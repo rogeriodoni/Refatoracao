@@ -1,0 +1,12 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\SigReInfBO.prg` criado com:
+
+**Propriedades declaradas:**
+- `this_cTabela = "SigMvNfi"` / `this_cCampoChave = "Nfis"`
+- `this_cEmps`, `this_cDopes`, `this_nNumes`, `this_cSerie` ÔÇö par├ómetros da NF (mapeados de `pcEmps`, `pcDopes`, `pcNumes`, `pcSerie` do legado)
+- `this_lVisualizarHabilitado`, `this_lImprimirHabilitado` ÔÇö controle de habilita├º├úo dos bot├Áes
+
+**M├®todos implementados:**
+- `Init()` ÔÇö chama `DODEFAULT()`
+- `PrepararDados()` ÔÇö SQL UNION ALL de `SigMvNfi + SigCdOpe + SigCdSer` (replicado do `processamento` original, com `EscaparSQL()` e quebras de linha corretas)
+- `CarregarConfiguracoes()` ÔÇö consulta `SigCdPam.nnfftlns/nnfftcls` para habilitar bot├úo Visualizar (equivalente ao Init() original)
+- `ObterMensagemErro()` / `Destroy()`

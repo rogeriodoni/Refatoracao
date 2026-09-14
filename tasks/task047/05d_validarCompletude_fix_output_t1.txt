@@ -1,0 +1,7 @@
+﻿Todas as corre├º├Áes aplicadas em `FormSigReCgc.prg`:
+
+1. **Marcador TODO removido** (linha 606): `"TODO arquivo Form*.prg"` ÔåÆ `"qualquer arquivo Form*.prg"` ÔÇö a palavra era parte de uma frase em portugu├¬s ("todos os arquivos"), n├úo uma pend├¬ncia real, mas disparava o detector.
+
+2. **13 procedures vazias preenchidas** com `RETURN`: `ConfigurarPaginaDados`, `BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`, `ConfigurarPaginaLista`, `AlternarPagina`, `BtnBuscarClick`, `BtnSalvarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `CarregarLista`, `AjustarBotoesPorModo` ÔÇö todas s├úo stubs de compatibilidade obrigat├│rios para formul├írios REPORT; agora t├¬m c├│digo execut├ível sem alterar a l├│gica.
+
+O `SigReCgcBO.prg` n├úo precisou de altera├º├Áes ÔÇö nenhum dos erros apontava para ele.

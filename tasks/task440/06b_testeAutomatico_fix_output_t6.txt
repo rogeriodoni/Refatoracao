@@ -1,0 +1,3 @@
+﻿All 3 SetFocus guards updated. The fix adds `AND !(TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)` to each condition, ensuring SetFocus is never called during automated testing even when `THIS.Visible` is `.T.` (which it is by default for VFP9 Form objects created with CREATEOBJECT).
+
+**Root cause summary (T6)**: VFP9 `Form` class defaults `Visible = .T.`, so forms created via `CREATEOBJECT("Formgpr")` in the test runner have `Visible = .T.` even though they are never rendered on screen. The `IF THIS.Visible` guards from T1 were therefore ineffective ÔÇö they evaluated to `.T.` and allowed `SetFocus()` to execute. VFP9 calling `SetFocus()` on a control of an unrendered (but logically-visible) form triggers a modal display attempt ÔåÆ 300-second hang.

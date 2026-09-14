@@ -1,0 +1,15 @@
+﻿Arquivo `FormSIGPRCCR.prg` criado com sucesso em `C:\4c\projeto\app\forms\relatorios\`. 
+
+**Fase 3/8 conclu├¡da.** O form est├í essencialmente completo (n├úo apenas esqueleto) porque este REPORT n├úo tem campos de filtro ÔÇö tudo que existe no legado ├® o cabe├ºalho cinza + 4 bot├Áes:
+
+| Elemento | Decis├úo |
+|----------|---------|
+| `Height=130, Width=800` | Exatos do SCX original |
+| `DataSession=1` | Mantido do original ÔÇö necess├írio para acessar `CrProdutos` criado pelo form pai |
+| `cnt_4c_Cabecalho.Height=130` | Ocupa toda a altura (sem ├írea de filtros abaixo) |
+| `cmg_4c_Botoes` | Left=495, Width=310, Height=85, bot├Áes Width=75 Left=5/80/155/230 (exatos do SCX) |
+| Buttons(3) | `geral_envelope_32.jpg` + Caption="Arquivos Email" (can├┤nico, n├úo Excel) |
+| `ExecutarReportForm()` | Helper Pattern #117 com guard FILE() + isolamento locale/REPORTBEHAVIOR 80 |
+| `BtnExcelClick` | Mapeia `memail` do legado ÔåÆ imprime direto (sem di├ílogo) |
+
+Como n├úo h├í campos de filtro, as Fases 4-8 n├úo t├¬m adi├º├Áes para este form ÔÇö o arquivo gerado j├í representa o form completo e funcional.

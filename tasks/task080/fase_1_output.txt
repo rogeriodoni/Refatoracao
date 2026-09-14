@@ -1,0 +1,12 @@
+﻿Arquivo criado corretamente. Fase 1 conclu├¡da.
+
+**`C:\4c\projeto\app\classes\SIGREDIRBO.prg`** criado com:
+
+- **3 propriedades de filtro**: `this_cAnoBase`, `this_cFornec`, `this_cDforn`
+- **2 propriedades de cursor**: `this_cCursorEmpresas` = `"cursor_4c_Empresas"`, `this_cCursorDados` = `"cursor_4c_Dados"`
+- **1 propriedade de relat├│rio**: `this_cArquivoFRX` = `"sigReDir"`
+- **`Init()`**: chama `DODEFAULT()`, depois carrega `SELECT 1 AS Imps, cemps, razas FROM SigCdEmp` via `SQLEXEC` para o cursor de empresas (todos marcados por padr├úo). `RETURN .F.` fica fora do `TRY/CATCH` (regra #1 obedecida)
+- **`ObterMensagemErro()`**: getter simples
+- **`Destroy()`**: fecha os dois cursores via `USE IN` e chama `DODEFAULT()`
+
+**Pr├│xima fase (2/8)**: adicionar `PrepararDados()` com a query `UNION ALL` de vpis/vcofins/vcsll de `SigMvNfi`, `MontaEmps()`, `Imprimir()` e `Visualizar()`.

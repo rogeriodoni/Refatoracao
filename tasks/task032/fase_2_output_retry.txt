@@ -1,0 +1,11 @@
+﻿The BO file is now complete with all required methods:
+
+- **Existing report methods**: `Init`, `Destroy` (enhanced), `ObterMensagemErro`, `BuscarCambio`, `NCalcJuros`, `BuscaSaldos`, `ProcessaPagRec`, `PrepararDados`, `Visualizar`, `Imprimir`, `ImprimirSemDialogo`, `ExportarExcel`
+- **Added in Phase 2**:
+  - `ObterChavePrimaria()` ÔÇö builds audit key from empresa/tipo/datas/grupo/conta/numes
+  - `RegistrarAuditoria(par_cOperacao)` ÔÇö INSERTs into LogAuditoria
+  - `Inserir()`, `Atualizar()`, `CarregarDoCursor()` ÔÇö explicit "not applicable" stubs returning `.F.` with accented messages via `CHR()` (no literal accents)
+  - `Visualizar`/`Imprimir`/`ImprimirSemDialogo`/`ExportarExcel` now call `RegistrarAuditoria(...)` after success
+  - `Destroy()` now closes all 16 temp cursors used by `PrepararDados`/`ProcessaPagRec`
+
+File is 1159 lines, properly closed with `ENDDEFINE`, follows the same pattern as `sigreanrBO.prg` (sibling REPORT BO).

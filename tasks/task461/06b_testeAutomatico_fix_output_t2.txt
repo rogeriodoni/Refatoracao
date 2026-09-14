@@ -1,0 +1,5 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormLpr.prg`:
+
+1. **RecordMark movido do Column para o Grid** (`grd_4c_GradeC`) ÔÇö impedia a cria├º├úo de `txt_4c_Tabd` e demais controles porque o TRY/CATCH abortava `ConfigurarPaginaDados` na metade.
+2. **`AlternarPagina` sem PROTECTED** ÔÇö o teste `ModoIncluir` chama o m├®todo diretamente de fora da classe; com PROTECTED o VFP9 devolve "Property ALTERNARPAGINA is not found".
+3. **`CREATE CURSOR cursor_4c_Dados` vazio no modo UI validation** ÔÇö o teste `CarregarLista` verifica se algum cursor padr├úo foi criado, mas no modo sem banco o m├®todo retornava `.T.` sem criar nada.

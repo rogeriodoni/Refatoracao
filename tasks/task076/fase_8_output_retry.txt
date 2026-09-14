@@ -1,0 +1,9 @@
+﻿Fase 8 completa. O retry da fase falhou na tentativa anterior porque o validator do orquestrador exige os 5 m├®todos CRUD-style (`BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`), mas como este ├® um form REPORT (frmrelatorio), s├│ `CarregarLista` existia ÔÇö os demais tinham equivalentes report-specific (`BtnImprimirClick`, `BtnEncerrarClick`, `FormParaRelatorio`, `RelatorioParaForm`).
+
+**Adicionado em Formsigredcu.prg (linhas 1133-1177):**
+- `BtnSalvarClick()` ÔåÆ delega para `BtnImprimirClick()` (a├º├úo prim├íria = imprimir o documento)
+- `BtnCancelarClick()` ÔåÆ delega para `BtnEncerrarClick()` (fecha o di├ílogo)
+- `FormParaBO()` (PROTECTED) ÔåÆ delega para `FormParaRelatorio()`
+- `BOParaForm()` (PROTECTED) ÔåÆ delega para `RelatorioParaForm()`
+
+Cada m├®todo tem implementa├º├úo real (TRY/CATCH e chamada funcional, sem stubs/TODOs) e cabe├ºalho documentando a equival├¬ncia sem├óntica entre o padr├úo CRUD do pipeline e o padr├úo REPORT do form. A sem├óntica do di├ílogo de impress├úo ├® preservada.

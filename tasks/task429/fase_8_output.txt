@@ -1,0 +1,14 @@
+﻿Arquivo completo e correto. Fase 8 conclu├¡da ÔÇö FormFPP.prg agora tem todos os m├®todos exigidos:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `CarregarLista()` | Delega para `BO.CarregarDados()` + Refresh do grid |
+| `FormParaBO()` | L├¬ linha corrente do cursor `xFPagi` ÔåÆ props do BO |
+| `BOParaForm()` | Faz `grd_4c_Dados.Refresh()` (dados j├í est├úo no cursor) |
+| `HabilitarCampos(par_lHabilitar)` | Controla `Enabled` dos bot├Áes Inserir/Excluir |
+| `LimparCampos()` | Reseta `this_lGravaDados` + recarrega do banco |
+| `AjustarBotoesPorModo()` | Habilita/desabilita Excluir conforme dados e permiss├úo |
+| `BtnBuscarClick()` | N/A para popup (retorno imediato, compatibilidade pipeline) |
+| `BtnEncerrarClick()` | Delegate para `CmdEncerrarClick()` |
+| `BtnSalvarClick()` | Salva via `BO.SalvarDados()` sem fechar o form |
+| `BtnCancelarClick()` | Confirma descarte se houver altera├º├Áes pendentes, depois `Release()` |

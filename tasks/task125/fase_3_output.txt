@@ -1,0 +1,9 @@
+﻿O menu.prg j├í tem a entrada correta. Fase 3 conclu├¡da.
+
+O arquivo `Formsigreinr.prg` j├í existia com implementa├º├úo completa de todas as fases (3-8). Corrigi o ├║nico bug encontrado: a viola├º├úo da regra Error 1767 no CheckBox do Grid de Ocorr├¬ncias ÔÇö o `Column1.ControlSource` estava sendo definido antes do `AddObject` do CheckBox, e o `chk_4c_Marca.ControlSource` tamb├®m estava definido (conflita com o Column). A corre├º├úo:
+
+1. Removido `Column1.ControlSource` de dentro do WITH block do Grid
+2. Removido `.ControlSource` do CheckBox  
+3. `Column1.ControlSource = "CsOperacaos.Marcas"` agora definido **ap├│s** `CurrentControl = "chk_4c_Marca"` (ordem correta per regra)
+
+O form j├í tem estrutura completa: `Init()` com par├ómetro NumBal, `InicializarForm()` que cria o BO e chama `InicializarDadosBasicos()`, `ConfigurarPageFrame()` com 1 p├ígina de filtros, todos os OptionGroups/TextBoxes/Grid, lookups F4 para Produto e Local, handlers dos bot├Áes Visualizar/Imprimir/Excel/Encerrar, e `Destroy()` correto.

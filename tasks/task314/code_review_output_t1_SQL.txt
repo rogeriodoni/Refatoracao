@@ -1,0 +1,11 @@
+﻿Todas as corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito no `sigprnfeBO.prg`:
+
+1. **[SQL-TABELA] SigCdParac removida** - Removido o bloco que consultava `SELECT TOP 1 * FROM SigCdParac` (tabela n├úo existe no schema.sql nem no c├│digo original) e as propriedades `this_cRTcnpj/cont/emai/tel` que eram populadas mas nunca lidas.
+
+2. **[SQL-FILTRO-INVENTADO] OPERAS removida** - Removida a condi├º├úo `AND a.Operas = ...` do WHERE principal (n├úo existe no original; o original usa apenas `o.Opers` de SigCdOpe, n├úo `a.Operas` de SigMvNfi).
+
+3. **[SQL-FILTRO-INVENTADO] IMPOSSIVEL** - Era apenas texto num coment├írio (`WHERE impossivel = cursor vazio`) sem SQL real ÔÇö coment├írio atualizado para `WHERE stats='xxx' retorna vazio` para evitar falsos positivos futuros.
+
+4. **[SQL-FILTRO-INVENTADO] CIDCHAVES** - O `WHERE cidchaves = ...` na linha 603 est├í em um UPDATE com chave prim├íria (`this_cCampoChave = "cidchaves"`), n├úo ├® filtro inventado em SELECT ÔÇö mantido corretamente.
+
+5. **[TRANSACAO-AVULSA] COMMIT removido** - Removida a linha `SQLEXEC(gnConnHandle, "COMMIT")` ap├│s o INSERT em `sigprnfe`. A conex├úo ODBC opera em autocommit; o COMMIT avulso era incorreto.

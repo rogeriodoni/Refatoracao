@@ -1,0 +1,8 @@
+﻿A edi├º├úo est├í correta. A Fase 6 adicionou os 4 controles restantes na Page2 de `ConfigurarPaginaDados()`:
+
+- **`lbl_4c_Mensagem`** ÔÇö Label "Mensagem :" (Say3, Top=239, Left=100)
+- **`txt_4c_Mensagem`** ÔÇö EditBox memo (getMensas, Top=238, Left=162, Width=537, Height=103)
+- **`lbl_4c_Tipo`** ÔÇö Label "Tipo :" (Say2, Top=349, Left=131)
+- **`opt_4c_Tipo`** ÔÇö OptionGroup com 3 bot├Áes aninhados via `WITH .Buttons(N)`: Cheque (Left=7), T├¡tulo (Left=84), Follow Up (Left=148), usando posi├º├Áes exatas do SCX original com compensa├º├úo +29px do PageFrame
+
+**Observa├º├úo:** O formul├írio SIGPRINT n├úo tem lookups ÔÇö o c├│digo original n├úo usa `fwbuscaext`, `sigacess` nem `fwBuscaSel`. A valida├º├úo de c├│digo duplicado (`getCods.Valid`) j├í estava implementada no `BtnSalvarClick()` (linha 918), e todos os outros m├®todos (`LimparCampos`, `HabilitarCampos`, `FormParaBO`, `BOParaForm`) j├í referenciavam corretamente `txt_4c_Mensagem` e `opt_4c_Tipo` das fases anteriores.

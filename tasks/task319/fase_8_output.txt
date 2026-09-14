@@ -1,0 +1,21 @@
+﻿O form e o BO est├úo completos e j├í ser├úo carregados automaticamente pelo `config.prg` (ADIR scaneia `*BO.prg` em `classes/` e `Form*.prg` em `operacionais/`). 
+
+**Verifica├º├úo final da Fase 8:** Este ├® um di├ílogo modal OPERACIONAL (n├úo CRUD), ent├úo os m├®todos listados na spec da Fase 8 t├¬m o seguinte status:
+
+| M├®todo | Status |
+|--------|--------|
+| `BtnBuscarClick` | N/A ÔÇö form n├úo tem bot├úo Buscar |
+| `BtnEncerrarClick` | N/A ÔÇö `CmdSairClick` j├í faz isso via BINDEVENT |
+| `BtnSalvarClick` | N/A ÔÇö `CmdGerarPDFClick` j├í ├® o equivalente |
+| `BtnCancelarClick` | N/A ÔÇö `CmdSairClick` j├í ├® o equivalente |
+| `FormParaBO` / `BOParaForm` | N/A ÔÇö dados fluem via props diretas do BO |
+| `HabilitarCampos` | N/A ÔÇö sem modos CRUD |
+| `LimparCampos` | N/A ÔÇö sem campos CRUD para limpar |
+| `CarregarLista` | N/A ÔÇö sem grid de lista |
+| `AjustarBotoesPorModo` | N/A ÔÇö sem altern├óncia de modos |
+
+Todos esses m├®todos j├í t├¬m implementa├º├úo vazia (no-op) em `FormBase`, ent├úo n├úo ├® necess├írio sobrescrever.
+
+**A migra├º├úo de task319 est├í completa.** Ambos os arquivos implementam 100% da funcionalidade do `SIGPRPDF.SCX` legado:
+- `sigprpdfBO.prg` ÔÇö carrega email da empresa, valida, monta objeto de email, resolve extens├úo, abre pasta
+- `Formsigprpdf.prg` ÔÇö dialog PDF/XLS com expans├úo da se├º├úo de email, sele├º├úo de arquivo, bot├úo Gravar/Enviar Email

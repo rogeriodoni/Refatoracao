@@ -1,0 +1,21 @@
+﻿An├ílise conclu├¡da. Os 7 itens flagados s├úo **falsos positivos** da ferramenta de code review autom├ítica.
+
+## Diagn├│stico
+
+A ferramenta comparou TODAS as cl├íusulas WHERE do arquivo contra o WHERE da query principal (`ExecutarConsulta` ÔåÆ `SigMvCab`), que usa GRUPODS, CONTADS, EMPDS.
+
+Por├®m, as 7 colunas flagadas aparecem em **sub-queries dos pickers/lookups**, n├úo na query principal:
+
+| Coluna flagada | M├®todo | Tabela | Status |
+|---|---|---|---|
+| `ICLIS` | `AbrirBuscaConta` | SigCdCli | PK v├ílida (confirmado por functions.prg:686, FormSIGREVIS.prg) |
+| `CPFS` | `AbrirBuscaConta`, `ValidarCpfCnpj` | SigCdCli | Coluna v├ílida |
+| `DOPES` | `AbrirBuscaOperacao` | SigCdOpe | PK v├ílida (confirmed by memory) |
+| `CMOES` | `AbrirBuscaMoeda` | SigCdMoe | PK v├ílida (schema.sql:4853: `cmoes char(3)`) |
+| `GRUPOS` | `AbrirBuscaConta` | SigCdCli | Coluna v├ílida (functions.prg:686) |
+| `CEMPS` | `AbrirBuscaEmpresa`, `ValidarCdEmpresa` | SigCdEmp | PK v├ílida (Formsigrevto.prg:1114) |
+| `CODIGOS` | `AbrirBuscaGrupoContabil`, `ValidarCdGrupo` | SigCdGcr | PK v├ílida (schema.sql:3728: `codigos char(10)`) |
+
+A query principal `ExecutarConsulta` no BO usa corretamente `a.GrupoDs`, `a.ContaDs`, `a.Empds` (as colunas de SigMvCab que o review esperava).
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto ÔÇö os WHERE dos pickers usam colunas v├ílidas de suas respectivas tabelas de dimens├úo.

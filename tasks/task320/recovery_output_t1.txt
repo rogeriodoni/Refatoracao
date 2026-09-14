@@ -1,0 +1,15 @@
+﻿As duas corre├º├Áes est├úo aplicadas corretamente:
+- `Width = 660` (linha 27) ÔÇö corresponde ao legado SCX
+- `cnt_4c_Sombra.Width = 800` (linha 103) ÔÇö hardcoded como no legado, independente da largura do form
+
+**Resumo das diferen├ºas visuais e como foram resolvidas:**
+
+| Diferen├ºa | Status |
+|-----------|--------|
+| `Form.Width` 800ÔåÆ660 | **Corrigido agora** |
+| `cntSombra.Width` (era 660, precisava 800) | J├í corrigido na 2┬¬ execu├º├úo anterior |
+| `lblSombra.Caption` "Produtos Por Conta"ÔåÆ"Cadastro de Testes" | J├í corrigido na 2┬¬ execu├º├úo anterior |
+| `lblTitulo.Caption` "Produtos Por Conta"ÔåÆ"Cadastro de Testes" | J├í corrigido na 2┬¬ execu├º├úo anterior |
+| `lbl*.Width` 640ÔåÆ769 | J├í corrigido na 2┬¬ execu├º├úo anterior |
+
+O form agora tem `Width=660` (igual ao legado) e `cntSombra.Width=800` (igual ao legado - o header intencionalmente extrapola a largura do form). Os 4 erros de `Dataenvironment` s├úo n├úo-bloqueantes (j├í est├úo no limite tolerado de 4).

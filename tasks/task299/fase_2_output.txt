@@ -1,0 +1,16 @@
+﻿O c├│digo fonte confirma que o `sigprico` ├® um form **exclusivamente visual**: 27 imagens posicionadas, Caption="Form1", **0 m├®todos/eventos, 0 queries SQL**. N├úo tem tabela, n├úo tem dados, n├úo tem CRUD.
+
+O `sigpricoBO.prg` gerado na Fase 1 j├í est├í **completo e correto** ÔÇö n├úo h├í nada a adicionar na Fase 2 porque o form original n├úo tem:
+- Nenhuma tabela de dados
+- Nenhum `CarregarDoCursor()` (sem cursor de dados)
+- Nenhum `Inserir()` / `Atualizar()` (sem INSERT/UPDATE)
+- Nenhum `ObterChavePrimaria()` (sem chave prim├íria)
+
+O BO atual j├í reflete fielmente a aus├¬ncia de opera├º├Áes de dados:
+
+```foxpro
+THIS.this_cTabela    = ""
+THIS.this_cCampoChave = ""
+```
+
+**Fase 2/8 conclu├¡da ÔÇö o BO j├í est├í completo.** A Fase 3 (cria├º├úo do Form) ser├í onde o trabalho real acontece: posicionar as 27 imagens com as coordenadas exatas do SCX original no `Formsigprico.prg`.

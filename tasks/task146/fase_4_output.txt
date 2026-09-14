@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi implementada com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarPaginaLista()`** ÔÇö implementa├º├úo completa substituindo o stub:
+   - `grd_4c_Dados` (Grid 5 colunas): `Industrializa├º├úo | Pedido | Produto | Quantidade | Tempo/min` com ColumnOrder exato do legado (Column4=3, Column3=4)
+   - Colunas 1ÔÇô4 `ReadOnly=.T.` (When original sempre `.F.`)
+   - Column5 `ReadOnly=.T.` por padr├úo, ajustado em `CarregarGrade()` conforme `crSigCdOpd.apontas`
+   - `BINDEVENT` para `AfterRowColChange` ÔåÆ `GrdDadosAfterRowColChange`
+   - Labels `Descri├º├úo :` e `Observa├º├úo :`, `txt_4c_Descr`, `edit_4c_MmObs` (com `ControlSource="xmfas.obsps"`), `txt_4c_TotQt`
+
+2. **`ConfigurarBotaoSair()`** ÔÇö adicionado `BINDEVENT(cmd_4c_Ok, "Click", THIS, "CmdOkClick")`
+
+3. **`InicializarForm()`** ÔÇö adicionada chamada `THIS.CarregarGrade()` ap├│s `TornarControlesVisiveis`
+
+4. **Novos m├®todos:**
+   - `CarregarGrade()` ÔÇö `RecordSource="xMFas"`, ControlSources, recria headers, `SUM Qtds`, visibilidade Origem/Destino, `Column5.ReadOnly`, SQLEXEC para nomes de cliente
+   - `GrdDadosAfterRowColChange(par_nColIndex)` ÔÇö PUBLIC, SQLEXEC em SigCdPro, exibe `DPros` e decodifica `FigJpgs` (base64 ÔåÆ JPG temp ÔåÆ `img_4c_FigJpg.Picture`)
+   - `CmdOkClick()` ÔÇö PUBLIC, habilita form pai e libera sub-dialog
+   - `FormatarGridDados(par_oGrid)` ÔÇö `SetAll FontSize=8`

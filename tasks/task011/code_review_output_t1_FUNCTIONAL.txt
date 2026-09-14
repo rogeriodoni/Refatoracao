@@ -1,0 +1,23 @@
+﻿PASS FUNCTIONAL conclu├¡do. Resumo das corre├º├Áes aplicadas em `FormProduto.prg`:
+
+**Corre├º├Áes aplicadas:**
+
+1. **[GRID-SQLEXEC]** ÔÇö CarregarLista() agora usa `cursor_4c_DadosTemp` como intermedi├írio, depois ZAP + APPEND FROM DBF() no `cursor_4c_Dados` (RecordSource do grid).
+
+2. **[NULL-CURSOR]** ÔÇö 13 CREATE CURSOR envolvidos com `SET NULL ON` antes e `SET NULL OFF` depois.
+
+3. **[CONTAINER-VISIVEL]** ÔÇö TornarControlesVisiveis() protege `CNT_4C_CABECALHO` com guarda INLIST.
+
+4. **[LOSTFOCUS-SEM-GUARDIA]** ÔÇö 4 handlers (ValidarConquilha, ValidarCor, ValidarTam, ValidarAcabamento) com 4 propriedades guarda adicionadas na class definition.
+
+5. **[BUSCA-CURSOR]** ÔÇö 17 chamadas FormBuscaAuxiliar Modo 2 receberam `this_cCursorDestino` ├║nico.
+
+6. **[MADDCOLUNA-PARAMS]** ÔÇö AbrirLookupMoeCompo: nomes de propriedade corrigidos, 4┬║ param removido das chamadas mAddColuna.
+
+7. **[GRID-HEADER]** ÔÇö Trailing space removido de `"Total "` ÔåÆ `"Total"` em 2 grids.
+
+**N├úo alterados (corretos/falsos positivos):**
+- [METODO-INEXISTENTE] MontarFiltro ÔÇö j├í existia na linha ~7378
+- [CURSOR-ORDEM] cursor_4c_Cmv ÔÇö ordem j├í consistente
+- [CARGA-DADOS] ÔÇö falsos positivos (validators de edi├º├úo, n├úo de filtro)
+- [LAYOUT-POSITION] ÔÇö todos ignorados (pass funcional apenas)

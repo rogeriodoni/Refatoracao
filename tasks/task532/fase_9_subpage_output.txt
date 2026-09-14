@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything balances. Let's summarize what was done.
+
+## Summary
+
+I implemented **Fase 9** ÔÇö the `PgConfDesconto` ("Configura├º├úo de Desconto") sub-page of `FormTbv.prg`.
+
+**Important deviation from the literal instructions, done deliberately:** the prompt assumed a `pgf_4c_Paginas.Page2.pgf_4c_DadosInternos` inner PageFrame already existed. It doesn't ÔÇö fases 5-8 flattened the `pgDados` fields directly onto `Page2` (no inner tabs), and `mapeamento.json` itself maps `PgConfDesconto` ÔåÆ `cnt_4c_PgConfDesconto` (a **Container**, not a PageFrame page). I followed that established pattern instead of inventing a conflicting PageFrame structure ÔÇö added `cnt_4c_PgConfDesconto` as a container floating on `Page2` (same technique already used for the empresas container), hidden by default until a future phase adds the tab-switcher (which depends on the still-unmigrated `pgDesconto` page).
+
+**What was built** (`FormTbv.prg`):
+- `ConfigurarPgPgConfDesconto()` ÔÇö all 24 legacy controls (labels, `grd_4c_GradeI` master grid mirroring `SigOpTdt`, `grd_4c_GradeD` detail grid for `SigOpTds` faixas, `cmd_4c_CmdExcluir`), called from `ConfigurarPaginaDados()` before `TornarControlesVisiveis`, exactly as requested.
+- Full behavior port: `MontarConfiguracaoDesconto()` (equivalent to legacy `MontaTbDes`), day-of-week/day-of-month/time/date validation handlers, auto-created starter faixa, delete-with-fallback-row logic, and `When`/`Valid` BINDEVENTs (all PUBLIC per CLAUDE.md rule #3).
+- Discovered that `Gradei.Column1/Column2` are permanently read-only in the legacy source (`When` always returns `.F.`), which correctly eliminated the need to port the large dead-code lookup block.
+
+**`TbvBO.prg`**: added `CarregarComposicaoDesconto`, `CarregarFaixasDesconto`, `SalvarFaixasDesconto` (delete+reinsert persistence, wired into `BtnConfirmarClick` so edits actually save ÔÇö avoiding the "success message but nothing persisted" anti-pattern).
+
+Verified balanced `PROCEDURE/ENDPROC`, `IF/ENDIF`, `WITH/ENDWITH`, `DO CASE/ENDCASE`, `TRY/ENDTRY`, `SCAN/ENDSCAN` in both files, and confirmed every `BINDEVENT` handler and cross-method call resolves to a real definition.
+
+**Known limitation, stated honestly:** `grd_4c_GradeI` will show empty until `pgDesconto` (not yet migrated) is built, since that's what creates the `SigOpTdt` rows this page mirrors ÔÇö this is expected incremental state, not a bug.

@@ -1,0 +1,12 @@
+﻿4 corre├º├Áes aplicadas no `FormSIGREAUP.prg`:
+
+| Linha | Query | Corre├º├úo |
+|-------|-------|----------|
+| 951 | SigCdGcr por Codigos | Removido `AND GerBals = 1` |
+| 991 | SigCdGcr por Descrs | Removido `AND GerBals = 1` |
+| 1031 | SigCdCli por IClis | Removido `AND GerBals = 1` |
+| 1071 | SigCdCli por RClis | Removido `AND GerBals = 1` |
+
+**CEMPS** (`WHERE Cemps = ...` em `SigCdEmp`): mantido ÔÇö ├® uma query auxiliar v├ílida para obter o nome da empresa para o cabe├ºalho do relat├│rio, n├úo ├® condi├º├úo inventada no filtro principal.
+
+O problema raiz era que o `AND GerBals = 1` foi inventado pela LLM nas 4 queries de valida├º├úo de lookup: o original carrega `SigCdGcr` e `SigCdCli` sem filtro (SELECT completo) e usa `SEEK()`. Adicionalmente, `GerBals` nem existe como coluna em `SigCdCli`, o que causaria erro em runtime.

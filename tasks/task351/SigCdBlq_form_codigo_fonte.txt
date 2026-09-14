@@ -1,0 +1,745 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdBlq.SCX
+* Data/Hora: 22/07/2026 00:02:36
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDBLQ
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say15
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Getdtinicial
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getdtfinal
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Codigo
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Check1
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Get_DtIncs
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say20
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Usuario
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say24
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say25
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape3
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: getDataAlts
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getUsuaAlts
+  Parent: SIGCDBLQ.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Bloqueios por Periodo"
+  Name = "SIGCDBLQ"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1020
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 20
+  Pagina.Lista.Grade.Top = 112
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 156
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 232
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 308
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Left = 538
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 917
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 49
+  Pagina.Lista.cntFiltros.Left = 179
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.FontName = "Tahoma"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.ForeColor = 90,90,90
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 7
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 82
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 812
+  Pagina.Dados.Grupo_Salva.Top = 24
+  Pagina.Dados.Grupo_Salva.TabIndex = 8
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 390
+  Top = 141
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Say15
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Período :"
+  Left = 387
+  Top = 167
+  Visible = .T.
+  Width = 45
+  TabIndex = 4
+  ZOrderSet = 12
+  Name = "Say15"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Até"
+  Left = 508
+  Top = 167
+  Visible = .T.
+  Width = 19
+  TabIndex = 6
+  ZOrderSet = 12
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Getdtinicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  StrictDateEntry = 0
+  Alignment = 3
+  BorderStyle = 1
+  ControlSource = "crSigCdBlq.dtInicial"
+  Format = "E"
+  Height = 23
+  InputMask = "99/99/9999"
+  Left = 435
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 163
+  Width = 66
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Getdtinicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.getdtfinal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  StrictDateEntry = 0
+  Alignment = 3
+  BorderStyle = 1
+  ControlSource = "crSigCdBlq.dtFinal"
+  Format = "E"
+  Height = 23
+  InputMask = "99/99/9999"
+  Left = 530
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 163
+  Width = 66
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "getdtfinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Get_Codigo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  ControlSource = "crSigCdBlq.codigos"
+  Height = 23
+  InputMask = "9999999999"
+  Left = 435
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 137
+  Width = 82
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Get_Codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Check1
+------------------------------------------------------------
+  Top = 141
+  Left = 542
+  Height = 15
+  Width = 52
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Inativo"
+  ControlSource = "crSigCdBlq.inativo"
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Get_DtIncs
+------------------------------------------------------------
+  ControlSource = "crSigCdBlq.dtincs"
+  Enabled = .T.
+  Height = 23
+  Left = 435
+  MaxLength = 8
+  SpecialEffect = 1
+  TabIndex = 117
+  Top = 254
+  Width = 79
+  BackColor = 240,240,240
+  DisabledBackColor = 224,235,235
+  DisabledForeColor = 0,0,0
+  Name = "Get_DtIncs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Say20
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Data / Usuário"
+  Left = 435
+  Top = 220
+  Width = 84
+  TabIndex = 115
+  ForeColor = 90,90,90
+  Name = "Say20"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Get_Usuario
+------------------------------------------------------------
+  ControlSource = "crSigCdBlq.UsuIncs"
+  Enabled = .T.
+  Height = 23
+  Left = 435
+  MaxLength = 8
+  SpecialEffect = 1
+  TabIndex = 118
+  Top = 279
+  Width = 79
+  BackColor = 240,240,240
+  DisabledBackColor = 224,235,235
+  DisabledForeColor = 0,0,0
+  Name = "Get_Usuario"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Say24
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Inclusão"
+  Height = 15
+  Left = 435
+  Top = 239
+  Width = 42
+  TabIndex = 116
+  ForeColor = 90,90,90
+  Name = "Say24"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Say25
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Alteração"
+  Height = 15
+  Left = 515
+  Top = 239
+  Width = 48
+  TabIndex = 119
+  ForeColor = 90,90,90
+  Name = "Say25"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.Shape3
+------------------------------------------------------------
+  Top = 235
+  Left = 435
+  Height = 2
+  Width = 161
+  BackStyle = 0
+  BorderWidth = 2
+  SpecialEffect = 0
+  Name = "Shape3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.getDataAlts
+------------------------------------------------------------
+  ControlSource = "crSigCdBlq.dtAlts"
+  Enabled = .T.
+  Height = 23
+  Left = 515
+  MaxLength = 8
+  SpecialEffect = 1
+  TabIndex = 120
+  Top = 254
+  Width = 79
+  BackColor = 240,240,240
+  DisabledBackColor = 224,235,235
+  DisabledForeColor = 0,0,0
+  Name = "getDataAlts"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDBLQ.Pagina.Dados.getUsuaAlts
+------------------------------------------------------------
+  ControlSource = "crSigCdBlq.UsuAlts"
+  Enabled = .T.
+  Height = 23
+  Left = 515
+  MaxLength = 8
+  SpecialEffect = 1
+  TabIndex = 121
+  Top = 279
+  Width = 79
+  BackColor = 240,240,240
+  DisabledBackColor = 224,235,235
+  DisabledForeColor = 0,0,0
+  Name = "getUsuaAlts"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDBLQ
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If Not Empty(ThisForm.Pagina.Dados.Get_Codigo.Value)
+	ThisForm.poDataMgr.LocateCursor([crSigCdBlq], [Codigos], ThisForm.Pagina.Dados.Get_Codigo.Value)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdBlq], [cIdChaves], [crSigCdBlq], [], ThisForm.Pagina.Lista.Grade)
+			.pfSqlTabela(1).pColuna([codigos],  [], [], [Codigo],    080, .t.)
+			.pfSqlTabela(1).pColuna([dtInicial],  [], [], [Data Inicial],   074, .t.)
+			.pfSqlTabela(1).pColuna([dtFinal], [], [], [Data Final], 074, .t.)
+			.pfSqlTabela(1).pColuna([UsuIncs],  [], [], [Usuario],   080, .t.)
+			.pfSqlTabela(1).pColuna([DtIncs],  [], [], [Data],   080, .t.)
+			.pfSqlTabela(1).pColuna([UsuAlts],  [], [], [Alteração],   080, .t.)
+			.pfSqlTabela(1).pColuna([DtAlts],  [], [], [Data],   080, .t.)
+			
+		EndWith
+
+		=DoDefault()
+
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Parameters lnOpcao
+
+If Not DoDefault(lnOpcao)
+	ThisForm.mAtivaPagina1
+	Return .f.
+EndIf
+
+Do Case
+	Case ThisForm.pcEscolha = 'INSERIR'
+	
+		Replace Codigos With fGerUniqueKey('BLOQUEIO'),;
+				CidChaves With fUniqueIds() ,;
+				UsuIncs With Usuar ,;
+				DtIncs With Datetime() In CrSigCdBlq
+				
+		This.Parent.Parent.Dados.get_codigo.Refresh		
+		This.Parent.Parent.Dados.GetDtinicial.SetFocus
+		 
+	Case InList(ThisForm.pcEscolha, [PROCURAR])
+		 ThisForm.Pagina.Dados.codigos.SetFocus
+		 
+	Case InList(ThisForm.pcEscolha, [ALTERAR])
+		 ThisForm.Pagina.Dados.GetDtinicial.SetFocus
+
+	Otherwise
+		 ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndCase
+
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	If Empty(ThisForm.Pagina.Dados.Get_Codigo.Value)
+		=Messagebox([Código Inválido!!!], 48, [Atenção!!!])
+		ThisForm.Pagina.Dados.Get_Codigo.SetFocus()
+		Return .f.
+	EndIf
+
+	If Empty(ThisForm.Pagina.Dados.getDtInicial.Value)
+		=Messagebox([Data Inicial Inválida!!!], 48, [Atenção!!!])
+		ThisForm.Pagina.Dados.getDtInicial.SetFocus()
+		Return .f.
+	EndIf
+	
+	If Empty(ThisForm.Pagina.Dados.getDtFinal.Value)
+		=Messagebox([Data Final Inválida!!!], 48, [Atenção!!!])
+		ThisForm.Pagina.Dados.getDtFinal.SetFocus()
+		Return .f.
+	EndIf
+	
+	If ThisForm.Pagina.Dados.getDtInicial.Value > ThisForm.Pagina.Dados.getDtFinal.Value
+		=Messagebox([Data Inicial Maior que a Data Final!!!], 48, [Atenção!!!])
+		ThisForm.Pagina.Dados.getDtInicial.SetFocus()
+		Return .f.
+	EndIf 
+	
+EndIf
+
+If ThisForm.pcEscolha = [ALTERAR]
+	Replace UsuAlts With Usuar ,;
+			DtAlts With Datetime() In CrSigCdBlq
+EndIf 
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBLQ.Pagina.Dados.Getdtinicial
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBLQ.Pagina.Dados.getdtfinal
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBLQ.Pagina.Dados.Get_Codigo
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pcEscolha = 'PROCURAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBLQ.Pagina.Dados.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBLQ.Pagina.Dados.Get_DtIncs
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBLQ.Pagina.Dados.Get_Usuario
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBLQ.Pagina.Dados.getDataAlts
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDBLQ.Pagina.Dados.getUsuaAlts
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDBLQ
+RESERVED3 (ClassInfo): nrecno
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

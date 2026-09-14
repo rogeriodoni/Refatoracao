@@ -1,0 +1,506 @@
+{
+  "resumo": {
+    "totalMetodos": 29,
+    "metodosComSQL": 10,
+    "metodosComValidacao": 13,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREINR",
+      "evento": "Procedure",
+      "linhas": 54,
+      "codigoOriginal": "Do Case\n\tCase This.TipoRelatório.Value = 1\n\t\tIf This.OptFoto.Value = 1\n\t\t\tReport Form SigReBrf Preview NoConsole ;\n\t\t\t\tFor Iif(_TipoDif = 1 Or ps == '2',.T.,;\n\t\t\t\tIif(Not ThisForm.tratapeso,(Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)),;\n\t\t\t\t((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops)))))\n\t\tElse\n\t\t\tIf llHorizontal\n\t\t\t\tReport Form SigReBlh Preview NoConsole ;\n\t\t\t\tFor Iif(_TipoDif = 1 Or ps == '2',.T.,;\n\t\t\t\tIif(Not ThisForm.tratapeso,(Saldos # Ii... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "tratapeso,",
+        "controlesReferenciados": "OptFoto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR",
+      "evento": "Procedure",
+      "linhas": 732,
+      "codigoOriginal": "Public lnNumBal, _Empresa, _DProduto, _Leitura, _TipoDif, _Titulo, _TipoLeitura, _TipoAnal, _Produto, _Local,;\n\t\t_TotalnLido, _TotalnEsto, _Saldo, _SaldoPs,llHorizontal, impCustos\n\nLocal lcEscape,lcTalk,lnDecimals,lcFixed,lnTpCusto,lnTpVenda,TcLinhas,TcTraco1s,TcCabecs,Moedas,Custofs,Pvens\n\n_TipoDif     = This.TipoDiferença.Value\n_TipoRel     = This.TipoRelatório.Value \n_TipoLeitura = This.TipoLeitura.Value \n_TipoAnal    = This.TipoAnalítico.Value \n_Produto     = This.Get_Cd_Codigo.Value\n_Local ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "TrataPeso =,SqlExecute",
+        "controlesReferenciados": "Get_Cd_Codigo,Get_Local,Get_Barra,optgTpCusto,OptObs,OptCtg,OptCol,OptGTpVenda,OptFoto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR",
+      "evento": "Procedure",
+      "linhas": 50,
+      "codigoOriginal": "Do Case\n\n\tCase This.TipoRelatório.Value = 1\n\t\tIf This.OptFoto.Value = 1\n\t\t\tReport Form SigReBrf To Printer NoConsole ;\n\t\t\t\tFor Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))\n\t\tElse\t\n\t\t\tIf llHorizontal \n\t\t\t\tReport Form SigReBlh To Printer NoConsole ;\n\t\t\t\tFor Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))\n\t\t\tElse\n\t\t\t\tReport Fo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptFoto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR",
+      "evento": "Init",
+      "linhas": 94,
+      "codigoOriginal": "LParameters NumBalanco\n\nPrivate lnNumBal\n\nlnNumBal = NumBalanco\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector',.Name)\n\tIf .poDataMgr.pnIdconn < 1\n\t\tMessageBox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.F.)\n\tEndIf\n\t=DoDefault()\nEndWith\n\t\t\nCreate Cursor CsFiltro (FGrupo c(50),FEstoque c(80),FPeriodo c(60),FLocal c(60),FIFor c(60),;\n\t\t\t\t\t\tFCGru c(60),FCGGru c(60),FPreco c(60),CObs M, llVisCtg l, llVisCol L)\n\nIf ThisForm.poDataMgr.SqlExecute([Sele... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "optgTpCusto,OptObs,Option2,Option4,Option5,Option6,Option7",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR",
+      "evento": "Procedure",
+      "linhas": 49,
+      "codigoOriginal": "Do Case\n\n\tCase This.TipoRelatório.Value = 1\n\t\tIf This.OptFoto.Value = 1\n\t\t\tReport Form SigReBrf To Printer Prompt NoConsole ;\n\t\t\t\tFor Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))\n\t\tElse\n\t\t\tIf llHorizontal\n\t\t\t\tReport Form SigReBlh To Printer Prompt NoConsole ;\n\t\t\t\tFor Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))\n\t\t\tElse\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptFoto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR",
+      "evento": "Procedure",
+      "linhas": 49,
+      "codigoOriginal": "Do Case\n\n\tCase This.TipoRelatório.Value = 1\n\t\tIf This.OptFoto.Value = 1\n\t\t\tReport Form SigReBrf To Printer NoConsole ;\n\t\t\t\tFor Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))\n\t\tElse\n\t\t\tIf llHorizontal\n\t\t\t\tReport Form SigReBlh To Printer NoConsole ;\n\t\t\t\tFor Iif(_TipoDif = 1 Or ps == '2',.T.,((Saldos # Iif(Empty(ReLidos),Lidos,ReLidos)) or (Saldops # Iif(Empty(ReLidops),Lidops,ReLidops))))\n\t\t\tElse\n\t\t\t\tReport Form... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptFoto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR",
+      "evento": "Destroy",
+      "linhas": 1,
+      "codigoOriginal": "Release _Empresa, _Periodo, _TipoLeitura, _DProduto, _Saldo, _Leitura, _TipoDif, _Titulo, _SaldoPs, llHorizontal",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "If This.Value <> 3\n\tIf ThisForm.TipoRelatório.Value = 2\n\t\tDo Case\n\n\t\t\tCase ThisForm.TipoAnalítico.Value = 1 And Empty(ThisForm.Get_Cd_Codigo.Value)\n\t\t\t\tMessageBox('Produto Inválido !!!',0+48,'Campo Obrigatório')\n\t\t\t\tThisForm.Get_Cd_Codigo.SetFocus\n\t\t\t\tReturn(.F.)\n\n\t\t\tCase ThisForm.TipoAnalítico.Value = 2 And Empty(ThisForm.Get_Local.Value)\n\t\t\t\tMessageBox('Local Inválido !!!',0+48,'Campo Obrigatório')\n\t\t\t\tThisForm.Get_Local.SetFocus\n\t\t\t\tReturn(.F.)\n\n\t\tEndCase\n\tEndIf\nEndIf\n\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = 1 And Empty,Value = 2 And Empty",
+        "controlesReferenciados": "Get_Cd_Codigo,Get_Local",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.TipoRelatório",
+      "evento": "InteractiveChange",
+      "linhas": 41,
+      "codigoOriginal": "=DoDefault()\n\nThisForm.TipoDiferença.SetAll('Enabled',(This.Value = 1),'OptionButton')\nThisForm.TipoLeitura.SetAll('Enabled'  ,(This.Value = 2),'OptionButton')\nThisForm.TipoAnalítico.SetAll('Enabled',(This.Value = 2),'OptionButton')\nThisForm.OptGTpCusto.SetAll('Enabled'  ,(This.Value = 1),'OptionButton')\nThisForm.OptGTpVenda.SetAll('Enabled'  ,(This.Value = 1),'OptionButton')\nThisForm.oPtEtiq.SetAll('Enabled'  ,(This.Value = 1),'OptionButton')\nThisForm.OptFoto.SetAll('Enabled'  ,(This.Value = 1)... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetAll,Enabled  =,Enabled      =,Enabled     =",
+        "controlesReferenciados": "OptionButton',OptGTpCusto,OptGTpVenda,oPtEtiq,OptFoto,Get_Cd_Codigo,Get_Ds_Codigo,Get_Local,Get_DLocal,Get_Barra,OptObs,OptCol,OptCtg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.TipoRelatório",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Get_Cd_Codigo.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.TipoRelatório",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Get_Cd_Codigo.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.get_ds_codigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Cd_Codigo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.get_ds_codigo",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','DPros',This.Value,'Produtos',1000)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('dpros','','Descrição')\n\t\tm.loLista.mAddColuna('cpros','','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrProds')\n\t\tThis.Value                   = Evaluate('CrProds.DPros')\n\t\tThisForm.Get_Cd_Codigo.Value = Evaluate('CrProds.CPros')\n\tElse\n\t\tThis.Value                   = ''\n\t\tTh... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "Get_Cd_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.get_cd_codigo",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "If !Empty(This.Value)\n\tlnBar = Val(This.Value)\n\tIf lnBar > 0 And ThisForm.poDataMgr.CursorQuery('SigOpEtq',,'CBars',lnBar)\n\t\tThis.Value = CqSigOpEtq.CPros\n\tEndIf\n\tlStrQuery = [Select cpros,dpros From SigCdPro Where cpros = ']+This.Value+[' ]\n\tIf ThisForm.poDataMgr.SqlExecute(lStrQuery,'CrProds') < 1\n\t\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrProds)')\n\t\tReturn(.F.)\n\tEndIf\n\tSelect CrProds\n\tIf Eof()\n\t\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery,SqlExecute,Value = Evaluate",
+        "controlesReferenciados": "Get_Ds_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.TipoDiferença",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.btnReport.Imprime.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.TipoDiferença",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.btnReport.Imprime.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.TipoDiferença",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.btnReport.Imprime.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.TipoLeitura",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.btnReport.Imprime.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.TipoLeitura",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.btnReport.Imprime.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.TipoLeitura",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.btnReport.Imprime.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.Get_Local",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigPrLcl','CrLocais','codigos',This.Value,'Locais',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('codigos','','Código')\n\t\tm.loLista.mAddColuna('descricaos','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrLocais')\n\t\tThis.Value                = Evaluate('CrLocais.codigos')\n\t\tThisForm.Get_DLocal.Value = Evaluate('CrLocais.descricaos')\n\tElse\n\t\tThis.Value                =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "Get_DLocal",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.get_Dlocal",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Local.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Local",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.get_Dlocal",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigPrLcl','CrLocais','descricaos',This.Value,'Locais',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('descricaos','','Descrição')\n\t\tm.loLista.mAddColuna('codigos','','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrLocais')\n\t\tThis.Value               = Evaluate('CrLocais.descricaos')\n\t\tThisForm.Get_Local.Value = Evaluate('CrLocais.codigos')\n\tElse\n\t\tThis.Value               =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "Get_Local",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.TipoAnalítico",
+      "evento": "InteractiveChange",
+      "linhas": 14,
+      "codigoOriginal": "ThisForm.Get_Cd_Codigo.Enabled = (This.Value = 1)\nThisForm.Get_Ds_Codigo.Enabled = (This.Value = 1)\nThisForm.Get_Local.Enabled     = (This.Value = 2)\nThisForm.Get_DLocal.Enabled    = (This.Value = 2)\nThisForm.Get_Barra.Enabled     = (This.Value = 3)\nIf This.Value = 1\n\tThisForm.Get_Cd_Codigo.SetFocus\nElse\n\tIf This.Value = 2\n\t\tThisForm.Get_Local.SetFocus\n\tElse\n\t\tThisForm.Get_Barra.SetFocus\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Enabled =,Enabled     =,Enabled    =",
+        "controlesReferenciados": "Get_Cd_Codigo,Get_Ds_Codigo,Get_Local,Get_DLocal,Get_Barra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.grdOperacaos.Column1.Check1",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select CsOperacaos\nReplace Marcas With Iif(CsOperacaos.Marcas = 0,1,0) In CsOperacaos\nThis.Refresh\nThis.Parent.Parent.Refresh\nReturn",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.grdOperacaos.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.grdOperacaos.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.apaga",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select CsOperacaos\nUpdate CsOperacaos Set Marcas = 0\nGo Top\nThisForm.GrdOperacaos.Refresh\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINR.SelTudo",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "Select CsOperacaos\nUpdate CsOperacaos Set Marcas = 1\nGo Top\nThisForm.GrdOperacaos.Refresh\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREINR.get_cd_codigo.Valid",
+      "queryOriginal": "\tlStrQuery = [Select cpros,dpros From SigCdPro Where cpros = ']+This.Value+[' ] \tIf ThisForm.poDataMgr.SqlExecute(lStrQuery,'CrProds') < 1",
+      "tabelas": "SigCdPro",
+      "colunas": "cpros,dpros,Value+[,SqlExecutelStrQuery,CrProds",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREINR.apaga.Click",
+      "queryOriginal": "Update CsOperacaos Set Marcas = 0",
+      "tabelas": "CsOperacaos",
+      "colunas": "Marcas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREINR.SelTudo.When",
+      "queryOriginal": "Update CsOperacaos Set Marcas = 1",
+      "tabelas": "CsOperacaos",
+      "colunas": "Marcas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPro", "CsOperacaos"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

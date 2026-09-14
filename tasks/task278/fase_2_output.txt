@@ -1,0 +1,22 @@
+﻿Structure is balanced: 17 PROCEDURE + 17 ENDPROC + 1 DEFINE CLASS + 1 ENDDEFINE.
+
+Phase 3/8 complete. `FormSigPrEml.prg` created with:
+
+- **Init**: receives `(par_cEmpDopNums, par_cEscolha, par_laOpeBaixa)`, stores params including array via `DIMENSION THIS.this_laOpeBaixa`, applies DataSession=2 date fix, calls DODEFAULT()
+- **InicializarForm**: creates BO ÔåÆ `InicializarConexaoAlerta()` ÔåÆ `CarregarDados()` ÔåÆ builds all UI in sequence
+- **ConfigurarCabecalho**: `cnt_4c_Sombra` (RGB 100,100,100), `lbl_4c_Sombra` (black shadow) + `lbl_4c_Titulo` (white), both AutoSize=.F. per canonical rule
+- **ConfigurarBotoes**: `shp_4c_Shape1` (decorativo), `cmd_4c_BtnEmail` (Themes=.T., geral_envelope_60.jpg), `cnt_4c_Saida`/`cmd_4c_Encerrar` canonical (Left=917, Width=90)
+- **ConfigurarSelecaoBotoes**: `cmd_4c_SelTudo` + `cmd_4c_Apaga` (Themes=.T.)
+- **ConfigurarGrade**: 5 columns ÔÇö Column1 (checkbox, Sparse=.F., ColumnOrder=1), Column2 (Conta, 80px), Column3 (Nome, 290px, verde inicial), Column4 (Email, 290px, edit├ível), Column5 (EditBox Mensagem, Sparse=.F.); RecordSource set last
+- **BINDEVENTs**: 4 button clicks + 3 header clicks + checkbox InteractiveChange
+- **Destroy**: chama `EncerrarConexaoAlerta()` + DODEFAULT()
+
+**Pr├│ximo passo ÔÇö integra├º├úo (checklist):**
+
+```
+[ ] Verificar se config.prg j├í carrega *BO.prg e Form*.prg dinamicamente (j├í faz via ADIR)
+[ ] Adicionar item de menu em menu.prg ÔåÆ popMovimentos ÔåÆ "ALERTA - Email"
+    DO FORM / CREATEOBJECT("FormSigPrEml", cEmpDopNums, pcEscolha, @laOpeBaixa)
+[ ] Deletar SigPrEmlBO.fxp e FormSigPrEml.fxp antes de testar
+[ ] Verificar se EnviaEmail() est├í portada em utils/functions.prg
+```

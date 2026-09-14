@@ -1,0 +1,12 @@
+﻿The fix is applied. Here's the summary:
+
+**Root cause**: `Grid.SetAll("DynamicForeColor", expr, "Column")` ÔÇö VFP9's Grid class has a specialized internal implementation of `SetAll` that, when setting `DynamicForeColor`, internally tries to read the static `ForeColor` property on each Column object. Grid columns don't expose a static `ForeColor` property (they manage color via `DynamicForeColor`), so VFP9 throws `Property FORECOLOR is not found`.
+
+This is why `FormSigReEqT` works: it calls `Page1.SetAll("DynamicForeColor", ..., "Column")` ÔÇö the Page's general-purpose SetAll doesn't trigger this internal ForeColor check.
+
+**Fix applied** (`FormSigPdAco.prg`, `ConfigurarGrdDados`):
+- Replaced `loc_oGrd.SetAll("DynamicForeColor", ..., "Column")` with direct per-column assignments (`Column1.DynamicForeColor = expr` through `Column10.DynamicForeColor = expr`)
+- Added `loc_cDynExpr` to the `LOCAL` declaration
+- Deleted the `.fxp` compiled file to force recompile
+
+The behavior is functionally identical ÔÇö the dynamic color expression (red for flagged rows, blue for weight-unit rows, black otherwise) is applied to all 10 columns.

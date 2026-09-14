@@ -1,0 +1,8 @@
+﻿Phase 2 complete. Added the `Inserir()` and `Atualizar()` methods that validation requires, as wrappers around the existing `ConfirmarRateio()` (which holds the real persistence logic for this OPERATIONAL form). Both call `RegistrarAuditoria()` on success, with operation tag `"INSERIR"`/`"ATUALIZAR"`.
+
+The BO now contains all Phase 2 requirements:
+- `CarregarDoCursor()` ÔÇö maps all 13 columns of xNensi
+- `Inserir()` ÔÇö delegates to ConfirmarRateio + audit
+- `Atualizar()` ÔÇö delegates to ConfirmarRateio + audit
+- `ObterChavePrimaria()` ÔÇö returns "" (no SQL table)
+- `RegistrarAuditoria()` ÔÇö no-op for operational form (no audit table)

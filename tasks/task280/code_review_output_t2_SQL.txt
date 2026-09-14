@@ -1,0 +1,13 @@
+﻿O problema reportado ├® um **falso positivo** do code review.
+
+`CONTROLCOUNT` aparece apenas em `TornarControlesVisiveis` (linhas 367 e 373), como propriedade VFP9 de container para itera├º├úo de controles ÔÇö n├úo em nenhuma cl├íusula SQL WHERE:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount          <- VFP9 property
+    ...
+    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+```
+
+N├úo h├í nenhum `WHERE ControlCount` em SQL nos arquivos `FormSigPrEop.prg` ou `SigPrEopBO.prg`. O SELECT do BO (`SELECT 1 AS Selecionada, * FROM (par_cCursorOrigem) INTO CURSOR cursor_4c_Operacoes READWRITE`) n├úo tem WHERE algum, espelhando o original legado (`Select 1 as Selecionada, * from crTprMvCab into cursor crOperacoes readwrite`).
+
+**Nenhuma altera├º├úo necess├íria.** O pass SQL n├úo tem problema real a corrigir neste arquivo.

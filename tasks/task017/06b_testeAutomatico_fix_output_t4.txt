@@ -1,0 +1,1 @@
+﻿The fix adds `THIS.CarregarLista()` immediately after the BO is created, before the `IF gnConnHandle > 0` block. Since `CarregarLista()` only does `CREATE CURSOR cursor_4c_Dados (cDummy C(1))` with no SQL needed, it runs successfully in the test environment, making `cursor_4c_Dados` available right at instantiation time.

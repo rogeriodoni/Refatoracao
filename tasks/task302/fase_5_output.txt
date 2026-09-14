@@ -1,0 +1,12 @@
+﻿Os SQLEXEC restantes s├úo todos contra tabelas SQL Server reais (SigCdTam, SigCdCor, SigCdCli) ÔÇö leg├¡timos.
+
+**Fase 5 conclu├¡da.** Este form ├® OPERACIONAL (layout flat sem PageFrame/Page2), ent├úo n├úo h├í `ConfigurarPaginaDados()` para adicionar ÔÇö o form j├í estava completo das fases anteriores.
+
+O trabalho significativo desta fase foi corrigir **7 bugs cr├¡ticos** no `sigprilaBO.prg`: chamadas `SQLEXEC(gnConnHandle, ...)` apontando para `TmpPlanilha`, que ├® um DBF local VFP criado em runtime. O SQL Server nunca teria acesso a esse arquivo ÔÇö todas as importa├º├Áes de lista/transfer├¬ncia/pedido falhariam silenciosamente.
+
+**Corre├º├Áes aplicadas:**
+- `ProcessarListaPreco()`: 3 SELECTs (DISTINCT NomeLista+Emps, COUNT, SELECT * WHERE NomeLista)
+- `ProcessarTransferencia()`: 2 SELECTs (linhas 785 e 1191, cursores csTransf)  
+- `ProcessarPedidoFabrica()`: 2 SELECTs (csMovPlan com filtro composto, csPedFab WHERE Contaos+Dopes)
+
+Todos convertidos para `SELECT ... INTO CURSOR ... READWRITE` (VFP local), com `m.` prefix correto nas vari├íveis de filtro e `RTRIM()/ALLTRIM()` para evitar problemas com SET EXACT ON.

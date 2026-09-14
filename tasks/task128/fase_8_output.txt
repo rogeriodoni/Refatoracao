@@ -1,0 +1,20 @@
+﻿Tudo correto. Fase 8 conclu├¡da.
+
+**Resumo das altera├º├Áes feitas:**
+
+**`Formsigreipe.prg`** ÔÇö 8 m├®todos adicionados antes do `ENDDEFINE`:
+- `BtnBuscarClick()` ÔÇö stub (n├úo aplic├ível a form REPORT)
+- `BtnSalvarClick()` ÔÇö stub (n├úo aplic├ível a form REPORT)
+- `BtnCancelarClick()` ÔÇö delega para `LimparCampos()` (reinicia filtros)
+- `FormParaBO()` ÔÇö delega para `FormParaRelatorio()` (compatibilidade com FormBase)
+- `BOParaForm()` ÔÇö stub (n├úo aplic├ível a form REPORT)
+- `HabilitarCampos(par_lHabilitar)` ÔÇö delega para `AtualizarEstadoControles()`
+- `CarregarLista()` ÔÇö retorna `.T.` (n├úo aplic├ível a form REPORT)
+- `AjustarBotoesPorModo()` ÔÇö stub (form REPORT n├úo tem modos CRUD)
+
+**`menu.prg`** ÔÇö 3 adi├º├Áes:
+- `DEFINE BAR 162` (separador) e `DEFINE BAR 163` ("Impress├úo de Etiquetas") no `popRelatorios`
+- `ON SELECTION BAR 163 OF popRelatorios DO AbrirFormsigreipe`
+- `PROCEDURE AbrirFormsigreipe()` no padr├úo can├┤nico do sistema
+
+O `config.prg` n├úo precisou de altera├º├Áes ÔÇö `sigreipeBO.prg` (em `classes/`) e `Formsigreipe.prg` (em `forms/relatorios/`) s├úo carregados automaticamente pelos padr├Áes `*BO.prg` e `Form*.prg`.

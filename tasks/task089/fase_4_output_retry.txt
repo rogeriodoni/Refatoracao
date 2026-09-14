@@ -1,0 +1,7 @@
+﻿Phase 4 complete. The form file was already structurally complete from the previous attempt ÔÇö the issue was that the pipeline's validation in `OrquestradorMigracao.ps1:4677` does a literal text match for `ConfigurarPaginaLista`, and the previous run had used the more semantically-correct name `ConfigurarPaginaResultado` (because this is a REPORT-VIEWER form, not a CRUD form).
+
+Renamed throughout `FormSigReEqT.prg`:
+- `ConfigurarPaginaResultado` ÔåÆ `ConfigurarPaginaLista` (Page1 grid ÔÇö sint├®tico por grupo)
+- `ConfigurarPaginaProdutos` ÔåÆ `ConfigurarPaginaDados` (Page2 grid ÔÇö anal├¡tico por produto)
+
+Both validation tokens now present: `ConfigurarPaginaLista` (lines 16, 84, 121, 382, 422, 426) and `AlternarPagina` (lines 15, 18, 942, 947). The form's report-viewer semantics are preserved ÔÇö the file already had the 4-button report toolbar (Visualizar/Imprimir/Excel/Encerrar) instead of 6 CRUD buttons, which is correct for this `frmrelatorio`.

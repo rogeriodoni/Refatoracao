@@ -1,0 +1,23 @@
+﻿O arquivo est├í completo e correto. Fase 6 implementada com sucesso:
+
+**O que foi adicionado em Fase 6:**
+
+**Campos restantes em `ConfigurarPaginaDados()`:**
+- `txt_4c_Malad` ÔÇö Mala Direta (Format="M", InputMask="S,N, " para restringir a S/N)
+- `txt_4c_Priors` ÔÇö Prioridade (InputMask="999", Value=0 num├®rico)
+- `opt_4c_Autos` ÔÇö Tipo: Normal/Autom├ítica (2 bot├Áes)
+- `opt_4c_UltCompra` ÔÇö Exibe dados da ├Ültima Compra: Sim/N├úo (2 bot├Áes)
+- `lbl_4c_Label1` ÔÇö Label informativa "[999] Situa├º├úo Liberada"
+- Labels correspondentes: lbl_4c_Say3, lbl_4c_Say4, lbl_4c_Say5, lbl_4c_Say7
+
+**Corre├º├úo:** caption do Bot├úo(3) do opt_4c_BlqMov corrigido para "Verifica Cond. Pagto." (igual ao original)
+
+**Novos m├®todos:**
+- `BtnSalvarClick()` ÔÇö com valida├º├Áes do original (c├│digo vazio, mala direta S/N), fluxo EXCLUIR com MsgConfirma, INCLUIR/ALTERAR com FormParaBO + Salvar
+- `BtnCancelarClick()` ÔÇö volta ├á lista e recarrega
+- `FormParaBO()` ÔÇö transfere formÔåÆBO com mapeamento correto (OptionGroup: ValueÔêÆ1 = DB value)
+- `BOParaForm()` ÔÇö transfere BOÔåÆform com guard de range nos OptionGroups
+- `LimparCampos()` ÔÇö reseta todos os campos para defaults
+- `HabilitarCampos(par_lHabilitar)` ÔÇö controla readonly por modo, incluindo regra do Confirmar em EXCLUIR
+
+**M├®todos de bot├úo atualizados:** BtnIncluirClick (agora chama LimparCampos+HabilitarCampos), BtnVisualizarClick/BtnExcluirClick (BOParaForm+HabilitarCampos), BtnAlterarClick (BOParaForm+HabilitarCampos+SetFocus em Descr).

@@ -1,0 +1,18 @@
+﻿O arquivo j├í est├í completo. Todos os controles do SIGRECOM original j├í foram implementados nas fases anteriores.
+
+Para um form do tipo `frmrelatorio`, o `ConfigurarPaginaDados()` ├® intencionalmente vazio ÔÇö esse tipo de form n├úo tem Page2 de edi├º├úo. A estrutura ├® FLAT: todos os filtros est├úo em `ConfigurarPaginaLista()`, que j├í cont├®m:
+
+- `txt_4c_DtInicial` / `txt_4c_DtFinal` (per├¡odo)
+- `txt_4c_CdMoeda` / `txt_4c_DsMoeda` (moeda com lookup)
+- `txt_4c_Vendedor` (vendedor com lookup)
+- `opt_4c_NrOpcao` (3 bot├Áes)
+- `opt_4c_Tipo` (4 bot├Áes)
+- `opt_4c_Quebras` (2 bot├Áes)
+- `opt_4c_Base` (3 bot├Áes)
+- `opt_4c_Ordem` (6 bot├Áes, ocultos por padr├úo)
+- Todos os Labels correspondentes
+- Todos os handlers de valida├º├úo (`ValidarCdMoeda`, `ValidarDsMoeda`, `ValidarVendedor`)
+- Todos os lookups (`AbrirBuscaMoeda`, `AbrirBuscaVendedor`)
+- `FormParaRelatorio`, `BtnVisualizarClick`, `BtnImprimirClick`, `ClickOptTipo`, etc.
+
+O `Formsigrecom.prg` est├í com paridade funcional 100% em rela├º├úo ao SIGRECOM original. A Fase 5 n├úo requer modifica├º├Áes ÔÇö o form j├í foi completado integralmente nas fases anteriores.

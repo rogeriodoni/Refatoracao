@@ -1,0 +1,768 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREIDC.SCX
+* Data/Hora: 06/06/2026 03:38:10
+* Total de registros: 15
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIDC
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREIDC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsGrupo
+  Parent: SIGREIDC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdGrupo
+  Parent: SIGREIDC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label4
+  Parent: SIGREIDC
+  Class: label
+  BaseClass: label
+
+Objeto: lbl_estoque
+  Parent: SIGREIDC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsConta
+  Parent: SIGREIDC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdConta
+  Parent: SIGREIDC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getLinha
+  Parent: SIGREIDC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getColuna
+  Parent: SIGREIDC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label5
+  Parent: SIGREIDC
+  Class: label
+  BaseClass: label
+
+Objeto: Opt_logo
+  Parent: SIGREIDC
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 528
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório de Identificaçao de Contas"
+  Name = "SIGREIDC"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 526
+  btnReport.Top = 4
+  btnReport.TabIndex = 12
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 127
+  REGISTRY1.Left = 642
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Left = 213
+  Top = 145
+  Width = 38
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.getDsGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 336
+  MaxLength = 20
+  TabIndex = 2
+  Top = 141
+  Width = 150
+  ZOrderSet = 3
+  Name = "getDsGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.getCdGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 255
+  MaxLength = 10
+  TabIndex = 1
+  Top = 141
+  Width = 79
+  ZOrderSet = 4
+  Name = "getCdGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Coluna Inicial :"
+  Height = 15
+  Left = 287
+  Top = 201
+  Width = 72
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta :"
+  Left = 213
+  Top = 173
+  Width = 38
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.getDsConta
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 336
+  MaxLength = 40
+  TabIndex = 4
+  Top = 168
+  Width = 290
+  ZOrderSet = 8
+  Name = "getDsConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.getCdConta
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 255
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 3
+  ToolTipText = ""
+  Top = 168
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "getCdConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.getLinha
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 1
+  Format = "KL"
+  Height = 25
+  InputMask = "99"
+  Left = 255
+  Margin = 0
+  TabIndex = 5
+  Top = 195
+  Width = 27
+  Name = "getLinha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.getColuna
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 1
+  Format = "KL"
+  Height = 25
+  InputMask = "99"
+  Left = 376
+  Margin = 0
+  TabIndex = 6
+  Top = 195
+  Width = 27
+  Name = "getColuna"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Linha Inicial :"
+  Height = 15
+  Left = 187
+  Top = 201
+  Width = 64
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDC.Opt_logo
+------------------------------------------------------------
+  Top = 202
+  Left = 438
+  Height = 15
+  Width = 100
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir Logotipo"
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 51
+  Name = "Opt_logo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIDC
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+
+Report Form SigReIdc To Printer Prompt NoConsole 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Local lcEscape
+
+=fConfigGeral()
+
+m.lcEscape = Set('Escape')
+
+Set Escape Off
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigCdPam','GrPadClis','crSigCdPam','GrPadClis',.f.,[Select GrPadClis, Logos from SigCdPam])
+		.Requery("crSigCdPam")
+	EndWith
+Endwith	
+
+
+Thisform.podatamgr.SqlExecute([Select a.Codigos,a.Descrs From SigCdGcr a Where a.GerBals=1 Order By a.codigos],"cTmpGrupos")
+
+Index On Codigos Tag Codigos
+Use Dbf('cTmpGrupos') Alias cGrupos Again In 0
+
+Select cGrupos
+Index On Descrs Tag Descrs
+
+Set Escape &lcEscape.
+
+=DoDefault()
+
+ThisForm.LockScreen = .t.
+ThisForm.getCdGrupo.Value = Space(10)
+ThisForm.getCdGrupo.Value = Space(20)
+ThisForm.getCdConta.Value = Space(10)
+ThisForm.getDsConta.Value = Space(50)
+ThisForm.getLinha.Value = 1
+ThisForm.getColuna.Value = 1
+ThisForm.getCdGrupo.SetFocus
+ThisForm.Refresh
+ThisForm.LockScreen = .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private lcCempresas,lcCgrupo,lcDgrupo,lcConta,lcDcotna,lcTitulo1,lcEscape,cEmpresas,cTitulo1s,cGrupos,cContas,cDcontas,;
+      cArqJpgs,lcDirJpg,lnLinha,lnColuna,lnConta1
+
+ThisForm.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _Empr)
+
+m.lcCempresas = AllTrim(crSigCdEmp.Razas)
+m.lcCgrupo = ThisForm.getCdGrupo.Value
+m.lcDgrupo = ThisForm.getDsGrupo.Value
+m.lcCconta = ThisForm.getCdConta.Value
+m.lcDconta = ThisForm.getDsConta.Value
+m.lnLinha = ThisForm.getLinha.Value
+m.lnColuna = ThisForm.getColuna.Value
+m.lcTitulo1 = 'IDENTIFICAÇÃO' && DO FUNCIONÁRIO'
+m.lcDirJpg = AllTrim(Sys(2023))
+m.lcDirJpg = (m.lcDirJpg+Iif(Right(m.lcDirJPg,1)=='\','','\'))
+m.lcEscape = Set('Escape')
+
+lcSel=""
+
+IF ! EMPTY(m.lcCgrupo)
+	lcSel=" and Grupos = ?m.lcCgrupo"
+Endif
+
+IF ! EMPTY(m.lcCconta)
+	lcSel=" and IClis = ?m.lcCconta"
+Endif
+
+lcSelecao=[Select a.Iclis,a.Rclis,a.Grupos From SigCdCli a Where a.GerBals=1]+lcSel
+
+WITH ThisForm.podatamgr
+	.SqlExecute(lcSelecao,'cTmpContas')
+Endwith
+
+SELECT cTmpContas
+Index On Iclis Tag Iclis
+
+Use Dbf('cTmpContas') Alias cContas Again In 0
+
+Select cContas
+Index On Rclis Tag Rclis
+Index On Grupos+Iclis Tag GrCodigo
+Index On Grupos+Rclis Tag GrNome
+
+
+Set Escape Off
+
+Create Cursor cIde (cEmpresas c(50),cTitulo1s c(50),cGrupos c(10),cContas c(10),cDcontas c(50),gLogos c(64), gFotos g(4) Null,cArqJpgs c(254),lBrancos l(1))
+Index On cContas Tag cContas
+
+Select crSigCdPam
+
+Select cIde
+Scatter Memvar Blank
+
+m.lBrancos = .t.
+
+m.lnNregi = (((m.lnLinha-1)+(m.lnColuna-1))*5)
+
+For m.lnConta=1 To m.lnNregi
+
+	Insert Into cIde From Memvar
+	
+EndFor
+
+Select cContas
+Set Order To GrCodigo In cContas
+Set Near On 
+= Seek(m.lcCgrupo+m.lcCconta,'cContas','Grcodigo')
+Set Near Off
+
+Scan While (IsEmpty(m.lcCgrupo+m.lcCconta).Or.;
+            cContas.Grupos==m.lcCgrupo.And.;
+            (IsEmpty(m.lcCconta).Or.cContas.Iclis==m.lcCconta))
+
+	ThisForm.podatamgr.CursorQuery('SigCdCli','crSigCdCli', 'Iclis', cContas.Iclis)
+	
+	m.cEmpresas = m.lcCempresas
+	m.cTitulo1s = m.lcTitulo1
+	m.cGrupos = cContas.Grupos
+	m.cContas = cContas.Iclis
+	m.cDcontas = cContas.Rclis
+	m.cArqJpgs = ''
+	m.lBrancos = .f.
+	
+	Insert Into cIde From Memvar
+	
+	Select cIde
+	
+	IF Not IsEmpty(crSigCdPam.Logos) And ThisForm.Opt_logo.VALUE = 1
+		m.cArqJpgs = (m.lcDirJpg+Sys(3)+'.Jpg')
+		Copy Memo CrSigCdPam.Logos To (m.cArqJpgs)
+		Replace gLogos With m.cArqJpgs in cIde
+	Endif
+
+	If Not Isnull(crSigCdCli.Figuras)
+	
+		Replace gFotos With crSigCdCli.Figuras in cIde
+		
+	Else
+	
+		If Not IsEmpty(crSigCdCli.FigJpgs)
+		
+			m.cArqJpgs = (m.lcDirJpg+Sys(3)+'.Jpg')
+
+			Clear Resources
+			
+			IF Not IsEmpty(crSigCdCli.FigJpgs)
+				Copy Memo crSigCdCli.FigJpgs To (m.cArqJpgs)
+			ENDIF
+			
+			Gather Memvar Fields cArqJpgs
+	
+		EndIf
+
+	EndIf
+	
+	Select cContas
+	
+EndScan
+
+SELECT cContas
+Use
+
+Select cIde
+Set Order To cContas In cIde
+= Seek('','cIde','cContas')
+
+Set Escape &lcEscape.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+
+Report Form SigReIdc Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+
+Local llRetorno
+
+ThisForm.LockScreen = .t.
+
+m.llRetorno = .t.
+
+If .Not.This.Value==3
+
+	Do Case
+		Case (.Not.IsEmpty(ThisForm.getCdGrupo.Value).And.;
+		      .Not.ThisForm.podatamgr.ChkRegister('SigCdGcr', 'Codigos', ThisForm.getCdGrupo.Value))
+	        Messagebox('Grupo Inválido.',16,'')
+	        ThisForm.getCdGrupo.SetFocus
+	        m.llRetorno = .f.
+		Case (.Not.IsEmpty(ThisForm.getCdConta.Value).And.;
+		      .Not.ThisForm.podatamgr.ChkRegister('SigCdCli', 'Iclis', ThisForm.getCdConta.Value))
+	        Messagebox('Conta Inválida.',16,'')
+	        ThisForm.getCdConta.SetFocus
+	        m.llRetorno = .f.
+		Case (.Not.BetWeen(ThisForm.getLinha.Value,1,5))
+	        Messagebox('Linha Inicial Inválida.',16,'')
+	        ThisForm.getLinha.SetFocus
+	        m.llRetorno = .f.
+		Case (.Not.BetWeen(ThisForm.getColuna.Value,1,2))
+	        Messagebox('Coluna Inicial Inválida.',16,'')
+	        ThisForm.getColuna.SetFocus
+	        m.llRetorno = .f.
+	EndCase
+
+EndIf
+
+If m.llRetorno
+
+	DODEFAULT()
+		
+	If Used('cIde')
+	
+		Select cIde
+		
+		Scan
+		
+			m.lcArqJpgs = AllTrim(cIde.cArqJpgs)
+		
+			If (.Not.IsEmpty(m.lcArqJpgs).And.;
+				 File(m.lcArqJpgs))
+				 
+				Delete File (m.lcArqJpgs)
+				
+			EndIf
+			
+		EndScan
+		
+		Use In cIde
+		
+	EndIf
+
+EndIf
+
+ThisForm.Refresh
+ThisForm.LockScreen = .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIDC.getDsGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'D',this.value,ThisForm.getCdGrupo,ThisForm.getDsGrupo)
+Else
+	ThisForm.getCdGrupo.value = ''
+	ThisForm.getCdGrupo.refresh
+endif
+return(.t.)
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+Return(IsEmpty(Thisform.getCdGrupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIDC.getCdGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'C',this.value,This,ThisForm.getDsGrupo)
+Else
+	ThisForm.getDsGrupo.value = ''
+	ThisForm.getDsGrupo.refresh
+endif
+return(.t.)
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIDC.getDsConta
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ThisForm.getCdGrupo.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'D',this.value,ThisForm.getCdConta,ThisForm.getDsConta)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		ThisForm.getCdConta.Value = ''
+		ThisForm.getCdConta.Refresh
+		return 0 
+	Endif
+Else
+	ThisForm.getCdConta.Value = ''
+	ThisForm.getCdConta.Refresh
+	return(.t.)
+endif
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+Return(.Not.IsEmpty(ThisForm.getCdGrupo.Value).And.IsEmpty(ThisForm.getCdConta.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIDC.getCdConta
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ThisForm.getCdGrupo.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'C',this.value,This,ThisForm.getDsConta)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		ThisForm.getDsConta.Value = ''
+		ThisForm.getDsConta.Refresh
+		return 0 
+	Endif
+Else
+	ThisForm.getDsConta.Value = ''
+	ThisForm.getDsConta.Refresh
+	return(.t.)
+endif
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+Return(.Not.IsEmpty(ThisForm.getCdGrupo.Value))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIDC
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

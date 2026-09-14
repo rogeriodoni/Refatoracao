@@ -1,0 +1,187 @@
+*==============================================================================
+* MENU.PRG
+* Menu principal da aplicação (versão programática)
+*
+* NOTA: Este é um exemplo de menu criado programaticamente.
+* Recomenda-se usar o Menu Designer do Visual FoxPro para criar um arquivo .MPR
+* Para usar o Menu Designer:
+* 1. No VFP, vá em File > New > Menu
+* 2. Desenhe o menu conforme necessário
+* 3. Salve como menu.mnx
+* 4. Gere o menu (Menu > Generate) para criar o menu.mpr
+*==============================================================================
+
+*------------------------------------------------------------------------------
+* CriarMenuPrincipal - Cria menu principal da aplicação
+*------------------------------------------------------------------------------
+PROCEDURE CriarMenuPrincipal()
+    * Define popup principal
+    DEFINE PAD padArquivo OF _MSYSMENU PROMPT "\<Arquivo" COLOR SCHEME 3 ;
+           KEY ALT+A, ""
+
+    DEFINE PAD padCadastros OF _MSYSMENU PROMPT "\<Cadastros" COLOR SCHEME 3 ;
+           KEY ALT+C, ""
+
+    DEFINE PAD padMovimentos OF _MSYSMENU PROMPT "\<Movimentos" COLOR SCHEME 3 ;
+           KEY ALT+M, ""
+
+    DEFINE PAD padRelatorios OF _MSYSMENU PROMPT "\<Relatórios" COLOR SCHEME 3 ;
+           KEY ALT+R, ""
+
+    DEFINE PAD padFerramentas OF _MSYSMENU PROMPT "\<Ferramentas" COLOR SCHEME 3 ;
+           KEY ALT+F, ""
+
+    DEFINE PAD padAjuda OF _MSYSMENU PROMPT "A\<juda" COLOR SCHEME 3 ;
+           KEY ALT+J, ""
+
+    * Menu Arquivo
+    ON PAD padArquivo OF _MSYSMENU ACTIVATE POPUP popArquivo
+
+    DEFINE POPUP popArquivo MARGIN RELATIVE SHADOW COLOR SCHEME 4
+    DEFINE BAR 1 OF popArquivo PROMPT "\<Sair" ;
+           KEY CTRL+Q, "Ctrl+Q"
+    ON SELECTION BAR 1 OF popArquivo DO SairSistema
+
+    * Menu Cadastros
+    ON PAD padCadastros OF _MSYSMENU ACTIVATE POPUP popCadastros
+
+    DEFINE POPUP popCadastros MARGIN RELATIVE SHADOW COLOR SCHEME 4
+    DEFINE BAR 1 OF popCadastros PROMPT "Cores" ;
+           MESSAGE "Cadastro de Cores"
+    DEFINE BAR 2 OF popCadastros PROMPT "\-"
+    DEFINE BAR 3 OF popCadastros PROMPT "Clientes" ;
+           MESSAGE "Cadastro de Clientes"
+    DEFINE BAR 4 OF popCadastros PROMPT "Fornecedores" ;
+           MESSAGE "Cadastro de Fornecedores"
+    DEFINE BAR 5 OF popCadastros PROMPT "Produtos" ;
+           MESSAGE "Cadastro de Produtos"
+    DEFINE BAR 6 OF popCadastros PROMPT "\-"
+    DEFINE BAR 7 OF popCadastros PROMPT "Usuários" ;
+           MESSAGE "Cadastro de Usuários"
+
+    * Vincular ações dos itens do menu Cadastros
+    ON SELECTION BAR 1 OF popCadastros DO AbrirFormCor
+    * ON SELECTION BAR 3 OF popCadastros DO FORM forms\clientes
+    * ON SELECTION BAR 4 OF popCadastros DO FORM forms\fornecedores
+    * ON SELECTION BAR 5 OF popCadastros DO FORM forms\produtos
+    * ON SELECTION BAR 7 OF popCadastros DO FORM forms\usuarios
+
+    * Menu Movimentos
+    ON PAD padMovimentos OF _MSYSMENU ACTIVATE POPUP popMovimentos
+
+    DEFINE POPUP popMovimentos MARGIN RELATIVE SHADOW COLOR SCHEME 4
+    DEFINE BAR 1 OF popMovimentos PROMPT "Pedidos" ;
+           MESSAGE "Lançamento de Pedidos"
+    DEFINE BAR 2 OF popMovimentos PROMPT "Notas Fiscais" ;
+           MESSAGE "Lançamento de Notas Fiscais"
+
+    * Menu Relatórios
+    ON PAD padRelatorios OF _MSYSMENU ACTIVATE POPUP popRelatorios
+
+    DEFINE POPUP popRelatorios MARGIN RELATIVE SHADOW COLOR SCHEME 4
+    DEFINE BAR 1 OF popRelatorios PROMPT "Clientes" ;
+           MESSAGE "Relatório de Clientes"
+    DEFINE BAR 2 OF popRelatorios PROMPT "Produtos" ;
+           MESSAGE "Relatório de Produtos"
+    DEFINE BAR 3 OF popRelatorios PROMPT "Pedidos" ;
+           MESSAGE "Relatório de Pedidos"
+
+    * Menu Ferramentas
+    ON PAD padFerramentas OF _MSYSMENU ACTIVATE POPUP popFerramentas
+
+    DEFINE POPUP popFerramentas MARGIN RELATIVE SHADOW COLOR SCHEME 4
+    DEFINE BAR 1 OF popFerramentas PROMPT "Configurações" ;
+           MESSAGE "Configurações do Sistema"
+    DEFINE BAR 2 OF popFerramentas PROMPT "\-"
+    DEFINE BAR 3 OF popFerramentas PROMPT "Testar Conexão BD" ;
+           MESSAGE "Testa conexão com banco de dados"
+    ON SELECTION BAR 3 OF popFerramentas DO TestarConexaoBD
+
+    * Menu Ajuda
+    ON PAD padAjuda OF _MSYSMENU ACTIVATE POPUP popAjuda
+
+    DEFINE POPUP popAjuda MARGIN RELATIVE SHADOW COLOR SCHEME 4
+    DEFINE BAR 1 OF popAjuda PROMPT "Sobre o Sistema" ;
+           MESSAGE "Informações sobre o sistema"
+    ON SELECTION BAR 1 OF popAjuda DO SobreSistema
+
+    * Ativa o menu
+    ACTIVATE MENU _MSYSMENU NOWAIT
+ENDPROC
+
+*------------------------------------------------------------------------------
+* SairSistema - Encerra o sistema
+*------------------------------------------------------------------------------
+PROCEDURE SairSistema()
+    LOCAL lnResposta
+
+    lnResposta = MESSAGEBOX("Deseja realmente sair do sistema?", ;
+                            36, ;
+                            "Confirmar Saída")
+
+    IF lnResposta = 6  && Sim
+        CLEAR EVENTS
+        SET SYSMENU TO DEFAULT
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* SobreSistema - Exibe informações sobre o sistema
+*------------------------------------------------------------------------------
+PROCEDURE SobreSistema()
+    LOCAL lcMensagem
+
+    lcMensagem = ObterVersaoCompleta() + CHR(13) + CHR(13) + ;
+                 "Sistema desenvolvido em Visual FoxPro 9" + CHR(13) + ;
+                 "Arquitetura: SOLID + Camadas" + CHR(13) + CHR(13) + ;
+                 "© " + TRANSFORM(YEAR(DATE())) + " - " + APP_EMPRESA
+
+    MESSAGEBOX(lcMensagem, 64, "Sobre o Sistema")
+ENDPROC
+
+*------------------------------------------------------------------------------
+* TestarConexaoBD - Testa conexão com banco de dados
+*------------------------------------------------------------------------------
+PROCEDURE TestarConexaoBD()
+    IF TestarConexao()
+        MESSAGEBOX("Conexão com banco de dados: OK", 64, "Teste de Conexão")
+    ELSE
+        MESSAGEBOX("Falha na conexão com banco de dados!", 16, "Teste de Conexão")
+    ENDIF
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormCor - Abre formulário de cadastro de cores
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormCor()
+    LOCAL loForm, loException
+
+        * Cria instância do formulário
+        loForm = CREATEOBJECT("FormCor")
+
+        IF VARTYPE(loForm) = "O"
+            * Exibe o formulário
+            loForm.Visible = 
+            loForm.Activate()
+            loForm.Show()
+        ELSE
+            MESSAGEBOX("Erro ao criar formulário de Cores" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), 16, "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formulário de Cores:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MESSAGEBOX(lcMensagem, 16, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* NOTA: Este arquivo contém apenas procedimentos
+* A chamada de CriarMenuPrincipal() e READ EVENTS deve ser feita
+* no programa principal (main.prg)
+*------------------------------------------------------------------------------

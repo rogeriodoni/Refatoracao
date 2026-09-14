@@ -1,0 +1,30 @@
+﻿**Estes s├úo falsos positivos do validador.** Nenhuma altera├º├úo ser├í feita. Aqui est├í a an├ílise:
+
+---
+
+### Problema 1: `Label1` ÔåÆ `lbl_4c_Label11` (Top 137 vs 345)
+
+O validador fez **substring match** errado:
+- SCX `Label1` ÔåÆ casou com `lbl_4c_Label11` (cont├®m "Label1" como prefixo)
+- O controle **correto** ├® `lbl_4c_Label1` (linha 514), Top=166 = 137+29 = **posi├º├úo exata** Ô£ô
+
+### Problema 2: `fwget1` ÔåÆ `txt_4c_Fwget17` (Top 133 vs 366)
+
+Mesmo problema de substring match:
+- SCX `fwget1` ÔåÆ casou com `txt_4c_Fwget17` (cont├®m "Fwget1" como prefixo)
+- O controle **correto** ├® `txt_4c_Fwget1` (linha 530), Top=162 = 133+29 = **posi├º├úo exata** Ô£ô
+
+---
+
+### Resumo
+
+| SCX Original | Top original | Migrado (correto) | Top migrado | C├ílculo |
+|---|---|---|---|---|
+| `Label1` | 137 | `lbl_4c_Label1` | 166 | 137+29=166 Ô£ô |
+| `fwget1` | 133 | `txt_4c_Fwget1` | 162 | 133+29=162 Ô£ô |
+| `Label11` | 316 | `lbl_4c_Label11` | 345 | 316+29=345 Ô£ô |
+| `fwget17` | 337 | `txt_4c_Fwget17` | 366 | 337+29=366 Ô£ô |
+
+**Causa raiz**: o validador de UI usa correspond├¬ncia por prefixo de nome sem priorizar match exato, causando `Label1` ÔåÆ `Label11` e `fwget1` ÔåÆ `fwget17`. Todos os controles est├úo posicionados corretamente no c├│digo. Alterar `lbl_4c_Label11.Top` de 345 para 166 moveria o label "Ano" para cima do label "Valor", quebrando o layout.
+
+O arquivo `FormCHM.prg` n├úo requer nenhuma corre├º├úo neste pass.

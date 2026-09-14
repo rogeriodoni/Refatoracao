@@ -1,0 +1,22 @@
+﻿Arquivo criado com sucesso em `C:/4c/projeto/app/forms/operacionais/FormSigPrSnd.prg` (523 linhas).
+
+**O que foi entregue na Fase 3 (completa, n├úo parcial):**
+
+Dado que o SIGPRSND ├® um form OPERACIONAL simples (15 objetos, 8 m├®todos no original), optei por entregar implementa├º├úo **100% funcional** em vez de arquivo parcial com stubs ÔÇö conforme a regra de completude obrigat├│ria.
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | `DODEFAULT()` |
+| `InicializarForm()` | Cria BO, cabecalho, saida, controles, eventos, carrega dados |
+| `ConfigurarPageFrame()` | Fundo `new_background.jpg` via Framework |
+| `ConfigurarCabecalho()` | Container cinza com lbl_4c_Sombra/Titulo (AddObject expl├¡cito fora do WITH) |
+| `ConfigurarSaida()` | `cnt_4c_Saida` canonical (Left=917, Width=90) + cmd_4c_Encerrar |
+| `ConfigurarControles()` | Bot├Áes operacionais, label, txt_4c_Qtdsen, grd_4c_Dados com Column1.Sparse=.F. |
+| `VincularEventos()` | BINDEVENT para os 4 bot├Áes |
+| `AtualizarGrid()` | Vincula crSigPrSnd ao grid + ControlSource correto |
+| `CmdSenPendClick()` | Chama `BuscarPendentes()` no BO |
+| `CmdExcelClick()` | `PUTFILE()` + COPY TO XL5/delimited com TmpPrSnd |
+| `CmdGerSenClick()` | Valida qty ÔåÆ chama `GerarSenhas()` no BO ÔåÆ AtualizarGrid |
+| `CmdEncerrarClick()` | `THIS.Release()` |
+| `TornarControlesVisiveis()` | Recursivo sem filtros (nenhum container flutuante neste form) |
+| `Destroy()` | Limpa BO + fecha cursor crSigPrSnd + DODEFAULT() |

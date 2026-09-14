@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDTAM",
+      "evento": "Init",
+      "linhas": 15,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdTam','cods','crSigCdTam','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('cods','','','Código',50,.t.)\n\t\t.pfSqlTabela(1).pColuna('descs','','','Descrição',150,.t.)\n\t\t.pfSqlTabela(1).pColuna('varias','','','Variação de Preço',100,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTAM",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lcBusca\n\nIf !IsEmpty(ThisForm.Pagina.Dados.getcods.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdTam','cods',ThisForm.Pagina.Dados.Getcods.Value)\nElse\n\tIf .Not.IsEmpty(ThisForm.Pagina.Dados.Getdescs.Value)\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdTam','descs',ThisForm.Pagina.Dados.Getdescs.Value)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTAM",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "parameters lcOpcao\n\nIf !dodefault( lcopcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\ndo case\ncase thisform.pcEscolha='INSERIR' or ;\n\tthisform.pcEscolha='PROCURAR'\n\tthisform.Pagina.Dados.getcods.setfocus\ncase thisform.pcEscolha='ALTERAR'\n\tthisform.pagina.dados.getdescs.setfocus\ncase thisform.pcEscolha='CONSULTAR' or ;\n\tthisform.pcEscolha='EXCLUIR'\n\tthisform.pagina.dados.grupo_salva.salva.setfocus\nendcase\n\t\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTAM",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "if inlist(thisform.pcEscolha,'INSERIR')\n    if IsEmpty(thisform.Pagina.Dados.getcods.value)\n       messagebox('Tamanho Inválido !!',0+48,'')\n       thisform.Pagina.Dados.getcods.setfocus\n\t\treturn \t\n\tendif\t\n\t\n\tif ThisForm.poDataMgr.ChkRegister('SigCdTam','Cods',ThisForm.Pagina.Dados.GetCods.Value)\n       messagebox('Tamanho já Cadastrado !!',0+48,'')\n       thisform.Pagina.Dados.getcods.setfocus\n      \treturn\n\tendif\t\t\t\nendif\nDoDefault()\nThisform.mAtivapagina1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdTam'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTAM",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "DoDefault()\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

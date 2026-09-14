@@ -1,0 +1,11 @@
+﻿Todas as condi├º├Áes `Grupos = EscaparSQL(...)` foram removidas. Resumo das corre├º├Áes:
+
+**FormSigReJur.prg** (2 ocorr├¬ncias):
+- Removido bloco `IF !EMPTY(loc_cGrupo) / this_cFiltroExtra = "Grupos = ..." / ENDIF` de `AbrirLookupContaDebito` (linha ~1167)
+- Removido o mesmo bloco de `AbrirLookupContaCredito` (linha ~1269)
+
+**SigReJurBO.prg** (2 ocorr├¬ncias):
+- `BuscarDescricaoConta`: WHERE simplificado para `WHERE IClis = ...` (removido `Grupos = ... AND`)
+- `VerificarAcessoConta`: WHERE simplificado para `WHERE IClis = ...` (removido `Grupos = ... AND`)
+
+**Sobre CODIGOS e ICLIS**: essas condi├º├Áes (`WHERE Codigos = ...` em SigCdGcr e `WHERE IClis = ...` em SigCdCli) s├úo o equivalente SQL dos `SEEK` do c├│digo original. Remov├¬-las tornaria as queries in├║teis (retornariam qualquer registro). O validador provavelmente detectou falsos positivos ao comparar queries SQL com c├│digo VFP que usava cursores locais sem SQL.

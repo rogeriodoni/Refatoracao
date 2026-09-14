@@ -1,0 +1,567 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGRECTL.SCX
+* Data/Hora: 03/06/2026 20:35:24
+* Total de registros: 9
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECTL
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblEmpresa
+  Parent: SIGRECTL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getMes
+  Parent: SIGRECTL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGRECTL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getAno
+  Parent: SIGRECTL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: chkImpTempo
+  Parent: SIGRECTL
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTL
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 143
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Relatório Mensal de Acessos"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 0
+  podatamgr = .F.
+  Name = "SIGRECTL"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 494
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.TabIndex = 6
+  btnReport.ZOrderSet = 3
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTL.lblEmpresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Mês :"
+  Left = 96
+  Top = 94
+  Width = 28
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "lblEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTL.getMes
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = "99"
+  Left = 126
+  MaxLength = 2
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Mês (Formato = 99]"
+  Top = 90
+  Width = 24
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  ZOrderSet = 13
+  Name = "getMes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTL.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ano :"
+  Left = 168
+  Top = 93
+  Width = 28
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTL.getAno
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = "9999"
+  Left = 198
+  MaxLength = 4
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Ano (Formato = 9999]"
+  Top = 89
+  Width = 38
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  ZOrderSet = 13
+  Name = "getAno"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTL.chkImpTempo
+------------------------------------------------------------
+  Top = 114
+  Left = 96
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Imprimir Tempo de Utilização"
+  Value = 1
+  TabIndex = 5
+  Name = "chkImpTempo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECTL
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE enviaremail
+------------------------------------------------------------
+PROCEDURE enviaremail
+Local lcTxt, lcDir, lcSch, loCfg, loMsg, lcArq
+
+lcTxt = []
+lcDir = Addbs(Sys(5) + Sys(2003))
+
+Thisform.pcArqEmail = lcDir + [SigReClt.pdf]
+
+ThisForm.Processamento()
+
+If (Used([crDados]) And Not Eof([crDados]))
+	lcTxt = Alltrim(crCabecalho.Subtitulos) + Chr(13) + Alltrim(crCabecalho.Empresa)
+	
+	lPrintPDFCreator = fGerPDFCreator(ThisForm)	
+
+	If lPrintPDFCreator And File(ThisForm.pcArqEmail)
+		lcSch = [http://schemas.microsoft.com/cdo/configuration/]
+		loCfg = CreateObject([CDO.Configuration])
+
+		With loCfg.Fields
+			.Item(lcSch + [smtpserver]) = [mail.4control.com.br] 
+		  	.Item(lcSch + [smtpserverport]) = 25
+			.Item(lcSch + [sendusing]) = 2
+		  	.Item(lcSch + [smtpauthenticate]) = 0
+		  	.Item(lcSch + [smtpusessl]) = .f.
+			.Item(lcSch + [smtpauthenticate]) = 1
+		  	.Item(lcSch + [smtpusessl]) = .f.
+		  	.Item(lcSch + [sendusername]) = [acessos@4control.com.br]
+		  	.Item(lcSch + [sendpassword]) = [PswAce4c]
+			.Item(lcSch + [smtpconnectiontimeout]) = 60
+		  	.Update
+		EndWith
+
+		loMsg = CreateObject([CDO.Message])
+
+		With loMsg
+			.Configuration 	= loCfg
+		  	.From 			= [acessos@4control.com.br]
+		  	.To 			= [acessos@4control.com.br]
+			.Subject 		= [Controle Mensal de Acessos - ] + Alltrim(crCabecalho.Empresa)
+			.TextBody 		= lcTxt
+
+			.Attachments.Add(1)
+			.AddAttachment(ThisForm.pcArqEmail)
+			.AutoGenerateTextBody = .f.
+			
+			=Inkey(1,[MH])
+			
+			.Send()
+		EndWith 
+
+		Delete File (ThisForm.pcArqEmail)
+	EndIf
+EndIf
+
+Return .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReCtl To Printer NoConsole
+
+DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReCtl To Print Prompt NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pAut, pExc
+
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.getMes.Value = Month(Date())
+		.getAno.Value = Year(Date())
+
+		.chkImpTempo.Value = Iif(pAut, 1, 0)
+
+		=DoDefault()
+		
+		If pAut
+			ThisForm.EnviarEmail(pExc)
+			Return .f.
+		EndIf
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcMes, lcAno, ldIni, ldFim, ltIni, ltFim, lcLic, lcSub
+
+lcMes = Alltrim(Str(ThisForm.getMes.Value, 2))
+lcAno = Alltrim(Str(ThisForm.getAno.Value, 4))
+ldIni = Ctod([01/] + lcMes + [/] + lcAno)
+ldFim = Gomonth(ldIni, 1) - 1
+ltIni = fDtoSQL(Ctod([01/] + lcMes + [/] + lcAno), [00:00:00])
+ltFim = fDtoSQL(Gomonth(ldIni, 1) - 1, [23:59:59])
+llTpo = (ThisForm.chkImpTempo.Value = 1)
+
+lcSub = [Mês : ] + lcMes + [ / Ano : ] + lcAno
+
+Create Cursor crCabecalho (Subtitulos c(250), Empresa c(250))
+Insert Into crCabecalho (Subtitulos) Values (lcSub)
+
+lcQuery = [Select Left(a.Lic_Usua, 10) as Usuario, b.NComps as Nomes, b.ccargs as Cargo, isnull(c.dcargs,space(20)) as descricao, a.Lic_Data, a.Lic_Vals ] + ;
+			[From SigSyCtl a ] + ;
+			[Left Join SigCdUsu b On Left(a.Lic_Usua, 10) = b.Usuarios ] + ;
+			[Left Join SigCdCrg c on b.ccargs = c.ccargs ] + ;
+		   [Where (Month(a.Lic_Data) = ] + lcMes + [ And ] + ;
+			 	 [Year(a.Lic_Data) = ] + lcAno + [) Or ] + ;
+			 	 [(Month(a.Lic_Vals) = ] + lcMes + [ And ] + ;
+			 	 [Year(a.Lic_Vals) = ] + lcAno + [) And ] + ;
+			 	 [Not b.Usuarios = '4CONTROL' ] + ;
+		   [Order By 1]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crDados1]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crDados1)])
+	Return .f.
+EndIf
+
+Update crDados1 Set Lic_Data = ltIni Where Lic_Data < ltIni
+Update crDados1 Set Lic_Vals = ltFim Where Lic_Vals > ltFim
+
+Select Sum(Lic_Vals - Lic_Data) as Minutos, Usuario, Nomes, Cargo, Descricao ;
+  From crDados1 ;
+ Group By Usuario, Nomes, Cargo, Descricao ;
+  Into Cursor crDados2
+
+Select [*] as Negrito, Space(10) as Usuario, ;
+	   Padr([UTILIZAÇÃO DOS USUÁRIOS], 60) as Nomes, ;
+	   Space(10) as Tempo, ;
+	   Space(10) as Cargo, Space(20) as Descricao  ;
+  From crDados2 ;
+ Where Recno() = 1 ;  
+ Union All ;
+Select [ ] as Negrito, Usuario, Padr(Nomes, 60) as Nomes, Padl(Iif(llTpo, fMtoH(Minutos / 60), []), 10) as Tempo, Cargo, Descricao ;
+  From crDados2 ;
+ Union All ;
+Select [*] as Negrito, Replicate(Chr(254), 10) as Usuario, ;
+	   Padr([QUANTIDADE : ] + Alltrim(Str(Reccount([crDados2]), 10)), 60) as Nomes, ;
+	   Padl(Iif(llTpo, fMtoH(Sum(Minutos) / 60), []), 10) as Tempo, Space(10) as Cargo, Space(20) as Descricao ;
+  From crDados2 ;
+ Group By 1, 2 ;
+  Into Cursor crDados ReadWrite ;
+ Order By 2, 3
+
+Update crDados Set Usuario = [TOTAL] Where Usuario = Replicate(Chr(254), 10)
+
+lcQuery = [Select a.Usuarios as Usuario, a.NComps as Nomes, a.ccargs as Cargo, isnull(c.dcargs,space(20)) as descricao ] + ;
+		    [From SigCdUsu a ] + ;
+		    [Left Join SigCdCrg c on a.ccargs = c.ccargs ] + ;
+		   [Where Not a.CAtivos = 'N' And ] + ;
+			 	 [Not a.Usuarios = '4CONTROL' ] + ;
+		   [Order By 1]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crDados4]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crDados4)])
+	Return .f.
+EndIf
+
+* Inserindo os Usuários Ativos
+Insert Into crDados (Usuario) Values ([]) && Linha em Branco
+Insert Into crDados (Negrito, Nomes) Values ([*], [USUÁRIOS ATIVOS])
+
+Select crDados4
+Scan
+	Insert Into crDados (Usuario, Nomes, Cargo, Descricao) Values (crDados4.Usuario, crDados4.Nomes, crDados4.Cargo, crDados4.Descricao)
+EndScan
+Insert Into crDados (Negrito, Usuario, Nomes) Values ([*], [TOTAL], [USUARIOS ATIVOS : ] + Alltrim(Str(Reccount([crDados4]))))
+
+lcQuery = [Select CEmps, Cgcs, Razas From SigCdEmp Where Ativas = 1 Order By CEmps]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crDados5]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crDados5)])
+	Return .f.
+EndIf
+
+* Inserindo as Empresas Ativas
+Insert Into crDados (Usuario) Values ([]) && Linha em Branco
+Insert Into crDados (Negrito, Nomes) Values ([*], [EMPRESAS ATIVAS])
+
+Select crDados5
+Scan
+	Insert Into crDados (Usuario, Nomes) ;
+	             Values (crDados5.CEmps, Iif(Empty(Alltrim(crDados5.Cgcs)), [], Alltrim(crDados5.Cgcs) + [ / ]) + crDados5.Razas)
+EndScan
+Insert Into crDados (Negrito, Usuario, Nomes) Values ([*], crDados5.CEmps, [EMPRESAS ATIVAS : ] + Alltrim(Str(Reccount([crDados5]))))
+
+lcQuery = [Select CNumLics, DirLivrosV From SigCdPam]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crNumLics]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crNumLics)])
+	Return .f.
+EndIf
+Go Top In crNumLics
+lcLic = fCriptografar(crNumLics.CNumLics)
+Replace Empresa With crNumLics.DirLivrosV In crCabecalho
+Use In crNumLics
+
+Insert Into crDados (Usuario) Values ([]) && Linha em Branco
+Insert Into crDados (Negrito, Usuario, Nomes) Values ([*], [TOTAL], [LICENÇAS ATIVAS : ] + lcLic)
+
+Select crDados
+Go Top In crDados
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReCtl Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4) && Se Não Clicou em Saída
+	Do Case
+		Case Not Between(ThisForm.getMes.Value, 1, 12)
+			=Messagebox([Mês Inválido!!!], 0+48, [Atenção!!!])
+			ThisForm.getMes.SetFocus
+			Return .f.
+
+		Case Not Between(ThisForm.getAno.Value, 2000, 2099)
+			=Messagebox([Ano Inválido!!!], 0+48, [Atenção!!!])
+			ThisForm.getAno.SetFocus
+			Return .f.
+	EndCase
+EndIf
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTL.getMes
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Between(This.Value, 1, 12)
+	=MessageBox([O Mês Precisa Estar No Intervalo de 01 a 12!!!], 0+16, [Mês Inválido!!!])
+	Return .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTL.getAno
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Between(This.Value, 2000, 2099)
+	=MessageBox([O Ano Precisa Estar No Intervalo de 2000 a 2099!!!], 0+16, [Ano Inválido!!!])
+	Return .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECTL
+RESERVED3 (ClassInfo): podatamgr
+*enviaremail 
+*gerarpdf 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

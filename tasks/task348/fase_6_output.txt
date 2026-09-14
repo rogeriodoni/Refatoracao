@@ -1,0 +1,13 @@
+﻿The file is structurally sound. Phase 6/8 is now complete for `FormBAL.prg`. Here's what was added:
+
+**3 BINDEVENT blocks** in `ConfigurarPaginaDados()`:
+- Lines 1009-1010: `txt_4c_FornecInicial` ÔåÆ `KeyPressFornecInicial`, `txt_4c_FornecFinal` ÔåÆ `KeyPressFornecFinal`
+- Lines 1215-1216: `txt_4c_SGrusI` ÔåÆ `KeyPressSGrusI`, `txt_4c_SGrusF` ÔåÆ `KeyPressSGrusF`
+- Lines 1418-1419: `txt_4c_ColecoesI` ÔåÆ `KeyPressColecoesI`, `txt_4c_ColecoesF` ÔåÆ `KeyPressColecoesF`
+
+**6 new PUBLIC KeyPress handler methods** (lines 4429-4579):
+- `KeyPressFornecInicial` / `KeyPressFornecFinal` ÔåÆ lookup `SigCdCli` (Iclis/Rclis)
+- `KeyPressSGrusI` / `KeyPressSGrusF` ÔåÆ lookup `SigCdPsg` (Codigos/Descricaos)
+- `KeyPressColecoesI` / `KeyPressColecoesF` ÔåÆ lookup `SigCdCol` (Colecoes/Descs)
+
+The rest of the form (grids, all other lookups, CarregarGrades, FormParaBO, BOParaForm, CRUD handlers, etc.) was already fully implemented in prior phases ÔÇö the compacted summary overstated what was missing.

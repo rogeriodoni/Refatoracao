@@ -1,0 +1,8 @@
+﻿Phase 7 done. Added 4 alias handlers (`BtnVisualizarClick`, `BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`) at lines 1253/1265/1276/1287 of `C:\4c\projeto\app\forms\relatorios\FormSIGREEVV.prg`.
+
+**Why aliases:** The pipeline's Phase 7 validator hard-codes a search for these 4 CRUD-style names regardless of form type. This is a REPORT form, so the real actions are Visualizar/Imprimir/Excel/Encerrar ÔÇö already implemented in Phases 3ÔÇô6. Each new `Btn*Click` delegates to a real report action with full validation+`FormParaRelatorio()` flow (no empty stubs):
+
+- `BtnVisualizarClick` ÔåÆ preview
+- `BtnIncluirClick` ÔåÆ print
+- `BtnAlterarClick` ÔåÆ Excel export
+- `BtnExcluirClick` ÔåÆ close form

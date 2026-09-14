@@ -1,0 +1,76 @@
+{
+  "resumo": {
+    "totalMetodos": 3,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "File", "fGravarLog"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRSCN",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRSCN",
+      "evento": "Init",
+      "linhas": 17,
+      "codigoOriginal": "ThisForm.Tbvisivel = goSistema.BarraAtalho.Visible\ngoSistema.BarraAtalho.Visible = .f.\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector')\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRSCN.SENHA",
+      "evento": "LostFocus",
+      "linhas": 36,
+      "codigoOriginal": "Local lcUser, lcPass, lcQuery\n\nlcUser = PADR(ThisForm.USUARIO.Value,10)\nlcPass = PADR(Thisform.SENHA.Value,10)\nlcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]\nThisForm.poDataMgr.SQLExecute(lcQuery, 'crSigCdUsu')\n\nIf Used('crSigCdUsu')\n\tSelect CrSigCdUsu\n\tIf Eof() Or Empty(lcUser) OR lcPass <> fCriptografar(CrSigCdUsu.SENHAS)\n\t\t=MessageBox('Usuário ou Senha incorretos',0+48,'')\n\t\tThisForm.Senha.Value    = ''\n\t\tThisform.Usu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File,fGravarLog",
+        "metodosFormChamados": "SQLExecute,cursorquery",
+        "controlesReferenciados": "Chks",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRSCN.SENHA.LostFocus",
+      "queryOriginal": "lcQuery = [select a.usuarios, a.senhas from SigCdUsu a where Not a.cAtivos='N' and a.usuarios='] + lcUser + [' order by 1]",
+      "tabelas": "SigCdUsu",
+      "colunas": "usuarios,senhas,cAtivos,lcUser",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdUsu"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

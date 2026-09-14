@@ -1,0 +1,14 @@
+﻿Tenho todos os dados necess├írios. Vou analisar cada issue.
+
+**Issue 1 ÔÇö `ICLIS`**: A coluna `Iclis` na linha 719 (`FROM SigCdCli WHERE Iclis = EscaparSQL(loc_cContaCli)`) ├® **v├ílida**. Outros forms migrados confirmam:
+- `Formpgr.prg:4754` ÔÇö `LEFT JOIN SigCdCli cli ON cli.Iclis = p.Contas`
+- `FormProduto.prg:8891` ÔÇö `SELECT TOP 1 IClis, Rclis FROM SigCdCli WHERE IClis = ...`
+
+`Iclis` ├® a PK de `SigCdCli`. O filtro est├í correto e reflete a l├│gica do legado (buscar dados do cliente pela conta de origem/destino do movimento).
+
+**Issue 2 ÔÇö `CONTROLCOUNT`**: N├úo ├® uma coluna SQL em cl├íusula WHERE. ├ë a propriedade VFP nativa `.ControlCount` usada no m├®todo `TornarControlesVisiveis` (linhas 1032, 1036, 1044) para iterar controles de um container. O grep case-insensitive pegou `ControlCount` do c├│digo OOP, n├úo de SQL.
+
+**Conclus├úo: ambos os problemas reportados s├úo FALSOS POSITIVOS.** Nenhuma altera├º├úo ├® necess├íria em `FormSIGPRIBL.prg` nem em `SIGPRIBLBO.prg`. O c├│digo SQL est├í correto:
+
+- `WHERE Iclis = EscaparSQL(loc_cContaCli)` ÔåÆ filtro leg├¡timo pela PK de `SigCdCli`
+- `ControlCount` ÔåÆ propriedade VFP de objeto, nunca esteve em WHERE SQL

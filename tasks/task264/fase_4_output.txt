@@ -1,0 +1,15 @@
+﻿Phase 5/8 is complete. Here's what was done:
+
+**Changes made to `FormSigPrCfn.prg`:**
+
+1. **InicializarForm()** ÔÇö added `THIS.ConfigurarPaginaVencimentos()` between `ConfigurarPaginaLista()` and `PopularCamposIniciais()` so venc fields exist before initial `Calculos()` fires.
+
+2. **Calculos()** ÔÇö changed `Page2` ÔåÆ `Page1` in the EVALUATE expression for venc fields (they're all on Page1 now, fitting within the 220px page height).
+
+3. **TxtValorBaseKeyPress()** ÔÇö fixed the double-`CHR(227)` bug (`"Valida├º├º├úo"` ÔåÆ `"Valida├º├úo"`), added `loc_x, loc_oVenc, loc_oErrV` to LOCAL declaration, added loop to enable/disable all 10 venc fields when ValorBase changes.
+
+4. **PopularCamposIniciais()** ÔÇö added same enable/disable loop for venc fields.
+
+5. **New method `ConfigurarPaginaVencimentos()`** ÔÇö creates the "Vencimentos :" label and all 10 date TextBoxes on Page1 in 2 rows ├ù 5 columns (Top=152/177, Left=97/184/271/358/445, W=82), all initially `Enabled=.F.`. BINDEVENTs all 10 to the shared `TxtVencKeyPress` handler.
+
+6. **New method `TxtVencKeyPress()`** ÔÇö shared handler for all venc fields: guards Enter/Tab, reads `ActiveControl` to identify which field fired, validates date ÔëÑ DataBase, updates Dias, calls Calculos().

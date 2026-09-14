@@ -1,0 +1,31 @@
+﻿An├ílise conclu├¡da. Todos os 4 problemas reportados s├úo **falsos positivos** do validador autom├ítico. Explica├º├úo detalhada:
+
+---
+
+## Resultado da Verifica├º├úo: 4 Falsos Positivos
+
+### Problema 1, 2, 3 ÔÇö CODIGOS, ICLIS, CMOES
+
+O validador comparou as colunas WHERE do c├│digo migrado contra a lista de colunas do SQL `processamento` (procedure principal do legado). Mas essas colunas aparecem em **m├®todos de valida├º├úo de lookup separados** ÔÇö n├úo no SQL de processamento principal:
+
+| Coluna | Arquivo | Linha | M├®todo | Tabela | Status |
+|--------|---------|-------|--------|--------|--------|
+| `codigos` | Form | 1024 | `ValidarGrupoMov` | `SigCdGcr` | Ô£ô Chave prim├íria v├ílida |
+| `iclis` | Form | 1063 | `ValidarCdEstoque` | `SigCdCli` | Ô£ô Chave prim├íria v├ílida |
+| `CMoes` | Form | 1102 | `ValidarCdMoeda` | `SigCdMoe` | Ô£ô Chave prim├íria v├ílida |
+
+Confirma├º├úo adicional: o pr├│prio **BO** usa as mesmas colunas nas mesmas tabelas (linhas 115, 129, 194 de `SIGRECMVBO.prg`). S├úo a tradu├º├úo SQL dos m├®todos `fAcessoContab`/`fAcessoContas` do legado VFP. Remover os WHERE quebraria as valida├º├Áes (retornariam qualquer registro em vez do registro com o c├│digo digitado).
+
+### Problema 4 ÔÇö CARREGARDADOSINICIA
+
+N├úo existe nenhuma cl├íusula `WHERE CARREGARDADOSINICIA = ...` no arquivo. O validador parseou incorretamente o texto de um **coment├írio** na linha 1133:
+
+```foxpro
+*   Cursor carregado por SIGRECMVBO.CarregarDadosIniciais (filtro SigCdTom)
+```
+
+O parser leu "CarregarDadosIniciais" como nome de coluna SQL ÔÇö erro do validador, n├úo do c├│digo.
+
+---
+
+**Conclus├úo:** Nenhuma altera├º├úo necess├íria. Os arquivos `FormSIGRECMV.prg` e `SIGRECMVBO.prg` est├úo corretos para este pass SQL. As queries de lookup usam as colunas corretas (chaves prim├írias de suas respectivas tabelas) e n├úo h├í filtros inventados no SQL de processamento principal.

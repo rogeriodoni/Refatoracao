@@ -1,0 +1,9 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com as seguintes adi├º├Áes ao `FormSIGREDIR.prg`:
+
+1. **`ConfigurarPaginaDados()`** ÔÇö inicializa `txt_4c_AnoBase` com o ano corrente (equivalente ao `getAnoBase.Value = Str(Year(Date()),4)` do legado) e garante `txt_4c_Dforn.ReadOnly = .F.`
+
+2. **`LimparCampos()`** ÔÇö m├®todo p├║blico que reseta os filtros para o estado inicial, reutiliz├ível externamente
+
+3. **`obj_4c_CmdEmps` corrigido** ÔÇö dimens├Áes exatas do original: `Width=50, Height=91`, bot├Áes verticais com ├¡cones `A_MISC1.BMP`/`A_MISC6.bmp`, `ForeColor=RGB(36,84,155)`, `FontName="Verdana"` ÔÇö sem texto (Caption="")
+
+4. **Valida├º├úo de sele├º├úo de empresas** adicionada em `BtnVisualizarClick`, `BtnImprimirClick` e `BtnExcelClick` ÔÇö equivalente ao `IF EMPTY(lcemps) THEN 'Nenhuma empresa foi selecionada.'` do original

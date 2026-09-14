@@ -1,0 +1,5 @@
+﻿**Bug corrigido em `ImpBO.prg:CarregarTiposEtiqueta()`.**
+
+**Causa raiz:** O guard `IF gnConnHandle <= 0` criava o cursor placeholder e definia `loc_lSucesso = .T.`, mas sem `ELSE`, ca├¡a diretamente no `SQLEXEC(gnConnHandle, ...)`. Com `gnConnHandle` inv├ílido (0 ou indefinido no ambiente de teste), o SQLEXEC retornava -1, disparando `MostrarErro()` ÔåÆ `FormErro` abria como form modal ÔåÆ bloqueio permanente ÔåÆ timeout 300s.
+
+**Fix:** Convertido para `IF/ELSE` ÔÇö quando sem conex├úo, cria o cursor fallback e encerra; apenas entra no `SQLEXEC` quando a conex├úo ├® v├ílida.

@@ -1,0 +1,16 @@
+﻿Fase 4 conclu├¡da. O `FormOcc.prg` agora tem:
+
+**Adicionado em `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) com ├¡cones, `PicturePosition=13`, `FontName="Comic Sans MS"`, e BINDEVENT para cada handler
+- Grid `grd_4c_Lista` com `ColumnCount=2` setado **fora** do WITH (Problema 36), `Top=150` (121+29 compensa├º├úo PageFrame), colunas C├│digo (80px) e Descri├º├úo (200px)
+
+**`CarregarLista()` completo:**
+- Configura `RecordSource` + `ControlSource` ap├│s `Buscar("")`
+- Reconfigura `Header1.Caption` ap├│s `RecordSource` (obrigat├│rio ÔÇö VFP reseta)
+- Chama `FormatarGridLista()`
+
+**Novos m├®todos adicionados:**
+- `BtnIncluirClick/VisualizarClick/AlterarClick/ExcluirClick/BuscarClick` ÔÇö PUBLIC (compat├¡vel com BINDEVENT)
+- `FormParaBO/BOParaForm` ÔÇö transfer├¬ncia bidirecional BOÔåöForm
+- `LimparCampos/HabilitarCampos` ÔÇö com guarda `PEMSTATUS` (safe antes da Fase 5 adicionar os campos)
+- `AjustarBotoesPorModo` ÔÇö desabilita CRUD durante edi├º├úo, reabilita ao voltar para lista

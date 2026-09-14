@@ -1,0 +1,8 @@
+﻿Arquivo criado. Fase 1 conclu├¡da: `C:\4c\projeto\app\classes\CAFBO.prg` com:
+
+- **5 propriedades** da tabela principal `SIGCDCNF`: `this_nCodigos`, `this_dDatas`, `this_cEmps`, `this_cObss`, `this_cUsuars`
+- **1 propriedade de controle**: `this_cCursorOps` (cursor de trabalho para as OPs, equivalente ao `TmpNop` legado)
+- **`Init()`**: configura `this_cTabela = "SIGCDCNF"` e `this_cCampoChave = "codigos"`
+- **`ObterChavePrimaria()`**: retorna `TRANSFORM(THIS.this_nCodigos)` para auditoria
+
+Pr├│xima fase ser├í completar o BO com `CarregarDoCursor()`, `Buscar()`, `CarregarPorCodigo()`, `Inserir()`, `Atualizar()` e `ExecutarExclusao()` ÔÇö incluindo a l├│gica de gerar chave ├║nica (substituto do `fGerUniqueKey`), gerenciar itens em `SigCdCaf` e atualizar `SigOpPic.QtdTubos`.

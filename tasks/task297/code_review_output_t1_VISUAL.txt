@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo do pass:
+
+**[GRID-WITH] ÔÇö CORRIGIDO**: `.ColumnCount` e `.RecordSource` movidos para fora do `WITH loc_oGrd` (linhas 484-485), usando refer├¬ncia expl├¡cita `loc_oGrd.ColumnCount = 4` / `loc_oGrd.RecordSource = "cursor_4c_Grade"`. As colunas agora existem quando o `WITH` come├ºa a acess├í-las.
+
+**[LAYOUT-POSITION] ÔÇö FALSO POSITIVO, sem altera├º├úo**: O review pareou `Label3` (legacy Top=211) com `lbl_4c_Label31` por semelhan├ºa de nome, mas o mapeamento correto ├® `Label3` ÔåÆ `lbl_4c_Label3` (j├í em Top=211 Ô£ô). `lbl_4c_Label31` em Top=438 est├í correto: fica imediatamente abaixo de `obj_4c_GetLocals` (Top=228 + Height=201 = 429), formando o layout empilhado esperado. Alterar para 211 criaria sobreposi├º├úo com `lbl_4c_Label3`.

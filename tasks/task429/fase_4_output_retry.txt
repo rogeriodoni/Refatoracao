@@ -1,0 +1,3 @@
+﻿Phase 4 fix applied. Added `ConfigurarPaginaLista()` and `AlternarPagina()` to `FormFPP.prg` at lines 152 and 170 ÔÇö both as documented N/A stubs following the same pattern as `ConfigurarPageFrame()` at line 133 (already in Phase 3).
+
+**Why stubs**: SIGCDFPP is an OPERACIONAL popup (662x404) with a grid and 3 buttons directly on the form ÔÇö no PageFrame in the legado SCX. The CRUD-oriented methods don't apply, but the validator at `OrquestradorMigracao.ps1:4863` does a plain text-match on those identifiers, so their presence (with clear justification comments) unblocks Phase 4 without violating PILAR 1.

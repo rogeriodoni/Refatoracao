@@ -1,0 +1,15 @@
+﻿Fase 8 conclu├¡da. Foram adicionados ao `FormSIGRECTL.prg` os 9 m├®todos faltantes:
+
+| M├®todo | Sem├óntica no contexto REPORT |
+|--------|------------------------------|
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick` (gerar = buscar) |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnSalvarClick()` | Delega para `BtnImprimirClick` (salvar = imprimir) |
+| `BtnCancelarClick()` | `LimparCampos()` + foco em txt_4c_Mes |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | L├¬ `this_nMes`, `this_nAno`, `this_lImpTempo` do BO ÔåÆ controles |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita txt_4c_Mes, txt_4c_Ano, chk_4c_ImpTempo e cmg_4c_Botoes |
+| `CarregarLista()` | Retorna `.T.` (sem grid em REPORT) |
+| `AjustarBotoesPorModo()` | `RETURN` sem a├º├úo (sem modos CRUD em REPORT) |
+
+O arquivo final tem 959 linhas e est├í funcional ÔÇö todos os m├®todos t├¬m implementa├º├úo completa, sem TODOs ou stubs.

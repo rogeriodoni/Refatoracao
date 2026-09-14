@@ -1,0 +1,13 @@
+﻿A migra├º├úo da Fase 8 est├í completa. Resumo do que foi verificado e adicionado:
+
+**Verifica├º├úo:**
+- Todos os m├®todos obrigat├│rios j├í estavam implementados nas fases anteriores (1-7)
+- `AbrirFormCco()` j├í existia em menu.prg (linha 5934)
+- BAR 40 `"Classifica├º├úo de Contas"` + `ON SELECTION BAR 40` j├í estavam no menu
+- config.prg usa ADIR() ÔÇö carrega `CcoBO.prg` e `FormCco.prg` automaticamente
+
+**Adicionado nesta fase:**
+- `AjustarBotoesPorModo()` (linha 1592) ÔÇö desabilita o bot├úo Confirmar no modo VISUALIZAR, mant├®m Cancelar sempre ativo
+- Chamadas a `AjustarBotoesPorModo()` nos handlers `BtnIncluirClick`, `BtnVisualizarClick` e `BtnAlterarClick`
+
+O arquivo final tem 1636 linhas com 22 m├®todos completos e funcionais. A integra├º├úo com o sistema (menu + carregamento autom├ítico) j├í estava em ordem desde as fases anteriores.

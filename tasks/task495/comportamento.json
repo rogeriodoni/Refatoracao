@@ -1,0 +1,140 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDPAI",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "SELECT crSigCdPai\nIf not Empty(ThisForm.Pagina.Dados.get_Codigos.Value) \n\tLOCATE FOR Codigos = ThisForm.Pagina.Dados.get_Codigos.Value\nElse\n\tLOCATE FOR Descs = ThisForm.Pagina.Dados.get_Descs.Value \nEndif\t\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Codigos,get_Descs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAI",
+      "evento": "Init",
+      "linhas": 17,
+      "codigoOriginal": "Lparameters lcAcesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector', 'SigCdPai')\n\tWith .poDataMgr\n\t\tlcQry = [Select * from SigCdPai]\n\t\t.AddCursor('SigCdPai', 'cIdChaves', 'crSigCdPai', '', ThisForm.Pagina.Lista.Grade,lcQry)\n\t\t.pfSqlTabela(1).pColuna('Codigos', '', '', 'Código',    050, .t.)\n\t\t.pfSqlTabela(1).pColuna('Descs',    '', '', 'País', 290, .t.)\n\tEndWith\t\nEndWith\n\n=DoDefault()\n\nThisForm.Pagina.Lista.Grade.Column1.SetFocus\n* Fim **************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAI",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "Lparameters Opcao\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf\n\nSelect crSigCdPai\nDo Case\n\tCase Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus\n\tOtherwise \n\t\tThis.Parent.Parent.Dados.get_Codigos.Setfocus\nEndCase \n\nSelect crSigCdPai\n\nThisForm.Pagina.Dados.Activate\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Codigos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAI",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "Local lnRecno1,lnNreg1,lcGrupo,lcDope,laCampos(2,2)\n\nIf InList(ThisForm.pcEscolha,'INSERIR')\n\tIf Empty(ThisForm.Pagina.Dados.get_Codigos.Value)\n\t\t=MessageBox('Obrigatório Informar o Código do País!!!', 48, '')\n\t\tThis.Parent.Parent.Get_Codigos.SetFocus\n\t\tReturn 0\n\tEndIf\n\t\n\tIf Empty(This.Parent.Parent.Get_Descs.Value)\n\t\t=MessageBox('Obrigatório Informar o Nome do País!!!', 48, '')\n\t\tThis.Parent.Parent.Get_Descs.SetFocus\n\t\tReturn 0\n\tEndIf\n\t\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdPai','Codigos',Th... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "get_Codigos,Get_Descs,ChkRegister('SigCdPai'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAI",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAI.Pagina.Dados.get_Descs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAI.Pagina.Dados.get_Codigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDPAI.Init",
+      "queryOriginal": "\t\tlcQry = [Select * from SigCdPai]",
+      "tabelas": "SigCdPai",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPai"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

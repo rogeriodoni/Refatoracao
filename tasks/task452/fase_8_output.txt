@@ -1,0 +1,10 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**FormInf.prg** (1258 linhas) ÔÇö m├®todo `AjustarBotoesPorModo()` adicionado (linha 1205) e chamado em `BtnIncluirClick`, `BtnVisualizarClick` e `BtnAlterarClick`. O form j├í continha desde as fases anteriores todos os demais m├®todos exigidos pela Fase 8: `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos` e `CarregarLista`.
+
+**menu.prg** ÔÇö adicionados:
+- `DEFINE BAR 111 OF popCadastros` com prompt "Informa├º├Áes Complementares"
+- `ON SELECTION BAR 111 OF popCadastros DO AbrirFormInf`
+- `PROCEDURE AbrirFormInf()` seguindo o padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, sem Release)
+
+**config.prg** ÔÇö n├úo requer altera├º├úo: o carregamento din├ómico via ADIR() j├í inclui automaticamente `InfBO.prg` (classes/) e `FormInf.prg` (forms/cadastros/).

@@ -1,0 +1,9 @@
+﻿Tudo correto. Fase 6 conclu├¡da. O arquivo `FormSIGREAPR.prg` foi atualizado com:
+
+1. **4 m├®todos `AbrirBuscaXxx()` corrigidos** ÔÇö removida a l├│gica `IF this_lSelecionou AND this_lAchouRegistro` (que nunca executava ap├│s `CREATEOBJECT`) e substitu├¡da pelo padr├úo can├┤nico: `mAddColuna ÔåÆ Show(1) ÔåÆ IF this_lSelecionou ÔåÆ ler cursor`.
+
+2. **8 BINDEVENTs `DblClick` adicionados** em `ConfigurarPaginaLista()` ÔÇö para todos os campos de lookup (Grupo, DGrupo, CPros, DPros, Lin, DLin, Fornecedor, DFornecedor).
+
+3. **4 handlers `DblClickXxx()`** adicionados antes de `ENDDEFINE` ÔÇö delegam para os respectivos `AbrirBuscaXxx()`.
+
+4. **Cabe├ºalho atualizado** para documentar a Fase 6/8.

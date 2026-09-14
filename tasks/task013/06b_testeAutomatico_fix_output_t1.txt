@@ -1,0 +1,5 @@
+﻿Fix applied. Two changes in `TornarControlesVisiveis`:
+
+1. **Guard added after VARTYPE check** (line ~3441): `IF !PEMSTATUS(par_oContainer, "ControlCount", 5)` ÔÇö prevents the FOR loop from running when the container itself doesn't have `ControlCount`.
+
+2. **Recursive call guard** (line ~3456): Changed `IF loc_oCtrl.ControlCount > 0` ÔåÆ `IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0` ÔÇö prevents accessing `ControlCount` on non-container controls (TextBox, Label, CommandButton, etc.) that VFP9 doesn't support that property on.

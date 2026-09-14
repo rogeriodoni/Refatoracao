@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 6,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRPPP",
+      "evento": "Init",
+      "linhas": 107,
+      "codigoOriginal": "Lparameters lfFormAnterior, lnDataSes\n\n=fConfigGeral()\t\n\nPrivate pKey\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nLocal lcVerCliente, lcVerOperacao, lcVerEmpresa\n\nSet DataSession to lnDataSes\n\nThisForm.ParentForm    = lfFormAnterior\nThisForm.LinhaAnterior = 1\n\nThisForm.grd_itens.RecordSource = 'dbItens'\nThisForm.grd_itens.column1.ControlSource = 'dbItens.cpros'\nThisForm.grd_itens.column2.ControlSource = 'dbItens.dpros'\nThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral,fUniqueIds",
+        "metodosFormChamados": "Update,Commit,SqlExecute,fSqlApagarTmp,CursorQuery",
+        "controlesReferenciados": "grd_itens,grd_operacoes,get_grupo,get_cliente,get_cliente_desc,get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPP.get_cliente",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPPP.get_cliente_desc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPPP.grp_operacao",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.\nThisForm.ParentForm.get_cliente.Setfocus\nThisForm.Release\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cliente",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPP.get_dt_inicial",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPPP.get_dt_final",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPPP.grd_operacoes",
+      "evento": "Procedure",
+      "linhas": 30,
+      "codigoOriginal": "Lparameters nColIndex\n\nIf (ThisForm.LinhaAnterior <> ThisForm.grd_operacoes.activerow)\n\tThisForm.LinhaAnterior = ThisForm.grd_operacoes.activerow\n\tThisForm.LockScreen   = .t.\n\tThisForm.MousePointer = 11\n\tZap In dbItens\n\n\tSelect crLclMvItn\n\tSet Order To EmpDopNum\n\tSet Near On\n\tSeek dbOperacao.Emps + dbOperacao.Dopes + Padl(dbOperacao.Numes, 6)\n\tSet Near Off\n\tScan While dbOperacao.Emps + dbOperacao.Dopes + Padl(dbOperacao.Numes, 6) = ;\n\t\t\t   crLclMvItn.Emps   + crLclMvItn.Dopes   + Padl(crLclMvItn... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "grd_operacoes,grd_itens",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPPP.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

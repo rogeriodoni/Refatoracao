@@ -1,0 +1,26 @@
+﻿O arquivo `CVEBO.prg` foi criado com sucesso. Verifica├º├úo da estrutura:
+
+**Fase 1/8 conclu├¡da ÔÇö `C:\4c\projeto\app\classes\CVEBO.prg`**
+
+**10 propriedades declaradas** (todas as colunas de SigCcCmI confirmadas via schema.sql):
+- `this_cCidchaves` ÔÇö char(20) PK
+- `this_cUsuars` ÔÇö char(10) usu├írio
+- `this_cMess` ÔÇö char(2) m├¬s
+- `this_cAnos` ÔÇö char(4) ano
+- `this_cIndivs` ÔÇö char(1) S/N individual
+- `this_cSetors` ÔÇö char(10) c├│digo do cargo
+- `this_cSupervs` ÔÇö char(10) supervisor (coluna NOT NULL no schema, sem UI ÔÇö preservada)
+- `this_nAdics` ÔÇö numeric(5,2) adicional %
+- `this_nMinimos` ÔÇö numeric(11,2) m├¡nimo
+- `this_nMinExps` ÔÇö numeric(11,2) experi├¬ncia m├¡nima
+
+**14 m├®todos implementados completos** (al├®m do m├¡nimo da fase):
+- `Init()` ÔåÆ `this_cTabela = "SigCcCmI"`, `this_cCampoChave = "cidchaves"`
+- `ObterChavePrimaria()`, `CarregarDoCursor()`, `CarregarPorCodigo()`
+- `Buscar()`, `BuscarComFiltroPeriodo()` (filtro mes/ano expl├¡cito)
+- `Inserir()`, `Atualizar()`, `ExecutarExclusao()` (PROTECTED)
+- `ValidarDuplicidadeEmSigCcCmI()`, `ValidarDuplicidadeEmSigCcCmV()` (valida├º├úo cruzada com SigCcCmV)
+- `CarregarUltimoPeriodoUsuario()` (auto-preenchimento do pr├│ximo per├¡odo)
+- `CopiarPeriodo()` (funcionalidade de c├│pia de per├¡odo do `cntCopia.cmdOk.Click`)
+
+Todas as regras cr├¡ticas aplicadas: RETURN fora de TRY/CATCH, CATCH nunca silencioso, CHR() para acentos, helpers SQL (`EscaparSQL`, `FormatarNumeroSQL`), nomes corretos (`this_cTabela`/`this_cCampoChave`, `ExecutarExclusao`).

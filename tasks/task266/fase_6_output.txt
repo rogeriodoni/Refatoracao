@@ -1,0 +1,7 @@
+﻿As duas corre├º├Áes est├úo aplicadas corretamente. 
+
+**Fase 6 conclu├¡da.** Este formul├írio OPERACIONAL ├® um popup simples de sele├º├úo de ├¡cones ÔÇö n├úo possui lookups F4/F5, campos adicionais nem bot├Áes Salvar/Cancelar (fecha automaticamente ao clicar no ├¡cone). As ├║nicas corre├º├Áes genu├¡nas da Fase 6 foram:
+
+1. **`Column1.Resizable = .T.`** ÔÇö o `SetAll("Resizable", .F., "Column")` sobrescrevia o valor original que o legado deixava como `.T.` na coluna 1; adicionada a linha ap├│s o bloco SetAll para restaurar fidelidade.
+
+2. **Fallback de ├¡cone via `JUSTFNAME(pcIdChaves)`** ÔÇö o Init original do SCX usava `JustFname(pcIdChaves)` como ├¡cone padr├úo quando `barrapict` estava vazio; l├│gica adicionada em `CarregarDados()` ap├│s carregar `this_cArqIconeAtual`.

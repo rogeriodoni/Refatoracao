@@ -1,0 +1,5 @@
+﻿Limpo. Os `ControlSource` dessas grids agora s├│ s├úo definidos em `CmdProcessarClick`, quando os cursores j├í existem. O form deve instanciar sem erro.
+
+**Causa raiz:** `ConfigurarPaginaDadosDetalhe` atribu├¡a `.ControlSource = "cursor_4c_Movimentos.Cpros"` (e outros 10 campos) nas grids de detalhe durante o `Init`, mas `cursor_4c_Movimentos` e `cursor_4c_Distribui` s├│ s├úo criados quando o usu├írio clica em "Processar". O VFP9 tentava acessar o alias inexistente no momento da atribui├º├úo ÔåÆ `Alias 'CURSOR_4C_MOVIMENTOS' is not found` na linha 2938.
+
+**Fix:** removidos os 11 `ControlSource` prematuros de `ConfigurarPaginaDadosDetalhe`. Os valores j├í s├úo corretamente atribu├¡dos em `CmdProcessarClick` ap├│s os cursores serem populados.

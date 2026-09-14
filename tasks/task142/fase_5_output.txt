@@ -1,0 +1,11 @@
+﻿Fase 5 conclu├¡da. As modifica├º├Áes feitas em `FormSigPdMp1.prg`:
+
+1. **`ConfigurarContainerOperacao()`** ÔÇö adicionados os 3 TextBoxes do container de opera├º├úo:
+   - `txt_4c_Empresa` (Left=76, Width=36) vinculado a `tmpnens.emps`
+   - `txt_4c_Operacao` (Left=114, Width=156) vinculado a `tmpnens.dopps`
+   - `txt_4c_Codigo` (Left=272, Width=81, InputMask num├®rico) vinculado a `tmpnens.numps`
+   - Todos `ReadOnly=.T.`, `BackColor=RGB(255,255,255)` (replica `DisabledBackColor` do legado)
+
+2. **`InicializarForm()`** ÔÇö adicionado ap├│s `TornarControlesVisiveis`:
+   - Atualiza `Column1.Header1.Caption` com o t├¡tulo din├ómico do form av├┤ (replica `ThisForm.ParentForm.ParentForm.Titulo` do legado)
+   - Controla `cmd_4c_Alterar.Visible` baseado em `this_cEscolha = "INSERIR"` (replica l├│gica `fChecaAcesso + InList` do legado)

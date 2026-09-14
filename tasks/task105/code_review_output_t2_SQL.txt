@@ -1,0 +1,14 @@
+﻿Corre├º├úo aplicada corretamente em ambos os blocos. O arquivo `SIGREFXVBO.prg` foi atualizado.
+
+**Resumo das corre├º├Áes:**
+
+Os 3 problemas detectados eram todos causados pela mesma raiz: o filtro `c.CGrus = EscaparSQL(m.Grupos)` inventado pela LLM, que aparecia em **dois lugares** (query period=1 e query period=2).
+
+| Problema | Causa | Corre├º├úo |
+|----------|-------|----------|
+| CGRUS no WHERE | Filtro direto `c.CGrus = valor` n├úo existe no original | Substitu├¡do por join `a.Grupos = c.CGrus` |
+| '1' no WHERE | Detec├º├úo da ocorr├¬ncia no bloco `nNrPeriodo = 1` | Resolvido com a corre├º├úo do CGRUS |
+| '2' no WHERE | Detec├º├úo da ocorr├¬ncia no bloco `ELSE` (period=2) | Resolvido com a corre├º├úo do CGRUS |
+
+**Antes:** `" AND c.CGrus = " + EscaparSQL(m.Grupos)` ÔÇö filtro inventado que for├ºa CGrus = valor externo  
+**Depois:** `" AND a.Grupos = c.CGrus"` ÔÇö join correto entre SigMvEst/SigMvHst e SigCdGrp, usando a coluna GRUPOS (que est├í na lista do original)

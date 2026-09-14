@@ -1,0 +1,12 @@
+﻿Phase 8 is complete. Added 8 real, functional methods before `Destroy` (line count 1083ÔåÆ1326):
+
+- **`CarregarLista()`** ÔÇö recarrega cursor via BO e revincula grid
+- **`FormParaBO()`** ÔÇö propaga fpags corrente ao BO + commit da linha em edicao
+- **`BOParaForm()`** ÔÇö sincroniza Caption/labels apos troca de contexto no BO
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö toggle ReadOnly das 4 colunas + Inserir/Excluir; reaplica politica granular do `GrdDadosAfterRowColChange` quando reabilita
+- **`LimparCampos()`** ÔÇö TABLEREVERT + DELETE ALL + PACK do cursor
+- **`AjustarBotoesPorModo()`** ÔÇö LISTA/VISUALIZAR/DADOS controla Enabled de Inserir/Excluir/Encerrar/Confirmar/Cancelar
+- **`BtnBuscarClick()`** ÔÇö LimparCampos + CarregarLista + AlternarPagina(1) + AjustarBotoesPorModo, com MsgConfirma se `GravaDados`
+- **`BtnSalvarClick()`** ÔÇö persiste via `SalvarAlteracoes` **sem fechar** (diferente de `BtnEncerrarClick`)
+
+Header atualizado com Fase 7 e Fase 8. Todos os metodos com implementacao real (nada de MsgAviso-stub) e alinhados ao caracter OPERACIONAL inline-grid do form.

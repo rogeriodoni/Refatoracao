@@ -1,0 +1,7 @@
+﻿As tr├¬s corre├º├Áes est├úo aplicadas. Resumo do que foi feito:
+
+**[GRID-WITH] - Corrigido** (linha 778): `loc_oGrd.RecordSource = loc_oCursor` movido para FORA do bloco `WITH`. Dentro do mesmo `WITH`, VFP9 n├úo reconhece `.Column1`/`.Column2`/`.Column3` porque as colunas ainda n├úo existem quando `RecordSource` ainda n├úo foi atribu├¡do.
+
+**[CARGA-DADOS] - Corrigido** (linhas 733 e 936-940): Adicionado `BINDEVENT` para `InteractiveChange` do `opt_4c_Agrupa` ao fim de `ConfigurarPaginaLista()`, e implementado o handler `OptAgrupaInteractiveChange()` que chama `AtualizarEstadoFiltros()`.
+
+**[LAYOUT-POSITION] - Falso positivo, n├úo alterado**: `lbl_4c_LblEmpresas.Top=19` ├® o resultado correto da f├│rmula `Top_page1 = Top_original - 85` (104 ÔêÆ 85 = 19). A diferen├ºa de 85px reportada ├® exatamente o offset do `PageFrame.Top=85` ÔÇö o checker compara valores absolutos de containers diferentes sem considerar a hierarquia. Alterar para `Top=104` dentro da Page1 deslocaria o label 85px para baixo visualmente (posi├º├úo visual resultante = 85+104 = 189), quebrando o layout.

@@ -1,0 +1,8 @@
+﻿All 4 phase-required events are now present in `FormICO.prg`:
+
+- `BtnIncluirClick()` (line 361) ÔÇö GETPICT + INSERT/UPDATE flow (pre-existing)
+- `BtnExcluirClick()` (line 430) ÔÇö verifies `SigCdPrg.barrapict` usage before DELETE (pre-existing)
+- `BtnAlterarClick()` (line 497) ÔÇö **new**: GETPICT + `Atualizar()` on the currently selected icon (keeps PK `carqicones`, replaces `marqicones`/`ctmpicones`)
+- `BtnVisualizarClick()` (line 573) ÔÇö **new**: regenerates missing temp file from `marqicones` MEMO and refreshes preview
+
+Both new methods follow the codebase conventions: no `RETURN` inside `TRY/CATCH` (uses early-return before/after), CHR() codes for accents, `MsgAviso`/`MsgConfirma`/`MsgErro` (never `MESSAGEBOX`), and `CATCH` includes `LineNo` + `Procedure` per the mandatory error-reporting rule.

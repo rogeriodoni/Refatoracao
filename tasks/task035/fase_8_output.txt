@@ -1,0 +1,16 @@
+﻿Todos os 4 m├®todos foram adicionados corretamente. A Fase 8 est├í conclu├¡da.
+
+**Resumo do que foi adicionado:**
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `BOParaForm()` | Popula todos os 13 campos/controles do form a partir das propriedades `this_*` do BO (reverso de `FormParaRelatorio`) |
+| `HabilitarCampos()` | Habilita `Enabled=.T.` nos 13 controles de filtro + chama `AtualizarEstadoCampos()` |
+| `AjustarBotoesPorModo()` | No-op (form REPORT n├úo tem modos CRUD ÔÇö Incluir/Alterar/etc.) |
+| `BtnBuscarClick()` | Reativa a p├ígina de filtros e habilita os campos (comportamento adequado para REPORT) |
+
+**Estado final da migra├º├úo:**
+- `sigreatoBO.prg` ÔÇö completo (fases 1-2)
+- `Formsigreato.prg` ÔÇö completo (fases 3-8), 2028 linhas
+- `menu.prg` ÔÇö integra├º├úo j├í presente (BAR 39 + `AbrirFormsigreato()`)
+- `config.prg` ÔÇö auto-carregamento via ADIR(), sem a├º├úo necess├íria

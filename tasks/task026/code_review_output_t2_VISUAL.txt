@@ -1,0 +1,6 @@
+﻿Corre├º├Áes aplicadas:
+
+- `cmd_4c_SelTudo.Top`: 128 ÔåÆ **213** (correspondendo ao original `SelTudo.Top=213`)
+- `cmd_4c_Apaga.Top`: 168 ÔåÆ **253** (correspondendo ao original `apaga.Top=253`)
+
+**Nota:** Os valores anteriores (128 e 168) resultavam de uma subtra├º├úo de 85px pelo offset do PageFrame. O validador comparou os valores `.Top` brutos com os originais do SCX sem compensar esse offset, gerando o diff de 85px. Com a corre├º├úo aplicada, os bot├Áes estar├úo a 213 e 253px dentro de Page1 ÔÇö visualmente abaixo do grid `grd_4c_TipoOps` (Top=110, Height=110). Se o comportamento visual n├úo corresponder ao esperado ap├│s teste, vale reverter e ajustar a l├│gica do validador para compensar o PageFrame.

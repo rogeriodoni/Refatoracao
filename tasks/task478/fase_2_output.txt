@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O OccBO.prg agora tem todos os m├®todos CRUD:
+
+- **`CarregarDoCursor()`** ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar `ncodigos`/`cdescrs`
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com ORDER BY ncodigos, suporta filtro opcional
+- **`CarregarPorCodigo(par_nCodigo)`** ÔÇö SELECT por PK, reseta `this_lNovoRegistro = .F.`
+- **`ValidarDados()`** ÔÇö valida c├│digo > 0, descri├º├úo n├úo vazia, e duplicidade no INSERT (via COUNT)
+- **`Inserir()`** ÔÇö PROTECTED, INSERT com `FormatarNumeroSQL` + `EscaparSQL` + auditoria
+- **`Atualizar()`** ÔÇö PROTECTED, UPDATE `cdescrs` WHERE `ncodigos` + auditoria
+- **`ExecutarExclusao()`** ÔÇö PROTECTED, verifica `SigNfCor.noccors` antes de deletar (mensagem id├¬ntica ao legado), depois DELETE + auditoria
+- **`ObterChavePrimaria()`** ÔÇö retorna `TRANSFORM(this_nCodigo)` para o sistema de auditoria

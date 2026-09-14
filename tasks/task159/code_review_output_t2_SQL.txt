@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo:
+
+**ICLIS** (linha 1901/1906): Corrigido `SELECT Nomes` ÔåÆ `SELECT rclis` e `cursor_4c_FornTmp.Nomes` ÔåÆ `cursor_4c_FornTmp.rclis`. A coluna `Nomes` n├úo existe em `SigCdCli`; `rclis` ├® o campo de descri├º├úo do cliente, conforme confirmado no schema e nos outros forms do projeto (FormSIGREVIS usa o mesmo padr├úo). O `WHERE Iclis = ?` permanece correto pois `iclis` ├® o PK real da tabela.
+
+**QTDEQS**: Falso positivo do validador ÔÇö as refer├¬ncias a `Qtdeqs` s├úo express├Áes VFP9 (`IIF(CrSigCdMoe.Qtdeqs = 0, ...)`) lendo campos de cursor, n├úo condi├º├Áes SQL WHERE. A coluna existe em `SigCdMoe`. Nenhuma altera├º├úo necess├íria.

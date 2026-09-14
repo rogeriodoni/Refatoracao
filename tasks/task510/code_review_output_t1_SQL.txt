@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `FormReg.prg`:
+
+1. **DESCS removido do WHERE** (linha 1320-1322): `AND (m.codigos = ... OR m.descs LIKE ...)` ÔåÆ `AND m.codigos = ...`. O original filtra municipios apenas por `b.estados` + busca por c├│digo; `descs LIKE` foi inven├º├úo da LLM.
+
+2. **RAZAOS removido do WHERE** (linha 1485): `WHERE iclis LIKE ... OR razaos LIKE ...` ÔåÆ `WHERE iclis LIKE ...`. O original usa apenas `iclis`/`skchaves`/`tipos` nas condi├º├Áes WHERE; `razaos LIKE` foi inven├º├úo da LLM.

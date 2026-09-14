@@ -1,0 +1,2683 @@
+#==============================================================================
+# OrquestradorMigracao.ps1
+#
+# PROPOSITO: Orquestrador principal do processo de migracao automatizada
+#
+# FLUXO:
+#   1. Mover arquivos de origem para task
+#   2. Extrair codigo fonte (ExtractSCXCode.prg)
+#   3. Gerar meta-prompt (GERADOR_PROMPT_MIGRACAO.md)
+#   4. Gerar mapeamento (GeradorMapeamento.prg)
+#   5. Executar migracao (Claude CLI)
+#   6. Testar formulario (TestFormWrapper.prg)
+#   7. Validar UI Fidelity (ValidarUIFidelity.prg)
+#   8. Gerar solicitacao de teste manual
+#
+# AUTOR: Sistema de Migracao Automatizada
+# DATA: 2026-01-22
+#==============================================================================
+
+param(
+    [Parameter(Mandatory=$false)]
+    [string]$ConfigFile = "C:\4c\automation\config.json",
+
+    [Parameter(Mandatory=$false)]
+    [switch]$ContinueFromLastTask,
+
+    [Parameter(Mandatory=$false)]
+    [string]$TaskId,
+
+    [Parameter(Mandatory=$false)]
+    [switch]$ProcessAll  # Processa TODOS os arquivos da pasta origem
+)
+
+$ErrorActionPreference = "Stop"
+
+#------------------------------------------------------------------------------
+# Carrega modulos
+#------------------------------------------------------------------------------
+
+$scriptDir = Split-Path -Parent $PSCommandPath
+. (Join-Path $scriptDir "TaskManager.ps1")
+
+#------------------------------------------------------------------------------
+# Mata processos VFP9 que possam estar travados
+#------------------------------------------------------------------------------
+
+$vfpProcesses = Get-Process -Name "vfp9" -ErrorAction SilentlyContinue
+if ($vfpProcesses) {
+    Write-Host "Encerrando processos VFP9 anteriores..." -ForegroundColor Yellow
+    $vfpProcesses | Stop-Process -Force
+    Start-Sleep -Milliseconds 500
+}
+
+#------------------------------------------------------------------------------
+# Carrega configuracao
+#------------------------------------------------------------------------------
+
+Write-Host "=== ORQUESTRADOR DE MIGRACAO ===" -ForegroundColor Cyan
+Write-Host ""
+
+if (-not (Test-Path $ConfigFile)) {
+    Write-Host "ERRO: Arquivo de configuracao nao encontrado: $ConfigFile" -ForegroundColor Red
+    exit 1
+}
+
+$config = Get-Content -Path $ConfigFile -Raw | ConvertFrom-Json
+
+Write-Host "Configuracao carregada:"
+Write-Host "  Origem: $($config.paths.origem)"
+Write-Host "  Tasks: $($config.paths.tasks)"
+Write-Host "  Max Problemas (ValidarUI): $($config.validacao.maxProblemas)"
+Write-Host ""
+
+#------------------------------------------------------------------------------
+# Funcoes auxiliares
+#------------------------------------------------------------------------------
+
+function Write-StepHeader {
+    param([string]$Step, [string]$Description)
+
+    Write-Host ""
+    Write-Host "============================================================================" -ForegroundColor Yellow
+    Write-Host " [$Step] $Description" -ForegroundColor Yellow
+    Write-Host "============================================================================" -ForegroundColor Yellow
+    Write-Host ""
+}
+
+function Get-NextTaskNumber {
+    $existingTasks = Get-ChildItem -Path $config.paths.tasks -Directory -ErrorAction SilentlyContinue |
+                     Where-Object { $_.Name -match '^task(\d+)$' } |
+                     ForEach-Object { [int]($_.Name -replace 'task', '') } |
+                     Sort-Object -Descending
+
+    if ($existingTasks.Count -eq 0) {
+        return 1
+    }
+
+    return ($existingTasks[0] + 1)
+}
+
+function Get-NextOriginalFile {
+    $scxFiles = Get-ChildItem -Path $config.paths.origem -Filter "*.scx" -ErrorAction SilentlyContinue
+
+    if ($scxFiles.Count -eq 0) {
+        return $null
+    }
+
+    # Retorna primeiro arquivo (par SCX/SCT)
+    $scx = $scxFiles[0]
+    $sct = Join-Path $config.paths.origem ($scx.BaseName + ".sct")
+
+    if (-not (Test-Path $sct)) {
+        Write-Host "AVISO: Arquivo .sct nao encontrado para: $($scx.Name)" -ForegroundColor Yellow
+        return $null
+    }
+
+    return @{
+        SCX = $scx.FullName
+        SCT = $sct
+        BaseName = $scx.BaseName
+        Tipo = "SCX"
+    }
+}
+
+function Get-FormClassName {
+    param([string]$BaseName)
+
+    # Tenta carregar mapeamento explícito
+    $mappingFile = Join-Path $config.paths.automation "class_mapping.json"
+
+    if (Test-Path $mappingFile) {
+        try {
+            $mapping = Get-Content $mappingFile -Raw | ConvertFrom-Json
+
+            if ($mapping.mappings.$BaseName) {
+                Write-Host "  [Mapeamento] $BaseName -> $($mapping.mappings.$BaseName.formClass)" -ForegroundColor Green
+                return $mapping.mappings.$BaseName.formClass
+            }
+        }
+        catch {
+            Write-Host "  [AVISO] Erro ao ler class_mapping.json: $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+    }
+
+    # Fallback: Inferencia baseada em padrao SIGCD*
+    if ($BaseName -like "SIGCD*") {
+        $suffix = $BaseName.Substring(5)  # Remove "SIGCD"
+        $formClass = "Form$suffix"
+        Write-Host "  [Inferencia] $BaseName -> $formClass" -ForegroundColor Yellow
+        return $formClass
+    }
+
+    # Fallback generico: Form + BaseName
+    $formClass = "Form$BaseName"
+    Write-Host "  [Inferencia Generica] $BaseName -> $formClass" -ForegroundColor Yellow
+    return $formClass
+}
+
+function Get-BOClassName {
+    param([string]$BaseName)
+
+    # Tenta carregar mapeamento explícito
+    $mappingFile = Join-Path $config.paths.automation "class_mapping.json"
+
+    if (Test-Path $mappingFile) {
+        try {
+            $mapping = Get-Content $mappingFile -Raw | ConvertFrom-Json
+
+            if ($mapping.mappings.$BaseName -and $mapping.mappings.$BaseName.boClass) {
+                Write-Host "  [Mapeamento] $BaseName -> $($mapping.mappings.$BaseName.boClass)" -ForegroundColor Green
+                return $mapping.mappings.$BaseName.boClass
+            }
+        }
+        catch {
+            Write-Host "  [AVISO] Erro ao ler class_mapping.json: $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+    }
+
+    # Fallback: Inferencia baseada em padrao SIGCD*
+    if ($BaseName -like "SIGCD*") {
+        $suffix = $BaseName.Substring(5)  # Remove "SIGCD"
+        $boClass = "${suffix}BO"
+        Write-Host "  [Inferencia] $BaseName -> $boClass" -ForegroundColor Yellow
+        return $boClass
+    }
+
+    # Fallback generico: BaseName + BO
+    $boClass = "${BaseName}BO"
+    Write-Host "  [Inferencia Generica] $BaseName -> $boClass" -ForegroundColor Yellow
+    return $boClass
+}
+
+function Get-TableSchema {
+    param(
+        [string]$TaskId,
+        [string]$TasksDir
+    )
+
+    # Tenta ler nome da tabela do analise.json
+    $taskPath = Join-Path $TasksDir $TaskId
+    $analiseFile = Join-Path $taskPath "analise.json"
+    $tableName = ""
+
+    if (Test-Path $analiseFile) {
+        try {
+            $analise = Get-Content $analiseFile -Raw | ConvertFrom-Json
+            if ($analise.form.tabela) {
+                $tableName = $analise.form.tabela
+            }
+        }
+        catch {
+            Write-Host "  [AVISO] Erro ao ler analise.json: $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+    }
+
+    if ([string]::IsNullOrEmpty($tableName)) {
+        return ""
+    }
+
+    Write-Host "  [Schema] Extraindo schema da tabela: $tableName" -ForegroundColor Cyan
+
+    # Usa SQLCMD para extrair estrutura da tabela (credenciais do config.json)
+    try {
+        $dbServer = $config.database.server
+        $dbName = $config.database.database
+        $dbUser = $config.database.user
+        $dbPass = $config.database.password
+
+        $query = @"
+SELECT
+    c.name AS coluna,
+    t.name AS tipo,
+    c.max_length AS tamanho,
+    c.precision AS precisao,
+    c.scale AS escala,
+    c.is_nullable AS nulo
+FROM sys.columns c
+INNER JOIN sys.types t ON c.user_type_id = t.user_type_id
+WHERE c.object_id = OBJECT_ID('$tableName')
+ORDER BY c.column_id
+"@
+
+        $result = sqlcmd -S $dbServer -d $dbName -U $dbUser -P $dbPass -Q $query -h -1 -W -s "|" 2>$null
+
+        if ($LASTEXITCODE -eq 0 -and $result) {
+            $schemaText = @"
+
+## ⚠️ SCHEMA DA TABELA (CRITICO - NAO INVENTAR COLUNAS)
+
+**Tabela: $tableName**
+
+| Coluna | Tipo | Tamanho | Nulo |
+|--------|------|---------|------|
+"@
+            $lines = $result -split "`n" | Where-Object { $_.Trim() -ne "" -and $_ -notmatch "^-+$" }
+            foreach ($line in $lines) {
+                $parts = $line -split "\|"
+                if ($parts.Count -ge 6) {
+                    $coluna = $parts[0].Trim()
+                    $tipo = $parts[1].Trim()
+                    $tamanho = $parts[2].Trim()
+                    $precisao = $parts[3].Trim()
+                    $escala = $parts[4].Trim()
+                    $nulo = if ($parts[5].Trim() -eq "1") { "SIM" } else { "NAO" }
+
+                    # Formata tipo com tamanho/precisao
+                    $tipoCompleto = $tipo
+                    if ($tipo -eq "char" -or $tipo -eq "varchar" -or $tipo -eq "nvarchar") {
+                        $tipoCompleto = "$tipo($tamanho)"
+                    }
+                    elseif ($tipo -eq "numeric" -or $tipo -eq "decimal") {
+                        $tipoCompleto = "$tipo($precisao,$escala)"
+                    }
+
+                    $schemaText += "| $coluna | $tipoCompleto | $tamanho | $nulo |`n"
+                }
+            }
+
+            $schemaText += @"
+
+**REGRAS CRITICAS:**
+1. **APENAS** usar as colunas listadas acima no BO e Form
+2. **NAO** inventar colunas que nao existem (pesos, grupos, tipos, etc.)
+3. **NAO** assumir que existem mais colunas alem das listadas
+4. Se precisar de um campo que nao existe na tabela, **PERGUNTAR** antes de criar
+
+"@
+            Write-Host "  [Schema] Schema extraido com sucesso ($($lines.Count) colunas)" -ForegroundColor Green
+            return $schemaText
+        }
+        else {
+            Write-Host "  [AVISO] Nao foi possivel extrair schema via SQLCMD - tentando fallback" -ForegroundColor Yellow
+        }
+    }
+    catch {
+        Write-Host "  [AVISO] Erro ao extrair schema via SQLCMD: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+
+    # Fallback: tentar ler de schemas_simplificado.json
+    try {
+        $schemaFallbackFile = Join-Path $config.paths.projeto "..\docs\schemas_simplificado.json"
+        if (Test-Path $schemaFallbackFile) {
+            $schemas = Get-Content $schemaFallbackFile -Raw | ConvertFrom-Json
+            if ($schemas.tabelas.$tableName) {
+                $colunas = $schemas.tabelas.$tableName.colunas
+                $schemaText = @"
+
+## SCHEMA DA TABELA (CRITICO - NAO INVENTAR COLUNAS)
+
+**Tabela: $tableName**
+
+| Coluna | Tipo | Nulo | Descricao |
+|--------|------|------|-----------|
+"@
+                foreach ($col in $colunas) {
+                    $nulo = if ($col.nulo) { "SIM" } else { "NAO" }
+                    $schemaText += "| $($col.nome) | $($col.tipo) | $nulo | $($col.descricao) |`n"
+                }
+
+                $schemaText += @"
+
+**REGRAS CRITICAS:**
+1. **APENAS** usar as colunas listadas acima no BO e Form
+2. **NAO** inventar colunas que nao existem (pesos, grupos, tipos, etc.)
+3. **NAO** assumir que existem mais colunas alem das listadas
+4. Se precisar de um campo que nao existe na tabela, **PERGUNTAR** antes de criar
+
+"@
+                Write-Host "  [Schema] Schema extraido do arquivo de fallback ($($colunas.Count) colunas)" -ForegroundColor Green
+                return $schemaText
+            }
+        }
+    }
+    catch {
+        Write-Host "  [AVISO] Erro ao ler schema de fallback: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+
+    Write-Host "  [AVISO] Schema nao disponivel para tabela: $tableName" -ForegroundColor Yellow
+    return ""
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 1: Criar task e mover arquivos
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa01_MoverArquivos {
+    param([string]$TaskId)
+
+    Write-StepHeader "ETAPA 1" "Criar task e mover arquivos"
+
+    Start-Etapa -TaskId $TaskId -Etapa "01_moverArquivos" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+
+        # Verifica se arquivos ja existem na task (retry scenario)
+        $existingFiles = Get-ChildItem -Path $taskPath -Filter "*.scx" -ErrorAction SilentlyContinue
+
+        if ($existingFiles.Count -gt 0) {
+            $scxFile = $existingFiles[0]
+            $baseName = $scxFile.BaseName
+
+            Write-Host "Arquivos ja existem na task (retry): $baseName" -ForegroundColor Yellow
+
+            # Atualiza estado
+            $destSCX = $scxFile.FullName
+            $destSCT = Join-Path $taskPath "$baseName.sct"
+
+            $metadata = @{
+                scxFile = $destSCX
+                sctFile = $destSCT
+                baseName = $baseName
+            }
+
+            Complete-Etapa -TaskId $TaskId -Etapa "01_moverArquivos" -TasksDir $config.paths.tasks -Metadata $metadata
+
+            return $baseName
+        }
+
+        # Busca proximo arquivo na origem (fluxo normal)
+        $arquivo = Get-NextOriginalFile
+
+        if (-not $arquivo) {
+            throw "Nenhum arquivo disponivel em C:\4c\origem"
+        }
+
+        Write-Host "Arquivo encontrado: $($arquivo.BaseName).$($arquivo.Tipo)" -ForegroundColor Green
+
+        # Cria diretorio da task
+        if (-not (Test-Path $taskPath)) {
+            New-Item -ItemType Directory -Path $taskPath -Force | Out-Null
+        }
+
+        # Move par de arquivos
+        $destSCX = Join-Path $taskPath "$($arquivo.BaseName).scx"
+        $destSCT = Join-Path $taskPath "$($arquivo.BaseName).sct"
+
+        Move-Item -Path $arquivo.SCX -Destination $destSCX -Force
+        Move-Item -Path $arquivo.SCT -Destination $destSCT -Force
+
+        Write-Host "Arquivos movidos para: $taskPath" -ForegroundColor Green
+
+        # Atualiza estado
+        $metadata = @{
+            scxFile = $destSCX
+            sctFile = $destSCT
+            baseName = $arquivo.BaseName
+        }
+
+        Complete-Etapa -TaskId $TaskId -Etapa "01_moverArquivos" -TasksDir $config.paths.tasks -Metadata $metadata
+
+        return $arquivo.BaseName
+    }
+    catch {
+        Fail-Etapa -TaskId $TaskId -Etapa "01_moverArquivos" -ErroMsg $_.Exception.Message -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 2: Extrair codigo fonte
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa02_ExtractCode {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 2" "Extrair codigo fonte (ExtractSCXCode.prg)"
+
+    Start-Etapa -TaskId $TaskId -Etapa "02_extractCode" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+        $logFile = Get-TaskLogPath -TaskId $TaskId -Etapa "02_extractCode" -TasksDir $config.paths.tasks
+
+        # Prepara parametros ordenados para ExtractSCXCode
+        # Parametro 1: Caminho completo do arquivo .SCX
+        $scxFile = Join-Path $taskPath "$BaseName.SCX"
+        $parameters = @($scxFile)
+
+        # Executa ExtractSCXCode.prg (SEM config.fpw - funciona melhor com sintaxe de parametros)
+        $extractScript = Join-Path $config.paths.projeto "app\utils\ExtractSCXCode.prg"
+
+        & (Join-Path $config.paths.automation "VFPExecutor.ps1") `
+            -ScriptPrg $extractScript `
+            -Parameters $parameters `
+            -Timeout $config.vfp.timeout `
+            -LogFile $logFile `
+            -OutputFile (Join-Path $taskPath "vfp_output.txt")
+
+
+
+        # Verifica se arquivo foi gerado (ExtractSCXCode gera: BaseName_form_codigo_fonte.txt para SCX)
+        # VFP pode normalizar nome para maiusculo, entao busca com wildcard case-insensitive
+        $txtFiles = Get-ChildItem -Path $taskPath -Filter "*_form_codigo_fonte.txt" -File
+
+        if ($txtFiles.Count -eq 0) {
+            throw "Arquivo de codigo fonte nao foi gerado no diretorio: $taskPath"
+        }
+
+        # Pega o primeiro arquivo encontrado (deve ser unico)
+        $txtFile = $txtFiles[0].FullName
+
+        # Extrai o BaseName correto (normalizado pelo VFP)
+        $BaseNameNormalizado = ($txtFiles[0].BaseName -replace "_form_codigo_fonte", "")
+
+        Write-Host "Codigo fonte extraido: $txtFile" -ForegroundColor Green
+        Write-Host "BaseName normalizado: $BaseNameNormalizado" -ForegroundColor Cyan
+
+        # Salva o BaseName normalizado no metadata para uso nas proximas etapas
+        Complete-Etapa -TaskId $TaskId -Etapa "02_extractCode" -TasksDir $config.paths.tasks -Metadata @{
+            txtFile = $txtFile
+            baseNameNormalizado = $BaseNameNormalizado
+        }
+
+        # Retorna o BaseName normalizado
+        return $BaseNameNormalizado
+    }
+    catch {
+        Fail-Etapa -TaskId $TaskId -Etapa "02_extractCode" -ErroMsg $_.Exception.Message -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 3: Gerar meta-prompt
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa03_GerarMetaPrompt {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 3" "Gerar meta-prompt (GERADOR_PROMPT_MIGRACAO.md)"
+
+    Start-Etapa -TaskId $TaskId -Etapa "03_gerarMetaPrompt" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+        $txtFile = Join-Path $taskPath "${BaseName}_form_codigo_fonte.txt"
+        $metaPromptFile = Join-Path $taskPath "meta_prompt.md"
+        $mapeamentoFile = Join-Path $taskPath "mapeamento.json"
+
+        # Determina nomes de classes (usando class_mapping.json ou inferencia)
+        $formClass = Get-FormClassName -BaseName $BaseName
+        $boClass = Get-BOClassName -BaseName $BaseName
+
+        # Gera prompt EXECUTAVEL simples e direto
+        $prompt = @"
+# Tarefa: Migrar $formClass
+
+Migre o formulÃ¡rio $BaseName para o novo sistema seguindo todas as regras do CLAUDE.md.
+
+## Arquivos de ReferÃªncia OBRIGATÃ"RIOS
+1. **CLAUDE.md** - Ler seÃ§Ã£o dos 3 PILARES antes de comeÃ§ar
+2. **docs/FORMCOR_LICOES_APRENDIDAS.md** - Ler COMPLETAMENTE para nÃ£o repetir os 5 problemas
+3. **docs/migration_guide.md** - Checklist geral
+4. **tasks/$TaskId/${BaseName}_form_codigo_fonte.txt** - CÃ³digo fonte original
+5. **tasks/$TaskId/mapeamento.json** - Mapeamento de objetos (se disponÃ­vel)
+
+## Arquivos a Criar
+1. **C:\4c\projeto\app\classes\${boClass}.prg**
+   - Herda de BusinessBase
+   - Propriedades this_* para todos os campos da tabela
+   - **Métodos OBRIGATÓRIOS** (nomes EXATOS do BusinessBase):
+     - `Inserir()` - INSERT (PROTECTED)
+     - `Atualizar()` - UPDATE (PROTECTED)
+     - `ExecutarExclusao()` - DELETE (PROTECTED) **← NÃO usar "Excluir()"!**
+     - `Buscar()` - SELECT (PUBLIC)
+     - `CarregarPorCodigo()` - SELECT por PK (PUBLIC)
+   - ObterChavePrimaria() para auditoria
+   - **CRÍTICO - Init()**: Usar nomes CORRETOS das propriedades herdadas:
+     ```foxpro
+     PROCEDURE Init()
+         DODEFAULT()
+         THIS.this_cTabela = "NomeTabela"      && ✅ CORRETO (NÃO this_cNomeTabela)
+         THIS.this_cCampoChave = "campo_pk"    && ✅ CORRETO (NÃO this_cChavePrimaria)
+         RETURN .T.
+     ENDPROC
+     ```
+   - **CarregarDoCursor**: SEMPRE usar `SELECT (par_cAliasCursor)` ANTES de acessar campos
+     ```foxpro
+     PROCEDURE CarregarDoCursor(par_cAliasCursor)
+         IF USED(par_cAliasCursor)
+             SELECT (par_cAliasCursor)           && ✅ OBRIGATÓRIO
+             THIS.this_campo = TratarNulo(campo, "C")  && ✅ Sem alias
+             RETURN .T.
+         ENDIF
+         RETURN .F.
+     ENDPROC
+     ```
+   - **NUNCA usar**: `(par_cAliasCursor).campo` → ERRO de sintaxe!
+
+2. **C:\4c\projeto\app\forms\cadastros\${formClass}.prg**
+   - Herda de FormBase
+   - PageFrame com Top=-29 e Tabs=.F.
+   - Page1: Lista (Grid)
+   - Page2: Dados (Campos)
+   - Lookups: TODOS os campos que tinham no original (F4/DblClick)
+   - ValidaÃ§Ãµes: copiar do original
+
+## 3 PILARES INEGOCIÃVEIS
+1. **UX**: Manter o mais prÃ³ximo possÃ­vel (Width, Height, BackColor, FontName, FontSize EXATOS)
+2. **Banco**: IdÃªntico (nÃ£o alterar nomes de tabelas/colunas)
+3. **CÃ³digo**: OBRIGATORIAMENTE diferente (nova arquitetura, novos nomes)
+
+## ⚠️ REGRA CRÍTICA: NUNCA usar RETURN dentro de TRY/CATCH
+
+**ERRO FATAL**: "RETURN/RETRY statement not allowed in TRY/CATCH"
+
+``````foxpro
+*-- ❌ ERRADO - NUNCA FAZER:
+PROTECTED PROCEDURE CarregarLista()
+    TRY
+        IF !THIS.this_oBusinessObject.Buscar("")
+            RETURN .F.  && ❌ ERRO CRÍTICO!
+        ENDIF
+        RETURN .T.  && ❌ ERRO CRÍTICO!
+    CATCH
+        RETURN .F.  && ❌ ERRO CRÍTICO!
+    ENDTRY
+ENDPROC
+
+*-- ✅ CORRETO - SEMPRE FAZER:
+PROTECTED PROCEDURE CarregarLista()
+    LOCAL loc_lResultado
+    loc_lResultado = .F.
+
+    TRY
+        IF !THIS.this_oBusinessObject.Buscar("")
+            loc_lResultado = .F.  && ✅ Atribuir variável
+        ELSE
+            loc_lResultado = .T.  && ✅ Atribuir variável
+        ENDIF
+    CATCH TO loException
+        MostrarErro("Erro: " + loException.Message, "Erro")
+        loc_lResultado = .F.  && ✅ Atribuir variável
+    ENDTRY
+
+    RETURN loc_lResultado  && ✅ RETURN apenas FORA do TRY/CATCH
+ENDPROC
+``````
+
+**CHECKLIST**: Declarar `LOCAL loc_lResultado`, inicializar `.F.`, substituir TODOS os RETURNs por atribuições, RETURN apenas FORA.
+
+## 23 PROBLEMAS CRÍTICOS A NÃO REPETIR (task006/task014/task016/task017/task018)
+
+### Problema 1: BotÃµes Sem Ícones e Captions
+**TODOS os botÃµes DEVEM ter estas 3 propriedades:**
+``````foxpro
+*-- BotÃ£o Incluir (EXEMPLO COMPLETO - COPIAR)
+loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
+WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir
+    .Caption = "Incluir"                               && ✅ Caption SEM tecla atalho
+    .Picture = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"  && ✅ Ícone (OBRIGATÓRIO)
+    .PicturePosition = 13                              && ✅ Ícone ACIMA do texto
+    .Top = 5
+    .Left = 5
+    .Width = 75
+    .Height = 75
+    .BackColor = RGB(255, 255, 255)
+    .ForeColor = RGB(90, 90, 90)
+    .Themes = .F.
+    .SpecialEffect = 0
+ENDWITH
+``````
+**Aplicar em TODOS os 8 botÃµes**: Incluir, Alterar, Excluir, Consultar, Pesquisar, Sair, Salvar, Cancelar
+
+### Problema 2: Grid Perde Dados ApÃ³s Consultar
+**BtnCancelarClick() DEVE chamar CarregarLista():**
+``````foxpro
+PROTECTED PROCEDURE BtnCancelarClick()
+    THIS.AlternarPagina(1)
+    THIS.this_cModoAtual = "LISTA"
+    THIS.CarregarLista()  && ✅ OBRIGATÓRIO: recarrega dados + formatação
+ENDPROC
+``````
+
+### Problema 3: Erro ao Fechar Form - "loForm is not an object"
+**PADRÃO CORRETO para AbrirForm() no menu.prg (COPIAR EXATAMENTE):**
+``````foxpro
+PROCEDURE Abrir${formClass}()
+    LOCAL loForm, loException
+
+    TRY
+        * Cria instancia do formulario
+        loForm = CREATEOBJECT("${formClass}")
+
+        IF VARTYPE(loForm) = "O"                  && ✅ VARTYPE, NÃO ISNULL
+            loForm.Show()                         && ✅ SEM parâmetro
+            *-- ✅ NÃO chamar loForm.Release() - FormBase cuida disso
+        ELSE
+            MostrarErro("Erro ao criar formulário ${formClass}", "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formulário ${formClass}:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+``````
+**NUNCA usar**:
+- `loForm.Show(1)` (parâmetro modal)
+- `loForm.Release()` após Show()
+- `ISNULL(loForm)` ao invés de `VARTYPE(loForm) = "O"`
+
+### Problema 4: Erro ao Salvar - "no parameter statement is found"
+**Salvar() NUNCA recebe parâmetro:**
+``````foxpro
+*-- ❌ ERRADO: Salvar(loc_lNovoRegistro)
+IF THIS.this_oBusinessObject.Salvar(loc_lNovoRegistro)
+
+*-- ✅ CORRETO: Salvar() SEM parâmetro
+IF THIS.this_oBusinessObject.Salvar()
+    MsgSucesso("Registro salvo com sucesso!")
+    THIS.AlternarPagina(1)
+    THIS.CarregarLista()
+ENDIF
+``````
+**Por quê?** BusinessBase.Salvar() já sabe se é INSERT ou UPDATE através da propriedade interna `this_lNovoRegistro`.
+
+### Problema 5: Labels com Cores Incorretas
+**SEMPRE copiar TODAS as propriedades visuais do original:**
+``````foxpro
+WITH loc_oPagina.lbl_4c_Codigo
+    .Caption = "C" + CHR(243) + "digo :"
+    .Top = 140
+    .Left = 369
+    .Width = 45
+    .Height = 17
+    .BackColor = RGB(90, 90, 90)      && ✅ COPIAR do original
+    .ForeColor = RGB(255, 255, 255)   && ✅ COPIAR do original
+    .FontName = "Tahoma"               && ✅ COPIAR do original
+    .FontSize = 8                      && ✅ COPIAR do original
+    .FontBold = .F.
+    .Alignment = 1  && Right
+ENDWITH
+``````
+
+### Problemas 6-11: Já Documentados
+6. Grid perde cabeÃ§alhos â†' Reconfigurar Header1.Caption APÃ"S RecordSource
+7. BotÃµes cortados â†' Se PageFrame.Top=-29, compensar +29px em TODOS os controles de topo
+8. "Connection invalid" â†' Verificar gb_4c_ValidandoUI antes de CarregarLista()
+9. Mapeamento incorreto â†' Criar hierarquia correta no JSON
+10. DuplicaÃ§Ã£o de raiz â†' JÃ¡ corrigido no ComparadorUI.prg
+11. MÃ©todos auxiliares â†' SEMPRE implementar TornarControlesVisiveis() + FormatarGridLista() no form
+
+## IMPORTANTE: Init() - NÃO Chamar InicializarForm() Duas Vezes!
+
+**PADRÃO CORRETO para FormXxx.Init()**:
+``````foxpro
+PROCEDURE Init()
+    *-- DODEFAULT() ja chama InicializarForm() atraves do FormBase.Init()
+    *-- NAO chamar THIS.InicializarForm() novamente aqui!
+    RETURN DODEFAULT()
+ENDPROC
+``````
+
+**NUNCA fazer**:
+``````foxpro
+PROCEDURE Init()
+    DODEFAULT()
+    THIS.InicializarForm()  && ❌ ERRO: Chamada duplicada!
+    RETURN .T.
+ENDPROC
+``````
+
+**Por quê?** FormBase.Init() já chama THIS.InicializarForm(). Se chamar novamente, AddObject() tenta criar objetos que já existem → erro "A member object with this name already exists".
+
+### Problema 12: ConfigurarPaginaDados() sem ENDPROC
+**CRÍTICO**: Todo PROCEDURE deve terminar com ENDPROC e chamar TornarControlesVisiveis():
+``````foxpro
+*-- ❌ ERRADO - Page2 fica VAZIA:
+PROTECTED PROCEDURE ConfigurarPaginaDados()
+    LOCAL loc_oPagina
+    loc_oPagina = THIS.pgf_4c_Paginas.Page2
+
+    loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
+    * ... mais campos ...
+
+    * NOTA: campos criados
+*-- FALTA ENDPROC! → Código não executa corretamente
+
+*-- ✅ CORRETO - SEMPRE terminar com TornarControlesVisiveis + ENDPROC:
+PROTECTED PROCEDURE ConfigurarPaginaDados()
+    LOCAL loc_oPagina
+    loc_oPagina = THIS.pgf_4c_Paginas.Page2
+
+    loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
+    * ... mais campos ...
+
+    * OBRIGATÓRIO: Tornar controles visíveis
+    THIS.TornarControlesVisiveis(loc_oPagina)
+ENDPROC  && ← NUNCA ESQUECER!
+``````
+
+### Problema 13: CarregarPorId vs CarregarPorCodigo
+**CRÍTICO**: O método correto no BO é `CarregarPorCodigo`, NÃO `CarregarPorId`:
+``````foxpro
+*-- ❌ ERRADO - Método não existe:
+IF THIS.this_oBusinessObject.CarregarPorId(loc_cCodigo)  && ERRO!
+
+*-- ✅ CORRETO - Usar nome do método do BO:
+IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCodigo)
+``````
+**Verificar**: Antes de usar, confirmar o nome exato do método no arquivo [Entidade]BO.prg
+
+### Problema 14: Propriedades Visuais na Definição da Classe (Form fecha imediatamente)
+**CRÍTICO**: Se o form abre e fecha SEM mensagem de erro, provavelmente faltam propriedades visuais na DEFINE CLASS:
+``````foxpro
+*-- ❌ ERRADO - Form abre e fecha imediatamente:
+DEFINE CLASS FormTam AS FormBase
+    this_oBusinessObject = .NULL.
+
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+ENDDEFINE
+
+*-- ✅ CORRETO - Propriedades visuais OBRIGATÓRIAS na DEFINE CLASS:
+DEFINE CLASS FormTam AS FormBase
+    *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
+    Height = 600
+    Width = 1000
+    Caption = "Cadastro de Tamanhos"
+    AutoCenter = .T.
+    ShowWindow = 1
+    WindowType = 1
+    ControlBox = .F.
+    TitleBar = 0
+    Themes = .F.
+    BorderStyle = 2
+
+    this_oBusinessObject = .NULL.
+
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+ENDDEFINE
+``````
+**Por quê?** FormBase.Init() depende dessas propriedades para configurar corretamente o formulário. Sem elas, o form pode falhar silenciosamente.
+
+### Problema 15: ExecutarExclusao vs Excluir (método não encontrado)
+**CRÍTICO**: O nome correto do método de exclusão no BusinessBase é `ExecutarExclusao()`, NÃO `Excluir()`:
+``````foxpro
+*-- ❌ ERRADO no [Entidade]BO.prg:
+PROTECTED PROCEDURE Excluir()  && ERRO: BusinessBase não chama este método!
+    ...
+ENDPROC
+
+*-- ✅ CORRETO no [Entidade]BO.prg:
+PROTECTED PROCEDURE ExecutarExclusao()  && ✅ Nome correto do BusinessBase
+    LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+    loc_lSucesso = .F.
+    TRY
+        TEXT TO loc_cSQL TEXTMERGE NOSHOW
+            DELETE FROM NomeTabela WHERE campo_pk = <<EscaparSQL(THIS.this_cCodigo)>>
+        ENDTEXT
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+        IF loc_nResultado >= 0
+            THIS.RegistrarAuditoria("DELETE")
+            loc_lSucesso = .T.
+        ELSE
+            MostrarErro("Erro ao excluir:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+        ENDIF
+    CATCH TO loException
+        MostrarErro("Erro:" + CHR(13) + loException.Message, "Erro")
+    ENDTRY
+    RETURN loc_lSucesso
+ENDPROC
+``````
+**Verificar**: BusinessBase.Excluir() chama THIS.ExecutarExclusao() internamente!
+
+### Problema 16: Ícone do Botão Salvar e RETURN em Validação
+**DOIS ERROS COMUNS**:
+
+1. **Ícone incorreto**: Usar `cadastro_salvar_60.jpg` (NÃO `cadastro_confirmar_60.jpg` que não existe)
+``````foxpro
+*-- ❌ ERRADO - Arquivo não existe:
+.Picture = gc_4c_CaminhoIcones + "cadastro_confirmar_60.jpg"
+
+*-- ✅ CORRETO:
+.Picture = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+``````
+
+2. **RETURN dentro de TRY para validação**: Mover validação para FORA do TRY
+``````foxpro
+*-- ❌ ERRADO - RETURN silenciosamente falha:
+TRY
+    IF EMPTY(campo)
+        MsgAviso("Campo obrigatório!")
+        RETURN  && ❌ Não funciona dentro de TRY!
+    ENDIF
+    ...
+ENDTRY
+
+*-- ✅ CORRETO - Validação ANTES do TRY:
+IF EMPTY(campo)
+    MsgAviso("Campo obrigatório!")
+    RETURN .F.  && ✅ Funciona fora do TRY
+ENDIF
+
+TRY
+    ...
+ENDTRY
+``````
+
+**Tabela de ícones corretos**:
+| Botão | Ícone |
+|-------|-------|
+| Incluir | cadastro_inserir_26.jpg |
+| Visualizar | cadastro_vizualizar_60.jpg |
+| Alterar | cadastro_alterar_60.jpg |
+| Excluir | cadastro_excluir_60.jpg |
+| Buscar | cadastro_procurar_60.jpg |
+| Encerrar | cadastro_sair_60.jpg |
+| **Salvar** | **cadastro_salvar_60.jpg** |
+| Cancelar | cadastro_cancelar_60.jpg |
+
+### Problema 17: BINDEVENT não funciona com métodos PROTECTED
+**CRÍTICO**: Métodos chamados via BINDEVENT devem ser PUBLIC (sem PROTECTED):
+``````foxpro
+*-- ❌ ERRADO - BINDEVENT falha silenciosamente:
+BINDEVENT(loBtn, "Click", THIS, "BtnSalvarClick")
+...
+PROTECTED PROCEDURE BtnSalvarClick()  && ❌ PROTECTED impede BINDEVENT!
+    ...
+ENDPROC
+
+*-- ✅ CORRETO - Método sem PROTECTED:
+BINDEVENT(loBtn, "Click", THIS, "BtnSalvarClick")
+...
+PROCEDURE BtnSalvarClick()  && ✅ PUBLIC (sem PROTECTED)
+    ...
+ENDPROC
+``````
+**Regra**: TODOS os métodos Btn*Click devem ser PUBLIC (sem PROTECTED) para funcionar com BINDEVENT.
+
+### Problema 18: BtnIncluirClick/BtnAlterarClick sem NovoRegistro()/EditarRegistro()
+**CRÍTICO**: Os métodos de botão DEVEM chamar os métodos do BO para preparar o estado:
+``````foxpro
+*-- ❌ ERRADO - Salvar() não sabe se é INSERT ou UPDATE:
+PROCEDURE BtnIncluirClick()
+    THIS.LimparCampos()
+    THIS.HabilitarCampos(.T.)
+    THIS.AlternarPagina(2)
+    THIS.this_cModoAtual = "INCLUIR"
+ENDPROC
+
+*-- ✅ CORRETO - Chamar NovoRegistro() para preparar INSERT:
+PROCEDURE BtnIncluirClick()
+    THIS.this_oBusinessObject.NovoRegistro()  && ✅ OBRIGATÓRIO: Prepara BO para INSERT
+    THIS.LimparCampos()
+    THIS.HabilitarCampos(.T.)
+    THIS.AlternarPagina(2)
+    THIS.this_cModoAtual = "INCLUIR"
+ENDPROC
+
+*-- ✅ CORRETO - Chamar EditarRegistro() para preparar UPDATE:
+PROCEDURE BtnAlterarClick()
+    IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCodigo)
+        THIS.this_oBusinessObject.EditarRegistro()  && ✅ OBRIGATÓRIO: Prepara BO para UPDATE
+        THIS.BOParaForm()
+        ...
+    ENDIF
+ENDPROC
+``````
+**Por quê?** O BusinessBase.Salvar() usa `this_lNovoRegistro` para decidir entre INSERT e UPDATE. Sem chamar NovoRegistro()/EditarRegistro(), esse flag não é setado corretamente.
+
+### Problema 19: HabilitarCampos() chamado ANTES de setar this_cModoAtual
+**CRÍTICO**: O método HabilitarCampos verifica `this_cModoAtual` para decidir se habilita o campo código:
+``````foxpro
+*-- ❌ ERRADO - this_cModoAtual ainda é "LISTA" quando HabilitarCampos é chamado:
+PROCEDURE BtnIncluirClick()
+    THIS.LimparCampos()
+    THIS.HabilitarCampos(.T.)           && ❌ this_cModoAtual = "LISTA" aqui!
+    THIS.this_cModoAtual = "INCLUIR"    && Setado tarde demais
+ENDPROC
+
+*-- ✅ CORRETO - Setar this_cModoAtual ANTES de HabilitarCampos:
+PROCEDURE BtnIncluirClick()
+    THIS.this_oBusinessObject.NovoRegistro()
+    THIS.LimparCampos()
+    THIS.this_cModoAtual = "INCLUIR"    && ✅ ANTES de HabilitarCampos!
+    THIS.HabilitarCampos(.T.)
+    THIS.AlternarPagina(2)
+ENDPROC
+``````
+
+### Problema 20: Parâmetros errados no FormBuscaAuxiliar
+**CRÍTICO**: FormBuscaAuxiliar espera gnConnHandle como primeiro parâmetro:
+``````foxpro
+*-- ❌ ERRADO - Parâmetros na ordem errada:
+loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", "SigCdTam", "cods", "descs")
+
+*-- ✅ CORRETO - gnConnHandle primeiro:
+loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdTam", "cursor_4c_Busca", "cods", "", "Buscar Tamanho")
+``````
+**Assinatura**: `FormBuscaAuxiliar(gnConnHandle, cTabela, cCursor, cCampo, cValor, cTitulo, lBuscaExata, lMostraGrid, cFiltro)`
+
+### Problema 21: Imagem de fundo com caminho relativo incorreto
+**CRÍTICO**: Usar `gc_4c_CaminhoIcones` ao invés de caminho relativo:
+``````foxpro
+*-- ❌ ERRADO - Caminho relativo pode não funcionar:
+.Page1.Picture = "..\framework\imagens\fundo_cad_1003.jpg"
+
+*-- ✅ CORRETO - Usar variável global de caminho:
+.Page1.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+``````
+
+### Problema 22: CarregarPorCodigo não reseta this_lNovoRegistro
+**CRÍTICO**: Ao carregar registro existente, DEVE resetar `this_lNovoRegistro = .F.`:
+``````foxpro
+*-- No [Entidade]BO.prg, método CarregarPorCodigo:
+IF RECCOUNT("cursor_4c_Carrega") > 0
+    loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_Carrega")
+    THIS.this_lNovoRegistro = .F.  && ✅ OBRIGATÓRIO: Evita violação de PK no Alterar
+ENDIF
+``````
+**Por quê?** Se o usuário clicar Incluir (seta `this_lNovoRegistro = .T.`) e depois Alterar, sem resetar o flag, o Salvar() chama Inserir() ao invés de Atualizar() → Violação de chave primária.
+
+### Problema 23: FormBuscaAuxiliar - Uso correto (NÃO tem ObterCodigoSelecionado)
+**CRÍTICO**: FormBuscaAuxiliar NÃO tem método `ObterCodigoSelecionado()`. Usar propriedade `this_lSelecionou` e cursor:
+``````foxpro
+*-- ❌ ERRADO - Método não existe:
+loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", ...)
+loc_oBusca.Show()
+loc_cCodigo = loc_oBusca.ObterCodigoSelecionado()  && ❌ ERRO!
+
+*-- ✅ CORRETO - Usar this_lSelecionou e cursor:
+loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdTam", "cursor_4c_Busca", "cods", "", "Buscar")
+
+*-- Adicionar colunas ao grid
+loc_oBusca.mAddColuna("cods", "", "C" + CHR(243) + "digo")
+loc_oBusca.mAddColuna("descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+
+*-- Mostrar modal
+loc_oBusca.Show(1)
+
+*-- Verificar seleção via propriedade
+IF loc_oBusca.this_lSelecionou
+    *-- Ler valor do cursor (NÃO do objeto)
+    IF USED("cursor_4c_Busca")
+        loc_cCodigo = ALLTRIM(cursor_4c_Busca.cods)
+    ENDIF
+ENDIF
+
+*-- Limpar
+IF USED("cursor_4c_Busca")
+    USE IN cursor_4c_Busca
+ENDIF
+loc_oBusca.Release()
+``````
+
+### Problema 24: PageFrame NÃO tem propriedade BackColor
+**CRÍTICO**: PageFrame é um container, NÃO tem BackColor - apenas as Pages internas têm:
+``````foxpro
+*-- ❌ ERRADO - PageFrame NÃO tem BackColor:
+THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+WITH THIS.pgf_4c_Paginas
+    .PageCount = 2
+    .BackColor = RGB(255,255,255)  && ❌ ERRO! PageFrame não tem BackColor!
+ENDWITH
+
+*-- ✅ CORRETO - BackColor apenas nas PAGES:
+THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+WITH THIS.pgf_4c_Paginas
+    .PageCount = 2
+    .Page1.BackColor = RGB(255,255,255)  && ✅ Pages TÊM BackColor
+    .Page2.BackColor = RGB(255,255,255)
+ENDWITH
+``````
+**CorretorAutomatico.ps1 pattern #15 remove automaticamente .BackColor de PageFrame.**
+
+## Ordem de Desenvolvimento
+1. Analisar cÃ³digo fonte .txt completo (campos, lookups, validaÃ§Ãµes, grid, propriedades visuais)
+2. Criar ${boClass}.prg
+3. Criar ${formClass}.prg
+4. **IMPLEMENTAR Init() correto** (OBRIGATÃ"RIO): apenas `RETURN DODEFAULT()`
+5. **IMPLEMENTAR mÃ©todos auxiliares** (OBRIGATÃ"RIO):
+   - TornarControlesVisiveis(par_oContainer) - copiar de FormCor.prg (linhas 956-984)
+   - FormatarGridLista(par_oGrid) - copiar de FormCor.prg (linhas 945-953)
+5. Implementar TODOS os lookups (procurar por fwbuscaext, fwBuscaSel, sigacess)
+6. Implementar TODAS as validaÃ§Ãµes (procurar por PROCEDURE Valid)
+7. Configurar Grid (cabeÃ§alhos apÃ³s RecordSource!)
+8. Compensar PageFrame se Top=-29
+9. Criar mapeamento JSON
+
+**IMPORTANTE - MÃ©todos Auxiliares (NAO estÃ£o no FormBase):**
+
+**TornarControlesVisiveis():**
+- SEMPRE implementar no formulÃ¡rio
+- SEMPRE chamar COM parÃ¢metro: THIS.TornarControlesVisiveis(loc_oPagina)
+- NUNCA chamar sem parÃ¢metro: THIS.TornarControlesVisiveis() â†' ERRO!
+- Copiar de FormCor.prg (linhas 956-984)
+
+**FormatarGridLista():**
+- SEMPRE implementar no formulÃ¡rio
+- SEMPRE chamar APÃ"S carregar dados: THIS.FormatarGridLista(loc_oGrid)
+- Define FontName="Tahoma", FontSize=8
+- Copiar de FormCor.prg (linhas 945-953)
+
+## IntegraÃ§Ã£o com o Sistema (OBRIGATÃ"RIO)
+
+ApÃ³s criar os arquivos .prg, vocÃª DEVE integrÃ¡-los ao sistema:
+
+### 1. Atualizar config.prg
+Arquivo: **C:\4c\projeto\app\start\config.prg**
+
+Adicionar SET PROCEDURE na funÃ§Ã£o ConfigurarAmbiente():
+
+``````foxpro
+*-- Business Objects (adicionar apÃ³s os BOs existentes, linha ~228)
+SET PROCEDURE TO (gcCaminhoClasses + "${boClass}.prg") ADDITIVE
+
+*-- Formularios (adicionar apÃ³s os Forms existentes, linha ~242)
+SET PROCEDURE TO (gcCaminhoForms + "cadastros\${formClass}.prg") ADDITIVE
+``````
+
+### 2. Criar funÃ§Ã£o no menu.prg
+Arquivo: **C:\4c\projeto\app\menu\menu.prg**
+
+Adicionar NO FINAL do arquivo (antes de ENDDEFINE se houver):
+
+``````foxpro
+*------------------------------------------------------------------------------
+* Abrir${formClass} - Abre formulÃ¡rio de cadastro de [descricao]
+*------------------------------------------------------------------------------
+PROCEDURE Abrir${formClass}()
+    LOCAL loForm, loException
+
+    TRY
+        * Cria instancia do formulario
+        loForm = CREATEOBJECT("${formClass}")
+
+        IF ISNULL(loForm)
+            MESSAGEBOX("Erro ao criar formulÃ¡rio ${formClass}", 16, "Erro")
+            RETURN .F.
+        ENDIF
+
+        * Mostra formulario de forma modal
+        loForm.Show(1)
+
+        * Libera objeto
+        loForm.Release()
+
+    CATCH TO loException
+        MESSAGEBOX("Erro ao abrir formulÃ¡rio: " + loException.Message, 16, "Erro")
+
+        * Libera objeto se foi criado
+        IF TYPE("loForm") = "O" AND !ISNULL(loForm)
+            loForm.Release()
+        ENDIF
+    ENDTRY
+ENDPROC
+``````
+
+### 3. Adicionar item no menu principal
+Arquivo: **C:\4c\projeto\app\menu\menu.prg**
+
+Na funÃ§Ã£o CriarMenu(), adicionar item no popCadastros:
+
+**Passo 1**: Adicionar DEFINE BAR (procurar "DEFINE POPUP popCadastros", linha ~44)
+``````foxpro
+*-- Adicionar APÃ"S o Ãºltimo DEFINE BAR (atualmente BAR 9):
+DEFINE BAR 10 OF popCadastros PROMPT "[Descricao]" ;
+       MESSAGE "Cadastro de [Descricao]"
+``````
+
+**Passo 2**: Vincular aÃ§Ã£o (procurar "ON SELECTION BAR", linha ~62)
+``````foxpro
+*-- Adicionar APÃ"S as outras vinculaÃ§Ãµes:
+ON SELECTION BAR 10 OF popCadastros DO Abrir${formClass}
+``````
+
+**Exemplo completo para FormTam**:
+``````foxpro
+DEFINE BAR 10 OF popCadastros PROMPT "Tamanhos" ;
+       MESSAGE "Cadastro de Tamanhos"
+
+ON SELECTION BAR 10 OF popCadastros DO AbrirFormTam
+``````
+
+**IMPORTANTE**:
+- Usar BAR 10 (ou prÃ³ximo disponÃ­vel se jÃ¡ existir)
+- Prompt deve ser curto e descritivo (sem acentos se possÃ­vel, ou usar CHR())
+- MESSAGE Ã© exibido na barra de status
+
+## ValidaÃ§Ã£o Final
+
+### CÃ³digo (23 Problemas Críticos)
+- [ ] **DEFINE CLASS**: Propriedades visuais (Height, Width, Caption, etc.) na definição da classe
+- [ ] **Init()**: APENAS `RETURN DODEFAULT()` (NÃO chamar InicializarForm explicitamente)
+- [ ] **BotÃµes**: Caption + Picture + PicturePosition=13 em TODOS (8 botÃµes)
+- [ ] **Ícones corretos**: Salvar=cadastro_salvar_60.jpg (NÃO cadastro_confirmar_60.jpg)
+- [ ] **Btn*Click**: Métodos PUBLIC (NÃO PROTECTED) para funcionar com BINDEVENT
+- [ ] **BtnIncluirClick**: Chamar `NovoRegistro()` E setar `this_cModoAtual = "INCLUIR"` ANTES de `HabilitarCampos()`
+- [ ] **BtnAlterarClick**: Chamar `EditarRegistro()` APÓS `CarregarPorCodigo()`
+- [ ] **BtnBuscarClick**: FormBuscaAuxiliar com `mAddColuna()`, `Show(1)`, `this_lSelecionou`, cursor (NÃO tem ObterCodigoSelecionado)
+- [ ] **Page.Picture**: Usar `gc_4c_CaminhoIcones + "arquivo.jpg"` (NÃO caminho relativo)
+- [ ] **CarregarPorCodigo**: Resetar `THIS.this_lNovoRegistro = .F.` após carregar registro
+- [ ] **BtnCancelarClick**: chama THIS.CarregarLista() ao voltar para lista
+- [ ] **BtnSalvarClick**: Salvar() SEM parâmetro, validações FORA do TRY
+- [ ] **Labels**: BackColor + ForeColor + FontName + FontSize COPIADOS do original
+- [ ] PageFrame.Top e Tabs corretos
+- [ ] Containers compensados (+29px se necessÃ¡rio)
+- [ ] Grid com cabeÃ§alhos reconfigurados
+- [ ] TornarControlesVisiveis() implementado + chamado COM parÃ¢metro
+- [ ] FormatarGridLista() implementado + chamado APÃ"S carregar
+- [ ] ConfigurarPaginaDados() com ENDPROC e chamada TornarControlesVisiveis()
+- [ ] **BO**: Métodos `ExecutarExclusao()` (NÃO Excluir) e `CarregarPorCodigo()` (NÃO CarregarPorId)
+- [ ] Todos os lookups funcionam (F4/DblClick)
+- [ ] Todas as validaÃ§Ãµes funcionam
+- [ ] INCLUIR/ALTERAR/EXCLUIR/VISUALIZAR funcionam
+- [ ] Form instancia sem erro "property not found"
+- [ ] Grid exibe com fonte Tahoma tamanho 8
+
+### IntegraÃ§Ã£o (menu.prg + config.prg)
+- [ ] SET PROCEDURE para BO adicionado no config.prg
+- [ ] SET PROCEDURE para Form adicionado no config.prg
+- [ ] **FunÃ§Ã£o Abrir${formClass}()**: usar VARTYPE, Show() sem parâmetro, SEM Release()
+- [ ] Item do menu adicionado (DEFINE BAR + ON SELECTION)
+
+**IMPORTANTE**: SÃ³ considerar completo apÃ³s:
+1. Criar AMBOS os arquivos (.prg do BO e do Form)
+2. Integrar com config.prg e menu.prg
+3. FormulÃ¡rio acessÃ­vel via menu do sistema
+
+ComeÃ§ar agora.
+"@
+        $prompt = $prompt -replace '\[ARQUIVO\]', $BaseName
+        $prompt = $prompt -replace '\[Ex: SIGCDCOR.*?\]', $BaseName
+        $prompt = $prompt -replace 'taskX', $TaskId
+
+        # Extrai e adiciona schema da tabela (CRITICO para evitar invencao de colunas)
+        $tableSchema = Get-TableSchema -TaskId $TaskId -TasksDir $config.paths.tasks
+        if (-not [string]::IsNullOrEmpty($tableSchema)) {
+            # Insere o schema logo apos a secao "Arquivos a Criar"
+            $insertPoint = $prompt.IndexOf("## Arquivos a Criar")
+            if ($insertPoint -gt 0) {
+                $prompt = $prompt.Insert($insertPoint, $tableSchema + "`n")
+            }
+            else {
+                # Fallback: adiciona no final antes de "Comecar agora"
+                $prompt = $prompt -replace "ComeÃ§ar agora\.", ($tableSchema + "`nComecar agora.")
+            }
+            Write-Host "  Schema da tabela incluido no meta-prompt" -ForegroundColor Green
+        }
+        else {
+            Write-Host "  [AVISO] Schema nao disponivel - meta-prompt sem validacao de colunas" -ForegroundColor Yellow
+        }
+
+        # Salva meta-prompt
+        $prompt | Set-Content -Path $metaPromptFile -Encoding UTF8
+
+        Write-Host "Meta-prompt gerado: $metaPromptFile" -ForegroundColor Green
+        Write-Host "  BaseName: $BaseName" -ForegroundColor Gray
+        Write-Host "  FormClass: $formClass" -ForegroundColor Gray
+        Write-Host "  BOClass: $boClass" -ForegroundColor Gray
+
+        Complete-Etapa -TaskId $TaskId -Etapa "03_gerarMetaPrompt" -TasksDir $config.paths.tasks -Metadata @{
+            metaPromptFile = $metaPromptFile
+            formClass = $formClass
+            boClass = $boClass
+        }
+    }
+    catch {
+        Fail-Etapa -TaskId $TaskId -Etapa "03_gerarMetaPrompt" -ErroMsg $_.Exception.Message -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 4: Gerar mapeamento
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa04_GerarMapeamento {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 4" "Gerar mapeamento (GeradorMapeamento.prg)"
+
+    Start-Etapa -TaskId $TaskId -Etapa "04_gerarMapeamento" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+        $logFile = Get-TaskLogPath -TaskId $TaskId -Etapa "04_gerarMapeamento" -TasksDir $config.paths.tasks
+
+        # Le o BaseName normalizado salvo na etapa 2
+        $state = Get-TaskState -TaskId $TaskId -TasksDir $config.paths.tasks
+        $baseNameNormalizado = $state.etapas."02_extractCode".baseNameNormalizado
+
+        if (-not $baseNameNormalizado) {
+            # Fallback: tenta encontrar arquivo .txt no diretorio
+            $txtFiles = Get-ChildItem -Path $taskPath -Filter "*_form_codigo_fonte.txt" -File
+            if ($txtFiles.Count -gt 0) {
+                $txtFile = $txtFiles[0].FullName
+            } else {
+                throw "Nao foi possivel encontrar arquivo de codigo fonte no diretorio: $taskPath"
+            }
+        } else {
+            $txtFile = Join-Path $taskPath "${baseNameNormalizado}_form_codigo_fonte.txt"
+        }
+
+        # Prepara parametros ordenados para GeradorMapeamento
+        # Parametro 1: Caminho completo do arquivo .TXT
+        # Parametro 2: Diretorio do task
+        # Usa sintaxe direta SEM config.fpw (classes carregadas com caminho absoluto no .prg)
+        $parameters = @($txtFile, $taskPath)
+
+        # Executa GeradorMapeamento.prg (SEM config.fpw - usa caminhos absolutos)
+        $mapeamentoScript = Join-Path $config.paths.projeto "app\utils\GeradorMapeamento.prg"
+
+        & (Join-Path $config.paths.automation "VFPExecutor.ps1") `
+            -ScriptPrg $mapeamentoScript `
+            -Parameters $parameters `
+            -Timeout $config.vfp.timeout `
+            -LogFile $logFile `
+            -OutputFile (Join-Path $taskPath "vfp_output.txt")
+
+
+
+        # Verifica se arquivo foi gerado
+        $jsonFile = Join-Path $taskPath "mapeamento.json"
+
+        if (-not (Test-Path $jsonFile)) {
+            throw "Arquivo de mapeamento nao foi gerado: $jsonFile"
+        }
+
+        Write-Host "Mapeamento gerado: $jsonFile" -ForegroundColor Green
+
+        Complete-Etapa -TaskId $TaskId -Etapa "04_gerarMapeamento" -TasksDir $config.paths.tasks -Metadata @{ jsonFile = $jsonFile }
+    }
+    catch {
+        Fail-Etapa -TaskId $TaskId -Etapa "04_gerarMapeamento" -ErroMsg $_.Exception.Message -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 5: Executar migracao (Claude CLI)
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa05_Migracao {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 5" "Executar migracao (Claude CLI)"
+
+    $state = Get-TaskState -TaskId $TaskId -TasksDir $config.paths.tasks
+    $tentativas = $state.etapas."05_migracao".tentativas
+    $maxTentativas = $config.retry.maxTentativasMigracao
+
+    if ($tentativas -ge $maxTentativas) {
+        throw "Numero maximo de tentativas atingido para migracao: $maxTentativas"
+    }
+
+    Start-Etapa -TaskId $TaskId -Etapa "05_migracao" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+        $metaPromptFile = Join-Path $taskPath "meta_prompt.md"
+        $outputFile = Join-Path $taskPath "migracao_output.txt"
+        $logFile = Get-TaskLogPath -TaskId $TaskId -Etapa "05_migracao" -TasksDir $config.paths.tasks
+
+        # Normaliza BaseName para case-insensitive (VFP converte para uppercase)
+        # Prefere arquivo _slim.txt se disponivel (para forms grandes)
+        $txtFiles = Get-ChildItem -Path $taskPath -Filter "*_form_codigo_fonte.txt" -File | Where-Object { $_.Name -notlike "*_slim*" }
+        if ($txtFiles.Count -eq 0) {
+            throw "Arquivo *_form_codigo_fonte.txt nao encontrado em $taskPath"
+        }
+
+        $txtFile = $txtFiles[0].FullName
+        $slimFile = $txtFile -replace "\.txt$", "_slim.txt"
+
+        # Se arquivo slim existe e eh menor que 500KB, usar ele
+        if (Test-Path $slimFile) {
+            $slimSize = (Get-Item $slimFile).Length / 1024
+            if ($slimSize -lt 500) {
+                Write-Host "Usando arquivo reduzido: $([System.IO.Path]::GetFileName($slimFile)) ($([math]::Round($slimSize, 2)) KB)" -ForegroundColor Cyan
+                $txtFile = $slimFile
+            }
+        }
+
+        $mapeamentoFile = Join-Path $taskPath "mapeamento.json"
+
+        # Prepara arquivos de contexto (OBRIGATORIOS para o Claude CLI)
+        $contextFiles = @(
+            $txtFile,                                                           # 1. Codigo fonte (ou versao slim)
+            "C:\4c\docs\FORMCOR_LICOES_APRENDIDAS.md",                        # 2. Licoes aprendidas (5 problemas)
+            "C:\4c\CLAUDE.md",                                                 # 3. Regras dos 3 PILARES
+            "C:\4c\docs\migration_guide.md"                                   # 4. Checklist geral
+        )
+
+        # Adiciona mapeamento.json se existir
+        if (Test-Path $mapeamentoFile) {
+            $contextFiles += $mapeamentoFile
+        }
+
+        Write-Host ""
+        Write-Host "Arquivos de contexto para Claude CLI:" -ForegroundColor Cyan
+        foreach ($file in $contextFiles) {
+            if (Test-Path $file) {
+                $size = [math]::Round((Get-Item $file).Length / 1KB, 2)
+                Write-Host "  [OK] $(Split-Path -Leaf $file) ($size KB)" -ForegroundColor Green
+            }
+            else {
+                Write-Host "  [AVISO] $(Split-Path -Leaf $file) (nao encontrado)" -ForegroundColor Yellow
+            }
+        }
+        Write-Host ""
+
+        # Invoca Claude CLI com contexto completo
+        & (Join-Path $config.paths.automation "ClaudeInvoker.ps1") `
+            -PromptFile $metaPromptFile `
+            -OutputFile $outputFile `
+            -Model $config.claude.model `
+            -Timeout $config.claude.timeout `
+            -LogFile $logFile `
+            -ContextFiles $contextFiles
+
+        if ($LASTEXITCODE -ne 0) {
+            throw "Claude CLI retornou codigo de erro: $LASTEXITCODE"
+        }
+
+        Write-Host "Claude CLI finalizado. Verificando arquivos gerados..." -ForegroundColor Cyan
+
+        # ===================================================================
+        # VALIDACAO POS-MIGRACAO: Verificar se arquivos foram gerados
+        # ===================================================================
+        $formClass = Get-FormClassName -BaseName $BaseName
+        $boClass = Get-BOClassName -BaseName $BaseName
+        $formFile = Join-Path $config.paths.projeto "app\forms\cadastros\$formClass.prg"
+        $boFile = Join-Path $config.paths.projeto "app\classes\$boClass.prg"
+
+        $formExists = Test-Path $formFile
+        $boExists = Test-Path $boFile
+
+        if (-not $formExists -or -not $boExists) {
+            Write-Host ""
+            Write-Host "========================================================" -ForegroundColor Yellow
+            Write-Host "ARQUIVOS NAO GERADOS NA PRIMEIRA TENTATIVA" -ForegroundColor Yellow
+            Write-Host "========================================================" -ForegroundColor Yellow
+            Write-Host "  Form: $formFile - $(if($formExists){'OK'}else{'PENDENTE'})" -ForegroundColor $(if($formExists){'Green'}else{'Yellow'})
+            Write-Host "  BO:   $boFile - $(if($boExists){'OK'}else{'PENDENTE'})" -ForegroundColor $(if($boExists){'Green'}else{'Yellow'})
+            Write-Host ""
+
+            # Verifica se o output indica formulario complexo
+            $outputContent = ""
+            if (Test-Path $outputFile) {
+                $outputContent = Get-Content -Path $outputFile -Raw -ErrorAction SilentlyContinue
+            }
+
+            # ===================================================================
+            # RETRY AUTOMATICO COM PROMPT FORCADO PARA FORMULARIOS COMPLEXOS
+            # Todos os formularios DEVEM ser migrados, independente da complexidade
+            # ===================================================================
+            Write-Host "Iniciando RETRY AUTOMATICO com instrucoes forcadas..." -ForegroundColor Cyan
+            Write-Host ""
+
+            # Cria prompt forcado que EXIGE geracao de codigo
+            $forcePromptFile = Join-Path $taskPath "force_prompt.md"
+            $forcePromptContent = @"
+# INSTRUCAO OBRIGATORIA - GERAR CODIGO AGORA
+
+**ATENCAO**: Na tentativa anterior, voce identificou este formulario como "complexo" e pediu orientacao.
+**ISSO NAO E ACEITAVEL**. TODOS os formularios devem ser migrados, independente da complexidade.
+
+## REGRA ABSOLUTA
+Voce DEVE gerar os arquivos de codigo AGORA:
+1. **$boClass.prg** em C:\4c\projeto\app\classes\
+2. **$formClass.prg** em C:\4c\projeto\app\forms\cadastros\
+
+## ESTRATEGIA PARA FORMULARIOS COMPLEXOS
+
+Se o formulario NAO segue o padrao FormBase simples (CRUD de uma tabela), use esta estrategia:
+
+### 1. Business Object Customizado
+- NAO herde de BusinessBase se nao fizer sentido
+- Crie classe propria com metodos especificos para a funcionalidade
+- Implemente TODA a logica de negocio necessaria
+
+### 2. Form Customizado
+- Pode herdar de FormBase OU criar classe propria
+- Para PageFrames aninhados: crie todos os niveis necessarios
+- Para drag-and-drop: implemente os eventos MouseDown/MouseUp/MouseMove
+- Para multiplas tabelas: crie cursores separados para cada uma
+- Para grids com checkboxes: use colunas com controles customizados
+
+### 3. Funcionalidades Especiais
+- Multiplas conexoes SQL: use variaveis locais (loc_nConn1, loc_nConn2)
+- Cursores temporarios: crie no Init e destrua no Destroy
+- Copiar dados entre registros: implemente metodos especificos
+
+## OUTPUT ESPERADO
+
+Voce DEVE usar a ferramenta Write para criar os arquivos:
+- Write para criar $boClass.prg
+- Write para criar $formClass.prg
+
+NAO pergunte, NAO peca confirmacao, NAO liste opcoes.
+GERE O CODIGO COMPLETO E FUNCIONAL AGORA.
+
+---
+
+$(Get-Content $metaPromptFile -Raw)
+"@
+
+            Set-Content -Path $forcePromptFile -Value $forcePromptContent -Encoding UTF8
+
+            Write-Host "Prompt forcado criado: $forcePromptFile" -ForegroundColor Cyan
+            Write-Host "Executando Claude CLI com instrucoes forcadas..." -ForegroundColor Cyan
+
+            # Executa novamente com prompt forcado
+            $forceOutputFile = Join-Path $taskPath "migracao_output_force.txt"
+
+            & (Join-Path $config.paths.automation "ClaudeInvoker.ps1") `
+                -PromptFile $forcePromptFile `
+                -OutputFile $forceOutputFile `
+                -Model $config.claude.model `
+                -Timeout ($config.claude.timeout * 2) `
+                -LogFile (Join-Path $taskPath "logs\05_migracao_force.log") `
+                -ContextFiles $contextFiles
+
+            # Verifica novamente se arquivos foram gerados
+            $formExists = Test-Path $formFile
+            $boExists = Test-Path $boFile
+
+            if (-not $formExists -or -not $boExists) {
+                # Ainda nao gerou - tentar uma terceira vez com modelo mais poderoso
+                Write-Host ""
+                Write-Host "Arquivos ainda nao gerados. Tentando com modelo OPUS..." -ForegroundColor Yellow
+
+                & (Join-Path $config.paths.automation "ClaudeInvoker.ps1") `
+                    -PromptFile $forcePromptFile `
+                    -OutputFile (Join-Path $taskPath "migracao_output_opus.txt") `
+                    -Model "opus" `
+                    -Timeout ($config.claude.timeout * 3) `
+                    -LogFile (Join-Path $taskPath "logs\05_migracao_opus.log") `
+                    -ContextFiles $contextFiles
+
+                # Verifica mais uma vez
+                $formExists = Test-Path $formFile
+                $boExists = Test-Path $boFile
+            }
+
+            if (-not $formExists -or -not $boExists) {
+                throw "Apos multiplas tentativas, os arquivos Form/BO nao foram gerados. Verifique os logs em $taskPath\logs\"
+            }
+        }
+
+        Write-Host ""
+        Write-Host "Migracao executada com sucesso" -ForegroundColor Green
+        Write-Host "  Form: $formFile" -ForegroundColor Green
+        Write-Host "  BO:   $boFile" -ForegroundColor Green
+
+        Complete-Etapa -TaskId $TaskId -Etapa "05_migracao" -TasksDir $config.paths.tasks -Metadata @{
+            outputFile = $outputFile
+            formFile = $formFile
+            boFile = $boFile
+            formExists = $formExists
+            boExists = $boExists
+        }
+    }
+    catch {
+        $erroMsg = $_.Exception.Message
+        Fail-Etapa -TaskId $TaskId -Etapa "05_migracao" -ErroMsg $erroMsg -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 6: Testar formulario
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa06_TestForm {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 6" "Testar formulario (TestFormWrapper.prg)"
+
+    $state = Get-TaskState -TaskId $TaskId -TasksDir $config.paths.tasks
+    $tentativas = $state.etapas."06_testForm".tentativas
+    $maxTentativas = $config.retry.maxTentativasTestForm
+
+    if ($tentativas -ge $maxTentativas) {
+        throw "Numero maximo de tentativas atingido para teste de formulario: $maxTentativas"
+    }
+
+    Start-Etapa -TaskId $TaskId -Etapa "06_testForm" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+        $logFile = Get-TaskLogPath -TaskId $TaskId -Etapa "06_testForm" -TasksDir $config.paths.tasks
+
+        # Determina nome da classe do form usando funcao auxiliar
+        $formClass = Get-FormClassName -BaseName $BaseName
+
+        # Executa TestFormWrapper.prg com parametros diretos (sem config.fpw)
+        # TestFormWrapper.prg aceita: LPARAMETERS par_cFormClass, par_cLogFile
+        $testScript = Join-Path $config.paths.automation "vfp_helpers\TestFormWrapper.prg"
+
+        $parameters = @($formClass, $logFile)
+
+        & (Join-Path $config.paths.automation "VFPExecutor.ps1") `
+            -ScriptPrg $testScript `
+            -Parameters $parameters `
+            -Timeout $config.vfp.timeout `
+            -LogFile $logFile `
+            -OutputFile (Join-Path $taskPath "vfp_output.txt")
+
+        $exitCode = $LASTEXITCODE
+
+        # Analisa resultado
+        if ($exitCode -eq 0) {
+            Write-Host "Formulario testado com sucesso (sem erros)" -ForegroundColor Green
+            Complete-Etapa -TaskId $TaskId -Etapa "06_testForm" -TasksDir $config.paths.tasks
+        }
+        else {
+            throw "Formulario apresentou erros. Exit Code: $exitCode (ver log: $logFile)"
+        }
+    }
+    catch {
+        $erroMsg = $_.Exception.Message
+        Fail-Etapa -TaskId $TaskId -Etapa "06_testForm" -ErroMsg $erroMsg -TasksDir $config.paths.tasks
+
+        # Solicita correcao
+        Write-Host ""
+        Write-Host "ERRO ao testar formulario: $erroMsg" -ForegroundColor Red
+        Write-Host "Log: $logFile" -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "Opcoes:" -ForegroundColor Yellow
+        Write-Host "  [R] Retry - Executar teste novamente (apos corrigir codigo)"
+        Write-Host "  [C] Continue - Marcar como sucesso e continuar"
+        Write-Host "  [A] Abort - Abortar task"
+        Write-Host ""
+
+        $opcao = Read-Host "Escolha uma opcao [R/C/A]"
+
+        switch ($opcao.ToUpper()) {
+            "R" {
+                Write-Host "Executando teste novamente..." -ForegroundColor Yellow
+                Start-Sleep -Seconds $config.retry.delaySegundos
+                return Invoke-Etapa06_TestForm -TaskId $TaskId -BaseName $BaseName
+            }
+            "C" {
+                Write-Host "Marcando como sucesso e continuando..." -ForegroundColor Yellow
+                Complete-Etapa -TaskId $TaskId -Etapa "06_testForm" -TasksDir $config.paths.tasks
+                return
+            }
+            "A" {
+                throw "Teste de formulario abortado pelo usuario"
+            }
+            default {
+                throw "Opcao invalida"
+            }
+        }
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 7: Validar UI Fidelity
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa07_ValidarUI {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 7" "Validar UI Fidelity (ValidarUIFidelity.prg)"
+
+    $state = Get-TaskState -TaskId $TaskId -TasksDir $config.paths.tasks
+    $tentativas = $state.etapas."07_validarUI".tentativas
+    $maxTentativas = $config.retry.maxTentativasValidacao
+
+    if ($tentativas -ge $maxTentativas) {
+        throw "Numero maximo de tentativas atingido para validacao UI: $maxTentativas"
+    }
+
+    Start-Etapa -TaskId $TaskId -Etapa "07_validarUI" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+        $logFile = Get-TaskLogPath -TaskId $TaskId -Etapa "07_validarUI" -TasksDir $config.paths.tasks
+
+        # Determina nome da classe do form usando funcao auxiliar
+        $formClass = Get-FormClassName -BaseName $BaseName
+
+        # Normaliza BaseName para case-insensitive (VFP converte para uppercase)
+        $txtFiles = Get-ChildItem -Path $taskPath -Filter "*_form_codigo_fonte.txt" -File
+        if ($txtFiles.Count -eq 0) {
+            throw "Arquivo *_form_codigo_fonte.txt nao encontrado em $taskPath"
+        }
+
+        $txtFile = $txtFiles[0].FullName
+
+        # Executa ValidarUIFidelity.prg com parametros diretos (sem config.fpw)
+        # ValidarUIFidelity.prg aceita: LPARAMETERS par_cArquivoOriginal, par_cClasseForm
+        # O relatorio HTML sera gerado automaticamente em: C:\4c\projeto\app\utils\relatorios\UIFidelity_<FormClass>_<timestamp>.html
+        $validacaoScript = Join-Path $config.paths.projeto "app\utils\ValidarUIFidelity.prg"
+
+        $parameters = @($txtFile, $formClass)
+
+        & (Join-Path $config.paths.automation "VFPExecutor.ps1") `
+            -ScriptPrg $validacaoScript `
+            -Parameters $parameters `
+            -Timeout $config.vfp.timeout `
+            -LogFile $logFile `
+            -OutputFile (Join-Path $taskPath "vfp_output.txt")
+
+        $exitCode = $LASTEXITCODE
+
+        # Exit code 0 = sucesso (0 diferencas)
+        # Exit code 1 = diferencas encontradas (mas validacao executou com sucesso)
+        # Exit code > 1 = erro de execucao
+        if ($exitCode -gt 1) {
+            throw "ValidarUIFidelity.prg retornou codigo de erro: $exitCode"
+        }
+
+        Write-Host ""
+        Write-Host "Resultado da validacao UI:" -ForegroundColor Cyan
+
+        if ($exitCode -eq 0) {
+            Write-Host "  Status: UI FIDELITY OK - Nenhuma diferenca encontrada!" -ForegroundColor Green
+            Write-Host "  O relatorio HTML foi gerado em: C:\4c\projeto\app\utils\relatorios\" -ForegroundColor Gray
+            Write-Host "  Log detalhado: $logFile" -ForegroundColor Gray
+
+            Complete-Etapa -TaskId $TaskId -Etapa "07_validarUI" -TasksDir $config.paths.tasks
+        }
+        else {
+            Write-Host "  Status: Diferencas encontradas" -ForegroundColor Yellow
+            Write-Host "  O relatorio HTML foi gerado em: C:\4c\projeto\app\utils\relatorios\" -ForegroundColor Gray
+            Write-Host "  Log detalhado: $logFile" -ForegroundColor Gray
+            Write-Host ""
+            Write-Host "  AVISO: Verifique o relatorio HTML para ver as diferencas." -ForegroundColor Yellow
+            Write-Host "  Diferencas aceitaveis: Dataenvironment (4), controles FormBase (~33)" -ForegroundColor Gray
+
+            Complete-Etapa -TaskId $TaskId -Etapa "07_validarUI" -TasksDir $config.paths.tasks
+        }
+
+        Write-Host ""
+    }
+    catch {
+        $erroMsg = $_.Exception.Message
+        Fail-Etapa -TaskId $TaskId -Etapa "07_validarUI" -ErroMsg $erroMsg -TasksDir $config.paths.tasks
+
+        # Solicita correcao
+        Write-Host ""
+        Write-Host "ERRO na validacao UI: $erroMsg" -ForegroundColor Red
+        Write-Host ""
+        Write-Host "Opcoes:" -ForegroundColor Yellow
+        Write-Host "  [R] Retry - Executar validacao novamente (apos corrigir codigo)"
+        Write-Host "  [C] Continue - Marcar como sucesso e continuar"
+        Write-Host "  [A] Abort - Abortar task"
+        Write-Host ""
+
+        $opcao = Read-Host "Escolha uma opcao [R/C/A]"
+
+        switch ($opcao.ToUpper()) {
+            "R" {
+                Write-Host "Executando validacao novamente..." -ForegroundColor Yellow
+                Start-Sleep -Seconds $config.retry.delaySegundos
+                return Invoke-Etapa07_ValidarUI -TaskId $TaskId -BaseName $BaseName
+            }
+            "C" {
+                Write-Host "Marcando como sucesso e continuando..." -ForegroundColor Yellow
+                Complete-Etapa -TaskId $TaskId -Etapa "07_validarUI" -TasksDir $config.paths.tasks
+                return
+            }
+            "A" {
+                throw "Validacao UI abortada pelo usuario"
+            }
+            default {
+                throw "Opcao invalida"
+            }
+        }
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 8: Gerar solicitacao de teste manual
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa08_GerarTestManual {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 8" "Gerar solicitacao de teste manual"
+
+    Start-Etapa -TaskId $TaskId -Etapa "08_gerarTestManual" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+        $state = Get-TaskState -TaskId $TaskId -TasksDir $config.paths.tasks
+
+        # Gera markdown de teste manual
+        $testManualDir = $config.paths.solicitacaoTestManual
+
+        if (-not (Test-Path $testManualDir)) {
+            New-Item -ItemType Directory -Path $testManualDir -Force | Out-Null
+        }
+
+        $testManualFile = Join-Path $testManualDir "${TaskId}_${BaseName}.md"
+
+        # Conteudo do teste manual - usa funcoes auxiliares para nomes
+        $formClass = Get-FormClassName -BaseName $BaseName
+        $boClass = Get-BOClassName -BaseName $BaseName
+
+        $testContent = @"
+# Solicitacao de Teste Manual
+
+**Task ID:** $TaskId
+**Formulario:** $formClass (origem: $BaseName)
+**Data:** $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+
+---
+
+## 1. Objetivo do Teste
+
+Validar se o formulario migrado (**$formClass**) esta funcionando corretamente e com UI identica ao original.
+
+## 2. Pre-Requisitos
+
+- [ ] Codigo migrado esta em: \`C:\4c\projeto\app\forms\cadastros\${formClass}.prg\`
+- [ ] Business Object em: \`C:\4c\projeto\app\classes\${boClass}.prg\`
+- [ ] Banco de dados acessivel: 192.168.15.101 (DB_MBAHIA)
+- [ ] Usuario com permissao de teste
+
+## 3. Casos de Teste
+
+### 3.1. Teste de UI Fidelity
+
+- [ ] Comparar visualmente com screenshot original (se disponivel)
+- [ ] Verificar Width/Height do formulario
+- [ ] Verificar cores (BackColor, ForeColor)
+- [ ] Verificar fontes (FontName, FontSize)
+- [ ] Verificar posicionamento de controles (Top, Left)
+- [ ] Verificar se todos os botoes estao visiveis (nenhum "comido")
+
+**Criterio de Aceitacao:** UI deve ser **pixel-perfect** identica ao original.
+
+### 3.2. Teste Funcional - Modo INCLUIR
+
+- [ ] Clicar no botao "Incluir"
+- [ ] Preencher todos os campos obrigatorios
+- [ ] Testar lookups (F4/F5) - se aplicavel
+- [ ] Clicar em "Confirmar"
+- [ ] Verificar se registro foi inserido no banco
+
+**Criterio de Aceitacao:** Registro deve ser salvo com sucesso e auditoria registrada em LogAuditoria.
+
+### 3.3. Teste Funcional - Modo ALTERAR
+
+- [ ] Pesquisar um registro existente
+- [ ] Clicar no botao "Alterar"
+- [ ] Modificar campos
+- [ ] Clicar em "Confirmar"
+- [ ] Verificar se registro foi atualizado no banco
+
+**Criterio de Aceitacao:** Registro deve ser atualizado e auditoria registrada.
+
+### 3.4. Teste Funcional - Modo VISUALIZAR
+
+- [ ] Pesquisar um registro existente
+- [ ] Clicar no botao "Visualizar"
+- [ ] Verificar se campos estao desabilitados (ReadOnly)
+- [ ] Clicar em "Cancelar"
+
+**Criterio de Aceitacao:** Campos nao editaveis, botao Confirmar desabilitado.
+
+### 3.5. Teste Funcional - Modo EXCLUIR
+
+- [ ] Pesquisar um registro existente
+- [ ] Clicar no botao "Excluir"
+- [ ] Confirmar exclusao
+- [ ] Verificar se registro foi excluido do banco
+
+**Criterio de Aceitacao:** Registro excluido logicamente (status) ou fisicamente, com auditoria.
+
+### 3.6. Teste de Validacoes
+
+- [ ] Testar campos obrigatorios (deixar vazio e tentar salvar)
+- [ ] Testar InputMask (formato de campos)
+- [ ] Testar duplicidade de chave primaria
+
+**Criterio de Aceitacao:** Mensagens de erro claras e consistentes com sistema legado.
+
+### 3.7. Teste de Performance
+
+- [ ] Medir tempo de abertura do formulario
+- [ ] Medir tempo de busca/pesquisa
+- [ ] Medir tempo de salvamento
+
+**Criterio de Aceitacao:** Performance similar ou melhor que sistema legado.
+
+## 4. Metricas de Qualidade
+
+### Validacao UI (Automatica)
+
+- **Erros:** $($state.etapas."07_validarUI".problemas.erros)
+- **Avisos:** $($state.etapas."07_validarUI".problemas.avisos)
+- **Diferencas:** $($state.etapas."07_validarUI".problemas.diferencas)
+- **Total:** $($state.etapas."07_validarUI".problemas.total)
+- **Limite:** $($config.validacao.maxProblemas)
+- **Status:** $(if ($state.etapas."07_validarUI".status -eq "COMPLETED") { "✅ APROVADO" } else { "❌ REPROVADO" })
+
+[Ver relatorio detalhado]($($taskPath)\validacao_ui_report.html)
+
+## 5. Resultado do Teste
+
+### Resumo
+
+- [ ] UI Fidelity: **APROVADO / REPROVADO**
+- [ ] Funcionalidade INCLUIR: **APROVADO / REPROVADO**
+- [ ] Funcionalidade ALTERAR: **APROVADO / REPROVADO**
+- [ ] Funcionalidade VISUALIZAR: **APROVADO / REPROVADO**
+- [ ] Funcionalidade EXCLUIR: **APROVADO / REPROVADO**
+- [ ] Validacoes: **APROVADO / REPROVADO**
+- [ ] Performance: **APROVADO / REPROVADO**
+
+### Evidencias
+
+- Screenshots: *(anexar aqui)*
+- Videos: *(anexar aqui)*
+- Logs de erro: *(anexar aqui)*
+
+### Problemas Encontrados
+
+*(Listar problemas encontrados durante o teste manual)*
+
+1.
+2.
+3.
+
+### Aprovacao
+
+- [ ] **APROVADO** - Formulario pronto para producao
+- [ ] **REPROVADO** - Necessita correcoes
+
+**Testador:** ___________________________
+**Data:** ___________________________
+**Assinatura:** ___________________________
+
+---
+
+**Proximos Passos:**
+
+- Se APROVADO: Commit do codigo e deploy
+- Se REPROVADO: Abrir issues para correcoes necessarias
+"@
+
+        $testContent | Set-Content -Path $testManualFile -Encoding UTF8
+
+        Write-Host "Solicitacao de teste manual gerada: $testManualFile" -ForegroundColor Green
+
+        Complete-Etapa -TaskId $TaskId -Etapa "08_gerarTestManual" -TasksDir $config.paths.tasks -Metadata @{ testManualFile = $testManualFile }
+    }
+    catch {
+        Fail-Etapa -TaskId $TaskId -Etapa "08_gerarTestManual" -ErroMsg $_.Exception.Message -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 2.5: Analisar Tarefa (NOVO)
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa02b_AnalisarTarefa {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 2.5" "Analisar Tarefa (AnalisadorTarefa.prg)"
+
+    Start-Etapa -TaskId $TaskId -Etapa "02b_analisarTarefa" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+        $logFile = Get-TaskLogPath -TaskId $TaskId -Etapa "02b_analisarTarefa" -TasksDir $config.paths.tasks
+
+        # Encontra arquivo TXT
+        $txtFiles = Get-ChildItem -Path $taskPath -Filter "*_form_codigo_fonte.txt" -File
+        if ($txtFiles.Count -eq 0) {
+            throw "Arquivo *_form_codigo_fonte.txt nao encontrado em $taskPath"
+        }
+        $txtFile = $txtFiles[0].FullName
+
+        # Executa AnalisadorTarefa.prg
+        $analisadorScript = Join-Path $config.paths.projeto "app\utils\AnalisadorTarefa.prg"
+
+        $parameters = @($txtFile)
+
+        & (Join-Path $config.paths.automation "VFPExecutor.ps1") `
+            -ScriptPrg $analisadorScript `
+            -Parameters $parameters `
+            -Timeout $config.vfp.timeout `
+            -LogFile $logFile `
+            -OutputFile (Join-Path $taskPath "vfp_output.txt")
+
+        # Verifica se arquivo foi gerado
+        $analiseFile = Join-Path $taskPath "analise.json"
+
+        if (-not (Test-Path $analiseFile)) {
+            throw "Arquivo analise.json nao foi gerado: $analiseFile"
+        }
+
+        Write-Host "Analise gerada: $analiseFile" -ForegroundColor Green
+
+        Complete-Etapa -TaskId $TaskId -Etapa "02b_analisarTarefa" -TasksDir $config.paths.tasks -Metadata @{ analiseFile = $analiseFile }
+    }
+    catch {
+        Fail-Etapa -TaskId $TaskId -Etapa "02b_analisarTarefa" -ErroMsg $_.Exception.Message -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 2.2: Reduzir Arquivo Grande (ExtratoReduzido.prg)
+# Para arquivos >400KB que causam "Prompt is too long" no Claude CLI
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa02a_ReduzirArquivo {
+    param([string]$TaskId, [string]$BaseName)
+
+    $taskPath = Join-Path $config.paths.tasks $TaskId
+
+    # Encontra arquivo TXT
+    $txtFiles = Get-ChildItem -Path $taskPath -Filter "*_form_codigo_fonte.txt" -File | Where-Object { $_.Name -notlike "*_slim*" }
+    if ($txtFiles.Count -eq 0) {
+        Write-Host "AVISO: Arquivo fonte nao encontrado. Pulando reducao." -ForegroundColor Yellow
+        return
+    }
+    $txtFile = $txtFiles[0]
+
+    # Limite em KB (400KB = limite seguro para Claude CLI)
+    $limiteKB = 400
+    $tamanhoKB = [math]::Round($txtFile.Length / 1024, 2)
+
+    # Se arquivo estah abaixo do limite, nao precisa reduzir
+    if ($tamanhoKB -le $limiteKB) {
+        Write-Host "[ETAPA 2.2] Arquivo ($tamanhoKB KB) abaixo do limite ($limiteKB KB) - Pulando reducao" -ForegroundColor Green
+        return
+    }
+
+    Write-StepHeader "ETAPA 2.2" "Reduzir Arquivo Grande (ExtratoReduzido.prg)"
+    Write-Host "Arquivo grande detectado: $tamanhoKB KB (limite: $limiteKB KB)" -ForegroundColor Yellow
+
+    Start-Etapa -TaskId $TaskId -Etapa "02a_reduzirArquivo" -TasksDir $config.paths.tasks
+
+    try {
+        $logFile = Get-TaskLogPath -TaskId $TaskId -Etapa "02a_reduzirArquivo" -TasksDir $config.paths.tasks
+
+        # Executa ExtratoReduzidoSimples.prg (versao simplificada que funciona com arquivos grandes)
+        $extratoScript = Join-Path $config.paths.projeto "app\utils\ExtratoReduzidoSimples.prg"
+
+        if (-not (Test-Path $extratoScript)) {
+            throw "Script ExtratoReduzidoSimples.prg nao encontrado: $extratoScript"
+        }
+
+        $parameters = @($txtFile.FullName, $limiteKB)
+
+        & (Join-Path $config.paths.automation "VFPExecutor.ps1") `
+            -ScriptPrg $extratoScript `
+            -Parameters $parameters `
+            -Timeout $config.vfp.timeout `
+            -LogFile $logFile `
+            -OutputFile (Join-Path $taskPath "vfp_output.txt")
+
+        # Verifica se arquivo slim foi gerado
+        $slimFile = $txtFile.FullName -replace "\.txt$", "_slim.txt"
+
+        if (Test-Path $slimFile) {
+            $slimTamanhoKB = [math]::Round((Get-Item $slimFile).Length / 1024, 2)
+            $reducaoPercent = [math]::Round((1 - $slimTamanhoKB / $tamanhoKB) * 100, 1)
+
+            Write-Host "Arquivo reduzido criado: $slimFile" -ForegroundColor Green
+            Write-Host "Tamanho original: $tamanhoKB KB" -ForegroundColor Cyan
+            Write-Host "Tamanho reduzido: $slimTamanhoKB KB" -ForegroundColor Cyan
+            Write-Host "Reducao: $reducaoPercent%" -ForegroundColor Cyan
+
+            Complete-Etapa -TaskId $TaskId -Etapa "02a_reduzirArquivo" -TasksDir $config.paths.tasks -Metadata @{
+                arquivoOriginal = $txtFile.FullName
+                arquivoSlim = $slimFile
+                tamanhoOriginalKB = $tamanhoKB
+                tamanhoSlimKB = $slimTamanhoKB
+                reducaoPercent = $reducaoPercent
+            }
+        }
+        else {
+            Write-Host "AVISO: Arquivo slim nao foi gerado (arquivo original sera usado)" -ForegroundColor Yellow
+            Complete-Etapa -TaskId $TaskId -Etapa "02a_reduzirArquivo" -TasksDir $config.paths.tasks -Metadata @{
+                skipped = $true
+                motivo = "Arquivo slim nao gerado"
+            }
+        }
+    }
+    catch {
+        Write-Host "AVISO: Erro na reducao: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host "Continuando com arquivo original..." -ForegroundColor Yellow
+        # Nao falha a etapa, apenas avisa - a migracao pode funcionar mesmo com arquivo grande
+        Complete-Etapa -TaskId $TaskId -Etapa "02a_reduzirArquivo" -TasksDir $config.paths.tasks -Metadata @{
+            skipped = $true
+            erro = $_.Exception.Message
+        }
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 4.5: Gerar Esqueletos (NOVO)
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa04b_GerarEsqueletos {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 4.5" "Gerar Esqueletos (GeradorEsqueletos.prg)"
+
+    Start-Etapa -TaskId $TaskId -Etapa "04b_gerarEsqueletos" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+        $logFile = Get-TaskLogPath -TaskId $TaskId -Etapa "04b_gerarEsqueletos" -TasksDir $config.paths.tasks
+
+        # Verifica se analise.json existe
+        $analiseFile = Join-Path $taskPath "analise.json"
+        if (-not (Test-Path $analiseFile)) {
+            Write-Host "AVISO: analise.json nao encontrado. Pulando geracao de esqueletos." -ForegroundColor Yellow
+            Complete-Etapa -TaskId $TaskId -Etapa "04b_gerarEsqueletos" -TasksDir $config.paths.tasks -Metadata @{ skipped = $true }
+            return
+        }
+
+        # Executa GeradorEsqueletos.prg
+        $esqueletosScript = Join-Path $config.paths.projeto "app\utils\GeradorEsqueletos.prg"
+
+        $parameters = @($analiseFile)
+
+        & (Join-Path $config.paths.automation "VFPExecutor.ps1") `
+            -ScriptPrg $esqueletosScript `
+            -Parameters $parameters `
+            -Timeout $config.vfp.timeout `
+            -LogFile $logFile `
+            -OutputFile (Join-Path $taskPath "vfp_output.txt")
+
+        # Verifica se pasta esqueletos foi criada
+        $esqueletosDir = Join-Path $taskPath "esqueletos"
+
+        if (-not (Test-Path $esqueletosDir)) {
+            throw "Pasta esqueletos nao foi criada: $esqueletosDir"
+        }
+
+        $esqueletos = Get-ChildItem -Path $esqueletosDir -Filter "*.prg" -File
+        Write-Host "Esqueletos gerados: $($esqueletos.Count) arquivos" -ForegroundColor Green
+
+        foreach ($esq in $esqueletos) {
+            Write-Host "  - $($esq.Name)" -ForegroundColor Gray
+        }
+
+        Complete-Etapa -TaskId $TaskId -Etapa "04b_gerarEsqueletos" -TasksDir $config.paths.tasks -Metadata @{
+            esqueletosDir = $esqueletosDir
+            arquivos = ($esqueletos | ForEach-Object { $_.Name })
+        }
+    }
+    catch {
+        Fail-Etapa -TaskId $TaskId -Etapa "04b_gerarEsqueletos" -ErroMsg $_.Exception.Message -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 5.5: Corrigir Automatico (NOVO)
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa05b_CorrigirAutomatico {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 5.5" "Corrigir Automatico (CorretorAutomatico.ps1)"
+
+    Start-Etapa -TaskId $TaskId -Etapa "05b_corrigirAutomatico" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+
+        # Determina nomes das classes
+        $formClass = Get-FormClassName -BaseName $BaseName
+        $boClass = Get-BOClassName -BaseName $BaseName
+
+        # Arquivos a corrigir
+        $formFile = Join-Path $config.paths.projeto "app\forms\cadastros\$formClass.prg"
+        $boFile = Join-Path $config.paths.projeto "app\classes\$boClass.prg"
+
+        $corretorScript = Join-Path $config.paths.automation "CorretorAutomatico.ps1"
+        $totalCorrecoes = 0
+
+        # Corrige Form se existir
+        if (Test-Path $formFile) {
+            Write-Host "Corrigindo Form: $formFile" -ForegroundColor Cyan
+
+            & $corretorScript -ArquivoPrg $formFile -TaskDir $taskPath
+
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "  Form corrigido com sucesso" -ForegroundColor Green
+            }
+        }
+        else {
+            Write-Host "AVISO: Form nao encontrado: $formFile" -ForegroundColor Yellow
+        }
+
+        # Corrige BO se existir
+        if (Test-Path $boFile) {
+            Write-Host "Corrigindo BO: $boFile" -ForegroundColor Cyan
+
+            & $corretorScript -ArquivoPrg $boFile -TaskDir $taskPath
+
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "  BO corrigido com sucesso" -ForegroundColor Green
+            }
+        }
+        else {
+            Write-Host "AVISO: BO nao encontrado: $boFile" -ForegroundColor Yellow
+        }
+
+        Complete-Etapa -TaskId $TaskId -Etapa "05b_corrigirAutomatico" -TasksDir $config.paths.tasks -Metadata @{
+            formFile = $formFile
+            boFile = $boFile
+        }
+    }
+    catch {
+        Fail-Etapa -TaskId $TaskId -Etapa "05b_corrigirAutomatico" -ErroMsg $_.Exception.Message -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 5.6: Validar Compilacao (NOVO)
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa05c_ValidarCompilacao {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 5.6" "Validar Compilacao (ValidarCompilacao.prg)"
+
+    Start-Etapa -TaskId $TaskId -Etapa "05c_validarCompilacao" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+
+        # Determina nomes das classes
+        $formClass = Get-FormClassName -BaseName $BaseName
+        $boClass = Get-BOClassName -BaseName $BaseName
+
+        # Arquivos a validar
+        $formFile = Join-Path $config.paths.projeto "app\forms\cadastros\$formClass.prg"
+        $boFile = Join-Path $config.paths.projeto "app\classes\$boClass.prg"
+
+        # Monta lista de arquivos para compilar
+        $arquivosParaCompilar = @()
+        if (Test-Path $formFile) { $arquivosParaCompilar += $formFile }
+        if (Test-Path $boFile) { $arquivosParaCompilar += $boFile }
+
+        if ($arquivosParaCompilar.Count -eq 0) {
+            Write-Host "AVISO: Nenhum arquivo encontrado para validar" -ForegroundColor Yellow
+            Complete-Etapa -TaskId $TaskId -Etapa "05c_validarCompilacao" -TasksDir $config.paths.tasks -Metadata @{
+                arquivosValidados = 0
+                sucesso = $true
+            }
+            return
+        }
+
+        $arquivosLista = $arquivosParaCompilar -join ";"
+        Write-Host "Validando compilacao de $($arquivosParaCompilar.Count) arquivo(s)..." -ForegroundColor Cyan
+
+        # Monta comando VFP
+        $validarScript = Join-Path $config.paths.automation "vfp_helpers\ValidarCompilacao.prg"
+        $vfp9Path = Join-Path $config.paths.vfp9 "vfp9.exe"
+
+        # Cria script temporario para executar
+        $tempScript = Join-Path $taskPath "temp_validar_compilacao.prg"
+        $scriptContent = @"
+SET SAFETY OFF
+SET TALK OFF
+SET CONSOLE ON
+
+TRY
+    DO "$validarScript" WITH "$arquivosLista"
+    loc_nResult = 0
+CATCH TO loEx
+    ? "ERRO: " + loEx.Message
+    loc_nResult = 1
+ENDTRY
+
+QUIT
+"@
+        $scriptContent | Set-Content -Path $tempScript -Encoding ASCII
+
+        # Executa VFP (sem -C pois nao precisa de config.fpw, apenas o script direto)
+        $logFile = Join-Path $taskPath "validar_compilacao.log"
+        $process = Start-Process -FilePath $vfp9Path -ArgumentList "`"$tempScript`"" -Wait -PassThru -NoNewWindow -RedirectStandardOutput $logFile
+
+        # Verifica resultado
+        $resultadoJson = Join-Path (Split-Path $formFile -Parent) "resultado_compilacao.json"
+        if (!(Test-Path $resultadoJson)) {
+            $resultadoJson = Join-Path $taskPath "resultado_compilacao.json"
+        }
+
+        $compilouOk = $true
+        $errosEncontrados = @()
+
+        if (Test-Path $resultadoJson) {
+            $resultado = Get-Content $resultadoJson -Raw | ConvertFrom-Json
+            $compilouOk = $resultado.sucesso
+
+            if (!$compilouOk) {
+                Write-Host ""
+                Write-Host "ERROS DE COMPILACAO ENCONTRADOS:" -ForegroundColor Red
+                foreach ($arq in $resultado.arquivos) {
+                    if (!$arq.compilou) {
+                        Write-Host "  - $($arq.arquivo)" -ForegroundColor Red
+                        Write-Host "    $($arq.mensagem)" -ForegroundColor Yellow
+                        $errosEncontrados += @{
+                            arquivo = $arq.arquivo
+                            mensagem = $arq.mensagem
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            # Verifica se existem arquivos .err
+            foreach ($arquivo in $arquivosParaCompilar) {
+                $errFile = [System.IO.Path]::ChangeExtension($arquivo, "err")
+                if (Test-Path $errFile) {
+                    $compilouOk = $false
+                    $erroConteudo = Get-Content $errFile -Raw
+                    Write-Host "ERRO em $arquivo :" -ForegroundColor Red
+                    Write-Host $erroConteudo -ForegroundColor Yellow
+                    $errosEncontrados += @{
+                        arquivo = $arquivo
+                        mensagem = $erroConteudo
+                    }
+                }
+            }
+        }
+
+        # Remove script temporario
+        if (Test-Path $tempScript) { Remove-Item $tempScript -Force }
+
+        if ($compilouOk) {
+            Write-Host ""
+            Write-Host "SUCESSO: Todos os arquivos compilaram corretamente!" -ForegroundColor Green
+
+            Complete-Etapa -TaskId $TaskId -Etapa "05c_validarCompilacao" -TasksDir $config.paths.tasks -Metadata @{
+                arquivosValidados = $arquivosParaCompilar.Count
+                sucesso = $true
+            }
+        }
+        else {
+            Write-Host ""
+            Write-Host "FALHA: Erros de compilacao encontrados!" -ForegroundColor Red
+
+            Fail-Etapa -TaskId $TaskId -Etapa "05c_validarCompilacao" -ErroMsg "Erros de compilacao encontrados" -TasksDir $config.paths.tasks
+
+            throw "Erros de compilacao encontrados. Verifique os arquivos .err"
+        }
+    }
+    catch {
+        Fail-Etapa -TaskId $TaskId -Etapa "05c_validarCompilacao" -ErroMsg $_.Exception.Message -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# ETAPA 6.5: Teste Automatico (NOVO)
+#------------------------------------------------------------------------------
+
+function Invoke-Etapa06b_TesteAutomatico {
+    param([string]$TaskId, [string]$BaseName)
+
+    Write-StepHeader "ETAPA 6.5" "Teste Automatico (TesteAutomatico.prg)"
+
+    Start-Etapa -TaskId $TaskId -Etapa "06b_testeAutomatico" -TasksDir $config.paths.tasks
+
+    try {
+        $taskPath = Join-Path $config.paths.tasks $TaskId
+        $logFile = Get-TaskLogPath -TaskId $TaskId -Etapa "06b_testeAutomatico" -TasksDir $config.paths.tasks
+
+        # Determina nome da classe do form
+        $formClass = Get-FormClassName -BaseName $BaseName
+
+        # Executa TesteAutomatico.prg
+        $testeScript = Join-Path $config.paths.projeto "app\utils\TesteAutomatico.prg"
+
+        $parameters = @($formClass, $taskPath)
+
+        & (Join-Path $config.paths.automation "VFPExecutor.ps1") `
+            -ScriptPrg $testeScript `
+            -Parameters $parameters `
+            -Timeout $config.vfp.timeout `
+            -LogFile $logFile `
+            -OutputFile (Join-Path $taskPath "vfp_output.txt")
+
+        $exitCode = $LASTEXITCODE
+
+        # Verifica resultado
+        $resultFile = Join-Path $taskPath "teste_resultado.json"
+
+        if (Test-Path $resultFile) {
+            $resultado = Get-Content $resultFile -Raw | ConvertFrom-Json
+
+            Write-Host ""
+            Write-Host "Resultado dos testes automaticos:" -ForegroundColor Cyan
+            Write-Host "  Total: $($resultado.resumo.total)" -ForegroundColor White
+            Write-Host "  Passou: $($resultado.resumo.passou)" -ForegroundColor Green
+            Write-Host "  Falhou: $($resultado.resumo.falhou)" -ForegroundColor $(if ($resultado.resumo.falhou -gt 0) { "Red" } else { "Green" })
+            Write-Host "  Percentual: $($resultado.resumo.percentual)%" -ForegroundColor White
+
+            Complete-Etapa -TaskId $TaskId -Etapa "06b_testeAutomatico" -TasksDir $config.paths.tasks -Metadata @{
+                resultFile = $resultFile
+                total = $resultado.resumo.total
+                passou = $resultado.resumo.passou
+                falhou = $resultado.resumo.falhou
+                percentual = $resultado.resumo.percentual
+            }
+        }
+        else {
+            Write-Host "AVISO: Arquivo de resultado nao foi gerado" -ForegroundColor Yellow
+            Complete-Etapa -TaskId $TaskId -Etapa "06b_testeAutomatico" -TasksDir $config.paths.tasks
+        }
+    }
+    catch {
+        Fail-Etapa -TaskId $TaskId -Etapa "06b_testeAutomatico" -ErroMsg $_.Exception.Message -TasksDir $config.paths.tasks
+        throw
+    }
+}
+
+#------------------------------------------------------------------------------
+# MAIN
+#------------------------------------------------------------------------------
+
+# Funcao para processar UMA task completa (todas as etapas)
+function Process-SingleTask {
+    param([string]$taskIdToProcess)
+
+    Write-Host ""
+    Write-Host "Task ID: $taskIdToProcess" -ForegroundColor Green
+    Write-Host ""
+
+    # Carrega estado da task para verificar etapas ja completadas
+    $taskState = Get-TaskState -TaskId $taskIdToProcess -TasksDir $config.paths.tasks
+
+    # Obtem baseName (do estado se disponivel, senao da execucao da Etapa 1)
+    $baseName = $null
+    if ($taskState.etapas."01_moverArquivos".baseName) {
+        $baseName = $taskState.etapas."01_moverArquivos".baseName
+        Write-Host "BaseName obtido do estado da task: $baseName" -ForegroundColor Cyan
+    }
+
+    # ETAPA 1: Mover Arquivos
+    if ($taskState.etapas."01_moverArquivos".status -ne "COMPLETED") {
+        $baseName = Invoke-Etapa01_MoverArquivos -TaskId $taskIdToProcess
+    }
+    else {
+        Write-Host "[ETAPA 1] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 2: Extrair Codigo
+    if ($taskState.etapas."02_extractCode".status -ne "COMPLETED") {
+        $baseNameNormalizado = Invoke-Etapa02_ExtractCode -TaskId $taskIdToProcess -BaseName $baseName
+        if ($baseNameNormalizado) {
+            $baseName = $baseNameNormalizado
+            Write-Host "BaseName atualizado para: $baseName" -ForegroundColor Cyan
+        }
+    }
+    else {
+        Write-Host "[ETAPA 2] JA COMPLETADA - Pulando..." -ForegroundColor Green
+        $taskState = Get-TaskState -TaskId $taskIdToProcess -TasksDir $config.paths.tasks
+        if ($taskState.etapas."02_extractCode".baseNameNormalizado) {
+            $baseName = $taskState.etapas."02_extractCode".baseNameNormalizado
+            Write-Host "BaseName recuperado do estado: $baseName" -ForegroundColor Cyan
+        }
+    }
+
+    # ETAPA 2.2: Reduzir Arquivo Grande (se necessario)
+    # Nota: Esta etapa verifica o tamanho e so executa se >400KB
+    Invoke-Etapa02a_ReduzirArquivo -TaskId $taskIdToProcess -BaseName $baseName
+
+    # ETAPA 2.5: Analisar Tarefa
+    if ($taskState.etapas."02b_analisarTarefa".status -ne "COMPLETED") {
+        Invoke-Etapa02b_AnalisarTarefa -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 2.5] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 3: Gerar Meta-Prompt
+    if ($taskState.etapas."03_gerarMetaPrompt".status -ne "COMPLETED") {
+        Invoke-Etapa03_GerarMetaPrompt -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 3] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 4: Gerar Mapeamento
+    if ($taskState.etapas."04_gerarMapeamento".status -ne "COMPLETED") {
+        Invoke-Etapa04_GerarMapeamento -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 4] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 4.5: Gerar Esqueletos
+    if ($taskState.etapas."04b_gerarEsqueletos".status -ne "COMPLETED") {
+        Invoke-Etapa04b_GerarEsqueletos -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 4.5] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 5: Migracao Claude
+    if ($taskState.etapas."05_migracao".status -ne "COMPLETED") {
+        Invoke-Etapa05_Migracao -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 5] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 5.5: Corrigir Automatico
+    if ($taskState.etapas."05b_corrigirAutomatico".status -ne "COMPLETED") {
+        Invoke-Etapa05b_CorrigirAutomatico -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 5.5] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 5.6: Validar Compilacao
+    if ($taskState.etapas."05c_validarCompilacao".status -ne "COMPLETED") {
+        Invoke-Etapa05c_ValidarCompilacao -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 5.6] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 6: Testar Form
+    if ($taskState.etapas."06_testForm".status -ne "COMPLETED") {
+        Invoke-Etapa06_TestForm -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 6] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 6.5: Teste Automatico
+    if ($taskState.etapas."06b_testeAutomatico".status -ne "COMPLETED") {
+        Invoke-Etapa06b_TesteAutomatico -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 6.5] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 7: Validar UI
+    if ($taskState.etapas."07_validarUI".status -ne "COMPLETED") {
+        Invoke-Etapa07_ValidarUI -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 7] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # ETAPA 8: Gerar Teste Manual
+    if ($taskState.etapas."08_gerarTestManual".status -ne "COMPLETED") {
+        Invoke-Etapa08_GerarTestManual -TaskId $taskIdToProcess -BaseName $baseName
+    }
+    else {
+        Write-Host "[ETAPA 8] JA COMPLETADA - Pulando..." -ForegroundColor Green
+    }
+
+    # Marca task como completa
+    Update-TaskStatus -TaskId $taskIdToProcess -Status "COMPLETED" -TasksDir $config.paths.tasks
+
+    Write-Host ""
+    Write-Host "============================================================================" -ForegroundColor Green
+    Write-Host " TASK COMPLETA: $taskIdToProcess" -ForegroundColor Green
+    Write-Host "============================================================================" -ForegroundColor Green
+}
+
+try {
+    # Modo ProcessAll: processa TODOS os arquivos da pasta origem
+    if ($ProcessAll) {
+        $scxFiles = Get-ChildItem -Path $config.paths.origem -Filter "*.scx" -ErrorAction SilentlyContinue
+        $totalFiles = $scxFiles.Count
+
+        if ($totalFiles -eq 0) {
+            Write-Host "Nenhum arquivo SCX encontrado em: $($config.paths.origem)" -ForegroundColor Yellow
+            exit 0
+        }
+
+        Write-Host "============================================================================" -ForegroundColor Cyan
+        Write-Host " MODO PROCESSALL: $totalFiles arquivo(s) para processar" -ForegroundColor Cyan
+        Write-Host "============================================================================" -ForegroundColor Cyan
+        Write-Host ""
+
+        $processedCount = 0
+        $errorCount = 0
+        $successTasks = @()
+        $errorTasks = @()
+
+        while ($true) {
+            # Verifica se ainda ha arquivos para processar
+            $remainingFiles = Get-ChildItem -Path $config.paths.origem -Filter "*.scx" -ErrorAction SilentlyContinue
+            if ($remainingFiles.Count -eq 0) {
+                break
+            }
+
+            $processedCount++
+            $currentFile = $remainingFiles[0].Name
+            Write-Host ""
+            Write-Host "============================================================================" -ForegroundColor Magenta
+            Write-Host " PROCESSANDO ARQUIVO $processedCount de $totalFiles : $currentFile" -ForegroundColor Magenta
+            Write-Host "============================================================================" -ForegroundColor Magenta
+
+            try {
+                # Cria nova task
+                $nextNumber = Get-NextTaskNumber
+                $taskIdToProcess = "task{0:D3}" -f $nextNumber
+                Write-Host "Criando nova task: $taskIdToProcess" -ForegroundColor Cyan
+                New-Task -TaskId $taskIdToProcess -ArquivoOriginal $currentFile -TipoArquivo "SCX" -TasksDir $config.paths.tasks
+
+                # Processa a task completa (todas as etapas)
+                Process-SingleTask -taskIdToProcess $taskIdToProcess
+
+                $successTasks += $taskIdToProcess
+            }
+            catch {
+                $errorCount++
+                $errorTasks += @{
+                    taskId = $taskIdToProcess
+                    arquivo = $currentFile
+                    erro = $_.Exception.Message
+                }
+                Write-Host ""
+                Write-Host "ERRO ao processar $currentFile : $($_.Exception.Message)" -ForegroundColor Red
+                Write-Host "Continuando com proximo arquivo..." -ForegroundColor Yellow
+            }
+        }
+
+        # Resumo final
+        Write-Host ""
+        Write-Host "============================================================================" -ForegroundColor Cyan
+        Write-Host " PROCESSALL CONCLUIDO" -ForegroundColor Cyan
+        Write-Host "============================================================================" -ForegroundColor Cyan
+        Write-Host ""
+        Write-Host "  Total de arquivos: $totalFiles" -ForegroundColor White
+        Write-Host "  Sucesso: $($successTasks.Count)" -ForegroundColor Green
+        Write-Host "  Erros: $errorCount" -ForegroundColor $(if ($errorCount -gt 0) { "Red" } else { "Green" })
+        Write-Host ""
+
+        if ($successTasks.Count -gt 0) {
+            Write-Host "  Tasks completadas:" -ForegroundColor Green
+            foreach ($task in $successTasks) {
+                Write-Host "    - $task" -ForegroundColor Green
+            }
+        }
+
+        if ($errorTasks.Count -gt 0) {
+            Write-Host ""
+            Write-Host "  Tasks com erro:" -ForegroundColor Red
+            foreach ($err in $errorTasks) {
+                Write-Host "    - $($err.taskId) ($($err.arquivo)): $($err.erro)" -ForegroundColor Red
+            }
+        }
+
+        Write-Host ""
+        Write-Host "Proximos passos:" -ForegroundColor Yellow
+        Write-Host "  1. Revisar solicitacoes de teste manual em: $($config.paths.solicitacaoTestManual)"
+        Write-Host "  2. Executar testes manuais para cada formulario"
+        Write-Host "  3. Se aprovados, fazer commit do codigo"
+        Write-Host ""
+
+        exit $(if ($errorCount -gt 0) { 1 } else { 0 })
+    }
+    # Determina qual task processar (modo single task)
+    elseif ($TaskId) {
+        $taskIdToProcess = $TaskId
+        Write-Host "Processando task especifica: $taskIdToProcess" -ForegroundColor Cyan
+    }
+    elseif ($ContinueFromLastTask) {
+        # Busca tasks pendentes
+        $pendingTasks = Get-PendingTasks -TasksDir $config.paths.tasks
+
+        if ($pendingTasks.Count -eq 0) {
+            Write-Host "Nenhuma task pendente encontrada. Criando nova task..." -ForegroundColor Yellow
+            $nextNumber = Get-NextTaskNumber
+            $taskIdToProcess = "task{0:D3}" -f $nextNumber
+            New-Task -TaskId $taskIdToProcess -ArquivoOriginal "" -TipoArquivo "SCX" -TasksDir $config.paths.tasks
+        }
+        else {
+            $taskIdToProcess = $pendingTasks[0].taskId
+            Write-Host "Continuando task pendente: $taskIdToProcess" -ForegroundColor Yellow
+        }
+    }
+    else {
+        # Cria nova task
+        $nextNumber = Get-NextTaskNumber
+        $taskIdToProcess = "task{0:D3}" -f $nextNumber
+        Write-Host "Criando nova task: $taskIdToProcess" -ForegroundColor Cyan
+        New-Task -TaskId $taskIdToProcess -ArquivoOriginal "" -TipoArquivo "SCX" -TasksDir $config.paths.tasks
+    }
+
+    # Processa a task (usa funcao que executa todas as etapas)
+    Process-SingleTask -taskIdToProcess $taskIdToProcess
+
+    Write-Host ""
+    Write-Host "Proximos passos:" -ForegroundColor Yellow
+    Write-Host "  1. Revisar solicitacao de teste manual em: $($config.paths.solicitacaoTestManual)"
+    Write-Host "  2. Executar testes manuais"
+    Write-Host "  3. Se aprovado, fazer commit do codigo"
+    Write-Host ""
+
+    exit 0
+}
+catch {
+    Write-Host ""
+    Write-Host "============================================================================" -ForegroundColor Red
+    Write-Host " ERRO NA EXECUCAO" -ForegroundColor Red
+    Write-Host "============================================================================" -ForegroundColor Red
+    Write-Host ""
+    Write-Host $_.Exception.Message -ForegroundColor Red
+    Write-Host ""
+    Write-Host $_.ScriptStackTrace -ForegroundColor DarkGray
+    Write-Host ""
+
+    exit 1
+}

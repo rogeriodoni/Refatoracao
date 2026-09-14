@@ -1,0 +1,10 @@
+﻿Este ├® um **falso positivo** do Code Review. Ap├│s busca exaustiva em ambos os arquivos:
+
+- `FormProduto.prg` (5761 linhas) ÔÇö 383 ocorr├¬ncias de `Top`, **todas** s├úo propriedades VFP9 (`.Top = N`) para posicionamento de controles UI, coment├írios de layout, ou `GO TOP IN cursor` (navega├º├úo de cursor)
+- `ProdutoBO.prg` ÔÇö zero ocorr├¬ncias de `Top`
+
+**Nenhuma cl├íusula WHERE com coluna `TOP` existe no c├│digo migrado.**
+
+O scanner de Code Review confundiu as atribui├º├Áes de propriedade VFP9 `.Top = 29`, `.Top = -29`, etc. com condi├º├Áes SQL `WHERE Top = N`, gerando um falso positivo.
+
+**N├úo h├í nada a corrigir.** O c├│digo migrado est├í correto em rela├º├úo ├á cl├íusula SQL reportada. O ├║nico `SELECT TOP 1` no c├│digo original (`Select Top 1 CPros, Datars From SigMvHst`) ├® uma cl├íusula `TOP` do SQL Server no SELECT (n├úo no WHERE), e esse trecho n├úo foi migrado para o FormProduto.prg novo.

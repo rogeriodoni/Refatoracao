@@ -1,0 +1,11 @@
+﻿Fase 4 conclu├¡da. O arquivo `Formsigrecgp.prg` foi atualizado com:
+
+- **`ConfigurarPaginaFiltros()`** ÔÇö adiciona ├á Page1 os tr├¬s controles do form original:
+  - `obj_4c_Opc_Rel` (OptionGroup, 5 op├º├Áes de tipo de relat├│rio, posi├º├úo relativa ├á Page1: Top=8)
+  - `lbl_4c_Label1` (label "Ordem : ", Top=115)
+  - `obj_4c_Opc_Ordem` (OptionGroup, 2 op├º├Áes lado a lado, Top=110)
+  - `Buttons(5)` inicia desabilitado por padr├úo
+
+- **L├│gica de habilita├º├úo do `Buttons(5)`** em `InicializarForm()` ÔÇö TRY/CATCH que tenta acessar `this_oParentForm.fld_principal.pag_Consulta.filtro.principal.get_opera[├º├ú]oi.Value` com `EVALUATE()` + CHR(), com fallback seguro para `.F.`
+
+- **`AlternarPagina(par_nPagina)`** ÔÇö compatibilidade com o pipeline de valida├º├úo

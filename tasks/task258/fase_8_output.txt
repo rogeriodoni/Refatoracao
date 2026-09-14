@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto e completo. A Fase 8 est├í conclu├¡da. Aqui o resumo do que foi adicionado:
+
+**M├®todos novos em `FormSigPrAop.prg`** (linhas 754ÔÇô878):
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `FormParaBO()` | Sincroniza `txt_4c_OP.Value` ÔåÆ `this_oBusinessObject.this_nNops` antes de gravar |
+| `BOParaForm()` | Sincroniza `this_cCodPds` ÔåÆ `txt_4c_Produto` e d├í Refresh no grid/editbox |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita `txt_4c_OP` e `Column5` (Qtd.Atual) |
+| `LimparCampos()` | Zera cursor, todos os campos, Confirmar, e props do BO |
+| `CarregarLista()` | Wrapper p├║blico para `CarregarDivisoesOP()` com retorno l├│gico |
+| `AjustarBotoesPorModo()` | Habilita Confirmar e desbloqueia Column5 conforme cursor ter dados |
+
+**`BtnConfirmarClick()` atualizado**: chama `THIS.FormParaBO()` antes de `Inserir()` e `THIS.LimparCampos()` no reset p├│s-sucesso.
+
+**Integra├º├úo**: j├í estava feita ÔÇö config.prg carrega `*BO.prg` e `operacionais/Form*.prg` dinamicamente; menu.prg j├í tem `AbrirFormSigPrAop` em `popMovimentos`.

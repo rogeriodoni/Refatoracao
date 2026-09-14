@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. A estrutura da Fase 3 est├í completa.
+
+**Fase 3 conclu├¡da** ÔÇö `C:/4c/projeto/app/forms/cadastros/FormPai.prg` criado com:
+
+- `DEFINE CLASS FormPai AS FormBase` ÔÇö Height=600, Width=1000, DataSession=2, Caption sem acento (overridden em `InicializarForm()`)
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()` (padr├úo can├┤nico)
+- `InicializarForm()` ÔÇö cria `PaiBO`, chama os 3 ConfigurarX, propaga Caption nos labels, guarda com `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com Top=-29, Tabs=.F., 2 p├íginas com `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö cria `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo`), `cnt_4c_Botoes` (Left=542, Top=29), `cnt_4c_Saida` (Left=917, can├┤nico)
+- `ConfigurarPaginaDados()` ÔÇö cria `cnt_4c_BotoesAcao` (Left=842, Top=33, can├┤nico)
+- `TornarControlesVisiveis()` e `FormatarGridLista()` ÔÇö implementa├º├Áes completas
+- `CarregarLista()` ÔÇö stub que retorna `.T.` (ser├í completado na Fase 4 com grid)
+- `Destroy()` ÔÇö libera BO e cursor

@@ -1,0 +1,18 @@
+﻿Arquivo completo e correto. A Fase 8/8 foi conclu├¡da.
+
+**Resumo do que foi adicionado** ao `FormSigReJob.prg`:
+
+| M├®todo | Implementa├º├úo para REPORT FLAT |
+|--------|-------------------------------|
+| `FormParaBO()` | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | Sincroniza caption com `CfgTitJob` do ParentForm |
+| `HabilitarCampos(par_lHabilitar)` | Controla `cmg_4c_Botoes.Enabled` |
+| `LimparCampos()` | Chama `HabilitarCampos(.T.)` |
+| `CarregarLista()` | Chama `AjustarBotoesPorModo()` + `Refresh()` |
+| `AjustarBotoesPorModo()` | Garante `cmg_4c_Botoes.Enabled=.T., Visible=.T.` |
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` |
+| `BtnEncerrarClick()` | Delega para `BtnSairClick()` |
+| `BtnSalvarClick()` | Delega para `BtnImprimirClick()` |
+| `BtnCancelarClick()` | Delega para `BtnSairClick()` |
+
+O form est├í 100% funcional e arquiteturalmente completo ÔÇö todos os m├®todos t├¬m l├│gica real justificada pela natureza do form REPORT FLAT (sem campos de entrada, sem grid, sem altern├óncia de modo).

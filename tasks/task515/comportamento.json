@@ -1,0 +1,236 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 9,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDRSS",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_Origem.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdRps','grupoos',ThisForm.Pagina.Dados.Get_Origem.Value)\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_Origem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS",
+      "evento": "Init",
+      "linhas": 13,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdRps','cidchaves','crSigCdRps','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('grupoos','','','Grupo Origem',100,.t.)\n\t\t.pfSqlTabela(1).pColuna('grupods','','','Grupo Destino',100,.t.)\n\t\t.AddCursor('SigCdGcr','codigos','crSigCdGcr','','')\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nIf InList(ThisForm.pcEscolha,'INSERIR','PROCURAR')\n\tThisForm.Pagina.Dados.Get_dOrigem.Value = ' '\n\tThisForm.Pagina.Dados.Get_ddestino.Value = ' '\nElse\n\tIf Thisform.PoDatamgr.SQLExecute([Select Descrs from SigCdGcr where Codigos = '] + CrSigCdRps.Grupoos + [' ],'CrSigCdGcr') < 0\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\t\tReturn(.F.)\n\tElse\n\t\tThisForm.Pagina.Dados.Get_dOrigem.Value = CrSigC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "Get_dOrigem,Get_ddestino,Get_Origem,Get_Destino",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "Local laCampos(2,2)\n\nget_origem  = thisform.pagina.dados.get_Origem.value\nget_destino = thisform.pagina.dados.get_Destino.value\n\nIf ThisForm.pcEscolha = 'INSERIR'\n\n\tm.laCampos(1,1) = 'grupoos'\n\tm.laCampos(1,2) = get_origem\n\tm.laCampos(2,1) = 'grupods'\n\tm.laCampos(2,2) = get_destino\n\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdRps',@m.laCampos)\n\t\tMessagebox( 'Grupo Origem , Grupo Destino já Cadastrado!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Origem.SetFocus\n\t\tReturn\n\tEndif\n\tSelect CrSigCdRps\n\tReplace... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "get_origem,get_destino,ChkRegister('SigCdRps'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS.Pagina.Dados.Get_Destino",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return( !thisform.pcEscolha $ 'EXCLUIR/CONSULTAR/PROCURAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS.Pagina.Dados.Get_Destino",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Grupos',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tthis.value = lcod\n\tthis.parent.get_Destino.value = Iif(LastKey()==27 or !used('CrSigCdGcr'),Space(15... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Destino,Get_dDestino",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS.Pagina.Dados.Get_Origem",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS.Pagina.Dados.Get_Origem",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Grupos',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tthis.value = lcod\n\tthis.parent.get_Origem.value = Iif(LastKey()==27 or !used('CrSigCdGcr'),Space(15)... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Origem,Get_DOrigem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS.Pagina.Dados.Get_Dorigem",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (IsEmpty(ThisForm.Pagina.Dados.Get_Origem.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Origem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS.Pagina.Dados.Get_Dorigem",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Descrs',This.Value,'Grupos',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Value = CrSigCdGcr.Descrs\n\tthis.parent.get_Origem.value = Iif(LastKey()==27 or !used('CrSigCdGcr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Origem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS.Pagina.Dados.Get_ddestino",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (IsEmpty(ThisForm.Pagina.Dados.Get_Destino.Value)) AND !InList(ThisForm.pcEscolha,'PROCURAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Destino",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRSS.Pagina.Dados.Get_ddestino",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Descrs',This.Value,'Grupos',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Value = CrSigCdGcr.Descrs\n\tthis.parent.get_Destino.value = Iif(LastKey()==27 or !used('CrSigCdGc... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Destino",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDRSS.Click",
+      "queryOriginal": "\tIf Thisform.PoDatamgr.SQLExecute([Select Descrs from SigCdGcr where Codigos = '] + CrSigCdRps.Grupoos + [' ],'CrSigCdGcr') < 0",
+      "tabelas": "SigCdGcr",
+      "colunas": "Descrs,Codigos,Grupoos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdGcr"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

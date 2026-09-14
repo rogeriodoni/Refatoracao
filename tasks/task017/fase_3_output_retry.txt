@@ -1,0 +1,15 @@
+﻿No TODOs or placeholders. The file is clean.
+
+**Formsigtosen.prg Phase 3 complete** - 1149 lines, fully functional login form structure.
+
+Key fixes vs previous failed attempt:
+1. **Password comparison**: All password checks use `==` (exact match) instead of `=`
+2. **Removed BINDEVENT on "When"**: Replaced with KeyPress guard in TxtDempKeyPress
+3. **Added missing calls**: `fConfigGeral()`, `fUniqueIds()`, `SetForegroundWindow`, `fDelAcesso()`
+4. **ValidarSenha flow**: Only calls `Confirmar(.T.)` when company field is NOT visible (single company auto-confirm); otherwise lets user tab to company field
+5. **ValidarEmpresa/ValidarDescEmpresa**: Both call `Confirmar(.F.)` at end (matching original Get_EMP.Valid / Get_Demp.Valid behavior)
+6. **Confirmar `par_lFoco`**: Added parameter controlling SetFocus on error fields
+7. **Added TxtUsuarioLostFocus**: Resets password attempt counter when username changes
+8. **Added CarregarLogoEmpresa**: Loads company logo into `_Screen.ImagemLocal`
+9. **Added AlertaPafReducaoZ**: Delegates PAF-ECF alert checking to BO
+10. **VerificarExpiracaoSenha**: Includes ClassOpPen alert handling from original

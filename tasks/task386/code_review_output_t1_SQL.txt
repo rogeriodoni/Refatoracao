@@ -1,0 +1,6 @@
+﻿Corre├º├Áes aplicadas em `CsiBO.prg`:
+
+- **`Atualizar()` linha 164**: `WHERE pkChaves = ...` ÔåÆ `WHERE Cods = EscaparSQL(THIS.this_cCodigo)`
+- **`ExecutarExclusao()` linha 192**: `WHERE pkChaves = ...` ÔåÆ `WHERE Cods = EscaparSQL(THIS.this_cCodigo)`
+
+A propriedade `this_cPkChaves` permanece ÔÇö ela ├® necess├íria apenas para o `INSERT` (popula a coluna `pkChaves` do banco), mas n├úo deve ser usada como filtro em UPDATE/DELETE pois o original filtra exclusivamente por `Cods`.

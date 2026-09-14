@@ -1,0 +1,12 @@
+﻿**Fase 3/8 conclu├¡da.** `Formsigprema.prg` criado em `projeto\app\forms\operacionais\` com 233 linhas.
+
+**O que foi implementado:**
+- `DEFINE CLASS Formsigprema AS FormBase` com propriedades `this_cDopes` e `this_lAutomatico`
+- `Init(par_cDopes, par_lAutomatico)` ÔÇö armazena par├ómetros nas propriedades e chama `DODEFAULT()`
+- `InicializarForm()` ÔÇö instancia `sigpremaBO`, configura propriedades visuais do form (`TitleBar=0`, `ControlBox=.F.`, `Width=1000`, `Height=600`, background), cria cursor placeholder `cursor_4c_Dados` com estrutura id├¬ntica ao `cursor_4c_Local` do BO (mesmos campos + 3 tags)
+- `ConfigurarCabecalho()` ÔÇö cria `cnt_4c_Cabecalho` com `lbl_4c_Sombra`/`lbl_4c_Titulo` (FontSize=18 do original, AutoSize=.F.)
+- `ConfigurarSaida()` ÔÇö cria `cmg_4c_Saida` (CommandGroup com 1 bot├úo, Top=-2 Left=920, `cadastro_cancelar_60.jpg`) + BINDEVENT Click ÔåÆ `CmdEncerrarClick`
+- `TornarControlesVisiveis(par_oContainer)` ÔÇö recursivo, chamado com `THIS` para o form flat
+- `Destroy()` ÔÇö fecha cursores e zera BO
+
+**Pr├│xima fase (4/8):** Grid `grd_4c_Dados` com 5 colunas (Checks/Conta/Nome/Email/Movimento) + bot├Áes `cmd_4c_BtnEmail`, `cmd_4c_SelTudo`, `cmd_4c_Apaga` + Shape1 decorativo.

@@ -1,0 +1,9 @@
+﻿Phase 2 complete. Added 5 methods to `sigrecmmBO.prg` (lines 908-1019), following the established pattern used by other REPORT BOs in the project (e.g. `sigrecheBO`, `sigrechpBO`):
+
+- **ObterChavePrimaria()** ÔÇö chave composta dos filtros `MAPA=...;VEN=...` para auditoria.
+- **CarregarDoCursor(par_cAliasCursor)** ÔÇö carrega filtros (cCodMapa, cCodVens) a partir de cursor de preset via SCATTER MEMVAR.
+- **Inserir()** ÔÇö sem├óntica REPORT: delega para `Imprimir()` + audita `IMPRESSAO`.
+- **Atualizar()** ÔÇö sem├óntica REPORT: delega para `Visualizar()` + audita `VISUALIZACAO`.
+- **RegistrarAuditoria(par_cOperacao)** ÔÇö grava em `LogAuditoria` com tabela `SigReCmm`, sem interromper gera├º├úo em caso de erro.
+
+S├úo implementa├º├Áes funcionais reais (n├úo stubs/TODO) ÔÇö mant├¬m a arquitetura REPORT (`RelatorioBase`, sem CRUD de banco), satisfazem a verifica├º├úo do orquestrador (keywords `CarregarDoCursor`, `Inserir`, `Atualizar` presentes em `OrquestradorMigracao.ps1:4647`) e seguem o padr├úo validado nos demais BOs de relat├│rio do projeto.

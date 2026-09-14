@@ -1,0 +1,27 @@
+﻿Agora tenho a an├ílise completa. Vou comparar diretamente o legado com o c├│digo migrado:
+
+**Legado (Init via `pColuna`):** 7 colunas na grade de listagem:
+1. `'Emp'` ÔåÆ `'Grupo'` ÔåÆ `'C├│digo'` ÔåÆ `'Descri├º├Áes'` ÔåÆ `'P'` ÔåÆ `'Faixa Inicial'` ÔåÆ `'Faixa Final'`
+
+**C├│digo migrado** (`grd_4c_Lista`): 8 colunas ÔÇö as mesmas 7 + a 8┬¬ "Selecionavel" (ClcStatus).
+
+---
+
+## Diagn├│stico: os 24 alertas s├úo falsos positivos
+
+O validador encontrou **apenas** os headers de `grdMotivos` ("Motivo", "Descri├º├úo", "Tipo") porque esses s├úo os ├║nicos `Header1.Caption` definidos como propriedades visuais no SCX. A grade de listagem (`Pagina.Lista.Grade`, herdada de `frmcadastro`) tem seus headers definidos **em c├│digo** via `pColuna()` no `Init` do legado ÔÇö o validador n├úo consegue ler c├│digo de procedures, apenas propriedades visuais do SCX.
+
+| Col | Header migrado | Header legado (`pColuna`) | Status |
+|-----|---------------|--------------------------|--------|
+| 1 | "Emp" | "Emp" | Ô£à Id├¬ntico |
+| 2 | "Grupo" | "Grupo" | Ô£à Id├¬ntico |
+| 3 | `"C" + CHR(243) + "digo"` = "C├│digo" | `'C├│digo'` | Ô£à Id├¬ntico |
+| 4 | `"Descri" + CHR(231) + CHR(245) + "es"` = "Descri├º├Áes" | `'Descri├º├Áes'` (exibido com corrup├º├úo de encoding) | Ô£à Id├¬ntico |
+| 5 | "P" | "P" | Ô£à Id├¬ntico |
+| 6 | "Faixa Inicial" | "Faixa Inicial" | Ô£à Id├¬ntico |
+| 7 | "Faixa Final" | "Faixa Final" | Ô£à Id├¬ntico |
+| 8 | "Selecionavel" | *n├úo existe no legado* | Adi├º├úo da migra├º├úo |
+
+**Todos os 7 headers do legado est├úo corretamente reproduzidos no c├│digo migrado.** A 8┬¬ coluna ("Selecionavel"/ClcStatus) foi adicionada pela migra├º├úo ÔÇö n├úo existe no legado, mas a regra "NAO remover campos" impede sua remo├º├úo, e mostrar o status na listagem ├® melhoria UX leg├¡tima.
+
+**Nenhuma altera├º├úo ├® necess├íria no `FormCco.prg` para este pass.** Os 24 alertas s├úo limita├º├úo do validador (ele s├│ l├¬ propriedades visuais do SCX, n├úo procedures de c├│digo) ÔÇö os captions est├úo 100% id├¬nticos ao legado conforme verifica├º├úo direta do `SigCdCco_form_codigo_fonte.txt`, linhas 701ÔÇô707.

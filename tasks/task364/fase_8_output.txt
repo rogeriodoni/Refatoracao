@@ -1,0 +1,20 @@
+﻿Todos os 11 m├®todos foram adicionados corretamente. A Fase 8 est├í conclu├¡da.
+
+**Resumo do que foi feito:**
+
+- **FormCfb.prg** (2490 ÔåÆ 2777 linhas): adicionados os m├®todos finais:
+  - `CarregarLista()` ÔÇö carrega o grid com `SigOpFp LEFT JOIN SIGCNFBL`
+  - `AlternarPagina()` ÔÇö alterna entre Page1 e Page2
+  - `BtnIncluirClick()` ÔÇö bloqueia INSERT com mensagem (regra de neg├│cio do legado)
+  - `BtnAlterarClick()` ÔÇö carrega registro existente ou prepara INSERT se n├úo configurado
+  - `BtnVisualizarClick()` ÔÇö modo somente leitura
+  - `BtnExcluirClick()` ÔÇö exclui configura├º├úo com confirma├º├úo
+  - `BtnBuscarClick()` ÔÇö filtra lista
+  - `BtnEncerrarClick()` ÔÇö fecha formul├írio
+  - `BtnSalvarClick()` ÔÇö salva via `this_oBusinessObject.Salvar()`
+  - `BtnCancelarClick()` ÔÇö volta para lista
+  - `AjustarBotoesPorModo()` ÔÇö habilita/desabilita bot├úo Confirmar conforme modo
+
+- **menu.prg**: adicionados `DEFINE BAR 46`, `ON SELECTION BAR 46` e `AbrirFormCfb()`
+
+- **config.prg**: n├úo precisou altera├º├úo (ADIR carrega automaticamente `*BO.prg` e `Form*.prg`)

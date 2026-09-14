@@ -1,0 +1,19 @@
+﻿Arquivo criado corretamente. Aqui est├í o resumo da Fase 3:
+
+**`FormSigPrEml.prg` criado** em `C:\4c\projeto\app\forms\operacionais\` com:
+
+| M├®todo | Status |
+|--------|--------|
+| `Init(par_cPrDopes, par_cEscolha, par_laOpeBaixa)` | Completo ÔÇö captura params antes de DODEFAULT; array de baixas salvo em `PUBLIC ga_4c_SigPrEmlOpeBaixa` |
+| `InicializarForm()` | Completo ÔÇö cria BO, inicializa conex├úo ALERTA, configura Picture/Caption, monta layout |
+| `ConfigurarCabecalho()` | Completo ÔÇö `cnt_4c_Sombra` com `lbl_4c_LblSombra` (preto) + `lbl_4c_LblTitulo` (branco), dimens├Áes exatas do SCX |
+| `ConfigurarEncerrar()` | Completo ÔÇö `cmg_4c_Encerrar` ButtonCount=1, `Cancel=.T.`, Picture=`cadastro_cancelar_60.jpg`, BINDEVENT Click |
+| `CmdEncerrarClick()` | Completo ÔÇö `THIS.Release()` |
+| `TornarControlesVisiveis()` | Completo ÔÇö recurs├úo por Controls + Pages |
+| `AtualizarEstadoControles()` | Override no-op (sem modos CRUD) |
+| `Destroy()` | Completo ÔÇö fecha 8 cursores, libera PUBLIC array, nulifica BO, DODEFAULT() |
+
+**Destaques de decis├úo:**
+- **Array `laOpeBaixa`**: Preservado em `PUBLIC ga_4c_SigPrEmlOpeBaixa` (VFP9 n├úo suporta ACOPY de array para propriedade de DEFINE CLASS antes do DODEFAULT)
+- **Sem PageFrame**: Form OPERACIONAL com layout flat ÔÇö controles diretos no form
+- **Fase 4**: adicionar├í `grd_4c_Dados` + `cmd_4c_BtnEmail` + `cmd_4c_SelTudo`/`cmd_4c_Apaga` + `CarregarDados()`

@@ -1,0 +1,12 @@
+﻿The form is complete and well-structured. FASE 5 integration is done. Here's a summary of what was verified and added:
+
+**FASE 3 (already complete):** `Formsigreinr.prg` ÔÇö 1925-line form with all 11 OptionGroups, 5 TextBox fields with F4 lookups, grid for TipoRel=4, dynamic visibility/enabled logic, fChecaAcesso integration, full button handlers (VisualizarÔåÆPrepararDadosÔåÆVisualizar(), ImprimirÔåÆPrepararDadosÔåÆImprimir(.T.)).
+
+**FASE 5 (just completed):** `menu.prg` integration:
+- Added `DEFINE BAR 158` (separator) and `DEFINE BAR 159` ("Invent├írio") to `popRelatorios`
+- Added `ON SELECTION BAR 159 OF popRelatorios DO AbrirFormsigreinr`
+- Added `AbrirFormsigreinr()` procedure that queries `MAX(Codigos) FROM SigCdBal` for the current company, falls back to `INPUTBOX()` if no inventory found, then opens `Formsigreinr` with the number
+
+**config.prg:** No changes needed ÔÇö ADIR auto-loads all `Form*.prg` from `relatorios\` at startup, so `Formsigreinr.prg` loads automatically.
+
+**Next step ÔÇö FASE 6:** Delete `.fxp` cache files and test. From VFP9, run `CD C:\4c\projeto\app\start && DO main.prg`, then open Relat├│rios ÔåÆ Invent├írio from the menu.

@@ -1,0 +1,13 @@
+﻿Menu est├í no padr├úo correto. A migra├º├úo da Fase 8 est├í completa. Aqui est├í o resumo do que foi feito:
+
+**Fase 8 - Consolida├º├úo Final:**
+
+Adicionados 5 m├®todos ao `Formsigrefcd.prg`:
+
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö habilita/desabilita os campos de filtro (empresa, datas); respeita a l├│gica do `AtualizarEstadoDsEmpresa()` para o campo de descri├º├úo.
+- **`CarregarLista()`** ÔÇö stub de compatibilidade com o pipeline CRUD; retorna `.T.` sem a├º├úo (forms REPORT n├úo t├¬m grade de lista).
+- **`AjustarBotoesPorModo()`** ÔÇö stub de compatibilidade; forms REPORT n├úo t├¬m modos de edi├º├úo, os bot├Áes ficam sempre habilitados.
+- **`FormParaBO()`** ÔÇö alias de `FormParaRelatorio()` para satisfazer contratos gen├®ricos do pipeline.
+- **`BOParaForm()`** ÔÇö no-op; em forms REPORT os dados fluem apenas no sentido FormÔåÆBOÔåÆFRX.
+
+Tudo j├í estava integrado das fases anteriores: `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `LimparCampos`, entrada no menu (BAR 119 de `popRelatorios`) e `AbrirFormsigrefcd()` no padr├úo can├┤nico. O arquivo final tem 947 linhas e est├í funcional.

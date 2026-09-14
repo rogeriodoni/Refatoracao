@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. A Fase 3/8 foi criada com sucesso.
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigPrGlx.prg`** criado com:
+
+- **`DEFINE CLASS FormSigPrGlx AS FormBase`** ÔÇö propriedades do form (800├ù600, TitleBar=0, WindowType=1, DataSession=2, etc.) e todas as `this_*` necess├írias
+- **`Init()`** ÔÇö recebe 7 par├ómetros do form pai; compartilha datasession via `THIS.DataSessionId = par_oParentForm.DataSessionId` para acessar os cursores `TmpFinalg`/`TmpFinal`/etc.; define caption din├ómico (Pr├®via da Globaliza├º├úo / Pr├®via da Reserva Autom├ítica); chama `DODEFAULT()`
+- **`InicializarForm()`** ÔÇö cria `SigPrGlxBO`, repassa flags ao BO, chama `ConfigurarPageFrame()` + `ConfigurarCabecalho()` + `ConfigurarAguarde()`, ativa o PageFrame
+- **`ConfigurarPageFrame()`** ÔÇö PageFrame com 6 pages (Top=-27, Width=804, Height=635, Tabs=.F.), pages com `new_background.jpg` e captions corretos; Pages 3-6 com `Enabled=.F.`
+- **`ConfigurarCabecalho()`** ÔÇö `cnt_4c_Cabecalho` na Page1 (Top=-1, BackColor=RGB(100,100,100)) com `lbl_4c_Sombra` (ForeColor preto) e `lbl_4c_Titulo` (ForeColor branco), AutoSize=.F.
+- **`ConfigurarAguarde()`** ÔÇö `cnt_4c_Aguarde` no form raiz (Visible=.F.) com labels "Aguarde...", "Processando Dados......" e mensagem din├ómica
+- **`MostrarAguarde()`** / **`OcultarAguarde()`** ÔÇö helpers para toggle do container de espera
+- **`TornarControlesVisiveis()`** ÔÇö recurs├úo completa com filtro para `cnt_4c_Aguarde` (n├úo altera Visible, mas recursiona filhos)
+- **`Destroy()`** ÔÇö limpa BO e refer├¬ncia ao form pai

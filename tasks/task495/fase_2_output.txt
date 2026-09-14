@@ -1,0 +1,16 @@
+﻿`PaiBO.prg` est├í completo. Fase 2/8 conclu├¡da.
+
+**Resumo do que foi adicionado:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `ObterChavePrimaria()` | PUBLIC | Retorna `this_cCodigos` para auditoria |
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT com ORDER BY Codigos, filtro opcional |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | SELECT por PK, seta `this_lNovoRegistro = .F.` |
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | `SELECT (alias)` antes de acessar campos ÔÇö padr├úo correto |
+| `ValidarDados()` | PUBLIC | Valida Codigos e Descs obrigat├│rios (mensagens com CHR()) |
+| `VerificarDuplicidade()` | PUBLIC | COUNT(*) para checar c├│digo duplicado antes do INSERT |
+| `GerarIdChaves()` | PROTECTED | `SYS(2015)+SYS(2015)` ÔÇö substitui o `fUniqueIds()` legado |
+| `Inserir()` | PROTECTED | INSERT com gera├º├úo autom├ítica de `cIdChaves` + auditoria |
+| `Atualizar()` | PROTECTED | UPDATE apenas `Descs` (PK e cIdChaves imut├íveis) + auditoria |
+| `ExecutarExclusao()` | PROTECTED | DELETE por PK + auditoria |

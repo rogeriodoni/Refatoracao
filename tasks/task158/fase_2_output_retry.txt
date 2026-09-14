@@ -1,0 +1,12 @@
+﻿Phase 2 is complete. `SigPrCccBO.prg` (1016 lines) now has all required CRUD methods:
+
+- **SigOpClU field properties** (this_cCidchaves, this_cCpros, this_dDatas, this_cDopes, this_cEmpdopnums, this_cEmps, this_cIclis, this_cMoedas, this_nNumes, this_nValors, this_nQtds) ÔÇö mapped from `docs/schema.sql`
+- **ObterChavePrimaria()** ÔÇö returns `this_cCidchaves` (real key), gera nova via SYS(2015)+SYS(2015) se vazia
+- **LimparDados()** ÔÇö reseta todas as propriedades SigOpClU
+- **CarregarDoCursor(par_cAliasCursor)** ÔÇö SELECT (alias) + acesso direto aos 11 campos com TratarNulo
+- **ValidarDados()** ÔÇö valida Emps/Dopes/Numes obrigat├│rios; auto-gera EmpDopNums
+- **Inserir()** ÔÇö INSERT completo em SigOpClU com todas as 11 colunas + chamada `RegistrarAuditoria("INSERT")`
+- **Atualizar()** ÔÇö UPDATE por cidchaves + `RegistrarAuditoria("UPDATE")`
+- **ExecutarExclusao()** ÔÇö DELETE por cidchaves + `RegistrarAuditoria("DELETE")`
+
+Todos os m├®todos operacionais originais (Processar/ProcessarContaCorrente/Estoque/Custo/UltimaCompra/InicializarConexao) foram preservados. Arquivo termina corretamente com `ENDDEFINE` na linha 1016.

@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormCco.prg`:
+
+1. **`CarregarLista`** ÔÇö quando `gb_4c_ValidandoUI=.T.`, agora cria `cursor_4c_Dados` vazio com a estrutura correta antes de retornar
+2. **`AlternarPagina`** ÔÇö removido `PROTECTED` ÔåÆ passa a ser PUBLIC, acess├¡vel pelo teste
+3. **`AjustarBotoesPorModo`** ÔÇö removido `PROTECTED` ÔåÆ idem
+
+O `CcoBO.prg` n├úo precisa de altera├º├úo ÔÇö o erro "Connection handle is invalid" em `CompletarMotivosFS` ├® esperado em ambiente sem banco e est├í dentro de CATCH (n├úo bloqueia os testes).

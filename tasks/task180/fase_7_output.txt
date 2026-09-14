@@ -1,0 +1,11 @@
+﻿O formul├írio SIGPREST ├® um dialog utilit├írio OPERACIONAL sem bot├Áes CRUD. N├úo h├í `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick` nem `BtnExcluirClick` no original ÔÇö o SCX tem apenas `OK.Click` (Gerar) e `Cancela.Click` (Encerrar), ambos j├í implementados nas fases anteriores como `CmdOKClick()` e `CmdCancelaClick()`.
+
+O arquivo `FormSIGPREST.prg` est├í **completo**. A Fase 7 foi gerada pelo pipeline multi-fase que pressup├Áe formul├írios CRUD; para este formul├írio OPERACIONAL ela ├® N/A.
+
+**Resumo do estado atual:**
+- `CmdOKClick()` ÔÇö implementa toda a l├│gica de `SIGPREST.OK.Click` (GerarEstrutura + GerarIndices + CarregarLogo)
+- `CmdCancelaClick()` ÔÇö implementa `SIGPREST.Cancela.Click` (CarregarLogo + Release)
+- `TrataAtalhoTeclado()` ÔÇö F5 dispara Gerar, ESC dispara Encerrar
+- `AlternarPagina()` ÔÇö state machine PRONTO/PROCESSANDO/CONCLU├ìDO
+
+N├úo h├í nenhuma funcionalidade pendente do original a adicionar. A Fase 8 (integra├º├úo: config.prg + menu.prg) pode prosseguir.

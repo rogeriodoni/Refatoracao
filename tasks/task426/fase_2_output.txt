@@ -1,0 +1,14 @@
+﻿Fase 2 conclu├¡da. O `FpmBO.prg` agora tem os seguintes m├®todos CRUD completos:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `BuscarPorCondicao(par_cFpags)` | Carrega `SigOpFpi` para `cursor_4c_FpagI` via SQLEXEC + APPEND FROM DBF |
+| `InserirLinha(par_cFpags)` | Insere linha em branco no cursor local (fpags setado, demais = 0/"") |
+| `ExcluirLinha()` | Marca linha corrente como `DELETED` no cursor local |
+| `ExisteNparcs(par_nNparcs)` | SEEK no ├¡ndice `fpags` para valida├º├úo inline da grade |
+| `ValidarConsistencia()` | SELECT VFP local com HAVING SUM(1) > 1 para detectar nparcs duplicado |
+| `SalvarAlteracoes(par_cFpags)` | DELETE + INSERT loop no SQL Server com `NEWID()` como cidchaves |
+| `CarregarDoCursor(par_cAlias)` | Mapeamento padr├úo cursor ÔåÆ propriedades BO |
+| `ValidarDados()` | Retorna .T. (valida├º├úo feita inline na grade pelo form) |
+
+Pontos cr├¡ticos respeitados: nenhum `RETURN` dentro de TRY/CATCH, guards de pr├®-condi├º├úo fora do TRY, `STR(nparcs, 2)` ├® v├ílido pois `nparcs` ├® num├®rico (N(2,0)), e `cidchaves char(20)` gerado via `LEFT(REPLACE(CAST(NEWID() AS varchar(36)), '-', ''), 20)`.

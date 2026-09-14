@@ -1,0 +1,3789 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRCNB.SCX
+* Data/Hora: 15/07/2026 05:18:11
+* Total de registros: 56
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRCNB
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: pgfprincipal
+  Parent: SIGPRCNB
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: cntSombra
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cmdTestaPos
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Get_Datai
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dataf
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_empresa
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say6
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdope
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro.grdope.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro.grdope.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro.grdope.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro.grdope.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: label
+  BaseClass: label
+
+Objeto: optProcessados
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_car_conta
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_car_conta
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say12
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_titban
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Commandgroup2
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: optPeriodo
+  Parent: SIGPRCNB.pgfprincipal.pgfiltro
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdope
+  Parent: SIGPRCNB.pgfprincipal.pgdados
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCNB.pgfprincipal.pgdados.grdope.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdTestaPos
+  Parent: SIGPRCNB.pgfprincipal.pgdados
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Commandgroup1
+  Parent: SIGPRCNB.pgfprincipal.pgdados
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Commandgroup2
+  Parent: SIGPRCNB.pgfprincipal.pgdados
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Say12
+  Parent: SIGPRCNB.pgfprincipal.pgdados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: spndias
+  Parent: SIGPRCNB.pgfprincipal.pgdados
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: Say1
+  Parent: SIGPRCNB.pgfprincipal.pgdados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRCNB.pgfprincipal.pgdados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Botao1
+  Parent: SIGPRCNB.pgfprincipal.pgdados
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Caption = "Geração de Arquivos CNAB"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowState = 0
+  Themes = .F.
+  podatamgr = .F.
+  Name = "SIGPRCNB"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  Top = -29
+  Width = 1003
+  Height = 635
+  TabIndex = 1
+  Name = "pgfprincipal"
+  Page1.Caption = "Page1"
+  Page1.Picture = ..\framework\imagens\fundo_cadastro.jpg
+  Page1.Name = "pgfiltro"
+  Page2.Caption = "Page2"
+  Page2.Picture = ..\framework\imagens\fundo_cadastro.jpg
+  Page2.Name = "pgdados"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.cntSombra
+------------------------------------------------------------
+  Top = 1
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.cmdTestaPos
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 844
+  SpecialEffect = 1
+  Top = -1
+  Width = 160
+  TabIndex = 18
+  BackColor = 240,240,240
+  BorderColor = 0,0,0
+  Themes = .F.
+  Name = "cmdTestaPos"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_processar_60.jpg
+  Command1.Caption = "\<Processar"
+  Command1.MousePointer = 15
+  Command1.ToolTipText = ""
+  Command1.SpecialEffect = 0
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnProcessar"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ToolTipText = "[ESC] Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnsair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Get_Datai
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 1
+  Value = {}
+  Left = 349
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 148
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .T.
+  Name = "Get_Datai"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Get_Dataf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 1
+  Value = {}
+  Left = 457
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 148
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .T.
+  Name = "Get_Dataf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.get_ds_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 383
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 120
+  Width = 290
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 4
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.get_cd_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 349
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = ""
+  Top = 120
+  Width = 31
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Themes = .T.
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Say6
+------------------------------------------------------------
+  Caption = "até"
+  Left = 434
+  Top = 151
+  TabIndex = 8
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.grdope
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  GridLines = 3
+  Height = 344
+  Left = 350
+  Panel = 1
+  ScrollBars = 2
+  SplitBar = .F.
+  TabIndex = 17
+  Top = 232
+  Width = 202
+  GridLineColor = 238,238,238
+  Themes = .F.
+  Name = "grdope"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 18
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 150
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.grdope.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.grdope.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 13
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.grdope.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.grdope.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Operação :"
+  Left = 291
+  Top = 234
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Oper\<ações :"
+  Height = 15
+  Left = 279
+  Top = 96
+  Width = 68
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.optProcessados
+------------------------------------------------------------
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 19
+  Left = 344
+  Top = 95
+  Width = 235
+  TabIndex = 2
+  Name = "optProcessados"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Não Processadas"
+  Option1.Left = 5
+  Option1.Top = 2
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Já Processadas"
+  Option2.Left = 126
+  Option2.Top = 2
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Empresa :"
+  Left = 297
+  Top = 123
+  Width = 50
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Período :"
+  Left = 302
+  Top = 151
+  Width = 45
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.get_ds_car_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 430
+  MaxLength = 40
+  ReadOnly = .F.
+  SpecialEffect = 1
+  TabIndex = 13
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 176
+  Width = 290
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 12
+  Name = "get_ds_car_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Banco :"
+  Left = 309
+  Top = 180
+  Width = 38
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.get_cd_car_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 349
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 176
+  Width = 79
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 15
+  Name = "get_cd_car_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Say12
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Título Banco : "
+  Height = 15
+  Left = 280
+  Top = 206
+  Width = 70
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 34
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Get_titban
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 348
+  MaxLength = 12
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 203
+  Width = 94
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 35
+  Name = "Get_titban"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.Commandgroup2
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 91
+  Left = 563
+  SpecialEffect = 1
+  Top = 315
+  Width = 50
+  TabIndex = 19
+  BackColor = 240,240,240
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Commandgroup2"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 7
+  Command1.Picture = ..\framework\imagens\geral_adicao_26.jpg
+  Command1.Caption = ""
+  Command1.ToolTipText = "Marcar tudo"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnmarca"
+  Command2.Top = 46
+  Command2.Left = 5
+  Command2.Height = 40
+  Command2.Width = 40
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Command2.Caption = ""
+  Command2.ToolTipText = "Desmarcar tudo"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btndesmarca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgfiltro.optPeriodo
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  Comment = "2"
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 544
+  SpecialEffect = 0
+  Top = 146
+  Width = 168
+  TabIndex = 10
+  ZOrderSet = 28
+  Name = "optPeriodo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Vencimento"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 73
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Emissão"
+  Option2.Value = 0
+  Option2.Left = 96
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope
+------------------------------------------------------------
+  ColumnCount = 8
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 401
+  Left = 7
+  Panel = 1
+  RecordMark = .F.
+  ScrollBars = 2
+  SplitBar = .F.
+  TabIndex = 1
+  Top = 134
+  Width = 981
+  GridLineColor = 238,238,238
+  Themes = .F.
+  Name = "grdope"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 16
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.ColumnOrder = 3
+  Column2.Width = 150
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.ColumnOrder = 4
+  Column3.Width = 52
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.ColumnOrder = 5
+  Column4.Width = 400
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.ColumnOrder = 6
+  Column5.Width = 72
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.ColumnOrder = 7
+  Column6.Width = 87
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.ColumnOrder = 8
+  Column7.Width = 100
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column7"
+  Column8.FontName = "Tahoma"
+  Column8.ColumnOrder = 2
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Name = "Column8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 13
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cliente"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vencimento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Forma Pagto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Título"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.grdope.Column8.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.cmdTestaPos
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 917
+  SpecialEffect = 1
+  Top = -3
+  Width = 85
+  TabIndex = 2
+  BackColor = 240,240,240
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdTestaPos"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ToolTipText = "[ESC] Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnsair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 692
+  SpecialEffect = 1
+  Top = -3
+  Width = 235
+  TabIndex = 3
+  BackColor = 240,240,240
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_disco2_60.jpg
+  Command1.Caption = "\<Gerar CNAB"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btncnab"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\geral_video_60.jpg
+  Command2.Caption = "\<Relatório"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnrelatorio"
+  Command3.Top = 5
+  Command3.Left = 155
+  Command3.Height = 75
+  Command3.Width = 75
+  Command3.FontBold = .T.
+  Command3.FontItalic = .T.
+  Command3.FontName = "Comic Sans MS"
+  Command3.FontSize = 8
+  Command3.Picture = ..\framework\imagens\geral_impressora_60.jpg
+  Command3.Caption = "\<Boleto"
+  Command3.ForeColor = 90,90,90
+  Command3.BackColor = 255,255,255
+  Command3.Name = "btnBoleto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.Commandgroup2
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 50
+  Left = 7
+  SpecialEffect = 1
+  Top = 543
+  Width = 92
+  TabIndex = 4
+  BackColor = 240,240,240
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "Commandgroup2"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 7
+  Command1.Picture = ..\framework\imagens\geral_adicao_26.jpg
+  Command1.Caption = ""
+  Command1.ToolTipText = "Marcar tudo"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnmarca"
+  Command2.Top = 5
+  Command2.Left = 45
+  Command2.Height = 40
+  Command2.Width = 40
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Command2.Caption = ""
+  Command2.ToolTipText = "Desmarcar tudo"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btndesmarca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.Say12
+------------------------------------------------------------
+  Caption = "Protestar após :"
+  Height = 15
+  Left = 370
+  Top = 103
+  Width = 80
+  TabIndex = 5
+  ZOrderSet = 34
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.spndias
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 24
+  KeyboardHighValue = 99
+  KeyboardLowValue = 0
+  Left = 451
+  SpecialEffect = 1
+  SpinnerHighValue =  99.00
+  SpinnerLowValue =   0.00
+  TabIndex = 7
+  Top = 98
+  Width = 45
+  Value = 5
+  Name = "spndias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.Say1
+------------------------------------------------------------
+  Caption = "dias"
+  Height = 15
+  Left = 501
+  Top = 103
+  Width = 21
+  TabIndex = 6
+  ZOrderSet = 34
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.Say2
+------------------------------------------------------------
+  Caption = "Endereços com tamanho maior que 40 caracteres"
+  Height = 15
+  Left = 390
+  Top = 15
+  Width = 238
+  TabIndex = 6
+  ForeColor = 255,0,0
+  ZOrderSet = 34
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCNB.pgfprincipal.pgdados.Botao1
+------------------------------------------------------------
+  BorderStyle = 1
+  Height = 16
+  Left = 370
+  SpecialEffect = 1
+  Top = 14
+  Width = 17
+  BackColor = 255,0,0
+  BorderColor = 255,0,0
+  Themes = .F.
+  Name = "Botao1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Verdana, 0, 7, 5, 12, 10, 19, 2, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRCNB
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+lcconta = Thisform.pgfprincipal.pgfiltro.get_cd_car_conta.Value
+lcemp = Thisform.pgfprincipal.pgfiltro.get_Cd_Empresa.Value
+ldti = Thisform.pgfprincipal.pgfiltro.get_Datai.Value
+ldtf = Thisform.pgfprincipal.pgfiltro.get_Dataf.Value
+llNPr = (Thisform.pgfprincipal.pgfiltro.optProcessados.Value = 1) && 1-Não Processados; 2-Já Processados
+lnPer = thisform.pgfPrincipal.pgfiltro.optPeriodo.Value
+
+lcope = [(]
+
+Select crSigCdOpe
+Scan
+	If crSigCdOpe.marca
+		lcope = lcope + Iif(lcope==[(],['],[,']) + crSigCdOpe.dopes + [']
+	Endif
+Endscan
+lcope = lcope + [) ]
+
+Thisform.pgfprincipal.pgDados.grdope.RecordSource = []
+Thisform.pgfprincipal.pgDados.grdope.Refresh()
+
+ltru = .T.
+lcquery = [select ?ltru as marca, e.titulos, a.dopes, a.numes, d.rclis, a.vencs, b.fpags, a.valos, a.datas, a.vpags, ] +;
+	[d.iclis, d.endes, d.cidas, d.estas, d.nums, d.compls, d.bairs, d.ceps, d.cpfs, a.emps, a.empdopnums, a.nopers, d.Razaos, ] +;
+	[d.endcobs, d.cepcobs, d.estcobs, d.baicobs, d.cidcobs, ] + ;
+	[Case When d.EndCobs <> '' And Len(rtrim(d.EndCobs)) > 40 then 1 else ] + ;
+	[Case When d.Endes <> '' And Len(rtrim(d.Endes) + ' ' + rtrim(d.Nums) + ' ' + rtrim(d.compls)) > 40 then 1 else 0 end end as EndErro ] +;
+	[from SigMvPar a inner join SigOpFp b on a.fpags = b.fpags ] +;
+	[left join SigMvCab c on a.empdopnums = c.empdopnums ] +;
+	[left join SigCdCli d on c.contads = d.iclis ] +;
+	[left join SigMvCcr e on a.empdopnums = e.empdopnums and a.nopers = e.nopers ] +;
+	[where b.infos = 'B' and a.vpags = 0 and ] +;
+	Iif(lnPer=1, [a.Vencs], [e.DtEmis]) + [ Between ?ldti and ?ldtf and ] +;
+	[e.opers = 'C' and ] +;
+	[c.emps = ?lcemp and a.dopes in ] + lcope + [ and a.EmpDopNums+e.titulos ] +;
+	Iif(llNPr, [Not ], []) + ;
+	[In (Select e.EmpDopNums+substring(e.dopeds,1,10) ] + ;
+	[From SigPcOol e ] + ;
+	[Where e.Tipos = 'SIGPRCNB') ] + ;
+	[order by a.dopes, a.numes, a.parcs]
+
+Thisform.podatamgr.sqlexecute(lcquery,[crFiltro])
+Select crFiltro
+Go top
+If Reccount() = 0
+	Messagebox('Nenhum dado foi encontrado',64,'Aviso')
+	Return .F.
+Endif
+
+replace all Marca with .f. for EndErro = 1 && Desmarca todos os títulos que o endereço está com problemas
+Go top 
+
+Thisform.pgfprincipal.pgDados.grdope.RecordSource = [crFiltro]
+*!*	Thisform.pgfprincipal.pgDados.grdope.SetAll('DynamicForeColor', 'Iif(!Empty(crFiltro.EndCobs) And Len(Alltrim(crFiltro.EndCobs)) > 40, RGB(255,0,0), ;
+*!*											Iif(!Empty(crFiltro.Endes) And Len(Alltrim(crFiltro.Endes) + Alltrim(crFiltro.Nums)) > 40, RGB(255,0,0),RGB(0,0,0)))', 'Column')
+Thisform.pgfprincipal.pgDados.grdope.SetAll('DynamicForeColor', 'Iif(crFiltro.EndErro = 1, RGB(255,0,0), RGB(0,0,0))', 'Column')
+
+Thisform.pgfprincipal.pgDados.grdope.Refresh()
+
+Thisform.pgfprincipal.pgfiltro.Enabled = .F.
+Thisform.pgfprincipal.pgDados.Enabled = .T.
+Thisform.pgfprincipal.pgDados.commandgroup1.btnBoleto.Enabled = !llNPr 
+Thisform.pgfprincipal.ActivePage = 2
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE geracnab
+------------------------------------------------------------
+PROCEDURE geracnab
+Lparameters pTipo
+
+lcconta = Thisform.pgfprincipal.pgfiltro.get_cd_car_conta.Value
+lcemp = Thisform.pgfprincipal.pgfiltro.get_Cd_Empresa.Value
+ldti = Thisform.pgfprincipal.pgfiltro.get_Datai.Value
+ldtf = Thisform.pgfprincipal.pgfiltro.get_Dataf.Value
+
+* Apanhando o Nome da Empresa
+Thisform.poDataMgr.CursorQuery('SigCdEmp', 'crEmpresa', 'Cemps', lcemp, 'RazSocs, Cgcs, Tel1s, Ceps, Endes, Numeros, Bairs, Cidas, Estas, Compls ')
+If Eof('crEmpresa') Or Empty(crEmpresa.RazSocs) Or Empty(crEmpresa.Cgcs)
+	=Messagebox('Não Foi Encontrada a Razão Social e/ou o CNPJ da Empresa [' + lcemp + ']' + Chr(13) + ;
+		'Complete os Dados no Cadastro de Empresas e Tente Nomamente!!!', 0+48, 'Atenção!!!')
+	Thisform.cntEscolha.cmbBancos.SetFocus
+	Return 0
+Endif
+
+Go Top In crFiltro
+Thisform.pgfprincipal.pgdados.grdope.Refresh
+Go Bottom In crFiltro
+Thisform.pgfprincipal.pgdados.grdope.Refresh
+
+If pTipo = [A]
+	Select crFiltro
+	Count For marca To lncont
+	If lncont = 0
+		Messagebox('Nenhum registro foi selecionado',64,'Aviso')
+		Return .F.
+	Endif
+
+	lctit = Thisform.pgfprincipal.pgfiltro.get_titban.Value
+*!*		latua = .F.
+	If !Empty(lctit)
+*!*			latua = (Messagebox([Confirma alteração do títulos para "] + lctit + [" ?],4+32,'Aviso') = 6)
+		If Messagebox([Confirma geração do arquivo de remessa?],4+32,'Aviso') = 7
+			Return .f.
+		Endif
+	Else
+		If Messagebox([O campo "Título Banco" não foi preenchido. Continuar?],4+32,'Aviso') = 7
+			Return .F.
+		Endif
+	Endif
+
+* Apanhando os Dados do Convênio
+	Thisform.poDataMgr.CursorQuery('SigCdCli', 'crBancos', 'IClis', lcconta, 'Grupos')
+
+	lcQuery = [Select * ] + ;
+				[From SigCdCeb ] + ;
+			   [Where GruContas = '] + crBancos.Grupos + lcconta + [' And ] + ;
+					 [Not NAgencias = Space(6) And ] + ;
+					 [Not Convenios = Space(9) ] + ;
+			   [Order By NAgencias, Convenios]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crConvenio') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crConvenio)')
+		Return .F.
+	Endif
+	Go Top In crConvenio
+	If Eof('crConvenio')
+		=Messagebox('Não Foi Encontrado o Número da Agência e/ou o Código do Convênio Para' + Chr(13) + ;
+			'o Banco [' + lcconta + ']!!! Complete os Dados no Cadastro de Contas!!!', ;
+			0+48, 'Atenção!!!')
+		Thisform.pgfprincipal.pgfiltro.get_cd_car_conta.SetFocus()
+		Return .F.
+	Endif
+	ThisForm.pgfPrincipal.pgdados.spndias.Value = Iif(Empty(crConvenio.DiasProts), 5, crConvenio.DiasProts)
+	
+*** Tiago - 12/07/2011
+	Do Case
+		Case Alltrim(crConvenio.nbancos) = [001] && Banco do Brasil Convenios
+			Thisform.cnabBrasil()
+			
+		Case Alltrim(crConvenio.nbancos) = [341] && Itau Convenios
+			lcarq = Getfile('txt','Arquivo','OK',0,'Arquivo CNAB')
+			If Empty(lcarq)
+				Return .F.
+			Endif
+			Thisform.CnabItau()
+			
+		Case Alltrim(crConvenio.nbancos) = [237] && Bradesco Convenios
+			Thisform.CnabBradesco()
+			
+		Case Inlist(Alltrim(crConvenio.nbancos),[033],[353]) && Santader Convenios
+			&&thisform.CnabSantander()	
+			thisform.CnabSantander240()	
+				
+	Endcase
+Else
+	* Apanhando os Dados do Convênio
+	ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crBancos', 'IClis', lcconta, 'Grupos')
+
+	lcQuery = [Select * ] + ;
+			    [From SigCdCeb ] + ;
+			   [Where GruContas = '] + crBancos.Grupos + lcconta + [' And ] + ;
+			   		 [Not NAgencias = Space(6) And ] + ;
+			   		 [Not Convenios = Space(9) ] + ;
+			   [Order By NAgencias, Convenios]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crConvenio') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crConvenio)')
+		Return .f.
+	EndIf
+
+	Create Cursor crcabecalho(titulo c(100), periodo c(100), empresa c(100))
+	lcprot = Padl(Iif(Thisform.pgfprincipal.pgdados.spndias.Value=0, 5, Thisform.pgfprincipal.pgdados.spndias.Value), 2, [0])
+	lcdata = [Período: ] + Dtoc(ldti) + [ até ] + Dtoc(ldtf) + [ - Protesto em ] + lcprot + [ dias]
+
+	Insert Into crcabecalho(titulo,periodo,empresa) Values ('Dados para geração do CNAB',lcdata,lcemp + [ - ] + crEmpresa.RazSocs)
+
+	Select *, Space(11) as SeqNums From crFiltro Where marca Into Cursor crFiltro2
+
+	Select crFiltro2
+	Go Top
+
+	If pTipo = [V]
+		Report Form sigrecnb Preview
+	Endif
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cnabbradesco
+------------------------------------------------------------
+PROCEDURE cnabbradesco
+Local lcTit, lcBcn, lcCnv, lcAge, lcBco, lcRaz, lcCgc, lcTpC, lcRbc, lcDat, lcEnv, lnMor, ;
+	  lcPri, lcPrt, lcCdC, lcDig, lcArq, lcStr, lnSeq, lcSeq, lcVct, lcVal, lcMor, ;
+	  lcCpf, lcNom, lcEnd, lcCep, lcNtt, lcChr, llOks, llAtu, lcBol, lcNossoNum, lcDV
+
+lcTit = Padr(thisform.pgfprincipal.pgfiltro.get_titban.value,12)
+lcBcn = Padl(Alltrim(crConvenio.nbancos),3,'0') && Número banco
+lcCnv = [009] && Padl(Alltrim(crConvenio.Convenios), 3, '0') && Código do Convênio
+lcAge = Padl(Alltrim(crConvenio.NAgencias), 5, '0') && Agência do Cliente
+lcBco = Padl(Alltrim(Chrtran(crConvenio.contas,'.-','')),7,'0') + Padl(crConvenio.DigiAgen,1,[0]) && Banco + DAC
+lcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) 		&& Razão Social do Empresa
+lcCgc = Padl(Strtran(Strtran(Strtran(crEmpresa.Cgcs,  [/], []), [.], []), [-], []), 14, [0])
+lcTpC = Iif(Len(Alltrim(Chrtran(crEmpresa.Cgcs,[/.-],[])))=11,'01','02')
+lcRbc = Padr(Alltrim(crConvenio.bancos), 15) 		&& Razão Social do Banco
+lcDat = Substr(Dtoc(Date()), 1, 2) + Substr(Dtoc(Date()), 4, 2) + Substr(Dtoc(Date()), 9, 2)
+lcEnv = Padl(fGerUniqueKey([BRADESCOENV]), 7, [0])
+lnMor = Iif(Empty(crConvenio.Moras), 0.17, crConvenio.Moras) && Índice de Mora 
+lcPri = Padl(Iif(Empty(Alltrim(crConvenio.Instrus)), [00], crConvenio.Instrus), 2, [0]) && Primeira Instrução
+lcPrt = Padl(Iif(ThisForm.pgfPrincipal.pgDados.spnDias.Value = 0, 5, ThisForm.pgfPrincipal.pgDados.spnDias.Value), 2, [0]) && Dias Para Protesto
+lcPrt = Iif(lcPri = [00], [00], Padl(Alltrim(lcPrt), 2, [0])) && Dias Para Protesto
+lcCdC = Padl(Alltrim(crConvenio.Convenios),20, [0]) && Código do Convênio do Cliente
+lcDig = Iif(Val(Substr(lcEnv,6,2))=0,Transform(Val(Substr(lcEnv,6,2)) + 1,'@L 99'),Transform(Val(Substr(lcEnv,6,2)),'@L 99'))
+lcArq = [CB] + Substr(Dtoc(Date()), 1, 2) + Substr(Dtoc(Date()), 4, 2) + lcDig + [.REM] 
+lcChr = Chr(13) + Chr(10)
+lcCar = Padl(Alltrim(crConvenio.tpctbols),2,'0')
+lcBol = IIF(crConvenio.bcoimprime=1, [1], [2])
+
+* Gerando o Registro de Cabeçalho
+lcH001a001 = [0] 				&& Identificação do Registro Header
+lcH002a002 = [1] 				&& Identificação do Arquivo Remessa
+lcH003a009 = [REMESSA] 			&& Identificação do Arquivo (Extenso)
+lcH010a011 = [01]				&& Identificação do Tipo de Serviço
+lcH012a026 = [COBRANCA       ] 	&& Identificação do Tipo de Serviço (Extenso)
+lcH027a046 = lcCdC				&& Código do Cliente Space(20) '4012415'
+lcH047a076 = lcRaz 				&& Nome do Cliente
+lcH077a079 = lcBcn	 			&& Número do Banco na Câmara de Compensação [237] lcCnv 			
+lcH080a094 = lcRbc				&& Nome do Banco
+lcH095a100 = lcdat				&& Data Geração
+lcH101a108 = Space(8) 			&& Filler
+lcH109a110 = [MX]	 			&& Identificação do Sistema
+lcH111a117 = lcEnv  			&& Número Sequêncial de remessa
+lcH118a394 = Space(277) 		&& Filler
+lcH395a400 = [000001] 			&& Número de Sequência do Registro
+
+lcStr = lcH001a001 + lcH002a002 + lcH003a009 + lcH010a011 + lcH012a026 + lcH027a046 +;
+		lcH047a076 + lcH077a079 + lcH080a094 + lcH095a100 + lcH101a108 + lcH109a110 +;
+		lcH111a117 + lcH118a394 + lcH395a400 + lcChr
+
+lcStr = fLimpaTexto(lcStr)
+=StrToFile(lcStr, lcArq, 0)
+
+Select *, Space(11) as SeqNums  From crfiltro Where marca Into Cursor crFiltro2 ReadWrite
+
+** Gerando registro de detalhes
+lnSeq = 2
+Select crFiltro2
+Scan 
+	*** Mena - 28/01/2019 - cria nosso numero para Bradesco
+	lcSeqNum = fGerUniqueKey([BRNOSSONUM])
+	replace SeqNums with Padl(lcSeqNum,11,[0]) in crFiltro2
+
+	lcSeq = Transform(lnSeq,'@L 999999')
+	lcVct = Substr(Dtoc(crFiltro2.vencs), 1, 2) + Substr(Dtoc(crFiltro2.vencs), 4, 2) + Substr(Dtoc(crFiltro2.vencs), 9, 2)
+	lcVal = Padl(Alltrim(Chrtran(STR(crFiltro2.valos,11,2),',.','')),13,'0')
+	lcMor = Padl(Alltrim(Chrtran(STR(Round((crFiltro2.valos * lnMor) / 100,2),11,2),',.','')),13,'0') && 2% multa , .17 5% mora mensal
+	lcCpf = Padl(Alltrim(Chrtran(crFiltro2.cpfs,[/.-,],[])),14,[0])
+	lcTpC = Iif(Len(Alltrim(Chrtran(crFiltro2.cpfs,[/.-],[])))=11,'01','02')
+	lcNom = Padr(Iif(Empty(crFiltro2.Razaos), crFiltro2.rclis, crFiltro2.Razaos),40)
+	lcNom = Padr(Chrtran(lcNom,[/.-,],[]),40)
+	If Empty(crFiltro2.EndCobs) Or Empty(crFiltro2.CepCobs)
+		lcEnd = Padr(Alltrim(crFiltro2.Endes)+[ ]+crFiltro2.Nums,40)
+		lcCep = Padl(Alltrim(Chrtran(crFiltro2.Ceps,[.-],[])),8,[0])
+	Else
+		lcEnd = Padr(ALLTRIM(crFiltro2.EndCobs),40)
+		lcCep = Padl(Alltrim(CHRTRAN(crFiltro2.CepCobs,[.-],[])),8,[0])
+	EndIf
+	lcEnd = Padr(Chrtran(lcEnd,[/.-,],[]),40)
+	lcNtt = Padl(Strtran(crFiltro2.Titulos, [/], []),8,[0])
+
+	*** Mena - 02/08/2019 - incluir nosso numero ***
+	lcNossoNum = [00000000000]
+	lcDV = [0]
+	IF lcBol = [2]
+		lcNossoNum = Padl(crFiltro2.SeqNums ,11,[0])
+		lcDV = fCalcMod11B7(lcCar+lcNossoNum)
+	ENDIF
+	
+	lcT002a006 = Space(5) 			&& Agência de débito (opcional)
+	lcT007a007 = Space(1) 			&& Dígito da Agência de débito (opcional)
+	lcT008a012 = Space(5) 			&& Razão da conta corrente (opcional)
+	lcT013a019 = Space(7) 			&& Conta corrente (opcional)
+	lcT020a020 = Space(1) 			&& Dígito da Conta corrente (opcional)
+	lcT021a037 = [0] + lcCnv + lcAge + lcBco  && Identificação da Empresa cedente - 21 a 21 - Zero; 22 a 24 - código da carteira; 25 a 29 - código da Agência Cedente, sem o dígito ; 30 a 36 - Conta Corrente; 37 a 37 - dígito da Conta	
+	lcT038a062 = Padr(lcNtt,25) 	&& Nº Controle do Participante
+	lcT063a065 = [   ] 				&& Código do Banco a ser debitado na Câmara de Compensação [237]
+	lcT066a066 = [2] 				&& Campo de Multa - 2 percentual multa, 0 sem multa
+	lcT067a070 = [0200] 			&& Percentual de multa a ser considerado - 2%
+	lcT071a081 = lcNossoNum  		&& Número Bancário para Cobrança Com e Sem Registro
+	lcT082a082 = lcDV  				&& Digito N/N
+	lcT083a092 = [0000000000] 		&& Desconto Bonificação por dia
+	lcT093a093 = lcBol 				&& Condição para Emissão da Papeleta de Cobrança - 1 = Banco emite e Processa o registro. 2 = Cliente emite e o Banco somente processa o registro
+	lcT094a094 = [ ] 				&& Ident. se emite Boleto para Débito Automático - N= Não registra na cobrança. Diferente de N registra e emite Boleto.
+	lcT095a104 = Space(10) 			&& Identificação da Operação do Banco
+	lcT105a105 = [ ] 				&& Indicador Rateio Crédito (opcional) - R
+	lcT106a106 = [2] 				&& Endereçamento para Aviso do Débito Automático em Conta Corrente (opcional) - 1 = emite aviso, e assume o endereço do Sacado constante do Arquivo-Remessa; 2 = não emite aviso
+	lcT107a108 = [  ] 				&& Brancos
+	lcT109a110 = [01] 				&& Identificação da ocorrência - 01 = Remessa
+	lcT111a120 = Padr(lcNtt,10) 	&& Número do documento
+	lcT121a126 = lcVct 				&& Data do Vencimento do Título
+	lcT127a139 = lcVal 				&& Valor do Título
+	lcT140a142 = [000]				&& Banco Encarregado da Cobrança - Zeros
+	lcT143a147 = [00000]			&& Agência Depositária
+	lcT148a149 = [01]				&& Espécie de Título - 01 = Duplicatas, 04 = Cobrança seriada
+	lcT150a150 = [N]				&& Identificação - Sempre N
+	lcT151a156 = lcDat				&& Data de emissão do título
+	lcT157a158 = lcPri				&& Primeira instrução - 06 = Protesto && não 
+	lcT159a160 = lcPrt				&& Primeira instrução - Número de dias a protestar
+	lcT161a173 = lcMor				&& Valor a ser cobrado por Dia de Atraso [0000000000000]
+	lcT174a179 = [000000] 			&& Data limite para concessão de desconto
+	lcT180a192 = [0000000000000] 	&& Valor do desconto
+	lcT193a205 = [0000000000000] 	&& Valor do IOF
+	lcT206a218 = [0000000000000] 	&& Valor do Abatimento a ser concedido ou cancelado
+	lcT219a220 = lcTpC 				&& Identificação do Tipo de Inscrição do Sacado
+	lcT221a234 = lcCpf 				&& Nº Inscrição do Sacado
+	lcT235a274 = lcNom 				&& Nome do Sacado
+	lcT275a314 = lcEnd 				&& Endereço Completo
+	lcT315a326 = Space(12) 			&& 1ª Mensagem - Livre
+	lcT327a334 = lcCep 				&& CEP
+	lcT335a394 = Space(60) 			&& Sacador/Avalista ou 2ª Mensagem
+	lcT395a400 = lcSeq 				&& Sequencial
+	
+	lcStr = [1] + lcT002a006 + lcT007a007 + lcT008a012 + lcT013a019 + lcT020a020 + lcT021a037 + lcT038a062 + lcT063a065 + lcT066a066 + ;
+				  lcT067a070 + lcT071a081 + lcT082a082 + lcT083a092 + lcT093a093 + lcT094a094 + lcT095a104 + lcT105a105 + lcT106a106 + ;
+				  lcT107a108 + lcT109a110 + lcT111a120 + lcT121a126 + lcT127a139 + lcT140a142 + lcT143a147 + lcT148a149 + lcT150a150 + ;
+				  lcT151a156 + lcT157a158 + lcT159a160 + lcT161a173 + lcT174a179 + lcT180a192 + lcT193a205 + lcT206a218 + lcT219a220 + ;
+				  lcT221a234 + lcT235a274 + lcT275a314 + lcT315a326 + lcT327a334 + lcT335a394 + lcT395a400 + lcChr
+
+	lcStr = fLimpaTexto(lcStr)
+	=StrToFile(lcStr, lcArq, 1)
+
+	Insert Into crSigPcOol (EmpDopNums, Emps, Dopes, Numes, Usuars, Tipos, Processos, Produtos, Datas, cIdChaves, DopeDs,NumeDs ) ;
+					Values (crFiltro2.EmpDopNums, crFiltro2.Emps, crFiltro2.Dopes, crFiltro2.Numes, Usuar, [SIGPRCNB], ;
+							[CNAB], lcStr, Datetime(), fUniqueIds(), crFiltro2.Titulos,lcSeqNum)
+	
+	lnSeq = lnSeq + 1
+EndScan
+
+** Gerando registro de finalização
+lcSeq = Transform(lnSeq, [@L 999999])
+lcStr = [9] + Space(393) + lcSeq + lcChr
+=StrToFile(lcStr, lcArq, 1)
+
+If File(lcArq)
+	llOks = .t.
+	If Not ThisForm.poDataMgr.Update([crSigPcOol])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update)])	
+		llOks = .f.
+	EndIf
+	
+	If llOks
+		Select crFiltro2
+		Scan
+			llAtu = .t.
+			
+			lcQuery = [Select Titulos, TitBans ] + ;
+					    [From SigMvCcr ] + ;
+					   [Where EmpDopNums = '] + crFiltro2.EmpDopNums + [' And ] + ;
+					   		 [Nopers = ] + Alltrim(Str(crFiltro2.Nopers, 12))
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigMvCcr]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvCcr)])
+				Return .f.
+			EndIf
+			Select crSigMvCcr
+			Go Top
+			
+			If Not Empty(crSigMvCcr.TitBans)
+				llAtu = MessageBox([Título "] + crSigMvCcr.Titulos + [" Já Possui Título do Banco Preenchido.] + Chr(13) + ;
+								   [Deseja Sobrescrever o Título?],4+32, [Aviso]) = 6
+			EndIf
+			
+			If llAtu
+				lcQuery = [Update SigMvCcr ] + ;
+							 [Set TitBans = '] + lcTit + [' ] + ;
+						   [Where EmpDopNums = '] + crFiltro2.EmpDopNums + [' And ] + ;
+						    	 [Nopers = ] + Alltrim(Str(crFiltro2.Nopers, 12))
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery) < 1)
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update)])	
+					llOks = .f.				
+				EndIf
+			EndIf
+		EndScan
+	EndIf
+	
+	If llOks
+		If (ThisForm.poDataMgr.Commit() < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+			llOks = .f.				
+		EndIf
+	EndIf		
+	
+	If Not llOks
+		ThisForm.poDataMgr.RollBack()
+	EndIf
+	
+	ThisForm.poDataMgr.Requery([crSigPcOol])
+	
+	=MessageBox([Arquivo "] + Alltrim(lcArq) + [" Gerado Com Sucesso!!!], 64, [Aviso])
+EndIf
+* Fim **************************************************************************************
+
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cnabitau
+------------------------------------------------------------
+PROCEDURE cnabitau
+lctit = Padr(thisform.pgfprincipal.pgfiltro.get_titban.value,12)
+lcCnv = Padl(Alltrim(crConvenio.Convenios), 8, '0') && Código do Convênio
+lcAge = Padl(Alltrim(crConvenio.NAgencias), 4, '0') && Agência do Cliente
+lcbco = PADL(ALLTRIM(CHRTRAN(crConvenio.contas,'.-','')),5,'0') + crConvenio.DigiAgen && Banco + DAC
+lcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) 		&& Razão Social do Empresa
+lcCgc = Padl(Strtran(Strtran(Strtran(crEmpresa.Cgcs,  [/], []), [.], []), [-], []), 14, [0])
+lctpcgc = IIF(LEN(ALLTRIM(CHRTRAN(crEmpresa.Cgcs,[/.-],[])))=11,'01','02')
+lcrazbco = Padr(Alltrim(crConvenio.bancos), 15) 		&& Razão Social do Banco
+lcDat = Substr(Dtoc(Date()), 1, 2) + Substr(Dtoc(Date()), 4, 2) + Substr(Dtoc(Date()), 9, 2)
+lcprot = Iif(thisform.pgfprincipal.pgdados.spndias.Value=0,5,thisform.pgfprincipal.pgdados.spndias.Value)
+lcprot = Padl(Alltrim(Str(lcprot)),2,'0')	
+*!*		lcEnv = Padl(fGerUniqueKey([BANKBOSTON] + Dtos(Date()) + [ENV]), 6, [0])
+
+* Gerando o Registro de Cabeçalho
+lcH001a001 = [0] 				&& Identificação do Registro Header
+lcH002a002 = [1] 				&& Identificação do Arquivo Remessa
+lcH003a009 = [REMESSA] 			&& Identificação do Arquivo (Extenso)
+lcH010a011 = [01]				&& Identificação do Tipo de Serviço
+lcH012a026 = [COBRANCA       ] 	&& Identificação do Tipo de Serviço (Extenso)
+lcH027a034 = lcAge				&& Código do Convênio do Cliente
+lcH035a037 = [00]	 			&& Filler
+lcH038a044 = lcbco				&& Banco + DAC
+lcH045a046 = Space(8) 			&& Filler
+lcH047a076 = lcRaz 				&& Nome do Cliente
+lcH077a079 = [341] 				&& Número do Banco na Câmara de Compensação
+lcH076a080 = lcrazbco			&& Nome do Banco
+lcH076a079 = lcdat				&& Data Geração
+lcH101a388 = Space(294) 		&& Filler
+lcH395a400 = [000001] 			&& Número de Sequência do Registro
+
+lcstrg = lcH001a001 + lcH002a002 + lcH003a009 + lcH010a011 + lcH012a026 + lcH027a034 +;
+		lcH035a037 + lcH038a044 + lcH045a046 + lcH047a076 + lcH077a079 + lcH076a080 +;
+		lcH076a079 + lcH101a388 + lcH395a400 + CHR(13)+CHR(10)
+
+lcstrg = fLimpaTexto(lcstrg)
+STRTOFILE(lcstrg,lcarq,0)
+
+SELECT * from crfiltro where marca into cursor crFiltro2
+
+** Gerando registro de detalhes
+lnseq = 2
+SELECT crFiltro2
+SCAN
+	lcseq = TRANSFORM(lnseq,'@L 999999')
+	lcnumes = TRANSFORM(crFiltro2.numes,'@L 9999999999')
+	lcvenc = Substr(Dtoc(crFiltro2.vencs), 1, 2) + Substr(Dtoc(crFiltro2.vencs), 4, 2) + Substr(Dtoc(crFiltro2.vencs), 9, 2)
+	lcvalor = PADL(Alltrim(CHRTRAN(STR(crFiltro2.valos,11,2),',.','')),13,'0')
+	lccgccli = Padl(Alltrim(CHRTRAN(crFiltro2.cpfs,[/.-,],[])),14,[0])
+	lctpcgc = IIF(LEN(ALLTRIM(CHRTRAN(crFiltro2.cpfs,[/.-],[])))=11,'01','02')
+	lcnome = PADR(Iif(Empty(crFiltro2.Razaos), crFiltro2.rclis, crFiltro2.Razaos),30)
+	If Empty(crFiltro2.endcobs) or Empty(crFiltro2.cepcobs) or Empty(crFiltro2.estcobs) or Empty(crFiltro2.baicobs) or Empty(crFiltro2.cidcobs)
+		lcende = PADR(ALLTRIM(crFiltro2.endes)+[,]+crFiltro2.nums,40)
+		lcbair = PADR(crFiltro2.bairs,12)
+		lccep = PADL(Alltrim(CHRTRAN(crFiltro2.ceps,[.-],[])),8,[0])
+		lccida = PADR(crFiltro2.cidas,15)
+		lcesta = PADR(crFiltro2.estas,2)
+	Else
+		lcende = PADR(ALLTRIM(crFiltro2.endcobs),40)
+		lcbair = PADR(crFiltro2.baicobs,12)
+		lccep = PADL(Alltrim(CHRTRAN(crFiltro2.cepcobs,[.-],[])),8,[0])
+		lccida = PADR(crFiltro2.cidcobs,15)
+		lcesta = PADR(crFiltro2.estcobs,2)
+	EndIf
+*!*			thisform.podatamgr.Sqlexecute('select titulos from SigMvCcr where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers','crSigMvCcr')
+	lcnumtit = Padl(Strtran(crFiltro2.titulos, [/], []),8,[0])
+	
+	lcstrg = [1] + lctpcgc + lcCgc + lcAge + [00] + lcbco + SPACE(4) + [0000] + Padr(lcnumtit, 25)  + lcnumtit +;
+			[0000000000000] + [112] + SPACE(21) + [I] + [01] + Padr(lcnumtit, 10) + lcvenc + lcvalor + [341] + [00000] +;
+			[01] + [A] + lcDat + [81] + [19] + [0000000000000] + [000000] + [0000000000000] + [0000000000000] +;
+			[0000000000000] + lctpcgc + lccgccli + lcnome + SPACE(10) + lcende + lcbair + lccep + lccida + ;
+			lcesta + SPACE(30) + SPACE(4) + [000000] + lcprot + SPACE(1) + lcseq + CHR(13)+CHR(10)
+
+	lcstrg = fLimpaTexto(lcstrg)
+	STRTOFILE(lcstrg,lcarq,1)
+	
+	Insert into crSigPcOol(empdopnums,emps,dopes,numes,usuars,tipos,processos,produtos,datas,cidchaves,dopeds) values ;
+		(crFiltro2.empdopnums,crFiltro2.emps,crFiltro2.dopes,crFiltro2.numes,usuar,'SIGPRCNB','CNAB',lcstrg,Datetime(),fUniqueIds(),crFiltro2.titulos)
+	
+	lnseq = lnseq + 1
+ENDSCAN
+
+** Gerando registro de finalização
+lcseq = TRANSFORM(lnseq,'@L 999999')
+lcstrg = [9] + SPACE(393) + lcseq + + CHR(13)+CHR(10)
+STRTOFILE(lcstrg,lcarq,1)
+
+IF FILE(lcarq)
+	lok = .t.
+	If ! thisform.podatamgr.Update('crSigPcOol')
+		MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')	
+		lok = .f.
+	EndIf
+	
+	If lok &&and latua
+		Select crFiltro2
+		Scan
+			thisform.podatamgr.Sqlexecute('select titulos, titbans from SigMvCcr where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers','crSigMvCcr')
+			Select crSigMvCcr
+			Go top
+			latua = .t.
+			If !Empty(crSigMvCcr.titbans)
+				latua = MessageBox([Título "] + crSigMvCcr.titulos + [" já possui Título do Banco preenchido. Sobrescrever?],4+32,'Aviso') = 6
+			EndIf
+			If latua
+				lcquery = 'Update SigMvCcr set titbans = ?lctit where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers'
+				If thisform.podatamgr.Sqlexecute(lcquery) < 1
+					MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')	
+					lok = .f.				
+				EndIf
+			EndIf
+		EndScan
+	EndIf
+	
+	If lok
+		If thisform.podatamgr.Commit() < 1
+			MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit) ')
+		EndIf
+	EndIf		
+	thisform.podatamgr.Requery('crSigPcOol')
+	
+	MESSAGEBOX([Arquivo '] + lcarq + ['gerado com sucesso.],64,'Aviso')
+ENDIF
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cnabbrasil
+------------------------------------------------------------
+PROCEDURE cnabbrasil
+lctit = Padr(Thisform.pgfprincipal.pgfiltro.get_titban.Value,12)
+lcBanco = Padl(Alltrim(crConvenio.nbancos),3,'0') && Número banco
+lcCnv = Padl(Alltrim(crConvenio.Convenios), 3, '0') && Código do Convênio
+
+*** 08/12/2016 - instrucoes do Rafael, substituir as linhas de baixo por estas ***
+lcAge = Padl(Alltrim(crConvenio.NAgencias), 5, '0') && Agência do Cliente + DAC
+lcbco = Padl(Alltrim(Chrtran(ALLTRIM(crConvenio.contas)+Padl(crConvenio.DigiAgen,1,[0]),'.-','')),9,'0')  && Banco
+
+*!*	lcAge = Padl(Alltrim(crConvenio.NAgencias)+Padl(crConvenio.DigiAgen,1,[0]), 5, '0') && Agência do Cliente + DAC
+*!*	lcbco = Padl(Alltrim(Chrtran(crConvenio.contas,'.-','')),9,'0')  && Banco
+
+lcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) 		&& Razão Social do Empresa
+lcCgc = Padl(Strtran(Strtran(Strtran(crEmpresa.Cgcs,  [/], []), [.], []), [-], []), 14, [0])
+lctpcgc = Iif(Len(Alltrim(Chrtran(crEmpresa.Cgcs,[/.-],[])))=11,'01','02')
+lcrazbco = Padr(Alltrim(crConvenio.bancos), 15) 		&& Razão Social do Banco
+lcDat = Substr(Dtoc(Date()), 1, 2) + Substr(Dtoc(Date()), 4, 2) + Substr(Dtoc(Date()), 9, 2)
+lnMor = Iif(Empty(crConvenio.Moras), 0.23, crConvenio.Moras) && Índice de Mora 
+lcPri = Padl(Iif(Empty(Alltrim(crConvenio.Instrus)), [00], crConvenio.Instrus), 2, [0]) && Primeira Instrução
+lcprot = Iif(Thisform.pgfprincipal.pgdados.spndias.Value=0,5,Thisform.pgfprincipal.pgdados.spndias.Value)
+lcprot = Iif(lcPri = [00], [00], Padl(Alltrim(Str(lcprot)), 2, [0])) && Dias Para Protesto
+lcCdC = Padl(Alltrim(crConvenio.Convenios),7, [0]) && Código do Convênio do Cliente
+lcTpCtArq = Alltrim(crConvenio.TpCtArqs)
+lcTpCtBol = Alltrim(crConvenio.TpCtBols)
+lcEnv = Padl(fGerUniqueKey([BRASILENV]), 7, [0])
+
+*!*	lcDig = Iif(Val(Substr(lcEnv,6,2))=0,Transform(Val(Substr(lcEnv,6,2)) + 1,'@L 99'),Transform(Val(Substr(lcEnv,6,2)),'@L 99'))
+lcArq = Alltrim(crConvenio.ArqCnabs) + lcEnv + [.REM] &&[CB] + Substr(Dtoc(Date()), 1, 2) + Substr(Dtoc(Date()), 4, 2) + lcDig + [.REM] && [.TST]
+
+* Gerando o Registro de Cabeçalho
+lcH001a001 = [0] 				&& Identificação do Registro Header
+lcH002a002 = [1] 				&& Identificação do Arquivo Remessa
+lcH003a009 = [REMESSA] 			&& Identificação do Arquivo (Extenso)
+lcH010a011 = [01]				&& Identificação do Tipo de Serviço
+lcH012a019 = [COBRANCA] 		&& Identificação do Tipo de Serviço (Extenso)
+lcH020a026 = [       ]			&& Brancos
+lcH027a031 = lcAge 				&& Agência do convenente lider do cedente + Dígito verificador da agência
+lcH032a040 = lcbco 				&& Número da conta do banco + dígito verificador da conta
+lcH041a046 = [000000]			&& Brancos
+lcH047a076 = lcRaz				&& Nome da empresa
+lcH077a094 = [001BANCO DO BRASIL] && Nome do Banco lcrazbco			
+lcH095a100 = lcDat				&& Data Geração
+lcH101a107 = lcEnv	 			&& Número Sequêncial de remessa
+lcH108a129 = Space(22)			&& Brancos
+lcH130a136 = lcCdC 				&& Número do convênio - [2376552]
+lcH137a394 = Space(258)			&& Brancos
+lcH395a400 = [000001] 			&& Número de Sequência do Registro
+
+lcstrg = lcH001a001 + lcH002a002 + lcH003a009 + lcH010a011 + lcH012a019 + lcH020a026 + lcH027a031 + lcH032a040 + lcH041a046 + ;
+	lcH047a076 + lcH077a094 + lcH095a100 + lcH101a107 + lcH108a129 + lcH130a136 + lcH137a394  + lcH395a400 + Chr(13)+Chr(10)
+
+lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcArq,0)
+
+Select *, Space(5) as SeqNums  From crfiltro Where marca Into Cursor crFiltro2 ReadWrite
+
+** Gerando registro de detalhes
+lnseq = 2
+Select crFiltro2
+Scan
+	lcSeqNum = fGerUniqueKey([BBNOSSONUM])
+	lcseq = Transform(lnseq,'@L 999999')
+	lcnumes = Transform(crFiltro2.numes,'@L 9999999999')
+	lcvenc = Substr(Dtoc(crFiltro2.vencs), 1, 2) + Substr(Dtoc(crFiltro2.vencs), 4, 2) + Substr(Dtoc(crFiltro2.vencs), 9, 2)
+	lcvalor = Padl(Alltrim(Chrtran(Str(crFiltro2.valos,11,2),',.','')),13,'0')
+	lnMora = Round((crFiltro2.valos * 0.23) / 100,2)
+	lcMora = Padl(Alltrim(Chrtran(Str(lnMora,11,2),',.','')),13,'0')
+	lccgccli = Padl(Alltrim(Chrtran(crFiltro2.cpfs,[/.-,],[])),14,[0])
+	lctpcgccli = Iif(Len(Alltrim(Chrtran(crFiltro2.cpfs,[/.-],[])))=11,'01','02')
+	lcnome = Padr(Iif(Empty(crFiltro2.Razaos), crFiltro2.rclis, crFiltro2.Razaos),37)
+	lcnome = Padr(Chrtran(lcnome,[/.-,],[]),37)
+	If Empty(crFiltro2.endcobs) Or Empty(crFiltro2.cepcobs) Or Empty(crFiltro2.estcobs) Or Empty(crFiltro2.baicobs) Or Empty(crFiltro2.cidcobs)
+		lcende = Padr(Alltrim(crFiltro2.endes) + [ ] + Alltrim(crFiltro2.nums) + [ ] + Alltrim(crFiltro2.compls),40)
+		lcbair = Padr(crFiltro2.bairs,12)
+		lccep = Padl(Alltrim(Chrtran(crFiltro2.ceps,[.-],[])),8,[0])
+		lccida = Padr(crFiltro2.cidas,15)
+		lcesta = Padr(crFiltro2.estas,2)
+	Else
+		lcende = Padr(Alltrim(crFiltro2.endcobs),40)
+		lcbair = Padr(crFiltro2.baicobs,12)
+		lccep = Padl(Alltrim(Chrtran(crFiltro2.cepcobs,[.-],[])),8,[0])
+		lccida = Padr(crFiltro2.cidcobs,15)
+		lcesta = Padr(crFiltro2.estcobs,2)
+	Endif
+	lcende = Padr(Chrtran(lcende,[/.-,],[]),40)
+	lcnumtit = Padl(Chrtran(crFiltro2.titulos, [/], []),8,[0])
+
+	lcT002a003 = lctpcgc  && Tipo inscrição da empresa
+	lcT004a017 = lcCgc && CNPJ / CPF da empresa
+	lcT018a022 = lcAge && Agência do convenente lider do cedente + Dígito verificador da agência
+	lcT023a031 = lcbco && Número da conta do banco + dígito verificador da conta
+	lcT032a038 = lcCdC && Número do convênio líder - [2376552]
+	lcT039a063 = Padr(lcnumtit,25) && Nº Controle do Participante
+	lcT064a080 = lcCdC + Padl(lcSeqNum,10,[0]) && Nosso número - [2376552] 
+	lcT081a082 = [00] && Número da parcela
+	lcT083a084 = [00] && Grupo de valor
+	lcT085a087 = [   ] && Brancos	
+	lcT088a088 = [ ] && Indicativo de SACADOR.. BRANCOS-nas pos.352 a 391 mensagens a criterio do cedente; A - nas pos.352 a 391 informar nome e CPF/CNPJ do sacador.
+	lcT089a091 = [   ] &&Prefixo do titulo - CARTEIRAS 31,51.. Preencher com SD; CARTEIRA 12.. Preencher com AIU; DEMAIS CARTEIRAS.. Preencher com AI
+	lcT092a094 = lcTpCtBol && Variação carteira - [019]
+	lcT095a095 = [0] && Conta caução - zeros
+	lcT096a101 = [000000] && Número do borderô - Em branco
+	lcT102a106 = [     ] && Tipo de Cobrança: Carteiras 11, 12 e 17 em branco
+	lcT107a108 = lcTpCtArq && Tipo carteira - [17]
+	lcT109a110 = [01] &&Identificação da ocorrência - 01 = Remessa
+	lcT111a120 = Padr(lcnumtit,10) && Número do documento
+	lcT121a126 = lcvenc && Data do Vencimento do Título
+	lcT127a139 = lcvalor && Valor do Título
+	lcT140a142 = [001] && Banco Encarregado da Cobrança
+	lcT143a146 = [0000] && Agência cobradora
+	lcT147a147 = [ ] && Dígito verificador da agência cobradora - brancos
+	lcT148a149 = [01] && Espécie de Título - 01 = Duplicatas
+	lcT150a150 = [N] && Identificação - Sempre N
+	lcT151a156 = lcDat && Data de emissão do título
+	lcT157a158 = lcPri && Primeira instrução - 05 = Protestar no quinto dia útil após vencimento
+	lcT159a160 = [00] && Segunda instrução
+*!*		lcT159a160 = lcprot && Primeira instrução - Número de dias a protestar
+	lcT161a173 = lcMora && Valor a ser cobrado por Dia de Atraso [0000000000000]
+	lcT174a179 = [000000] && Data limite para concessão de desconto
+	lcT180a192 = [0000000000000] && Valor do desconto
+	lcT193a205 = [0000000000000] && Valor do IOF
+	lcT206a218 = [0000000000000] && Valor do Abatimento a ser concedido ou cancelado
+	lcT219a220 = lctpcgccli && Identificação do Tipo de Inscrição do Sacado
+	lcT221a234 = lccgccli && Nº Inscrição do Sacado
+	lcT235a271 = Upper(lcnome) && Nome do Sacado
+	lcT272a274 = [   ] && Brancos
+	lcT275a314 = Upper(lcende) && Endereço Completo
+	lcT315a326 = Upper(lcbair) && Bairro
+	lcT327a334 = lccep && CEP
+	lcT335a349 = Upper(lccida) && Cidade do sacado
+	lcT350a351 = Upper(lcesta) && Estado do sacado
+	lcT352a391 = Space(40) && Observação
+	lcT392a393 = [  ] && Primeira instrução - Número de dias a protestar	
+	lcT394a394 = [ ] && Brancos
+	lcT395a400 = lcseq && Sequencial
+
+	lcstrg = [7] + lcT002a003 + lcT004a017 + lcT018a022 + lcT023a031 + lcT032a038 + lcT039a063 + lcT064a080 + lcT081a082 + lcT083a084 + lcT085a087 + lcT088a088 +;
+		lcT089a091 + lcT092a094 + lcT095a095 + lcT096a101 + lcT102a106 + lcT107a108 + lcT109a110 + lcT111a120 + lcT121a126 + lcT127a139 + lcT140a142 + lcT143a146 +;
+		lcT147a147 + lcT148a149 + lcT150a150 + lcT151a156 + lcT157a158 + lcT159a160 + lcT161a173 + lcT174a179 + lcT180a192 + lcT193a205 + lcT206a218 + lcT219a220 +;
+		lcT221a234 + lcT235a271 + lcT272a274 + lcT275a314 + lcT315a326 + lcT327a334 + lcT335a349 + lcT350a351 + lcT352a391 + lcT392a393 + lcT394a394 + lcT395a400 +;
+		Chr(13)+Chr(10)
+
+	lcStrg = fLimpaTexto(lcstrg)
+	Strtofile(lcStrg,lcArq,1)
+
+	replace SeqNums with Padl(lcSeqNum,5,[0]) in crFiltro2
+	
+	Insert Into crSigPcOol(empdopnums,emps,dopes,numes,usuars,tipos,processos,produtos,DataS,cidchaves,dopeds,NumeDs) Values ;
+		(crFiltro2.empdopnums,crFiltro2.emps,crFiltro2.dopes,crFiltro2.numes,usuar,'SIGPRCNB','CNAB',lcstrg,Datetime(),fUniqueIds(),crFiltro2.titulos,lcSeqNum)
+
+	lnseq = lnseq + 1
+Endscan
+
+** Gerando registro de finalização
+lcseq = Transform(lnseq,'@L 999999')
+lcstrg = [9] + Space(393) + lcseq + + Chr(13)+Chr(10)
+Strtofile(lcstrg,lcArq,1)
+
+If File(lcArq)
+	lok = .T.
+	If ! Thisform.podatamgr.Update('crSigPcOol')
+		Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')
+		lok = .F.
+	Endif
+
+	If lok &&And latua
+		Select crFiltro2
+		Scan
+			Thisform.podatamgr.Sqlexecute('select titulos, titbans from SigMvCcr where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers','crSigMvCcr')
+			Select crSigMvCcr
+			Go Top
+			latua = .T.
+			If !Empty(crSigMvCcr.titbans)
+				latua = Messagebox([Título "] + crSigMvCcr.titulos + [" já possui Título do Banco preenchido. Sobrescrever?],4+32,'Aviso') = 6
+			Endif
+			If latua
+				lcquery = 'Update SigMvCcr set titbans = ?lctit where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers'
+				If Thisform.podatamgr.Sqlexecute(lcquery) < 1
+					Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')
+					lok = .F.
+				Endif
+			Endif
+		Endscan
+	Endif
+
+	If lok
+		If Thisform.podatamgr.Commit() < 1
+			Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit) ')
+		Endif
+	Endif
+	Thisform.podatamgr.Requery('crSigPcOol')
+
+	Messagebox([Arquivo '] + lcarq + ['gerado com sucesso.],64,'Geração CNAB')
+Endif
+
+Thisform.pgfprincipal.pgDados.commandgroup1.btnBoleto.Enabled = .t.
+thisform.impboleto(.F.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impboleto
+------------------------------------------------------------
+PROCEDURE impboleto
+Lparameters pReimp
+
+lcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) && Razão Social do Empresa
+lcAge = Left(Alltrim(crConvenio.NAgencias),4) && Agência do Cliente
+lcbco = Padl(Alltrim(Chrtran(crConvenio.contas,'.-','')),8,'0') && Banco
+lcCdC = Padl(Alltrim(crConvenio.Convenios),7, [0]) && Código do Convênio do Cliente
+lcTpCtArq = Alltrim(crConvenio.TpCtArqs) && Tipo carteira
+lcTpCtBol = Alltrim(crConvenio.TpCtBols) && Tipo carteira de boleto
+
+Select a.*, Space(44) as nBarras, Space(30) as ImgBarra, lcRaz as Cedente, Space(50) as NomeCli, Space(50) as Instr1, Space(50) as Instr2, Space(50) as Instr3, ;
+		Space(50) as Instr4, Space(50) as Instr5, Space(50) as Instr6, Space(70) as Instr7, Space(50) as NrDigit, Space(17) as NossoNum, Space(15) as AgCodCed, ;
+		Space(10) as cTitulos, b.Ceps as CepEmp, b.Endes as EndEmp, b.Numeros as NumEmp, b.Bairs as BaiEmp, b.Cidas as CidEmp, b.Estas as EstaEmp, b.Cgcs as CpfEmp, ;
+		b.compls as compEmp, lcTpCtBol as TpCtBols, lcTpCtArq as TpCtArqs, SPACE(2) as carteira ;
+		from crFiltro2 a, crEmpresa b into cursor crFiltro2 ReadWrite
+
+Select crFiltro2
+Scan
+	If pReimp && Se for reimpressão, busca a última geração do título para pegar o mesmo NOSSO NÚMERO do arquivo enviado
+		If thisform.podatamgr.SqlExecute([Select top 1 NumeDs from SigPcOol where Processos = 'CNAB' And DopeDs = ?crFiltro2.titulos order by Datas Desc],[crTmpPcOol]) < 1
+			=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpPcOol)')
+			Return .F.
+		Endif
+		Select crFiltro2
+		replace SeqNums with Padl(Alltrim(Str(crTmpPcOol.NumeDs)),5,[0])
+	Endif
+
+	If crConvenio.nbancos = [001] && Banco do Brasil
+		lcNossoNum = lcCdC + Padl(crFiltro2.SeqNums ,10,[0]) &&[2376552]
+
+		lcFator = Padl(Alltrim(Str(1000 + (Ttod(crFiltro2.vencs) - Ctod('03/07/2000')))),4,[0])
+		lcValor = Padl(Alltrim(Chrtran(Str(crFiltro2.valos,8,2),',.','')),10,'0')
+		lcBarra = [0019] + lcFator + lcValor + [000000] + lcNossoNum + [17]
+		lcDV = fCalcMod11BB(lcBarra,crConvenio.nbancos)
+		
+		lcNossoNum = lcCdC + Padl(crFiltro2.SeqNums ,10,[0]) &&[2376552]
+		lcBarra = [0019] + lcDV + lcFator + lcValor + [000000] + lcNossoNum + [17]
+		replace nBarras with lcBarra in crFiltro2
+
+		lcArqBMP = [img_barra_] + Padl(crFiltro2.SeqNums,10,[0]) + [.bmp]
+		=fGerBar2de5(Sys(2023) + [\] + lcArqBMP, lcBarra)
+		replace ImgBarra with lcArqBMP in crFiltro2
+			
+		lcCampo1 = [001900000]
+		lcDv1 = fCalcMod10(lcCampo1)
+		lcCampo2 = Substr(lcBarra,25,10)
+		lcDv2 = fCalcMod10(lcCampo2)
+		lcCampo3 = Substr(lcBarra,35,10)
+		lcDv3 = fCalcMod10(lcCampo3)
+		lcNrDigit = lcCampo1 + lcDv1 + lcCampo2 + lcDv2 + lcCampo3 + lcDv3 + lcDV + lcFator + lcValor
+		Replace NrDigit with lcNrDigit in crFiltro2
+		Replace AgCodCed with Left(Alltrim(crConvenio.NAgencias),4) + [-] + Right(Alltrim(crConvenio.NAgencias),1) + [/] + ;
+							  Alltrim(Chrtran(crConvenio.contas,'.-','')) + [-] + Padl(crConvenio.DigiAgen,1,[0]) in crFiltro2
+		
+		If Type([crConvenio.MsgMulta])=[N] And crConvenio.MsgMulta = 1
+			replace Instr3 with [COBRAR MULTA DE 2% AO MÊS APÓS 1 DIA DE VENCIMENTO ] in crFiltro2
+		EndIf 
+		
+	Endif
+
+	If crConvenio.nbancos = [033] && Santander
+		lcNossoNum = Padl(crFiltro2.SeqNums ,12,[0])
+		lcDV = fCalcMod11BB(lcNossoNum,crConvenio.nbancos)
+		lcNossoNum = lcNossoNum + lcDV
+
+		lcFator = Padl(Alltrim(Str((Ttod(crFiltro2.vencs) - Ctod('07/10/1997')))),4,[0])
+		lcValor = Padl(Alltrim(Chrtran(Str(crFiltro2.valos,8,2),',.','')),10,'0')
+		lcCnv = lcCdC && Padl(Alltrim(crConvenio.Convenios), 7, '0') && Código do Convênio
+		lcBarra = [0339] + lcFator + lcValor + [9] + lcCnv + lcNossoNum + [0] + [101]
+		lcDV = fCalcMod11BB(lcBarra,crConvenio.nbancos,[DVB])
+		
+		lcBarra = [0339] + lcDV + lcFator + lcValor + [9] + lcCnv + lcNossoNum + [0] + [101]
+		replace nBarras with lcBarra in crFiltro2
+
+		lcArqBMP = [img_barra_] + Padl(crFiltro2.SeqNums,12,[0]) + [.bmp]
+		=fGerBar2de5(Sys(2023) + [\] + lcArqBMP, lcBarra)
+		replace ImgBarra with lcArqBMP in crFiltro2
+			
+		lcCampo1 = [03399] + Substr(lcCnv,1,4)
+		lcDv1 = fCalcMod10(lcCampo1)
+		lcCampo2 = Substr(lcBarra,25,10)
+		lcDv2 = fCalcMod10(lcCampo2)
+		lcCampo3 = Substr(lcBarra,35,10)
+		lcDv3 = fCalcMod10(lcCampo3)
+		lcNrDigit = lcCampo1 + lcDv1 + lcCampo2 + lcDv2 + lcCampo3 + lcDv3 + lcDV + lcFator + lcValor
+		Replace NrDigit with ALLTRIM(lcNrDigit) in crFiltro2		
+		Replace AgCodCed With Alltrim(crConvenio.NAgencias) + [/] + lcCnv in crFiltro2
+		replace Instr3 with [COBRAR 1% DE MULTA A PARTIR DE ]+dtoc(TTOD(crFiltro2.vencs)+6) in crFiltro2	&& mena - 30/05/2018 - solicitado por Joias aline
+	Endif
+
+	*** Mena 22/07/2019 - pega sequencia com 11 posicioes ***
+	If crConvenio.nbancos = [237] && Bradesco
+		replace SeqNums with Padl(Alltrim(transform(crTmpPcOol.NumeDs, "@R 99999999999")),11,[0]) in crFiltro2
+		lcCnv = lcCdC && Padl(Alltrim(crConvenio.Convenios), 7, '0') && Código do Convênio
+		lcFator = Padl(Alltrim(Str((Ttod(crFiltro2.vencs) - Ctod('07/10/1997')))),4,[0])
+		lcValor = Padl(Alltrim(Chrtran(Str(crFiltro2.valos,8,2),',.','')),10,'0')
+		lcAg = Padl(Left(Alltrim(crConvenio.NAgencias),4),4,'0')
+		lcCar = Padl(Alltrim(crConvenio.tpctbols),2,'0')
+		lcCta = Padl(Alltrim(Chrtran(crConvenio.contas,'.-','')),7,'0')
+		lcDig = ALLTRIM(crConvenio.digiagen)
+		lcNossoNum = Padl(crFiltro2.SeqNums ,11,[0])
+		lcDV = fCalcMod11B7(lcCar+lcNossoNum)
+		lcNossoNum = lcNossoNum + lcDV
+		
+		lcLivre = lcAg + lcCar + SUBSTR(lcNossoNum,1,11) + lcCta + [0]	&& 23/01/2019 nosso numero sem o digito verificador
+		lcBarra = [2379] +lcFator + lcValor + lcLivre
+		lcDV = fCalcMod11BB(lcBarra,crConvenio.nbancos,[DVB])		
+		
+		lcBarra = [2379] + lcDv + lcFator + lcValor + lcLivre
+		replace nBarras with lcBarra in crFiltro2
+
+		lcArqBMP = [img_barra_] + Padl(crFiltro2.SeqNums,11,[0]) + [.bmp]
+		=fGerBar2de5(Sys(2023) + [\] + lcArqBMP, lcBarra)
+		replace ImgBarra with lcArqBMP in crFiltro2
+			
+		lcCampo1 = [2379] + Substr(lcLivre,1,5)
+		lcDv1 = fCalcMod10(lcCampo1)
+		lcCampo2 = Substr(lcLivre,6,10)
+		lcDv2 = fCalcMod10(lcCampo2)
+		lcCampo3 = Substr(lcLivre,16,10)
+		lcDv3 = fCalcMod10(lcCampo3)
+		lcNrDigit = lcCampo1 + lcDv1 + lcCampo2 + lcDv2 + lcCampo3 + lcDv3 + lcDV + lcFator + lcValor
+		Replace NrDigit with lcNrDigit in crFiltro2		
+		Replace AgCodCed With Alltrim(crConvenio.NAgencias) + [/] + lcCta +[-]+lcDig in crFiltro2
+		replace carteira with lcCar in crFiltro2
+	
+	EndIf 
+	
+	replace NossoNum	with lcNossoNum ,;
+			ctitulos 	with Padl(Chrtran(crFiltro2.titulos, [/], []),8,[0]) in crFiltro2
+
+	lcNome = Padr(Iif(Empty(crFiltro2.Razaos), crFiltro2.rclis, crFiltro2.Razaos),37)
+	lcNome = Padr(Chrtran(lcnome,[/.-,],[]),37)
+	replace NomeCli with lcNome
+
+	If Empty(crFiltro2.endcobs) Or Empty(crFiltro2.cepcobs) Or Empty(crFiltro2.estcobs) Or Empty(crFiltro2.baicobs) Or Empty(crFiltro2.cidcobs)
+	Else
+		replace Endes with Alltrim(crFiltro2.endcobs)
+		replace Bairs with crFiltro2.baicobs
+		replace Ceps with crFiltro2.cepcobs
+		replace Cidas with crFiltro2.cidcobs
+		replace Estas with crFiltro2.estcobs
+	Endif
+
+*!*		lcProt = Str(Iif(Thisform.pgfprincipal.pgdados.spndias.Value=0,5,Thisform.pgfprincipal.pgdados.spndias.Value),1)
+	lcPri = Padl(Iif(Empty(Alltrim(crConvenio.Instrus)), [00], crConvenio.Instrus), 2, [0]) && Primeira Instrução
+	lcprot = Iif(Thisform.pgfprincipal.pgdados.spndias.Value=0,5,Thisform.pgfprincipal.pgdados.spndias.Value)
+	lcprot = Iif(lcPri = [00], [00], Padl(Alltrim(Str(lcprot)), 2, [0])) && Dias Para Protesto	
+	lnMor = Iif(Empty(crConvenio.Moras), 0.23, crConvenio.Moras) && Índice de Mora 
+	lcMora = Str(Round((crFiltro2.valos * lnMor) / 100,2),8,2)
+	lcInt1 = [APÓS VENCIMENTO, COBRAR JUROS DE R$] + Alltrim(lcMora) + [ AO DIA.]
+	lcInt2 = [PROTESTAR NO ] + lcProt +[º DIA ÚTIL APÓS O VENCIMENTO.]
+	lcInt7 = IIF(crConvenio.nbancos = [237],[Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso],[PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO])
+	
+	If Type([crConvenio.MsgMulta])=[N] And crConvenio.MsgMulta = 1
+		lcInt2 = []
+	EndIf 
+	
+	replace Instr1 with lcInt1 ,;
+			Instr2 with lcInt2 ,;
+			Instr7 with lcInt7
+Endscan
+
+Select crFiltro2
+Go top
+Do Case
+	Case crConvenio.nbancos = [001] && Banco do Brasil
+		Report form BloquetoBB2 Preview	
+		
+	Case crConvenio.nbancos = [033] && Santander
+		Report form BloquetoSt Preview	
+
+	Case crConvenio.nbancos = [237] && Bradescp
+		Report form BloquetoBra Preview	
+Endcase	
+
+*** Deleta as imagens dos barras gerados
+Select crFiltro2
+Scan
+	lcArqBMP = Sys(2023) + [\img_barra_] + Padl(crFiltro2.SeqNums,10,[0]) + [.bmp]
+	If File(lcArqBMP)
+		Erase &lcArqBMP
+	Endif
+Endscan
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cnabbrasil6
+------------------------------------------------------------
+PROCEDURE cnabbrasil6
+lctit = Padr(Thisform.pgfprincipal.pgfiltro.get_titban.Value,12)
+lcBanco = Padl(Alltrim(crConvenio.nbancos),3,'0') && Número banco
+lcCnv = Padl(Alltrim(crConvenio.Convenios), 3, '0') && Código do Convênio
+lcAge = Padl(Alltrim(crConvenio.NAgencias), 5, '0') && Agência do Cliente
+lcbco = Padl(Alltrim(Chrtran(crConvenio.contas,'.-','')),8,'0') + Padl(crConvenio.DigiAgen,1,[0]) && Banco + DAC
+lcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) 		&& Razão Social do Empresa
+lcCgc = Padl(Strtran(Strtran(Strtran(crEmpresa.Cgcs,  [/], []), [.], []), [-], []), 14, [0])
+lctpcgc = Iif(Len(Alltrim(Chrtran(crEmpresa.Cgcs,[/.-],[])))=11,'01','02')
+lcrazbco = Padr(Alltrim(crConvenio.bancos), 15) 		&& Razão Social do Banco
+lcDat = Substr(Dtoc(Date()), 1, 2) + Substr(Dtoc(Date()), 4, 2) + Substr(Dtoc(Date()), 9, 2)
+lcprot = Iif(Thisform.pgfprincipal.pgdados.spndias.Value=0,5,Thisform.pgfprincipal.pgdados.spndias.Value)
+lcprot = Padl(Alltrim(Str(lcprot)),2,'0')
+lcEnv = Padl(fGerUniqueKey([BRASILENV]), 7, [0])
+
+*!*	lcDig = Iif(Val(Substr(lcEnv,6,2))=0,Transform(Val(Substr(lcEnv,6,2)) + 1,'@L 99'),Transform(Val(Substr(lcEnv,6,2)),'@L 99'))
+lcArq = Alltrim(crConvenio.ArqCnabs) + lcEnv + [.REM] &&[CB] + Substr(Dtoc(Date()), 1, 2) + Substr(Dtoc(Date()), 4, 2) + lcDig + [.REM] && [.TST]
+
+* Gerando o Registro de Cabeçalho
+lcH001a001 = [0] 				&& Identificação do Registro Header
+lcH002a002 = [1] 				&& Identificação do Arquivo Remessa
+lcH003a009 = [TESTE  ] &&[REMESSA] 			&& Identificação do Arquivo (Extenso)
+lcH010a011 = [01]				&& Identificação do Tipo de Serviço
+lcH012a019 = [COBRANCA] 		&& Identificação do Tipo de Serviço (Extenso)
+lcH020a026 = [       ]			&& Brancos
+lcH027a031 = lcAge 				&& Agência do convenente lider do cedente + Dígito verificador da agência
+*!*	lcH027a046 = Padl('4012415',20,'0')	&& Código do Cliente Space(20)
+*!*	lcH047a076 = lcRaz 				&& Nome do Cliente
+lcH032a040 = lcbco 				&& Número da conta do banco + dígito verificador da conta
+lcH041a046 = [237655]			&& Número do convênio líder - 2376552
+lcH047a076 = lcRaz				&& Nome da empresa
+lcH077a079 = lcBanco 			&& Número do Banco na Câmara de Compensação [237] lcCnv
+lcH080a094 = lcrazbco			&& Nome do Banco
+lcH095a100 = lcDat				&& Data Geração
+lcH101a107 = lcEnv	 			&& Número Sequêncial de remessa
+lcH108a383 = Space(276)			&& Filler
+lcH384a385 = Space(2)  			&& Filler
+lcH386a388 = Space(3)	 		&& Filler
+lcH389a394 = Space(6)	 		&& Filler
+lcH395a400 = [000001] 			&& Número de Sequência do Registro
+
+*!*	lcH027a034 = lcAge				&& Código do Convênio do Cliente
+*!*	lcH035a037 = [00]	 			&& Filler
+*!*	lcH038a044 = lcbco				&& Banco + DAC
+*!*	lcH045a046 = Space(8) 			&& Filler
+*!*	lcH101a388 = Space(294) 		&& Filler
+*!*	lcH395a400 = [000001] 			&& Número de Sequência do Registro
+
+lcstrg = lcH001a001 + lcH002a002 + lcH003a009 + lcH010a011 + lcH012a019 + lcH020a026 + lcH027a031 + lcH032a040 + lcH041a046 + ;
+	lcH047a076 + lcH077a079 + lcH080a094 + lcH095a100 + lcH101a107 + lcH108a383 + lcH384a385 + lcH386a388 + lcH389a394  + lcH395a400 + Chr(13)+Chr(10)
+
+lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcArq,0)
+
+Select *, Space(5) as SeqNums  From crfiltro Where marca Into Cursor crFiltro2 ReadWrite
+
+** Gerando registro de detalhes
+lnseq = 2
+Select crFiltro2
+Scan
+	lcSeqNum = fGerUniqueKey([BBNOSSONUM])
+	lcseq = Transform(lnseq,'@L 999999')
+	lcnumes = Transform(crFiltro2.numes,'@L 9999999999')
+	lcvenc = Substr(Dtoc(crFiltro2.vencs), 1, 2) + Substr(Dtoc(crFiltro2.vencs), 4, 2) + Substr(Dtoc(crFiltro2.vencs), 9, 2)
+	lcvalor = Padl(Alltrim(Chrtran(Str(crFiltro2.valos,11,2),',.','')),13,'0')
+	lnMora = Round((crFiltro2.valos * 0.23) / 100,2)
+	lcMora = Padl(Alltrim(Chrtran(Str(lnMora,11,2),',.','')),13,'0')
+	lccgccli = Padl(Alltrim(Chrtran(crFiltro2.cpfs,[/.-,],[])),14,[0])
+	lctpcgccli = Iif(Len(Alltrim(Chrtran(crFiltro2.cpfs,[/.-],[])))=11,'01','02')
+	lcnome = Padr(Iif(Empty(crFiltro2.Razaos), crFiltro2.rclis, crFiltro2.Razaos),37)
+	lcnome = Padr(Chrtran(lcnome,[/.-,],[]),37)
+	If Empty(crFiltro2.endcobs) Or Empty(crFiltro2.cepcobs) Or Empty(crFiltro2.estcobs) Or Empty(crFiltro2.baicobs) Or Empty(crFiltro2.cidcobs)
+		lcende = Padr(Alltrim(crFiltro2.endes)+[ ]+crFiltro2.nums,37)
+		lcbair = Padr(crFiltro2.bairs,12)
+		lccep = Padl(Alltrim(Chrtran(crFiltro2.ceps,[.-],[])),8,[0])
+		lccida = Padr(crFiltro2.cidas,15)
+		lcesta = Padr(crFiltro2.estas,2)
+	Else
+		lcende = Padr(Alltrim(crFiltro2.endcobs),37)
+		lcbair = Padr(crFiltro2.baicobs,12)
+		lccep = Padl(Alltrim(Chrtran(crFiltro2.cepcobs,[.-],[])),8,[0])
+		lccida = Padr(crFiltro2.cidcobs,15)
+		lcesta = Padr(crFiltro2.estcobs,2)
+	Endif
+	lcende = Padr(Chrtran(lcende,[/.-,],[]),37)
+*!*			thisform.podatamgr.Sqlexecute('select titulos from SigMvCcr where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers','crSigMvCcr')
+	lcnumtit = Padl(Strtran(crFiltro2.titulos, [/], []),8,[0])
+
+	lcT002a003 = lctpcgc  && Tipo inscrição da empresa
+	lcT004a017 = lcCgc && CNPJ / CPF da empresa
+	lcT018a022 = lcAge && Agência do convenente lider do cedente + Dígito verificador da agência
+	lcT023a031 = lcbco && Número da conta do banco + dígito verificador da conta
+	lcT032a037 = [237655] && Número do convênio líder - 2376552
+	lcT038a062 = Padr(lcnumtit,25) && Nº Controle do Participante
+*!*		lcT063a074 = [            ] && Nosso número
+	lcT063a074 = [237655] + Padl(lcSeqNum,5,[0]) && Nosso número
+	lcT063a074 = lcT063a074 + fCalcMod11(lcT063a074) && Dígito verificador do nosso número
+	lcT075a076 = [00] && Número da parcela
+	lcT077a078 = [00] && Grupo de valor
+	lcT079a081 = [   ] && Brancos	
+	lcT082a082 = [ ] && Indicativo de SACADOR.. BRANCOS-nas pos.352 a 391 mensagens a criterio do cedente; A - nas pos.352 a 391 informar nome e CPF/CNPJ do sacador.
+	lcT083a085 = [AI ] &&Prefixo do titulo - CARTEIRAS 31,51.. Preencher com SD; CARTEIRA 12.. Preencher com AIU; DEMAIS CARTEIRAS.. Preencher com AI
+	lcT086a088 = [019] && Variação carteira
+	lcT089a089 = [0] && Conta caução - zeros
+	lcT090a095 = [000000] && Código de responsabilidade
+	lcT096a101 = [000000] && Número do borderô - Em branco
+	lcT102a106 = [     ] && Tipo de Cobrança: Carteiras 11, 12 e 17 em branco
+	lcT107a108 = [17] && Tipo carteira
+	lcT109a110 = [01] &&Identificação da ocorrência - 01 = Remessa
+	lcT111a120 = Padr(lcnumtit,10) && Número do documento
+	lcT121a126 = lcvenc && Data do Vencimento do Título
+	lcT127a139 = lcvalor && Valor do Título
+	lcT140a142 = [001] && Banco Encarregado da Cobrança
+	lcT143a147 = [00000] && Agência Depositária
+	lcT148a149 = [01] && Espécie de Título - 01 = Duplicatas
+	lcT150a150 = [N] && Identificação - Sempre N
+	lcT151a156 = lcDat && Data de emissão do título
+	lcT157a158 = [05] && Primeira instrução - 05 = Protestar no quinto dia útil após vencimento
+	lcT159a160 = [  ] && Segunda instrução
+*!*		lcT159a160 = lcprot && Primeira instrução - Número de dias a protestar
+	lcT161a173 = lcMora && Valor a ser cobrado por Dia de Atraso [0000000000000]
+	lcT174a179 = [000000] && Data limite para concessão de desconto
+	lcT180a192 = [0000000000000] && Valor do desconto
+	lcT193a205 = [0000000000000] && Valor do IOF
+	lcT206a218 = [0000000000000] && Valor do Abatimento a ser concedido ou cancelado
+	lcT219a220 = lctpcgccli && Identificação do Tipo de Inscrição do Sacado
+	lcT221a234 = lccgccli && Nº Inscrição do Sacado
+	lcT235a271 = lcnome && Nome do Sacado
+	lcT272a274 = [   ] && Brancos
+	lcT275a311 = lcende && Endereço Completo
+	lcT312a326 = Space(15) && 1ª Mensagem - Livre
+	lcT327a334 = lccep && CEP
+*!*		lcT335a394 = Space(60) && Sacador/Avalista ou 2ª Mensagem
+	lcT335a349 = lccida && Cidade do sacado
+	lcT350a351 = lcesta && Estado do sacado
+	lcT352a391 = Space(40) && Observação
+	lcT392a393 = [00] && Primeira instrução - Número de dias a protestar	
+	lcT394a394 = [ ] && Brancos
+	lcT395a400 = lcseq && Sequencial
+
+	lcstrg = [1] + lcT002a003 + lcT004a017 + lcT018a022 + lcT023a031 + lcT032a037 + lcT038a062 + lcT063a074 + lcT075a076 + lcT077a078 + lcT079a081 + lcT082a082 +;
+		lcT083a085 + lcT086a088 + lcT089a089 + lcT090a095 + lcT096a101 + lcT102a106 + lcT107a108 + lcT109a110 + lcT111a120 + lcT121a126 + lcT127a139 + lcT140a142 +;
+		lcT143a147 + lcT148a149 + lcT150a150 + lcT151a156 + lcT157a158 + lcT159a160 + lcT161a173 + lcT174a179 + lcT180a192 + lcT193a205 + lcT206a218 + lcT219a220 +;
+		lcT221a234 + lcT235a271 + lcT272a274 + lcT275a311 + lcT312a326 + lcT327a334 + lcT335a349 + lcT350a351 + lcT352a391 + lcT392a393 + lcT394a394 + lcT395a400 +;
+		Chr(13)+Chr(10)
+
+
+*!*		lctpcgc + lcCgc + lcAge + [00] + lcbco + SPACE(4) + [0000] + Padr(lcnumtit, 25)  + lcnumtit +;
+*!*				[0000000000000] + [112] + SPACE(21) + [I] + [01] + Padr(lcnumtit, 10) + lcvenc + lcvalor + [341] + [00000] +;
+*!*				[01] + [A] + lcDat + [81] + [19] + [0000000000000] + [000000] + [0000000000000] + [0000000000000] +;
+*!*				[0000000000000] + lctpcgc + lccgccli + lcnome + SPACE(10) + lcende + lcbair + lccep + lccida + ;
+*!*				lcesta + SPACE(30) + SPACE(4) + [000000] + lcprot + SPACE(1) + lcseq + CHR(13)+CHR(10)
+
+	lcstrg = fLimpaTexto(lcstrg)
+	Strtofile(lcstrg,lcArq,1)
+
+	replace SeqNums with Padl(lcSeqNum,5,[0]) in crFiltro2
+	
+	Insert Into crSigPcOol(empdopnums,emps,dopes,numes,usuars,tipos,processos,produtos,DataS,cidchaves,dopeds,NumeDs) Values ;
+		(crFiltro2.empdopnums,crFiltro2.emps,crFiltro2.dopes,crFiltro2.numes,usuar,'SIGPRCNB','CNAB',lcstrg,Datetime(),fUniqueIds(),crFiltro2.titulos,lcSeqNum)
+
+	lnseq = lnseq + 1
+Endscan
+
+** Gerando registro de finalização
+lcseq = Transform(lnseq,'@L 999999')
+lcstrg = [9] + Space(393) + lcseq + + Chr(13)+Chr(10)
+Strtofile(lcstrg,lcArq,1)
+
+If File(lcArq)
+	lok = .T.
+	If ! Thisform.podatamgr.Update('crSigPcOol')
+		Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')
+		lok = .F.
+	Endif
+
+	If lok &&And latua
+		Select crFiltro2
+		Scan
+			Thisform.podatamgr.Sqlexecute('select titulos, titbans from SigMvCcr where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers','crSigMvCcr')
+			Select crSigMvCcr
+			Go Top
+			latua = .T.
+			If !Empty(crSigMvCcr.titbans)
+				latua = Messagebox([Título "] + crSigMvCcr.titulos + [" já possui Título do Banco preenchido. Sobrescrever?],4+32,'Aviso') = 6
+			Endif
+			If latua
+				lcquery = 'Update SigMvCcr set titbans = ?lctit where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers'
+				If Thisform.podatamgr.Sqlexecute(lcquery) < 1
+					Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')
+					lok = .F.
+				Endif
+			Endif
+		Endscan
+	Endif
+
+	If lok
+		If Thisform.podatamgr.Commit() < 1
+			Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit) ')
+		Endif
+	Endif
+	Thisform.podatamgr.Requery('crSigPcOol')
+
+	Messagebox('Arquivo gerado com sucesso',64,'Aviso')
+Endif
+
+
+thisform.impboleto(.F.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cnabsantander
+------------------------------------------------------------
+PROCEDURE cnabsantander
+lctit = Padr(Thisform.pgfprincipal.pgfiltro.get_titban.Value,12)
+lcCnv = Padl(Alltrim(crConvenio.Convenios), 8, '0') && Código do Convênio
+lcAge = Padl(Alltrim(crConvenio.NAgencias), 4, '0') && Agência do Cliente
+lcbco = Padl(Substr(Chrtran(crConvenio.contas,'.-',''),1,7),8,'0')  &&+ crConvenio.DigiAgen && Banco + DAC
+lcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) 		&& Razão Social do Empresa
+lcCgc = Padl(Strtran(Strtran(Strtran(crEmpresa.Cgcs,  [/], []), [.], []), [-], []), 14, [0])
+lctpcgc = Iif(Len(Alltrim(Chrtran(crEmpresa.Cgcs,[/.-],[])))=11,'01','02')
+lcrazbco = Padr(Alltrim(crConvenio.bancos), 15) 		&& Razão Social do Banco
+lcDat = Substr(Dtoc(Date()), 1, 2) + Substr(Dtoc(Date()), 4, 2) + Substr(Dtoc(Date()), 9, 2)
+lcprot = Iif(Thisform.pgfprincipal.pgdados.spndias.Value=0,5,Thisform.pgfprincipal.pgdados.spndias.Value)
+lcprot = Padl(Alltrim(Str(lcprot)),2,'0')
+lcEnv = Padl(fGerUniqueKey([SANTANDERENV]), 7, [0])
+lcArq = Alltrim(crConvenio.Drive) + Iif(Empty(Alltrim(crConvenio.Drive)), [], [\])
+lcArq = Strtran(lcArq + Alltrim(crConvenio.ArqCnabs) + lcEnv + [.REM], [\\], [\])
+lcTpCtArq = Alltrim(crConvenio.TpCtArqs)
+lcTpCtBol = Alltrim(crConvenio.TpCtBols)
+
+* Gerando o Registro de Cabeçalho
+lcH001a001 = [0] 				&& Identificação do Registro Header
+lcH002a002 = [1] 				&& Identificação do Arquivo Remessa
+lcH003a009 = [REMESSA] 			&& Identificação do Arquivo (Extenso)
+lcH010a011 = [01]				&& Identificação do Tipo de Serviço
+lcH012a026 = [COBRANCA       ] 	&& Identificação do Tipo de Serviço (Extenso)
+lcH027a046 = lcAge + lcCnv + lcbco  				&& Código do Convênio do Cliente
+lcH047a076 = lcRaz 				&& Nome do Cliente
+lcH077a079 = [033] 				&& Número do Banco na Câmara de Compensação
+lcH080a094 = lcrazbco			&& Nome do Banco
+lcH095a100 = lcDat				&& Data Geração
+lcH101a116 = [0000000000000000] && Filler
+lcH117a391 = Space(275) 		&& Filler
+lcH392a394 = [000]		 		&& Filler
+lcH395a400 = [000001] 			&& Número de Sequência do Registro
+
+lcstrg = lcH001a001 + lcH002a002 + lcH003a009 + lcH010a011 + lcH012a026 + lcH027a046 +;
+	lcH047a076 + lcH077a079 + lcH080a094 +;
+	lcH095a100 + lcH101a116 + lcH117a391 + lcH392a394 + lcH395a400 + Chr(13)+Chr(10)
+
+lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcarq,0)
+
+Select *, Space(5) as SeqNums From crfiltro Where marca Into Cursor crFiltro2 ReadWrite
+
+** Gerando registro de detalhes
+lnseq = 2
+Select crFiltro2
+Scan
+	lcSeqNum = fGerUniqueKey([STNOSSONUM])
+	lcseq = Transform(lnseq,'@L 999999')
+	lcnumes = Transform(crFiltro2.numes,'@L 9999999999')
+	lcvenc = Substr(Dtoc(crFiltro2.vencs), 1, 2) + Substr(Dtoc(crFiltro2.vencs), 4, 2) + Substr(Dtoc(crFiltro2.vencs), 9, 2)
+	lcvalor = Padl(Alltrim(Chrtran(Str(crFiltro2.valos,11,2),',.','')),13,'0')
+	lccgccli = Padl(Alltrim(Chrtran(crFiltro2.cpfs,[/.-,],[])),14,[0])
+	lctpcgcCli = Iif(Len(Alltrim(Chrtran(crFiltro2.cpfs,[/.-],[])))=11,'01','02')
+	lcnome = Padr(Iif(Empty(crFiltro2.Razaos), crFiltro2.rclis, crFiltro2.Razaos),40)
+	If Empty(crFiltro2.endcobs) Or Empty(crFiltro2.cepcobs) Or Empty(crFiltro2.estcobs) Or Empty(crFiltro2.baicobs) Or Empty(crFiltro2.cidcobs)
+		lcende = Padr(Alltrim(crFiltro2.endes)+[,]+crFiltro2.nums,40)
+		lcbair = Padr(crFiltro2.bairs,12)
+		lccep = Padl(Alltrim(Chrtran(crFiltro2.ceps,[.-],[])),8,[0])
+		lccida = Padr(crFiltro2.cidas,15)
+		lcesta = Padr(crFiltro2.estas,2)
+	Else
+		lcende = Padr(Alltrim(crFiltro2.endcobs),40)
+		lcbair = Padr(crFiltro2.baicobs,12)
+		lccep = Padl(Alltrim(Chrtran(crFiltro2.cepcobs,[.-],[])),8,[0])
+		lccida = Padr(crFiltro2.cidcobs,15)
+		lcesta = Padr(crFiltro2.estcobs,2)
+	Endif
+
+	lcnumtit = Padl(Strtran(crFiltro2.titulos, [/], []),8,[0])
+	lcDV = fCalcMod11BB(Padl(lcSeqNum,7,[0]),crConvenio.nbancos)
+	lcNossoNum = Padl(lcSeqNum,7,[0]) + lcDV	
+
+	lcT002a003 = lctpcgc
+	lcT004a017 = lcCgc 
+	lcT018a021 = lcAge && Agência
+	lcT022a029 = lcCnv &&lcbco && Conta de movimentação
+	lcT030a037 = lcbco && Conta de cobrança
+	lcT038a062 = Padr(lcnumtit, 25)
+	lcT063a070 = lcNossoNum &&Padl(lcSeqNum,8,[0]) && Nosso número
+	lcT071a076 = [000000]
+	lcT077a077 = [ ]
+	lcT078a078 = [0] && Multa = 4
+	lcT079a082 = [0000] && Percentual de multa
+	lcT083a084 = [00]	
+	lcT085a097 = [0000000000000]
+	lcT102a107 = [000000]
+	lcT108a108 = lcTpCtArq && Código da carteira
+	lcT109a110 = [01] && Código da ocorrência - 1 = entrada de títulos
+	lcT111a120 = Padr(lcnumtit, 10) 
+	lcT121a126 = lcvenc 
+	lcT127a139 = lcvalor 
+	lcT140a142 = [033]
+	lcT143a147 = [00000] &&Iif(lcTpCtArq=5, Padl(lcAge,5,[0]) ,[00000]) && Código da agência cobradora
+	lcT148a149 = [01] && 01 = Duplicata
+	lcT150a150 = [N]
+	lcT151a156 = lcDat 
+	lcT157a158 = [06] && Primeira instrução - 06 = Protestar
+	lcT159a160 = [00] && Segunda instrução
+	lnMora = Round((crFiltro2.valos * 0.33) / 100,2)
+	lcMora = PADL(Alltrim(CHRTRAN(STR(lnMora,11,2),',.','')),13,'0')	
+	lcT161a173 = lcMora
+	lcT174a179 = [000000]
+	lcT180a192 = [0000000000000]
+	lcT193a205 = [0000000000000]
+	lcT206a218 = [0000000000000]
+	lcT219a220 = lctpcgcCli
+	lcT221a234 = lccgccli
+	lcT235a274 = lcnome
+	lcT275a314 = lcende
+	lcT315a326 = lcbair 
+	lcT327a334 = lccep 
+	lcT335a349 = lccida 
+	lcT350a351 = lcesta 
+	lcT352a381 = Space(30)
+	lcT382a382 = [ ] 
+	lcT383a383 = [I] 
+	lcT384a385 = Right(Alltrim(Chrtran(crConvenio.contas,'.-','')) + crConvenio.DigiAgen,2) && [23] && Complemento da conta (2 últimos dígitos) - 13.001.972-3
+	lcT386a391 = Space(6)
+	lcT392a393 = [06] && Dias para protesto
+	lcT394a394 = [ ]
+	
+	lcstrg = [1] + lcT002a003 + lcT004a017 + lcT018a021 + lcT022a029 + lcT030a037 + lcT038a062 + lcT063a070 + lcT071a076 + lcT077a077 + lcT078a078 + lcT079a082 + ;
+		lcT083a084 + lcT085a097 + Space(4) + lcT102a107 + lcT108a108 + lcT109a110 + lcT111a120 + lcT121a126 + lcT127a139 + lcT140a142 + lcT143a147 + lcT148a149 + ;
+		lcT150a150 + lcT151a156 + lcT157a158 + lcT159a160 + lcT161a173 + lcT174a179 + lcT180a192 + lcT193a205 + lcT206a218 + ;
+		lcT219a220 + lcT221a234 + lcT235a274 + lcT275a314 + lcT315a326 + lcT327a334 + lcT335a349 + lcT350a351 + ;
+		lcT352a381 + lcT382a382 + lcT383a383 + lcT384a385 + lcT386a391 + lcT392a393 + lcT394a394 + lcseq + Chr(13)+Chr(10)
+
+	lcstrg = fLimpaTexto(lcstrg)
+	Strtofile(lcstrg,lcarq,1)
+	
+	replace SeqNums with Padl(lcSeqNum,5,[0]) in crFiltro2	
+
+	Insert Into crSigPcOol(empdopnums,emps,dopes,numes,usuars,tipos,processos,produtos,DataS,cidchaves,dopeds,NumeDs) Values ;
+		(crFiltro2.empdopnums,crFiltro2.emps,crFiltro2.dopes,crFiltro2.numes,usuar,'SIGPRCNB','CNAB',lcstrg,Datetime(),fUniqueIds(),crFiltro2.titulos,lcSeqNum)
+
+	lnseq = lnseq + 1
+Endscan
+
+** Gerando registro de finalização
+Select crFiltro2
+Go top 
+Sum valos to lnTotTit
+
+lcseq = Transform(lnseq,'@L 999999')
+lcTotTit = Padl(Alltrim(Chrtran(Str(lnTotTit,11,2),',.','')),13,'0')
+lcstrg = [9] + lcseq + lcTotTit + Replicate([0],374) + lcseq + + Chr(13)+Chr(10)
+Strtofile(lcstrg,lcarq,1)
+
+If File(lcarq)
+	lok = .T.
+	If ! Thisform.podatamgr.Update('crSigPcOol')
+		Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')
+		lok = .F.
+	Endif
+
+	If lok &&And latua
+		Select crFiltro2
+		Scan
+			Thisform.podatamgr.Sqlexecute('select titulos, titbans from SigMvCcr where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers','crSigMvCcr')
+			Select crSigMvCcr
+			Go Top
+			latua = .T.
+			If !Empty(crSigMvCcr.titbans)
+				latua = Messagebox([Título "] + crSigMvCcr.titulos + [" já possui Título do Banco preenchido. Sobrescrever?],4+32,'Aviso') = 6
+			Endif
+			If latua
+				lcquery = 'Update SigMvCcr set titbans = ?lctit where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers'
+				If Thisform.podatamgr.Sqlexecute(lcquery) < 1
+					Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')
+					lok = .F.
+				Endif
+			Endif
+		Endscan
+	Endif
+
+	If lok
+		If Thisform.podatamgr.Commit() < 1
+			Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit) ')
+		Endif
+	Endif
+	Thisform.podatamgr.Requery('crSigPcOol')
+
+	Messagebox([Arquivo '] + lcarq + [' gerado com sucesso.],64,[Aviso])
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cnabsantander240
+------------------------------------------------------------
+PROCEDURE cnabsantander240
+*** Mena - 18/04/2018 - novo layout para o Santander - JAL ***
+
+lctit = Padr(Thisform.pgfprincipal.pgfiltro.get_titban.Value,13)
+lcCnv = Padl(Alltrim(crConvenio.Convenios), 11, '0') && Código do Convênio
+lcAge = Padl(Alltrim(crConvenio.NAgencias), 4, '0') && Agência do Cliente
+lcDigA= ALLTRIM(crConvenio.DigiAgen)				&& digito da agencia
+lcCtaC= alltrim(Chrtran(crConvenio.contas,'.-',''))
+lcDigC= right(lcCtaC,1)
+lcCta= PADL(LEFT(lcCtaC, LEN(lcCtaC)-1),9,'0')
+lcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) 		&& Razão Social do Empresa
+lcCgc = Padl(ALLTRIM(Strtran(Strtran(Strtran(crEmpresa.Cgcs,  [/], []), [.], []), [-], [])), 15, [0])
+lctpcgc = Iif(Len(Alltrim(Chrtran(crEmpresa.Cgcs,[/.-],[])))=11,'1','2')
+lcrazbco = Padr(Alltrim(crConvenio.bancos), 30) 		&& Razão Social do Banco
+lcDat = Substr(Dtoc(Date()), 1, 2) + Substr(Dtoc(Date()), 4, 2) + Substr(Dtoc(Date()), 7, 4)
+lcprot = Iif(Thisform.pgfprincipal.pgdados.spndias.Value=0,5,Thisform.pgfprincipal.pgdados.spndias.Value)
+lcprot = Padl(Alltrim(Str(lcprot)),2,'0')
+lcEnv = Padl(fGerUniqueKey([SANTANDERENV]), 8, [0])
+lcArq = Alltrim(crConvenio.Drive) + Iif(Empty(Alltrim(crConvenio.Drive)), [], [\])
+lcArq = Strtran(lcArq + Alltrim(crConvenio.ArqCnabs) + lcEnv + [.REM], [\\], [\])
+lcTpCtArq = Alltrim(crConvenio.TpCtArqs)
+lcTpCtBol = Alltrim(crConvenio.TpCtBols)
+
+lnLot = 0
+lcLot = Transform(lnLot,'@L 9999')
+lnSeq = 1
+lcSeq = Transform(lnseq,'@L 999999')
+
+* Gerando o Registro de Cabeçalho
+lcH001a003 = [033] 				&& Código do Banco na compensação
+lcH004a007 = lcLot				&& Lote de serviço
+lcH008a008 = [0] 				&& Identificação do Registro Header
+lcH009a016 = Space(8)	 		&& Reservado (uso Banco)
+lcH017a017 = lctpcgc			&& Tipo de inscrição da empresa
+lcH018a032 = lcCgc				&& Nº de inscrição da empresa
+lcH033a047 = lcAge+lcCnv		&& Código de Transmissão
+lcH048a072 = SPACE(25)			&& Reservado (uso Banco)
+lcH073a102 = lcRaz				&& Nome da empresa
+lcH103a132 = lcrazbco			&& Nome do banco
+lcH133a142 = SPACE(10)			&& Reservado (uso Banco)
+lcH143a143 = [1]				&& Código remessa
+lcH144a151 = lcDat				&& Data de geração do arquivo
+lcH152a157 = SPACE(6)			&& Reservado (uso Banco) 
+lcH158a163 = SUBSTR(lcEnv,3)	&& Nº seqüencial do arquivo  
+lcH164a166 = [040] 				&& Nº da versão do layout do arquivo 
+lcH167a240 = SPACE(74)			&& Reservado (uso Banco) 
+					
+
+lcstrg = lcH001a003 + lcH004a007 + lcH008a008 + lcH009a016 + lcH017a017 + lcH018a032 +;
+	lcH033a047 + lcH048a072 + lcH073a102 + lcH103a132 + lcH133a142 + lcH143a143 + lcH144a151 +;
+	lcH152a157 + lcH158a163 + lcH164a166 + lcH167a240 + Chr(13)+Chr(10)
+
+lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcarq,0)
+
+
+
+* Gerando o Registro de Cabeçalho de lote
+lnLot = lnLot+1
+lcLot = Transform(lnLot,'@L 9999')
+lnSeq = lnSeq+1 
+lcSeq = Transform(lnseq,'@L 999999')
+
+lcL001a003 = [033] 				&& Código do Banco na compensação
+lcL004a007 = lcLot				&& Numero do lote remessa
+lcL008a008 = [1] 				&& Tipo de registro
+lcL009a009 = [R]		 		&& Tipo de operação
+lcL010a011 = [01]		 		&& Tipo de serviço
+lcL012a013 = SPACE(2)			&& Reservado (uso Banco)
+lcL014a016 = [030]		 		&& Nº da versão do layout do lote
+lcL017a017 = SPACE(1)			&& Reservado (uso Banco)
+lcL018a018 = lctpcgc			&& Tipo de inscrição da empresa
+lcL019a033 = lcCgc				&& Nº de inscrição da empresa
+lcL034a053 = SPACE(20)			&& Reservado (uso Banco)
+lcL054a068 = lcAge+lcCnv		&& Código de Transmissão
+lcL069a073 = SPACE(5)			&& Reservado (uso Banco)
+lcL074a103 = lcRaz				&& Nome da empresa
+lcL104a143 = SPACE(40)			&& Mensagem 1
+lcL144a183 = SPACE(40)			&& Mensagem 2
+lcL184a191 = lcEnv				&& Número remessa/retorno
+lcL192a199 = lcDat				&& Data da gravação remessa/retorno
+lcL200a240 = SPACE(41)			&& Reservado (uso Banco) 
+					
+
+lcstrg = lcL001a003+lcL004a007+lcL008a008+lcL009a009+lcL010a011+lcL012a013+lcL014a016+lcL017a017+lcL018a018+lcL019a033+;
+		 lcL034a053+lcL054a068+lcL069a073+lcL074a103+lcL104a143+lcL144a183+lcL184a191+lcL192a199+lcL200a240 + Chr(13)+Chr(10)
+lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcarq,1)
+
+Select *, Space(5) as SeqNums From crfiltro Where marca Into Cursor crFiltro2 ReadWrite
+
+** Gerando registro de detalhes
+lnSeql = 0
+Select crFiltro2
+Scan
+	lcnumes = Transform(crFiltro2.numes,'@L 9999999999')
+	lcvenc = Substr(Dtoc(crFiltro2.vencs), 1, 2) + Substr(Dtoc(crFiltro2.vencs), 4, 2) + Substr(Dtoc(crFiltro2.vencs), 7, 4)
+	lcvalor = Padl(Alltrim(Chrtran(Str(crFiltro2.valos,11,2),',.','')),15,'0')
+	lccgccli = Padl(Alltrim(Chrtran(crFiltro2.cpfs,[/.-,],[])),15,[0])
+	lctpcgcCli = Iif(Len(Alltrim(Chrtran(crFiltro2.cpfs,[/.-],[])))=11,'1','2')
+	lcnome = Padr(Iif(Empty(crFiltro2.Razaos), crFiltro2.rclis, crFiltro2.Razaos),40)
+	lnMora = IIF(crconvenio.moras=0,0.33,crconvenio.moras)
+	lnMora = Round((crFiltro2.valos * lnMora) / 100,2)
+	lcMora = PADL(Alltrim(CHRTRAN(STR(lnMora,11,2),',.','')),15,'0')
+	If Empty(crFiltro2.endcobs) Or Empty(crFiltro2.cepcobs) Or Empty(crFiltro2.estcobs) Or Empty(crFiltro2.baicobs) Or Empty(crFiltro2.cidcobs)
+		lcende = Padr(Alltrim(crFiltro2.endes)+[,]+crFiltro2.nums,40)
+		lcbair = Padr(crFiltro2.bairs,15)
+		lccep = Padl(Alltrim(Chrtran(crFiltro2.ceps,[.-],[])),8,[0])
+		lccida = Padr(crFiltro2.cidas,15)
+		lcesta = Padr(crFiltro2.estas,2)
+	Else
+		lcende = Padr(Alltrim(crFiltro2.endcobs),40)
+		lcbair = Padr(crFiltro2.baicobs,15)
+		lccep = Padl(Alltrim(Chrtran(crFiltro2.cepcobs,[.-],[])),8,[0])
+		lccida = Padr(crFiltro2.cidcobs,15)
+		lcesta = Padr(crFiltro2.estcobs,2)
+	Endif
+
+	lcnumtit = Padl(ALLTRIM(Strtran(crFiltro2.titulos, [/], [])),15,[0])
+	lcChave  = PadR(ALLTRIM(Strtran(crFiltro2.titulos, [/], [])),15)+lcnumes && numero do titulo no sigmvccr + numes
+
+	lcseq = Transform(lnseq,'@L 999999')
+
+	lcSeqNum = fGerUniqueKey([STNOSSONUM])
+	lcDV = fCalcMod11BB(Padl(lcSeqNum,7,[0]),crConvenio.nbancos)
+	lcNossoNum = Padl(lcSeqNum,12,[0]) + lcDV	
+
+	*** Detalhe P ***
+	lnSeqL = lnSeqL+1
+	lcSeql	= Transform(lnSeqL,'@L 99999')
+	
+	lnSeq = lnSeq+1
+	lcP001a003 = [033] 				&& Código do Banco na compensação
+	lcP004a007 = lcLot				&& Numero do lote remessa
+	lcP008a008 = [3] 				&& Tipo de registro
+	lcP009a013 = lcSeqL		 		&& Nº seqüencial do registro de lote 
+	lcP014a014 = [P]		 		&& Cód. Segmento do registro detalhe
+	lcP015a015 = SPACE(1)			&& Reservado (uso Banco)
+	lcP016a017 = [01]				&& Código de movimento remessa  - entrada de titulo
+	lcP018a021 = lcAge				&& Agência do Destinatária
+	lcP022a022 = lcDigA				&& Dígito da Ag do Destinatária
+	lcP023a031 = lcCta				&& Número da conta corrente
+	lcP032a032 = lcDigC				&& Dígito verificador da conta
+	lcP033a041 = lcCta				&& Conta cobrança  Destinatária FIDC
+	lcP042a042 = lcDigC				&& Dígito da conta cobrança Destinatária FIDC 
+	lcP043a044 = SPACE(2)			&& Reservado (uso Banco)
+	lcP045a057 = lcNossoNum			&& Identificação do título no Banco 
+	lcP058a058 = [5]				&& Tipo de cobrança
+	lcP059a059 = [1]				&& Forma de Cadastramento
+	lcP060a060 = [1]				&& Tipo de documento
+	lcP061a061 = SPACE(1)			&& Reservado (uso Banco)
+	lcP062a062 = SPACE(1)			&& Reservado (uso Banco)
+	lcP063a077 = lcNumTit			&& Nº  do documento - seu numero
+	lcP078a085 = lcVenc				&& Data de vencimento do título
+	lcP086a100 = lcValor			&& Valor nominal do título
+	lcP101a104 = lcAge				&& Agência encarregada da cobrança FIDC
+	lcP105a105 = lcDigA				&& Dígito da Agência do Beneficiário FIDC
+	lcP106a106 = SPACE(1)			&& Reservado (uso Banco)
+	lcP107a108 = [02]				&& Espécie do título - duplicata
+	lcP109a109 = [N]				&& título Aceito/Não Aceito
+	lcP110a117 = lcDat				&& Data da emissão do título
+	lcP118a118 = [1]				&& Código do juros de mora
+	lcP119a126 = lcVenc				&& Data do juros de mora
+	lcP127a141 = lcMora				&& Valor da mora/dia  ou Taxa mensal
+	lcP142a142 = [0]				&& Código do desconto 1
+	lcP143a150 = [00000000]			&& Data de desconto 1
+	lcP151a165 = [000000000000000]	&& Valor ou Percentual do desconto concedido
+	lcP166a180 = [000000000000000]	&& percentual do IOF a ser recolhido
+	lcP181a195 = [000000000000000]	&& Valor do abatimento
+	lcP196a220 = lcChave			&& Identificação do título na empresa
+	lcP221a221 = [0]				&& Código para protesto - nao protestar
+	lcP222a223 = [00]				&& Número de dias para prot 
+	lcP224a224 = [2]				&& Código para Baixa/Devolução
+	lcP225a225 = [0]				&& Reservado (uso Banco)
+	lcP226a227 = [00]				&& Número de dias para Baixa/Devolução
+	lcP228a229 = [00]				&& Código da moeda
+	lcP230a240 = SPACE(11)			&& Reservado (uso Banco)
+
+
+	lcStrg = lcP001a003+lcP004a007+lcP008a008+lcP009a013+lcP014a014+lcP015a015+lcP016a017+lcP018a021+lcP022a022+lcP023a031+lcP032a032+;
+			 lcP033a041+lcP042a042+lcP043a044+lcP045a057+lcP058a058+lcP059a059+lcP060a060+lcP061a061+lcP062a062+lcP063a077+lcP078a085+;
+			 lcP086a100+lcP101a104+lcP105a105+lcP106a106+lcP107a108+lcP109a109+lcP110a117+lcP118a118+lcP119a126+lcP127a141+lcP142a142+;
+			 lcP143a150+lcP151a165+lcP166a180+lcP181a195+lcP196a220+lcP221a221+lcP222a223+lcP224a224+lcP225a225+lcP226a227+lcP228a229+;
+			 lcP230a240 + Chr(13)+Chr(10)
+
+	lcstrg = fLimpaTexto(lcstrg)
+	Strtofile(lcstrg,lcarq,1)
+
+
+
+
+	*** Detalhe Q ***
+	lnSeq = lnSeq+1 
+	lnSeqL = lnSeqL+1
+	lcSeql	= Transform(lnSeqL,'@L 99999')
+
+	lcQ001a003 = [033] 				&& Código do Banco na compensação
+	lcQ004a007 = lcLot				&& Numero do lote remessa
+	lcQ008a008 = [3] 				&& Tipo de registro
+	lcQ009a013 = lcSeqL		 		&& Nº seqüencial do registro de lote 
+	lcQ014a014 = [Q]		 		&& Cód. Segmento do registro detalhe
+	lcQ015a015 = SPACE(1)			&& Reservado (uso Banco)
+	lcQ016a017 = [01]				&& Código de movimento remessa  - entrada de titulo
+	lcQ018a018 = lctpcgcCli			&& Tipo de inscrição do Pagador
+	lcQ019a033 = lccgccli			&& Número de inscrição do Pagador
+	lcQ034a073 = lcnome				&& Nome Pagador
+	lcQ074a113 = lcende				&& Endereço  Pagador
+	lcQ114a128 = lcbair				&& Bairro  Pagador
+	lcQ129a136 = lccep				&& Cep  Pagador
+	lcQ137a151 = lccida				&& Cidade do Pagador
+	lcQ152a153 = lcesta				&& Unidade da Federação do Pagador
+	lcQ154a154 = [0]				&& Tipo de inscrição Sacador/avalista
+	lcQ155a169 = [000000000000000]	&& Nº de inscrição Sacador/avalista
+	lcQ170a209 = SPACE(40)			&& Nome do Sacador/avalista
+	lcQ210a212 = [000]				&& Identificador de carne
+	lcQ213a215 = [000]				&& Seqüencial da Parcela ou número inicial da parcela
+	lcQ216a218 = [000]				&& Quantidade total de parcelas
+	lcQ219a221 = [000]				&& Número do plano
+	lcQ222a240 = SPACE(19)			&& Reservado (uso Banco)
+
+	lcStrg = lcQ001a003+lcQ004a007+lcQ008a008+lcQ009a013+lcQ014a014+lcQ015a015+lcQ016a017+lcQ018a018+lcQ019a033+lcQ034a073+lcQ074a113+;
+			 lcQ114a128+lcQ129a136+lcQ137a151+lcQ152a153+lcQ154a154+lcQ155a169+lcQ170a209+lcQ210a212+lcQ213a215+lcQ216a218+lcQ219a221+;
+			 lcQ222a240 + Chr(13)+Chr(10)
+
+	lcstrg = fLimpaTexto(lcstrg)
+	Strtofile(lcstrg,lcarq,1)
+	
+	replace SeqNums with Padl(lcSeqNum,5,[0]) in crFiltro2	
+
+	Insert Into crSigPcOol(empdopnums,emps,dopes,numes,usuars,tipos,processos,produtos,DataS,cidchaves,dopeds,NumeDs) Values ;
+		(crFiltro2.empdopnums,crFiltro2.emps,crFiltro2.dopes,crFiltro2.numes,usuar,'SIGPRCNB','CNAB',lcstrg,Datetime(),fUniqueIds(),crFiltro2.titulos,lcSeqNum)
+
+Endscan
+
+* Gerando o Registro de trailer do lote
+lnseq = lnseq + 1
+lnSeqL = lnSeqL+1
+lcSeql	= Transform(lnSeqL,'@L 999999')
+lcL001a003 = [033] 				&& Código do Banco na compensação
+lcL004a007 = lcLot				&& Numero do lote remessa
+lcL008a008 = [5] 				&& Tipo de registro
+lcL009a017 = SPACE(9)			&& Reservado (uso Banco)
+lcL018a023 = lcSeql		 		&& Quantidade de registros do lote
+lcL024a240 = SPACE(217)			&& Reservado (uso Banco) 
+
+lcstrg = lcL001a003+lcL004a007+lcL008a008+lcL009a017+lcL018a023+lcL024a240+Chr(13)+Chr(10)
+
+lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcarq,1)
+
+
+** Gerando registro trailer de arquivo 
+lnseq = lnseq + 1
+lcseq = Transform(lnseq,'@L 999999')
+lcH001a003 = [033] 				&& Código do Banco na compensação
+lcH004a007 = [9999]				&& Numero do lote remessa
+lcH008a008 = [9] 				&& Tipo de registro
+lcH009a017 = SPACE(9)			&& Reservado (uso Banco)
+lcH018a023 = [000001]	 		&& Quantidade de lotes
+lcH024a029 = lcSeq		 		&& Quantidade de registros
+lcH030a240 = SPACE(211)			&& Reservado (uso Banco) 
+
+lcstrg = lcH001a003+lcH004a007+lcH008a008+lcH009a017+lcH018a023+lcH024a029+lcH030a240+Chr(13)+Chr(10)
+
+lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcarq,1)
+
+
+If File(lcarq)
+	lok = .T.
+	If ! Thisform.podatamgr.Update('crSigPcOol')
+		Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')
+		lok = .F.
+	Endif
+
+	If lok &&And latua
+		Select crFiltro2
+		Scan
+			Thisform.podatamgr.Sqlexecute('select titulos, titbans from SigMvCcr where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers','crSigMvCcr')
+			Select crSigMvCcr
+			Go Top
+			latua = .T.
+			If !Empty(crSigMvCcr.titbans)
+				latua = Messagebox([Título "] + crSigMvCcr.titulos + [" já possui Título do Banco preenchido. Sobrescrever?],4+32,'Aviso') = 6
+			Endif
+			If latua
+				lcquery = 'Update SigMvCcr set titbans = ?lctit where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers'
+				If Thisform.podatamgr.Sqlexecute(lcquery) < 1
+					Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')
+					lok = .F.
+				Endif
+			Endif
+		Endscan
+	Endif
+
+	If lok
+		If Thisform.podatamgr.Commit() < 1
+			Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit) ')
+		Endif
+	Endif
+	Thisform.podatamgr.Requery('crSigPcOol')
+
+	Messagebox([Arquivo '] + lcarq + [' gerado com sucesso.],64,[Aviso])
+	Thisform.pgfprincipal.pgDados.commandgroup1.btnBoleto.Enabled = .t.
+
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cnabitau240
+------------------------------------------------------------
+PROCEDURE cnabitau240
+*** Mena - 18/04/2018 - novo layout para o Santander - JAL ***
+
+lctit = Padr(Thisform.pgfprincipal.pgfiltro.get_titban.Value,13)
+lcCnv = Padl(Alltrim(crConvenio.Convenios), 11, '0') && Código do Convênio
+lcAge = Padl(Alltrim(crConvenio.NAgencias), 5, '0') && Agência do Cliente
+lcDigA= Alltrim(crConvenio.DigiAgen)				&& digito da agencia
+lcCtaC= Alltrim(Chrtran(crConvenio.contas,'.-',''))
+lcDigC= Right(lcCtaC,1)
+lcCta= Padl(Left(lcCtaC, Len(lcCtaC)-1),9,'0')
+lcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) 		&& Razão Social do Empresa
+lcCgc = Padl(Alltrim(Strtran(Strtran(Strtran(crEmpresa.Cgcs,  [/], []), [.], []), [-], [])), 14, [0])
+lctpcgc = Iif(Len(Alltrim(Chrtran(crEmpresa.Cgcs,[/.-],[])))=11,'1','2')
+lcrazbco = Padr(Alltrim(crConvenio.bancos), 30) 		&& Razão Social do Banco
+lcDat = Substr(Dtoc(Date()), 1, 2) + Substr(Dtoc(Date()), 4, 2) + Substr(Dtoc(Date()), 7, 4)
+lcHor = Alltrim(Str(Hour(Datetime())))+Alltrim(Str(minute(Datetime())))+Alltrim(Str(sec(Datetime())))
+lcprot = Iif(Thisform.pgfprincipal.pgdados.spndias.Value=0,5,Thisform.pgfprincipal.pgdados.spndias.Value)
+lcprot = Padl(Alltrim(Str(lcprot)),2,'0')
+lcEnv = Padl(fGerUniqueKey([SANTANDERENV]), 8, [0])
+lcArq = Alltrim(crConvenio.Drive) + Iif(Empty(Alltrim(crConvenio.Drive)), [], [\])
+lcArq = Strtran(lcArq + Alltrim(crConvenio.ArqCnabs) + lcEnv + [.REM], [\\], [\])
+lcTpCtArq = Alltrim(crConvenio.TpCtArqs)
+lcTpCtBol = Alltrim(crConvenio.TpCtBols)
+
+lcende = Padr(Alltrim(crEmpresa.Endes),30)
+lcnume = Padr(Alltrim(crFiltro2.nums),5)
+lccomp = Padr(Alltrim(crFiltro2.Compls),15)
+lccida = Padr(crFiltro2.cidas,20)
+lccep = Padl(Alltrim(Chrtran(crFiltro2.ceps,[.-],[])),8,[0])
+lcesta = Padr(crFiltro2.estas,2)
+
+lnLot = 0
+lcLot = Transform(lnLot,'@L 9999')
+lnSeq = 1
+lcSeq = Transform(lnSeq,'@L 999999')
+
+
+* Gerando o Registro de Cabeçalho
+lcH001a003 = [341] 				&& Código do Banco na compensação
+lcH004a007 = lcLot				&& Lote de serviço
+lcH008a008 = [0] 				&& Identificação do Registro Header
+lcH009a014 = Space(6)	 		&& COMPLEMENTO DE REGISTRO
+lcH015a017 = [080]				&& N? DA VERSÃO DO LAYOUT DO ARQUIVO
+lcH018a018 = lctpcgc			&& TIPO DE INSCRIÇÃO DA EMPRESA
+lcH019a032 = lcCgc				&& CNPJ EMPRESA DEBITADA
+lcH033a052 = Space(20)			&& Reservado (uso Banco)
+lcH053a057 = lcAge				&& NÚMERO AGÊNCIA DEBITADA
+lcH058a058 = Space(1)			&& Reservado (uso Banco)
+lcH059a070 = lcCta				&& NÚMERO DE C/C DEBITADA
+lcH071a071 = Space(1)			&& Reservado (uso Banco)
+lcH072a072 = lcDigC				&& DAC DA AGÊNCIA/CONTA DEBITADA
+lcH073a102 = lcRaz				&& NOME DA EMPRESA
+lcH103a132 = lcrazbco			&& NOME DO BANCO
+lcH133a142 = Space(10)			&& Reservado (uso Banco)
+lcH143a143 = [1]				&& Código remessa
+lcH144a151 = lcDat				&& Data de geração do arquivo
+lcH152a157 = lcHor				&& HORA DE GERAÇÃO DO ARQUIVO
+lcH158a166 = [000000000]		&& Reservado (uso Banco)
+lcH167a171 = [00000] 			&& Nº da versão do layout do arquivo
+lcH172a240 = Space(69)			&& Reservado (uso Banco)
+
+
+lcstrg = lcH001a003 + lcH004a007 + lcH008a008 + lcH009a014 + lcH015a017 + lcH018a018 +;
+lcH019a032 + lcH033a052 + lcH053a057 + lcH058a058 + lcH059a070 + lcH071a071 + lcH072a072 +;
+lcH073a102 + lcH103a132 + lcH133a142 + lcH143a143 + lcH144a151 + lcH152a157 + lcH158a166 +;
+lcH167a171 + lcH172a240 + Chr(13)+Chr(10)
+
+lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcArq,0)
+
+* Gerando o Registro de Cabeçalho de lote
+lnLot = lnLot+1
+lcLot = Transform(lnLot,'@L 9999')
+lnSeq = lnSeq+1
+lcSeq = Transform(lnSeq,'@L 999999')
+
+lcL001a003 = [341] 				&& Código do Banco na compensação
+lcL004a007 = lcLot				&& Numero do lote remessa
+lcL008a008 = [1] 				&& Tipo de registro
+lcL009a009 = [C]		 		&& Tipo de operação
+lcL010a011 = [98]		 		&& TIPO DE PAGTO
+lcL012a013 = [45]				&& FORMA DE PAGAMENTO
+lcL014a016 = [040]		 		&& Nº da versão do layout do lote
+lcL017a017 = Space(1)			&& Reservado (uso Banco)
+lcL018a018 = lctpcgc			&& Tipo de inscrição da empresa
+lcL019a032 = lcCgc				&& Nº de inscrição da empresa
+lcL033a036 = Space(4)			&& IDENTIFICAÇÃO DO LANÇAMENTO NO EXTRATO DO FAVORECIDO
+lcL037a052 = Space(16)			&& Reservado (uso Banco)
+lcL053a057 = lcAge				&& NÚMERO AGÊNCIA DEBITADA
+lcL058a058 = Space(1)			&& Reservado (uso Banco)
+lcL059a070 = lcCta				&& NÚMERO DE C/C DEBITADA
+lcL071a071 = Space(1)			&& Reservado (uso Banco)
+lcL072a072 = lcDigC				&& DAC DA AGÊNCIA/CONTA DEBITADA
+lcL073a102 = lcRaz				&& NOME DA EMPRESA
+lcL103a132 = Space(30)		 	&& FINALIDADE DOS PAGTOS DO LOTE 
+lcL133a142 = Space(10)		 	&& COMPLEMENTO HISTÓRICO C/C DEBITADA
+lcL143a172 = lcende		 		&& NOME DA RUA, AV, PÇA, ETC...
+lcL173a177 = lcnume		 		&& NÚMERO DO LOCAL
+lcL178a192 = lccomp		 		&& CASA, APTO, SALA, ETC... 
+lcL193a212 = lccida		 		&& NOME DA CIDADE
+lcL213a220 = lccep		 		&& CEP
+lcL221a222 = lcesta		 		&& SIGLA DO ESTADO
+lcL223a230 = Space(8)			&& Reservado (uso Banco)
+lcL231a240 = Space(10)			&& Reservado (uso Banco)
+
+lcstrg = lcL001a003 +lcL004a007 +lcL008a008 +lcL009a009 +lcL010a011 +lcL012a013 +lcL014a016 +lcL017a017 +lcL018a018 +lcL019a032 +;
+	lcL033a036 +lcL037a052 +lcL053a057 +lcL058a058 +lcL059a070 +lcL071a071 +lcL072a072 +lcL073a102 +lcL103a132 + lcL133a142 +;
+	lcL143a172 +lcL173a177 +lcL178a192 +lcL193a212 +lcL213a220 +lcL221a222 +lcL223a230 +lcL231a240 +Chr(13)+Chr(10)
+	lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcArq,1)
+
+Select *, Space(5) As SeqNums From crfiltro Where marca Into Cursor crFiltro2 Readwrite
+
+** Gerando registro de detalhes
+lnSeql = 0
+lnSomaValor = 0 
+Select crFiltro2
+Scan
+	lcnumes = Transform(crFiltro2.numes,'@L 9999999999')
+	lcvenc = Substr(Dtoc(crFiltro2.vencs), 1, 2) + Substr(Dtoc(crFiltro2.vencs), 4, 2) + Substr(Dtoc(crFiltro2.vencs), 7, 4)
+	lcvalor = Padl(Alltrim(Chrtran(Str(crFiltro2.valos,11,2),',.','')),15,'0')
+	lccgccli = Padl(Alltrim(Chrtran(crFiltro2.cpfs,[/.-,],[])),15,[0])
+	lctpcgcCli = Iif(Len(Alltrim(Chrtran(crFiltro2.cpfs,[/.-],[])))=11,'1','2')
+	lcTipoChv = [01] &&Padl(Alltrim(crFiltro2.tipochv),2,[0])
+	lcChv = Padl(Alltrim(' '),100,[ ]) &&Padl(Alltrim(crFiltro2.chvpix),100,[ ])
+	lcnome = Padr(Iif(Empty(crFiltro2.Razaos), crFiltro2.rclis, crFiltro2.Razaos),30)
+	lnMora = Iif(crConvenio.moras=0,0.33,crConvenio.moras)
+	lnMora = Round((crFiltro2.valos * lnMora) / 100,2)
+	lcMora = Padl(Alltrim(Chrtran(Str(lnMora,11,2),',.','')),15,'0')
+	
+	lcCodBco = Padl(crConvenio.nBancos,3)
+	lnCodAge = Padl(crConvenio.nagencias,20)
+	
+	lnSomaValor = lnSomaValor + crFiltro2.valos
+	
+	If Empty(crFiltro2.endcobs) Or Empty(crFiltro2.cepcobs) Or Empty(crFiltro2.estcobs) Or Empty(crFiltro2.baicobs) Or Empty(crFiltro2.cidcobs)
+		lcende = Padr(Alltrim(crFiltro2.endes)+[,]+crFiltro2.nums,40)
+		lcbair = Padr(crFiltro2.bairs,15)
+		lccep = Padl(Alltrim(Chrtran(crFiltro2.ceps,[.-],[])),8,[0])
+		lccida = Padr(crFiltro2.cidas,15)
+		lcesta = Padr(crFiltro2.estas,2)
+	Else
+		lcende = Padr(Alltrim(crFiltro2.endcobs),40)
+		lcbair = Padr(crFiltro2.baicobs,15)
+		lccep = Padl(Alltrim(Chrtran(crFiltro2.cepcobs,[.-],[])),8,[0])
+		lccida = Padr(crFiltro2.cidcobs,15)
+		lcesta = Padr(crFiltro2.estcobs,2)
+	Endif
+
+	lcnumtit = Padl(Alltrim(Strtran(crFiltro2.titulos, [/], [])),15,[0])
+	lcChave  = Padr(Alltrim(Strtran(crFiltro2.titulos, [/], [])),15)+lcnumes && numero do titulo no sigmvccr + numes
+
+	lcSeq = Transform(lnSeq,'@L 999999')
+
+	lcSeqNum = fGerUniqueKey([ITNOSSONUM])
+	lcDV = fCalcMod11BB(Padl(lcSeqNum,7,[0]),crConvenio.nbancos)
+	lcNossoNum = Padl(lcSeqNum,12,[0]) + lcDV
+
+	*** Detalhe A ***
+	lnSeql = lnSeql+1
+	lcSeql	= Transform(lnSeql,'@L 99999')
+
+	lnSeq = lnSeq+1
+	lcA001a003 = [341] 				&& Código do Banco na compensação
+	lcA004a007 = lcLot				&& Numero do lote remessa
+	lcA008a008 = [3] 				&& Tipo de registro
+	lcA009a013 = lcSeql		 		&& Nº seqüencial do registro de lote
+	lcA014a014 = [A]		 		&& Cód. Segmento do registro detalhe
+	lcA015a017 = [000]				&& TIPO DE MOVIMENTO 
+	lcA018a020 = [009]				&& CÓDIGO DA CÂMARA CENTRALIZADORA
+	lcA021a023 = lcCodBco			&& CÓDIGO BANCO FAVORECIDO 
+	lcA024a043 = lnCodAge			&& AGÊNCIA CONTA FAVORECIDO
+	lcA044a073 = lcnome				&& NOME DO FAVORECIDO
+	lcA074a093 = lcCta				&& Conta cobrança  Destinatária FIDC
+	lcA094a101 = lcvenc				&& Data de vencimento do título
+	lcA102a104 = [REA]				&& Reservado (uso Banco)
+	lcA105a112 = [009]				&& DENTIFICAÇÃO DA INSTITUIÇÃO PARA O SPB
+	lcA113a114 = [04]				&& CONTA PAGAMENTO / PIX
+	lcA115a119 = [00000]			&& COMPLEMENTO DE REGISTRO
+	lcA120a134 = lcvalor			&& Valor nominal do título
+	lcA135a149 = Space(15)			&& Nº DOCTO ATRIBUÍDO PELO BANCO
+	lcA150a154 = Space(5)			&& COMPLEMENTO DE REGISTRO 
+	lcA155a162 = lcvenc				&& DATA REAL EFETIVAÇÃO DO PAGTO
+	lcA163a177 = lcvalor			&& VALOR REAL EFETIVAÇÃO DO PAGTO
+	lcA178a197 = Space(20)			&& INFORMAÇÃO COMPLEMENTAR P/ HIST. DE C/C
+	lcA198a203 = [000000]			&& Nº DO DOC/TED/ OP/ CHEQUE NO RETORNO
+	lcA204a217 = lccgccli			&& N? DE INSCRIÇÃO DO FAVORECIDO (CPF/CNPJ)
+	lcA218a219 = Space(2)			&& FINALIDADE DO DOC E STATUS DO FUNCIONÁRIO NA EMPRESA 
+	lcA220a224 = Space(5)			&& FINALIDADE DA TED 
+	lcA225a229 = Space(5)			&& COMPLEMENTO DE REGISTRO
+	lcA230a230 = [0]				&& AVISO AO FAVORECIDO 
+	lcA231a240 = Space(10)			&& CÓDIGO OCORRÊNCIAS NO RETORNO
+
+	lcstrg = lcA001a003 +lcA004a007 +lcA008a008 +lcA009a013 +lcA014a014 +lcA015a017 +lcA018a020 +lcA021a023 +lcA024a043 +;
+	lcA044a073 +lcA074a093 +lcA094a101 +lcA102a104 +lcA105a112 +lcA113a114 +lcA115a119 +lcA120a134 +lcA135a149 +lcA150a154 +;
+	lcA155a162 +lcA163a177 +lcA178a197 +lcA198a203 +lcA204a217 +lcA218a219 +lcA220a224 +lcA225a229 +lcA230a230 +lcA231a240 + Chr(13)+Chr(10)
+
+	lcstrg = fLimpaTexto(lcstrg)
+	Strtofile(lcstrg,lcArq,1)
+
+	*** Detalhe B ***
+	lnSeq = lnSeq+1
+	lnSeql = lnSeql+1
+	lcSeql	= Transform(lnSeql,'@L 99999')
+
+	lcB001a003 = [341] 				&& Código do Banco na compensação
+	lcB004a007 = lcLot				&& LOTE DE SERVIÇO 
+	lcB008a008 = [3] 				&& REGISTRO DETALHE DO LOTE
+	lcB009a013 = lcSeql		 		&& Nº seqüencial do registro de lote
+	lcB014a014 = [B]		 		&& Cód. Segmento do registro detalhe
+	lcB015a016 = lcTipoChv			&& TIPO IDENTIFICAÇÃO DE CHAVE PIX
+	lcB017a017 = Space(1)			&& COMPLEMENTO DE REGISTRO 
+	lcB018a018 = lctpcgcCli			&& Tipo de inscrição do Pagador
+	lcB019a032 = lccgccli			&& Número de inscrição do Pagador
+	lcB033a062 = Space(30)			&& COMPLEMENTO DE REGISTRO 
+	lcB063a127 = Replicate('0',65)	&& INFORMAÇÃO ENTRE USUÁRIOS 
+	lcB128a227 = lcChv				&& CHAVE DE ENDEREÇAMENTO
+	lcB228a230 = Space(3)			&& COMPLEMENTO DE REGISTRO
+	lcB231a240 = Space(10)			&& CÓDIGO DE OCORRÊNCIAS NO RETORNO
+	
+
+	lcstrg = lcB001a003 +lcB004a007 +lcB008a008 +lcB009a013 +lcB014a014 +lcB015a016 +lcB017a017 +lcB018a018 +lcB019a032 +lcB033a062 +lcB063a127 +;
+	lcB128a227 +lcB228a230 +lcB231a240 + Chr(13)+Chr(10)
+
+	lcstrg = fLimpaTexto(lcstrg)
+	Strtofile(lcstrg,lcArq,1)
+
+	Replace SeqNums With Padl(lcSeqNum,5,[0]) In crFiltro2
+
+	Insert Into crSigPcOol(empdopnums,emps,dopes,numes,usuars,tipos,processos,produtos,DataS,cidchaves,dopeds,NumeDs) Values ;
+	(crFiltro2.empdopnums,crFiltro2.emps,crFiltro2.dopes,crFiltro2.numes,usuar,'SIGPRCNB','CNAB',lcstrg,Datetime(),fUniqueIds(),crFiltro2.titulos,lcSeqNum)
+
+Endscan
+
+* Gerando o Registro de trailer do lote
+lnSeq = lnSeq + 1
+lnSeql = lnSeql+1
+lcSeql	= Transform(lnSeql,'@L 999999')
+
+lcsomavalor = Padl(Alltrim(Chrtran(Str(lnSomaValor,11,2),',.','')),15,'0')
+
+lcL001a003 = [341] 				&& Código do Banco na compensação
+lcL004a007 = lcLot				&& Numero do lote remessa
+lcL008a008 = [5] 				&& Tipo de registro
+lcL009a017 = Space(9)			&& Reservado (uso Banco)
+lcL018a023 = lcSeql		 		&& Quantidade de registros do lote
+lcL024a041 = lcsomavalor		&& SOMA VALOR DOS PGTOS DO LOTE
+lcL042a059 = Replicate('0',18)  && COMPLEMENTO DE REGISTRO
+lcL060a230 = Space(171)			&& COMPLEMENTO DE REGISTRO
+lcL231a240 = Space(10)			&& CÓDIGOS OCORRÊNCIAS P/ RETORNO
+
+lcstrg = lcL001a003+lcL004a007+lcL008a008+lcL009a017+lcL018a023+lcL024a041+lcL042a059+lcL060a230+lcL231a240+Chr(13)+Chr(10)
+
+lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcArq,1)
+
+
+** Gerando registro trailer de arquivo
+lnSeq = lnSeq + 1
+lcSeq = Transform(lnSeq,'@L 999999')
+lcH001a003 = [033] 				&& Código do Banco na compensação
+lcH004a007 = [9999]				&& Numero do lote remessa
+lcH008a008 = [9] 				&& Tipo de registro
+lcH009a017 = Space(9)			&& Reservado (uso Banco)
+lcH018a023 = [000001]	 		&& Quantidade de lotes
+lcH024a029 = lcSeq		 		&& Quantidade de registros
+lcH030a240 = Space(211)			&& Reservado (uso Banco)
+
+lcstrg = lcH001a003+lcH004a007+lcH008a008+lcH009a017+lcH018a023+lcH024a029+lcH030a240+Chr(13)+Chr(10)
+
+lcstrg = fLimpaTexto(lcstrg)
+Strtofile(lcstrg,lcArq,1)
+
+
+If File(lcArq)
+	lok = .T.
+	If ! Thisform.podatamgr.Update('crSigPcOol')
+		Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')
+		lok = .F.
+	Endif
+
+	If lok &&And latua
+		Select crFiltro2
+		Scan
+			Thisform.podatamgr.Sqlexecute('select titulos, titbans from SigMvCcr where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers','crSigMvCcr')
+			Select crSigMvCcr
+			Go Top
+			latua = .T.
+			If !Empty(crSigMvCcr.titbans)
+				latua = Messagebox([Título "] + crSigMvCcr.titulos + [" já possui Título do Banco preenchido. Sobrescrever?],4+32,'Aviso') = 6
+			Endif
+			If latua
+				lcquery = 'Update SigMvCcr set titbans = ?lctit where empdopnums = ?crFiltro2.empdopnums and nopers = ?crFiltro2.nopers'
+				If Thisform.podatamgr.Sqlexecute(lcquery) < 1
+					Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update) ')
+					lok = .F.
+				Endif
+			Endif
+		Endscan
+	Endif
+
+	If lok
+		If Thisform.podatamgr.Commit() < 1
+			Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit) ')
+		Endif
+	Endif
+	Thisform.podatamgr.Requery('crSigPcOol')
+
+	Messagebox([Arquivo '] + lcArq + [' gerado com sucesso.],64,[Aviso])
+	Thisform.pgfprincipal.pgdados.commandgroup1.btnBoleto.Enabled = .T.
+
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.pgfprincipal.pgfiltro.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.pgfprincipal.pgfiltro.cntSombra.lblTitulo.Caption = ThisForm.Caption
+With Thisform
+	.poDataMgr = Createobject('fSqlConector', Thisform.Name)
+
+	If (.poDataMgr.pnIdconn < 0)
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...',48,'Create Object')
+		Return(.F.)
+	Endif
+
+	.poDataMgr.AddCursor('SigPcOol','cidchaves','crSigPcOol','empdopnums')
+
+	lcQuery = [Select * ] + ;
+		[From SigOpFp ] + ;
+		[Where Situas in ('R','A') And ] + ;
+		[Infos = 'K']
+
+	Thisform.poDataMgr.SqlExecute(lcQuery, [CrSigOpFp])
+	Select CrSigOpFp
+	Index On Fpags Tag FPagsGru
+
+	lltru = .F.
+	Thisform.poDataMgr.SqlExecute([select dopes, ?lltru as marca from SigCdOpe where Parcontas = 1 And ValPends = 1 order by dopes],[crSigCdOpe])
+	Select crSigCdOpe
+
+	Thisform.pgfprincipal.pgfiltro.grdope.RecordSource = [crSigCdOpe]
+	Thisform.pgfprincipal.pgfiltro.grdope.column1.ControlSource = [crSigCdOpe.marca]
+	Thisform.pgfprincipal.pgfiltro.grdope.column2.ControlSource = [crSigCdOpe.dopes]
+
+	Thisform.pgfprincipal.pgfiltro.get_Cd_Empresa.SetFocus()
+
+Endwith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgfiltro.cmdTestaPos
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnProcessar.Click
+------------------------------------------------------------
+PROCEDURE btnProcessar.Click
+If Empty(Thisform.pgfprincipal.pgfiltro.get_Cd_Empresa.Value)
+	Messagebox('Empresa inválida',64,'Aviso')
+	Thisform.pgfprincipal.pgfiltro.get_Cd_Empresa.SetFocus()
+	Return .F.
+Endif
+
+If Empty(Thisform.pgfprincipal.pgfiltro.get_Datai.Value) Or Empty(Thisform.pgfprincipal.pgfiltro.get_Dataf.Value)
+	Messagebox('Período inválido',64,'Aviso')
+	Thisform.pgfprincipal.pgfiltro.get_Datai.SetFocus()
+	Return .F.
+Endif
+
+If Empty(Thisform.pgfprincipal.pgfiltro.get_cd_car_conta.Value)
+	Messagebox('Banco inválido',64,'Aviso')
+	Thisform.pgfprincipal.pgfiltro.get_cd_car_conta.SetFocus()
+	Return .F.
+Endif
+
+Select crSigCdOpe
+Count For marca To lncont
+If lncont = 0
+	Messagebox('Nenhuma operação foi selecionada',64,'Aviso')
+	Return .F.
+Endif
+
+Thisform.processamento()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnsair.Click
+------------------------------------------------------------
+PROCEDURE btnsair.Click
+thisform.Release()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgfiltro.Get_Dataf
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < ThisForm.pgfprincipal.pgfiltro.Get_Datai.Value And Not Empty(ThisForm.pgfprincipal.pgfiltro.Get_Datai.Value)
+	=Messagebox('Data Final Deve Ser Maior Que a Inicial!!!', 48, '')
+	Return 0
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgfiltro.get_ds_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+*!*	IF !EMPTY(this.Value)
+	fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.pgfprincipal.pgfiltro.get_Cd_Empresa, ThisForm.pgfprincipal.pgfiltro.get_Ds_Empresa)
+*!*	ENDIF
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.pgfprincipal.pgfiltro.get_cd_empresa.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgfiltro.get_cd_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+*!*	IF !EMPTY(this.Value)
+	fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.pgfprincipal.pgfiltro.get_Cd_Empresa, ThisForm.pgfprincipal.pgfiltro.get_Ds_Empresa)
+*!*	ENDIF
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgfiltro.get_ds_car_conta
+* Classe: fwget (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,lcGrupo
+
+Local llRetorno
+
+m.lcGrupo = ''
+
+m.llRetorno = (fAcessoContas(Usuar,m.lcGrupo,'D',This.Value,ThisForm.pgfprincipal.pgfiltro.get_Cd_Car_Conta,ThisForm.pgfprincipal.pgfiltro.get_Ds_Car_Conta))
+
+If .Not.m.llRetorno
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.pgfprincipal.pgfiltro.get_Cd_Car_Conta.Value = ''
+	ThisForm.pgfprincipal.pgfiltro.get_Ds_Car_Conta.Value = ''
+EndIf
+
+Return(m.llRetorno)
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.pgfprincipal.pgfiltro.get_cd_Car_conta.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgfiltro.get_cd_car_conta
+* Classe: fwget (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,lcGrupo
+
+Local llRetorno
+
+m.lcGrupo = ''
+
+m.llRetorno = (fAcessoContas(Usuar,m.lcGrupo,'C',This.Value,ThisForm.pgfprincipal.pgfiltro.get_Cd_Car_Conta,ThisForm.pgfprincipal.pgfiltro.get_Ds_Car_Conta))
+
+If .Not.m.llRetorno
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.pgfprincipal.pgfiltro.get_Cd_Car_Conta.Value = ''
+	ThisForm.pgfprincipal.pgfiltro.get_Ds_Car_Conta.Value = ''
+EndIf
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgfiltro.Get_titban
+* Classe: fwget (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Select * ;
+	  From CrSigOpFp ;
+  	  Into Cursor LocalFpag ReadWrite
+
+	Select LocalFpag
+	Index On Fpags Tag FpagSgru
+	Set Near On
+	If Not Seek(This.Value)
+		loBrow = CreateObject('fwBuscaSel', 'LocalFPag', 'FPagsGru', This.Value, 'Formas de Pagamento')
+		loBrow.AddColuna('FPags', Repl( 'X', 12 ), 'Código' , .T., 'FPagsGru')
+		loBrow.Show
+		This.Value = Iif(Lastkey()=27, [], Padr(LocalFPag.FPags, 12))
+	EndIf 
+	Set Near Off
+EndIf 
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgfiltro.Commandgroup2
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnmarca.Click
+------------------------------------------------------------
+PROCEDURE btnmarca.Click
+Select crSigCdOpe
+Update crSigCdOpe Set marca = .T.
+Locate
+Go Top
+
+Thisform.pgfprincipal.pgfiltro.grdope.Refresh()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btndesmarca.Click
+------------------------------------------------------------
+PROCEDURE btndesmarca.Click
+Select crSigCdOpe
+Update crSigCdOpe Set marca = .F.
+Locate
+Go Top
+
+Thisform.pgfprincipal.pgfiltro.grdope.Refresh()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgdados.grdope.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return crFiltro.EndErro = 0
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgdados.cmdTestaPos
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnsair.Click
+------------------------------------------------------------
+PROCEDURE btnsair.Click
+thisform.pgfprincipal.pgDados.grdope.RecordSource = []
+thisform.pgfprincipal.pgfiltro.Enabled = .t.
+thisform.pgfprincipal.pgDados.Enabled = .f.
+thisform.pgfprincipal.ActivePage = 1
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgdados.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 49
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btncnab.Click
+------------------------------------------------------------
+PROCEDURE btncnab.Click
+thisform.geracnab([A])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnrelatorio.Click
+------------------------------------------------------------
+PROCEDURE btnrelatorio.Click
+thisform.geracnab([V])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnBoleto.Click
+------------------------------------------------------------
+PROCEDURE btnBoleto.Click
+thisform.geracnab([I])
+thisform.impboleto(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgdados.Commandgroup2
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnmarca.Click
+------------------------------------------------------------
+PROCEDURE btnmarca.Click
+SELECT crfiltro
+Update crfiltro set marca = .t.
+*!*	replace all marca with .t.
+Locate
+Go top
+
+
+thisform.pgfprincipal.pgdados.grdope.Refresh()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btndesmarca.Click
+------------------------------------------------------------
+PROCEDURE btndesmarca.Click
+SELECT crfiltro
+Update crfiltro set marca = .f.
+*!*	replace all marca with .f.
+Locate
+Go top
+
+thisform.pgfprincipal.pgdados.grdope.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCNB.pgfprincipal.pgdados.Botao1
+* Classe: textbox (Base: textbox)
+* Registro: 55
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRCNB
+RESERVED3 (ClassInfo): podatamgr
+*processamento 
+*geracnab 
+*cnabbradesco 
+*cnabitau 
+*cnabbrasil 
+*impboleto 
+*cnabbrasil6 
+*cnabsantander 
+*cnabsantander240 
+*cnabitau240 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 32
+================================================================================

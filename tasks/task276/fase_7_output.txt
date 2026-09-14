@@ -1,0 +1,13 @@
+﻿O arquivo `FormSigPrDsc.prg` j├í est├í completo. Todos os eventos principais desta fase j├í foram implementados nas fases anteriores:
+
+- `BtnEncerrarClick` ÔÇö linha 491 (Release)
+- `BtnAtualizarClick` ÔÇö linha 495 (chama `GravarDescricoes()` do BO)
+- `BtnSelecionarClick` ÔÇö linha 513 (valida filtros + chama `ProcessarTraducoes()`)
+- `TxtCProsIKeyPress` / `TxtCProsFKeyPress` ÔÇö linhas 569/611 (valida├º├úo com ENTER/TAB/F4 + picker)
+- `TxtCGrusKeyPress` ÔÇö linha 703 (valida├º├úo de grupo + picker)
+- `AbrirBuscaProduto` / `AbrirBuscaGrupo` ÔÇö linhas 654/748 (FormBuscaAuxiliar)
+- `AtualizarEstadoCampos` ÔÇö linha 781 (controle de Enabled para filtros mutuamente exclusivos)
+
+Os nomes "BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick" do template de fase s├úo para forms CRUD ÔÇö este form OPERACIONAL n├úo tem esses bot├Áes. Os equivalentes funcionais (`Selecionar` e `Atualizar`) j├í est├úo implementados.
+
+A fase 7/8 est├í conclu├¡da. O form possui paridade 100% com o legado: valida├º├Áes de filtros, lookups por F4/ENTER/TAB para produto e grupo, processamento de tradu├º├Áes e grava├º├úo em batch com barra de progresso via BO.

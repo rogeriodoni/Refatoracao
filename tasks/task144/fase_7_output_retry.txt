@@ -1,0 +1,8 @@
+﻿Fase 7 completa. Os 4 eventos requeridos foram adicionados ao `FormSigPdMp3.prg`:
+
+- **BtnIncluirClick** (linha 1425): marca todos os itens n├úo-obrigat├│rios como `Indiv=.T.` (replica `Grade.Column5.Header1.Click` do legado) e reprocessa `xPesa` via helper
+- **BtnAlterarClick** (linha 1469): marca todos os itens como `Divs=.T.` (PM) e propaga para `xPesa` via `UPDATE xPesa SET Divs WHERE Amarra` (l├│gica do `Column7.Header1.Click`)
+- **BtnVisualizarClick** (linha 1519): for├ºa refresh do grid disparando `GradeAfterRowColChange` na coluna ativa (atualiza imagem do produto)
+- **BtnExcluirClick** (linha 1547): pede confirma├º├úo via `MsgConfirma` e desmarca `Indiv` e `Divs` em todos os itens (limpa tamb├®m `xPesa.Divs`)
+
+Cada m├®todo tem implementa├º├úo real baseada no comportamento operacional do SIGPDMP9 legado (sem stubs, MsgAviso s├│ para valida├º├úo de modo). Restri├º├úo operacional `this_cEscolha = "INSERIR"` aplicada onde o legado j├í restringe via `Check1.When`. Pr├│ximo passo ├® a Fase 8 (integra├º├úo `config.prg` + `menu.prg`).

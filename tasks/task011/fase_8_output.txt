@@ -1,0 +1,14 @@
+﻿`config.prg` uses `ADIR()` to automatically load all `*BO.prg` from `classes/` and all `Form*.prg` from `forms/cadastros/`. Both `ProdutoBO.prg` and `FormProduto.prg` are already in those directories and will be loaded automatically. No changes needed.
+
+Phase 8 is complete. Here's a summary of what was done:
+
+**Changes made to `FormProduto.prg`:**
+
+1. **`BtnSalvarClick()` (line 2965)** ÔÇö Added call to `THIS.AtualizarSigCdPro()` before `AlternarPagina(1)`. The `AlternarPagina(1)` already internally calls `CarregarLista()` + `AjustarBotoesPorModo()`, so the grid refreshes correctly after save.
+
+2. **New `AtualizarSigCdPro()` method (line 3948)** ÔÇö Saves all editable SigCdPro fields back to the database after the BO saves SigPrFtp. This was missing: the form makes ~30 SigCdPro fields user-editable (dpro2s, cbars, linhas, colecoes, ifors, reffs, codcors, codtams, codfinp, pesobs, codacbs, cclass, locals, cunis, cunips, custofs, moecs, pvens, moepvs, codident, fvendas, moevs, dsccompras, dpro3s, obscompras, fabrproprs, consigs, encoms) but none were being saved without this method.
+
+**No changes needed for:**
+- `config.prg` ÔÇö dynamic ADIR() loading picks up both files automatically
+- `menu.prg` ÔÇö `AbrirFormProduto()` and BAR 7 already in place
+- `BtnCancelarClick()` ÔÇö `AlternarPagina(1)` already handles the list refresh

@@ -1,0 +1,13 @@
+﻿Os 4 eventos j├í foram implementados em fase anterior. Verificando o estado atual:
+
+**BtnIncluirClick** (linha 1340): Ô£ô Implementado com NovoRegistro(), LimparCampos(), CriarCursorDetalheVazio(), AlternarGradeDetalhe()
+
+**BtnVisualizarClick** (linha 1368): Ô£ô Implementado com guard de cursor, CarregarPorCodigo(), BOParaForm(), CarregarDetalhe(), HabilitarCampos(.F.)
+
+**BtnAlterarClick** (linha 1403): Ô£ô Implementado com CarregarPorCodigo(), EditarRegistro(), modo ALTERAR
+
+**BtnExcluirClick** (linha 1439): Ô£ô Implementado com MsgConfirma() + Excluir() + CarregarLista()
+
+Todos os m├®todos do BO chamados pelos eventos existem em `mtzBO.prg`: `NovoRegistro`, `CarregarDetalhe`, `CriarCursorDetalheVazio`, `AtualizarTotal`, `ValidarDuplicatas`, `InserirLinhaDetalhe`, `ExcluirLinhaDetalhe`.
+
+**Fase 7/8 j├í est├í completa.** O arquivo `Formmtz.prg` tem os 4 eventos principais funcionais, sem RETURN dentro de TRY/CATCH, com CATCH tratado, e todos os m├®todos do BO existentes. Nenhuma altera├º├úo necess├íria.

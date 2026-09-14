@@ -1,0 +1,26 @@
+﻿Tenho agora a vis├úo completa. Vou fazer a an├ílise definitiva de cada item antes de responder.
+
+**An├ílise dos 10 itens flagados:**
+
+**Itens em SQL WHERE (strings de query SQL Server):**
+- **CEMPS** (linha 2163): `WHERE Cemps = ` para SigCdEmp ÔÇö `Cemps` ├® o PK correto de SigCdEmp (ver `feedback_sigcdemp_cemps_razas.md`). O c├│digo original tamb├®m usa `Where Cemps = `. **Falso positivo.**
+- **GRUPODS** (linhas 2180, 2200, 2225, 2249, 2640, 2656, 2674): Em queries SQL para LocalNens, LocalNensI, LocalServ, LocalMFas, LocalEest. O c├│digo original usava `ThisForm.poDataMgr.SqlExecute` que aplicava filtros implicitamente via DataManager Fortyus. A migra├º├úo traduz esses filtros para WHERE expl├¡cito na query SQL ÔÇö l├│gica correta e necess├íria.
+
+**Itens em condi├º├Áes VFP (`IF`/`SCAN`) ÔÇö N├âO s├úo SQL WHERE:**
+- **UNIFBALS** (linhas 2325, 2346, 2520, 2835, 2842, 2851, 3170, 3216): Condi├º├Áes VFP `IF TmpGccr.UnifBals = X` ÔÇö acesso a campo de cursor, n├úo WHERE SQL.
+- **ESTORIGS** (linhas 2304, 2390, 2407, 2420, 2426, 2533, 2544, 2587, 2705, 2744, 2799, 2806, 2815, 2822): Condi├º├Áes VFP `IF LocalOpp.EstOrigs = 1` / `crSigCdOpe.EstOrigs = 4`.
+- **GRTRANS** (linhas 2418, 2494): VFP `crSigCdPam.GrTrans <> loc_cGrupo`.
+- **PRODZS** (linha 2441): VFP `crSigOpOpt.Prodzs = 1`.
+- **ESTDESTS** (linhas 2466, 2483, 2496, 2502, 2556, 2567, 2579, 2801, 2808, 2813, 2820): VFP `LocalOpp.EstDests = 1`.
+- **DESTINOS** (linhas 2308, 2709, 2720, 2801, 2808): VFP `crSigCdOpe.Destinos = 1`.
+- **ACERTBALS** (linha 3406): VFP `crSigCdPam.AcertBals = 1`.
+- **TPOPS** (linha 3479): Condi├º├úo JOIN em SELECT VFP local (`a.TpOps = c.Cods`) sobre cursores tempor├írios ÔÇö n├úo ├® query SQL Server.
+
+---
+
+**Resultado da verifica├º├úo:** Todos os 10 itens s├úo **falsos positivos** do validador autom├ítico. Nenhum ├® uma condi├º├úo WHERE SQL inventada:
+
+1. **CEMPS** e **GRUPODS** est├úo em WHERE SQL corretos ÔÇö traduzem fielmente a l├│gica do DataManager original e dos filtros VFP p├│s-load.
+2. Os demais 8 itens s├úo condi├º├Áes `IF` em c├│digo VFP puro que processam dados de cursores j├í carregados ÔÇö o validador os confundiu com cl├íusulas SQL WHERE.
+
+**Nenhuma altera├º├úo de c├│digo ├® necess├íria.** O c├│digo migrado est├í semanticamente correto em rela├º├úo ao original.

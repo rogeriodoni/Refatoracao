@@ -1,0 +1,23 @@
+[2026-06-04 03:53:05] [INFO] === CLAUDE CLI INVOKER ===
+[2026-06-04 03:53:05] [INFO] Prompt File: C:\4c\tasks\task078\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-06-04 03:53:05] [INFO] Output File: C:\4c\tasks\task078\06b_testeAutomatico_fix_output_t1.txt
+[2026-06-04 03:53:05] [INFO] Model: sonnet
+[2026-06-04 03:53:05] [INFO] Timeout: 3600 segundos
+[2026-06-04 03:53:05] [INFO] Max Output Tokens: 128000
+[2026-06-04 03:53:05] [INFO] Context Files: 0 arquivo(s)
+[2026-06-04 03:53:06] [INFO] Invocando Claude CLI...
+[2026-06-04 03:53:06] [INFO] Prompt carregado: 136337 caracteres
+[2026-06-04 03:53:06] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-06-04 03:53:06] [INFO] Tamanho total do prompt: 136337 caracteres
+[2026-06-04 03:53:06] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-06-04 03:54:32] [INFO] Claude CLI finalizado em 85.909316 segundos
+[2026-06-04 03:54:32] [INFO] Exit Code: 0
+[2026-06-04 03:54:32] [INFO] Output salvo em: C:\4c\tasks\task078\06b_testeAutomatico_fix_output_t1.txt
+[2026-06-04 03:54:32] [INFO] Output size: 815 bytes
+[2026-06-04 03:54:32] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-06-04 03:54:32] [INFO] Preview do output:
+[2026-06-04 03:54:32] [INFO] **Fix aplicado em `FormSIGREDES.prg` (linha ~838).**
+
+**Causa raiz:** `InicializarFiltros()` do BO faz SQLEXEC para criar `cursor_4c_OpFp`. No ambiente de teste (sem conex+úo SQL Server real), o SQLEXEC retorna `-1` e o cursor nunca +® criado. A form n+úo checava o retorno de `InicializarFiltros()` e chamava `ConfigurarFiltros()` mesmo assim, que tentava setar `RecordSource = "cursor_4c_OpFp"` em um alias inexistente ÔåÆ crash.
+
+**Solu+º+úo:** Antes de criar o grid, verificar `IF !USED("curs

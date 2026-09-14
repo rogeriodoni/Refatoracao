@@ -1,0 +1,577 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdCst.SCX
+* Data/Hora: 31/07/2026 17:04:43
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCST
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Código
+  Parent: SIGCDCST.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Descrição
+  Parent: SIGCDCST.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Constante
+  Parent: SIGCDCST.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDCST.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDCST.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGCDCST.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label4
+  Parent: SIGCDCST.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: get_ds_moeda
+  Parent: SIGCDCST.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_moeda
+  Parent: SIGCDCST.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCST
+------------------------------------------------------------
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Constantes"
+  Name = "SIGCDCST"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 543
+  Pagina.Lista.Grupo_op.Top = 0
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = 0
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 820
+  Pagina.Dados.Grupo_Salva.Top = 8
+  Pagina.Dados.Grupo_Salva.TabIndex = 10
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Comment = "e"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCST.Pagina.Dados.Get_Código
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigCdCnt.Codigos"
+  Height = 23
+  InputMask = "!!!"
+  Left = 330
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 122
+  Width = 34
+  plprocurar = .T.
+  Name = "Get_Código"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCST.Pagina.Dados.Get_Descrição
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigCdCnt.Descricaos"
+  Height = 23
+  Left = 330
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 148
+  Width = 290
+  Name = "Get_Descrição"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCST.Pagina.Dados.Get_Constante
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "crSigCdCnt.Consts"
+  Height = 23
+  InputMask = "9,999,999.999999"
+  Left = 330
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 174
+  Width = 150
+  Name = "Get_Constante"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCST.Pagina.Dados.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Código : "
+  Height = 15
+  Left = 281
+  Top = 126
+  Width = 45
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCST.Pagina.Dados.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição : "
+  Height = 15
+  Left = 268
+  Top = 152
+  Width = 58
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCST.Pagina.Dados.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Valor da Constante : "
+  Height = 15
+  Left = 222
+  Top = 178
+  Width = 104
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCST.Pagina.Dados.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Moeda : "
+  Height = 15
+  Left = 282
+  Top = 204
+  Width = 44
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCST.Pagina.Dados.get_ds_moeda
+------------------------------------------------------------
+  Height = 23
+  Left = 365
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 200
+  Width = 115
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCST.Pagina.Dados.get_cd_moeda
+------------------------------------------------------------
+  ControlSource = "crSigCdCnt.Moedas"
+  Height = 23
+  InputMask = "!!!"
+  Left = 330
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 200
+  Width = 32
+  ZOrderSet = 15
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCST
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.Get_Código.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdCnt','codigos',ThisForm.Pagina.Dados.Get_código.Value)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdCnt','codigos','crSigCdCnt','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('codigos','','','Código',60,.t.)
+		.pfSqlTabela(1).pColuna('descricaos','','','Descrição',267,.t.)
+		.pfSqlTabela(1).pColuna('consts','','','Valor',177,.t.)
+		.pfSqlTabela(1).pColuna('moedas','','','Moeda',42,.t.)
+		.AddCursor('SigCdMoe','cmoes','SigCdMoe','','')
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !DoDefault( opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Thisform.podatamgr.sqlexecute("Select a.dmoes from SigCdMoe a where a.cmoes = '"+CrSigCdCnt.moedas+"'","SigCdMoe") 
+This.Parent.Parent.Dados.get_ds_moeda.Value = SigCdMoe.dmoes
+
+If (ThisForm.pcEscolha = [EXCLUIR])
+	lcCon = crSigCdCnt.Codigos
+
+	lcQuery = [Select Codigos ] + ;
+				[From SigOpTdt ] + ;
+			   [Where (const1t1s = '] + lcCon + [' Or ] + ;
+			   		  [const1t2s = '] + lcCon + [' Or ] + ;
+			   		  [const2t1s = '] + lcCon + [' Or ] + ;
+			   		  [const2t2s = '] + lcCon + [' Or ] + ;
+			   		  [const3t1s = '] + lcCon + [' Or ] + ;
+			   		  [const3t2s = '] + lcCon + [')]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus)])
+		Return 0
+	EndIf
+	Go Top In LocalBus
+	If Not Eof([LocalBus])
+		=MessageBox([A Constante Não Pode Ser Excluída Pois Está] + Chr(13) + ;
+					[Sendo Usada Na Tabela de Descontos "] + Alltrim(LocalBus.Codigos) + ["], 0+16, ;
+					[Exclusão Não Permitida])
+		ThisForm.mAtivapagina1
+		Return .f.
+	EndIf
+EndIf
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.Get_Código.SetFocus
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' ) 
+		ThisForm.Pagina.Dados.Grupo_salva.Salva.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Get_Descrição.SetFocus
+Endcase
+
+ThisForm.Pagina.Dados.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha = 'INSERIR'		
+	If ThisForm.poDataMgr.ChkRegister('SigCdCnt','codigos',ThisForm.Pagina.Dados.Get_Código.Value)
+		Messagebox( 'Código da Constante já cadastrado...', 48, '' )
+		ThisForm.Pagina.Dados.Get_Código.SetFocus
+		Return
+	Endif	
+Endif		
+=DoDefault()		
+ThisForm.mAtivapagina1		
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCST.Pagina.Dados.Get_Código
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCST.Pagina.Dados.Get_Descrição
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCST.Pagina.Dados.Get_Constante
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCST.Pagina.Dados.get_ds_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( IsEmpty( this.parent.get_cd_moeda.value ) ) AND Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdMoe','SigCdMoe','Dmoes',This.Value,'Descrição',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Dmoes',Replicate('x',60),'Descrição')
+		m.loLista.mAddColuna('Cmoes','','Moeda')
+		m.loLista.Show()
+	EndIf
+
+	this.value = Iif(LastKey()==27,Space(15),SigCdMoe.dmoes)
+	this.parent.get_cd_moeda.value = Iif(LastKey()==27,Space(3),SigCdMoe.cmoes)
+	This.Refresh
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCST.Pagina.Dados.get_cd_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdMoe','SigCdMoe','Cmoes',This.Value,'Moeda',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Cmoes','','Moeda')
+		m.loLista.mAddColuna('Dmoes',Replicate('x',60),'Descrição')
+		m.loLista.Show()
+	EndIf
+
+	this.value = Iif(LastKey()==27,Space(3),SigCdMoe.Cmoes)
+	this.parent.get_ds_moeda.value = Iif(LastKey()==27,Space(15),SigCdMoe.dmoes)
+	This.Refresh
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+
+Return(m.llRetorno)
+
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

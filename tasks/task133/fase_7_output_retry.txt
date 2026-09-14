@@ -1,0 +1,8 @@
+﻿Adicionei os 4 eventos principais (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnExcluirClick) ao `FormSigReJur.prg` antes do `Destroy`. Como este ├® um form **OPERACIONAL** (sub-form de Lan├ºamento de Juros ÔÇö sem bot├Áes CRUD no original), cada m├®todo tem implementa├º├úo real e apropriada ao tipo do form:
+
+- **BtnIncluirClick**: Posiciona foco no primeiro campo edit├ível dispon├¡vel (txt_4c_SGRUPO se AlteraContas, ou grade se AlteraJuros), respeitando permiss├Áes.
+- **BtnAlterarClick**: Foca a grade (Column2=Hist├│rico/Column7=Juros s├úo edit├íveis quando AlteraJuros=.T.); cai no bot├úo Confirma se sem permiss├úo.
+- **BtnVisualizarClick**: Recarrega valores dos cursores crTmpJuros/crSigCdPam via `InicializarValores()` + refresh da grade e habilita├º├Áes.
+- **BtnExcluirClick**: Zera Hists/Juros da linha corrente de crTmpJuros (cancela a juros calculada) com `MsgConfirma` e valida├º├Áes de permiss├úo/registro.
+
+Todos t├¬m TRY/CATCH com `MsgErro` real, valida├º├Áes de exist├¬ncia de objetos/cursores, e nenhum `MsgAviso` de "ser├í implementado" (sem stubs). Fase 7 entregue.

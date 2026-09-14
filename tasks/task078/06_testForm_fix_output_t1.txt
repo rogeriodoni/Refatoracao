@@ -1,0 +1,9 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente. Resumo do diagn├│stico e da solu├º├úo:
+
+**Causa raiz**: Durante `CREATEOBJECT("FormSIGREDES")`, o fluxo de inicializa├º├úo chegava em `CarregarFiltrosNaUI()` que chamava `ValidarEmpresa()` automaticamente (empresa `"01"` tinha c├│digo mas sem descri├º├úo). Se a empresa n├úo fosse encontrada em `SigCdEmp` ÔÇö ou se o SQLEXEC expirasse pelo timeout ÔÇö o c├│digo chamava `AbrirBuscaEmpresa()` ÔåÆ `FormBuscaAuxiliar.Show()` (WindowType=1, modal) ÔåÆ bloqueio eterno aguardando input de usu├írio ÔåÆ timeout de 300s.
+
+**Corre├º├Áes aplicadas**:
+
+1. **`SIGREDESBO.prg`** (`InicializarFiltros`): Agora busca a descri├º├úo da empresa via SQLEXEC direto logo ap├│s setar `this_cEmpresa`, populando `this_cDesEmpresa` sem precisar abrir lookup modal.
+
+2. **`FormSIGREDES.prg`** (`CarregarFiltrosNaUI`): Removido o bloco que chamava `ValidarEmpresa()` automaticamente durante init ÔÇö a descri├º├úo agora vem populada pelo BO, e chamadas de lookup devem ocorrer apenas por a├º├úo do usu├írio (F4/Enter/DblClick).

@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O objeto `check12` foi renomeado para `Check1`, alinhando com o `CurrentControl = "Check1"` e os `BINDEVENT` que j├í referenciavam `grd_4c_Orcs.Column1.Check1`.
+
+**Causa raiz:** `AddObject("check12", ...)` criou o controle com nome `check12`, mas `CurrentControl = "Check1"` tentava referenciar `Check1` (inexistente) ÔÇö causando o erro "Expression evaluated to an illegal value" que derrubava o `InicializarForm()`.

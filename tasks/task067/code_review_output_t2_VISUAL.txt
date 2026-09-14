@@ -1,0 +1,45 @@
+﻿An├ílise conclu├¡da. Todos os 7 problemas s├úo **falsos positivos** do validador. Explico:
+
+---
+
+## Os 7 problemas s├úo todos falsos positivos
+
+### Causa 1: Offset do PageFrame n├úo contabilizado (problemas 1, 2, 4, 5, 7)
+
+O validador compara as coordenadas do SCX original (relativas ao form) com as coordenadas migradas (relativas ao Page1). Como o PageFrame tem `Top=85` e `Tabs=.F.`, a conven├º├úo correta ├®:
+
+```
+page_top = top_original - 85
+```
+
+Verifica├º├úo exata de cada caso:
+
+| Controle | Top original | Top migrado | C├ílculo | Resultado |
+|----------|-------------|-------------|---------|-----------|
+| `lbl_vencimento` / `_a` | 219 | 134 | 219 - 85 = **134** | Ô£ô CORRETO |
+| `lbl_empresa` | 244 | 159 | 244 - 85 = **159** | Ô£ô CORRETO |
+| `lbl_moeda` | 270 | 185 | 270 - 85 = **185** | Ô£ô CORRETO |
+| `Opt_oper` | 87 | 2 | 87 - 85 = **2** | Ô£ô CORRETO |
+
+O pr├│prio c├│digo documenta isso na linha 329: `*   Coordenadas relativas a Page1: top_original - 85 (PageFrame.Top=85)`.
+
+---
+
+### Causa 2: Validador confundiu `lbl_vencimento` com `lbl_vencimento_a` (problemas 2 e 3)
+
+O validador associou `lbl_vencimento` ÔåÆ `lbl_4c_Lbl_vencimento_a` (o "a" entre as datas), mas o mapeamento correto ├®:
+
+- `lbl_vencimento` ÔåÆ `lbl_4c_Lbl_vencimento` (linha 542: Top=134, Left=177) Ô£ô
+- `lbl_vencimento_a` ÔåÆ `lbl_4c_Lbl_vencimento_a` (linha 570: Top=134, Left=333) Ô£ô
+
+Ambos existem no c├│digo com posi├º├Áes corretas. O validador fez match errado pelo nome mais similar.
+
+---
+
+### Causa 3: Validador leu posi├º├úo dos bot├Áes internos do OptionGroup (problemas 5 e 6)
+
+O validador reportou `obj_4c_Opt_oper` com Top=3 e Left=0 ÔÇö mas esses s├úo os valores de `Buttons(1)` **dentro** do OptionGroup (linhas 363-364: `.Top=3`, `.Left=0`). O pr├│prio OptionGroup est├í em Top=2, Left=243 (linhas 353-354), que corresponde exatamente ao original (Left=243 id├¬ntico; Top=87-85=2).
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto em todos os 7 casos reportados. O validador tem tr├¬s limita├º├Áes conhecidas aqui: n├úo contabiliza o offset do PageFrame, faz match de nome amb├¡guo entre controles similares, e penetra na hierarquia interna do OptionGroup ao medir posi├º├Áes.

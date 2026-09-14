@@ -1,0 +1,21 @@
+﻿Phase 5 is complete. Here's a summary of what was implemented:
+
+**Phase 5 changes to `FormIct.prg`:**
+
+- **11 Labels** (lbl_4c_Label1ÔÇô11) added inside `cnt_4c_Container1` at exact legado positions ÔÇö Tipo, Descri├º├úo, C.F.O.P., Estado Origem, Estado Destino, Tipo de Movimento, [E]ntrada/[S]a├¡da hint, Al├¡quota, Base Reduzida, Al├¡quota Reduzida, Al├¡quota Substitui├º├úo
+
+- **13 TextBoxes** added: `txt_4c_Tipo` (MaxLength=4), `txt_4c_Desc` (20), `txt_4c_CFOP` (10), `txt_4c_DCFOP` (60), `txt_4c_Origem` (2), `txt_4c_DOrigem` (50), `txt_4c_Destino` (2), `txt_4c_DDestino` (50), `txt_4c_Movs` (1), `txt_4c_Aliquota/Base/Reduz/Subst` (numeric, Format="N"). All start ReadOnly=.T.
+
+- **FormParaBO()** fully implemented ÔÇö reads all 13 field values into BO properties (UPPER on Tipo/Origems/Destinos/Movs)
+
+- **BOParaForm()** fully implemented ÔÇö populates all 13 fields from BO properties
+
+- **HabilitarCampos()** per-field ReadOnly logic:
+  - INCLUIR: all editable except display fields (DCFOP/DOrigem/DDestino always ReadOnly)
+  - ALTERAR: only numeric fields editable; PK + Desc locked (matches legado When events)
+  - BUSCAR: PK + Desc + numerics editable; Movs locked (legado When = INSERIR only); display fields ReadOnly
+  - VISUALIZAR: all ReadOnly
+
+- **LimparCampos()** now also zeros all 13 form fields directly
+
+Next is **Phase 6** ÔÇö lookup BINDEVENTs for CFOP (SigCdCfo), Origem (SigCdUfs), and Destino (SigCdUfs) fields, plus GetMovs validation.

@@ -1,0 +1,11 @@
+﻿Fase 5 conclu├¡da. Foram adicionados ao `Formsigrecnt.prg`:
+
+**`ConfigurarPaginaDados()`** ÔÇö vincula 6 BINDEVENTs (KeyPress + InteractiveChange) para os campos `txt_4c_Conta`, `txt_4c_DConta`, `txt_4c_Base` e `txt_4c_Nvl2`.
+
+**14 novos m├®todos (todos PUBLIC para BINDEVENT)**:
+- `TeclaVendedor` / `ValidarVendedor` / `AbrirBuscaVendedor` ÔÇö equivalente ao `getConta.Valid` do legado: monta SQL com controle de acesso via `SigCdAcJ` + abre `FormBuscaAuxiliar`
+- `TeclaDescVendedor` / `ValidarDescVendedor` ÔÇö equivalente ao `getDConta.Valid`; respeita a regra do `When` legado (bloqueado quando `getConta` est├í preenchido)
+- `TeclaBase` / `ValidarBase` / `AbrirBuscaBase` / `LimparBaseDescendentes` ÔÇö equivalente ao `getBase.Valid` + `InteractiveChange`; busca em `cursor_4c_SigLcNv1` do BO
+- `TeclaNvl2` / `ValidarNvl2` / `AbrirBuscaNvl2` / `LimparNvl2Descendentes` ÔÇö equivalente ao `getNvl2.Valid` + `When` + `InteractiveChange`; busca em `cursor_4c_SigLcNv2` filtrado pelo Cods = Base atual
+
+A Fase 6 dever├í adicionar BINDEVENTs para `Nvl3` e `Nvl4`, e a Fase 7 os handlers dos bot├Áes do relat├│rio (Visualizar/Imprimir/Excel).

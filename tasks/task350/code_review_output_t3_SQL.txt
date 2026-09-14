@@ -1,0 +1,14 @@
+﻿An├ílise completa dos tr├¬s problemas flagueados:
+
+**1. `CONTROLCOUNT` (linhas 2551, 2572)**
+- **Falso positivo**: ├ë a propriedade VFP `par_oContainer.ControlCount` e `loc_oControl.ControlCount`, usada em loops `FOR` e `IF` para iterar sobre controles visuais. N├úo ├® coluna SQL nem aparece em nenhum `WHERE` de query.
+
+**2. `ICLIS` (linhas 2169, 2423, 2641)**
+- **Falso positivo**: Aparece em queries `SELECT ... FROM SIGCDCLI WHERE iclis = ...` que s├úo **lookups subsidi├írios** para exibir a descri├º├úo do cliente (campo `razaos`). `iclis` ├® a PK de `SIGCDCLI`. O original usava `a.IClis` de `SigChe` no SELECT, e a lista de colunas do WHERE original ├® da query principal sobre `SigCdBch`/`SigChe` ÔÇö n├úo das queries de lookup.
+
+**3. `OPERACAOS` (linhas 2215, 2656)**
+- **Falso positivo**: Aparece em queries `SELECT ... FROM SigCdOpt WHERE operacaos = ...` que s├úo **lookups subsidi├írios** para validar e exibir descri├º├úo da opera├º├úo. `operacaos` ├® a PK de `SigCdOpt`. O campo `operacaos` existe em `SigCdBch` (schema confirmado no BO) e ├® o FK que aponta para `SigCdOpt`.
+
+**Diagn├│stico**: O checker comparou colunas de WHERE de queries **subsidi├írias de lookup** contra a lista de colunas do WHERE da **query principal** sobre `SigCdBch`. Essa compara├º├úo cross-query ├® um falso positivo ÔÇö as lookups em `SIGCDCLI` e `SigCdOpt` precisam filtrar pelas suas pr├│prias PKs.
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto ÔÇö remover `WHERE iclis = ...` ou `WHERE operacaos = ...` dessas lookups quebraria completamente a valida├º├úo e exibi├º├úo de descri├º├Áes. O `ControlCount` ├® propriedade VFP, n├úo SQL.

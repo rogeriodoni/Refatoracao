@@ -1,0 +1,1226 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrebal.SCX
+* Data/Hora: 16/05/26 13:03:12
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREBAL
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGREBAL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGREBAL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_empresa
+  Parent: SIGREBAL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo
+  Parent: SIGREBAL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREBAL
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_moeda
+  Parent: SIGREBAL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGREBAL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_moeda
+  Parent: SIGREBAL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: optGcontaz
+  Parent: SIGREBAL
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: optGtprel
+  Parent: SIGREBAL
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: optconcilias
+  Parent: SIGREBAL
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: OpAnCst
+  Parent: SIGREBAL
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say6
+  Parent: SIGREBAL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptCotacao
+  Parent: SIGREBAL
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say3
+  Parent: SIGREBAL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREBAL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREBAL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_Cli
+  Parent: SIGREBAL
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say5
+  Parent: SIGREBAL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREBAL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 64
+  Left = 29
+  Width = 363
+  Height = 116
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL
+------------------------------------------------------------
+  DataSession = 2
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório de Balanço"
+  Name = "SIGREBAL"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 530
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Empresa :"
+  Left = 234
+  Top = 186
+  Width = 50
+  TabIndex = 9
+  ZOrderSet = 3
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.get_ds_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 320
+  MaxLength = 40
+  TabIndex = 8
+  Top = 182
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.get_cd_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 288
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 7
+  ToolTipText = ""
+  Top = 182
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Até :"
+  Left = 258
+  Top = 137
+  Width = 26
+  TabIndex = 3
+  ZOrderSet = 6
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Left = 288
+  TabIndex = 2
+  Top = 132
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.lbl_moeda
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Moeda :"
+  Left = 243
+  Top = 161
+  Width = 41
+  TabIndex = 6
+  ZOrderSet = 8
+  Name = "lbl_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.get_ds_moeda
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 320
+  MaxLength = 15
+  TabIndex = 5
+  Top = 157
+  Width = 115
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.get_cd_moeda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 288
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 4
+  ToolTipText = ""
+  Top = 157
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.optGcontaz
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 283
+  Top = 207
+  Width = 109
+  TabIndex = 10
+  ZOrderSet = 11
+  Name = "optGcontaz"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optContaz1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Height = 17
+  Option2.Left = 45
+  Option2.Top = 5
+  Option2.Width = 41
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optContaz2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.optGtprel
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 283
+  Top = 232
+  Width = 140
+  TabIndex = 11
+  ZOrderSet = 12
+  Name = "optGtprel"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Analítico"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 64
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optTpRel1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "S\<intético"
+  Option2.Height = 17
+  Option2.Left = 70
+  Option2.Top = 5
+  Option2.Width = 65
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optTpRel2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.optconcilias
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 26
+  Left = 420
+  Top = 324
+  Width = 99
+  TabIndex = 15
+  ZOrderSet = 13
+  Name = "optconcilias"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 42
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "opAncst1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.Width = 43
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "opAnCst2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.OpAnCst
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 26
+  Left = 283
+  Top = 305
+  Width = 99
+  TabIndex = 15
+  ZOrderSet = 13
+  Name = "OpAnCst"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 42
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "opAncst1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.Width = 43
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "opAnCst2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Para contas conciliáveis, utilizar saldo conciliado?"
+  Left = 176
+  Top = 330
+  Width = 235
+  TabIndex = 21
+  ZOrderSet = 14
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.OptCotacao
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 283
+  Top = 258
+  Width = 210
+  TabIndex = 13
+  ZOrderSet = 15
+  Name = "OptCotacao"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Fechamento"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 89
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optCot1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Movimentação"
+  Option2.Height = 17
+  Option2.Left = 100
+  Option2.Top = 5
+  Option2.Width = 98
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optCot2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Cotação :"
+  Left = 235
+  Top = 262
+  Width = 49
+  TabIndex = 19
+  ZOrderSet = 16
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Conta Zerada :"
+  Left = 209
+  Top = 211
+  Width = 75
+  TabIndex = 16
+  ZOrderSet = 17
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Tipo :"
+  Left = 255
+  Top = 236
+  Width = 29
+  TabIndex = 18
+  ZOrderSet = 18
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.Opt_Cli
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 283
+  Top = 283
+  Width = 140
+  TabIndex = 14
+  ZOrderSet = 19
+  Name = "Opt_Cli"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Analítico"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 64
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optTpRel1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "S\<intético"
+  Option2.Height = 17
+  Option2.Left = 70
+  Option2.Top = 5
+  Option2.Width = 65
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optTpRel2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Anal. Consistência:"
+  Left = 190
+  Top = 309
+  Width = 94
+  TabIndex = 21
+  ZOrderSet = 14
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBAL.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Cliente :"
+  Left = 242
+  Top = 287
+  Width = 42
+  TabIndex = 20
+  ZOrderSet = 20
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREBAL
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReBal To Printer Noconsole
+
+Select Consulta
+Go Top
+If (Reccount() > 0) And (ThisForm.OpAnCst.Value = 1)
+	Report Form SigReAcs To Printer Noconsole
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReBal To Printer Prompt Noconsole
+
+Select Consulta
+Go Top
+If (Reccount() > 0) And (ThisForm.OpAnCst.Value = 1)
+	Report Form SigReAcs To Printer Prompt Noconsole
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.get_dt_final.Value   = Date()
+		.get_cd_moeda.Value   = ''
+		.get_ds_moeda.Value   = ''
+		.get_cd_empresa.Value = ''
+		.get_ds_empresa.Value = ''
+		.optGcontaz.Value     = 1
+		.optGtprel.Value      = 1
+		.Refresh
+
+		ThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'GrPadClis')
+
+		ThisForm.poDataMgr.CursorQuery('SigCdCot', 'crSigCdCot', .f., .f., 'CMoes, Datas, Valos')
+		Select crSigCdCot
+		Index On CMoes + Dtos(Datas) Tag CMoeData
+		Set Order To CMoeData Descending
+
+		ThisForm.poDataMgr.CursorQuery('SigCdMoe', 'crSigCdMoe', .f., .f., 'CMoes, Cotas')
+		Select crSigCdMoe
+		Index On CMoes Tag CMoes
+
+		ThisForm.poDataMgr.CursorQuery('SigCdGcr', 'crSigCdGcr', .f., .f., 'Codigos, Descrs, Classes')
+		Select crSigCdGcr
+		Index On Codigos Tag Codigos
+
+		ThisForm.poDataMgr.CursorQuery('SigCdCss', 'crSigCdCss', .f., .f., 'Classes, Descrs, Nivels, OpBalancos')
+		Select crSigCdCss
+		Index On Classes Tag Classes
+
+		If (ThisForm.poDataMgr.getDriver() = 'foxpro')
+			lcDiretorio = Addbs(JustPath(ThisForm.poDataMgr.GetDatabase()))
+			Use &lcDiretorio.\SigCdCli Alias crSigCdCli In 0
+			Select crSigCdCli
+			Set Order To IClis
+		Else
+			ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', .f., .f., 'IClis, Grupos, RClis, Concilias')
+			Select crSigCdCli
+			Index On Grupos + Iclis Tag GrCodigo
+			Index On IClis Tag IClis
+		EndIf
+
+		If (Not Used('crSigCdPam') Or Not Used('crSigCdCot')  Or Not Used('crSigCdMoe') Or ;
+			Not Used('crSigCdGcr')  Or Not Used('crSigCdCss') Or Not Used('crSigCdCli'))
+			=Messagebox('Não Foi Possível a Criação dos Cursores Necessários...', 0+48, 'CursorQuery')
+			Return .f.
+		EndIf
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDat
+Local ldDtSaldo,lcCdEmp,lcDsEmp,lcCdMoeda,lcDsMoeda,lnContaz,lnOptRel,lcEmpresa,lcTitulo1s,lcTitulo2s,lcEscape,;
+      lnDecimals,lcFixed,laOrd,laStrArea,cEmpresa,cTitulo1s,cTitulo2s,cContas,cDcontas,nSaldos,cOrds,cPs,cIps,;
+      lnSaldos,Grupos,Contas,Moedas,lcClasse2,lnNivels,lnConta1,lnCtRfr,lnCtMvt
+
+m.ldDtSaldo  = ThisForm.get_dt_final.Value
+m.lcCdEmp    = ThisForm.get_cd_empresa.Value
+m.lcDsEmp    = ThisForm.get_ds_empresa.Value
+m.lcCdMoeda  = ThisForm.get_cd_moeda.Value
+m.lcDsMoeda  = ThisForm.get_ds_moeda.Value
+m.lnContaz   = ThisForm.optGcontaz.Value
+m.lnOptRel   = ThisForm.optGtprel.Value
+m.lnOptCli   = ThisForm.opt_cli.Value
+m.lnOptAn    = ThisForm.OpAnCst.Value
+m.lnOptCot   = ThisForm.optCotacao.Value
+m.lnOptConc  = ThisForm.OptConcilias.Value
+m.lcEmpresa  = _Screen.Caption
+m.lcTitulo1s = 'Balanço em ' + Dtoc(m.ldDtSaldo) + ' - ' + Alltrim(m.lcDsMoeda)
+m.lcTitulo2s = Alltrim(m.lcCdMoeda)
+m.lcTitulo2s = Iif( not Empty(m.lcCdEmp), Alltrim(m.lcCdEmp) + ' - ' + Alltrim(m.lcDsEmp),[TODAS AS EMPRESAS])
+
+m.lcEscape   = Set('Escape')
+m.lnDecimals = Set('Decimals')
+m.lcFixed    = Set('Fixed')
+
+Set Escape Off
+Set Decimals To 2
+Set Fixed On
+
+Create Cursor cPlconta (cEmpresas c(40), cTitulo1s c(80), cTitulo2s c(80), cContas c(10), ;
+						cDContas c(50), nSaldos n(16,2), cOrds c(50), cPs c(1), cIps c(1))
+Index On cOrds Tag cOrds
+
+Declare laOrd(5),laStrArea(5)
+
+pDat = fDtoSQL(m.ldDtSaldo, '23:59:59')
+
+If (ThisForm.poDataMgr.getDriver() = 'foxpro')
+	lcDiretorio = Addbs(JustPath(ThisForm.poDataMgr.GetDatabase()))
+	Use &lcDiretorio.\SigMvCcr Alias crSigMvCcr In 0
+Else
+	lcQuery = [Select Emps, Datas, Opers, Grupos, Contas, Valors, Moedas, SValors, ] + ;
+					 [SMoedas, Cotacaos, Nopers, Saldos, cIdChaves, Hists, Hist2s, ]+;
+					 [Concs, sOpers, sgrupos, scontas, scotacaos, SaldoCs, EmpCcs ] + ;
+			    [From SigMvCcr ] + ;
+			   [Where Datas <= ?pDat Or Datas Is Null ] + ;
+			   [Order By Datas, Opers, Grupos, Contas, Valors, Moedas, SValors, ] + ;
+					 [SMoedas, Cotacaos, Nopers, Saldos, cIdChaves]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvCcr') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvCcr)')
+		Return 0
+	EndIf
+	Select crSigMvCcr
+	Index On Datas Tag Datas
+EndIf
+
+Select crSigMvCcr
+=Afields(xMccr)
+Create Cursor TmpMccr From Array xMccr
+Select TmpMccr
+Index On Nopers tag Nopers
+
+m.laOrd = ''
+m.laStrArea = ''
+
+lnCot2 = fCarregarCambio(m.lcCdMoeda, ldDtSaldo)
+
+Select crSigMvCcr
+Set Order To Datas
+Go Top
+oProg = CreateObject('fwprogressbar', 'Processando Dados de Conta Corrente...', Reccount('crSigMvCcr'))
+oProg.Show
+Do While Not Eof('crSigMvCcr') And (crSigMvCcr.Datas <= pDat)
+	oProg.Update(.t.)
+
+	If not Empty(m.lcCdEmp) And Iif(!Empty(crSigMvCcr.EmpCcs), (crSigMvCcr.EmpCCs <> m.lcCdEmp), (crSigMvCcr.Emps <> m.lcCdEmp)) && Tiago - 23/02/2016 - Rosana Jóias - Alterado para checar campo EMPCCS, caso em branco ai checa o EMPS
+		Skip +1 in crSigMvCcr
+		Loop
+	Endif	
+
+	Scatter Memvar Fields Grupos, Contas, Moedas
+
+	m.laOrd = ''
+	m.laStrArea = ''
+
+	If (m.lnOptCot = 1)
+		lnCot1 = fCarregarCambio(crSigMvCcr.Moedas, ldDtSaldo)
+	Else
+		lnCot1 = Iif(crSigMvCcr.Moedas <> crSigMvCcr.SMoedas, crSigMvCcr.Cotacaos, fCarregarCambio(crSigMvCcr.Moedas, crSigMvCcr.Datas))
+		lnCot2 = fCarregarCambio(m.lcCdMoeda, crSigMvCcr.Datas)
+	EndIf
+
+	=Seek(m.Contas, 'crSigCdCli', 'Iclis')
+	If( m.lnOptConc = 2) or crSigCdCli.Concilias <> 1
+		If (crSigMvCcr.SMoedas = m.lcCdMoeda) And (m.lnOptCot = 2)
+			_Valors = crSigMvCcr.SValors
+		Else
+			_Valors = (crSigMvCcr.Valors * lnCot1 / lnCot2)
+		EndIf
+	Else
+		If not crSigMvCcr.Concs
+			Skip +1 in crSigMvCcr
+			Loop
+		Endif
+		If (crSigMvCcr.SMoedas = m.lcCdMoeda) And (m.lnOptCot = 2)
+			_Valors = crSigMvCcr.SValors
+		Else
+			_Valors = (crSigMvCcr.Valors * lnCot1 / lnCot2)
+		EndIf					
+	Endif		
+
+	m.lnSaldos = _Valors * Iif(crSigMvCcr.Opers = 'D', 1, -1)
+
+	If ((m.lnContaz = 1 Or Not Empty(m.lnSaldos)) And ;
+		Not Empty(m.Contas) And Seek(m.Contas, 'crSigCdCli', 'Iclis') And ;
+		Not Empty(m.Grupos) And Seek(m.Grupos, 'crSigCdGcr','Codigos') And ;
+		Not Empty(crSigCdGcr.Classes) And Seek(Padr(Alltrim(crSigCdGcr.Classes),1), 'crSigCdCss', 'Classes') And ;
+		crSigCdCss.OpBalancos=1 And Seek(crSigCdGcr.Classes, 'crSigCdCss', 'Classes'))
+	    
+		m.lcClasse2 = Padr(Alltrim(crSigCdGcr.Classes), 10)
+		m.lnNivels  = crSigCdCss.Nivels
+		For m.lnConta1=1 To m.lnNivels
+			m.laOrd(m.lnConta1)     = Padr(Substr(m.lcClasse2, 1, Val(SubStr('124', m.lnConta1, 1))), 10)
+			m.laStrArea(m.lnConta1) = 'crSigCdCss'
+		EndFor
+			
+		m.laOrd(m.lnNivels + 1) = Padr(Alltrim(crSigCdGcr.Codigos), 10)
+		m.laOrd(m.lnNivels + 2) = Padr(Alltrim(crSigCdCli.Iclis), 10)
+		m.laStrArea(m.lnNivels+1) = 'crSigCdGcr'
+		m.laStrArea(m.lnNivels+2) = 'crSigCdCli'
+		m.cOrds = ''
+
+		For m.lnConta1=1 To (m.lnNivels + 2)
+			m.cContas = m.laOrd(m.lnConta1)
+
+			If (m.lnConta1 <= m.lnNivels)
+				=Seek(m.cContas, m.laStrArea(m.lnConta1), 'Classes')
+			EndIf
+			
+			m.cOrds    = (m.cOrds + m.laOrd(m.lnConta1))
+			m.cDcontas = Evaluate(m.laStrArea(m.lnConta1) + IIf(m.lnConta1 = (m.lnNivels + 2), '.Rclis', '.Descrs'))
+			m.nSaldos  = 0
+			m.cPs      = Str(Iif(m.lnConta1 <= m.lnNivels, m.lnConta1, Iif(m.lnConta1=(m.lnNivels + 1), 4, 5)), 1)
+			m.cIps     = Str(m.lnConta1, 1)
+
+			_Grava=.f.
+			If ((crSigCdCli.Grupos = crSigCdPam.GrPadClis) And (m.lnOptCli = 1 Or Not m.cPs = '5')) Or ;
+			   ((m.lnOptRel = 1 Or Not m.cPs = '5') And (crSigCdCli.Grupos <> crSigCdPam.GrPadClis)) 
+				Select cPlConta
+				If Not Seek(Padr(m.cOrds, 50), 'cPlconta', 'cOrds')
+					Insert Into cPlconta (cEmpresas, cTitulo1s, cTitulo2s, cContas, cDcontas, nSaldos, cOrds, cPs, cIps) ;
+						    	   Value (m.lcEmpresa, m.lcTitulo1s, m.lcTitulo2s, m.cContas, m.cDContas, m.nSaldos, ;
+						    	   		  m.cOrds, m.cPs, m.cIps)
+				EndIf
+				m.nSaldos = (cPlConta.nSaldos + m.lnSaldos)
+				Gather Memvar Fields nSaldos
+
+				If m.lnConta1 = m.lnNivels+2 And m.lnContaz=2 And Empty(nSaldos)
+					Delete In cPlConta
+				Endif
+
+			EndIf
+		EndFor
+		
+		Select crSigMvCcr
+		Scatter To Memvar
+
+		Select TmpMccr
+		Set Order To Nopers
+		Seek crSigMvCcr.Nopers
+		If Not Found()
+			Append From Array Memvar
+			Replace Saldos With 0
+		EndIf
+		Replace Saldos With Saldos + m.lnSaldos
+	EndIf
+
+	Select crSigMvCcr
+	Skip
+EndDo
+oProg.Complete
+
+If (m.lnContaz = 1)
+	Select crSigCdCli
+	Set Order To GrCodigo
+	oProg = CreateObject('fwprogressbar', 'Processando Dados de Contas Zeradas...', Reccount('crSigCdCli') + Reccount('crSigCdGcr'))
+	oProg.Show
+	Scan
+		oProg.Update(.t.)
+
+		m.laOrd = ''
+		m.laStrArea = ''
+
+		If (Not Empty(crSigCdCli.Iclis) And ;
+			Not Empty(crSigCdCli.Grupos) And Seek(crSigCdCli.Grupos, 'crSigCdGcr', 'Codigos') And ;
+			Not Empty(crSigCdGcr.Classes) And Seek(Padr(Alltrim(crSigCdGcr.Classes), 1), 'crSigCdCss', 'Classes') And ;
+			crSigCdCss.OpBalancos = 1 And Seek(crSigCdGcr.Classes, 'crSigCdCss', 'Classes'))
+		    
+			m.lcClasse2 = Padr(Alltrim(crSigCdGcr.Classes), 10)
+			m.lnNivels  = crSigCdCss.Nivels
+			For m.lnConta1=1 To m.lnNivels
+				m.laOrd(m.lnConta1)     = Padr(Substr(m.lcClasse2, 1, Val(Substr('124', m.lnConta1, 1))), 10)
+				m.laStrArea(m.lnConta1) = 'crSigCdCss'
+			EndFor
+
+			m.laOrd(m.lnNivels + 1) = Padr(Alltrim(crSigCdGcr.Codigos), 10)
+			m.laOrd(m.lnNivels + 2) = Padr(Alltrim(crSigCdCli.Iclis), 10)
+			m.laStrArea(m.lnNivels + 1) = 'crSigCdGcr'
+			m.laStrArea(m.lnNivels + 2) = 'crSigCdCli'
+			m.cOrds = ''
+
+			For m.lnConta1=1 To (m.lnNivels + 2)
+				m.cContas = m.laOrd(m.lnConta1)
+				If (m.lnConta1 <= m.lnNivels)
+					=Seek(m.cContas, m.laStrArea(m.lnConta1), 'Classes')
+				EndIf
+
+				m.cOrds    = (m.cOrds + m.laOrd(m.lnConta1))
+				m.cDcontas = Evaluate(m.laStrArea(m.lnConta1) + Iif(m.lnConta1 = (m.lnNivels + 2), '.Rclis', '.Descrs'))
+				m.nSaldos  = 0
+				m.cPs      = Str(Iif(m.lnConta1 <= m.lnNivels, m.lnConta1, Iif(m.lnConta1 = (m.lnNivels + 1), 4, 5)), 1)
+				m.cIps     = Str(m.lnConta1, 1)
+
+				If ((crSigCdCli.Grupos = crSigCdPam.GrPadClis) And (m.lnOptCli = 1 Or Not m.cPs = '5')) Or ;
+				   ((m.lnOptRel = 1 Or Not m.cPs = '5') And (crSigCdCli.Grupos <> crSigCdPam.GrPadClis))
+					Select cPlConta
+					If Not Seek(Padr(m.cOrds, 50), 'cPlconta', 'cOrds')
+						Insert Into cPlconta (cEmpresas, cTitulo1s, cTitulo2s, cContas, cDcontas, nSaldos, cOrds, cPs, cIps) ;
+									   Value (m.lcEmpresa, m.lcTitulo1s, m.lcTitulo2s, m.cContas, m.cDContas, m.nSaldos, ;
+									   		  m.cOrds, m.cPs, m.cIps)
+					EndIf
+				EndIf
+			EndFor
+		EndIf
+	EndScan
+
+	Select crSigCdGcr
+	Set Order To Codigos
+	Scan
+		oProg.Update(.t.)
+
+		m.laOrd = ''
+		m.laStrArea = ''
+
+		If (Not Empty(crSigCdGcr.Codigos) And Not Empty(crSigCdGcr.Classes) And ;
+			Seek(Padr(Alltrim(crSigCdGcr.Classes), 1), 'crSigCdCss', 'Classes') And ;
+		    crSigCdCss.OpBalancos = 1 And Seek(crSigCdGcr.Classes, 'crSigCdCss', 'Classes'))
+			m.lcClasse2 = Padr(Alltrim(crSigCdGcr.Classes), 10)
+			m.lnNivels  = crSigCdCss.Nivels
+			
+			For m.lnConta1=1 To m.lnNivels
+				m.laOrd(m.lnConta1)     = Padr(Substr(m.lcClasse2, 1, Val(Substr('124', m.lnConta1, 1))), 10)
+				m.laStrArea(m.lnConta1) = 'crSigCdCss'
+			EndFor
+
+			m.laOrd(m.lnNivels + 1)     = Padr(Alltrim(crSigCdGcr.Codigos), 10)
+			m.laStrArea(m.lnNivels + 1) = 'crSigCdGcr'
+			m.cOrds = ''
+			
+			For m.lnConta1=1 To (m.lnNivels + 1)
+				m.cContas = m.laOrd(m.lnConta1)
+
+				If (m.lnConta1 <= m.lnNivels)
+					=Seek(m.cContas, m.laStrArea(m.lnConta1), 'Classes')
+				EndIf
+
+				m.cOrds    = (m.cOrds + m.laOrd(m.lnConta1))
+				m.cDcontas = Evaluate(m.laStrArea(m.lnConta1) + Iif(m.lnConta1 = (m.lnNivels + 2), '.Rclis', '.Descrs'))
+				m.nSaldos  = 0
+				m.cPs      = Str(Iif(m.lnConta1 <= m.lnNivels, m.lnConta1, Iif(m.lnConta1 = (m.lnNivels + 1), 4, 5)), 1)
+				m.cIps     = Str(m.lnConta1, 1)
+
+				If ((crSigCdCli.Grupos = crSigCdPam.GrPadClis) And (m.lnOptCli = 1 Or Not m.cPs = '5')) Or ;
+				   ((m.lnOptRel = 1 Or Not m.cPs = '5') And (crSigCdCli.Grupos <> crSigCdPam.GrPadClis))
+					Select cPlConta
+					If Not Seek(Padr(m.cOrds, 50), 'cPlconta', 'cOrds')
+						Insert Into cPlconta (cEmpresas, cTitulo1s, cTitulo2s, cContas, cDcontas, nSaldos, cOrds, cPs, cIps) ;
+							    	   Value (m.lcEmpresa, m.lcTitulo1s, m.lcTitulo2s, m.cContas, m.cDContas, m.nSaldos, ;
+							    	   		  m.cOrds, m.cPs, m.cIps)
+					EndIf
+				EndIf
+			EndFor
+		EndIf
+	EndScan
+	oProg.Complete
+ENDIF
+
+Select * ;
+  From TmpMccr ;
+ Where Abs(Saldos) > 1 ;
+  Into Cursor Consulta
+
+Wait Clear
+
+Use In crSigMvCcr
+
+Select cPlConta
+Set Order To cOrds In cPlConta Ascending
+=Seek('', 'cPlConta', 'cOrds')
+
+Set Escape &lcEscape.
+Set Decimals To m.lnDecimals
+Set Fixed &lcFixed.
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReBal Preview NoConsole
+
+Select Consulta
+Go Top
+If (Reccount() > 0) And (ThisForm.OpAnCst.Value = 1)
+	Report Form SigReAcs Preview NoConsole
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREBAL.get_ds_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.get_Cd_Empresa, ThisForm.get_Ds_Empresa, ThisForm.poDataMgr)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_cd_empresa.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREBAL.get_cd_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.get_Cd_Empresa, ThisForm.get_Ds_Empresa, ThisForm.poDataMgr)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREBAL.get_ds_moeda
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.get_Cd_Moeda.Value = crListaRemota.Cmoes
+	This.Parent.get_Ds_Moeda.Value = crListaRemota.Dmoes
+	Use In crListaRemota
+Else
+	This.Parent.get_Cd_Moeda.Value = ''
+	This.Parent.get_Ds_Moeda.Value = ''
+EndIf
+This.Parent.get_Cd_Moeda.Refresh
+This.Parent.get_Ds_Moeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_cd_moeda.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREBAL.get_cd_moeda
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.get_Cd_Moeda.Value = crListaRemota.Cmoes
+	This.Parent.get_Ds_Moeda.Value = crListaRemota.Dmoes
+	Use In crListaRemota
+Else
+	This.Parent.get_Cd_Moeda.Value = ''
+	This.Parent.get_Ds_Moeda.Value = ''
+EndIf
+This.Parent.get_Cd_Moeda.Refresh
+This.Parent.get_Ds_Moeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREBAL
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

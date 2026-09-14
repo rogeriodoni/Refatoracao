@@ -1,0 +1,14 @@
+﻿A Fase 7/8 j├í est├í **completa**. Ambos os arquivos est├úo implementados e consistentes:
+
+**FormSER.prg** ÔÇö 4 eventos j├í implementados:
+- `BtnIncluirClick()` (linha 744) ÔÇö chama `NovoRegistro()`, limpa campos, seta modo INCLUIR, foco em `txt_4c_Codigo`
+- `BtnVisualizarClick()` (linha 758) ÔÇö l├¬ `cIdChaves` do cursor, carrega BO, modo VISUALIZAR, campos desabilitados
+- `BtnAlterarClick()` (linha 785) ÔÇö carrega BO, chama `EditarRegistro()`, modo ALTERAR, foco em `txt_4c_Descricao`
+- `BtnExcluirClick()` (linha 812) ÔÇö confirma via `MsgConfirma()`, chama `Excluir()` (PUBLIC), recarrega lista
+
+**SERBO.prg** ÔÇö consistente com o Form:
+- `Buscar()` retorna cursor com `cIdChaves, Cods, Descs, qtDias` ÔÇö correto para `cursor_4c_Dados.cIdChaves` usado nos eventos
+- `CarregarPorCodigo()` recebe `cIdChaves` como chave ÔÇö correto
+- `Inserir()` chama `fUniqueIds()` para gerar UUID ÔÇö correto conforme `comportamento.json`
+
+Nenhuma modifica├º├úo necess├íria. A migra├º├úo do FormSER est├í completa nas fases 1-7.

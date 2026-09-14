@@ -1,0 +1,17 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormPcp.prg` foi atualizado com:
+
+**Adicionado em ConfigurarPaginaLista():**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) com ├¡cones, fontes e BINDEVENTs
+- `cmd_4c_Encerrar` em `cnt_4c_Saida` (Left=917, padr├úo can├┤nico)
+- 3 bot├Áes operacionais espec├¡ficos do PCP: `cmd_4c_Processa` (Mapa), `cmd_4c_Previsao`, `cmd_4c_Prioridade` ÔÇö Top original 84 + compensa├º├úo +29 = 113
+- `grd_4c_Lista` com 3 colunas (Codigos/80, Titulos/350, Datas/150) ÔÇö Top original 145 + 29 = 174
+
+**Novos m├®todos:**
+- `CarregarLista()` ÔÇö chama `BO.Buscar("")`, seta RecordSource + ControlSource + headers
+- `AlternarPagina(par_nPagina)` ÔÇö troca entre Page1/Page2, recarrega lista ao voltar
+- `FormatarGridLista()` ÔÇö aplica Verdana/8 nas colunas
+- `BtnEncerrarClick()`, `BtnIncluirClick()`, `BtnVisualizarClick()`, `BtnAlterarClick()`, `BtnExcluirClick()`, `BtnBuscarClick()`
+- `BtnProcessaClick()`, `BtnPrevisaoClick()`, `BtnPrioridadeClick()` ÔÇö delegam para os forms legados via `DO FORM`
+- Stubs vazios para `FormParaBO/BOParaForm/LimparCampos/HabilitarCampos/AjustarBotoesPorModo` (Fase 5)
+
+**InicializarForm()** atualizado para chamar `CarregarLista()` ap├│s `ConfigurarPageFrame()`, com guarda `gb_4c_ValidandoUI`.

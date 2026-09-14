@@ -1,0 +1,7 @@
+﻿**Diagn├│stico:** O problema reportado ├® um **falso positivo** do code reviewer.
+
+`THIS.Controls(n)` e `par_oContainer.Controls(n)` s├úo **sintaxe nativa do VFP9** ÔÇö `Controls` ├® uma cole├º├úo built-in de qualquer Form ou Container, acessada por ├¡ndice 1-based. N├úo ├® um m├®todo customizado que precise ser definido no form. ├ë o equivalente VFP9 de acessar `Controls[n]` em outras linguagens.
+
+Evid├¬ncia: o c├│digo j├í usa corretamente `THIS.ControlCount` (tamb├®m built-in) para limitar o loop, e o padr├úo `FOR i = 1 TO ControlCount ... Controls(i)` ├® o idioma padr├úo VFP9 para itera├º├úo sobre controles filhos ÔÇö id├¬ntico ao que o pr├│prio Framework legado usa.
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo est├í correto como est├í.

@@ -1,0 +1,323 @@
+{
+  "resumo": {
+    "totalMetodos": 18,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 15,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fChecaAcesso", "fwBuscaInt", "fAcessoContab", "fAcessoContas", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCrf Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Procedure",
+      "linhas": 165,
+      "codigoOriginal": "Private pDtI, pDtF\nLocal lcLocals, lcVends, lnLocal, ldData, lcLocalizacao\n\n\nWait Window 'Aguarde Processamento!' Nowait\n\nCreate Cursor csCabecalho (NomeEmpresa c(80), Titulo c(200), Titulo2 c(200), Figura c(10))\nThisform.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')\nlcEmpresa = _Empr + ' - ' + Alltrim(crSigCdEmp.Razas)\nlcTitulo  = 'Relação de Contagem por Referencia'\nlcTitulo2 = Iif(not Empty(Thisform.GetConta.Value),'Vendedor - ' + Thisform.GetConta.Value + ' ' + Thi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "OptLocal,get_Produto,Get_Cd_GrEstoque,Get_Cd_Estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Init",
+      "linhas": 54,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\n\t\tThisForm.poDataMgr.CursorQuery([SigCdPam], [LocalPam], .f., .f., [GrPadVens])\n\t\tIf Not Used([LocalPam])\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalPam)])\n\t\t\tReturn .f.\n\t\tEndIf\n\t\t\n\t\tGo Top In LocalPam\n\t\tIf Empty(LocalPam.GrPadVens)\n\t\t\t=MessageBox([O Grupo Padrão de Vendedores Não Está Configurado Nos] + Chr(13) + ;\n\t\t\t\t\t\t[Parâmetros do Siste... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "CursorQuery,Value = Date",
+        "controlesReferenciados": "OptLocal,option1,option2,option3,get_Produto,get_descricao,Get_Ds_GrEstoque,Get_Cd_GrEstoque,Get_Ds_Estoque,Get_Cd_Estoque",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCrf To Print Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCrf To Print NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If (This.Value <> 4)\n\tIf Empty(ThisForm.getDatas.Value)\t\n\t\t=Messagebox('Data Inválida!', 16, 'Aviso')\n\t\tThisForm.getDatas.SetFocus()\n\t\tReturn 0\n\tEndIf\n\n\nEndIf\n\nfrmrelatorio::btnReport.Click\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getConta",
+      "evento": "Valid",
+      "linhas": 40,
+      "codigoOriginal": "Local loLista\n\nIf !Empty(This.Value)\n\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ;\n\t\t\t[From SigCdCli a ] + ;  \n\t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos  ] + ;\n\t\t\t[And (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ;\n\t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ;\n\t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+This.Value+[')))) ] + ;\n\t\t\t[And a.grupos = ']+LocalPam.GrPadVens+[' ]... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getDConta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty(ThisForm.getConta.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.getDConta",
+      "evento": "Valid",
+      "linhas": 41,
+      "codigoOriginal": "Local lcVends, loLista\nlcVends  = []\n\nIf !Empty(This.Value)\n\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ;\n\t\t\t[From SigCdCli a ] + ;  \n\t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos  ] + ;\n\t\t\t[And (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ;\n\t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ;\n\t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+lcVends+[')))) ] + ;\n\t\t\t[And a.grupos = ']+Loc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "Sqlexecute,Value = Evaluate",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.Get_Ds_GrEstoque",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'D',This.Value,ThisForm.Get_Cd_GrEstoque,ThisForm.Get_Ds_GrEstoque)\nElse\n\tThisForm.Get_Cd_GrEstoque.Value = ''\n\tThisForm.Get_Cd_GrEstoque.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_GrEstoque,Get_Ds_GrEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.Get_Ds_GrEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_CD_GrEstoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_CD_GrEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.Get_Cd_GrEstoque",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'C',This.Value,ThisForm.Get_Cd_GrEstoque,ThisForm.Get_Ds_GrEstoque)\nElse\n\tThisForm.Get_Ds_GrEstoque.Value = ''\n\tThisForm.Get_Ds_GrEstoque.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_GrEstoque,Get_Ds_GrEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.Get_Ds_Estoque",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.Get_Cd_GrEstoque.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.Value,ThisForm.Get_Cd_Estoque,ThisForm.Get_Ds_Estoque)\n\t\tMessageBox('Acesso Negado !!',48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Get_Cd_Estoque.Value = ''\n\t\tThisForm.Get_Cd_Estoque.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.Get_Cd_Estoque.Value = ''\n\tThisForm.Get_Cd_Estoque.Refresh\n\tReturn(.T.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_GrEstoque,Get_Cd_Estoque,Get_Ds_Estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.Get_Ds_Estoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Cd_Estoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.Get_Cd_Estoque",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.Get_Cd_GrEstoque.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'C',This.Value,ThisForm.Get_Cd_Estoque,ThisForm.Get_Ds_Estoque)\n\t\tMessageBox('Acesso Negado !!',48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Get_Ds_Estoque.Value = ''\n\t\tThisForm.Get_Ds_Estoque.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.Get_Ds_Estoque.Value = ''\n\tThisForm.Get_Ds_Estoque.Refresh\n\tReturn(.T.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_GrEstoque,Get_Cd_Estoque,Get_Ds_Estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.get_descricao",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'DPros', This.Value, 'Seleção', 1000)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DPros', '', 'Descrição')\n\t\tloLista.mAddColuna('CPros', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisform.get_Produto.Value = crListaRemota.CPros\n\tThisform.get_descricao.Value = crListaRemota.DPros\n\tUse In crListaRemota\nElse\n\tThisform.get_Produto.Value = ''\n\tTh... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "get_Produto,get_descricao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.get_descricao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Empty(ThisForm.Get_produto.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECNT.get_Produto",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nIf Not Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','TmpPro','cpros',This.Value,'Produtos',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('cpros','','Código')\n\t\tm.loLista.mAddColuna('dpros','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tThisForm.Get_produto.Value = Evaluate('TmpPro.cpros')\n\tthisform.get_descricao.Value = tmppro.dpros\nEndif\nThisForm.Get_produto.Refresh()\nthisform.get_descricao.Refresh()\nIf Used(... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate,Refresh",
+        "controlesReferenciados": "Get_produto,get_descricao",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECNT.getConta.Valid",
+      "queryOriginal": "\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ; \t\t\t[From SigCdCli a ] + ; \t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos  ] + ; \t\t\t[And (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ; \t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ; \t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+This.Value+[')))) ] + ; \t\t\t[And a.grupos = ']+LocalPam.GrPadVens+[' ]... [TRUNCADO]",
+      "tabelas": "SigCdAcJ,SigCdGcr",
+      "colunas": "iclis,rclis,grupos,situas,Cpfs,inativas,ContaMats,Jobs,Usuars,Value+[,GrPadVens+[",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECNT.getDConta.Valid",
+      "queryOriginal": "\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ; \t\t\t[From SigCdCli a ] + ; \t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos  ] + ; \t\t\t[And (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ; \t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ; \t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+lcVends+[')))) ] + ; \t\t\t[And a.grupos = ']+Loc... [TRUNCADO]",
+      "tabelas": "SigCdAcJ,SigCdGcr",
+      "colunas": "iclis,rclis,grupos,situas,Cpfs,inativas,ContaMats,Jobs,Usuars",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdAcJ", "SigCdGcr"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

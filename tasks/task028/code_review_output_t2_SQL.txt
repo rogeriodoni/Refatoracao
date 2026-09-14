@@ -1,0 +1,39 @@
+﻿Verifica├º├úo conclu├¡da. Ap├│s an├ílise completa dos dois arquivos, ambos os alertas s├úo **falsos positivos**. Veja o diagn├│stico:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### [SQL-FILTRO-INVENTADO] CMOES ÔÇö FALSO POSITIVO
+
+`cmoes` aparece **apenas** no m├®todo `BuscarCotacao` (linha 558), em uma query sobre a tabela `SigCdCot`:
+
+```foxpro
+loc_cSQL = "SELECT TOP 1 valos FROM SigCdCot " + ;
+           "WHERE cmoes = " + EscaparSQL(loc_cMoeda) + ;
+           " AND datas <= GETDATE() " + ;
+           "ORDER BY datas DESC, horas DESC"
+```
+
+Esta ├® uma query completamente diferente ÔÇö sobre `SigCdCot` (tabela de cota├º├Áes de c├ómbio), **n├úo** sobre as tabelas do relat├│rio principal. `cmoes` ├® coluna leg├¡tima de `SigCdCot` (documentada no pr├│prio coment├írio do m├®todo: `Tabela: SigCdCot (cmoes, datas, valos)`). O m├®todo substitui corretamente `fBuscarCotacao()` do legado.
+
+### [SQL-FILTRO-INVENTADO] DATAS ÔÇö FALSO POSITIVO
+
+`datas` aparece em dois contextos leg├¡timos:
+
+1. **Linha 559** ÔÇö mesmo m├®todo `BuscarCotacao`/`SigCdCot`: `AND datas <= GETDATE()` ├® filtro necess├írio para retornar apenas cota├º├Áes hist├│ricas (n├úo futuras). Remover quebraria o c├ílculo de c├ómbio.
+
+2. **Linha 352** ÔÇö query sobre cursor local `crMovimento`:
+   ```foxpro
+   WHERE CPros + DTOS(Datas) BETWEEN ;
+         crProdutos.CPros + loc_lcDtI AND crProdutos.CPros + loc_lcDtF ;
+   ```
+   `Datas` aqui ├® campo do cursor `crMovimento` (criado na linha 327: `TTOD(Datas) AS Datas`), com ├¡ndice Rushmore `CPros + DTOS(Datas) TAG ProDat` (linha 334) criado especificamente para essa query. Sem esse filtro, acumularia movimenta├º├Áes de **todos os produtos/per├¡odos** no lugar errado.
+
+---
+
+### Por que o detector falhou
+
+O validador comparou os WHERE columns com a lista das queries principais (`SigCdOpe`, `SigMvCab`, `SigMvItn`, `SigCdTom`). `BuscarCotacao` usa uma tabela completamente diferente (`SigCdCot`) com suas pr├│prias colunas, e o filtro de `crMovimento` ├® sobre cursor local ÔÇö ambos fora do escopo da lista de refer├¬ncia.
+
+**Nenhuma altera├º├úo ├® necess├íria.** Remover qualquer uma das condi├º├Áes quebraria a l├│gica de neg├│cio (c├ílculo errado de c├ómbio ou ac├║mulo errado de movimenta├º├Áes), violando a regra "NAO alterar logica de negocio". Os arquivos est├úo corretos.

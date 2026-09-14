@@ -1,0 +1,12 @@
+﻿Fase 4 conclu├¡da. O arquivo foi atualizado com:
+
+**O que foi adicionado:**
+- **10 propriedades de estado do protocolo SiTef** (`this_nProximoComando`, `this_nTipoCampo`, etc.) ÔÇö equivalentes ├ás vari├íveis `PUBLIC` do legado
+- **`ConfigurarAreaPrincipal()` completa** com `shp_4c_Borda` (Shape1), `lbl_4c_Label3` ("Senha do Supervisor"), `txt_4c_GetSenha` e `txt_4c_Senha` (mesma posi├º├úo, protocolo alterna via `When`), `cnt_4c_Instrucao` com label "Insira ou Passe o Cart├úo" ÔÇö mais BINDEVENTs para GotFocus/LostFocus/When de ambos os textboxes
+- **`ConfigurarSaida()` completa** com `cmd_4c_Cancelar` (Picture + Themes=.T.)
+- **Handlers dos textboxes:** `TxtGetSenhaWhen/GotFocus/LostFocus` e `TxtSenhaWhen/GotFocus/LostFocus`
+- **Loop compartilhado** `ExecutarLoopContinua(par_nTipo)` ÔÇö usado pelos dois GotFocus, com vars locais intermedi├írias para os `@`-par├ómetros da DLL
+- **`MontaRetorno(par_cCupom)`** ÔÇö chama `BO.RetornoSucesso` e libera o form
+- **`AlternarPagina(par_nModo)`** ÔÇö alterna caption do label de instru├º├úo
+- **`BtnCancelarClick()`** ÔÇö chama `RetornoFalha` com mensagem de cancelamento
+- **`ConfigurarPaginaLista()`** ÔÇö stub vazio para compatibilidade com o pipeline

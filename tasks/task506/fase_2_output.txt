@@ -1,0 +1,21 @@
+﻿The `InicializarForm` now correctly uses IF/ELSE nesting with RETURN only outside TRY/CATCH.
+
+**FASE 3/8 complete.** `FormPzo.prg` was created at `C:\4c\projeto\app\forms\operacionais\FormPzo.prg` (1,085 lines). Here's a summary of what was built:
+
+**Structure:**
+- `DEFINE CLASS FormPzo AS FormBase` ÔÇö flat modal layout, `DataSession=1` (shared cursors with parent form), `WindowType=1`, no `PageFrame`
+- `Init(par_oFormPai)` stores parent form reference before `DODEFAULT()`
+- `InicializarForm()` creates `PzoBO`, initializes `CsPrazE` via BO, then builds all controls
+
+**Controls created:**
+| Method | Controls |
+|--------|----------|
+| `ConfigurarCabecalho` | `cnt_4c_Sombra` + `lbl_4c_Sombra`/`lbl_4c_Titulo` (dark header) |
+| `ConfigurarGrid` | `grd_4c_Dados` ÔÇö 5 columns with `DynamicReadOnly` for edit control |
+| `ConfigurarGridDados` | `RecordSource=CsPrazE`, `ControlSource` per column, dynamic row coloring |
+| `ConfigurarAreaTotais` | 6 TextBoxes for Frete/Desp/Seg (Total + Informado) |
+| `ConfigurarContainerObservacao` | `cnt_4c_Observacao` (Top=422, hidden by default) |
+| `ConfigurarContainerEntrega` | `cnt_4c_Entrega` (Top=534, hidden by default) |
+| `ConfigurarBotaoEncerrar` | Canonical `cnt_4c_Saida`/`cmd_4c_Encerrar` (Left=917) |
+
+**Events (BINDEVENT):** `AfterRowColChange` ÔåÆ `AtualizarLinhaGrid`, `LostFocus` on numeric columns ÔåÆ `AtualizarTotaisNaTela`, `LostFocus` on `txt_4c_Conta` ÔåÆ `ValidarConta`, `LostFocus` on `txt_4c_CodObs` ÔåÆ `ValidarObservacao`, `Click` on `cmd_4c_Encerrar` ÔåÆ `EncerrarClick` (calls `BO.Confirmar()` then `Release`).

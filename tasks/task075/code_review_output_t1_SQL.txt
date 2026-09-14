@@ -1,0 +1,5 @@
+﻿3 corre├º├Áes aplicadas em `SigReDctBO.prg`:
+
+1. **Linha 74** ÔÇö `EmpDnPs = '" + loc_cEdn + "'"` ÔåÆ `EmpDnPs = " + EscaparSQL(loc_cEdn)`
+2. **Linha 85** ÔÇö `EmpDopNums = '" + loc_cEdn2 + "'"` ÔåÆ `EmpDopNums = " + EscaparSQL(loc_cEdn2)`
+3. **SQL-FILTRO-INVENTADO** ÔÇö Removida a query inventada `SELECT ... FROM SigCdEmp WHERE Cemps = ...`; substitu├¡da por `go_4c_Sistema.cCodEmpresa + " - " + ALLTRIM(go_4c_Sistema.cEmpresa)`, que usa o objeto de sistema j├í dispon├¡vel (propriedade `cEmpresa` documentada em CLAUDE.md).

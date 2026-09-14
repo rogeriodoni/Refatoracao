@@ -1,0 +1,12 @@
+﻿Tudo integrado corretamente. Resumo da Fase 8/8:
+
+**O que foi verificado e estava completo (fases anteriores):**
+- `FormDpi.prg` ÔÇö todos os 19 m├®todos implementados: `BtnBuscarClick`, `BtnEncerrarClick`, `BtnConfirmarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`, etc.
+- `DpiBO.prg` ÔÇö completo com `Inserir`, `Atualizar`, `ExecutarExclusao`, `Buscar`, `CarregarPorCodigo`
+
+**O que foi integrado nesta fase:**
+- `menu.prg` linha 182: `DEFINE BAR 77 OF popCadastros PROMPT "Departamentos do Site"`
+- `menu.prg` linha 247: `ON SELECTION BAR 77 OF popCadastros DO AbrirFormDpi`
+- `menu.prg` linha 6945: `PROCEDURE AbrirFormDpi()` com padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+
+**Carregamento autom├ítico** (sem necessidade de editar config.prg): `DpiBO.prg` e `FormDpi.prg` s├úo carregados automaticamente pelo ADIR nas pastas `classes\*BO.prg` e `forms\cadastros\Form*.prg`.

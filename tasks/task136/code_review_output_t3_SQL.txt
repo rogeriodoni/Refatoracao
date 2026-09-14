@@ -1,0 +1,14 @@
+﻿After a complete read of both files ÔÇö 1588 lines in the form, 271 in the BO ÔÇö the verdict is clear:
+
+**No WHERE condition with column 'XNENS' exists in either file.** All WHERE clauses in the migrated code are:
+
+| Location | SQL | Columns used |
+|---|---|---|
+| `FormSigPdM11.prg` line 1029 | `WHERE Nenvs = loc_nNenvs` | `Nenvs` Ô£ô |
+| `FormSigPdM11.prg` line 1174 | `WHERE Emps = ... OR LTRIM(RTRIM(Emps)) = ''` | `Emps` Ô£ô |
+| `FormSigPdM11.prg` line 974 | `WHERE (RTRIM(Grupos)+RTRIM(Contas) = ...)` | `Grupos`, `Contas` |
+| `SigPdM11BO.prg` line 232 | `WHERE Emps = ... OR LTRIM(RTRIM(Emps)) = ''` | `Emps` Ô£ô |
+
+The original code specifies `WHERE original usa: NENVS, EMPS` ÔÇö and that's exactly what the migrated code uses. The automated SQL validator produced a **false positive**. Most likely cause: the tool is tokenizing `xNensiS` (the cursor alias that appears before `WHERE Nenvs = loc_nNenvs` in `ValidarConta`) and treating it as a column name abbreviated to `XNENS`.
+
+No changes are needed to either file. The [SQL-FILTRO-INVENTADO] alert does not correspond to a real problem in the code.

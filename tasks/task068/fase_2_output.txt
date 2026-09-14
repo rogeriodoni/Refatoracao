@@ -1,0 +1,18 @@
+﻿Fase 2 completa. O `sigrecrtBO.prg` agora tem implementa├º├úo 100% funcional:
+
+**M├®todos adicionados:**
+
+- **`CarregarParametros()`** ÔÇö carrega `SigCdOpt` (com ├¡ndice em `operacaos` para os SEEKs no SCAN), `SigCdPac` (t├¡tulos din├ómicos das 3 op├º├Áes de nota), `SigCdPam` (tipo de juros: Simples/Compostos)
+
+- **`PrepararDados()`** ÔÇö replica fiel do `processamento()` legado:
+  - Copia filtros das propriedades para vari├íveis locais (necess├írio para `?var` no SQLEXEC)
+  - Monta todas as 9 cl├íusulas WHERE condicionais
+  - Constr├│i `loc_cVerTipo` com subselects em `cursor_4c_SigCdOpt` (VFP local) por tipo de relat├│rio
+  - Executa SQLEXEC para `cursor_4c_CliCqDev` (devolvidos), `cursor_4c_SqlTmp0` (query principal)
+  - Aplica `&loc_cVerTipo` e `&loc_cVerOrdem.` via macro VFP no SELECT local ÔåÆ `CsRelatorio`
+  - Monta `CsCabecalho` com nome da empresa, t├¡tulo, per├¡odo, emissor, destino, origem
+  - SCAN por `CsRelatorio`: calcula `cotasE`, `valsai`, `valent`, `Dif`, `valliq`, juros por linha
+
+- **`Imprimir()`** / **`Visualizar()`** ÔÇö chamam `PrepararDados()` + `REPORT FORM ... TO PRINTER PROMPT NOCONSOLE` / `PREVIEW NOCONSOLE`
+
+- **`LimparCursores()`**, **`ObterMensagemErro()`**, **`Destroy()`** ÔÇö gest├úo de recursos

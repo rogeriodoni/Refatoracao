@@ -1,0 +1,21 @@
+﻿A migra├º├úo da Fase 8 j├í estava completa nas fases anteriores. Verificando o estado atual:
+
+**Todos os m├®todos da Fase 8 j├í implementados:**
+- `CarregarLista()` ÔÇö linha 547
+- `BtnBuscarClick()` ÔÇö linha 726
+- `BtnEncerrarClick()` ÔÇö linha 764
+- `BtnSalvarClick()` ÔÇö linha 775
+- `BtnCancelarClick()` ÔÇö linha 803
+- `FormParaBO()` ÔÇö linha 1226 (todos os campos mapeados)
+- `BOParaForm()` ÔÇö linha 1050 (todos os campos mapeados)
+- `HabilitarCampos()` ÔÇö linha 962
+- `LimparCampos()` ÔÇö linha 874
+- `AlternarPagina()` ÔÇö linha 591
+
+**Integra├º├úo j├í conclu├¡da:**
+- `config.prg` carrega `cfoBO.prg` e `Formcfo.prg` via ADIR din├ómico (n├úo precisa entrada manual)
+- `menu.prg` linha 70-71: `DEFINE BAR 16 OF popCadastros PROMPT "CFOP"`
+- `menu.prg` linha 85: `ON SELECTION BAR 16 OF popCadastros DO AbrirFormcfo`
+- `menu.prg` linha 769: `PROCEDURE AbrirFormcfo()` com padr├úo correto (VARTYPE, Show() sem par├ómetro, sem Release())
+
+A migra├º├úo do `SIGCDCFO ÔåÆ Formcfo.prg` est├í **100% completa** em todas as 8 fases. O arquivo tem 3188 linhas com implementa├º├úo funcional de todos os campos, lookups (CfoST60, CfoST, CfoDest, Sittricm), valida├º├Áes (IPICST, PISCST, COFCST, ContFrt/Seg/Da), eventos (BipiChangeHandler, IpiIChangeHandler) e os bot├Áes XML de exporta├º├úo/importa├º├úo.

@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks good. The file is structurally sound (balanced WITH/ENDWITH, PROCEDURE/ENDPROC, single DEFINE CLASS/ENDDEFINE).
+
+## Resumo da Fase 5/8 ÔÇö FormTbO.prg
+
+Modifiquei `C:\4c\projeto\app\forms\cadastros\FormTbO.prg` (Read + Edit, arquivo j├í existia das fases 1-4):
+
+**Contexto importante**: o form legado `SIGCDTBV.SCX` n├úo tem campos de dados separados ÔÇö a edi├º├úo acontece direto nas c├®lulas da grade (`GradeSubN.Column1.Text1`/`Column2.Text1`), e `analise.json` confirma `"campos": []`. Por isso n├úo havia coordenadas Top/Left legadas para copiar. Segui o padr├úo can├┤nico de `FormCor.prg`/`FormCargo.prg` (Page2 com campos abaixo do cabe├ºalho, Top~156-191, Left=40/135) para os dois campos que sustentam o v├¡nculo `SigOpTdo`Ôåö`SigOpTdz` j├í modelado no `TbOBO.prg` das fases 1-2:
+
+1. **`txt_4c_Dopes`** (Opera├º├úo) ÔÇö somente leitura, cinza, d├í visibilidade ao contexto (equivale ao `crSigCdOpe.Dopes` do legado, que s├│ aparecia no Caption).
+2. **`txt_4c_Tabds`** (Tabela de Desconto) ÔÇö edit├ível, `MaxLength=10`, equivalente ├á c├®lula `GradeSubN.Column1.Text1`; o lookup F4 (`fwbuscaext`ÔåÆ`SigOpTdz`) fica para a Fase 7 (Eventos), conforme `docs/PROCESSAMENTO_MULTI_FASE.md`.
+
+Tamb├®m adicionei `FormParaBO()`/`BOParaForm()` (exigidos pela valida├º├úo autom├ítica da Fase 5), cobrindo os dois campos j├í criados ÔÇö `txt_4c_Descrs`/`this_cDescrs` (somente leitura, vindo do JOIN) entra na Fase 6 junto com o restante.
+
+Corrigi coment├írios desatualizados que ainda diziam "Fase 3"/"shell vazio - Fases 5-6" para refletir o plano oficial de 8 fases.
+
+**Valida├º├úo estrutural**: WITH/ENDWITH (22/22), PROCEDURE/ENDPROC (12/12), DEFINE CLASS/ENDDEFINE (1/1) ÔÇö tudo balanceado.

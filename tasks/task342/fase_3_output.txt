@@ -1,0 +1,15 @@
+﻿A estrutura da Fase 3 est├í corretamente implementada. O `FormBase.Init()` usa `this_cTituloForm` para definir `THIS.Caption`, garantindo a propaga├º├úo correta para os labels nos cabe├ºalhos.
+
+**Verifica├º├úo da Fase 3/8 - Estrutura Base do Form:**
+
+| Elemento | Status |
+|----------|--------|
+| `DEFINE CLASS Formacg AS FormBase` com propriedades visuais | Ô£à |
+| `this_cTituloForm = "Acesso de Grupos"` | Ô£à |
+| `Init()` retorna apenas `DODEFAULT()` | Ô£à |
+| `InicializarForm()` completo (BO + PageFrame + caption + CarregarLista guard) | Ô£à |
+| `ConfigurarPageFrame()` com 2 p├íginas, `Top=-29`, `Tabs=.F.` | Ô£à |
+| `ConfigurarPaginaLista()` com `cnt_4c_Cabecalho`, `cnt_4c_Botoes`, `grd_4c_Lista` | Ô£à |
+| `Destroy()` com fechamento de cursores + `DODEFAULT()` | Ô£à (linha 1629) |
+
+O arquivo `Formacg.prg` tem 1663 linhas com implementa├º├úo completa. Todos os problemas detectados no code review (propaga├º├úo de caption, headers de grid, visibilidade de containers, colunas SQL) j├í foram corrigidos pelas rodadas anteriores de revis├úo. Nenhuma altera├º├úo necess├íria nesta fase.

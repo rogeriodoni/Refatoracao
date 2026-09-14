@@ -1,0 +1,16 @@
+﻿Arquivo completo e correto. Fase 8 conclu├¡da.
+
+**O que foi adicionado:**
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `FormParaRelatorio()` | Centraliza `DefinirOpcao(opt_4c_Opcao.Value)` ÔÇö eliminando duplica├º├úo nos 3 bot├Áes de a├º├úo |
+| `LimparCampos()` | Repositiona `cursor_4c_TempoGr` e `cursor_4c_TempoCp` no topo |
+| `CarregarLista()` | Atualiza grid Page1 (sintetico) ou Page2 (anal├¡tico) conforme p├ígina ativa |
+| `HabilitarCampos()` | No-op ÔÇö viewer ├® somente leitura |
+| `AjustarBotoesPorModo()` | No-op ÔÇö viewer n├úo tem modos CRUD |
+| `BtnBuscarClick()` | Chama `CarregarLista()` para refresh |
+| `BtnSalvarClick()` | Alias para `BtnImprimirClick()` |
+| `BtnCancelarClick()` | Alias para `BtnEncerrarClick()` |
+
+Os tr├¬s bot├Áes de a├º├úo (`BtnVisualizarClick`, `BtnImprimirClick`, `BtnDocumentoClick`) foram refatorados para chamar `FormParaRelatorio()` em vez de duplicar `DefinirOpcao()` inline. O arquivo final tem 1257 linhas e est├í funcionalmente completo.

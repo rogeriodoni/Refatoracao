@@ -1,0 +1,13 @@
+﻿Analisei o arquivo completo (999 linhas). Os dois alertas s├úo **falsos positivos** do validador SQL.
+
+**COLUMNCOUNT** e **CONTROLCOUNT** no arquivo s├úo propriedades VFP de objetos UI ÔÇö n├úo cl├íusulas SQL WHERE:
+
+- `ColumnCount` ÔåÆ linha 213: `.ColumnCount = 2` (propriedade do Grid)
+- `ColumnCount` ÔåÆ linha 254: `loc_oGrid.ColumnCount = 2` (idem)
+- `ControlCount` ÔåÆ linha 475: `PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0` (m├®todo TornarControlesVisiveis)
+
+Os SQLs reais do arquivo usam exatamente as colunas corretas:
+- `WHERE RTRIM(cgrus) = ...` (linha 756)
+- `WHERE a.Dopes = ...` (GpsBO.prg ÔÇö CarregarGrupos, ExecutarExclusao, SalvarGrupos)
+
+N├úo h├í nenhuma condi├º├úo WHERE inventada. O validador confundiu nomes de propriedades VFP com nomes de colunas SQL. **Nenhuma altera├º├úo necess├íria** ÔÇö o c├│digo est├í correto.

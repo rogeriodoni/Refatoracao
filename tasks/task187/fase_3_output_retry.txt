@@ -1,0 +1,22 @@
+﻿The file `C:\4c\projeto\app\forms\operacionais\FormSigPrGlo.prg` already exists in a complete Phase 3 state (441 lines). Verification:
+
+**Estrutura base presente:**
+- `DEFINE CLASS FormSigPrGlo AS FormBase` ÔÇö layout OPERACIONAL flat (Width=680, Height=379, DataSession=2)
+- Properties de modo: `this_lReserva`, `this_lAutomatico`, `this_lPorDestino`, `this_lGerPorTp`, `this_lAlterEmp`, `this_lMostrarChkPedra`
+
+**M├®todos base (Fase 3):**
+- `Init(par_lReserva, par_lAutom, par_lPorDestino, par_pTipo)` ÔÇö seta flags e delega via `DODEFAULT()`
+- `InicializarForm()` ÔÇö cria BO (SigPrGloBO), chama `CarregarParametros()`, `CarregarEmpresa()`, monta caption din├ómico, orquestra Configurar* methods
+- `ConfigurarCabecalho()` ÔÇö cntSombra RGB(100,100,100) + lbl_4c_Sombra/lbl_4c_Titulo (AutoSize=.F., Width=THIS.Width)
+- `ConfigurarShape()` ÔÇö shp_4c_Shape3 decorativo
+- `ConfigurarBotoes()` ÔÇö cmd_4c_Processar + cmd_4c_Cancelar (Themes=.T. + DisabledPicture, ├¡cones existem em vbmp/)
+- `ConfigurarContainers()` ÔÇö 7 containers vazios (cnt_4c_TipoOp, cnt_4c_Operacao, cnt_4c_Conta, cnt_4c_Responsavel, cnt_4c_Empresa, cnt_4c_Previsao com visibilidade condicional Reserva, cnt_4c_Op com visibilidade GlobAutos=2)
+- `TornarControlesVisiveis()` ÔÇö com filtro para containers hidden-por-design (cnt_4c_Op/cnt_4c_Previsao) e recurs├úo nos filhos ANTES do LOOP (regra anti-ghost)
+- `Destroy()` ÔÇö libera cursores tempor├írios (TmpOper, crSigCdPam, crSigCdPac, etc.) + BO
+
+**Verifica├º├Áes cruzadas:**
+- BO `SigPrGloBO` tem m├®todos `CarregarParametros(par_lGerPorTp)` e `CarregarEmpresa(par_cCodEmp)` referenciados
+- Propriedades `this_l*` no BO combinam com as passadas do Form
+- ├ìcones `geral_processar_60.jpg`, `cadastro_sair_60.jpg`, `new_background.jpg` existem em `C:\4c\vbmp\`
+
+Fase 3 completa ÔÇö arquivo pronto para as pr├│ximas fases (containers filhos, TextBoxes, eventos).

@@ -1,0 +1,23 @@
+﻿All fixes are verified. Phase 6 is complete. Here's a summary of everything implemented in `FormClf.prg` (now 2441 lines):
+
+**27 missing controls added to `ConfigurarPaginaDados()`:**
+- Combos: `cbo_4c_Cmbbred`, `cbo_4c_CmbAred`, `cbo_4c_CmbIpi`, `cbo_4c_CmbIPip`
+- TextBoxes: `txt_4c_Areduzida`, `txt_4c_AreduzidaS`, `txt_4c_Aipi`, `txt_4c_AliqFcp`, `txt_4c_Cest`
+- Labels: `lbl_4c_Label3/5/6/7/8/9/12/13/14/15/16`, `lbl_4c__IPI` (Visible=.F. until TemProduto)
+- Action buttons: `cmd_4c_Incluir/Excluir/InsRed/ExcRed`
+- Grid `grd_4c_IVA` (4 cols: UF Ori/Des/IVA/IVA Im) with F4+LostFocus BINDEVENTs
+- Grid `grd_4c_Reducao` (3 cols: UF Dest/Aliq Red/Aliq B Red) with F4+LostFocus BINDEVENTs
+
+**Bugs fixed in existing methods:**
+- `TornarControlesVisiveis`: guards `LBL_4C__IPI` from being forced Visible
+- `FormParaBO`: cmbIpi maps T/I/O (Tributado=1, Isento=2, Outros=3), not S/N
+- `BOParaForm`: plain string combo values (no `\<` prefix)
+- `LimparCampos`: cmbIpi defaults to ListIndex=1 (Tributado)
+- `HabilitarCampos`: `CmbIPip.Enabled = par_lHabilitar AND !this_lTemProduto`
+- `BtnIncluir/Visualizar/AlterarClick`: call `CarregarFilhos/CriarCursoresFilhos + VincularGridsFilhos + VerificarTemProduto + AtualizarSayIPI`
+- `BtnExcluirClick`: product check (SigCdPro/SigCdPrc UNION) + DELETE from SigCdIva/SigCdRed before exclusion
+- `BtnSalvarClick`: calls `SalvarFilhos(loc_cCodigo)` after `Salvar()`
+- `Destroy`: closes crIva and crRed before DODEFAULT
+
+**21 new methods added:**
+`PopularCombos`, `CriarCursoresFilhos`, `CarregarFilhos`, `VincularGridsFilhos`, `SalvarFilhos`, `BtnIncluirIvaClick`, `BtnExcluirIvaClick`, `BtnInsRedClick`, `BtnExcRedClick`, `IvaCol1/2KeyPress`, `RedCol1KeyPress`, `AbrirLookupUF`, `IvaLostFocusValidar`, `RedLostFocusValidar`, `ValidarAliqFcp`, `ValidarAreduzida`, `ValidarAreduzidaS`, `VerificarTemProduto`, `AtualizarSayIPI`.

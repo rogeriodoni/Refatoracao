@@ -1,0 +1,4 @@
+﻿Todos os 8 erros corrigidos. O problema raiz era duplo:
+
+- **`SCAN IN <alias>`** ÔÇö VFP9 n├úo tem cl├íusula `IN` no `SCAN`. Fix: `SELECT <alias>` antes + `SCAN` (sem IN). O `SELECT` interno ao loop foi mantido onde havia `SQLEXEC` que muda o workarea corrente.
+- **`INDEX ON ... IN <alias>`** ÔÇö VFP9 tamb├®m n├úo suporta `IN` no `INDEX ON`. Fix: `SELECT cursor_4c_Contas` antes + `INDEX ON` sem `IN`.

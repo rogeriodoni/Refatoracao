@@ -1,0 +1,7 @@
+﻿Integration is complete. The task073 migration for SIGRECTP is fully done:
+
+- `FormSIGRECTP.prg` ÔÇö complete form with all filters, lookups, validation, and report generation
+- `SIGRECTPBO.prg` ÔÇö BO with SQL query and filter validation (created in earlier phases)
+- `menu.prg` ÔÇö BAR 85 added under `popRelatorios` ("Cota├º├úo de Compras") with procedure `AbrirFormSIGRECTP()`
+
+The dynamic loader in `config.prg` picks up `FormSIGRECTP.prg` and `SIGRECTPBO.prg` automatically (ADIR pattern). Before testing, delete `.fxp` files: `del /s /q C:\4c\projeto\app\*.fxp`. The report also needs `relsigrectp.frx` in `gc_4c_CaminhoReports` to render.

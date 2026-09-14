@@ -1,0 +1,17 @@
+﻿Ap├│s revisar todos os arquivos, a migra├º├úo est├í completa. Relat├│rio do estado atual:
+
+**Formsigreinr.prg** (1924 linhas) ÔÇö completo:
+- Todos os controles implementados em `ConfigurarPaginaLista()`: 8 OptionGroups (TipoRel, TipoAnal, TipoDif, TipoLeitura, TpCusto, TpVenda, Foto, Etiq, Obs, Ctg, Col), 5 TextBoxes (CodProduto, DsProduto, CodLocal, DsLocal, Barra), grid de ocorr├¬ncias com CheckBox, bot├Áes SelTudo/Apaga
+- `ConfigurarPaginaDados()` retorna `.T.` ÔÇö correto para REPORT (n├úo h├í Page2 CRUD)
+- Todos os lookups implementados com BINDEVENT KeyPress + DblClick + LostFocus: `AbrirBuscaCodProduto`, `AbrirBuscaDsProduto`, `AbrirBuscaCodLocal`, `AbrirBuscaDsLocal`, `ValidarCodProduto`, `ValidarDsProduto`, `ValidarCodLocal`, `ValidarDsLocal`
+- `FormParaRelatorio` com todos os campos, `LimparCampos`, `MudouTipoRelatorio`, `MudouTipoAnalitico`, todos os handlers de bot├úo
+
+**sigreinrBO.prg** (1360 linhas) ÔÇö completo:
+- `InicializarDadosBasicos()` ÔÇö carrega CsFiltro, CsSigCdPam, CsSigCdBal, CrSigCdEmp, CrSigCdGcr, CsOperacaos
+- `PrepararDados()` ÔÇö todos os 7 tipos de relat├│rio implementados (TipoRel 1-8)
+- `Visualizar()` e `Imprimir()` ÔÇö todos os FRX referenciados (SigReBrf/Blh/Blr/Bla/Ble/Blo/Blb/Bel/Bl3)
+- `ValidarFiltros()` e `Destroy()`
+
+**Integra├º├úo** ÔÇö completa: `menu.prg` tem `AbrirFormsigreinr` (linha 3476), `config.prg` usa ADIR() din├ómico.
+
+A Fase 6/8 j├í estava conclu├¡da pelas fases anteriores. N├úo h├í nada a modificar ÔÇö o form de relat├│rio n├úo tem `ConfigurarPaginaDados` com campos CRUD porque ├® um form FLAT de filtros, e todo o trabalho equivalente foi feito em `ConfigurarPaginaLista()`.

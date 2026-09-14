@@ -1,0 +1,10 @@
+﻿Ambas as corre├º├Áes aplicadas corretamente. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL] ÔÇö CORRIGIDO** (`TornarControlesVisiveis`, linha 1726ÔÇô1733)
+- Adicionado guarda INLIST para `CNT_4C_CABECALHO`: recurs├úo nos filhos ├® executada ANTES do `LOOP`, garantindo que sub-controles fiquem vis├¡veis; o container em si n├úo recebe `Visible=.T.` for├ºado.
+
+**[GRID-SQLEXEC] ÔÇö CORRIGIDO** (`CarregarGradeOperacao`, linha 1842ÔÇô1853)
+- SQLEXEC agora grava em `cursor_4c_OperacaoTemp`. Se `cursor_4c_Operacao` j├í existe (est├í como RecordSource do grid), faz `ZAP + APPEND FROM DBF()` preservando as colunas; se ├® a primeira carga, faz `SELECT INTO CURSOR READWRITE`. Temp cursor descartado logo ap├│s.
+
+**[LAYOUT-POSITION] ÔÇö J├ü CORRETO** (`cnt_4c_Origem`, linha 711)
+- `Top=202` (173+29) j├í estava no c├│digo atual; o problema foi detectado contra vers├úo anterior.

@@ -1,0 +1,16 @@
+﻿Both files are clean. The migration is complete:
+
+**Formsigprnfe.prg** (1619 lines) ÔÇö OPERACIONAL form with:
+- Full UI: cnt_4c_Sombra header, cnt_4c_Operacoes filter panel (6 OptionGroups, TextBoxes, ComboBox, CheckBoxes), cnt_4c_Grade with 9-column grid (Column1 has CheckBox with Sparse=.F.), 4 grade action buttons, Selecionar/Limpar/Processar/Encerrar buttons, cnt_4c_Inu floating inutiliza├º├úo container
+- KeyPress handlers (Tab/Enter guard) for Emps and Series validation via SQL
+- BINDEVENT for all buttons and grid CheckBox toggle
+- DataSession=2 with DODEFAULT() in Init()
+- Cursor csOperacoes created in InicializarForm, closed in Destroy()
+
+**sigprnfeBO.prg** (650 lines) ÔÇö BO with:
+- Selecionar(): 3-query SQL pipeline (SigMvNfi + sigprnfe status + SigCdSer NF-e series filter) with all validations moved outside TRY
+- CarregarEmpresa(): SQL lookup of SigCdEmp with regime/contact data
+- Inserir()/Atualizar(): SQLEXEC INSERT/UPDATE with proper helper function usage
+- RegistrarAuditoria(): LogAuditoria INSERT with GETDATE()
+
+**Fixes applied**: AllowAddNew removed from grids, RETURN-inside-TRY eliminated in both files (moved validations before TRY, replaced with flag+ELSE pattern), FOR EACH [] syntax fixed, CorretorAutomatico auto-fixed 7 additional patterns (CheckBox.Value numeric, container visibility, LostFocusÔåÆKeyPress).

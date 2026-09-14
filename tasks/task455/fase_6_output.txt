@@ -1,0 +1,20 @@
+﻿O arquivo est├í completo e correto. Vou confirmar os pontos-chave implementados na Fase 6:
+
+**Adicionados em `ConfigurarPaginaDados()`:**
+- `lbl_4c_Descricao` (Say2: Top=117+29=146, Left=148, Width=58)
+- `txt_4c_Descr` (get_Descr: Top=112+29=141, Left=215, Width=220, MaxLength=30, TabIndex=2)
+
+**Corrigidos (bugs das fases anteriores):**
+- `BOParaForm()` ÔÇö usava `this_cCodigo` (inexistente); corrigido para `this_cCods` e adicionado `this_cDescrs`
+- Todos os click handlers (`BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`) ÔÇö usavam `cursor_4c_Dados.Cods` para chamar `CarregarPorCodigo()` que espera `cidchaves`; corrigido para `cursor_4c_Dados.cidchaves`
+- `BtnBuscarClick` ÔÇö LOCATE agora usa `cidchaves` em vez de `Cods`
+
+**M├®todos novos adicionados:**
+- `FormParaBO()` ÔÇö transfere campos do form para o BO + vincula `this_cRetrabs = THIS.this_cRetrabalho`
+- `HabilitarCampos(par_lHabilitar)` ÔÇö C├│digo enabled apenas no INCLUIR; Descri├º├úo enabled no INCLUIR e ALTERAR (espelha exatamente o `When` do legado)
+- `LimparCampos()` ÔÇö limpa os dois campos da Page2
+- `AjustarBotoesPorModo()` ÔÇö desabilita Confirmar no modo VISUALIZAR
+- `BtnSalvarClick()` ÔÇö valida C├│digo obrigat├│rio (fora do TRY), chama `FormParaBO()` + `Salvar()` + navega para Page1
+- `BtnCancelarClick()` ÔÇö volta para Page1
+
+**Atualizado:** `BtnIncluirClick` agora chama `LimparCampos()`, `HabilitarCampos(.T.)` e `AjustarBotoesPorModo()` antes de navegar.

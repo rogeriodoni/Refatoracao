@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo da Fase 6/8 ÔÇö FormSre.prg
+
+Completei `C:\4c\projeto\app\forms\cadastros\FormSre.prg` (848 ÔåÆ 1498 linhas), adicionando:
+
+**Campos restantes (├║ltimos 50% de Page2), todos com Tops compensados (+29):**
+- `lbl_4c_Label13` "Numera├º├úo :" + `obj_4c_Fwoption2` (nnfobrigs: Opcional/Obrigat├│ria)
+- `lbl_4c_Label4` "Imprime NF :" + `obj_4c_Op_AlteraPeso` (impnfs: Sim/N├úo/Eletr├┤nica)
+- `lbl_4c_Label5` "Dados ECF Fiscal :" + `obj_4c_Optiongroup1` (mostecfs: Sim/N├úo)
+- `lbl_4c_Label6` "Servi├ºos :" + `obj_4c_Fwoption1` (TpServicos: Sim/N├úo/Sim Com Itens)
+- `lbl_4c_Label11` "Selo Transporte :" + `obj_4c_OptSeloTrans` (SeloTrans: Sim/N├úo)
+- `lbl_4c_Label8`/`txt_4c_Inicials` + `lbl_4c_Label9`/`txt_4c_Finals` (Inicial/Final do selo)
+
+**Container `cnt_4c_BotoesAcao`**: adicionados `cmd_4c_Confirmar` e `cmd_4c_Cancelar` (padr├úo can├┤nico do framework).
+
+**Lookup de Empresa completo** (equivalente ao `fAcessoEmpresa` legado, `sigacess.PRG:732`):
+- `ValidarEmpresa()` ÔÇö LostFocus de `txt_4c_Emps`, valida c├│digo, preenche descri├º├úo (Razas), com guard anti-reabertura (Problema 45)
+- `ValidarDescricaoEmpresa()` ÔÇö LostFocus de `txt_4c_DEmps`, busca reversa por raz├úo social
+- `AbrirLookupEmpresa()` ÔÇö `FormBuscaAuxiliar` completo (CREATEOBJECT, mAddColuna, Show, verifica `this_lSelecionou`, preenche campos, USE IN, Release)
+- `EmpsKeyPress`/`EmpsDblClick`/`DEmpsKeyPress`/`DEmpsDblClick` ÔÇö handlers PUBLIC com BINDEVENT (F4 = c├│digo 28)
+
+**Corre├º├úo**: `txt_4c_DEmps` estava `ReadOnly = .T.` desde a Fase 5, o que impediria a busca reversa por nome que o legado suporta (`getDEmps.Valid` com `fAcessoEmpresa(...,'D',...)`) ÔÇö corrigido para edit├ível, restaurando paridade funcional.
+
+Validei: nenhum `PROCEDURE`/`WITH` ├│rf├úo (17 `PROCEDURE`=17 `ENDPROC`, 61 `WITH`=61 `ENDWITH`), sem nomes de objeto duplicados, sem stubs/TODOs.
+
+**Ainda n├úo inclu├¡do** (escopo das Fases 7-8, conforme cabe├ºalho do arquivo): `FormParaBO`/`BOParaForm` e os eventos dos bot├Áes CRUD (Incluir/Alterar/Excluir/Buscar/Salvar/Cancelar).

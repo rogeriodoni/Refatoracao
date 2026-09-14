@@ -1,0 +1,330 @@
+{
+  "resumo": {
+    "totalMetodos": 18,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 11,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fBuscarCotacao", "fAcessoContab", "fAcessoContas", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECOR",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "lcSep = Set([Separator])\nlcPto = Set([Point])\nSet Point To [,]\nSet Separator To [.]\n\nDo Case\n\tcase thisform.optPenPag.value=1\n\t\treport form SigReCr11 to printer noconsole\n\n\tCase (ThisForm.optTipo.Value = 1)\n\t\tIf (ThisForm.optQuebras.Value = 1)\n\t\t\treport form SigReCr1 to printer noconsole\n\t\tElse \n\t\t\treport form SigReCr2 to printer noconsole\n\t\tEndIf\n\n\tCase (ThisForm.optTipo.Value = 2)\n\t\treport form SigReCr3 to printer noconsole\n\n\tOtherwise \n\t\treport form SigReCr4 to printer noconsole\nEndCase\n\nSet ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optPenPag,optTipo,optQuebras",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR",
+      "evento": "Init",
+      "linhas": 91,
+      "codigoOriginal": "set\nlcQrySigCdOpe = [Select ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas From SigCdOpe ] + ;\n\t\t   [ Order By ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas ]\nlcQrySigCdEmp = [Select cemps,razas From SigCdEmp Where cemps=']+_Empr+[']\nlcQrySigMvPar = [Select * From SigMvPar Where 1=0 ]\nlcQrySigCdMoe = [Select cmoes,dmoes,cotas,datatrans,fmults,nordrels,disfpres,valadics,grumoes,moeqs,qtdeqs,submoes ]+;\n\t\t\t  [ From SigCdMoe ] + ;\n\t\t\t  [ Order ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = date,Sqlexecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cd_moeda,get_ds_moeda",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECOR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR",
+      "evento": "Procedure",
+      "linhas": 305,
+      "codigoOriginal": "Private pDtI,pDtF\nLOCAL lcMoe, lnPenPag\nlcMoe = 'AU'\nlnCot1 = fBuscarCotacao(lcMoe, DATE())\t\t\t\t&& mena - 16/11/2016 - pega a cotação da data do recebimento\tDate()) \n\n\nldDtI     = ThisForm.get_dt_inicial.Value\nldDtF     = ThisForm.get_dt_final.Value \nlcCdMoeda = ThisForm.get_cd_moeda.Value\nlcDsMoeda = ThisForm.get_ds_moeda.Value\nlcGrupo   = PadR(thisform.get_cd_grestoque.Value,10)\nlDGrupo   = PadR(thisform.get_Ds_grestoque.Value,20)\nlcConta   = PadR(thisform.get_cd_estoque.Value,10)\nlnTip     = T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fBuscarCotacao",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cd_moeda,get_ds_moeda,get_cd_grestoque,get_Ds_grestoque,get_cd_estoque,optTipo,optSNA,optPenPag,optQuebras",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.podatamgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR",
+      "evento": "Procedure",
+      "linhas": 30,
+      "codigoOriginal": "lcSep = Set([Separator])\nlcPto = Set([Point])\nSet Point To [,]\nSet Separator To [.]\n\nDo Case\n\tcase thisform.optPenPag.value=1\n\t\treport form SigReCr11 preview NoConsole\n\n\tCase (ThisForm.optTipo.Value = 1)\n\t\tIf (ThisForm.optQuebras.Value = 1)\n\t\t\treport form SigReCr1 preview NoConsole\n\t\tElse\n\t\t\tIf ThisForm.optQuebras.Value = 2\n\t\t\t\treport form SigReCr2 preview NoConsole\n\t\t\tElse\n\t\t\t\treport form SigReCr6 preview NoConsole\n\t\t\tEndif\n\t\tEndIf\n\n\tCase (ThisForm.optTipo.Value = 2)\n\t\treport form SigReCr3 prev... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optPenPag,optTipo,optQuebras",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.get_Ds_GrEstoque",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'D',this.value,This.Parent.get_Cd_Grestoque,This)\nElse\n\tThis.Parent.get_Cd_Grestoque.value = ''\n\tThis.Parent.get_Cd_Grestoque.refresh\nendif\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.get_Ds_GrEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(thisform.get_cd_grestoque.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.get_Cd_GrEstoque",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'C',this.value,This,This.Parent.get_Ds_Grestoque)\nElse\n\tThis.Parent.get_Ds_Grestoque.value = ''\n\tThis.Parent.get_Ds_Grestoque.refresh\nendif\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Ds_Grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.get_ds_estoque",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = ThisForm.get_Cd_GrEstoque.Value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',this.value,This.Parent.get_Cd_estoque,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.Parent.get_Cd_estoque.Value = ''\n\t\tThis.Parent.get_Cd_estoque.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThis.Parent.get_Cd_estoque.Value = ''\n\tThis.Parent.get_Cd_estoque.Refresh\n\treturn(.t.)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_Cd_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.get_ds_estoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.Not.IsEmpty(ThisForm.get_Cd_GrEstoque.Value).And.IsEmpty(ThisForm.get_cd_estoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "IsEmpty",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_cd_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.get_cd_estoque",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = ThisForm.get_Cd_GrEstoque.Value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.value,This,This.Parent.get_Ds_estoque)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.Parent.get_Ds_estoque.Value = ''\n\t\tThis.Parent.get_Ds_estoque.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThis.Parent.get_Ds_estoque.Value = ''\n\tThis.Parent.get_Ds_estoque.Refresh\n\treturn(.t.)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_Ds_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.get_cd_estoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.Not.IsEmpty(ThisForm.get_Cd_GrEstoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "if IsEmpty(ThisForm.get_cd_moeda.Value)\n\tThisForm.get_ds_moeda.Value = ''\n\tThisForm.get_ds_moeda.refresh\n\treturn(.t.)\nendif\n\nloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t   'crListaRemota','CMOES', This.Value, 'Seleção', 1000)\nIf Not loLista.plAchouRegistro\n\tloLista.mAddColuna('CMOES', '', 'Código.',.T.,'CMOES')\n\tloLista.mAddColuna('DMOES', '', 'Descrição',.T., 'DMOES')\n\tloLista.Show()\nEndIf\nIf Lastkey() = 27\n\tThisForm.get_cd_moeda.Value=''\n\tThisForm.get_d... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.optTipo",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "IF this.Value <> 1\n\tthisform.optPenPag.Value=0\n\tthisform.Refresh   \nENDIF\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optPenPag",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "if IsEmpty(ThisForm.get_cd_moeda.Value)\n\tThisForm.get_cd_moeda.Value=''\n\tThisForm.get_cd_moeda.refresh\n\treturn(.t.)\nendif\n\nloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t   'crListaRemota','DMOES', This.Value, 'Seleção', 1000)\nIf Not loLista.plAchouRegistro\n\tloLista.mAddColuna('DMOES', '', 'Descrição',.T., 'DMOES')\n\tloLista.mAddColuna('CMOES', '', 'Código.',.T.,'CMOES')\n\tloLista.Show()\nEndIf\nIf Lastkey() = 27\n\tThisForm.get_cd_moeda.Value=''\n\tThisForm.get_ds_... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.optQuebras",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "IF this.Value <> 1\n\tthisform.optPenPag.Value=0\n\tthisform.Refresh   \nENDIF\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optPenPag",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECOR.optPenPag",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "IF this.Value = 1\n\tthisform.optTipo.Value=1\n\tthisform.optQuebras.Value=1\n\tthisform.Refresh   \nENDIF\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipo,optQuebras",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECOR.Init",
+      "queryOriginal": "lcQrySigCdOpe = [Select ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas From SigCdOpe ] + ; \t\t   [ Order By ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas ]",
+      "tabelas": "SigCdOpe",
+      "colunas": "ordes,dopes,cmoes,copers,ccomis,comcargs,vendas,calcfecs,relfechas,caixas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECOR.Init",
+      "queryOriginal": "lcQrySigCdEmp = [Select cemps,razas From SigCdEmp Where cemps=']+_Empr+['] lcQrySigMvPar = [Select * From SigMvPar Where 1=0 ]",
+      "tabelas": "SigCdEmp,SigMvPar",
+      "colunas": "cemps,razas,lcQrySigMvPar,From,Where",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECOR.Init",
+      "queryOriginal": "lcQrySigCdMoe = [Select cmoes,dmoes,cotas,datatrans,fmults,nordrels,disfpres,valadics,grumoes,moeqs,qtdeqs,submoes ]+; \t\t\t  [ From SigCdMoe ] + ; \t\t\t  [ Order ... [TRUNCADO]",
+      "tabelas": "SigCdMoe",
+      "colunas": "cmoes,dmoes,cotas,datatrans,fmults,nordrels,disfpres,valadics,grumoes,moeqs,qtdeqs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpe", "SigCdEmp", "SigMvPar", "SigCdMoe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

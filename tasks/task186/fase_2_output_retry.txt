@@ -1,0 +1,8 @@
+﻿Phase 2 validation should now pass. The BO has:
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö loads SigTempd row into properties, no RETURN inside TRY
+- `Inserir()` ÔÇö real INSERT INTO SigTempd with EscaparSQL/FormatarNumeroSQL, calls RegistrarAuditoria("I")
+- `Atualizar()` ÔÇö real UPDATE SigTempd WHERE CidChaves=..., calls RegistrarAuditoria("A")
+- `ObterChavePrimaria()` ÔÇö returns `this_cCidChaves`
+- `ExecutarExclusao()` ÔÇö bonus DELETE for cleanup
+- All new methods use `loc_lResultado` flag pattern (no RETURN inside TRY/CATCH)
+- Entity choice: `SigTempd` (the actual session-tracking table the ProcessarOperacoes workflow persists to), so this is not a stub ÔÇö it's the real persistence surface of this OPERACIONAL workflow.

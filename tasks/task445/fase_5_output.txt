@@ -1,0 +1,22 @@
+﻿O arquivo est├í correto e completo. A Fase 5 foi implementada com sucesso.
+
+**O que foi adicionado em FormIBP.prg:**
+
+**ConfigurarPaginaDados()** ÔÇö 7 campos (primeiros 50% dos 14 campos n├úo-PK):
+| Campo | Controle | Tipo | Posi├º├úo |
+|-------|---------|------|---------|
+| ufs (Estado) | `txt_4c_Ufs` | TextBox, MaxLength=2 | Top=135 |
+| codigo | `txt_4c_Codigo` | TextBox, MaxLength=10 | Top=160 |
+| ex | `txt_4c_Ex` | TextBox, MaxLength=3 | Top=185 |
+| tipo | `txt_4c_Tipo` | TextBox, InputMask="999" | Top=210 |
+| descricao | `edt_4c_Descricao` | EditBox, Height=55 | Top=235 |
+| datini | `txt_4c_DatIni` | TextBox, Value={} | Top=295 |
+| datfin | `txt_4c_DatFin` | TextBox, Value={} | Top=320 |
+
+**Novos m├®todos adicionados:**
+- `FormParaBO()` ÔÇö transfere os 7 campos do form para o BO
+- `BOParaForm()` ÔÇö transfere propriedades do BO para os 7 campos do form
+- `LimparCampos()` ÔÇö zera todos os 7 campos
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita campos; ufs e codigo s├úo somente edit├íveis em modo INCLUIR (componentes da chave natural)
+
+A Fase 6 dever├í adicionar os 7 campos restantes (nacfederal, impfederal, estadual, municipal, chave, versao, fonte) e atualizar FormParaBO/BOParaForm/LimparCampos/HabilitarCampos.

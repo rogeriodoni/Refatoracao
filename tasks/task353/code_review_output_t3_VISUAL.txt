@@ -1,0 +1,23 @@
+﻿Encontrei o que precisava. No arquivo legado `SIGCDCAF_form_codigo_fonte.txt`, linha 688-691, o m├®todo `Init` do legado define os headers da Page1 (Grade) via framework din├ómico (`pColuna()`):
+
+```foxpro
+.pfSqlTabela(1).pColuna('codigos', '', '', 'C├│digos', 55, .T.)
+.pfSqlTabela(1).pColuna('datas',   '', '', 'Datas',   80, .F.)
+.pfSqlTabela(1).pColuna('usuars',  '', '', 'usuars',  80, .F.)
+.pfSqlTabela(1).pColuna('obss',    '', '', 'Observa├º├Áes', 500, .F.)
+```
+
+**Os 8 problemas reportados s├úo falsos positivos.** Os headers do c├│digo migrado s├úo ID├èNTICOS ao legado:
+
+| Migrado | Legado (pColuna) | Status |
+|---------|-----------------|--------|
+| `"C" + CHR(243) + "digos"` | `'C├│digos'` | Ô£ô Correto |
+| `"Datas"` | `'Datas'` | Ô£ô Correto |
+| `"usuars"` | `'usuars'` | Ô£ô Correto |
+| `"Observa" + CHR(231) + CHR(245) + "es"` | `'Observa├º├Áes'` | Ô£ô Correto |
+
+O c├│digo review n├úo encontrou esses headers porque o legado os define via `fSqlConector.pColuna()` (chamada de m├®todo do framework), e n├úo como propriedade `Caption` est├ítica no SCX. O extrator s├│ captura `Caption = "..."` nas propriedades, n├úo calls de m├®todo ÔÇö por isso encontrou apenas os headers do Gradenop da Page2 (`O.P., Produto, Qtde Tubo, Qtde Canc.`).
+
+Os dois grupos de 4 headers aparecem em dois locais (linhas 366-369 e 859-862), gerando 8 ocorr├¬ncias ÔÇö mas ambos os locais est├úo corretos.
+
+**Nenhuma altera├º├úo ├® necess├íria.** O `FormCAF.prg` est├í correto neste pass visual.

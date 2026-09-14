@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All blocks balance correctly. **FormTpa.prg (Fase 3/8) criado** em `C:\4c\projeto\app\forms\cadastros\FormTpa.prg`:
+
+- `DEFINE CLASS FormTpa AS FormBase` com propriedades visuais (Width=1000, Height=600, Caption="Cadastro de Tipo de Acabamento")
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (sem chamada duplicada a `InicializarForm`)
+- `InicializarForm()` ÔÇö cria `TpaBO`, chama `ConfigurarPageFrame()`, propaga `Caption` para os labels do cabe├ºalho nas duas p├íginas, ativa Page1
+- `ConfigurarPageFrame()` ÔÇö PageFrame com `Top=-29`, `Tabs=.F.`, Page1="Lista"/Page2="Dados", ambas com `Picture=fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö cabe├ºalho cinza (`cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo`, primeiro AddObject da p├ígina) e `cnt_4c_Botoes` **vazio** (can├┤nico Left=542/Width=390, bot├Áes CRUD ficam para a Fase 4)
+- `ConfigurarPaginaDados()` ÔÇö mesma faixa de cabe├ºalho (regra #11, faixa nas duas p├íginas) e `cnt_4c_BotoesAcao` **vazio** (can├┤nico Left=842/Width=160, bot├Áes Confirmar/Cancelar ficam para fase posterior)
+- `TornarControlesVisiveis()` recursivo e `Destroy()` liberando BO/cursors
+
+Sem Grid, sem TextBoxes de campos e sem BINDEVENTs ÔÇö conforme escopo desta fase. Blocos `PROCEDURE/ENDPROC`, `WITH/ENDWITH`, `TRY/ENDTRY` e `DEFINE CLASS/ENDDEFINE` conferidos e balanceados.

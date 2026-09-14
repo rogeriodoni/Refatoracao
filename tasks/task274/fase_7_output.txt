@@ -1,0 +1,10 @@
+﻿Os 4 m├®todos foram adicionados corretamente antes do `Destroy` e antes do `ENDDEFINE`. 
+
+**Fase 7/8 conclu├¡da.** Adicionados os 4 eventos principais ao `Formsigprdft.prg` (linhas 1820ÔÇô1896), adaptados para o contexto do di├ílogo TEF:
+
+| M├®todo | A├º├úo para TEF |
+|---|---|
+| `BtnIncluirClick()` | Reinicia a sess├úo TEF ÔÇö reseta estado e posiciona foco em `txt_4c_Digitos` para disparar novo `GotFocus` |
+| `BtnAlterarClick()` | Retoma o fluxo pendente ÔÇö direciona foco para o campo ativo (Datas > Text1 > Digitos) |
+| `BtnVisualizarClick()` | Exibe resultado ou mensagem atual da sess├úo SiTef via `MsgInfo` |
+| `BtnExcluirClick()` | Cancela a transa├º├úo TEF delegando para `BtnCancelaClick()` |

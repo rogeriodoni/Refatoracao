@@ -1,0 +1,25 @@
+﻿Ap├│s ler o arquivo completo, analisei os 3 problemas reportados. Aqui est├í meu diagn├│stico:
+
+**Problema 1 ÔÇö `THIS.Controls()` (METODO-INEXISTENTE)**
+
+O validator sinalizou isso como m├®todo inventado, mas `Controls` ├® uma **propriedade interna built-in do VFP9** em todos os objetos container (Form, Container, PageFrame, etc.). A sintaxe `THIS.Controls(loc_i)` ├® VFP9 padr├úo documentado ÔÇö funciona como array indexado que retorna o n-├®simo controle. N├úo ├® um m├®todo inventado. O c├│digo est├í correto.
+
+**Problemas 2 & 3 ÔÇö Top/Left do `obj_4c_OptTabela`**
+
+O validator reportou valores migrados como `Top=5` e `Left=5`, mas o c├│digo atual (linhas 235-236) j├í tem os valores corretos:
+
+```foxpro
+.Left = 128   ÔåÉ CORRETO (identico ao legado)
+.Top  = 93    ÔåÉ CORRETO (identico ao legado)
+```
+
+O validator confundiu essas posi├º├Áes com as de `Buttons(1)` que internamente tem `Left=5, Top=5` ÔÇö mas esses valores s├úo **relativos ao OptionGroup**, n├úo ao form. ├ë o comportamento correto.
+
+**Conclus├úo: os 3 problemas s├úo falsos positivos.**
+
+- `Controls(n)` ÔÇö built-in VFP9 v├ílido, n├úo precisa ser definido como PROCEDURE
+- `obj_4c_OptTabela.Left` ÔÇö j├í est├í em 128 (correto)
+- `obj_4c_OptTabela.Top` ÔÇö j├í est├í em 93 (correto)
+- `Buttons(1).Left=5 / Top=5` ÔÇö posi├º├úo relativa ao OptionGroup, correto
+
+O arquivo `Formale.prg` est├í funcionalmente correto e n├úo requer altera├º├Áes neste pass. Nenhuma mudan├ºa foi feita para n├úo introduzir regress├Áes em c├│digo que j├í est├í certo.

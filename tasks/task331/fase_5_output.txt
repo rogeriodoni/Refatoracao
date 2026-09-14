@@ -1,0 +1,9 @@
+﻿Todas as edi├º├Áes est├úo corretas. Resumo do que foi adicionado na Fase 5:
+
+**Linha 72** ÔÇö `THIS.LockScreen = .F.` em `InicializarForm()` depois de `AlternarPagina(1)` ÔÇö form deixava de renderizar com tela travada.
+
+**Linha 299** ÔÇö `BINDEVENT(THIS.cmd_4c_Ok, "Click", THIS, "CmdOkClick")` em `ConfigurarBotaoOk()` ÔÇö sem isso o bot├úo OK e a tecla ESC (`Cancel = .T.`) n├úo chamavam `CmdOkClick`.
+
+**Linha 911** ÔÇö `THIS.PopularCamposOperacao()` chamado em `CarregarDados()` ap├│s carregar TmpDistrib.
+
+**Linhas 920ÔÇô945** ÔÇö novo m├®todo `PopularCamposOperacao()` que l├¬ o cursor `tmpnens` do form pai (acess├¡vel via `SET DATASESSION TO par_oParentForm.DataSessionId` j├í feito em `Init`) e popula os tr├¬s campos read-only do container Opera├º├úo: empresa, descri├º├úo da opera├º├úo e n├║mero do processamento.

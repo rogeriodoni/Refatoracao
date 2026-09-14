@@ -1,0 +1,7 @@
+﻿Corre├º├Áes aplicadas. Os 3 problemas eram todos no m├®todo `EnviarEmail` de `sigredcuBO.prg`:
+
+- **[SQL-TABELA]** `SigMvFornE` ÔÇö tabela inexistente no original, removida
+- **[SQL-FILTRO-INVENTADO]** `EMPS` ÔÇö coluna inventada no WHERE, removida junto com o bloco
+- **[SQL-FILTRO-INVENTADO]** `NUMES` ÔÇö coluna inventada no WHERE, removida junto com o bloco
+
+O c├│digo original usa `Thisform.oEMAIL.cFrom` diretamente (email passado via par├ómetro), sem nenhuma consulta SQL para busca de email. O m├®todo agora usa apenas `this_cEmail` (j├í recebido no `Init` via `par_cEmail`), e se estiver vazio, retorna erro ÔÇö sem nenhuma consulta inventada.

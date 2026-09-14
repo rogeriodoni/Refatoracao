@@ -1,0 +1,12 @@
+﻿A estrutura est├í perfeita. Resumo do que foi feito na Fase 8:
+
+**Formcnl.prg** ÔÇö todos os m├®todos j├í estavam implementados nas fases anteriores. Fase 8 adicionou:
+- `AjustarBotoesPorModo()` ÔÇö habilita/desabilita bot├Áes CRUD (Incluir/Alterar/Excluir/Buscar/Espelho/Fechar/Abrir) conforme modo atual (LISTA vs edi├º├úo)
+- Integra├º├úo de `AjustarBotoesPorModo()` no `AlternarPagina()` para chamada autom├ítica ao navegar
+
+**menu.prg** ÔÇö integra├º├úo completa:
+- `DEFINE BAR 55 OF popCadastros` ÔÇö "Contagem por Localiza├º├úo"
+- `ON SELECTION BAR 55` ligado a `AbrirFormcnl`
+- `PROCEDURE AbrirFormcnl()` adicionada com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+**config.prg** ÔÇö sem altera├º├Áes necess├írias (ADIR carrega `*BO.prg` e `Form*.prg` automaticamente).

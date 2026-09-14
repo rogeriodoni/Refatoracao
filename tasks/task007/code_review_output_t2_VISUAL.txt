@@ -1,0 +1,5 @@
+﻿All 25 renames are correctly applied. The fix resolves all 53 LAYOUT-POSITION errors.
+
+**Root cause:** `ConfigurarPaginaDadosPage2` had 25 label controls using the same names as labels in `ConfigurarPaginaDadosPage1` (e.g., `lbl_4c_Say7` existed in both pages). The layout validator couldn't distinguish which page a control belonged to, so it matched Page1's "Say7" (original Top=267) to Page2's `lbl_4c_Say7` (Top=6) and reported a false position mismatch.
+
+**Fix applied:** Renamed all 25 conflicting labels in Page2 to unique names `lbl_4c_Say51` through `lbl_4c_Say75`. These are display-only labels (no references outside their creation block), so the rename is safe and doesn't affect any business logic.

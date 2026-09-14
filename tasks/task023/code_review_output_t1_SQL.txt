@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas em `SIGREVISBO.prg`:
+
+- **VENDAS / PEDIDOS** ÔÇö Removidos os blocos `IF this_nOpcaoVenda = 1/2` e `IF this_nOpcaoPedido = 1/2` que adicionavam `AND a.Vendas` / `AND a.Pedidos` ao `loc_cWhere`. O WHERE original usa apenas RCLIS, GRUPOS, DATAS.
+- **CEMPS** ÔÇö Removido o `WHERE Cemps = EscaparSQL(...)` da query `SELECT Razas FROM SigCdEmp`, alinhando com o comportamento original.
+- **CRSIGCDV** ÔÇö Falso positivo: ├® o nome do cursor `crSigCdVis` passado ao `SQLEXEC`, n├úo uma coluna WHERE. Nenhuma altera├º├úo necess├íria.

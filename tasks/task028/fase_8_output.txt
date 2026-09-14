@@ -1,0 +1,7 @@
+﻿Fase 8 conclu├¡da. O FormSIGREAGV.prg j├í estava completo com todos os m├®todos das fases anteriores ÔÇö `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnEncerrarClick`, `BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`, `FormParaRelatorio`, `LimparCampos`, e os lookups de Colecao/Moeda. A integra├º├úo que faltava era no menu.prg, que agora tem:
+
+- `BAR 24` (separador) e `BAR 25` ("Acompanhamento Por Grupo de Venda") no `popRelatorios`
+- `ON SELECTION BAR 25 OF popRelatorios DO AbrirFormSIGREAGV`
+- Procedure `AbrirFormSIGREAGV()` no padr├úo can├┤nico do sistema (`VARTYPE` + `Show()` sem par├ómetro + `MostrarErro`)
+
+O config.prg j├í auto-carrega tudo via `ADIR()` em `relatorios\Form*.prg`, ent├úo nenhuma altera├º├úo adicional ├® necess├íria.

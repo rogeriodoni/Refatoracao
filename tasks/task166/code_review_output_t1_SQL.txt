@@ -1,0 +1,7 @@
+﻿**Resumo das corre├º├Áes:**
+
+| Problema | A├º├úo | Justificativa |
+|---|---|---|
+| `VALOS` em `SalvarCotacoes` linha 330 | **Removido** `OR cursor_4c_Cotacoes.valos = 0` | O `sair.Click` original sincronizava todos os registros via `poDataMgr.Update()` sem deletar registros com valos=0. Condi├º├úo inventada pela LLM. |
+| `CMOES` em `BuscarCotacoes` linha 172 | **Mantido** | O original usava cursor VFP pr├®-filtrado por moeda (`CrSigCdCot`). Na migra├º├úo para SQL Server direto, `WHERE cmoes = ...` ├® necess├írio para replicar o mesmo escopo de dados. |
+| `CONTROLCOUNT` no form linha 512 | **Mantido** | ├ë `loc_oObjeto.ControlCount` ÔÇö propriedade VFP de container object em `TornarControlesVisiveis`, n├úo uma coluna SQL em WHERE. Falso positivo da ferramenta. |

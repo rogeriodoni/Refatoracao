@@ -1,0 +1,5 @@
+﻿The fix is applied. The `ShowWindow = 1` duplicate on line 27 is removed. Now `ShowWindow = 0` is the class-level default, and `Init()` only sets `ShowWindow = 1` + `WindowType = 1` in production (when `gb_4c_ValidandoUI` and `gb_4c_ModoTeste` are both false).
+
+**Root cause**: The class declared `ShowWindow = 0` and then `ShowWindow = 1` ÔÇö the second declaration silently overrode the first. VFP9's `-T` unattended mode hangs for exactly 300 seconds when it tries to create a top-level/in-top-level-form window (`ShowWindow = 1`) without a GUI. The code's own comment documented the intent ("Classe definida com 0") but the duplicate property contradicted it.
+
+**Fix**: Removed the duplicate `ShowWindow = 1` line (was line 27). The class now correctly starts with `ShowWindow = 0` and `Init()` promotes it to 1 only in interactive production runs.

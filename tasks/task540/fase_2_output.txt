@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+O arquivo `TpaBO.prg` foi completado com todos os m├®todos CRUD exigidos pela Fase 2. Resumo do que foi adicionado (via Edit, preservando `Init()` j├í existente da Fase 1):
+
+- **`ObterChavePrimaria()`** ÔåÆ retorna `this_cCodigo` (para `RegistrarAuditoria`)
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔåÆ `SELECT (par_cAliasCursor)` seguido de acesso direto aos campos `cods`/`descrs` (regra cr├¡tica #9 do CarregarDoCursor)
+- **`ValidarDados()`** ÔåÆ reproduz exatamente a l├│gica do legado (`comportamento.json`, evento Click do bot├úo de confirma├º├úo): c├│digo obrigat├│rio + verifica├º├úo de duplicidade (`ChkRegister`) somente quando `this_lNovoRegistro`
+- **`VerificarCodigoExistente(par_cCodigo)`** ÔåÆ `SELECT COUNT(*)` em `SigCdAca`
+- **`Inserir()`** (PROTECTED) ÔåÆ `INSERT INTO SigCdAca (cods, descrs)` com `EscaparSQL()`, chama `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** (PROTECTED) ÔåÆ `UPDATE SigCdAca SET descrs = ... WHERE cods = ...`, chama `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** (PROTECTED, nome correto ÔÇö n├úo `Excluir()`) ÔåÆ `DELETE FROM SigCdAca WHERE cods = ...`, chama `RegistrarAuditoria("DELETE")`
+- **`Buscar(par_cFiltro)`** (PUBLIC) ÔåÆ `SELECT cods, descrs FROM SigCdAca` com filtro opcional e cursor placeholder (`gb_4c_ValidandoUI`-safe) quando sem conex├úo
+- **`CarregarPorCodigo(par_cCodigo)`** (PUBLIC) ÔåÆ `SELECT` por PK, reseta `this_lNovoRegistro = .F.` (Problema 22)
+
+Validado contra `docs/schema.sql` (via `Get-Content -Raw`, nunca grep ÔÇö regra #14): tabela `SigCdAca` tem exatamente `cods char(3)` (PK) e `descrs char(20)`, ambos `NOT NULL` ÔÇö nomes e tamanhos usados no `CREATE CURSOR` e nas queries batem exatamente. Nenhum `RETURN` dentro de `TRY/CATCH`, todos os `CATCH` chamam `MostrarErro`.
+
+Arquivo completo: `C:\4c\projeto\app\classes\TpaBO.prg`.

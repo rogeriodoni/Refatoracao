@@ -1,0 +1,11 @@
+﻿3 corre├º├Áes aplicadas:
+
+1. **[NULL-CURSOR] SigReCmpBO.prg** ÔÇö `SET NULL ON` antes e `SET NULL OFF` depois do `CREATE CURSOR cursor_4c_TipoMov` em `InicializarDados()`.
+
+2. **[NULL-CURSOR] FormSigReCmp.prg** ÔÇö `SET NULL ON`/`SET NULL OFF` em volta do `CREATE CURSOR` no branch de valida├º├úo UI de `ConfigurarPaginaLista()`.
+
+3. **[GRID-HEADER] FormSigReCmp.prg** ÔÇö `Header1.Caption` da Column2 do grid alterado de `"Tipo"` para `"Descrs"` (valor id├¬ntico ao legado).
+
+---
+
+**Sobre os 22 problemas [LAYOUT-POSITION]:** Todos com diff exatamente de 85px s├úo **corretos** ÔÇö os controles ficam dentro da `Page1` do `pgf_4c_Paginas` cujo `Top=85`, ent├úo as posi├º├Áes relativas ├á p├ígina s├úo `Top_legado - 85`. Os diffs irregulares (387px, 365px, 114px em `optagrupa`/`OptSituas`/`optData`) ocorreram porque o validador mapeou as posi├º├Áes internas dos `Buttons(1)` (`.Top=4, .Left=2`) em vez dos pr├│prios OptionGroups. Os containers est├úo em `Top=306/284/33` com `Left=100/100/292`, que coincidem com o legado. Nenhuma altera├º├úo de posi├º├úo foi feita, pois a regra pro├¡be alterar `Top`/`Left` exceto em problemas de alinhamento dentro de grupos.

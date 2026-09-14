@@ -1,0 +1,19 @@
+﻿Tudo correto. A Fase 6 est├í completa. Aqui est├í o resumo do que foi feito:
+
+**Fase 6/8 ÔÇö ImprimirDocumento completo:**
+
+1. **Bug corrigido ÔÇö `ConfigGers` da tabela errada**: A query anterior buscava `ConfigGers` de `SigOpCdi`, mas o original usa `SigOpCdd`. Agora h├í queries separadas:
+   - `SigOpCdi` ÔåÆ `lbltxidCs`, `chkInvs`
+   - `SigOpCdd` ÔåÆ `ConfigGers`
+
+2. **`GerOpes` adicionado**: `SELECT ... GerOpes FROM SigOpCdc` para detectar impress├úo de m├║ltiplas movimenta├º├Áes.
+
+3. **Estorno (`nOpCrs`)**: Quando `cursor_4c_Ope.nOpCrs` n├úo est├í vazio, busca o documento vinculado via `EmpDnCrds` e imprime via `SigPrIdc` (docus 1,5) ou `SigReIfx` (docus 3,6,7,8,9).
+
+4. **`GerOpes = 2`**: Chama `DO FORM SigOpIgm` para impress├úo de m├║ltiplas movimenta├º├Áes geradas.
+
+5. **`chkInvs = 1`**: Chama `DO FORM SigReIiv` para impress├úo de invent├írio.
+
+6. **`Destroy()`**: Adicionados `cursor_4c_OpCdd`, `cursor_4c_MvCabEst`, `cursor_4c_OpeEst`, `cursor_4c_OpCdcEst`.
+
+7. **`BorderColor`** do `cmg_4c_Saida`: `RGB(136, 189, 188)` ÔÇö fidelidade visual com o original.

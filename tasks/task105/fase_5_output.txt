@@ -1,0 +1,13 @@
+﻿As edi├º├Áes foram aplicadas corretamente. A Fase 5 est├í completa.
+
+**O que foi adicionado:**
+
+- `THIS.ConfigurarPaginaDados()` chamado em `InicializarForm()` ap├│s `ConfigurarCamposFiltro()`
+
+- **`ConfigurarPaginaDados()`** ÔÇö Vincula via BINDEVENT os handlers de teclado aos `Text1` do grid CsEstoque (Column1 e Column2), implementando o que os `Valid` events de `fAcessoEmpresa` e `fAcessoContab` faziam no legado
+
+- **`TeclaEmpresaGrid()` / `TeclaGrupoEstoqueGrid()`** ÔÇö Handlers de KeyPress que disparam em F4(115), Enter(13) ou Tab(9)
+
+- **`ValidarEmpresaGrid()`** ÔÇö Replica `fAcessoEmpresa`: busca c├│digo digitado em `SigCdEmp.Cemps`; se n├úo encontrado, abre `FormBuscaAuxiliar` e atualiza `CsEstoque.Emps` com o selecionado
+
+- **`ValidarGrupoEstoqueGrid()`** ÔÇö Replica `fAcessoContab`: valida c├│digo em `SigCdGrp.CGrus` via SQLEXEC; se n├úo encontrado, abre `FormBuscaAuxiliar` e atualiza `CsEstoque.Grupos`

@@ -1,0 +1,20 @@
+﻿Tudo correto. A Fase 8 est├í completa.
+
+**O que foi feito:**
+
+1. **Corre├º├úo de bug** ÔÇö `InicializarForm` agora retorna `loc_lSucesso` ap├│s o `ENDTRY` (linha 96), garantindo que `FormBase.Init()` receba o resultado correto de inicializa├º├úo.
+
+2. **M├®todos adicionados** (linhas 1058ÔÇô1183):
+
+| M├®todo | Comportamento para este OPERACIONAL |
+|---|---|
+| `CarregarLista()` | Delega para `CarregarDados()` (compatibilidade FormBase) |
+| `BtnBuscarClick()` | Alias para `CmdProcurarClick()` (exibe filtro de data) |
+| `BtnEncerrarClick()` | Alias para `CmdEncerrarClick()` (fecha form) |
+| `BtnSalvarClick()` | Verifica permiss├úo e dispara `ChkAuditadoClick()` |
+| `BtnCancelarClick()` | Oculta filtro de data, restaura foco ao grid |
+| `FormParaBO()` | Propaga checkbox de auditoria + par├ómetros de contexto ao BO |
+| `BOParaForm()` | Delega para `AtualizarCamposLinha()` |
+| `HabilitarCampos()` | Gerencia visibilidade do checkbox conforme permiss├úo do usu├írio |
+| `LimparCampos()` | Limpa todos os campos de exibi├º├úo da linha selecionada |
+| `AjustarBotoesPorModo()` | No-op de compatibilidade (form OPERACIONAL n├úo tem modos CRUD) |

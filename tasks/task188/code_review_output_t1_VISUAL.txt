@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas:
+
+- **BtnVisualizarClick** (linha 692): guard expandido de `RECCOUNT = 0` para `RECCOUNT = 0 OR EOF("cursor_4c_Lista")` ÔÇö garante que o cursor est├í posicionado em registro v├ílido antes de carregar dados na Page2
+- **BtnAlterarClick** (linha 707): mesma corre├º├úo ÔÇö sem o EOF check, se o ponteiro do grid estiver em EOF, `CarregarDoCursor` leria campos vazios e Page2 abriria sem dados
+- **BtnIncluirClick**: sem altera├º├úo ÔÇö modo INCLUIR corretamente n├úo l├¬ do cursor (limpa campos e inicia registro novo); o flag do review ├® falso-positivo para este m├®todo

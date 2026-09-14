@@ -1,0 +1,3 @@
+﻿**Causa raiz:** `PEMSTATUS(ALIAS(), "campo", 5)` em `UfsBO.CarregarDoCursor` (linhas 202-215). `PEMSTATUS` exige um **objeto** como primeiro argumento ÔÇö `ALIAS()` retorna uma string. Isso lan├ºava exce├º├úo que o CATCH capturava e exibia `MostrarErro()`, gerando di├ílogo modal que travava o teste automatizado.
+
+**Corre├º├úo:** Substitu├¡das as 5 chamadas de `PEMSTATUS(ALIAS(), ...)` por `TYPE(par_cAliasCursor + ".campo") != "U"`, que ├® a forma correta de verificar se um campo existe em um cursor VFP9.

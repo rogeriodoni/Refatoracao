@@ -1,0 +1,21 @@
+﻿O arquivo est├í completo. Ao analisar o FormICD.prg e o ICDBO.prg, a **Fase 7 j├í est├í conclu├¡da** para este formul├írio ÔÇö e n├úo requer as 4 events do template CRUD.
+
+**Por qu├¬?**
+
+Este form (SIGCDICD) ├® um **di├ílogo modal operacional de duplica├º├úo**, n├úo um form CRUD. O original tinha apenas dois bot├Áes:
+- `Command1` (Duplicar) ÔåÆ j├í implementado como `CmdDuplicarClick()` (linha 329)
+- `Command2` (Encerrar) ÔåÆ j├í implementado como `CmdEncerrarClick()` (linha 355)
+
+Os eventos `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick` s├úo do **template CRUD** (Page1=Lista/Page2=Dados). Adicionar esses m├®todos aqui seria c├│digo morto ÔÇö n├úo h├í esses bot├Áes no layout do form.
+
+**O que j├í est├í implementado (fases 1ÔÇô6 completas):**
+
+| Evento original | Equivalente novo |
+|---|---|
+| `Command1.Click` | `CmdDuplicarClick()` + `ICDBO.DuplicarTipo()` |
+| `Command2.Click` | `CmdEncerrarClick()` |
+| `GetTipo.Valid` (fwBuscaExt) | `TxtTipoKeyPress()` + `ValidarTipo()` + `AbrirLookupTipo()` |
+| `GetDesc.When` | Guard no `TxtDescKeyPress()` (linha 446) |
+| `GetDesc.Valid` (fwBuscaExt) | `TxtDescKeyPress()` + `ValidarDesc()` + `AbrirLookupDesc()` |
+
+O FormICD.prg est├í funcionalmente completo com paridade 100% ao legado. A Fase 7/8 pode ser marcada como conclu├¡da ÔÇö a "Fase 8" (integra├º├úo ao menu) seria o pr├│ximo passo se n├úo estiver feita.

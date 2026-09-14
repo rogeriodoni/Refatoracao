@@ -1,0 +1,3 @@
+﻿**Causa**: `TABLEREVERT(.T., "cursor_4c_Dados")` na linha 292 exige que o cursor tenha buffering habilitado (modo 3, 4 ou 5). O `cursor_4c_Dados` ├® criado com `CREATE CURSOR` no BO, que n├úo tem buffering ÔÇö logo a fun├º├úo falha.
+
+**Corre├º├úo**: Removida a chamada `TABLEREVERT`. Cursores criados com `CREATE CURSOR` s├úo descartados diretamente com `USE IN`, sem necessidade de revert.

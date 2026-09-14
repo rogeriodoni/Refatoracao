@@ -1,0 +1,16 @@
+﻿Phase 2 complete. The sigtosenBO.prg now has 1274 lines with 23 methods covering all business logic from the original SIGTOSEN form:
+
+**Phase 1 methods (already existed):**
+- `Init`, `ObterChavePrimaria`, `CarregarDoCursor`, `ValidarUsuario`, `CarregarAcessos`, `CarregarEmpresas`, `CarregarParametros`, `ValidarEmpresa`, `BloquearSenha`, `CarregarMenuPrincipal`, `VerificarLicencas`, `AlertaPafReducaoZ`, `LimparCursores`
+
+**Phase 2 methods (added now):**
+- `ValidarSenha` - Password validation with 4CONTROL special user (fGerPswDiario) and blocking after max attempts
+- `VerificarCredenciais` - Full credential check (user+password+empresa+licenses) from original `confirma` procedure
+- `ProcessarLogin` - Post-validation processing: loads menus, creates shortcut bar, sets global variables
+- `CarregarBarraAtalhos` - Loads shortcut bar buttons from SigCdAcB with icons from SigSyIco
+- `AjustarEmpresas` - Initial empresa load, auto-fills if single empresa
+- `BuscarEmpresaPorDescricao` - Empresa lookup by description (from Get_Demp.Valid)
+- `VerificarExpSenha` - Password expiration check against nDiaSenhas
+- `VerificarPafEcf` - PAF-ECF status check
+- `CarregarLogoEmpresa` - Base64 logo decode and temp file creation
+- `VerificarAlertas` - Alert type configuration check

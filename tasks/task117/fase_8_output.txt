@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. A Fase 8 est├í completa. Aqui est├í o resumo do que foi adicionado ao `FormSigReIdt.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` (form REPORT n├úo tem lista) |
+| `BtnEncerrarClick()` | Chama `THIS.Release()` |
+| `BtnSalvarClick()` | Delega para `BtnImprimirClick()` |
+| `BtnCancelarClick()` | Delega para `BtnSairClick()` |
+| `FormParaBO()` | Transfere TODOS os campos: `this_cEmps`, `this_cDopes`, `this_cNumes`, `this_nNumef`, `this_cDiretorio`, `this_cDirFiscais`, `this_nOptTipo`, `this_nOptAgrupa` |
+| `BOParaForm()` | Restaura `obj_4c_OptTipo.Value` e `obj_4c_OptAgrupa.Value` do BO |
+| `HabilitarCampos()` | Habilita/desabilita `obj_4c_OptTipo`, `obj_4c_OptAgrupa`, `cmg_4c_Botoes` |
+| `CarregarLista()` | Verifica `gb_4c_ValidandoUI`, pr├®-popula BO via `FormParaRelatorio()` |
+| `AjustarBotoesPorModo()` | Stub vazio (form REPORT sem modo CRUD) |
+
+`FormParaBO()` foi implementado com todos os campos (n├úo delega apenas para `FormParaRelatorio()` ÔÇö cont├®m o mapeamento expl├¡cito completo para garantir paridade total).

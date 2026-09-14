@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da. O `SIGREGDPBO.prg` foi completado com os seguintes m├®todos adicionados:
+
+**M├®todos implementados:**
+
+- **`InicializarCursores()`** ÔÇö Cria `cursor_4c_Dados` (equivalente ao `TmpNFis` legado) e carrega `SigOpFp` e `SigCdPam` via SQLEXEC. Respeita `gb_4c_ValidandoUI` para pular os SQLs em modo de valida├º├úo de UI.
+
+- **`PrepararDados()`** ÔÇö Override da RelatorioBase. Implementa toda a l├│gica do `Processar.Click` original: JOIN `SigMvNfi`/`SigMvPar` com filtros de s├®rie/NF, SCAN com LOCATE em `cursor_4c_OpFp` para verificar flags `ImpDups`/`ImpBols`, lookup de cliente em `SigCdCli`, c├ílculo do campo `Vecto` (data de vencimento ou forma de pagamento), e INSERT no `cursor_4c_Dados`.
+
+- **`Imprimir()`** ÔÇö Equivalente ao `procedure impressao` do legado. Para Duplicatas chama `SigIpDup()`. Para Boletos monta cursor agrupado, verifica `SigCnFBl` e chama os forms legados `SigPrIbl` ou `SigPrIbb`.
+
+- **`SelecionarTodos()`** / **`DesmarcarTodos()`** ÔÇö UPDATE `cursor_4c_Dados SET flag = .T./.F.` (equivalente aos bot├Áes `SelTudo`/`apaga` do legado).
+
+- **`ObterChavePrimaria()`** ÔÇö Stub retornando `""` (sem PK em relat├│rio).
+
+- **`Init()`** atualizado para chamar `InicializarCursores()` ap├│s `DODEFAULT()`.

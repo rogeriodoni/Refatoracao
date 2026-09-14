@@ -1,0 +1,15 @@
+﻿Todas as corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi corrigido:
+
+**Mapeamento** (`Formsigrehpr_mapeamento.json`):
+- `lbl_estoque` ÔåÆ `lbl_4c_Estoque` (era `lbl_4c_GrEstoque` ÔÇö mapeamento incorreto causava 4 das 10 diferen├ºas visuais)
+
+**Form** (`Formsigrehpr.prg`):
+- `lbl_4c_Estoque.Top`: 145 ÔåÆ **142** (alinha com original)
+- `txt_4c_CdEstoque.Alignment`: adicionado **0** (era 3 por default)
+- `lbl_4c_Codigo.Top`: 172 ÔåÆ **169** (alinha com original)
+- `txt_4c_CdCodigo.Alignment`: adicionado **0** (era 3 por default)
+- `lbl_4c_Periodo.Top`: 199 ÔåÆ **196** (alinha com original)
+- `lbl_4c_PeriodoA.Top`: 199 ÔåÆ **196** (alinha com original)
+- `opt_4c_OptObs.Width`: 185 ÔåÆ **180** (alinha com original)
+
+As 10 diferen├ºas visuais foram eliminadas. Os 4 erros do `Dataenvironment` s├úo estruturais (form n├úo usa DataEnvironment) e j├í estavam no limite permitido (4/4).

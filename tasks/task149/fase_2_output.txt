@@ -1,0 +1,18 @@
+﻿Arquivo completo e correto. Fase 2/8 conclu├¡da.
+
+**O que foi adicionado ao `SigPdMp8BO.prg`:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `ObterChavePrimaria()` | FUNCTION | Retorna TRANSFORM(Nops) do cursor xNensiN |
+| `CarregarDoCursor(alias)` | PROCEDURE | Carrega Nops, Cods, Qtds, Descs, Conta2s, Fixos |
+| `ValidarDados()` | PROTECTED FUNCTION | Valida this_nNops > 0 antes de inserir/atualizar |
+| `ExecutarInsercao()` | PROTECTED FUNCTION | `INSERT INTO xNensiN (Nops, Qtds)` ÔÇö replica cmdSInserir.Click |
+| `ExecutarAtualizacao()` | PROTECTED FUNCTION | `REPLACE Cods/Qtds/Fixos/Descs/Conta2s IN xNensiN` |
+| `ExecutarExclusao()` | PROTECTED FUNCTION | `DELETE` no cursor xNensiN ÔÇö replica cmdSexcluir.Click |
+| `BuscarNcf(cCods, cEmps)` | FUNCTION | SQLEXEC em SigCdNcf; retorna .T. se encontrado, .F. abre lookup |
+| `BuscarProduto(cCodPds)` | PROCEDURE | SQLEXEC em SigCdPro; carrega this_cDpros e this_cFigJpgs |
+| `AtualizarNcfNoCursor(cCods, nFixos, cDescs)` | PROCEDURE | REPLACE Fixos+Descs ap├│s sele├º├úo no lookup |
+| `ContarNcsPorNops(nNops)` | FUNCTION | COUNT com SET KEY TO nNops; retorna 0 quando todas as NCs foram exclu├¡das |
+
+**Decis├úo de design:** Como `xNensiN` ├® um cursor VFP local (n├úo tabela SQL Server), os m├®todos `ExecutarInsercao/Atualizacao/Exclusao` usam comandos VFP (`INSERT INTO`, `REPLACE`, `DELETE`) em vez de SQLEXEC. Os m├®todos SQL (`BuscarNcf`, `BuscarProduto`) usam SQLEXEC normalmente contra SQL Server.

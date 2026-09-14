@@ -1,0 +1,24 @@
+﻿O arquivo est├í correto e completo. Vou fazer um resumo do que foi adicionado na Fase 4:
+
+**Fase 4 conclu├¡da ÔÇö `FormSIGPRVTX.prg` (238ÔåÆ622 linhas)**
+
+**3 edi├º├Áes aplicadas:**
+
+1. **`InicializarForm()`** ÔÇö adicionadas 3 chamadas: `ConfigurarPaginaLista()`, `BINDEVENT(THIS, "KeyPress", ...)`, e `MontaGrade()` ao final do fluxo de inicializa├º├úo.
+
+2. **`ConfigurarBotoesPrincipais()`** ÔÇö adicionado `BINDEVENT(THIS.cmg_4c_Principal, "Click", ...)` logo ap├│s a configura├º├úo do CommandGroup.
+
+3. **10 novos m├®todos inseridos** antes do `Destroy()`:
+
+| M├®todo | Fun├º├úo |
+|---|---|
+| `ConfigurarPaginaLista()` | Shape decorativo + label + `txt_4c_Planilha` + `cmd_4c_GetPlanilha` + `cmd_4c_Limpar` + `cmd_4c_Processar` + `grd_4c_Dados` (4 colunas) + BINDEVENTs |
+| `AlternarPagina()` | No-op para compatibilidade com pipeline (form flat sem PageFrame) |
+| `CmgPrincipalClick()` | Buttons(1)=SalvarÔåÆ`ProcessarGrade()` com MsgConfirma; Buttons(2)=`Release()` |
+| `CmdGetPlanilhaClick()` | `GETFILE("xls")` ÔåÆ `txt_4c_Planilha.Value` |
+| `CmdProcessarClick()` | Guard vazio ÔåÆ `ImportarPlanilha()` ÔåÆ `MontaGrade()` |
+| `CmdLimparClick()` | `LimpaGrade()` + limpa campo planilha |
+| `ImportarPlanilha()` | Chama `ImpExcelDriver(cArquivo)` ÔåÆ l├¬ cursor "Planilha" ÔåÆ `INSERT INTO cursor_4c_Grade` |
+| `MontaGrade()` | Reconecta grid: `RecordSource=""` ÔåÆ `ColumnCount=4` ÔåÆ `RecordSource="cursor_4c_Grade"` ÔåÆ redefine `ControlSource` + `Header1.Caption` |
+| `LimpaGrade()` | `RecordSource=""` ÔåÆ `ZAP cursor_4c_Grade` ÔåÆ reconecta |
+| `FormKeyPress()` | `LPARAMETERS` + guard ESC=27 ÔåÆ `Release()` |

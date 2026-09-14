@@ -1,0 +1,23 @@
+[2026-07-18 03:52:28] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-18 03:52:28] [INFO] Prompt File: C:\4c\tasks\task317\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-07-18 03:52:28] [INFO] Output File: C:\4c\tasks\task317\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-18 03:52:28] [INFO] Model: sonnet
+[2026-07-18 03:52:28] [INFO] Timeout: 3600 segundos
+[2026-07-18 03:52:28] [INFO] Max Output Tokens: 128000
+[2026-07-18 03:52:28] [INFO] Context Files: 0 arquivo(s)
+[2026-07-18 03:52:28] [INFO] Invocando Claude CLI...
+[2026-07-18 03:52:28] [INFO] Prompt carregado: 74968 caracteres
+[2026-07-18 03:52:28] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-18 03:52:28] [INFO] Tamanho total do prompt: 74968 caracteres
+[2026-07-18 03:52:28] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-18 03:54:42] [INFO] Claude CLI finalizado em 134.1649135 segundos
+[2026-07-18 03:54:42] [INFO] Exit Code: 0
+[2026-07-18 03:54:42] [INFO] Output salvo em: C:\4c\tasks\task317\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-18 03:54:42] [INFO] Output size: 482 bytes
+[2026-07-18 03:54:42] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-18 03:54:42] [INFO] Preview do output:
+[2026-07-18 03:54:42] [INFO] The structure looks correct. The fix is complete:
+
+- `CarregarDlls()` now has TRY/CATCH ÔÇö if `CliSiTef32I.DLL` is absent, the error is stored in `this_cErroDll` and `this_lDllCarregada` stays `.F.`, allowing `Init()` to complete
+- `InicializarForm()` checks `this_lDllCarregada` first and shows `MsgErro` with the stored message if the DLL failed to load ÔÇö so the CATCH is not silent (rule 9 satisfied)
+- In production with the DLL present, behaviour is unchanged

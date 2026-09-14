@@ -1,0 +1,614 @@
+{
+  "resumo": {
+    "totalMetodos": 37,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 31,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChkFeriado"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCFN",
+      "evento": "Procedure",
+      "linhas": 69,
+      "codigoOriginal": "Local lnJuros, lnParc\n\nlnParc = 0\n\nIf (Empty(ThisForm.getValorBase.Value) Or ;\n\tEmpty(ThisForm.getJurosMes.Value)  Or ;\n\tEmpty(ThisForm.getJurosDia.Value)  Or ;\n\tEmpty(ThisForm.getDataBase.Value)  Or ;\n\tEmpty(ThisForm.getDataFinal.Value) Or ;\n\tEmpty(ThisForm.getDias.Value))\n\n\tThisForm.getValorJuros.Value = 0\n\tThisForm.getValorTotal.Value = 0\nElse\n\t***********   Cálculo dos Valores   ***********\n\tIf (ThisForm.optCalculo.Value = 1)\n\t\t* Juros Simples\n\t\tlnJuros = Round(ThisForm.getValorBase.Value * ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "getvenc] + Alltrim,Value =",
+        "controlesReferenciados": "optCalculo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN",
+      "evento": "Init",
+      "linhas": 55,
+      "codigoOriginal": "Lparameters pVal, pTip, pJMe, pJDi, pDtB, pDtF\n* pVal = Valor Base\n* pTip = Tipo de Cálculo (1=Simples; 2=Composto)\n* pJMe = Juros ao Mês\n* pJDi = Juros ao Dia (Só é Relevante Se Não Informar o pJMe)\n* pDtB = Data Base\n* pDtF = Data Final do Cálculo (Se Não Passar Usa a Data Atual)\n\nLocal llEnable\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr  = CreateObject('fSqlConector','SIGPRCFN',.t.)\n\n\t.getValorBas... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optCalculo,Option1,Option2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getValorBase",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local llEnable\n\nllEnable = .f.\nIf (This.Value < 0)\n\t=Messagebox([O Valor Base Precisa Ser Positivo!], 0+48, [Atenção!!!])\n\tReturn .f.\nElse\n\tllEnable = .t.\nEndIf\n\nWith ThisForm\n\t.optCalculo.Option1.Enabled = llEnable\n\t.optCalculo.Option2.Enabled = llEnable\n\n\t.getJurosMes.Enabled   = llEnable\n\t.getJurosDia.Enabled   = llEnable\n\t.getDataBase.Enabled   = llEnable\n\t.getDataFinal.Enabled  = llEnable\n\t.getDias.Enabled       = llEnable\n\n\t.Calculos()\nEndWith\n* Fim ****************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optCalculo,Option1,Option2",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.optCalculo",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Calculos()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getJurosMes",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lnJurosDia\n\nIf (ThisForm.optCalculo.Value = 1)\n\t*Juros Simples\n\tlnJurosDia = Round(This.Value / 30, 9)\nElse\n\t*Juros Compostos\n\tlnJurosDia = Round((((1+This.Value/100) ^ (1/30)) - 1) * 100, 9)\nEndIf\n\nThisForm.getJurosDia.Value = lnJurosDia\nThisForm.getJurosDia.Refresh\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calculos",
+        "controlesReferenciados": "optCalculo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getJurosMes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getJurosDia",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lnJurosMes\n\nIf (ThisForm.optCalculo.Value = 1)\n\t*Juros Simples\n\tlnJurosMes = Round(This.Value * 30, 2)\nElse\n\t*Juros Compostos\n\tlnJurosMes = Round((((1+This.Value/100) ^ (30)) - 1) * 100, 2)\nEndIf\n\nThisForm.getJurosMes.Value = lnJurosMes\nThisForm.getJurosMes.Refresh\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calculos",
+        "controlesReferenciados": "optCalculo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getJurosDia",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getDataBase",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataFinal.Value) And Not Empty(This.Value)\n\tIf (This.Value > ThisForm.getDataFinal.Value)\n\t\t=Messagebox([A Data Base Não Pode Ser Maior Que a Data Final!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf \n\n\tThisForm.getDias.Value = (ThisForm.getDataFinal.Value - This.Value)\nEndIf \n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getDataBase",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getDataFinal",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\n\n\t*** Tiago - 02/02/2016 - Rotina para pegar a quantidade de dias úteis dentro do período para fazer o cálculo de juros\n\tlnDia = ThisForm.getDias.Value\n\tIf (lnDia > 0) And thisform.optDias.Value = 2\n\t\tllSab = .t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkFeriado",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Value && Ttod,Calculos",
+        "controlesReferenciados": "optDias,ChkFeriado(ThisForm",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getDataFinal",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getDias",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "If thisform.optDias.Value = 1\n\tIf Not Empty(ThisForm.getDataBase.Value)\n\t\tThisForm.getDataFinal.Value = ThisForm.getDataBase.Value + This.Value\n\tElse\n\t\tThisForm.getDataBase.Value = ThisForm.getDataFinal.Value - This.Value\n\tEndIf\nEndif\n\n*** Tiago - 02/02/2016 - Rotina para pegar a quantidade de dias úteis dentro do período para fazer o cálculo de juros\nlnDia = ThisForm.getDias.Value\nIf (lnDia > 0) And thisform.optDias.Value = 2\n\tllSab = .t.\n\tllDom = .t.\n\tllFer = .t.\n\n\tldDI1 = ThisForm.getDataBase... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkFeriado",
+        "metodosFormChamados": "Value && Ttod,Calculos",
+        "controlesReferenciados": "optDias,ChkFeriado(ThisForm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getDias",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (Not Empty(ThisForm.getValorBase.Value) And ;\n\t   (Not Empty(ThisForm.getDataFinal.Value) Or ;\n\t    Not Empty(ThisForm.getDataBase.Value)))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.btnOK",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\nEndIf\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc2",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\nEndIf\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc3",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\nEndIf\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc4",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\nEndIf\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc4",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc5",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\nEndIf\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc5",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc6",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\nEndIf\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc6",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc7",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\nEndIf\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc7",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc8",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\nEndIf\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc8",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc9",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\nEndIf\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc9",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc10",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(ThisForm.getDataBase.Value) And Not Empty(This.Value)\n\tIf (This.Value < ThisForm.getDataBase.Value)\n\t\t=Messagebox([A Data Final Não Pode Ser Menor Que a Data Base!], 0+48, [Atenção!!!])\n\t\tReturn .f.\n\tEndIf\n\n\tThisForm.getDias.Value = (This.Value - ThisForm.getDataBase.Value)\nEndIf\n\nThisForm.Calculos()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Not Empty,Value =,Calculos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.getvenc10",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getValorBase.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCFN.optDias",
+      "evento": "InteractiveChange",
+      "linhas": 22,
+      "codigoOriginal": "*** Tiago - 02/02/2016 - Rotina para pegar a quantidade de dias úteis dentro do período para fazer o cálculo de juros\nThisForm.getDias.Value = (Thisform.getDataFinal.Value - ThisForm.getDataBase.Value)\n\nlnDia = ThisForm.getDias.Value\nIf (lnDia > 0) And thisform.optDias.Value = 2\n\tllSab = .t.\n\tllDom = .t.\n\tllFer = .t.\n\n\tldDI1 = ThisForm.getDataBase.Value && Ttod(TprMvCab.Datas)\n\tldDI2 = Thisform.getDataFinal.Value && Ttod(TprMvCab.Datas) + lnSum\n\tDo While (ldDI1 <= ldDI2)\n\t\tIf fChkFeriado(ThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkFeriado",
+        "metodosFormChamados": "Value =,Value && Ttod,Calculos",
+        "controlesReferenciados": "optDias,ChkFeriado(ThisForm",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

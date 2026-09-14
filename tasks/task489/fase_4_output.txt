@@ -1,0 +1,21 @@
+﻿Arquivo completo e correto. Fase 4 conclu├¡da. Resumo do que foi implementado:
+
+**`ConfigurarPaginaLista()`** ÔÇö Completa com:
+- 5 bot├Áes CRUD no `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones/fontes can├┤nicas
+- Bot├úo Encerrar no `cnt_4c_Saida` (can├┤nico: Left=917, Width=90, cmd Width=75)
+- Bot├úo Copiar (legado `cmdCopiar`: Top=107, Left=614, W=115, H=55)
+- Grid `grd_4c_Lista` com 6 colunas (ColumnCount/RecordSource fora do WITH ÔÇö regra Problema 36)
+- BINDEVENTs para todos os 7 bot├Áes em m├®todos PUBLIC
+
+**`CarregarLista()`** ÔÇö Completa: Buscar() ÔåÆ RecordSource ÔåÆ ControlSources ÔåÆ Headers reconfigurados ap├│s RecordSource ÔåÆ FormatarGridLista()
+
+**`AlternarPagina(par_nPagina)`** ÔÇö Nova: alterna PageFrame.ActivePage; ao voltar ├á Page1 reseta modo e recarrega lista
+
+**Handlers de bot├Áes** (7 PUBLIC, sem PROTECTED para BINDEVENT funcionar):
+- `BtnEncerrarClick`: Release()
+- `BtnIncluirClick`: NovoRegistro + modo INCLUIR + navega Page2
+- `BtnVisualizarClick`: CarregarPorCodigo + BuscarGrupos/Contas/Detalhe + modo VISUALIZAR + navega Page2
+- `BtnAlterarClick`: CarregarPorCodigo + BuscarGrupos/Contas/Detalhe + EditarRegistro + modo ALTERAR + navega Page2
+- `BtnExcluirClick`: MsgConfirma + Excluir() + CarregarLista
+- `BtnBuscarClick`: INPUTBOX para t├¡tulo ÔåÆ Buscar com filtro LIKE ÔåÆ rebind grid
+- `BtnCopiarClick`: CarregarPorCodigo + BuscarGrupos/Contas/Detalhe + NovoRegistro + navega Page2 em modo INCLUIR

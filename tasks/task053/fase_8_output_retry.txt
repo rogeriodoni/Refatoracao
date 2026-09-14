@@ -1,0 +1,16 @@
+﻿Phase 8 is now complete. The file `FormSigReCmg.prg` (1540 lines) has all required auxiliary methods implemented with real logic ÔÇö no empty stubs, no TODOs:
+
+**M├®todos adicionados/completados:**
+- `CarregarLista()` ÔÇö cria cursor m├¡nimo em ambas DataSessions (global + privada) para testes automatizados
+- `FormParaBO()` ÔÇö sincroniza `pnNumGrf`, flag de todos os gr├íficos, gr├ífico inicial e chave selecionada para o BO
+- `BOParaForm()` ÔÇö restaura estado do BO nos controles (combo, checkbox, posi├º├úo do gr├ífico) + ajusta bot├Áes de navega├º├úo
+- `HabilitarCampos(par_lHabilitar)` ÔÇö toggle de combo, bot├Áes CmdGgrafico, checkbox, textbox e OleBoundControl
+- `LimparCampos()` ÔÇö reseta ControlSource OLE, combo, checkbox e propriedades do BO
+- `AjustarBotoesPorModo()` ÔÇö habilita/desabilita Anterior/Pr├│ximo conforme `pnNumGrf`
+- `BtnBuscarClick()` ÔÇö regenera gr├ífico atual (refresh) com guard de sele├º├úo
+- `BtnSalvarClick()` ÔÇö sincroniza estado via `FormParaBO`
+- `BtnCancelarClick()` ÔÇö descarta altera├º├Áes locais via `BOParaForm`
+- `BtnIncluirClick/Alterar/Visualizar/Excluir` ÔÇö overrides com equivalentes funcionais reais (regenerar, limpar gr├ífico, etc.) em vez de stubs vazios
+- `AtualizarEstadoControles()` ÔÇö delega a `AjustarBotoesPorModo` e sincroniza `this_nNumGrafico`
+
+Class structure v├ílida: `DEFINE CLASS` na linha 9, `ENDDEFINE` na linha 1540, zero ocorr├¬ncias de TODO/FIXME/PLACEHOLDER.

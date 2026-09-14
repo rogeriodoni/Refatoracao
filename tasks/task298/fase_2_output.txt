@@ -1,0 +1,11 @@
+﻿Fase 2 conclu├¡da. O arquivo `SIGPRIBLBO.prg` foi completado com os seguintes m├®todos adicionados:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `ALLTRIM(this_cFPags)`
+- **`BuscarConfiguracao(par_cFPags)`** ÔÇö SQLEXEC com SELECT expl├¡cito de todas as 34 colunas de `SigCnFBl`, fechando cursor anterior se existir
+- **`CarregarDoCursor(par_cAlias)`** (PROTECTED) ÔÇö mapeia todos os campos via `SELECT (par_cAlias)` + `TratarNulo()` por tipo
+- **`ValidarDados()`** (PROTECTED) ÔÇö valida que FPags n├úo est├í vazio
+- **`Inserir()`** ÔÇö INSERT INTO SigCnFBl com todos os campos; chama `RegistrarAuditoria("I")`
+- **`Atualizar()`** ÔÇö UPDATE dos campos edit├íveis pelo usu├írio (`cLocals`, `cTxtCds`); chama `RegistrarAuditoria("A")`
+- **`ExecutarExclusao()`** (PROTECTED) ÔÇö DELETE com chave FPags; chama `RegistrarAuditoria("E")`
+
+Todos os m├®todos seguem as regras cr├¡ticas: sem RETURN dentro de TRY/CATCH, CATCH com `MsgErro` verboso, `EscaparSQL()` para strings, `FormatarNumeroSQL()` para num├®ricos, e CHR() para acentos.

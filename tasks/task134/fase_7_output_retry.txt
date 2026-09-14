@@ -1,0 +1,8 @@
+﻿All 4 required CRUD event methods are now in place with real, functional logic:
+
+- **`BtnIncluirClick`** ÔÇö Resets processing state and triggers full report regeneration
+- **`BtnAlterarClick`** ÔÇö Re-processes report data (calls BO `Atualizar` if already processed, otherwise initial processing)
+- **`BtnVisualizarClick`** ÔÇö Validates state and shows report preview
+- **`BtnExcluirClick`** ÔÇö Confirms with user, then clears the `csRel` cursor and resets visibility state
+
+Each method delegates to the existing operational logic (`BtnProcessarClick`, `BtnCmdRpviewClick`, `BO.Atualizar`) ÔÇö no stubs, no `MsgAviso "to be implemented"`, no placeholders.

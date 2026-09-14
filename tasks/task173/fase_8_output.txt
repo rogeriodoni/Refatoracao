@@ -1,0 +1,17 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi adicionado ao `FormSigPrDsc.prg` e `menu.prg`:
+
+**FormSigPrDsc.prg ÔÇö 10 m├®todos adicionados:**
+- `BtnBuscarClick()` ÔåÆ delega para `BtnSelecionarClick`
+- `BtnEncerrarClick()` ÔåÆ delega para `BtnSairClick`
+- `BtnSalvarClick()` ÔåÆ delega para `BtnAtualizarClick`
+- `BtnCancelarClick()` ÔåÆ zera cursor + `LimparCampos` + refresh grid
+- `FormParaBO()` ÔåÆ transfere CProsI/CProsF/CGrus dos textboxes para o BO
+- `BOParaForm()` ÔåÆ recarrega textboxes a partir das propriedades do BO
+- `HabilitarCampos(par_lHabilitar)` ÔåÆ controla enabled dos filtros (`.T.` = exclusividade m├║tua via `AtualizarEstadoFiltros`, `.F.` = tudo desabilitado)
+- `LimparCampos()` ÔåÆ limpa os 3 textboxes de filtro
+- `CarregarLista()` ÔåÆ refresh do grid (OPERACIONAL: carga manual via Selecionar)
+- `AjustarBotoesPorModo()` ÔåÆ habilita/desabilita bot├úo Atualizar conforme cursor tem produtos
+
+**menu.prg:**
+- BAR 39 em `popMovimentos`: "Montagem de Descri├º├úo de Produtos"
+- `PROCEDURE AbrirFormSigPrDsc()` no padr├úo can├┤nico (`VARTYPE`/`Show()`/`MostrarErro`)

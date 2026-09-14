@@ -1,0 +1,19 @@
+﻿Todas as corre├º├Áes est├úo aplicadas. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL] ÔÇö 3 mudan├ºas:**
+1. `ConfigurarPageFrame` linha 138: adicionado `.Visible = .T.` ao `cnt_4c_Cabecalho` ÔÇö define visibilidade explicitamente, sem depender de `TornarControlesVisiveis`
+2. `TornarControlesVisiveis` linha 190: o IF ├║nico `"OBJ_4C_OPT_IMPRESSORA"` virou `INLIST(..., "OBJ_4C_OPT_IMPRESSORA", "CNT_4C_CABECALHO")` ÔÇö ambos os containers com visibilidade gerenciada manualmente ficam fora do tratamento gen├®rico
+3. Antes do `LOOP`, adicionada recurs├úo nos filhos (linhas 191-193) ÔÇö corrige o bug da mem├│ria: `LOOP` sem recurs├úo deixava filhos de containers ocultos permanentemente hidden
+
+**[OPTIONGROUP-LEFT] ÔÇö `.Themes = .F.` adicionado em TODOS os buttons:**
+- `obj_4c_Opt_Tipo` Buttons(1) ÔÇö est├ítico
+- `obj_4c_Opt_Impressora` Buttons(1) ÔÇö vestigial
+- `obj_4c_Opcao_imp` Buttons(1,2,3) ÔÇö inside cnt_4c__Impressora
+- `obj_4c_Opt_separador` Buttons(1,2)
+- `obj_4c_Opt_Preco` Buttons(1,2,3,4,5,6)
+- `obj_4c_Opt_peso` Buttons(1,2)
+- `obj_4c_OptCompos` Buttons(1,2)
+- `obj_4c_OptOrdem` Buttons(1,2)
+- Loop din├ómico em `CarregarTiposEtiqueta`
+
+**[LAYOUT-POSITION] ÔÇö sem altera├º├úo:** As 14 ocorr├¬ncias s├úo falsos positivos ÔÇö o validador comparou `Buttons(1).Top/Left` com o `Top/Left` esperado do OptionGroup-pai. O c├│digo atual j├í tem as posi├º├Áes corretas correspondentes ao SCX original.

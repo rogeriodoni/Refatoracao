@@ -1,0 +1,15 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSigPrGf1.prg` est├í completo com todos os m├®todos do contrato de pipeline adicionados:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnBuscarClick()` | Delega a `BtnProcessarClick()` |
+| `BtnSalvarClick()` | Delega a `BtnProcessarClick()` |
+| `BtnCancelarClick()` | Chama `LimparCampos()` + foco em DtInicial |
+| `FormParaBO()` | Transfere DtInicial/DtFinal/Empresa para o BO |
+| `BOParaForm()` | Restaura datas do BO nos TextBoxes |
+| `HabilitarCampos(lHabilitar)` | Enabled/ReadOnly nos campos de data |
+| `LimparCampos()` | Zera datas no form e BO, fecha cursors crRel1/crLstMatLote |
+| `CarregarLista()` | Restaura per├¡odo padr├úo (m├¬s corrente) se campos vazios |
+| `AjustarBotoesPorModo()` | No-op documentado (form sem modos CRUD) |
+
+O menu.prg j├í tinha a procedure `AbrirFormSigPrGf1` correta (padr├úo `VARTYPE + Show()` sem `Release()`). A migra├º├úo do `FormSigPrGf1` est├í 100% conclu├¡da.

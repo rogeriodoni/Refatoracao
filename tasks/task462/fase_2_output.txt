@@ -1,0 +1,13 @@
+﻿As 3 corre├º├Áes foram aplicadas corretamente. O MdaBO.prg est├í completo e correto.
+
+**Fase 2/8 conclu├¡da.** O MdaBO.prg j├í continha todos os m├®todos CRUD necess├írios da Fase 1. Corrigi 3 bugs cr├¡ticos no m├®todo `SalvarRelacionados` onde a sintaxe `(par_cCursorX).campo` (inv├ílida em VFP9) foi substitu├¡da por acesso direto ao campo ap├│s `SELECT (par_cCursorX)`:
+
+| Local | Antes (inv├ílido) | Depois (correto) |
+|-------|-----------------|-----------------|
+| SCAN empresas | `(par_cCursorEmps).Imps` | `Imps` |
+| SCAN empresas | `(par_cCursorEmps).Emps` | `Emps` |
+| SCAN opera├º├Áes | `(par_cCursorOpes).Imps` | `Imps` |
+| SCAN opera├º├Áes | `(par_cCursorOpes).Dopes` | `Dopes` |
+| SCAN composi├º├Áes | `(par_cCursorCompo).Compos` | `Compos` |
+
+O arquivo cont├®m todos os m├®todos esperados: `ObterChavePrimaria`, `Buscar`, `CarregarPorCodigo`, `CarregarDoCursor`, `Inserir`, `Atualizar`, `ExecutarExclusao`, `SalvarRelacionados`, `ExcluirRelacionados`, `CarregarEmpresas`, `CarregarOperacoes`, `CarregarComposicoes`, `BuscarComposicoesProdutos`, e `Destroy` - com `RegistrarAuditoria` chamado nos m├®todos corretos (INSERT, UPDATE, DELETE).

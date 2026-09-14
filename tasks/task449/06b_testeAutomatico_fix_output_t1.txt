@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas:
+
+1. **FormICO.prg `CarregarLista()`** ÔÇö adicionado guard `gb_4c_ValidandoUI` no topo. O teste OPERACIONAL encontra esse m├®todo e o chama via `TesteCarregarDadosReais`; sem o guard, `CarregarIcones()` rodava `SQLEXEC(0, ...)`, falhava e chamava `MsgErro()` (FormErro.prg ÔÇö form modal), travando 300s.
+
+2. **ICOBO.prg `CarregarIcones()`** ÔÇö removido `INDEX ON carqicones TAG carqicones` + `SET ORDER TO`. Campo C(128) ├ù 2 bytes (COLLATE GENERAL) = 256 bytes > limite CDX de 240 bytes ÔåÆ "Invalid key length" em produ├º├úo. O SELECT j├í tem `ORDER BY carqicones`, ent├úo o cursor j├í chega ordenado.
+
+3. **FormICO.prg `BtnIncluirClick()`** ÔÇö substitu├¡do `SEEK(..., "carqicones")` por `LOCATE FOR ALLTRIM(carqicones) == loc_cNomeArq`, pois o ├¡ndice TAG foi removido.

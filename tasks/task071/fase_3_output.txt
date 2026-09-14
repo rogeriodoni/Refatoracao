@@ -1,0 +1,12 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\relatorios\Formsigrectc.prg` foi criado com:
+
+**Estrutura implementada:**
+- `DEFINE CLASS Formsigrectc AS FormBase` ÔÇö dimens├Áes exatas do original (Width=800, Height=300, DataSession=2, TitleBar=0)
+- `Init()` ÔÇö `RETURN DODEFAULT()` (FormBase chama InicializarForm automaticamente)
+- `InicializarForm()` ÔÇö instancia `sigrectcBO`, carrega cursor de cart├Áes via `CarregarCartoes()` (pula se `gb_4c_ValidandoUI`), monta cabe├ºalho + bot├Áes + PageFrame
+- `ConfigurarCabecalho()` ÔÇö container cinza (RGB 100,100,100) com lbl_4c_Sombra (preto, offset +2px) e lbl_4c_Titulo (branco)
+- `ConfigurarBotoes()` ÔÇö `cmg_4c_Botoes` (CommandGroup, Left=529, Width=273) com 4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar, Comic Sans MS, PicturePosition=13
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com PageCount=1 (REPORT), Top=85, Tabs=.F., Page1 com Picture fundo_cad_1003.jpg
+- `Destroy()` ÔÇö atribui `.NULL.` ao BO (n├úo usa .Release() ÔÇö CustomBase n├úo tem), DODEFAULT()
+
+**Pr├│ximas fases:** Fase 4 adicionar├í os controles de filtro em `ConfigurarPaginaLista()` na Page1 (checkboxes, datas, OptionGroup, campos empresa/cart├úo).

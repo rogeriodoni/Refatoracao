@@ -1,0 +1,28 @@
+﻿Fiz an├ílise completa de todos os 14 problemas reportados. Nenhum deles ├® real ÔÇö s├úo todos falsos positivos.
+
+**An├ílise por categoria:**
+
+**GRID-SQL: cursor_4c_Pendentes (Emps, Dopes, Numes, Grupos)**
+O BO `BuscarMovimentosPendentes` inclui exatamente esses campos:
+```foxpro
+"SELECT 0 AS nMarca, a.Emps, a.Dopes, a.Numes,"
+" a.EmpDopNums AS OriDopNums,"
+" a.GrupoOs AS Grupos, a.ContaOs AS Contas"
+```
+Todos os ControlSources est├úo cobertos. Ô£ô
+
+**GRID-SQL: cursor_4c_Movimentos (Cpros, Dpros, Units, Qtds, QtBaixas, QtReservas, Saldo)**
+O `CmdProcessarClick` (linhas 2433-2449) inclui todos esses campos, e o `CREATE CURSOR cursor_4c_Movimentos` (linhas 2476-2480) tamb├®m os declara explicitamente. Ô£ô
+
+**SQL-FILTRO-INVENTADO: QTDOS**
+A palavra `QTDOS`/`qtdos` n├úo existe em nenhum dos arquivos migrados ÔÇö confirmado por grep. Falso positivo do validador. Ô£ô
+
+**SQL-FILTRO-INVENTADO: RCLIS**
+A condi├º├úo `WHERE Rclis LIKE ...` (linha 1996) est├í em `TxtDcontaLostFocus`, consultando `SigCdCli` pelo nome do fornecedor. ├ë um lookup leg├¡timo e necess├írio para o campo Dconta funcionar. Ô£ô
+
+**SQL-FILTRO-INVENTADO: CMOES**
+As condi├º├Áes `WHERE CMoes = ...` e `WHERE CMoes LIKE ...` (linhas 2153/2168/3513/3525) s├úo lookups v├ílidos em `SigCdMoe` (para preenchimento do campo Moeda) e em `SigCdCot` (para convers├úo de cota├º├úo). Ô£ô
+
+---
+
+**Nenhuma corre├º├úo ├® necess├íria.** O c├│digo migrado est├í correto: os cursores t├¬m todos os campos usados nos ControlSources, `QTDOS` n├úo existe no c├│digo, e as condi├º├Áes com `RCLIS`/`CMOES` s├úo lookups auxiliares leg├¡timos ÔÇö n├úo filtros inventados na query principal.

@@ -1,0 +1,11 @@
+﻿Done. Here's a summary of what was added/changed in Phase 7:
+
+**New methods added:**
+- `HabilitarCampos(par_lHabilitar)` ÔÇö enables/disables all Page2 fields based on mode (INCLUIR/ALTERAR = editable, VISUALIZAR = read-only). Respects original legado rules: `txt_4c_Usuario` always read-only, `txt_4c_Oper`/`txt_4c_Moeda` only in INCLUIR, `txt_4c_DGrupo`/`txt_4c_DConta` only when parent field is empty.
+- `AjustarBotoesPorModo()` ÔÇö enables/disables the Confirmar button based on mode (disabled in VISUALIZAR).
+
+**Updated methods:**
+- `BtnIncluirClick()` ÔÇö now calls `HabilitarCampos(.T.)` + `AjustarBotoesPorModo()` + `AlternarPagina(2)` (replacing direct `ActivePage` assignment).
+- `BtnVisualizarClick()` ÔÇö now calls `HabilitarCampos(.F.)` + `AjustarBotoesPorModo()` + `AlternarPagina(2)`.
+- `BtnAlterarClick()` ÔÇö now calls `HabilitarCampos(.T.)` + `AjustarBotoesPorModo()` + `AlternarPagina(2)`.
+- `BtnCancelarClick()` ÔÇö now calls `CarregarLista()` after returning to Page1 (Problema 2 fix).

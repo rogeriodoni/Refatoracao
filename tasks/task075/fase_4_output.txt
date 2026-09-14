@@ -1,0 +1,13 @@
+﻿O arquivo est├í completo e correto. A Fase 4 foi implementada com sucesso.
+
+**O que foi adicionado em `FormSigReDct.prg`:**
+
+- **`ConfigurarBotoes()`** ÔÇö `cmg_4c_Botoes` CommandGroup com 4 bot├Áes no padr├úo `frmrelatorio`: Visualizar, Imprimir, Excel, Encerrar (Cancel=.T.), geometria `Left=529, Width=273, Height=80` exata do framework
+- **`ConfigurarPaginaLista()`** ÔÇö adiciona os 2 checkboxes ├á Page1: `chk_4c_ImpTotal` (Top=5) e `chk_4c_ImpCodBarra` (Top=23), posi├º├Áes calculadas do original flat (`top-85`)
+- **`AlternarPagina()`** ÔÇö navega├º├úo defensiva entre p├íginas com foco no `chk_4c_ImpTotal`
+- **`FormParaRelatorio()`** ÔÇö sincroniza valores dos checkboxes com `this_nImpTotal`/`this_nImpCodBarra` do BO
+- **`LimparCampos()`** ÔÇö restaura padr├úo: ImpTotal=1, ImpCodBarra=0
+- **`BtnVisualizarClick/BtnImprimirClick/BtnExcelClick/BtnSairClick`** ÔÇö handlers dos 4 bot├Áes, delegando para BO que j├í tem `Visualizar()`/`Imprimir()` implementados
+- **`ChkImpTotalClick/ChkImpCodBarraClick`** ÔÇö exclus├úo m├║tua fiel ao original (`ImpTotal.Click` / `ImpCodBarra.Valid`)
+- **Mapeamento CRUDÔåÆREPORT** ÔÇö `BtnAlterarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`
+- **`InicializarForm()`** atualizado com chamadas a `ConfigurarBotoes()`, `ConfigurarPaginaLista()`, todos os BINDEVENTs, e `LimparCampos()`

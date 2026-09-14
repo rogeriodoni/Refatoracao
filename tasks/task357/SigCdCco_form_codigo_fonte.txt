@@ -1,0 +1,1111 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdCco.SCX
+* Data/Hora: 22/07/2026 06:32:19
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCCO
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Grupo
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_codigo
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_descricao
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_faixai
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_faixaf
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetPriori
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetEmps
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Fwoption1
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdMotivos
+  Parent: SIGCDCCO.Pagina.Dados
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDCCO.Pagina.Dados.grdMotivos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDCCO.Pagina.Dados.grdMotivos.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDCCO.Pagina.Dados.grdMotivos.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDCCO.Pagina.Dados.grdMotivos.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDCCO.Pagina.Dados.grdMotivos.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Optiongroup1
+  Parent: SIGCDCCO.Pagina.Dados.grdMotivos.Column3
+  Class: optiongroup
+  BaseClass: optiongroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 629
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Classificação de Contas"
+  Name = "SIGCDCCO"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 0
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1045
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 516
+  Pagina.Lista.Grade.Left = 29
+  Pagina.Lista.Grade.Top = 96
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Left = 544
+  Pagina.Lista.Grupo_op.Top = -2
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -2
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 48
+  Pagina.Lista.cntFiltros.Left = 168
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 841
+  Pagina.Dados.Grupo_Salva.Top = -3
+  Pagina.Dados.Grupo_Salva.TabIndex = 18
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 0
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -28
+  Pagina.Left = -1
+  Pagina.Width = 1003
+  Pagina.Height = 664
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 99
+  Top = 78
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 95
+  Top = 53
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 270
+  Top = 53
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Selecionavel nos Cadastros :"
+  Left = 573
+  Top = 52
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Faixa de :"
+  Left = 275
+  Top = 103
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "até"
+  Left = 439
+  Top = 103
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Get_Grupo
+------------------------------------------------------------
+  ControlSource = "crSigCdClc.grupos"
+  Left = 139
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 74
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 7
+  plprocurar = .T.
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Get_codigo
+------------------------------------------------------------
+  ControlSource = "crSigCdClc.codigos"
+  Left = 139
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 49
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 8
+  plprocurar = .T.
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Get_descricao
+------------------------------------------------------------
+  ControlSource = "crSigCdClc.descs"
+  Left = 327
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 49
+  Width = 220
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 9
+  Name = "Get_descricao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Get_faixai
+------------------------------------------------------------
+  ControlSource = "crSigCdClc.faixais"
+  InputMask = "9999999999.99"
+  Left = 327
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 99
+  Width = 108
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 10
+  Name = "Get_faixai"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Get_faixaf
+------------------------------------------------------------
+  ControlSource = "crSigCdClc.faixafs"
+  Height = 23
+  InputMask = "9999999999.99"
+  Left = 461
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 99
+  Width = 115
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 11
+  Name = "Get_faixaf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 87
+  Top = 103
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Prioridade :"
+  Left = 268
+  Top = 78
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.GetPriori
+------------------------------------------------------------
+  ControlSource = "crSigCdClc.Prioridades"
+  Format = ""
+  Height = 23
+  InputMask = "99"
+  Left = 327
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 74
+  Width = 26
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 14
+  plprocurar = .T.
+  Name = "GetPriori"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.GetEmps
+------------------------------------------------------------
+  ControlSource = "crSigCdClc.Emps"
+  Height = 23
+  Left = 139
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 99
+  Width = 34
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 15
+  plprocurar = .T.
+  Name = "GetEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.Fwoption1
+------------------------------------------------------------
+  AutoSize = .T.
+  Value = 1
+  ControlSource = "crSigCdClc.ClcStatus"
+  Left = 711
+  Top = 47
+  TabIndex = 6
+  ZOrderSet = 16
+  Name = "Fwoption1"
+  Option1.Caption = "Sim"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.Caption = "Não"
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.grdMotivos
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 20
+  Height = 464
+  Left = 98
+  Panel = 1
+  ReadOnly = .T.
+  RecordMark = .F.
+  RecordSource = "crMotivos"
+  RowHeight = 20
+  ScrollBars = 2
+  TabIndex = 17
+  Top = 132
+  Width = 706
+  GridLineColor = 238,238,238
+  ZOrderSet = 17
+  Name = "grdMotivos"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = "crMotivos.Codigos"
+  Column1.Width = 94
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = "crMotivos.Descrs"
+  Column2.Width = 379
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = "crMotivos.Tipos"
+  Column3.Width = 210
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Sparse = .F.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.grdMotivos.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Motivo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.grdMotivos.Column1.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.grdMotivos.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.grdMotivos.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.grdMotivos.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tipo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCCO.Pagina.Dados.grdMotivos.Column3.Optiongroup1
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 12
+  Top = 35
+  Width = 156
+  Name = "Optiongroup1"
+  Option1.FontSize = 8
+  Option1.Caption = "Inserir"
+  Option1.Value = 1
+  Option1.Height = 16
+  Option1.Left = 5
+  Option1.Top = 2
+  Option1.Width = 48
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.FontSize = 8
+  Option2.Caption = "Excluir"
+  Option2.Height = 16
+  Option2.Left = 60
+  Option2.Top = 2
+  Option2.Width = 50
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+  Option3.FontSize = 8
+  Option3.Caption = "Nenhum"
+  Option3.Height = 17
+  Option3.Left = 120
+  Option3.Top = 2
+  Option3.Width = 61
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCCO
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pCli
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+	With .poDatamgr
+		ThisForm.Grupos = []
+		ThisForm.poDataMgr.CursorQuery([SigCdPam], [crSigCdPam], .f., .f., [GrPadClis])
+		If Not Used([crSigCdPam])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigCdPam)])
+			Return 0
+		EndIf
+		ThisForm.Grupos   = Padr(crSigCdPam.GrPadClis, 10)
+		ThisForm.Clientes = pCli
+
+		If Empty(ThisForm.Grupos)
+			lcQuery = [Select * From SigCdClc]
+		Else
+			If ThisForm.Clientes
+				lcQuery = [Select * From SigCdClc] + Iif(Empty(ThisForm.Grupos), [], [ Where Grupos = '] + ThisForm.Grupos + ['])
+			Else
+				lcQuery = [Select * From SigCdClc] + Iif(Empty(ThisForm.Grupos), [], [ Where Not Grupos = '] + ThisForm.Grupos + ['])
+			EndIf
+		EndIf
+
+		.AddCursor('SigCdClc','cidchaves','crSigCdClc','',ThisForm.pagina.lista.grade, lcQuery)
+		.pfSqlTabela(1).pColuna('Emps','','','Emp',30,.t.)
+		.pfSqlTabela(1).pColuna('grupos','','','Grupo',80,.t.)
+		.pfSqlTabela(1).pColuna('codigos','','','Código',80,.t.)
+		.pfSqlTabela(1).pColuna('descs','','','Descriçãos',220,.t.)		
+		.pfSqlTabela(1).pColuna('Prioridades','','','P',27,.t.)
+		.pfSqlTabela(1).pColuna('faixais','9999999999.99','','Faixa Inicial',101,.t.)
+		.pfSqlTabela(1).pColuna('faixafs','9999999999.99','','Faixa Final',101,.t.)		
+
+		.AddCursor([SigCdCmt], [cIdChaves], [crSigCdCmt])
+	EndWith
+	=DoDefault()
+
+	lcQuery = [Select Codigos, Descrs From SigCdGcr]
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigCdGcr]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdGcr)])
+		Return .f.
+	EndIf
+	Select crSigCdGcr
+	Index On Codigos Tag Codigos
+	Index On Descrs Tag Descrs
+	
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=DoDefault()
+
+Create Cursor crMotivos (Codigos c(10), Descrs c(40), Tipos n(1))
+Index On Codigos Tag Codigos
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+Local llOks
+
+llOks = .t.
+
+If Not ThisForm.poDataMgr.Update([crSigCdCmt])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (mSv_Alterar - Update - crSigCdCmt)])
+	llOks = .f.
+EndIf
+
+If llOks
+	=DoDefault()
+Else
+	ThisForm.poDataMgr.RollBack()
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+Local llOks
+
+llOks = .t.
+
+If Not ThisForm.poDataMgr.Update([crSigCdCmt])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (mSv_Alterar - Update - crSigCdCmt)])
+	llOks = .f.
+EndIf
+
+If llOks
+	=DoDefault()
+Else
+	ThisForm.poDataMgr.RollBack()
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local laCampos(3,2)
+
+m.laCampos(1,1) = 'Emps'
+m.laCampos(1,2) = thisform.pagina.dados.GetEmps.value
+m.laCampos(2,1) = 'grupos'
+m.laCampos(2,2) = thisform.pagina.dados.get_grupo.value
+m.laCampos(3,1) = 'codigos'
+m.laCampos(3,2) = thisform.pagina.dados.get_codigo.value
+ThisForm.poDataMgr.LocateCursor('crSigCdClc',@m.laCampos)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+If Not DoDefault(Opcao)
+	ThisForm.mAtivaPagina1
+	Return .f.
+EndIf
+
+Select crSigCdClc
+If Empty(crSigCdClc.cIdChaves)
+	Replace cIdChaves With fUniqueIds() In crSigCdClc 
+EndIf
+
+ThisForm.Pagina.Dados.get_grupo.Enabled = .t.
+If Not Empty(ThisForm.Grupos) And ThisForm.Clientes
+	If (ThisForm.pcEscolha = [INSERIR]) Or (Empty(crSigCdClc.Grupos))
+		Replace Grupos With ThisForm.Grupos In crSigCdClc
+	EndIf
+	ThisForm.Pagina.Dados.get_grupo.Enabled = .f.
+EndIf
+ThisForm.Pagina.Dados.get_grupo.Refresh 
+
+Zap In crMotivos
+
+If InList(ThisForm.pcEscolha, [ALTERAR], [CONSULTA], [EXCLUIR])
+	lcQuery = [Select a.*, b.Descrs ] + ;
+			    [From SigCdCmt a, SigCdFs b ] + ;
+			   [Where a.fkChaves = '] + crSigCdClc.cIdChaves + [' And ] + ;
+			   		 [a.Codigos = b.Codigos]
+		   
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalClaMt]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalClaMt)])
+		Return 0
+	EndIf
+	Select LocalClaMt
+	Scan
+		Insert Into crMotivos (Codigos, Descrs, Tipos) ;
+					   Values (LocalClaMt.Codigos, LocalClaMt.Descrs, LocalClaMt.Tipos)
+	EndScan
+EndIf
+
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	lcQuery = [Select * From SigCdFs]
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalMDsc]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalMDsc)])
+		Return 0
+	EndIf
+
+	Select LocalMDsc
+	Scan
+		If Not Seek(LocalMDsc.Codigos, [crMotivos], [Codigos])
+			Insert Into crMotivos (Codigos, Descrs, Tipos) Values (LocalMDsc.Codigos, LocalMDsc.Descrs, 3)
+		EndIf
+	EndScan
+EndIf
+
+Go Top In crMotivos
+ThisForm.Pagina.Dados.grdMotivos.Refresh 
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.get_codigo.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Get_Descricao.SetFocus
+	Otherwise 
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndCase
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Local laCampos(3,2) , lcCampos(2,2)
+
+If ThisForm.pcEscolha = 'INSERIR'
+	If IsEmpty( crSigCdClc.grupos )
+		Messagebox( 'Grupo não pode ficar em branco!', 48, '' )
+		ThisForm.Pagina.Dados.Get_grupo.SetFocus
+		Return
+	Endif
+
+	If IsEmpty( CrSigCdClc.codigos)
+		Messagebox( 'Código não pode ficar em branco!', 48, '' )
+		ThisForm.Pagina.Dados.get_codigo.SetFocus
+		Return
+	Endif
+
+	m.laCampos(1,1) = 'Emps'
+	m.laCampos(1,2) = thisform.pagina.dados.GetEmps.value
+	m.laCampos(2,1) = 'grupos'
+	m.laCampos(2,2) = thisform.pagina.dados.get_grupo.value
+	m.laCampos(3,1) = 'codigos'
+	m.laCampos(3,2) = thisform.pagina.dados.get_codigo.value
+
+	If ThisForm.poDataMgr.ChkRegister('SigCdClc',@m.laCampos)
+		Messagebox( 'Grupo e Codigo já Cadastrado!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Grupo.SetFocus
+		Return
+	Endif
+
+	Select CrSigCdClc
+	Replace cidchaves with fUniqueIds()
+
+Else
+
+	If ThisForm.pcEscolha = 'EXCLUIR'
+		m.lcCampos(1,1) = 'grupos'
+		m.lcCampos(1,2) = thisform.pagina.dados.get_grupo.value
+		m.lcCampos(2,1) = 'codigos'
+		m.lcCampos(2,2) = thisform.pagina.dados.get_codigo.value
+
+		If ThisForm.poDataMgr.ChkRegister('SigCdCli',@m.lcCampos)
+			Messagebox( 'Existe Conta Cadastrada com essa Classificação !', 48, 'Impossível Exclusão' )
+			ThisForm.Pagina.Dados.Grupo_Salva.Cancelar.SetFocus
+			Return
+		Endif
+
+	EndIf
+Endif
+
+If ThisForm.pcEscolha = 'ALTERAR' OR ThisForm.pcEscolha = 'INSERIR'
+	If Thisform.pagina.dados.get_faixai.value > Thisform.pagina.dados.get_faixaf.value
+		Messagebox( 'Valor da Faixa Inicial > que o valor da Faixa Final !', 48, '' )
+		ThisForm.Pagina.Dados.Get_faixaf.SetFocus
+		Return
+	EndIf
+	lnValIni = thisform.pagina.dados.Get_faixai.Value
+	lnValFim = thisform.pagina.dados.Get_faixaf.Value
+	If (lnValIni + lnValFim <> 0)
+		SqlClaCo = [Select Descs, FaixaIs, FaixaFs ] + ;
+					 [From SigCdClc ]+;
+					[Where Emps = ']+thisform.pagina.dados.GetEmps.value+[' ]+;
+						   [And grupos = ']+thisform.pagina.dados.get_grupo.value+[' ]+;
+		                   [And Not cIdChaves = ']+crSigCdClc.cIdChaves+[' ]+;
+		                   [And ( (?lnValIni Between Faixais And Faixafs) ]+;
+		                   [Or    (?lnValFim Between Faixais And Faixafs) ]+;
+		                   [Or    (Faixais Between ?lnValIni And ?lnValFim) ]+;
+		                   [Or    (Faixafs Between ?lnValIni And ?lnValFim) ) ]
+
+		ThisForm.poDatamgr.SqlExecute(SqlClaCo,'csSigCdClc')
+		Select csSigCdClc
+		If Not Eof()
+			=MessageBox([Faixa Cadastrada no Codigo ] + Alltrim(Descs) + Chr(13) + ;
+						[Valor : ] + Alltrim(Str(FaixaIs, 12, 2)) + [ à ] + Alltrim(Str(FaixaFs, 12, 2)), 16, [Atenção!!!])
+			Return 0
+		Endif
+	EndIf
+EndIf
+
+* Gravando Dados da Grade de Motivos
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR], [EXCLUIR])
+	lcQuery = [Delete From SigCdCmt Where fkChaves = '] + crSigCdClc.cIdChaves + [']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Delete - crSigCdCmt)])
+		Return 0
+	EndIf
+
+	Zap In crSigCdCmt
+	
+	Select crMotivos
+	Scan
+		If InList(crMotivos.Tipos, 1, 2)
+			Insert Into crSigCdCmt (fkChaves, cIdChaves, Codigos, Tipos) ;
+							Values (crSigCdClc.cIdChaves, fUniqueIds(), crMotivos.Codigos, crMotivos.Tipos)
+		EndIf
+	EndScan
+EndIf
+
+=DoDefault()
+
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCCO.Pagina.Dados.Get_Grupo
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	Select crSigCdGcr
+	Go Top In crSigCdGcr
+	Locate For Codigos = Padr(This.Value, 10)
+	If Eof([crSigCdGcr])
+		loLista = CreateObject([fwBuscaInt], [crSigCdGcr], [Codigos], This.Value, [Grupos], .t.)
+		loLista.mAddColuna([Codigos], [], [Grupo], 	  .t.)
+		loLista.mAddColuna([Descrs],  [], [Descrição], .t.)
+		loLista.Show()
+	EndIf
+	This.Value = Iif(LastKey()=27, [], crSigCdGcr.Codigos)
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR]) And Not ThisForm.Clientes
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCCO.Pagina.Dados.Get_codigo
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR])
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCCO.Pagina.Dados.GetPriori
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCCO.Pagina.Dados.GetEmps
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local loLista
+
+If ! Empty(THis.Value)
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdEmp','crSigCdEmp','cEmps',This.Value,'Selecao',.t.,'cEmps')
+	If ! m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('cEmps','','Emp.')
+		m.loLista.mAddColuna('RazSocs','','Razão')
+		m.loLista.Show()
+	EndIf
+
+	this.value = Iif(LastKey()==27,Space(3),crSigCdEmp.cEmps)
+
+	This.Refresh
+
+EndIf
+
+Select CrSigCdClc
+
+Return
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( InList(thisform.pcEscolha,"INSERIR","PROCURAR" ))
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDCCO
+RESERVED3 (ClassInfo): clientes
+grupos
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

@@ -1,0 +1,5 @@
+﻿**Diagn├│stico e corre├º├úo:**
+
+**Causa raiz**: `TesteCarregarDadosReais()` do TesteAutomatico detecta `CarregarDados` como m├®todo candidato e o chama via macro (que bypassa o modificador `PROTECTED`). Dentro de `CarregarDados()` ÔåÆ `CarregarProgramas()` ÔåÆ `SQLEXEC(gnConnHandle=0, ...)`. Em VFP9, `SQLEXEC(0, ...)` com handle inv├ílido n├úo retorna -1 imediatamente ÔÇö tenta estabelecer uma conex├úo ODBC ao SQL Server configurado, bloqueando pelo TCP timeout do Windows (**exatamente 300 segundos**), o que derruba o processo do VFP9.
+
+**Fix aplicado** em `FormICN.prg:CarregarDados()`: guard `gnConnHandle > 0` no in├¡cio do m├®todo ÔÇö se n├úo h├í conex├úo ativa, retorna sem executar nenhuma query SQL. Em produ├º├úo (`gnConnHandle > 0`) o comportamento ├® id├¬ntico ao antes.

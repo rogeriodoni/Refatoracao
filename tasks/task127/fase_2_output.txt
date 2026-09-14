@@ -1,0 +1,13 @@
+﻿Fase 2 conclu├¡da. `SigReIpcBO.prg` foi completado com 4 m├®todos:
+
+- **`PrepararDados()`** ÔÇö posiciona TMPLANCA no topo (l├│gica do `processamento` original)
+- **`Visualizar()`** ÔÇö loop por `this_nQbols` opera├º├Áes, monta cursor `Cabecalho` e executa `REPORT FORM ... PREVIEW NOCONSOLE` (l├│gica do `visualizacao` original)
+- **`Imprimir()`** ÔÇö id├¬ntico ao Visualizar mas com `TO PRINTER PROMPT NOCONSOLE` (l├│gica do `impressao` original)
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` (relat├│rio n├úo tem chave prim├íria)
+
+Pontos importantes aplicados:
+- `_empr` substitu├¡do por `go_4c_Sistema.cCodEmpresa`
+- Literais acentuados substitu├¡dos por `CHR()`: `CHR(231)+CHR(227)` para "├º├úo"
+- `RETURN` sempre fora do `TRY/CATCH` via vari├ível `loc_lSucesso`
+- `CATCH` com `MsgErro()` ÔÇö nunca silencioso
+- Caminho do FRX via `gc_4c_CaminhoReports + "RelSigReIpc.frx"`

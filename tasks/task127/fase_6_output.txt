@@ -1,0 +1,12 @@
+﻿Arquivo atualizado e verificado. Fase 6 conclu├¡da.
+
+**O que foi feito:**
+
+- `FormSigReIpc.prg` ├® um form utilit├írio de relat├│rio **sem campos de filtro** ÔÇö o original SIGREIPC tamb├®m n├úo tinha. O form recebe os cursores j├í preparados pelo form chamador (SIGCDPGR) e apenas exibe os 4 bot├Áes de a├º├úo.
+
+**Altera├º├Áes da Fase 6:**
+1. **Cabe├ºalho atualizado** ÔÇö documenta que o form est├í completo e explica por que as fases 4-8 n├úo adicionam campos (o original n├úo tinha filtros)
+2. **`TornarControlesVisiveis` adicionado** ÔÇö m├®todo obrigat├│rio per padr├úo FORMCOR, implementado com itera├º├úo recursiva sobre Controls e Pages
+3. **Chamada em `InicializarForm`** ÔÇö `THIS.TornarControlesVisiveis(THIS)` ap├│s `ConfigurarPageFrame()`
+
+`ConfigurarPaginaDados()` e `LimparCampos()` permanecem intencionalmente vazios pois o form original n├úo possui Page2 CRUD nem campos de filtro.

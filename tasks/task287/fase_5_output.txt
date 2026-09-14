@@ -1,0 +1,16 @@
+﻿As edi├º├Áes est├úo corretas. Aqui est├í o resumo do que foi feito na Fase 5:
+
+**Status da migra├º├úo FormSigPrGf1 (task287):**
+
+O FormSigPrGf1.prg era um form OPERACIONAL **flat** (sem PageFrame, sem Page2) ÔÇö um painel simples de filtro por per├¡odo que abre o FormSigPrGf2 com os resultados. Todas as fases 1-4 j├í tinham migrado 100% dos controles:
+- `cnt_4c_Cabecalho` (header cinza com lbl_4c_Sombra + lbl_4c_Titulo)
+- `txt_4c_DtInicial` + `txt_4c_DtFinal` + `lbl_4c_Periodo`
+- `cmg_4c_Processar` (Buttons 1=Processar, 2=Encerrar)
+- `cnt_4c_Aguarde` (oculto durante processamento)
+
+A Fase 5 pediu `ConfigurarPaginaDados()` ÔÇö que n├úo se aplica a este form (sem Page2). Em vez disso, a ├║nica pend├¬ncia era a **integra├º├úo no menu**, que foi feita:
+
+1. **`menu.prg` linha 251-254**: DEFINE BAR 61 + ON SELECTION em `popMovimentos`
+2. **`menu.prg` linha 4615**: Procedure `AbrirFormSigPrGf1()` adicionada ao final
+
+`config.prg` j├í carrega automaticamente todos `*BO.prg` e `Form*.prg` via ADIR() ÔÇö sem necessidade de inclus├úo manual.

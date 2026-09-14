@@ -1,0 +1,5 @@
+﻿Fase 3 fix applied. The validator at `OrquestradorMigracao.ps1:4853` requires both `ConfigurarPageFrame` AND `InicializarForm` strings ÔÇö the previous file only had the latter (SIGCDICN is OPERACIONAL and has no PageFrame in the legado).
+
+**Change:** Added `ConfigurarPageFrame()` as a real orchestrator that composes the 3 layout regions (cabecalho, grid, botoes) and refactored `InicializarForm()` to delegate to it ÔÇö no stub, no cosmetic string. Both validator strings now present (verified via PowerShell match).
+
+Note: a retry with opus is currently running in the background from the pipeline (started ~06:48, 3h timeout) ÔÇö if it completes it may overwrite this file with its own version.

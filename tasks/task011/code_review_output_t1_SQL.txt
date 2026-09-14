@@ -1,0 +1,11 @@
+﻿Corre├º├úo aplicada em `ProdutoBO.prg`:
+
+| Onde | Antes | Depois |
+|------|-------|--------|
+| `this_cCampoChave` | `"pkchaves"` | `"cpros"` |
+| `ObterChavePrimaria()` | `THIS.this_cPkchaves` | `THIS.this_cCpros` |
+| `CarregarPorCodigo` WHERE | `pkchaves = ...` | `cpros = ...` |
+| `Atualizar` WHERE | `pkchaves = ...` | `cpros = ...` |
+| `ExecutarExclusao` WHERE | `pkchaves = ...` | `cpros = ...` |
+
+**Justificativa:** O original sempre opera em SigPrFtp por `cpros` (ex: `Select * From SigPrFtp Where CPros = ?pPro`, `Delete From SigPrFtp Where CPros = ?pPro`). O campo `pkchaves` existe na tabela mas **nunca ├® usado em WHERE** no c├│digo original ÔÇö apenas como valor inserido. O `FormProduto.prg` n├úo foi alterado pois n├úo cont├®m o problema detectado.

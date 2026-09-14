@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. Vou resumir o que foi feito na Fase 4:
+
+**Fase 4/8 conclu├¡da** ÔÇö `ConfigurarPaginaLista()` adicionada ao `FormSigPrAop.prg`.
+
+**Controles criados** (escala 702├ù436 ÔåÆ 1000├ù600):
+- `lbl_4c_Label1` / `lbl_4c_Label2` ÔÇö Labels "O.P.:" e "Produto:" (Top=128/161)
+- `txt_4c_OP` ÔÇö TextBox para n├║mero da O.P. com InputMask="999999999999"
+- `txt_4c_Produto` ÔÇö TextBox do produto (ReadOnly, preenchido automaticamente)
+- `grd_4c_Dados` ÔÇö Grid 5 colunas: Pedido(Dopes), Cor, Tam, Qtd.Atual(Qtds readonly), Quantidade(QtdDivs edit├ível/Format=K)
+- `edt_4c_Obss` ÔÇö EditBox readonly vinculado a `cursor_4c_DivOp.Obss`
+- `cmg_4c_Conf` ÔÇö CommandGroup com Confirmar (inicia desabilitado) + Encerrar
+
+**BINDEVENTs e handlers** (todos PUBLIC):
+- `TxtOPGotFocus` ÔÇö desabilita Confirmar ao entrar no campo (equivalente ao `When` do legado)
+- `TxtOPKeyPress` ÔÇö carrega divis├Áes da O.P. em ENTER/TAB/F4 via `CarregarOP()` do BO
+- `GrdDadosAfterRowColChange` ÔÇö atualiza `edt_4c_Obss` ao navegar no grid
+- `BtnConfirmarClick` ÔÇö chama `SalvarAlteracoes()` no BO e reseta campos
+- `BtnEncerrarClick` ÔÇö chama `THIS.Release()`

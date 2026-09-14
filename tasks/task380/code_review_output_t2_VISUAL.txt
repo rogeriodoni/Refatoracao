@@ -1,0 +1,23 @@
+﻿Encontrei a resposta. Os 5 captions da grade de lista est├úo definidos no legacy via m├®todo do framework `pColuna`:
+
+```
+.pfSqlTabela(1).pColuna([Cods],     [], [], [Descrio],     290, .t.)
+.pfSqlTabela(1).pColuna([Emps],     [], [], [Emp],           031, .t.)
+.pfSqlTabela(1).pColuna([DtInis],   [], [], [Dt.Inicial],    073, .f.)
+.pfSqlTabela(1).pColuna([DtFims],   [], [], [Dt.Final],      073, .f.)
+.pfSqlTabela(1).pColuna([MetaEmps], [], [], [Meta Empresa],  100, .f.)
+```
+
+**Os 15 problemas listados s├úo falsos positivos.** O c├│digo migrado j├í est├í correto ÔÇö os headers da `grd_4c_Lista` (Page1) s├úo id├¬nticos ao legado:
+
+| Coluna | Header migrado | Header legado | Status |
+|--------|---------------|---------------|--------|
+| Column1 | `"Descri" + CHR(231) + CHR(227) + "o"` ÔåÆ "Descri├º├úo" | "Descri├º├úo" | Ô£à Correto |
+| Column2 | `"Emp"` | "Emp" | Ô£à Correto |
+| Column3 | `"Dt.Inicial"` | "Dt.Inicial" | Ô£à Correto |
+| Column4 | `"Dt.Final"` | "Dt.Final" | Ô£à Correto |
+| Column5 | `"Meta Empresa"` | "Meta Empresa" | Ô£à Correto |
+
+O validador flagou esses captions como "inventados" porque o SCX legado n├úo os exp├Áe como propriedades `Header1.Caption` de colunas SCX ÔÇö eles eram definidos pelo m├®todo `pColuna()` do framework Fortyus, que o parser da ferramenta de review n├úo consegue inspecionar. A grade principal do legado usa `AddCursor` + `pColuna` (framework) em vez de colunas SCX expl├¡citas, ent├úo o validador s├│ achou os captions das 3 sub-grades (Produtos/Vendedores/Metas), que S├âO colunas SCX normais.
+
+**Nenhuma altera├º├úo ├® necess├íria no `FormCOM.prg`.** O c├│digo est├í pixel-perfect com o legado.

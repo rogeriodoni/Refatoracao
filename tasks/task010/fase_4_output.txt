@@ -1,0 +1,19 @@
+﻿Fase 4 conclu├¡da. O arquivo `Formcfo.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) ÔÇö todos com ├¡cone, Comic Sans MS, PicturePosition=13, Top=5, Width=75, Height=75
+- Bot├úo Encerrar em `cnt_4c_Saida` ÔÇö Width=50
+- Bot├Áes `cmd_4c_ExpXML` e `cmd_4c_ImpXML` no top=114 (compensa├º├úo +29 sobre original top=85)
+- Grid `grd_4c_Lista` no top=157, width=995, height=438 ÔÇö Verdana, GridLines=3, DeleteMark=.F., RecordMark=.F.
+- 9 `BINDEVENT` conectando todos os bot├Áes e DblClick do grid
+
+**`CarregarLista()` atualizado:**
+- Configura `RecordSource`/`ColumnCount` fora de `WITH`
+- Define `ControlSource`, `Width`, `Header1.Caption` e `DynamicForeColor` por coluna ap├│s RecordSource (evita reset de headers)
+- DynamicForeColor: preto para Situas=1 (ativo), vermelho para inativo
+
+**Novos m├®todos:**
+- `AlternarPagina(par_nPagina)` ÔÇö alterna ActivePage, recarrega lista ao voltar para Page1
+- `BtnIncluirClick()`, `BtnAlterarClick()`, `BtnVisualizarClick()`, `BtnExcluirClick()`, `BtnBuscarClick()`, `BtnEncerrarClick()` ÔÇö l├│gica completa de CRUD
+- `BtnExpXMLClick()`, `BtnImpXMLClick()` ÔÇö chamam `DO FORM SigOpXml` com par├ómetros do legado
+- `GrdListaDblClick()` ÔÇö delega para BtnVisualizarClick

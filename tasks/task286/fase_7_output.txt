@@ -1,0 +1,11 @@
+﻿O arquivo est├í completo (2412 linhas, termina com `ENDDEFINE`). 
+
+**Resumo das altera├º├Áes da Fase 7:**
+
+1. **BINDEVENT para `cbo_4c_CboProvedor`** ÔÇö adicionado em `ConfigurarRodape()` (linha 1071): `InteractiveChange` ÔåÆ `CboProvedorInteractiveChange`
+
+2. **`CmdCmdloadClick()` completo** (linhas 1159-1190) ÔÇö agora verifica conectividade Dial-Up antes de chamar `MontarContainer()`: se `_TpConnect="D"` verifica `RasAtivas()` primeiro; caso contr├írio, carrega direto.
+
+3. **`CmdCmdconectClick()` completo** (linhas 1223-1253) ÔÇö implementa o fluxo real do legado: checa `RasAtivas()`, se desconectado e provedor selecionado, executa `RUN /N Rundll Rnaui.dll,RnaDial <provedor>` via macro.
+
+4. **`CboProvedorInteractiveChange()`** (linhas 1259-1264) ÔÇö handler que atualiza `this_nProvedor` e `this_cProvedor` quando o usu├írio seleciona um provedor Dial-Up no ComboBox.

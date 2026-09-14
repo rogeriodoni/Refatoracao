@@ -1,0 +1,8 @@
+﻿Phase 2 CRUD methods added to `C:\4c\projeto\app\classes\SigPrFemBO.prg` (2029 ÔåÆ 2209 lines):
+
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö maps params (Datai, Dataf, Demonstrativo, Empresa, CodMat, DopeBals, NdFechas, GruposDmo, ContasDmo) using `SELECT (alias)` + `EVALUATE`/`TratarNulo` guarded by `TYPE()`.
+- `Inserir()` ÔÇö validates Demonstrativo/Dataf/Datai order, calls `ProcessarAnalise()`, then `RegistrarAuditoria("EXECUCAO ANALISE PRODUCAO")`.
+- `Atualizar()` ÔÇö same validation, reprocessing path with `RegistrarAuditoria("REPROCESSAMENTO ANALISE PRODUCAO")`.
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö OPERACIONAL override, inserts into `LogAuditoria` (Usuario/DataHora/Operacao/Tabela=SIGPRFEM/ChaveRegistro/Detalhes) using `EscaparSQL`; swallows errors so audit failure doesn't break the operation.
+
+`ObterChavePrimaria()` already existed at line 62 (returns `this_cDemonstrativo`). All methods respect CLAUDE.md rules: no RETURN inside TRY/CATCH, CHR() codes for accents, `EscaparSQL`/no double-quoting, `MsgErro` only for real exceptions.

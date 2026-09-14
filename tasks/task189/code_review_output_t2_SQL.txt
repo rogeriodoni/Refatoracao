@@ -1,0 +1,15 @@
+﻿Encontrei o c├│digo legado original. Verificando as 3 condi├º├Áes flagadas contra o original em `tasks/task189/SigPrGlp_form_codigo_fonte.txt`:
+
+| Coluna flagada | Linha original | C├│digo original |
+|---|---|---|
+| `ESTOQUE` | 3803 | `If ThisForm.Reserva And (TmpFinal.Estoque = 0)` |
+| `GEREMPHS` | 4979 | `If TmpDcOpe.GerEmphs <> 1` |
+| `BXDESTS` | 5768/5793 | `If Inlist(crSigCdOpd.EstDests, 1, 2) And (crSigCdOpd.BxDEsts = 2/1)` |
+
+**Todas as 3 condi├º├Áes existem no c├│digo legado original.** O validador gerou falsos positivos neste caso.
+
+- `ESTOQUE` ÔåÆ condi├º├úo VFP `TmpFinal.Estoque = 0` ├® do legado (linha 3803 do SCX)
+- `GEREMPHS` ÔåÆ `TmpDcOpe.GerEmphs <> 1` ap├│s SELECT do SigOpCdc ├® do legado (linha 4979)
+- `BXDESTS` ÔåÆ `crSigCdOpd.BxDEsts = 2/1` em IF do loop de historico ├® do legado (linhas 5768/5793)
+
+**Nenhuma corre├º├úo ├® necess├íria.** O c├│digo migrado implementa corretamente a l├│gica do original. Este pass SQL n├úo requer altera├º├Áes no arquivo.

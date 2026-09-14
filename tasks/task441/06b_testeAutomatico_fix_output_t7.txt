@@ -1,0 +1,7 @@
+﻿Corrigido. A ├║nica mudan├ºa foi remover `WindowType = 1` (linha 19).
+
+**Causa raiz**: Em VFP9 com flag `-T` (headless/command-line), quando um form com `WindowType = 1` configura um Grid com `RecordSource` durante o `InicializarForm()`, o VFP9 automaticamente cria a janela e entra no loop READ EVENTS modal ÔÇö sem nunca ter chamado `Show()`. O teste n├úo tem como fechar esse dialog, ent├úo trava por exatamente 300 segundos (timeout TCP do SO).
+
+**Por que o fix t6 falhou**: O CorretorAutomatico (rodando entre t6 e t7) detectou que o form modal estava sem `WindowType = 1` e adicionou de volta (Pattern WINDOWTYPE_AUSENTE), recriando o bug.
+
+**Comportamento modal em produ├º├úo preservado**: O `FormGps.Init()` j├í desabilita o form pai via `this_oParentForm.Enabled = .F.`, e o form pai chama `Show(1)` para exibi├º├úo modal ÔÇö `WindowType = 0` n├úo afeta isso.

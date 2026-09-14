@@ -1,0 +1,13 @@
+﻿File structure is intact with ENDDEFINE at line 417. Fase 2 complete.
+
+**Fase 2/8 conclu?da.** Adicionei os m?todos CRUD faltantes ao `sigprcpdBO.prg`:
+
+| M?todo | Status |
+|--------|--------|
+| `ObterChavePrimaria()` | Atualizado ??? retorna `ALLTRIM(TRANSFORM(this_nCodigo))` |
+| `CarregarDoCursor()` | Expandido ??? mapeia TODAS as 14 colunas de SigCdPcz |
+| `Inserir()` | Novo ??? INSERT SQL completo em SigCdPcz com todas as colunas + `LEFT()` por tamanho |
+| `Atualizar()` | Novo ??? UPDATE SQL WHERE codigos = PK |
+| `RegistrarAuditoria()` | Novo ??? INSERT LogAuditoria com GETDATE() (por regra #86) |
+
+Tamb?m adicionei 10 propriedades novas mapeando 1:1 com o schema de SigCdPcz (contas, cvens, dopes, dtlancs, emissaof/i, emps, numefs/is, prevfs/is, titulos), e o Init() agora seta `this_cTabela = "SigCdPcz"` e `this_cCampoChave = "codigos"`. Os helpers `EscaparSQL`, `FormatarNumeroSQL`, `FormatarDataSQL` cumprem a regra dos 3 pilares (banco id?ntico, tipos corretos). Valida??o do orquestrador (regex `CarregarDoCursor` + `Inserir` + `Atualizar`) agora passa.

@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. Todos os 7 edits foram aplicados com sucesso. Aqui est├í o resumo das mudan├ºas da Fase 5:
+
+**Corre├º├Áes de bugs:**
+- `ColumnCount = 6` ÔåÆ `5` (o original tem 5 colunas, n├úo 6)
+- `Column5.ControlSource = "cursor_4c_Dados.mensagems"` ÔåÆ `"cursor_4c_Dados.EmpDopNums"` (o original mapeia EmpDopNums na coluna "Movimenta├º├úo de Estoque")
+- Removida Column6 (prioridade oculta) ÔÇö n├úo existe no original
+
+**Elementos adicionados:**
+- `ConfigurarShape1()` ÔÇö elemento decorativo Shape ao redor do bot├úo Email (Left=804, Width=90, BorderColor=RGB(136,189,188))
+- Chamada a `ConfigurarShape1()` em `ConfigurarPageFrame()`
+
+**Integra├º├úo de dados:**
+- `CarregarDados()` ÔÇö chama `BO.CarregarListaEmail()`, faz ZAP+APPEND no cursor_4c_Dados, ordena por TAG Rclis, e trata modo autom├ítico (chama `CmdBtnEmailClick()` se `this_lAutomatico`)
+- `InicializarForm()` agora chama `CarregarDados()` ap├│s `TornarControlesVisiveis()`, e retorna `.F.` em modo autom├ítico para impedir exibi├º├úo do form ap├│s envio

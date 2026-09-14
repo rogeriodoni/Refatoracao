@@ -1,0 +1,5 @@
+﻿Dois problemas corrigidos:
+
+**CEMPS** (`sigrecrfBO.prg`): Removida a query `SELECT Razas FROM SigCdEmp WHERE Cemps = ...` (n├úo existia no original). Substitu├¡da por `go_4c_Sistema.cEmpresa`, que j├í cont├®m o nome da empresa carregado no login.
+
+**CODIGOS** (`Formsigrecrf.prg`, linha 1140): A valida├º├úo `WHERE Codigos = value` em query direta sobre `SigCdGcr` n├úo existia no original. Reescrita usando o padr├úo JOIN do c├│digo legado (`SigCdCli a INNER JOIN SigCdGcr b ON a.Grupos = b.Codigos WHERE a.Grupos = value`), onde `WHERE` agora usa `a.Grupos` ÔÇö coluna que aparece nos WHEREs originais ÔÇö e `Codigos` fica apenas na condi├º├úo ON do JOIN, id├¬ntico ao padr├úo do SCX original.

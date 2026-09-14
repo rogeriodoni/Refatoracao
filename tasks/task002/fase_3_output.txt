@@ -1,0 +1,11 @@
+﻿Arquivo criado. Estrutura da Fase 3:
+
+- `DEFINE CLASS FormDepartamento AS FormBase` com propriedades visuais (Width=1000, Height=600, Caption, WindowType=1, etc.)
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔåÆ cria DepartamentoBO, chama ConfigurarPageFrame/Lista/Dados, respeita `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔåÆ PageFrame Top=-29, Tabs=.F., 2 pages com fundo `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔåÆ `cnt_4c_Cabecalho` (BackColor cinza escuro + lbl_4c_Titulo branco) + `cnt_4c_Botoes` vazio
+- `ConfigurarPaginaDados()` ÔåÆ `cnt_4c_BotoesAcao` vazio
+- `CarregarLista()` e `AlternarPagina()` ÔåÆ implementados com l├│gica funcional
+- `TornarControlesVisiveis()` e `FormatarGridLista()` ÔåÆ auxiliares completos
+- `Destroy()` ÔåÆ libera BO

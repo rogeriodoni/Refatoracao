@@ -1,0 +1,17 @@
+﻿O arquivo est├í completo e correto. A Fase 8/8 est├í conclu├¡da.
+
+**Resumo do que foi adicionado na Fase 8:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `FormParaBO()` | Transfere todos os 7 campos do formul├írio para as propriedades do BO (this_cSolicits, this_cEmps, this_cOperas, this_nDocs, this_cFpags, this_nValors, this_cMotivos + datas/tipos/lProducao) |
+| `BtnSalvarClick()` | Modo INCLUIR ÔåÆ delega para `BtnGeraSenhaClick`; Modo ALTERAR ÔåÆ `FormParaBO` + `Atualizar` + volta para lista |
+| `BtnCancelarClick()` | Limpa campos e volta para Page1 |
+| `HabilitarCampos(par_cModo)` | INCLUIR/ALTERAR = edit├ível; VISUALIZAR = ReadOnly em todos os campos; tamb├®m controla visibilidade dos bot├Áes de a├º├úo |
+| `AjustarBotoesPorModo()` | Habilita/desabilita bot├Áes da Page1 conforme presen├ºa de registro na lista |
+
+Al├®m disso, os m├®todos existentes foram atualizados:
+- `BtnIncluirClick` ÔåÆ chama `HabilitarCampos("INCLUIR")`
+- `BtnVisualizarClick` ÔåÆ chama `HabilitarCampos("VISUALIZAR")`
+- `BtnAlterarClick` ÔåÆ chama `HabilitarCampos("ALTERAR")`
+- `AlternarPagina` ÔåÆ chama `AjustarBotoesPorModo()` ao retornar para Page1

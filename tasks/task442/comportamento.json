@@ -1,0 +1,204 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 6,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "for ! Deleted", "fwBuscaExt", "fGravarLog", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDGR1",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGR1",
+      "evento": "Init",
+      "linhas": 18,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdAcU','pkChaves','crSigCdAcU','pkChaves',.f.)\n\t\t.AddCursor('SigCdGrA','Grupos','crSigCdGrA','Grupos',.f.)\n\t\t.AddCursor('SigCdAcB','pkChaves... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGR1.Commandgroup2",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "Select crSigCdAcUs\nlnReg = Recno()\nDelete\nGo Top\nCount for ! Deleted() to lnRegs\nGo lnReg\n\nThisForm.Grid1.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for ! Deleted",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGR1.GetDescri",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Parent.GetCodigo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGR1.GetDescri",
+      "evento": "Valid",
+      "linhas": 70,
+      "codigoOriginal": "Private lcSpace\n\nIf !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdUsu','CrUsuarios','NComps',This.Value,'Usuarios',.T.,.f.,[Not cAtivos='N'])\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('NComps','','Nome')\n\t\tm.loLista.mAddColuna('Usuarios','XXXXXXXXXX','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrUsuarios')\n\t\tThis.Value                  = Evaluate('CrUsuarios.NComps')\n\t\tThis.Parent.GetCodigo.Value = Evaluate('CrUsua... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGR1.GetCodigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGR1.GetCodigo",
+      "evento": "Valid",
+      "linhas": 72,
+      "codigoOriginal": "Private lcSpace\n\nIf Empty(This.Value)\n\tThis.Parent.GetDescri.Value = ''\nElse\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdUsu','CrUsuarios','Usuarios',This.Value,'Usuários',.T.,.f.,[Not cAtivos='N'])\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Usuarios','XXXXXXXXXX','Código')\n\t\tm.loLista.mAddColuna('NComps','','Nome')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrUsuarios')\n\t\tThis.Value                  = Evaluate('CrUsuarios.Usuarios')\n\t\tThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGR1.GetCodigo",
+      "evento": "GotFocus",
+      "linhas": 2,
+      "codigoOriginal": "Clear Typeahead\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGR1.GetGrupo",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "ThisForm.poDatamgr.SqlExecute([Select * from SigCdGrA Where Grupos = ']+This.Value+['],'csSigCdGrA')\n\nSelect csSigCdGrA\nIf ! Eof()\n\tMessageBox('Grupo Ja Cadastrado !!!',16,'')\n\tReturn .f.\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGR1.Commandgroup1",
+      "evento": "Click",
+      "linhas": 67,
+      "codigoOriginal": "Local grupos, usuarios, descricaos, barraforms, barraordem, programas, parametros, selbarras, cidchaves, lnErro1\n\nm.lnErro1 = ThisForm.poDataMgr.pnIdConn\n\nIf Empty(ThisForm.GetCodigo.Value)\n\tMessageBox('Usuario Invalido !!!',16, '')\n\tReturn\nEndif\nIf Empty(ThisForm.GetGrupo.Value)\n\tMessageBox('Grupo Invalido !!!',16, '')\n\tReturn\nEndif\n\nZap In crSigCdGrA\nAppend Blank In crSigCdGrA\nReplace Grupos With ThisForm.GetGrupo.Value In crSigCdGrA\nReplace nComps With ThisForm.GetGrupo.Value In crSigCdGrA\n=f... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog,fUniqueIds",
+        "metodosFormChamados": "Value) + ' Prog : ' + Alltrim,UpDate,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGR1.Commandgroup1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Release Windows",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDGR1.GetGrupo.Valid",
+      "queryOriginal": "ThisForm.poDatamgr.SqlExecute([Select * from SigCdGrA Where Grupos = ']+This.Value+['],'csSigCdGrA') ",
+      "tabelas": "SigCdGrA",
+      "colunas": "Grupos,Value+[],csSigCdGrA",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdGrA"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. A Fase 3 entregou:
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigPdM14.prg`** (565 linhas)
+
+**Estrutura criada:**
+- `DEFINE CLASS FormSigPdM14 AS FormBase` ÔÇö propriedades visuais exatas do original (800├ù600, DataSession=2, TitleBar=0, ControlBox=.F., modal, AlwaysOnTop)
+- Propriedades custom: `this_oParentForm`, `this_cPcEscolha`, `this_nRecnoAnt`, `this_nAntValue`, `this_nAntValueP`, `this_nCas`
+- `Init(par_oForm)` ÔÇö armazena refer├¬ncia ao form pai antes de `DODEFAULT()`
+- `InicializarForm()` ÔÇö troca datasession para a do form pai via `SET DATASESSION TO this_oParentForm.DataSessionId`, carrega `xNensi` no BO, inicializa `TmpDistrib` via `InicializarCursores`, chama todos os m├®todos de configura├º├úo
+- `ConfigurarPageFrame()` ÔÇö background `new_background.jpg`
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Cabecalho` com `lbl_4c_LblSombra` + `lbl_4c_LblTitulo`
+- `ConfigurarShape1()` ÔÇö decorativo `shp_4c_Shape1`
+- `ConfigurarContainerOperacao()` ÔÇö `cnt_4c_Operacao` com empresa/opera├º├úo/c├│digo NE (read-only)
+- `ConfigurarContainerMaterial()` ÔÇö `cnt_4c_Material` com material/qtde/peso/peso-f├íbrica (read-only)
+- `ConfigurarDescricao()` ÔÇö label + `txt_4c_Descr` na parte inferior
+- `PreencherContainerOperacao()` / `PreencherContainerMaterial()` ÔÇö preenchem com dados de `tmpnens` e BO
+- `TornarControlesVisiveis()` / `Destroy()`
+
+**Pr├│ximas fases:** Fase 4 adicionar├í o grid (10 colunas, `TmpDistrib`) e os bot├Áes `cmd_4c_Ok` / `cmd_4c_Cancelar`.

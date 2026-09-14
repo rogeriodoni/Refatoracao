@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `sigreaniBO.prg`:
+
+1. **[SQL-FILTRO-INVENTADO] EMPS**: `SELECT Razas FROM SigCdEmp WHERE Emps = ...` ÔåÆ `SELECT TOP 1 Razas FROM SigCdEmp` ÔÇö a condi├º├úo `WHERE Emps` n├úo existe no original, removida.
+
+2. **[SQL-FILTRO-INVENTADO] DMCONJS**: Removida a cl├íusula `OR (dmconjs >= ... AND dmconjs <= ...)` do WHERE do SELECT em `SigCdCli`. O original filtra apenas por `DMNASCS` e `DMCASAS`; a condi├º├úo `DMCONJS` foi inventada pela LLM. O processamento dos c├┤njuges no SCAN (via `m.dtncons`/`m.conjuges`) n├úo foi alterado ÔÇö esse c├│digo opera sobre o cursor j├í carregado, n├úo ├® uma condi├º├úo SQL.

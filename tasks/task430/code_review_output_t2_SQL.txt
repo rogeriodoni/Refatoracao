@@ -1,0 +1,28 @@
+﻿Analisei o problema em detalhe. Vou comparar o WHERE do legado com o migrado.
+
+**Original (SigCdFpr_form_codigo_fonte.txt):**
+- ├Ünica cl├íusula SQL WHERE expl├¡cita: `WHERE CodFinP = '<cods>'` (linha 312) ÔÇö busca em **SigCdPro** para verificar depend├¬ncias
+- Filtragem da lista SigCdFip era feita por `LocateCursor` (linha 223) ÔÇö sem SQL WHERE
+
+**C├│digo migrado FprBO.prg:**
+- `WHERE CodFinP = EscaparSQL(THIS.this_cCods)` (linha 179) ÔÇö correto, mesma query do original
+- `WHERE Cods = EscaparSQL(...)` (linhas 98, 149, 207, 222, 309) ÔÇö queries de CRUD por PK em SigCdFip
+- `WHERE <loc_cFiltro>` (linha 263) ÔÇö filtro din├ómico vindo do form (Buscar)
+
+---
+
+**Diagn├│stico: Falso positivo do validador**
+
+O detector SQL-FILTRO-INVENTADO comparou:
+- ├Ünica WHERE expl├¡cita do original = `CodFinP` (em SigCdPro)  
+- C├│digo migrado tem WHEREs com `Cods` (em SigCdFip)  
+- Sinalizou `Cods` como "inventado" por n├úo aparecer no original's SQL
+
+Mas os `WHERE Cods = ...` s├úo **corretos e necess├írios**:
+1. **CarregarPorCodigo / VerificarCodigoExistente**: SELECT por PK ÔÇö equivalentes aos `ChkRegister`/framework do original
+2. **Atualizar / ExecutarExclusao**: UPDATE e DELETE por PK ÔÇö equivalentes ao `ChkSave`/framework do original  
+3. **Buscar (Cods LIKE ...)**: tradu├º├úo correta do `LocateCursor([crSigCdFip], [Cods], ...)` do original
+
+A coluna `CodFinP` j├í est├í no lugar certo: apenas no check de depend├¬ncia `ExecutarExclusao` contra `SigCdPro` (linha 179 do BO). Remover os `WHERE Cods = ...` quebraria toda a funcionalidade CRUD e de busca.
+
+**Conclus├úo: nenhuma altera├º├úo de c├│digo necess├íria.** A detec├º├úo foi um falso positivo causado pelo contraste entre a ├║nica SQL WHERE expl├¡cita do legado (`CodFinP` em SigCdPro) e as WHEREs geradas pelo c├│digo migrado para opera├º├Áes CRUD na tabela `SigCdFip` via sua PK (`Cods`), que no legado eram abstra├¡das pelo framework VCX.

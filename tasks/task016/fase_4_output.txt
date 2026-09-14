@@ -1,0 +1,10 @@
+﻿`AlternarPagina` is now fully implemented at lines 2335ÔÇô2351. The method:
+- Sets `pgf_4c_Paginas.ActivePage` to the requested page
+- Toggles visibility of Page1 controls (buttons, exit container, filters, grid) when switching to Lista
+- Toggles `cnt_4c_BotoesDados` visibility when switching to Dados
+
+**FASE 4/8 is complete.** Summary of what was verified/done:
+
+- `ConfigurarPaginaLista()` ÔÇö already fully implemented (lines 124ÔÇô326): 5-column grid + 6 CRUD buttons with BINDEVENTs
+- `CarregarLista()` ÔÇö already fully implemented (lines 1764ÔÇô1806): executes `Buscar("")`, sets RecordSource + ColumnSource/Width/Headers for all 5 columns
+- `AlternarPagina(par_nPagina)` ÔÇö **added** (lines 2335ÔÇô2351): was called from 5 places but never defined; now properly switches ActivePage and toggles visibility of Page1/Page2 containers

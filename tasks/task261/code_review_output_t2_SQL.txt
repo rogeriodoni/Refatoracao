@@ -1,0 +1,18 @@
+﻿Tenho o schema completo de ambas as tabelas. Verifica├º├úo conclu├¡da:
+
+**SigMvCcr** ÔÇö linha `[cidchaves] [char](20) NOT NULL` **EXISTE** no schema.  
+**SigMvHst** ÔÇö `[cidchaves] [char](20) NOT NULL` tamb├®m **EXISTE** confirmado acima.
+
+O flag `[SQL-FILTRO-INVENTADO]` ├® um **falso positivo**. An├ílise:
+
+| Localiza├º├úo no c├│digo migrado | Uso de `cidchaves` | V├ílido? |
+|---|---|---|
+| `UPDATE SigMvCcr SET saldos WHERE cidchaves = ?` (RecalcularSaldosConta) | Identifica├º├úo de linha (PK), n├úo filtro de dataset | Ô£ô coluna existe |
+| `UPDATE SigMvHst SET sqtds WHERE cidchaves = ?` (RecalcularSaldosEstoque) | Identifica├º├úo de linha (PK), n├úo filtro de dataset | Ô£ô coluna existe |
+| `SELECT cidchaves FROM SigOpClU WHERE cpros=? AND emps=?` (RecalcularSaldosCompra) | `cidchaves` est├í no SELECT, n├úo no WHERE | Ô£ô sem filtro por cidchaves |
+
+**Por que o detector flagou:** A ferramenta compara as colunas do WHERE do original com as do migrado. O c├│digo original usava `Space(20) as CidChaves` em SELECTs DISTINCT (alias computado) e `IF Seek(Selecao.CidChaves)` em cursores VFP locais ÔÇö nunca um `WHERE cidchaves = ?` em SQL. Mas isso ├® porque o original fazia identifica├º├úo de linha via VFP SEEK, n├úo via SQL.
+
+**A tradu├º├úo para SQL est├í correta:** `UPDATE SigMvCcr SET saldos = ? WHERE cidchaves = ?` ├® o padr├úo can├┤nico de update linha-a-linha por PK. Remover o WHERE causaria `UPDATE SigMvCcr SET saldos = X` sem filtro ÔÇö atualizaria TODOS os registros.
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo `SigPrCccBO.prg` est├í correto neste ponto. O pass SQL n├úo requer mudan├ºas de c├│digo.

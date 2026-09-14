@@ -1,0 +1,23 @@
+﻿Ap├│s leitura completa de ambos os arquivos, o status ├® claro:
+
+**Formsigprema.prg e sigpremaBO.prg est├úo completamente implementados.** A Fase 7/8 do pipeline pede `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick` ÔÇö mas esses eventos **n├úo existem** no SIGPREMA original e n├úo pertencem a este form OPERACIONAL.
+
+O SIGPREMA original tem apenas:
+| Evento original | Implementado como |
+|---|---|
+| `Commandgroup1.Click` | `BtnEncerrarClick()` Ô£ô |
+| `btnEmail.Click` | `BtnEmailClick()` Ô£ô |
+| `SelTudo.Click` | `BtnSelTudoClick()` Ô£ô |
+| `apaga.Click` | `BtnApagaClick()` Ô£ô |
+| `grade.Column2.Header1.Click` | `HeaderContaClick()` Ô£ô |
+| `grade.Column3.Header1.Click` | `HeaderNomeClick()` Ô£ô |
+| `grade.Column4.Header1.Click` | `HeaderEmailClick()` Ô£ô |
+| `grade.Column6.InteractiveChange` | `ChkChecksChange()` Ô£ô |
+
+O BO implementa todos os m├®todos funcionais: `CarregarDados`, `ObterConfigSMTP`, `ImprimirDocumento`, `GerarPDF`, `ImprimirParaPDF`, `EnviarEmailCDO`, `ProcessarEnvioEmails`, `RegistrarLogEmail`.
+
+**A migra├º├úo do Formsigprema est├í completa.** N├úo h├í nada a adicionar nesta Fase 7/8 ÔÇö o template do pipeline foi gerado para forms CRUD e n├úo se aplica a este form OPERACIONAL. Adicionar stubs de `BtnIncluirClick`/etc. violaria a regra "ABSOLUTAMENTE PROIBIDO criar m├®todos Btn*Click com MsgAviso".
+
+Para finalizar a integra├º├úo, verifique se:
+1. `config.prg` carrega `sigpremaBO.prg` e `Formsigprema.prg`
+2. `menu.prg` tem o item `AbrirFormsigprema` no popup correto

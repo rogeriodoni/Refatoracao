@@ -1,0 +1,18 @@
+﻿Fase 6 conclu├¡da. Resumo do que foi implementado:
+
+**SigPrGloTBO.prg** ÔÇö atualiza├º├Áes:
+- Adicionadas propriedades `this_cTipos` e `this_cDescrs`
+- `this_cCampoChave = "Tipos"` (era `""`)
+- `ObterChavePrimaria()` retorna `ALLTRIM(THIS.this_cTipos)`
+- `ValidarDados()` valida que Tipo e Descri├º├úo n├úo est├úo vazios (usando `MsgAviso` + `CHR()` corretos)
+- `CarregarDoCursor()` carrega `Tipos` e `Descrs` do cursor com `SELECT (alias)` antes
+
+**FormSigPrGloT.prg** ÔÇö atualiza├º├Áes:
+- `ConfigurarPaginaDados()`: adicionados `lbl_4c_Descrs` + `txt_4c_Descrs` (Top=172, Left=115, Width=400, MaxLength=60)
+- `BtnIncluirClick()`: agora chama `LimparCampos()` + `HabilitarCampos(.T.)` antes de ir para Page2
+- `BtnVisualizarClick()`: carrega cursor ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.F.)` (somente leitura)
+- `BtnAlterarClick()`: carrega cursor ÔåÆ `EditarRegistro()` ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.T.)`
+- `BtnConfirmarClick()`: corrigido para chamar `FormParaBO()` diretamente (era `IF FormParaBO()` ÔÇö PROCEDURE n├úo retorna valor)
+- Novos m├®todos: `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`
+
+Nenhum lookup foi adicionado ÔÇö o original ├® um placeholder sem refer├¬ncia a tabelas externas, e a regra ├® n├úo inventar lookups que n├úo existiam.

@@ -1,0 +1,14 @@
+﻿Both the BO (`*BO.prg` pattern matches `sigmvccrBO.prg`) and the form (`Form*.prg` matches `Formsigmvccr.prg`) are auto-loaded by ADIR in config.prg. No manual SET PROCEDURE needed.
+
+Phase 8 is complete. Here's what was done:
+
+**Changes made:**
+
+1. **`Formsigmvccr.prg`** ÔÇö Updated header comment from "Fase 6/8" to "Fase 8/8 - COMPLETO". All Phase 8 methods were already implemented in previous phases: `BtnBuscarClick`, `BtnEncerrarClick`, `BtnConfirmarClick`, `BtnCancelarClick`, `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`, `AjustarBotoesPorModo()`.
+
+2. **`menu.prg`** ÔÇö Added:
+   - `DEFINE BAR 7 OF popMovimentos` ÔÇö "Conta Corrente Geral" menu item
+   - `ON SELECTION BAR 7 OF popMovimentos DO AbrirFormsigmvccr`
+   - `PROCEDURE AbrirFormsigmvccr()` ÔÇö follows the correct pattern (VARTYPE check, Show() sem par├ómetro, sem Release(), MostrarErro no catch)
+
+3. **No manual config.prg changes needed** ÔÇö ADIR already auto-loads `*BO.prg` (catches `sigmvccrBO.prg`) and `Form*.prg` from cadastros/ (catches `Formsigmvccr.prg`).

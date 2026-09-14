@@ -1,0 +1,14 @@
+﻿Arquivo criado com sucesso. **Fase 3/8 conclu├¡da.**
+
+`C:\4c\projeto\app\forms\cadastros\FormOpd.prg` criado com:
+
+- **DEFINE CLASS FormOpd AS FormBase** ÔÇö propriedades visuais (Height=600, Width=1000, DataSession=2, Caption din├ómico via CHR())
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` (FormBase cuida do resto)
+- **InicializarForm()** ÔÇö cria OpdBO, chama ConfigurarPageFrame, propaga Caption para labels, ativa Page1, chama CarregarLista (respeitando `gb_4c_ValidandoUI`)
+- **ConfigurarPageFrame()** ÔÇö PageFrame com Top=-29, Tabs=.F., 2 pages com imagem de fundo
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (com lbl_4c_Sombra/lbl_4c_Titulo) + `cnt_4c_Botoes` vazio (Left=542 can├┤nico); grid e bot├Áes CRUD na Fase 4
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` vazio (Left=618, Top=40 conforme original); campos e bot├Áes nas Fases 4-6
+- **CarregarLista()** ÔÇö funcional: chama `OpdBO.Buscar("")`, respeita RETURN fora do TRY/CATCH
+- **FormatarGridLista()** ÔÇö funcional m├¡nimo, pronto para receber grid na Fase 4
+- **TornarControlesVisiveis()** ÔÇö implementa├º├úo completa com recurs├úo em Pages e Containers
+- **Destroy()** ÔÇö libera BO, fecha cursores, chama DODEFAULT()

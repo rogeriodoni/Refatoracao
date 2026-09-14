@@ -1,0 +1,22 @@
+﻿**Fase 3 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\FormDCC.prg` criado com 308 linhas.
+
+## O que foi criado
+
+**Estrutura base do FormDCC (OPERACIONAL flat, sem PageFrame):**
+
+| Elemento | Detalhe |
+|---|---|
+| `DataSession = 1` | Acessa cursores do pai (xEestDsc, TprMvCab) diretamente |
+| `Init(par_oParentForm, par_nDataSes, par_cEmpresa)` | Captura params ÔåÆ desabilita pai ÔåÆ `DODEFAULT()` |
+| `InicializarForm()` | Cria DCCBO, background, cabe├ºalho, bot├Áes, total inicial |
+| `ConfigurarCabecalho()` | `cnt_4c_Cabecalho` 1000├ù80 cinza + lbl_4c_Sombra/Titulo |
+| `ConfigurarBotoes()` | Inserir (left=716), Excluir (811), Encerrar (906) ÔÇö escalados de 800ÔåÆ1000px |
+| `AtualizarTotal()` | Chama `DCCBO.CalcularTotal()`, atualiza `txt_4c_Total` via PEMSTATUS guard |
+| `CmdInserirClick/ExcluirClick/EncerrarClick` | Handlers PUBLIC (BINDEVENT Fase 7-8) |
+| `Destroy()` | Re-habilita form pai + `DODEFAULT()` |
+
+**Pr├│ximas fases:**
+- **Fase 4**: `grd_4c_Dados` (4 colunas: Motivo/Descri├º├úo/Valor/Observa├º├úo) + bind xEestDsc
+- **Fase 5**: `txt_4c_Total` (totalizador) + label
+- **Fase 6**: Campos auxiliares + labels de contexto
+- **Fase 7-8**: BINDEVENTs (ColMotivo.KeyPress ÔåÆ BuscarMotivos, ColValor.LostFocus ÔåÆ AtualizarTotal, bot├Áes Click)

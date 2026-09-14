@@ -1,0 +1,35 @@
+﻿A an├ílise est├í completa. O `FormSigReCmg.prg` **j├í est├í completo** como resultado das fases 1-7. Veja o status:
+
+## Fase 8 ÔÇö Verifica├º├úo Final
+
+### M├®todos listados na Fase 8 ├ù Status
+
+| M├®todo | Status | Justificativa |
+|--------|--------|---------------|
+| `BtnEncerrarClick()` | Ô£ô Presente (linha 1035) | Fecha form, limpa cursor, reabilita pai |
+| `BtnAnteriorClick()` | Ô£ô Presente (linha 855) | Navega grafico anterior |
+| `BtnProximoClick()` | Ô£ô Presente (linha 903) | Navega pr├│ximo grafico |
+| `BtnImprimirClick()` | Ô£ô Presente (linha 951) | Imprime grafico(s) |
+| `BtnBuscarClick()` | N/A | N├úo existe bot├úo Buscar neste subform |
+| `BtnSalvarClick()` | N/A | Form operacional sem CRUD |
+| `BtnCancelarClick()` | N/A | Form operacional sem CRUD |
+| `FormParaBO()` | Herdado vazio | FormBase tem implementa├º├úo vazia PROTECTED |
+| `BOParaForm()` | Herdado vazio | FormBase tem implementa├º├úo vazia PROTECTED |
+| `HabilitarCampos()` | N/A | Sem campos CRUD |
+| `LimparCampos()` | Herdado vazio | FormBase tem implementa├º├úo vazia PROTECTED |
+| `CarregarLista()` | N/A | Sem lista (dados v├¬m de `TmpResult` do pai) |
+| `AjustarBotoesPorModo()` | N/A | Sem modos CRUD |
+
+### Integra├º├úo
+
+- **config.prg**: Auto-carrega via `ADIR(*BO.prg)` em classes/ e `ADIR(Form*.prg)` em forms/operacionais/ ÔÇö **sem a├º├úo necess├íria**
+- **menu.prg**: **N├úo aplic├ível** ÔÇö `FormSigReCmg` ├® subform chamado por `FormSigRecmc` (Relat├│rio de Clientes que Mais Compram). N├úo tem entrada direta no menu.
+
+### Arquivos no disco
+
+| Arquivo | Tamanho | Modificado |
+|---------|---------|-----------|
+| `forms/operacionais/FormSigReCmg.prg` | 49.320 bytes | 17/05 01:37 |
+| `classes/SigReCmgBO.prg` | 11.942 bytes | 17/05 01:05 |
+
+**A Fase 8 est├í conclu├¡da.** O form j├í foi finalizado nas fases anteriores ÔÇö como ├® um subform OPERACIONAL de exibi├º├úo de gr├ífico OLE (sem CRUD), os m├®todos auxiliares padr├úo de formul├írios cadastro (FormParaBO, CarregarLista, AjustarBotoesPorModo, etc.) herdados vazios do FormBase s├úo suficientes.

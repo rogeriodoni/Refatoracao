@@ -1,0 +1,16 @@
+﻿Arquivo correto e completo. `SigReFtpBO.prg` agora tem todos os m├®todos da Fase 2:
+
+| M├®todo | Legado equivalente |
+|--------|-------------------|
+| `InicializarCursorSelecao()` | Bloco `SELECT/INDEX` do `Init()` |
+| `PrepararDados()` | `processamento` (Recall All + filtro por lMarca) |
+| `Visualizar()` | `visualizacao` (REPORT FORM ... PREVIEW) |
+| `Imprimir()` | `impressao` (REPORT FORM ... TO PRINTER PROMPT) |
+| `Documento()` | `documento` (REPORT FORM ... TO PRINTER) |
+| `MarcarTodos()` | `cmdSel.Click` (REPLACE ALL lMarca WITH .T.) |
+| `DesmarcarTodos()` | `CmdApg.Click` (REPLACE ALL lMarca WITH .F.) |
+| `ObterChavePrimaria()` | Retorna `this_cCodProd` |
+| `ObterMensagemErro()` | Exp├Áe `this_cMensagemErro` |
+| `Destroy()` | Fecha `cursor_4c_SelSigReFtp` sem tocar no `csDetalhes` do chamador |
+
+Pontos cr├¡ticos observados: `PrepararDados()` usa `RECALL ALL` antes de filtrar (para reutiliza├º├úo em preview m├║ltiplo), `SEEK()` com tag `OrdGru` e `EVALUATE()` para acessar `lMarca` via nome din├ómico do cursor, e `Destroy()` n├úo fecha `csDetalhes` (que pertence ao contexto do form chamador).

@@ -1,0 +1,8 @@
+﻿Fase 7 completa. O arquivo `FormSigReIdt.prg` agora possui todos os 4 eventos principais exigidos pela Fase 7 (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`), alem dos eventos especificos de REPORT que ja existiam (`BtnImprimirClick`, `BtnDocumentoClick`, `BtnSairClick`).
+
+Como SIGREIDT eh um `frmrelatorio` (sem CRUD real), os 3 metodos CRUD adicionados delegam para as acoes semanticamente equivalentes do relatorio:
+- `BtnIncluirClick` ? `BtnVisualizarClick` (gerar preview)
+- `BtnAlterarClick` ? `BtnImprimirClick` (reprocessar/imprimir)
+- `BtnExcluirClick` ? `BtnSairClick` (cancelar/fechar)
+
+Cada metodo tem implementacao real (chamada delegada) e documentacao explicando a semantica REPORT vs CRUD - sem TODOs, stubs vazios ou comentarios de placeholder.

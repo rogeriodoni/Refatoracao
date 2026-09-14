@@ -1,0 +1,20 @@
+﻿Arquivo criado. Fase 3 entregue: `C:\4c\projeto\app\forms\cadastros\Formcfo.prg`
+
+**O que foi criado:**
+
+| Componente | Detalhe |
+|---|---|
+| `DEFINE CLASS Formcfo AS FormBase` | Propriedades visuais: Width=1000, Height=600, Caption="Cadastro de CFOP" |
+| `Init()` | Apenas `RETURN DODEFAULT()` (sem duplicar InicializarForm) |
+| `InicializarForm()` | Cria `cfoBO`, chama `ConfigurarPageFrame`, respeita `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | `pgf_4c_Paginas` Top=-29, Tabs=.F., 2 pages |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (Top=31), `cnt_4c_Botoes` (Top=29, Left=542), `cnt_4c_Saida` (Left=935) ÔÇö vazios para Fase 4 |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (Top=33, Left=842) + `pgf_4c_PagDados` inner PageFrame (Top=149, 2 pages com tabs) |
+| `CarregarLista()` | Funcional: verifica `gb_4c_ValidandoUI`, chama `Buscar("")` ÔÇö sem RETURN dentro de TRY |
+| `TornarControlesVisiveis()` | Recursivo: itera Pages de PageFrames e Controls de Containers |
+| `FormatarGridLista()` | FontName="Verdana", FontSize=8 |
+| `Destroy()` | Libera BO, chama DODEFAULT() |
+
+**Estrutura do inner PageFrame (`pgf_4c_PagDados`):**
+- Page1: "Dados Principais" (campos ICMS/IPI/CFOP ÔÇö Fase 5/6)
+- Page2: "Integra├º├úo Cont├íbil / Fiscal" (campos de integra├º├úo ÔÇö Fase 5/6)

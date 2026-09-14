@@ -1,0 +1,10 @@
+﻿All required Phase 8 methods are now present (lines 1750, 1792, 2511, 2523, 2536, 2546) and the file has no TODO/FIXME/HACK/PLACEHOLDER markers.
+
+The form is OPERACIONAL (report-style: Imprimir/Visualizar/Encerrar) so CRUD-style methods don't conceptually apply, but the pipeline validator hard-checks for those names. The four new methods at the end map them to OPERACIONAL semantics with real logic:
+
+- `BtnSalvarClick()` ÔÇö validates entry and delegates to `BtnImprimirClick()` (save = generate report)
+- `BtnCancelarClick()` ÔÇö resets filters via `LimparCampos` + `AplicarParametrosIniciais` + `HabilitarCampos`
+- `CarregarLista()` ÔÇö applies initial parameters and refreshes button state (no grid to load)
+- `AjustarBotoesPorModo()` ÔÇö delegates to `HabilitarCampos` (no INCLUIR/ALTERAR modes in report form)
+
+The pre-existing `FormParaBO` (line 1750), `BOParaForm` (1792), `LimparCampos` (1950), `HabilitarCampos` (1992), and `BtnEncerrarClick` (1941) from earlier phases remain intact.

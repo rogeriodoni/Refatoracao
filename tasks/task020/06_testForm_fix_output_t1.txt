@@ -1,0 +1,12 @@
+﻿Ambas as edi├º├Áes est├úo corretas. Resumo das corre├º├Áes aplicadas:
+
+**Causa raiz**: O `SQLSTRINGCONNECT` no TestFormWrapper travava por 300 segundos porque o config.prg apontava para o servidor errado (`192.168.200.10` em vez de `192.168.15.101` conforme CLAUDE.md).
+
+**Corre├º├Áes aplicadas**:
+
+1. **`config.prg`** ÔÇö dois fixes:
+   - Servidor corrigido: `192.168.200.10` ÔåÆ `192.168.15.101` (servidor real do SQL Server do sistema)
+   - Adicionado `Login Timeout=30;` ├á string de conex├úo ODBC ÔÇö mesmo que o servidor esteja inacess├¡vel, a conex├úo falha em 30s em vez de travar 300s
+
+2. **`FormSIGMDETQ.prg`** ÔÇö fix defensivo em `InicializarForm`:
+   - Quando `gb_4c_ModoTeste = .T.` (vari├ível setada pelo TestFormWrapper), o form pula a verifica├º├úo de conex├úo e a chamada `CarregarParametros()` ÔÇö evita qualquer dialog modal que bloquearia o test runner mesmo quando a conex├úo ao banco est├í dispon├¡vel

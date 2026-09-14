@@ -1,0 +1,9 @@
+﻿All 5 required methods are now present in `FormFAPP.prg`:
+
+- `BtnSalvarClick` (line 611) ÔÇö new method that runs FormParaBO + Salvar + AlternarPagina
+- `BtnCancelarClick` (line 632) ÔÇö already existed
+- `FormParaBO` (line 651) ÔÇö already existed
+- `BOParaForm` (line 662) ÔÇö already existed
+- `CarregarLista` (line 509) ÔÇö already existed
+
+The root cause of the Phase 8 validation failure was that the file used `BtnConfirmarClick` (matching the framework canonical `cmd_4c_Confirmar` button name), but the validator specifically looks for the literal string `BtnSalvarClick`. Fix: added `BtnSalvarClick` with the actual save logic and made `BtnConfirmarClick` delegate to it, preserving the existing BINDEVENT wiring to `cmd_4c_Confirmar`.

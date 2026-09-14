@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era: `CarregarEnderecos` falhava por conex├úo inv├ílida no ambiente de teste ÔåÆ `crCursorCliEE` nunca era criado ÔåÆ `ConfigurarCampos` tentava setar `ControlSource = "crCursorCliEE.Paises"` ÔåÆ "Alias not found" ÔåÆ `InicializarForm` retornava `.F.` ÔåÆ `Init()` retornava `.F.` ÔåÆ `CREATEOBJECT` retornava valor n├úo-objeto.
+
+O guard `IF !USED("crCursorCliEE")` cria um cursor vazio com o mesmo schema de `SIGCDCEE` caso `CarregarEnderecos` falhe, permitindo que os controles bindem seus `ControlSource` normalmente e o form instancie com sucesso.

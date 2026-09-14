@@ -1,0 +1,18 @@
+﻿Fase 2 conclu├¡da. O arquivo `FpNBO.prg` agora est├í completo com **14 m├®todos** adicionados ao BO existente:
+
+**M├®todos CRUD standard (conforme especifica├º├úo da fase):**
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö `SELECT (par_cAlias)` + mapeia cIdChaves/Dopes/Fpags
+- `Inserir()` ÔÇö SQL INSERT com gera├º├úo de chave `LEFT(SYS(2015)+SYS(2015), 20)` + auditoria
+- `Atualizar()` ÔÇö SQL UPDATE por cIdChaves + auditoria
+- `ExecutarExclusao()` ÔÇö PROTECTED, DELETE por cIdChaves + auditoria
+- `ObterChavePrimaria()` ÔÇö j├í existia na Fase 1
+
+**M├®todos operacionais (espec├¡ficos do form SIGCDTBD):**
+- `InicializarCursorTrabalho()` ÔÇö cria cursor `cursor_4c_xOpe(Dopes C20, Fpags C12, Descrs C30)` com `SET NULL ON` + INDEX
+- `CarregarRegistros(par_cDopes)` ÔÇö SQLEXEC com INNER JOIN SigCdFpN+SigOpFp ÔåÆ APPEND FROM DBF()
+- `InserirLinhaVazia()` ÔÇö INSERT SPACE(12) no cursor de trabalho + seta `this_lGravaDados=.T.`
+- `ExcluirLinhaAtual()` ÔÇö DELETE + SKIP com navega├º├úo GO BOTTOM se EOF
+- `ValidarDuplicatas()` ÔÇö SELECT GROUP BY Fpags HAVING COUNT(*) > 1 ÔåÆ MsgAviso se houver
+- `ValidarLookupFpags(par_cFpags)` ÔÇö SELECT TOP 1 FROM SigOpFp ÔåÆ preenche `this_cDescrs`
+- `Salvar(par_cDopes)` ÔÇö fluxo completo: validar duplicatas ÔåÆ DELETE FROM SigCdFpN ÔåÆ SCAN INSERT novo ÔåÆ auditoria
+- `Destroy()` ÔÇö USE IN cursores + DODEFAULT() como ├║ltima linha

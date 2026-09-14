@@ -1,0 +1,17 @@
+﻿Arquivo criado e menu integrado. Fase 3 conclu├¡da.
+
+**O que foi criado:**
+
+- `C:\4c\projeto\app\forms\relatorios\FormSIGREHPE.prg` ÔÇö Form completo de relat├│rio FLAT (sem PageFrame CRUD, sem campos de filtro)
+  - `InicializarForm()` cria BO + cabe├ºalho + bot├Áes
+  - `ConfigurarCabecalho()` ÔÇö container cinza escuro com t├¡tulo duplo (sombra + branco)
+  - `ConfigurarBotoes()` ÔÇö CommandGroup can├┤nico com 4 bot├Áes: Visualizar/Imprimir/Excel/Sair, flush-direita em form 1000px (`Left=727`)
+  - `BtnVisualizarClick/BtnImprimirClick/BtnExcelClick/BtnCancelarClick` ÔÇö todos com l├│gica real
+  - `Destroy()` ÔÇö libera BO sem `.Release()` (Custom n├úo tem Release)
+
+**Menu integrado** (`menu.prg`):
+- BAR 138 (separador) + BAR 139 "Resumo de Cheques Pendentes" adicionados ao `popRelatorios`
+- `ON SELECTION BAR 139` ÔåÆ `AbrirFormSIGREHPE`
+- Procedure `AbrirFormSIGREHPE()` adicionada ao final do arquivo
+
+Como o form n├úo tem campos de filtro, a Fase 3 entregou o form **completo e funcional** ÔÇö as fases 4ÔÇô8 n├úo t├¬m conte├║do adicional a acrescentar.

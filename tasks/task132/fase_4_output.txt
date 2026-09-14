@@ -1,0 +1,13 @@
+﻿O arquivo foi atualizado corretamente. A Fase 4/8 est├í conclu├¡da para este formul├írio REPORT.
+
+**O que foi adicionado:**
+
+- **BINDEVENT** no final de `ConfigurarBotoes()` ÔÇö vincula o clique do `cmg_4c_Botoes` ao handler `CmgBotoesClick`
+- **`CmgBotoesClick()`** ÔÇö roteia para o handler correto conforme `cmg_4c_Botoes.Value` (1-4)
+- **`BtnVisualizarClick()`** ÔÇö chama `this_oRelatorio.Visualizar()` (preview ambas as passagens)
+- **`BtnImprimirClick()`** ÔÇö chama `this_oRelatorio.Imprimir()` (com di├ílogo de impressora)
+- **`BtnArquivosClick()`** ÔÇö chama `this_oRelatorio.ImprimirDireto()` (equivalente ao loop de `Passagem 1 e 2` do DocExcel original)
+- **`BtnSairClick()`** ÔÇö chama `THIS.Release()`
+- **`FormParaRelatorio()`** ÔÇö mant├®m o contrato arquitetural; sem campos filtro a transferir pois o BO acessa os cursores do ParentForm diretamente
+
+> **Nota:** Phase 4 foi adaptada para frmrelatorio FLAT. N├úo h├í `ConfigurarPaginaLista()` nem `AlternarPagina()` pois o form n├úo tem PageFrame de duas p├íginas ÔÇö o template gen├®rico da fase n├úo se aplica a forms REPORT. O equivalente funcional foi adicionar os handlers de bot├úo que ficaram pendentes da Fase 3.

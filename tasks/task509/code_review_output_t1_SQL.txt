@@ -1,0 +1,18 @@
+﻿Confirmado. O c├│digo legado mostra:
+
+```
+.AddCursor('SigCdGcr','Codigos','crSigCdGcr','','')
+fAcessoContab(Usuar,'C',this.value,...)
+fAcessoContab(Usuar,'D',this.value,...)
+```
+
+Ambos os alertas `SQL-FILTRO-INVENTADO` s├úo **falsos positivos**. O detector comparou os WHERE do `BuscarGrupoGcr` (que consulta `SigCdGcr`) contra as colunas de `SIGCDREC` (que usa `grupos`), mas s├úo tabelas diferentes:
+
+- `SIGCDREC.grupos` ÔåÆ FK para `SigCdGcr.codigos`
+- `SigCdGcr` tem colunas `codigos` (PK) e `descrs` ÔÇö confirmado pelo legado (`.AddCursor('SigCdGcr','Codigos',...)`) e pelo `docs/lookup_implementation.md`
+
+O c├│digo migrado est├í **correto**:
+- `WHERE codigos = X` no tipo "C" ÔåÆ pesquisa por c├│digo em `SigCdGcr` Ô£ô  
+- `WHERE descrs LIKE X%` no tipo "D" ÔåÆ pesquisa por descri├º├úo em `SigCdGcr` Ô£ô
+
+O detector errou porque o "WHERE original usa: GRUPOS" refere-se ├á tabela `SIGCDREC` (cursor principal), n├úo ├á `SigCdGcr` (lookup). Nenhuma altera├º├úo necess├íria nos arquivos ÔÇö o c├│digo SQL est├í correto.

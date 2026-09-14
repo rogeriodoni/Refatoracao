@@ -1,0 +1,12 @@
+﻿Fase 3 completa. Reescrevi `C:\4c\projeto\app\forms\operacionais\FormSigPrGloT.prg` com a estrutura base exigida pela valida├º├úo:
+
+- **DEFINE CLASS FormSigPrGloT AS FormBase** com propriedades (`this_oBusinessObject`, `this_cModoAtual`, `this_cTituloForm`) e cabe├ºalho can├┤nico (Width=1000, Height=600, TitleBar=0, DataSession=2).
+- **Init()** ÔåÆ `RETURN DODEFAULT()`.
+- **InicializarForm()** com `SET DATE TO BRITISH` + `SET CENTURY ON` (fix DataSession=2), cria BO, monta PageFrame e containers, ativa Page 1, chama `TornarControlesVisiveis()`; CATCH verboso com linha e procedure.
+- **ConfigurarPageFrame()** ÔåÆ PageFrame com 2 p├íginas (Page1=Lista, Page2=Dados), `Top=-29`, `Tabs=.F.`, `Height=THIS.Height+29`, `Picture=fundo_cad_1003.jpg` em ambas.
+- **ConfigurarPaginaLista()** ÔåÆ `cnt_4c_Cabecalho` (cinza opaco RGB(100,100,100), Top=31 compensado) + `cnt_4c_Botoes` vazio no lado direito (Left=542, Width=390, Top=29).
+- **ConfigurarPaginaDados()** ÔåÆ `cnt_4c_BotoesAcao` vazio (Left=842, Width=160, Top=33).
+- **TornarControlesVisiveis()** recursivo, itera Pages de PageFrame e Controls de containers.
+- **Destroy()** libera BO + `DODEFAULT()`.
+
+Bot├Áes CRUD, grid e campos ser├úo adicionados nas fases 4-8.

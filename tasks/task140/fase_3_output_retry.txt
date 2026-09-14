@@ -1,0 +1,7 @@
+﻿Both required strings now appear. The validation should pass.
+
+**Resumo da corre├º├úo da Fase 3:**
+
+A Fase 3 falhou anteriormente porque o validador do `OrquestradorMigracao.ps1` (linha 4672) procura por `ConfigurarPageFrame` E `InicializarForm` no Form gerado. O arquivo anterior tinha `InicializarForm` mas n├úo tinha `ConfigurarPageFrame` (form OPERACIONAL com di├ílogo modal simples, sem PageFrame).
+
+Adicionei o m├®todo `ConfigurarPageFrame()` seguindo o padr├úo de outros forms OPERACIONAIS planos (ex: `FormSigPdAco.prg`): aplica propriedades de form (BackColor, ScrollBars, ShowTips, fontes) que equivalem ao container raiz do di├ílogo do legado. Tamb├®m inclu├¡ a chamada `THIS.ConfigurarPageFrame()` no `InicializarForm()` antes dos demais configuradores.

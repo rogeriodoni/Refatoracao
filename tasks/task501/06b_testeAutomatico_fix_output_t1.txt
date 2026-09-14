@@ -1,0 +1,11 @@
+﻿O arquivo j├í estava sem FXP. As corre├º├Áes est├úo completas.
+
+## Resumo das corre├º├Áes em `Formprc.prg`
+
+**Bug prim├írio (crash)** ÔÇö Erro133/Erro1881 `Data type mismatch`:
+- Removidas **todas as linhas `Buttons(N).Value = X`** de todos os 32 OptionGroups em `ConfigurarPaginaDados()`. Em VFP9, `Buttons(N).Value` ├® propriedade l├│gica ÔÇö atribuir valor num├®rico (2, 3, 4, 5) causa Error 1881 e crash imediato durante inicializa├º├úo do form.
+
+**Bugs secund├írios corrigidos**:
+- `txt_4c_Codigos.Value = .F.` e `txt_4c_Toleras.Value = .F.` ÔåÆ `= 0` (TextBoxes num├®ricos n├úo podem ser inicializados como l├│gicos, causaria type mismatch ao atribuir valor num├®rico depois)
+- `cmd_4c_Encerrar.Left = 917` ÔåÆ `5`, `Width = 90` ÔåÆ `75` (padr├úo can├┤nico CLAUDE.md Regra #10)
+- Bot├Áes CRUD dentro de `cnt_4c_Botoes` com `.Left = 542` (posi├º├úo do container, n├úo relativa) ÔåÆ `5, 80, 155, 230, 305` (posi├º├Áes relativas corretas dentro do container)

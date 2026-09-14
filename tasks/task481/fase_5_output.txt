@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. A Fase 5 foi conclu├¡da com sucesso.
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+
+1. **`lbl_4c_Label8`** ÔÇö Label "C├│digo :" (Say8: Top=199, Left=185, Width=42, compensa├º├úo +29)
+2. **`txt_4c_Codigo`** ÔÇö TextBox para o c├│digo (getCods: Top=196, Left=231, Width=31, MaxLength=5)
+3. **`lbl_4c_Label1`** ÔÇö Label "Descri├º├úo :" (Say1: Top=226, Left=172, Width=55)
+
+**Tamb├®m criado o m├®todo `ValidarCodigo()`** (PUBLIC, ligado via BINDEVENT no LostFocus do txt_4c_Codigo), que replica o comportamento do `getCods.Valid` do legado: verifica duplicidade em modo INCLUIR consultando `SigEtOco WHERE cods = valor` e limpa o campo + devolve o foco se j├í cadastrado.
+
+**Fase 6/8** adicionar├í os campos restantes: `txt_4c_Descrs` (getDescrs) e `chk_4c_Opt_Justif` (Opt_Justif).

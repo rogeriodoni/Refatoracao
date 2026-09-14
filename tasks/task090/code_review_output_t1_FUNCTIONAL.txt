@@ -1,0 +1,9 @@
+﻿Corre├º├úo aplicada. Resumo da an├ílise:
+
+**├Ünica corre├º├úo real necess├íria:**
+- `obj_4c_OptAnaSin` ÔÇö adicionado `.Themes = .F.` em Buttons(1) e Buttons(2) (ambos j├í tinham `.Left`, `.Top`, `.AutoSize`, `.ForeColor` definidos corretamente).
+
+**Falsos positivos confirmados:**
+- **[METODO-INEXISTENTE] `THIS.Width()`**: n├úo existe nenhuma chamada `THIS.Width()` no arquivo ÔÇö j├í estava resolvido.
+- **[LAYOUT-POSITION] 18 erros com diff=80px**: todos os controles est├úo dentro de `pgf_4c_Paginas.Page1` (PageFrame com `Top=80`), portanto `Top_Page1 = Top_original - 80` preserva a posi├º├úo visual correta. O validador comparou coordenadas da Page com coordenadas do SCX original sem compensar o offset do PageFrame.
+- **[LAYOUT-POSITION] optAnaSin Top=5**: c├│digo atual tem `Top=267` (= 347ÔêÆ80), correto ÔÇö o validador rodou em vers├úo anterior do arquivo.

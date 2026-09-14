@@ -1,0 +1,14 @@
+﻿A Fase 7/8 j├í est├í conclu├¡da. Os quatro m├®todos foram implementados em fases anteriores:
+
+- **BtnIncluirClick** (linha 2498): Gera pr├│ximo Ndope via `MAX(Ndopes)+1`, chama `NovoRegistro()`, limpa campos, habilita edi├º├úo, navega para Page2
+- **BtnVisualizarClick** (linha 2541): Verifica sele├º├úo, carrega por c├│digo, modo VISUALIZAR, desabilita campos, BOParaForm
+- **BtnAlterarClick** (linha 2570): Verifica sele├º├úo, carrega por c├│digo, `EditarRegistro()`, modo ALTERAR, habilita campos, BOParaForm
+- **BtnExcluirClick** (linha 2600): Confirma exclus├úo, carrega por c├│digo, chama `Excluir()`, recarrega lista
+
+Todos seguem os padr├Áes corretos:
+- `LOCAL loc_lResultado` com `RETURN` fora do TRY/CATCH Ô£ô
+- `MsgConfirma()` comparado como logical (n├úo `= 6`) Ô£ô
+- `EditarRegistro()` chamado antes de navegar para alterar Ô£ô
+- `this_cModoAtual` setado antes de `HabilitarCampos()` Ô£ô
+
+**A Fase 7/8 j├í estava implementada desde a Fase 6.** O arquivo FormOTI.prg est├í completo com 4375 linhas e ENDDEFINE correto.

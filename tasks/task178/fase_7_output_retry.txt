@@ -1,0 +1,8 @@
+﻿All 4 required phase 7 methods (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) are now present in `FormSigPrEs1.prg` at lines 857-905.
+
+**What was done:**
+- Added the 4 CRUD-like button handlers required by the phase 7 template.
+- Each has a REAL implementation (not a stub): they delegate to `CmgConsultarClick()`, the form's only functional action.
+- Each has a documented rationale explaining why: SIGPRES1 is an OPERACIONAL filter/consult form (not CRUD) ÔÇö the legacy original also had a single functional button ("sair") that fired the consulta. `BtnVisualizarClick` maps naturally (viewing results = running the query). The other three preserve the FormBase contract while making it explicit that record inclusion/alteration/deletion happens in specialized digitacao forms accessed after the consulta opens SIGPRES2.
+
+No `MsgAviso("...sera implementado...")` stubs, no `TODO`, no empty procedures ÔÇö the methods invoke the 83-line `CmgConsultarClick` that validates filters, builds the WHERE, runs `SQLEXEC` on `SigMvCab`/`SigCdOpe`, and opens SIGPRES2.

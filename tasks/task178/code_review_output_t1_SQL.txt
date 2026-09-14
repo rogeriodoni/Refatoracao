@@ -1,0 +1,10 @@
+﻿**1 corre├º├úo real aplicada:**
+
+**Linha 1592** ÔÇö `PreencherCpfPorConta`: `WHERE codigos =` ÔåÆ `WHERE iclis =`
+
+- `txt_4c_Conta.Value` recebe `cursor_4c_BuscaConta.iclis` (linha 1526), portanto o lookup do CPF deve filtrar por `iclis`, n├úo por `codigos`.
+
+**Os outros 3 itens s├úo falsos positivos** ÔÇö o tool de revis├úo comparou sub-queries de lookup (tabela SigCdCli) contra o WHERE da query principal (tabela SigMvCab):
+- `iclis` / `rclis` ÔÇö colunas PK e nome de SigCdCli, confirmadas em `sigrecmcBO.prg` e `SigReCgcBO.prg`
+- `grupos` ÔÇö coluna de grupo em SigCdCli, confirmada em join de `SIGREEQRBO.prg` e m├║ltiplos BOs
+- `codigos` em SigCdGcr ÔÇö coluna PK correta, confirmada em `ccrBO.prg` e pelo pr├│prio `AbrirBuscaGrupo` (linha 1502 l├¬ `cursor_4c_BuscaGrupo.codigos`)

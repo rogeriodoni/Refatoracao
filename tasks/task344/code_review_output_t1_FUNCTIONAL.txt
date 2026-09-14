@@ -1,0 +1,9 @@
+﻿Todas as corre├º├Áes foram aplicadas com sucesso. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL + CONTAINER-TOGGLE]** ÔÇö `TornarControlesVisiveis()` agora filtra via INLIST: os containers `CNT_4C_CABECALHO`, `CNT_4C_SAIDA`, `CNT_4C_BOTOESACAO` fazem recurs├úo nos filhos mas n├úo t├¬m Visible for├ºado; `CNT_4C_COPIARACESSO` ├® pulado completamente (permanece `.F.` controlado por bot├úo). A linha 494 (`cnt_4c_CopiarAcesso.Visible = .F.`) deixa de ser necess├íria como workaround, mas n├úo causa dano.
+
+**[GRID-SQLEXEC]** ÔÇö Os 4 m├®todos (`CarregarGruposGrid`, `CarregarEmpresasGrid`, `CarregarAcessosGrid`, `CarregarBarraGrid`) agora usam cursor tempor├írio (`*Temp`): na **primeira carga** faz `SELECT * FROM temp INTO CURSOR` e configura o grid; em **reloads** faz `ZAP + APPEND FROM DBF()` preservando colunas, CheckBoxes e defini├º├Áes existentes do grid.
+
+**[GRID-HEADER]** ÔÇö Corrigidos os dois headers confirmados pelo legado: `"Par" + CHR(226) + "metro"` ÔåÆ `"Parametro"` (linhas 686 e 1814) e `"Tooltip"` ÔåÆ `"Tool Tip Text"` (linha 1854).
+
+**[LAYOUT-POSITION]** ÔÇö Os 3 OptionGroups movidos para posi├º├Áes do legado: `opt_4c_Optsenhadia` (Top 181ÔåÆ213, Left 10ÔåÆ148), `opt_4c_Optlibpesag` (Top 208ÔåÆ240, Left 10ÔåÆ148), `opt_4c_Optlibprod` (Top 235ÔåÆ266, Left 10ÔåÆ148). Os issues de `lbl_4c_Cargo` e `lbl_4c_Departamento` s├úo falsos positivos ÔÇö o checker comparou os labels (Left=10, correto para labels) contra os textboxes legados (Left=152); os `txt_4c_Cargo` e `txt_4c_Departamento` j├í estavam corretamente em Left=152.

@@ -1,0 +1,8 @@
+﻿4 corre├º├Áes aplicadas em `Formsigpres2.prg`:
+
+| Falha | Causa | Fix |
+|-------|-------|-----|
+| `CarregarLista` ÔÇö nenhum cursor criado | Bloco `gb_4c_ValidandoUI` retornava sem criar cursor | `CREATE CURSOR cursor_4c_Dados` vazio no branch de valida├º├úo |
+| `ModoIncluir` ÔÇö `ALTERNARPAGINA is not found` | `AlternarPagina` era `PROTECTED` (inacess├¡vel de fora) | Removido `PROTECTED` ÔåÆ m├®todo `PUBLIC` |
+| `ModoVisualizar` ÔÇö `AJUSTARBOTOESPORMODO is not found` | `AjustarBotoesPorModo` era `PROTECTED` | Removido `PROTECTED` ÔåÆ m├®todo `PUBLIC` |
+| `BtnIncluirNavegacao` ÔÇö ficou em Page1 | `BtnIncluirClick` chamava `AlternarPagina(1)` | Corrigido para `AlternarPagina(2)` |

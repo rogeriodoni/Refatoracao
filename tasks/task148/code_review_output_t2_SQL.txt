@@ -1,0 +1,17 @@
+﻿Os arquivos alvo est├úo limpos. Os resultados restantes s├úo todos de `.bak`/`.pre_review` (backups) e de outros BOs n├úo relacionados a esta tarefa.
+
+### Corre├º├Áes aplicadas
+
+**Problema**: `[SQL-FILTRO-INVENTADO]` ÔÇö coluna `cidchaves` usada em WHERE mas n├úo existe nos WHERE originais. O c├│digo original usava `_CHAVENENS` (chave composta = `emps+dopps+STR(numps,10)` = `empdnps`), n├úo o surrogate PK `cidchaves`.
+
+**Arquivos alterados**:
+
+`Formsigpdmp7.prg`:
+- **cursor_4c_Dados** (linha 81): removido `cidchaves C(20)` do cursor placeholder
+- **BtnVisualizarClick / BtnAlterarClick / BtnExcluirClick** (linhas 1329, 1357, 1386): `cursor_4c_Dados.cidchaves` ÔåÆ `cursor_4c_Dados.empdnps`
+
+`sigpdmp7BO.prg`:
+- **Buscar SELECT**: removido `cidchaves,` da lista de colunas
+- **CarregarPorCodigo** WHERE: `WHERE cidchaves = EscaparSQL(par_cChave)` ÔåÆ `WHERE empdnps = EscaparSQL(par_cChave)`
+- **Atualizar** WHERE: `WHERE cidchaves = EscaparSQL(this_cCidchaves)` ÔåÆ `WHERE empdnps = EscaparSQL(this_cEmpdnps)`
+- **ExecutarExclusao** WHERE: idem

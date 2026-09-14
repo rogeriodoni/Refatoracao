@@ -1,0 +1,31 @@
+﻿Everything looks well-structured. Here's a summary of what was implemented:
+
+**FASE 9 - ConfigurarPgpgComposicao() complete implementation:**
+
+**Added to `ConfigurarPaginaDados()`**: Call to `THIS.ConfigurarPgpgComposicao()` before `TornarControlesVisiveis`.
+
+**New `PROTECTED PROCEDURE ConfigurarPgpgComposicao()`** (lines 691-2426) implementing:
+- 3 cursor placeholders: `cursor_4c_Compo`, `cursor_4c_SubCp`, `cursor_4c_Grupo`
+- `grd_4c_Compo` (14 columns, pixel-perfect positions from layout.json)
+- `grd_4c_SubCp` (15 columns)
+- `grd_4c_Grupo` (3 columns, ReadOnly)
+- `cnt_4c_BotoesCompo` container with 5 CommandButtons (Insert/Delete/Calc/Update/Weights)
+- `cnt_4c_BotoesSubCp` container with 2 CommandButtons (Insert/Delete)
+- `cmd_4c_CalcVals` button
+- `chk_4c_LiberaCusto` / `chk_4c_LiberaVenda` checkboxes
+- `chk_4c_PlanCus` / `chk_4c_PlanVen` / `chk_4c_PVenda` checkboxes
+- 2 Shape separators
+- All pricing/cost textboxes (getPcus, getFcusto, getCustof, getMoec, getMoepc, getMoecusf, getPesom, GetCotaCalcP, getMargem, GetStatus, getMarkupA, getftio, getPvideal, getFvenda, getPven, getMoeda, getMoepv, getMoev, GetMftio, GetPftio, FIdeals, FAtuals, GetEncarg, GetCmkpc, GetPftioc)
+- All labels (with CHR() codes for Portuguese accents)
+- `cnt_4c_MtPrima` container with ComboBox and 9 child controls
+- BINDEVENT for all events
+
+**31 new PUBLIC handler procedures** (lines 2428-3222):
+- Grid AfterRowColChange handlers
+- Checkbox Click handlers (enable/disable dependent fields)
+- All button Click handlers
+- All textbox LostFocus/KeyPress handlers
+- Lookup methods for Moeda, FtioCusto, FtioVenda, Status, MatP
+- `CalcPrecoCompo()` helper calling BO.CalcPreco()
+- `ValidarMoedaCompo()` shared validator
+- `AbrirLookupMoedaCompo()` shared lookup opener

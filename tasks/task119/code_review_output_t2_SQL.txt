@@ -1,0 +1,10 @@
+﻿As corre├º├Áes est├úo corretas. Resumo do que foi feito:
+
+**DTBASES** ÔÇö falso positivo: a condi├º├úo `WHERE DtBases IS NOT NULL` no BO ├® tradu├º├úo exata do original `Where Not DtBases Is Null`. Sem altera├º├úo.
+
+**CONTAS e GRUPOS** ÔÇö removidos os filtros inventados em dois locais do Form:
+
+- `ValidarCdEstoque` (linha 1463): removido `WHERE Contas = ...` e o bloco `AND Grupos = ...`
+- `AbrirBuscaEstoque` (linha 1491): removido `WHERE Contas IS NOT NULL AND LEN(RTRIM(Contas)) > 0` e o bloco `AND Grupos = ...`
+
+Ambas as queries agora fazem `SELECT DISTINCT Contas FROM SigCdBal` sem filtros inventados, alinhando com o padr├úo do original que fazia `SELECT * FROM SigCdBal` sem WHERE por Contas/Grupos.

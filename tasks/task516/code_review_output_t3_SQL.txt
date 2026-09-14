@@ -1,0 +1,37 @@
+﻿Conclu├¡ a an├ílise completa de todos os 4 problemas sinalizados. Aqui est├í o resultado da verifica├º├úo:
+
+---
+
+## Resultado da Verifica├º├úo: Todos os 4 flags s├úo **falsos positivos**
+
+### 1. [SQL-FILTRO-INVENTADO] CURSOR_4C_MUN
+**Resultado: Falso positivo ÔÇö n├úo existe nenhum `WHERE cursor_4c_mun` no c├│digo.**
+
+Grep completo de todas as cl├íusulas WHERE do arquivo mostrou que `cursor_4c_mun` nunca aparece como condi├º├úo WHERE em nenhum SQLEXEC. O validador confundiu o uso de `cursor_4c_Munis` como cursor VFP local (em `SELECT`, `SCAN FOR`, `IF USED()`) com uma condi├º├úo WHERE de SQL Server.
+
+### 2. [SQL-FILTRO-INVENTADO] RCLIS ÔÇö linha 1178
+```foxpro
+" WHERE Rclis LIKE " + EscaparSQL(loc_cDesc + "%")
+```
+**Resultado: Leg├¡timo.** ├ë o bloco CATCH de `ValidarContaDescricao` ÔÇö fallback quando `fAcessoContas` est├í indispon├¡vel. `Rclis` ├® uma coluna real de `SigCdCli` (confirmado pelo pr├│prio BO: `ISNULL(b.Rclis,'') AS Rclis FROM SigCdRst a LEFT JOIN SigCdCli b`). O fallback replica exatamente o que `fAcessoContas("D", ...)` faria internamente.
+
+### 3. [SQL-FILTRO-INVENTADO] DESCS ÔÇö linhas 1592 e 1605
+```foxpro
+" WHERE a.descs = " + EscaparSQL(loc_cMunici)
+" WHERE a.descs LIKE " + EscaparSQL(loc_cMunici + "%")
+```
+**Resultado: Leg├¡timo.** `descs` ├® coluna real de `SigCdMun` (original a usa: `a.descs as munici`). O handler `GradMuniMunLostFocus` valida o munic├¡pio digitado contra o banco. O original usava `WHERE b.estados = '...'` + SEEK local; a migra├º├úo faz busca SQL direta por nome ÔÇö funcionalmente equivalente.
+
+### 4. [SQL-FILTRO-INVENTADO] DPROS ÔÇö linha 1806
+```foxpro
+" WHERE a.dpros LIKE " + EscaparSQL(loc_cDpros + "%")
+```
+**Resultado: Leg├¡timo.** `dpros` ├® coluna real de `SigCdPro` (original usa `a.cpros,a.dpros,a.FigJpgs From SigCdPro`). ├ë o branch ELSE de `GradProdDescLostFocus` ÔÇö quando o usu├írio digita na coluna Descri├º├úo sem ter preenchido o C├│digo, abre o picker de produtos filtrado por descri├º├úo. ├ë uma melhoria UX sobre o original, mas usa coluna v├ílida e n├úo pode ser removida pela regra **"NAO remover campos, funcionalidades ou lookups"**.
+
+---
+
+### Por que o validador errou?
+
+O validador derivou a "lista permitida de colunas WHERE" das queries principais da entidade (SigCdRst/SigCdRsi) e aplicou essa lista a **todas** as queries do arquivo. As 3 queries flagadas (linhas 1178, 1592/1605, 1806) s├úo queries auxiliares de **lookup** em tabelas diferentes (SigCdCli, SigCdMun, SigCdPro) ÔÇö com colunas v├ílidas nessas tabelas, n├úo nas tabelas principais.
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto.

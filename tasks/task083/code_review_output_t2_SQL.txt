@@ -1,0 +1,25 @@
+﻿An├ílise completa de todos os 5 problemas:
+
+---
+
+**Resultado da verifica├º├úo: todos os 5 s├úo falsos positivos ou j├í inexistentes.**
+
+### Problema 1 ÔÇö Coluna `'3'`
+**Falso positivo.** Ocorre no BO em `WHERE d.TpRegs == 3` (linhas 774 e 1589). O `3` ├® um **valor literal** comparado com a coluna `TpRegs` (que est├í na lista de colunas v├ílidas do original como `TPREGS`). O validator interpretou erroneamente o valor como nome de coluna. A condi├º├úo corresponde ao cursor de grupos (Ps='3') ÔÇö um dos tr├¬s SELECT sobre `cBal2/cBalC + crSigCdMri` que existem no legado. **Nenhuma altera├º├úo necess├íria.**
+
+### Problemas 2 e 3 ÔÇö Colunas `LNVALOR` e `SUBTOT100S`
+**J├í ausentes.** Busca em todo `app/` n├úo retornou nenhuma ocorr├¬ncia desses nomes. **Nenhuma altera├º├úo necess├íria.**
+
+### Problemas 4 e 5 ÔÇö Colunas `CMOES` e `DMOES`
+**Falso positivo.** Aparecem em consultas de lookup de moeda (`ValidarMoedaCod` linha 1284 e `ValidarMoedaDesc` linha 1360):
+```foxpro
+"SELECT CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + EscaparSQL(...)
+"SELECT CMoes, DMoes FROM SigCdMoe WHERE DMoes LIKE " + EscaparSQL(...)
+```
+`CMoes` e `DMoes` s├úo colunas reais da tabela `SigCdMoe`. O validator comparou **todos** os WHERE do arquivo contra a lista de colunas do query principal do relat├│rio ÔÇö mas esses s├úo queries separados de valida├º├úo de lookup. Remover essas condi├º├Áes quebraria a valida├º├úo da moeda. **Nenhuma altera├º├úo necess├íria.**
+
+---
+
+**Nenhum arquivo foi modificado.** O c├│digo est├í correto; os alertas do validator foram falsos positivos causados por:
+1. Confundir valor literal `3` com nome de coluna em `TpRegs == 3`
+2. Aplicar a lista de colunas do query principal do relat├│rio a queries de lookup em tabelas diferentes (`SigCdMoe`)

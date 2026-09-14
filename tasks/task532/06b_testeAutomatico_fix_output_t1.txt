@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Only one occurrence in this file ÔÇö fixed.
+
+## Diagn├│stico
+
+**Causa raiz:** `FormTbv.prg:1203` ÔÇö o ComboBox `cbo_4c_CmbTpDesc` usa `RowSourceType = 6` (Fields), mas o `RowSource` repetia o alias do cursor em cada campo:
+
+```foxpro
+.RowSource = "cursor_4c_TipoDesconto.Descrs,cursor_4c_TipoDesconto.Ordem"
+```
+
+Para `RowSourceType = 6`, o VFP9 exige que **apenas o primeiro campo** leve o prefixo `alias.`; os campos seguintes devem ser informados sem o alias (ex.: `alias.Campo1,Campo2`). Repetir `cursor_4c_TipoDesconto.` no segundo campo faz o parser tentar interpretar o texto como uma cl├íusula de campo e falhar com `'field' phrase is not found`, o que derruba `InicializarForm()` (retorna `.F.`) e por consequ├¬ncia o `CREATEOBJECT("FormTbv")` retorna algo n├úo instanci├ível no teste autom├ítico.
+
+## Corre├º├úo aplicada
+
+```foxpro
+.RowSource = "cursor_4c_TipoDesconto.Descrs,Ordem"
+```
+
+Nenhuma outra ocorr├¬ncia de `RowSourceType = 6` foi encontrada no arquivo, ent├úo o fix ├® ├║nico e pontual ÔÇö n├úo altera l├│gica de neg├│cio, nomenclatura `_4c_`, nem schema do banco (PILARES 1ÔÇô3 preservados). Arquivo salvo em `C:\4c\projeto\app\forms\cadastros\FormTbv.prg`.

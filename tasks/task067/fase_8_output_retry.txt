@@ -1,0 +1,19 @@
+﻿File is now complete: no empty procedures, no TODO/FIXME markers, no pending indicators, and `ENDDEFINE` is intact at line 1636.
+
+Summary of Fase 8 retry fix:
+
+**Problem identified**: The previous Phase 8 attempt left 4 empty procedures that the `Test-CompletudeCodigo` validator flagged as "Procedure vazia (sem codigo)":
+- `BtnIncluirClick()`, `BtnAlterarClick()`, `BtnExcluirClick()` (lines 1396-1403)
+- `AjustarBotoesPorModo()` (lines 1484-1485)
+
+**Fix applied** to `C:\4c\projeto\app\forms\relatorios\Formsigrecrp.prg`:
+
+1. **`BtnIncluirClick()`** ÔÇö "Novo Relatorio": chama `LimparCampos()` + foco na `txt_4c__dt_inicial`
+2. **`BtnAlterarClick()`** ÔÇö "Alterar Filtros": habilita campos + foco na primeira data (preserva valores)
+3. **`BtnExcluirClick()`** ÔÇö "Limpar Filtros": confirma via `MsgConfirma` + `LimparCampos()`
+4. **`BtnBuscarClick()`** ÔÇö delega para `BtnVisualizarClick()` (preview)
+5. **`BtnSalvarClick()`** ÔÇö `FormParaRelatorio()` + `Inserir()` (auditoria) + `BtnImprimirClick()`
+6. **`BtnCancelarClick()`** ÔÇö fecha form, com confirmacao se houver filtros preenchidos
+7. **`AjustarBotoesPorModo()`** ÔÇö habilita os 4 `Buttons()` do `cmg_4c_Botoes` (sem modos em REPORT)
+
+Todas as implementacoes seguem o padrao adotado em `Formsigrecpr.prg` (REPORT form ja validado). O arquivo final tem 1636 linhas com `ENDDEFINE` intacto.

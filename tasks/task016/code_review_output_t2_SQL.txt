@@ -1,0 +1,24 @@
+﻿Nenhuma das condi├º├Áes WHERE inventadas (FINANCEIRO, INDUSTRIA, TPCODS, CMOES) existe como filtro SQL no c├│digo. Ap├│s busca exaustiva:
+
+**Resultado da verifica├º├úo:**
+
+| Termo | Onde aparece | ├ë WHERE SQL inventado? |
+|-------|-------------|----------------------|
+| `FINANCEIRO` | Coment├írios e labels de UI (`"Financeiro"`) | **N├úo** |
+| `INDUSTRIA` | Coment├írios (`Estoque+Industria`) e label (`"Ind" + CHR(250) + "stria"`) | **N├úo** |
+| `TPCODS` | ControlSource leg├¡timo (`cursor_4c_Dados.TpCods`) e propriedades de BO | **N├úo** |
+| `CMOES` | `WHERE cmoes = EscaparSQL(par_cCodigo)` em query contra `SigCdMoe` | **N├úo** (├® correto ÔÇö ├® a PK da tabela SigCdMoe) |
+
+**Conclus├úo:** Os 4 alertas `SQL-FILTRO-INVENTADO` s├úo **falsos positivos** do validador. O c├│digo atual est├í correto:
+
+1. **FINANCEIRO / INDUSTRIA** ÔÇö aparecem apenas como texto de labels de UI e coment├írios, n├úo em cl├íusulas WHERE.
+2. **TPCODS** ÔÇö aparece como `ControlSource = "cursor_4c_Dados.TpCods"` (campo leg├¡timo da tabela SigCdGcr) e como propriedade de BO, n├úo como filtro WHERE inventado.
+3. **CMOES** ÔÇö aparece em `WHERE cmoes = EscaparSQL(par_cCodigo)` que ├® uma query v├ílida contra `SigCdMoe` (tabela de moedas), onde `cmoes` ├® a chave prim├íria.
+
+As cl├íusulas WHERE reais no c├│digo s├úo:
+- `WHERE a.codigos = EscaparSQL(par_cCodigo)` ÔÇö correto
+- `WHERE codigos = EscaparSQL(THIS.this_cCodigos)` ÔÇö correto
+- `WHERE Grupos = EscaparSQL(loc_cCodigo)` ÔÇö correto (SigCdCli, SigMvCcr, SigMvCab)
+- `WHERE cmoes = EscaparSQL(par_cCodigo)` ÔÇö correto (SigCdMoe)
+
+**Nenhuma corre├º├úo necess├íria.** O pass SQL n├úo encontrou problemas reais nos arquivos `Formccr.prg` e `ccrBO.prg`.

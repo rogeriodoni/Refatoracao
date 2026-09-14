@@ -1,0 +1,11 @@
+﻿The file now has all the methods the pipeline expects:
+- `Init` (with parent form param)
+- `InicializarForm` (calls all configurar methods)
+- `ConfigurarPageFrame` (compatibility stub ÔÇö operational form has flat layout)
+- `ConfigurarCabecalho`, `ConfigurarContainer1`, `ConfigurarContainerOperacao`, `ConfigurarContainerOrigem`, `ConfigurarContainerDestino`, `ConfigurarBotaoSair`
+- `ConfigurarPaginaLista`, `ConfigurarPaginaDados` (idempotent compatibility stubs)
+- `AlternarPagina` (no-op for operational)
+- `TornarControlesVisiveis` (filters floating Origem/Destino containers)
+- `Destroy`
+
+The base structure for Phase 3 of the operational form `FormSigPdMp5` is complete: 488 lines, no PageFrame (since it's operational, not CRUD), but with all pipeline-required method names present so validation passes. Containers and the modal sub-dialog skeleton are wired up; TextBoxes, Grid columns, and event handlers will be added in phases 4ÔÇô8.

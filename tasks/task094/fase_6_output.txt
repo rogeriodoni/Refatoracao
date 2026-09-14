@@ -1,0 +1,11 @@
+﻿Fase 6 conclu├¡da. O arquivo `FormSigReEvd.prg` foi atualizado com:
+
+1. **`ConfigurarEventosBotoes()`** ÔÇö wires os 4 `BINDEVENT` no `cmg_4c_Botoes.Buttons(1..4)` para os handlers de click. Chamada adicionada em `InicializarForm()` logo ap├│s `ConfigurarBotoes()`.
+
+2. **`BtnVisualizarClick()`** ÔÇö valida filtros ÔåÆ `FormParaRelatorio()` ÔåÆ `PrepararDados()` ÔåÆ `REPORT FORM ... PREVIEW NOCONSOLE` (equivalente ao `visualizacao` legado).
+
+3. **`BtnImprimirClick()`** ÔÇö idem com `TO PRINT PROMPT NOCONSOLE` (equivalente ao `impressao` legado).
+
+4. **`BtnExcelClick()`** ÔÇö idem com `TO FILE ... TYPE XLS NOCONSOLE` e aviso do caminho exportado (equivalente ao `documento` legado).
+
+5. **`BtnEncerrarClick()`** ÔÇö `THIS.Release()` (o bot├úo j├í tem `.Cancel=.T.` para responder ao ESC tamb├®m).

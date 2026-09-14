@@ -1,0 +1,15 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito:
+
+**9 corre├º├Áes efetivas** (problema 2 ÔÇö `THIS.Controls()` ÔÇö ├® VFP9 built-in v├ílido, nenhuma altera├º├úo necess├íria):
+
+| # | Problema | Corre├º├úo |
+|---|----------|----------|
+| 1 | CONTAINER-VISIVEL | Adicionado `"CNT_4C_CABECALHO"` ao INLIST em `TornarControlesVisiveis()` (linha 1662) |
+| 3 | GRID-WITH grd_4c_Itens | `.RecordSource = "TmpFinal"` movido para fora do WITH (linha 1689) |
+| 4 | GRID-WITH grd_4c_DispInfo | `.RecordSource = "TmpSaldG"` movido para fora do WITH (linha 1719) |
+| 5 | GRID-WITH grd_4c_DispProd | `.ColumnCount` e `.RecordSource` movidos para fora do WITH em `CmdDisponiveisClick` (linhas 2130-2131) |
+| 6 | GRID-WITH grd_4c_LinhasAgg | `.ColumnCount` e `.RecordSource` movidos para fora do WITH em `CmdLinhasTotClick` (linhas 2172-2173) |
+| 7 | GRID-WITH grd_4c_PedraReq | `.ColumnCount` e `.RecordSource` movidos para fora do WITH em `CmdRequisoesClick` (linhas 2202-2203) |
+| 8 | GRID-WITH grd_4c_DispEstq | `.ColumnCount` e `.RecordSource` movidos para fora do WITH em `CmdEstoquesClick` (linhas 2236-2237) |
+| 9 | GRID-HEADER "Prior" | Caption corrigido para `"Prioridade"` em `CmdEstoquesClick` (linha 2246) |
+| 10 | LAYOUT-POSITION | `lbl_4c_TituloDisp.Left` 284 ÔåÆ 610 (posi├º├úo absoluta = 12+610 = 622, igual ao legado) |

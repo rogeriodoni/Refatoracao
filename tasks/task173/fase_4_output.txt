@@ -1,0 +1,15 @@
+﻿O arquivo est├í completo e correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado em `FormSigPrDsc.prg`:**
+
+- **`ConfigurarFiltros()`** ÔÇö 6 controles de filtro: labels "Produtos de:" / "at├®" / "Grupo de Produto:", textboxes `txt_4c_CProsI` / `txt_4c_CProsF` / `txt_4c_CGrus` com posi├º├Áes escaladas de 800ÔåÆ1000px
+- **`cmd_4c_BtnSelecionar`** em `ConfigurarBotoes()` ÔÇö bot├úo ├¡cone-only com `Themes=.T.`, posicionado em Left=925/Top=116 (abaixo dos bot├Áes Atualizar/Sair)
+- **`ConfigurarGrade()`** ÔÇö grid 3 colunas (C├│digo/Portugu├¬s/Traduzido), 961├ù343px, `ReadOnly=.T.`, `RecordSource=cursor_4c_Produtos`, cabe├ºalhos via CHR()
+- **`VincularEventos()`** ÔÇö 6 BINDEVENTs: KeyPress nos 3 filtros + Click nos 3 bot├Áes
+- **Handlers KeyPress** (`TxtCProsIKeyPress`, `TxtCProsFKeyPress`, `TxtCGrusKeyPress`) ÔÇö LPARAMETERS na primeira linha, guard Enter/Tab/F4
+- **`AbrirBuscaProduto()` / `AbrirBuscaGrupo()`** ÔÇö match exato ÔåÆ FormBuscaAuxiliar com mAddColuna, comportamento cross-fill entre CProsI/CProsF, clear do campo oposto
+- **`BtnSelecionarClick()`** ÔÇö valida├º├úo de filtro + auto-fill de faixa + chama `Processamento()`
+- **`Processamento()`** ÔÇö l├│gica completa: ZAP cursor ÔåÆ query SigCdPro ÔåÆ SCAN com JOIN SigCdGrp+SigCdCor ÔåÆ tradu├º├úo via SigCdDic ÔåÆ APPEND BLANK+REPLACE no cursor_4c_Produtos, fwprogressbar com TRY/CATCH, restaura SELECT cursor_4c_PrdTraduz ao final de cada itera├º├úo
+- **`Gravacao()`** ÔÇö UPDATE SigCdPro (DscCompras/ObsCompras/DPros) + DELETE SigPrPrt por produto via SQLEXEC com EscaparSQL()
+- **`AlternarPagina()`** ÔÇö stub de compatibilidade de API (form flat sem PageFrame)
+- **Destroy** atualizado com cleanup de `cursor_4c_PrdTraduz` e `cursor_4c_LocalPro`

@@ -1,0 +1,1091 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRPPP.SCX
+* Data/Hora: 03/07/2026 18:06:46
+* Total de registros: 40
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRPPP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRPPP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRPPP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRPPP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: shp_cliente_periodo
+  Parent: SIGPRPPP
+  Class: shape
+  BaseClass: shape
+
+Objeto: lbl_cliente
+  Parent: SIGPRPPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cliente
+  Parent: SIGPRPPP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cliente_desc
+  Parent: SIGPRPPP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grp_operacao
+  Parent: SIGPRPPP
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: lbl_periodo
+  Parent: SIGPRPPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGPRPPP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGPRPPP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGPRPPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: shp_operacao
+  Parent: SIGPRPPP
+  Class: shape
+  BaseClass: shape
+
+Objeto: lbl_operacao
+  Parent: SIGPRPPP
+  Class: label
+  BaseClass: label
+
+Objeto: shp_itens
+  Parent: SIGPRPPP
+  Class: shape
+  BaseClass: shape
+
+Objeto: lbl_itens
+  Parent: SIGPRPPP
+  Class: label
+  BaseClass: label
+
+Objeto: grd_itens
+  Parent: SIGPRPPP
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRPPP.grd_itens.column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPPP.grd_itens.column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPPP.grd_itens.column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPPP.grd_itens.column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPPP.grd_itens.column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPPP.grd_itens.column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grd_operacoes
+  Parent: SIGPRPPP
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRPPP.grd_operacoes.column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPPP.grd_operacoes.column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPPP.grd_operacoes.column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPPP.grd_operacoes.column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPPP.grd_operacoes.column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPPP.grd_operacoes.column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPPP.grd_operacoes.column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPPP.grd_operacoes.column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPPP.grd_operacoes.column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPPP.grd_operacoes.column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say4
+  Parent: SIGPRPPP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGPRPPP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 114
+  Left = 74
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP
+------------------------------------------------------------
+  DataSession = 2
+  Height = 500
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Pesquisa de Produtos por Conta"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  AlwaysOnTop = .T.
+  Name = "SIGPRPPP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.shp_cliente_periodo
+------------------------------------------------------------
+  Top = 108
+  Left = 132
+  Height = 90
+  Width = 484
+  BackStyle = 0
+  SpecialEffect = 1
+  Name = "shp_cliente_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.lbl_cliente
+------------------------------------------------------------
+  Caption = "Conta :"
+  Left = 152
+  Top = 174
+  TabIndex = 7
+  Name = "lbl_cliente"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.get_cliente
+------------------------------------------------------------
+  FontName = "Courier New"
+  Left = 197
+  TabIndex = 4
+  Top = 169
+  Width = 80
+  Name = "get_cliente"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.get_cliente_desc
+------------------------------------------------------------
+  Left = 279
+  TabIndex = 5
+  Top = 169
+  Width = 290
+  Name = "get_cliente_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grp_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 717
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 14
+  BorderColor = 136,188,189
+  Themes = .F.
+  Name = "grp_operacao"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ToolTipText = "[ESC] - Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.DisabledBackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmd_sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.lbl_periodo
+------------------------------------------------------------
+  Caption = "Período :"
+  Left = 143
+  Top = 121
+  TabIndex = 8
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.get_dt_inicial
+------------------------------------------------------------
+  Left = 197
+  TabIndex = 1
+  Top = 116
+  Width = 80
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.get_dt_final
+------------------------------------------------------------
+  Left = 290
+  TabIndex = 2
+  Top = 116
+  Width = 80
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.lbl_periodo_a
+------------------------------------------------------------
+  Caption = "à"
+  Left = 280
+  Top = 121
+  TabIndex = 9
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.shp_operacao
+------------------------------------------------------------
+  Top = 224
+  Left = 133
+  Height = 112
+  Width = 484
+  BackStyle = 0
+  SpecialEffect = 1
+  Name = "shp_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.lbl_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Movimentações"
+  Height = 15
+  Left = 143
+  Top = 210
+  Width = 92
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "lbl_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.shp_itens
+------------------------------------------------------------
+  Top = 354
+  Left = 133
+  Height = 127
+  Width = 511
+  BackStyle = 0
+  SpecialEffect = 1
+  Name = "shp_itens"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.lbl_itens
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = " Ítens "
+  Height = 15
+  Left = 143
+  Top = 339
+  Width = 38
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "lbl_itens"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_itens
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  DeleteMark = .F.
+  Enabled = .T.
+  Height = 112
+  Left = 140
+  ReadOnly = .T.
+  ScrollBars = 2
+  TabIndex = 13
+  Top = 363
+  Visible = .T.
+  Width = 497
+  Name = "grd_itens"
+  Column1.FontName = "Tahoma"
+  Column1.Enabled = .T.
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .T.
+  Column1.Name = "column1"
+  Column2.FontName = "Tahoma"
+  Column2.Enabled = .T.
+  Column2.Width = 290
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Visible = .T.
+  Column2.Name = "column2"
+  Column3.FontName = "Tahoma"
+  Column3.Enabled = .T.
+  Column3.Width = 66
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Visible = .T.
+  Column3.Name = "column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_itens.column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_itens.column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_itens.column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_itens.column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_itens.column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Qtde."
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_itens.column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Arial"
+  DeleteMark = .F.
+  Enabled = .T.
+  Height = 94
+  Left = 140
+  ReadOnly = .T.
+  ScrollBars = 2
+  TabIndex = 11
+  Top = 234
+  Visible = .T.
+  Width = 469
+  Name = "grd_operacoes"
+  Column1.FontName = "Courier New"
+  Column1.Enabled = .T.
+  Column1.Width = 31
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .T.
+  Column1.Name = "column1"
+  Column2.FontName = "Courier New"
+  Column2.Enabled = .T.
+  Column2.Width = 150
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Visible = .T.
+  Column2.Name = "column2"
+  Column3.FontName = "Courier New"
+  Column3.Enabled = .T.
+  Column3.Width = 80
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Visible = .T.
+  Column3.Name = "column3"
+  Column4.FontName = "Courier New"
+  Column4.Enabled = .T.
+  Column4.Width = 75
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Visible = .T.
+  Column4.Format = ""
+  Column4.Name = "column4"
+  Column5.FontName = "Courier New"
+  Column5.Enabled = .T.
+  Column5.Width = 98
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Visible = .T.
+  Column5.Format = "999,999,999.99"
+  Column5.Name = "column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes.column1.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp."
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes.column1.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes.column2.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes.column2.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes.column3.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Número"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes.column3.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes.column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes.column4.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes.column5.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.grd_operacoes.column5.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.Say4
+------------------------------------------------------------
+  Caption = "Grupo :"
+  Left = 151
+  Top = 147
+  TabIndex = 6
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPPP.Get_grupo
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 197
+  TabIndex = 3
+  Top = 144
+  Width = 80
+  ZOrderSet = 20
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Courier New, 0, 8, 7, 14, 11, 8, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRPPP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters lfFormAnterior, lnDataSes
+
+=fConfigGeral()	
+
+Private pKey
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Local lcVerCliente, lcVerOperacao, lcVerEmpresa
+
+Set DataSession to lnDataSes
+
+ThisForm.ParentForm    = lfFormAnterior
+ThisForm.LinhaAnterior = 1
+
+ThisForm.grd_itens.RecordSource = 'dbItens'
+ThisForm.grd_itens.column1.ControlSource = 'dbItens.cpros'
+ThisForm.grd_itens.column2.ControlSource = 'dbItens.dpros'
+ThisForm.grd_itens.column3.ControlSource = 'dbItens.qtds'
+
+ThisForm.grd_operacoes.RecordSource = 'dbOperacao'
+ThisForm.grd_operacoes.ChildOrder   = 'EmpDopNum'
+ThisForm.grd_operacoes.column1.ControlSource = 'dbOperacao.Emps'
+ThisForm.grd_operacoes.column2.ControlSource = 'dbOperacao.Dopes'
+ThisForm.grd_operacoes.column3.ControlSource = 'dbOperacao.Numes'
+ThisForm.grd_operacoes.column4.ControlSource = 'dbOperacao.Datas'
+ThisForm.grd_operacoes.column5.ControlSource = 'dbOperacao.Valos'
+
+pKey = fUniqueIds()
+
+Select TprMvCab
+Scan
+	Insert Into crSigTempC (EmpDopNums, cIdQuerys, cIdChaves) ;
+				    Values (TprMvCab.Emps + TprMvCab.Dopes + Str(TprMvCab.Numes, 6), pKey, fUniqueIds())
+EndScan
+
+If Not ThisForm.ParentForm.poDataTmp.Update('crSigTempC')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigTempC)')
+	Return 0
+EndIf
+
+If (ThisForm.ParentForm.poDataTmp.Commit() < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Init - Commit)')
+	Return 0
+EndIf
+
+lcQuery = [Select b.Emps, b.Dopes, b.Numes, b.Cpros, b.Dpros, b.Qtds ] + ;
+		    [From SigTempC a, SigMvItn b ] + ;
+		   [Where a.cIdQuerys = ?pKey And ] + ;
+		   		 [a.EmpDopNums = b.EmpDopNums ] + ;
+		   [Order By b.Emps, b.Dopes, b.Numes, b.Cpros]
+
+If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcQuery, 'crLclMvItn') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crLclMvItn)')
+	Return 0
+EndIf
+
+ThisForm.ParentForm.poDataTmp.fSqlApagarTmp('SigTempC', pKey)
+
+Select crLclMvItn
+Index On Emps + Dopes + Padl(Numes, 6) Tag EmpDopNum	
+
+ThisForm.get_grupo.Value        = pcGrupo
+ThisForm.get_cliente.Value      = pcConta
+ThisForm.get_cliente_desc.Value = pcContaDesc
+ThisForm.get_dt_inicial.Value   = pdInicial
+ThisForm.get_dt_final.Value     = pdFinal
+ThisForm.get_cliente.Refresh
+ThisForm.get_dt_inicial.Refresh
+ThisForm.get_dt_final.Refresh
+
+ThisForm.LockScreen   = .t.
+ThisForm.MousePointer = 11
+
+Zap In dbOperacao
+Zap In dbItens
+
+Select TprMvCab
+Scan
+	Scatter MemVar
+	Insert Into dbOperacao From MemVar
+EndScan
+
+Select dbOperacao
+Go Top
+
+Select crLclMvItn
+Set Order To EmpDopNum
+Set Near On
+Seek dbOperacao.Emps + dbOperacao.Dopes + Padl(dbOperacao.Numes, 6)
+Set Near Off
+Scan While dbOperacao.Emps + dbOperacao.Dopes + Padl(dbOperacao.Numes, 6) = ;
+		   crLclMvItn.Emps   + crLclMvItn.Dopes   + Padl(crLclMvItn.Numes, 6)
+	Scatter MemVar
+
+	ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', crLclMvItn.CPros)
+
+	m.DPros = Iif(Eof('crSigCdPro'), '', crSigCdPro.DPros)
+
+	Insert Into dbItens From MemVar
+EndScan
+
+ThisForm.MousePointer = 0
+ThisForm.LockScreen   = .f.
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPPP.get_cliente
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPPP.get_cliente_desc
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPPP.grp_operacao
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmd_sair.Click
+------------------------------------------------------------
+PROCEDURE cmd_sair.Click
+ThisForm.ParentForm.Enabled = .t.
+ThisForm.ParentForm.get_cliente.Setfocus
+ThisForm.Release
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPPP.get_dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPPP.get_dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPPP.grd_operacoes
+* Classe: fwgrade (Base: grid)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+If (ThisForm.LinhaAnterior <> ThisForm.grd_operacoes.activerow)
+	ThisForm.LinhaAnterior = ThisForm.grd_operacoes.activerow
+	ThisForm.LockScreen   = .t.
+	ThisForm.MousePointer = 11
+	Zap In dbItens
+
+	Select crLclMvItn
+	Set Order To EmpDopNum
+	Set Near On
+	Seek dbOperacao.Emps + dbOperacao.Dopes + Padl(dbOperacao.Numes, 6)
+	Set Near Off
+	Scan While dbOperacao.Emps + dbOperacao.Dopes + Padl(dbOperacao.Numes, 6) = ;
+			   crLclMvItn.Emps   + crLclMvItn.Dopes   + Padl(crLclMvItn.Numes, 6)
+		Scatter MemVar
+		
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', crLclMvItn.CPros)
+
+		m.DPros = Iif(Eof('crSigCdPro'), '', crSigCdPro.DPros)
+		
+		Insert Into dbItens From MemVar
+	EndScan
+	
+	ThisForm.grd_itens.Refresh
+	ThisForm.MousePointer = 0
+	ThisForm.LockScreen   = .f.
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPPP.Get_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRPPP
+RESERVED3 (ClassInfo): linhaanterior
+parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================

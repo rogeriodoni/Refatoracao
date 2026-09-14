@@ -1,0 +1,35 @@
+﻿Phase 6/8 is complete. Here's a summary of all changes made to `FormFti.prg` (now 2434 lines):
+
+**Edit 2** ÔÇö Fixed `opt_4c_TpFtio` button captions:
+- Buttons(1): `"Por Feitio"` ÔåÆ `"Por Peso"`
+- Buttons(2): `"Por Peso"` ÔåÆ `"Valor Adicional"`
+- Buttons(3): `"Sem Feitio"` ÔåÆ `"Informativo"`
+
+**Edit 3** ÔÇö After `grd_4c_Grade.Column5.Header1.Caption = "Ordem"`:
+- `Column2.ReadOnly = .T.` (Dgrus is read-only, filled automatically)
+- 6 BINDEVENTs: Col1.Text1 (When+Valid), Col3.Text1 (When+LostFocus), Col4.Text1 (When+Valid)
+
+**Edit 4** ÔÇö After `grd_4c_Custo.Column4.Text1.InputMask = "99999"`:
+- `Column2.ReadOnly = .T.` (Dpros filled automatically)
+- 5 BINDEVENTs: Col1.Text1 (When+Valid), Col3.Text1 (When+LostFocus), Col4.Text1 (When)
+- `BINDEVENT(pgf_4c_Configuracao.Page2, "Activate", THIS, "ConfigPage2Activate")`
+
+**Edit 5** ÔÇö 14 new controls added before `TornarControlesVisiveis`:
+- `lbl_4c_Label8` + `txt_4c_FaixaI` (Faixa de / from:to faixa)
+- `lbl_4c_Label9` + `txt_4c_Faixaf` (at├® label + faixa final)
+- `lbl_4c_Label11` + `txt_4c_Perdas` (Perda do Metal)
+- `lbl_4c_Label6` + `opt_4c_CusVenda` (Tipo: Custo/Venda, default=2)
+- `lbl_4c_Label13` + `opt_4c_Etiquetas` (Utilizado na Etiqueta: Sim/Sim-AU/N├úo, default=3)
+- `lbl_4c_Label7` + `opt_4c_Cfixo` (Coeficiente Custo Fixo: Multiplicador/Divisor, default=1)
+- `lbl_4c_Label10` + `opt_4c_Fwoption1` (Aplicar Sobre Custo: Sim/N├úo, default=2)
+
+**Edit 6** ÔÇö In `HabilitarCampos`: grids `grd_4c_Grade` and `grd_4c_Custo` become ReadOnly when not editing.
+
+**Edit 7** ÔÇö 12 new PUBLIC methods:
+- `ConfigPage2Activate` ÔÇö sets Column3 header to `"( % )"` when opt_4c_Cfixo.Value=2
+- `GradeGrupoCol1When/Valid` ÔÇö Cgrus SEEKÔåÆCrSigCdGrp, picker if not found, fills Dgrus+Coefs
+- `GradeGrupoCol3When/LostFocus` ÔÇö SET CONFIRM ON, auto-insert blank row on Enter
+- `GradeGrupoCol4When/Valid` ÔÇö CPros Mode 1 picker on SigCdPro
+- `GradeCustoCol1When/Valid` ÔÇö Cpros SEEKÔåÆCrSigCdPro, picker with CgruCfxs filter if not found, fills Dpros+Coefs(pVens)+Seqs
+- `GradeCustoCol3When/LostFocus` ÔÇö guard EMPTY(Cpros), auto-insert+navigate on Enter
+- `GradeCustoCol4When` ÔÇö guard EMPTY(Cpros)

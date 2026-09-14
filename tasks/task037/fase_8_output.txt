@@ -1,0 +1,18 @@
+﻿Arquivo completo e correto. Fase 8/8 conclu├¡da.
+
+**Resumo do que foi adicionado em `Formsigrebal.prg`:**
+
+| M├®todo | Descri├º├úo |
+|---|---|
+| `LimparCampos()` | Reseta todos os filtros para defaults; `BtnIncluirClick` agora o chama |
+| `HabilitarCampos()` | Garante que os campos de filtro ficam edit├íveis (com regra de cd/ds) |
+| `CarregarLista()` | Stub PROTECTED retornando `.T.` (REPORT n├úo tem grid de lista) |
+| `AjustarBotoesPorModo()` | Stub PROTECTED (bot├Áes sempre no mesmo estado em REPORT) |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | Carrega as 11 propriedades do BO de volta para os controles do form |
+| `BtnBuscarClick()` | Aciona Visualizar com os filtros atuais |
+| `BtnEncerrarClick()` | Fecha o formul├írio via `Release()` |
+| `BtnSalvarClick()` | Avisa o usu├írio que salvamento n├úo se aplica a relat├│rios |
+| `BtnCancelarClick()` | Fecha o formul├írio via `Release()` |
+
+A integra├º├úo j├í estava completa: menu.prg tem `AbrirFormsigrebal` no `popRelatorios`, e config.prg carrega automaticamente todos os `Form*.prg` da pasta `relatorios\`.

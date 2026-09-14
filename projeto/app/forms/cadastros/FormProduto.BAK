@@ -1,0 +1,1422 @@
+*=================================================================================
+* FORMPRODUTO - CADASTRO DE PRODUTOS (FASE 1 - MVP)
+*=================================================================================
+* Descricao: Formulario para cadastro de produtos (migração SIGCDPRO)
+* Autor: Claude Code
+* Data: 2026-01-16
+* Versao: 1.0 - Fase 1 (MVP - 15 campos básicos, sem pgframeDados aninhado)
+*
+* IMPORTANTE FASE 1:
+* - 15 campos básicos dispostos diretamente na Page2 (sem PageFrame aninhado)
+* - 2 lookups apenas (Grupo e Fornecedor)
+* - Grid com 7 colunas (modo padrão, Tipo2 = .F.)
+* - Layout simplificado é aceitável (foco em funcionalidade, não pixel-perfect)
+* - Fases 2 e 3 adicionarão pgframeDados com 17 sub-páginas
+*=================================================================================
+
+DEFINE CLASS FormProduto AS FormBase
+
+	*-- Propriedades visuais do formulário (CRÍTICAS - copiadas do FormCor)
+	DataSession = 2
+	Height = 600
+	Width = 1000
+	Caption = "Cadastro de Produtos"
+	ShowWindow = 1      && REGRA: Usar 1 (não 2) para compatibilidade com modal
+	WindowType = 1      && REGRA: Modal definido na classe
+	AutoCenter = .T.
+
+	*-- Propriedades do frmcadastro (SEM barra de título, SEM botões de janela)
+	ControlBox = .F.    && Sem menu de controle
+	Closable = .F.      && Sem botão fechar
+	MaxButton = .F.     && Sem botão maximizar
+	MinButton = .F.     && Sem botão minimizar
+	TitleBar = 0        && Sem barra de título
+	ClipControls = .F.  && Otimização de repintura
+	Themes = .F.        && Sem temas do Windows (aparência clássica)
+	BorderStyle = 2     && Borda fixa
+
+	*-- Propriedades de negócio
+	this_cTitulo = "Cadastro de Produtos"
+	this_cTabela = "SigCdPro"
+	this_cChavePrimaria = "cpros"
+
+	*-- Controle de modo do formulário
+	this_cModoAtual = "LISTA"         && LISTA, INCLUIR, ALTERAR, VISUALIZAR
+	this_cCodigoAtual = ""            && Código do registro atual
+
+	*-- Nomes de campos para descrição (lookup)
+	this_cDescGrupo = ""
+	this_cDescFornecedor = ""
+
+	*===========================================================================
+	* METODO: Init
+	*===========================================================================
+	PROCEDURE Init()
+		LOCAL loc_lSucesso
+		loc_lSucesso = .T.
+
+		TRY
+			*-- Criar Business Object
+			THIS.this_oBusinessObject = CREATEOBJECT("ProdutoBO")
+
+			*-- Construir interface (estrutura básica)
+			THIS.ConstruirInterface()
+
+			*-- Carregar lista inicial (pular se validando UI)
+			IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+				IF !THIS.CarregarLista()
+					*-- Se falhar ao carregar, não impede abertura do form
+				ENDIF
+			ENDIF
+
+			*-- Ativar Page1 (Lista)
+			THIS.pgf_4c_Principal.ActivePage = 1
+			THIS.this_cModoAtual = "LISTA"
+
+		CATCH TO loc_oErro
+			MESSAGEBOX("Erro no Init() do FormProduto:" + CHR(13) + ;
+			           "Mensagem: " + loc_oErro.Message + CHR(13) + ;
+			           "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+			           "Procedure: " + loc_oErro.Procedure, 16, "Erro")
+			loc_lSucesso = .F.
+		ENDTRY
+
+		RETURN loc_lSucesso
+	ENDPROC
+
+	*===========================================================================
+	* METODO: ConstruirInterface
+	*===========================================================================
+	PROTECTED PROCEDURE ConstruirInterface()
+		*-- Criar PageFrame principal
+		THIS.AdicionarPageFrame()
+
+		*-- Configurar Page1 (Lista)
+		THIS.ConfigurarPage1()
+
+		*-- Configurar Page2 (Dados)
+		THIS.ConfigurarPage2()
+
+		*-- CRÍTICO: Tornar controles visíveis (AddObject cria com Visible = .F.)
+		THIS.TornarControlesVisiveis(THIS.pgf_4c_Principal.Page1)
+		THIS.TornarControlesVisiveis(THIS.pgf_4c_Principal.Page2)
+	ENDPROC
+
+	*===========================================================================
+	* METODO: AdicionarPageFrame
+	*===========================================================================
+	PROTECTED PROCEDURE AdicionarPageFrame()
+		THIS.AddObject("pgf_4c_Principal", "PageFrame")
+
+		WITH THIS.pgf_4c_Principal
+			.Left = 0
+			.Top = 0  && NÃO é -29 (confirmado na verificação)
+			.Width = 1003
+			.Height = 631
+			.PageCount = 2
+			.Tabs = .F.  && Esconder abas
+			.Page1.Caption = "Lista"
+			.Page2.Caption = "Dados"
+			.ActivePage = 1
+			.Visible = .T.
+		ENDWITH
+	ENDPROC
+
+	*===========================================================================
+	* METODO: ConfigurarPage1 (Lista)
+	*===========================================================================
+	PROTECTED PROCEDURE ConfigurarPage1()
+		LOCAL loc_oPage1
+		loc_oPage1 = THIS.pgf_4c_Principal.Page1
+
+		*-- Container cabeçalho (cnt_4c_Cabecalho = cntSombra original)
+		loc_oPage1.AddObject("cnt_4c_Cabecalho", "Container")
+		WITH loc_oPage1.cnt_4c_Cabecalho
+			.Top = 1  && EXATO do original (sem compensação)
+			.Left = 0
+			.Width = 1000
+			.Height = 80
+			.BackColor = RGB(240, 240, 240)
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label título dentro do cabeçalho
+		loc_oPage1.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
+		WITH loc_oPage1.cnt_4c_Cabecalho.lbl_4c_Titulo
+			.Top = 25
+			.Left = 30
+			.Width = 400
+			.Height = 30
+			.FontName = "Tahoma"
+			.FontSize = 16
+			.FontBold = .T.
+			.Caption = "Cadastro de Produtos"
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0  && Transparent
+			.Visible = .T.
+		ENDWITH
+
+		*-- Container botões CRUD (cnt_4c_Botoes = Grupo_op original)
+		loc_oPage1.AddObject("cnt_4c_Botoes", "Container")
+		WITH loc_oPage1.cnt_4c_Botoes
+			.Top = -1  && EXATO do original (Top negativo CONFIRMADO)
+			.Left = 542
+			.Width = 380
+			.Height = 85
+			.BackStyle = 0
+			.BorderWidth = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Botões CRUD (criar manualmente)
+		LOCAL loc_cIconPath
+		loc_cIconPath = gc_4c_CaminhoIcones
+
+		*-- Botão Incluir
+		loc_oPage1.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
+		WITH loc_oPage1.cnt_4c_Botoes.cmd_4c_Incluir
+			.Caption = "Incluir"
+			.Width = 75
+			.Height = 75
+			.Left = 5
+			.Top = 5
+			.Picture = loc_cIconPath + "btn_incluir.jpg"
+			.PicturePosition = 13  && Ícone acima do texto
+			.BackColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
+			.Themes = .F.
+			.SpecialEffect = 0
+			.Visible = .T.
+		ENDWITH
+		BINDEVENT(loc_oPage1.cnt_4c_Botoes.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
+
+		*-- Botão Consultar
+		loc_oPage1.cnt_4c_Botoes.AddObject("cmd_4c_Consultar", "CommandButton")
+		WITH loc_oPage1.cnt_4c_Botoes.cmd_4c_Consultar
+			.Caption = "Consultar"
+			.Width = 75
+			.Height = 75
+			.Left = 80
+			.Top = 5
+			.Picture = loc_cIconPath + "btn_consultar.jpg"
+			.PicturePosition = 13
+			.BackColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
+			.Themes = .F.
+			.SpecialEffect = 0
+			.Visible = .T.
+		ENDWITH
+		BINDEVENT(loc_oPage1.cnt_4c_Botoes.cmd_4c_Consultar, "Click", THIS, "BtnConsultarClick")
+
+		*-- Botão Alterar
+		loc_oPage1.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
+		WITH loc_oPage1.cnt_4c_Botoes.cmd_4c_Alterar
+			.Caption = "Alterar"
+			.Width = 75
+			.Height = 75
+			.Left = 155
+			.Top = 5
+			.Picture = loc_cIconPath + "btn_alterar.jpg"
+			.PicturePosition = 13
+			.BackColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
+			.Themes = .F.
+			.SpecialEffect = 0
+			.Visible = .T.
+		ENDWITH
+		BINDEVENT(loc_oPage1.cnt_4c_Botoes.cmd_4c_Alterar, "Click", THIS, "BtnAlterarClick")
+
+		*-- Botão Excluir
+		loc_oPage1.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
+		WITH loc_oPage1.cnt_4c_Botoes.cmd_4c_Excluir
+			.Caption = "Excluir"
+			.Width = 75
+			.Height = 75
+			.Left = 230
+			.Top = 5
+			.Picture = loc_cIconPath + "btn_excluir.jpg"
+			.PicturePosition = 13
+			.BackColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
+			.Themes = .F.
+			.SpecialEffect = 0
+			.Visible = .T.
+		ENDWITH
+		BINDEVENT(loc_oPage1.cnt_4c_Botoes.cmd_4c_Excluir, "Click", THIS, "BtnExcluirClick")
+
+		*-- Botão Procurar
+		loc_oPage1.cnt_4c_Botoes.AddObject("cmd_4c_Procurar", "CommandButton")
+		WITH loc_oPage1.cnt_4c_Botoes.cmd_4c_Procurar
+			.Caption = "Procurar"
+			.Width = 75
+			.Height = 75
+			.Left = 305
+			.Top = 5
+			.Picture = loc_cIconPath + "btn_procurar.jpg"
+			.PicturePosition = 13
+			.BackColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
+			.Themes = .F.
+			.SpecialEffect = 0
+			.Visible = .T.
+		ENDWITH
+		BINDEVENT(loc_oPage1.cnt_4c_Botoes.cmd_4c_Procurar, "Click", THIS, "BtnProcurarClick")
+
+		*-- Container botão Sair (cnt_4c_BotoesSaida = Grupo_Saida original)
+		loc_oPage1.AddObject("cnt_4c_BotoesSaida", "Container")
+		WITH loc_oPage1.cnt_4c_BotoesSaida
+			.Top = -1  && EXATO do original (Top negativo CONFIRMADO)
+			.Left = 917
+			.Width = 80
+			.Height = 85
+			.BackStyle = 0
+			.BorderWidth = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Botão Sair
+		loc_oPage1.cnt_4c_BotoesSaida.AddObject("cmd_4c_Sair", "CommandButton")
+		WITH loc_oPage1.cnt_4c_BotoesSaida.cmd_4c_Sair
+			.Caption = "Sair"
+			.Width = 75
+			.Height = 75
+			.Left = 5
+			.Top = 5
+			.Picture = loc_cIconPath + "btn_sair.jpg"
+			.PicturePosition = 13
+			.BackColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
+			.Themes = .F.
+			.SpecialEffect = 0
+			.Visible = .T.
+		ENDWITH
+		BINDEVENT(loc_oPage1.cnt_4c_BotoesSaida.cmd_4c_Sair, "Click", THIS, "BtnSairClick")
+
+		*-- Grid de dados (grd_4c_Dados = Grade original)
+		loc_oPage1.AddObject("grd_4c_Dados", "GridBase")
+		WITH loc_oPage1.grd_4c_Dados
+			.Top = 173  && EXATO do original
+			.Left = 38
+			.Width = 922
+			.Height = 409
+			.RecordSourceType = 1  && Alias
+			.RecordSource = ""  && Será definido em CarregarLista()
+			.DeleteMark = .F.
+			.ReadOnly = .T.
+			.ColumnCount = 7  && FASE 1: 7 colunas (modo padrão, Tipo2=.F.)
+			.Visible = .T.
+		ENDWITH
+
+		*-- Bind eventos do grid
+		BINDEVENT(loc_oPage1.grd_4c_Dados, "DblClick", THIS, "GridDblClick")
+	ENDPROC
+
+	*===========================================================================
+	* METODO: ConfigurarColunasGrid
+	*===========================================================================
+	PROTECTED PROCEDURE ConfigurarColunasGrid()
+		LOCAL loc_oGrid
+
+		*-- Só executar se o cursor existir
+		IF !USED("cursor_4c_Lista")
+			RETURN
+		ENDIF
+
+		loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
+
+		WITH loc_oGrid
+			*-- Coluna 1: Código
+			.Column1.Width = 110
+			.Column1.Header1.Caption = "C" + CHR(243) + "digo"
+			.Column1.ControlSource = "cursor_4c_Lista.cpros"
+			.Column1.ReadOnly = .T.
+
+			*-- Coluna 2: Descrição
+			.Column2.Width = 408
+			.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+			.Column2.ControlSource = "cursor_4c_Lista.dpros"
+			.Column2.ReadOnly = .T.
+
+			*-- Coluna 3: Grupo (VISÍVEL no modo padrão)
+			.Column3.Width = 40
+			.Column3.Header1.Caption = "Grp"
+			.Column3.ControlSource = "cursor_4c_Lista.cgrus"
+			.Column3.ReadOnly = .T.
+
+			*-- Coluna 4: Subgrupo
+			.Column4.Width = 70
+			.Column4.Header1.Caption = "SubGrp"
+			.Column4.ControlSource = "cursor_4c_Lista.sgrus"
+			.Column4.ReadOnly = .T.
+
+			*-- Coluna 5: Ref. Fornecedor
+			.Column5.Width = 150
+			.Column5.Header1.Caption = "Ref. Fornecedor"
+			.Column5.ControlSource = "cursor_4c_Lista.reffs"
+			.Column5.ReadOnly = .T.
+
+			*-- Coluna 6: Coleção/Grp.Venda
+			.Column6.Width = 100
+			.Column6.Header1.Caption = "Grp.Venda"
+			.Column6.ControlSource = "cursor_4c_Lista.colecoes"
+			.Column6.ReadOnly = .T.
+
+			*-- Coluna 7: Imprimir Etiquetas (Checkbox)
+			.Column7.Width = 16
+			.Column7.Header1.Caption = ""
+			.Column7.ControlSource = "cursor_4c_Lista.impEtiqs"
+			.Column7.Sparse = .F.  && Checkbox sempre visível
+			.Column7.ReadOnly = .T.
+
+			*-- Aplicar fonte Arial 8 para todas as colunas
+			LOCAL loc_i
+			FOR loc_i = 1 TO 7
+				.Columns(loc_i).FontName = "Arial"
+				.Columns(loc_i).FontSize = 8
+			ENDFOR
+		ENDWITH
+	ENDPROC
+
+	*===========================================================================
+	* METODO: ConfigurarPage2 (Dados - FASE 2: com pgframeDados aninhado)
+	*===========================================================================
+	PROTECTED PROCEDURE ConfigurarPage2()
+		LOCAL loc_oPage2, loc_oPgframeDados, loc_oPgDados
+		LOCAL loc_nTopAtual, loc_nColuna1, loc_nColuna2, loc_cIconPath
+		loc_oPage2 = THIS.pgf_4c_Principal.Page2
+		loc_cIconPath = gc_4c_CaminhoIcones
+
+		*-- Container botões Salvar/Cancelar (cnt_4c_BotoesAcao = Grupo_Salva original)
+		*-- IMPORTANTE: Botões ficam FORA do pgframeDados, diretos na Page2
+		loc_oPage2.AddObject("cnt_4c_BotoesAcao", "Container")
+		WITH loc_oPage2.cnt_4c_BotoesAcao
+			.Top = 5
+			.Left = 842
+			.Width = 160
+			.Height = 85
+			.BackStyle = 0
+			.BorderWidth = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Botões Confirmar/Cancelar (criar manualmente)
+		*-- Botão Confirmar
+		loc_oPage2.cnt_4c_BotoesAcao.AddObject("cmd_4c_Confirmar", "CommandButton")
+		WITH loc_oPage2.cnt_4c_BotoesAcao.cmd_4c_Confirmar
+			.Caption = "Confirmar"
+			.Width = 75
+			.Height = 75
+			.Left = 5
+			.Top = 5
+			.Picture = loc_cIconPath + "btn_confirmar.jpg"
+			.PicturePosition = 13
+			.BackColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
+			.Themes = .F.
+			.SpecialEffect = 0
+			.Visible = .T.
+		ENDWITH
+		BINDEVENT(loc_oPage2.cnt_4c_BotoesAcao.cmd_4c_Confirmar, "Click", THIS, "BtnConfirmarClick")
+
+		*-- Botão Cancelar
+		loc_oPage2.cnt_4c_BotoesAcao.AddObject("cmd_4c_Cancelar", "CommandButton")
+		WITH loc_oPage2.cnt_4c_BotoesAcao.cmd_4c_Cancelar
+			.Caption = "Cancelar"
+			.Width = 75
+			.Height = 75
+			.Left = 80
+			.Top = 5
+			.Picture = loc_cIconPath + "btn_cancelar.jpg"
+			.PicturePosition = 13
+			.BackColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
+			.Themes = .F.
+			.SpecialEffect = 0
+			.Visible = .T.
+		ENDWITH
+		BINDEVENT(loc_oPage2.cnt_4c_BotoesAcao.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
+
+		*-- IMPORTANTE: Trazer container de botões para frente (evitar ser coberto pelo pgframeDados)
+		loc_oPage2.cnt_4c_BotoesAcao.ZOrder(0)  && 0 = BringToFront
+
+		*-- =====================================================================
+		*-- PGFRAMEDADOS ANINHADO (PageFrame dentro da Page2)
+		*-- IMPORTANTE: Top = -54 para esconder as abas (igual ao original)
+		*-- =====================================================================
+		loc_oPage2.AddObject("pgframeDados", "PageFrame")
+		loc_oPgframeDados = loc_oPage2.pgframeDados
+
+		WITH loc_oPgframeDados
+			.Left = -1            && Original: -1
+			.Top = -54            && Original: -54 (CRITICO - esconde abas!)
+			.Width = 1003         && Original: 1003 (EXATO)
+			.Height = 656         && Original: 656 (EXATO)
+			.PageCount = 1        && FASE 2: Apenas 1 página (pgDados) por enquanto
+			.Tabs = .T.           && Mostrar abas
+			.TabStyle = 0         && Original: 0
+			.TabStretch = 0       && Original: 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Configurar primeira página: pgDados
+		WITH loc_oPgframeDados.Page1
+			.Caption = "Dados Principais"  && Original: "Dados Principais"
+			.Name = "pgDados"
+			.BackColor = RGB(236, 233, 216)
+		ENDWITH
+
+		loc_oPgDados = loc_oPgframeDados.pgDados
+
+		*-- =====================================================================
+		*-- CAMPOS DENTRO DO pgDados (15 campos básicos - POSIÇÕES EXATAS DO ORIGINAL)
+		*-- Referência: C:\4c\docs\FORMPRODUTO_LAYOUT_ORIGINAL.md
+		*-- =====================================================================
+
+		*-- 1. Código (Left=113, Top=130, Width=108, Height=23)
+		loc_oPgDados.AddObject("txt_4c_Codigo", "TextBox")
+		WITH loc_oPgDados.txt_4c_Codigo
+			.Left = 113
+			.Top = 130
+			.Width = 108
+			.Height = 23
+			.MaxLength = 14
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 2. Descrição (Left=222, Top=130, Width=290, Height=23)
+		loc_oPgDados.AddObject("txt_4c_Descricao", "TextBox")
+		WITH loc_oPgDados.txt_4c_Descricao
+			.Left = 222
+			.Top = 130
+			.Width = 290
+			.Height = 23
+			.MaxLength = 65
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 3. Situação (Left=735, Top=130, Width=142, Height=25)
+		loc_oPgDados.AddObject("opc_4c_Situacao", "OptionGroup")
+		WITH loc_oPgDados.opc_4c_Situacao
+			.Left = 735
+			.Top = 130
+			.Width = 142
+			.Height = 25
+			.AutoSize = .F.
+			.BackStyle = 0
+			.BorderStyle = 0
+			.ButtonCount = 2
+			.Value = 1
+			.Buttons(1).Caption = "Ativo"
+			.Buttons(1).AutoSize = .T.
+			.Buttons(2).Caption = "Inativo - Ap" + CHR(243) + "s :"
+			.Buttons(2).AutoSize = .T.
+			.Visible = .T.
+		ENDWITH
+
+		*-- 4. Código de Barras (Left=626, Top=155, Width=108, Height=21)
+		loc_oPgDados.AddObject("txt_4c_CodigoBarras", "TextBox")
+		WITH loc_oPgDados.txt_4c_CodigoBarras
+			.Left = 626
+			.Top = 155
+			.Width = 108
+			.Height = 21
+			.InputMask = "99999999999999"
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 5. Grupo (Left=113, Top=178, Width=31, Height=23)
+		loc_oPgDados.AddObject("txt_4c_Grupo", "TextBox")
+		WITH loc_oPgDados.txt_4c_Grupo
+			.Left = 113
+			.Top = 178
+			.Width = 31
+			.Height = 23
+			.MaxLength = 3
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 6. Descrição Grupo (Left=145, Top=178, Width=171, Height=23)
+		loc_oPgDados.AddObject("txt_4c_DescGrupo", "TextBox")
+		WITH loc_oPgDados.txt_4c_DescGrupo
+			.Left = 145
+			.Top = 178
+			.Width = 171
+			.Height = 23
+			.ReadOnly = .T.
+			.BackColor = RGB(240, 240, 240)
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 7. Obs. Pessoal (Left=626, Top=265, Width=220, Height=21)
+		loc_oPgDados.AddObject("txt_4c_ObsPessoal", "TextBox")
+		WITH loc_oPgDados.txt_4c_ObsPessoal
+			.Left = 626
+			.Top = 265
+			.Width = 220
+			.Height = 21
+			.MaxLength = 30
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 8. Fornecedor (Left=113, Top=274, Width=80, Height=23)
+		loc_oPgDados.AddObject("txt_4c_Fornecedor", "TextBox")
+		WITH loc_oPgDados.txt_4c_Fornecedor
+			.Left = 113
+			.Top = 274
+			.Width = 80
+			.Height = 23
+			.MaxLength = 10
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 9. Descrição Fornecedor (Left=194, Top=274, Width=318, Height=23)
+		loc_oPgDados.AddObject("txt_4c_DescFornecedor", "TextBox")
+		WITH loc_oPgDados.txt_4c_DescFornecedor
+			.Left = 194
+			.Top = 274
+			.Width = 318
+			.Height = 23
+			.ReadOnly = .T.
+			.BackColor = RGB(240, 240, 240)
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 10. Obs. Pedidos (Left=626, Top=287, Width=220, Height=21)
+		loc_oPgDados.AddObject("txt_4c_ObsPedidos", "TextBox")
+		WITH loc_oPgDados.txt_4c_ObsPedidos
+			.Left = 626
+			.Top = 287
+			.Width = 220
+			.Height = 21
+			.MaxLength = 30
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 11. Ref. Fornecedor (Left=113, Top=298, Width=152, Height=23)
+		loc_oPgDados.AddObject("txt_4c_RefFornecedor", "TextBox")
+		WITH loc_oPgDados.txt_4c_RefFornecedor
+			.Left = 113
+			.Top = 298
+			.Width = 152
+			.Height = 23
+			.MaxLength = 40
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 12. Custo Fornecedor (Left=626, Top=375, Width=127, Height=21)
+		loc_oPgDados.AddObject("txt_4c_CustoFornecedor", "TextBox")
+		WITH loc_oPgDados.txt_4c_CustoFornecedor
+			.Left = 626
+			.Top = 375
+			.Width = 127
+			.Height = 21
+			.InputMask = "9,999,999.99999"
+			.Alignment = 1
+			.ForeColor = RGB(36, 84, 155)
+			.BackColor = RGB(224, 235, 235)
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 13. Preço Venda (Left=626, Top=397, Width=127, Height=21)
+		loc_oPgDados.AddObject("txt_4c_PrecoVenda", "TextBox")
+		WITH loc_oPgDados.txt_4c_PrecoVenda
+			.Left = 626
+			.Top = 397
+			.Width = 127
+			.Height = 21
+			.InputMask = "9,999,999.99999"
+			.Alignment = 1
+			.ForeColor = RGB(36, 84, 155)
+			.BackColor = RGB(224, 235, 235)
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 14. Data Inclusão (Left=833, Top=397, Width=79, Height=21)
+		loc_oPgDados.AddObject("txt_4c_DataInclusao", "TextBox")
+		WITH loc_oPgDados.txt_4c_DataInclusao
+			.Left = 833
+			.Top = 397
+			.Width = 79
+			.Height = 21
+			.ReadOnly = .T.
+			.ForeColor = RGB(36, 84, 155)
+			.BackColor = RGB(224, 235, 235)
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- 15. Fator Venda (Left=626, Top=419, Width=127, Height=21)
+		loc_oPgDados.AddObject("txt_4c_FatorVenda", "TextBox")
+		WITH loc_oPgDados.txt_4c_FatorVenda
+			.Left = 626
+			.Top = 419
+			.Width = 127
+			.Height = 21
+			.InputMask = "9,999,999.99999"
+			.Alignment = 1
+			.ForeColor = RGB(36, 84, 155)
+			.BackColor = RGB(224, 235, 235)
+			.Value = ""
+			.Visible = .T.
+		ENDWITH
+
+		*-- =====================================================================
+		*-- LABELS DOS CAMPOS (Say) - POSIÇÕES EXATAS DO ORIGINAL
+		*-- =====================================================================
+
+		*-- Label Código (estimado: Left=65, Top=134)
+		loc_oPgDados.AddObject("lbl_4c_Codigo", "Label")
+		WITH loc_oPgDados.lbl_4c_Codigo
+			.Left = 65
+			.Top = 134
+			.AutoSize = .T.
+			.Caption = "C" + CHR(243) + "digo :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Descrição (estimado: Left=157, Top=134)
+		loc_oPgDados.AddObject("lbl_4c_Descricao", "Label")
+		WITH loc_oPgDados.lbl_4c_Descricao
+			.Left = 157
+			.Top = 134
+			.AutoSize = .T.
+			.Caption = "Descri" + CHR(231) + CHR(227) + "o :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Código de Barras (estimado: Left=540, Top=159)
+		loc_oPgDados.AddObject("lbl_4c_CodigoBarras", "Label")
+		WITH loc_oPgDados.lbl_4c_CodigoBarras
+			.Left = 540
+			.Top = 159
+			.AutoSize = .T.
+			.Caption = "C" + CHR(243) + "digo de Barras :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Grupo (Left=73, Top=182 conforme original)
+		loc_oPgDados.AddObject("lbl_4c_Grupo", "Label")
+		WITH loc_oPgDados.lbl_4c_Grupo
+			.Left = 73
+			.Top = 182
+			.Width = 38
+			.Height = 15
+			.Caption = "Grupo :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Obs. Pessoal (estimado: Left=540, Top=269)
+		loc_oPgDados.AddObject("lbl_4c_ObsPessoal", "Label")
+		WITH loc_oPgDados.lbl_4c_ObsPessoal
+			.Left = 540
+			.Top = 269
+			.AutoSize = .T.
+			.Caption = "Observa" + CHR(231) + CHR(227) + "o Pessoal :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Fornecedor (estimado: Left=40, Top=278)
+		loc_oPgDados.AddObject("lbl_4c_Fornecedor", "Label")
+		WITH loc_oPgDados.lbl_4c_Fornecedor
+			.Left = 40
+			.Top = 278
+			.AutoSize = .T.
+			.Caption = "Fornecedor :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Obs. Pedidos (estimado: Left=510, Top=291)
+		loc_oPgDados.AddObject("lbl_4c_ObsPedidos", "Label")
+		WITH loc_oPgDados.lbl_4c_ObsPedidos
+			.Left = 510
+			.Top = 291
+			.AutoSize = .T.
+			.Caption = "Observa" + CHR(231) + CHR(227) + "o para Pedidos :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Ref. Fornecedor (estimado: Left=50, Top=302)
+		loc_oPgDados.AddObject("lbl_4c_RefFornecedor", "Label")
+		WITH loc_oPgDados.lbl_4c_RefFornecedor
+			.Left = 17
+			.Top = 302
+			.AutoSize = .T.
+			.Caption = "Refer" + CHR(234) + "ncia :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Data/Usuário (Left=833, Top=365 conforme original)
+		loc_oPgDados.AddObject("lbl_4c_DataUsuario", "Label")
+		WITH loc_oPgDados.lbl_4c_DataUsuario
+			.Left = 833
+			.Top = 365
+			.Width = 84
+			.Caption = "Data / Usu" + CHR(225) + "rio"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.FontBold = .T.
+			.BackStyle = 0
+			.ForeColor = RGB(90, 90, 90)
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Custo (Left=546, Top=379 conforme original)
+		loc_oPgDados.AddObject("lbl_4c_Custo", "Label")
+		WITH loc_oPgDados.lbl_4c_Custo
+			.Left = 546
+			.Top = 379
+			.Width = 79
+			.Height = 15
+			.Caption = "Valor de Custo :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Preço Venda (Left=505, Top=400 conforme original)
+		loc_oPgDados.AddObject("lbl_4c_PrecoVenda", "Label")
+		WITH loc_oPgDados.lbl_4c_PrecoVenda
+			.Left = 505
+			.Top = 400
+			.AutoSize = .F.
+			.Width = 120
+			.Height = 15
+			.Alignment = 1
+			.Caption = "Valor de Venda :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Label Fator Venda (estimado: Left=520, Top=423)
+		loc_oPgDados.AddObject("lbl_4c_FatorVenda", "Label")
+		WITH loc_oPgDados.lbl_4c_FatorVenda
+			.Left = 520
+			.Top = 423
+			.AutoSize = .T.
+			.Caption = "Fator de Venda :"
+			.FontName = "Tahoma"
+			.FontSize = 8
+			.ForeColor = RGB(90, 90, 90)
+			.BackStyle = 0
+			.Visible = .T.
+		ENDWITH
+
+		*-- Implementar lookups (F4/DblClick)
+		THIS.ImplementarLookups()
+	ENDPROC
+
+	*===========================================================================
+	* METODO: AdicionarCampoTexto (Helper)
+	*===========================================================================
+	PROTECTED PROCEDURE AdicionarCampoTexto(par_oContainer, par_cNome, par_cLabel, par_nLeft, par_nTop, par_nWidth)
+		LOCAL loc_cNomeLabel, loc_cNomeTexto
+
+		*-- Label
+		IF !EMPTY(par_cLabel)
+			loc_cNomeLabel = "lbl" + SUBSTR(par_cNome, 4)  && Remove "txt_" → "lbl_4c_XXX"
+			par_oContainer.AddObject(loc_cNomeLabel, "Label")
+			WITH par_oContainer.&loc_cNomeLabel.
+				.Top = par_nTop
+				.Left = par_nLeft
+				.Width = 140
+				.Height = 20
+				.Caption = par_cLabel
+				.FontName = "Arial"
+				.FontSize = 9
+				.BackStyle = 0
+				.Visible = .T.
+			ENDWITH
+			par_nTop = par_nTop + 22  && Label acima do campo
+		ENDIF
+
+		*-- TextBox
+		par_oContainer.AddObject(par_cNome, "TextBox")
+		WITH par_oContainer.&par_cNome.
+			.Top = par_nTop
+			.Left = par_nLeft
+			.Width = par_nWidth
+			.Height = 22
+			.FontName = "Arial"
+			.FontSize = 9
+			.Value = ""  && IMPORTANTE: Inicializar como string
+			.Visible = .T.
+		ENDWITH
+	ENDPROC
+
+	*===========================================================================
+	* METODO: Implement arLookups
+	*===========================================================================
+	PROTECTED PROCEDURE ImplementarLookups()
+		*-- Lookup Grupo (F4/DblClick)
+		BINDEVENT(THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_Grupo, "KeyPress", THIS, "LookupGrupoKeyPress")
+		BINDEVENT(THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_Grupo, "DblClick", THIS, "LookupGrupo")
+		BINDEVENT(THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_Grupo, "LostFocus", THIS, "BuscarDescricaoGrupo")
+
+		*-- Lookup Fornecedor (F4/DblClick)
+		BINDEVENT(THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_Fornecedor, "KeyPress", THIS, "LookupFornecedorKeyPress")
+		BINDEVENT(THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_Fornecedor, "DblClick", THIS, "LookupFornecedor")
+		BINDEVENT(THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_Fornecedor, "LostFocus", THIS, "BuscarDescricaoFornecedor")
+	ENDPROC
+
+	*===========================================================================
+	* METODO: LookupGrupoKeyPress
+	*===========================================================================
+	PROCEDURE LookupGrupoKeyPress(tnKeyCode, tnShiftAltCtrl)
+		IF tnKeyCode = 286  && F4
+			THIS.LookupGrupo()
+		ENDIF
+	ENDPROC
+
+	*===========================================================================
+	* METODO: LookupGrupo
+	*===========================================================================
+	PROCEDURE LookupGrupo()
+		LOCAL loc_oFormBusca, loc_cCodigoSelecionado, loc_cSQL
+
+		*-- SQL para buscar grupos
+		loc_cSQL = "SELECT cgrus, dgrus FROM SigCdGrp ORDER BY cgrus"
+
+		*-- Criar formulário de busca
+		loc_oFormBusca = CREATEOBJECT("FormBuscaAuxiliar", ;
+			loc_cSQL, ;
+			"cgrus", ;
+			"dgrus", ;
+			"Busca de Grupos")
+
+		loc_oFormBusca.Show(1)  && Modal
+
+		*-- Se selecionou algo
+		IF !ISNULL(loc_oFormBusca.this_cCodigoSelecionado)
+			loc_cCodigoSelecionado = loc_oFormBusca.this_cCodigoSelecionado
+			THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_Grupo.Value = loc_cCodigoSelecionado
+			THIS.BuscarDescricaoGrupo()
+		ENDIF
+
+		loc_oFormBusca.Release()
+	ENDPROC
+
+	*===========================================================================
+	* METODO: BuscarDescricaoGrupo
+	*===========================================================================
+	PROCEDURE BuscarDescricaoGrupo()
+		LOCAL loc_cCodigo, loc_cSQL, loc_nResultado
+
+		loc_cCodigo = ALLTRIM(THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_Grupo.Value)
+
+		IF EMPTY(loc_cCodigo)
+			THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_DescGrupo.Value = ""
+			RETURN
+		ENDIF
+
+		loc_cSQL = "SELECT dgrus FROM SigCdGrp WHERE cgrus = " + EscaparSQL(loc_cCodigo)
+		loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Verifica")
+
+		IF loc_nResultado < 0
+			THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_DescGrupo.Value = "*** ERRO ***"
+			RETURN
+		ENDIF
+
+		IF RECCOUNT("cursor_4c_Verifica") = 0
+			THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_DescGrupo.Value = "*** N" + CHR(195) + "O ENCONTRADO ***"
+		ELSE
+			THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_DescGrupo.Value = ALLTRIM(cursor_4c_Verifica.dgrus)
+		ENDIF
+
+		USE IN SELECT("cursor_4c_Verifica")
+	ENDPROC
+
+	*===========================================================================
+	* METODO: LookupFornecedorKeyPress
+	*===========================================================================
+	PROCEDURE LookupFornecedorKeyPress(tnKeyCode, tnShiftAltCtrl)
+		IF tnKeyCode = 286  && F4
+			THIS.LookupFornecedor()
+		ENDIF
+	ENDPROC
+
+	*===========================================================================
+	* METODO: LookupFornecedor
+	*===========================================================================
+	PROCEDURE LookupFornecedor()
+		LOCAL loc_oFormBusca, loc_cCodigoSelecionado, loc_cSQL
+
+		*-- SQL para buscar fornecedores
+		loc_cSQL = "SELECT ifors, dfors FROM SigCdFor ORDER BY dfors"
+
+		*-- Criar formulário de busca
+		loc_oFormBusca = CREATEOBJECT("FormBuscaAuxiliar", ;
+			loc_cSQL, ;
+			"ifors", ;
+			"dfors", ;
+			"Busca de Fornecedores")
+
+		loc_oFormBusca.Show(1)  && Modal
+
+		*-- Se selecionou algo
+		IF !ISNULL(loc_oFormBusca.this_cCodigoSelecionado)
+			loc_cCodigoSelecionado = loc_oFormBusca.this_cCodigoSelecionado
+			THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_Fornecedor.Value = loc_cCodigoSelecionado
+			THIS.BuscarDescricaoFornecedor()
+		ENDIF
+
+		loc_oFormBusca.Release()
+	ENDPROC
+
+	*===========================================================================
+	* METODO: BuscarDescricaoFornecedor
+	*===========================================================================
+	PROCEDURE BuscarDescricaoFornecedor()
+		LOCAL loc_cCodigo, loc_cSQL, loc_nResultado
+
+		loc_cCodigo = ALLTRIM(THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_Fornecedor.Value)
+
+		IF EMPTY(loc_cCodigo)
+			THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_DescFornecedor.Value = ""
+			RETURN
+		ENDIF
+
+		loc_cSQL = "SELECT dfors FROM SigCdFor WHERE ifors = " + EscaparSQL(loc_cCodigo)
+		loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Verifica")
+
+		IF loc_nResultado < 0
+			THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_DescFornecedor.Value = "*** ERRO ***"
+			RETURN
+		ENDIF
+
+		IF RECCOUNT("cursor_4c_Verifica") = 0
+			THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_DescFornecedor.Value = "*** N" + CHR(195) + "O ENCONTRADO ***"
+		ELSE
+			THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados.txt_4c_DescFornecedor.Value = ALLTRIM(cursor_4c_Verifica.dfors)
+		ENDIF
+
+		USE IN SELECT("cursor_4c_Verifica")
+	ENDPROC
+
+	*===========================================================================
+	* METODO: CarregarLista (OVERRIDE)
+	*===========================================================================
+	PROTECTED PROCEDURE CarregarLista()
+		LOCAL loc_cSQL, loc_nResultado
+
+		*-- IMPORTANTE: Não executar durante validação de UI
+		IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+			RETURN .T.
+		ENDIF
+
+		*-- SQL para carregar lista de produtos (FASE 1: campos básicos)
+		loc_cSQL = ""
+		loc_cSQL = loc_cSQL + "SELECT "
+		loc_cSQL = loc_cSQL + "  cpros, dpros, dpro2s, cgrus, sgrus, "
+		loc_cSQL = loc_cSQL + "  reffs, colecoes, impEtiqs "
+		loc_cSQL = loc_cSQL + "FROM SigCdPro "
+		loc_cSQL = loc_cSQL + "ORDER BY cpros"
+
+		loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Lista")
+
+		IF loc_nResultado < 0
+			MostrarErro("Erro ao carregar lista de produtos", loc_cSQL)
+			RETURN .F.
+		ENDIF
+
+		*-- Bind RecordSource ao grid
+		THIS.pgf_4c_Principal.Page1.grd_4c_Dados.RecordSource = "cursor_4c_Lista"
+
+		*-- CRÍTICO: Reconfigurar cabeçalhos APÓS definir RecordSource
+		THIS.ConfigurarColunasGrid()
+
+		RETURN .T.
+	ENDPROC
+
+	*===========================================================================
+	* METODO: BOParaForm (OVERRIDE)
+	*===========================================================================
+	PROTECTED PROCEDURE BOParaForm()
+		LOCAL loc_oPgDados
+		loc_oPgDados = THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados
+
+		WITH THIS.this_oBusinessObject
+			loc_oPgDados.txt_4c_Codigo.Value = .this_cCodigo
+			loc_oPgDados.txt_4c_Descricao.Value = .this_cDescricao
+			loc_oPgDados.txt_4c_CodigoBarras.Value = TRANSFORM(.this_nCodigoBarras, "99999999999999")
+			loc_oPgDados.txt_4c_Grupo.Value = .this_cGrupo
+			loc_oPgDados.txt_4c_Fornecedor.Value = .this_cFornecedor
+			loc_oPgDados.txt_4c_RefFornecedor.Value = .this_cRefFornecedor
+			loc_oPgDados.txt_4c_CustoFornecedor.Value = TRANSFORM(.this_nCustoFornecedor, "999999999.999")
+			loc_oPgDados.txt_4c_PrecoVenda.Value = TRANSFORM(.this_nPrecoVenda, "999999999.99999")
+			loc_oPgDados.txt_4c_FatorVenda.Value = TRANSFORM(.this_nFatorVenda, "9999.999")
+			loc_oPgDados.txt_4c_ObsPessoal.Value = .this_cObsPessoal
+			loc_oPgDados.txt_4c_ObsPedidos.Value = .this_cObsPedidos
+			loc_oPgDados.opc_4c_Situacao.Value = IIF(.this_nSituacao = 1, 1, 2)
+			loc_oPgDados.txt_4c_DataInclusao.Value = DTOC(.this_dDataInclusao)
+		ENDWITH
+
+		*-- Buscar descrições (lookups)
+		THIS.BuscarDescricaoGrupo()
+		THIS.BuscarDescricaoFornecedor()
+	ENDPROC
+
+	*===========================================================================
+	* METODO: FormParaBO (OVERRIDE)
+	*===========================================================================
+	PROTECTED PROCEDURE FormParaBO()
+		LOCAL loc_oPgDados
+		loc_oPgDados = THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados
+
+		WITH THIS.this_oBusinessObject
+			.this_cCodigo = ALLTRIM(loc_oPgDados.txt_4c_Codigo.Value)
+			.this_cDescricao = ALLTRIM(loc_oPgDados.txt_4c_Descricao.Value)
+			.this_nCodigoBarras = VAL(ALLTRIM(loc_oPgDados.txt_4c_CodigoBarras.Value))
+			.this_cGrupo = ALLTRIM(loc_oPgDados.txt_4c_Grupo.Value)
+			.this_cFornecedor = ALLTRIM(loc_oPgDados.txt_4c_Fornecedor.Value)
+			.this_cRefFornecedor = ALLTRIM(loc_oPgDados.txt_4c_RefFornecedor.Value)
+			.this_nCustoFornecedor = VAL(ALLTRIM(loc_oPgDados.txt_4c_CustoFornecedor.Value))
+			.this_nPrecoVenda = VAL(ALLTRIM(loc_oPgDados.txt_4c_PrecoVenda.Value))
+			.this_nFatorVenda = VAL(ALLTRIM(loc_oPgDados.txt_4c_FatorVenda.Value))
+			.this_cObsPessoal = ALLTRIM(loc_oPgDados.txt_4c_ObsPessoal.Value)
+			.this_cObsPedidos = ALLTRIM(loc_oPgDados.txt_4c_ObsPedidos.Value)
+			.this_nSituacao = IIF(loc_oPgDados.opc_4c_Situacao.Value = 1, 1, 0)
+			*-- Data inclusão não é alterada (gerada automaticamente no INSERT)
+		ENDWITH
+	ENDPROC
+
+	*===========================================================================
+	* METODO: ValidarDados (OVERRIDE)
+	*===========================================================================
+	PROTECTED PROCEDURE ValidarDados()
+		LOCAL loc_oPgDados
+		loc_oPgDados = THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados
+
+		*-- Código obrigatório
+		IF EMPTY(ALLTRIM(loc_oPgDados.txt_4c_Codigo.Value))
+			MsgErro("C" + CHR(243) + "digo do produto " + CHR(233) + " obrigat" + CHR(243) + "rio!")
+			loc_oPgDados.txt_4c_Codigo.SetFocus()
+			RETURN .F.
+		ENDIF
+
+		*-- Descrição obrigatória
+		IF EMPTY(ALLTRIM(loc_oPgDados.txt_4c_Descricao.Value))
+			MsgErro("Descri" + CHR(231) + CHR(227) + "o " + CHR(233) + " obrigat" + CHR(243) + "ria!")
+			loc_oPgDados.txt_4c_Descricao.SetFocus()
+			RETURN .F.
+		ENDIF
+
+		*-- Grupo obrigatório
+		IF EMPTY(ALLTRIM(loc_oPgDados.txt_4c_Grupo.Value))
+			MsgErro("Grupo " + CHR(233) + " obrigat" + CHR(243) + "rio!")
+			loc_oPgDados.txt_4c_Grupo.SetFocus()
+			RETURN .F.
+		ENDIF
+
+		*-- Custo >= 0
+		IF VAL(ALLTRIM(loc_oPgDados.txt_4c_CustoFornecedor.Value)) < 0
+			MsgErro("Custo n" + CHR(227) + "o pode ser negativo!")
+			loc_oPgDados.txt_4c_CustoFornecedor.SetFocus()
+			RETURN .F.
+		ENDIF
+
+		*-- Preço >= 0
+		IF VAL(ALLTRIM(loc_oPgDados.txt_4c_PrecoVenda.Value)) < 0
+			MsgErro("Pre" + CHR(231) + "o n" + CHR(227) + "o pode ser negativo!")
+			loc_oPgDados.txt_4c_PrecoVenda.SetFocus()
+			RETURN .F.
+		ENDIF
+
+		RETURN .T.
+	ENDPROC
+
+	*===========================================================================
+	* METODOS: Button Click Handlers
+	*===========================================================================
+
+	PROCEDURE BtnIncluirClick()
+		THIS.this_cModoAtual = "INCLUIR"
+		THIS.this_lNovoRegistro = .T.
+		THIS.this_oBusinessObject.NovoRegistro()
+		THIS.BOParaForm()
+		THIS.HabilitarCampos(.T., .T.)
+		THIS.AjustarBotoesPorModo()
+		THIS.pgf_4c_Principal.ActivePage = 2
+		THIS.pgf_4c_Principal.Page2.txt_4c_Codigo.SetFocus()
+	ENDPROC
+
+	PROCEDURE BtnConsultarClick()
+		LOCAL loc_cCodigo
+		loc_cCodigo = THIS.ObterCodigoSelecionado()
+
+		IF EMPTY(loc_cCodigo)
+			MESSAGEBOX("Selecione um registro!", 48, "Aviso")
+			RETURN
+		ENDIF
+
+		THIS.this_cModoAtual = "VISUALIZAR"
+		THIS.this_lNovoRegistro = .F.
+		THIS.this_cCodigoAtual = loc_cCodigo
+
+		IF THIS.this_oBusinessObject.CarregarPorId(loc_cCodigo)
+			THIS.BOParaForm()
+			THIS.HabilitarCampos(.F., .F.)
+			THIS.AjustarBotoesPorModo()
+			THIS.pgf_4c_Principal.ActivePage = 2
+		ELSE
+			MESSAGEBOX("Erro ao carregar registro!", 16, "Erro")
+		ENDIF
+	ENDPROC
+
+	PROCEDURE BtnAlterarClick()
+		LOCAL loc_cCodigo
+		loc_cCodigo = THIS.ObterCodigoSelecionado()
+
+		IF EMPTY(loc_cCodigo)
+			MESSAGEBOX("Selecione um registro!", 48, "Aviso")
+			RETURN
+		ENDIF
+
+		THIS.this_cModoAtual = "ALTERAR"
+		THIS.this_lNovoRegistro = .F.
+		THIS.this_cCodigoAtual = loc_cCodigo
+
+		IF THIS.this_oBusinessObject.CarregarPorId(loc_cCodigo)
+			THIS.BOParaForm()
+			THIS.HabilitarCampos(.T., .F.)
+			THIS.AjustarBotoesPorModo()
+			THIS.pgf_4c_Principal.ActivePage = 2
+			THIS.pgf_4c_Principal.Page2.txt_4c_Descricao.SetFocus()
+		ELSE
+			MESSAGEBOX("Erro ao carregar registro!", 16, "Erro")
+		ENDIF
+	ENDPROC
+
+	PROCEDURE BtnExcluirClick()
+		LOCAL loc_cCodigo
+		loc_cCodigo = THIS.ObterCodigoSelecionado()
+
+		IF EMPTY(loc_cCodigo)
+			MESSAGEBOX("Selecione um registro!", 48, "Aviso")
+			RETURN
+		ENDIF
+
+		IF MESSAGEBOX("Confirma a exclus" + CHR(227) + "o do produto " + loc_cCodigo + "?", 4 + 32, "Confirma" + CHR(231) + CHR(227) + "o") = 6
+			IF THIS.this_oBusinessObject.CarregarPorId(loc_cCodigo)
+				IF THIS.this_oBusinessObject.Excluir()
+					MESSAGEBOX("Registro exclu" + CHR(237) + "do com sucesso!", 64, "Sucesso")
+					THIS.CarregarLista()
+				ELSE
+					MESSAGEBOX(THIS.this_oBusinessObject.this_cMensagemErro, 16, "Erro")
+				ENDIF
+			ENDIF
+		ENDIF
+	ENDPROC
+
+	PROCEDURE BtnProcurarClick()
+		LOCAL loc_cBusca, loc_oGrid
+		loc_cBusca = INPUTBOX("Digite o c" + CHR(243) + "digo ou descri" + CHR(231) + CHR(227) + "o:", "Buscar")
+
+		IF !EMPTY(loc_cBusca)
+			loc_cBusca = UPPER(ALLTRIM(loc_cBusca))
+			THIS.this_oBusinessObject.Buscar("UPPER(cpros) LIKE '%" + loc_cBusca + "%' OR UPPER(dpros) LIKE '%" + loc_cBusca + "%'")
+		ELSE
+			THIS.this_oBusinessObject.Buscar()
+		ENDIF
+
+		IF USED("cursor_4c_Dados")
+			loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
+			loc_oGrid.RecordSource = "cursor_4c_Dados"
+
+			*-- Reconfigurar ControlSource das colunas
+			loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.cpros"
+			loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.dpros"
+			loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.cgrus"
+			loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.ifors"
+			loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.reffs"
+			loc_oGrid.Column6.ControlSource = "cursor_4c_Dados.custofs"
+			loc_oGrid.Column7.ControlSource = "cursor_4c_Dados.pvens"
+
+			*-- Reconfigura cabeçalhos (perdidos ao alterar RecordSource)
+			THIS.ConfigurarColunasGrid()
+
+			SELECT cursor_4c_Dados
+			GO TOP
+			loc_oGrid.Refresh()
+		ENDIF
+	ENDPROC
+
+	PROCEDURE BtnSairClick()
+		THIS.Release()
+	ENDPROC
+
+	PROCEDURE GridDblClick()
+		THIS.BtnConsultarClick()
+	ENDPROC
+
+	PROCEDURE BtnConfirmarClick()
+		THIS.FormParaBO()
+
+		*-- Coloca o BO em modo de edição se necessário
+		IF THIS.this_cModoAtual = "INCLUIR"
+			THIS.this_oBusinessObject.this_lEmEdicao = .T.
+			THIS.this_oBusinessObject.this_lNovoRegistro = .T.
+		ELSE
+			IF THIS.this_cModoAtual = "ALTERAR"
+				THIS.this_oBusinessObject.this_lEmEdicao = .T.
+				THIS.this_oBusinessObject.this_lNovoRegistro = .F.
+			ENDIF
+		ENDIF
+
+		IF THIS.this_oBusinessObject.Salvar()
+			MESSAGEBOX("Registro salvo com sucesso!", 64, "Sucesso")
+			THIS.CarregarLista()
+			THIS.pgf_4c_Principal.ActivePage = 1
+			THIS.this_cModoAtual = "LISTA"
+		ELSE
+			MESSAGEBOX(THIS.this_oBusinessObject.this_cMensagemErro, 16, "Erro")
+		ENDIF
+	ENDPROC
+
+	PROCEDURE BtnCancelarClick()
+		IF MESSAGEBOX("Cancelar altera" + CHR(231) + CHR(245) + "es?", 4 + 32, "Confirma" + CHR(231) + CHR(227) + "o") = 6
+			THIS.CarregarLista()
+			THIS.pgf_4c_Principal.ActivePage = 1
+			THIS.this_cModoAtual = "LISTA"
+		ENDIF
+	ENDPROC
+
+	*===========================================================================
+	* METODOS: Auxiliares
+	*===========================================================================
+
+	*---------------------------------------------------------------------------
+	* AjustarBotoesPorModo - Ajusta botões conforme modo (VISUALIZAR vs EDIÇÃO)
+	*---------------------------------------------------------------------------
+	PROTECTED PROCEDURE AjustarBotoesPorModo()
+		LOCAL loc_oPagina, loc_lVisualizar
+		loc_oPagina = THIS.pgf_4c_Principal.Page2
+		loc_lVisualizar = (THIS.this_cModoAtual == "VISUALIZAR")
+
+		*-- Confirmar: sempre visível, desabilitado no modo VISUALIZAR
+		loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Visible = .T.
+		loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = !loc_lVisualizar
+
+		*-- Cancelar: sempre visível e habilitado
+		loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Visible = .T.
+		loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Enabled = .T.
+	ENDPROC
+
+	*---------------------------------------------------------------------------
+	* HabilitarCampos - Habilita/desabilita campos para edição
+	*---------------------------------------------------------------------------
+	PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar, par_lHabilitarCodigo)
+		LOCAL loc_oPgDados
+		loc_oPgDados = THIS.pgf_4c_Principal.Page2.pgframeDados.pgDados
+
+		*-- Código só é editável em modo INCLUIR
+		loc_oPgDados.txt_4c_Codigo.Enabled = par_lHabilitarCodigo
+
+		*-- Demais campos (FASE 1 - 15 campos)
+		loc_oPgDados.txt_4c_Descricao.Enabled = par_lHabilitar
+		loc_oPgDados.txt_4c_CodigoBarras.Enabled = par_lHabilitar
+		loc_oPgDados.txt_4c_Grupo.Enabled = par_lHabilitar
+		loc_oPgDados.txt_4c_DescGrupo.Enabled = .F.  && Sempre desabilitado (lookup result)
+		loc_oPgDados.txt_4c_Fornecedor.Enabled = par_lHabilitar
+		loc_oPgDados.txt_4c_DescFornecedor.Enabled = .F.  && Sempre desabilitado (lookup result)
+		loc_oPgDados.txt_4c_RefFornecedor.Enabled = par_lHabilitar
+		loc_oPgDados.txt_4c_CustoFornecedor.Enabled = par_lHabilitar
+		loc_oPgDados.txt_4c_PrecoVenda.Enabled = par_lHabilitar
+		loc_oPgDados.txt_4c_FatorVenda.Enabled = par_lHabilitar
+		loc_oPgDados.txt_4c_ObsPessoal.Enabled = par_lHabilitar
+		loc_oPgDados.txt_4c_ObsPedidos.Enabled = par_lHabilitar
+		loc_oPgDados.txt_4c_DataInclusao.Enabled = .F.  && Sempre desabilitado (gerado automaticamente)
+	ENDPROC
+
+	*---------------------------------------------------------------------------
+	* ObterCodigoSelecionado - Retorna código da linha selecionada no grid
+	*---------------------------------------------------------------------------
+	PROTECTED PROCEDURE ObterCodigoSelecionado()
+		IF USED("cursor_4c_Lista") AND RECCOUNT("cursor_4c_Lista") > 0
+			SELECT cursor_4c_Lista
+			RETURN ALLTRIM(cursor_4c_Lista.cpros)
+		ENDIF
+		RETURN ""
+	ENDPROC
+
+	*---------------------------------------------------------------------------
+	* TornarControlesVisiveis - Torna todos os controles visíveis recursivamente
+	* REGRA: Deve iterar Pages E Controls para PageFrames
+	* IMPORTANTE: AddObject() cria controles com Visible = .F. por padrão
+	*---------------------------------------------------------------------------
+	PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+		LOCAL loc_nI, loc_oObjeto
+
+		FOR loc_nI = 1 TO par_oContainer.ControlCount
+			loc_oObjeto = par_oContainer.Controls(loc_nI)
+
+			IF VARTYPE(loc_oObjeto) = "O"
+				IF PEMSTATUS(loc_oObjeto, "Visible", 5)
+					loc_oObjeto.Visible = .T.
+				ENDIF
+
+				*-- Trata PageFrame - itera Pages
+				IF UPPER(loc_oObjeto.BaseClass) = "PAGEFRAME"
+					LOCAL loc_nP
+					FOR loc_nP = 1 TO loc_oObjeto.PageCount
+						THIS.TornarControlesVisiveis(loc_oObjeto.Pages(loc_nP))
+					ENDFOR
+				ENDIF
+
+				*-- Trata containers com ControlCount
+				IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+					THIS.TornarControlesVisiveis(loc_oObjeto)
+				ENDIF
+			ENDIF
+		ENDFOR
+	ENDPROC
+
+ENDDEFINE

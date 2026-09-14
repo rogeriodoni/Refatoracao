@@ -1,0 +1,3507 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrChr.SCX
+* Data/Hora: 15/07/2026 03:07:46
+* Total de registros: 74
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRCHR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRCHR
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRCHR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRCHR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGPRCHR
+  Class: shape
+  BaseClass: shape
+
+Objeto: Label5
+  Parent: SIGPRCHR
+  Class: label
+  BaseClass: label
+
+Objeto: Shape2
+  Parent: SIGPRCHR
+  Class: shape
+  BaseClass: shape
+
+Objeto: grdCcheques
+  Parent: SIGPRCHR
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRCHR.grdCcheques.clnDatas
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCHR.grdCcheques.clnDatas
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCHR.grdCcheques.clnContas
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCHR.grdCcheques.clnContas
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCHR.grdCcheques.clnNcopias
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCHR.grdCcheques.clnNcopias
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCHR.grdCcheques.clnBancos
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCHR.grdCcheques.clnBancos
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCHR.grdCcheques.clnAgencias
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCHR.grdCcheques.clnAgencias
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCHR.grdCcheques.clnNcontas
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCHR.grdCcheques.clnNcontas
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCHR.grdCcheques.clnNcheques
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCHR.grdCcheques.clnNcheques
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCHR.grdCcheques.clnSituacaos
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCHR.grdCcheques.clnSituacaos
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCHR.grdCcheques.clnValors
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRCHR.grdCcheques.clnValors
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRCHR.grdCcheques.clnImprime
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGPRCHR.grdCcheques.clnImprime
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: txtFavorecido
+  Parent: SIGPRCHR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdGok
+  Parent: SIGPRCHR
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Label1
+  Parent: SIGPRCHR
+  Class: label
+  BaseClass: label
+
+Objeto: getCdContas
+  Parent: SIGPRCHR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDsContas
+  Parent: SIGPRCHR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdApaga1
+  Parent: SIGPRCHR
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Dt_inicial
+  Parent: SIGPRCHR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Dt_final
+  Parent: SIGPRCHR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRCHR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGPRCHR
+  Class: label
+  BaseClass: label
+
+Objeto: Command2
+  Parent: SIGPRCHR
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label3
+  Parent: SIGPRCHR
+  Class: label
+  BaseClass: label
+
+Objeto: GetCdGrupos
+  Parent: SIGPRCHR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDsGrupos
+  Parent: SIGPRCHR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cntjustificativa
+  Parent: SIGPRCHR
+  Class: container
+  BaseClass: container
+
+Objeto: Label5
+  Parent: SIGPRCHR.cntjustificativa
+  Class: label
+  BaseClass: label
+
+Objeto: cmdGconf
+  Parent: SIGPRCHR.cntjustificativa
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: get_justificativa
+  Parent: SIGPRCHR.cntjustificativa
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdTudo1
+  Parent: SIGPRCHR
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: impchmat
+  Parent: SIGPRCHR
+  Class: container
+  BaseClass: container
+
+Objeto: lblBanco
+  Parent: SIGPRCHR.impchmat
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblAgencia
+  Parent: SIGPRCHR.impchmat
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblCheque
+  Parent: SIGPRCHR.impchmat
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getBanco
+  Parent: SIGPRCHR.impchmat
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getChfin
+  Parent: SIGPRCHR.impchmat
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdGprocurar
+  Parent: SIGPRCHR.impchmat
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Label1
+  Parent: SIGPRCHR.impchmat
+  Class: label
+  BaseClass: label
+
+Objeto: Getchini
+  Parent: SIGPRCHR.impchmat
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntProcurar
+  Parent: SIGPRCHR
+  Class: container
+  BaseClass: container
+
+Objeto: lblBanco
+  Parent: SIGPRCHR.cntProcurar
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblAgencia
+  Parent: SIGPRCHR.cntProcurar
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblConta
+  Parent: SIGPRCHR.cntProcurar
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblCheque
+  Parent: SIGPRCHR.cntProcurar
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getBanco
+  Parent: SIGPRCHR.cntProcurar
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getAgencia
+  Parent: SIGPRCHR.cntProcurar
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getConta
+  Parent: SIGPRCHR.cntProcurar
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCheque
+  Parent: SIGPRCHR.cntProcurar
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblEmissão
+  Parent: SIGPRCHR.cntProcurar
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lblValor
+  Parent: SIGPRCHR.cntProcurar
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmissao
+  Parent: SIGPRCHR.cntProcurar
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getValor
+  Parent: SIGPRCHR.cntProcurar
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGPRCHR.cntProcurar
+  Class: label
+  BaseClass: label
+
+Objeto: cmdgprocurar
+  Parent: SIGPRCHR.cntProcurar
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 94
+  Left = 12
+  Width = 709
+  Height = 301
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = ( Prompt())
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowState = 0
+  AlwaysOnTop = .F.
+  Name = "SIGPRCHR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.Shape1
+------------------------------------------------------------
+  Top = 227
+  Left = 18
+  Height = 301
+  Width = 774
+  BackStyle = 0
+  SpecialEffect = 1
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Favorecido :"
+  Height = 15
+  Left = 24
+  Top = 534
+  Width = 62
+  TabIndex = 17
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.Shape2
+------------------------------------------------------------
+  Top = 156
+  Left = 18
+  Height = 66
+  Width = 774
+  BackStyle = 0
+  BorderStyle = 6
+  SpecialEffect = 1
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques
+------------------------------------------------------------
+  ColumnCount = 10
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 291
+  Left = 24
+  ReadOnly = .F.
+  RecordSource = "SigCqChi"
+  ScrollBars = 2
+  TabIndex = 8
+  Top = 233
+  Width = 710
+  GridLineColor = 238,238,238
+  Name = "grdCcheques"
+  Column1.FontName = "Tahoma"
+  Column1.ColumnOrder = 10
+  Column1.ControlSource = ""
+  Column1.Width = 79
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Format = "K"
+  Column1.Name = "clnDatas"
+  Column2.FontName = "Tahoma"
+  Column2.ControlSource = ""
+  Column2.Width = 79
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Format = "K"
+  Column2.Name = "clnContas"
+  Column3.FontName = "Tahoma"
+  Column3.ControlSource = ""
+  Column3.Width = 51
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Format = "K"
+  Column3.InputMask = "999999"
+  Column3.Name = "clnNcopias"
+  Column4.FontName = "Tahoma"
+  Column4.ControlSource = ""
+  Column4.Width = 30
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Format = "K"
+  Column4.Name = "clnBancos"
+  Column5.FontName = "Tahoma"
+  Column5.ControlSource = ""
+  Column5.Width = 37
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Format = "K"
+  Column5.Name = "clnAgencias"
+  Column6.FontName = "Tahoma"
+  Column6.ControlSource = ""
+  Column6.Width = 79
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Format = "K"
+  Column6.Name = "clnNcontas"
+  Column7.FontName = "Tahoma"
+  Column7.ControlSource = ""
+  Column7.Width = 51
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Format = "K"
+  Column7.Name = "clnNcheques"
+  Column8.FontName = "Tahoma"
+  Column8.ControlSource = ""
+  Column8.Width = 79
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Format = "K"
+  Column8.Name = "clnSituacaos"
+  Column9.FontName = "Tahoma"
+  Column9.ControlSource = ""
+  Column9.Width = 110
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.ReadOnly = .T.
+  Column9.Format = "K"
+  Column9.InputMask = "999,999,999.99"
+  Column9.Name = "clnValors"
+  Column10.FontName = "Tahoma"
+  Column10.ColumnOrder = 1
+  Column10.ControlSource = ""
+  Column10.Width = 55
+  Column10.Movable = .F.
+  Column10.Resizable = .F.
+  Column10.ReadOnly = .F.
+  Column10.Sparse = .F.
+  Column10.Name = "clnImprime"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnDatas.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Data"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnDatas.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Format = "K"
+  Margin = 0
+  MaxLength = 10
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnContas.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Conta"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnContas.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Format = "K"
+  Margin = 0
+  MaxLength = 10
+  ReadOnly = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnNcopias.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontUnderline = .F.
+  Alignment = 2
+  Caption = "Cópia"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnNcopias.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Format = "K"
+  InputMask = "999999"
+  Margin = 0
+  MaxLength = 6
+  ReadOnly = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnBancos.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Bco"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnBancos.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Format = "K"
+  Margin = 0
+  MaxLength = 3
+  ReadOnly = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnAgencias.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Ag."
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnAgencias.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Format = "K"
+  Margin = 0
+  MaxLength = 4
+  ReadOnly = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnNcontas.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "C.Corrente"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnNcontas.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Format = "K"
+  Margin = 0
+  MaxLength = 10
+  ReadOnly = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnNcheques.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Cheque"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnNcheques.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Format = "K"
+  Margin = 0
+  MaxLength = 6
+  ReadOnly = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnSituacaos.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Situação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnSituacaos.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Format = "K"
+  Margin = 0
+  MaxLength = 11
+  ReadOnly = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnValors.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnValors.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Format = "K"
+  InputMask = "999,999,999.99"
+  Margin = 0
+  MaxLength = 14
+  ReadOnly = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnImprime.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Imprime"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.grdCcheques.clnImprime.Check1
+------------------------------------------------------------
+  Top = 32
+  Left = 8
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.txtFavorecido
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 99
+  MaxLength = 40
+  ReadOnly = .T.
+  SelectOnEntry = .T.
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 530
+  Width = 286
+  Themes = .F.
+  Name = "txtFavorecido"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cmdGok
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 9
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 160
+  Left = 11
+  SpecialEffect = 1
+  Top = -3
+  Width = 789
+  TabIndex = 12
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdGok"
+  Command1.Top = 121
+  Command1.Left = 473
+  Command1.Height = 37
+  Command1.Width = 120
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_pastas_60.jpg
+  Command1.Caption = "\<Documento"
+  Command1.TabIndex = 5
+  Command1.PicturePosition = 1
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdDocumento"
+  Command2.Top = 6
+  Command2.Left = 713
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.TabIndex = 9
+  Command2.ToolTipText = "[Esc] Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdSair"
+  Command3.Top = 84
+  Command3.Left = 353
+  Command3.Height = 37
+  Command3.Width = 120
+  Command3.FontBold = .T.
+  Command3.FontItalic = .T.
+  Command3.FontName = "Comic Sans MS"
+  Command3.FontSize = 8
+  Command3.Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Command3.Caption = "\<Imprimir"
+  Command3.TabIndex = 4
+  Command3.PicturePosition = 1
+  Command3.ForeColor = 90,90,90
+  Command3.BackColor = 255,255,255
+  Command3.Themes = .F.
+  Command3.Name = "cmdImprimir"
+  Command4.Top = 84
+  Command4.Left = 593
+  Command4.Height = 37
+  Command4.Width = 120
+  Command4.FontBold = .T.
+  Command4.FontItalic = .T.
+  Command4.FontName = "Comic Sans MS"
+  Command4.FontSize = 8
+  Command4.Picture = ..\framework\imagens\cadastro_procurar_60.jpg
+  Command4.Caption = "\<Procurar"
+  Command4.TabIndex = 8
+  Command4.PicturePosition = 1
+  Command4.ForeColor = 90,90,90
+  Command4.BackColor = 255,255,255
+  Command4.Themes = .F.
+  Command4.Name = "cmdProcurar"
+  Command5.Top = 121
+  Command5.Left = 593
+  Command5.Height = 37
+  Command5.Width = 120
+  Command5.FontBold = .T.
+  Command5.FontItalic = .T.
+  Command5.FontName = "Comic Sans MS"
+  Command5.FontSize = 8
+  Command5.Picture = ..\framework\imagens\geral_pendencia_60.jpg
+  Command5.Caption = "\<Recibo"
+  Command5.TabIndex = 7
+  Command5.PicturePosition = 1
+  Command5.ForeColor = 90,90,90
+  Command5.BackColor = 255,255,255
+  Command5.Themes = .F.
+  Command5.Name = "cmdRecibo"
+  Command6.Top = 84
+  Command6.Left = 473
+  Command6.Height = 37
+  Command6.Width = 120
+  Command6.FontBold = .T.
+  Command6.FontItalic = .T.
+  Command6.FontName = "Comic Sans MS"
+  Command6.FontSize = 8
+  Command6.Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Command6.Caption = "E\<xclui Docto."
+  Command6.TabIndex = 6
+  Command6.ToolTipText = "Exclui Documento"
+  Command6.PicturePosition = 1
+  Command6.ForeColor = 90,90,90
+  Command6.BackColor = 255,255,255
+  Command6.Themes = .F.
+  Command6.Name = "cmdExcluiDoc"
+  Command7.Top = 121
+  Command7.Left = 353
+  Command7.Height = 37
+  Command7.Width = 120
+  Command7.FontBold = .T.
+  Command7.FontItalic = .T.
+  Command7.FontName = "Comic Sans MS"
+  Command7.FontSize = 8
+  Command7.Picture = ..\framework\imagens\geral_boleto_60.jpg
+  Command7.Caption = "Che\<que"
+  Command7.TabIndex = 3
+  Command7.ToolTipText = "Impressora de cheque"
+  Command7.PicturePosition = 1
+  Command7.ForeColor = 90,90,90
+  Command7.BackColor = 255,255,255
+  Command7.Themes = .F.
+  Command7.Name = "cmdImpchq"
+  Command8.Top = 84
+  Command8.Left = 233
+  Command8.Height = 37
+  Command8.Width = 120
+  Command8.FontBold = .T.
+  Command8.FontItalic = .T.
+  Command8.FontName = "Comic Sans MS"
+  Command8.FontSize = 8
+  Command8.Picture = ..\framework\imagens\cheque.png
+  Command8.Caption = "Chq. \<Matric."
+  Command8.TabIndex = 2
+  Command8.ToolTipText = "Impressora matricial"
+  Command8.PicturePosition = 1
+  Command8.ForeColor = 90,90,90
+  Command8.BackColor = 255,255,255
+  Command8.Themes = .F.
+  Command8.Name = "cmdchmat"
+  Command9.Top = 121
+  Command9.Left = 233
+  Command9.Height = 37
+  Command9.Width = 120
+  Command9.FontBold = .T.
+  Command9.FontItalic = .T.
+  Command9.FontName = "Comic Sans MS"
+  Command9.FontSize = 8
+  Command9.Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Command9.Caption = "Excluir Chq."
+  Command9.TabIndex = 1
+  Command9.ToolTipText = "Exclui Cheque"
+  Command9.PicturePosition = 1
+  Command9.ForeColor = 90,90,90
+  Command9.BackColor = 255,255,255
+  Command9.Themes = .F.
+  Command9.Name = "btnExcluirChq"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta :"
+  Height = 15
+  Left = 34
+  Top = 194
+  Width = 38
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.getCdContas
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 75
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 190
+  Width = 100
+  Themes = .F.
+  Name = "getCdContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.getDsContas
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 177
+  MaxLength = 50
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 190
+  Width = 360
+  Themes = .F.
+  Name = "getDsContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cmdApaga1
+------------------------------------------------------------
+  Top = 375
+  Left = 742
+  Height = 40
+  Width = 40
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 11
+  TabStop = .F.
+  ToolTipText = "Desmarca tudo"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 25
+  Themes = .F.
+  Name = "cmdApaga1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.Dt_inicial
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  Left = 598
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 163
+  Name = "Dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.Dt_final
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  Left = 701
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 163
+  Name = "Dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "a"
+  Left = 686
+  Top = 167
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Height = 15
+  Left = 550
+  Top = 167
+  Width = 45
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.Command2
+------------------------------------------------------------
+  Top = 191
+  Left = 598
+  Height = 24
+  Width = 88
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Caption = "Processar"
+  TabIndex = 7
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Command2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 34
+  Top = 167
+  Width = 38
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.GetCdGrupos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 75
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 163
+  Width = 100
+  Themes = .F.
+  Name = "GetCdGrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.GetDsGrupos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 177
+  MaxLength = 50
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 163
+  Width = 360
+  Themes = .F.
+  Name = "GetDsGrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntjustificativa
+------------------------------------------------------------
+  Top = 532
+  Left = 395
+  Width = 350
+  Height = 69
+  BorderWidth = 0
+  SpecialEffect = 0
+  Visible = .F.
+  BackColor = 255,255,255
+  Name = "cntjustificativa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntjustificativa.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Justificativa do cancelamento"
+  Height = 15
+  Left = 6
+  Top = 5
+  Width = 143
+  TabIndex = 17
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntjustificativa.cmdGconf
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 47
+  Left = 243
+  Top = 18
+  Width = 107
+  TabIndex = 14
+  Name = "cmdGconf"
+  Command1.Top = 4
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 48
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_escudo_ok_32.jpg
+  Command1.Caption = ""
+  Command1.Enabled = .T.
+  Command1.ToolTipText = "Confirmar"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmConfirmar"
+  Command2.Top = 4
+  Command2.Left = 53
+  Command2.Height = 40
+  Command2.Width = 48
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_32.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = ""
+  Command2.ToolTipText = "Cancelar"
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdCancelar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntjustificativa.get_justificativa
+------------------------------------------------------------
+  Height = 44
+  Left = 3
+  Top = 21
+  Width = 238
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  Name = "get_justificativa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cmdTudo1
+------------------------------------------------------------
+  Top = 334
+  Left = 742
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 10
+  TabStop = .F.
+  ToolTipText = "Marca tudo"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 23
+  Themes = .F.
+  Name = "cmdTudo1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.impchmat
+------------------------------------------------------------
+  Top = 284
+  Left = 240
+  Width = 314
+  Height = 218
+  SpecialEffect = 0
+  Enabled = .F.
+  Visible = .F.
+  TabIndex = 18
+  BackColor = 255,255,255
+  Name = "impchmat"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.impchmat.lblBanco
+------------------------------------------------------------
+  Caption = "Banco :"
+  Height = 15
+  Left = 66
+  Top = 157
+  Width = 38
+  TabIndex = 8
+  Name = "lblBanco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.impchmat.lblAgencia
+------------------------------------------------------------
+  Caption = "Cheque Inicial :"
+  Height = 15
+  Left = 28
+  Top = 185
+  Width = 76
+  TabIndex = 10
+  Name = "lblAgencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.impchmat.lblCheque
+------------------------------------------------------------
+  Caption = "Cheque Final :"
+  Height = 15
+  Left = 172
+  Top = 184
+  Width = 71
+  TabIndex = 9
+  Name = "lblCheque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.impchmat.getBanco
+------------------------------------------------------------
+  InputMask = "999"
+  Left = 107
+  TabIndex = 2
+  Top = 153
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "getBanco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.impchmat.getChfin
+------------------------------------------------------------
+  Height = 23
+  InputMask = "999999"
+  Left = 245
+  MaxLength = 6
+  TabIndex = 5
+  Top = 180
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "getChfin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.impchmat.cmdGprocurar
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 110
+  Left = 134
+  SpecialEffect = 1
+  Top = 7
+  Width = 173
+  TabIndex = 14
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdGprocurar"
+  Command1.Top = 1
+  Command1.Left = 13
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Command1.Caption = "\<Imprimir"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdimpri"
+  Command2.Top = 1
+  Command2.Left = 95
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdCancelar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.impchmat.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "Impressão"
+  Height = 16
+  Left = 12
+  Top = 8
+  Width = 65
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.impchmat.Getchini
+------------------------------------------------------------
+  Height = 23
+  InputMask = "999999"
+  Left = 107
+  MaxLength = 6
+  TabIndex = 5
+  Top = 179
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "Getchini"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar
+------------------------------------------------------------
+  Top = 284
+  Left = 240
+  Width = 314
+  Height = 218
+  SpecialEffect = 0
+  Enabled = .F.
+  Visible = .F.
+  TabIndex = 19
+  BackColor = 255,255,255
+  Name = "cntProcurar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.lblBanco
+------------------------------------------------------------
+  Caption = "Banco :"
+  Height = 15
+  Left = 36
+  Top = 139
+  Width = 38
+  TabIndex = 8
+  Name = "lblBanco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.lblAgencia
+------------------------------------------------------------
+  Caption = "Agência :"
+  Height = 15
+  Left = 27
+  Top = 163
+  Width = 47
+  TabIndex = 9
+  Name = "lblAgencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.lblConta
+------------------------------------------------------------
+  Caption = "Conta :"
+  Height = 15
+  Left = 36
+  Top = 187
+  Width = 38
+  TabIndex = 10
+  Name = "lblConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.lblCheque
+------------------------------------------------------------
+  Caption = "Cheque :"
+  Height = 15
+  Left = 164
+  Top = 139
+  Width = 46
+  TabIndex = 11
+  Name = "lblCheque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.getBanco
+------------------------------------------------------------
+  InputMask = "999"
+  Left = 77
+  TabIndex = 2
+  Top = 135
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "getBanco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.getAgencia
+------------------------------------------------------------
+  InputMask = "9999"
+  Left = 77
+  MaxLength = 4
+  TabIndex = 3
+  Top = 158
+  Width = 40
+  ForeColor = 0,0,0
+  Name = "getAgencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.getConta
+------------------------------------------------------------
+  Height = 23
+  InputMask = "9999999999"
+  Left = 77
+  MaxLength = 10
+  TabIndex = 4
+  Top = 181
+  Width = 81
+  ForeColor = 0,0,0
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.getCheque
+------------------------------------------------------------
+  Height = 23
+  InputMask = "999999"
+  Left = 213
+  MaxLength = 6
+  TabIndex = 5
+  Top = 135
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "getCheque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.lblEmissão
+------------------------------------------------------------
+  Caption = "Emissão :"
+  Height = 15
+  Left = 163
+  Top = 163
+  Width = 47
+  TabIndex = 12
+  Name = "lblEmissão"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.lblValor
+------------------------------------------------------------
+  Caption = "Valor :"
+  Height = 15
+  Left = 177
+  Top = 187
+  Width = 33
+  TabIndex = 13
+  Name = "lblValor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.getEmissao
+------------------------------------------------------------
+  Height = 23
+  InputMask = ""
+  Left = 213
+  MaxLength = 10
+  TabIndex = 6
+  Top = 158
+  Width = 81
+  ForeColor = 0,0,0
+  Name = "getEmissao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.getValor
+------------------------------------------------------------
+  Height = 23
+  InputMask = "999,999.99"
+  Left = 213
+  MaxLength = 10
+  TabIndex = 7
+  Top = 181
+  Width = 81
+  ForeColor = 0,0,0
+  Name = "getValor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 9
+  BackStyle = 0
+  Caption = "Procurar"
+  Height = 16
+  Left = 12
+  Top = 8
+  Width = 54
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCHR.cntProcurar.cmdgprocurar
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 110
+  Left = 135
+  SpecialEffect = 1
+  Top = 7
+  Width = 173
+  TabIndex = 14
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdgprocurar"
+  Command1.Top = 1
+  Command1.Left = 21
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_procurar_60.jpg
+  Command1.Caption = "\<Procurar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdprocurar"
+  Command2.Top = 1
+  Command2.Left = 97
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdCancelar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 1, 9, 6, 14, 12, 35, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRCHR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE carregaconta
+------------------------------------------------------------
+PROCEDURE carregaconta
+Create Cursor TmpConta (grupos c(10),contas c(10),flag l,valos n(12,2),acerto n(12,2),moedas c(3),datas d,vencs d,;
+						hists c(50),nomes c(50),emps c(3),nopers n(9),dopes c(20),numes n(6),tipos c(1),fpags c(12),;
+						opers c(1),baixa n(12,2),baixaaut n(12,2),cotacaos n(12,4),grupocs c(10),contacs c(10),;
+						cotorigs n(12,4),moedacs c(3),cotacaocs n(12,4),valocs n(12,2),empos c(3), OrdCopChs n(3))
+
+_Chave = CsSigCqChi.emps + CsSigCqChi.dopes + Str(CsSigCqChi.numes,6)
+
+If Used('TmpPrIt')
+	Use In TmpPrIt
+EndIf
+
+lStrQuery = [Select emps,dopes,numes,empos,grupos,contas,tipos,nopers,opers,acertos,cotacaos,valos,moedas,hists,vencs,datas ]+;
+			[From SigCdPit ]+;
+			[Where empdopnums = "]+_Chave+[" ]+;
+			[Order By emps,dopes,numes,grupos,contas,nopers ]
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpPrIt')
+
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select TmpPrIt
+Go Top
+Scan
+	Scatter MemVar
+	m.flag   = .F.
+	m.nomes  = ''
+	If Seek(m.contas,'CrContas','iclis')
+		m.nomes = CrContas.rclis
+	EndIf
+
+	Do Case
+		Case TmpPrIt.tipos = 'M'
+			Scatter Fields moedas,hists,vencs,datas MemVar
+			If m.acertos <> 0
+				m.Flag  = .T.
+			EndIf
+	
+		Case TmpPrIt.tipos = 'C'
+			m.Flag  = .T.
+			If Used('TmpMccr')
+				Use In TmpMccr
+			EndIf
+			lStrQuery = [Select emps,nopers,grupos,contas,valors,valpags From SigMvCcr ]+;
+						[Where emps = ']+TmpPrIt.empos+[' And nopers = ]+Str(TmpPrIt.Nopers,9)+[ ]
+			lnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpMccr')
+			If lnQueryOk < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+				Return(.F.)
+			EndIf
+			
+			Select TmpMccr
+			Go Top
+			If m.grupos <> TmpMccr.grupos Or m.contas <> TmpMccr.contas
+				Select TmpMccr
+				Skip
+			EndIf
+
+			m.valos  = TmpMccr.valors - TmpMccr.valpags + m.acertos
+			
+		Case TmpPrIt.tipos = 'P'
+			m.Flag  = .T.
+			If Used('TmpPar')
+				Use In TmpPar
+			EndIf
+			lStrQuery = [Select emps,nopers,moefpgs,fpags,vpags From SigMvPar ]+;
+						[Where emps = ']+TmpPrIt.empos+[' And nopers = ]+Str(TmpPrIt.Nopers,9)+[ ]
+			lnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpPar')
+			If lnQueryOk < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+				Return(.F.)
+			EndIf
+			Select TmpPar
+			Go Top
+			m.valos  = m.valos - TmpPar.vpags + m.acertos
+			m.moedas = TmpPar.moefpgs
+			m.hists  = Alltrim(TmpPar.fpags) + ' ' + m.emps + Alltrim(m.dopes) + ' ' + Alltrim(fGerMascara(m.numes))
+	EndCase
+	m.acerto = m.acertos
+	Insert Into TmpConta From MemVar
+EndScan
+Return
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mexibecheques
+------------------------------------------------------------
+PROCEDURE mexibecheques
+LParameters llSeek
+
+ThisForm.LockScreen = .T.
+llSeek = Iif(Type('llSeek') = 'L',llSeek,.F.)
+If Used('CsSigCqChi')
+	UpDate CsSigCqChi Set nMarca1s = 0 Where nMarca1s = 1
+EndIf
+
+If Empty(ThisForm.getCdContas.Value)
+	Select CsSigCqChi
+	Set Order To NCopias
+	If llSeek
+		Seek Chr(255) In CsSigCqChi Order NCopias Ascending
+	EndIf
+Else
+	Select CsSigCqChi
+	Set Order To contas
+	Set Key To ThisForm.getCdContas.Value
+	If llSeek
+		Seek ThisForm.getCdContas.Value + Chr(255) In CsSigCqChi Order contas Ascending
+	EndIf
+EndIf
+
+ThisForm.CmdGOk.CmdProcurar.Enabled = .t.
+ThisForm.CmdGOk.Refresh
+ThisForm.GrdCCheques.Refresh
+ThisForm.TxtFavorecido.Value = CsSigCqChi.favos
+ThisForm.TxtFavorecido.Refresh
+ThisForm.GrdCCheques.clnContas.SetFocus
+ThisForm.LockScreen = .F.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montachq
+------------------------------------------------------------
+PROCEDURE montachq
+Lparameters llPosiciona
+
+Private lcDtInicial, lcDtFinal
+
+ThisForm.LockScreen = .T.
+
+If llPosiciona
+	lcBusca = csSigCqChi.Bancos + CsSigCqChi.Agencias + CsSigCqChi.ncontas + CsSigCqChi.Ncheques
+EndIf
+
+lcDtInicial = fDtoSQL(ThisForm.Dt_Inicial.Value)
+lcDtFinal   = fDtoSQL(ThisForm.Dt_Final.Value,'23:59:59')
+lcCdGrupo   = ThisForm.getCdGrupos.Value
+lcCdConta   = ThisForm.getCdContas.Value
+
+Wait Window 'Aguarde! Selecionando Cheques...' NoWait
+
+If Used('CsSigCqChi')
+	ThisForm.GrdCCheques.RecordSource = ''
+	Use In CsSigCqChi
+EndIf
+
+If Empty(lcCdConta)
+	lcQuery = [Select a.emps, a.dopes, a.numes, a.datas, a.bancos, a.agencias, a.ncontas, a.ncheques, a.contas, ] + ;
+					 [a.valors, a.favos, a.ncopias, a.emitidos, a.nemissoes, a.cancelas, a.cidchaves, a.JustCanc ] + ;
+				[From SigCqChi a ] + ;
+			   [Where a.datas Between ?lcDtInicial And ?lcDtFinal And ] + ;
+				 	  Iif(Empty(lcCdGrupo), [], [a.Grupos = '] + lcCdGrupo + [' And ]) + ;
+				 	 [a.Contas in (Select Distinct ContaDs From SigOpFp Where EmiChqs = 1) ] + ;
+			   [Order By a.emps, a.dopes, a.numes, a.datas, a.bancos, a.agencias, a.ncontas, a.ncheques, a.contas, ] + ;
+				 	 [a.valors, a.favos, a.ncopias, a.emitidos, a.nemissoes, a.cancelas, a.cidchaves]
+Else
+	lcQuery = [Select emps, dopes, numes, datas, bancos, agencias, ncontas, ncheques, contas, ] + ;
+					 [valors, favos, ncopias, emitidos, nemissoes, cancelas, cidchaves, JustCanc ] + ;
+				[From SigCqChi ] + ;
+			   [Where datas Between ?lcDtInicial And ?lcDtFinal And ] + ;
+					  Iif(Empty(lcCdGrupo), [], [Grupos = '] + lcCdGrupo + [' And ]) + ;
+					  [Contas = '] + lcCdConta + [' ] + ;
+			   [Order By emps, dopes, numes, datas, bancos, agencias, ncontas, ncheques, contas, ] + ;
+					 [valors, favos, ncopias, emitidos, nemissoes, cancelas, cidchaves]
+EndIf
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpChi') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpChi - ' + Iif(Empty(lcCdConta), '1', '2') + ')')
+	Return .f.
+EndIf
+
+Select Emps, Dopes, Numes, Datas, Bancos, Agencias, NContas, NCheques, Contas, Valors, Favos, NCopias, ;
+	   NEmissoes, cIdChaves, Iif(Emitidos,1,0) as NEmitidos, Iif(Cancelas,1,0) as NCancelas, 0 as NMarca1s, JustCanc ;
+  From TmpChi ;
+ Order By Bancos, Agencias, NContas, NCheques ;
+  Into Cursor csSigCqChi ReadWrite
+
+Select CsSigCqChi
+Index On ncopias               Tag NCopias
+Index On nEmitidos             Tag NEmitidos
+Index On nCancelas             Tag NCancelas
+Index On nMarca1s              Tag NMarca1s
+Index On ncheques              Tag NCheques
+Index On datas                 Tag Datas
+Index On ncontas + ncheques    Tag Conta
+Index On contas + Str(ncopias) Tag Contas
+Index On Dtos(datas) + bancos + agencias + ncontas + ncheques      Tag Emissao
+Index On Str(valors,12,2) + bancos + agencias + ncontas + ncheques Tag Valor
+Index On bancos + agencias + ncontas + ncheques                    Tag Cheque
+Index On agencias + ncontas + ncheques                             Tag Agencia
+Set Order To NCopias
+If llPosiciona
+	If Not Seek(lcBusca)
+		Go Top
+	Endif
+Else
+	Go Top
+EndIf
+
+ThisForm.LockScreen = .F.
+
+With ThisForm
+	With .GrdCCheques
+		.RecordSource = 'CsSigCqChi'
+		.clnImprime.ControlSource   = 'CsSigCqChi.nMarca1s'
+		.clnDatas.ControlSource     = 'CsSigCqChi.datas'
+		.clnContas.ControlSource    = 'CsSigCqChi.contas'
+		.clnNCopias.ControlSource   = 'CsSigCqChi.ncopias'
+		.clnBancos.ControlSource    = 'CsSigCqChi.bancos'
+		.clnAgencias.ControlSource  = 'CsSigCqChi.agencias'
+		.clnNContas.ControlSource   = 'CsSigCqChi.ncontas'
+		.clnNCheques.ControlSource  = 'CsSigCqChi.ncheques'
+		.clnValors.ControlSource    = 'CsSigCqChi.valors'
+		.clnSituacaos.ControlSource = [IIf(CsSigCqChi.ncancelas = 1,'Cancelado',IIf(CsSigCqChi.nemissoes > 1,'Reemitido',;
+										IIf(CsSigCqChi.nemitidos = 1,'Emitido','Não Emitido')))]
+		.SetAll("DynamicForeColor","Iif(CsSigCqChi.ncancelas = 1,Rgb(255,0,0),Iif(CsSigCqChi.nemitidos = 0,Rgb(0,0,255),Rgb(0,0,0)))","Column")
+		.Refresh
+	EndWith 
+	.cntjustificativa.get_justificativa.ControlSource='CsSigCqChi.JustCanc'
+EndWith
+
+
+Wait Clear
+
+If llPosiciona
+	ThisForm.mExibeCheques(.F.)
+Else
+	ThisForm.mExibeCheques(.T.)
+EndIf
+
+ThisForm.Inicial = .f.
+
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Public xImpOk
+Local lcEscape,lcTalk,lcQueryChi
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.poDataMgr = CreateObject('fSqlConector',This.Name)
+
+ThisForm.Dt_Inicial.Value = Date()
+ThisForm.Dt_Final.Value   = Date()
+ThisForm.AntDtIni         = Ctod('')
+ThisForm.AntDtFin         = Ctod('')
+ThisForm.AntCdGrupo       = ''
+ThisForm.AntDsGrupo       = ''
+ThisForm.AntCdConta       = ''
+ThisForm.AntDsConta       = ''
+
+ThisForm.ExcluirDocumento = fChecaAcesso('SIGPRCHR','EXCLUIR')
+ThisForm.ExcluirCheque    = fChecaAcesso('SIGPRCHR','EXCLUIRCHQ')
+ThisForm.plInicio         = .F.
+
+ThisForm.Inicial          = .t.
+
+ThisForm.CntProcurar.GetBanco.Value   = Space(3)
+ThisForm.CntProcurar.GetAgencia.Value = Space(4)
+ThisForm.CntProcurar.GetConta.Value   = Space(10)
+ThisForm.CntProcurar.GetCheque.Value  = Space(6)
+ThisForm.CntProcurar.GetEmissao.Value = {}
+ThisForm.CntProcurar.GetValor.Value   = 0
+
+If Used('CrSigCdmp')
+	Use In CrSigCdmp
+EndIf
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select * From SigCdmp ],'CrSigCdmp')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select CrSigCdmp
+Index On impres Tag impres
+Go Top
+
+m.lcEscape = Set('Escape')
+m.lcTalk   = Set('Talk')
+
+Set Escape Off
+Set Talk On
+
+Wait Window 'Aguarde! Selecionando Contas...' NoWait
+
+lStrQuery = [Select Distinct b.IClis,b.RClis ]+;
+			  [From SigOpFp a, SigCdCli b ]+;
+			 [Where a.EmiChqs = 1 And ] + ;
+			 	   [b.IClis = a.ContaDs ]+;
+			 [Order By IClis ]
+
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CrContas') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrContas')
+	Return(.F.)
+EndIf
+
+lcQuery = [Select a.emps, a.dopes, a.numes, a.datas, a.bancos, a.agencias, a.ncontas, a.ncheques, a.contas, ] + ;
+				 [a.valors, a.favos, a.ncopias, a.emitidos, a.nemissoes, a.cancelas, a.cidchaves, a.JustCanc, ] + ;
+				 [0 as NEmitidos, 0 as NCancelas, 0 as NMarca1s ] + ;
+			[From SigCqChi a where 0=1 ]
+If ThisForm.poDataMgr.SqlExecute(lcQuery,'CsSigCqChi') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CsSigCqChi')
+	Return(.F.)
+EndIf
+
+SELECT csSigCqChi
+Index On ncopias               Tag NCopias
+Index On nEmitidos             Tag NEmitidos
+Index On nCancelas             Tag NCancelas
+Index On nMarca1s              Tag NMarca1s
+Index On ncheques              Tag NCheques
+Index On datas                 Tag Datas
+Index On ncontas + ncheques    Tag Conta
+Index On contas + Str(ncopias) Tag Contas
+Index On Dtos(datas) + bancos + agencias + ncontas + ncheques      Tag Emissao
+Index On Str(valors,12,2) + bancos + agencias + ncontas + ncheques Tag Valor
+Index On bancos + agencias + ncontas + ncheques                    Tag Cheque
+Index On agencias + ncontas + ncheques                             Tag Agencia
+
+Select CrContas
+Index On IClis Tag IClis
+Index On RClis Tag RClis
+Go Top
+
+ThisForm.Dt_Inicial.SetFocus
+
+Set Talk &lcTalk.
+Set Escape &lcEscape.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.grdCcheques
+* Classe: grid (Base: grid)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Scrolled
+------------------------------------------------------------
+PROCEDURE Scrolled
+LParameters nDirection
+
+lCancelas = (CsSigCqChi.ncancelas <> 0)
+
+ThisForm.TxtFavorecido.Value          = CsSigCqChi.favos
+ThisForm.CmdGOk.CmdDocumento.Enabled  = !lCancelas
+ThisForm.CmdGOk.CmdExcluiDoc.Enabled  = (!lCancelas And ThisForm.ExcluirDocumento)
+ThisForm.CmdGOk.CmdImprimir.Enabled   = !lCancelas
+ThisForm.CmdGOk.CmdRecibo.Enabled     = !lCancelas
+ThisForm.CmdGOk.BtnExcluirChq.Enabled = (lCancelas And ThisForm.ExcluirCheque)
+If lCancelas
+	With Thisform.cntjustificativa
+		.Visible=.T.
+		.get_justificativa.Width = 346
+		.get_justificativa.ReadOnly = .T.
+		.get_justificativa.Refresh
+		.cmdGconf.Enabled=.F.
+		.cmdGconf.Visible=.F.
+		
+	EndWith 
+Else
+	With Thisform.cntjustificativa
+		.Visible=.F.
+		.get_justificativa.ReadOnly=.F.
+		.cmdGconf.Enabled=.F.
+		.cmdGconf.Visible=.F.
+	EndWith 
+EndIf 
+ThisForm.TxtFavorecido.Refresh
+ThisForm.CmdGOk.CmdDocumento.Refresh
+ThisForm.CmdGOk.CmdExcluiDoc.Refresh
+ThisForm.CmdGOk.CmdImprimir.Refresh
+ThisForm.CmdGOk.CmdRecibo.Refresh
+ThisForm.CmdGOk.BtnExcluirChq.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE DoScroll
+------------------------------------------------------------
+PROCEDURE DoScroll
+LParameters nDirection
+
+lCancelas = (CsSigCqChi.ncancelas <> 0)
+
+ThisForm.TxtFavorecido.Value          = CsSigCqChi.favos
+ThisForm.CmdGOk.CmdDocumento.Enabled  = !lCancelas
+ThisForm.CmdGOk.CmdExcluiDoc.Enabled  = (!lCancelas And ThisForm.ExcluirDocumento)
+ThisForm.CmdGOk.CmdImprimir.Enabled   = !lCancelas
+ThisForm.CmdGOk.CmdRecibo.Enabled     = !lCancelas
+ThisForm.CmdGOk.BtnExcluirChq.Enabled = (lCancelas And ThisForm.ExcluirCheque)
+If lCancelas
+	With Thisform.cntjustificativa
+		.Visible=.T.
+		.get_justificativa.Width = 346
+		.get_justificativa.ReadOnly = .T.
+		.get_justificativa.Refresh
+		.cmdGconf.Enabled=.F.
+		.cmdGconf.Visible=.F.
+		
+	EndWith 
+Else
+	With Thisform.cntjustificativa
+		.Visible=.F.
+		.get_justificativa.ReadOnly=.F.
+		.cmdGconf.Enabled=.F.
+		.cmdGconf.Visible=.F.
+	EndWith 
+EndIf 
+ThisForm.TxtFavorecido.Refresh
+ThisForm.CmdGOk.CmdDocumento.Refresh
+ThisForm.CmdGOk.CmdExcluiDoc.Refresh
+ThisForm.CmdGOk.CmdImprimir.Refresh
+ThisForm.CmdGOk.CmdRecibo.Refresh
+ThisForm.CmdGOk.BtnExcluirChq.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE BeforeRowColChange
+------------------------------------------------------------
+PROCEDURE BeforeRowColChange
+LParameters nColIndex
+
+lCancelas = (CsSigCqChi.ncancelas <> 0)
+
+ThisForm.TxtFavorecido.Value          = CsSigCqChi.favos
+ThisForm.CmdGOk.CmdDocumento.Enabled  = !lCancelas
+ThisForm.CmdGOk.CmdExcluiDoc.Enabled  = (!lCancelas And ThisForm.ExcluirDocumento)
+ThisForm.CmdGOk.CmdImprimir.Enabled   = !lCancelas
+ThisForm.CmdGOk.CmdRecibo.Enabled     = !lCancelas
+ThisForm.CmdGOk.BtnExcluirChq.Enabled = (lCancelas And ThisForm.ExcluirCheque)
+If lCancelas
+	With Thisform.cntjustificativa
+		.Visible=.T.
+		.get_justificativa.Width = 346
+		.get_justificativa.ReadOnly = .T.
+		.get_justificativa.Refresh
+		.cmdGconf.Enabled=.F.
+		.cmdGconf.Visible=.F.
+		
+	EndWith 
+Else
+	With Thisform.cntjustificativa
+		.Visible=.F.
+		.get_justificativa.ReadOnly=.F.
+		.cmdGconf.Enabled=.F.
+		.cmdGconf.Visible=.F.
+	EndWith 
+EndIf 
+ThisForm.TxtFavorecido.Refresh
+ThisForm.CmdGOk.CmdDocumento.Refresh
+ThisForm.CmdGOk.CmdExcluiDoc.Refresh
+ThisForm.CmdGOk.CmdImprimir.Refresh
+ThisForm.CmdGOk.CmdRecibo.Refresh
+ThisForm.CmdGOk.BtnExcluirChq.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LParameters nColIndex
+
+lCancelas = (CsSigCqChi.ncancelas <> 0)
+
+ThisForm.TxtFavorecido.Value          = CsSigCqChi.favos
+ThisForm.CmdGOk.CmdDocumento.Enabled  = !lCancelas
+ThisForm.CmdGOk.CmdExcluiDoc.Enabled  = (!lCancelas And ThisForm.ExcluirDocumento)
+ThisForm.CmdGOk.CmdImprimir.Enabled   = !lCancelas
+ThisForm.CmdGOk.CmdRecibo.Enabled     = !lCancelas
+ThisForm.CmdGOk.BtnExcluirChq.Enabled = (lCancelas And ThisForm.ExcluirCheque)
+If lCancelas
+	With Thisform.cntjustificativa
+		.Visible=.T.
+		.get_justificativa.Width = 346
+		.get_justificativa.ReadOnly = .T.
+		.get_justificativa.Refresh
+		.cmdGconf.Enabled=.F.
+		.cmdGconf.Visible=.F.
+		
+	EndWith 
+Else
+	With Thisform.cntjustificativa
+		.Visible=.F.
+		.get_justificativa.ReadOnly=.F.
+		.cmdGconf.Enabled=.F.
+		.cmdGconf.Visible=.F.
+	EndWith 
+EndIf 
+ThisForm.TxtFavorecido.Refresh
+ThisForm.CmdGOk.CmdDocumento.Refresh
+ThisForm.CmdGOk.CmdExcluiDoc.Refresh
+ThisForm.CmdGOk.CmdImprimir.Refresh
+ThisForm.CmdGOk.CmdRecibo.Refresh
+ThisForm.CmdGOk.BtnExcluirChq.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.grdCcheques.clnNcopias.Header1
+* Classe: header (Base: header)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If (Empty(ThisForm.getCdContas.Value) And !Upper(Order('CsSigCqChi')) = 'NCOPIAS')
+	ThisForm.mExibeCheques(.F.)
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.grdCcheques.clnImprime.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+This.KeyPress(32,0)
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+Local lcKeyChq1,lnRecno1
+
+If InList(m.nKeyCode,13,32)
+	lnRecno1  = RecNo('CsSigCqChi')
+	lcKeyChq1 = (CsSigCqChi.bancos + CsSigCqChi.agencias + CsSigCqChi.ncontas + CsSigCqChi.ncheques)
+	
+	UpDate CsSigCqChi Set nMarca1s = Iif(nMarca1s = 1,0,1) ;
+	Where bancos + agencias + ncontas + ncheques = lcKeyChq1 And nEmitidos = 0 And nCancelas = 0
+	
+	ThisForm.GrdCCheques.Refresh
+	If BetWeen(m.lnRecno1,1,RecCount('CsSigCqChi'))
+		GoTo lnRecno1
+	EndIf
+	NoDefault
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.txtFavorecido
+* Classe: textbox (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.cmdGok
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdDocumento.Click
+------------------------------------------------------------
+PROCEDURE cmdDocumento.Click
+Local lnRecno1
+
+ThisForm.LockScreen = .T.
+
+lnRecno1= RecNo('CsSigCqChi')
+
+If !Eof('CsSigCqChi')
+	lcEDNs    = CsSigCqChi.emps + CsSigCqChi.dopes + Str(CsSigCqChi.numes,6)
+	If ThisForm.poDataMgr.CursorQuery('SigCdPgr',,'empdopnums',lcEDNs)
+		Do Form SigCdPgr With Left(CsSigCqChi.dopes,1),.T.,CsSigCqChi.emps,CsSigCqChi.dopes,CsSigCqChi.numes
+		SigCdPgr.AlwaysOnTop = .T.
+		If BetWeen(lnRecno1,1,RecCount('CsSigCqChi'))
+			Goto lnRecno1 In CsSigCqChi
+		EndIf
+		ThisForm.mExibeCheques(.F.)
+		SigCdPgr.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+	EndIf
+Else
+	ThisForm.mExibeCheques(.T.)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdSair.Click
+------------------------------------------------------------
+PROCEDURE cmdSair.Click
+If Used('TmpContas')
+	Use In TmpContas
+EndIf
+If Used('CrContas')
+	Use In CrContas
+Endif
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdImprimir.Click
+------------------------------------------------------------
+PROCEDURE cmdImprimir.Click
+llCarrega = ThisForm.CarregaConta()
+
+If llCarrega
+	Do Form SigReEch With CsSigCqChi.emps,CsSigCqChi.dopes,CsSigCqChi.numes,'CONSULTAR',CsSigCqChi.nCheques
+Else
+	Return(.F.)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdProcurar.Click
+------------------------------------------------------------
+PROCEDURE cmdProcurar.Click
+ThisForm.plInicio = .T.
+ThisForm.CntProcurar.Init
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdRecibo.Click
+------------------------------------------------------------
+PROCEDURE cmdRecibo.Click
+llCarrega = ThisForm.CarregaConta()
+
+If llCarrega
+	Do Form SigRerec With ThisForm,'RECIBO'
+Else
+	Return(.F.)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdExcluiDoc.Click
+------------------------------------------------------------
+PROCEDURE cmdExcluiDoc.Click
+With Thisform.cntjustificativa
+	.Visible=.T.
+	.get_justificativa.Value=''
+	.get_justificativa.Width=238
+	.get_justificativa.ReadOnly=.F.
+	.get_justificativa.SetFocus 
+	
+	.CmdGconf.Enabled=.T.
+	.CmdGconf.Visible=.T.
+	.CmdGconf.cmConfirmar.Enabled=.T. 
+EndWith 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdImpchq.Click
+------------------------------------------------------------
+PROCEDURE cmdImpchq.Click
+Local Array laPrinters(1)
+Local lcPoint,lcSeparator,lcStrgMes,lnPrinters,lcNomeImp1,loBrowse1,lcNomeImp1,lcPrnIni1,lnMaxcol1,lnLivl1,lnClvl1,;
+		lnLivext1,lnClvext1,lnLivext2,lnClvext2,lnLinom1,lnClnom1,lnLicid1,lnClcid1,lnLidia1,lnCldia1,lnLimes1,lnClmes1,;
+		lnLiano1,lnClano1,lcPgchq1,lcStrImp1,lcStrImp2,lcStrImp3,loBarra1
+
+lcPoint     = Set('Point')
+lcSeparator = Set('Separator')
+lcStrgMes   = 'Janeiro  FevereiroMarço    Abril    Maio     Junho    Julho    Agosto   Setembro Outubro  Novembro Dezembro '
+laPrinters  = ''
+lnPrinters  = aPrinters(m.laPrinters)
+
+If Seek(1,'CsSigCqChi','nMarca1s')
+	If Used('CrImp1')
+		Use In ('CrImp1')
+	EndIf
+
+	Select Distinct Impres as cNomeImp1s, Space(100) as cNomeImp2s, 0 as nMarca1s ;
+	  From crSigCdmp ;
+	 Where nchqfs = 1 ;
+	 Order By Impres ;
+	  Into Cursor crImp1 ReadWrite
+
+	Select CrImp1
+	Index On nMarca1s Tag nMarca1s
+	Set Order To ('') In CrImp1
+	Locate
+
+	Scan
+		lcNomeImp1 = Lower(AllTrim(CrImp1.cNomeImp1s))
+		For m.lnConta1 = 1 To m.lnPrinters
+			If Lower(AllTrim(JustFName(m.laPrinters(m.lnConta1,1)))) == m.lcNomeImp1
+				Select CrImp1
+				m.cNomeImp2s = AllTrim(m.laPrinters(m.lnConta1,1))
+				m.nMarca1s = 1
+				Gather Memo Memvar Fields cNomeImp2s,nMarca1s
+				Exit
+			EndIf
+		EndFor
+	EndScan
+	If Used('CrImp2')
+		Use In ('CrImp2')
+	EndI
+
+	Select Distinct cNomeImp1s, cNomeImp2s ;
+	  From crImp1 ;
+	 Where nMarca1s = 1 ;
+	 Order By cNomeImp1s ;
+	  Into Cursor crImp2 ReadWrite
+	
+	Select CrImp2
+	Index On cNomeImp2s Tag cNomeImp2s
+	Go Top
+	
+	Set Point To ','
+	Set Separator To '.'
+	  
+	Select CrImp2
+	Set Order To ('') In CrImp2
+	Locate
+
+	If !Eof('CrImp2')
+		KeyBoard Chr(32) Plain
+		= Inkey()
+		If RecCount('CrImp2') > 1
+			m.loLista = CreateObject('fwBuscaInt','CrImp2','cNomeImp2s','','Seleção')
+			m.loLista.mAddColuna('cNomeImp2s','','Impressoras')
+			m.loLista.Show()
+		EndIf
+		If !(LastKey() = 27)
+			m.lcNomeImp1 = CrImp2.cNomeImp1s
+			m.lcNomeImp2 = AllTrim(CrImp2.cNomeImp2s)
+			
+			Set Order To ('') In CsSigCqChi   && Retirar a Ordem e Set Key...
+			=Seek(lcNomeImp1,'CrSigCdmp','impres')
+			
+			lcPrnIni1 = AllTrim(CrSigCdmp.fontes)
+			lcPrnIni1 = Iif(Empty(lcPrnIni1),'',Evaluate(lcPrnIni1))
+			lnMaxCol1 = CrSigCdmp.maxcols
+			lnLivl1   = CrSigCdmp.nlivl1s
+			lnClvl1   = CrSigCdmp.nclvl1s
+			lnLivExt1 = CrSigCdmp.nlivext1s
+			lnClvExt1 = CrSigCdmp.nclvext1s
+			lnLivExt2 = CrSigCdmp.nlivext2s
+			lnClvExt2 = CrSigCdmp.nclvext2s
+			lnLiNom1  = CrSigCdmp.nlinom1s
+			lnClNom1  = CrSigCdmp.nclnom1s
+			lnLiCid1  = CrSigCdmp.nlicid1s
+			lnClCid1  = CrSigCdmp.nclcid1s
+			lnLiDia1  = CrSigCdmp.nlidia1s
+			lnClDia1  = CrSigCdmp.ncldia1s
+			lnLiMes1  = CrSigCdmp.nlimes1s
+			lnClMes1  = CrSigCdmp.nclmes1s
+			lnLiAno1  = CrSigCdmp.nliano1s
+			lnClAno1  = CrSigCdmp.nclano1s
+			lcPgChq1  = CrSigCdmp.cpgchq1s
+			
+			Set Printer To Name (lcNomeImp2)
+			Set Device To Printer
+
+			@ $,$ Say lcPrnIni1
+			
+			*-[ Seleciona cheques para impressão ]-*
+			Select * From CsSigCqChi Where nMarca1s = 1 Into Cursor TmpChImp
+
+			loBarra1 = CreateObject('fwprogressbar','Imprimindo Cheque(s) Selecionado(s)...',Reccount(TmpChImp))
+			loBarra1.Show
+			
+			Select TmpChImp
+			Go Top
+			Scan
+				lStrQuery = [Select valos,vencs From SigMvPar ]+;
+							[Where bancos = ']+CsSigCqChi.bancos+[' And agencias = ']+CsSigCqChi.agencias+;
+								[' And contas = ']+CsSigCqChi.ncontas+[' And numeros = ']+CsSigCqChi.ncheques+[' ] 
+				lnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpPar')
+				If lnQueryOk < 1
+					MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+					Return(.F.)
+				EndIf
+				
+				Select TmpPar
+				Go Top
+				If !Eof() And Iif(Empty(ThisForm.getCdContas.Value),.T.,(CsSigCqChi.contas = ThisForm.getCdContas.Value))
+
+					lcStrImp1 = ('#' + AllTrim(TransForm(TmpPar.valos,'999,999,999.99')) + '#')
+					@ lnLivl1,lnClvl1 Say lcStrImp1 Font 'Courier New',10 Style 'N'
+					
+					lcStrImp1 = AllTrim(fValorExtenso(TmpPar.valos))
+					lcStrImp2 = lcStrImp1
+					If Len(lcStrImp2) > (lnMaxCol1 - m.lnClvExt1)
+						lcStrImp2 = Left(lcStrImp2,(lnMaxCol1 - m.lnClvExt1))
+						If !Empty(SubStr(lcStrImp1,(Len(lcStrImp2) + 1)))
+							lcStrImp2 = SubStr(lcStrImp2,1,Rat(' ',lcStrImp2))
+						EndIf
+					EndIf
+					@ lnLivExt1,lnClvExt1 Say lcStrImp2 Font 'Courier New',10 Style 'N'
+					
+					lcStrImp2 = Substr(lcStrImp1,(Len(lcStrImp2) + 1))
+					lcStrImp2 = PadR(lcStrImp2,Min(Len(lcStrImp2),(lnMaxCol1 - m.lnClvExt2)))
+					@ lnLivext2,lnClvext2 Say lcStrImp2 Font 'Courier New',10 Style 'N'
+					
+					lcStrImp1 = PadR(AllTrim(CsSigCqChi.favos),Min(Len(lcStrImp1),(lnMaxCol1 - lnClNom1)))
+					@ lnLiNom1,lnClNom1 Say lcStrImp1 Font 'Courier New',10 Style 'N'
+
+					lcStrImp1 = PadR(AllTrim(CrSigCdEmp.cidas),Min(Len(lcStrImp1),(lnMaxCol1 - lnClCid1)))
+					@ lnLiCid1,lnClCid1 Say lcStrImp1 Font 'Courier New',10 Style 'N'
+					
+					lcStrImp1 = TransForm(Day(TmpPar.vencs),'@L 99')
+					@ lnLiDia1,lnClDia1 Say lcStrImp1 Font 'Courier New',10 Style 'N'
+					
+					lcStrImp1 = AllTrim(Substr(m.lcStrgMes,(Month(TmpPar.vencs) * 9 - 8),9))
+					@ lnLiMes1,lnClMes1 Say lcStrImp1 Font 'Courier New',10 Style 'N'
+					
+					lcStrImp1 = TransForm(Year(TmpPar.vencs),'@L 9999')
+					@ lnLiAno1,lnClAno1 Say lcStrImp1 Font 'Courier New',10 Style 'N'
+					
+					Select CsSigCqChi
+					
+					lStrQuery = [Update SigCqChi Set emitidos = 1 Where cidchaves = ']+CsSigCqChi.cidchaves+[' ]
+					lnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery)
+					If lnQueryOk < 1
+						MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+						Return(.F.)
+					EndIf
+				EndIf
+				loBarra1.Update(.T.)
+			EndScan
+			loBarra1.Complete(.T.)
+			Set Printer To Default
+			Set Device To Screen
+			Set Console On
+		Else
+			MessageBox('Nenhuma Impressora Selecionada !!!',(0+48+0),'')
+		EndIf
+	Else
+		MessageBox('Nenhuma Impressora de Cheque Configurada !!!',(0+48+0),'')
+	EndIf
+Else
+	MessageBox('Nenhum Cheque Selecionado !!!',(0+48+0),'')
+EndIf
+If Type('loBarra1') = 'O'
+	Release loBarra1
+EndIf
+Set Point To (lcPoint)
+Set Separator To (lcSeparator)
+ThisForm.mExibeCheques(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdchmat.Click
+------------------------------------------------------------
+PROCEDURE cmdchmat.Click
+Local xCont,xRecno
+Select CsSigCqChi
+xRecno = Recno()
+
+If Used('TmpChi')
+	Use In TmpChi
+EndIf
+
+Select Distinct Bancos ;
+  From csSigCqChi ;
+ Where nMarca1s = 1 ;
+  Into Cursor TmpChi
+
+Select TmpChi
+Go Top
+If !Eof()
+	If Reccount('TmpChi') > 1
+		MessageBox('Todos os cheques selecionados devem ser do mesmo banco',48,'Atenção')
+		Go xRecno
+		ThisForm.GrdCCheques.SetFocus
+		Return(.F.)
+	EndIf
+
+	Select bancos,valors,ncheques,datas,nemitidos,ncancelas,favos From CsSigCqChi ;
+	Where nMarca1s = 1 ;
+	Order By bancos,ncheques ;
+	Into Cursor CrCheque
+
+	Select CrCheque
+	Locate For nEmitidos = 1
+	If Found()
+		If MessageBox('Os cheques selecionados já foram emitidos. Confirma impressão ?',36+256,'Atenção') = 7
+			Return(.F.)
+		EndIf
+	EndIf
+	Go Top
+	MessageBox('Verificar se a impressora está Pronta p/ impressão',32,'Atenção')
+
+	Do SigIpChq.prg With ThisForm.Podatamgr 
+	
+	If xImpOk
+		Select CrCheque
+		Go Top
+		Scan
+			lStrQuery = [Update SigCqChi Set emitidos = 1 ]+;
+						[Where bancos = ']+CrCheque.bancos+[' And ncheques = ']+CrCheque.ncheques+[' ]
+			lnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery)
+			If lnQueryOk < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+				Return(.F.)
+			EndIf
+			Update CsSigCqChi Set nemitidos = 1 Where bancos = CrCheque.bancos And ncheques = CrCheque.ncheques
+			Select CrCheque
+		EndScan
+		ThisForm.poDataMgr.Commit()
+	EndIf
+	Select CsSigCqChi
+	Go xRecno
+	ThisForm.GrdCCheques.Refresh
+Else
+	ThisForm.ChMatIni = .T.
+	ThisForm.ImpChMat.Init
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnExcluirChq.Click
+------------------------------------------------------------
+PROCEDURE btnExcluirChq.Click
+If CsSigCqChi.ncancelas = 1 And ThisForm.ExcluirCheque
+	If MessageBox('Deseja realmente excluir o cheque :' + Chr(13) + CsSigCqChi.bancos + ' / ' + CsSigCqChi.agencias + ;
+		' / ' + CsSigCqChi.ncontas + ' / ' + CsSigCqChi.ncheques + ' ?',4+32+256,'Exclusão de cheque cancelado') = 6
+
+		lStrQuery = [Delete From SigCqChi Where cidchaves = ']+CsSigCqChi.cidchaves+[' ]
+		lnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery,'')
+		lcMensa = 'Exclusão do cheque cancelado : ' + CsSigCqChi.bancos + '/' + CsSigCqChi.agencias + '/' + ;
+			CsSigCqChi.ncontas + '/' + CsSigCqChi.ncheques
+				  
+		=fGravarLog('X',ThisForm.Name,'EXCLUIRCHQ',lcMensa)
+		
+		ThisForm.poDataMgr.Commit()
+		Select CsSigCqChi
+		Delete
+
+		ThisForm.GrdCCheques.Refresh
+	EndIf
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.getCdContas
+* Classe: textbox (Base: textbox)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntCdConta = This.Value
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.GetCdGrupos.Value
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'C',This.Value,This,ThisForm.GetDsContas)
+		Messagebox('Acesso Negado !!!',48,'')
+		This.Value                 = ''
+		ThisForm.GetDsContas.Value = ''
+		This.Refresh
+		ThisForm.GetDsContas.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.GetDsContas.Value = ''
+	ThisForm.GetDsContas.Refresh
+EndIf
+If This.Value <> ThisForm.AntCdConta
+	If Used('CsSigCqChi')
+		Zap In CsSigCqChi
+		ThisForm.GrdCCheques.Refresh
+	EndIf
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.getDsContas
+* Classe: textbox (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntDsConta = This.Value
+Return(Empty(ThisForm.GetCdContas.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.GetCdGrupos.Value
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.GetCdContas,This)
+		Messagebox('Acesso Negado !!!',48,'')
+		This.Value                 = ''
+		ThisForm.GetCdContas.Value = ''
+		This.Refresh
+		ThisForm.GetCdContas.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.GetCdContas.Value = ''
+	ThisForm.GetCdContas.Refresh
+EndIf
+If This.Value <> ThisForm.AntDsConta
+	If Used('CsSigCqChi')
+		Zap In CsSigCqChi
+		ThisForm.GrdCCheques.Refresh
+	EndIf
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.cmdApaga1
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lnRecno1
+
+lnRecno1 = RecNo('CsSigCqChi')
+UpDate CsSigCqChi Set nMarca1s = 0 Where nMarca1s = 1
+If BetWeen(lnRecno1,1,RecCount('CsSigCqChi'))
+	GoTo lnRecno1 In ('CsSigCqChi')
+EndIf
+ThisForm.GrdCCheques.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.Dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntDtIni = This.Value
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value > ThisForm.Dt_final.Value
+	ThisForm.Dt_Final.Value = This.Value
+EndIf
+If This.Value <> ThisForm.AntDtIni
+	If Used('CsSigCqChi')
+		Zap In CsSigCqChi
+		ThisForm.GrdCCheques.Refresh
+	EndIf
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.Dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntDtFin = This.Value
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < ThisForm.Dt_Inicial.Value
+	ThisForm.Dt_Inicial.Value = This.Value
+EndIf
+If This.Value <> ThisForm.AntDtFin
+	If Used('CsSigCqChi')
+		Zap In CsSigCqChi
+		ThisForm.GrdCCheques.Refresh
+	EndIf
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.Command2
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If ThisForm.Dt_Inicial.Value > ThisForm.Dt_Final.Value
+	MessageBox('Data Final menor que Data Inicial !!!',16,'Período Inválido')
+	ThisForm.Dt_Inicial.SetFocus
+	Return 0
+EndIf
+
+*!*	If Empty(ThisForm.GetCdGrupos.Value)
+*!*		MessageBox('Grupo Inválido !!!',48,'Campo Obrigatório')
+*!*		ThisForm.GetCdGrupos.SetFocus
+*!*		Return 0
+*!*	EndIf
+
+*!*	If Empty(ThisForm.GetCdContas.Value)
+*!*		MessageBox('Conta Inválida !!!',48,'Campo Obrigatório')
+*!*		ThisForm.GetCdContas.SetFocus
+*!*		Return 0
+*!*	EndIf
+
+*!*	If !Seek(ThisForm.GetCdContas.Value,'CrContas','IClis')
+*!*		MessageBox('Conta não configurada para emissão de cheques !!!',48,'')
+*!*		ThisForm.GetCdContas.SetFocus
+*!*		Return 0
+*!*	EndIf
+
+If ThisForm.AntDtIni # ThisForm.Dt_Inicial.Value Or ;
+   ThisForm.AntDtFin # ThisForm.Dt_Final.Value Or ;
+   ThisForm.AntCdGrupo # ThisForm.getCdGrupos.Value Or ;
+   ThisForm.AntCdConta # ThisForm.getCdContas.Value Or ;
+   ThisForm.Inicial
+
+	If !(ThisForm.MontaChq(.F.))
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (MontaChq)')
+		Return 0
+	EndIf
+EndIf
+
+ThisForm.GrdCCheques.ClnContas.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.GetCdGrupos
+* Classe: textbox (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntCdGrupo = This.Value
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	fAcessoContab(Usuar,'C',This.Value,This,ThisForm.GetDsGrupos)
+Else
+	ThisForm.GetDsGrupos.Value = ''
+	ThisForm.GetDsGrupos.Refresh
+EndIf
+If This.Value <> ThisForm.AntCdGrupo
+	If Used('CsSigCqChi')
+		Zap In CsSigCqChi
+		ThisForm.GrdCCheques.Refresh
+	EndIf
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.GetDsGrupos
+* Classe: textbox (Base: textbox)
+* Registro: 44
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntDsGrupo = This.Value
+Return(Empty(ThisForm.GetCdGrupos.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	fAcessoContab(Usuar,'C',This.Value,ThisForm.GetCdGrupos,This)
+Else
+	ThisForm.GetCdGrupos.Value = ''
+	ThisForm.GetCdGrupos.Refresh
+EndIf
+If This.Value <> ThisForm.AntDsGrupo
+	If Used('CsSigCqChi')
+		Zap In CsSigCqChi
+		ThisForm.GrdCCheques.Refresh
+	EndIf
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.cntjustificativa.cmdGconf
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmConfirmar.Click
+------------------------------------------------------------
+PROCEDURE cmConfirmar.Click
+Local lnRecno1
+
+If Empty(This.Parent.Parent.get_justificativa.Value)
+	MessageBox('Atenção, justificativa em Branco',16,'')
+	this.Parent.Parent.get_justificativa.SetFocus
+	Return 0
+EndIf 
+
+ThisForm.LockScreen = .T.
+
+lnRecno1= RecNo('CsSigCqChi')
+
+If !Eof('CsSigCqChi')
+	lcEDNs    = CsSigCqChi.emps + CsSigCqChi.dopes + Str(CsSigCqChi.numes,6)
+	If ThisForm.poDataMgr.CursorQuery('SigCdPgr',,'empdopnums',lcEDNs)
+		ThisForm.Enabled = .F.
+		Do Form SigCdPgr With Left(CsSigCqChi.dopes,1),.F.,CsSigCqChi.emps,CsSigCqChi.dopes,CsSigCqChi.numes,.T.,ThisForm,;
+							  Alltrim(this.Parent.Parent.get_justificativa.Value) 
+		SigCdPgr.AlwaysOnTop = .T.
+		SigCdPgr.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+	EndIf
+	lcCidChavesDel=CsSigCqChi.CidChaves
+Else
+	ThisForm.mExibeCheques(.T.)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdCancelar.Click
+------------------------------------------------------------
+PROCEDURE cmdCancelar.Click
+This.Parent.Enabled=.F.
+This.Parent.Parent.Visible=.F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.cntjustificativa.get_justificativa
+* Classe: fwmemo (Base: editbox)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+*
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.cmdTudo1
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 49
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lnRecno1
+
+lnRecno1 = RecNo('CsSigCqChi')
+UpDate CsSigCqChi Set nMarca1s = 1 Where nMarca1s = 0 And nEmitidos = 0 And nCancelas = 0
+If BetWeen(lnRecno1,1,RecCount('CsSigCqChi'))
+	GoTo lnRecno1 In ('CsSigCqChi')
+EndIf
+ThisForm.GrdCCheques.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.impchmat
+* Classe: container (Base: container)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+If ThisForm.ChMatIni
+
+	ThisForm.LockScreen = .T.
+
+	ThisForm.ChMatIni   = .F.
+	This.getBanco.Value = ''
+	This.getChIni.Value = ''
+	This.getChFin.Value = '' 
+
+	ThisForm.CmdGOk.Enabled   = .F.
+	ThisForm.ImpChMat.Enabled = .T.
+	ThisForm.ImpChMat.Visible = .T.
+	ThisForm.ImpChMat.getBanco.SetFocus
+	ThisForm.Refresh
+
+	ThisForm.LockScreen = .F.
+	
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.impchmat.getBanco
+* Classe: fwget (Base: textbox)
+* Registro: 54
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If m.nKeyCode = 60
+	If !(ThisForm.plLeCheque)
+		ThisForm.pcChqLido = ''
+	EndIf
+	ThisForm.plLeCheque = .T.
+EndIf
+
+If ThisForm.plLeCheque
+	NoDefault
+	ThisForm.pcChqLido = ThisForm.pcChqLido + Chr(m.nKeyCode)
+EndIf
+
+If m.nKeyCode = 58
+	This.Valid
+	ThisForm.plLeCheque = .F.
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.impchmat.getChfin
+* Classe: fwget (Base: textbox)
+* Registro: 55
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+This.Value = PadL(Alltrim(This.Value),6,'0')
+DoDefault()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.impchmat.cmdGprocurar
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 56
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdimpri.Click
+------------------------------------------------------------
+PROCEDURE cmdimpri.Click
+If Empty(ThisForm.ImpChMat.getBanco.Value)
+	MessageBox('Banco não preenchido !!!',48,'Atenção')
+	ThisForm.ImpChMat.getBanco.SetFocus
+	Return(.F.)
+EndIf
+If Empty(ThisForm.ImpChMat.getChIni.Value)
+	MessageBox('Número do cheque inicial não preenchido !!!',48,'Atenção')
+	ThisForm.ImpChMat.getChIni.SetFocus 
+	Return(.F.)
+EndIf
+If Empty(ThisForm.ImpChMat.getChFin.Value)
+	MessageBox('Núumero do cheque final não preenchido !!!',48,'Atenção')
+	ThisForm.ImpChMat.getChFin.SetFocus 
+	Return(.F.)
+EndIf
+If ThisForm.ImpChMat.getChFin.Value < ThisForm.ImpChMat.getChIni.Value
+	MessageBox('Número do cheque final menor que o inicial !!!',48,'Atenção')
+	ThisForm.ImpChMat.getChIni.SetFocus 
+	Return(.F.)
+EndIf
+
+Select bancos,valors,ncheques,datas,favos,nemitidos From CsSigCqChi ;
+Where bancos = ThisForm.ImpChMat.getBanco.Value And ncheques BetWeen ThisForm.ImpChMat.getChIni.Value ;
+	And ThisForm.ImpChMat.getChFin.Value And ncancelas = 0 ;
+Order By bancos,ncheques ;
+Into Cursor CrCheque
+
+Select CrCheque
+Locate For nemitidos = 1
+If Found()
+	If MessageBox('Os cheques selecionados já foram emitidos. Confirma impressão ?',36+256,'Atenção') = 7
+		Return(.F.)
+	EndIf
+EndIf
+Go Top
+MessageBox('Verificar se a impressora está pronta p/ impressão',32,'Atenção')
+
+Do SigIpChq.prg
+
+If xImpOk
+	Select CrCheque
+	Scan
+		lStrQuery = [Update SigCqChi Set emitidos = 1 ]+;
+					[Where bancos = ']+CrCheque.bancos+[' And ncheques = ']+CrCheque.ncheques+[' ]
+		lnQueryOk = ThisForm.poDataMgr.SqlExecute(lStrQuery)
+		If lnQueryOk < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return(.F.)
+		EndIf
+		Select CrCheque
+	EndScan
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdCancelar.Click
+------------------------------------------------------------
+PROCEDURE cmdCancelar.Click
+ThisForm.LockScreen = .T.
+
+ThisForm.CmdGOk.Enabled   = .T.
+ThisForm.ImpChMat.Enabled = .F.
+ThisForm.ImpChMat.Visible = .F.
+
+ThisForm.mExibeCheques(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.impchmat.Getchini
+* Classe: fwget (Base: textbox)
+* Registro: 58
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+This.Value = Padl(Alltrim(This.Value),6,'0')
+DoDefault()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.cntProcurar
+* Classe: container (Base: container)
+* Registro: 59
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+If ThisForm.plInicio
+
+	ThisForm.LockScreen = .T.
+
+	ThisForm.plInicio = .F.
+
+	ThisForm.getCdContas.Enabled   = .F.
+	ThisForm.getDsContas.Enabled   = .F.
+	ThisForm.GrdCCheques.Enabled   = .F.
+	ThisForm.TxtFavorecido.Enabled = .F.
+	ThisForm.CmdGOk.Enabled        = .F.
+	ThisForm.CntProcurar.Enabled   = .T.
+	ThisForm.CntProcurar.Visible   = .T.
+	ThisForm.CntProcurar.getBanco.SetFocus
+	ThisForm.Refresh
+
+	ThisForm.LockScreen = .F.
+	
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.cntProcurar.getBanco
+* Classe: fwget (Base: textbox)
+* Registro: 64
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcLeitor
+
+If ThisForm.plLeCheque
+	lcLeitor = ThisForm.pcChqLido
+Else
+	lcLeitor = ""
+EndIf
+
+ThisForm.plLeitor = .F.
+
+If LastKey()==9
+	KeyBoard "{CTRL+TAB}"
+Else
+	ThisForm.plleitor = .T.
+
+	If Len(lcLeitor) >= 33
+		ThisForm.CntProcurar.getBanco.Value   = Substr(lcLeitor,2,3)
+		ThisForm.CntProcurar.getAgencia.Value = Substr(lcLeitor,5,4)
+		ThisForm.CntProcurar.getConta.Value   = Substr(lcLeitor,23,10)
+		ThisForm.CntProcurar.getCheque.Value  = Substr(lcLeitor,14,6)
+		ThisForm.Refresh
+		This.Parent.CmdGProcurar.CmdProcurar.Click
+	Else
+		ThisForm.plLeitor = .F.
+	EndIf
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If m.nKeyCode = 60
+	If !(ThisForm.plLeCheque)
+		ThisForm.pcChqLido = ''
+	EndIf
+	ThisForm.plLeCheque = .T.
+EndIf
+
+If ThisForm.plLeCheque
+	NoDefault
+	ThisForm.pcChqLido = ThisForm.pcChqLido + Chr(m.nKeyCode)
+EndIf
+
+If m.nKeyCode = 58
+	This.Valid
+	ThisForm.plLeCheque = .F.
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.cntProcurar.getEmissao
+* Classe: fwget (Base: textbox)
+* Registro: 70
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Parent.getValor.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.cntProcurar.getValor
+* Classe: fwget (Base: textbox)
+* Registro: 71
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Parent.getEmissao.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRCHR.cntProcurar.cmdgprocurar
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 73
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdprocurar.Click
+------------------------------------------------------------
+PROCEDURE cmdprocurar.Click
+Set Near On
+
+This.Parent.Parent.getBanco.Value = PadR(AllTrim(This.Parent.Parent.getBanco.Value),3)
+
+Select CsSigCqChi
+Do Case
+	Case !Empty(This.Parent.Parent.getEmissao.Value)
+		Set Order To Emissao		
+		Seek Dtos(This.Parent.Parent.getEmissao.Value) + This.Parent.Parent.getBanco.Value +;
+			This.Parent.Parent.getAgencia.Value + This.Parent.Parent.getConta.Value +;
+			This.Parent.Parent.getCheque.Value
+		         
+	Case !Empty(This.Parent.Parent.getValor.Value)
+		Set Order To Valor
+		Seek Str(This.Parent.Parent.getValor.Value,12,2) + This.Parent.Parent.getBanco.Value +;
+			This.Parent.Parent.getAgencia.Value + This.Parent.Parent.getConta.Value +;
+			This.Parent.Parent.getCheque.Value
+
+	Case !Empty(This.Parent.Parent.getBanco.Value)
+		Set Order To Cheque
+		Seek This.Parent.Parent.getBanco.Value + This.Parent.Parent.getAgencia.Value +;
+			This.Parent.Parent.getConta.Value + This.Parent.Parent.getCheque.Value
+		         
+	Case !Empty(This.Parent.Parent.getAgencia.Value)
+		Set Order To Agencia
+		Seek This.Parent.Parent.getAgencia.Value + This.Parent.Parent.getConta.Value + ;
+			This.Parent.Parent.getCheque.Value
+		         
+	Case !Empty(This.Parent.Parent.getConta.Value)
+		Set Order To Conta
+		Seek This.Parent.Parent.getConta.Value + This.Parent.Parent.getCheque.Value
+		         
+	Case !Empty(This.Parent.Parent.getCheque.Value)
+		Set Order To NCheques
+		Seek This.Parent.Parent.getCheque.Value
+EndCase
+
+Set Near Off
+
+ThisForm.LockScreen = .T.
+
+ThisForm.getCdContas.Enabled   = .T.
+ThisForm.getDsContas.Enabled   = .T.
+ThisForm.GrdCCheques.Enabled   = .T.
+ThisForm.TxtFavorecido.Enabled = .T.
+ThisForm.CmdGOk.Enabled        = .T.
+ThisForm.CntProcurar.Enabled   = .F.
+ThisForm.CntProcurar.Visible   = .F.
+
+ThisForm.mExibeCheques(.F.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdCancelar.Click
+------------------------------------------------------------
+PROCEDURE cmdCancelar.Click
+ThisForm.LockScreen = .T.
+
+ThisForm.getCdContas.Enabled   = .T.
+ThisForm.getDsContas.Enabled   = .T.
+ThisForm.GrdCCheques.Enabled   = .T.
+ThisForm.TxtFavorecido.Enabled = .T.
+ThisForm.CmdGOk.Enabled        = .T.
+ThisForm.CntProcurar.Enabled   = .F.
+ThisForm.CntProcurar.Visible   = .F.
+
+ThisForm.mExibeCheques(.F.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRCHR
+RESERVED3 (ClassInfo): antcdconta
+antcdgrupo
+antdsconta
+antdsgrupo
+antdtfin
+antdtini
+chmatini
+excluircheque
+excluirdocumento
+impinicio
+inicial
+pcchqlido
+plinicio
+pllecheque
+plleitor
+podatamgr
+poform
+*carregaconta 
+*mexibecheques 
+*montachq 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 55
+================================================================================

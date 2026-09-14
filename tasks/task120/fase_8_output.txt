@@ -1,0 +1,21 @@
+﻿Tudo correto. Fase 8 conclu├¡da. Aqui est├í o resumo do que foi implementado:
+
+**`Formsigreifx.prg`** ÔÇö adicionados 10 m├®todos antes de `ENDDEFINE`:
+
+| M├®todo | Tipo | Implementa├º├úo |
+|--------|------|---------------|
+| `LimparCampos()` | PROTECTED | Reinicia `chk_4c_ChkObs` e `chk_4c_ChkImagem` para `Value = 1` |
+| `HabilitarCampos()` | PROTECTED | Stub (n├úo aplic├ível a REPORT) |
+| `FormParaBO()` | PROTECTED | Alias que chama `FormParaRelatorio()` |
+| `BOParaForm()` | PROTECTED | Stub (n├úo aplic├ível a REPORT) |
+| `CarregarLista()` | PROTECTED | Stub (sem grid de lista em REPORT) |
+| `AjustarBotoesPorModo()` | PUBLIC | Habilita Imprimir/Excel via `this_lAcImprimir`/`this_lAcExcel` do BO |
+| `BtnBuscarClick()` | PUBLIC | Stub |
+| `BtnEncerrarClick()` | PUBLIC | `THIS.Release()` |
+| `BtnSalvarClick()` | PUBLIC | Stub |
+| `BtnCancelarClick()` | PUBLIC | `THIS.Release()` |
+
+**`menu.prg`** ÔÇö integra├º├úo adicionada:
+- `DEFINE BAR 150` (separador) e `DEFINE BAR 151` ("Impress├úo de Documentos Comerciais") em `popRelatorios`
+- `ON SELECTION BAR 151` ÔåÆ `AbrirFormsigreifx`
+- Procedure `AbrirFormsigreifx()` no final do arquivo (abre com empresa corrente + documento vazio para testes)

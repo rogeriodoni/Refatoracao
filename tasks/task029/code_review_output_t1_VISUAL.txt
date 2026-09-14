@@ -1,0 +1,7 @@
+﻿Feito. Resumo das corre├º├Áes:
+
+**SigReAivBO.prg** ÔÇö 2 corre├º├Áes aplicadas:
+- `SET NULL ON` antes + `SET NULL OFF` depois de `CREATE CURSOR cursor_4c_Cabecalho` (linha 122)
+- `SET NULL ON` antes + `SET NULL OFF` depois de `CREATE CURSOR cursor_4c_DbImp` (linha 127)
+
+**LAYOUT-POSITION (obj_4c_OptTipo)** ÔÇö falso positivo do validador: o c├│digo j├í tem `.Top = 77` e `.Left = 167` (posi├º├Áes corretas relativas ├á Page1; absoluto no form = PageFrame.Top 85 + 77 = 162, Left = 167). O validador leu as sub-propriedades de `Buttons(1)` (Top=0, Left=0) e as atribuiu ao OptionGroup pai ÔÇö nada a corrigir no c├│digo.

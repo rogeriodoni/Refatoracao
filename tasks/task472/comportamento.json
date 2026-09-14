@@ -1,0 +1,1252 @@
+{
+  "resumo": {
+    "totalMetodos": 73,
+    "metodosComSQL": 10,
+    "metodosComValidacao": 35,
+    "totalQueries": 9,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "For", "For Empty", "fAcessoContab", "fAcessoContas", "fChecarInativas", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDMTZ",
+      "evento": "Procedure",
+      "linhas": 36,
+      "codigoOriginal": "Parameters pcChave\nLocal lnOldSel, lnTotal\n\nlnOldSel = Select()\n\n*-- Atualiza valor Total da linha\nlnTotal = 0\n\nSelect csSigCdMtI\nLocate For .F.\nSelect (val_abr+val_ago+val_dez+val_fev+val_jan+val_jul+val_jun+val_mai+val_nov+val_out+val_set+val_mar) As Total From csSigCdMtI Where cIdChaves = pcChave Into Cursor crTmpTot Readwrite\n\nSelect crTmpTot\nlnTotal = crTmpTot.Total\n\nSelect csSigCdMtI\nReplace Total With lnTotal For cIdChaves = pcChave In csSigCdMtI\n\n*-- Atualiza valor Total\nIf Used([crTmpTo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "llOk = .t.\n\nIf Not Thisform.poDataMgr.Update('crSigCdMtz')\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdMtz )')\n\tllOks = .F.\nEndif\n\nIf llOk And Not Thisform.poDataMgr.Update('crSigCdMtI')\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdMtI )')\n\tllOk = .F.\nEndif\nIf llOk\n\tThisForm.poDataMgr.Commit()\nElse\n\tThisform.poDataMgr.Rollback()\n\tReturn .F.\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "llOk = .t.\n\nlcCodigo = crSigCdMtz.Codigo\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdMtz Where Codigo = ?lcCodigo], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')\n\tllOk = .f.\nEndIf\n\nIf llOk\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdMtI Where Codigo = ?lcCodigo], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')\n\t\tllOk = .f.\n\tEndIf\nEndIf\n\nIf llOk\n\tThisForm.poDataMgr.Commit(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ",
+      "evento": "Procedure",
+      "linhas": 31,
+      "codigoOriginal": "llOk = .t.\n\nlcCodigo = crSigCdMtz.Codigo\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdMtz Where Codigo = ?lcCodigo], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')\n\tllOk = .f.\nEndIf\n\nIf llOk\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdMtI Where Codigo = ?lcCodigo], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')\n\t\tllOk = .f.\n\tEndIf\nEndIf\n\nIf llOk And Not Thisform.poDataMgr.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ",
+      "evento": "Init",
+      "linhas": 34,
+      "codigoOriginal": "Lparameters pAce, pTit\n\nWith Thisform\n\t.poDatamgr = Createobject('fSqlConector',Thisform.Name)\n\n\tIf Not .poDatamgr.pnIdconn > 0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.F.)\n\tEndIf\n\t\n\tlcQuery = [Select a.*, b.rclis as sDContas From SigCdMtz a join SigCdCli b on a.sContas = b.IClis ]\n\t\n\tlcCodigo = Space(3)\n\tlcSqlCdMtI = [Select *, (val_abr+val_ago+val_dez+val_fev+val_jan+val_jul+val_jun+val_mai+val_nov+val_out+val_set+val_mar) as Total From... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_class3",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ",
+      "evento": "Click",
+      "linhas": 105,
+      "codigoOriginal": "Lparameters opcao\n\nIf !DoDefault( opcao )\n\tThisform.mAtivapagina1\n\tReturn\nEndif\n\nlcCodigo = crSigCdMtz.Codigo\n\nSelect crSigCdMtI\nZap\n\nThisform.pagina.dados.grdSaldos.RecordSource = []\n\nlcQuery = [Select a.*, (val_abr+val_ago+val_dez+val_fev+val_jan+val_jul+val_jun+val_mai+val_nov+val_out+val_set+val_mar) as Total ] + ;\n\t[from SigCdMtI a ] + ;\n\t[join SigCdMtz b on a.codigo = b.codigo ] + ;\n\t[Where a.codigo = ']+lcCodigo+[' ]\n\t\nThisform.podatamgr.SqlExecute(lcQuery,[csSigCdMtI])\n\n*Thisform.podatam... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Refresh",
+        "controlesReferenciados": "ChkValida]",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ",
+      "evento": "Click",
+      "linhas": 101,
+      "codigoOriginal": "If Inlist( ThisForm.pcEscolha,[INSERIR],[ALTERAR] )\n\n\tlcCodigo = thisform.pagina.dados.getCodigo.value\n\tlcAno \t = This.parent.parent.getAno.Value \n\tlcGrupo  = This.parent.parent.Get_sgrupo.Value\n\tlcConta  = This.parent.parent.Get_sconta.Value\n\tlcMoeda  = This.parent.parent.getMoeda.Value\n\n\tIf ThisForm.pcEscolha=[INSERIR]\n\t\t\n\t\tlcQuery = [Select * From SigCdMtz Where Ano = ']+lcAno+[' And sGrupos = ']+lcGrupo+[' And sContas = ']+lcConta+[' ]\n\t\tIf ThisForm.Podatamgr.SqlExecute(lcQuery,[crChkMtz])<1... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds,For,For Empty",
+        "metodosFormChamados": "SqlExecute,Setfocus",
+        "controlesReferenciados": "Get_sgrupo,Get_sconta,ChkMtz]",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "DoDefault()\nIf thisform.plCancelar\n\tthisform.mAtivapagina1\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.cmdInsFtc",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.cmdInsFtc",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "lnCodigo = This.parent.parent.getCodigo.Value \n\nIf InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Not Empty(lnCodigo)\n\n\tSelect csSigCdMtI\n\tLocate For .F.\n\tGo Top In csSigCdMtI\n\tLocate For (Empty(Grupos) And Empty(Contas))\n\tIf Eof([csSigCdMtI])\n\t\tInsert Into csSigCdMtI (Codigo, cIdChaves) Values (lnCodigo, fUniqueIds())\n\tEndIf\n\n\tThis.parent.parent.grdSaldos.Refresh\n\tThis.parent.parent.grdSaldos.Column1.SetFocus\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.cmdInsFtc",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.cmdInsFtc",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tSelect csSigCdMtI\n\tIf Not Eof()\n\t\tDelete\n\tEndIf\n\t\n\tIf Not Eof()\n\t\tSkip \n\t\tSkip - 1\n\tEndIf \n\tGo Bottom\n\t\n\tThis.parent.parent.grdSaldos.SetFocus\n\tThis.parent.parent.grdSaldos.Refresh\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.Get_DtIncs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.Get_Usuario",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.getDataAlts",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.Get_sgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.Get_sgrupo",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "fAcessoContab(Usuar,'C',This.Value,This,'',This.parent.Get_sconta.Value,Thisform.Podatamgr)\n\n* Checagem da classe do grupo\nIf Not Empty(This.Value)\n\tThisform.Podatamgr.CursorQuery([SigCdGcr],[crTmpGccr],[Codigos],This.Value,[Classes])\n\tIf Used([crTmpGccr]) And Empty(crTmpGccr.Classes)\n\t\tMessagebox([Impossível efetuar lançamento para este grupo!] + Chr(13) + Chr(10) + ;\n\t\t\t[A classe do grupo não está informada!],0+48,'Atenção')\n\t\tReturn(.F.)\n\tEndif\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_sconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.getUsuaAlts",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.Get_sconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.Get_sconta",
+      "evento": "Valid",
+      "linhas": 42,
+      "codigoOriginal": "Local lcGrupo, lOrdem\n\n\nlcGrupo = Thisform.Pagina.Dados.Get_SGrupo.Value\nlOrdem = .F.\n\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,lcGrupo,'C',This.Value,This,This.Parent.get_sdconta,lOrdem,,,.T.)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.Parent.get_sdconta.Value = ''\n\t\tThis.Parent.get_sdconta.Refresh\n\t\tReturn .F.\n\tEndif\n\n\tIf Not fChecarInativas(This.Value,Thisform.poDataMgr)\n\t\tMessagebox('Conta Inativa ...',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.P... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_SGrupo,get_sdconta,get_sconta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.getAno",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(thisform.pcEscolha $ 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.getAno",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tThis.Value = Padl(This.Value,4,'2000')\n\tIf Val(This.Value) <= 2000 or Val(This.Value) >= 2999\n\t\tMessageBox([Informe um Ano Válido.],0+64,[Atenção])\n\t\tReturn .F.\n\tEndIf \nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.getCodigo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(Thisform.pcEscolha = 'PROCURAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.getMoeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(InList(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.getMoeda",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'CrListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = CrListaRemota.CMoes\n\tUse In CrListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.getValorTotal",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.getValorTotal",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tThis.Value = Padl(This.Value,4,'2000')\n\tIf Val(This.Value) <= 2000 or Val(This.Value) >= 2999\n\t\tMessageBox([Informe um Ano Válido.],0+64,[Atenção])\n\t\tReturn .F.\n\tEndIf \nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.Get_sdconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0 And Empty(This.parent.Get_sconta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_sconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.Get_sdconta",
+      "evento": "Valid",
+      "linhas": 44,
+      "codigoOriginal": "Local lcGrupo, lOrdem, lcDigClass\n\nlcGrupo = Thisform.Pagina.Dados.Get_SGrupo.Value\nlOrdem  = .F.\n\nlcDigClass = This.Parent.get_class3.Value\nlcDigClass = Alltrim(Iif(Type([lcDigClass])='C',lcDigClass,Str(lcDigClass)))\n\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,lcGrupo,'D',This.Value,This.Parent.get_sconta,This.Parent.get_sdconta,lOrdem,,,.T.,,,,,lcDigClass)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.Parent.get_sconta.Value = ''\n\t\tThis.Parent.get_sconta.Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_SGrupo,get_class3,get_sconta,get_sdconta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.getSaldo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If !fAcessoContab(Usuar,'C',This.Value,This,'')\n\tMessagebox('Acesso Negado !!!',48,'')\n\tThis.Value = ''\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "Grupo = csSigCdMtI.Grupos\nllRet = Empty(This.Value) or fAcessoContas(Usuar,grupo,'C',This.Value,This,'')\nIf !llRet\n\tMessagebox('Acesso Negado !!!',48,'')\n\tThis.Value  = ''\n\tThis.Refresh\nEndIf\nReturn(llRet)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column6.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column7.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column8.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column8.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column9.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column9.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column10.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column10.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column11.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column11.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column12.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column12.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column13.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column13.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column14.Text1",
+      "evento": "LostFocus",
+      "linhas": 22,
+      "codigoOriginal": "lnCodigo = This.parent.parent.parent.getCodigo.Value \n\n*If Not Empty(This.Value)\n\n\tSelect csSigCdMtI\n\tGo Top In csSigCdMtI\n\tLocate For (Empty(Grupos) And Empty(Contas))\n\tIf Eof([csSigCdMtI])\n\t\tInsert Into csSigCdMtI (Codigo, cIdChaves) Values (lnCodigo, fUniqueIds())\n\tEndIf\n\t\t\n\tThis.parent.parent.Column1.SetFocus\n\t\n\t*Go Top In csSigCdMtI\n\tKeyboard [{DNARROW}]\n\t\n\tThis.parent.parent.Refresh\n*EndIf\n\n\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column14.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AtualizaTotal(csSigCdMti.cIdChaves)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AtualizaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column14.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And crSigCdMtz.Inativas = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column15.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column16.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column17.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column18.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column19.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column20.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column21.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column22.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column23.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column24.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column25.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column26.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column27.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDMTZ.Procedure",
+      "queryOriginal": "Select (val_abr+val_ago+val_dez+val_fev+val_jan+val_jul+val_jun+val_mai+val_nov+val_out+val_set+val_mar) As Total From csSigCdMtI Where cIdChaves = pcChave Into Cursor crTmpTot Readwrite",
+      "tabelas": "csSigCdMtI",
+      "colunas": "cIdChaves,pcChave,crTmpTot,Readwrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDMTZ.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdMtz Where Codigo = ?lcCodigo], '') < 1)",
+      "tabelas": "SigCdMtz",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDMTZ.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdMtI Where Codigo = ?lcCodigo], '') < 1)",
+      "tabelas": "SigCdMtI",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDMTZ.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdMtz Where Codigo = ?lcCodigo], '') < 1)",
+      "tabelas": "SigCdMtz",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDMTZ.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdMtI Where Codigo = ?lcCodigo], '') < 1)",
+      "tabelas": "SigCdMtI",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDMTZ.Init",
+      "queryOriginal": "\tlcQuery = [Select a.*, b.rclis as sDContas From SigCdMtz a join SigCdCli b on a.sContas = b.IClis ]",
+      "tabelas": "SigCdMtz,SigCdCli",
+      "colunas": "rclis",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDMTZ.Click",
+      "queryOriginal": "\t\tlcQuery = [Select * From SigCdMtz Where Ano = ']+lcAno+[' And sGrupos = ']+lcGrupo+[' And sContas = ']+lcConta+[' ] \t\tIf ThisForm.Podatamgr.SqlExecute(lcQuery,[crChkMtz])<1... [TRUNCADO]",
+      "tabelas": "SigCdMtz",
+      "colunas": "Ano,sGrupos,sContas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDMTZ.Pagina.Dados.cmdInsFtc.Click",
+      "queryOriginal": "\t\tInsert Into csSigCdMtI (Codigo, cIdChaves) Values (lnCodigo, fUniqueIds())",
+      "tabelas": "csSigCdMtI",
+      "colunas": "Codigo,cIdChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDMTZ.Pagina.Dados.grdSaldos.Column14.Text1.LostFocus",
+      "queryOriginal": "\t\tInsert Into csSigCdMtI (Codigo, cIdChaves) Values (lnCodigo, fUniqueIds())",
+      "tabelas": "csSigCdMtI",
+      "colunas": "Codigo,cIdChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csSigCdMtI", "SigCdMtz", "SigCdMtI", "SigCdCli"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

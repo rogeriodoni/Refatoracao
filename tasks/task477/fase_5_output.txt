@@ -1,0 +1,22 @@
+﻿Fase 5 conclu├¡da. O arquivo `FormOcb.prg` foi expandido com:
+
+**ConfigurarPaginaDados() ÔÇö novo conte├║do:**
+- Bot├Áes `cmd_4c_Salvar` e `cmd_4c_Cancelar` adicionados ao `cnt_4c_BotoesAcao` com ├¡cones can├┤nicos e BINDEVENTs
+- **Grupo 1** (Top 216/219): `txt_4c_Tipos` + `lbl_4c_Label3` + `lbl_4c_Label4` ÔÇö com BINDEVENTÔåÆ`ValidarTipos`
+- **Grupo 2** (Top 242/245): `txt_4c_Codigos` + `lbl_4c_Label1`
+- **Grupo 3** (Top 268/271): `txt_4c_Descrs` + `lbl_4c_Label2`
+- **Grupo 4** (Top 294/297/298): `txt_4c_Apura` + `lbl_4c_Label15` + `lbl_4c_Label14` ÔÇö com BINDEVENTÔåÆ`ValidarApura`
+
+**M├®todos atualizados:**
+- `BtnIncluirClick`: agora chama `LimparCampos` + `HabilitarCampos(.T.)` + foco em `txt_4c_Tipos`
+- `BtnVisualizarClick`: agora chama `BOParaForm` + `HabilitarCampos(.F.)`
+- `BtnAlterarClick`: agora chama `BOParaForm` + `HabilitarCampos(.T.)` + foco em `txt_4c_Descrs`
+
+**Novos m├®todos adicionados:**
+- `BtnSalvarClick`, `BtnCancelarClick` ÔÇö implementa├º├úo completa
+- `FormParaBO` (50%): valida C├│digo obrigat├│rio, Tipo (O/J), Apura├º├úo (S/N); popula 4 propriedades do BO
+- `BOParaForm` (50%): preenche 4 campos com dados do BO
+- `LimparCampos`, `HabilitarCampos` (50%): ReadOnly por modo + controle dos bot├Áes
+- `ValidarTipos`, `ValidarApura`: handlers Valid com auto-uppercase
+
+**Pr├│xima fase (6/8):** adicionar os 5 campos restantes ÔÇö `Get_Lanca`, `GetOper`, `GetGrContabil` (com lookup SigCdGcr), `GetAutos` e `GetOperac` ÔÇö e completar `FormParaBO/BOParaForm/LimparCampos/HabilitarCampos` com esses campos.

@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `sigreeqeBO.prg` est├í completo com:
+
+- **`Init()`** ÔÇö carrega 6 cursores de apoio (`SigCdPam`, `SigCdEmp`, `SigCdMoe`, `SigCdCot`, `SigCdGrp`, `SigCdCfi`), inicializa `this_cGrupo`/`this_cConta` de `SigCdPam`, e carrega a tabela de desconto da empresa logada
+- **`ValidarEmpresa()`** ÔÇö busca descri├º├úo e `CodTabDs` (tabela de desconto padr├úo) da empresa via `SigOpTde + SigOpTdz`
+- **`ValidarFiltros()`** ÔÇö empresa obrigat├│ria + tabela de desconto obrigat├│ria
+- **`GerarCabecalho()`** ÔÇö cria `CsCabecalho` com `nomeempresa`, `titulo1`, `Barra`
+- **`Processar()`** ÔÇö l├│gica completa do `processamento` original: carrega `SigOpTdz` (nParcs), `SigOpTdt` (descontos indexados), UNION ALL `SigOpEtq`+`SigMvEst`, SCAN com c├ílculo de pre├ºo, desconto por tipo, arredondamento por grupo, agrupamento Barra vs Identidade
+- **`Visualizar()`**, **`Imprimir()`**, **`ImprimirDireto()`** ÔÇö equivalentes a `visualizacao`, `impressao`, `documento`
+- Stubs `CarregarDoCursor`, `Inserir`, `Atualizar` (N/A em relat├│rios)
+- **`Destroy()`** ÔÇö fecha todos os cursores de apoio e intermedi├írios

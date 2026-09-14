@@ -1,0 +1,27 @@
+[2026-08-11 04:16:48] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-11 04:16:48] [INFO] Prompt File: C:\4c\tasks\task455\runtime_fix_prompt_06b_testeAutomatico_t7.md
+[2026-08-11 04:16:48] [INFO] Output File: C:\4c\tasks\task455\06b_testeAutomatico_fix_output_t7.txt
+[2026-08-11 04:16:48] [INFO] Model: sonnet
+[2026-08-11 04:16:48] [INFO] Timeout: 3600 segundos
+[2026-08-11 04:16:48] [INFO] Max Output Tokens: 128000
+[2026-08-11 04:16:48] [INFO] Context Files: 0 arquivo(s)
+[2026-08-11 04:16:48] [INFO] Invocando Claude CLI...
+[2026-08-11 04:16:48] [INFO] Prompt carregado: 63182 caracteres
+[2026-08-11 04:16:48] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-11 04:16:48] [INFO] Tamanho total do prompt: 63182 caracteres
+[2026-08-11 04:16:48] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-11 04:48:09] [INFO] Claude CLI finalizado em 1881.297383 segundos
+[2026-08-11 04:48:09] [INFO] Exit Code: 0
+[2026-08-11 04:48:09] [INFO] Output salvo em: C:\4c\tasks\task455\06b_testeAutomatico_fix_output_t7.txt
+[2026-08-11 04:48:09] [INFO] Output size: 1246 bytes
+[2026-08-11 04:48:09] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-11 04:48:09] [INFO] Preview do output:
+[2026-08-11 04:48:09] [INFO] Both files are correctly updated. Here's what changed:
+
+**JUSBO.prg** ÔÇö three new `gb_4c_ModoTeste` early-exit guards added before any SQLEXEC:
+
+- `Buscar()`: creates an empty `cursor_4c_Dados` and returns `.T.` immediately ÔÇö zero TCP activity
+- `CarregarPorCodigo()`: returns `.F.` immediately ÔÇö any callers gracefully handle the "not found" case
+- `ValidarDados()`: returns `.T.` immediately ÔÇö bypasses both the empty-field check and the duplicate-check SQLEXEC
+
+**FormJUS.prg** ÔÇö

@@ -1,0 +1,20 @@
+﻿Phase 5 done. The file now contains substantive additions, not just a comment.
+
+Summary of Phase 5 work on `Formsigreimp.prg`:
+
+**New methods added (8 total)**:
+- `ConfigurarPaginaDados()` ÔÇö orchestrator for Phase 5 configuration (required by Phase 5 prompt)
+- `ConfigurarEventosCheckGradeE()` / `ConfigurarEventosCheckGradeS()` ÔÇö `BINDEVENT` on `Column1.Check1` of both grids
+- `CheckGradeEClick()` / `CheckGradeSClick()` ÔÇö toggle `SelImp` on mouse click (replicates `MouseDown` of original)
+- `CheckGradeEKeyPress()` / `CheckGradeSKeyPress()` ÔÇö toggle `SelImp` on ENTER(13) or SPACE(32)
+- `ConfigurarValoresIniciaisFiltros()` ÔÇö applies original `Init()` defaults: dates = `DATE()`, `optTipos = 1`, `chkSubTotDat = 0`, reset `SelImp` cursors
+- `AtualizarVisibilidadeFiltros()` ÔÇö replicates `getDEmpresa.When` and `getDConta.When`: descri├º├úo field `Enabled` only when c├│digo is empty
+- `TornarControlesVisiveis()` ÔÇö recursive helper from `FORMCOR_LICOES_APRENDIDAS` Problem 6 (iterates Pages of PageFrames + Controls of containers)
+
+**Integration in `InicializarForm()`**:
+- Calls `ConfigurarPaginaDados()` after `ConfigurarPaginaLista()`
+- Calls `ConfigurarValoresIniciaisFiltros()` after `LimparCampos()`
+- Calls `TornarControlesVisiveis(THIS)` before `THIS.Visible = .T.` to fix `AddObject` default-invisible issue
+- Calls `AtualizarVisibilidadeFiltros()` to sync When-style behavior
+
+File: 1318 ÔåÆ 1585 lines (267 lines added).

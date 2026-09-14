@@ -1,0 +1,15 @@
+﻿Fase 4 conclu├¡da. Resumo do que foi adicionado/modificado em `Formsigreche.prg`:
+
+**InicializarForm() corrigido:**
+- Removido `RETURN .F.` dentro de TRY/CATCH (viola├º├úo regra #1) ÔåÆ substitu├¡do por bloco `ELSE`
+- Adicionadas chamadas: `ConfigurarCamposFiltro()`, `ConfigurarGridOperacoes()`, `ConfigurarGridImprimir()`, `AtualizarTitulosOpcao()`, `LimparCampos()`
+
+**Novos m├®todos adicionados (1651 linhas total):**
+- `ConfigurarCamposFiltro()` ÔÇö todos os controles de filtro com posi├º├Áes EXATAS do layout.json: per├¡odo, empresa, op├º├úo (OptionGroup 3 bot├Áes), situa├º├úo (OptionGroup 4 bot├Áes para 4 tipos), ordem (ComboBox), ├║ltima movimenta├º├úo (CheckBox), carteira/dep├│sito/emissor (grupo+conta)
+- `ConfigurarGridOperacoes()` ÔÇö grd_4c_Operacoes (3 colunas: CheckBox+Operacaos+Tipos) com BINDEVENT KeyPress
+- `ConfigurarGridImprimir()` ÔÇö grd_4c_Imprimir (2 colunas: CheckBox+Campos) com BINDEVENT KeyPress  
+- `LimparCampos()` ÔÇö restaura todos os filtros para valores padr├úo
+- `AtualizarTitulosOpcao()` ÔÇö aplica t├¡tulos din├ómicos do SigCdPac ao OptionGroup
+- 16 handlers `TeclaXxx()` ÔÇö F4=115 abre busca, ENTER=13/TAB=9 valida
+- `TeclaCheckOperacoes()` / `TeclaCheckImprimir()` ÔÇö toggle de checkbox via ENTER/SPACE
+- `ValidarCd/Ds` + `AbrirBusca` para: Empresa (SigCdEmp), CarGrupo, CarConta, DepGrupo, DepConta (via SigCdCli), EmiGrupo, EmiConta (via SigCdCli)

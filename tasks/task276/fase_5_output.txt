@@ -1,0 +1,15 @@
+﻿As altera├º├Áes est├úo corretas. Fase 5/8 conclu├¡da.
+
+**O que foi modificado:**
+
+1. **`ConfigurarFiltros` (linha 297)** ÔÇö BINDEVENT de `txt_4c_CProsF` corrigido de `TxtCProsIKeyPress` para `TxtCProsFKeyPress`
+
+2. **`ConfigurarGrade` (Column2 e Column3)** ÔÇö adicionado `.ReadOnly = .T.` em ambas (o original tinha `.Grade.ReadOnly = .t.`, tornando toda a grade somente leitura)
+
+3. **`TxtCProsIKeyPress` (reescrito)** ÔÇö agora faz lookup em `SigCdPro` via SQLEXEC, copia valor para `CProsF` se vazio, limpa `CGrus` (l├│gica do `getCProsI.Valid` original); abre picker se c├│digo n├úo encontrado
+
+4. **`TxtCProsFKeyPress` (novo)** ÔÇö mesma l├│gica mas em espelho: copia para `CProsI` se vazio
+
+5. **`AbrirBuscaProduto` (novo)** ÔÇö picker gen├®rico para `SigCdPro` com 3 colunas (CPros, DPros, CGrus), aceita par├ómetro `"I"/"F"` para saber qual campo popular
+
+6. **`Destroy`** ÔÇö adicionada limpeza de `cursor_4c_ProBusca` e `cursor_4c_LookupPro`

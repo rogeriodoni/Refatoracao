@@ -1,0 +1,111 @@
+{
+  "version": "1.0",
+  "comentario": "Mapeamento explícito de nomes de arquivos originais para classes do novo sistema",
+
+  "mappings": {
+    "SIGCDCOR": {
+      "tipo": "FORM",
+      "formClass": "FormCor",
+      "boClass": "CorBO",
+      "tabela": "SigCdCor",
+      "descricao": "Cadastro de Cores"
+    },
+
+    "SIGCDCAR": {
+      "tipo": "FORM",
+      "formClass": "FormCargo",
+      "boClass": "CargoBO",
+      "tabela": "SigCdCar",
+      "descricao": "Cadastro de Cargos"
+    },
+
+    "SIGCDDPT": {
+      "tipo": "FORM",
+      "formClass": "FormDepartamento",
+      "boClass": "DepartamentoBO",
+      "tabela": "SigCdDpt",
+      "descricao": "Cadastro de Departamentos"
+    },
+
+    "SIGCDPRO": {
+      "tipo": "FORM",
+      "formClass": "FormProduto",
+      "boClass": "ProdutoBO",
+      "tabela": "SigCdPro",
+      "descricao": "Cadastro de Produtos"
+    },
+
+    "SIGCDGRP": {
+      "tipo": "FORM",
+      "formClass": "FormGrupo",
+      "boClass": "GrupoBO",
+      "tabela": "SigCdGrp",
+      "descricao": "Cadastro de Grupos"
+    },
+
+    "SIGCDCLI": {
+      "tipo": "FORM",
+      "formClass": "FormCliente",
+      "boClass": "ClienteBO",
+      "tabela": "SigCdCli",
+      "descricao": "Cadastro de Clientes"
+    },
+
+    "SIGCDFOR": {
+      "tipo": "FORM",
+      "formClass": "FormFornecedor",
+      "boClass": "FornecedorBO",
+      "tabela": "SigCdFor",
+      "descricao": "Cadastro de Fornecedores"
+    }
+  },
+
+  "defaultPatterns": {
+    "comentario": "Padrões de inferência quando não há mapeamento explícito",
+
+    "SIGCD*": {
+      "regra": "Remove 'SIGCD' e usa sufixo",
+      "formClass": "Form{SUFFIX}",
+      "boClass": "{SUFFIX}BO",
+      "exemplo": "SIGCDXYZ -> FormXYZ, XYZBO"
+    },
+
+    "REL*": {
+      "tipo": "REPORT",
+      "regra": "Remove 'REL' e adiciona 'Relatorio'",
+      "reportClass": "Relatorio{SUFFIX}",
+      "exemplo": "RELCORES -> RelatorioCores"
+    },
+
+    "FW*": {
+      "tipo": "FRAMEWORK",
+      "comentario": "Classes do framework - não migrar automaticamente"
+    }
+  },
+
+  "instrucoes": {
+    "como_adicionar": [
+      "1. Copie um bloco existente (ex: SIGCDCOR)",
+      "2. Altere o nome do arquivo original (chave do JSON)",
+      "3. Ajuste formClass, boClass, tabela, descricao",
+      "4. Salve o arquivo"
+    ],
+
+    "validacao": [
+      "OrquestradorMigracao.ps1 valida automaticamente:",
+      "- Se mapeamento existe, usa explícito",
+      "- Se não existe, usa inferência (padrão SIGCD*)",
+      "- Se inferência falhar, pergunta ao usuário",
+      "- Logs mostram qual método foi usado (Mapeamento/Inferência)"
+    ],
+
+    "exemplo_uso": [
+      "# Ver qual classe será usada para SIGCDXXX:",
+      "Get-FormClassName -BaseName 'SIGCDXXX'",
+      "",
+      "# Saída esperada:",
+      "# [Mapeamento] SIGCDXXX -> FormXXX (se existe)",
+      "# [Inferencia] SIGCDXXX -> FormXXX (se não existe)"
+    ]
+  }
+}

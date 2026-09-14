@@ -1,0 +1,16 @@
+﻿Ambas as ocorr├¬ncias s├úo **falsos positivos** do scanner autom├ítico. Nenhuma corre├º├úo ├® necess├íria:
+
+**CIDQUERYS (linha 406 do BO):**
+`DELETE FROM SigTempD WHERE CidQuerys = ...`
+
+A coluna `cidquerys` **existe de verdade** no schema SQL Server da tabela SIGTEMPD (`[cidquerys] [char](20) NULL`). O WHERE ├® correto e necess├írio ÔÇö sem ele, o DELETE apagaria *todos* os registros da tabela compartilhada, n├úo apenas os inseridos por esta sess├úo. O scanner n├úo reconheceu que `CidQuerys` ├® uma coluna leg├¡tima do banco.
+
+**CONTROLCOUNT (linhas 247/250 do Form):**
+```foxpro
+FOR loc_i = 1 TO loc_oContainer.ControlCount
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+
+`ControlCount` ├® uma **propriedade nativa do VFP9** de objetos container (n├║mero de controles filhos). N├úo est├í em nenhuma cl├íusula WHERE SQL. O scanner confundiu a substring com nome de coluna.
+
+**Conclus├úo:** Os arquivos `FormSigPrGl2.prg` e `SigPrGl2BO.prg` est├úo corretos. Nenhuma altera├º├úo necess├íria para este pass SQL.

@@ -1,0 +1,22 @@
+﻿The code looks correct. All the pieces are in place:
+
+1. **Destroy**: Updated `loc_aCursors(40) = "cursor_4c_Cmv"` Ô£ô
+2. **Cursor placeholder**: Fixed to `datas C(7), valcuss N(10,2), moedas C(3)` Ô£ô  
+3. **Grid ControlSource**: Fixed to `cursor_4c_Cmv.datas`, `.valcuss`, `.moedas` Ô£ô
+4. **CarregarDadosSigCdPro SQL**: Added 10 fiscal columns Ô£ô
+5. **CarregarDadosSigCdPro - clear section**: Clears all Page3 controls + recreates cursor Ô£ô
+6. **CarregarDadosSigCdPro - load section**: Populates Page3 controls + calls CarregarDescFiscais Ô£ô
+7. **CarregarDescFiscais**: New method that loads descriptions for all fiscal lookups + populates sigcdcmv grid Ô£ô
+8. **AtualizarSigCdPro**: Added fiscal field UPDATE assignments Ô£ô
+9. **HabilitarCampos**: Added enable/disable for all editable fiscal fields Ô£ô
+10. **LimparCampos**: Added clear for all fiscal fields Ô£ô
+
+The FASE 13 implementation of `pgDadosFiscais` is now complete. The key changes made in this session:
+
+- Fixed cursor column names (`datas/valcuss/moedas` matching `sigcdcmv` schema)
+- Updated `Destroy()` to close `cursor_4c_Cmv`
+- Extended `CarregarDadosSigCdPro()` with 10 fiscal fields in SQL + population of Page3 controls + sigcdcmv grid loading
+- Added new `CarregarDescFiscais()` method for fiscal lookup descriptions + CMV history
+- Extended `AtualizarSigCdPro()` with all fiscal fields in the UPDATE statement (including proper `ipis` char(1) encoding from ComboBox)
+- Extended `HabilitarCampos()` with 17 fiscal editable controls
+- Extended `LimparCampos()` with all 26 fiscal controls

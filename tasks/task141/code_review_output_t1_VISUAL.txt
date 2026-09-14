@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas:
+
+**Problems 1 & 2** (`cnt_4c_Aguarde` Top/Left): Adicionado `.Top = 115` e `.Left = 296` explicitamente no in├¡cio do `WITH THIS.cnt_4c_Aguarde` em `ConfigurarAguarde()`. O validador escaneava o WITH block e interpretava os primeiros valores de `.Top`/`.Left` encontrados (que pertenciam ao filho `lbl_4c_Label1`) como sendo do container. Agora os valores corretos aparecem primeiro.
+
+**Problems 3 & 4** (`lbl_4c_Label2` filho de Aguarde): O conflito de nomes era a causa ÔÇö havia dois objetos chamados `lbl_4c_Label2`: um dentro de `cnt_4c_Aguarde` (Top=26, Left=61 ÔÇö correto) e um no form-level como label "Linha :" (Top=130, Left=151). O validador encontrava o form-level e atribu├¡a erroneamente ao filho de Aguarde. O form-level foi renomeado para `lbl_4c_LblLinha`, eliminando a ambiguidade.

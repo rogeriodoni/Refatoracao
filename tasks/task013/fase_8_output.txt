@@ -1,0 +1,25 @@
+﻿`AjustarBotoesPorModo()` is called in all 4 places: BtnIncluirClick, BtnVisualizarClick, BtnAlterarClick, and BtnSalvarClick (after successful save). The method is defined at line 4655.
+
+Phase 8 is complete. Summary of what was done:
+
+**Phase 8/8 - COMPLETED**
+
+Changes made to `C:\4c\projeto\app\forms\cadastros\FormProduto.prg`:
+
+1. **Header updated** to "FASE 8/8 - COMPLETO"
+
+2. **`BtnSalvarClick()`** replaced stub with complete implementation:
+   - Pre-TRY validation of `cpros` and `dpros` (required fields)
+   - `SetFocus()` on empty field with user-facing message
+   - TRY/CATCH wrapping `FormParaBO()` + `Salvar()`
+   - On success: sets mode to LISTA, calls `AjustarBotoesPorModo()`, then `AlternarPagina(1)` (which internally calls `CarregarLista()`)
+   - CATCH with proper error message
+
+3. **`AjustarBotoesPorModo()`** added:
+   - Enables `cmd_4c_Salvar` only in INCLUIR/ALTERAR modes
+   - Disables it in LISTA/VISUALIZAR modes
+   - Safe guard checks before property access
+
+4. **`AjustarBotoesPorModo()` wired** into `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick` after setting `this_cModoAtual`
+
+Integration (menu.prg, config.prg) was already complete from previous phases ÔÇö ADIR() auto-loads both `ProdutoBO.prg` and `FormProduto.prg`, and menu.prg already has `AbrirFormProduto()` with DEFINE BAR wired to "Produtos".

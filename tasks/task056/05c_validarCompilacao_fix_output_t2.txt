@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era que `ALLTRIM((loc_cCursor)->Cpros)` confunde o parser do VFP9: ao ver `ALLTRIM((`, ele interpreta o segundo `(` como in├¡cio de uma chamada de fun├º├úo indireta (esperando um nome antes do par├¬ntese) em vez de um operador de alias com vari├ível.
+
+A solu├º├úo extrai o acesso ao campo para `loc_cCpros` antes de chamar `ALLTRIM`, eliminando o duplo par├¬ntese.

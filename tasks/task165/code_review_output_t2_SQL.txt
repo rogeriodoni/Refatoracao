@@ -1,0 +1,7 @@
+﻿Corrigido. Resumo do que foi feito e por qu├¬:
+
+**Problema real corrigido (SQL-FILTRO-INVENTADO CIDCHAVES):**
+`SalvarGridEstoque` em `sigprcomBO.prg` tinha um `SELECT COUNT(*) FROM SigCdMax WHERE cidchaves = ?` para checar se o registro existia antes de decidir INSERT vs UPDATE. Esse check n├úo existe no original (que usava `DataMgr.Update()`). Substitu├¡do por DELETE-all + INSERT-all: deleta todas as linhas do produto e re-insere as do cursor, sempre com `this_lNovoRegistro = .T.` (chama `Inserir()` diretamente).
+
+**10 problemas GRID-SQL ÔÇö falsos positivos do validador:**
+Os campos `emps, qmaxs, codtams, codcores, deptos` para `cursor_4c_MaxProduto` est├úo no SELECT da linha 114 do BO (`BuscarPorProduto`). Os campos `marcas, qmaxs, codtams, codcores, deptos` para `cursor_4c_Copia` est├úo no SELECT da linha 651 do BO (`CarregarCursorCopia`). O validador analisa o form e n├úo enxerga o SQL do BO ÔÇö os cursores s├úo criados via SQLEXEC no BO, n├úo no form. Nenhuma mudan├ºa foi necess├íria.

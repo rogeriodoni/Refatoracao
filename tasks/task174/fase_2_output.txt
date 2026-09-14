@@ -1,0 +1,15 @@
+﻿Fase 2 completa. O `sigpremaBO.prg` foi atualizado com todos os m├®todos CRUD exigidos:
+
+**M├®todos adicionados:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `CarregarDoCursor()` | Mapeia os 8 campos do cursor (`Checks`, `grupos`, `Contas`, `Rclis`, `emails`, `mensagems`, `EmpDopNums`, `prioridade`) para propriedades `this_*`, decompondo automaticamente `EmpDopNums` em `this_cEmps`/`this_cDopes`/`this_nNumes` |
+| `CarregarListaEmail(par_cDopes)` | Move a l├│gica do `Init` legado para o BO: cria `cursor_4c_Local` com TAGs de ├¡ndice, carrega `SigMvCab JOIN SigCdCli` (com filtro por data/dia ou EmpDopNums espec├¡fico), e complementa com clientes PAM via `SigCdPam JOIN SigCdCli JOIN SigClJob` |
+| `BuscarConfigEmail()` | Busca `pademails`, `padservs`, `padsenhas`, `padportas` de `sigcdemp` e popula `this_cPadEmails/Servs/Senhas/nPadPortas` |
+| `Inserir()` | Grava o log de envio em `SigOpLog` (equivalente ao `fGravarLog('T','SIGPREMA','',lcEdn)` do legado) com todos os campos obrigat├│rios do schema |
+| `Atualizar()` | Retorna `.F.` ÔÇö n├úo aplic├ível para este form operacional |
+| `ObterChavePrimaria()` | Retorna `this_cEmpDopNums` |
+| `RegistrarAuditoria()` | Override do BusinessBase inserindo em `LogAuditoria` |
+
+**Propriedades adicionadas** ao DEFINE CLASS: `this_cContas`, `this_cRclis`, `this_cEmails`, `this_cGrupos`, `this_cMensagems`, `this_cPrioridade`, `this_nChecks`.

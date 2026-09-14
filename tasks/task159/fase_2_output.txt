@@ -1,0 +1,17 @@
+﻿The menu changes look correct. The migration of SIGPRCCP is complete:
+
+**Files created/modified:**
+
+1. **`sigprccpBO.prg`** (1659 lines) ÔÇö BO with all properties, `CarregarDadosAuxiliares`, `CriarCursorDados`, `ConstruirWhereClause`, `Processar`, `AtualizarPrecos`, and `ProcessaAutomatico`
+
+2. **`Formsigprccp.prg`** (2217 lines) ÔÇö OPERACIONAL form with:
+   - Flat layout (no PageFrame), `DataSession=2`, gray header
+   - Two filter columns: Fornecedor/Grande Grupo/Grupo/Subgrupo/Unidade/Moeda (left) and Linha/Grupo Venda/Markup/Encargo/Varia├º├úo/Feitio (right)
+   - OptionGroups: `opg_4c_Recalc` (8 options), `opg_4c_Situacao`, `opg_4c_Compra`, `opg_4c_OpcaoM`, `opg_4c_PVen`
+   - Grid `grd_4c_Produto` (9 columns, Column1 = CheckBox for lMarca)
+   - Image `img_4c_FigJpg` with base64 decode for product photos
+   - Canonical `cnt_4c_Saida` at Left=917, plus standalone Processar/Atualizar/Imprimir buttons
+   - `cmd_4c_SelTudo`/`cmd_4c_Desmarcar` at Left=955
+   - Complete BINDEVENT wiring, all lookup methods via `AbrirBuscaGenerica`
+
+3. **`menu.prg`** ÔÇö Added BAR 25 (separator) + BAR 26 "Rec├ílculo de Pre├ºos" ÔåÆ `AbrirFormSigPrCcp` procedure

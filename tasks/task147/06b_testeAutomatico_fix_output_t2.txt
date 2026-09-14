@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O problema era que `grd_4c_GradeOperacao.Column1.ControlSource = "TmpOperacao.Codigos"` e `Column2.ControlSource = "TmpOperacao.TmpMins"` eram configurados durante `ConfigurarPaginaDados()`, mas o alias `TmpOperacao` n├úo existia. VFP9 valida o alias no momento da atribui├º├úo do `ControlSource`.
+
+**Mudan├ºas:**
+1. `InicializarForm()`: Criado `cursor TmpOperacao (Codigos N(12,0), TmpMins N(5,0))` antes de `ConfigurarPageFrame()`
+2. `Destroy()`: Adicionado `USE IN TmpOperacao` para limpeza ao fechar

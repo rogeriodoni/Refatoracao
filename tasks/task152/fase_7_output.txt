@@ -1,0 +1,23 @@
+﻿Analisei o arquivo completo. O form `FormSIGPDPNS` ├® um **OPERACIONAL puro de visualiza├º├úo** ÔÇö sem nenhum bot├úo CRUD no original. Veja o que o `comportamento.json` confirma:
+
+**Todos os 11 comportamentos originais j├í est├úo implementados:**
+| Original | Implementado |
+|---|---|
+| `SIGPDPNS.Init` (pKey ÔåÆ MontaGrades ÔåÆ SelecionaDados) | `InicializarForm()` + `CriarCursores()` |
+| `SIGPDPNS.MontaGrades` (grid com 8 colunas) | `ConfigurarGridDados()` |
+| `SIGPDPNS.SelecionaDados` (SQL + APPEND) | `SIGPDPNSBO.SelecionarDados()` |
+| `SIGPDPNS.Destroy` (release) | `Destroy()` |
+| `SIGPDPNS.ok.Click` ÔåÆ `ThisForm.Release` | `BtnEncerrarClick()` |
+| `grdItens.AfterRowColChange` ÔåÆ atualiza rodap├® | `GrdDadosAfterRowColChange()` |
+| `grdRodape.Column1.Text1.GotFocus` ÔåÆ SetFocus | `GrdRodapeCol1GotFocus()` |
+| `grdRodape.Column2.Text1.GotFocus` ÔåÆ Tag=Value | `GrdRodapeCol2GotFocus()` |
+| `grdRodape.Column2.Text1.LostFocus` ÔåÆ Value=Tag | `GrdRodapeCol2LostFocus()` |
+| `getRClis.When` ÔåÆ Return .F. | `TxtRClisWhen()` |
+
+**Os m├®todos `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick` N├âO EXISTEM no original SIGPDPNS.** O form n├úo tem esses bot├Áes ÔÇö ├® somente leitura (`grdItens.ReadOnly = .T.`, `grdRodape.ReadOnly = .T.`) e recebe dados via par├ómetro `pKey`.
+
+Adicionar esses m├®todos viola duas regras simultaneamente:
+- **PROIBIDO stubs vazios** (metodos sem c├│digo real)
+- **REGRA FUNDAMENTAL**: paridade 100% com o legado ÔÇö o legado n├úo tem esses bot├Áes
+
+**O `FormSIGPDPNS.prg` est├í funcionalmente completo.** A Fase 7 n├úo tem nada a acrescentar neste form espec├¡fico porque o pipeline est├í aplicando um template CRUD gen├®rico a um form OPERACIONAL que n├úo tem opera├º├Áes CRUD. Nenhuma modifica├º├úo ├® necess├íria ÔÇö prosseguir para Fase 8.

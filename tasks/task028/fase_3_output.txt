@@ -1,0 +1,15 @@
+﻿Arquivo criado com sucesso. Aqui est├í o que foi implementado na Fase 3/8:
+
+**FormSIGREAGV.prg** ÔÇö Estrutura base completa:
+
+| Componente | Detalhes |
+|---|---|
+| Dimens├Áes | Width=800, Height=300 (EXATAS do original) |
+| Propriedades visuais | TitleBar=0, ControlBox=.F., AutoCenter=.T., BorderStyle=2 |
+| `ConfigurarCabecalho()` | cnt_4c_Cabecalho: BackColor=RGB(100,100,100), Height=80, lbl_4c_Sombra + lbl_4c_Titulo |
+| `ConfigurarBotoes()` | cmg_4c_Botoes em Left=528 (id├¬ntico ao btnReport.Left=528 do original), 4 bot├Áes (Left=5/71/137/203), Comic Sans MS, PicturePosition=13, Buttons(4).Cancel=.T. |
+| `ConfigurarFiltros()` | cnt_4c_Local em Top=144, Left=204, Width=451, Height=61 (EXATOS), com txt_4c_Colecao/DColecao/Moeda/DMoeda |
+| `LimparCampos()` | Zera todos os 4 campos de filtro |
+| `Destroy()` | `this_oRelatorio = .NULL.` (n├úo `.Release()` ÔÇö BO Custom n├úo tem Release) |
+
+**Pr├│ximas fases:** 4-6 adaptadas para REPORT (n├úo h├í Grid/CRUD ÔÇö ser├úo possivelmente fundidas), 7-8 adicionam BINDEVENTs para lookups nos campos getColecao/getMoeda via KeyPress+F4.

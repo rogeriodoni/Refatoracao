@@ -1,0 +1,18 @@
+﻿Arquivo completo e correto. Fase 8 conclu├¡da.
+
+**M├®todos adicionados em FormSIGPRCIC.prg (linhas 646-815):**
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `CarregarLista()` | Reinicializa RecordSource do grid com `crSigSyIco1` + atualiza preview |
+| `FormParaBO()` | L├¬ ├¡cone selecionado no grid ÔåÆ `BO.this_cArqIcone` + `this_cIdChaves` |
+| `BOParaForm()` | Atualiza `img_4c_Icone` e `txt_4c_Programa` a partir das props do BO |
+| `HabilitarCampos()` | No-op (dialog flat: `txt_4c_Programa` sempre readonly, grid sempre readonly) |
+| `LimparCampos()` | Oculta `img_4c_Icone`, limpa `Picture` e `txt_4c_Programa` |
+| `AjustarBotoesPorModo()` | No-op (form operacional sem modos INCLUIR/ALTERAR/VISUALIZAR) |
+| `BtnBuscarClick()` | Chama `CarregarDados()` para reposicionar no ├¡cone atual |
+| `BtnSalvarClick()` | `FormParaBO()` + `SelecionarIcone()` + `Release()` |
+| `BtnCancelarClick()` | `Release()` sem salvar |
+| `BtnEncerrarClick()` | `Release()` (alias de cancelar para compatibilidade com FormBase) |
+
+O form est├í 100% funcional: 815 linhas, todas as fases (1-8) integradas, sem stubs, sem TODOs.

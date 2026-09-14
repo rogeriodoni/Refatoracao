@@ -1,0 +1,20 @@
+﻿O arquivo est├í completo e correto. Fase 4 entregue:
+
+**O que foi adicionado:**
+
+- **`ConfigurarPaginaLista()`** expandida com:
+  - 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) com ├¡cones, fontes Comic Sans MS, PicturePosition=13 e BINDEVENTs
+  - `cmd_4c_Encerrar` em `cnt_4c_Saida` (padr├úo can├┤nico Left=917)
+  - `grd_4c_Lista` com 2 colunas (cods=90px, descs=337px), headers configurados, RecordSource/ColumnCount fora do WITH (Problema 36)
+
+- **`AlternarPagina(par_nPagina)`** ÔÇö navega entre pages e recarrega lista ao voltar para Page1
+
+- **Handlers dos bot├Áes** (todos PUBLIC para funcionar com BINDEVENT):
+  - `BtnIncluirClick` ÔÇö NovoRegistro + LimparCampos + modoATUAL antes de HabilitarCampos
+  - `BtnVisualizarClick` ÔÇö l├¬ do cursor, CarregarPorCodigo, HabilitarCampos(.F.)
+  - `BtnAlterarClick` ÔÇö CarregarPorCodigo + EditarRegistro, foco em txt_4c_Desc
+  - `BtnExcluirClick` ÔÇö MsgConfirma + Excluir + CarregarLista
+  - `BtnBuscarClick` ÔÇö FormBuscaAuxiliar padr├úo can├┤nico com mAddColuna de 3 params
+  - `BtnEncerrarClick` ÔÇö Release()
+  - `BtnSalvarClick` ÔÇö FormParaBO + Salvar + AlternarPagina(1)
+  - `BtnCancelarClick` ÔÇö AlternarPagina(1)

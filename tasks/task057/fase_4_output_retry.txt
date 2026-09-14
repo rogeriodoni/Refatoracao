@@ -1,0 +1,13 @@
+﻿Phase 4 completed for FormSIGRECND.prg. Since this is a REPORT form (not CRUD), I interpreted "Page1 complete" appropriately:
+
+**Changes made:**
+1. **Removed forward-looking comments** ("Fase X", "Fases seguintes") that would fail the no-TODO validation rule
+2. **Completed `ConfigurarPaginaLista()`** with all 7 filter textboxes inside `cnt_4c_Local`:
+   - `txt_4c_DtInicial` (Top=5, Left=109) ÔÇö Data Refer├¬ncia with mask 99/99/9999
+   - `txt_4c_Grupo` / `txt_4c_DGrupo` (Top=30) ÔÇö c├│digo + descri├º├úo do grupo
+   - `txt_4c_Conta` / `txt_4c_DConta` (Top=57) ÔÇö c├│digo + descri├º├úo da conta
+   - `txt_4c_Moeda` / `txt_4c_DMoeda` (Top=84) ÔÇö c├│digo + descri├º├úo da moeda
+   - Posi├º├Áes EXATAS de `layout.json`, tabindex sequencial, BorderStyle=1, Visible=.T.
+3. **Adicionado `AtualizarEstadoControles()` override** ÔÇö para REPORT, retorna sem CRUD logic (mesmo padr├úo de `Formsigatcrp.prg`)
+
+**Por que n├úo Grid/CRUD/AlternarPagina:** este form ├® `frmrelatorio` (FLAT layout com filtros + bot├Áes Visualizar/Imprimir/Excel/Encerrar), n├úo cadastro CRUD ÔÇö confirmado pelos artefatos da task e pelo contexto detalhado do prompt ("Layout FLAT: SEM PageFrame de duas paginas"). Grid de lista, bot├Áes CRUD e AlternarPagina n├úo se aplicam a relat├│rios de 1 p├ígina.

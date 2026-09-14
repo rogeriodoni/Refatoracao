@@ -1,0 +1,15 @@
+﻿**FASE 1/8 concluida.** Arquivo criado: `C:\4c\projeto\app\classes\ProdutoBO.prg`
+
+**Resumo do que foi declarado:**
+- **74 campos Character** (`this_c*`) ÔÇö todos os char() e text da tabela
+- **9 campos Memo/Text** (`this_c*`) ÔÇö descfis, figjpgs, figtecs, dsccompras, obscompras, dpro3s, figjpgs64, mtiposervs, obsinsp
+- **72 campos Numeric** (`this_n*`) ÔÇö todos os numeric() da tabela
+- **5 campos BIT nativos** (`this_l*`) ÔÇö flagctabs, tcomps, transps, impetiqs, chkfunds
+- **7 campos Logical** (`this_l*`) ÔÇö varias, consigs, fabrproprs, encoms, chkgarvit, cravcers, prodwebs (conforme instrucao do usuario)
+- **10 campos DateTime** (`this_d*`) ÔÇö todos os datetime NULL
+- `Init()` configurando `this_cTabela = "SigCdPro"` e `this_cCampoChave = "cpros"`
+- `ObterChavePrimaria()` retornando `this_cCpros`
+
+**Nota:** Os campos `instalas` e `opcvars` mencionados nas instrucoes **nao existem na tabela SigCdPro** (podem ser de SigPrFtp). Nao foram incluidos para manter fidelidade ao schema.
+
+Pronto para **FASE 2/8**: implementar `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`, `Buscar()` e `CarregarPorCodigo()`.

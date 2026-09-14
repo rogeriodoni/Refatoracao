@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto e completo. A Fase 5 est├í conclu├¡da.
+
+**O que foi feito:**
+
+1. **Removido `DataSession = 2`** da DEFINE CLASS ÔÇö n├úo ├® necess├írio na nova arquitetura (sem ControlSource binding) e causaria falha no lookup via FormBuscaAuxiliar, que opera em DataSession=1 compartilhada.
+
+2. **Adicionados 3 controles + 3 labels (50% dos campos) em `ConfigurarPaginaDados()`:**
+   - `lbl_4c_Codigo` + `txt_4c_Codigo` (Top=180/185, ReadOnly, legado When=RETURN .F.)
+   - `lbl_4c_Produto` + `txt_4c_Cpros` (Top=207/210, MaxLength=14, com lookup F4)
+   - `lbl_4c_TipoPromocao` + `cbo_4c_CmbTpDesc` (Top=231/234, RowSource="1-Brinde", ListIndex=1)
+
+3. **BINDEVENTs adicionados** para `txt_4c_Cpros`: KeyPress (F4/F5), DblClick, LostFocus.
+
+4. **Corrigido ComboBox** em FormParaBO/BOParaForm/LimparCampos: `.Value` ÔåÆ `.ListIndex` (evita type mismatch entre string "1-Brinde" e numeric `this_nTppro`).
+
+5. **3 novos m├®todos PUBLIC** adicionados: `TeclaTxtCpros`, `AbrirBuscaProduto`, `ValidarProduto` ÔÇö todos sem PROTECTED para funcionar com BINDEVENT.

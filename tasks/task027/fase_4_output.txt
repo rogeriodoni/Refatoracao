@@ -1,0 +1,9 @@
+﻿Fase 4 conclu├¡da. O que foi feito:
+
+**`ConfigurarPaginaLista()`** ÔÇö implementada com carregamento dos cursores de refer├¬ncia que o Init original carregava via `poDataMgr.SqlExecute`:
+- `cursor_4c_SigCdEmp` (cemps/razas/ativas) ÔÇö indexado por `cemps` para que `ValidarEmpresa()` possa usar `SEEK` em vez de SQLEXEC a cada digita├º├úo
+- `cursor_4c_SigCdGrp` (cgrus/mercs/cestoqs) ÔÇö cursor de grupos de estoque carregado como no original; se falhar, as valida├º├Áes fazem fallback para SQLEXEC direto (graceful degradation, sem bloquear abertura do form)
+
+**`AlternarPagina()`** ÔÇö j├í estava implementada desde a Fase 3, sem altera├º├úo necess├íria.
+
+**`Destroy()`** ÔÇö atualizado para liberar os dois cursores de refer├¬ncia antes de desalocar o BO.

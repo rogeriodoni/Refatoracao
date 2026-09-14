@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FormTam.prg criado (Fase 3/8 ÔÇö Estrutura Base) em `C:\4c\projeto\app\forms\cadastros\FormTam.prg`.
+
+Conte├║do entregue nesta fase:
+- `DEFINE CLASS FormTam AS FormBase` com propriedades visuais (Height=600, Width=1000, Caption="Cadastro de Tamanhos", AutoCenter, ShowWindow, WindowType, ControlBox, Closable, MaxButton, TitleBar, Themes, BorderStyle) e estado (`this_oBusinessObject`, `this_cModoAtual`)
+- `Init()` ÔÇö apenas `DODEFAULT()` (n├úo chama `InicializarForm()` duas vezes)
+- `InicializarForm()` ÔÇö cria `TamBO`, chama `ConfigurarPageFrame()`, propaga `Caption` para os labels do cabe├ºalho, guarda `gb_4c_ValidandoUI` antes de chamar `CarregarLista()` (ser├í implementado na Fase 4), seta `ActivePage=1` e `this_cModoAtual="LISTA"`
+- `ConfigurarPageFrame()` ÔÇö PageFrame com `Top=-29`, `Tabs=.F.`, Page1="Lista" e Page2="Dados" com `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö Page1 com `cnt_4c_Cabecalho` (+ labels Sombra/Titulo) e container vazio `cnt_4c_Botoes` (posi├º├úo can├┤nica Left=542) ÔÇö grid e bot├Áes CRUD entram na Fase 4
+- `ConfigurarPaginaDados()` ÔÇö Page2 com container vazio `cnt_4c_BotoesAcao` (posi├º├úo can├┤nica Left=842) ÔÇö bot├Áes Confirmar/Cancelar entram na Fase 4, campos nas Fases 5-6
+- `TornarControlesVisiveis()` ÔÇö implementa├º├úo completa e recursiva (Controls + Pages)
+- `Destroy()` ÔÇö libera `this_oBusinessObject`
+
+Seguido o padr├úo can├┤nico de `FormCargo.prg`/`FormCor.prg` para nomes, posi├º├Áes e compensa├º├úo do PageFrame. Nenhum stub/placeholder ÔÇö os m├®todos ainda n├úo inclu├¡dos nesta fase (CarregarLista, bot├Áes, campos) ser├úo adicionados via Edit nas Fases 4-8, conforme o processo multi-fase.

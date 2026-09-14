@@ -1,0 +1,26 @@
+﻿An├ílise completa. Ambos os alertas s├úo **falsos positivos** do detector autom├ítico.
+
+## Resultado da Verifica├º├úo
+
+### [SQL-FILTRO-INVENTADO] `CBARSEDEXS`
+
+Ocorr├¬ncias em `SedBO.prg`:
+- **Linha 376** ÔÇö `WHERE cBarSedexs = ...` no m├®todo `Atualizar()` ÔÇö atualiza├º├úo por PK, padr├úo correto do BusinessBase
+- **Linha 413** ÔÇö `WHERE cBarSedexs = ...` no SELECT de `ExecutarExclusao()` ÔÇö verifica se etiqueta est├í usada antes de deletar
+- **Linha 438** ÔÇö `WHERE cBarSedexs = ...` no DELETE de `ExecutarExclusao()` ÔÇö delete por PK, padr├úo correto do BusinessBase
+
+`cBarSedexs` ├® a **chave prim├íria declarada** (`this_cCampoChave = "cBarSedexs"`). Esses usos n├úo s├úo condi├º├Áes inventadas ÔÇö s├úo o padr├úo can├┤nico do BusinessBase para UPDATE/DELETE por PK. O detector marcou porque o legado n├úo tinha esses m├®todos CRUD (usava `ExcluirFaixa` customizado), mas a arquitetura nova exige que `ExecutarExclusao` e `Atualizar` usem a PK.
+
+### [SQL-FILTRO-INVENTADO] `CONTROLCOUNT`
+
+Ocorr├¬ncias em `FormSed.prg`:
+- **Linha 238** ÔÇö `par_oContainer.ControlCount` ÔÇö propriedade VFP9 do container, loop de itera├º├úo de controles
+- **Linha 245** ÔÇö `PEMSTATUS(loc_oControl, "ControlCount", 5)` ÔÇö string passada como par├ómetro para PEMSTATUS, n├úo SQL
+
+`ControlCount` **n├úo aparece em nenhuma cl├íusula SQL** nos dois arquivos. O detector confundiu a string `"ControlCount"` (argumento de `PEMSTATUS`) com um nome de coluna SQL.
+
+## Conclus├úo
+
+Nenhuma altera├º├úo necess├íria. Os dois arquivos est├úo corretos:
+- `SedBO.prg` usa `cBarSedexs` como PK nos m├®todos CRUD padr├úo do BusinessBase ÔÇö comportamento esperado e correto.
+- `FormSed.prg` usa `ControlCount` como propriedade VFP9 no m├®todo de visibilidade recursiva ÔÇö sem rela├º├úo com SQL.

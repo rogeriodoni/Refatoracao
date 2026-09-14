@@ -1,0 +1,16 @@
+﻿After reading both files in full and searching for all WHERE clauses, the two reported problems are **false positives** from the code review checker:
+
+1. **`CURSOR_4C_TOTA`** ÔÇö the checker matched the string `cursor_4c_Totais` (truncated). This appears only in `IF USED("cursor_4c_Totais")` and `USE IN cursor_4c_Totais` ÔÇö VFP cursor management, never in a SQL WHERE condition.
+
+2. **`CONTROLCOUNT`** ÔÇö the checker matched `ControlCount`, which appears only at lines 776 and 791 of the Form as a VFP object property (`par_oContainer.ControlCount`), not in any SQL WHERE clause.
+
+The actual SQL WHERE clauses in the migrated code are all correct and match the original:
+
+| Location | SQL WHERE | Status |
+|----------|-----------|--------|
+| `CarregarParaEdicao` (BO:115) | `WHERE a.empdopnums = EscaparSQL(...)` | Ô£à matches original `EmpDopNums = ''+pcEdn+''` |
+| `ValidarDuplicidade` (BO:223) | `WHERE !DELETED() AND !EMPTY(ALLTRIM(cmoes))` | Ô£à VFP local SELECT, not SQL Server |
+| `BuscarMoeda` (BO:270) | `WHERE cmoes LIKE EscaparSQL(...)` | Ô£à correct lookup |
+| `SalvarCotacoes` (BO:329) | `DELETE FROM sigprctc WHERE empdopnums = ...` | Ô£à matches original `lcDelete` |
+
+**No changes are needed.** Both files are already correct for this pass.

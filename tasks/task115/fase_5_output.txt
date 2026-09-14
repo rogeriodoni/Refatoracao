@@ -1,0 +1,14 @@
+﻿Fase 5/8 conclu├¡da. As seguintes adi├º├Áes foram feitas em `Formsigrehtc.prg`:
+
+**Adicionado ao final de `ConfigurarCamposFiltro()` (linha 724-726):**
+- `BINDEVENT` para `txt_4c_CdGrEstoque` ÔåÆ `TeclaCdGrEstoque`
+- `BINDEVENT` para `txt_4c_DsGrEstoque` ÔåÆ `TeclaDsGrEstoque`
+
+**Novos m├®todos (linhas 766-881):**
+- `FormParaRelatorio()` ÔÇö mapeia todos os 11 campos do form para as propriedades correspondentes do BO (`this_dDtInicial`, `this_dDtFinal`, `this_nTpDat`, `this_cGrupo`, `this_cDsGrupo`, `this_cIclis`, `this_cDsContas`, `this_nOpEmitido`, `this_nOpCancela`, `this_nOpOrdem`, `this_nOpBaixas`)
+- `ValidarCdGrEstoque()` ÔÇö SQLEXEC em `SigCdGrp` por `cgrus`; preenche `dgrus` ou avisa e limpa
+- `ValidarDsGrEstoque()` ÔÇö SQLEXEC em `SigCdGrp` por `dgrus`; s├│ ativo quando o campo c├│digo est├í vazio (comportamento legado `When`); preenche `cgrus` ou limpa ambos
+- `TeclaCdGrEstoque(par_nKeyCode, par_nShift)` ÔÇö dispara `ValidarCdGrEstoque` em ENTER(13)/TAB(9)
+- `TeclaDsGrEstoque(par_nKeyCode, par_nShift)` ÔÇö dispara `ValidarDsGrEstoque` em ENTER(13)/TAB(9)
+
+**Fase 6 vai adicionar:** `ValidarCdContas`, `ValidarDsContas`, `TeclaCdContas`, `TeclaDsContas` + BINDEVENTs para os campos de conta.

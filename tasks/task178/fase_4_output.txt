@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi implementada com sucesso.
+
+**O que foi feito:**
+
+1. **`ConfigurarBotoes()` completo** ÔÇö adicionadas as propriedades visuais exatas dos dois bot├Áes (extra├¡das do SCX original):
+   - `Buttons(1)` = "Consultar" com `geral_procura_60.jpg`, `Left=5`, `Comic Sans MS`, `Themes=.F.`
+   - `Buttons(2)` = "Encerrar" com `cadastro_sair_60.jpg`, `Left=85`, `Cancel=.T.`
+   - BINDEVENT de ambos os bot├Áes para `CmgConsultarClick` e `CmgEncerrarClick`
+
+2. **`CmgConsultarClick()`** ÔÇö implementa├º├úo completa fiel ao legado (83 linhas originais):
+   - 3 valida├º├Áes obrigat├│rias: empresa, opera├º├úo e per├¡odo
+   - Captura todos os filtros: grupo, conta, moeda, respons├ível, OP, n├║mero, status, empresa destino
+   - Monta WHERE din├ómico com todos os filtros opcionais (cada parte terminando em ` AND `)
+   - Executa `SQLEXEC` em `cursor_4c_MovTemp`, indexa por `EmpDopNums`, corrige NULL em `PrazoEnts`
+   - Abre `sigpres2` (legado) via `DO FORM` passando `loc_cNmO, THIS.DataSessionId, THIS`
+
+3. **`CmgEncerrarClick()`** ÔÇö fecha o form (`THIS.Release()`), fiel ao legado de 1 linha.

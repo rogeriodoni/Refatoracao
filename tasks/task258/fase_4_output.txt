@@ -1,0 +1,12 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormSigPrAop.prg` foi atualizado com:
+
+- **`ConfigurarGrade()`** ÔÇö grid com 5 colunas mapeadas para `cursor_4c_DivOp`:
+  - *Pedido*: express├úo `RTRIM(Dopes) + ' ' + LTRIM(STR(Numes,6))` substituindo o legado `fGerMascara()`, ReadOnly
+  - *Cor* e *Tam*: CodCors/CodTams, ReadOnly
+  - *Quantidade*: Qtds com InputMask `999,999.999`, ReadOnly
+  - *Qtd.Atual*: QtdDivs com `Format="K"` ÔÇö ├║nica coluna edit├ível pelo usu├írio
+  - BINDEVENT para `AfterRowColChange` wired ao handler `GrdDadosAfterRowColChange`
+
+- **`GrdDadosAfterRowColChange(par_nColIndex)`** ÔÇö atualiza o EditBox de observa├º├Áes ao mudar de linha (equivale ao `Get_obss.Refresh` do legado), com guard `PEMSTATUS` para Fase 5 que ainda criar├í `edt_4c_Obss`
+
+- **`InicializarForm()`** agora chama `THIS.ConfigurarGrade()` na sequ├¬ncia de inicializa├º├úo

@@ -1,0 +1,259 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 6,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds", "fwBuscaExt", "fwBuscaInt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDMTP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDatamgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Select crSigIdPcp\nSet Near On\nIndex On tipos+grupos tag TpGru\nSet Order To TpGru\nSeek Thisform.pagina.dados.get_tipos.Value+Thisform.pagina.dados.get_Grupo.Value\nSet Near Off\n=DoDefault()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_tipos,get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP",
+      "evento": "Init",
+      "linhas": 34,
+      "codigoOriginal": "lcQryTpCp = [Select * From SigIdPcp ]\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigIdPcp', 'cIdChaves', 'crSigIdPcp', '', ThisForm.Pagina.Lista.Grade, lcQryTpCp)\n\t\t\t.pfSqlTabela(1).pColuna('Tipos', '', '', 'Código', 30, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('descs', '', '', 'Descrição', 80, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('limites', '', '', 'Prod. Mínima', 105, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\tlcQuery = [Sel... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMTP",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "LPARAMETERS opcao\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect crSigIdPcp\n\n* posiciona o cursor de acordo com a opção\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tthisform.pagina.dados.get_Tipos.setfocus\t\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tthisform.pagina.dados.get_descs.setfocus\n\tCase Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tthisform.pagina.dados.grupo_salva.salva.setfocus\nEndCase\n\nIf ThisForm.poDataMgr.CursorQuery('SigCdMoe', 'cr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "get_Tipos,get_descs,get_Desc_Moe",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP",
+      "evento": "Click",
+      "linhas": 31,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n\tIF IsEmpty(ThisForm.Pagina.Dados.Get_Tipos.Value)\n    \tMessageBox( 'Obrigatório Informar o Código...', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Tipos.SetFocus\n\t\tReturn\n\tEndif\n\tIF IsEmpty(ThisForm.Pagina.Dados.Get_Grupo.Value)\n    \tMessageBox( 'Obrigatório Informar o Grupo...', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Grupo.SetFocus\n\t\tReturn\n\tEndIf\n\tlcQuery = [Select Tipos,Grupos ] + ;\n\t\t    [ From SigIdPcp] + ;\n\t\t    [ Where Tipos=']+ThisForm.pagina.dados.get_tipos.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Tipos,Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP.Pagina.Dados.Get_tipos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP.Pagina.Dados.Get_Descs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP.Pagina.Dados.Get_moedas",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "if not IsEmpty(this.value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMOES', This.Value, 'Seleção', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMOES', '', 'Código')\n\t\tloLista.mAddColuna('DMOES', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tIf Lastkey() = 27\n\t\tThis.Value = ''\n\t\tthisform.pagina.dados.get_Desc_Moe.value = ''\n\tElse\n\t\tthis.value = crListaRemota.Cmoes\n\t\tthisform.pagina.dados.get_Desc_Moe.value = crListaRemo... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Desc_Moe",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP.Pagina.Dados.Get_Desc_Moe",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(IsEmpty(Thisform.pagina.dados.get_Moedas.value) AND ;\n       Inlist(ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Moedas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP.Pagina.Dados.Get_Desc_Moe",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "if not IsEmpty(this.value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMOES', This.Value, 'Seleção', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMOES', '', 'Descrição')\n\t\tloLista.mAddColuna('CMOES', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\tIf Lastkey() = 27\n\t\tThis.Value = ''\n\t\tthisform.pagina.dados.get_Moedas.value = ''\n\tElse\n\t\tthis.value = crListaRemota.Cmoes\n\t\tthisform.pagina.dados.get_Moedas.value = crListaRemota.D... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Moedas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP.Pagina.Dados.Get_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTP.Pagina.Dados.Get_grupo",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "If not IsEmpty(This.Value)\n\txBrow = CreateObject('fwBuscaInt', 'crSigCdGcr', 'Codigos', This.Value, 'Cadastro de Grupos')\n\txBrow.mAddColuna('Codigos', '', 'Código', .t.)\n\txBrow.mAddColuna('Descrs', '', 'Descrição', .t.)\n\txBrow.Show\n\tIf Lastkey()#27\n\t\tThis.Value = crSigCdGcr.Codigos\n\t\tThis.Refresh\n\tEndif\nEndIf\nSelect crSigIdPcp\nReturn(.T.)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDMTP.Init",
+      "queryOriginal": "lcQryTpCp = [Select * From SigIdPcp ]",
+      "tabelas": "SigIdPcp",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDMTP.Click",
+      "queryOriginal": "\tlcQuery = [Select Tipos,Grupos ] + ; \t\t    [ From SigIdPcp] + ; \t\t    [ Where Tipos=']+ThisForm.pagina.dados.get_tipos.Val... [TRUNCADO]",
+      "tabelas": "SigIdPcp",
+      "colunas": "Tipos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigIdPcp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

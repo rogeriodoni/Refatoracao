@@ -1,0 +1,7 @@
+﻿Fase 4 conclu├¡da. As tr├¬s mudan├ºas feitas em `Formacg.prg`:
+
+1. **`Caption = "Acesso de Grupos"`** adicionado ao DEFINE CLASS ÔÇö sem isso `THIS.Caption` era string vazia quando usado nos labels do cabe├ºalho.
+
+2. **`AlternarPagina(par_nPagina)`** adicionado ÔÇö era chamado em 5 lugares (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnSalvarClick, BtnCancelarClick) mas n├úo existia, o que causaria erro de runtime imediato ao clicar qualquer bot├úo CRUD.
+
+3. **Headers do grid** corrigidos para `"Grupo"` / `"Nome"` em `CarregarLista()` e `BtnBuscarClick()` ÔÇö estavam com string vazia.

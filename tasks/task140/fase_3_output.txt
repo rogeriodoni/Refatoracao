@@ -1,0 +1,15 @@
+﻿Arquivo criado e corrigido. Resumo do que foi implementado na Fase 3:
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigPdMen.prg`** ÔÇö form completo (dialog modal simples, sem PageFrame):
+
+- **Init(par_cCidChave, par_cDescr1, par_cDescr2)** ÔÇö armazena par├ómetros como propriedades antes de chamar `DODEFAULT()`, cria `SigPdMenBO`
+- **InicializarForm()** ÔÇö configura picture, cria todos os controles, chama `CarregarMensagem()` (com guarda `gb_4c_ValidandoUI`)
+- **ConfigurarCabecalho()** ÔÇö `cnt_4c_Sombra` com dois labels shadow/title (BackColor=RGB(100,100,100), ForeColor branco)
+- **ConfigurarShape()** ÔÇö `shp_4c_Shape1` decorativo
+- **ConfigurarLabel2()** ÔÇö label est├ítico `"[ Texto ]"`
+- **ConfigurarContainer()** ÔÇö `cnt_4c_Container1` com `obj_4c_GetMemo` (EditBox, `Visible=.F.` inicial) e `lbl_4c_Gettexto`
+- **ConfigurarBotaoOk()** ÔÇö `cmd_4c_Ok` com BINDEVENT para `CmdOkClick`
+- **CarregarMensagem()** ÔÇö query via BO, preenche caption/labels, decide entre EditBox (modo memo) ou Label (modo texto) com fonte/cor/estilo do banco
+- **CmdOkClick()** ÔÇö l├│gica fiel ao original: mouse fecha (`Release`), ENTER mostra aviso + ESC
+- **TornarControlesVisiveis()** ÔÇö filtra `OBJ_4C_GETMEMO` (permanece oculto at├® `CarregarMensagem` decidir)
+- **Destroy()** ÔÇö libera BO, chama `DODEFAULT()`

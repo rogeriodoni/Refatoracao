@@ -1,0 +1,5 @@
+﻿Tudo certo. Resumo das corre├º├Áes aplicadas em `FormSigPrDsc.prg`:
+
+1. **[TITULO-NAO-PROPAGADO]** ÔÇö Adicionadas linhas 90-91 em `InicializarForm`, ap├│s `ConfigurarCabecalho()`, propagando `THIS.Caption` para `lbl_4c_Sombra` e `lbl_4c_Titulo`. Como ├® um form OPERACIONAL flat (sem PageFrame), o caminho correto ├® `THIS.cnt_4c_Cabecalho.lbl_4c_Sombra/Titulo` (n├úo o caminho PageFrame do checker, que ├® para forms CRUD).
+
+2. **[FONTNAME-ERRADO] linhas 195 e 222** ÔÇö `"Comic Sans MS"` substitu├¡do por `"Tahoma"` em ambos `cmd_4c_Encerrar` e `cmd_4c_Atualizar`. Nenhuma ocorr├¬ncia remanescente.

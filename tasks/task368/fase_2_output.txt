@@ -1,0 +1,8 @@
+﻿CHMBO.prg est├í completo com todos os m├®todos CRUD. Resumo do que foi adicionado:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT em `SigCqMat` com filtro opcional por `banco`, alimenta `cursor_4c_Dados` para o grid
+- **`CarregarPorCodigo(par_cBanco)`** ÔÇö SELECT completo dos 20 campos por PK, chama `CarregarDoCursor`, seta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia todos os campos do cursor para propriedades `this_*`; usa `EVALUATE(alias + ".local")` para o campo `local` (palavra reservada VFP)
+- **`Inserir()`** (PROTECTED) ÔÇö verifica duplicidade de `banco` antes do INSERT, inclui todos os 20 campos com helpers tipados (`EscaparSQL`/`FormatarNumeroSQL`), chama `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** (PROTECTED) ÔÇö UPDATE de todos os campos exceto PK, com `[local]` entre colchetes (palavra reservada SQL Server), chama `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** (PROTECTED) ÔÇö DELETE por PK, chama `RegistrarAuditoria("DELETE")`

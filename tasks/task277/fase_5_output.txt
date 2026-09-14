@@ -1,0 +1,29 @@
+﻿Ap├│s revisar completamente o `Formsigprema.prg` e `sigpremaBO.prg`, concluo que **a Fase 5 ├® um no-op para este form OPERACIONAL**.
+
+Aqui est├í o diagn├│stico completo:
+
+**O que a Fase 5 pretendia fazer**: adicionar `ConfigurarPaginaDados()` com metade dos campos da Page2 (TextBoxes, Labels).
+
+**Por que n├úo h├í nada a fazer**: este ├® um form OPERACIONAL plano (herda de `form`, n├úo de `frmcadastro`). N├úo tem Page1/Page2 com campos de entrada. O template multi-fase gerou uma Fase 5 gen├®rica que n├úo se aplica a este tipo de form.
+
+**Estado atual - COMPLETO:**
+
+| Componente | Status |
+|---|---|
+| `sigpremaBO.prg` | Ô£ô Completo (970 linhas) - CarregarDados, ProcessarEnvioEmails, GerarPDF, EnviarEmailCDO, RegistrarLogEmail |
+| `Formsigprema.prg` | Ô£ô Completo (541 linhas) - header, grid 5 colunas, bot├Áes SelTudo/Apaga/Email/Encerrar |
+| `menu.prg` | Ô£ô Integrado - BAR 55 + AbrirFormsigprema() |
+| `config.prg` | Ô£ô Carregamento autom├ítico via ADIR(*BO.prg + operacionais/Form*.prg) |
+
+**Elementos do legado mapeados:**
+
+| Original | Novo | Status |
+|---|---|---|
+| `cntSombra` | `cnt_4c_Cabecalho` | Ô£ô |
+| `grade` (5 colunas) | `grd_4c_Dados` (5 colunas) | Ô£ô |
+| `Commandgroup1` (Encerrar) | `cnt_4c_Saida` + `cmd_4c_Encerrar` (can├┤nico) | Ô£ô |
+| `btnEmail` | `cmd_4c_BtnEmail` | Ô£ô |
+| `SelTudo` / `apaga` | `cmd_4c_SelTudo` / `cmd_4c_Apaga` | Ô£ô |
+| `REGISTRY1` | N├úo portado (control de framework legado) | OK |
+
+O form est├í pronto para a Fase 6 (testForm).

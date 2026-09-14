@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+File looks correct and complete. Summary of what I did for Fase 2/8:
+
+Completed `C:\4c\projeto\app\classes\TbOBO.prg` (SigOpTdo ÔÇö v├¡nculo Opera├º├úo ├ù Tabela de Desconto) adding:
+
+- **`ObterChavePrimaria()`** (PROTECTED) ÔÇö retorna `cidchaves` para auditoria.
+- **`Buscar(par_cDopes)`** ÔÇö SELECT com `INNER JOIN SigOpTdz` para trazer `descrs`, espelhando exatamente a query original (`Select a.*,b.Descrs From SigOpTdo a, SigOpTdz b Where a.Dopes=... And a.Tabds=b.Codigos`); filtra por opera├º├úo quando informado, sen├úo lista tudo.
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por `cidchaves` (PK) com o mesmo JOIN, resetando `this_lNovoRegistro`.
+- **`CarregarDoCursor()`** ÔÇö usa `SELECT (par_cAliasCursor)` + acesso direto aos campos (sem a sintaxe inv├ílida `(variavel).campo`), mapeando `cidchaves`, `dopes`, `tabds` e opcionalmente `descrs` (s├│ existe quando veio de JOIN).
+- **`Inserir()`** ÔÇö gera `cidchaves` via `LEFT(fUniqueIds(), 20)` (mesmo padr├úo do legado `fUniqueIds()`) quando vazio, faz INSERT com as 3 colunas NOT NULL do schema real, e chama `RegistrarAuditoria("INSERT")`.
+- **`Atualizar()`** ÔÇö UPDATE de `dopes`/`tabds` por `cidchaves`, com `RegistrarAuditoria("UPDATE")`.
+- **`ExecutarExclusao()`** (PROTECTED, chamada apenas via `Excluir()` p├║blico da BusinessBase) ÔÇö DELETE por `cidchaves`, com `RegistrarAuditoria("DELETE")`.
+- **`ValidarTabelaDescontoDuplicada(par_cDopes)`** ÔÇö replica a checagem de duplicidade do `cmdSair.Click` do legado (GROUP BY/HAVING COUNT>1), ├║til para a fase do Form.
+
+Todas as queries usam nomes de tabela/coluna exatos confirmados em `docs/schema.sql`/`schema_ascii.sql` (`SigOpTdo.cidchaves/dopes/tabds`, `SigOpTdz.codigos/descrs`), todo `RETURN` est├í fora de `TRY/CATCH`, e nenhum `CATCH` ├® silencioso (todos chamam `MsgErro`).

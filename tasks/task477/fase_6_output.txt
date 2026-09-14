@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. A Fase 6 foi executada com sucesso.
+
+**O que foi feito:**
+
+- **5 campos restantes adicionados** em `ConfigurarPaginaDados()` com Tops compensados (+29px):
+  - `txt_4c_Lanca` (Lan├ºa C/C ÔÇö S/N) com `ValidarLanca`
+  - `txt_4c_Oper` (Opera├º├úo ÔÇö DB/CR/DF/NL) com `ValidarOper`
+  - `txt_4c_GrContabil` (Grupo Cont├íbil ÔÇö FK SigCdGcr) com lookup completo
+  - `txt_4c_Autos` (Autom├ítico ÔÇö S/N) com `ValidarAutos` + `AutosLostFocus`
+  - `txt_4c_Operac` (Opera├º├úo E/S ÔÇö inicia desabilitado) com `ValidarOperac`
+
+- **L├│gica `GetOperac.When` do legado reproduzida:** `txt_4c_Operac.Enabled` ├® controlado por `AutosLostFocus` (BINDEVENT em LostFocus do Autos), espelhando o comportamento `Return (GetAutos.Value = "S")` do original.
+
+- **Lookup de GrContabil completo:** `GrContabilLookupKeyPress` (F4 = keycode 28) + `GrContabilLookupDblClick` + `AbrirLookupGrContabil()` com `FormBuscaAuxiliar` para `SigCdGcr.Codigos/Descrs`, mais `ValidarGrContabil` que abre o picker se o c├│digo n├úo existir.
+
+- **`FormParaBO()`, `BOParaForm()`, `LimparCampos()`, `HabilitarCampos()`** completados com todos os 9 campos ÔÇö sem TODO nem stub.

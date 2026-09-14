@@ -1,0 +1,190 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReIpc.SCX
+* Data/Hora: 06/06/2026 15:25:24
+* Total de registros: 4
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIPC
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 1016
+  Height = 634
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPC
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 130
+  Width = 800
+  DoCreate = .T.
+  Caption = "Impressão da Relação"
+  ControlBox = .F.
+  ClipControls = .F.
+  WindowType = 1
+  Name = "SIGREIPC"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 495
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 36
+  REGISTRY1.Left = 396
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIPC
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+For x = 1 to Thisform.Qbols
+	lcNomeEmpresa = Iif( Seek( _empr, 'crSigCdEmp', 'Cemps'), crSigCdEmp.Razas, '' )
+	lcRelTitulo   = 'Relação de ' + Proper( Alltrim( crSigCdPgr.Dopes ) ) + 's'
+	lcPeriodo     = 'Operação : ' + Alltrim( crSigCdPgr.Dopes ) + ' ' + fGerMascara( crSigCdPgr.Numes )
+	
+	Create Cursor Cabecalho ( pNomeEmpresa C(80), pRelTitulo C(80), pTipo n(1),;
+							 pPeriodo C(80) )
+	Insert Into Cabecalho ( pNomeEmpresa, pRelTitulo, pPeriodo, pTipo ) ;
+				Values ( lcNomeEmpresa, lcRelTitulo, lcPeriodo, 1 )
+	
+	Select xPar
+	Go Top
+	
+	Select TmpLanca
+	Go Top
+	Report Form SigCdPgr Preview Noconsole
+Next
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+SELECT TMPLANCA
+goto top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters qbols
+
+=DoDefault()
+
+
+Thisform.Qbols=qbols
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+For x = 1 to Thisform.Qbols
+	lcNomeEmpresa = Iif( Seek( _empr, 'crSigCdEmp', 'Cemps'), crSigCdEmp.Razas, '' )
+	lcRelTitulo   = 'Relação de ' + Proper( Alltrim( crSigCdPgr.Dopes ) ) + 's'
+	lcPeriodo     = 'Operação : ' + Alltrim( crSigCdPgr.Dopes ) + ' ' + fGerMascara( crSigCdPgr.Numes )
+	
+	Create Cursor Cabecalho ( pNomeEmpresa C(80), pRelTitulo C(80), pTipo n(1),;
+							 pPeriodo C(80) )
+	Insert Into Cabecalho ( pNomeEmpresa, pRelTitulo, pPeriodo, pTipo ) ;
+				Values ( lcNomeEmpresa, lcRelTitulo, lcPeriodo, 1 )
+	
+	Select xPar
+	Go Top
+	
+	Select TmpLanca
+	Go Top
+	Report Form SigCdPgr to printer prompt noconsole 
+Next
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIPC
+RESERVED3 (ClassInfo): qbols
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 4
+================================================================================

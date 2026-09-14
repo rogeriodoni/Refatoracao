@@ -1,0 +1,1802 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREDES.SCX
+* Data/Hora: 04/06/2026 01:57:56
+* Total de registros: 38
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREDES
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmpresa
+  Parent: SIGREDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_a
+  Parent: SIGREDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREDES
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREDES
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGREDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesEmpresa
+  Parent: SIGREDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: say5
+  Parent: SIGREDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDVend
+  Parent: SIGREDES
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCGru
+  Parent: SIGREDES
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_vend
+  Parent: SIGREDES
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Option
+  Parent: SIGREDES
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say3
+  Parent: SIGREDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGru
+  Parent: SIGREDES
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say8
+  Parent: SIGREDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGREDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Command1
+  Parent: SIGREDES
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Command2
+  Parent: SIGREDES
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: chkLanc
+  Parent: SIGREDES
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: ChkDesc
+  Parent: SIGREDES
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: getCateD
+  Parent: SIGREDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCate
+  Parent: SIGREDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GrdForma
+  Parent: SIGREDES
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREDES.GrdForma.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREDES.GrdForma.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREDES.GrdForma.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREDES.GrdForma.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getProd
+  Parent: SIGREDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGREDES
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getProdD
+  Parent: SIGREDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetColeD
+  Parent: SIGREDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCole
+  Parent: SIGREDES
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 56
+  Left = 23
+  Width = 329
+  Height = 96
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 499
+  Width = 555
+  DoCreate = .T.
+  Caption = "Cotas de Desconto"
+  ControlBox = .F.
+  FontSize = 9
+  ClipControls = .T.
+  Name = "SIGREDES"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 6
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 6
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 6
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 6
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 283
+  btnReport.Top = -1
+  btnReport.TabIndex = 19
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.getEmpresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 123
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 86
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 2
+  Name = "getEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Empresa :"
+  Left = 69
+  Top = 89
+  TabIndex = 29
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.lbl_a
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 207
+  Top = 115
+  TabIndex = 28
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Left = 220
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 111
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  Left = 123
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 111
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Periodo :"
+  Left = 74
+  Top = 114
+  Width = 45
+  TabIndex = 27
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.getDesEmpresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 156
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 86
+  Width = 353
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "getDesEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Conta :"
+  Left = 81
+  Top = 162
+  Width = 38
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Grupo :"
+  Left = 81
+  Top = 138
+  Width = 38
+  TabIndex = 23
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Categoria :"
+  Left = 63
+  Top = 185
+  Width = 56
+  TabIndex = 26
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.getDVend
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 21
+  Left = 205
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 159
+  Width = 304
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "getDVend"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.getCGru
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 21
+  Left = 123
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 136
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "getCGru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.get_vend
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 21
+  Left = 123
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 7
+  ToolTipText = ""
+  Top = 159
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "get_vend"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.Option
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 47
+  Left = 115
+  Top = 261
+  Width = 137
+  TabIndex = 15
+  ZOrderSet = 14
+  Name = "Option"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Visão detalhada"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 7
+  Option1.Top = 5
+  Option1.Width = 94
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Visão Resumida"
+  Option2.Height = 15
+  Option2.Left = 7
+  Option2.Top = 26
+  Option2.Width = 92
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Tipo :"
+  Left = 90
+  Top = 266
+  TabIndex = 30
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.getDGru
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 21
+  Left = 205
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 136
+  Width = 304
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "getDGru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.Say8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "CoLeção :"
+  Left = 69
+  Top = 210
+  Width = 50
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.Say9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Produto :"
+  Left = 72
+  Top = 235
+  Width = 47
+  TabIndex = 24
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.Command1
+------------------------------------------------------------
+  Top = 392
+  Left = 355
+  Height = 45
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 21
+  TabStop = .F.
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Command1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.Command2
+------------------------------------------------------------
+  Top = 348
+  Left = 355
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 20
+  TabStop = .F.
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Command2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.chkLanc
+------------------------------------------------------------
+  Top = 264
+  Left = 385
+  Height = 15
+  Width = 76
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Lançamento"
+  TabIndex = 17
+  ForeColor = 90,90,90
+  Name = "chkLanc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.ChkDesc
+------------------------------------------------------------
+  Top = 264
+  Left = 280
+  Height = 15
+  Width = 86
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Com desconto"
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "ChkDesc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.getCateD
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 233
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 182
+  Width = 276
+  ForeColor = 0,0,0
+  ZOrderSet = 76
+  Themes = .F.
+  Name = "getCateD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.getCate
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 123
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 182
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 76
+  Themes = .F.
+  Name = "getCate"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.GrdForma
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Enabled = .T.
+  GridLines = 3
+  HeaderHeight = 0
+  Height = 181
+  Left = 122
+  Panel = 1
+  RecordMark = .F.
+  RecordSource = ""
+  RowHeight = 18
+  ScrollBars = 2
+  TabIndex = 18
+  Top = 306
+  Width = 228
+  GridLineColor = 238,238,238
+  ZOrderSet = 27
+  Name = "GrdForma"
+  Column1.FontName = "Tahoma"
+  Column1.Alignment = 0
+  Column1.ControlSource = ""
+  Column1.Enabled = .T.
+  Column1.Width = 15
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.ControlSource = ""
+  Column2.Enabled = .T.
+  Column2.Width = 220
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.GrdForma.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.GrdForma.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 35
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  Enabled = .T.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.GrdForma.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Descrs"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.GrdForma.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Enabled = .T.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.getProd
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 123
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 232
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 76
+  Themes = .F.
+  Name = "getProd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.Say7
+------------------------------------------------------------
+  Caption = "Forma de Pagamento :"
+  Left = 8
+  Top = 306
+  TabIndex = 31
+  ForeColor = 90,90,90
+  ZOrderSet = 37
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.getProdD
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 233
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 232
+  Width = 276
+  ForeColor = 0,0,0
+  ZOrderSet = 76
+  Themes = .F.
+  Name = "getProdD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.GetColeD
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 233
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 207
+  Width = 276
+  ForeColor = 0,0,0
+  ZOrderSet = 76
+  Themes = .F.
+  Name = "GetColeD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDES.GetCole
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 123
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 11
+  Top = 207
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 76
+  Themes = .F.
+  Name = "GetCole"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREDES
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+If InList(thisform.option.value, 1)
+	Report Form SigReDes Preview
+Else
+	Report Form SigReDe1 Preview
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF, lnOpt
+Local lcCbEmp, lcTitulo, lcPeriodo, lcGru, lcVendedor, lcOperacao, ldInicial, ldFinal, lcModa, ;
+	lnAgru, lnAgru2, lnAgru3, lcFPubl
+Local cheVen, cheTop, cheFP, cheProd, cheCole, cheCate, cheLstOp, cheLstOp1, lcLstOp, lcHInicial, lcHFinal, lcDataIni, lcDataFin
+
+lcGru		= Thisform.getCGru.Value
+lcVend		= Alltrim(Thisform.get_vend.Value)
+ldInicial   = Thisform.get_dt_inicial.Value
+ldFinal     = Thisform.get_dt_final.Value
+lcHInicial  = '00:00:00'
+lcHFinal    = '23:59:59'
+lcEmp		= Thisform.getEmpresa.Value
+lcCole		= Alltrim(Thisform.getCole.Value)
+lcCate		= Alltrim(Thisform.getCate.Value)
+lcProd		= Alltrim(Thisform.getprod.Value)
+lnOpt		= Thisform.Option.Value
+lnDesc		= Thisform.chkDesc.Value
+lnLanc		= Thisform.chkLanc.Value
+**** prepara filtros - vendedor ****
+If Empty(lcVend)
+	cheVen = [ ]
+Else
+	cheVen = [ and a.vends = ']+lcVend+[' ]
+Endif
+
+**** prepara filtros - coleção ****
+If Empty(lcCole)
+	cheCole = [ ]
+Else
+	cheCole = [ and p.sgrus = ']+lcCole+[' ]
+Endif
+
+**** prepara filtros - categoria ****
+If Empty(lcCate)
+	cheCate = [ ]
+Else
+	cheCate = [ and p.colecoes = ']+lcCate+[' ]
+Endif
+
+**** prepara filtros - produto ****
+If Empty(lcProd)
+	cheProd = [ ]
+Else
+	cheProd = [ and b.cpros = ']+lcProd+[' ]
+Endif
+
+*** Verifica se precisa filtrar forma de pagamento ***
+Go Top In CrSigOpFp
+Thisform.GrdForma.Refresh
+Go Bottom In CrSigOpFp
+Select nMarca, fpags From CrSigOpFp Where nMarca = 1 Into Cursor crAux1
+Go Top
+If Reccount() > 0
+	cheFP = [ and e.fpags in (']
+	Scan
+		cheFP = cheFP + Alltrim(fpags)+ [',']
+	Endscan
+	cheFP = Substr(cheFP, 1, Len(cheFP)-2) + [) ]
+Else
+	cheFP = []
+Endif
+*******************************************************************
+
+Thisform.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr)
+
+lcCbEmp=[VENDAS]
+If Not Empty(lcGru)
+	lcCbEmp = lcCbEmp + ' (' + Alltrim(lcGru) + ')'
+Endif
+
+lcCbTitulo  = 'Relatorio de cotas de Desconto - Detalhado'
+
+pDtI = fDtoSQL(ldInicial, lcHInicial)
+pDtF = fDtoSQL(ldFinal, lcHFinal)
+pDtH = fDtoSQL(Date(), lcHFinal)
+pOpt = lnOpt
+
+lcFiltro = []
+*lcFiltro = [ And a.EmpDopnums = 'TSHVENDA ECF            21270' ]
+
+Wait Window 'Aguarde...' Nowait Noclear
+*** mena - 12112017 - alterado join com sigcdctg e sigcdpsg ***
+lcQuery =	[Select a.datars, a.Emps, a.Dopes, a.Numes,     ] + ;
+	[b.CPros, b.dpros, b.qtds, b.units, b.unitorigs, b.totas, b.opers, ] + ;
+	[c.rclis as repre, case when co.descricaos is null then 'sem subgrupo' else co.descricaos end as colecao, ] + ;
+	[case when ca.descs is null then 'sem categoria' else ca.descs end as categoria, ] +;
+	[a.empdopnums,a.cidchaves as chaCab,b.cidchaves as chaItn,d.cidchaves as chaItd, SPACE(50) as formasP, '1' as imprime, ' ' as lancamento,  ] + ;
+	[d.ddesc, d.pdes, d.vdes, d.tpdesc, d.codigo, e.valcota, round(unitorigs*qtds,2) as ValR, ] +;
+	[CAST(0.00 as numeric(11,4)) as DescT, CAST(0.00 as numeric(11,2)) as Realizado,] +;
+	[CAST(0.00 as numeric(7,4)) as pdes01, CAST(0.00 as numeric(11,2)) as vdes01,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes02, CAST(0.00 as numeric(11,2)) as vdes02,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes03, CAST(0.00 as numeric(11,2)) as vdes03,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes04, CAST(0.00 as numeric(11,2)) as vdes04,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes05, CAST(0.00 as numeric(11,2)) as vdes05,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes06, CAST(0.00 as numeric(11,2)) as vdes06,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes07, CAST(0.00 as numeric(11,2)) as vdes07,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes08, CAST(0.00 as numeric(11,2)) as vdes08,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes09, CAST(0.00 as numeric(11,2)) as vdes09,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes10, CAST(0.00 as numeric(11,2)) as vdes10,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes11, CAST(0.00 as numeric(11,2)) as vdes11,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes12, CAST(0.00 as numeric(11,2)) as vdes12,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes13, CAST(0.00 as numeric(11,2)) as vdes13,  ] +;
+	[CAST(0.00 as numeric(7,4)) as pdes14, CAST(0.00 as numeric(11,2)) as vdes14,  ] +;
+	[CAST(0.00 as numeric(11,4)) as vdestot  ] +;
+	[From SigMvCab a with(nolock), SigMvItn b with(nolock) ] + ;
+	[left join SigMvItd d with(nolock) on b.empdopnums = d.empdopnums and b.cpros=d.Cpros and b.citens = d.citens ] + ;
+	[left join sigcddes e with(nolock) on d.codigo=e.codigo, ] +;
+	[SigCdCli c with(nolock), SigCdOpe g with(nolock), SigCdTom h with(nolock), SigcdPro p with(nolock) ] + ;
+	[left join SigCdPsg co with(nolock) on co.cgrus=p.cgrus and co.codigos=p.sgrus ] + ;
+	[left join SigCdCtg ca with(nolock) on ca.cods=p.categoria ] + ;
+	[Where a.datars BetWeen ?pDtI And ?pDtF And ] + ;
+	Iif(Empty(lcGru), [], [c.Grupos = '] + lcGru + [' And ]) + ;
+	Iif(Empty(lcEmp), [], [a.Emps = '] + lcEmp + [' And ]) + ;
+	[b.cpros = p.cpros And ] + ;
+	[a.Vends = c.IClis And ] + ;
+	[a.EmpDopNums = b.EmpDopNums and ] + ;
+	[a.dopes = g.dopes and ] +;
+	[g.tipoops = h.codigos and ] +;
+	[h.gergdmis = 1 and ] +;
+	[g.tipoops <> 5 ] + cheCole + cheCate + cheVen + cheProd + lcFiltro + ;	
+	[order by a.cidchaves,b.cidchaves,d.cidchaves ]
+
+
+
+****
+*[and a.empdopnums in (select e.empdopnums from sigmvpar e where e.empdopnums = a.empdopnums ] +cheFP +[) ] +
+****
+
+
+*!*SigCdPsg codigos descricaos  SigCdPro.SGrus - colecao
+*!*SigCdCol colecoes descs SigCdPro.colecoes - categoria
+*!*			[e.cidchaves as chavefp, e.fpags, e.valos, ] + ;
+
+*!*				[p.cgrus = co.cgrus And ] + ;
+*!*				[p.sgrus = co.codigos And ] + ;
+*!*				[p.colecoes = ca.colecoes And ] + ;
+
+
+
+If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDados') < 1)
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+	Return 0
+Endif
+
+lcQuery =	[SELECT * from sigcddes with(nolock) Where dtini >= ?pDtI And dtfin <= ?pDtF ] + ;
+	Iif(Empty(lcEmp), [], [ and Emps = '] + lcEmp + [' ])
+If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDados1') < 1)
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados1)')
+	Return 0
+Endif
+Select * From csDados1 Where emps Not In (Select emps From csDados) Into Cursor csDados1
+Select csDados1
+Go Top
+Scan
+	Select csDados
+	Append Blank
+	Replace emps With csDados1.emps
+	Replace valcota With csDados1.valcota
+	replace imprime with "1"
+Endscan
+
+*** sinaliza quando os dados são repetidos para não imprimir no report ***
+lcChaAnt = [xxxxxxx]
+Select csDados
+Go Top
+
+Scan
+	If Isnull(chaitd) Or Empty(chaitd)
+		Replace chaitd With Space(20) In csDados
+		Replace ddesc  With [] In csDados
+		Replace pdes With 0.00 In csDados
+		Replace vdes With 0.00 In csDados
+	Endif
+	If chacab+chaitn+chaitd = lcChaAnt
+		Replace imprime With '' In csDados
+	Endif
+	lcChaAnt = chacab+chaitn+chaitd
+
+*** sinaliza se lancamento
+	lcQuery =	[Select dtincs from sigcdpro with(nolock) where cpros = ']+csDados.cpros+[']
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crProd') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crProd)')
+		Return 0
+	Endif
+	ldDatM=Ttod(csDados.datars)
+	ldDatP=Ttod(crProd.dtincs)
+	If ldDatM-ldDatP < 61
+		Replace lancamento With '1' In csDados
+	Endif
+	Select csDados
+
+Endscan
+
+*** filtra com desconto ***
+If lnDesc = 1
+	Select csDados
+	Delete All For chaitd =Space(20)
+Endif
+
+If lnLanc = 1
+	Select csDados
+	Delete All For lancamento <> '1'
+Endif
+
+*** pega formas de pagamento da operacao
+Select csDados
+Go Top
+Scan
+	lcQuery =	[Select fpags from sigmvpar with(nolock) where empdopnums = ']+csDados.empdopnums+[' group by fpags]
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crMvPar') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crMvPar)')
+		Return 0
+	Endif
+	Select crMvPar
+	Go Top
+	Scan
+		Replace formasP With Alltrim(formasP)+ ' '+Alltrim(crMvPar.fpags) In csDados
+	Endscan
+	Select csDados
+Endscan
+
+*** prepara colunas de descontos ***
+lcPdes = []
+lcVdes = []
+lnAlt  = 0
+Select * From csDados Where imprime = '1' Into Cursor csRelatorio Readwrite
+
+Select csRelatorio
+Go Top
+
+Scan
+	Select csDados
+	Go Top
+	Scan For chacab+chaitn+chaitd = csRelatorio.chacab+csRelatorio.chaitn+csRelatorio.chaitd And Nvl(csDados.tpdesc,0)>0
+		lcPdes=[pDes] + Padl(Alltrim(Str(Nvl(tpdesc,1))),2,'0')
+		lcVdes=[vDes] + Padl(Alltrim(Str(Nvl(tpdesc,1))),2,'0')
+		Replace &lcPdes With csDados.pdes In csRelatorio
+		Replace &lcVdes With csDados.vdes In csRelatorio
+	Endscan
+	*** Mena - 13/12/2017 - Se preco alterado sem desconto nao aparece no realizado
+	Select csRelatorio
+
+	lnAlt = pdes01+pdes02+pdes03+pdes04+pdes05+pdes06+pdes07+pdes08+pdes09+pdes10+pdes11+pdes12+pdes13+pdes14
+	Replace desct With Iif(ValR=0,0,Round((ValR-totas)/Nvl(ValR,1)*100,2)) In csRelatorio
+	
+	lnValRel = 0
+	
+	*-- Rafael 18/08/2021 - Remoção do calculo para simplificar o processo, realizado é a soma dos valores 2 ate 10 (desconto 1 e 11 nao contabiliza)
+	*lnValRel = 0
+	*lnValRel = Iif(ValR = 0 Or lnAlt = 0,0.00,Round(ValR*((100-pdes01-pdes02-pdes06-pdes07-pdes10-pdes11)/100),2)-totas)
+	*If InList(Alltrim(lcPdes),'pDes01','pDes11') and Not Empty(lnValRel)
+	*	lnValRel = vdes02+vdes03+vdes04+vdes05+vdes06+vdes07+vdes08+vdes09+vdes10
+	*EndIf 
+
+	*-- Rafael 28/09/2023 - Remoção do calculo para simplificar o processo, realizado é a soma dos valores 3 ate 10
+	*lnValRel = vdes02+vdes03+vdes04+vdes05+vdes06+vdes07+vdes08+vdes09+vdes10+vdes11
+	
+	lnValRel = vdes03+vdes04+vdes05+vdes06+vdes07+vdes08+vdes09+vdes10+vdes12+vdes13
+	Replace realizado With lnValRel In csRelatorio
+	
+	Replace vdestot With vdes01+vdes02+vdes03+vdes04+vdes05+vdes06+vdes07+vdes08+vdes09+vdes10+vdes11+vdes12+vdes13+vdes14
+Endscan
+****************************************************************
+
+If Used([csTmpRel])
+	Use In csTmpRel 
+EndIf 
+
+Select csRelatorio
+Go Top
+
+If lnOpt = 1
+	Select datars,emps,dopes,numes,cpros,dpros,qtds,units,unitorigs,totas,opers,repre,colecao,categoria,empdopnums,chacab,chaitn,;
+		Max(chaitd) as chaitd,formasp,imprime,lancamento,Max(ddesc) as ddesc,Sum(pdes) as pdes,Sum(vdes) as vdes, Max(tpdesc) as tpdesc, codigo, valcota,;
+		valr,desct,realizado,Sum(pdes01) as pdes01,Sum(vdes01) as vdes01,Sum(pdes02) as pdes02,Sum(vdes02) as vdes02,Sum(pdes03) as pdes03,Sum(vdes03) as vdes03,;
+		Sum(pdes04) as pdes04,Sum(vdes04) as vdes04,Sum(pdes05) as pdes05,Sum(vdes05) as vdes05,Sum(pdes06) as pdes06,Sum(vdes06) as vdes06,;
+		Sum(pdes07) as pdes07,Sum(vdes07) as vdes07,Sum(pdes08) as pdes08,Sum(vdes08) as vdes08,Sum(pdes09) as pdes09,Sum(vdes09) as vdes09,;
+		Sum(pdes10) as pdes10,Sum(vdes10) as vdes10,Sum(pdes11) as pdes11,Sum(vdes11) as vdes11,Sum(pdes12) as pdes12,Sum(vdes12) as vdes12,;
+		Sum(pdes13) as pdes13,Sum(vdes13) as vdes13,Sum(pdes14) as pdes14,Sum(vdes14) as vdes14,Sum(vdestot) as vdestot ;
+		from csRelatorio ;
+		group by datars,emps,dopes,numes,cpros,dpros,qtds,units,unitorigs,totas,opers,repre,colecao,categoria,empdopnums,chacab,;
+		chaitn,formasp,imprime,lancamento, codigo, valcota,valr,desct,realizado ;
+		into cursor csTmpRel ReadWrite
+Else
+	Select datars,emps,dopes,numes,cpros,dpros,qtds,units,unitorigs,totas,opers,repre,colecao,categoria,empdopnums,chacab,chaitn,;
+		chaitd,formasp,imprime,lancamento,Max(ddesc) as ddesc,Sum(pdes) as pdes,Sum(vdes) as vdes, Max(tpdesc) as tpdesc, codigo, valcota,;
+		valr,desct,realizado,Sum(pdes01) as pdes01,Sum(vdes01) as vdes01,Sum(pdes02) as pdes02,Sum(vdes02) as vdes02,Sum(pdes03) as pdes03,Sum(vdes03) as vdes03,;
+		Sum(pdes04) as pdes04,Sum(vdes04) as vdes04,Sum(pdes05) as pdes05,Sum(vdes05) as vdes05,Sum(pdes06) as pdes06,Sum(vdes06) as vdes06,;
+		Sum(pdes07) as pdes07,Sum(vdes07) as vdes07,Sum(pdes08) as pdes08,Sum(vdes08) as vdes08,Sum(pdes09) as pdes09,Sum(vdes09) as vdes09,;
+		Sum(pdes10) as pdes10,Sum(vdes10) as vdes10,Sum(pdes11) as pdes11,Sum(vdes11) as vdes11,Sum(pdes12) as pdes12,Sum(vdes12) as vdes12,;
+		Sum(pdes13) as pdes13,Sum(vdes13) as vdes13,Sum(pdes14) as pdes14,Sum(vdes14) as vdes14,Sum(vdestot) as vdestot ;
+		from csRelatorio ;
+		group by datars,emps,dopes,numes,cpros,dpros,qtds,units,unitorigs,totas,opers,repre,colecao,categoria,empdopnums,chacab,;
+		chaitn,formasp,chaitd,imprime,lancamento, codigo, valcota,valr,desct,realizado ;
+		into cursor csTmpRel ReadWrite
+		
+EndIf 
+
+*!*	Select datars,emps,dopes,numes,cpros,dpros,qtds,units,unitorigs,totas,opers,repre,colecao,categoria,empdopnums,chacab,chaitn,;
+*!*			chaitd,formasp,imprime,lancamento,Max(ddesc) as ddesc,Sum(pdes) as pdes,Sum(vdes) as vdes, Max(tpdesc) as tpdesc, codigo, valcota,;
+*!*			valr,desct,realizado,Sum(pdes01) as pdes01,Sum(vdes01) as vdes01,Sum(pdes02) as pdes02,Sum(vdes02) as vdes02,Sum(pdes03) as pdes03,Sum(vdes03) as vdes03,;
+*!*			Sum(pdes04) as pdes04,Sum(vdes04) as vdes04,Sum(pdes05) as pdes05,Sum(vdes05) as vdes05,Sum(pdes06) as pdes06,Sum(vdes06) as vdes06,;
+*!*			Sum(pdes07) as pdes07,Sum(vdes07) as vdes07,Sum(pdes08) as pdes08,Sum(vdes08) as vdes08,Sum(pdes09) as pdes09,Sum(vdes09) as vdes09,;
+*!*			Sum(pdes10) as pdes10,Sum(vdes10) as vdes10,Sum(pdes11) as pdes11,Sum(vdes11) as vdes11,Sum(vdestot) as vdestot ;
+*!*			from csRelatorio ;
+*!*			group by datars,emps,dopes,numes,cpros,dpros,qtds,units,unitorigs,totas,opers,repre,colecao,categoria,empdopnums,chacab,;
+*!*			chaitn,formasp,chaitd,imprime,lancamento, codigo, valcota,valr,desct,realizado ;
+*!*			into cursor csTmpRel ReadWrite
+
+Zap in csRelatorio
+
+Select * from csTmpRel Into cursor csRelatorio ReadWrite 
+
+Select csRelatorio
+Go Top
+
+Wait Window 'Aguarde...' Nowait Noclear
+If lnOpt = 1
+	lcCbTitulo  = 'Relatorio de cotas de Desconto - Detalhado'
+Else
+** total por empresa **
+	Select emps,Space(20) As repre, Max(valcota) As valcota, Sum(realizado) As realizado, '1' As tipo From csRelatorio Group By emps, codigo Into Cursor crAux2
+	Select emps,Space(20) As repre, Sum(valcota) As valcota, Sum(realizado) As realizado, '1' As tipo From crAux2 Group By emps Into Cursor crAux2
+
+** total por vendedor **
+	Select emps,repre, Max(valcota) As valcota, Sum(realizado) As realizado, '2' As tipo From csRelatorio Group By emps, repre, codigo Into Cursor crAux1
+	Select emps,repre, Max(valcota) As valcota, Sum(realizado) As realizado, '2' As tipo From crAux1 Group By emps, repre Into Cursor crAux1 readwrite
+	SELECT crAux1
+	Delete All For EMPTY(repre)
+	Select * From crAux2 Union (Select * From crAux1) Into Cursor crAux
+	Select emps, repre, valcota, realizado As realizadoV, Round(realizado/Nvl(valcota,1)*100,2) As realizadoP, valcota-realizado As saldoV, ;
+		ROUND((valcota-realizado)/Nvl(valcota,1)*100,2) As saldoP, tipo;
+		from crAux Into Cursor csRelatorio Order By 1
+
+	lcCbTitulo  = 'Relatorio de cotas de Desconto - Resumido'
+Endif
+
+**** adiciona titulos ****
+lcCbPeriodo   = 'Período : '+Dtoc(ldInicial)+' '+lcHInicial+' à '+Dtoc(ldFinal)+' '+lcHFinal+' '
+Create Cursor csCabecalho (empresa c(240), titulo c(240), periodo c(80))
+Insert Into csCabecalho (empresa, titulo, periodo) Values (lcCbEmp, lcCbTitulo, lcCbPeriodo)
+
+Wait Clear
+
+Select csRelatorio
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		lcQuery = [Select GrPadVens ] + ;
+				    [From SigCdPam]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPam') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPam)')
+			Return 0
+		EndIf
+		Go Top In crSigCdPam
+
+		.get_vend.Value		  = ''
+		.getDvend.Value		  = ''
+		.getCGru.Value		  = ''
+		.getDGru.Value		  = ''
+		.get_dt_inicial.Value = Date()
+		.get_dt_final.Value   = Date()
+		.getEmpresa.Value	  = _empr
+
+		lcI=ctod('01'+SUBSTR(DTOC(DATE()),3))
+		lcF=DTOC(GOMONTH(DATE(),1))
+		lcF=CTOD('01/'+SUBSTR(lcF,4))-1
+		.get_dt_inicial.Value = lcI
+		.get_dt_final.Value   = lcF
+
+		IF !fChecaAcesso('SIGREDES', 'TOTAL' )
+			.get_dt_inicial.enabled = .F.
+			.get_dt_final.enabled = .F.
+		ENDIF
+				
+		.Refresh
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+*** Monta lista de Forma de pagamento ***
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select 0 As nMarca, fpags ]+;
+	   [From SigOpFp ],'CrSigOpFp')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha de Conexão (crSigCdTom)')
+	Return(.F.)
+EndIf
+
+ThisForm.GrdForma.RecordSource = ''
+Select CrSigOpFp
+Index On fpags Tag fpags
+Go Top
+
+With ThisForm.GrdForma
+	.RecordSource = 'CrSigOpFp'
+	.Column1.ControlSource = 'CrSigOpFp.nMarca'
+	.Column3.ControlSource = 'CrSigOpFp.fpags'
+	.Refresh
+EndWith
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+If InList(thisform.option.value, 1)
+	Report Form SigReDes To Printer Prompt NoConsole
+Else
+	Report Form SigReDe1 To Printer Prompt NoConsole
+EndIf
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+If InList(thisform.option.value, 1)
+	Report Form SigReDes To Printer NoConsole
+Else
+	Report Form SigReDe1 To Printer NoConsole
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.getEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.getEmpresa, ThisForm.getDesEmpresa)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.getDesEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getEmpresa.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.getEmpresa, ThisForm.getDesEmpresa)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.getDVend
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_vend.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ''
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.get_vend, ThisForm.getDVend)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getDVend.Value = ''
+		ThisForm.getDVend.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getDVend.Value = ''
+	ThisForm.getDVend.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.getCGru
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, 'C', This.Value, ThisForm.getCGru, ThisForm.getDGru)
+Else
+	ThisForm.getDGru.Value = ''
+	ThisForm.getDGru.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.get_vend
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ''
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.get_vend, ThisForm.getDVend)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getDVend.Value = ''
+		ThisForm.getDVend.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getDVend.Value = ''
+	ThisForm.getDVend.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.getDGru
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCGru.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, 'D', This.Value, ThisForm.getCGru, ThisForm.getDGru)
+Else
+	ThisForm.getCGru.Value = ''
+	ThisForm.getCGru.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.Command1
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select CrSigOpFp
+Replace All CrSigOpFp.nMarca with 0
+Go Top
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.Command2
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Select CrSigOpFp
+Replace All CrSigOpFp.nMarca with 1
+Go Top
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.getCateD
+* Classe: fwget (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(thisform.getCate.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdCol', ;
+						   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descs',    '', 'Descrição')
+		loLista.mAddColuna('Colecoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getCate.Value  = crListaRemota.Colecoes
+	This.Parent.getCateD.Value = crListaRemota.Descs
+	Use In crListaRemota
+ELSE
+	This.Parent.getCate.Value  = ''
+	This.Parent.getCateD.Value = ''
+EndIf
+This.Parent.getCate.Refresh
+This.Parent.getCateD.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.getCate
+* Classe: fwget (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdCol', ;
+						   'crListaRemota', 'colecoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Colecoes', '', 'Código')
+		loLista.mAddColuna('Descs',    '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getCate.Value = crListaRemota.Colecoes
+	This.Parent.getCateD.Value = crListaRemota.Descs
+	Use In crListaRemota
+ELSE
+	This.Parent.getCate.Value = ''
+	This.Parent.getCateD.Value = ''
+EndIf
+This.Parent.getCate.Refresh
+This.Parent.getCateD.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.getProd
+* Classe: fwget (Base: textbox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', 'crListaRemota', 'CPros', This.Value, 'Seleção', 1000)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getProd.Value = crListaRemota.CPros
+	This.Parent.getProdD.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	This.Parent.getProd.Value = ''
+	This.Parent.getProdD.Value = ''
+EndIf
+This.Parent.getProd.Refresh
+This.Parent.getProdD.Refresh
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.getProdD
+* Classe: fwget (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getProd.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'DPros', This.Value, 'Seleção', 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getProd.Value = crListaRemota.CPros
+	This.Parent.getProdD.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	This.Parent.getProd.Value = ''
+	This.Parent.getProdD.Value = ''
+EndIf
+
+This.Parent.getProd.Refresh
+This.Parent.getProdD.Refresh
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.GetColeD
+* Classe: fwget (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(thisform.getCole.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+						   'CrListaRemota', 'descricaos', This.Value, 'Seleção', .t., .f., .f.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.mAddColuna('Descricaos', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getCole.Value = CrListaRemota.Codigos
+	This.Parent.GetColeD.Value = CrListaRemota.Descricaos
+Else
+	This.Parent.getCole.Value = ''
+	This.Parent.getColeD.Value = ''
+EndIf
+
+This.Parent.getCole.Refresh
+This.Parent.getColeD.Refresh
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDES.GetCole
+* Classe: fwget (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+						   'CrListaRemota', 'codigos', This.Value, 'Seleção', .t., .f., .f.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.mAddColuna('Descricaos', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getCole.Value = CrListaRemota.Codigos
+	This.Parent.GetColeD.Value = CrListaRemota.Descricaos
+Else
+	This.Parent.getCole.Value = ''
+	This.Parent.getColeD.Value = ''
+EndIf
+
+This.Parent.getCole.Refresh
+This.Parent.getColeD.Refresh
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREDES
+RESERVED3 (ClassInfo): codquas Código do arquivo SCEPRO para filtrar a qualidade a ser utilizada
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 26
+================================================================================

@@ -1,0 +1,8 @@
+﻿Phase 7 complete. Added the 4 required CRUD button handlers (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) to `FormSigPrAop.prg`, each mapped to operational semantics that reflect this form's actual purpose (altering OP quantities):
+
+- **BtnIncluirClick** ÔåÆ Resets state for a new O.P. entry (`AlternarPagina(1)`)
+- **BtnAlterarClick** ÔåÆ Saves altered quantities (delegates to `BtnConfirmarClick`, the form's real action)
+- **BtnVisualizarClick** ÔåÆ Reloads current O.P. divisions via `CarregarOP` with input validation
+- **BtnExcluirClick** ÔåÆ Confirms and discards local edits by reloading server data via `CarregarOP`
+
+None are stubs ÔÇö each calls into the BO or the form's existing operational flow. File integrity verified: 666 lines, one `ENDDEFINE`, all 6 button handlers present (including the pre-existing `BtnConfirmarClick`/`BtnEncerrarClick`).

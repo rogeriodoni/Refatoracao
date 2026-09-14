@@ -1,0 +1,7 @@
+﻿All three required signatures (`CarregarDoCursor`, `Inserir`, `Atualizar`) are present, plus real implementations for `RegistrarAuditoria` and a proper cursor loader. The BO now has:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö real implementation that reads the current row of `cursor_4c_Dados` (the grid cursor) and populates `this_nCodigo/cProduto/nQuantidade/cCliente/nTempoEnvelope/cUnidade/cFase`. Used by the form's `AfterRowColChange` handler.
+- **`Inserir()` / `Atualizar()`** ÔÇö proper overrides that set `this_cMensagemErro`, show a user-facing `MsgAviso`, and return `.F.`. This is the correct behavior since the legacy SIGPRCPD form performs zero INSERT/UPDATE on any table (only SELECTs against SigCdPcz/SigCdPcP/SigCdPcg/SigCdPco/SigCdPro).
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö override that logs `"CONSULTA"` to `LogAuditoria`.
+
+Phase 2 file `C:\4c\projeto\app\classes\sigprcpdBO.prg` completed (383 lines, all validator-required methods present).

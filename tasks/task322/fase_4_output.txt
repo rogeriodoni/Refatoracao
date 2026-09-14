@@ -1,0 +1,14 @@
+﻿Fase 4 conclu├¡da. O arquivo foi atualizado com:
+
+**Page1 completa:**
+- `cnt_4c_Botoes` com 5 bot├Áes CRUD: Incluir, Visualizar, Alterar, Excluir, Buscar ÔÇö cada um com Picture, PicturePosition=13, BINDEVENTs
+- `cnt_4c_Saida` com `cmd_4c_Encerrar` (padr├úo can├┤nico Left=917/Width=75)
+- `cnt_4c_Periodo` com `txt_4c_Dt_inicial`/`txt_4c_Dt_final` + BINDEVENTs LostFocus
+- `cnt_4c_Prod` com `txt_4c_Grupo`/`txt_4c_Prod`/`txt_4c_DProd` + BINDEVENTs LostFocus
+- `grd_4c_Lista` com 8 colunas (cpros, dpros, cgrus, datas, moevs, pvensant, pvens, usuals)
+
+**`CarregarLista()`** implementado: l├¬ filtros dos containers, passa ao BO, vincula cursor `crSigPrPre` ao grid, redefine headers ap├│s RecordSource.
+
+**Handlers de bot├úo** (PUBLIC, BINDEVENT-safe): Btn*Click todos implementados + lookups `ValidarGrupo`/`ValidarProduto`/`ValidarDataInicial`/`ValidarDataFinal` com FormBuscaAuxiliar.
+
+**FormParaBO/BOParaForm/HabilitarCampos/LimparCampos/ValidarCampos** implementados com `PEMSTATUS` para tolerar controles da Page2 que ser├úo criados na Fase 5.

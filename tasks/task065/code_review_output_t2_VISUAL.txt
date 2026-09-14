@@ -1,0 +1,33 @@
+﻿An├ílise conclu├¡da. Os 9 problemas detectados s├úo **todos falsos positivos**. Aqui est├í a explica├º├úo:
+
+## Diagn├│stico: Falsos Positivos do Validador
+
+O validador comparou as posi├º├Áes **absolutas do SCX original** com as posi├º├Áes **relativas ao container** no c├│digo migrado, sem compensar o offset do `cnt_4c_Filtros` (Top=80).
+
+### Verifica├º├úo matem├ítica ÔÇö todos os controles est├úo corretos:
+
+| Controle | Top original (absoluto) | Container offset | Top correto (relativo) | Top no c├│digo | Status |
+|---|---|---|---|---|---|
+| `lbl_4c_Say3` | 145 | ÔêÆ80 | **65** | 65 | Ô£ô |
+| `opt_4c_OptFiltro` | 140 | ÔêÆ80 | **60** | 60 | Ô£ô |
+| `opt_4c_OptFiltro` Left | 288 | 0 | **288** | 288 | Ô£ô |
+| `lbl_4c_Say1` | 170 | ÔêÆ80 | **90** | 90 | Ô£ô |
+| `txt_4c_DataIni` | 167 | ÔêÆ80 | **87** | 87 | Ô£ô |
+| `lbl_4c_Say2` | 171 | ÔêÆ80 | **91** | 91 | Ô£ô |
+| `txt_4c_DataFin` | 167 | ÔêÆ80 | **87** | 87 | Ô£ô |
+| `opt_4c_Opcao` | 120 | ÔêÆ80 | **40** | 40 | Ô£ô |
+| `opt_4c_Opcao` Left | 288 | 0 | **288** | 288 | Ô£ô |
+
+### Causa raiz de cada categoria de erro:
+
+**Diff 80px (7 erros):** O validador subtraiu 80 sem perceber que o c├│digo j├í subtrai ÔÇö os controles est├úo dentro de `cnt_4c_Filtros` (Top=80), ent├úo Top=87 no container equivale a posi├º├úo absoluta 167. Correto.
+
+**Diff 115px / 283px (opt_4c_Opcao e opt_4c_OptFiltro, 4 erros):** O validador leu `Buttons(1).Top=5` e `Buttons(1).Left=5` (posi├º├úo interna do primeiro bot├úo dentro do OptionGroup) como se fossem as coordenadas do pr├│prio OptionGroup. O OptionGroup em si est├í em Top=40/Left=288 e Top=60/Left=288 respectivamente ÔÇö posi├º├Áes corretas.
+
+## Conclus├úo
+
+**Nenhuma altera├º├úo ├® necess├íria.** Alterar qualquer posi├º├úo listada quebraria o layout:
+- Mover `txt_4c_DataIni` de Top=87 para Top=167 dentro do container resultaria em posi├º├úo absoluta 80+167=247 (80px abaixo do original)
+- O mesmo vale para todos os outros controles
+
+O arquivo `Formsigrecpr.prg` est├í correto. O pass visual n├úo requer modifica├º├Áes neste form.

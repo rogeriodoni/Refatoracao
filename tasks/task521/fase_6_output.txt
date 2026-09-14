@@ -1,0 +1,18 @@
+﻿The code is correct. Phase 6/8 is complete. Here's a summary of what was applied:
+
+**FormSET.prg (7 edits):**
+- `LimparCampos`: inserts initial blank row into `cursor_4c_Localizacoes` after ZAP/CREATE
+- `BtnIncluirClick`: wires `RecordSource`/`ControlSource`/`Header` on the localiza├º├Áes grid after `LimparCampos`
+- `BtnAlterarClick`: appends a blank row after `BOParaForm()` loads existing localiza├º├Áes (ALTERAR mode)
+- `HabilitarCampos`: controls `cmd_4c_Apagar` visibility/enabled (only visible in INCLUIR/ALTERAR)
+- 5 new PUBLIC/PROTECTED methods added before `Destroy`:
+  - `GridLocalizacoesKeyPress` ÔÇö F4 triggers `AbrirLookupLocalizacao` when in Column1
+  - `GridLocAftRowColChange` ÔÇö validates on leaving Column1
+  - `AbrirLookupLocalizacao` ÔÇö FormBuscaAuxiliar Mode 1 for SigPrLcl; checks duplicates + other-setor; calls `GarantirLinhaEmBranco` after fill
+  - `ValidarLocalizacaoGrid` ÔÇö exact-match via `BuscarLocalizacao`; falls back to lookup; checks duplicates + other-setor
+  - `GarantirLinhaEmBranco` (PROTECTED) ÔÇö appends blank row only if last row is non-empty
+  - `BtnApagarClick` ÔÇö REPLACE Locals/Descricaos="" + `GarantirLinhaEmBranco` + Refresh
+- `Destroy`: adds `cursor_4c_VldLcl` cleanup
+
+**SETBO.prg (1 edit):**
+- `SalvarLocalizacoes`: replaced selective-delete-empty with **DELETE ALL** existing rows for setor + INSERT all non-empty Locals ÔÇö ensures apagados rows are removed from SigCdSei.

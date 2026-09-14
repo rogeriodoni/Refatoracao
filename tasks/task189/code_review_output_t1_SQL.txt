@@ -1,0 +1,14 @@
+﻿Ap├│s an├ílise completa dos dois arquivos, os tr├¬s alertas s├úo **falsos positivos** do validador. Nenhum deles representa condi├º├úo WHERE SQL inventada:
+
+| Alerta | O que realmente ├® | Local |
+|---|---|---|
+| `ESTOQUE` | Campo de cursor VFP (`TmpFinal.Estoque`, `TmpEstoque.Estoque`) em opera├º├Áes REPLACE/INSERT/IF locais ÔÇö nunca em cl├íusula SQL WHERE | BO linha 1069-1189, Form linha 1745/1915 |
+| `GEREMPHS` | Coluna na lista **SELECT** (`SELECT GerEmphs FROM SigOpCdc WHERE Dopes = ...`), n├úo no WHERE; o IF da linha 1327 verifica o resultado do cursor em VFP, n├úo ├® SQL | BO linha 1326-1327 |
+| `BXDESTS` | Campo de cursor `crSigCdOpd.BxDEsts` verificado em `IF ... AND crSigCdOpd.BxDEsts = 2/1` ÔÇö condi├º├úo VFP pura, n├úo SQL | BO linhas 2030, 2045 |
+
+**Verifica├º├Áes feitas:**
+- `grep "WHERE.*ESTOQUE"` ÔåÆ sem resultado
+- `grep "WHERE.*GEREMPHS"` ÔåÆ s├│ `WHERE Dopes = ...` (Dopes est├í na lista v├ílida do original)
+- `grep "WHERE.*BXDESTS"` ÔåÆ sem resultado
+
+Nenhuma modifica├º├úo ├® necess├íria ÔÇö as tr├¬s colunas est├úo sendo usadas exatamente como no legado, em contextos VFP (IF/REPLACE/INSERT de cursores locais) e n├úo como filtros SQL inventados. O validador se confundiu porque detectou o padr├úo `coluna = valor` em c├│digo VFP e classificou incorretamente como WHERE SQL.

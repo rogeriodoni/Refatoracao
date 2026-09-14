@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada corretamente. Resumo do que foi feito:
+
+**Resultado da verifica├º├úo:**
+- **CODIGOS** (`SigCdGcr.codigos`): **False positive** ÔÇö `SigCdGcr` e `codigos` existem no schema real. Sem altera├º├úo necess├íria.
+- **ICLIS** (`SigCdCli.iclis`): **False positive** ÔÇö `SigCdCli` (SIGCDCLI) e `iclis` existem no schema real. Sem altera├º├úo necess├íria.
+- **NDOPES** (`SigCdOpe.nDopes`): **Genu├¡no** ÔÇö `nDopes` n├úo existe em `SigCdOpe` (s├│ existe `dopes`). **Corrigido.**
+
+**Corre├º├úo em `sigrehprBO.prg`:** Removido o bloco que decodificava `Codigos` (N10) em `loc_nNdope`/`loc_nNume` e consultava `SigCdOpe WHERE nDopes = X` (coluna inexistente). Substitu├¡do por uso direto de `cursor_4c_EstPe.Dopes` e `cursor_4c_EstPe.Numes`, que j├í estavam dispon├¡veis no SELECT de `SigMvPec`. A query subsequente a `SigMvCab WHERE empdopnums` foi preservada intacta.

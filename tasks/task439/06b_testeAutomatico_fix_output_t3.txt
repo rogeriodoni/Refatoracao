@@ -1,0 +1,9 @@
+﻿All 6 fixes are confirmed on disk:
+- `cmd_4c_Incluir.Left` = 5 Ô£ô
+- `cmd_4c_Visualizar.Left` = 80 Ô£ô
+- `cmd_4c_Alterar.Left` = 155 Ô£ô
+- `cmd_4c_Excluir.Left` = 230 Ô£ô
+- `cmd_4c_Buscar.Left` = 305 Ô£ô
+- `cmd_4c_Encerrar.Left` = 5, `.Width` = 75 Ô£ô
+
+The root cause was all 5 CRUD buttons inside `cnt_4c_Botoes` having `.Left = 542` (the container's own absolute position), stacking them all at the same off-screen location (~1084px from form left). VFP9 hangs for 300 seconds when rendering multiple controls overlapping at an extreme off-screen position. The canonical relative positions (5/80/155/230/305) are now in place, matching the pattern from FormCor/FormMoe. The `cmd_4c_Encerrar` inside `cnt_4c_Saida` was similarly wrong at `.Left = 917` with `.Width = 90` ÔÇö now corrected to `.Left = 5`, `.Width = 75` per CLAUDE.md canonical values.

@@ -1,0 +1,7 @@
+﻿O `ControlCount` encontrado nas linhas 174 e 180 **n├úo ├® uma coluna SQL** ÔÇö ├® a propriedade VFP9 nativa de containers (`par_oContainer.ControlCount`), usada no m├®todo `TornarControlesVisiveis` para iterar recursivamente sobre controles da tela.
+
+N├úo h├í nenhuma condi├º├úo WHERE inventada nos SQLs do arquivo. As queries em `SigPdM13BO.CarregarDados` usam exatamente as colunas do original: `Nenvs`, `Dopps`, `SepPedras`, `ChkDests`, `TpOps`, `chkDevs`.
+
+**Este ├® um falso positivo do detector.** O scanner detectou a string `CONTROLCOUNT` no arquivo e assumiu que era uma coluna SQL, mas ela aparece exclusivamente em contexto VFP9 de itera├º├úo de controles visuais ÔÇö sem nenhuma rela├º├úo com SQL.
+
+Nenhuma corre├º├úo necess├íria.

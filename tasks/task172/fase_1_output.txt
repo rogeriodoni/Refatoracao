@@ -1,0 +1,7 @@
+﻿Arquivo criado. `C:\4c\projeto\app\classes\sigprdisBO.prg` cont├®m a estrutura Phase 1 com:
+
+- **16 propriedades** mapeadas exatamente do schema `sigprdis` (cidchaves, codigos, cpros, codcors, codtams, datas, dtalts, empdopnums, empds, empgruests, locals, qtdos, qtds, usualts, usuars, oridopnums)
+- **Init()** configurando `this_cTabela = "sigprdis"` e `this_cCampoChave = "cidchaves"`
+- **ObterChavePrimaria()** para auditoria retornando `this_cCidChaves`
+
+Nota relevante para as pr├│ximas fases: o cabe├ºalho documenta que esta tabela opera em modo **lote** ÔÇö um `codigos` corresponde a N linhas (uma por empresa/produto/cor/tamanho). Os m├®todos `ExecutarExclusao()` e `Inserir()` na Fase 2 precisar├úo tratar essa particularidade (DELETE por `codigos`, INSERT m├║ltiplo iterando `crDistribui`).

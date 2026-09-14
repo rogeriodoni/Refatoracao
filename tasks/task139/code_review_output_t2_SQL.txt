@@ -1,0 +1,20 @@
+﻿Ap├│s an├ílise completa dos dois arquivos, o problema detectado ├® um **falso positivo** do review automatizado.
+
+**O que o tool encontrou:** `ControlCount` em linhas 552 e 558 do form.
+
+**O que realmente ├®:** Propriedade nativa VFP9 (`par_oContainer.ControlCount`) usada no m├®todo `TornarControlesVisiveis` para iterar sobre controles de forma recursiva ÔÇö n├úo est├í em nenhum WHERE de SQL.
+
+```foxpro
+* Linha 552 - FormSigPdM14.prg
+FOR loc_nI = 1 TO par_oContainer.ControlCount
+    ...
+    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+
+Verifica├º├Áes realizadas:
+- Nenhum `WHERE ... ControlCount` em strings SQL nos dois arquivos
+- Nenhum `SCAN FOR` ou `LOCATE FOR` com ControlCount
+- O ├║nico SQL do BO (`BuscarUnidadeSQL`) tem apenas `WHERE CUnis = EscaparSQL(...)` ÔÇö correto, espelhando o original `[Where cunis = ']`
+- As colunas "CUNIS, FATORS, QTDS2, VALUE" mencionadas pelo review s├úo campos VFP usados em condi├º├Áes l├│gicas nos handlers (n├úo SQL), e todas existem corretamente no c├│digo
+
+**Nenhuma altera├º├úo necess├íria.** O pass SQL n├úo tem problema real a corrigir nestes arquivos.

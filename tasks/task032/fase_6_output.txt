@@ -1,0 +1,9 @@
+﻿All four update paths for `this_nVlCotacao` are correctly in place. The SIGREAPP migration is complete across all 8 phases:
+
+**Summary of all phases:**
+- **Phases 1-2:** `sigreappBO.prg` ÔÇö full BO with `PrepararDados`, `BuscarCambio`, 4 report execution methods
+- **Phases 3-5:** `Formsigreapp.prg` ÔÇö full form with all ~20 filter controls, 3 grids with checkbox columns, all 8 lookups with BINDEVENT F4/F5 handlers
+- **Phase 6:** Fixed `AbrirBuscaMoeda` to update `this_nVlCotacao` in all 3 branches (auto-found, user-selected, user-cancelled)
+- **Phases 7-8:** Menu entry BAR 33 + `AbrirFormsigreapp()` procedure already present; `config.prg` auto-loads both files via ADIR(); no `.fxp` files to clear
+
+The form is ready to test by running `DO main.prg` and navigating to `Relat├│rios ÔåÆ An├ílise a Pagar / Receber`.

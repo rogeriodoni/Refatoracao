@@ -1,0 +1,7 @@
+﻿Correto ÔÇö `PROTECTED` removido. As tr├¬s corre├º├Áes aplicadas:
+
+1. **`AjustarBotoesPorModo`**: removido `PROTECTED` ÔåÆ m├®todo agora p├║blico, acess├¡vel pelo teste (fix principal do erro `Property AJUSTARBOTOESPORMODO is not found`)
+
+2. **`ConfigurarPaginaLista`** (linha ~492): blocos de `ControlSource` p├│s-`RecordSource` e redefini├º├úo de cabe├ºalhos movidos para dentro do `IF USED("cursor_4c_SelSigReFtp")` ÔÇö elimina o erro `Alias 'CURSOR_4C_SELSIGREFTP' is not found` no modo valida├º├úo UI
+
+3. **`ConfigurarPaginaDados`** (linha ~654): `edt_4c_Obs.ControlSource` agora condicional com `IF USED("cursor_4c_SelSigReFtp")` ÔÇö elimina o segundo erro de alias no modo valida├º├úo

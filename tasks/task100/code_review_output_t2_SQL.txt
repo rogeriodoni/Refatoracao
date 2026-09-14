@@ -1,0 +1,5 @@
+﻿Ambas as corre├º├Áes foram aplicadas com sucesso em `sigrefecBO.prg`:
+
+1. **[SQL-FILTRO-INVENTADO] USUARS** ÔÇö removido o bloco `IF !EMPTY... DELETE FROM crDados WHERE Usuars != ...`. O original n├úo filtra `crDados` por `Usuars`; apenas seleciona o campo para exibi├º├úo no cabe├ºalho.
+
+2. **[SQL-FILTRO-INVENTADO] NUMES** ÔÇö removida a condi├º├úo `AND Numes = TmpOpeIndivs.Numes` do WHERE da SELECT que monta `TmpOpePags`. O original nunca usa `NUMES` em cl├íusula WHERE ÔÇö o campo aparece apenas em SELECT lists. O filtro permanece `WHERE Dopes = TmpOpeIndivs.Dopes`, alinhado com o c├│digo legado.

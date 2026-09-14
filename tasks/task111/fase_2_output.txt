@@ -1,0 +1,14 @@
+﻿Fase 2 conclu├¡da. O SIGREHCPBO.prg foi completado com os seguintes m├®todos:
+
+| M├®todo | Finalidade |
+|--------|-----------|
+| `Init()` | Inicializa BO e chama `ObterParametros()` |
+| `ObterParametros()` | L├¬ `calccustos` da `SigCdPaC` para determinar modo de c├ílculo |
+| `ValidarFiltros()` | Valida datas (retorna `"DataInicial"`, `"DataFinal"`, `"Periodo"` ou `""`) |
+| `PrepararDados()` | Executa SELECT na `SigCdPro` montando `cursor_4c_Rehcp` com filtros din├ómicos |
+| `ObterCaminhoRelatorio()` | Determina qual FRX usar: SigRehc1/2 (Padr├úo) ou SigRehc3 (Modelo 3) |
+| `Imprimir()` | Chama `PrepararDados()` + `REPORT FORM ... TO PRINT` |
+| `Visualizar()` | Chama `PrepararDados()` + `REPORT FORM ... PREVIEW` |
+| `ObterMensagemErro()` | Retorna `this_cMensagemErro` para o Form exibir ao usu├írio |
+
+**Nota sobre o SQL em `PrepararDados()`:** O BO legado (`cnSigRehcp`) n├úo est├í dispon├¡vel e a tabela `SigRehcp` n├úo existe no schema.sql. A query foi implementada sobre `SigCdPro` com colunas de custo (`custofs`, `fcustos`, `pcuss`, `pvens`). Quando os FRX files forem analisados, o SQL pode precisar de ajuste para usar os aliases de cursor que os relat├│rios esperam.

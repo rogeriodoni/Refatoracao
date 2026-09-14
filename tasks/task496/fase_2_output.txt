@@ -1,0 +1,9 @@
+﻿**Fase 2 completa.** O PcpBO.prg j├í tinha todos os m├®todos CRUD desde a Fase 1 ÔÇö o que faltava era apenas `GerarCodigoUnico()`, que foi adicionado agora.
+
+Resumo do PcpBO.prg completo:
+- `CarregarDoCursor()` ÔÇö mapeia todas as 14 colunas de SigCdPcz
+- `Inserir()` / `Atualizar()` ÔÇö SQL completo com `RegistrarAuditoria()`
+- `ExecutarExclusao()` ÔÇö cascade em 4 tabelas (SigCdPcz, SigCdPco, SigCdPcp, SigCdPcg)
+- `ObterChavePrimaria()` ÔÇö retorna `TRANSFORM(this_nCodigos)`
+- `GerarCodigoUnico()` ÔÇö substitui `fGerUniqueKey()` via `MAX(Codigos)+1`
+- `BuscarOperacoes()`, `BuscarParametros()`, `ValidarCodigo()` ÔÇö auxiliares para o Form

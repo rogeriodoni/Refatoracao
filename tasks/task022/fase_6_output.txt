@@ -1,0 +1,13 @@
+﻿Arquivo completo e correto. Fase 6 conclu├¡da:
+
+**O que foi adicionado:**
+
+1. **Se├º├úo Conta Corrente** em `ConfigurarPaginaDados()` ÔÇö Shape2 (separador), lbl_4c_Label6 "Conta Corrente" (bold), lbl_4c_Label4 "Grupo :", lbl_4c_Label5 "Conta :", e os 4 campos: `txt_4c_GrConta`, `txt_4c_DGrConta`, `txt_4c_CdConta`, `txt_4c_DCONTA`, cada um com BINDEVENT LostFocus.
+
+2. **4 m├®todos de lookup completos** (linhas 1505ÔÇô1838):
+   - `ValidarGrConta()` ÔÇö busca SigCdGcr por Codigos, preenche DGrConta com Descrs; limpa CdConta/DCONTA quando grupo muda
+   - `ValidarDGrConta()` ÔÇö busca SigCdGcr por Descrs, preenche GrConta com Codigos
+   - `ValidarCdConta()` ÔÇö busca SigCdCli (IClis) com filtro Grupos=GrConta; equivalente ao `fAcessoContas('C')`
+   - `ValidarDConta()` ÔÇö busca SigCdCli (RClis) com filtro Grupos=GrConta; equivalente ao `fAcessoContas('D')`
+
+3. **Verifica├º├úo de duplicidade** em `BtnSalvarClick()` ÔÇö chama `VerificarDuplicidade()` do BO ap├│s `FormParaBO()` e antes de `Salvar()`, replicando o `CursorQuery('SigSyAgc',...)` do original.

@@ -1,0 +1,16 @@
+﻿The file looks correct end-to-end. Phase 4 is complete. Here's what was added to `Formemp.prg`:
+
+**Page1 (`ConfigurarPaginaLista`)**
+- 5 CRUD buttons in `cnt_4c_Botoes`: Incluir (Left=5), Visualizar (Left=80), Alterar (Left=155), Excluir (Left=230), Buscar (Left=305) ÔÇö all 75├ù75, with standard icons and BINDEVENTs
+- `grd_4c_Lista` grid: Top=127, Left=20, Width=939, Height=484, ColumnCount=6, ReadOnly, RecordSourceType=1
+
+**Page2 (`ConfigurarPaginaDados`)**
+- Confirmar (Left=5) and Cancelar (Left=90) buttons in `cnt_4c_BotoesAcao`, BINDEVENTs wired
+
+**`CarregarLista()`** ÔÇö now sets ColumnCount=6, RecordSource, all 6 ControlSources (`cemps/nemps/razsocs/razas/cgcs/ativas`), Header captions (all AFTER RecordSource as required), then calls FormatarGridLista + Refresh
+
+**`FormatarGridLista()`** ÔÇö complete: HeaderHeight=22, RowHeight=18, column widths (50/60/150/340/130/60)
+
+**New PUBLIC handlers**: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnConfirmarClick`, `BtnCancelarClick`, `AjustarBotoesPorModo`
+
+**PROTECTED stubs** (filled in Phases 5-8): `FormParaBO`, `BOParaForm`, `LimparCampos`, `HabilitarCampos`

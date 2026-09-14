@@ -1,0 +1,558 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrGf1.SCX
+* Data/Hora: 03/07/2026 04:50:48
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRGF1
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRGF1
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRGF1.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRGF1.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: getDtfinal
+  Parent: SIGPRGF1
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGPRGF1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdGprocessa
+  Parent: SIGPRGF1
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: getDtinicial
+  Parent: SIGPRGF1
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntAguarde
+  Parent: SIGPRGF1
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPRGF1.cntAguarde
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGPRGF1.cntAguarde
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 148
+  Left = 4
+  Width = 349
+  Height = 122
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 158
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = ( Prompt())
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  TitleBar = 0
+  Name = "SIGPRGF1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1.getDtfinal
+------------------------------------------------------------
+  Format = "K"
+  Height = 25
+  Left = 180
+  TabIndex = 2
+  Top = 111
+  Width = 79
+  ZOrderSet = 9
+  Name = "getDtfinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Período :"
+  Height = 15
+  Left = 41
+  Top = 116
+  Width = 45
+  TabIndex = 3
+  ZOrderSet = 6
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1.cmdGprocessa
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 643
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 5
+  BorderColor = 136,189,188
+  Name = "cmdGprocessa"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_processar_60.jpg
+  Command1.Caption = "\<Processar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdProcessa"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1.getDtinicial
+------------------------------------------------------------
+  Format = "K"
+  Height = 25
+  Left = 98
+  TabIndex = 1
+  Top = 111
+  Width = 79
+  ZOrderSet = 7
+  Name = "getDtinicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1.cntAguarde
+------------------------------------------------------------
+  Top = 99
+  Left = 312
+  Width = 207
+  Height = 49
+  SpecialEffect = 0
+  TabIndex = 4
+  BackColor = 255,255,255
+  ZOrderSet = 16
+  Name = "cntAguarde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1.cntAguarde.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 10
+  BackStyle = 0
+  Caption = "Aguarde..."
+  Height = 18
+  Left = 69
+  Top = 7
+  Width = 78
+  ForeColor = 255,0,0
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRGF1.cntAguarde.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  FontCondense = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Processando Dados..."
+  Height = 18
+  Left = 34
+  Top = 24
+  Width = 141
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRGF1
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mchkvalid
+------------------------------------------------------------
+PROCEDURE mchkvalid
+If Empty(ThisForm.getDtFinal.Value)
+	ThisForm.pcMsg = 'Data Final Inválida!!!'
+	ThisForm.getDtFinal.SetFocus
+	Return .f.
+EndIf
+
+If (ThisForm.getDtFinal.Value < ThisForm.getDtInicial.Value)
+	ThisForm.pcMsg = 'Data Inicial Maior Que a Data Final!!!'
+	ThisForm.getDtInicial.SetFocus
+	Return .f.
+EndIf
+
+If ((Year(ThisForm.getDtInicial.Value)==Year(ThisForm.getDtFinal.Value) And ;
+	(Month(ThisForm.getDtInicial.Value)-Month(ThisForm.getDtFinal.Value)+1)>12) Or ;
+	(Not Year(ThisForm.getDtInicial.Value)==Year(ThisForm.getDtFinal.Value) And ;
+	((12-Month(ThisForm.getDtInicial.Value))+Month(ThisForm.getDtFinal.Value)+1)>12))
+	ThisForm.pcMsg = 'Período Ultrapassa Doze Meses!!!'
+	ThisForm.getDtInicial.SetFocus
+	Return .f.
+EndIf
+Return .t.
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mprocessamento
+------------------------------------------------------------
+PROCEDURE mprocessamento
+Local Array laAnoMes(1), laCampo1(1), laCampo2(1)
+Local lndecimals,lcfixed,lcexact,lddata1,lddata2,lcanomes1,lcanomes2,lcempresa,lcgrupomt,lcmoedarlt,;
+      ldmoedarlt,lcmoedap,lntprlt,lncotacao,lcnomeempresa,lcstrgmes,lctitulo1,lctitulo2,lcmcrsql1,;
+      lcstrgmes1,lcstrgmes2,lnconta1,lnncolini,lcchave1,lcchave2,lcstrgmoeda1,lcemp,lcanomes,lcgrupo,;
+      lcconta,lcdope,lncaixa,lnoper,lncoper,lnoperacao,lddtmov1,lddtmov2,lcmoedamov,lnmeta,lnconta2,;
+      lnvalor,lnncol1,lcdata1,lnvendsubn,lnnume,lnvalormov,lcemppe,lnnumepe,lndope,lnvalor1,lnvalor2,;
+      lnvalor3,lcmcrcmp1,ecol23s,ecol24s,lcTpRel1
+
+With ThisForm
+	.cntAguarde.Visible = .t.
+	.Refresh
+	.Draw
+	m.lnDecimals = Set('Decimals',1)
+	m.lcFixed 	 = Set('Fixed',1)
+	m.lcExact 	 = Set('Exact',1)
+
+	Set Decimals To 6
+	Set Fixed On
+	Set Exact On
+
+	ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+	m.lcNomeEmpresa = Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+
+	m.ldData1   = .getDtInicial.Value
+	m.ldData2   = .getDtFinal.Value
+	m.lcAnoMes1 = Left(DtoS(m.ldData1), 6)
+	m.lcAnoMes2 = Left(DtoS(m.ldData2), 6)
+	m.lcEmpresa = m._Empr
+	m.lcStrgMes = 'Janeiro  FevereiroMarço    Abril    Maio     Junho    Julho    Agosto   Setembro Outubro  Novembro Dezembro '
+	m.lcTitulo1 = 'Falha X Recuperação por Mês da Empresa '
+	m.lcTitulo2 = Iif((Empty(m.ldData1) And Empty(m.ldData2)), '', ;
+				  Iif(m.ldData1==m.ldData2, ' [Em ' + Dtoc(m.ldData1) + ']', ;
+				  Iif(Empty(m.ldData1), ' [Até ' + Dtoc(m.ldData2) + ']', ;
+				  					    ' [De '  + Dtoc(m.ldData1) + ' à ' + Dtoc(m.ldData2) + ']')))
+
+	pDtI = fDtoSQL(m.ldData1)
+	pDtF = fDtoSQL(m.ldData2, '23:59:59')
+
+	lcQuery = [Select a.Emps, a.Datas, b.Cemps, b.Razas, a.Falhas, a.Pesoccbs ] + ;
+				[From SigCdFea a ] + ;
+				[Left Join SigCdEmp b On b.Cemps = a.Emps ] + ;
+			   [Where a.Datas Between ?pDtI And ?pDtF And ] + ;
+			   		 [a.Emps = '] + m._Empr + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpRel') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpRel)')
+		Return 0
+	EndIf
+
+	Select Emps as Cemps, ;
+		   Padr(Dtos(Datas), 6) as cAnomess, ;
+		   Padr(Padr(Substr(m.lcStrgmes, (Month(Datas) * 9 - 8), 9), 3) + './' + Transform(Year(Datas), '@L 9999'), 9) as csTraNomes, ;
+		   Padr(m.lcTitulo1 + Alltrim(Nvl(Cemps, '')) + ' - ' + Alltrim(Nvl(Razas, '')), 100) as cTitulo1s, ;
+		   m.lctitulo2 as ctitulo2s, ;
+		   Padr(Alltrim(m.lcEmpresa) + ' - ' + Alltrim(m.lcNomeEmpresa), 100) as cEmpresas, ;
+		   Val(Str(Sum(Falhas), 16, 2)) as nFalhas, ;
+		   Val(Str(Sum(Pesoccbs), 16, 2)) as nPesoccbs ;
+	  From crTmpRel ;
+	 Group By 1, 2, 3, 4, 5, 6 ;
+	  Into Cursor crRel1 ReadWrite
+
+	Select crRel1
+	Go Top
+
+	Set Decimals To (m.lnDecimals)
+	Set Fixed &lcFixed.
+	Set Exact &lcExact.
+	.cntAguarde.Visible = .f.
+	.Refresh
+	.Draw
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.LockScreen = .t.
+		.Caption = Prompt()
+		.getDtInicial.Value = Ctod('01/' + Str(Month(Date()), 2, 0) + '/' + Str(Year(Date()), 4, 0))
+		.getDtFinal.Value = (GoMonth(.getDtInicial.Value, 1) -1)
+		.pcMsg = ''
+		.getDtInicial.SetFocus
+		.cntAguarde.Visible = .f.
+
+		=DoDefault()
+
+		.Refresh
+		.LockScreen = .f.
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRGF1.cmdGprocessa
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdProcessa.Click
+------------------------------------------------------------
+PROCEDURE cmdProcessa.Click
+With ThisForm
+	.pcMsg = ''
+
+	If .mChkValid()
+		.mProcessamento()
+		
+		If Not Eof()
+			.Enabled = .f.
+			Do Form SigPrGf2 With ThisForm
+		Else
+			.pcMsg = 'Nenhum Registro Encontrado.'
+		EndIf
+	EndIf
+	If Not Empty(.pcMsg)
+		.LockScreen = .f.
+		=MessageBox(.pcMsg, 0+48+0, '')
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdSair.Click
+------------------------------------------------------------
+PROCEDURE cmdSair.Click
+With ThisForm
+	.LockScreen = .t.
+	
+	If Used('crLstMatLote')
+		Use In ('crLstMatLote')
+	EndIf
+	
+	.Release
+	.Refresh
+	.LockScreen = .f.
+	
+	If (Type('ThisForm.poForm1') = 'O')
+		.poForm1.LockScreen = .t.
+		.poForm1.Enabled = .t.
+		.poForm1.mAtivaPgMovto1()
+		.poForm1.LockScreen = .f.
+	EndIf	
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRGF1
+RESERVED3 (ClassInfo): pcmsg
+podatamgr
+*mchkvalid 
+*mprocessamento 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\SigPrItbBO.prg",
+    "timestamp":  "2026-07-19T03:05:12",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  75,
+                          "Original":  "THIS.this_lAutos = (NVL(Autos, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(Autos)=\"L\" / THIS.this_lAutos = ... / ELSE / THIS.this_lAutos = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

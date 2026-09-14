@@ -1,0 +1,395 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFpr.SCX
+* Data/Hora: 06/08/2026 04:33:38
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFPR
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDFPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDFPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCods
+  Parent: SIGCDFPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescs
+  Parent: SIGCDFPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Modelos de Produtos"
+  Name = "SIGCDFPR"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 935
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 36
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 111
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 186
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 261
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 336
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 512
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 438
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 819
+  Pagina.Dados.Grupo_Salva.Top = 10
+  Pagina.Dados.Grupo_Salva.TabIndex = 5
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPR.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Código :"
+  Height = 15
+  Left = 374
+  Top = 157
+  Width = 42
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPR.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Height = 15
+  Left = 361
+  Top = 185
+  Width = 55
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPR.Pagina.Dados.getCods
+------------------------------------------------------------
+  ControlSource = "crSigCdFip.Cods"
+  Height = 24
+  Left = 422
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 153
+  Width = 31
+  ZOrderSet = 5
+  plprocurar = .T.
+  Name = "getCods"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPR.Pagina.Dados.getDescs
+------------------------------------------------------------
+  ControlSource = "crSigCdFip.Descs"
+  Height = 24
+  Left = 422
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 181
+  Width = 150
+  ZOrderSet = 6
+  plprocurar = .T.
+  Name = "getDescs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFPR
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If Not Empty(ThisForm.Pagina.Dados.getCods.Value)
+	ThisForm.poDataMgr.LocateCursor([crSigCdFip], [Cods], ThisForm.Pagina.Dados.getCods.Value)
+EndIf
+
+If Not Empty(ThisForm.Pagina.Dados.getDescs.Value)
+	ThisForm.poDataMgr.LocateCursor([crSigCdFip], [Descs], ThisForm.Pagina.Dados.getDescs.Value)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdFip], [Cods], [crSigCdFip], [], ThisForm.Pagina.Lista.Grade)
+			.pfSqlTabela(1).pColuna([Cods],  [], [], [Códigos],   060, .t.)
+			.pfSqlTabela(1).pColuna([Descs], [], [], [Descrição], 150, .t.)
+		EndWith
+
+		=DoDefault()
+
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters Opcao
+
+If Not DoDefault(Opcao)
+	ThisForm.mAtivapagina1
+	Return .f.
+EndIf
+
+Do Case
+	Case Inlist(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+		 ThisForm.Pagina.Dados.getCods.SetFocus
+		 
+	Case (ThisForm.pcEscolha = [ALTERAR])
+		 ThisForm.Pagina.Dados.getDescs.SetFocus
+
+	Otherwise
+		 ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndCase
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	If (ThisForm.pcEscolha = [INSERIR])
+		If Empty(crSigCdFip.Cods) Or (At(['], crSigCdFip.Cods) + At(["], crSigCdFip.Cods) > 0)
+			=MessageBox([Código Inválido!!!], 48, [Atenção!!!]) 
+			ThisForm.Pagina.Dados.getCods.SetFocus
+			Return .f.
+		EndIf
+		
+		If ThisForm.poDataMgr.ChkRegister([SigCdFip], [Cods], ThisForm.Pagina.Dados.getCods.Value)
+			=MessageBox([Código Já Cadastrado!!!], 48, [Atenção!!!]) 
+			ThisForm.Pagina.Dados.getCods.SetFocus
+			Return .f.
+		EndIf
+	EndIf
+	
+	If Empty(crSigCdFip.Descs) Or (At(['], crSigCdFip.Descs) + At(["], crSigCdFip.Descs) > 0)
+		=MessageBox([Descrição Inválida!!!], 48, [Atenção!!!]) 
+		ThisForm.Pagina.Dados.getDescs.SetFocus
+		Return .f.
+	EndIf
+EndIf
+
+If (ThisForm.pcEscolha = [EXCLUIR])
+	lcQuery = [Select CPros, DPros ] + ;
+			    [From SigCdPro ] + ;
+			   [Where CodFinP = '] + crSigCdFip.Cods + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBusca]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBusca)])
+		Return .f.
+	EndIf
+	Go Top In LocalBusca
+	If Not Eof([LocalBusca])
+		If (Reccount([LocalBusca])>1)
+			lcMsg = [Existem ] + Alltrim(Str(Reccount([LocalBusca]))) + [ Produtos Utilizando Esse Modelo!!! Para Excluir o] + Chr(13) + ;
+					[Modelo É Necessário Alterar o Cadastro de Produtos Primeiro!!!]
+		Else
+			lcMsg = [O Produto ] + Alltrim(LocalBusca.CPros) + [ - ] + Alltrim(LocalBusca.DPros) + [ Está Utilizando Esse Modelo!!! ] + Chr(13) + ;
+					[Para Excluir o Modelo É Necessário Alterar o Cadastro do Produto Primeiro!!!]
+		EndIf
+		=MessageBox(lcMsg, 48, [Atenção!!!]) 
+								
+		ThisForm.Pagina.Dados.Grupo_salva.Cancelar.SetFocus
+		Return .f.
+	EndIf
+EndIf
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPR.Pagina.Dados.getCods
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPR.Pagina.Dados.getDescs
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR], [PROCURAR])
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

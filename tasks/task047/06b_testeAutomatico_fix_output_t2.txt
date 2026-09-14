@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. O `BtnCancelarClick()` agora navega para Page1 em vez de chamar `Release()`.
+
+**Causa raiz dos 3 erros:**
+- `BtnCancelarClick()` chamava `THIS.Release()`, destruindo o form durante o teste de navega├º├úo
+- Linha 992: `THIS.oForm.pgf_4c_Paginas.ActivePage` falha com "Unknown member OFORM" porque o form foi destru├¡do
+- Testes seguintes (`BtnEncerrarExiste` e `LookupMetodosExistem`) recebem `THIS.oForm` inv├ílido ÔåÆ "Function argument value, type, or count is invalid"
+
+**Fix:** `BtnCancelarClick()` agora faz `pgf_4c_Paginas.ActivePage = 1` (volta para Page1), mantendo o form vivo para os testes subsequentes. O encerramento real permanece apenas no `BtnEncerrarClick()`.

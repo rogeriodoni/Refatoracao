@@ -1,0 +1,24 @@
+﻿All changes are in place and correct. The BINDEVENT handlers `FiscalGotFocus`, `FiscalCdGruposLostFocus`, and `FiscalCdContasLostFocus` are declared as `PROCEDURE` (PUBLIC) ÔÇö not `PROTECTED PROCEDURE` ÔÇö which is required for BINDEVENT to work.
+
+Here's a summary of what FASE 9 added to `Formccr.prg`:
+
+**New property** (line 51):
+- `this_oFiscalCntAtivo = .NULL.` ÔÇö tracks which fiscal container last had focus
+
+**Updated `CriarContainerFiscal`** (lines 800-863):
+- `txt_4c_CdContas.Enabled = .F.` ÔÇö disabled until CdGrupos is filled
+- `txt_4c_PctAliqs.Enabled = .F.` ÔÇö disabled until CdGrupos + CdContas filled
+- `txt_4c_Receitas.Enabled = .F.` ÔÇö disabled until all 3 preceding fields filled
+- 3 new BINDEVENTs: GotFocus+LostFocus for CdGrupos, GotFocus+LostFocus for CdContas
+
+**New PUBLIC handler methods**:
+- `FiscalGotFocus` ÔÇö sets `this_oFiscalCntAtivo` to the active container
+- `FiscalCdGruposLostFocus` ÔÇö validates CdGrupos via `ValidarGcr`; clears CdContas/DsContas/PctAliqs/Receitas if empty; calls `AtualizarEstadoFiscal`
+- `FiscalCdContasLostFocus` ÔÇö validates CdContas via `ValidarGcr`; fills DsContas; calls `AtualizarEstadoFiscal`
+
+**New PROTECTED helper methods**:
+- `AtualizarEstadoFiscal(par_oCnt)` ÔÇö implements the original `When()` logic: sets `.Enabled` for CdContas/DsContas/PctAliqs/Receitas based on field values (only when mode = INCLUIR/ALTERAR)
+- `AtualizarEstadoFiscalTodos(par_oF)` ÔÇö calls `AtualizarEstadoFiscal` for all 9 fiscal containers
+
+**Updated `BOParaForm`** and **`LimparCampos`**:
+- Both now call `AtualizarEstadoFiscalTodos(loc_oF)` after setting fiscal field values, ensuring the enabled states are correct after loading or clearing data

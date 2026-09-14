@@ -1,0 +1,24 @@
+[2026-07-17 04:43:18] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-17 04:43:18] [INFO] Prompt File: C:\4c\tasks\task298\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-07-17 04:43:18] [INFO] Output File: C:\4c\tasks\task298\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-17 04:43:18] [INFO] Model: sonnet
+[2026-07-17 04:43:18] [INFO] Timeout: 3600 segundos
+[2026-07-17 04:43:18] [INFO] Max Output Tokens: 128000
+[2026-07-17 04:43:18] [INFO] Context Files: 0 arquivo(s)
+[2026-07-17 04:43:18] [INFO] Invocando Claude CLI...
+[2026-07-17 04:43:18] [INFO] Prompt carregado: 80737 caracteres
+[2026-07-17 04:43:18] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-17 04:43:18] [INFO] Tamanho total do prompt: 80737 caracteres
+[2026-07-17 04:43:18] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-17 04:44:01] [INFO] Claude CLI finalizado em 42.2620606 segundos
+[2026-07-17 04:44:01] [INFO] Exit Code: 0
+[2026-07-17 04:44:01] [INFO] Output salvo em: C:\4c\tasks\task298\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-17 04:44:01] [INFO] Output size: 621 bytes
+[2026-07-17 04:44:01] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-17 04:44:01] [INFO] Preview do output:
+[2026-07-17 04:44:01] [INFO] Corre+º+úo aplicada. O erro estava em duas chamadas a `TABLEREVERT(.T., "cursor_4c_Config")`:
+
+- **Linha 340** (`AtualizaBoleto`): chamada antes de recriar o cursor a cada atualiza+º+úo
+- **Linha 1254** (`Destroy`): chamada ao fechar o form ÔÇö esta +® a que disparou o erro no teste "Fechar"
+
+`TABLEREVERT()` exige que o cursor esteja em modo de buffering (`CURSORSETPROP("Buffering", ...)`), mas `cursor_4c_Config` +® criado com `CREATE CURSOR` simples (sem buffering). A solu+º+úo +® usar ape

@@ -1,0 +1,7 @@
+﻿Ambas as corre├º├Áes est├úo corretas. Resumo:
+
+**Problemas 1 e 2** (`AbrirLookupTamanho` / `AbrirLookupCor`): falsos positivos do analisador est├ítico ÔÇö os m├®todos est├úo definidos como `FUNCTION` (equivalente a `PROCEDURE` em VFP9) nas linhas 930 e 1242, e os handlers que os chamam (`GradeCol4TextKeyPress`, `GradeCol4TextDblClick`, `GradeCol7TextKeyPress`, `GradeCol7TextDblClick`) tamb├®m est├úo presentes e corretos. Nenhuma altera├º├úo necess├íria.
+
+**Problema 3** (GRID-WITH): corrigido em dois locais:
+- `ConfigurarGrid()` (l.330): `THIS.grd_4c_Itens.RecordSource = "xPesa"` movido para antes do `WITH`, eliminando o risco de "Unknown member COLUMN1" ao acessar `.Column1`..`.Column9` dentro do mesmo bloco.
+- `CarregarLista()` (l.1977): mesmo padr├úo corrigido da mesma forma.

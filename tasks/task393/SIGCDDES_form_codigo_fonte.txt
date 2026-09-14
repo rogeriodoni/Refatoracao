@@ -1,0 +1,930 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDDES.SCX
+* Data/Hora: 01/08/2026 00:40:17
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDDES
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btncarregar
+  Parent: SIGCDDES.Pagina.Lista
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say1
+  Parent: SIGCDDES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDDES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDDES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDDES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetValmeta
+  Parent: SIGCDDES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getvalcota
+  Parent: SIGCDDES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getpdes
+  Parent: SIGCDDES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getvaldes
+  Parent: SIGCDDES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDtfin
+  Parent: SIGCDDES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtini
+  Parent: SIGCDDES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDDES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDDES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmps
+  Parent: SIGCDDES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDDES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getcodigo
+  Parent: SIGCDDES.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDDES.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Cotas de Desconto por período"
+  Name = "SIGCDDES"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 451
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 131
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 81
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 157
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 233
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 309
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 538
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 389
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 819
+  Pagina.Dados.Grupo_Salva.Top = 9
+  Pagina.Dados.Grupo_Salva.TabIndex = 9
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -24
+  Pagina.Left = 0
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Lista.btncarregar
+------------------------------------------------------------
+  AutoSize = .F.
+  Top = 4
+  Left = 467
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  FontExtend = .F.
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Carrega Cotas"
+  MousePointer = 15
+  TabIndex = 8
+  ToolTipText = "Carregar Cadastro"
+  Visible = .F.
+  PicturePosition = 7
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "btncarregar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa : "
+  Left = 437
+  Top = 153
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Meta de Vendas : "
+  Left = 401
+  Top = 234
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cota Desconto $ : "
+  Left = 398
+  Top = 261
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cota Desconto % : "
+  Left = 393
+  Top = 315
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.GetValmeta
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdDes.valmeta"
+  Height = 24
+  InputMask = "99,999,999.99"
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 229
+  Width = 126
+  ZOrderSet = 8
+  Name = "GetValmeta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.getvalcota
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdDes.valcota"
+  Height = 24
+  InputMask = "99,999,999.99"
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 256
+  Width = 126
+  ZOrderSet = 8
+  Name = "getvalcota"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.getpdes
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = ""
+  Height = 24
+  InputMask = "999.99"
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 310
+  Width = 126
+  ZOrderSet = 8
+  Name = "getpdes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.getvaldes
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdDes.valdes"
+  Height = 24
+  InputMask = "99,999,999.99"
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 283
+  Width = 126
+  ZOrderSet = 8
+  Name = "getvaldes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.GetDtfin
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdDes.dtfin"
+  Format = ""
+  Height = 24
+  InputMask = ""
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 202
+  Width = 80
+  ZOrderSet = 8
+  Name = "GetDtfin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.getDtini
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdDes.dtini"
+  Format = ""
+  Height = 24
+  InputMask = ""
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 175
+  Width = 80
+  ZOrderSet = 8
+  Name = "getDtini"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data Inicial : "
+  Left = 425
+  Top = 180
+  TabIndex = 17
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data Final : "
+  Left = 430
+  Top = 207
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.getEmps
+------------------------------------------------------------
+  ControlSource = "CrSigCdDes.emps"
+  Height = 24
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 148
+  Width = 33
+  ZOrderSet = 57
+  Themes = .F.
+  Name = "getEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código : "
+  Left = 445
+  Top = 126
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.getcodigo
+------------------------------------------------------------
+  ControlSource = "CrSigCdDes.codigo"
+  Height = 24
+  InputMask = "!!!!!!!!!!"
+  Left = 492
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 121
+  Width = 80
+  ZOrderSet = 57
+  Themes = .F.
+  Name = "getcodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDES.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Desconto Aplicado $ : "
+  Left = 381
+  Top = 288
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDDES
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE importaplan
+------------------------------------------------------------
+PROCEDURE importaplan
+PRIVATE ldIni, ldFin
+
+lcArq = GetFile('xls*')
+
+If Empty(lcArq)
+	Return .f.
+EndIf
+		
+If Not ImpExcelDriver(lcArq,'Cota Desconto')
+	Return .F.
+EndIf 
+lnCelI=0
+
+SELECT crSigCdDes
+ZAP 
+
+Select * from xlResults Into Cursor localCota ReadWrite 
+SELECT localCota
+GO top
+
+Select Localcota
+Go Top
+Scan
+	a=FIELD(1)
+	lcEmp = ALLTRIM(STR(Iif(InList(VARTYPE(&a),'N'),&a,0)))
+	a=FIELD(2)
+	lcMes = PADL(ALLTRIM(Iif(InList(VARTYPE(&a),'C','M'),&a,[])),6,'0')
+	a=FIELD(3)
+	lnCota= Iif(InList(VARTYPE(&a),'N'),&a,0)
+	a=FIELD(4)
+	lnCotaC= Iif(InList(VARTYPE(&a),'N'),&a,0)
+	
+	IF lcEmp <> '0' 
+
+		lcQuery = 	[Select * From SigcdEmp where nemps = ]+lcEmp+[ ]
+		If ThisForm.Podatamgr.Sqlexecute(lcQuery,'localEmp') < 1
+			Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+			Return
+		Endif
+
+		lcEmp = localEmp.cemps
+		*** prepara primeiro e ultimo dia do mes ***
+		ldIni=CTOD('01'+'/'+SUBSTR(lcMes,1,2)+'/'+SUBSTR(lcMes,3,4))
+		ldFin = ldIni+28
+		do while DAY(ldFin)<>1
+			ldFin=ldFin+1
+		ENDDO
+		ldFin=ldFin-1
+		ldIni = DTOT(ldIni)
+		ldFin = DTOT(ldFin)
+				
+		lcQuery = 	[Select * From SigcdDes where emps = ']+lcEmp+[' and dtini = ?ldIni and dtFin = ?ldFin]
+		If ThisForm.Podatamgr.Sqlexecute(lcQuery,'crAux') < 1
+			Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+			Return
+		Endif
+
+		IF RECCOUNT('crAux') = 0
+			lcDat=SUBSTR(ALLTRIM(STR(YEAR(DATE()))),3)+PADL(ALLTRIM(STR(month(DATE()))),2,'0')
+			lcCod = lcEmp+lcDat+PADL(ALLTRIM(STR(fGerUniqueKey(lcEmp+lcDat))),3,'0')
+			lnValdes=0.00
+		ELSE
+			lcCod=crAux.codigo
+			lnValDes= crAux.valdes	
+		ENDIF
+		
+		Insert Into crSigcdDes (codigo, Emps, dtini, dtfin, valmeta, valcota, valcotac,valdes, dtalts);
+			             Value (lcCod, lcEmp, ldIni, ldFin, 0.00, lnCota, lnCotaC, lnValDes, DATETIME())
+	
+	ENDIF
+		
+	Select LocalCota
+Endscan
+
+llOks = .T.
+
+If Not ThisForm.poDataMgr.Update([crSigcdDes])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigcddes)])
+	llOks = .f.
+EndIf
+If llOks
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+EndIf
+
+ThisForm.Refresh 
+RETURN llOks
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.Empty(ThisForm.Pagina.Dados.Getemps.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdDes','emps',ThisForm.Pagina.Dados.Getemps.Value)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector', THISFORM.NAME)
+	With .poDatamgr
+		.AddCursor('SigCdDes','codigo','crSigCdDes','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('codigo','','','Codigo',100,.t.)
+		.pfSqlTabela(1).pColuna('emps','','','Empresa',75,.t.)
+		.pfSqlTabela(1).pColuna('dtini','','','Dt Inicio',75,.t.)
+		.pfSqlTabela(1).pColuna('dtfin','','','Dt final',75,.t.)
+		.pfSqlTabela(1).pColuna('valmeta','','','Vr Meta',75,.t.)
+		.pfSqlTabela(1).pColuna('valcota','','','Cota',75,.t.)
+		.pfSqlTabela(1).pColuna('valdes','','','Utilizado',75,.t.)
+		.pfSqlTabela(1).pColuna('usualts','','','Usuário',75,.t.)
+		.pfSqlTabela(1).pColuna('dtalts','','','Alteracao',75,.t.)
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+
+ENDWITH
+
+thisform.pagina.lista.btncarregar.Visible = .t.
+   
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.Getemps.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Getemps.SetFocus
+	Case Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+LOCAL lcQuery
+
+If INLIST(ThisForm.pcEscolha,'INSERIR')
+	If Empty( CrSigCdDes.emps )
+		Messagebox( 'Empresa não pode ficar em branco!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getemps.SetFocus
+		Return
+	Endif
+	If Empty( CrSigCdDes.dtini )
+		Messagebox( 'Data Inicial não pode ficar em branco!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getdtini.SetFocus
+		Return
+	Endif
+	If Empty( CrSigCdDes.dtFin )
+		Messagebox( 'Data final não pode ficar em branco!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getdtfin.SetFocus
+		Return
+	Endif
+	If CrSigCdDes.dtini >  CrSigCdDes.dtfin
+		Messagebox( 'As datas estão incompatíveis!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getdtini.SetFocus
+		Return
+	Endif
+
+	lcDat=SUBSTR(DTOS(TTOd(CrSigCdDes.dtini)),1,10)
+	lcDat=SUBSTR(lcDat,1,4)+'-'+SUBSTR(lcDat,5,2)+'-'+SUBSTR(lcDat,7,2)
+	lcQuery = 	[Select * From SigCdDes where emps = ']+CrSigCdDes.emps+[' and ']+lcDat+[' ]+;
+				[between LEFT(CONVERT(VARCHAR, dtini, 120), 10) and  LEFT(CONVERT(VARCHAR, dtfin, 120),10)]	 && 2017-01-21
+	If ThisForm.Podatamgr.Sqlexecute(lcQuery,'crAux1') < 1
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return
+	Endif
+
+	lcDat=SUBSTR(DTOS(TTOd(CrSigCdDes.dtfin)),1,10)
+	lcDat=SUBSTR(lcDat,1,4)+'-'+SUBSTR(lcDat,5,2)+'-'+SUBSTR(lcDat,7,2)
+	lcQuery = 	[Select * From SigCdDes where emps = ']+CrSigCdDes.emps+[' and ']+lcDat+[' ]+;
+				[between LEFT(CONVERT(VARCHAR, dtini, 120), 10) and  LEFT(CONVERT(VARCHAR, dtfin, 120),10)]	 && 2017-01-21
+	If ThisForm.Podatamgr.Sqlexecute(lcQuery,'crAux2') < 1
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return
+	Endif
+
+	If RECCOUNT('crAux1')>0 or RECCOUNT('crAux2') >0
+		Messagebox( 'Esse intervado já está cadastrado para essa empresa!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getdtini.SetFocus
+		Return
+	Endif
+
+	lcDat=SUBSTR(ALLTRIM(STR(YEAR(DATE()))),3)+PADL(ALLTRIM(STR(month(DATE()))),2,'0')
+	replace codigo with crSigCdDes.emps+lcDat+PADL(ALLTRIM(STR(fGerUniqueKey(crSigCdDes.emps+lcDat))),3,'0') in crSigcdDes
+
+Endif
+
+If INLIST(ThisForm.pcEscolha,'EXCLUIR')
+	If CrSigCdDes.valdes > 0
+		Messagebox( 'Exclusão não permitida. Cota já utilizada!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getemps.SetFocus
+		Return
+	Endif
+ENDIF
+
+replace dtalts with DATETIME() in crSigcdDes
+replace usualts with Usuar in crSigcdDes
+
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDES.Pagina.Lista.btncarregar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .t.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+local llRet
+
+llRet = thisform.ImportaPlan()
+IF llRet
+	Messagebox('Planilha importada com sucesso.',(0+64),'Aviso')
+ELSE
+	Messagebox('A Planilha não foi importada.',(0+48),'Aviso')
+ENDIF
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDES.Pagina.Dados.GetValmeta
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+this.Parent.getpdes.Value = IIF(crSigcddes.valmeta=0, 0.00,crSigcddes.valcota/crSigcddes.valmeta*100)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDES.Pagina.Dados.getvalcota
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+this.Parent.getpdes.Value = IIF(crSigcddes.valmeta=0, 0.00,crSigcddes.valcota/crSigcddes.valmeta*100)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDES.Pagina.Dados.getpdes
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDES.Pagina.Dados.getvaldes
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDES.Pagina.Dados.GetDtfin
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN INLIST(ThisForm.pcEscolha, 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDES.Pagina.Dados.getDtini
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN INLIST(ThisForm.pcEscolha, 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDES.Pagina.Dados.getEmps
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN INLIST(ThisForm.pcEscolha, 'INSERIR')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.pagina.dados.getEmps)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDES.Pagina.Dados.getcodigo
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDDES
+RESERVED3 (ClassInfo): *importaplan 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 19
+================================================================================

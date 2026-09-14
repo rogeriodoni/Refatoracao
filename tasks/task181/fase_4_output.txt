@@ -1,0 +1,20 @@
+﻿The file is complete and correct. The edit was applied successfully ÔÇö `ENDDEFINE` is at line 781, all methods are properly closed, and the structure is sound.
+
+Here's what was added in Phase 4:
+
+**`ConfigurarPaginaLista()`** (PROTECTED) ÔÇö creates:
+- `lbl_4c_Lbl_titulo` ÔÇö "Etiquetas Selecionadas" header label (Top=203, Left=10)
+- `grd_4c_Dados` ÔÇö 7-column grid (Top=216, Left=12, Width=818, Height=157) bound to `dbImpressao` with exact column order (ColumnOrder 2/3/4 on columns 4/2/3), widths, and TextBox ControlSources matching the SCX including the col_DPro2s duality (column shows `Dpro2s`, TextBox edits `reffs`)
+- `cmd_4c_Btnexcluir` ÔÇö 26├ù26 icon button with `Themes=.T.` + `DisabledPicture` (Top=374, Left=21)
+- `cmd_4c_BtnCarregar` ÔÇö 26├ù26 icon button (Top=159, Left=373)
+- `obj_4c_BTNREPORT` ÔÇö CommandGroup with Buttons(1)=Imprime (Comic Sans MS, `\<Imprimir`) and Buttons(2)=Sair (Encerrar, Cancel=.T.), both `Themes=.F.` as canonical for CommandGroup buttons
+
+**`AlternarPagina(par_nPagina)`** ÔÇö returns `.T.` (OPERACIONAL has no PageFrame)
+
+**`BtnImprimeClick()`** ÔÇö confirms via `MsgConfirma()`, reorders dbImpressao (removes QtdsÔëñ0, sorts by CPros or Registros tag, scatter/insert cycle), populates BO properties from Phase 5 controls, calls `BO.ImprimirEtiquetas()`, clears form on success
+
+**`BtnSairClick()`** ÔÇö `THIS.Release()`
+
+**`BtnExcluirClick()`** ÔÇö `DELETE` + `LOCATE FOR .F.` + `GO TOP` + `APPEND BLANK` if EOF
+
+**`BtnCarregarClick()`** ÔÇö validates txt_4c_Emps/Dopes/Numes with `loc_lContinuar` flag pattern (no RETURN inside TRY), confirms replacement, ZAPs and calls `BO.CarregarPorMovimentacao()`, applies lista de pre├ºos via `BO.AplicarListaPrecoNoItem()` if applicable

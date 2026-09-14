@@ -1,0 +1,476 @@
+{
+  "resumo": {
+    "totalMetodos": 28,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 14,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fCarregarCambio", "fConfigGeral", "fChecaAcesso", "fValorExtenso", "fAcessoEmpresa", "fwBuscaSel", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREINV",
+      "evento": "Procedure",
+      "linhas": 812,
+      "codigoOriginal": "LParameters lcFilEmp,lnValCot,lcMoeda\n\nPrivate lcDatas,ldDtHis\n\n* Declara as variáveis de verificação\nLocal lnSldNeg, ldDtAtu, lcConexao, llImpICMS, lnCota\n\nWith ThisForm\n\tlnPosicao = .OptPosicao.Value\n\tlnSldPos  = .ChkSaldo1.Value\n\tlnSldNeg  = .ChkSaldo2.Value\n\tllImpICMS = (.Opt_ICMS.Value = 1)\n\tldDatas   = .GetDataSaldo.Value\nEndWith\n\nldDtAtu   = Date()\nlcConexao = ThisForm.poDataMgr.GetDriver()\nllConFox  = (lcConexao = 'foxpro')\n\nIf (lnValCot = 0)\n\tlnValCot = fCarregarCambio(Alltrim(lcFilEmp)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fCarregarCambio",
+        "metodosFormChamados": "GetDriver,SqlExecute,GetDataBase",
+        "controlesReferenciados": "OptPosicao,ChkSaldo1,ChkSaldo2,Opt_ICMS",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREINV",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "lcEmpInv = ThisForm.Get_Cd_Empresa.Value\nlcEmpLiv = Iif(Empty(lcEmpInv),_Empr,lcEmpInv)\n=Seek(lcEmpLiv,'CrSigCdEmp','CEmps')\n=Seek(lcEmpLiv,'CrSlvEmp','CEmps')\n\nReplace Datas With ThisForm.GetDataSaldo.Value In CrSlvEmp\n\nReport Form SigReIv1 Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV",
+      "evento": "Procedure",
+      "linhas": 165,
+      "codigoOriginal": "* Declara as Variáveis de Cabeçalho\nLocal lcCbEmpresa,lcCbTitulo,lcCbEstoque,lcCbGrupo,lcCbFornecedor,ldDtAtu,lcMoe\n\nldDtAtu = Date()\n\n* Inicializa as Variáveis de Campos\nWith ThisForm\n\tlcCdEmpresa    = Padr(.Get_Cd_Empresa.Value,3)\n\tlnImpUEPS      = .ChkValor1.Value\n\tlnImpPEPS      = .ChkValor2.Value\n\tlnImpCusto     = .ChkValor3.Value\n\tlnImpMedio     = .ChkValor4.Value\n\tlnImpVenda     = .ChkValor5.Value\n\tlnValFat       = .Get_ValFator.Value\n\tlcMoe          = .Get_Moeda.Value\nEndWith\n\nCreate Cur... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,ProcEst",
+        "controlesReferenciados": "Get_Cd_Empresa,ChkValor1,ChkValor2,ChkValor3,ChkValor4,ChkValor5,Get_ValFator,Get_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor TmpGrupo (Tipo c(1), CGrus c(80), Moedas c(3), Valors n(12,2))\nIndex On Tipo + CGrus + Moedas Tag TpGruMoe\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV",
+      "evento": "Init",
+      "linhas": 128,
+      "codigoOriginal": "Private ldDatas\n\nldDatas = Date()\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector',.name)\n\n\tIf .poDataMgr.pnIdConn < 1\n\t\tMessageBox('Impossível Efetuar Conexão com Servidor de Banco de Dados !!!',48,'Create Object 1')\n\t\tReturn(.F.)\n\tEndIf\n\t\n\tWith .poDataMgr\n\t\t.AddCursor('SigTempR', 'cIdChaves', 'crSigTempR')\n\tEndWith\nEndWith\n\n=DoDefault()\n\nThisForm.lImpICMS   = .F.\nThisForm.AliqICMS   = 0\n\nlStrQuery = [Select CEmps,Razas,Cidas,RazSocs,Endes,Cidas,IEs,CGCs,Ativas ]+;\n\t\t\t[From SigCdEmp ]+;... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "SQLExecute,Visible = fChecaAcesso",
+        "controlesReferenciados": "Get_Cd_Empresa,Get_Ds_Empresa,Get_MoeFator,Get_ValFator,Opt_ICMS,OptPosicao,ChkValor4,ChkValor5",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV",
+      "evento": "Procedure",
+      "linhas": 33,
+      "codigoOriginal": "lcEmpInv = ThisForm.Get_Cd_Empresa.Value\nlcEmpLiv = Iif(Empty(lcEmpInv),_Empr,lcEmpInv)\n=Seek(lcEmpLiv,'CrSigCdEmp','CEmps')\n=Seek(lcEmpLiv,'CrSlvEmp','CEmps')\n\nReplace Datas With ThisForm.GetDataSaldo.Value In CrSlvEmp\n\nReport Form SigReIv1 To Printer Prompt NoConsole\n\nlcPagina  = AllTrim(Str(lnPaginas + 2))\nlcExtenso = fValorExtenso(lnPaginas + 2)\nlcExt     = ''\nFor lnConta = 1 To Words(lcExtenso)\n\tIf InList(WordNum(lcExtenso,lnConta),'REAL','REAIS')\n\t\tExit\n\tEndIf\n\tlcExt = lcExt + WordNum(lcEx... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fValorExtenso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV",
+      "evento": "Procedure",
+      "linhas": 45,
+      "codigoOriginal": "lcEmpInv = ThisForm.Get_Cd_Empresa.Value\nlcEmpLiv = Iif(Empty(lcEmpInv),_Empr,lcEmpInv)\n=Seek(lcEmpLiv,'CrSigCdEmp','CEmps')\n=Seek(lcEmpLiv,'CrSlvEmp','CEmps')\n\nReplace Datas With ThisForm.GetDataSaldo.Value In CrSlvEmp\n\nReport Form SigReIv1 To Printer NoConsole\n\nlcPagina  = AllTrim(Str(lnPaginas + 2))\nlcExtenso = fValorExtenso(lnPaginas + 2)\nlcExt     = ''\nFor lnConta = 1 to Words(lcExtenso)\n\tIf Inlist(WordNum(lcExtenso,lnConta),'REAL','REAIS')\n\t\tExit\n\tEndIf\n\tlcExt = lcExt + WordNum(lcExtenso,l... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fValorExtenso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV",
+      "evento": "Click",
+      "linhas": 90,
+      "codigoOriginal": "Local llChkInv1, llChkInv2, llChkInv3, llValor1, llValor2, llValor3, llValor4, llValor5\n\nllChkInv1    = (ThisForm.ChkInv1.Value = 1)\nllChkInv2    = (ThisForm.ChkInv2.Value = 1)\nllChkInv3    = (ThisForm.ChkInv3.Value = 1)\nllChkValor1  = (ThisForm.ChkValor1.Value = 1)\nllChkValor2  = (ThisForm.ChkValor2.Value = 1)\nllChkValor3  = (ThisForm.ChkValor3.Value = 1)\nllChkValor4  = (ThisForm.ChkValor4.Value = 1)\nllChkValor5  = (ThisForm.ChkValor5.Value = 1)\n\nIf !(This.Value = 4)\n\tDo Case\n\t\tCase (Empty(This... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "Value = 2 And Empty,SQLExecute",
+        "controlesReferenciados": "ChkInv1,ChkInv2,ChkInv3,ChkValor1,ChkValor2,ChkValor3,ChkValor4,ChkValor5,Get_Cd_Empresa,OptPosicao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.Command1",
+      "evento": "Click",
+      "linhas": 107,
+      "codigoOriginal": "*** mena - 30/01/2015 - gera arquivo de inventário conforme layout fornecido pela Costantine ***\n\nLocal llChkInv1, llChkInv2, llChkInv3, llValor1, llValor2, llValor3, llValor4, llValor5\nLOCAL lcStr, lcData\n\nllChkInv1    = (ThisForm.ChkInv1.Value = 1)\nllChkInv2    = (ThisForm.ChkInv2.Value = 1)\nllChkInv3    = (ThisForm.ChkInv3.Value = 1)\nllChkValor1  = (ThisForm.ChkValor1.Value = 1)\nllChkValor2  = (ThisForm.ChkValor2.Value = 1)\nllChkValor3  = (ThisForm.ChkValor3.Value = 1)\nllChkValor4  = (ThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "Value = 2 And Empty,SQLExecute,Processamento",
+        "controlesReferenciados": "ChkInv1,ChkInv2,ChkInv3,ChkValor1,ChkValor2,ChkValor3,ChkValor4,ChkValor5,Get_Cd_Empresa,OptPosicao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.Get_MoeFator",
+      "evento": "Valid",
+      "linhas": 40,
+      "codigoOriginal": "If Empty(This.Value)\n\tThisForm.Get_ValFator.Value = 0\n\tThisForm.Get_ValFator.Refresh\nElse\n\tIf ThisForm.poDataMgr.SQLExecute([Select CMoes,DMoes From SigCdMoe],'TmpMoe2') < 1\n\t\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpMoe)')\n\t\tReturn(.F.)\n\tEndIf\t\n\tlnValFat = 0\n\tldData   = Iif(ThisForm.OptPosicao.Value = 1,Date(),ThisForm.GetDataSaldo.Value)\n\tSelect TmpMoe2\n\tIndex On CMoes Tag CMoes\n\tIndex On DMoes Tag DMoes\n\tSet Order To CMoes\n\tGo Top\n\tIf Seek(This.Value,'TmpMoe2',... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,fCarregarCambio",
+        "metodosFormChamados": "SQLExecute,Value = 1,Date",
+        "controlesReferenciados": "Get_ValFator,OptPosicao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.Get_Ds_Empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Cd_Empresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.Get_Ds_Empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.Get_Cd_Empresa,ThisForm.Get_Ds_Empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa,Get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.Get_Cd_Empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.Get_Cd_Empresa,ThisForm.Get_Ds_Empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Empresa,Get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.get_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_moeda.Value \t  = crListaRemota.CMoes\n\tThisForm.get_moeda_desc.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThisForm.get_moeda.Value \t  = ''\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_moeda,get_moeda_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.get_moeda_desc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.get_moeda_desc",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_moeda.Value \t  = crListaRemota.CMoes\n\tThisForm.get_moeda_desc.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThisForm.get_moeda.Value \t  = ''\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_moeda,get_moeda_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.Opt_ICMS",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.lImpICMS = (This.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "lImpICMS =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.ChkValor1",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If This.Value = 1\n\tThisForm.ChkValor2.Value = 0\n\tThisForm.ChkValor3.Value = 0\n\tThisForm.ChkValor4.Value = 0\n\tThisForm.ChkValor5.Value = 0\n\tThisForm.ChkValor2.Refresh\n\tThisForm.ChkValor3.Refresh\n\tThisForm.ChkValor4.Refresh\n\tThisForm.ChkValor5.Refresh\n\tThisForm.ChkSaldo1.Value   = 1\n\tThisForm.ChkSaldo2.Value   = 0\n\tThisForm.ChkSaldo1.Enabled = .F.\n\tThisForm.ChkSaldo2.Enabled = .F.\n\tThisForm.ChkSaldo1.Refresh\n\tThisForm.ChkSaldo1.Refresh\nElse\n\tThis.Value = 1\n\tThis.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkValor2,ChkValor3,ChkValor4,ChkValor5,ChkSaldo1,ChkSaldo2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.ChkValor2",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If This.Value = 1\n\tThisForm.ChkValor1.Value = 0\n\tThisForm.ChkValor3.Value = 0\n\tThisForm.ChkValor4.Value = 0\n\tThisForm.ChkValor5.Value = 0\n\tThisForm.ChkValor1.Refresh\n\tThisForm.ChkValor3.Refresh\n\tThisForm.ChkValor4.Refresh\n\tThisForm.ChkValor5.Refresh\n\tThisForm.ChkSaldo1.Value   = 1\n\tThisForm.ChkSaldo2.Value   = 0\n\tThisForm.ChkSaldo1.Enabled = .F.\n\tThisForm.ChkSaldo2.Enabled = .F.\n\tThisForm.ChkSaldo1.Refresh\n\tThisForm.ChkSaldo1.Refresh\nElse\n\tThis.Value = 1\n\tThis.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkValor1,ChkValor3,ChkValor4,ChkValor5,ChkSaldo1,ChkSaldo2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.ChkValor4",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If This.Value = 1\n\tThisForm.ChkValor1.Value = 0\n\tThisForm.ChkValor2.Value = 0\n\tThisForm.ChkValor3.Value = 0\n\tThisForm.ChkValor5.Value = 0\n\tThisForm.ChkValor1.Refresh\n\tThisForm.ChkValor2.Refresh\n\tThisForm.ChkValor3.Refresh\n\tThisForm.ChkValor5.Refresh\n\tThisForm.ChkSaldo1.Enabled = .T.\n\tThisForm.ChkSaldo2.Enabled = .T.\n\tThisForm.ChkSaldo1.Refresh\n\tThisForm.ChkSaldo1.Refresh\nElse\n\tThis.Value = 1\n\tThis.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkValor1,ChkValor2,ChkValor3,ChkValor5,ChkSaldo1,ChkSaldo2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.ChkValor5",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If This.Value = 1\n\tThisForm.ChkValor1.Value = 0\n\tThisForm.ChkValor2.Value = 0\n\tThisForm.ChkValor3.Value = 0\n\tThisForm.ChkValor4.Value = 0\n\tThisForm.ChkValor1.Refresh\n\tThisForm.ChkValor2.Refresh\n\tThisForm.ChkValor3.Refresh\n\tThisForm.ChkValor4.Refresh\n\tThisForm.ChkSaldo1.Enabled = .T.\n\tThisForm.ChkSaldo2.Enabled = .T.\n\tThisForm.ChkSaldo1.Refresh\n\tThisForm.ChkSaldo1.Refresh\nElse\n\tThis.Value = 1\n\tThis.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkValor1,ChkValor2,ChkValor3,ChkValor4,ChkSaldo1,ChkSaldo2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.ChkValor3",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If This.Value = 1\n\tThisForm.ChkValor1.Value = 0\n\tThisForm.ChkValor2.Value = 0\n\tThisForm.ChkValor4.Value = 0\n\tThisForm.ChkValor5.Value = 0\n\tThisForm.ChkValor1.Refresh\n\tThisForm.ChkValor2.Refresh\n\tThisForm.ChkValor4.Refresh\n\tThisForm.ChkValor5.Refresh\n\tThisForm.ChkSaldo1.Enabled = .T.\n\tThisForm.ChkSaldo2.Enabled = .T.\n\tThisForm.ChkSaldo1.Refresh\n\tThisForm.ChkSaldo1.Refresh\nElse\n\tThis.Value = 1\n\tThis.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkValor1,ChkValor2,ChkValor4,ChkValor5,ChkSaldo1,ChkSaldo2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.ChkSaldo1",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If This.Value = 1\n\tThis.Parent.ChkSaldo2.Value = 0\n\tThis.Parent.ChkSaldo2.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkSaldo2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.ChkSaldo2",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If This.Value = 1\n\tThis.Parent.ChkSaldo1.Value = 0\n\tThis.Parent.ChkSaldo1.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkSaldo1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.GetDataSaldo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.OptPosicao.Value = 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptPosicao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.Get_ValFator",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREINV.OptPosicao",
+      "evento": "InteractiveChange",
+      "linhas": 13,
+      "codigoOriginal": "With This.Parent\n\tIf This.Value = 1\n\t\t.GetDataSaldo.Value   = Date()\n\t\t.GetDataSaldo.Enabled = .F.\n\tElse\n\t\tIf Empty(.GetDataSaldo.Value)\n\t\t\t.GetDataSaldo.Value = Date()\n\t\tEndIf\n\t\t.GetDataSaldo.Enabled = .T.\n\tEndIf\n\t.GetDataSaldo.Refresh\n\t.GetDataSaldo.SetFocus\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREINV.Get_MoeFator.Valid",
+      "queryOriginal": "\tIf ThisForm.poDataMgr.SQLExecute([Select CMoes,DMoes From SigCdMoe],'TmpMoe2') < 1",
+      "tabelas": "SigCdMoe",
+      "colunas": "CMoes,DMoes",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdMoe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

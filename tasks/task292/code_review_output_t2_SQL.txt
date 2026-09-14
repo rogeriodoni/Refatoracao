@@ -1,0 +1,9 @@
+﻿Corre├º├úo aplicada. Resumo do pass SQL:
+
+**├Ünico problema real corrigido:**
+- `SigPrGlpBO.prg:570` ÔÇö Removida refer├¬ncia morta a `DbParam.OpZers` (cursor do DataManager legado `fSqlConector` que n├úo existe na nova arquitetura). Substitu├¡do por `loc_nTPeso` diretamente, que era sempre o valor resultante j├í que `USED("DbParam")` retorna `.F.`.
+
+**3 falsos positivos confirmados (sem altera├º├úo):**
+- `CAMPO`: ├ë `par_cCampo` ÔÇö par├ómetro VFP9 do m├®todo `CursorQuery`, n├úo coluna SQL.
+- `CONTROLCOUNT`: ├ë `THIS.ControlCount` / `loc_oCtrl.ControlCount` ÔÇö propriedade do objeto VFP9 Form/Container.
+- `ESTOQUE`: ├ë `TmpFinal.Estoque = 0` ÔÇö compara├º├úo IF em cursor VFP9 local; `Estoque` ├® campo v├ílido do TmpFinal.

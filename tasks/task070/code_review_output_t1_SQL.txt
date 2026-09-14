@@ -1,0 +1,39 @@
+﻿A an├ílise est├í completa. Aqui est├í o resultado da verifica├º├úo dos 4 problemas SQL-FILTRO-INVENTADO:
+
+---
+
+## Resultado da Verifica├º├úo
+
+**Todos os 4 problemas s├úo FALSOS POSITIVOS.** Nenhuma altera├º├úo de c├│digo ├® necess├íria.
+
+### Por que s├úo falsos positivos
+
+O validador varreu todos os `WHERE` do arquivo e comparou as colunas contra o `WHERE` original da query principal (`SigMvCab`). Mas os 4 campos flagados aparecem **exclusivamente em queries auxiliares de lookup** ÔÇö tabelas diferentes, m├®todos diferentes:
+
+| Coluna flagada | Onde aparece | Tabela | Exist├¬ncia no schema |
+|---|---|---|---|
+| `CEMPS` | `InicializarFiltros()` (BO) + valida├º├úo Form | `SigCdEmp` | Ô£à char(3) |
+| `RAZAS` | Busca empresa por descri├º├úo (Form) | `SigCdEmp` | Ô£à char(40) |
+| `CODIGOS` | Valida├º├úo grupo (Form, linha 1598) | `SigCdGcr` | Ô£à char(10) |
+| `ICLIS` | Valida├º├úo conta + busca (Form, linhas 1724/1727) | `SigCdCli` | Ô£à char(10) |
+
+### A query principal est├í correta
+
+O `PrepararDados()` do BO (linhas 127-164) usa **exatamente** as colunas do original:
+
+```
+a.Emps, a.Dopes, a.numes, a.notas, a.datas, a.Obses
+```
+
+Isso bate perfeitamente com o original: `EMPS, DOPES, NUMES, NOTAS, DATAS, OBSES`.
+
+---
+
+## Achado colateral (fora do escopo deste pass)
+
+Durante a verifica├º├úo do schema, detectei um bug real que **n├úo foi flagado** por este pass:
+
+- **SigCdGcr**: coluna de descri├º├úo no schema = `descrs` (com `r`)
+- **C├│digo** (linha 1598, 1605, 1659): usa `descs` (sem `r`)
+
+Isso causaria erro em runtime nos lookups de grupo (`SigCdGcr`). Recomendo abrir um pass SQL-COLUNA espec├¡fico para essa corre├º├úo, ou corrijo agora se preferir ÔÇö basta confirmar.

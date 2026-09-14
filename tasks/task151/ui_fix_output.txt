@@ -1,0 +1,12 @@
+﻿Feito. Sobre as 3 diferen├ºas:
+
+**Diferen├ºa real corrigida (item #139):**
+- `cmd_4c_Pesquisar.FontName`: `"Tahoma"` ÔåÆ `"Comic Sans MS"` (linha ~543)
+
+**Itens #5 e #6 s├úo falsos positivos do validador:**
+- O SCX original tinha `Caption = "Cadastro de Testes"` como valor de **design-time** nos labels `lblSombra`/`lblTitulo`
+- Mas o Init() do SCX imediatamente sobrescreve: `ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption`
+- O form migrado j├í replica esse comportamento com `.Caption = THIS.Caption` (que em runtime vale `"Movimenta├º├Áes de produ├º├úo por funcion├írio"`)
+- Ambas as vers├Áes exibem **o mesmo texto** ao usu├írio ÔÇö o validador compara valor est├ítico do SCX vs valor em runtime do PRG, gerando falso positivo
+
+Se quiser, posso reexecutar o validador para confirmar que a diferen├ºa visual real foi eliminada.

@@ -1,0 +1,11 @@
+﻿`C:\4c\projeto\app\forms\relatorios\FormSIGREDIR.prg` criado com 217 linhas.
+
+**O que foi implementado na Fase 3:**
+
+- **Propriedades visuais exatas** do original: `Width=800, Height=350, DataSession=2, TitleBar=0, ControlBox=.F.`
+- **`Init()`** ÔåÆ `RETURN DODEFAULT()` (garante FormBase.Init() com SET DATE BRITISH)
+- **`InicializarForm()`** ÔÇö cria estrutura visual primeiro (independente de SQL), depois instancia `SIGREDIRBO` apenas quando h├í conex├úo real (pula em modo `gb_4c_ValidandoUI`)
+- **`ConfigurarCabecalho()`** ÔÇö container escuro `RGB(100,100,100)` com `lbl_4c_Sombra` + `lbl_4c_Titulo` (padr├úo cntSombra do framework)
+- **`ConfigurarBotoes()`** ÔÇö `cmg_4c_Botoes` CommandGroup com 4 bot├Áes (`Left=529, Width=273, Height=80`), icones `relatorio_*_26.jpg`, `Buttons(4).Cancel=.T.`
+- **`ConfigurarPageFrame()`** ÔÇö `pgf_4c_Paginas` com `PageCount=1`, `Top=85, Height=265`, `Page1="Filtros"` (vazio ÔÇö controles de filtro chegam na Fase 4)
+- **`Destroy()`** ÔÇö `this_oRelatorio = .NULL.` + `DODEFAULT()`

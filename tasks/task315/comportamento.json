@@ -1,0 +1,554 @@
+{
+  "resumo": {
+    "totalMetodos": 32,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 20,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["File", "fDtoSQL", "fConfigGeral", "For Empty", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRNSE",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "Lparameters pTip\n\nWith ThisForm\n\t.optProcessados.Option1.Enabled \t= pTip\n\t.optProcessados.Option2.Enabled \t= pTip\n\t.getDtIni.Enabled \t\t\t\t\t= pTip\n\t.getDtFin.Enabled \t\t\t\t\t= pTip\n\t.getCEmps.Enabled  \t\t\t\t\t= pTip\n\t.getDEmps.Enabled \t\t\t\t\t= pTip\n\t.cmbCidades.Enabled\t\t\t\t\t= pTip\n\t.btnSelecionar.Enabled \t\t\t\t= pTip\n\t.getDirs.Enabled\t\t\t\t\t= pTip\n\t.btnDirs.Enabled \t\t\t\t\t= pTip\n\n\t.cmdBtnForm.btnLimpar.Enabled       = Not pTip\n\t.cmdBtnForm.btnCopiar.Enabled       = Not pTip\n\t.cmdBtnGrade.btnMarcaTudo.Enabled   =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optProcessados,Option1,Option2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE",
+      "evento": "Procedure",
+      "linhas": 330,
+      "codigoOriginal": "* NOTA FISCAL DE SERVIÇO ELETRÔNICA (NFS-e) \n* Prefeitura Municipal da Cidade do Rio de Janeiro\n* Arquivo TXT – Versão 3.1 - 27/05/2014 (Richard Diegues)\nLocal lcArq, lcDir, lnR20, lnR40, lnTsr, lnTdd, lnTdc, lnTdi, lcFim, lcTip, lcCpf, lcIms, ;\n\t  lcDtI, lcDtF\n\n* Carregando as Notas de Saída\nSelect a.* ;\n  From LocalNotas a, csOperacoes b ;\n Where a.Operas = [S] And ;\n \t   a.Emps + a.Dopes + Str(a.Numes, 6) = b.Emps + b.Dopes + Str(b.Numes, 6) And ;\n \t   b.SelImp ;\n  Into Cursor LocalNfS Readwr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE",
+      "evento": "Procedure",
+      "linhas": 177,
+      "codigoOriginal": "* NOTA FISCAL DE SERVIÇO ELETRÔNICA (NFS-e) \n* Prefeitura Municipal da Cidade de São Paulo\n* Arquivo TXT – Versão 3.4 - 10/07/2014 (Richard Diegues)\nLocal lcArq, lcDir, lnRg2, lnTsr, lnTdd, lnTdc, lnTdi, lcFim, lcTip, lcCpf, lcIms, lcDtI, lcDtF\n\n* Carregando as Notas de Saída\nSelect a.* ;\n  From LocalNotas a, csOperacoes b ;\n Where a.Operas = [S] And ;\n \t   a.Emps + a.Dopes + Str(a.Numes, 6) = b.Emps + b.Dopes + Str(b.Numes, 6) And ;\n \t   b.SelImp ;\n  Into Cursor LocalNfS Readwrite\n\n* Totalizado... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "Local llOks, lcCid\n\nllOks = .f.\n\nlcCid = ThisForm.cmbCidades.Value && 1-RJ - Rio de Janeiro\n\t\t\t\t\t\t\t\t  && 2-SP - São Paulo\n\nDo Case\n\tCase (Alltrim(lcCid) = [RJ - Rio de Janeiro])\n\t\tllOks = ThisForm.PrcRJRioDeJaneiro()\n\t\t\n\tCase (Alltrim(lcCid) = [SP - São Paulo])\n\t\tllOks = ThisForm.PrcSPSaoPaulo()\nEndCase\n\nIf llOks\n\tIf (ThisForm.poDataMgr.Commit() < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])\n\t\tllOks = .f.\n\tEndIf\n\n\tThisForm.AjustaControles(.t.)\n\tZap In cs... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "PrcRJRioDeJaneiro,PrcSPSaoPaulo,Commit,AjustaControles,Click,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE",
+      "evento": "Procedure",
+      "linhas": 161,
+      "codigoOriginal": "Private pDtI, pDtF, pDay\n\nLocal llOks, llNPr, lcEmp, ldDtI, ldDtF, lcDir\n\nllNPr = (ThisForm.optProcessados.Value = 1) && 1-Não Processados; 2-Já Processados\nlcEmp = Padr(ThisForm.getCEmps.Value, 3)\nldDtI = ThisForm.getDtIni.Value\nldDtF = ThisForm.getDtFin.Value\nlcDir = ThisForm.getDirs.Value\n\nIf Not llNPr && Se For Reprocessar as Notas\n\tIf Messagebox([Confirma a Seleção de Notas Fiscais Já Processadas Anteriormente?] + Chr(13) + ;\n\t\t\t\t  [Este Processo Poderá Sobrepor Registros no Arquivo Gerado ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute,AjustaControles",
+        "controlesReferenciados": "optProcessados,OptSimples",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor csOperacoes (SelImp l(1), Emps c(3), Dopes c(20), Numes n(6), Datas d(8), Valos n(12,2), ;\n\t\t\t\t\t\t   Notas c(10), Usuars c(10), ContaOs c(10), ContaDs c(10), Opers c(1), Erros m(4))\n\nIndex On Emps + Dopes + Str(Numes, 6) \t\t\t\tTag Operacao\nIndex On Dtos(Datas) + Emps + Dopes + Str(Numes, 6) Tag Data\nIndex On Notas + Emps + Dopes + Str(Numes, 6) \t\tTag Nota\nIndex On ContaOs + Emps + Dopes + Str(Numes, 6) \tTag Origem\nIndex On ContaDs + Emps + Dopes + Str(Numes, 6) \tTag D... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE",
+      "evento": "Init",
+      "linhas": 66,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name, .t.)\n\n\t.getDtIni.Value\t\t= Date()\n\t.getDtFin.Value \t= Date()\n\t.cmbCidades.Value\t= [RJ - Rio de Janeiro]\n\t.getDirs.Value \t\t= [C:\\]\n\n\tIf (.poDataMgr.pnIdconn < 1)\n\t\t=Messagebox([Impossivel Efetuar Conexão com Servidor de Banco de Dados...], 0+48, [CreateObject])\n\t\tReturn .f.\n\tEndIf\n\n\t.AjustaControles(.t.)\n\n\tlcQuery = [Select Distinct a.Codigos, a.Descs, b.Estados ] + ;\n\t\t\t\t[From SigCdMun a, SigCdUfs b ] + ;\n\t\t\t   [Where a.UFIBGEs = b.U... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.cmdBtnGrade",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "Do Case\n   Case This.Value = 1 And This.btnMarcaTudo.Enabled\n\t\t* Marca Tudo\n\t\tSelect csOperacoes\n\t\tReplace All SelImp With .t. For Empty(Alltrim(csOperacoes.Erros))\n\t\tGo Top\n\t\tThisForm.GrdOperacoes.Refresh\n\t\t \n   Case This.Value = 2 And This.btnDesmarcar.Enabled\n   \t\t* Desmarcar\n\t\tSelect csOperacoes\n\t\tReplace All SelImp With .f.\n\t\tGo Top\n\t\tThisForm.GrdOperacoes.Refresh\n\t\t \n   Case This.Value = 3 And This.btnDocumentos.Enabled\n\t\tDo Form SigMvExp With csOperacoes.Dopes, 'C', csOperacoes.Numes, csO... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.getCEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.getCEmps, ThisForm.getDEmps, ThisForm.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.getDirs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.getDEmps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCEmps.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.getDEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.getCEmps, ThisForm.getDEmps, ThisForm.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.btnSelecionar",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Selecionar()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Selecionar",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.btnDirs",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Local lcDir\n\nlcDir = Alltrim(ThisForm.getDirs.Value)\n\nlcDir = Alltrim(GetDir(lcDir, [Selecione o Diretório / Pasta De Gravação do Arquivo], [Seleção de Diretórios], 2))\n\nIf Not Empty(lcDir)\n\tThisForm.getDirs.Value = lcDir\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.getErros.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column1.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(Alltrim(csOperacoes.Erros))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal SelImp\n\nm.SelImp = (Not csOperacoes.SelImp)\n\nSelect csOperacoes\nGather Memvar Fields SelImp\nThisForm.GrdOperacoes.Refresh\n\nNoDefault\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal SelImp\n\nIf InList(nKeyCode, 13, 32)\n\tm.SelImp = (Not csOperacoes.SelImp)\n\n\tSelect csOperacoes\n\tGather Memvar Fields SelImp\n\tThisForm.GrdOperacoes.Refresh\n\n\tNoDefault\nEndIf\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column8.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column9.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.GrdOperacoes.Column10.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "If (This.Value = 2) && Se Clicou em Copiar Faz a Checagem\n\tSelect SelImp, Count(1) as Selecionados ;\n\t  From csOperacoes ;\n\t Where SelImp ;\n\t Group By SelImp ;\n\t  Into Cursor csSeles\n\t  \n\tIf (csSeles.Selecionados < 1)\n\t\t=Messagebox([Nenhum Lançamento Foi Encontrado!!!], 0+48, [Sem Lançamentos])\n\t\tThisForm.cntOperacoes.cmbOperacoes.SetFocus\n\t\tReturn .f.\n\tEndIf\nEndIf \n\nDo Case\n\tCase (This.Value = 1) And This.btnLimpar.Enabled\n\t\t ThisForm.AjustaControles(.t.)\n\t\t Zap In csOperacoes \n\t\t \n\tCase (This.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AjustaControles,Processamento",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRNSE.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRNSE.Procedure",
+      "queryOriginal": "Select a.* ; From LocalNotas a, csOperacoes b ; Where a.Operas = [S] And ; \t   a.Emps + a.Dopes + Str(a.Numes, 6) = b.Emps + b.Dopes + Str(b.Numes, 6) And ; \t   b.SelImp ; Into Cursor LocalNfS Readwr... [TRUNCADO]",
+      "tabelas": "LocalNotas",
+      "colunas": "Operas,Emps,Dopes,Numes,SelImp,LocalNfS",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRNSE.Procedure",
+      "queryOriginal": "Select a.* ; From LocalNotas a, csOperacoes b ; Where a.Operas = [S] And ; \t   a.Emps + a.Dopes + Str(a.Numes, 6) = b.Emps + b.Dopes + Str(b.Numes, 6) And ; \t   b.SelImp ; Into Cursor LocalNfS Readwrite",
+      "tabelas": "LocalNotas",
+      "colunas": "Operas,Emps,Dopes,Numes,SelImp,LocalNfS,Readwrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRNSE.cmdBtnForm.Click",
+      "queryOriginal": "\tSelect SelImp, Count(1) as Selecionados ; \t  From csOperacoes ; \t Where SelImp ; \t Group By SelImp ; \t  Into Cursor csSeles",
+      "tabelas": "csOperacoes",
+      "colunas": "SelImp,csSeles",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["LocalNotas", "csOperacoes"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

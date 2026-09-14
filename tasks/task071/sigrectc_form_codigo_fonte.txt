@@ -1,0 +1,869 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrectc.SCX
+* Data/Hora: 03/06/2026 18:56:28
+* Total de registros: 18
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECTC
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_emps
+  Parent: SIGRECTC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_fpags
+  Parent: SIGRECTC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_fpags
+  Parent: SIGRECTC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_razas
+  Parent: SIGRECTC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cemps
+  Parent: SIGRECTC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: entrada
+  Parent: SIGRECTC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: receber
+  Parent: SIGRECTC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: depositar
+  Parent: SIGRECTC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: baixa
+  Parent: SIGRECTC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: lbl_a
+  Parent: SIGRECTC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptTpDep
+  Parent: SIGRECTC
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGRECTC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGRECTC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGRECTC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 136
+  Left = -16
+  Width = 632
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório Movimentação de Cartões"
+  Name = "SIGRECTC"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 530
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.lbl_emps
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Left = 235
+  Top = 176
+  Width = 50
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "lbl_emps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.lbl_fpags
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nome do Cartão :"
+  Left = 198
+  Top = 203
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_fpags"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.get_fpags
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = ""
+  Height = 25
+  InputMask = "!!!!!!!!!!!!"
+  Left = 288
+  MaxLength = 12
+  TabIndex = 13
+  Top = 198
+  Width = 94
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_fpags"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.get_razas
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  Left = 325
+  MaxLength = 40
+  TabIndex = 11
+  Top = 171
+  Width = 301
+  ForeColor = 0,0,0
+  Name = "get_razas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.get_cemps
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  InputMask = ""
+  Left = 288
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 10
+  ToolTipText = ""
+  Top = 171
+  Width = 35
+  ForeColor = 0,0,0
+  Name = "get_cemps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.entrada
+------------------------------------------------------------
+  Top = 123
+  Left = 288
+  Height = 15
+  Width = 61
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Entradas"
+  Value = .F.
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "entrada"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.receber
+------------------------------------------------------------
+  Top = 123
+  Left = 363
+  Height = 15
+  Width = 68
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "À Receber"
+  Value = .F.
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "receber"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.depositar
+------------------------------------------------------------
+  Top = 123
+  Left = 447
+  Height = 15
+  Width = 74
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "À Depositar"
+  Value = .F.
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "depositar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.baixa
+------------------------------------------------------------
+  Top = 123
+  Left = 540
+  Height = 15
+  Width = 61
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Baixados"
+  Value = .F.
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "baixa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.lbl_a
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 373
+  Top = 147
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "lbl_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.OptTpDep
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 466
+  SpecialEffect = 0
+  Top = 143
+  Width = 152
+  TabIndex = 1
+  ZOrderSet = 13
+  Name = "OptTpDep"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Entrada"
+  Option1.Value = 1
+  Option1.Enabled = .F.
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 56
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.Alignment = 0
+  Option2.BackStyle = 0
+  Option2.Caption = "Vencimento"
+  Option2.Value = 0
+  Option2.Enabled = .F.
+  Option2.Left = 74
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 25
+  Left = 386
+  TabIndex = 7
+  Top = 144
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 14
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 25
+  Left = 288
+  TabIndex = 6
+  Top = 144
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTC.lbl_periodo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Periodo :"
+  Left = 240
+  Top = 149
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECTC
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+
+_DepPrev = Iif(ThisForm.OptTpDep.Option2.Enabled And ThisForm.OptTpDep.Value = 2,.T.,.F.)
+
+report form SigReCtc to printer Prompt noconsole
+use in listpro
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+=fConfigGeral()
+
+Thisform.poDatamgr = CreateObject('fSqlConector')
+DoDefault()
+
+lcsql=[Select dcarts From SigOpFp where Infos = 'T' group by dcarts ]
+If Used('Crfpagam')
+	USE in 'CrfPagam'
+EndIf
+If thisform.podatamgr.sqlexecute(lcsql,'Crfpagam') <= 0
+	Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+	return(.f.)
+Else
+	Select Crfpagam
+	Index on DCarts Tag Cartao
+EndIf
+
+* inicialização das variáveis do formulário
+
+thisform.get_dt_inicial.value = date()
+thisform.get_dt_final.value = date()
+thisform.get_cemps.value = ''
+thisform.get_razas.value = ''
+thisform.get_fpags.value = ''
+thisform.refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Public dDtInicial, dDtFinal, cEmpresa, cVerEmpresa, cNomeEmpresa,lcCartao
+
+create cursor listpro1 (cNomeEmpre C(40),dDtInicial t Null,dDtfinal t Null,CEmps c(3),ncarts n(12),numes N(8),;
+						datas t Null,nlotecs C(10),fpags C(12),dopes C(20),valor N(13,2),ValLiq N(20,9),Taxas N(9,3),;
+						noresumos C(10),iclis C(10),rclis C(50) NULL,razas c(40) NULL,opcao i,cMovimento C(30), Vencs d(8) NULL)
+create cursor listpro2 (cNomeEmpre C(40),dDtInicial t Null,dDtfinal t Null,CEmps c(3),ncarts n(12),numes N(8),;
+						datas t Null,nlotecs C(10),fpags C(12),dopes C(20),valor N(13,2),ValLiq N(20,9),Taxas N(9,3),;
+						noresumos C(10),iclis C(10),rclis C(50) NULL,razas c(40) NULL,opcao i,cMovimento C(30), Vencs d(8) NULL)
+create cursor listpro3 (cNomeEmpre C(40),dDtInicial t Null,dDtfinal t Null,CEmps c(3),ncarts n(12),numes N(8),;
+						datas t Null,nlotecs C(10),fpags C(12),dopes C(20),valor N(13,2),ValLiq N(20,9),Taxas N(9,3),;
+						noresumos C(10),iclis C(10),rclis C(50) NULL,razas c(40) NULL,opcao i,cMovimento C(30),Vencs d(8) NULL)
+create cursor listpro4 (cNomeEmpre C(40),dDtInicial t Null,dDtfinal t Null,CEmps c(3),ncarts n(12),numes N(8),;
+						datas t Null,nlotecs C(10),fpags C(12),dopes C(20),valor N(13,2),ValLiq N(20,9),Taxas N(9,3),;
+						noresumos C(10),iclis C(10),rclis C(50) NULL,razas c(40) NULL,opcao i,cMovimento C(30), Vencs d(8) NULL)
+
+cNomeEmpresa = iif(thisform.poDatamgr.CursorQuery('SigCdEmp','CrEmp','Cemps',_Empr),evaluate('CrEmp.Razas'),'')
+m.dDtInicial  = Ctot(Dtoc(thisform.get_dt_inicial.value))
+m.dDtFinal    = Ctot(Dtoc(thisform.get_dt_final.value)+' 23:59:59')
+cEmpresa    = thisform.get_cemps.value
+cVerEmpresa = iif(IsEmpty(cEmpresa),'','a.emps = ?cEmpresa and ')
+ckEntrada = thisform.entrada.value
+ckReceber = thisform.receber.value
+ckDepositar = thisform.depositar.value
+ckBaixa = thisform.baixa.value
+lcCartao = Iif(IsEmpty(thisform.get_fpags.value),'',thisform.get_fpags.value)
+
+set talk on
+set talk window
+if ckEntrada
+	opMovimento=1
+	cMovimento=Padr('Entradas',30)
+	lcsql=	[select ']+cNomeEmpresa+[' as cNomeEmpre ,?m.dDtInicial as dDtInicial,?m.dDtFinal as dDtFinal,]+;
+			[a.emps as cemps,b.ncarts,a.numes,a.datas,a.nlotecs,b.fpags,b.dopes,b.valos as valor,]+;
+			[(b.valos*(1-(b.taxas/100))) as ValLiq,b.taxas,b.noresumos,b.iclis,b.Vencs,c.Rclis,e.razas,]+;
+			+Str(opMovimento,1)+[ as opcao,']+cMovimento+[' as cMovimento ]+;
+			[from SigCdEmp e,SigCdCar a, SigCdCtt b Left Join SigCdCli c On c.Iclis = b.Iclis ]+;
+			[where ]+m.cVerEmpresa+[ a.datas between ?m.dDtInicial and ?m.dDtFinal and a.emps  = e.cemps and ]+;
+			[a.emps  = b.emps And a.numes = b.numes And a.Dopes = b.Dopes And a.Nlotecs = b.Nlotecs ]+;
+			Iif(IsEmpty(m.lcCartao),'','and b.fpags = ?m.lcCartao')+[ order by a.emps,b.fpags,a.datas ]
+
+	If thisform.podatamgr.sqlexecute(lcsql,'listp1') <= 0
+		Messagebox('Favor reinicializar o processo !!!',16,'Falha na Conexão (ListPro1)')
+		return(.f.)
+	EndIf
+	set talk off
+	Select listp1
+	Go Top
+	Scan
+		Scatter MemVar
+		Insert Into ListPro1 From MemVar
+		Select listp1
+	EndScan
+endif
+if ckReceber
+	opMovimento=2
+	cMovimento=Padr('À Receber',30)
+	lcsql=	[select ']+cNomeEmpresa+[' as cNomeEmpre , ?m.dDtInicial as dDtInicial, ?m.dDtFinal as dDtFinal, ]+;
+			[d.emps as cemps,d.ncarts,d.numes,d.vencs as datas,d.nlotecs,d.fpags,d.dopes,d.totres-d.totpar as valor,]+;
+			[((d.totres-d.totpar)*(1-(d.taxas/100))) as ValLiq,d.taxas,d.noresumos,d.iclis,c.Rclis,e.razas,]+;
+			+Str(opMovimento,1)+[ as opcao,']+cMovimento+[' as cMovimento ]+;
+			[from SigCdEmp e,SigCdCrd d Left Join SigCdCli c On c.Iclis = d.Iclis ]+;
+			[where ]+iif(IsEmpty(m.cEmpresa),'','d.emps = ?m.cEmpresa and ')+[d.vencs between ?m.dDtInicial and ?m.dDtFinal ]+;
+			Iif(IsEmpty(m.lcCartao),'','and d.fpags = ?m.lcCartao')+[ and not (d.totres-d.totpar = 0) ]+;
+			[and d.emps = e.cemps order by d.emps,d.fpags,d.vencs ]
+
+	If thisform.podatamgr.sqlexecute(lcsql,'listp2') <= 0
+		Messagebox('Favor reinicializar o processo !!!',16,'Falha na Conexão (ListPro2)')
+		return(.f.)
+	EndIf
+	set talk off
+	Select listp2
+	Go Top
+	Scan
+		Scatter MemVar
+		Insert Into ListPro2 From MemVar
+		Select listp2
+	EndScan
+endif
+if ckDepositar
+	opMovimento = 3
+	lcsql=	[select ']+cNomeEmpresa+[' as cNomeEmpre , ?m.dDtInicial as dDtInicial, ?m.dDtFinal as dDtFinal, ]+;
+			[b.emps as cemps,b.ncarts,b.numes,b.datas,b.Parcs,f.prazos,b.nlotecs,b.fpags,b.dopes,b.valos as valor,]+;
+			[(b.valos*(1-(b.taxas/100))) as ValLiq,b.taxas,b.noresumos,b.iclis,b.Vencs,c.Rclis,e.razas,]+;
+			+Str(opMovimento,1)+[ as opcao,']+cMovimento+[' as cMovimento ]+;
+			[from SigCdEmp e,SigOpFp f, SigCdCtt b Left Join SigCdCli c On c.Iclis = b.Iclis ]+;
+			[where b.Fpags = f.Fpags ]+iif(IsEmpty(m.cEmpresa),'',' and b.emps = ?m.cEmpresa ')+;
+			Iif(IsEmpty(m.lcCartao),'','and b.fpags = ?m.lcCartao ')+[ and b.emps = e.cemps ]+;
+			[and not exists (select x.ncarts from SigCdCrd x where x.ncarts = b.ncarts and x.emps=b.emps)]
+
+	If Used('Crtmppro3')
+		USE in 'Crtmppro3'
+	EndIf
+	If thisform.podatamgr.sqlexecute(lcsql,'Crtmppro3') <= 0
+		Messagebox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpPro3)')
+		return(.f.)
+	EndIf
+
+	If ThisForm.OptTpDep.Option2.Enabled And ThisForm.OptTpDep.Value = 2
+		cMovimento=Padr('À Depositar (Prev. Venc.)',30)
+		select cNomeEmpre,dDtInicial,dDtFinal,cemps,ncarts,numes, ;
+				(datas + iif(!IsEmpty(Parcs),Parcs,1) * Prazos) as Datas, ;
+				nlotecs,fpags,dopes,valor,valor*iif(taxas<>0,(1-(taxas/100)),1) as ValLiq,;
+				taxas,noresumos,iclis,Rclis,razas,opcao,cMovimento;
+				from  Crtmppro3 ;
+				where (datas + iif(!IsEmpty(Parcs),Parcs,1) * Prazos) between m.dDtInicial and m.dDtFinal ;
+				into cursor listp3 group by 4,5,1,2,3,6,7,8,9,10,11,12,13,14,15,16,17,18,19 order by cemps,fpags,7
+	Else
+		cMovimento=Padr('À Depositar',30)
+		select cNomeEmpre,dDtInicial,dDtFinal,cemps,ncarts,numes,Datas, ;
+				nlotecs,fpags,dopes,valor,ValLiq,;
+				taxas,noresumos,iclis,Rclis,razas,opcao,cMovimento,vencs;
+				from  Crtmppro3 ;
+				where datas between m.dDtInicial and m.dDtFinal ;
+				into cursor listp3 group by 4,5,1,2,3,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 order by cemps,fpags,datas
+
+	EndIf
+	set talk off
+	Select listp3
+	Go Top
+	Scan
+		Scatter MemVar
+		Insert Into ListPro3 From MemVar
+		Select listp3
+	EndScan
+endif
+
+if ckBaixa
+	opMovimento=4
+	cMovimento=Padr('Baixados',30)
+	lcsql=	[select ']+cNomeEmpresa+[' as cNomeEmpre , ?m.dDtInicial as dDtInicial, ?m.dDtFinal as dDtFinal, ]+;
+			[d.emps as cemps,d.ncarts,d.numes,d.vencs as datas,d.nlotecs,d.fpags,d.dopes,d.totres as valor,]+;
+			[(d.totres*(1-(d.taxas/100))) as ValLiq,d.taxas,d.noresumos,d.iclis,c.Rclis,e.razas,]+;
+			+Str(opMovimento,1)+[ as opcao,']+cMovimento+[' as cMovimento ]+;
+			[from SigCdEmp e,SigCdCrd d Left Join SigCdCli c On c.Iclis = d.Iclis ]+;
+			[where ]+iif(IsEmpty(cEmpresa),'','d.emps = ?cEmpresa and ')+[d.vencs between ?m.dDtInicial and ?m.dDtFinal ]+;
+			Iif(IsEmpty(m.lcCartao),'','and d.fpags = ?m.lcCartao')+[ and d.emps = e.cemps ]+;
+			[ and (d.totres-d.totpar = 0) order by d.emps,d.fpags,d.vencs ]
+
+	If thisform.podatamgr.sqlexecute(lcsql,'listp4') <= 0
+		Messagebox('Favor reinicializar o processo !!!',16,'Falha na Conexão (ListPro4)')
+		return(.f.)
+	EndIf
+	set talk off
+	Select listp4
+	Go Top
+	Scan
+		Scatter MemVar
+		Insert Into ListPro4 From MemVar
+		Select listp4
+	EndScan
+endif
+
+If ckEntrada Or ckReceber Or CkDepositar Or CkBaixa
+	Select l1.* from listpro1 l1 Union All ;
+	Select l2.* from listpro2 l2 Union All ;	
+	Select l3.* from listpro3 l3 Union All ;
+	Select l4.* from listpro4 l4 ;
+		Into Cursor listpro Order By 17
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+_DepPrev = Iif(ThisForm.OptTpDep.Option2.Enabled And ThisForm.OptTpDep.Value = 2,.T.,.F.)
+	
+report form SigReCtc preview NoConsole
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTC.get_fpags
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno, loLista
+If !IsEmpty(This.Value)
+	m.llRetorno = (LastKey()==27.Or.Empty(This.Value))
+	If .Not.m.llRetorno
+		If !seek(this.value,'crfpagam','Cartao')
+			&&						Object			  cursor	 campo proc  busca       titulo                     
+			m.loLista = CreateObject('fwbuscaint','crfpagam','Dcarts',this.value,'Seleção',.t.)
+			m.loLista.mAddColuna('Dcarts','','Cartao')
+			m.loLista.Show()
+		EndIf
+		This.Value = Iif(LastKey()==27,'',crfpagam.Dcarts)
+		This.Refresh
+		m.llRetorno = (.Not.Empty(This.Value))
+	EndIf
+	Return(m.llRetorno)
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTC.get_razas
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,loLista
+m.llRetorno = (LastKey()==27.Or.Empty(This.Value))
+If .Not.m.llRetorno
+	m.loLista = CreateObject('fwbuscaext',Thisform.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','razas',This.Value,'Seleção',.t.)
+	If  Not m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Razas','','Descrição')
+		m.loLista.mAddColuna('Cemps','','Código')
+		m.loLista.Show()
+	EndIf
+	This.Value = Iif(LastKey()==27,'',Evaluate('CrSigCdEmp.Razas'))
+	This.Refresh
+	ThisForm.Get_Cemps.value = iif(lastkey() <> 27,evaluate('CrSigCdEmp.Cemps'),'')
+	ThisForm.Get_Cemps.refresh		
+	m.llRetorno = (.Not.Empty(This.Value))
+EndIf
+Return(m.llRetorno)
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(thisform.get_cemps.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTC.get_cemps
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,loLista
+m.llRetorno = (LastKey()==27.Or.Empty(This.Value))
+If .Not.m.llRetorno
+	m.loLista = CreateObject('fwbuscaext',Thisform.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','cemps',This.Value,'Seleção',.t.)
+	If  Not m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Cemps','','Código')
+		m.loLista.mAddColuna('Razas','','Descrição')
+		m.loLista.Show()
+	EndIf
+	This.Value = Iif(LastKey()==27,'',Evaluate('CrSigCdEmp.cemps'))
+	This.Refresh
+	ThisForm.Get_razas.value = iif(lastkey() <> 27,evaluate('CrSigCdEmp.Razas'),'')
+	ThisForm.Get_razas.refresh		
+	m.llRetorno = (.Not.Empty(This.Value))
+EndIf
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTC.entrada
+* Classe: checkbox (Base: checkbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local llAtiva
+
+llAtiva = This.Value Or ThisForm.Receber.Value Or ThisForm.baixa.Value
+
+If llAtiva
+	ThisForm.OptTpDep.Option1.Enabled = .F.
+	ThisForm.OptTpDep.Option2.Enabled = .F.	
+Else
+	ThisForm.OptTpDep.Option1.Enabled = Thisform.Depositar.Value
+	ThisForm.OptTpDep.Option2.Enabled = Thisform.Depositar.Value
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTC.receber
+* Classe: checkbox (Base: checkbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local llAtiva
+
+llAtiva = This.Value Or ThisForm.Entrada.Value Or ThisForm.Baixa.Value
+
+If llAtiva
+	ThisForm.OptTpDep.Option1.Enabled = .F.
+	ThisForm.OptTpDep.Option2.Enabled = .F.	
+Else
+	ThisForm.OptTpDep.Option1.Enabled = Thisform.Depositar.Value
+	ThisForm.OptTpDep.Option2.Enabled = Thisform.Depositar.Value	
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTC.depositar
+* Classe: checkbox (Base: checkbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local llAtiva
+
+llAtiva = ThisForm.entrada.Value Or ThisForm.receber.Value Or ThisForm.baixa.Value
+
+If This.Value And !llAtiva
+	ThisForm.OptTpDep.Option1.Enabled = .T.
+	ThisForm.OptTpDep.Option2.Enabled = .T.	
+Else
+	ThisForm.OptTpDep.Option1.Enabled = .F.
+	ThisForm.OptTpDep.Option2.Enabled = .F.	
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTC.baixa
+* Classe: checkbox (Base: checkbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local llAtiva
+
+llAtiva = This.Value Or ThisForm.Entrada.Value Or ThisForm.Receber.Value
+
+If llAtiva
+	ThisForm.OptTpDep.Option1.Enabled = .F.
+	ThisForm.OptTpDep.Option2.Enabled = .F.	
+Else
+	ThisForm.OptTpDep.Option1.Enabled = Thisform.Depositar.Value
+	ThisForm.OptTpDep.Option2.Enabled = Thisform.Depositar.Value	
+EndIf
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECTC
+RESERVED3 (ClassInfo): codquas Código do arquivo SCEPRO para filtrar a qualidade a ser utilizada
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

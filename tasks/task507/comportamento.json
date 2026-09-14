@@ -1,0 +1,460 @@
+{
+  "resumo": {
+    "totalMetodos": 27,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 15,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fGerUniqueKey", "fwBuscaExt", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDRAN",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "iTPan = ThisForm.Pagina.Dados.Gettpan.Value\nIf Thisform.podatamgr.cursorquery('SigPrTpa','crTmpSigPrTpa','codigos',iTPan)\n  ThisForm.Pagina.Dados.Getdtpan.Value = crTmpSigPrTpa.Descs\nElse\n  ThisForm.Pagina.Dados.Getdtpan.Value = ''\nEndIf\niContas = thisform.pagina.dados.getcdconta.Value\nIf thisform.podatamgr.cursorquery('SigCdCli','crTmpSigCdCli','iclis',iContas)\n  thisform.pagina.dados.getdsconta.Value = crTmpSigCdCli.rclis\nElse\n  thisform.pagina.dados.getdsconta.Value = ''\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN",
+      "evento": "Init",
+      "linhas": 26,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n        lcQryRGan = [Select * From SigInAna]\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigInAna', 'codigos', 'crSigInAna', '', ThisForm.Pagina.Lista.Grade, lcQryRGan)\n\t\t\t.pfSqlTabela(1).pColuna('Codigos', '', '', 'Códigos', 80, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Datas', '', '', 'Data', 80, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('resps', '', '', 'Responsável', 80, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('codtpans', '', '... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRAN",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN",
+      "evento": "Click",
+      "linhas": 76,
+      "codigoOriginal": "LPARAMETERS opcao\n\nLocal Codigos,llFechado\n\nIf Type('m.Opcao')=='N'\n\tThis.Value = m.Opcao \nEndif\n\nIf ( DoDefault(This.Value) )\n\n\tThisForm.LockScreen = .t.\n\n    If not Empty(Thisform.Pagina.Dados.gettpan.Value)\n      ThisForm.podatamgr.cursorquery('SigPrTpa','csTmpSigPrTpa','codigos',Thisform.Pagina.Dados.gettpan.Value)\n\t  Thisform.Pagina.Dados.getDtpan.Value = csTmpSigPrTpa.Descs\n\tEndIf\n\t                                                \n\tlcConta = Padr(Thisform.Pagina.Dados.getCdConta.Value,10)\t ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "cursorquery,Value = Iif,SetFocus,inicdesc",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "If Inlist(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\tIf Empty(ThisForm.Pagina.Dados.getDatas.Value)\n\t\tMessageBox('Data Invalida.',48,'')\n\t\tThisForm.Pagina.Dados.getDatas.SetFocus\n\t\tReturn (.F.)\n\tEndif\nEndif\n\n=DoDefault()\nThisForm.mAtivapagina1",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.Pagina.Lista.Activate\n\tThisForm.Pagina.Lista.Grade.SetFocus\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.getCodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.pcEscolha=='PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.GetLaudo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Gettpan",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "if not IsEmpty(this.value)\n  If this.value = 0\n    ThisForm.Pagina.Dados.Getdtpan.Value = ''\n  Else\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrTpa', ;\n\t\t\t\t\t\t   'crListaRemota','CODIGOS', This.Value, 'Seleção', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '99', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tIf Lastkey() = 27\n\t\tThisForm.Pagina.Dados.Gettpan.Value = ''\n\t\tThisForm.Pagina.Dados.Getdtpan.Value = '... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Gettpan",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Getdtpan",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "if not IsEmpty(this.value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrTpa', ;\n\t\t\t\t\t\t   'crListaRemota','Descs', This.Value, 'Seleção', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.mAddColuna('Codigos', '99', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\tIf Lastkey() = 27\n\t\tThisForm.Pagina.Dados.Gettpan.Value = ''\n\t\tThisForm.Pagina.Dados.Getdtpan.Value = ''\n\tElse\n\t\tThisForm.Pagina.Dados.Gettpan.Value = crListaRemota.Codigos\n\t\tThi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Getdtpan",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') AND ThisForm.Pagina.Dados.Gettpan.Value = 0)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.getDatas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Container2.Getpeam",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Container2.Getdtam",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Container1.GetOp",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If !Empty(This.Value)\n    If not ThisForm.podatamgr.cursorquery('SigPdMvf','csTmpSigPdMvf','nops',Thisform.Pagina.Dados.container1.getop.Value)\n\t\tMessageBox('Op '+Str(Thisform.Pagina.Dados.container1.getOP.Value,10)+' não encontrada!!!',48,'')\n\t\tReturn 0\n\tElse\n\t\tThisform.Pagina.Dados.container1.Getfase.Value = csTmpSigPdMvf.Grupods\n\t\tThisform.Pagina.Dados.container1.Getfase.Refresh()\n\tEndif\nElse\n\tThisform.Pagina.Dados.container1.Getfase.Value = ' '\n\tThisform.Pagina.Dados.container1.Getfase.Refre... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Container1.GetOp",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Empty(This.Parent.GetnLote.Value) And Empty(This.Parent.Getnfund.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Container1.Getnlote",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "If !Empty(This.Value)\n\tset decimals to 0\n\tndope = Val( Left( Str( This.value, 10 ), 4) )\n\t\n    ThisForm.poDatamgr.CursorQuery('SigCdOpe','crSigCdOpe','nDopes',ndope)\n\n\tDope = crSigCdOpe.Dopes\n\tIf crSigCdOpe.Ctrllotes # 1\n\t\tMessagebox('Operação '+Dope+' não Configurada para gerar No. Lote !!', 48, '')\n\t\tReturn 0\n\tEndif\n\tNume = Val( Right( Str( This.Value, 10), 6 ) )\n\tset decimals to 2\n\tDeclare laCampo(2,2)\n\tLaCampo(1,1)='Dopes'\n\tLaCampo(2,1)='Numes'\n\tLaCampo(2,1)=Dope\n\tLaCampo(2,2)=Nume\n\tIf !This... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigMvCab'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Container1.Getnlote",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Empty(This.Parent.GetOp.Value) And Empty(This.Parent.Getnfund.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Container1.Getnfund",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "if not IsEmpty(this.value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdFun', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Fundições', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '99', 'Código')\n\t\tloLista.mAddColuna('Datas', '', 'Data')\n\t\tloLista.Show()\n\tEndIf\n\tIf Lastkey() = 27\n    \tThisForm.Pagina.Dados.container1.Getnfund.Value = ''\n\tElse\n    \tThisForm.Pagina.dados.container1.getnfund.Value = crListaRemota.Codigos\n\tEndif\n\tThisForm.Pa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Container1.Getnfund",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Empty(This.Parent.GetOp.Value) And Empty(This.Parent.Getnlote.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Container1.Getfase",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Getcdconta",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = ''\nIf !empty(this.Value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.Value,ThisForm.pagina.Dados.getcdconta,ThisForm.Pagina.dados.getdsconta)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.Pagina.Dados.getdsconta.Value = ''\n\t\tThisForm.Pagina.Dados.getdsconta.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThisForm.Pagina.Dados.getdsconta.Value = ''\n\tThisForm.Pagina.Dados.getdsconta.Refresh\n\treturn(.t.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Getcdconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Getdsconta",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = ''\nIf !empty(this.Value)\n\tIf !fAcessoContas(Usuar,grupo,'D',this.Value,ThisForm.pagina.Dados.getcdconta,ThisForm.Pagina.dados.getdsconta)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.Pagina.Dados.getdsconta.Value = ''\n\t\tThisForm.Pagina.Dados.getdsconta.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThisForm.Pagina.Dados.getdsconta.Value = ''\n\tThisForm.Pagina.Dados.getdsconta.Refresh\n\treturn(.t.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRAN.Pagina.Dados.Getdsconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Empty(This.Parent.Getcdconta.Value) and InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDRAN.Init",
+      "queryOriginal": "lcQryRGan = [Select * From SigInAna]",
+      "tabelas": "SigInAna",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigInAna"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

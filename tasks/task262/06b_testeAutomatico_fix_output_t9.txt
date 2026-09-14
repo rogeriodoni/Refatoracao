@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada: removida a linha `.HeaderHeight = 0` do bloco `WITH .Column1` em `ConfigurarGrade()` (linha 1365). `HeaderHeight` ├® propriedade do Grid, n├úo de Column ÔÇö atribuir em Column causa `Property HEADERHEIGHT is not found` e aborta `InicializarForm`, resultando em `CREATEOBJECT retornou valor nao-objeto`.
+
+O cabe├ºalho da coluna 1 j├í estava configurado com `.Caption = ""`, ent├úo o efeito visual desejado (header vazio) ├® mantido sem a propriedade inv├ílida.

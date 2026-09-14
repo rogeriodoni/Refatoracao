@@ -1,0 +1,22 @@
+﻿**Fase 6/8 completa.**
+
+Para este form OPERACIONAL (SIGOPDIV), a Fase 6 foi uma fase de verifica├º├úo/auditoria com uma ├║nica corre├º├úo aplicada:
+
+**Corre├º├úo aplicada:**
+- `ConfigurarGrade2()`: adicionado `.RecordMark = .F.` ao Grade2 (regra: grids criados via AddObject em forms OPERACIONAIS devem ter RecordMark=.F.)
+
+**Por que Phase 6 foi m├¡nima para este form:**
+
+Este ├® um form OPERACIONAL puro ÔÇö n├úo segue o padr├úo CRUD Page1/Page2. Toda a estrutura de UI j├í foi implementada nas fases 3-5:
+
+| Elemento | Status |
+|----------|--------|
+| Controles (labels, textboxes, editboxes, grids) | Ô£ô Fase 5 |
+| CommandGroups (GrupoSalva, GrupoConf) | Ô£ô Fase 4 |
+| Lookups | N/A ÔÇö nenhum lookup no original |
+| `cnt_4c_BotoesAcao` | N/A ÔÇö padr├úo CRUD, n├úo aplic├ível |
+| Eventos (BINDEVENT, handlers) | Ô£ô Fase 5 |
+
+**BO verificado:** `BuscarOP`, `GerarNovaOP`, `ConfirmarGravacao`, `RollbackTransacao` ÔÇö todos implementados nas fases 1-2.
+
+**Pr├│xima fase (7/8):** integra├º├úo com menu.prg e config.prg.

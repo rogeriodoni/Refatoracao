@@ -1,0 +1,364 @@
+{
+  "resumo": {
+    "totalMetodos": 21,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 13,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fDtoSQL", "fAcessoContas", "fwBuscaInt", "fAcessoMovmto", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREADS",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Local lnTipoRel\n\nlnTipoRel = ThisForm.optTipoRel.Value && 1-Sintético, 2-Analítico, 3-Resumo\n\nIf lnTipoRel = 3\n\tReport Form SigReAd2 to Printer\nElse\n\tReport Form SigReAd1 to Printer\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipoRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Local lnTipoRel\n\nlnTipoRel = ThisForm.optTipoRel.Value && 1-Sintético, 2-Analítico, 3-Resumo\n\nIf lnTipoRel = 3\n\tReport Form SigReAd2 to Printer Prompt NoConsole\nElse\n\tReport Form SigReAd1 to Printer Prompt NoConsole\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipoRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS",
+      "evento": "Init",
+      "linhas": 57,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\tWith .poDataMgr\n\t\tIf (.pnIdconn > 0)\n\t\t\t.AddCursor('SigTempR','CIdChaves','CrSigTempR','','')\n\t\t\t=DoDefault()\n\t\tElse\n\t\t\t=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\t\tReturn .f.\n\t\tEndIf\n\t\t.SqlExecute([Select MoePadVens, GrPadVens From SigCdPam],\"crSigCdPam\")\n\tEndWith\nEndWith\n* Fim **************************************************************************************\n\n&... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "Opt_TipoVars,Get_Empresa,Get_DEmpresa,get_nm_operacao,get_dt_inicial,get_dt_final,optTipoRel",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREADS",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor cs_SigCdTom (Marca n(1), Descri c(40), Codigos n(2))\nIndex On Codigos Tag Codigos",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS",
+      "evento": "Procedure",
+      "linhas": 360,
+      "codigoOriginal": "Private lcNmEmpresa, lcNmTitulo, lcNmPeriodo, lcCdEmpresa, lcNmOperacao, ldDtInicial, ldDtFinal, lnNrOpcao, lnObs\nPrivate lnNrCusto, lnNrVenda, lnNrSaldo, lnDecimals, lcFixed, lnTipoVars, lcMacroAcres, lcMacroDesc, lcMacroTotal\nPrivate llAnalitico, lnMargem, lnTipoRel\n\nWith ThisForm\n\tlcCdEmpresa  = .get_Empresa.Value\n\tlcNmOperacao = .get_nm_operacao.Value\n\tlcMoeda      = .getcmoeda.Value\n\tlcDMoeda     = .getDmoeda.Value\n\tldDtInicial\t = fDtoSQL(.get_dt_inicial.Value)\n\tldDtFinal\t = fDtoSQL(.get_dt... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChecaAcesso,fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute,poDataMgr) / fBuscarCotacao",
+        "controlesReferenciados": "get_Empresa,get_nm_operacao,get_dt_inicial,get_dt_final,opt_TipoVars,get_vended,opt_obs,optTipoRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\nDoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lnTipoRel\n\nlnTipoRel = ThisForm.optTipoRel.Value && 1-Sintético, 2-Analítico, 3-Resumo\n\nIf lnTipoRel = 3\n\tReport Form SigReAd2 Preview NoConsole\nElse\n\tReport Form SigReAd1 Preview NoConsole\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipoRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "if this.value <> 4\n\t* consiste o campo moeda\n\n\tif IsEmpty(thisform.getcmoeda.value) or not ThisForm.poDataMgr.CursorQuery('SigCdMoe', 'crSigCdMoe', 'cMoes', thisform.getcmoeda.value)\n\t\tmessagebox('Moeda inválida !',16,'')\n\t\tthisform.getcmoeda.setfocus\n\t\treturn(.f.)\n\tendif\n\n\t* consiste o campo data inicial\n\tif IsEmpty(thisform.get_dt_inicial.value)\t\n\t\tmessagebox('Data inicial inválida !',16,'')\n\t\tthisform.get_dt_inicial.setfocus\n\t\treturn(.f.)\n\tendif\n\n\t* consiste o campo data final\n\tif IsEmpty(thi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.Get_Vended",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "Select crSigCdPam\ngoto top\nlcGrupo = crSigCdPam.GrPadVens\nlordem = .t.\n\nIf !IsEmpty( This.Value )\n\tfAcessoContas( Usuar, lcGrupo, 'C', This.Value, This, ThisForm.Get_DVend,lordem)\nEndif\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DVend",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.Get_Dvend",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "Select crSigCdPam\ngoto top\nlcGrupo = crSigCdPam.GrPadVens\nlordem = .t.\n\nIf !IsEmpty( This.Value )\n\tfAcessoContas( Usuar, lcGrupo, 'D', This.Value, ThisForm.Get_Vended, This, lordem)\nEndif\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Vended",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.Get_Dvend",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(thisform.get_vended.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_vended",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.Get_Empresa",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "Local xBrow\n\nIf !IsEmpty(This.Value)\n\n\tSelect Janemp\n\tLOCATE FOR cEmps = This.Value\n\tIf EOF()\n\t\txBrow = CreateObject('fwBuscaInt','JanEmp','cEmps',This.Value,'Empresas',.t.)\n\t\txBrow.mAddColuna('cEmps','','Código',.t.)\n\t\txBrow.mAddColuna('Razas','','Descrição',.t.)\n\t\txBrow.Show\t\t\n\tEndIf\n\n\tIf LastKey()<>27\n\t    This.Parent.get_Empresa.Value = Evaluate('Janemp.Cemps')\n    \tThis.Parent.get_Dempresa.Value = Evaluate('Janemp.Razas')\n\t    This.Parent.get_Empresa.Refresh\n    \tThis.Parent.get_Dempresa.Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Empresa,get_Dempresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.Get_Dempresa",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "Local xBrow\n\nIf !IsEmpty(This.Value)\n\n\tSelect Janemp\n\tLOCATE FOR cEmps = This.Value\n\tIf EOF()\n\t\txBrow = CreateObject('fwBuscaInt','JanEmp','Razas',This.Value,'Empresas',.t.)\n\t\txBrow.mAddColuna('Razas','','Descrição',.t.)\n\t\txBrow.mAddColuna('cEmps','','Código',.t.)\n\t\txBrow.Show\t\t\n\tEndIf\n\n\tIf LastKey()<>27\n\t    This.Parent.get_Empresa.Value = Evaluate('Janemp.Cemps')\n    \tThis.Parent.get_Dempresa.Value = Evaluate('Janemp.Razas')\n\t    This.Parent.get_Empresa.Refresh\n    \tThis.Parent.get_Dempresa.Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Empresa,get_Dempresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.Get_Dempresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(thisform.get_Empresa.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.get_nm_operacao",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If !IsEmpty( This.Value )\n\t= fAcessoMovmto(Usuar,This.Value,This)\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoMovmto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.get_dt_inicial",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "thisform.get_dt_final.value    = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.getDmoeda",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição',.t.)\n\t\tloLista.mAddColuna('CMoes', 'XXXXXX', 'Código',.t.)\n\t\tloLista.Show()\n\tEndIf\n\t\n    This.Parent.getCmoeda.Value = Evaluate('crListaRemota.Cmoes')\n    This.Parent.getDmoeda.Value = Evaluate('crListaRemota.Dmoes')\n    This.Parent.get... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.getDmoeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.getCmoeda.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.getCmoeda",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', 'XXXXXX', 'Código',.t.)\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição',.t.)\n\t\tloLista.Show()\n\tEndIf\n\t\n    This.Parent.getCmoeda.Value = Evaluate('crListaRemota.Cmoes')\n    This.Parent.getDmoeda.Value = Evaluate('crListaRemota.Dmoes')\n    This.Parent.get... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.SelTudo",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "sele cs_SigCdTom\nreplace all marca with 1\ngo top\nthisform.refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREADS.apaga",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "sele cs_SigCdTom\nreplace all marca with 0\ngo top\nthisform.refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREADS.Init",
+      "queryOriginal": "\t\t.SqlExecute([Select MoePadVens, GrPadVens From SigCdPam],\"crSigCdPam\")",
+      "tabelas": "SigCdPam",
+      "colunas": "MoePadVens,GrPadVens",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPam"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

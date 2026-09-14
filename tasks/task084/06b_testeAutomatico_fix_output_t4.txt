@@ -1,0 +1,5 @@
+﻿The fix is in place. Here's what was causing the 300-second timeout and what was done:
+
+**Root cause:** `AddObject("obj_4c_OModem", "OLEControl", "MSCommLib.MSComm")` was being called unconditionally during form initialization. Creating a COM/OLE control for a serial port device (MSCommLib.MSComm) blocks indefinitely in unattended mode ÔÇö either waiting for Windows to register/initialize the COM subsystem, or silently trying to enumerate hardware. `SYS(2335, 0)` does not suppress this type of hang.
+
+**Fix (FormSigReEch.prg, line 442):** Wrapped the entire `AddObject` block inside the same `IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI` guard that was already protecting the `MsgErro` call in the CATCH. In test mode (`gb_4c_ValidandoUI = .T.`), the OLE control is never created ÔÇö the `PEMSTATUS` checks in `EmiteCheque()`/`EmiteVerso()` already handle the case where `obj_4c_OModem` doesn't exist, and those methods are never invoked during automated testing anyway.

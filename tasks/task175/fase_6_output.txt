@@ -1,0 +1,20 @@
+﻿O arquivo est├í ├¡ntegro com `ENDDEFINE` correto. Resumo das altera├º├Áes aplicadas na Fase 6:
+
+**Arquivo modificado:** `C:\4c\projeto\app\forms\operacionais\FormSigPrEml.prg`
+
+**1. `ConfigurarGrade` (melhorado):**
+- Adicionado `AllowAutoColumnFit = 2` (fidelidade ao SCX)
+- Column1-Column3 agora t├¬m `FontName`, `FontSize`, `ReadOnly` expl├¡citos
+- Todos os `Header1` agora t├¬m `FontName`, `FontSize`, `Alignment = 2`
+- Column4 (Mensagem) ganhou `EditBox1` com `BorderStyle=0`, `ReadOnly=.T.`, `SpecialEffect=1` ÔÇö adequado para campo memo
+
+**2. `CarregarDados` (melhorado):**
+- Reconfigura├º├úo do `Column4.CurrentControl = "EditBox1"` ap├│s RecordSource (evita reset pelo VFP)
+- Adicionado `THIS.GrdColNomeClick()` ap├│s o Refresh ÔÇö replicando o `column3.header1.Click()` que o legado chamava no Init para ordenar por Nome automaticamente
+
+**3. `CmdBtnEmailClick` (reescrito):**
+- Assunto agora vem da **prioridade do primeiro destinat├írio** (`"ALERTA - URGENTE"` etc.), id├¬ntico ao SCX original
+- Corpo do email completo com: `Movimenta├º├úo`, `A├º├úo`, `Usu├írio` (`gc_4c_UsuarioLogado`), `Data` (`TTOC(DATETIME())`), `Mensagem`, `Observa├º├úo`
+- **Segundo email** para opera├º├Áes baixadas (`cursor_4c_OpeBaixa`) com corpo diferente incluindo linha `"Movimenta├º├úo baixada [cancelada]: ..."` 
+- Hist├│rico de baixas registrado com `Acaos = "BAIXAR"` (corre├º├úo do bug anterior que passava `THIS.this_cEscolha`)
+- `THIS.Release()` ap├│s envio bem-sucedido ÔÇö fecha o form como o legado fazia

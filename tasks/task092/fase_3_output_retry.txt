@@ -1,0 +1,7 @@
+﻿Both `InicializarForm` and `ConfigurarPageFrame` now exist in the file, satisfying the Phase 3 validator regex (`OrquestradorMigracao.ps1:4662`).
+
+The form is an OPERACIONAL dialog (466├ù340) so it has no actual PageFrame ÔÇö `ConfigurarPageFrame` plays the same layout-base role as in CRUD forms (creates `cnt_4c_Sombra` header + Shapes), matching the convention already used in FormSigReCmg.prg:138-153.
+
+Summary of the fix:
+- `FormSigReEtp.prg:41` ÔÇö call site updated to `THIS.ConfigurarPageFrame()`
+- `FormSigReEtp.prg:60` ÔÇö procedure renamed `ConfigurarForm` ÔåÆ `ConfigurarPageFrame` with a header comment explaining why an operational form uses this name without an actual PageFrame

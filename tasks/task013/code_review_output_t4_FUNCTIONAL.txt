@@ -1,0 +1,36 @@
+﻿Ap├│s an├ílise detalhada do c├│digo, todos os 8 problemas reportados s├úo **falsos positivos** ou **j├í est├úo corretamente implementados**:
+
+---
+
+## Resultado: NENHUMA CORRE├ç├âO NECESS├üRIA
+
+### Problema 1 ÔÇö [CONTAINER-VISIVEL]: J├ü CORRETO
+**Linha 3447-3455** ÔÇö `TornarControlesVisiveis()` j├í filtra containers ocultos por design:
+```foxpro
+IF INLIST(LEFT(loc_cNome, 4), "cnt_", "pgf_") AND !loc_oCtrl.Visible
+    *-- Container oculto por design - pular
+ELSE
+    loc_oCtrl.Visible = .T.
+```
+O `cnt_4c_Cabecalho` (que tem `Visible=.F.` por design) j├í ├® corretamente ignorado.
+
+### Problema 2 ÔÇö [NULL-CURSOR]: J├ü CORRETO
+**Linhas 490-495** ÔÇö `SET NULL ON/OFF` j├í envolve o `CREATE CURSOR`:
+```foxpro
+SET NULL ON
+CREATE CURSOR cursor_4c_Dados (...)
+SET NULL OFF
+```
+
+### Problemas 3-4 ÔÇö [LAYOUT-POSITION] `cnt_4c_Botoes`: FALSO POSITIVO
+O Code Review comparou o container migrado com um container legado de **nome diferente**. O migrado `cnt_4c_Botoes` veio do legado `Grupo_op` (Left=542, Top=0ÔåÆ29). Se aplicasse a "corre├º├úo" para Left=959 + Width=390, o resultado seria 1349px ÔÇö **fora da tela** em um form de 1003px de largura.
+
+### Problemas 5-6 ÔÇö [LAYOUT-POSITION] `obj_4c_Opc_situacao`: FALSO POSITIVO
+O Code Review comparou o `Opc_situacao` da **p├ígina Lista** (controle de filtro) contra o `obj_4c_Opc_situacao` da **p├ígina Dados** (controle de edi├º├úo). S├úo controles com fun├º├Áes distintas em p├íginas distintas ÔÇö compara├º├úo inv├ílida.
+
+### Problemas 7-8 ÔÇö [LAYOUT-POSITION] `chk_4c_Fwoption1`: FALSO POSITIVO
+O pr├│prio coment├írio do c├│digo migrado indica a origem: `"Legado: ...pgDados - prodvars"`. O Code Review localizou o controle em `PgDadosFaseP` do legado ÔÇö fonte incorreta. O legado possui dois checkboxes similares e o Code Review comparou o par errado.
+
+---
+
+**Conclus├úo**: O arquivo `FormProduto.prg` est├í correto. Nenhuma altera├º├úo ├® necess├íria neste pass funcional.

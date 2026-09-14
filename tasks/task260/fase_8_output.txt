@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSigPrCar.prg` foi expandido de 955 para 1064 linhas com os 10 m├®todos adicionados:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `CarregarLista()` | Delega a `CarregarGrid()` |
+| `AjustarBotoesPorModo()` | Delega a `AjustarBotoesVisibilidade()` |
+| `FormParaBO()` | Copia linha corrente do cursor (`codigos/cpros/pkchaves/descrs`) ÔåÆ BO |
+| `BOParaForm()` | REPLACE cursor com dados do BO |
+| `HabilitarCampos(par_lHabilitar)` | `grd_4c_Grade.ReadOnly = !par_lHabilitar` |
+| `LimparCampos()` | REPLACE codigos/descrs com "" + Refresh |
+| `BtnBuscarClick()` | Recarrega o grid via `CarregarGrid()` |
+| `BtnEncerrarClick()` | Delega a `CmdSairClick()` |
+| `BtnSalvarClick()` | `LimparLinhasVazias` + `SalvarTodasCaracteristicas` + reabilita pai + Release |
+| `BtnCancelarClick()` | Reabilita pai + Release (sem persistir, igual ao comportamento original sem bot├úo cancelar) |
+
+**Decis├úo de design:** `BtnSalvarClick` usa `SalvarTodasCaracteristicas` (DELETE+INSERT no SQL Server), enquanto `CmdSairClick`/`BtnEncerrarClick` apenas limpa linhas vazias e fecha (deixando a persist├¬ncia para o form pai, que ├® o comportamento original do legado).

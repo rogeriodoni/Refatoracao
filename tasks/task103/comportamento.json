@@ -1,0 +1,188 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 1,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREFTP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "If (ThisForm.OptTpRel.Value = 1) && Reduzida\n\tReport Form SigReFtp Preview NoConsole\nElse \t\t\t\t\t\t\t && Expandido (Grande)\n\tReport Form SigReFt1 Preview NoConsole\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFTP",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Select csDetalhes\nRecall All\nScan\n\tIf Seek(Str(csDetalhes.Ordems,2) + csDetalhes.Grupos, 'csSelekton', 'OrdGru')\n\t\tIf Not csSelekton.lMarca\n\t\t\tDelete In csDetalhes\n\t\tEndIf\n\tEndIf\nEndScan\nGo Top In csSelekton\nGo Top In csCabecalho\nGo Top In csDetalhes\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFTP",
+      "evento": "Init",
+      "linhas": 34,
+      "codigoOriginal": "Parameters pcProd, pdProd\n\n=DoDefault()\n\nThisform.fcProd = pcProd\n\nSelect .f. as lMarca, *  ;\n  From csDetalhes ;\n  Into Cursor csSelekTon ReadWrite\n\nSelect csSelekton\nIndex On Str(Ordems,2)+Grupos Tag OrdGru\nGo Top\n\nWith ThisForm\n\t.getCpro.value = pcProd\n\t.getDpro.value = pdProd\n\n\tWith .GrdProc\n\t\t.RecordSource          = 'csSelekton'\n\t\t.RecordSourceType      = 1\n\t\t.Column1.ControlSource = 'csSelekton.lmarca'\n\t\t.Column2.ControlSource = 'csSelekton.Ordems'\n\t\t.Column3.ControlSource = 'csSelekton.G... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFTP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "If (ThisForm.OptTpRel.Value = 1) && Reduzida\n\tReport Form SigReFtp To Printer Prompt NoConsole\nElse \t\t\t\t\t\t\t && Expandido (Grande)\n\tReport Form SigReFt1 To Printer Prompt NoConsole\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFTP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "If (ThisForm.OptTpRel.Value = 1) && Reduzida\n\tReport Form SigReFtp To Printer\nElse \t\t\t\t\t\t     && Expandido (Grande)\n\tReport Form SigReFt1 To Printer\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFTP.GrdProc",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Eof()\n   Skip \n   Skip -1\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFTP.GrdProc",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "Lparameters nColIndex\n\nLocal lcArquivo\n\nlcArquivo = Sys(2023) + '\\SigrModP.Jpg'\n\nWith ThisForm\n\tWith ThisForm\n\t\tClear Resources\n\t\t.ImgFigJpg.Picture = ''\n\t\t.ImgFigJpg.Visible = .f.\n\n\t\t* Figura no Campo Memo\n\t\tIf Not Empty(csSelekTon.FigProcs) And Not IsNull(csSelekTon.FigProcs)\n\t\t\tIf (StrToFile(csSelekTon.FigProcs, lcArquivo) > 0)\n\t\t\t\t.ImgFigJpg.Picture = (lcArquivo)\n\t\t\t\t.ImgFigJpg.Visible = .t.\n\t\t\tEndIf\n\t\tEndIf\n\tEndWith\n\n\t.Obs.Refresh\n\t.Refresh\nEndWith\n* Fim ************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFTP.GrdProc.Column1.Check1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Replace csSelekTon.lMarca With This.Value In csSelekTon\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFTP.cmdSel",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Replace All lMarca With .t. In csSelekTon\nGo Top In csSelekTon\nThisForm.Refresh\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFTP.CmdApg",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Replace All lMarca With .f. In csSelekTon\nGo Top In csSelekTon\nThisForm.Refresh\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREFTP.Init",
+      "queryOriginal": "Select .f. as lMarca, *  ; From csDetalhes ; Into Cursor csSelekTon ReadWrite",
+      "tabelas": "csDetalhes",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csDetalhes"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,21 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\sigtosenBO.prg",
+    "timestamp":  "2026-04-15T14:07:35",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1102,
+                          "Original":  "loc_lObrigNova = (NVL(crsigcdusu1.ObrigSenhas, 0) = 1) AND ;",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1178,
+                          "Original":  "loc_lAtivo = (NVL(crParam2.PafEcfs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(crParam2.PafEcfs)=\"L\" / loc_lAtivo = ... / ELSE / loc_lAtivo = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  2
+}

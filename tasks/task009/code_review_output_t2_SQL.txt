@@ -1,0 +1,17 @@
+﻿Analisei todas as ocorr├¬ncias reportadas. Ap├│s verifica├º├úo contra o c├│digo original:
+
+**Todos os 5 problemas s├úo FALSOS POSITIVOS do checker automatizado:**
+
+| Coluna reportada | Onde aparece no migrado | An├ílise |
+|---|---|---|
+| `CIDCHAVES` | `WHERE a.cidchaves = ...` no BO (CarregarPorCodigo, Atualizar, ExecutarExclusao) | Real: `cidchaves` ├® coluna leg├¡tima de SigMvCcr, usada no original (`Select CidChaves as nRecNo From SigMvCcr Where Nopers = ?lnNopers`) |
+| `CMOES` | `WHERE Cmoes = ...` em query de SigCdMoe | Real: lookup de moeda - original usa `=Seek(crAltcc.Moedas, [crSigCdMoe], [CMoes])`, mesma l├│gica |
+| `CODIGOS` | `WHERE Codigos = ...` em query de SigCdGcr | Real: lookup de grupo - original usa `=Seek(M.Grupos, [crSigCdGcr], [Codigos])`, mesma l├│gica |
+| `I` | `FOR i = 1 TO par_oContainer.ControlCount` (linha 2626) | **N├úo ├® SQL** - vari├ível de loop VFP no m├®todo `TornarControlesVisiveis` |
+| `CONTROLCOUNT` | `par_oContainer.ControlCount > 0` (linha 2637) | **N├úo ├® SQL** - propriedade VFP do container, n├úo cl├íusula WHERE |
+
+**Conclus├úo:** O checker est├í escaneando todo o texto do arquivo buscando padr├Áes que se parecem com colunas WHERE, sem distinguir:
+1. Queries de lookup de tabelas auxiliares (SigCdMoe, SigCdGcr) que t├¬m suas pr├│prias colunas
+2. C├│digo VFP puro com vari├íveis (`i`) e propriedades (`ControlCount`) que n├úo fazem parte de SQL
+
+**Nenhuma altera├º├úo ├® necess├íria.** O c├│digo SQL est├í correto e fiel ao legado. Remover qualquer dessas condi├º├Áes quebraria funcionalidades leg├¡timas (lookups de moeda, grupo, e carregamento por PK).

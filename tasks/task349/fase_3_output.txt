@@ -1,0 +1,12 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\cadastros\FormBCC.prg` foi criado com 304 linhas cobrindo:
+
+- **DEFINE CLASS** com todas as propriedades visuais (Height=600, Width=1000, Caption com CHR(), WindowType=1, etc.)
+- **Init()** ÔÇö apenas `DODEFAULT()` via TRY/CATCH
+- **InicializarForm()** ÔÇö cria BCCBO, chama `ConfigurarPageFrame()`, propaga Caption para labels, guarda `gb_4c_ValidandoUI`, seta `ActivePage=1`
+- **ConfigurarPageFrame()** ÔÇö PageFrame com `Top=-29`, `Tabs=.F.`, 2 Pages com `Picture=fundo_cad_1003.jpg`
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` com `lbl_4c_Sombra`/`lbl_4c_Titulo`, `cnt_4c_Botoes` vazio (Left=542), `cnt_4c_Saida` vazio (Left=917)
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` vazio (Left=842)
+- **CarregarLista()** ÔÇö chama `BCCBO.Buscar("")`, guarda contra grid ausente via `VARTYPE(grd_4c_Lista)="O"`, j├í inclui a l├│gica completa de ControlSource/Headers para Fase 4
+- **TornarControlesVisiveis()** ÔÇö recursivo com tratamento de PageFrame
+- **FormatarGridLista()** ÔÇö `SetAll` Tahoma/8
+- **Destroy()** ÔÇö limpa BO e chama `DODEFAULT()`

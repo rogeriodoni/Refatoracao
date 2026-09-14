@@ -1,0 +1,22 @@
+﻿The code structure is correct. Phase 6/8 is complete. Here's what was added:
+
+**`ConfigurarPaginaDados()`** ÔÇö 4 container objects with all their sub-controls:
+- `cnt_4c_Container4` (Top=298): `txt_4c_Prdz` (Produzido)
+- `cnt_4c_Container3` (Top=330): `txt_4c_PTrab` + `txt_4c_Pfalha` (Trabalhado/Falha)
+- `cnt_4c_Container1` (Top=362): `txt_4c_pesob`, `txt_4c_ifor` (LostFocusÔåÆ`ValidarIfor`), `txt_4c_tpmat` (LostFocusÔåÆ`ValidarTpmat`), `txt_4c_dfor` (LostFocusÔåÆ`ValidarDfor`)
+- `cnt_4c_Container2` (Top=423): `txt_4c_Totccb` + `txt_4c_totscb` (both LostFocusÔåÆ`AtualizarBaixas`)
+
+**`BOParaForm()`** ÔÇö maps all BO properties to the new container fields; calls `AjustarContainersPorTipo()` + `AjustarPrdzReadOnly()` after loading
+
+**`FormParaBO()`** ÔÇö transfers all container field values back to BO; derives `this_lBaixas` from Totccb/totscb values
+
+**`HabilitarCampos()`** ÔÇö enables/disables all container fields based on `par_lHabilitar`
+
+**`AjustarContainersPorTipo()`** ÔÇö now includes `cnt_4c_Container4` (enabled for Fundi├º├úo, same as Container3)
+
+**5 new methods:**
+- `ValidarIfor()` ÔÇö lookup SigCdCli by IClis, fills `txt_4c_dfor`
+- `ValidarDfor()` ÔÇö lookup SigCdCli by RClis (only when ifor is empty), fills `txt_4c_ifor`
+- `ValidarTpmat()` ÔÇö lookup SigOpOpt WHERE Situas=3 by Cods
+- `AtualizarBaixas()` ÔÇö updates `this_lBaixas`; blocks Container1 fields when both totals are non-zero
+- `AjustarPrdzReadOnly()` ÔÇö `txt_4c_Prdz` editable only when both CdGrupo and CdConta are empty

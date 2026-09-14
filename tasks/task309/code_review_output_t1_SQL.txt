@@ -1,0 +1,43 @@
+﻿Ap├│s an├ílise detalhada, todos os 4 problemas reportados s├úo **falsos positivos** do scanner. Veja a verifica├º├úo:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### Query principal (BuscarOcorrencias vs original legado)
+
+**Original legado:**
+```foxpro
+[Select a.*, b.descs from SigClLan a, SigCcCco b where a.grucontas='...'] + [' and a.cocos = b.cods]
+```
+
+**Migrado (linha 100-104 do BO):**
+```foxpro
+"SELECT a.grupos, a.contas, a.cocos, a.cidchaves, a.grucontas, b.descs" + ...
+" FROM SigClLan a LEFT JOIN SIGCCCCO b ON b.cods = a.cocos" +
+" WHERE a.grucontas = " + EscaparSQL(par_cGruContas)
+```
+
+Ô£à **Correto** ÔÇö a condi├º├úo de join `a.cocos = b.cods` foi movida para `ON b.cods = a.cocos` (forma moderna e equivalente). O `WHERE` da query principal usa apenas `grucontas`, exatamente como o original.
+
+---
+
+### As 4 colunas flagadas est├úo em SQL de OUTRAS tabelas/contextos
+
+| Coluna | Onde aparece no migrado | Contexto | Correto? |
+|--------|------------------------|----------|----------|
+| `CODS` | `WHERE cods = ...` em `SELECT FROM SIGCCCCO` (BO linha 134) | Mesma tabela do join original ÔÇö separada em lookup pr├│prio. `b.cods` j├í existia no WHERE original | Ô£à |
+| `CIDCHAVES` | `WHERE cidchaves = ...` em `CarregarPorCodigo`, `Atualizar`, `ExecutarExclusao` | Chave prim├íria de SigClLan (confirmada no INSERT legado: `Insert Into crSigClLan (..., cIdChaves, ...)`). Padr├úo de CRUD por PK da arquitetura | Ô£à |
+| `CODIGOS` | `WHERE Codigos = ...` em `SELECT FROM SigCdGcr` (Form linhas 992, 1053) | Tabela diferente ÔÇö lookup de descri├º├úo de grupo. `Codigos` ├® PK de SigCdGcr | Ô£à |
+| `ICLIS` | `WHERE Iclis = ...` em `SELECT FROM SigCdCli` (Form linhas 1016, 1111) | Tabela diferente ÔÇö lookup de descri├º├úo de conta. `Iclis` ├® PK de SigCdCli | Ô£à |
+
+---
+
+## Diagn├│stico
+
+O scanner comparou **todas** as colunas em WHEREs de **todos** os SQLs do arquivo contra o WHERE da **query principal** do legado (`SigClLan`). Como `CODS/CIDCHAVES/CODIGOS/ICLIS` n├úo aparecem no WHERE dessa query espec├¡fica, foram flagadas como inventadas ÔÇö mas na pr├ítica est├úo em queries de tabelas completamente diferentes.
+
+**Nenhuma corre├º├úo necess├íria.** O c├│digo SQL est├í correto:
+- Query principal usa `WHERE grucontas = ...` (id├¬ntico ao original)
+- As demais colunas s├úo PKs v├ílidas nas suas respectivas tabelas
+- Nenhum filtro foi inventado na tabela `SigClLan`

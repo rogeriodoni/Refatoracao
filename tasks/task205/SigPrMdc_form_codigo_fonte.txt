@@ -1,0 +1,1123 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrMdc.SCX
+* Data/Hora: 03/07/2026 17:59:46
+* Total de registros: 28
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRMDC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRMDC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRMDC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRMDC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Commandgroup1
+  Parent: SIGPRMDC
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Commandgroup3
+  Parent: SIGPRMDC
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cntResult
+  Parent: SIGPRMDC
+  Class: container
+  BaseClass: container
+
+Objeto: Say5
+  Parent: SIGPRMDC.cntResult
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntBarra
+  Parent: SIGPRMDC.cntResult
+  Class: container
+  BaseClass: container
+
+Objeto: shpBarra
+  Parent: SIGPRMDC.cntResult.cntBarra
+  Class: shape
+  BaseClass: shape
+
+Objeto: lblPorcento
+  Parent: SIGPRMDC.cntResult.cntBarra
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getArquivo
+  Parent: SIGPRMDC.cntResult
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGPRMDC.cntResult
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grade
+  Parent: SIGPRMDC
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRMDC.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRMDC.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRMDC.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRMDC.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Chk_DelCT
+  Parent: SIGPRMDC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: btnIncluir
+  Parent: SIGPRMDC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnExcluir
+  Parent: SIGPRMDC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Exporta
+  Parent: SIGPRMDC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnProcessar
+  Parent: SIGPRMDC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnSair
+  Parent: SIGPRMDC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkReps
+  Parent: SIGPRMDC
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 120
+  Left = 27
+  Width = 503
+  Height = 210
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 340
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Muda Conta"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  Name = "SIGPRMDC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 0
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 110
+  Left = 329
+  SpecialEffect = 1
+  Top = 8
+  Width = 331
+  TabIndex = 11
+  BorderColor = 136,189,188
+  ZOrderSet = 1
+  Themes = .F.
+  Name = "Commandgroup1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.Commandgroup3
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 0
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 110
+  Left = 703
+  SpecialEffect = 1
+  Top = 8
+  Width = 90
+  TabIndex = 10
+  BorderColor = 136,189,188
+  ZOrderSet = 1
+  Themes = .F.
+  Name = "Commandgroup3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.cntResult
+------------------------------------------------------------
+  Top = 112
+  Left = 393
+  Width = 237
+  Height = 146
+  SpecialEffect = 0
+  TabIndex = 7
+  BackColor = 255,255,255
+  Name = "cntResult"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.cntResult.Say5
+------------------------------------------------------------
+  Caption = "Arquivo/Campo :"
+  Left = 7
+  Top = 9
+  TabIndex = 4
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.cntResult.cntBarra
+------------------------------------------------------------
+  Top = 116
+  Left = 5
+  Width = 224
+  Height = 21
+  TabIndex = 5
+  Name = "cntBarra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.cntResult.cntBarra.shpBarra
+------------------------------------------------------------
+  Top = 1
+  Left = 1
+  Height = 19
+  Width = 222
+  BackColor = 0,128,255
+  BorderColor = 100,100,100
+  Name = "shpBarra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.cntResult.cntBarra.lblPorcento
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "0 %"
+  Left = 104
+  Top = 4
+  TabIndex = 18
+  ForeColor = 255,255,255
+  Name = "lblPorcento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.cntResult.getArquivo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Enabled = .F.
+  Format = "K!"
+  Height = 24
+  Left = 7
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 26
+  Width = 222
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 4
+  Name = "getArquivo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.cntResult.Say1
+------------------------------------------------------------
+  Caption = "Progresso :"
+  Left = 7
+  Top = 100
+  TabIndex = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.Grade
+------------------------------------------------------------
+  ColumnCount = 2
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 18
+  Height = 201
+  Left = 170
+  RecordSource = "csContas"
+  RowHeight = 18
+  ScrollBars = 2
+  TabIndex = 6
+  Top = 111
+  Width = 213
+  Name = "Grade"
+  Column1.ControlSource = "csContas.ContaAnt"
+  Column1.Width = 90
+  Column1.Name = "Column1"
+  Column2.ControlSource = "csContas.ContaNov"
+  Column2.Width = 90
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta Antiga"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.Grade.Column1.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  ControlSource = "csContas.ContaAnt"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta Nova"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.Grade.Column2.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  ControlSource = "csContas.ContaNov"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.Chk_DelCT
+------------------------------------------------------------
+  Top = 278
+  Left = 393
+  Height = 15
+  Width = 190
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Apagar a Conta Antiga do Cadastro"
+  Value = 0
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Chk_DelCT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.btnIncluir
+------------------------------------------------------------
+  Top = 3
+  Left = 425
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "\<Incluir"
+  TabIndex = 1
+  Name = "btnIncluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.btnExcluir
+------------------------------------------------------------
+  Top = 3
+  Left = 500
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "\<Excluir"
+  TabIndex = 2
+  Name = "btnExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.Exporta
+------------------------------------------------------------
+  Top = 3
+  Left = 575
+  Picture = ..\framework\imagens\geral_multiplos_60.jpg
+  Caption = "I\<mportar"
+  TabIndex = 3
+  Name = "Exporta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.btnProcessar
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  TabIndex = 4
+  Name = "btnProcessar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.btnSair
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 5
+  Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMDC.chkReps
+------------------------------------------------------------
+  Top = 297
+  Left = 393
+  Height = 15
+  Width = 168
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Trocar Apenas Representantes"
+  Value = 0
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "chkReps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRMDC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE trocarreps
+------------------------------------------------------------
+PROCEDURE trocarreps
+Select csContas
+Scan
+	lcUpdate = [Update SigCdCli ] + ;
+				  [Set ContaVens = '] + csContas.ContaNov + [' ] + ;
+				[Where ContaVens = '] + csContas.ContaAnt + [']
+
+	lnErro = ThisForm.PodataMgr.SqlExecute(lcUpdate,[])
+	If (lnErro < 1)
+		If MessageBox([Falha ao Tentar Trocar a Conta "] + Alltrim(csContas.ContaAnt) + ["] + Chr(13) + ;
+					  [Deseja Tentar Novamente?], 4+32+256, [Atenção!!!]) = 6
+			Select CsContas
+			Skip -1
+			Loop
+		Else
+			Exit
+		Endif
+	EndIf
+EndScan
+			
+If (lnErro < 1)
+	ThisForm.poDataMgr.RollBack()
+Else
+	ThisForm.poDataMgr.Commit()
+	Select csContas
+	Scan
+		=fGravarLog([C], ThisForm.Name, [INSERIR], [REPRESENTANTE DE : ] + csContas.ContaAnt + [ ] + ;
+					  [PARA : ] + csContas.ContaNov, Iif(Type('m.usuar')=='C',m.usuar,''))
+	EndScan
+EndIf
+
+Return Not (lnErro < 1)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.PodataMgr.Release
+DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor csContas (ContaAnt c(10), ContaNov c(10))
+Index On ContaAnt + ContaNov Tag Duplica
+Index On ContaAnt Tag ContaAnt
+Index On ContaNov Tag ContaNov
+Set Order To
+Insert Into csContas(ContaAnt, ContaNov) Values ('', '')
+
+lcArquivo = Sys(5)+Sys(2003)+'\ArqDBF'
+If Not File(lcArquivo+'.dbf')
+	MessageBox('O ArqDBF não está no diretório do Sistema!!!',0+48,'')
+	Return
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pCheckCad
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.Checkcadpro = pCheckCad
+
+With ThisForm
+	.podatamgr = CreateObject('fSqlConector')
+EndWith
+
+ThisForm.PodataMgr.Cursorquery('SigCdPam','CrSigCdPam',.f.,.f.)
+
+With ThisForm.Grade
+	.ColumnCount = 2
+	.AllowHeaderSizing = .F.
+	.AllowRowSizing = .F.
+	.DeleteMark = .F.
+	.HeaderHeight = 18
+	.RecordSource = "csContas"
+	.RowHeight = 18
+	.ScrollBars = 2
+	.TabIndex = 1
+	.Column1.ControlSource = "csContas.ContaAnt"
+	.Column1.Width = 90
+	.Column2.ControlSource = "csContas.ContaNov"
+	.Column2.Width = 90
+EndWith
+
+ThisForm.cntResult.Visible = .f.
+ThisForm.Grade.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMDC.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not ThisForm.Checkcadpro
+	If Not Empty(This.Value)
+		loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+							   'crListaRemota', 'Iclis', This.Value, 'Seleção', 1000)
+
+		If Not loLista.plAchouRegistro
+			loLista.mAddColuna('Iclis', '', 'Código')
+			loLista.mAddColuna('Rclis', '', 'Descrição')
+			loLista.mAddColuna('Grupos', '', 'Grupo')
+			loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+			loLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+			loLista.Show()
+		EndIf
+		
+		This.Value = crListaRemota.Iclis
+		Use In crListaRemota
+	Else
+		This.Value = ''
+	EndIf
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMDC.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'Iclis', This.Value, 'Seleção', 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Iclis', '', 'Código')
+		loLista.mAddColuna('Rclis', '', 'Descrição')
+		loLista.mAddColuna('Grupos', '', 'Grupo')
+		loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+		loLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Iclis
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMDC.Chk_DelCT
+* Classe: checkbox (Base: checkbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.chkReps.Value = 0)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMDC.btnIncluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csContas
+If !Empty(csContas.ContaAnt) .And. !Empty(csContas.ContaNov)
+	Append Blank
+Endif
+ThisForm.Grade.Refresh
+ThisForm.Grade.Column1.Text1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMDC.btnExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csContas
+Delete
+ThisForm.Grade.Refresh
+ThisForm.Grade.Column1.Text1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMDC.Exporta
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+gcFileExcel = GetFile('XLS')
+
+If Empty(gcFileExcel)
+	MessageBox('Arquivo para Importação não informado!!!',0+16,'')
+	Return .f.
+Endif
+
+Create Cursor CrImporta (ContaAnt c(10), ContaNov c(10))
+Index On ContaAnt Tag Contas
+
+If Not Empty(gcFileExcel) And Not File(gcFileExcel)
+	=MessageBox('O Arquivo [' + Alltrim(gcFileExcel) + ']' + Chr(13) + ;
+				'Não Foi Encontrado ou o Acesso Foi Negado!!! Verifique!!!', 0+48, '')
+	Return 0
+EndIf
+
+Select CrImporta
+Append From (gcfileexcel) type xls
+
+Select CrImporta
+x=Reccount()
+w=0
+Scan
+
+	w=w+1
+	Wait Window 'Aguarde Importando Contas!'+Str(x-w) Nowait
+
+	Scatter Memvar
+	lcSql = [Select Iclis From SigCdCli Where Iclis = ']+CrImporta.ContaAnt+[']
+	If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalCli') < 1
+		Loop
+	Endif
+
+	If Empty(CrImporta.ContaAnt) Or (Reccount('LocalCli') = 0 And Not ThisForm.Checkcadpro )
+		Loop
+	Endif
+
+	If Empty(CrImporta.ContaNov)
+	   Loop
+	Endif
+
+	If CrImporta.ContaAnt = CrImporta.ContaNov
+	   loop
+	EndIf
+	
+	Select csContas
+	Set Order To Duplica
+	If Not Seek(m.ContaAnt + m.ContaNov )
+		Append Blank
+		Gather Memvar
+	Endif
+EndScan
+Select CsContas
+Set Order To 
+Go bott
+ThisForm.Grade.Refresh
+Wait Clear
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMDC.btnProcessar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local llFecha, lnCnt, lcArq, lcCpo, lnNumero
+
+Select csContas
+Go Top
+If Eof()
+   Messagebox('Não Existem Contas a Serem Processadas!!!', 0+48,'Atenção!!!')
+   ThisForm.Grade.Column1.Text1.SetFocus
+   Return
+Endif
+
+Select csContas
+Scan
+	If Empty(csContas.ContaAnt)
+	   Messagebox('Existe Uma Conta Antiga Inválida!!!', 0+48,'Atenção!!!')
+	   ThisForm.Grade.Column1.Text1.SetFocus
+	   Return		
+	Endif
+
+	If Empty(csContas.ContaNov)
+	   Messagebox('Existe Uma Conta Nova Inválida!!!', 0+48,'Atenção!!!')
+	   ThisForm.Grade.Column2.Text1.SetFocus
+	   Return		
+	Endif
+
+	If csContas.ContaAnt = csContas.ContaNov
+	   Messagebox('Existe Uma Conta Antiga e Uma Conta Nova Com o Mesmo Código!!!', 0+48,'Atenção!!!')
+	   ThisForm.Grade.Column1.Text1.SetFocus
+	   Return		
+	Endif
+EndScan
+
+If MessageBox('Confirma a Troca das Contas ?', 4+32+256, 'Confirmação do Processamento!!!') # 6
+	ThisForm.btnSair.SetFocus
+	Return
+Endif
+
+llOks = .t.
+
+If (ThisForm.chkReps.Value = 1) && Trocar Apenas Representantes
+	llOks = ThisForm.TrocarReps()
+Else
+	****   Processamento dos Arquivos   *******************************
+	ThisForm.cntResult.Visible = .t.
+	ThisForm.cntResult.cntBarra.ShpBarra.Width = 0
+	lnNumero = 0
+
+	Select Arquivos, Campos ;
+	From ArqDBF ;
+	Where ( Tamanhos=10 Or Upper(Campos) = 'CLIFORS' ) And ;
+	   Upper(Tipos)='C' And ;
+	   not Empty(Dbcs) And ;
+	   Arquivos # 'ArqDBF.DBF' And ;
+	   Upper(Arquivos) # 'SIGTEMPC.DBF' And ;
+	   Upper(Arquivos) # 'SIGCDCE.DBF' And ;
+	   Upper(Arquivos) # 'SIGCDCEE.DBF' And ;
+	   Upper(Arquivos) # 'SIGALERT.DBF' And ;
+	   Inlist(Upper(Subs(Arquivos,1,3)), 'SIG') And ;
+	   (At('CON', Upper(Campos)) # 0 Or ;
+	   At('IFOR', Upper(Campos)) # 0 Or ;
+	   At('ESTOS', Upper(Campos)) # 0 Or ;
+	   At('CLI', Upper(Campos)) # 0 Or ;
+	   At('VEN', Upper(Campos)) # 0 Or ;
+	   At('RESP', Upper(Campos)) # 0 ) And ;
+	   At('USU', Upper(Campos)) = 0 And ;
+	   At('GR', Upper(Campos)) = 0 And ;
+	   At('NCONTAS', Upper(Campos)) = 0 And ;
+	   At('NRCONS', Upper(Campos)) = 0 And ;
+	   At('CCUSTOS', Upper(Campos)) = 0 ;
+	Order By Arquivos ;
+	Into Cursor csCampos
+	Index On Arquivos + Campos Tag ArqCpo
+
+	Select Distinct Arquivos ;
+	  From csCampos ;
+	 Order By Arquivos ;
+	  Into Cursor csArquivos
+
+	lnErro = 1
+	lnRec  = 0
+	Select csArquivos
+	lnCnt = Reccount()
+	ThisForm.cntResult.cntBarra.lblPorcento.Caption = '0 %'
+	ThisForm.cntResult.cntBarra.ShpBarra.Width = 0
+	Scan 
+		lcArq = Alltrim(StrTran(csArquivos.Arquivos,'.DBF',''))
+
+		ThisForm.cntResult.getArquivo.Value = lcArq
+
+		Select csCampos
+		Seek csArquivos.Arquivos
+		Scan While csArquivos.Arquivos = csCampos.Arquivos .and. !Eof()
+			lcCpo = Alltrim(csCampos.Campos)
+			ThisForm.cntResult.getArquivo.Value = lcArq + ' / ' + lcCpo
+			ThisForm.cntResult.getArquivo.Refresh
+			Select csContas
+			Scan
+				
+				If lcArq == 'SIGMVCCR' And lcCpo = 'CONTAS'
+					lcWhere = [Select Distinct Emps, Grupos, Contas, Moedas  From SigMvCcr ]+;
+							[ Where ]+lcCpo+[ = ']+Padr(csContas.ContaAnt,10)+[']
+					=ThisForm.PodataMgr.SqlExecute(lcWhere,'CrMccr')
+					Select CrMccr
+					Scan
+						=fRecalculaS( crMccr.Grupos, csContas.ContaNov, Ctod('01/01/1900'), crMccr.Moedas, ThisForm.Podatamgr  )
+					EndScan
+				EndIf
+				If ( lcArq == 'SIGCDCLI' ) And  lcCpo = 'ICLIS' And ;
+					ThisForm.PodataMgr.CursorQuery('SigCdCli','CrTmpCli','Iclis',CsContas.ContaNov,[Iclis])
+					If ThisForm.Chk_DelCT.Value = 1
+						lcSql = [Delete From SigCdCli Where Iclis = ']+CsContas.ContaAnt+[']
+						ThisForm.Podatamgr.SqlExecute(lcSql,'')
+					Endif
+					Loop
+				EndIf
+				
+				If ( lcArq == 'SIGMVSLC' ) Or ( lcArq == 'SIGMVEST' )
+					lcDelete = [Delete From ]+lcArq+[ Where ]+lcCpo+[ = ']+csContas.ContaAnt+[']
+					lnErro = ThisForm.PodataMgr.SqlExecute(lcDelete,'')
+					If lnErro < 1
+						Exit
+					EndIf
+				Else
+					If lcArq == 'SIGMVCCR' And lcCpo = 'CONTAS'
+						lcUpdate = [Update ]+lcArq+[ Set ]+lcCpo+[ = ']+csContas.ContaNov+[', GruConMoes = Grupos + ']+csContas.ContaNov+['+Moedas Where ]+lcCpo+[ = ']+csContas.ContaAnt+[']
+					Else
+						If lcArq == 'SIGMVHST' And lcCpo = 'ESTOS'
+							lcWhere = [Select Distinct Emps, Grupos, Estos, Cpros, CodCors, CodTams From SigMvHst ]+;
+									[ Where ]+lcCpo+[ = ']+Padr(csContas.ContaAnt,10)+[']
+							=ThisForm.PodataMgr.SqlExecute(lcWhere,'CrHis')
+							Select CrHis
+							Scan
+								=fRecalculaP( CrHis.Emps, crhis.grupos, csContas.ContaNov, crhis.cpros, Ctod('01/01/1900'), crhis.codcors, crhis.codtams, ThisForm.Podatamgr )
+								=fRecalculaC( CrHis.Emps, CrHis.Cpros, Ctod('01/01/1900'), ThisForm.Podatamgr )
+							EndScan
+							lcUpdate = [Update ]+lcArq+[ Set ]+lcCpo+[ = ']+csContas.ContaNov+[',EmpGruEsts = Emps + Grupos + ']+CsContas.ContaNov+[' Where ]+lcCpo+[ = ']+csContas.ContaAnt+[']
+						Else
+							If lcArq == 'SIGCDCLH' And lcCpo = 'ICLIS'
+								lcUpdate = [Update ]+lcArq+[ Set ]+lcCpo+[ = ']+csContas.ContaNov+[', GruContas = Grupos + ']+csContas.ContaNov+[' Where ]+lcCpo+[ = ']+csContas.ContaAnt+[']
+							Else
+								lcUpdate = [Update ]+lcArq+[ Set ]+lcCpo+[ = ']+csContas.ContaNov+[' Where ]+lcCpo+[ = ']+csContas.ContaAnt+[']
+							Endif
+						EndIf
+					Endif
+					lnErro = ThisForm.PodataMgr.SqlExecute(lcUpdate,'')
+					If lnErro < 1
+						If MessageBox('Falha de Conexao!!!,Tentar Novamente?',4+32+256,'') = 6
+							Select CsContas
+							Skip -1
+							Loop
+						Else
+							Exit
+						Endif
+					EndIf
+				Endif
+			EndScan
+			
+			If lnErro < 1
+				Exit
+			Endif
+
+		EndScan
+
+		If lnErro < 1
+			Exit
+		EndIf
+		
+		Select csArquivos
+		lnRec  = lnRec + 1
+		ThisForm.cntResult.cntBarra.ShpBarra.Width = Int((lnRec * 100) / lnCnt) * 2
+		ThisForm.cntResult.cntBarra.lblPorcento.Caption = Alltrim(Str(Int((lnRec * 100) / lnCnt))) + ' %'
+		ThisForm.cntResult.cntBarra.Refresh
+
+	EndScan
+
+	If lnErro > 0 And Not fRecalculaS( .t., ThisForm.Podatamgr, .t.)
+		lnErro = -1
+	EndIf
+	If lnErro > 0 And Not fRecalculaP(.t., ThisForm.Podatamgr )
+		lnErro = -1
+	EndIf
+	If lnErro > 0 And Not fRecalculaC(.t.,.f.,.f.,ThisForm.Podatamgr)
+		lnErro = -1
+	Endif
+
+	If lnErro < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		=ThisForm.PodataMgr.RollBack()
+		ThisForm.cntResult.Visible = .t.
+		ThisForm.cntResult.cntBarra.ShpBarra.Width = 0
+		ThisForm.cntResult.cntBarra.Refresh
+		Return 0
+	Else
+		=ThisForm.PodataMgr.Commit()
+		Select csContas
+		Scan
+			= fGravarLog('C',ThisForm.Name,'INSERIR', 'DE:'+CsContas.ContaAnt+' '+Iif(ThisForm.Chk_DelCT.Value=1,'(Excluida) ','')+'PARA:'+ CsContas.ContaNov ,Iif(Type('m.usuar')=='C',m.usuar,''))
+		EndScan
+	EndIf
+
+	Use In csCampos
+	Use In csArquivos
+EndIf
+
+If llOks
+	=Messagebox('Todas as Contas Foram Alteradas!!!',0+48,'Processamento Encerrado!!!')
+Else
+	=Messagebox('As Contas Não Foram Alteradas!!!',0+48,'Processamento Encerrado!!!')
+EndIf
+
+ThisForm.cntResult.Visible = .f.
+
+Select csContas
+Set Order To
+Zap
+Append Blank
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMDC.btnSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMDC.chkReps
+* Classe: checkbox (Base: checkbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If (This.Value = 1)
+	ThisForm.chk_DelCT.Value = 0
+EndIf
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRMDC
+RESERVED3 (ClassInfo): checkcadpro
+podatamgr
+*trocarreps 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

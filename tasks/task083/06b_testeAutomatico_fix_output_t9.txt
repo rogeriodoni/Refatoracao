@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. O bug estava em `ConfigurarCampos()`: o checkbox do `grd_4c_Orcs.Column1` foi adicionado como `"check12"` mas `CurrentControl = "Check1"` e todos os `BINDEVENT` referenciavam `"Check1"` ÔÇö nome inexistente naquela coluna. Renomear o objeto para `"Check1"` resolve o erro "Expression evaluated to an illegal value" ao instanciar o form.

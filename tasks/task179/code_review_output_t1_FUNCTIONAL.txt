@@ -1,0 +1,7 @@
+﻿All 3 fixes are correctly applied. Here's a summary:
+
+**Fix 1 ÔÇö `TornarControlesVisiveis` (line 1194):** Added `INLIST` guard for `CNT_4C_CABECALHO`. When this container is encountered, the method recurses into its children (so they stay visible) then `LOOP`s ÔÇö skipping the `Visible=.T.` assignment on the container itself.
+
+**Fix 2 ÔÇö `CarregarOperacaoGrid` (lines 1304-1321):** SQLEXEC now writes to `cursor_4c_OperacoesTemp`. On first call it creates `cursor_4c_Operacoes` via `SELECT ... INTO CURSOR ... READWRITE`; on subsequent calls it `ZAP + APPEND FROM DBF()` to preserve the grid's column definitions. Temp cursor is closed immediately after.
+
+**Fix 3 ÔÇö `CarregarItensGrid` (lines 1530-1559):** Same pattern for `cursor_4c_ItensPam` / `cursor_4c_ItensPamTemp`. The `Destroy()` already closed both cursors so no change needed there.

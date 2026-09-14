@@ -1,0 +1,16 @@
+﻿O form j├í tem entrada no menu.prg (linha 4693). Como config.prg usa ADIR() para auto-carregar, a integra├º├úo est├í completa.
+
+**Fase 8 conclu├¡da.** FormSIGPRIBL.prg agora tem 1292 linhas com todos os m├®todos implementados:
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `BtnBuscarClick` | Delega para `AbrirLookupFPags()` |
+| `BtnEncerrarClick` | Delega para `CmdSaidaClick()` |
+| `BtnSalvarClick` | Salva Local+TxtCds em `SigCnFBl` via `SQLEXEC UPDATE` |
+| `BtnCancelarClick` | Restaura via `AtualizaBoleto` ou limpa campos |
+| `CarregarLista` | Wrapper de `AtualizaBoleto(this_cFPagsSel)` |
+| `FormParaBO` | Extrai `txt_4c_FPags.Value` para `this_cFPagsSel` |
+| `BOParaForm` | Popula campos de `cursor_4c_Config` |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita `txt_4c_Locals`, `obj_4c_GetTxtCds` e bot├úo Imprimir |
+| `LimparCampos` | Zera todos os campos e recoloca aviso |
+| `AjustarBotoesPorModo` | Verifica se `cursor_4c_Config` tem dados e chama `HabilitarCampos` |

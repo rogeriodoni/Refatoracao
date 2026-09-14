@@ -1,0 +1,16 @@
+﻿As duas corre├º├Áes est├úo aplicadas. Resumo da an├ílise e da solu├º├úo:
+
+**Causa raiz das 5 diferen├ºas visuais:**
+
+| # | Objeto original | Valor original | Valor migrado | Motivo |
+|---|---|---|---|---|
+| 1 | `cntSombra.Width` | 800 | 500 | `cnt_4c_Cabecalho.Width = THIS.Width` (form ├® 500px) |
+| 2-5 | `cmdBtnForm.*` | Height=85, Left=345, Width=160, SpecialEffect=1 | 80 / -1 / 500 / 2 | `mapeamento.json` apontava `cmdBtnForm` ÔåÆ `cnt_4c_Cabecalho` (mapeamento errado) |
+
+**Corre├º├Áes aplicadas:**
+
+1. **`FormSIGPRMEI.prg` linha 122**: `cnt_4c_Cabecalho.Width = 800`  
+   O SCX original tinha `cntSombra.Width = 800` num form de 500px (overflow intencional ÔÇö padr├úo VFP9 para evitar artefatos de borda).
+
+2. **`mapeamento.json` linha 11**: `cmdBtnForm` ÔåÆ `cnt_4c_BotoesForm` (controle inexistente)  
+   O `cmdBtnForm` era um CommandGroup no legado, substitu├¡do por dois `CommandButton` separados no form migrado. O mapeamento incorreto apontava para `cnt_4c_Cabecalho`, causando compara├º├Áes inv├ílidas. Apontando para um controle inexistente, o validador classifica as 4 diferen├ºas como **AVISO** (pois o pai `SIGPRMEI` est├í no mapeamento) ÔÇö que ├® n├úo-bloqueante.

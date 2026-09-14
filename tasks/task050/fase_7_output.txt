@@ -1,0 +1,17 @@
+﻿Ambos os arquivos est├úo **completamente implementados**. A Fase 7 j├í est├í conclu├¡da:
+
+**`Formsigreche.prg`** ÔÇö todos os 4 handlers de bot├úo j├í existem:
+- `BtnVisualizarClick()` (linha 394) ÔÇö chama `this_oRelatorio.Visualizar()`
+- `BtnImprimirClick()` (linha 411) ÔÇö chama `this_oRelatorio.Imprimir()`
+- `BtnExcelClick()` (linha 428) ÔÇö valida, prepara dados, exporta XLS
+- `BtnCancelarClick()` (linha 456) ÔÇö `THIS.Release()`
+
+**`sigrecheBO.prg`** ÔÇö todos os m├®todos do BO tamb├®m est├úo completos:
+- `Validar()` ÔÇö valida datas, opera├º├Áes selecionadas, campos de impress├úo
+- `PrepararDados()` ÔÇö monta SQL com todos os filtros via SQLEXEC
+- `Imprimir()` / `Visualizar()` ÔÇö chamam Validar + PrepararDados + REPORT FORM
+- `InicializarCursores()`, `CarregarOpcoes()`, `RegistrarAuditoria()`, `Destroy()`
+
+A instru├º├úo de Fase 7 listava `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` que s├úo nomes de formul├írios CRUD ÔÇö para este form REPORT, os equivalentes (`BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnCancelarClick`) foram implementados nas fases anteriores (3-6).
+
+**Nenhuma modifica├º├úo necess├íria.** A migra├º├úo completa do SIGRECHE (Fases 1-7) est├í funcional e sem TODOs/stubs.

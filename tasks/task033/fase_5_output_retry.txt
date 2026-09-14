@@ -1,0 +1,8 @@
+﻿Fase 5/8 conclu├¡da. Mudan├ºas aplicadas em `C:\4c\projeto\app\forms\relatorios\FormSIGREAPR.prg`:
+
+- **Novo m├®todo `ConfigurarPaginaDados()`** (linha 323) ÔÇö cria os primeiros 11 controles de filtro (Data Inicial, Grupo+desc, Produto+desc, Linha+desc) com posi├º├Áes e propriedades completas.
+- **`ConfigurarPaginaLista()` refatorado** (linha 485) ÔÇö agora cont├®m apenas os 11 controles restantes (Fornecedor+desc, Diferen├ºas M├¡nimas Venda/Custo, Shape separador) + BINDEVENTs.
+- **`InicializarForm()` atualizado** ÔÇö chama `ConfigurarPaginaDados()` antes de `ConfigurarPaginaLista()` para que os BINDEVENTs encontrem os controles j├í criados.
+- **Header do arquivo** atualizado documentando a nova divis├úo.
+
+Verifica├º├úo: 22 `AddObject` para 22 controles ├║nicos (sem duplica├º├úo). Ambos os m├®todos populam `pgf_4c_Paginas.Page1` j├í que REPORT ├® flat (sem Page2 real). Funcionalidade preservada 100%.

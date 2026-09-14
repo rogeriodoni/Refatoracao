@@ -1,0 +1,17 @@
+﻿Tudo correto. Fase 4 conclu├¡da.
+
+**O que foi feito:**
+
+1. **Bug fix no BO** (`SIGREFXVBO.prg`): `loc_lSucesso = .T.` adicionado antes do SCAN principal em `PrepararDados()`. Sem isso, o m├®todo sempre retornava `.F.` mesmo com sucesso, impedindo qualquer gera├º├úo de relat├│rio.
+
+2. **FormSIGREFXV.prg** ÔÇö adicionados 22 m├®todos completos:
+   - `ConfigurarCamposFiltro()` ÔÇö cria na Page1 todos os 14 controles de filtro (OptionGroup Posi├º├úo, DataSaldo oculto, Moeda c├│digo/descr, Complemento Caracter├¡stica, Grande Grupo c├│digo/descr, Grupo c├│digo/descr) com BINDEVENTs de KeyPress
+   - `ConfigurarGridEstoques()` ÔÇö grid `grd_4c_Dados` com CsEstoque (Empresa/Grupo Estoque), BINDEVENT AfterRowColChange
+   - `ConfigurarContainerAguarde()` ÔÇö container "AguardeÔÇª" com visibilidade controlada durante processamento
+   - `ConfigurarBotoesBind()` ÔÇö vincula os 4 bot├Áes do cmg_4c_Botoes aos handlers
+   - `AlternarPagina()`, `LimparCampos()`, `FormParaRelatorio()`, `ValidarFormulario()`
+   - `BtnVisualizarClick()`, `BtnImprimirClick()`, `BtnExcelClick()`, `BtnEncerrarClick()`
+   - `OptRfEstoqueChange()` ÔÇö mostra/oculta data ao mudar para Retroativa
+   - 7 handlers `TeclaXxx()` (F4/Enter/Tab ativam lookup)
+   - 7 m├®todos `AbrirBuscaXxx()` via FormBuscaAuxiliar (SigCdMoe, SigPrCpP, SigCdGpr, SigCdGrp)
+   - `GrdEstoquesAfterRowColChange()` ÔÇö mant├®m linha em branco no fim do grid

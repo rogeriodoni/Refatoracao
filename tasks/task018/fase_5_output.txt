@@ -1,0 +1,28 @@
+﻿Fase 5 conclu├¡da. O arquivo `FormUfs.prg` foi atualizado com:
+
+**Altera├º├Áes feitas:**
+
+1. **`InicializarForm()`** ÔÇö adicionada chamada a `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`
+
+2. **`ConfigurarPaginaDados()` (novo m├®todo)** ÔÇö primeiros 50% dos campos da Page2:
+
+   **Bot├Áes:**
+   - `cmd_4c_Confirmar` (cadastro_salvar_60.jpg) ÔåÆ BINDEVENT para `BtnSalvarClick`
+   - `cmd_4c_Cancelar` (cadastro_cancelar_60.jpg) ÔåÆ BINDEVENT para `BtnCancelarClick`
+
+   **Campos de texto (com compensa├º├úo +29px):**
+   - `txt_4c_Estado` (UF, MaxLength=2)
+   - `txt_4c_Descr` (Descri├º├úo, MaxLength=30)
+   - `txt_4c_UFIBGES` (C├│d. IBGE, num├®rico)
+   - `txt_4c_Aicms` / `txt_4c_Bicms` / `txt_4c_AliqSB` / `txt_4c_Areduzida` (al├¡quotas com InputMask="99.99")
+   - `txt_4c_Layoutnf` (Layout NFCe, MaxLength=8)
+
+   **Labels:** `lbl_4c_Label1` a `lbl_4c_Label8` (posi├º├Áes exatas do original)
+
+   **ComboBox:** `cbo_4c_CmbIpi` com 3 itens pr├®-carregados (Tributado/Isento/Outros via `PADR(...,9)` como no legado)
+
+   **CheckBox:** `chk_4c_Fwcheckbox6` (CAT 52)
+
+   **Outros:** `shp_4c_Shape2` (separador) + `lbl_4c_SaylQ` (Gera├º├úo de Arquivos Sintegra, `Visible=.F.` como no original)
+
+**Fase 6** adicionar├í os ~18 checkboxes da se├º├úo Sintegra.

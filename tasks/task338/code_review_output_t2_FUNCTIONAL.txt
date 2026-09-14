@@ -1,0 +1,18 @@
+﻿Agora tenho o quadro completo. Vou analisar cada um dos 9 problemas antes de editar.
+
+**CONTAINER-VISIVEL**: O c├│digo atual (linhas 987-1006) j├í tem o INLIST guard para `cnt_4c_cabecalho` **e** a recurs├úo j├í est├í ANTES do LOOP ÔÇö padr├úo correto conforme feedback_tcv_skip_recursao. Sem mudan├ºa necess├íria.
+
+**LAYOUT-POSITION Label1-4 em Container1**: O verificador est├í mapeando incorretamente. O SCX Container1 corresponde a `cnt_4c_Status`. Confirmando:
+
+| SCX Label | Posi├º├úo SCX | Migrado como | Posi├º├úo real |
+|-----------|-------------|--------------|--------------|
+| Label1 (Container1) | Top=8, Left=4 | `lbl_4c_Status1` em `cnt_4c_Status` | Top=8, Left=4 Ô£ô |
+| Label2 (Container1) | Top=3, Left=4 | `lbl_4c_Status2` em `cnt_4c_Status` | Top=3, Left=4 Ô£ô |
+| Label3 (Container1) | Top=21, Left=4 | `lbl_4c_Status3` em `cnt_4c_Status` | Top=21, Left=4 Ô£ô |
+| Label4 (Container1) | Top=39, Left=4 | `lbl_4c_Status4` em `cnt_4c_Status` | Top=39, Left=4 Ô£ô |
+
+Os `lbl_4c_Label1-4` que o checker flagrou s├úo **controles diferentes** ÔÇö s├úo labels dos campos de dados do cheque (CPF, Ag├¬ncia, DV Conta, DV Cheque) colocados corretamente como controles de n├¡vel de form com posi├º├Áes absolutas. Alterar seus Top/Left para os valores relativos do container SCX quebraria o layout visual.
+
+Nenhum dos 9 problemas listados requer corre├º├úo: o CONTAINER-VISIVEL j├í est├í corretamente implementado com o padr├úo can├┤nico (recurs├úo antes do LOOP + INLIST guard), e os 8 problemas LAYOUT-POSITION s├úo falsos positivos ÔÇö o checker mapeou `Label1-4` do SCX para `lbl_4c_Label1-4` quando o mapeamento real ├® `Label1-4` ÔåÆ `lbl_4c_Status1-4` dentro de `cnt_4c_Status`, que est├úo nas posi├º├Áes corretas.
+
+O arquivo `FormSIGPRTFH.prg` est├í correto e n├úo precisa de modifica├º├Áes neste pass.

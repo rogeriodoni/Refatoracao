@@ -1,0 +1,31 @@
+﻿Feito. Aqui est├í o resumo do que foi feito:
+
+## Corre├º├úo aplicada
+
+### [CONTAINER-VISIVEL] - TornarControlesVisiveis com INLIST
+
+**Localiza├º├úo**: `Formcfo.prg`, linhas 569-576
+
+**Problema**: O checker detectou que `TornarControlesVisiveis()` n├úo usava INLIST para filtrar containers espec├¡ficos pelo nome.
+
+**Fix**: Adicionado `INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO")` ├á condi├º├úo de preserva├º├úo, para que o container `cnt_4c_Cabecalho` nunca tenha sua visibilidade alterada pelo m├®todo recursivo ÔÇö mesmo que seja chamado em um momento onde o container esteja com `Visible=.F.`:
+
+```foxpro
+IF loc_cBaseClass = "CONTAINER" AND ;
+   (!loc_oObjeto.Visible OR INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO"))
+    *-- Nao alterar: container oculto intencional ou gerenciado externamente
+```
+
+---
+
+### [LAYOUT-POSITION] ÔÇö Todos s├úo falsos positivos do checker
+
+Ap├│s verifica├º├úo do c├│digo completo, todos os 10 problemas de layout s├úo erros de mapeamento do checker:
+
+| Problema reportado | Realidade |
+|---|---|
+| `cbo_4c_Combo10` deveria estar em (315,136) | O checker confundiu "Combo1" com "Combo10" (substring match). `cbo_4c_Combo1` j├í est├í em (315,136). Mover Combo10 causaria sobreposi├º├úo. |
+| `cbo_4c_Combo2` em Top=27, Left=642 | Essa ├® a inst├óncia de **Page2** (`ConfigurarPaginaDadosPage2`). A inst├óncia de **Page1** j├í est├í corretamente em (315,380). |
+| `cbo_4c_CmbIpiI` deveria estar em Left=136 | O checker confundiu "cmbIpi" com "cbo_4c_CmbIpiI". `cbo_4c_CmbIpi` j├í est├í em Left=136. Mover CmbIpiI causaria sobreposi├º├úo. |
+| `obj_4c_Fwoption1/2` em Page1 com posi├º├Áes erradas | Checker encontrou as inst├óncias de **Page2** (Top=127/233). As inst├óncias de **Page1** j├í est├úo em (389,686) e (420,686). |
+| `lbl_4c_LblCmbFixa` deveria estar em Left=642 | O checker comparou a posi├º├úo do **combo** `cbo_4c_CmbFixa` (Left=642) com o **label** `lbl_4c_LblCmbFixa` (Left=477). O label estar ├á esquerda do combo ├® correto. |

@@ -1,0 +1,10 @@
+﻿Tr├¬s ocorr├¬ncias - uma para cada grid (grdCabec, grdItens, grdRodape). Tudo correto.
+
+**Fase 6 conclu├¡da.** Adicionei ao `Formsigprite.prg`:
+
+1. **`DataSession = 2`** ÔÇö fidelidade com o original SCX que usa datasession privada.
+2. **`SetAll("Movable", .F.)` + `SetAll("Resizable", .F.)`** nos 3 grids ÔÇö reproduz o loop `For I=1 To .ColumnCount` do `montagrades` original que impede o usu├írio de mover/redimensionar colunas.
+3. **4 novos BINDEVENTs** para `grd_4c_Cabec.Column2.Text1` e `grd_4c_Rodape.Column2.Text1` (GotFocus + LostFocus).
+4. **4 novos handlers** (`GrdCabecCol2GotFocus/LostFocus`, `GrdRodapeCol2GotFocus/LostFocus`) que armazenam e restauram o valor via `.Tag`, replicando o comportamento de estabilidade visual do original.
+
+Pr├│ximo passo: Fases 7 e 8 (integra├º├úo no config.prg e menu.prg).

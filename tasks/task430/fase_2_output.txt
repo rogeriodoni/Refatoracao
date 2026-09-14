@@ -1,0 +1,16 @@
+﻿Arquivo completo e correto. A Fase 2/8 est├í conclu├¡da.
+
+**FprBO.prg agora cont├®m todos os m├®todos CRUD:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `Init()` | PUBLIC | Configura tabela/campo chave (com TRY/CATCH) |
+| `ObterChavePrimaria()` | PUBLIC | Retorna `this_cCods` para auditoria |
+| `CarregarDoCursor()` | PROTECTED | SELECT (alias) + mapeia Cods/Descs |
+| `ValidarDados()` | PROTECTED | Valida vazio + aspas (regras do original) + duplicado no INSERT |
+| `VerificarCodigoExistente()` | PUBLIC | COUNT(*) em SigCdFip |
+| `Inserir()` | PROTECTED | INSERT com RegistrarAuditoria("INSERT") |
+| `Atualizar()` | PROTECTED | UPDATE Descs (Cods ├® PK, n├úo atualiza) com RegistrarAuditoria("UPDATE") |
+| `ExecutarExclusao()` | PROTECTED | Verifica SigCdPro.CodFinP antes de DELETE ÔÇö mensagens exatas do original (1 produto / N produtos) |
+| `Buscar()` | PUBLIC | SELECT Cods, Descs ORDER BY Cods; suporta ZAP+APPEND para cursor existente |
+| `CarregarPorCodigo()` | PUBLIC | SELECT WHERE Cods = ? + reseta `this_lNovoRegistro = .F.` |

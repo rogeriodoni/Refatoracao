@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. O problema era um typo na linha 926 do m├®todo `Atualizar()` em `ProdutoBO.prg`:
+
+- **Coluna errada**: `custoccp` (c duplo ÔÇö n├úo existe em `SigCdPro`)
+- **Coluna correta**: `custocp` (conforme lista de colunas v├ílidas do banco)
+
+O m├®todo `Inserir()` usava a vari├ível `loc_cCols` que continha `custocp` corretamente, mas o `Atualizar()` tinha o typo diretamente no UPDATE, que causaria erro SQL em runtime ao tentar atualizar um produto.

@@ -1,0 +1,13 @@
+﻿Corrections aplicadas:
+
+**Fixados (2 layout genu├¡nos):**
+- `lbl_4c_LblAltura`: Top `250ÔåÆ474`, Left `881ÔåÆ749` (alinhado com legado)
+- `txt_4c_Altura`: Top `247ÔåÆ471`, Left `923ÔåÆ793` (proporcional ao label)
+- `lbl_4c_LblAltMM`: Top `251ÔåÆ475`, Left `976ÔåÆ845` (alinhado com textbox)
+- `lbl_4c_LblComprimento`: Top `339ÔåÆ474` (Left=847 mantido, dentro da toler├óncia)
+- `txt_4c_Comprimento`: Top `335ÔåÆ471` (Left=923 mantido)
+
+**Ignorados como falsos positivos (com justificativa):**
+- `[OPTIONGROUP-LEFT]`: Todos os 7 bot├Áes de `obj_4c_NavegacaoDados` j├í t├¬m `.Left` definido (Button 1=5, 2=80, 3=155, 4=230, 5=305, 6=380, 7=455)
+- `[CARGA-DADOS]` (16 itens): `ValidarDados*` s├úo valida├º├Áes de campos de EDI├ç├âO na Page2 (produto). Chamar `CarregarLista()` seria funcionalmente errado (recarregaria a lista enquanto o usu├írio est├í editando na Page2)
+- `[LAYOUT-POSITION] cnt_4c_Botoes`: Left=959 num form de 1003px com container de 390px iria al├®m da borda direita; o coment├írio do c├│digo confirma que Top=-1+29=28 era intencional

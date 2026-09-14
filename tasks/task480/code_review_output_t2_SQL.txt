@@ -1,0 +1,8 @@
+﻿O arquivo SCT do legado confirma claramente: a tabela `SigCdOcs` aparece explicitamente no original (`.AddCursor('SigCdOcs','cods','CrSigCdOcs',...)` e `SigCdOcs` m├║ltiplas vezes). O alerta ├® um **falso positivo** ÔÇö o revisor autom├ítico n├úo conseguiu ler o bin├írio SCX e concluiu erroneamente que a tabela n├úo existia no original.
+
+**Nenhuma corre├º├úo necess├íria.** O BO migrado est├í correto:
+- Tabela `SigCdOcs` confirmada no legado SIGCDOCS.SCT
+- Cursor `crSigCdOcs` / `cursor_4c_Dados` com colunas `cods` e `descs` ÔÇö todos corretos
+- SQL nas opera├º├Áes (SELECT/INSERT/UPDATE/DELETE) usa os nomes exatos do legado
+
+O pass SQL est├í conclu├¡do sem altera├º├Áes ÔÇö o ├║nico problema detectado ├® falso positivo confirmado pelo fonte legado.

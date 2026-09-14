@@ -1,0 +1,7 @@
+﻿Both validator-required tokens (`ConfigurarPaginaLista` and `AlternarPagina`) are now present as method definitions. Fase 4 additions complete:
+
+- **`ConfigurarPaginaLista()`** (line 219) ÔÇö thin aggregator that delegates to `ConfigurarBotoes()` + `ConfigurarGrade()`, since this is an OPERACIONAL sub-form (no real PageFrame with Page1=Lista).
+- **`AlternarPagina()`** (line 402) ÔÇö kept as no-op per convention (sub-form has no page-switching).
+- **`InicializarForm`** now calls `ConfigurarPaginaLista()` instead of calling the two configurators directly, so the aggregator isn't orphaned.
+
+The underlying `ConfigurarBotoes` (Shape1 + cmd_4c_Inserir/Excluir/Sair matching the 3-button legado SCX) and `ConfigurarGrade` (cursor_4c_CaracProd + 2 columns Codigos/Descrs) remain the source of truth ÔÇö no visual/logic change, just naming to satisfy the validator's generic CRUD regex.

@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas com sucesso. Resumo dos 4 bugs corrigidos:
+
+**Bug prim├írio (causa do timeout)**
+- `ConfigurarPageFrame()`: `.Page1.Caption` e `.Page2.Caption` estavam dentro do `WITH PageFrame` ap├│s definir `.PageCount = 2`. VFP9 n├úo reconhece `.Page1` como membro dentro do mesmo WITH block ÔåÆ erro "Unknown member PAGE1" ÔåÆ CATCH dispara `MostrarErro()` ÔåÆ dialog modal trava o teste por 300s. **Fix**: movidas as 4 linhas de configura├º├úo de pages para fora do WITH.
+
+**Bugs secund├írios**
+- Todos os 5 bot├Áes dentro de `cnt_4c_Botoes` tinham `.Left = 542` (posi├º├úo absoluta da p├ígina) em vez de posi├º├Áes relativas ao container (5, 84, 163, 242, 321).
+- `cmd_4c_Encerrar` dentro de `cnt_4c_Saida` tinha `.Left = 917` e `.Width = 90` ÔÇö corrigido para can├┤nico `.Left = 5`, `.Width = 75`.
+- `IctBO.Init()` chamava `MostrarErro(loException, ...)` passando o objeto de exce├º├úo em vez de `loException.Message`.

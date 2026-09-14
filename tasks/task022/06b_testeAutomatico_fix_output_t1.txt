@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas:
+
+1. **CarregarLista** ÔÇö no branch `gb_4c_ValidandoUI=.T.`, agora cria `cursor_4c_Dados` com a estrutura correta antes de retornar `.T.`
+2. **AlternarPagina** ÔÇö removido `PROTECTED` ÔåÆ m├®todo p├║blico acess├¡vel externamente pelo teste
+3. **AjustarBotoesPorModo** ÔÇö removido `PROTECTED` ÔåÆ mesmo motivo
+
+O teste `TesteAutomatico.prg` chama esses dois m├®todos diretamente no objeto do form; como eram `PROTECTED`, VFP9 retornava "Property not found" ao tentar acess├í-los de fora da classe.

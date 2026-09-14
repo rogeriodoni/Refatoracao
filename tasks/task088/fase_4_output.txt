@@ -1,0 +1,8 @@
+﻿All three changes are in place. The migration for task088 (FormSIGREEQR) is now fully integrated:
+
+- **DEFINE BAR 106** (separator) and **DEFINE BAR 107** ("Posi├º├úo de Estoque Retroativo") added to `popRelatorios`
+- **ON SELECTION BAR 107** wired to `AbrirFormSIGREEQR`
+- **`AbrirFormSIGREEQR()` procedure** added at end of menu.prg
+- **config.prg**: no changes needed ÔÇö ADIR() auto-loads `SIGREEQRBO.prg` (matches `*BO.prg`) and `FormSIGREEQR.prg` (matches `forms/relatorios/Form*.prg`)
+
+The task088 migration is complete. Before testing, delete the compiled files: `del /s /q C:\4c\projeto\app\*.fxp`

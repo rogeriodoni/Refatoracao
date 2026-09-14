@@ -1,0 +1,10 @@
+﻿Fase 6 conclu├¡da. O arquivo `Formsigredcu.prg` foi atualizado com os controles restantes e handlers completos:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- `chk_4c_ChkImpPag` (Top=156) ÔÇö "Imprimir o Cabe├ºalho em Todas as P├íginas" + BINDEVENT Click
+- `lbl_4c_Agrupa` (Top=180, Left=36) ÔÇö "Agrupar por :"
+- `obj_4c_OptAgrupa` (Top=174, Left=117) com 3 op├º├Áes exatas do original + BINDEVENT InteractiveChange
+
+**Novos handlers adicionados:**
+- `ChkImpPagClick()` ÔÇö sincroniza `this_nChkImpPag` e `this_lImpTodasPaginas` no BO
+- `OptAgrupaInteractiveChange()` ÔÇö sincroniza `this_nOptAgrupa` e chama `PrepararDados()` (equivalente ao `OptAgrupa.Valid()` legado que chamava SigPrIdc)

@@ -1,0 +1,43 @@
+﻿An├ílise completa conclu├¡da. Aqui est├í o diagn├│stico definitivo:
+
+## Resultado da An├ílise
+
+### GRID-SQL (7 problemas) ÔÇö FALSOS POSITIVOS
+
+Todos os 7 campos flagados **existem** no `cursor_4c_Operacoes`:
+
+**FormCLC.prg linhas 1613ÔÇô1616** (CREATE CURSOR):
+```foxpro
+CREATE CURSOR cursor_4c_Operacoes (cIdChaves C(36), Codigos C(20), ;
+    Emps C(3), Cods C(20), Operacoes C(20), ;
+    GrupoOs C(40), ContaOs C(40), ;
+    GrupoDs C(40), ContaDs C(40), Agrupar L, EnvRecs C(1))
+```
+
+**CLCBO.prg linhas 308ÔÇô310** (SELECT que popula o cursor via BO):
+```foxpro
+"SELECT cIdChaves, Codigos, Emps, Cods, Operacoes," + ;
+" GrupoOs, ContaOs, GrupoDs, ContaDs, Agrupar, EnvRecs" + ;
+" FROM SigLcLoI WHERE Codigos = ..."
+```
+
+O validator scaneou o FORM em busca de SELECT SQL mas n├úo encontrou porque o SELECT est├í no BO (`CarregarOperacoes`). Os 7 campos existem tanto no `CREATE CURSOR` quanto no `SELECT` do BO. **Nenhuma corre├º├úo necess├íria.**
+
+---
+
+### SQL-FILTRO-INVENTADO (LOCALS) ÔÇö N├âO PODE SER REMOVIDO
+
+O `AND Locals = ...` aparece em `CarregarEstoques()` (CLCBO.prg linha 344) e `GravarEstoques()` (linha 614). O c├│digo migrado usa **dois cursores separados** por local:
+
+```foxpro
+loc_oBO.CarregarEstoques(loc_cCodigos, loc_cLocalA, "cursor_4c_EstoqueA")
+loc_oBO.CarregarEstoques(loc_cCodigos, loc_cLocalB, "cursor_4c_EstoqueB")
+```
+
+Remover o `AND Locals = ...` causaria que `cursor_4c_EstoqueA` e `cursor_4c_EstoqueB` contivessem os **mesmos registros** (todos de A+B combinados), quebrando a compara├º├úo dual-local. Isso viola a regra **"NAO alterar logica de negocio"**.
+
+O c├│digo legado usava um ├║nico cursor `crSigLcLoE` com todos os registros porque trabalhava com uma ├║nica ├írea de trabalho. A arquitetura migrada usa dois cursores separados por local, tornando o filtro `AND Locals = ...` **arquiteturalmente necess├írio e correto**.
+
+---
+
+**Os 8 problemas listados s├úo falsos positivos do validator.** Os arquivos `FormCLC.prg` e `CLCBO.prg` est├úo corretos como est├úo e n├úo precisam de altera├º├úo neste pass SQL.

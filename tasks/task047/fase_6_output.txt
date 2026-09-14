@@ -1,0 +1,10 @@
+﻿Fase 6 conclu├¡da. Aqui est├í o resumo do que foi feito:
+
+**FormSigReCgc.prg:**
+1. **Corrigido `optDatas` Buttons(1)**: Caption `"Emiss├úo"` ÔåÆ `"Data"` (igual ao original `\<Data`), dimens├Áes corrigidas para Width=44, Height=17, Top=5, Left=5
+2. **Corrigido `optDatas` Buttons(2)**: Width=83, Height=17, Top=5, Left=60 (igual ao original)
+3. **Adicionado `BtnExcelClick`**: Chama `FormParaRelatorio()` + `ExportarExcel()` **sem validar datas** (reproduzindo o comportamento original onde `If This.Value # 3` pula a valida├º├úo para o bot├úo DocExcel)
+4. **Adicionado `BtnEncerrarClick`**: Chama `THIS.Release()` (equivale ao `btnReport.Sair.Click: ThisForm.Release` do original)
+
+**SigReCgcBO.prg:**
+5. **Adicionado `ExportarExcel()`**: Chama `PrepararDados()`, exporta `cursor_4c_TmpRel` com `COPY TO TYPE XLS` e abre o arquivo via `WScript.Shell.Run()`. Padr├úo correto sem `RETURN` dentro de `TRY/CATCH`.

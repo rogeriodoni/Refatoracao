@@ -1,0 +1,19 @@
+﻿Fase 5 conclu├¡da. O arquivo `FormCec.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- Bot├Áes Confirmar + Cancelar no `cnt_4c_Salva` (com ├¡cones can├┤nicos `cadastro_salvar_60.jpg` / `cadastro_cancelar_60.jpg`)
+- **7 grupos de campos (primeira metade)** com posi├º├Áes exatas do `layout.json`:
+  - Empresa (label + `txt_4c_Empresa` MaxLength=3 + `txt_4c_DesEmpresa` readonly)
+  - Tipo (`cbo_4c_CmbTCons` com RowSource CHEQUE PRE/SERASA/ACSP)
+  - Contrato (`txt_4c_Contrato` MaxLength=100, condicional CHEQUE PRE)
+  - C├│digo da Rede (`txt_4c_Rede`, condicional CHEQUE PRE)
+  - C├│digo da Loja (`txt_4c_Loja`, condicional CHEQUE PRE)
+  - Logon (`txt_4c_Logon` MaxLength=8, condicional n├úo-CHEQUE PRE)
+  - Senha (`txt_4c_Senha` MaxLength=8, PasswordChar=`*`, condicional n├úo-CHEQUE PRE)
+
+**Novos m├®todos adicionados (completos):**
+- `BtnSalvarClick` ÔÇö valida├º├Áes por tipo (CHEQUE PRE vs demais), verifica duplicidade, chama `Salvar()`
+- `BtnCancelarClick` ÔÇö volta para lista
+- `ValidarEmpresaCec` ÔÇö lookup em `SigCdEmp` com FormBuscaAuxiliar (substitui `fAcessoEmpresa` n├úo portada)
+- `TipoConsultaChanged` ÔÇö alterna visibilidade condicional dos campos por tipo de consulta
+- `FormParaBO` / `BOParaForm` / `HabilitarCampos` / `LimparCampos` ÔÇö implementados para os campos da Fase 5 (ser├úo expandidos na Fase 6 com os campos restantes)

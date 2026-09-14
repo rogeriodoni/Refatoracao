@@ -1,0 +1,12 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\cfiBO.prg` criado com 325 linhas.
+
+**O que foi entregue:**
+- `DEFINE CLASS cfiBO AS BusinessBase` herdando de BusinessBase
+- **14 propriedades** mapeadas 1:1 com as colunas de SIGCDCFI (schema verificado)
+- **2 propriedades de display** (this_cDgrus, this_cDsittricms) para campos de lookup que n├úo s├úo armazenados
+- `Init()` configurando `this_cTabela = "SIGCDCFI"` e `this_cCampoChave = "cidchaves"`
+- `ObterChavePrimaria()` retornando `this_cCidchaves`
+- `CarregarDoCursor()` com padr├úo `SELECT (par_cAliasCursor)` + `TratarNulo` correto
+- Todos os m├®todos CRUD completos: `Buscar()`, `CarregarPorCodigo()`, `VerificarDuplicidade()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`
+- `Inserir()` gera `cidchaves` via `LEFT(SYS(2015), 20)` (substituto do `fUniqueIds()` legado)
+- Valida├º├úo de unicidade por grupos+ests+clfiscals (regra de neg├│cio do original)

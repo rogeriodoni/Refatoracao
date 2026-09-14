@@ -1,0 +1,21 @@
+﻿Todos os RETURNs est├úo fora de TRY/CATCH. Arquivo validado e pronto.
+
+**FormOTI.prg - Fase 3 criado com sucesso** (`C:\4c\projeto\app\forms\cadastros\FormOTI.prg`, 354 linhas).
+
+Estrutura criada:
+
+| M├®todo | Conte├║do na Fase 3 |
+|--------|---------------------|
+| `Init()` | `RETURN DODEFAULT()` (padr├úo can├┤nico) |
+| `InicializarForm()` | Cria OTIBO, chama ConfigurarPageFrame/Lista/Dados, CarregarLista |
+| `ConfigurarPageFrame()` | `pgf_4c_Paginas` com `Top=-29`, `Tabs=.F.`, 2 pages com Picture |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (t├¡tulo+sombra), `cnt_4c_Botoes` (vazio), `cnt_4c_Saida` + `cmd_4c_Encerrar` |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (vazio) |
+| `CarregarLista()` | Chama `OTIBO.Buscar("")`, atribui grid se existir |
+| `AlternarPagina()` | Navega entre Page1/Page2, recarrega lista |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `TornarControlesVisiveis()` | Recursivo com itera├º├úo de Pages em PageFrames |
+| `FormatarGridLista()` | `SetAll("FontName", "Verdana")` e `FontSize=8` via coluna |
+| `Destroy()` | Fecha cursor, libera BO, chama `DODEFAULT()` |
+
+**Pr├│xima fase (4/8):** adicionar Grid `grd_4c_Lista` e bot├Áes CRUD em `cnt_4c_Botoes` na Page1.

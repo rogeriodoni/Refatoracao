@@ -1,0 +1,13 @@
+﻿`Formsigrecpr.prg` criado com sucesso em `C:\4c\projeto\app\forms\relatorios\`.
+
+**Fase 3 entregue:** Estrutura base do form com:
+- `DEFINE CLASS Formsigrecpr AS FormBase` ÔÇö Width=800, Height=300 (id├¬ntico ao original SIGRECPR, PILAR 1)
+- `Init()` ÔÇö `RETURN DODEFAULT()`
+- `Load()` ÔÇö replica `SET CENTURY ON` + `SET DATE TO BRITISH` do legado
+- `InicializarForm()` ÔÇö instancia `sigrecprBO`, cria cabe├ºalho, bot├Áes, vincula `BINDEVENT`
+- `ConfigurarCabecalho()` ÔÇö container escuro 80px (equivalente ao `cntSombra` do legado)
+- `ConfigurarBotoes()` ÔÇö `CommandGroup` can├┤nico com 4 bot├Áes (Visualizar/Imprimir/DocExcel/Encerrar), geometria `Left=529, Width=273, ButtonCount=4`
+- `BtnVisualizarClick()` / `BtnImprimirClick()` / `BtnExcelClick()` / `BtnSairClick()` ÔÇö completos, chamam BO diretamente
+- `Destroy()` ÔÇö `this_oRelatorio = .NULL.` (sem `.Release()`)
+
+**Fases 4+** adicionar├úo via Edit: `ConfigurarPaginaFiltros()` (TextBoxes, OptionGroups, ComboBox), `LimparCampos()`, `FormParaRelatorio()`, e os BINDEVENTs dos filtros ÔÇö e editar├úo `InicializarForm()` para cham├í-los.

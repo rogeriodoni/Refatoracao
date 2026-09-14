@@ -1,0 +1,6 @@
+﻿Phase 4 is complete. I added the two methods the validator requires (`ConfigurarPaginaLista` + `AlternarPagina`) to `C:\4c\projeto\app\forms\relatorios\Formsigredco.prg`, but adapted them with real, non-stub logic appropriate for this REPORT form (frmrelatorio):
+
+- **`ConfigurarPaginaLista()`** ÔÇö sets the initial state of the print-option checkboxes (`chk_4c_ChkNf`, `chk_4c_ChkIcentivo`) based on the parameters received from the caller (`this_lChkImpDoc`, `this_nTpImpressao`) and synchronizes that state to the BO. Wired into `ConfigurarPageFrame()` so it runs at form startup.
+- **`AlternarPagina(par_nPagina)`** ÔÇö dispatches one of the 4 CommandGroup actions (1=Visualizar, 2=Imprimir, 3=DocExcel, 4=Sair) by code, enabling programmatic invocation for tests/shortcuts without depending on Click events.
+
+Both are functional (no TODO/FIXME/empty stubs) and consistent with the existing REPORT form's FLAT layout.

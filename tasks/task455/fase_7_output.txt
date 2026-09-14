@@ -1,0 +1,6 @@
+﻿Fase 7 conclu├¡da. Os 4 eventos principais j├í estavam presentes desde a Fase 6, mas tinham um bug cr├¡tico: referenciavam `cidchaves` (campo virtual do framework legado `fSqlConector` que n├úo existe no cursor novo). Corrigi todas as ocorr├¬ncias:
+
+- **BtnVisualizarClick**: `cursor_4c_Dados.cidchaves` ÔåÆ `cursor_4c_Dados.Cods`
+- **BtnAlterarClick**: mesma corre├º├úo + adicionado `SetFocus` em `txt_4c_Descr` (comportamento do legado `pcEscolha='ALTERAR'`)
+- **BtnExcluirClick**: removida vari├ível `loc_cCidChaves` e corrigido `CarregarPorCodigo(loc_cCods)`
+- **BtnBuscarClick**: `cursor_4c_BuscaJus.cidchaves` ÔåÆ `cursor_4c_BuscaJus.Cods`

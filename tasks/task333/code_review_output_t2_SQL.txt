@@ -1,0 +1,5 @@
+﻿Confirmado: `ControlCount` nas linhas 705 e 708 ├® a propriedade VFP9 padr├úo de containers (`.ControlCount` = n├║mero de controles filhos), usada no m├®todo `TornarControlesVisiveis`. **N├úo ├® uma condi├º├úo WHERE inventada.**
+
+Todos os `WHERE` SQL do c├│digo usam apenas as colunas leg├¡timas: `cidchaves`, `EmpDopNums`, `SenhaDs` ÔÇö exatamente as listadas no original (`CIDCHAVES`, `EMPDOPNUMS`, `SENHADS`).
+
+**Nenhuma corre├º├úo necess├íria.** O alerta foi um falso positivo: o scanner confundiu a propriedade VFP9 `ControlCount` (itera├º├úo de controles UI) com uma coluna SQL inventada em cl├íusula WHERE.

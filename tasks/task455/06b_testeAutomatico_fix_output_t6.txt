@@ -1,0 +1,5 @@
+﻿Both fixes are confirmed:
+
+**Fix A** ÔÇö `TornarControlesVisiveis()` (lines 599-605): GRID/COLUMN LOOP now fires **before** the `Visible = .T.` assignment. Grid and Column objects are skipped entirely ÔÇö no `.Visible = .T.` call on an unpopulated grid (which in headless mode could trigger VFP9 internal Header1 access), and no recursion into grid internals.
+
+**Fix B** ÔÇö `AjustarBotoesPorModo()` (line 879): PROTECTED removed. The test `TesteModoVisualizar` calls this method externally after `PEMSTATUS` returns `.T.` ÔÇö with PROTECTED, VFP9 raises error 1734 "Member is not accessible" outside the class context, which with `SYS(2335,0)` can produce an uncatchable infinite-retry loop.

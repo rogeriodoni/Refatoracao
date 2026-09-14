@@ -1,0 +1,21 @@
+﻿Phase 2/8 is complete. `lchBO.prg` now has 530 lines with all CRUD methods. Here's a summary of what was added/fixed:
+
+**Fix**: `this_nCotUsus = 0` ÔåÆ `this_cCotUsus = ""` ÔÇö schema column `cotusus` is `char(10)`, not numeric.
+
+**Methods added**:
+
+| Method | Visibility | Purpose |
+|---|---|---|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT SigChLcq ÔåÆ cursor_4c_Dados for Page1 grid |
+| `CarregarPorCodigo(par_nNumLotes)` | PUBLIC | Load full lote detail by PK |
+| `CarregarDoCursor(par_cAlias)` | PROTECTED | Map all 28 cursor columns to `this_*` properties |
+| `BuscarCheques(par_nNumLotes)` | PUBLIC | SELECT SIGCHE ÔåÆ cursor_4c_Cheques for Page2 grid |
+| `ObterProximoLote()` | PROTECTED | MAX(numlotes)+1 per empresa for new PK |
+| `Inserir()` | PROTECTED | INSERT INTO SigChLcq (all NOT NULL columns) |
+| `Atualizar()` | PROTECTED | UPDATE SigChLcq SET all editable fields |
+| `ExecutarExclusao()` | PROTECTED | DELETE SIGCHE child records, then DELETE SigChLcq |
+
+Key schema findings used:
+- `SIGCHE.numos` is the FK ÔåÆ `SigChLcq.numlotes` (child cheques table)
+- `gratends` = grupo respons├ível, `atends` = conta respons├ível (lote-level)
+- `grures`/`conres` = respons├ível per-cheque in SIGCHE

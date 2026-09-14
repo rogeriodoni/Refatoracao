@@ -1,0 +1,22 @@
+﻿Ambos os arquivos est├úo completos. Verificando o estado atual:
+
+**FormFpm.prg** (1083 linhas) j├í cont├®m todos os m├®todos necess├írios:
+- Estrutura: `InicializarForm`, `ConfigurarPageFrame`, `ConfigurarContainersBase`, `ConfigurarPaginaLista`, `ConfigurarPaginaDados`
+- Grid: `VincularGrid`, `GrdDadosAfterRowColChange`
+- A├º├Áes: `BtnInserirClick`, `BtnExcluirClick`, `BtnEncerrarClick`, `BtnConfirmarClick`, `BtnCancelarClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnIncluirClick`
+- Valida├º├úo: `ValidarParcelas`, `ValidarEmps`
+- Auxiliares: `CarregarDados`, `AlternarPagina`, `TornarControlesVisiveis`, `Destroy`
+
+**FpmBO.prg** (437 linhas) tamb├®m est├í completo com: `BuscarPorCondicao`, `InserirLinha`, `ExcluirLinha`, `SalvarAlteracoes`, `ValidarConsistencia`, `CarregarDoCursor`, `Inserir`, `Atualizar`, `ExecutarExclusao`.
+
+O header do arquivo j├í confirma: `Fase 7/8: N/A - MIGRACAO COMPLETA`.
+
+**Os m├®todos do template da Fase 8 n├úo se aplicam a este form:**
+- `FormParaBO / BOParaForm` ÔåÆ N/A: edi├º├úo inline no grid (sem campos separados em Page2)
+- `HabilitarCampos / LimparCampos` ÔåÆ N/A: sem campos CRUD individuais
+- `AjustarBotoesPorModo` ÔåÆ N/A: 3 bot├Áes fixos (Inserir/Excluir/Encerrar), sem modo INCLUIR/ALTERAR/VISUALIZAR
+- `CarregarLista` ÔåÆ equivalente ├® `CarregarDados()` Ô£ô j├í implementado
+
+**Observa├º├úo de integra├º├úo:** FormFpm ├® um sub-form modal que recebe `par_oParentForm` e `par_cFpags` como par├ómetros. N├úo vai diretamente no menu ÔÇö precisa ser chamado pelo form pai (que gerencia as condi├º├Áes de pagamento SigCdFpm) via `CREATEOBJECT("FormFpm", oParentForm, cFpags)`.
+
+A migra├º├úo da Fase 8 est├í encerrada ÔÇö o arquivo j├í estava completo desde a Fase 7.

@@ -1,0 +1,11 @@
+﻿All four changes are correct. Here's a summary of what was done:
+
+**FASE 10 status**: The core UI implementation (all 59 controls from `SIGCDRPT.Pagina.Dados.Pageframe1.Page2`) was already complete in `ConfigurarSubPaginaLayout()` from a prior session. Four missing properties/behaviors were added:
+
+1. **`cbo_4c_TamPapel`** (`FormRPT.prg:1718`): Added `ColumnCount=2`, `BoundColumn=2`, `ColumnWidths="300,48"`, `ControlSource="cursor_4c_PropsTitulo.PaperSize"` ÔÇö necessary for the combobox to correctly display paper names and bind the numeric index (1-41) to the cursor's `PaperSize` field.
+
+2. **`opt_4c_Orientacao`** (`FormRPT.prg:1804`): Added `ControlSource="cursor_4c_PropsTitulo.Orientation"` ÔÇö binds orientation selection (1=Retrato, 2=Paisagem) bidirectionally to the cursor so it's saved when `BtnGerarLayoutClick` reads `cursor_4c_PropsTitulo.Orientation`.
+
+3. **`grd_4c_PropsCampos` columns 5 & 6** (`FormRPT.prg:2151-2155`): Added `DynamicBackColor` ÔÇö shows dark grey (RGB 209,209,209) for SubTotal/Total checkboxes when the field type is not numeric/currency, matching original visual behavior.
+
+4. **`BtnLayOutRPTClick`** (`FormRPT.prg:1450`): After navigating to the Layout sub-page, now syncs `ListIndex` from the cursor's `PaperSize` value and calls `OrientacaoChanged()` to update the orientation image ÔÇö ensuring the UI reflects the correct state when first entering the layout page.

@@ -1,0 +1,13 @@
+﻿O arquivo est├í completo e correto. Fase 2/8 conclu├¡da.
+
+**SigReDctBO.prg** agora tem todos os m├®todos necess├írios para um BO de relat├│rio:
+
+- **`PrepararDados()`** ÔÇö tradu├º├úo fiel do `PROCEDURE processamento` original: cria `cursor_4c_Relatorio` com os campos exatos, executa as queries em `SigCdNei`, `SigOpEtq`, `SigCdPro`, `SigOpPic`/`SigMvCab`/`SigCdCli`, `SigPrCpo` e `SigCdOpd`; processa os 3 loops aninhados (SCAN com SCAN WHILE sincronizado TmpEti├ùTmpNensi + loop de composi├º├úo); adiciona linha de totaliza├º├úo quando `this_nImpTotal = 1`; gera c├│digo de barras do documento via `fAltBar2de5`; cria `cursor_4c_Cabecalho` com t├¡tulo e nome da empresa
+
+- **`Visualizar()`** ÔÇö chama `PrepararDados()` + `REPORT FORM SigReDct/SigReDc3 PREVIEW NOCONSOLE`
+
+- **`Imprimir()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... TO PRINTER PROMPT NOCONSOLE`
+
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro`
+
+- **`PrepararEmail()`** ÔÇö equivalente ao `PROCEDURE memail` original (posiciona cursor no topo)

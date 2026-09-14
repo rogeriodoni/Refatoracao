@@ -1,0 +1,7 @@
+﻿Fase 5 conclu├¡da. Adicionei em `ConfigurarPaginaDados()`:
+
+- **Label CEP** (`lbl_4c_Label6`): `top=225, left=196` (compensa├º├úo +29 sobre o original 196)
+- **TextBox CEP** (`txt_4c_CEP`): `top=222, left=226, width=80`, `InputMask="99999-999"`, `MaxLength=9`, com `BINDEVENT LostFocus ÔåÆ LostFocusCEP`
+- **Label Endere├ºo** (`lbl_4c_Label4`): `top=248, left=170` (compensa├º├úo +29)
+- **TextBox Endere├ºo** (`txt_4c_Endereco`): `top=245, left=226, width=403`, `MaxLength=60`
+- **M├®todo `LostFocusCEP()`** (PUBLIC): ao sair do CEP, faz `SELECT TOP 1 endes, bairs FROM SigCdEnr WHERE ceps = ?` e preenche Endere├ºo e Bairro se estiverem vazios (substitui `fwCep` que n├úo foi portada). Na Fase 6 vem o campo Bairro.

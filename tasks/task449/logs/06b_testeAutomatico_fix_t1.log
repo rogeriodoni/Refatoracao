@@ -1,0 +1,23 @@
+[2026-08-09 10:47:14] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-09 10:47:14] [INFO] Prompt File: C:\4c\tasks\task449\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-08-09 10:47:14] [INFO] Output File: C:\4c\tasks\task449\06b_testeAutomatico_fix_output_t1.txt
+[2026-08-09 10:47:14] [INFO] Model: sonnet
+[2026-08-09 10:47:14] [INFO] Timeout: 3600 segundos
+[2026-08-09 10:47:14] [INFO] Max Output Tokens: 128000
+[2026-08-09 10:47:14] [INFO] Context Files: 0 arquivo(s)
+[2026-08-09 10:47:14] [INFO] Invocando Claude CLI...
+[2026-08-09 10:47:14] [INFO] Prompt carregado: 52325 caracteres
+[2026-08-09 10:47:14] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-09 10:47:14] [INFO] Tamanho total do prompt: 52325 caracteres
+[2026-08-09 10:47:14] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-09 10:51:06] [INFO] Claude CLI finalizado em 232.5078838 segundos
+[2026-08-09 10:51:06] [INFO] Exit Code: 0
+[2026-08-09 10:51:06] [INFO] Output salvo em: C:\4c\tasks\task449\06b_testeAutomatico_fix_output_t1.txt
+[2026-08-09 10:51:06] [INFO] Output size: 866 bytes
+[2026-08-09 10:51:06] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-09 10:51:06] [INFO] Preview do output:
+[2026-08-09 10:51:06] [INFO] Tr+¬s corre+º+Áes aplicadas:
+
+1. **FormICO.prg `CarregarLista()`** ÔÇö adicionado guard `gb_4c_ValidandoUI` no topo. O teste OPERACIONAL encontra esse m+®todo e o chama via `TesteCarregarDadosReais`; sem o guard, `CarregarIcones()` rodava `SQLEXEC(0, ...)`, falhava e chamava `MsgErro()` (FormErro.prg ÔÇö form modal), travando 300s.
+
+2. **ICOBO.prg `CarregarIcones()`** ÔÇö removido `INDEX ON carqicones TAG carqicones` + `SET ORDER TO`. Campo C(128) +ù 2 bytes (COLLATE GENERAL) = 256 bytes > l

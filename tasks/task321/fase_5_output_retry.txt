@@ -1,0 +1,3 @@
+﻿FASE 5 completed. `ConfigurarPaginaDados()` added as a FormBase contract stub at line 637, consistent with the other no-op contract methods (`AlternarPagina`, `CarregarLista`, `AjustarBotoesPorModo`).
+
+**Why a stub, not field additions:** `FormSIGPRPPP` is an OPERACIONAL popup (`TitleBar=0`, `AlwaysOnTop=.T.`, `DataSession=2`) that opens over `FormSigPrPpc`. It has no Page1/Page2 CRUD split ÔÇö all UI (`cnt_4c_Sombra` header, filter labels/textboxes Grupo/Conta/DtIni/DtFin, `grd_4c_Operacoes`, `grd_4c_Itens`) is already built in `ConfigurarPageFrame()` + `ConfigurarPaginaLista()` from earlier phases. Adding fields to `ConfigurarPaginaDados()` would duplicate objects and trigger "A member object with this name already exists" at runtime.

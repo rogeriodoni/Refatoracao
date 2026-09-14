@@ -1,0 +1,920 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREAUP.SCX
+* Data/Hora: 16/05/26 11:53:43
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREAUP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREAUP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREAUP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGREAUP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREAUP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Grupo
+  Parent: SIGREAUP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo_a
+  Parent: SIGREAUP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREAUP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DGrupo
+  Parent: SIGREAUP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getEnvelope
+  Parent: SIGREAUP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGREAUP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Codigo
+  Parent: SIGREAUP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREAUP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREAUP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGREAUP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGREAUP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optOrdem
+  Parent: SIGREAUP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Chk_Percent
+  Parent: SIGREAUP
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 66
+  Left = 41
+  Width = 301
+  Height = 63
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório de Tipos de Autorizações de Produção"
+  ControlBox = .F.
+  ClipControls = .F.
+  Name = "SIGREAUP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.TabIndex = 2
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 71
+  btnReport.Imprime.TabIndex = 1
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 137
+  btnReport.DocExcel.Picture = ..\framework\imagens\geral_envelope_32.jpg
+  btnReport.DocExcel.TabIndex = 5
+  btnReport.DocExcel.PicturePosition = 7
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 204
+  btnReport.Sair.TabIndex = 3
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 527
+  btnReport.Top = 2
+  btnReport.TabIndex = 18
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Conta :"
+  Left = 206
+  Top = 160
+  Width = 38
+  TabIndex = 14
+  ZOrderSet = 3
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "O.S. :"
+  Left = 213
+  Top = 183
+  Width = 31
+  TabIndex = 15
+  ZOrderSet = 4
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Período :"
+  Left = 199
+  Top = 111
+  Width = 45
+  TabIndex = 11
+  ZOrderSet = 5
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 23
+  Left = 249
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 108
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Get_Grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 23
+  Left = 249
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 133
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "à"
+  Left = 334
+  Top = 111
+  Width = 8
+  TabIndex = 12
+  ZOrderSet = 8
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 23
+  Left = 348
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 108
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Get_DGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 23
+  Left = 330
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 133
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "Get_DGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.getEnvelope
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  InputMask = ""
+  Left = 249
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 180
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "getEnvelope"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Código :"
+  Left = 202
+  Top = 207
+  Width = 42
+  TabIndex = 16
+  ZOrderSet = 12
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Get_Codigo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Format = "K"
+  Height = 23
+  Left = 249
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 204
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "Get_Codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Grupo :"
+  Left = 206
+  Top = 136
+  Width = 38
+  TabIndex = 13
+  ZOrderSet = 14
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Say5
+------------------------------------------------------------
+  Caption = "Quebra :"
+  Left = 199
+  Top = 234
+  Width = 45
+  TabIndex = 17
+  ZOrderSet = 15
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Get_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 23
+  Left = 249
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 157
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Get_dconta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 330
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 157
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 17
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.optOrdem
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BorderStyle = 0
+  Height = 25
+  Left = 245
+  Top = 229
+  Width = 219
+  TabIndex = 10
+  ZOrderSet = 18
+  Name = "optOrdem"
+  Option1.Caption = "Grupo/conta"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 78
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.Caption = "Tipo de Autorização"
+  Option2.Height = 15
+  Option2.Left = 101
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 113
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAUP.Chk_Percent
+------------------------------------------------------------
+  Top = 209
+  Left = 455
+  Height = 15
+  Width = 108
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Em Percentual (%)"
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "Chk_Percent"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREAUP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE carregacli
+------------------------------------------------------------
+PROCEDURE carregacli
+lcQuery = [Select IClis, RClis, Inativas ] + ;
+		    [From SigCdCli ] + ;
+		   [Where GerBals = 1]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCli)')
+	Return 0
+EndIf
+Select crSigCdCli
+Index On IClis Tag Iclis
+Index On IClis Tag BalCodigo
+Index On RClis Tag BalNome
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE carregagccr
+------------------------------------------------------------
+PROCEDURE carregagccr
+lcQuery = [Select Codigos, Descrs, GerBals ] + ;
+		    [From SigCdGcr]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdGcr') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdGcr)')
+	Return 0
+EndIf
+Select crSigCdGcr
+Index On Codigos Tag BalCodigo For GerBals = 1
+Index On Descrs  Tag BalDescrs For GerBals = 1
+Index On Codigos Tag Codigos
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+If ThisForm.Chk_Percent.Value = 1
+	Report Form SigReAu2 Preview NoConsole
+Else
+	Report Form SigReAu1 Preview NoConsole
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+If Used('crSigCdCli')
+	Use In crSigCdCli
+EndIf
+If Used('crSigCdGcr')
+	Use In crSigCdGcr
+EndIf
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF, pOpI, pOpF
+Local ldDti, ldDtf, _Origem, _Destino, _Grupo, _Conta
+
+ldDtI = ThisForm.get_dt_inicial.Value
+ldDtf = ThisForm.get_dt_Final.Value
+lcGru = ThisForm.Get_Grupo.Value
+lcCta = ThisForm.Get_conta.Value
+lnEnv = ThisForm.getEnvelope.Value
+lnQbr = ThisForm.optOrdem.Value 
+lcCod = Thisform.Get_codigo.Value
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcEmp = _Empr + ' - ' + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+lcCab = [Relatório de Tipo de Autorizações]
+lcSub = [Período: ] + Dtoc(ldDti) + [ à ] + Dtoc(ldDtf) + ;
+		Iif(Empty(lcGru), [], [ - Grupo : ] + lcGru) + ;
+		Iif(Empty(lcCta), [], [ - Contas : ] + lcCta) + ;
+		Iif(Empty(lnEnv), [], [ - Envelope : ] + Alltrim(Str(lnEnv))) + ;
+		Iif(Empty(lcCod), [], [ - Codigo : ] + Alltrim(lcCod) )
+
+Create Cursor dbCabecalho (Titulo c(100), SubTitulo c(100), NomeEmpresa c(100))
+Insert Into dbCabecalho (Titulo, SubTitulo, NomeEmpresa) Values (lcCab, lcSub, lcEmp)
+
+pDtI = fDtoSQL(ldDtI)
+pDtF = fDtoSQL(ldDtF, '23:59:59')
+
+lcQuery = [Select a.*, d.RClis, b.Descs as DescTabs, b.fixos ] + ;
+		  [From SigOpInc a, SigCdNcf b, SigCdCli d ] + ;
+		  [Where a.Datas BetWeen ?pDtI And ?pDtF And ] + ;
+		  [a.Cods = b.Cods And ] + ;
+		  [(b.Emps = ']+_Empr+[' Or b.Emps = '  ') And ]+;
+		  [a.Contas = d.IClis And a.Cpros = ' ' ] + ;
+		  Iif(Empty(lcGru), [], [And a.Grupos = '] + lcGru + [' ]) + ;
+		  Iif(Empty(lcCta), [], [And a.Contas = '] + lcCta + [' ]) + ;
+		  Iif(Empty(lcCod), [], [And a.Cods   = '] + lcCod + [' ]) + ;
+		  Iif(Empty(lnEnv), [], [And a.Nenvs = ] + Alltrim(Str(lnEnv)) + [ ]) + ;
+		  [Order By a.Grupos, a.Contas, a.Datas, a.Nenvs, a.Cods]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigOpInc') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigOpInc)')
+	Return 0
+EndIf
+
+If ThisForm.Chk_Percent.Value = 1
+
+	Select CrSigOpInc
+	Sum 1 to WQtd
+	
+	Select Cods, Iif(Fixos<>2,DescTabs,Descs) as DescTabs, Iif(lnQbr=1,Grupos,Space(10)) as Grupos, Iif(lnQbr=1,Contas,Space(10)) as Contas,;
+	Sum(1) as Qtds, Sum(1 / wQtd * 100.00) as Percs From CrSigOpInc ;
+	Into Cursor TmpInc Group by 1,2,3,4 Order by 1,2,3,4
+
+Else
+
+	Select Iif(lnQbr=1,Grupos + '/'+Contas+'-'+Rclis,Cods+'-'+Iif(fixos<>2,DescTabs,Descs)) as Quebra1,;
+	Iif(lnQbr=1,Cods+'-'+DescTabs,Grupos + '/'+Contas+'-'+Rclis) as Quebra2, Iif(fixos<>2,DescTabs,Descs) as DescTabs,* From CrSigOpInc ;
+	Into cursor Selecao
+
+	Select Selecao
+	Index On Quebra1 + Quebra2 + Dtos(Datas) + Str(Nenvs, 10) Tag Ordem
+	Go Top
+
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+If Thisform.Chk_Percent.Value = 1
+	Report Form SigReAu2 To Printer Prompt NoConsole
+Else
+	Report Form SigReAu1 To Printer Prompt NoConsole
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+If ThisForm.Chk_Percent.Value = 1
+	Report Form SigReAu2 to Print NoConsole
+Else
+	Report Form SigReAu1 to Print NoConsole
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4) && Se Não Clicou em Saída
+	If Empty(ThisForm.get_dt_inicial.value)
+		=Messagebox('Data Inicial Inválida!!!', 0+48, '')
+		ThisForm.get_dt_inicial.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(ThisForm.get_dt_final.value)
+		=Messagebox('Data Final Inválida!!!', 0+48, '')
+		ThisForm.get_dt_final.SetFocus
+		Return 0
+	EndIf
+
+	If (ThisForm.get_dt_final.value < ThisForm.get_dt_inicial.value)
+		=Messagebox('A Data Final Não Pode Ser Menor Que a Inicial!!!', 0+48, '')
+		ThisForm.get_dt_final.SetFocus
+		Return 0
+	EndIf
+
+EndIf
+
+frmrelatorio::btnReport.Click
+* Fim ********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAUP.Get_Grupo
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If Not Empty(This.Value)
+	If Not Used('crSigCdGcr')
+		ThisForm.CarregaGccr
+	EndIf
+
+	Select crSigCdGcr
+	Set Order To BalCodigo
+
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'crSigCdGcr', 'BalCodigo', This.Value, 'Cadastro de Grupos')
+		loBrowse.AddColuna('Codigos', '', 'Código',    .t., 'BalCodigo')
+		loBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'BalDescrs')
+		loBrowse.Show
+	EndIf
+	
+	Thisform.Get_Grupo.Value  = Iif(Lastkey()=27, '', crSigCdGcr.Codigos)
+	Thisform.Get_DGrupo.Value = Iif(Lastkey()=27, '', crSigCdGcr.Descrs)
+Else
+	Thisform.Get_Grupo.Value  = ''
+	Thisform.Get_DGrupo.Value = ''
+EndIf
+Thisform.Get_Grupo.Refresh
+Thisform.Get_DGrupo.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAUP.Get_DGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(Thisform.Get_Grupo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If Not Empty(This.Value)
+	If Not Used('crSigCdGcr')
+		ThisForm.CarregaGccr
+	EndIf
+
+	Select crSigCdGcr
+	Set Order To BalDescrs
+
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'crSigCdGcr', 'BalDescrs', This.Value, 'Cadastro de Grupos')
+		loBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'BalDescrs')
+		loBrowse.AddColuna('Codigos', '', 'Código',    .t., 'BalCodigo')
+		loBrowse.Show
+	EndIf
+	
+	Thisform.Get_Grupo.Value  = Iif(Lastkey()=27, '', crSigCdGcr.Codigos)
+	Thisform.Get_DGrupo.Value = Iif(Lastkey()=27, '', crSigCdGcr.Descrs)
+Else
+	Thisform.Get_Grupo.Value  = ''
+	Thisform.Get_DGrupo.Value = ''
+EndIf
+Thisform.Get_Grupo.Refresh
+Thisform.Get_DGrupo.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAUP.Get_Codigo
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	lcSql = [Select * From SigCdNcf Where Emps = ']+_Empr+[' Or Emps = ' ' ]
+	If Thisform.Podatamgr.Sqlexecute(lcSql,'CsSelecao') < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdNcf)')
+		Return .f.
+	EndIf
+	Select CsSelecao
+	Index On Cods Tag Cods
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'CsSelecao', 'Cods', This.Value, 'Nao Conformidade')
+		loBrowse.AddColuna('Cods', 	  '', 'Código', .t., 'Cods')
+		loBrowse.AddColuna('Descs',   '', 'Descrição')
+		loBrowse.Show
+		This.Value = Iif(Lastkey() = 27,'',CsSelecao.Cods)
+	EndIf
+	USE In CsSelecao
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAUP.Get_conta
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(This.Parent.Get_Grupo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If Not Empty(This.Value)
+	If Not Used('crSigCdCli')
+		ThisForm.CarregaCli
+	EndIf
+
+	Select crSigCdCli
+	Set Order to BalCodigo
+
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'crSigCdCli', 'BalCodigo', This.Value, 'Cadastro de Contas')
+		loBrowse.AddColuna('IClis', '', 'Código',    .t., 'BalCodigo')
+		loBrowse.AddColuna('RClis', '', 'Descrição', .t., 'BalNome')
+		loBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loBrowse.Show
+	EndIf
+
+	ThisForm.Get_Conta.Value  = Iif(Lastkey()=27, '', crSigCdCli.IClis)
+	ThisForm.Get_DConta.Value = Iif(Lastkey()=27, '', crSigCdCli.RClis)
+Else
+	ThisForm.Get_Conta.Value = ''
+	ThisForm.Get_DConta.Value = ''
+EndIf
+ThisForm.Get_Conta.Refresh
+ThisForm.Get_DConta.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAUP.Get_dconta
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(This.Parent.Get_Grupo.Value) And Empty(This.Parent.Get_Conta.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If Not Empty(This.Value)
+	If Not Used('crSigCdCli')
+		ThisForm.CarregaCli
+	EndIf
+
+	Select crSigCdCli
+	Set Order to BalNome
+
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'crSigCdCli', 'BalNome', This.Value, 'Cadastro de Contas')
+		loBrowse.AddColuna('RClis', '', 'Descrição', .t., 'BalNome')
+		loBrowse.AddColuna('IClis', '', 'Código',    .t., 'BalCodigo')
+		loBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loBrowse.Show
+	EndIf
+
+	ThisForm.Get_Conta.Value  = Iif(Lastkey()=27, '', crSigCdCli.IClis)
+	ThisForm.Get_DConta.Value = Iif(Lastkey()=27, '', crSigCdCli.RClis)
+Else
+	ThisForm.Get_Conta.Value = ''
+	ThisForm.Get_DConta.Value = ''
+EndIf
+ThisForm.Get_Conta.Refresh
+ThisForm.Get_DConta.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREAUP
+RESERVED3 (ClassInfo): podatamgr
+*carregacli 
+*carregagccr 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 18
+================================================================================

@@ -1,0 +1,24 @@
+﻿O arquivo est├í completo e bem estruturado. Aqui est├í o resumo do que foi implementado na **Fase 2/8**:
+
+---
+
+## Fase 2/8 conclu├¡da: sigtosenBO.prg ÔÇö M├®todos de Neg├│cio
+
+Como o SIGTOSEN ├® um formul├írio de **autentica├º├úo** (n├úo CRUD), os m├®todos implementados refletem a l├│gica real do original, n├úo inser├º├úo/atualiza├º├úo de tabela pr├│pria:
+
+| M├®todo | Equivalente CRUD | L├│gica do original |
+|---|---|---|
+| `ObterChavePrimaria()` | Chave | Retorna `this_cUsuario` |
+| `CarregarDoCursor()` | Ler | Mapeia campos de `crsigcdusu1` ÔåÆ propriedades |
+| `ValidarUsuario()` | Buscar | Query em `sigcdusu` + carga de permiss├Áes |
+| `CarregarAcessos()` | ÔÇö | Monta array `gaAcesso` por perfil (supervisor/normal) |
+| `CarregarEmpresas()` | ÔÇö | Query em `SigCdEmp`/`SigCdAcE` por supervisor |
+| `CarregarParametros()` | ÔÇö | Carrega `SigCdPam` e `SigCdPac` |
+| `ValidarEmpresa()` | ÔÇö | Valida empresa selecionada em `crEmpresa1` |
+| `BloquearSenha()` | Atualizar | `UPDATE sigcdusu SET senhas=` ap├│s exceder tentativas |
+| `CarregarMenuPrincipal()` | ÔÇö | Carrega `SigCdOpe`, `SigSyCcb`, `SigCdOpd`, `SigCdGpe`, `SigOpOpe` |
+| `VerificarLicencas()` | ÔÇö | Query `SigSyCtl` para contagem de licen├ºas em uso |
+| `AlertaPafReducaoZ()` | ÔÇö | Verifica pend├¬ncias PAF-ECF em `Sigfipaf` |
+| `LimparCursores()` | ÔÇö | Fecha todos cursores tempor├írios do login |
+
+Todos os m├®todos seguem as regras VFP9: sem `RETURN` dentro de `TRY/CATCH`, sem acentos literais (CHR()), sem `MESSAGEBOX` (usa `MsgErro`/`MsgAviso`), e `SQLEXEC` com `gnConnHandle`.

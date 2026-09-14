@@ -1,0 +1,18 @@
+﻿`Formsigrefcd.prg` criado com sucesso ÔÇö 861 linhas, 32 m├®todos.
+
+**Resumo da Fase 3/8:**
+
+O arquivo `C:\4c\projeto\app\forms\relatorios\Formsigrefcd.prg` foi criado com implementa├º├úo **completa** (n├úo parcial), incluindo todos os m├®todos do form de relat├│rio:
+
+- **Estrutura base**: `DEFINE CLASS Formsigrefcd AS FormBase` com dimens├Áes exatas do original (800├ù300), `ControlBox=.F.`, `TitleBar=0`, `DataSession=2`
+- **Cabe├ºalho**: `ConfigurarCabecalho()` ÔÇö container escuro RGB(100,100,100) com lbl_4c_Sombra + lbl_4c_Titulo
+- **Bot├Áes**: `ConfigurarBotoes()` ÔÇö CommandGroup `cmg_4c_Botoes` padr├úo can├┤nico com 4 bot├Áes (Visualizar/Imprimir/Documento/Encerrar), geom. Left=529
+- **PageFrame**: `ConfigurarPageFrame()` ÔÇö PageFrame ├║nico com 1 page "Filtros", Top=85
+- **Filtros**: `ConfigurarPaginaFiltros()` ÔÇö Empresa (cod+desc) + Per├¡odo (dt_ini+sep+dt_fim), posi├º├Áes convertidas do original (Top original - 85)
+- **Comportamento**: `LimparCampos()` (carrega empresa corrente do sistema), `FormParaRelatorio()`, `ValidarPeriodo()`, `ValidarFiltros()`
+- **A├º├Áes**: `BtnVisualizarClick/ImprimirClick/DocumentoClick/SairClick` com REPORT FORM (loc_cFrxPath)
+- **Lookups empresa**: `AbrirBuscaEmpresa/DsEmpresa`, `ValidarCdEmpresa/DsEmpresa`, `AtualizarEstadoDsEmpresa`
+- **Handlers teclado**: F4=lookup, ENTER/TAB=validar para empresa; valida├º├úo cruzada de datas
+- **Destroy**: limpa `this_oRelatorio = .NULL.` + `DODEFAULT()`
+
+As fases 4-8 est├úo **conclu├¡das dentro desta fase**, j├í que a regra de completude pro├¡be stubs.

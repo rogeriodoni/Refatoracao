@@ -1,0 +1,6 @@
+﻿4 problemas corrigidos em `Formsigrecnt.prg`:
+
+- **obj_4c_OptLocal**: `.Top = 265` e `.Left = 231` movidos para ap├│s os `WITH .Buttons(...)`, garantindo que o validador leia as coordenadas do grupo (265/231) e n├úo as do bot├úo interno (4/2).
+- **obj_4c_OptOrdem**: mesma corre├º├úo ÔÇö `.Top = 289` e `.Left = 231` reposicionados ap├│s os bot├Áes.
+
+O comportamento em runtime ├® id├¬ntico (VFP9 aceita a atribui├º├úo em qualquer ordem dentro do WITH), mas o validador agora encontra os valores corretos como ├║ltimo `.Top`/`.Left` do bloco.

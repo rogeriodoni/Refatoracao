@@ -1,0 +1,6 @@
+﻿All edits are correct. The migration of `Formsigpdmp7` is now complete across all 8 phases:
+
+- **config.prg**: No changes needed ÔÇö the existing ADIR() dynamic loading already picks up `sigpdmp7BO.prg` (from `classes/`) and `Formsigpdmp7.prg` (from `forms/cadastros/`) automatically.
+- **menu.prg**: Added BAR 15 (separator) and BAR 16 ("Movimenta├º├úo por Funcion├írio") to `popMovimentos`, with `ON SELECTION BAR 16 DO AbrirFormsigpdmp7`, and the full `AbrirFormsigpdmp7()` procedure at line 3719 following the exact pattern of all other form-opening procedures in the file.
+
+The form is now accessible via **Movimentos ÔåÆ Movimenta├º├úo por Funcion├írio** in the system menu.

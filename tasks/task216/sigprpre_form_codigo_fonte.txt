@@ -1,0 +1,650 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprpre.SCX
+* Data/Hora: 03/07/2026 18:07:23
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRPRE
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: CntPeriodo
+  Parent: SIGPRPRE.Pagina.Lista
+  Class: container
+  BaseClass: container
+
+Objeto: Dt_inicial
+  Parent: SIGPRPRE.Pagina.Lista.CntPeriodo
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Dt_final
+  Parent: SIGPRPRE.Pagina.Lista.CntPeriodo
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRPRE.Pagina.Lista.CntPeriodo
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGPRPRE.Pagina.Lista.CntPeriodo
+  Class: label
+  BaseClass: label
+
+Objeto: cntProd
+  Parent: SIGPRPRE.Pagina.Lista
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPRPRE.Pagina.Lista.cntProd
+  Class: label
+  BaseClass: label
+
+Objeto: GetProd
+  Parent: SIGPRPRE.Pagina.Lista.cntProd
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetdProd
+  Parent: SIGPRPRE.Pagina.Lista.cntProd
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getGrupo
+  Parent: SIGPRPRE.Pagina.Lista.cntProd
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Alteracao de Precos"
+  Name = "SIGPRPRE"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Width = 1100
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.Height = 459
+  Pagina.Lista.Grade.Left = 29
+  Pagina.Lista.Grade.TabIndex = 4
+  Pagina.Lista.Grade.Top = 126
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 544
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.TabIndex = 7
+  Pagina.Lista.Grupo_op.Visible = .F.
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.TabIndex = 8
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 7
+  Pagina.Lista.cntFiltros.Left = 455
+  Pagina.Lista.cntFiltros.Width = 36
+  Pagina.Lista.cntFiltros.Height = 30
+  Pagina.Lista.cntFiltros.BackStyle = 0
+  Pagina.Lista.cntFiltros.TabIndex = 9
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 843
+  Pagina.Dados.Grupo_Salva.Top = -1
+  Pagina.Dados.Grupo_Salva.TabIndex = 12
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -24
+  Pagina.Left = 0
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE.Pagina.Lista.CntPeriodo
+------------------------------------------------------------
+  Top = 90
+  Left = 701
+  Width = 266
+  Height = 27
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 3
+  Name = "CntPeriodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE.Pagina.Lista.CntPeriodo.Dt_inicial
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  ControlSource = "llDatai"
+  Left = 65
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = "Este periodo refere-se à data de inicio da atividade"
+  Top = 2
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "Dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE.Pagina.Lista.CntPeriodo.Dt_final
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  ControlSource = "llDataf"
+  Left = 165
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 2
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "Dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE.Pagina.Lista.CntPeriodo.Say2
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 151
+  Top = 6
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE.Pagina.Lista.CntPeriodo.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período : "
+  Height = 15
+  Left = 15
+  Top = 6
+  Width = 48
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE.Pagina.Lista.cntProd
+------------------------------------------------------------
+  Top = 89
+  Left = 16
+  Width = 641
+  Height = 27
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 2
+  Name = "cntProd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE.Pagina.Lista.cntProd.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo/Produto : "
+  Height = 15
+  Left = 38
+  Top = 7
+  Width = 83
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE.Pagina.Lista.cntProd.GetProd
+------------------------------------------------------------
+  ControlSource = "pcProd"
+  Height = 23
+  Left = 197
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 3
+  Width = 115
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 36
+  Name = "GetProd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE.Pagina.Lista.cntProd.GetdProd
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 317
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 3
+  Width = 317
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 37
+  Name = "GetdProd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRE.Pagina.Lista.cntProd.getGrupo
+------------------------------------------------------------
+  ControlSource = "pcGru"
+  Height = 23
+  Left = 123
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 3
+  Width = 69
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 57
+  Themes = .F.
+  Name = "getGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRPRE
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE sqldados
+------------------------------------------------------------
+PROCEDURE sqldados
+llDatai = ThisForm.Pagina.Lista.CntPeriodo.Dt_inicial.Value
+llDataf = ThisForm.Pagina.Lista.CntPeriodo.Dt_Final.Value
+llDatai = fDtoSQL(llDatai)
+llDataf = fDtoSQL(llDataf,'23:59:59')
+pcProd = []
+pcGru = []
+IF !EMPTY(ThisForm.Pagina.Lista.CntProd.GetProd.Value)
+	pcProd = ALLTRIM(ThisForm.Pagina.Lista.cntProd.getProd.Value)
+ENDIF
+
+IF !EMPTY(ThisForm.Pagina.Lista.CntProd.getGrupo.Value)
+	pcGru  = ALLTRIM(ThisForm.Pagina.Lista.cntProd.getgrupo.Value)
+ENDIF
+
+IF EMPTY(pcProd)
+	pcProdF = 'zzzzzzzzzz'
+ELSE
+	pcProdF=ALLTRIM(pcProd)
+ENDIF
+
+IF EMPTY(pcGru)
+	pcGruF = 'zzz'
+ELSE
+	pcGruF=ALLTRIM(pcGru)
+ENDIF
+
+ThisForm.podatamgr.Requery('crSigPrPre')
+
+Select crSigPrPre
+Go Top
+
+ThisForm.Pagina.Lista.Grade.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+Public llDatai,llDataf, pcProd, pcProdF, pcGru, pcGruF
+
+ThisForm.Pagina.Lista.CntPeriodo.Dt_inicial.Value = DATE()
+ThisForm.Pagina.Lista.CntPeriodo.Dt_Final.Value = DATE()
+
+llDatai = ThisForm.Pagina.Lista.CntPeriodo.Dt_inicial.Value
+llDataf = ThisForm.Pagina.Lista.CntPeriodo.Dt_Final.Value
+llDatai = fDtoSQL(llDatai)
+llDataf = fDtoSQL(llDataf,'23:59:59')
+pcProd = []
+pcGru = []
+
+IF !EMPTY(ThisForm.Pagina.Lista.CntProd.GetProd.Value)
+	pcProd = ALLTRIM(ThisForm.Pagina.Lista.cntProd.getProd.Value)
+ENDIF
+
+IF !EMPTY(ThisForm.Pagina.Lista.CntProd.getGrupo.Value)
+	pcGru  = ALLTRIM(ThisForm.Pagina.Lista.cntProd.getgrupo.Value)
+ENDIF
+
+pcProdF = pcProd
+pcGruF = pcGru
+
+lcQryPrPre  = 	[Select a.*, b.dpros, b.cgrus From SigPrPre a, SigcdPro b ] + ;
+				[where a.datas between ?llDatai And ?llDataf and a.cPros Between ?pcProd and ?pcProdF and a.cpros=b.cpros ] + ;
+				[and b.cGrus Between ?pcGru and ?pcGruF and a.cpros=b.cpros ]
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector', THISFORM.NAME)
+	With .poDatamgr
+		.AddCursor('SigPrPre','cidchaves','crSigPrPre','',ThisForm.pagina.lista.grade, lcQryPrPre)
+		.pfSqlTabela(1).pColuna('cPros','','','Produto',120,.t.)
+		.pfSqlTabela(1).pColuna('dPros','','','Descricao',300,.t.)
+		.pfSqlTabela(1).pColuna('cgrus','','','Grupo',75,.t.)
+		.pfSqlTabela(1).pColuna('datas','','','Data',75,.t.)
+		.pfSqlTabela(1).pColuna('pvensant','','','Pr Anterior',100,.t.)
+		.pfSqlTabela(1).pColuna('pvens','','','Pr Atual',100,.t.)
+	EndWith
+	= DoDefault()
+	thisform.sqldados() 
+	.LockScreen = .f.
+ENDWITH
+
+thisform.pagina.lista.grupo_Op.Visible=.f.
+    
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPRE.Pagina.Lista.CntPeriodo.Dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value > This.Parent.Dt_final.Value
+	This.Parent.Dt_Final.Value = This.Value
+Endif
+
+ThisForm.SqlDados
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPRE.Pagina.Lista.CntPeriodo.Dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < This.Parent.Dt_Inicial.Value
+	This.Parent.Dt_Inicial.Value = This.Value
+EndIf
+ThisForm.SqlDados
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Thisform.Pagina.Lista.Grade.Column1.SetFocus
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPRE.Pagina.Lista.cntProd.GetProd
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .t.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+lcGrupo = This.Parent.getGrupo.value
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', 'crListaRemota', 'CPros', This.Value, 'Seleção', 1000)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getProd.Value = crListaRemota.CPros
+	This.Parent.getdProd.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	This.Parent.getProd.Value = ''
+	This.Parent.getdProd.Value = ''
+EndIf
+This.Parent.getProd.Refresh
+This.Parent.getDProd.Refresh
+
+ThisForm.SqlDados
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPRE.Pagina.Lista.cntProd.GetdProd
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Empty(This.Parent.getProd.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'DPros', This.Value, 'Seleção', 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getProd.Value = crListaRemota.CPros
+	This.Parent.getDProd.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	This.Parent.getProd.Value = ''
+	This.Parent.getDProd.Value = ''
+EndIf
+This.Parent.getProd.Refresh
+This.Parent.getdProd.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPRE.Pagina.Lista.cntProd.getGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('CGrus','XXXXXX','Código')
+		m.loLista.mAddColuna('DGrus','','Descrição')
+		m.loLista.mAddColuna('Mercs','','Gde.Grupo')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrGrupos')
+		This.Value                  = Evaluate('CrGrupos.CGrus')
+	Else
+		This.Value                  = ''
+	EndIf
+EndIf
+This.Refresh
+thisform.sqldados() 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .t.
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRPRE
+RESERVED3 (ClassInfo): *sqldados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

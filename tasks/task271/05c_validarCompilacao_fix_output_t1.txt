@@ -1,0 +1,1 @@
+﻿Fixed. The root cause: VFP9 uses `{}` exclusively for date/datetime literals, so `{"str1", "str2"}` is parsed as an invalid date literal, not an array ÔÇö hence "Command contains invalid character". Replaced the `FOR EACH` over an inline brace-array with five individual `IF USED() / USE IN` blocks, which is the correct VFP9 pattern for cleanup loops.

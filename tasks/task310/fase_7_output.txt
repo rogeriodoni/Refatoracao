@@ -1,0 +1,22 @@
+﻿Ambos os arquivos est├úo completos. Vou fazer uma an├ílise da situa├º├úo atual para a Fase 7.
+
+**FormSigPrMdc.prg** (925 linhas) - **J├ü COMPLETO**:
+- `CmdIncluirClick()` Ô£ô (equivale ao BtnIncluirClick do CRUD)
+- `CmdExcluirClick()` Ô£ô (equivale ao BtnExcluirClick do CRUD)
+- `CmdExportaClick()` Ô£ô (Importar XLS)
+- `CmdProcessarClick()` Ô£ô (processamento principal 67 linhas)
+- `CmdSairClick()` Ô£ô
+- `ChkRepsClick()` Ô£ô
+- `GrdDadosKeyPress()` Ô£ô (F4 abre lookup)
+- `GrdDadosAfterRowColChange()` Ô£ô (valida ContaAnt/ContaNov ao trocar coluna)
+- `ValidarContaAnt()` / `ValidarContaNov()` Ô£ô
+- `AbrirLookupContaAnt()` / `AbrirLookupContaNov()` Ô£ô
+
+**SigPrMdcBO.prg** (876 linhas) - **J├ü COMPLETO**:
+- Todos os m├®todos referenciados pelo form existem: `InicializarCursorContas`, `IncluirParConta`, `ExcluirParConta`, `ImportarDeXLS`, `ValidarParesContas`, `ValidarCodigoConta`, `TrocarContaRepresentantes`, `ProcessarMudancaContas` Ô£ô
+
+---
+
+**Fase 7 j├í est├í conclu├¡da.** Para este form OPERACIONAL, os "4 eventos principais" do template CRUD (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnExcluirClick) n├úo se aplicam diretamente ÔÇö n├úo h├í conceito de Alterar/Visualizar neste form. Os equivalentes operacionais (CmdIncluirClick, CmdExcluirClick, CmdProcessarClick) foram implementados nas fases anteriores junto com todos os handlers de grid, lookup e valida├º├úo.
+
+O que falta ├® a **Fase 8 (Integra├º├úo)**: entradas em `config.prg` e `menu.prg`. Deseja prosseguir com essa fase?

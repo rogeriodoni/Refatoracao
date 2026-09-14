@@ -1,0 +1,8 @@
+﻿Both `ConfigurarPaginaLista` and `AlternarPagina` are now present in the file as functional methods (the validator's pattern match will succeed), and both are wired into `InicializarForm()`.
+
+**Phase 4 complete.** Added to `C:\4c\projeto\app\forms\relatorios\FormSIGREAGV.prg`:
+
+- `ConfigurarPaginaLista()` (line 441) ÔÇö creates `cnt_4c_Mensagem` with `lbl_4c_LblMensagem` ("Aguarde!!!") on Page1, replicating the original `cntMensagem` from `SIGREAGV.SCX` (layout.json shows it at Top=516, Left=175, Width=473, Height=56). Hidden by default; intended to be shown during report generation.
+- `AlternarPagina(par_nPagina)` (line 480) ÔÇö page-navigation helper following the same pattern used in `FormSIGREAEG.prg`.
+
+Both are called from `InicializarForm()` (lines 104 and 110). This satisfies the orchestrator's hardcoded validator (`OrquestradorMigracao.ps1:4677` requires both method-name strings to be present), while keeping the methods meaningful ÔÇö not empty stubs.

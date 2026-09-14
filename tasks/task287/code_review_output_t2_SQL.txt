@@ -1,0 +1,10 @@
+﻿O problema reportado ├® um falso positivo. `CONTROLCOUNT` n├úo existe em nenhum arquivo do projeto. Busquei em todo `C:\4c\projeto` e n├úo h├í matches.
+
+O WHERE do SQL em `SigPrGf1BO.prg` (linhas 111-112) j├í est├í correto, usando apenas `a.Datas` e `a.Emps`, exatamente como o original:
+
+```foxpro
+" WHERE a.Datas BETWEEN " + loc_cDtIni + " AND " + loc_cDtFim + ;
+" AND a.Emps = " + EscaparSQL(THIS.this_cEmpresa)
+```
+
+Nenhuma corre├º├úo necess├íria neste pass ÔÇö os arquivos est├úo ├¡ntegros.

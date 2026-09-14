@@ -1,0 +1,28 @@
+﻿Analisei ambos os arquivos. A **Fase 7 n├úo requer altera├º├Áes** neste form espec├¡fico ÔÇö aqui est├í o motivo:
+
+## Diagn├│stico
+
+**FormSIGPRCIC ├® um dialog modal de sele├º├úo de ├¡cone** (n├úo um CRUD). O SCX original n├úo tem bot├Áes `Incluir/Alterar/Excluir/Visualizar` ÔÇö n├úo existe equivalente para `BtnIncluirClick`, `BtnAlterarClick`, etc.
+
+**Todas as a├º├Áes do form j├í est├úo implementadas (Fases 3-6):**
+
+| A├º├úo original (SCX) | Implementa├º├úo atual |
+|---------------------|---------------------|
+| `Grid1.Column1.Text1.DblClick` ÔåÆ salva ├¡cone | `GrdDadosText1DblClick()` ÔåÆ `SelecionarIcone()` ÔåÆ `Release()` |
+| `Grid1.Column1.Text1.KeyPress` ENTER | `GrdDadosText1KeyPress()` ÔåÆ chama DblClick |
+| `SIGPRCIC.KeyPress` ESC ÔåÆ fecha | `KeyPress()` ÔåÆ `Release()` |
+| `Grid1.AfterRowColChange` ÔåÆ preview | `GrdDadosAfterRowColChange()` |
+| `Grid1.BeforeRowColChange` ÔåÆ preview | `GrdDadosBeforeRowColChange()` |
+| `Grid1.Scrolled` ÔåÆ preview | `GrdDadosScrolled()` |
+
+**BO tamb├®m est├í completo:** `SelecionarIcone()`, `BuscarIconeAtual()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()` ÔÇö tudo implementado.
+
+## Por que n├úo adicionar os 4 m├®todos
+
+Adicionar `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` sem bot├Áes correspondentes na tela seria **stubs** (proibido pela regra de completude). O original n├úo tem esses bot├Áes ÔÇö adicion├í-los violaria o **PILAR 1 (UX fidelity)**.
+
+A fase 7 usa o template gen├®rico do pipeline que foi desenhado para forms CRUD. Para este dialog operacional, o equivalente dos "eventos principais" s├úo os handlers de grid (DblClick/KeyPress/ESC) ÔÇö todos j├í implementados.
+
+**Fase 7 est├í conclu├¡da. Os dois arquivos est├úo completos:**
+- `C:\4c\projeto\app\classes\SIGPRCICBO.prg` ÔÇö 243 linhas, BO completo
+- `C:\4c\projeto\app\forms\operacionais\FormSIGPRCIC.prg` ÔÇö 529 linhas, form completo com todos os event handlers do original

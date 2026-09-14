@@ -1,0 +1,10 @@
+﻿All 4 required methods (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) are now present in `FormFis.prg` (823 lines total). ENDDEFINE closes the class properly. Fase 7 complete.
+
+**Resumo do que foi adicionado** (sem├óntica adaptada ÔÇö SigCdFis ├® dialog de configura├º├úo, n├úo CRUD, ent├úo os 4 m├®todos mapeiam para opera├º├Áes sobre o arquivo `SetFiscal.Ini`):
+
+- `FormFis.prg:628` **`BtnIncluirClick`** ÔÇö Reinicializa cursor com defaults (`Portas=1`, `Settings="9600,n,8,1"`, combos "Em Branco"), com confirma├º├úo. Equivale a "nova configura├º├úo".
+- `FormFis.prg:678` **`BtnAlterarClick`** ÔÇö Recarrega `SetFiscal.Ini` do disco descartando altera├º├Áes em mem├│ria. Equivale a "editar registro existente".
+- `FormFis.prg:707` **`BtnVisualizarClick`** ÔÇö Exibe `MsgInfo` com resumo da configura├º├úo corrente (path + porta + settings + DTR/RTS + impressora). Read-only, n├úo altera cursor.
+- `FormFis.prg:760` **`BtnExcluirClick`** ÔÇö Limpa configura├º├úo e persiste estado vazio em `SetFiscal.Ini` via `COPY TO ... TYPE SDF`, com dupla confirma├º├úo. Equivale a "excluir registro".
+
+Todos os m├®todos s├úo `PUBLIC` (sem `PROTECTED`), tem `TRY/CATCH` com `MsgErro` incluindo `LineNo`/`Procedure`, usam `CHR()` para acentos, `MsgConfirma`/`MsgInfo`/`MsgAviso` (nunca `MESSAGEBOX`), e delegam para m├®todos existentes do `FisBO` (`CarregarDeArquivo`, `CarregarDoCursor`, `InicializarCursor`). Sem TODOs, sem stubs.

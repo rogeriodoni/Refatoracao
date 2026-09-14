@@ -1,0 +1,9 @@
+﻿Arquivo correto. Fase 4 conclu├¡da. O que foi implementado:
+
+**`ConfigurarBotoes()`** ÔÇö 3 bot├Áes standalone na posi├º├úo exata do legado (Top=3, Left=413/488/563, Width=75, Height=75): `cmd_4c_Inserir`, `cmd_4c_Excluir`, `cmd_4c_Encerrar`. Todos com `.Themes=.T.` + `.DisabledPicture` (regra de standalone com Picture).
+
+**`ConfigurarGrid()`** ÔÇö `grd_4c_Dados` com 6 colunas (posi├º├úo exata do legado: Top=111, Left=9, Width=620, Height=394). Column1=Tam.(65px), Column2=Descri├º├úo(170px), Column3-6 num├®ricos(90px cada). `InputMask` para as colunas num├®ricas fora do WITH principal para evitar problema de aninhamento.
+
+**`ConfigurarGrdDados()`** ÔÇö V├¡ncula o cursor `cursor_4c_TamPro` ao grid: `ColumnCount=6` antes de `RecordSource` (regra anti-auto-expans├úo), `ControlSource` para cada coluna, cabe├ºalhos redefinidos ap├│s `RecordSource` (VFP9 os reseta).
+
+**`AjustarBotoesPorModo()`** ÔÇö Oculta `cmd_4c_Inserir` e `cmd_4c_Excluir` em modo CONSULTAR. Chamada no `InicializarForm()` ap├│s `TornarControlesVisiveis()`, para sobrescrever a visibilidade que o m├®todo anterior for├ºa para `.T.`.

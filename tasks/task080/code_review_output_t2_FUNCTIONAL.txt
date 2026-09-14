@@ -1,0 +1,11 @@
+﻿Ap├│s varrer o arquivo completo, n├úo h├í nenhuma ocorr├¬ncia de `THIS.Width()` com par├¬nteses. O que existe s├úo acessos ├á **propriedade** `THIS.Width` (sem par├¬nteses):
+
+- Linha 114: `.Width = THIS.Width`
+- Linha 126: `.Width = THIS.Width`
+- Linha 142: `.Width = THIS.Width`
+- Linha 283: `loc_oPgf.Width = THIS.Width + 2`
+- Linha 284: `loc_oPgf.Height = THIS.Height - 85`
+
+`Width` e `Height` s├úo **propriedades nativas de Form no VFP9**, sempre presentes. O detector de falhas confundiu `THIS.Width` (acesso a propriedade, correto) com `THIS.Width()` (chamada de m├®todo, que seria erro).
+
+**Diagn├│stico: falso positivo.** O c├│digo est├í correto ÔÇö n├úo existe chamada de m├®todo inventado, n├úo h├í nada a implementar nem remover. Nenhuma altera├º├úo necess├íria.

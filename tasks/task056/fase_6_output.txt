@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. Todos os edits foram aplicados com sucesso. Fase 6 conclu├¡da.
+
+**Resumo das altera├º├Áes feitas em `FormSIGRECMV.prg`:**
+
+1. **DblClick BINDEVENTs adicionados** para todos os campos com lookup:
+   - `txt_4c_NmOperacao` ÔåÆ `NmOperacaoDblClick`
+   - `txt_4c_CdMoeda` ÔåÆ `CdMoedaDblClick`
+   - `txt_4c_DsMoeda` ÔåÆ `DsMoedaDblClick` (novo ÔÇö original permitia busca por descri├º├úo)
+   - `txt_4c_GrupoMov` ÔåÆ `GrupoMovDblClick`
+   - `txt_4c_DGrupoMov` ÔåÆ `DGrupoMovDblClick`
+   - `txt_4c_CdEstoque` ÔåÆ `CdEstoqueDblClick`
+   - `txt_4c_DsEstoque` ÔåÆ `DsEstoqueDblClick`
+
+2. **`txt_4c_DsMoeda` corrigido**: removido `ReadOnly=.T.` e `BackColor=RGB(230,230,230)` ÔÇö o original (`get_ds_moeda`) era edit├ível e permitia busca reversa por descri├º├úo; agora tem `KeyPress` (F4/ENTER/TAB) e `DblClick` vinculados.
+
+3. **9 novos m├®todos adicionados**: 7 handlers DblClick, `TeclaDsMoeda` e `ValidarDsMoeda` (busca em `SigCdMoe.DMoes LIKE valor%`, preenche ambos os campos ou abre o lookup se n├úo encontrar).

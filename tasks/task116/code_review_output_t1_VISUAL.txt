@@ -1,0 +1,12 @@
+﻿Esses dois problemas s├úo **falsos positivos** do validador. Explica├º├úo:
+
+- `pgf_4c_Paginas.Top = 85` (linha 294)
+- `lbl_4c_Label4` e `lbl_4c_Label5` est├úo **dentro de Page1**, portanto suas coordenadas s├úo relativas ├á p├ígina, n├úo ao form
+- 201 (original, relativo ao form) ÔêÆ 85 (PageFrame.Top) = **116** (relativo ├á p├ígina) Ô£ô
+
+A diferen├ºa de exatamente 85px que o validador detectou **├®** o offset do PageFrame. Se eu alterasse para `Top = 201`, os controles ficariam a 201+85 = **286px** do topo do form ÔÇö completamente errado.
+
+Al├®m disso, os demais controles na mesma linha confirmam a consist├¬ncia:
+- `txt_4c_Linha.Top = 110`, `txt_4c_Coluna.Top = 110`, `chk_4c_OptLogo.Top = 117` ÔÇö todos na mesma faixa (~110ÔÇô117)
+
+**Nenhuma altera├º├úo ser├í feita.** Os dois problemas s├úo artefatos do validador que compara coordenadas absolutas do SCX original (relativas ao form) com coordenadas relativas ├á Page1 do PageFrame, sem descontar o offset de 85px do PageFrame. Os valores atuais (116) est├úo matematicamente corretos e visualmente alinhados.

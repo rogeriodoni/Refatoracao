@@ -1,0 +1,41 @@
+﻿Confirma├º├úo completa. Todos os 4 casos s├úo **falsos positivos** do validador. Nenhuma altera├º├úo ├® necess├íria.
+
+---
+
+## An├ílise das 4 detec├º├Áes
+
+### 1. CONTROLCOUNT ÔÇö Falso positivo: propriedade VFP9, n├úo SQL
+
+O validador encontrou `ControlCount` em `FormSIGPRCPR.prg` linha 360/371/379, mas ├® `par_oContainer.ControlCount` ÔÇö propriedade nativa de containers VFP9 usada em `TornarControlesVisiveis`. N├úo existe nenhuma cl├íusula `WHERE CONTROLCOUNT` no c├│digo.
+
+### 2. DOPES ÔÇö Falso positivo: PK de SigCdOpe
+
+```vfp
+*-- BO linha 181
+"SELECT TOP 1 Globalizas, Servicos FROM SigCdOpe WHERE Dopes = " + EscaparSQL(...)
+```
+`Dopes` ├® a chave prim├íria de `SigCdOpe` (confirmado pela mem├│ria do projeto: *"SigCdOpe eh single-column (Dopes eh PK+descricao)"*). Lookup de PK leg├¡timo, equivalente ao `Select crSigCdOpe` + SEEK do c├│digo original.
+
+### 3. CGRUS ÔÇö Falso positivo: PK de SigCdGrp
+
+```vfp
+*-- BO linha 211
+"SELECT TipoEstos FROM SigCdGrp WHERE CGrus = " + EscaparSQL(...)
+```
+`CGrus` ├® o campo-chave de SigCdGrp. Lookup leg├¡timo para determinar `TipoEstos` do grupo do produto.
+
+### 4. ICLIS ÔÇö Falso positivo: PK de SigCdCli
+
+```vfp
+*-- BO linha 232
+"SELECT GruProds, ConProds FROM SigCdCli WHERE IClis = " + EscaparSQL(loc_cTConta)
+```
+`IClis` ├® a PK de `SigCdCli`, confirmada por **m├║ltiplos usos no projeto** (sigopcgpBO, sigopindBO, SigPdM10BO, SIGPGCNBBO, etc., todos usam `WHERE IClis = ...`).
+
+---
+
+## Por que o validador errou
+
+O validador comparou as colunas nos WHERE do c├│digo migrado contra o WHERE do c├│digo original (que usava `UPDATE SigMvItn/SigMvIts` com colunas EMPDOPNUMS, CIDCHAVES, etc.). Mas o c├│digo migrado adiciona **queries de lookup** equivalentes aos `Select crSigCdOpe`/`crSigMvCab` pr├®-carregados do legado ÔÇö esses lookups por PK s├úo semanticamente id├¬nticos a um SEEK no cursor original.
+
+**Nenhum arquivo foi alterado.** O c├│digo est├í correto.

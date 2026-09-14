@@ -1,0 +1,13 @@
+﻿Fase 2 conclu├¡da. O arquivo `sigrecpeBO.prg` est├í completo com 373 linhas.
+
+**O que foi implementado:**
+
+- **`PrepararDados()`**: Busca nome da empresa via SQLEXEC, cria `cscabecalho`, carrega `cursor_4c_LocalEst` (SigMvEst) e `cursor_4c_LocalPro` (SigCdPro) do SQL Server, delega para o m├®todo correto conforme `this_nTipo`.
+
+- **`ExecutarComparacaoEstoqueAvsB()`** (tipo 1): VFP SQL local com subquery NOT IN ÔÇö por chave composta `Cpros+CodCors+CodTams` quando `this_nCorTam=1`, ou somente por `Cpros` caso contr├írio.
+
+- **`ExecutarComparacaoProdutosVsB()`** (tipo 2): Constr├│i WHERE por macro com filtros de intervalo (Grupo, Unidade, Linha, Cole├º├úo, Situa├º├úo), indexa `cursor_4c_TmpPro` por Cpros, resolve equivalentes via SCAN/SEEK/REPLACE, e gera resultado agrupado por Reffs (`this_nReff=1`) ou direto por Cpros.
+
+- **`Imprimir()`** / **`Visualizar()`**: Chamam `PrepararDados()` e emitem `RelSigrecpe.frx`.
+
+- **`ObterMensagemErro()`**: Helper para o form consumir mensagens de erro.

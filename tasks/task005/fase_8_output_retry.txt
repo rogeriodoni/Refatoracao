@@ -1,0 +1,22 @@
+﻿Both SQL queries now have 56 columns each. The Buscar and CarregarPorCodigo queries are aligned.
+
+Phase 8 is complete. Here's a summary of what was done:
+
+**ProdutoBO.prg fixes (11 missing columns):**
+- Added `QtPed`, `QultComp`, `WebPros` to both SQL SELECT queries (Buscar + CarregarPorCodigo)
+- Added `qtped`, `qultcomp` to `CarregarDoCursor`
+- Added `qtped`, `qultcomp`, `webpros` to CREATE CURSOR placeholder
+- Added `MoECs`, `MoePVs`, `QtPed`, `UltComps`, `VultComps`, `MultComps`, `QultComp`, `ChkFunds`, `Volumes`, `TEnts`, `WebPros` to INSERT SQL
+- Added same fields to UPDATE SQL
+
+**FormProduto.prg fixes (3 missing fields in FormParaBO):**
+- Added `this_dDatas` (from `txt_4c_DtSituas`)
+- Added `this_nPcuss` (from `txt_4c_Ctotal`)
+- Added `this_nTents` (from `txt_4c_TEnts`)
+- `this_nWebpros` was already present at line 3501
+
+**Integration (already done in prior phases):**
+- `config.prg`: Auto-loads via ADIR() - no changes needed
+- `menu.prg`: Already has `AbrirFormProduto()` + BAR 7 in popCadastros
+
+All Phase 8 methods were already implemented in earlier phases: `CarregarLista`, `BOParaForm`, `FormParaBO`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnConfirmarClick`, `BtnCancelarClick`. The fixes above address the missing data fields that would cause runtime errors.

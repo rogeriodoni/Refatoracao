@@ -1,0 +1,1454 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrefc1.SCX
+* Data/Hora: 05/06/2026 03:50:59
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREFC1
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGREFC1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREFC1
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREFC1
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_empresa
+  Parent: SIGREFC1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGREFC1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREFC1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: TpRel
+  Parent: SIGREFC1
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say3
+  Parent: SIGREFC1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGREFC1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = -7
+  Left = 26
+  Width = 792
+  Height = 479
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFC1
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Fechamento de Caixa"
+  ControlBox = .F.
+  WindowState = 0
+  segunda = .F.
+  Name = "SIGREFC1"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.AutoSize = .F.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.AutoSize = .F.
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.AutoSize = .F.
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.AutoSize = .F.
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.ControlSource = ""
+  btnReport.Left = 534
+  btnReport.Top = 0
+  btnReport.TabIndex = 6
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFC1.lbl_periodo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Left = 219
+  Top = 148
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFC1.get_dt_final
+------------------------------------------------------------
+  ControlSource = ""
+  Left = 364
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 145
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFC1.get_dt_inicial
+------------------------------------------------------------
+  ControlSource = ""
+  Left = 267
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 145
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFC1.get_cd_empresa
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  Left = 267
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 120
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFC1.lbl_empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Left = 214
+  Top = 123
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFC1.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 351
+  Top = 148
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFC1.TpRel
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = ""
+  Height = 47
+  Left = 256
+  Top = 174
+  Width = 155
+  TabIndex = 5
+  ZOrderSet = 9
+  Name = "TpRel"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Visão detalhada"
+  Option1.Value = 1
+  Option1.ControlSource = ""
+  Option1.Height = 15
+  Option1.Left = 7
+  Option1.Top = 5
+  Option1.Width = 94
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Mapa de Fechamento"
+  Option2.ControlSource = ""
+  Option2.Height = 15
+  Option2.Left = 7
+  Option2.Top = 26
+  Option2.Width = 121
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFC1.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Tipo :"
+  Left = 235
+  Top = 179
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFC1.get_ds_empresa
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  Left = 300
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 120
+  Width = 289
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREFC1
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE preparafechamentoconserto
+------------------------------------------------------------
+PROCEDURE preparafechamentoconserto
+lcQuery = [Select c.datas, c.Emps, c.Dopes, c.Numes, c.empdopnums, c.cidchaves as chaPar, c.fpags, (c.valos*c.cotfpgs) as valos, ] +; 
+	[d.fparcs, c.valos as valosM, c.moefpgs, ] +; 
+	[case when d.infos = 'T' then d.formas else e.descrs end as info, ] +;  
+	[d.formas, d.valpends, d.trocos,d.bandeira,c.adquirente ] +;  
+	[From sigmvPar c, sigopfp d, sigprinf e, sigcdope g, sigcdtom h ] +; 
+	[Where c.datas BetWeen ?pDtI And ?pDtF And ] +;  
+	[c.empdopnums in(select a.empdopnums ] +; 
+	[from  sigmvpec a, sigcdope b, sigmvcab c, sigcdope g ] +;  
+	[Where a.datas BetWeen ?pDtI And ?pDtF And ] +;  
+	Iif(Empty(lcEmp), [ ], [a.Emps = '] + lcEmp + [' And ]) + ;
+	[g.relfechas = 1 and ] +;  
+	[a.dopes = g.dopes and ] +;  
+	[a.dopes = '] + lcConserto + [' and ] +;  
+	[convert(integer,a.codigos/1000000)=b.ndopes and ] +; 
+	[c.emps = a.empsubns and ] +; 
+	[c.dopes=b.dopes and c.numes = convert(integer,right(a.codigos,6))) and ] +;
+	[g.tipoops = h.codigos and ] +; 
+	[h.gergdmis = 1 and ] +;  
+	[g.tipoops <> 5 and ] +;  
+	[c.fpags = d.fpags and ] +;  
+	[d.infos = e.infos and ] +;  
+	[g.relfechas = 1 and ] +;  
+	[c.dopes = g.dopes and ] +;  
+	[c.fpags not in ('GARANTIA','CORTESIA','PAG EFETUADO','ABERTO R','PAG EFETUAD','CHEQUES','CREDITO LOJA','DEV LOJA','CRED PERMUTA') ] +;  
+	[order by c.empdopnums ]
+		
+If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosNewE') < 1)
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDadosNewE)')
+	Return 0
+Endif
+
+*** Prepara fechamento ***
+Select chapar, Max(empdopnums) As empdopnums, Max(valos) As valos, Max(fparcs) As fparcs, Max(Info) As Info, Max(formas) As formas, Max(valpends) As valpends, Max(bandeira) As bandeira, ;
+	MAX(adquirente) As adquirente, Max(valosM) As valosM, MAX(moefpgs) as moefpgs From csDadosNewE Group By chapar Into Cursor CurvE
+
+Select chapar, empdopnums, Info, formas, bandeira, adquirente, valos As valAv, Cast(0.00 As numeric(11,2))  As valFin, Cast(0.00 As numeric(11,2)) As valRec;
+	from CurvE Where fparcs = 1;
+	union ;
+	SELECT chapar, empdopnums, Info, formas, bandeira, adquirente, Cast(0.00 As numeric(11,2)) As valAv, valos As valFin, Cast(0.00 As numeric(11,2)) As valRec;
+	from CurvE Where !(fparcs = 1) ;
+	into Cursor CurtE
+
+Select CurtE
+Go Top
+
+Store [] to lcAdq, lcInfo, lcBand, lcForma
+ 
+Select Info, formas, bandeira, adquirente, valAv, Cast(0.00 As numeric(11,2)) As QtdAv, valFin, Cast(0.00 As numeric(11,2)) As QtdFin ;
+From CurtE Where 1=0 ;
+Into cursor csResultE readwrite 
+
+Select csResultE
+Select valAv as aVista, QtdAv as QtVista, valFin as aPrazo, QtdFin as QtPrazo From csResultE Into Cursor csResTotalE readwrite
+
+Select csResTotalE 
+Append Blank 
+
+Select CurtE
+Go Top
+Select Distinct Info, adquirente from CurtE Into Cursor csAdqE Readwrite
+
+If Reccount('csAdqE')>0
+	Select csRelatorio
+	Append Blank
+	Replace c0 With [DETALHAMENTO DAS ORDEM DE SERVIÇOS PAGAS]
+	Append Blank
+	Replace c2 With [A VISTA]
+	Replace c4 With [PARCELADO]
+	Replace c6 With [TOTAL]
+	Replace c7 With [B7]
+	
+	Select csRelatorio
+	Append Blank
+		Replace c2 With [QTD]
+		Replace c3 With [R$]
+		Replace c4 With [QTD]
+		Replace c5 With [R$]
+		Replace c6 With [R$]
+		Replace c7 With [B1]
+EndIf 
+
+Select csAdqE
+Go Top
+Scan
+	
+	Select csResultE
+	Zap in csResultE
+	
+	lcAdq = csAdqE.Adquirente
+	lcInfo = csAdqE.Info
+	
+	Select Distinct formas, bandeira from CurtE where adquirente = lcAdq and Info = lcInfo Into Cursor csBandE readwrite 
+	
+	Select csRelatorio
+	Append Blank
+	Replace c3 With Alltrim(lcInfo) + [ ] + Alltrim(lcAdq)
+	Replace c7 With [B7]
+
+	Select csBandE
+	Go top
+	Scan
+		lcBand = csBandE.bandeira
+		lcForma = csBandE.formas
+		Select Info, adquirente, formas, bandeira, Sum(valAv) As valAv, Count(1) as QtdAv, Cast(0.00 As numeric(11,2))  As valFin, Cast(0.00 As numeric(11,2))  As QtdFin ;
+			from CurtE ;
+			Where adquirente = lcAdq And Info = lcInfo and bandeira = lcBand and formas = lcForma and valAv <> 0 ;
+			group by Info, adquirente, formas, bandeira ;
+		union all ;
+		Select Info, adquirente, formas, bandeira, Cast(0.00 As numeric(11,2)) As valAv, Cast(0.00 As numeric(11,2)) as QtdAv, Sum(valFin) As valFin, Count(1) as QtdFin ;
+			from CurtE ;
+			Where adquirente = lcAdq And Info = lcInfo and bandeira = lcBand and formas = lcForma and valFin <> 0 ;
+			group by Info, adquirente, formas, bandeira ;	
+			Into Cursor csValAvE
+		
+		Select Info, adquirente, formas, bandeira, Sum(valAv) As valAv, Sum(QtdAv) As QtdAv, Sum(valFin) As valFin, Sum(QtdFin) As QtdFin ;
+			from csValAvE ;
+			Group by Info, adquirente, formas, bandeira ;
+			Into Cursor csSomaAFE ReadWrite 
+		
+		Select csSomaAFE
+		Go Top
+		Scan
+				
+			Select csResTotalE
+			Go Top
+			replace aVista With aVista + csSomaAFE.valAv ,;
+					QtVista With QtVista + csSomaAFE.QtdAv ,;
+					aPrazo With aPrazo + csSomaAFE.valFin ,;
+					QtPrazo With QtPrazo + csSomaAFE.QtdFin in csResTotalE 
+			
+			
+			Select csResultE
+			Append Blank	
+			Replace Info with csSomaAFE.Info , ;
+					adquirente with csSomaAFE.adquirente, ;
+					formas with csSomaAFE.formas, ;
+					bandeira with csSomaAFE.bandeira, ;
+					valAv with csSomaAFE.valAv, ;
+					QtdAv with csSomaAFE.QtdAv, ;
+					valFin with csSomaAFE.valFin, ;
+					QtdFin with csSomaAFE.QtdFin in csResultE
+	
+			Select csSomaAFE
+		EndScan 
+		Select csBandE
+	EndScan 
+	Select csResultE
+	Go Top
+	Scan
+		Select csRelatorio
+		Append Blank
+		Replace c1 With Iif(Empty(csResultE.adquirente),csResultE.formas,csResultE.bandeira)
+		Replace c2 With Transform(csResultE.QtdAv, '@R 999,999,999.99')
+		Replace c3 With Transform(csResultE.valAv, '@R 999,999,999.99')
+		Replace c4 With Transform(csResultE.QtdFin, '@R 999,999,999.99')
+		Replace c5 With Transform(csResultE.valFin, '@R 999,999,999.99')
+		Replace c6 With Transform(csResultE.valAv + csResultE.valFin , '@R 999,999,999.99')
+		Replace c7 With [B1] 
+		
+	EndScan 
+	Select csAdqE	
+EndScan 
+
+If Reccount('csResTotalE')>0
+	Select csRelatorio
+	Append Blank
+	Replace c1 With [TOTAL]
+	Replace c2 With Transform(csResTotalE.QtVista, '@R 999,999,999.99')
+	Replace c3 With Transform(csResTotalE.aVista, '@R 999,999,999.99')
+	Replace c4 With Transform(csResTotalE.QtPrazo, '@R 999,999,999.99')
+	Replace c5 With Transform(csResTotalE.aPrazo, '@R 999,999,999.99')
+	Replace c6 With Transform(csResTotalE.aVista + csResTotalE.aPrazo, '@R 999,999,999.99')
+	Replace c7 With [T1]
+
+	Append Blank
+	Append Blank
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+	Report Form SigReFc3 To Printer Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Public m.reslanca, m.resforma, m.rescheque, m.rescartao, m.resvende, m.resconta, m.reslanfor, m.resqtdes, m.ResvDets
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		lnQueryOk = ThisForm.podataMgr.SqlExecute([Select * From SigCdPam ],'CrSigCdPam')
+		If lnQueryOk < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return(.F.)
+		EndIf
+
+*!*			lnQueryOk = ThisForm.podataMgr.SqlExecute([Select cemps,razas From SigCdEmp ],'CrSigCdEmp')
+*!*			If lnQueryOk < 1
+*!*				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+*!*				Return(.F.)
+*!*			EndIf
+
+*!*			Select CrSigCdEmp
+*!*			Index On cemps Tag cemps
+*!*			Go Top
+
+
+		lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select * From SigOpFp ],'CrSigOpFp')
+		If lnQueryOk < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return(.F.)
+		EndIf
+		Select CrSigOpFp
+		Index On fpags Tag FPags
+		Go Top
+
+		.get_dt_inicial.Value = Date()
+		.get_dt_final.Value   = Date()
+		.get_cd_empresa.Value = _empr
+
+		=DoDefault()
+
+		ThisForm.Refresh
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor csSigCdTom (Marca n(1), Descri c(40), Codigos n(2))
+Index On Codigos Tag Codigos
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF, lnOpt
+Local lcCbEmp, lcTitulo, lcPeriodo, lcGru, lcVendedor, lcOperacao, ldInicial, ldFinal, lcModa, ;
+	lnAgru, lnAgru2, lnAgru3, lcFPubl
+Local cheVen, cheTop, cheFP, cheProd, cheCole, cheCate, cheLstOp, cheLstOp1, lcLstOp, lcHInicial, lcHFinal, lcDataIni, lcDataFin, lcEmpAnt
+
+ldInicial   = Thisform.get_dt_inicial.Value
+lcHInicial  = [00:00:00]
+ldFinal     = Thisform.get_dt_Final.Value
+lcHFinal    = [23:59:59]
+lcEmp		= Thisform.get_cd_empresa.Value
+lnTpRel 	= Thisform.tpRel.Value
+lcEmpAnt	= [   ]
+
+Thisform.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', lcEmp)
+
+lcCbTitulo  = Iif(Empty(lcEmp), [Todas as empresas], lcEmp+[-]+Alltrim(crSigcdEmp.razas))
+
+pDtI = fDtoSql(ldInicial, lcHInicial)
+pDtF = fDtoSql(ldFinal, lcHFinal)
+pDtH = fDtoSql(Date(), lcHFinal)
+
+lcOperacao = Alltrim(crSigcdpam.dopes)
+lcConserto = Alltrim(crSigcdpam.opconsers)
+
+If Empty(lcOperacao)
+	=Messagebox('Não existe movimentação de fechamento configurada!!!', 0+48, '')
+Endif
+
+Wait Window 'Aguarde...' Nowait Noclear
+
+Create Cursor csRelatorio (c0 Char(60), c1 Char(30), c2 Char(30), c3 Char(30), c4 Char(30), c5 Char(30), c6 Char(30), c7 Char(2))
+Set Step On 
+If lnTpRel = 2
+	*** mena - considera venda os tipos cujo gergdmis = 1 ***
+	*** mena - seleciona vendas por data  ***
+	*** mena - 23/08/2018 - incluidas formas de pagamento 'PAG EFETUAD' e 'CHEQUES'
+	lcQuery =	[Select a.emps, LEFT(convert(char,a.datas,120),10) as datas From sigmvCab a, sigcdope g, sigcdtom h ]+;
+		[Where a.datas BetWeen ?pDtI And ?pDtF And ] + ;
+		Iif(Empty(lcEmp), [ ], [a.Emps = '] + lcEmp + [' And ]) + ;
+		[a.dopes = g.dopes and ] +;
+		[g.tipoops = h.codigos and ] +;
+		[h.gergdmis = 1 and ] +;
+		[g.tipoops <> 5 and ] +;
+		[a.EmpDopNums not in (select empdopnums from sigmvpar where fpags in ('GARANTIA','CORTESIA','PAG EFETUADO','PAG EFETUAD','CHEQUES')) and ] + ;
+		[h.gergdmis = 1 group by a.emps, a.datas ]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosF') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+		Return 0
+	Endif
+
+	lcQuery =	[Select a.emps,  LEFT(convert(char,a.datas,120),10) as datas, a.dopes, b.codvends, b.nAtends as nAtend ]+;
+		[From SigMvCab a, SigMvate b Where a.empdopnums = b.empdopnums and a.datas BetWeen ?pDtI And ?pDtF And ] + ;
+		Iif(Empty(lcEmp), [], [a.Emps = '] + lcEmp + [' And ]) + ;
+		[a.Dopes = '] + lcOperacao + [' ]
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosF1') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+		Return 0
+	Endif
+
+	Select a.emps, a.DataS, Space(10) As codvends, 000 As nAtend, 'N' As fec From csDadosF a Where a.emps+a.DataS Not In (Select b.emps+b.DataS From csDadosF1 b) ;
+		union ;
+		SELECT a.emps, a.DataS, b.codvends, b.nAtend, 'S' As fec From csDadosF a, csDadosF1 b Where a.emps+a.DataS =b.emps+b.DataS ;
+		into Cursor curF
+
+	*** Prepara Mapa de fechamento ***
+	Select * From curF Order By emps, DataS Into Cursor curFec
+
+	Select curFec
+	Go Top
+
+	Scan
+		Select csRelatorio
+		If Recno('curFec') = 1
+			Append Blank
+			Replace c0 With [MAPA DE FECHAMENTOS NO PERIODO]
+			Append Blank
+			Replace c1 With [Loja]
+			Replace c2 With [Data]
+			Replace c3 With [Vendedor]
+			Replace c4 With [Atendimentos]
+			Replace c5 With [Fechamento]
+			Replace c7 With [C5]
+		Endif
+		Append Blank
+		Replace c1 With Iif(Alltrim(curFec.emps)<>lcEmpAnt,Alltrim(curFec.emps),[])
+		Replace c2 With Substr(curFec.DataS,9,2)+'/'+Substr(curFec.DataS,6,2)+'/'+Substr(curFec.DataS,1,4)
+		Replace c3 With Alltrim(curFec.codvends)
+		Replace c4 With Alltrim(Str(curFec.nAtend))
+		Replace c5 With Alltrim(curFec.fec)
+		Replace c7 With [D5]
+		lcEmpAnt = Alltrim(curFec.emps)
+		Select curFec
+	Endscan
+	**********************************************************
+	lcCbTitulo  = 'MAPA DE FECHAMENTO'
+
+EndIf
+
+If lnTpRel = 1
+	*** mena - considera venda os tipos cujo gergdmis = 1 ***
+	*** mena - 25/09/2017 - inclui valor e moeda para totalizar por moeda ***
+	*--[and c.dopes not in('VENDA PICKUP STORE','VENDA SHIP FROM STOR') ]
+	
+	lcQuery =	[Select c.datas, c.Emps, c.Dopes, c.Numes, c.empdopnums, c.cidchaves as chaPar, c.fpags, (c.valos*c.cotfpgs) as valos, d.fparcs, ] +;
+		[c.valos as valosM, c.moefpgs, ] +;
+		[case when d.infos = 'T' then d.formas else e.descrs end as info, ] +;
+		[d.formas, d.valpends, d.trocos,d.bandeira,c.adquirente ] +;
+		[From sigmvPar c, sigopfp d, sigprinf e, sigcdope g, sigcdtom h ]+;
+		[Where c.datas BetWeen ?pDtI And ?pDtF And ] + ;
+		Iif(Empty(lcEmp), [ ], [c.Emps = '] + lcEmp + [' And ]) + ;
+		[g.tipoops = h.codigos and ] +;
+		[h.gergdmis = 1 and ] +;
+		[g.tipoops <> 5 and ] +;
+		[c.fpags = d.fpags and ] +;
+		[d.infos = e.infos and ] +;
+		[g.relfechas = 1 and ] +;
+		[c.dopes = g.dopes and ] +;
+		[c.fpags not in ('GARANTIA','CORTESIA','PAG EFETUADO','ABERTO R','PAG EFETUAD','CHEQUES','CREDITO LOJA','DEV LOJA','CRED PERMUTA') ] +;
+		[order by c.cidchaves]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosV') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+		Return 0
+	Endif
+
+	*** Mena - 14/07/2017 seleciona venda só com pagamento Pag Efetuado ***
+	*--[and c.dopes not in('VENDA PICKUP STORE','VENDA SHIP FROM STOR') ] 
+	lcQuery =	[Select c.datas, c.Emps, c.Dopes, c.Numes, c.empdopnums, c.cidchaves as chaPar, c.fpags, (c.valos*c.cotfpgs) as valos, d.fparcs, ] +;
+		[case when d.infos = 'T' then d.formas else e.descrs end as info, ] +;
+		[d.formas, d.valpends, d.trocos,d.bandeira,c.adquirente ] +;
+		[From sigmvPar c, sigopfp d, sigprinf e, sigcdope g, sigcdtom h ]+;
+		[Where c.datas BetWeen ?pDtI And ?pDtF And ] + ;
+		Iif(Empty(lcEmp), [ ], [c.Emps = '] + lcEmp + [' And ]) + ;
+		[g.tipoops = h.codigos and ] +;
+		[h.gergdmis = 1 and ] +;
+		[g.tipoops <> 5 and ] +;
+		[c.fpags = d.fpags and ] +;
+		[d.infos = e.infos and ] +;
+		[g.opers <> 1 and ] +;
+		[g.relfechas = 1 and ] +;
+		[c.dopes = g.dopes and ] +;
+		[c.fpags in ('pag efetuado','aberto r','CREDITO LOJA','DEV LOJA','CRED PERMUTA') ] +;
+		[order by c.cidchaves]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosP') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+		Return 0
+	Endif
+Set Step On 
+	lcQuery =	[Select a.datas, a.Emps, a.Dopes, a.Numes, a.empdopnums,a.cidchaves as chaCab, b.cidchaves as chaItn, ] +;
+		[b.CPros, b.dpros, b.qtds, b.units, b.unitorigs, b.totas, i.empsubvend, a.empsdev ] + ;
+		[From SigMvCab a, SigMvItn b, sigcdope g, SigOpCdi i ]+;
+		[Where a.datas BetWeen ?pDtI And ?pDtF And ] + ;
+		Iif(Empty(lcEmp), [ ], [a.Emps = '] + lcEmp + [' And ]) + ;
+		[a.EmpDopNums = b.EmpDopNums and ] + ;
+		[g.tipoops = 5 and ] +;
+		[g.relfechas = 1 and ] +;
+		[a.dopes = g.dopes ] +;
+		[and a.dopes = i.dopes ]+;
+		[order by a.cidchaves,b.cidchaves]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosD') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+		Return 0
+	Endif
+
+	Select csDadosD
+	Scan 
+		If Empty(EmpsDev)
+			Select csDadosD
+			loop
+		EndIf
+		
+		If EmpSubVend = 1
+			If EmpsDev <> Emps
+				Select csDadosD
+				Delete
+				Loop
+			EndIf 
+		EndIf 
+		 
+		Select csDadosD
+	EndScan 
+	
+	lcQuery =	[Select a.datas, a.Emps, a.Dopes, a.Numes, a.empdopnums,a.cidchaves as chaCab, b.cidchaves as chaItn, ] +;
+		[b.CPros, b.dpros, b.qtds, b.units, b.unitorigs, b.totas, i.empsubvend, a.empsdev ] + ;
+		[From SigMvCab a, SigMvItn b, sigcdope g, SigOpCdi i ]+;
+		[Where a.datas BetWeen ?pDtI And ?pDtF And ] + ;
+		Iif(Empty(lcEmp), [ ], [a.EmpsDev = '] + lcEmp + [' And ]) + ;
+		[a.EmpDopNums = b.EmpDopNums and ] + ;
+		[g.tipoops = 5 and ] +;
+		[g.relfechas = 1 and ] +;
+		[a.dopes = g.dopes and ] +;
+		[a.dopes = i.dopes and ]+;
+		[empsubvend = 1 ]+;
+		[order by a.cidchaves,b.cidchaves]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosD2') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDadosD2)')
+		Return 0
+	Endif
+		
+	*-- ecommerce que nao contabiliza na venda
+	lcQuery =	[Select distinct a.datas, a.emps, a.dopes, a.numes, a.pedidoweb, a.valos ] +;
+		[From SigMvCab a, sigcdope g, sigcdtom h ]+;
+		[Where a.datas BetWeen ?pDtI And ?pDtF And ] + ;
+		Iif(Empty(lcEmp), [ ], [a.Emps = '] + lcEmp + [' And ]) + ;
+		[a.dopes = g.dopes and ] +;
+		[a.dopes in('VENDA PICKUP STORE','VENDA SHIP FROM STOR') and ] +;
+		[g.tipoops = h.codigos and ] +;
+		[g.relfechas = 1 ] +;
+		[order by a.datas]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosEC') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDadosEC)')
+		Return 0
+	Endif
+
+	lcQuery = [Select distinct IsNull(j.Datarcs, c.Datas) as datas, c.Emps, c.Dopes, ] + ;
+		[c.Numes, c.empdopnums, c.cidchaves as chaPar, c.fpags, (c.valos*c.cotfpgs) as valos, d.fparcs, ] +;
+		[c.valos as valosM, c.moefpgs, ] +;
+		[case when d.infos = 'T' then d.formas else e.descrs end as info, ] +;
+		[d.formas, d.valpends, d.trocos, d.bandeira, c.adquirente ] +;
+		[From SigMvccr a, sigmvPar c ] + ;
+		[Left Join SigCdPgr j On c.Empdopnums = j.Empdopnums ] + ;
+		[, sigcdope g, sigcdtom h, sigopfp d, sigprinf e ]+;
+		[Where IsNull(j.Datarcs, c.Datas) BetWeen ?pDtI And ?pDtF And ] + ;
+		Iif(Empty(lcEmp), [ ], [c.Emps = '] + lcEmp + [' And ]) + ;
+		[c.dopes = g.dopes and ] +;
+		[c.dopes = 'RECEBIMENTO' and ] +;
+		[c.nopers = a.nopers and ] +;
+		[g.tipoops = h.codigos and ] +;
+		[g.relfechas = 1 and ] +;
+		[c.fpags = d.fpags and ] +;
+		[d.infos = e.infos ] +;
+		[order by c.cidchaves]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosR') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+		Return 0
+	Endif
+
+	*** seleciona Entrega Conserto Cli - essa operação está configurada no parametro do sistema ***
+	lcQuery =	[select a.numes, a.empsubns, convert(integer,right(a.codigos,6)) as numesS, b.dopes, c.valos, c.empdopnums ] +;
+		[from sigmvpec a, sigcdope b, sigmvcab c, sigcdope g ] +;
+		[Where a.datas BetWeen ?pDtI And ?pDtF And ] + ;
+		Iif(Empty(lcEmp), [ ], [a.Emps = '] + lcEmp + [' And ]) + ;
+		[g.relfechas = 1 and ] +;
+		[a.dopes = g.dopes and ] +;
+		[a.dopes = '] + lcConserto + [' and ] + ;
+		[convert(integer,a.codigos/1000000)=b.ndopes and ]+;
+		[c.emps = a.empsubns and ]+;
+		[c.dopes=b.dopes and c.numes = convert(integer,right(a.codigos,6)) ] +;
+		[order by c.empdopnums]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDadosE') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDados)')
+		Return 0
+	Endif
+
+
+	*** Prepara fechamento ***
+	Select chapar, Max(empdopnums) As empdopnums, Max(valos) As valos, Max(fparcs) As fparcs, Max(Info) As Info, Max(formas) As formas, Max(valpends) As valpends, Max(bandeira) As bandeira, ;
+		MAX(adquirente) As adquirente, Max(valosM) As valosM, MAX(moefpgs) as moefpgs From csDadosV Group By chapar Into Cursor Curv
+
+	Select chapar, Max(empdopnums) As empdopnums, Max(valos) As valos, Max(fparcs) As fparcs, Max(Info) As Info, Max(formas) As formas, Max(valpends) As valpends, Max(bandeira) As bandeira, ;
+		MAX(adquirente) As adquirente, Max(valosM) As valosM, MAX(moefpgs) as moefpgs From csDadosR Group By chapar Into Cursor Curr
+
+
+	Select chapar, empdopnums, Info, formas, bandeira, adquirente, valos As valAv, Cast(0.00 As numeric(11,2))  As valFin, Cast(0.00 As numeric(11,2)) As valRec;
+		from Curv Where fparcs = 1;
+		union ;
+		SELECT chapar, empdopnums, Info, formas, bandeira, adquirente, Cast(0.00 As numeric(11,2)) As valAv, valos As valFin, Cast(0.00 As numeric(11,2)) As valRec;
+		from Curv Where !(fparcs = 1) ;
+		union ;
+		SELECT chapar, empdopnums, Info, formas, bandeira, adquirente, Cast(0.00 As numeric(11,2)) As valAv, Cast(0.00 As numeric(11,2)) As valFin, valos As valRec;
+		from Curr ;
+		into Cursor Curt
+
+	Select Info, Sum(valAv) As valAv,Sum(valFin) As valFin,Sum(valRec) As valRec From Curt Group By Info Into Cursor curPag
+	Select *, valAv+valFin As valVenda, valAv+valFin+valRec As valTot From curPag Into Cursor curPag
+	Select Sum(valAv) As valAv, Sum(valFin) As valFin, Sum(valRec) As valRec, Sum(valVenda) As valVenda, Sum(valTot) As valTot From curPag Into Cursor curPagT
+
+	Select curPag
+	Go Top
+
+	Scan
+		Select csRelatorio
+		If Recno('curPag') = 1
+			Append Blank
+			Replace c2 With [A VISTA]
+			Replace c3 With [FINANCIADO]
+			Replace c4 With [TOTAL (VENDAS)]
+			Replace c5 With [RECEBIMENTO]
+			Replace c6 With [TOTAL RECEBIDO]
+			Replace c7 With [C1]
+		Endif
+		Append Blank
+		Replace c1 With curPag.Info
+		Replace c2 With Transform(curPag.valAv, '@R 999,999,999.99')
+		Replace c3 With Transform(curPag.valFin, '@R 999,999,999.99')
+		Replace c4 With Transform(curPag.valVenda, '@R 999,999,999.99')
+		Replace c5 With Transform(curPag.valRec, '@R 999,999,999.99')
+		Replace c6 With Transform(curPag.valTot, '@R 999,999,999.99')
+		Replace c7 With [D1]
+		Select curPag
+	Endscan
+
+	If Reccount('curPag')>0
+		Select csRelatorio
+		Append Blank
+		Replace c1 With [TOTAL]
+		Replace c2 With Transform(curPagT.valAv, '@R 999,999,999.99')
+		Replace c3 With Transform(curPagT.valFin, '@R 999,999,999.99')
+		Replace c4 With Transform(curPagT.valVenda, '@R 999,999,999.99')
+		Replace c5 With Transform(curPagT.valRec, '@R 999,999,999.99')
+		Replace c6 With Transform(curPagT.valTot, '@R 999,999,999.99')
+		Replace c7 With [T1]
+
+		Append Blank
+		Append Blank
+	Endif
+
+	*** Prepara totalizador por moeda ***
+	Select valosM, moefpgs, chapar from Curv union Select valosM, moefpgs, chapar from Curr into cursor curM 
+	SELECT SUM(valosM) as valosM, moefpgs from curM group by moefpgs into cursor curM
+
+	Select curM
+	Go Top
+
+	Scan
+		Select csRelatorio
+		If Recno('curM') = 1
+			Append Blank
+			Replace c0 With [Total por moeda]
+			Append Blank
+			Replace c3 With Padl([Total],14)
+			Replace c4 With [Moeda]
+			Replace c7 With [C8]
+		Endif
+		Append Blank
+		Replace c3 With Transform(curM.valosM, '@R 999,999,999.99')
+		Replace c4 With ALLTRIM(curM.moefpgs)
+		Replace c7 With [D8]
+		Select curM
+	Endscan
+	Select csRelatorio
+	Append Blank
+	Append Blank
+
+
+	*** Prepara Pagamento efetuado ***
+	Select dopes, numes, valos From csDadosP Order By dopes, numes Into Cursor curPeX
+	Select Sum(valos) As valos From curPeX Into Cursor curPeT
+
+	Select  Space(26) As dopes, Space(20) valos, Space(26) As dopes1, Space(15) As valos1, Space(26) As dopes2, Space(15) As valos2 From curPeX ;
+		where 1=0 Into Cursor curPe Readwrite
+
+	*** coloca as operacoes em tres colunas ***
+	Select curPeX
+	Go Top
+	Do While !Eof()
+		Select curPe
+		Append Blank
+		Select curPeX
+		Replace dopes With Alltrim(curPeX.dopes) + [ ] + Alltrim(Str(curPeX.numes)) In curPe
+		Replace valos With Alltrim(Transform(curPeX.valos, '@R 999,999,999.99')) In curPe
+		Skip
+		If Eof()
+			Exit
+		Endif
+		Replace dopes1 With Alltrim(curPeX.dopes) + [ ] + Alltrim(Str(curPeX.numes)) In curPe
+		Replace valos1 With Alltrim(Transform(curPeX.valos, '@R 999,999,999.99')) In curPe
+		Skip
+		If Eof()
+			Exit
+		Endif
+		Replace dopes2 With Alltrim(curPeX.dopes) + [ ] + Alltrim(Str(curPeX.numes)) In curPe
+		Replace valos2 With Alltrim(Transform(curPeX.valos, '@R 999,999,999.99')) In curPe
+		Skip
+	Enddo
+
+	Select curPe
+	Go Top
+	Scan
+		Select csRelatorio
+		If Recno('curPe') = 1
+			Append Blank
+			Replace c0 With [Recebido Anteriormente R$ ] + Alltrim(Transform(curPeT.valos, '@R 999,999,999.99'))
+			Append Blank
+			Replace c1 With Padr([Vendas],20)
+			Replace c2 With Padl([Valor],15)
+			Replace c3 With Padr([Vendas],20)
+			Replace c4 With Padl([Valor],15)
+			Replace c5 With Padr([Vendas],20)
+			Replace c6 With Padl([Valor],15)
+			Replace c7 With [C7]
+		Endif
+		Append Blank
+		Replace c1 With Alltrim(curPe.dopes)
+		Replace c2 With Padl(Alltrim(curPe.valos),15)
+		Replace c3 With Alltrim(curPe.dopes1)
+		Replace c4 With Padl(Alltrim(curPe.valos1),15)
+		Replace c5 With Alltrim(curPe.dopes2)
+		Replace c6 With Padl(Alltrim(curPe.valos2),15)
+		Replace c7 With [D7]
+		Select curPe
+	Endscan
+	Select csRelatorio
+	Append Blank
+	Append Blank
+
+	**********************************************************
+
+	*** Prepara Devolucao ***
+	Select numes, cpros, qtds, totas From  csDadosD ;
+	union all ;
+	Select numes, cpros, qtds, totas From  csDadosD2 ;
+	Into Cursor curDev
+	
+	Select Sum(totas) As totas From  curDev Into Cursor curDevT
+
+	Select curDev
+	Go Top
+
+	Scan
+		Select csRelatorio
+		If Recno('curDev') = 1
+			Append Blank
+			Replace c0 With [PEÇAS DEVOLVIDAS]
+			Append Blank
+			Replace c1 With [No. do P]
+			Replace c2 With [Peças]
+			Replace c3 With Padl([Qtde],15)
+			Replace c4 With Padl([Valor],15)
+			Replace c7 With [C2]
+		Endif
+		Append Blank
+		Replace c1 With Alltrim(Str(curDev.numes))
+		Replace c2 With Alltrim(curDev.cpros)
+		Replace c3 With Padl(Transform(curDev.qtds, '@R 999999'),15)
+		Replace c4 With Padl(Transform(curDev.totas, '@R 999,999,999.99'),15)
+		Replace c7 With [D2]
+		Select curDev
+	Endscan
+
+	If Reccount('curDev') > 0
+		Select csRelatorio
+		Append Blank
+		Replace c3 With Padl([TOTAL],15)
+		Replace c4 With Padl(Transform(curDevT.totas, '@R 999,999,999.99'),15)
+		Replace c7 With [T2]
+
+		Append Blank
+		Append Blank
+	Endif
+
+	**********************************************************
+
+	*** Prepara Ecommerce ***
+	Select numes, pedidoweb, valos  From  csDadosEC Into Cursor curECo
+	Select Sum(valos) As valos From  curECo Into Cursor curEcoT
+
+	Select curECo
+	Go Top
+
+	Scan
+		Select csRelatorio
+		If Recno('curECo') = 1
+			Append Blank
+			Replace c0 With [VENDA E-COMMERCE]
+			Append Blank
+			Replace c1 With [Numero]
+			Replace c2 With [Pedido]
+			Replace c3 With Padl([Valor],15)
+			Replace c7 With [C3]
+		Endif
+		Append Blank
+		Replace c1 With Alltrim(Str(curECo.numes))
+		Replace c2 With Alltrim(curECo.Pedidoweb)
+		Replace c3 With Padl(Transform(curECo.valos, '@R 999,999,999.99'),15)
+		Replace c7 With [D3]
+		Select curECo
+	Endscan
+
+	If Reccount('curECo') > 0
+		Select csRelatorio
+		Append Blank
+		Replace c2 With Padl([TOTAL],15)
+		Replace c3 With Padl(Transform(curECoT.valos, '@R 999,999,999.99'),15)
+		Replace c7 With [T3]
+
+		Append Blank
+		Append Blank
+	Endif
+
+
+	*** Prepara Entrega conserto ***
+	Select numes, numesS, valos  From  csDadosE Into Cursor curEnt
+	Select Sum(valos) As valos From  curEnt Into Cursor curEntT
+
+	Select curEnt
+	Go Top
+
+	Scan
+		Select csRelatorio
+		If Recno('curEnt') = 1
+			Append Blank
+			Replace c0 With [ORDEM DE SERVIÇOS PAGAS]
+			Append Blank
+			Replace c1 With [No. do P]
+			Replace c2 With [OS]
+			Replace c3 With Padl([Valor],15)
+			Replace c7 With [C3]
+		Endif
+		Append Blank
+		Replace c1 With Alltrim(Str(curEnt.numes))
+		Replace c2 With Alltrim(Str(curEnt.numesS))
+		Replace c3 With Padl(Transform(curEnt.valos, '@R 999,999,999.99'),15)
+		Replace c7 With [D3]
+		Select curEnt
+	Endscan
+
+	If Reccount('curEnt') > 0
+		Select csRelatorio
+		Append Blank
+		Replace c2 With Padl([TOTAL],15)
+		Replace c3 With Padl(Transform(curEntT.valos, '@R 999,999,999.99'),15)
+		Replace c7 With [T3]
+
+		Append Blank
+		Append Blank
+	Endif
+
+
+
+
+	*** Prepara detalhe de cartao parcelado + cartao de crédito  e debito da Rede- mena 15/07/2017 ***
+	*** MENA - 02/07/2017 - separa os adquirentes
+	*** Mena - 11/07/2017 - calcula qtde de vendas por bandeira/adquirente ***
+	*** Mena - 05/03/2018 - calcula qtde de vendas e valor da venda por bandeira/adquirente - considera todos os adquirentes ***
+	Select adquirente, bandeira, empdopnums From Curt Where bandeira <> '  ' Group By empdopnums, adquirente, bandeira Into Cursor crQtv
+	Select adquirente, bandeira, Count(empdopnums) As qtdv From crQtv Group By adquirente, bandeira Into Cursor crQtv
+
+	SELECT adquirente from crQtv group by adquirente into cursor crAdq	&& mena - 05/03/2018 - prepara lista de adquirente 
+	SELECT crAdq
+	GO top
+
+	SCAN
+		lcAdq = crAdq.adquirente
+		Select a.bandeira, Sum(a.valFin+a.valAv) As valos, Max(b.qtdv) As qtds, lcAdq As adquirente, 000 As linha ;
+			from  Curt a, crQtv b Where Inlist(a.formas,'CARTAO','CREDITO') And a.adquirente == lcAdq ;
+			and a.adquirente=b.adquirente And a.bandeira=b.bandeira ;
+			group By a.bandeira Into Cursor curCar Readwrite
+
+		Select a.bandeira, Sum(a.valFin+a.valAv) As valos, Max(b.qtdv) As qtds, lcAdq As adquirente, 000 As linha ;
+			from  Curt a, crQtv b Where Inlist(a.formas,'DEBITO') And a.adquirente == lcAdq ;
+			and a.adquirente=b.adquirente And a.bandeira=b.bandeira ;
+			group By a.bandeira Into Cursor curCarD Readwrite
+
+
+		Select Sum(valos) As valos, Sum(qtds) As qtds From  curCar Into Cursor curCarT
+
+		Select curCar
+		Go Top
+
+		Scan
+			Select csRelatorio
+			If Recno('curCar') = 1
+				Append Blank
+				Replace c0 With lcAdq
+				Append Blank
+				Replace c1 With [CARTÃO PARCELADO]
+				Replace c2 With Padl([QTD.],15)
+				Replace c3 With Padl([VALOR VENDIDO],15)
+				Replace c7 With [C4]
+			Endif
+			Append Blank
+			Replace c1 With Alltrim(Nvl(curCar.bandeira,[]))
+			Replace c2 With Padl(Transform(Nvl(curCar.qtds,0), '@R 999999'),15)
+			Replace c3 With Padl(Transform(Nvl(curCar.valos,0), '@R 999,999,999.99'),15)
+			Replace c7 With [D4]
+			Select curCar
+		Endscan
+
+		If Reccount('curCar') > 0
+			Select csRelatorio
+			Append Blank
+			Replace c1 With Padl([TOTAL],15)
+			Replace c2 With Padl(Transform(curCarT.qtds, '@R 999999'),15)
+			Replace c3 With Padl(Transform(curCarT.valos, '@R 999,999,999.99'),15)
+			Replace c7 With [T4]
+
+			Append Blank
+			Append Blank
+		Endif
+
+
+		Select * from curCarD into cursor curCar readwrite
+		Select Sum(valos) As valos, Sum(qtds) As qtds From  curCar Into Cursor curCarT
+		
+		SELECT curCar
+		Go Top
+
+		Scan
+			Select csRelatorio
+			If Recno('curCar') = 1
+				Append Blank
+				Replace c0 With lcAdq
+				Append Blank
+				Replace c1 With [CARTÃO À VISTA]
+				Replace c2 With Padl([QTD.],15)
+				Replace c3 With Padl([VALOR VENDIDO],15)
+				Replace c7 With [C6]
+			Endif
+			Append Blank
+			Replace c1 With Alltrim(Nvl(curCar.bandeira,[]))
+			Replace c2 With Padl(Transform(Nvl(curCar.qtds,0), '@R 999999'),15)
+			Replace c3 With Padl(Transform(Nvl(curCar.valos,0), '@R 999,999,999.99'),15)
+			Replace c7 With [D6]
+			Select curCar
+		Endscan
+
+		If Reccount('curCar') > 0
+			Select csRelatorio
+			Append Blank
+			Replace c1 With Padl([TOTAL],15)
+			Replace c2 With Padl(Transform(curCarT.qtds, '@R 999999'),15)
+			Replace c3 With Padl(Transform(curCarT.valos, '@R 999,999,999.99'),15)
+			Replace c7 With [T6]
+
+			Append Blank
+			Append Blank
+		Endif
+		SELECT crAdq
+	ENDSCAN
+	
+
+	*** Prepara detalhe de cartao parcelado + cartao de crédito  e debito da CIELO - mena 15/07/2017 ***
+	*** Mena - 11/07/2017 - calcula qtde de vendas por bandeira por adquirente ***
+	*** MENA - 11/07/2017 - separa os adquirentes
+
+*!*		Select a.bandeira As bandeira2, Sum(a.valFin+a.valAv) As valos2, Max(b.qtdv) As qtds2, 'CIELO' As adquirente2, 000 As linha2 ;
+*!*			from  Curt a, crQtv b Where Inlist(a.formas,'CARTAO','CREDITO') And a.adquirente <> 'REDE' ;
+*!*			and a.adquirente=b.adquirente And a.bandeira=b.bandeira ;
+*!*			group By a.bandeira Into Cursor curCar Readwrite
+
+*!*		Select a.bandeira As bandeira2, Sum(a.valAv) As valos2, Max(b.qtdv) As qtds2, 'CIELO' As adquirente2, 000 As linha2 ;
+*!*			from  Curt a, crQtv b Where Inlist(a.formas,'DEBITO') And a.adquirente <> 'REDE' ;
+*!*			and a.adquirente=b.adquirente And a.bandeira=b.bandeira ;
+*!*			group By a.bandeira Into Cursor curCarD Readwrite
+
+*!*		Select Sum(valos2) As valos2, Sum(qtds2) As qtds2 From  curCar Into Cursor curCarT
+
+*!*		Select curCar
+*!*		Go Top
+
+*!*		Scan
+*!*			Select csRelatorio
+*!*			If Recno('curCar') = 1
+*!*				Append Blank
+*!*				Replace c0 With [CIELO]
+*!*				Append Blank
+*!*				Replace c1 With [CARTÃO PARCELADO]
+*!*				Replace c2 With Padl([QTD.],15)
+*!*				Replace c3 With Padl([VALOR VENDIDO],15)
+*!*				Replace c7 With [C9]
+*!*			Endif
+*!*			Append Blank
+*!*			Replace c1 With Alltrim(Nvl(curCar.bandeira2,[]))
+*!*			Replace c2 With Padl(Transform(Nvl(curCar.qtds2,0), '@R 999999'),15)
+*!*			Replace c3 With Padl(Transform(Nvl(curCar.valos2,0), '@R 999,999,999.99'),15)
+*!*			Replace c7 With [D9]
+*!*			Select curCar
+*!*		Endscan
+
+*!*		If Reccount('curCar') > 0
+*!*			Select csRelatorio
+*!*			Append Blank
+*!*			Replace c1 With Padl([TOTAL],15)
+*!*			Replace c2 With Padl(Transform(curCarT.qtds2, '@R 999999'),15)
+*!*			Replace c3 With Padl(Transform(curCarT.valos2, '@R 999,999,999.99'),15)
+*!*			Replace c7 With [T9]
+
+*!*			Append Blank
+*!*			Append Blank
+*!*		Endif
+
+
+*!*		Select * from curCarD into cursor curCar readwrite
+*!*		Select Sum(valos2) As valos2, Sum(qtds2) As qtds2 From  curCar Into Cursor curCarT
+*!*		
+*!*		SELECT curCar
+*!*		Go Top
+
+*!*		Scan
+*!*			Select csRelatorio
+*!*			If Recno('curCar') = 1
+*!*				Append Blank
+*!*				Replace c0 With [CIELO]
+*!*				Append Blank
+*!*				Replace c1 With [CARTÃO À VISTA]
+*!*				Replace c2 With Padl([QTD.],15)
+*!*				Replace c3 With Padl([VALOR VENDIDO],15)
+*!*				Replace c7 With [C10]
+*!*			Endif
+*!*			Append Blank
+*!*			Replace c1 With Alltrim(Nvl(curCar.bandeira2,[]))
+*!*			Replace c2 With Padl(Transform(Nvl(curCar.qtds2,0), '@R 999999'),15)
+*!*			Replace c3 With Padl(Transform(Nvl(curCar.valos2,0), '@R 999,999,999.99'),15)
+*!*			Replace c7 With [D10]
+*!*			Select curCar
+*!*		Endscan
+
+*!*		If Reccount('curCar') > 0
+*!*			Select csRelatorio
+*!*			Append Blank
+*!*			Replace c1 With Padl([TOTAL],15)
+*!*			Replace c2 With Padl(Transform(curCarT.qtds2, '@R 999999'),15)
+*!*			Replace c3 With Padl(Transform(curCarT.valos2, '@R 999,999,999.99'),15)
+*!*			Replace c7 With [T10]
+
+*!*			Append Blank
+*!*			Append Blank
+*!*		Endif
+
+
+*!*		*** numera linha sequencial para fazer join para poder sair rede e cielo na mesma linha ***
+*!*		Select curCar1
+*!*		Go Top
+*!*		lnLin=0
+*!*		Scan
+*!*			lnLin=lnLin+1
+*!*			Replace linha With lnLin In curCar1
+*!*		Endscan
+
+*!*		Select curCar2
+*!*		Go Top
+*!*		lnLin=0
+*!*		Scan
+*!*			lnLin=lnLin+1
+*!*			Replace linha2 With lnLin In curCar2
+*!*		Endscan
+*!*		*******************************************************************************************
+
+
+*!*		*** Junta as colunas do adquirente REDE com OUTROS adquirentes ***
+*!*		Select a.bandeira, a.valos, a.qtds, a.adquirente, a.linha, b.bandeira2, b.valos2, b.qtds2, b.adquirente2, b.linha2 ;
+*!*			from curCar1 a Full Join curCar2 b On linha = linha2 Into Cursor curCar
+
+*!*		Select Sum(valos) As valos, Sum(qtds) As qtds, Sum(valos2) As valos2, Sum(qtds2) As qtds2 From  curCar Into Cursor curCarT
+
+
+Endif
+
+**** adiciona titulos ****
+lcCbEmp = lcEmp + [ ]
+lcCbPeriodo   = 'Periodo : '+Dtoc(ldInicial)+ ' a '+Dtoc(ldFinal)
+Create Cursor csCabecalho (empresa c(240), titulo c(240), PERIODO c(80))
+Insert Into csCabecalho (empresa, titulo, PERIODO) Values (lcCbEmp, lcCbTitulo, lcCbPeriodo)
+
+Wait Clear
+
+Select csRelatorio
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReFc3 Preview
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE verificadevolucao
+------------------------------------------------------------
+PROCEDURE verificadevolucao
+*-- Deleta a Devolução que foi feita na LOJA X e a Origem é Y
+Local lnOldSel
+lnOldSel = Select()
+Select csDados1
+Go top
+Scan 
+
+	lcEdn = csDados1.Emps + csDados1.Dopes + Str(csDados1.Numes,6)
+	
+	lcQuery = [Select a.EmpSubns as emps, d.dopes, convert(int,right(codigos,6)) as numes, e.datas, e.vends	]+;
+		[From SigMvPec a ]+;
+		[inner join SigMvCab b on a.EmpDopnums = b.EmpDopNums ]+;
+		[inner join SigCdOpe c on b.Dopes = c.Dopes ]+;
+		[inner join SigCdOpe d on d.ndopes = replace(a.codigos,right(codigos,6),'') ]+;
+		[inner join SigMvCab e on e.empdopnums = a.EmpSubns + d.dopes + str(convert(int,right(codigos,6)),6) ]+;
+		[Where a.EmpDopnums = ']+lcEdn+[' ]+;
+		[and e.vends <> space(10) ]+;
+		[and a.empsubns <> ']+csDados1.Emps+[' ]
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, 'csDevolucao') < 1)
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csDevolucao)')
+		Select(lnOldSel)
+		Return 0
+	EndIf
+	
+	If Reccount([csDevolucao])>0
+		Select csDados1
+		Delete
+	EndIf 
+	
+	Select csDados1
+EndScan 
+
+Select(lnOldSel)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFC1.get_cd_empresa
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFC1.get_ds_empresa
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREFC1
+RESERVED3 (ClassInfo): maxcols
+podatamgr
+segunda
+*cabecalho 
+*preparafechamentoconserto 
+*verificadevolucao 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

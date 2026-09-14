@@ -1,0 +1,5 @@
+﻿Both fixes applied:
+
+**FormProduto.prg** (lines 1188/1190): Replaced invalid VFP9 string-within-string + non-SQL-Server functions (`IIF(VARTYPE(...) = "L"...)`, `NVL()`) with SQL Server-native `ISNULL(p.Instalas, 0) = 1` / `= 0`. This also resolves the cascade parser errors in `ConfigurarPgDados2()` and later methods.
+
+**ProdutoBO.prg** (lines 227/257): Removed `PUBLIC` from `PUBLIC FUNCTION CarregarPorCodigo` and `PUBLIC FUNCTION Buscar`. VFP9 Rule #39 ÔÇö `PUBLIC` is invalid before method declarations inside `DEFINE CLASS`.

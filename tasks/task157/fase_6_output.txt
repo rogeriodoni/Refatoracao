@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da.
+
+**Resumo do que foi feito na Fase 6:**
+
+Este form OPERACIONAL (`FormSigPrCar`) ├® puramente baseado em grid - n├úo possui Page2 com TextBoxes nem lookups em campos separados. Todas as funcionalidades principais foram implementadas nas fases 4 e 5. Nesta fase:
+
+1. **`FormatarGridLista(par_oGrid)`** ÔÇö m├®todo can├┤nico adicionado (padr├úo FORMCOR_LICOES_APRENDIDAS, Problema 6), usando `SetAll("FontName"/"FontSize")` nas colunas.
+
+2. **`CarregarDados()`** ÔÇö agora chama `FormatarGridLista()` ap├│s rebind do RecordSource para garantir fontes consistentes.
+
+3. **`CmdExcluirClick()`** ÔÇö headers ap├│s reconstru├º├úo do cursor agora incluem `FontName="Tahoma"` e `FontSize=8` (estava faltando em rela├º├úo ao `CarregarDados()`), e tamb├®m chama `FormatarGridLista()`.
+
+Os lookups (`TxtCodigosKeyPress` e `TxtDescrsKeyPress`) j├í estavam 100% implementados com `FormBuscaAuxiliar`, valida├º├úo de duplicata e tratamento completo de sele├º├úo/cancelamento.

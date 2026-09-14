@@ -1,0 +1,5 @@
+﻿**Causa raiz**: `.Page1.Caption`, `.Page1.Picture`, `.Page1.BackColor` (e os an├ílogos de Page2) estavam dentro do bloco `WITH THIS.pgf_4c_Paginas`, causando o erro "PAGE1 not found" em VFP9.
+
+**Regra VFP9**: Dentro de um bloco `WITH objeto`, acessar sub-objetos como `.Page1` via ponto relativo falha. O acesso ├ás Pages deve ser feito **fora** do WITH, usando o caminho completo `THIS.pgf_4c_Paginas.Page1.*`.
+
+**Corre├º├úo**: Fechado o bloco WITH ap├│s `.Visible = .T.` e movidas as 6 atribui├º├Áes de Page1/Page2 para fora do WITH com refer├¬ncia completa.

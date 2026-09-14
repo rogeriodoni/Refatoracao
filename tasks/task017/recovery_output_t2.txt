@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada.
+
+**Causa raiz:** `DATASESSION()` n├úo ├® uma fun├º├úo nativa do VFP9. O runtime buscou por `datasession.prg` externo e falhou, lan├ºando exce├º├úo dentro do `TRY` do `InicializarForm()`, que caiu no `CATCH` e retornou `.F.` ÔÇö fazendo `FormBase.Init()` retornar `.F.` e `CREATEOBJECT("Formsigtosen")` retornar `.NULL.`.
+
+**Corre├º├úo (m├¡nima):** Linha 1449 ÔÇö substitu├¡do `DATASESSION()` por `THIS.DataSessionId`, que ├® a propriedade correta do VFP9 para obter o ID da sess├úo de dados do pr├│prio form.

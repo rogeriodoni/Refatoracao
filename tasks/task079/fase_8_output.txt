@@ -1,0 +1,12 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o resumo do que foi adicionado:
+
+**FormSigReDif.prg** ÔÇö 4 m├®todos adicionados antes de `Destroy()`:
+- `FormParaRelatorio()` ÔÇö propaga `this_nDataSessionId` ao BO antes de imprimir/visualizar
+- `LimparCampos()` ÔÇö limpa `txt_4c_Historico.Value`
+- `HabilitarCampos(par_lHabilitar)` ÔÇö stub (form ├® sempre somente-leitura)
+- `AjustarBotoesPorModo()` ÔÇö stub (sem modos CRUD neste form)
+
+**menu.prg** ÔÇö 3 altera├º├Áes:
+- `DEFINE BAR 90` (separador) + `DEFINE BAR 91` ("Diferen├ºas Encontradas") adicionados ao `popRelatorios`
+- `ON SELECTION BAR 91 OF popRelatorios DO AbrirFormSigReDif`
+- Procedure `AbrirFormSigReDif()` seguindo o padr├úo can├┤nico (`VARTYPE(loForm) = "O"`, sem `Release()`, usando `MostrarErro()`)

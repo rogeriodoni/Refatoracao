@@ -1,0 +1,12 @@
+﻿Altera├º├Áes corretas. A Fase 5 est├í conclu├¡da.
+
+**Resumo do que foi feito:**
+
+O form `FormSigPdMpf.prg` e o BO `SigPdMpfBO.prg` j├í estavam completos desde as fases anteriores ÔÇö este ├® um form OPERACIONAL plano (sem PageFrame/Page2), ent├úo toda a UI foi implementada em `ConfigurarFiltros()` nas fases 3-4. N├úo h├í `ConfigurarPaginaDados()` porque o form ├® flat.
+
+Para a **Fase 5**, a integra├º├úo de menu estava errada: o bar 16 de `popMovimentos` chamava `AbrirFormsigpdmp7` (que tenta criar `Formsigpdmp7`, form legado sem par├ómetros), quando deveria abrir o **form de filtro** `FormSigPdMpf`. Foram feitas duas mudan├ºas em `menu.prg`:
+
+1. **Linha 136**: `DO AbrirFormsigpdmp7` ÔåÆ `DO AbrirFormSigPdMpf`
+2. **Novo procedure** `AbrirFormSigPdMpf()` adicionado ao final do menu
+
+O fluxo correto agora ├®: Menu ÔåÆ `AbrirFormSigPdMpf` ÔåÆ `FormSigPdMpf` (filtros) ÔåÆ usu├írio clica Pesquisar ÔåÆ `FormSigPdMp7` (resultados com SQL query).

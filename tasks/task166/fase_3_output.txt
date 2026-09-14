@@ -1,0 +1,15 @@
+﻿Ambos os arquivos est├úo completos e corretos. 
+
+**Fase 3/8 conclu├¡da.** `FormSIGPRCOT.prg` criado em `C:\4c\projeto\app\forms\operacionais\` com 412 linhas.
+
+**O que foi implementado nesta fase:**
+- `Init(par_cMoes)` ÔÇö recebe o c├│digo da moeda e chama `DODEFAULT()`
+- `InicializarForm()` ÔÇö cria BO, caption din├ómico, configura todos os componentes, carrega dados
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Cabecalho` (537├ù80px cinza) com `lbl_4c_Sombra` e `lbl_4c_Titulo` (`AutoSize=.F.`, sem acento literal)
+- `ConfigurarGrid()` ÔÇö `grd_4c_Cotacoes` (Top=85, Left=133, 270├ù283px, ColumnCount=3, Courier New, RowHeight=20)
+- `ConfigurarBotoes()` ÔÇö 3 bot├Áes (Inserir/Excluir/Encerrar) nas posi├º├Áes originais (Left 312/387/462) + `BINDEVENT`
+- `CarregarCotacoes()` ÔÇö chama `BO.BuscarCotacoes()` e vincula `RecordSource`
+- `CmdInserirClick/CmdExcluirClick/CmdEncerrarClick` ÔÇö l├│gica completa replicando o legado
+- `TornarControlesVisiveis()` e `Destroy()` can├┤nicos
+
+**Fase 4 adicionar├í via Read+Edit:** ControlSource das 3 colunas, `Header1.Caption`, `InputMask`, `ColumnOrder` e `BINDEVENT` dos eventos de c├®lula (`AfterRowColChange`, `Valid` de hora).

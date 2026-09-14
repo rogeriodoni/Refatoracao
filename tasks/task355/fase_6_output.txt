@@ -1,0 +1,15 @@
+﻿Fase 6 implementada corretamente. Resumo do que foi adicionado:
+
+**Campos adicionados em `ConfigurarPaginaDados()`:**
+- `lbl_4c_Label13` ÔÇö "Gde.Grp.:" (Top=302, Left=248, Width=50)
+- `txt_4c_GdeGrp` ÔÇö campo Grande Grupo, MaxLength=3, com BINDEVENTs para F4/DblClick (Top=299, Left=301)
+- `lbl_4c_Label3` ÔÇö "Prazo de Entrega :" (Top=326, Left=206, Width=92)
+- `txt_4c_Prazo` ÔÇö campo num├®rico, InputMask="99" (Top=323, Left=301)
+- `lbl_4c_Label4` ÔÇö "Dias" (Top=327, Left=329, Width=22)
+
+**M├®todos de lookup adicionados:**
+- `GdeGrpLookupKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö captura F4 (keycode 28)
+- `GdeGrpLookupDblClick()` ÔÇö delega para AbrirLookupGdeGrp
+- `AbrirLookupGdeGrp()` ÔÇö busca em `SigCdGpr` (colunas `codigos`/`descs`, confirmadas no schema.sql), com guard de `Enabled`, Show(1) quando n├úo encontra exato, limpeza do cursor no CATCH
+
+Todos os controles novos j├í estavam referenciados em `FormParaBO`, `BOParaForm`, `LimparCampos` e `HabilitarCampos` das fases anteriores ÔÇö sem inconsist├¬ncias.

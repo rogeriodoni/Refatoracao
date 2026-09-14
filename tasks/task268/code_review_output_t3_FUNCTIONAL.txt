@@ -1,0 +1,40 @@
+﻿Conclu├¡ a an├ílise completa. Vou explicar o que encontrei para cada um dos 9 problemas listados.
+
+---
+
+## Resultado da Verifica├º├úo
+
+Verifiquei o arquivo atual linha a linha e consultei o legado SCX/SCT em `C:/4install/FortyusMC/Fortyus/sigprcom.sc*`. **Todos os 9 problemas est├úo resolvidos no c├│digo atual ou s├úo falsos positivos.** Nenhuma altera├º├úo ├® necess├íria.
+
+### Problemas j├í corrigidos no c├│digo atual
+
+**[INIT-DUPLICADO]** ÔÇö `Init()` (linhas 64-95) chama apenas `DODEFAULT()`. N├úo h├í chamada duplicada a `THIS.InicializarForm()`. Ô£ô
+
+**[GRID-WITH]** ÔÇö Todos os grids j├í t├¬m `RecordSource` e `ColumnCount` **fora** do WITH:
+- `grd_4c_Lista`: linhas 443-444 (fora), WITH apenas ajusta larguras (linha 445-472)
+- `grd_4c_DadosCopia`: linhas 633-634 (fora), WITH apenas ajusta visuais
+- `grd_4c_Gradei`: linhas 1151-1152 (fora), WITH ajusta visual + Column sub-configs Ô£ô
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` na linha 1341 j├í inclui `CNT_4C_BOTOESACAO` no INLIST:
+```
+IF INLIST(loc_cNome, "CNT_4C_COPIA", "CNT_4C_CABECALHO", "CNT_4C_BOTOESACAO")
+```
+Ô£ô
+
+### Falsos positivos confirmados
+
+**[GRID-HEADER] (4 itens)** ÔÇö Confirmado no SCT legado que os headers da lista EST├âO corretos. O SCT cont├®m:
+```
+.pfSqlTabela(1).pColuna('cpros', '', '', 'Produto'   ,  108, .T.)
+.pfSqlTabela(1).pColuna('dpros', '', '', 'Descri...     ÔåÉ "Descri├º├úo" com encoding Latin-1
+.pfSqlTabela(1).pColuna('ifors', '', '', 'Fornecedor',   75, .T.)
+.pfSqlTabela(1).pColuna('reffs', '', '', 'Refer...      ÔåÉ "Refer├¬ncia" com encoding Latin-1
+.pfSqlTabela(1).pColuna('sgrus', '', '', 'Sub Grp'   ,   45, .F.)
+```
+O revisor n├úo encontrou "Descri├º├úo", "Refer├¬ncia" porque a ferramenta n├úo decodificou os bytes Latin-1 (├º, ├ú, ├¬). O c├│digo migrado est├í **id├¬ntico ao legado**. Ô£ô
+
+**[LAYOUT-POSITION] (2 itens)** ÔÇö Confirmado no SCT legado: `Opc_situacao.Top = 100`, `Left = 555`. O c├│digo migrado usa `.Top = 100 + 29` e `.Left = 555` (linha 1050-1051), valores corretos com compensa├º├úo do PageFrame. O revisor confundiu `Buttons(1).Top = 5` / `Buttons(1).Left = 5` (propriedades internas do OptionGroup, dentro do WITH aninhado) com as propriedades do pr├│prio OptionGroup. Ô£ô
+
+---
+
+O arquivo `Formsigprcom.prg` est├í correto como est├í. Os 9 problemas detectados pelo revisor automatizado s├úo falsos positivos causados por: (1) dificuldade do revisor em decodificar strings Latin-1 com acentos no SCX/SCT, e (2) o revisor atribuindo propriedades de `Buttons(N)` ao OptionGroup pai ao analisar WITH aninhados.

@@ -1,0 +1,6 @@
+﻿Todas as corre├º├Áes aplicadas com sucesso em `sigrecomBO.prg`:
+
+- **[SQL-ASPAS]** Linhas 357, 641, 929: substitu├¡do `"WHERE b.EmpDopNums = '" + loc_lcEdn + "'"` ÔåÆ `"WHERE b.EmpDopNums = " + EscaparSQL(loc_lcEdn)` (3 ocorr├¬ncias via `replace_all`)
+- **[SQL-FILTRO-INVENTADO] SERVICOS**: removida a linha `"AND c.Servicos <> 1 " + ;` do query de totais de itens por moeda
+
+Os 3 flags restantes (CMOEDATA, USUARIOS, '2') s├úo falsos positivos do scanner: CMOEDATA ├® um nome de TAG VFP, USUARIOS ├® necess├írio para o `ValidarVendedor` funcionar corretamente, e '2' aparece apenas em propriedades visuais de form.

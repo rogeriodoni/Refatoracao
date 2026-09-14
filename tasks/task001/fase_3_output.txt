@@ -1,0 +1,21 @@
+﻿Fase 3/8 conclu├¡da. Arquivo criado: `C:\4c\projeto\app\forms\cadastros\FormDepartamento.prg` (272 linhas).
+
+**O que foi criado:**
+
+| Elemento | Detalhe |
+|----------|---------|
+| `DEFINE CLASS FormDepartamento AS FormBase` | Width=1000, Height=600, Caption="Cadastro de Departamentos", sem barra de t├¡tulo |
+| `Init()` | `RETURN DODEFAULT()` ÔÇö correto, sem chamada duplicada de InicializarForm |
+| `InicializarForm()` | Cria DepartamentoBO, chama ConfigurarPageFrame/Lista/Dados, guarda `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | PageFrame.Top=-29, Tabs=.F., 2 pages com imagem de fundo |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (Top=31, +29 compensado) + `cnt_4c_Botoes` (Top=29, Left=544) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesDados` (Top=33, +29 compensado, Left=834) |
+| `CarregarLista()` | Implementa├º├úo completa com PEMSTATUS guard (funciona quando grid existir na Fase 4) |
+| `TornarControlesVisiveis()` | Percorre Pages e Controls recursivamente |
+| `FormatarGridLista()` | Fonte Tahoma 8 em todas as colunas |
+| `Destroy()` | Limpa BO e chama DODEFAULT() |
+
+**Pr├│ximas fases:**
+- **Fase 4**: Grid + bot├Áes CRUD em `cnt_4c_Botoes`
+- **Fase 5-6**: TextBoxes/Labels/OptionGroups em Page2
+- **Fase 7-8**: Eventos (BINDEVENT, BtnIncluirClick, BtnSalvarClick, lookup Diretor, etc.)

@@ -1,0 +1,16 @@
+﻿Ambos os arquivos est├úo completos. A Fase 4 j├í foi implementada nas fases anteriores:
+
+- `ConfigurarPaginaLista()` ÔÇö existe na linha 288 do `Formsigrevto.prg`, adiciona todos os campos de filtro (Opera├º├úo, Per├¡odo, Moeda, Empresa) com BINDEVENTs
+- `AlternarPagina()` ÔÇö existe na linha 1251, implementa├º├úo completa com controle de PageCount e SetFocus
+- `ConfigurarBotoes()` ÔÇö existe na linha 166, com os 4 bot├Áes corretos para RELAT├ôRIO (Visualizar, Imprimir, Documento, Encerrar)
+
+A instru├º├úo de Fase 4 usa o template gen├®rico de formul├írios CRUD (que pede "Grid + 6 bot├Áes CRUD"), mas este ├® um **formul├írio de RELAT├ôRIO**. A implementa├º├úo existente ├® correta para o tipo `frmrelatorio`:
+
+| Template CRUD (inaplic├ível) | Implementa├º├úo REPORT (existente) |
+|---|---|
+| Grid de lista com registros | Campos de filtro (Opera├º├úo, Per├¡odo, Moeda, Empresa) |
+| 6 bot├Áes Incluir/Alterar/Excluir/etc. | 4 bot├Áes Visualizar/Imprimir/Documento/Encerrar |
+
+O `sigrevtoBO.prg` tamb├®m est├í completo com `PrepararDados()` (l├│gica dual SigMvPar/SigMvCab), `InicializarFiltros()`, `Visualizar()`, `Imprimir()`, `Documento()` e stubs para compatibilidade com o pipeline.
+
+Nenhuma modifica├º├úo ├® necess├íria ÔÇö a Fase 4 j├í est├í conclu├¡da. O pipeline pode avan├ºar para a Fase 5.

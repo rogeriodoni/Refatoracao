@@ -1,0 +1,12 @@
+﻿**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\relatorios\FormSigReEvd.prg` criado com 311 linhas.
+
+O que foi entregue:
+- `DEFINE CLASS FormSigReEvd AS FormBase` com dimens├Áes exatas do original (Width=800, Height=300), `TitleBar=0`, `ControlBox=.F.`, `DataSession=2`
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö cria o BO (`SigReEvdBO`), trata o caso de UI validation mode (`gb_4c_ValidandoUI`), chama os tr├¬s m├®todos de estrutura e define `Visible=.T.`
+- `ConfigurarCabecalho()` ÔÇö container cinza opaco (`RGB(100,100,100)`) com lbl_4c_Sombra e lbl_4c_Titulo
+- `ConfigurarBotoes()` ÔÇö `cmg_4c_Botoes` CommandGroup em `Left=529`, 4 bot├Áes com ├¡cones `relatorio_*.jpg` verificados no disco
+- `ConfigurarPageFrame()` ÔÇö 1 page ("Filtros"), `Top=85`, `Height=215`, `Tabs=.F.`
+- `Destroy()` ÔÇö `this_oRelatorio = .NULL.` + `DODEFAULT()`
+
+**Pr├│ximas fases**: Fase 5 adicionar├í `ConfigurarPaginaLista()` com os campos de filtro (Grupo, Conta, DConta, Datai, Dataf); Fase 7 vincular├í os BINDEVENTs dos bot├Áes e handlers de clique.

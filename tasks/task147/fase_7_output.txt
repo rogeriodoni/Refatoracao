@@ -1,0 +1,9 @@
+﻿As 4 corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito na Fase 7:
+
+**BtnIncluirClick** ÔÇö adicionado `NovoRegistro()` no in├¡cio, garantindo que o BO sabe que ├® um novo registro (flag `this_lNovoRegistro = .T.`) antes de Salvar.
+
+**BtnVisualizarClick** ÔÇö agora chama `CarregarPorCodigo(cidchaves)` antes de `BOParaForm()`, carregando todos os campos do BO a partir do banco. Sem isso, o formul├írio mostrava dados vazios/antigos.
+
+**BtnAlterarClick** ÔÇö agora chama `CarregarPorCodigo(cidchaves)` e depois `EditarRegistro()` antes de `BOParaForm()`. O `EditarRegistro()` zera o flag `this_lNovoRegistro`, garantindo que Salvar executa UPDATE e n├úo INSERT.
+
+**BtnExcluirClick** ÔÇö agora chama `CarregarPorCodigo(cidchaves)` antes de `Excluir()`, populando `this_cCidChaves` e `this_cEmpDnPs` que o `ExecutarExclusao()` usa nas queries DELETE. Sem isso, as exclus├Áes falhariam silenciosamente por chaves vazias.

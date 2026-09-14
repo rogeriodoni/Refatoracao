@@ -1,0 +1,21 @@
+﻿Both Phase 7 (button events) and Phase 8 (integration) are already implemented in the codebase. Here's what I found:
+
+**Phase 7 - Button events already in `FormProduto.prg`:**
+- `BtnIncluirClick()` at line 5139 ÔÇö sets `INCLUIR` mode, calls `NovoRegistro()`, `BOParaForm()`, `HabilitarCampos(.T., .T.)`, `AlternarPagina(2)`
+- `BtnVisualizarClick()` at line 5151 ÔÇö gets code from grid, `CarregarPorCodigo()`, `BOParaForm()`, `HabilitarCampos(.F., .F.)`
+- `BtnAlterarClick()` at line 5172 ÔÇö `CarregarPorCodigo()`, `EditarRegistro()`, `BOParaForm()`, `HabilitarCampos(.T., .F.)`
+- `BtnExcluirClick()` at line 5194 ÔÇö `MsgConfirma()` ÔåÆ `Excluir()` (PUBLIC) ÔåÆ `CarregarLista()`
+
+**Phase 8 - Integration already in `menu.prg`:**
+- Menu item `"Produtos"` at BAR 7 of `popCadastros`
+- `AbrirFormProduto()` procedure using correct pattern: `VARTYPE(loForm) = "O"` + `loForm.Show()` (no Release after Show)
+
+**config.prg**: Uses `ADIR()` dynamic loading ÔÇö `ProdutoBO.prg` (matches `*BO.prg`) and `FormProduto.prg` (matches `Form*.prg` in `cadastros\`) load automatically. No manual entries needed.
+
+**Key patterns verified correct:**
+- `AjustarBotoesPorModo()` called inside `AlternarPagina()` ÔÇö all 4 buttons reach it Ô£ô
+- `RETURN` in Visualizar/Alterar is outside TRY/CATCH Ô£ô
+- `MsgConfirma()` result used as logical (`IF loc_lConfirmado`) not numeric Ô£ô
+- Calls `Excluir()` (PUBLIC), not `ExecutarExclusao()` directly Ô£ô
+
+The FormProduto migration is complete through Phase 8/8. The file is ready for testing.

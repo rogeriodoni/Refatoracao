@@ -1,0 +1,13 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**FormOcc.prg e OccBO.prg j├í estavam completos** das fases anteriores, com todos os m├®todos exigidos:
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`, `AjustarBotoesPorModo()`
+- `CarregarLista()`, `AlternarPagina()`, `TornarControlesVisiveis()`, `FormatarGridLista()`
+
+**Integra├º├úo adicionada ao menu.prg:**
+- `DEFINE BAR 139 OF popCadastros` com prompt "Ocorr├¬ncias de Corre├º├úo"
+- `ON SELECTION BAR 139 OF popCadastros DO AbrirFormOcc`
+- `PROCEDURE AbrirFormOcc()` no padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, sem Release)
+
+**config.prg**: nenhuma altera├º├úo necess├íria ÔÇö `ADIR()` j├í carrega automaticamente `OccBO.prg` (classes\) e `FormOcc.prg` (forms\cadastros\) por padr├úo.

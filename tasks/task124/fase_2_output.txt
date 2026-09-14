@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. O `SigReInfBO.prg` agora tem os m├®todos completos adaptados ao padr├úo REPORT:
+
+- **`Visualizar()`** ÔÇö chama `PrepararDados()` e depois `DO SigPrNfs` com modo `"V"` (equivalente ao `visualizacao` original)
+- **`Imprimir()`** ÔÇö chama `PrepararDados()` e depois `DO SigPrNfs` com modo `"I"`, com TRY/CATCH completo (equivalente ao `impressao` original)
+- **`ObterChavePrimaria()`** ÔÇö retorna `emps + dopes + STR(numes, 6)`, mesmo formato do `lcEdn` original
+- **`RegistrarAuditoria()`** ÔÇö override adequado: relat├│rios n├úo escrevem dados, retorna `.T.` sem l├│gica de escrita
+
+N├úo foram adicionados Inserir()/Atualizar()/CarregarDoCursor() pois este ├® um BO de relat├│rio (RelatorioBase), n├úo CRUD ÔÇö conforme exigido pelo contexto da task.

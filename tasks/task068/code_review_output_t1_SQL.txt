@@ -1,0 +1,25 @@
+﻿Ap├│s verifica├º├úo completa, posso confirmar a an├ílise:
+
+**Ambos os flags s├úo FALSOS POSITIVOS.** Aqui est├í o racioc├¡nio:
+
+### CEMPS (linha 1440 do Form)
+```foxpro
+loc_cSQL = "SELECT razas FROM sigcdemp WHERE cemps = " + EscaparSQL(loc_cCod)
+```
+- Este ├® um m├®todo auxiliar `ValidarCdEmpresa` ÔÇö query **secund├íria de lookup**, n├úo parte do WHERE do relat├│rio principal.
+- `cemps` ├® a chave prim├íria correta da tabela `sigcdemp` (c├│digo da empresa).
+- O WHERE do relat├│rio principal usa `a.emps` (de `SigChe`) ÔÇö correto e presente.
+
+### GRUPOS (linhas 1572 e 1711 do Form)
+```foxpro
+loc_cFiltro = "grupos = " + EscaparSQL(loc_cGrupo)  && filtro do FormBuscaAuxiliar
+loc_cSQL = loc_cSQL + " AND grupos = " + EscaparSQL(loc_cGrupo)  && ValidarCdConta
+```
+- S├úo queries **secund├írias de lookup/valida├º├úo** de conta por grupo.
+- `grupos` ├® coluna v├ílida de `SigCdCli` ÔÇö inclusive **o pr├│prio c├│digo original** a usa no JOIN: `left join sigcdcli c on a.grupot = c.grupos`.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** O validador escaneou todas as cl├íusulas WHERE do arquivo inteiro, mas a lista de refer├¬ncia (`DATAS, VENCS, EMPS...`) cont├®m apenas as colunas do **SELECT principal do relat├│rio**. As colunas `cemps` e `grupos` aparecem exclusivamente em queries auxiliares de lookup/valida├º├úo, s├úo nomes corretos para suas tabelas, e remov├¬-las quebraria a funcionalidade ÔÇö violando a regra "NAO remover campos, funcionalidades ou lookups".
+
+O c├│digo est├í **correto como est├í**. Nenhum arquivo modificado.

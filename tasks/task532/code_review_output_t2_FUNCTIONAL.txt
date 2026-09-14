@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo do Pass Functional Logic
+
+Verifiquei os 49 problemas reportados contra o arquivo real em disco e apliquei o ├║nico fix que era de fato necess├írio e estava dentro do escopo deste pass:
+
+**Corrigido:**
+- **[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis()` (`FormTbv.prg:4161-4164`) protegia `CNT_4C_CABECALHO`, `CNT_4C_CONTAINER1` e `CNT_4C_PGCONFDESCONTO` contra serem for├ºados a `Visible=.T.`, mas faltava `CNT_4C_PGDESCONTO`, que segue exatamente o mesmo padr├úo de visibilidade condicional (linha 1333: `loc_oPagina.cnt_4c_PgDesconto.Visible = .F.`). Adicionei-o ├á whitelist para consist├¬ncia e robustez contra reordena├º├Áes futuras do c├│digo.
+
+**N├úo alterado (falsos positivos confirmados no arquivo real):**
+- **[METODO-INEXISTENTE] `THIS.FormatarHorarioValidado()`** ÔÇö j├í definido como `PROTECTED FUNCTION` na linha 3467. O relat├│rio cortou o trecho exatamente ap├│s a declara├º├úo, escondendo-a.
+- **[METODO-INEXISTENTE] `THIS.FaixaTemInicial()`** ÔÇö j├í definido como `PROTECTED FUNCTION` na linha 3493, vis├¡vel inclusive no pr├│prio trecho fornecido.
+
+**Fora de escopo deste pass (n├úo tocados):**
+- Os 8 itens `[GRID-HEADER]` e os 38 itens `[LAYOUT-POSITION]` n├úo pertencem ├ás categorias funcionais listadas em "Foco deste pass" e a regra "PROIBIDO alterar propriedades visuais" os exclui explicitamente. Ficam para o pass de layout/visual dedicado.
+- Categorias mencionadas nas instru├º├Áes (`BUSCA-CURSOR`, `OPTIONGROUP-LEFT`, `CARGA-DADOS`, `BINDEVENT-PARAMS`, `STUB-MSGAVISO`, `LOSTFOCUS-SEM-GUARDIA`, `INIT-DUPLICADO`) n├úo tinham nenhuma ocorr├¬ncia na lista real dos 49 problemas detectados ÔÇö nada a corrigir nelas.
+
+Arquivo salvo: `C:\4c\projeto\app\forms\cadastros\FormTbv.prg`.

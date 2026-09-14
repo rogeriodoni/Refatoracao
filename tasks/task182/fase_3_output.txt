@@ -1,0 +1,11 @@
+﻿Config.prg already scans `operacionais\Form*.prg` at line 304. The migration is fully integrated ÔÇö no further changes needed.
+
+**Status summary:**
+
+- `FormSigPrFem.prg` ÔÇö complete OPERACIONAL form (~1440 lines), all 7 bugs fixed from the previous session
+- `SigPrFemBO.prg` ÔÇö already complete (Phase 1-2)
+- `menu.prg` ÔÇö already has BAR 43 in `popMovimentos` + `AbrirFormSigPrFem` procedure
+- `config.prg` ÔÇö auto-loads via `ADIR()` from `operacionais\` folder; no changes needed
+- `RelSigPrFem.frx` ÔÇö doesn't exist yet, but CmdVisualizarClick/CmdImprimirClick guard with `IF FILE(loc_cRelatorio)` and show a `MsgAviso` if missing
+
+To test: `del /s /q C:\4c\projeto\app\*.fxp` then open the "An├ílise de Produ├º├úo" item from the Movimentos menu.

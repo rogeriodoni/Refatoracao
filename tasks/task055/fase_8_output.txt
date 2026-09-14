@@ -1,0 +1,28 @@
+﻿A Fase 8/8 j├í est├í **completamente implementada**. Revisando os arquivos:
+
+**FormSigReCmp.prg** (2394 linhas) ÔÇö todos os m├®todos exigidos j├í existem:
+
+| M├®todo | Linha | Status |
+|--------|-------|--------|
+| `BtnBuscarClick()` | 1353 | Ô£à |
+| `BtnEncerrarClick()` | 1289 | Ô£à |
+| `BtnSalvarClick()` | 1361 | Ô£à |
+| `BtnCancelarClick()` | 1285 | Ô£à |
+| `FormParaBO()` | 1337 | Ô£à |
+| `BOParaForm()` | 1341 | Ô£à |
+| `HabilitarCampos()` | 1314 | Ô£à |
+| `LimparCampos()` | 939 | Ô£à |
+| `CarregarLista()` | 1329 | Ô£à |
+| `AjustarBotoesPorModo()` | 1296 | Ô£à |
+
+**Integra├º├úo completa:**
+- `SigReCmpBO.prg` em `app\classes\` ÔÇö auto-carregado via `ADIR(*BO.prg)` no config.prg (linha 263)
+- `FormSigReCmp.prg` em `app\forms\relatorios\` ÔÇö auto-carregado via `ADIR(Form*.prg)` (linha 293)
+- `menu.prg` ÔÇö DEFINE BAR 53 + `AbrirFormSigReCmp()` implementado (linhas 215, 1644)
+
+A migra├º├úo do FormSigReCmp est├í 100% finalizada. Para testar, basta apagar os .fxp e executar:
+```
+del /s /q C:\4c\projeto\app\*.fxp
+CD C:\4c\projeto\app\start
+DO main.prg
+```

@@ -1,0 +1,13 @@
+﻿Todas as 8 corre├º├Áes aplicadas. Resumo do que foi feito:
+
+**sigpdmp7BO.prg** (4 mudan├ºas):
+- `CarregarPorCodigo`: `WHERE empdnps = ...` ÔåÆ `WHERE cidchaves = ...` (a PK real)
+- `Buscar` SELECT: adicionado `cidchaves` ├ás colunas retornadas
+- `Atualizar`: `WHERE empdnps = THIS.this_cEmpdnps` ÔåÆ `WHERE cidchaves = THIS.this_cCidchaves`
+- `ExecutarExclusao`: mesma corre├º├úo
+
+**Formsigpdmp7.prg** (4 mudan├ºas):
+- `cursor_4c_Dados` CREATE CURSOR: adicionado `cidchaves C(20)` (para receber o campo do SELECT)
+- `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`: `cursor_4c_Dados.empdnps` ÔåÆ `cursor_4c_Dados.cidchaves` como chave de lookup
+
+A condi├º├úo `WHERE empdnps = ...` era inventada pela LLM ÔÇö o original usa `_CHAVENENS` (vari├ível VFP para a PK `cidchaves`). Agora os lookups e opera├º├Áes DML usam a PK correta.

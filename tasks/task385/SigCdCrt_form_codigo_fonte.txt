@@ -1,0 +1,548 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdCrt.SCX
+* Data/Hora: 30/07/2026 02:35:18
+* Total de registros: 15
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCRT
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Justifica
+  Parent: SIGCDCRT.Pagina.Lista
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say2
+  Parent: SIGCDCRT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDCRT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_codigo
+  Parent: SIGCDCRT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_descricao
+  Parent: SIGCDCRT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDCRT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fwget1
+  Parent: SIGCDCRT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDCRT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fwget2
+  Parent: SIGCDCRT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say20
+  Parent: SIGCDCRT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_EmpPad
+  Parent: SIGCDCRT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 643
+  Width = 798
+  DoCreate = .T.
+  Caption = "Cadastro de Retrabalhos"
+  Name = "SIGCDCRT"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Left = 37
+  Pagina.Lista.Grade.Top = 126
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.ZOrderSet = 1
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Left = 343
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.ZOrderSet = 4
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 718
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.ZOrderSet = 6
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 48
+  Pagina.Lista.cntFiltros.Left = 157
+  Pagina.Lista.cntFiltros.ZOrderSet = 7
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 619
+  Pagina.Dados.Grupo_Salva.Top = 17
+  Pagina.Dados.Grupo_Salva.TabIndex = 6
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -29
+  Pagina.Left = -2
+  Pagina.Width = 804
+  Pagina.Height = 676
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Lista.Justifica
+------------------------------------------------------------
+  Top = 82
+  Left = 604
+  Height = 40
+  Width = 120
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\vbmp\altera.ico
+  Caption = "\<Justificativas"
+  TabIndex = 3
+  ToolTipText = "Mostra Tabelas de Desconto Válidas para a Operação"
+  PicturePosition = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 5
+  Name = "Justifica"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 274
+  Top = 256
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 261
+  Top = 287
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Dados.Get_codigo
+------------------------------------------------------------
+  ControlSource = "crSigPrCrt.cods"
+  Left = 319
+  MaxLength = 6
+  TabIndex = 1
+  Top = 254
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Dados.Get_descricao
+------------------------------------------------------------
+  ControlSource = "crSigPrCrt.descs"
+  Left = 319
+  TabIndex = 2
+  Top = 284
+  Width = 220
+  ForeColor = 0,0,0
+  Name = "Get_descricao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Fator : "
+  Left = 278
+  Top = 316
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Dados.fwget1
+------------------------------------------------------------
+  ControlSource = "crSigPrCrt.fators"
+  InputMask = "9999.99"
+  Left = 319
+  MaxLength = 7
+  TabIndex = 3
+  Top = 313
+  Width = 60
+  ForeColor = 0,0,0
+  Name = "fwget1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ordem : "
+  Left = 272
+  Top = 344
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Dados.fwget2
+------------------------------------------------------------
+  ControlSource = "crSigPrCrt.Seqs"
+  InputMask = "99"
+  Left = 319
+  MaxLength = 2
+  TabIndex = 4
+  Top = 341
+  Width = 24
+  ForeColor = 0,0,0
+  Name = "fwget2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Dados.Say20
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Height = 15
+  Left = 266
+  Top = 372
+  Width = 50
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say20"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCRT.Pagina.Dados.Get_EmpPad
+------------------------------------------------------------
+  FontName = "Courier New"
+  Alignment = 3
+  Value = 
+  ControlSource = "CrSigPrCrt.Emps"
+  Height = 23
+  InputMask = ""
+  Left = 319
+  TabIndex = 5
+  Top = 369
+  Width = 34
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_EmpPad"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 8, 7, 14, 11, 8, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCRT
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQryCrt = [Select * From SigPrCrt Where Emps = ']+_Empr+[' Or Emps = ' ' ]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigPrCrt', 'cods', 'crSigPrCrt', '', ThisForm.Pagina.Lista.Grade, lcQryCrt)
+			.pfSqlTabela(1).pColuna('Cods', '', '', 'Código', 80, .t.)
+			.pfSqlTabela(1).pColuna('Descs', '', '', 'Descrição', 220, .t.)
+			.pfSqlTabela(1).pColuna('Fators', '', '', 'Fator', 80)
+			.pfSqlTabela(1).pColuna('seqs', '', '', 'Ordem', 40)
+		EndWith
+
+		=DoDefault()
+		Select crSigPrCrt
+		Index On cods tag cods
+		
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Select crSigPrCrt
+Set Near On
+Set Order To cods
+Seek Cods
+Set Near Off
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.podatamgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+If !dodefault( opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.Get_Codigo.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Get_Descricao.SetFocus
+Other
+	ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha = 'INSERIR'
+	If IsEmpty( ThisForm.pagina.dados.get_codigo.Value )
+		Messagebox( 'Codigo não pode ficar em branco!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Codigo.SetFocus
+		Return
+	EndIf
+	If ThisForm.poDataMgr.CursorQuery('SigPrCrt', 'crPesqSigPrCrt', 'cods', ThisForm.pagina.dados.get_codigo.Value)
+		Messagebox( 'Código já Cadastrado!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Codigo.SetFocus
+		Return
+	Endif
+Endif
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCRT.Pagina.Lista.Justifica
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Reccount() <> 0
+	Do Form SigCdJus With Thisform, CrSigPrCrt.Cods
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCRT.Pagina.Dados.Get_codigo
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCRT.Pagina.Dados.Get_EmpPad
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','cEmps',This.Value,'Empresas',.t.,'cEmps')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('CEmps', 'XXXXXX', 'Código', .t.)
+		xBrox.mAddColuna('Razas', '', 'Descrição', .t.)
+		xBrox.Show()
+		This.Value = Iif( LastKey() # 27, Evaluate('crSigCdEmp.CEmps'), '' )
+	EndIf 
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, "INSERIR", "ALTERAR" )
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

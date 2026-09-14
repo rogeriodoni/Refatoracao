@@ -1,0 +1,17 @@
+﻿Fase 2 conclu├¡da. O `sigprcpdBO.prg` foi completado com:
+
+**M├®todos adicionados:**
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `TRANSFORM(this_nCodigo)`, requisito do BusinessBase.
+
+- **`CarregarDados(par_nCodigo, par_cFase, par_cUnidade, par_dData)`** ÔÇö reproduz fielmente a l├│gica do Init() original em 6 etapas:
+  1. SQLEXEC ÔåÆ `cursor_4c_Pcp` (SigCdPcz ÔÇö dados b├ísicos do processo)
+  2. SQLEXEC ÔåÆ `cursor_4c_Capacidade` (SigCdPcP agrupado ÔÇö Minutos/UtilizadoS/Saldos ÔåÆ populam `this_nCapacidade/Utilizado/Saldo`)
+  3. SQLEXEC ÔåÆ `cursor_4c_PcpPp` (SigCdPcg ÔÇö itens individuais de programa├º├úo)
+  4. SQLEXEC ÔåÆ `cursor_4c_PcpOp2` (SigCdPco + SigCdCli ÔÇö ordens com Pedido/Cliente calculados)
+  5. VFP SELECT local ÔåÆ `cursor_4c_PcpOp3` (agrega Minutos por Fases+UniPrdts+Nenvs+Seqs)
+  6. VFP SELECT local ÔåÆ `cursor_4c_Dados` (cursor final do grid com TempU/TempoO/TempoReal proporcional via `fStoM`)
+
+- **`ObterDetalheProduto(par_cCpros)`** ÔÇö chamado pelo AfterRowColChange do form: SQLEXEC em SigCdPro, decodifica base64, salva `.jpg` tempor├írio, popula `this_cDescricaoProduto/FotoBase64/CaminhoFoto`.
+
+- **`FUNCTION fStoM`** ÔÇö ap├│s ENDDEFINE, replica a fun├º├úo legada do framework (converte segundos ÔåÆ minutos via `INT(x/60)`), necess├íria nos VFP SELECTs locais.

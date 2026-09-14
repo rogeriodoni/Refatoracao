@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 handlers principais no `FormSigPrChr.prg` (linhas 3203ÔÇô3341), antes de `ENDDEFINE`:
+
+- **BtnIncluirClick** ÔÇö valida conta selecionada e ativa o container `impchmat` (entrada manual de faixa de cheques, via `AtivarImpChmat()`).
+- **BtnAlterarClick** ÔÇö abre `SigCdPgr` do documento vinculado (com `CursorQuery("SigCdPgr", "empdopnums", ...)`), bloqueando cheques cancelados.
+- **BtnVisualizarClick** ÔÇö chama `CarregaConta()` + `DO FORM SigReEch WITH ... "CONSULTAR"` para visualiza├º├úo/impress├úo.
+- **BtnExcluirClick** ÔÇö exclui cheque cancelado selecionado (checa `NCancelas=1` e permiss├úo `this_lExcluirCheque`, executa `DELETE FROM SigCqChi WHERE cidchaves = ?pCidChaveDel` + `Commit()`).
+
+Todos com `TRY/CATCH`, `MsgAviso` para valida├º├úo de UI e `MsgErro` para exceptions. Nada de stubs ÔÇö cada m├®todo delega para l├│gica operacional real do form (mapeamento can├┤nico das opera├º├Áes CRUD sobre o form OPERACIONAL de processamento de cheques).

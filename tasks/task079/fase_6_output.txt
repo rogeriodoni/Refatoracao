@@ -1,0 +1,15 @@
+﻿Fase 6 conclu├¡da. As duas modifica├º├Áes foram aplicadas com sucesso ao `FormSigReDif.prg`:
+
+**1. `ConfigurarPaginaDados()` ÔÇö completo (colunas 1-14)**
+- Colunas 8-14 adicionadas com `Movable=.F.`, `Resizable=.F.`, `ReadOnly=.T.`, `InputMask` onde o original especificava
+- Col 12: `Alignment=2` em Column e `Text1` (centrado), `MaxLength=3`
+- Col 13: `Text1.MaxLength=3`
+- Col 14: `Text1.MaxLength=10`
+- Colunas 1-7 receberam bloco `WITH .ColumnN.Text1` com `BorderStyle=0`, `Margin=0`, `ForeColor`, `BackColor`; Col 3 com `FontName="Tahoma"` e `ForeColor=RGB(90,90,90)` (fiel ao original)
+
+**2. `CarregarGrade()` ÔÇö headers com FontName/FontSize/Alignment**
+- `SetAll("FontName","Tahoma","Header")` + override Verdana para cols 11-14 (fiel ao original)
+- `SetAll("FontSize",8,"Header")`
+- `SetAll("Alignment",2,"Header")` + override `Column14.Header1.Alignment=0` (left-align, fiel ao original)
+
+**Sem lookups** ÔÇö este form n├úo tem campos com lookup (confirmado pelo `comportamento.json`). A `cnt_4c_BotoesAcao` n├úo se aplica (form REPORT). Os BINDEVENTs dos bot├Áes do `cmg_4c_Botoes` ser├úo adicionados na **Fase 7** conforme planejado.

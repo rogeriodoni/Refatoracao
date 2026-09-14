@@ -1,0 +1,15 @@
+﻿**Falso positivo confirmado.** 
+
+As ocorr├¬ncias de `ControlCount` em FormICO.prg (linhas 803 e 814) est├úo no m├®todo `TornarControlesVisiveis` ÔÇö s├úo uso leg├¡timo da propriedade VFP9 `ControlCount` para iterar sobre controles de UI, n├úo uma coluna SQL em cl├íusula WHERE.
+
+Comparando os SQLs reais em ICOBO.prg com o original:
+
+| SQL no BO migrado | Colunas no WHERE | Status |
+|---|---|---|
+| `VerificarUsoIcone` | `barrapict = ?loc_cNome` | Ô£ô igual ao original |
+| `ExecutarExclusao` | `carqicones = ?loc_cNome` | Ô£ô igual ao original |
+| `Atualizar` | `carqicones = ?loc_cNome` | Ô£ô igual ao original |
+
+N├úo existe nenhuma cl├íusula `WHERE CONTROLCOUNT` nos arquivos. O detector do pass SQL confundiu a propriedade VFP9 `.ControlCount` (contagem de controles de um container) com uma suposta coluna SQL inventada.
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `FormICO.prg` e `ICOBO.prg` est├úo corretos para este pass.

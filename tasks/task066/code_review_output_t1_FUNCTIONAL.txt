@@ -1,0 +1,5 @@
+﻿Done. Only one real fix was needed:
+
+**[OPTIONGROUP-LEFT] fixed** ÔÇö Added `.Themes = .F.` to all 4 buttons (was missing from all), and added `.FontName = "Tahoma"` / `.FontSize = 8` to Buttons(1) (which was the only one missing those properties).
+
+**[LAYOUT-POSITION] not changed** ÔÇö All 8 position errors have exactly 85px diff, which is precisely `PageFrame.Top=85`. The controls are inside `Page1` of the PageFrame, so their Top values are *page-relative*, not form-absolute. `lbl_4c_Label1.Top=14` inside a page at `pgf.Top=85` renders at screen position 99 ÔÇö exactly the original. Changing them to original SCX values would misplace every control ~85px too low. The validator doesn't account for the PageFrame offset; these are false positives.

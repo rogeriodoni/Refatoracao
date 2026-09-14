@@ -1,0 +1,21 @@
+﻿O arquivo est├í correto e completo. Aqui est├í o resumo do que foi feito na Fase 5:
+
+**`ConfigurarPaginaDados()` expandida com:**
+- `cmd_4c_Confirmar` + `cmd_4c_Cancelar` dentro do `cnt_4c_Salva` (posi├º├Áes exatas do original: Left=5/80, Top=5), com BINDEVENTs para os handlers
+- `lbl_4c_Label2` ("C├│digo :") ÔÇö Top=266 (237+29), Left=184
+- `txt_4c_Codigo` ÔÇö Top=263 (234+29), Left=234, Width=80, MaxLength=10
+- `lbl_4c_Label1` ("Descri├º├úo :") ÔÇö Top=291 (262+29), Left=171
+- `txt_4c_Descricao` ÔÇö Top=288 (259+29), Left=234, Width=430, MaxLength=60
+
+**M├®todos CRUD atualizados:**
+- `BtnIncluirClick` ÔåÆ agora chama `LimparCampos()` + `HabilitarCampos(.T.)`
+- `BtnVisualizarClick` ÔåÆ agora chama `HabilitarCampos(.F.)` + `BOParaForm()`
+- `BtnAlterarClick` ÔåÆ agora chama `HabilitarCampos(.T.)` + `BOParaForm()`
+
+**Novos m├®todos adicionados (funcionais, n├úo stubs):**
+- `BtnSalvarClick` ÔÇö valida C├│digo/Descri├º├úo obrigat├│rios, chama `FormParaBO()` + `Salvar()`
+- `BtnCancelarClick` ÔÇö retorna ├á lista
+- `FormParaBO` ÔÇö mapeia txt_4c_Codigo e txt_4c_Descricao ÔåÆ BO
+- `BOParaForm` ÔÇö mapeia BO ÔåÆ txt_4c_Codigo e txt_4c_Descricao
+- `HabilitarCampos` ÔÇö C├│digo apenas em INCLUIR; Descri├º├úo conforme par_lHabilitar
+- `LimparCampos` ÔÇö limpa ambos os campos

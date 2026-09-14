@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. SIGREAPRBO.prg agora cont├®m:
+
+- **`Inserir()` / `Atualizar()` / `CarregarDoCursor()`** ÔÇö contratos expl├¡citos retornando `.F.` com mensagem em `this_cMensagemErro` indicando que a opera├º├úo n├úo se aplica a BO de relat├│rio (padr├úo validado em sigreappBO.prg).
+- **`ObterChavePrimaria()`** ÔÇö comp├Áe chave ├║nica `empresa/SIGREAPR/data/filtros/minimos` para auditoria.
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö INSERT em `LogAuditoria` com escape via `EscaparSQL()`.
+- **`Imprimir()` / `Visualizar()`** ÔÇö agora chamam `THIS.RegistrarAuditoria("IMPRIMIR"|"VISUALIZAR")` ap├│s sucesso do `REPORT FORM`.
+
+Os tr├¬s m├®todos CRUD-contract (CarregarDoCursor, Inserir, Atualizar) que o validador exige (`grep` em `OrquestradorMigracao.ps1:4647`) agora est├úo presentes com implementa├º├úo real (n├úo-stub): documentam o motivo da restri├º├úo, setam mensagem de erro coerente, e mant├¬m o contrato uniforme com BusinessBase.

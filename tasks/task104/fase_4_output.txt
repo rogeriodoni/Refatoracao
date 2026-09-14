@@ -1,0 +1,8 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormSIGREFUN.prg` agora tem:
+
+- **`ConfigurarCamposFiltro()`** ÔÇö cria os 5 controles da Page1 (lbl_4c_Label2, txt_4c_Fundi, lbl_4c_Label1, txt_4c_Fundf, chk_4c_ImpObs) com posi├º├Áes relativas ├á Page1 (top original ÔêÆ 85)
+- **`FormParaRelatorio()`** ÔÇö transfere `txt_4c_Fundi.Value` ÔåÆ `this_nFundI`, `txt_4c_Fundf.Value` ÔåÆ `this_nFundF`, `chk_4c_ImpObs.Value = 1` ÔåÆ `this_lImpObs`
+- **`LimparCampos()`** ÔÇö zera os filtros ap├│s a cria├º├úo
+- **`Validar()`** ÔÇö `EMPTY(FundI) OR EMPTY(FundF)` ÔåÆ `MsgAviso` + `SetFocus`, reproduz exatamente o `Valid` original
+- **4 handlers PUBLIC** (`BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnCancelarClick`) ÔÇö exig├¬ncia do BINDEVENT
+- **4 BINDEVENTs** em `InicializarForm()` vinculando `cmg_4c_Botoes.Buttons(1..4)` a esses handlers

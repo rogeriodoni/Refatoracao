@@ -1,0 +1,15 @@
+﻿Phase 2 complete. The BO now has the three CRUD methods required by the validator (`CarregarDoCursor`, `Inserir`, `Atualizar`), all with real SQL implementations against `SigOpPic` (the target table where production orders are persisted after processing).
+
+**Changes made to `C:\4c\projeto\app\classes\SigPrGloBO.prg`** (883 ÔåÆ 1220 lines):
+
+- Retargeted `this_cTabela` ÔåÆ `SigOpPic`, `this_cCampoChave` ÔåÆ `Cidchaves`
+- Added ~40 `this_*` properties covering all `SigOpPic` columns
+- `MontarCidChaves()` helper ÔÇö composes PK from Emps+Dopes+Numps
+- `CarregarDoCursor()` ÔÇö reworked to map all 40 SigOpPic columns with proper NULL/type handling (BITÔåÆLOGICAL for `Divs`/`Imprs`/`Iimprs`, `TratarNulo` for the rest)
+- `Inserir()` PROTECTED ÔÇö auto-fills derived keys (Cidchaves, Empdopnums, Empdnps, Empdopnops, Empds, DtGeras, Usuars), builds full 40-column INSERT with helpers (`EscaparSQL`/`FormatarNumeroSQL`/`FormatarDataSQL`), `LEFT()` truncation on Dpros/EmpDnps/EmpDopnops/EmpDopnums per schema sizes, calls `RegistrarAuditoria("INSERT")`
+- `Atualizar()` PROTECTED ÔÇö full UPDATE by Cidchaves, `RegistrarAuditoria("UPDATE")`
+- `ExecutarExclusao()` PROTECTED ÔÇö DELETE by Cidchaves, `RegistrarAuditoria("DELETE")`
+- `CarregarPorChave()` ÔÇö loader by PK
+- `ObterChavePrimaria()` ÔÇö updated to return `this_cCidChaves`
+
+All existing operational methods (`ProcessarOP`, `CarregarOperacoes`, `CarregarTiposGeracao`, `CarregarParametros`, `CarregarPacotes`, `VerificarNumeroOP`, `ValidarDados`) preserved intact.

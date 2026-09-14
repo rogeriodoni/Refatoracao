@@ -1,0 +1,29 @@
+﻿Ap├│s verifica├º├úo completa dos dois arquivos e do schema.sql, identifiquei que os tr├¬s problemas flagados s├úo **falsos positivos** do validador est├ítico. Aqui est├í a an├ílise:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### Coluna 'P'
+**Falso positivo** ÔÇö Nenhuma cl├íusula WHERE com coluna `P` existe em nenhum dos dois arquivos. Pesquisa exaustiva com grep confirma zero ocorr├¬ncias. O validador provavelmente extraiu 'P' de `PADR(...)` ou da vari├ível `loc_nP` (linha 1319 do form), que n├úo s├úo colunas SQL.
+
+### Coluna 'CIDCHAVES'
+**Falso positivo** ÔÇö O schema.sql confirma que `cidchaves` ├® a **PRIMARY KEY** real de `SigMvNfi`:
+```sql
+CONSTRAINT [sigmvnfi_cidchaves] PRIMARY KEY CLUSTERED
+```
+Seu uso em `WHERE n.cidchaves = ...` em `CarregarPorCodigo`, `Atualizar` e `ExecutarExclusao` ├® **correto**. O validador compara contra os campos WHERE da query de *filtro/lista* do legado, n├úo contra todos os WHEREs poss├¡veis.
+
+### Coluna 'CEMPS'
+**Falso positivo** ÔÇö A query em quest├úo ├® `SELECT CEmps, Razas FROM SigCdEmp WHERE CEmps = ...` (linha 1540 do form), que opera sobre a tabela **SigCdEmp**, n├úo SigMvNfi. O schema.sql confirma que `cemps [char](3)` existe em `sigcdemp`. A mem├│ria do projeto tamb├®m documenta isso em `feedback_sigcdemp_cemps_razas.md`. O validador agrupou incorretamente as colunas WHERE de queries contra tabelas diferentes.
+
+---
+
+## Conclus├úo
+
+**Nenhuma corre├º├úo necess├íria.** Os tr├¬s itens s├úo falsos positivos causados pela limita├º├úo do validador que:
+1. Trata `PADR(...)` como token SQL
+2. Compara WHEREs de queries de lookup (CarregarPorCodigo) contra os WHEREs da query de lista principal
+3. Agrupa colunas WHERE de tabelas diferentes (SigCdEmp vs SigMvNfi)
+
+O c├│digo migrado est├í correto. Nenhum dos arquivos precisa ser alterado.

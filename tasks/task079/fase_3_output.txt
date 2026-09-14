@@ -1,0 +1,10 @@
+﻿O arquivo foi criado corretamente. Fase 3/8 completa.
+
+**`C:\4c\projeto\app\forms\relatorios\FormSigReDif.prg`** criado com:
+
+- `DEFINE CLASS FormSigReDif AS FormBase` ÔÇö Height=570, Width=810, DataSession=2
+- `Init(par_nDataSessionId)` ÔÇö armazena o ID da sess├úo, chama `DODEFAULT()` (ÔåÆ FormBase.Init() ÔåÆ InicializarForm()), depois junta o DataSessionId ao form para que o grid da Fase 4 enxergue crGrid
+- `InicializarForm()` ÔÇö cria `SigReDifBO`, propaga `this_nDataSessionId` ao BO, chama `ConfigurarCabecalho()` e `ConfigurarBotoes()`
+- `ConfigurarCabecalho()` ÔÇö container cinza escuro (RGB 100,100,100) com lbl_4c_Sombra + lbl_4c_Titulo, largura = THIS.Width
+- `ConfigurarBotoes()` ÔÇö CommandGroup `cmg_4c_Botoes` com 4 bot├Áes (Visualizar/Imprimir/Documento/Encerrar) na geometria can├┤nica do framework (Left=529, Width=273, bot├Áes com W=65); BINDEVENTs ficam para a Fase 7
+- `Destroy()` ÔÇö libera `this_oRelatorio = .NULL.` + DODEFAULT()

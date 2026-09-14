@@ -1,0 +1,13 @@
+﻿Arquivo criado com 996 linhas. A Fase 3/8 est├í conclu├¡da.
+
+**Formmtz.prg** criado em `C:\4c\projeto\app\forms\cadastros\Formmtz.prg` com:
+
+- `DEFINE CLASS Formmtz AS FormBase` com propriedades visuais (Width=1105, Height=600, Caption correto)
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔåÆ instancia mtzBO, chama ConfigurarPageFrame, CarregarLista (com guard gb_4c_ValidandoUI)
+- `ConfigurarPageFrame()` ÔåÆ PageFrame Top=-29, Tabs=.F., 2 pages com fundo fundo_cad_1003.jpg
+- `ConfigurarPaginaLista()` ÔåÆ cnt_4c_Cabecalho + cnt_4c_Botoes (5 bot├Áes CRUD) + cnt_4c_Saida/cmd_4c_Encerrar (can├┤nico Left=917)
+- `ConfigurarPaginaDados()` ÔåÆ cnt_4c_BotoesAcao (Confirmar + Cancelar) ÔÇö grade e campos vir├úo nas pr├│ximas fases
+- M├®todos completos: CarregarLista, AlternarPagina, FormParaBO, BOParaForm, LimparCampos, HabilitarCampos, todos os Btn\*Click, TornarControlesVisiveis, FormatarGridLista, Destroy
+
+**Pr├│xima fase (4/8):** Grid da Page1 (grd_4c_Lista) + Grid grdSaldos da Page2 com as 28 colunas mensais.

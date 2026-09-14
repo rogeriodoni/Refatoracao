@@ -1,0 +1,7 @@
+﻿Tr├¬s altera├º├Áes aplicadas em `Formsigrecmc.prg`:
+
+1. **`ConfigurarPageFrame()`**: `PageCount = 1` ÔåÆ `PageCount = 2`, com Page2 configurada (mesma apar├¬ncia da Page1) ÔÇö sem isso, `AlternarPagina(2)` era bloqueado pelo guard `par_nPagina <= PageCount`.
+
+2. **`BtnIncluirClick()`**: adicionado `THIS.AlternarPagina(2)` ap├│s `LimparCampos()` ÔÇö o teste chama este m├®todo e verifica se `ActivePage = 2`.
+
+3. **`BtnCancelarClick()`**: trocado `BtnEncerrarClick()` (que destruiria o form via `Release()`) por `AlternarPagina(1)` ÔÇö o teste, ap├│s navegar para Page2, chama `BtnCancelarClick()` e espera `ActivePage = 1`.

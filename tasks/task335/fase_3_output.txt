@@ -1,0 +1,13 @@
+﻿Fase 3/8 conclu├¡da. `C:\4c\projeto\app\forms\operacionais\Formsigprtam.prg` criado com:
+
+**Estrutura entregue:**
+- `DEFINE CLASS Formsigprtam AS FormBase` com todas as propriedades visuais exatas do SCX (`Width=638, Height=540, TitleBar=0, ControlBox=.F., DataSession=1`)
+- Propriedades de contexto: `this_cCPros`, `this_cDPros`, `this_cPcEscolha`, `this_oParentForm`, `this_lHouveIncl/Excl`, `this_nPeAntValue`
+- `Init(par_oParentForm, par_nDataSes, par_cPcEscolha, par_cCPros)` ÔÇö armazena params ANTES de `DODEFAULT()`
+- `ConfigurarPageFrame()` ÔÇö form plano OPERACIONAL, apenas seta `new_background.jpg` (sem PageFrame real)
+- `InicializarForm()` ÔÇö orquestra todo o ciclo com CATCH verboso
+- `ConfigurarCabecalho()` ÔÇö completo (cntSombra: Top=0, Width=800, Height=80, labels 769px, AutoSize=.F.)
+- `CarregarDados()` ÔÇö chama `CarregarProduto` + `CarregarTamanhos` do BO
+- `TornarControlesVisiveis()` ÔÇö recursivo
+- `Destroy()` ÔÇö captura cursor antes de anular o BO, fecha cursores, `DODEFAULT()`
+- Stubs com coment├írio de fase: `ConfigurarBotoes`, `ConfigurarGrid`, `ConfigurarGrdDados` (Fase 4), `ConfigurarBINDEVENTs` (Fases 7-8)

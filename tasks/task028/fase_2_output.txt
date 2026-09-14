@@ -1,0 +1,10 @@
+﻿Fase 2/8 conclu├¡da. O arquivo `SIGREAGVBO.prg` agora cont├®m a implementa├º├úo completa com:
+
+**M├®todos adicionados:**
+- `PrepararDados()` ÔÇö replica fiel da `PROCEDURE processamento` original (287 linhas), usando padr├úo `DO WHILE .T. / EXIT` para sa├¡da antecipada sem `RETURN` dentro de `TRY/CATCH`. Fluxo completo: cabe├ºalho da empresa ÔåÆ tipos de opera├º├úo ÔåÆ produtos por grupo ÔåÆ convers├úo de moeda ÔåÆ c├ílculo de pre├ºo m├®dio ÔåÆ hist├│rico de pre├ºos ÔåÆ promo├º├Áes ÔåÆ agrega├º├Áes ÔåÆ intervalos de data ÔåÆ movimenta├º├Áes ÔåÆ saldos e percentuais
+- `Imprimir()` ÔÇö chama `PrepararDados()` + `REPORT FORM ... TO PRINTER PROMPT NOCONSOLE`
+- `Visualizar()` ÔÇö chama `PrepararDados()` + `REPORT FORM ... PREVIEW NOCONSOLE`
+- `GerarExcel()` ÔÇö chama `PrepararDados()` + `REPORT FORM ... TO PRINTER NOCONSOLE` (equivalente ao DocExcel)
+- `BuscarCotacao(par_cMoeda)` ÔÇö substitui `fBuscarCotacao()` do legado, consulta `SigCdCot.valos` com fallback seguro para 1.0
+
+**Regras respeitadas:** sem `RETURN` dentro de `TRY/CATCH`, sem literais acentuados (CHR()), CATCH com `MsgErro`, sem `PUBLIC` em `DEFINE CLASS`, cleanup de cursores tempor├írios sempre executado (fora do TRY).

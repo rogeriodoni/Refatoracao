@@ -1,0 +1,12 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**Arquivos j├í completos (fases anteriores):**
+- `JUSBO.prg` ÔÇö BO completo com Init, Buscar, CarregarPorCodigo, ValidarDados, Inserir, Atualizar, ExecutarExclusao
+- `FormJUS.prg` ÔÇö Form completo com todos os m├®todos (CarregarLista, FormParaBO, BOParaForm, HabilitarCampos, LimparCampos, AjustarBotoesPorModo, todos os Btn*Click)
+
+**Corrigido nesta fase:**
+- Bug nos bot├Áes Visualizar/Alterar/Excluir: passavam `Cods` para `CarregarPorCodigo()`, que espera `cidchaves` (a PK real do cursor)
+
+**Integra├º├úo adicionada:**
+- `menu.prg`: BAR 115 "Justificativas do Retrabalho" em `popCadastros`, `ON SELECTION BAR 115` e procedure `AbrirFormJUS()` no final
+- `config.prg`: n├úo necessita altera├º├úo ÔÇö usa ADIR din├ómico que carrega automaticamente `JUSBO.prg` (de `classes/`) e `FormJUS.prg` (de `forms/cadastros/`)

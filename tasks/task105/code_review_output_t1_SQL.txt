@@ -1,0 +1,8 @@
+﻿Todas as 4 corre├º├Áes aplicadas com sucesso em `SIGREFXVBO.prg`:
+
+| Problema | Corre├º├úo |
+|---|---|
+| **CEMPS** (linha 112) | Removida query `SELECT Razas FROM SigCdEmp WHERE Cemps = ...`; substitu├¡da por `go_4c_Sistema.cEmpresa` |
+| **CGRUS (filtro inventado)** | Removido `IIF(EMPTY(loc_cGrupo), "", " AND b.Cgrus = ...")` de ambas as queries (SigMvEst e SigMvHst) |
+| **CGRUS (join inventado)** | `" AND b.CGrus = c.CGrus"` substitu├¡do por `" AND c.CGrus = " + EscaparSQL(m.Grupos)` ÔÇö usa GRUPOS (que existe no original) para filtrar SigCdGrp |
+| **GROUP BY 1,2...** | `GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10` substitu├¡do por nomes de colunas reais em ambos os SELECTs do UNION ALL |

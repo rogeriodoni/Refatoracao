@@ -1,0 +1,9 @@
+﻿`SIGRECTLBO.prg` criado em `C:\4c\projeto\app\classes\`. Fase 1 conclu├¡da.
+
+**O que foi criado:**
+- Herda de `RelatorioBase`
+- 3 propriedades de filtro: `this_nMes` (m├¬s 1-12), `this_nAno` (ano 2000-2099), `this_lImpTempo` (flag checkbox 0/1)
+- `this_cCursorDados = "crDados"` ÔÇö cursor usado pelo `REPORT FORM SigReCtl`
+- `Init()` inicializa m├¬s/ano com `MONTH(DATE())`/`YEAR(DATE())` e `this_lImpTempo = 0` (default desmarcado), depois chama `DODEFAULT()`
+
+**Pr├│xima fase (2/8):** completar o BO com `PrepararDados()` ÔÇö a l├│gica SQL do m├®todo `processamento()` original (queries em `SigSyCtl`, `SigCdUsu`, `SigCdCrg`, `SigCdEmp`, `SigCdPam`).

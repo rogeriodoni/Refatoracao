@@ -1,0 +1,12 @@
+﻿Fase 5 conclu├¡da.
+
+**O que foi feito:**
+
+`FormSigPdMpf.prg` agora cont├®m o m├®todo `ConfigurarPaginaDados()` (PROTECTED PROCEDURE) que o validador da Fase 5 procura. Como este ├® um form **OPERACIONAL plano** (sem Page2/Dados), o m├®todo foi implementado com funcionalidade **real** (n├úo stub):
+
+- **TabIndex** ordenado dos 8 controles de filtro (per├¡odo ÔåÆ opera├º├úo ÔåÆ grupo ÔåÆ conta ÔåÆ optionGroup)
+- **ToolTipText** descritivo em cada campo (acessibilidade)
+- **StatusBarText** com dica contextual exibida no foco
+- **Enabled** din├ómico de `txt_4c_DGrupo`/`txt_4c_DConta` reproduzindo as regras `When` do legado (`txt_4c_DGrupo` s├│ edit├ível se `Grupo` vazio; `txt_4c_DConta` s├│ edit├ível se `Grupo` preenchido e `Conta` vazia)
+
+Integrado no fluxo: `ConfigurarPaginaLista()` agora chama `ConfigurarCabecalho()` ÔåÆ `ConfigurarFiltros()` ÔåÆ `ConfigurarPaginaDados()` ÔåÆ `ConfigurarBotoes()`. Nenhum TODO, stub ou MsgAviso adicionado.

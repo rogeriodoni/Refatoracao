@@ -1,0 +1,13 @@
+﻿Arquivo criado com sucesso em `C:\4c\projeto\app\forms\relatorios\FormSigReFtp.prg`.
+
+**Fase 3 entregue** ÔÇö Estrutura base do `FormSigReFtp`:
+
+- **DEFINE CLASS** com `DataSession=1` (essencial: usa `csDetalhes` p├║blico do form pai), `TitleBar=0`, `Width=820`, `Height=575`
+- **Init(par_cCodProd, par_cNomProd)** ÔÇö armazena par├ómetros em `this_cCodProd`/`this_cNomProd` *antes* do `DODEFAULT()`, garantindo que `InicializarForm()` os acesse via `THIS.*`
+- **InicializarForm()** ÔÇö cria `SigReFtpBO`, chama `InicializarCursorSelecao()` (opera├º├úo VFP local, sem SQL ÔÇö pula se `gb_4c_ValidandoUI`), monta cabe├ºalho + bot├Áes + BINDEVENTs
+- **ConfigurarCabecalho()** ÔÇö container `RGB(100,100,100)` com `lbl_4c_Sombra`/`lbl_4c_Titulo`
+- **ConfigurarBotoes()** ÔÇö `cmg_4c_Botoes` (padr├úo can├┤nico: `Left=529, Width=273`, 4 bot├Áes de 65px: Visualizar/Imprimir/Documento/Encerrar com `.Cancel=.T.` no bot├úo 4)
+- **Handlers de bot├úo** completos chamando os m├®todos correspondentes do BO
+- **Destroy()** ÔÇö anula BO via `.NULL.` (n├úo `.Release()`)
+
+Pr├│xima fase: **Fase 4** ÔÇö adicionar o grid `grd_4c_Dados` (GrdProc com 4 colunas: CheckBox de sele├º├úo, Ordem, Grupo, Descri├º├úo) + bot├Áes `cmd_4c_CmdSel`/`cmd_4c_CmdApg`.

@@ -1,0 +1,21 @@
+﻿Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\cadastros\Formgem.prg` criado com 309 linhas.
+
+**O que foi implementado:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | `RETURN DODEFAULT()` ÔÇö sem l├│gica extra |
+| `InicializarForm()` | Cria gemBO, chama ConfigurarPage*, CarregarLista, define ActivePage=1 |
+| `ConfigurarPageFrame()` | pgf_4c_Paginas: Top=-29, Tabs=.F., 2 pages com background |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho (com labels sombra/titulo), cnt_4c_Botoes (vazio), cnt_4c_Saida + cmd_4c_Encerrar |
+| `ConfigurarPaginaDados()` | cnt_4c_BotoesAcao (vazio) |
+| `CarregarLista()` | Chama Buscar("") com guard gb_4c_ValidandoUI |
+| `AlternarPagina()` | Troca ActivePage, recarrega lista ao voltar para Page1 |
+| `BtnEncerrarClick()` | PUBLIC ÔÇö compat├¡vel com BINDEVENT |
+| `TornarControlesVisiveis()` | Recursivo, itera Pages e Controls |
+| `FormatarGridLista()` | Tahoma 8 via SetAll |
+| `Destroy()` | Null no BO + DODEFAULT() |
+
+**Valores can├┤nicos aplicados:** cnt_4c_Saida.Left=917, cmd_4c_Encerrar Width=75 Caption="Encerrar". Compensa├º├úo PageFrame (+29): Top=-1+29=28 nos containers, Top=2+29=31 no cabe├ºalho.
+
+**Pr├│ximas fases:** Fase 4 adiciona grid + bot├Áes CRUD em cnt_4c_Botoes; Fases 5-6 adicionam labels e campos em Page2.

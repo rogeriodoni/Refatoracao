@@ -1,0 +1,25 @@
+[2026-04-24 17:34:35] [INFO] === CLAUDE CLI INVOKER ===
+[2026-04-24 17:34:35] [INFO] Prompt File: C:\4c\tasks\task020\runtime_fix_prompt_06_testForm_t2.md
+[2026-04-24 17:34:35] [INFO] Output File: C:\4c\tasks\task020\06_testForm_fix_output_t2.txt
+[2026-04-24 17:34:35] [INFO] Model: sonnet
+[2026-04-24 17:34:35] [INFO] Timeout: 3600 segundos
+[2026-04-24 17:34:35] [INFO] Max Output Tokens: 128000
+[2026-04-24 17:34:35] [INFO] Context Files: 0 arquivo(s)
+[2026-04-24 17:34:35] [INFO] Invocando Claude CLI...
+[2026-04-24 17:34:35] [INFO] Prompt carregado: 78334 caracteres
+[2026-04-24 17:34:35] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-04-24 17:34:35] [INFO] Tamanho total do prompt: 78334 caracteres
+[2026-04-24 17:34:35] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-04-24 17:45:59] [INFO] Claude CLI finalizado em 684.6346209 segundos
+[2026-04-24 17:45:59] [INFO] Exit Code: 0
+[2026-04-24 17:45:59] [INFO] Output salvo em: C:\4c\tasks\task020\06_testForm_fix_output_t2.txt
+[2026-04-24 17:45:59] [INFO] Output size: 1422 bytes
+[2026-04-24 17:45:59] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-04-24 17:45:59] [INFO] Preview do output:
+[2026-04-24 17:45:59] [INFO] As corre+º+Áes est+úo aplicadas. Resumo do diagn+¦stico e das corre+º+Áes:
+
+**Causa raiz do TIMEOUT**: O `SQLSTRINGCONNECT` (ETAPA 1B do TestFormWrapper) ficava travado por 300s porque o SQL Server em `192.168.15.101` era inacess+¡vel e o driver ODBC n+úo tinha timeout configurado.
+
+**Corre+º+Áes aplicadas:**
+
+1. **`config.prg`** (esta sess+úo) ÔÇö Adicionado `=SQLSETPROP(0, "ConnectTimeOut", 30)` no corpo principal, executado durante `DO config.prg` na ETAPA 1. Isso define o timeout globa

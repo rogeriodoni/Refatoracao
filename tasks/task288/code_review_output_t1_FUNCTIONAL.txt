@@ -1,0 +1,5 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` agora tem INLIST para `CNT_4C_CABECALHO`: ao encontrar esse container, o m├®todo recursa nos filhos primeiro (tornando-os vis├¡veis) e ent├úo faz `LOOP` sem for├ºar `.Visible=.T.` no pr├│prio container ÔÇö padr├úo da mem├│ria que evita que filhos fiquem hidden permanentes.
+
+**[METODO-INEXISTENTE]** ÔÇö Removidas todas as 9 chamadas `THIS.Draw()` (linhas 81, 391, 400, 439, 501, 771, 789, 803, 888 do original). O m├®todo n├úo existe em FormBase nem no form, e `THIS.Refresh()` j├í estava presente em todos os pontos ÔÇö nenhuma regress├úo visual esperada.

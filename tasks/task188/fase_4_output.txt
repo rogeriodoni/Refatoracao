@@ -1,0 +1,17 @@
+﻿Arquivo atualizado e verificado. Fase 4/8 conclu├¡da com sucesso.
+
+**O que foi adicionado em `FormSigPrGloT.prg`:**
+
+- **`ConfigurarPaginaLista()`** completada com:
+  - 5 bot├Áes CRUD dentro de `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com BINDEVENTs
+  - `cnt_4c_Saida` can├┤nico (`Left=917, Width=90`) com `cmd_4c_Encerrar` (`Width=75`, `Caption="Encerrar"`)
+  - `grd_4c_Lista` (`Top=117, Left=26, Width=890, Height=468`, `FontName="Verdana"`) com DblClick vinculado a `BtnVisualizarClick`
+
+- **`InicializarForm()`** atualizado: chama `CarregarLista()` + `AjustarBotoesPorModo()` ap├│s `TornarControlesVisiveis()`
+
+- **Novos m├®todos:**
+  - `AlternarPagina(par_nPagina)` ÔÇö alterna pages, recarrega lista ao voltar para Page1
+  - `CarregarLista()` ÔÇö cria cursor placeholder `cursor_4c_Lista (Tipos, Descrs)` e vincula ao grid com headers
+  - `FormatarGridLista()` ÔÇö aplica Verdana/8 via SetAll
+  - `AjustarBotoesPorModo()` ÔÇö habilita Visualizar/Alterar/Excluir somente se h├í registros
+  - `BtnIncluirClick/BtnVisualizarClick/BtnAlterarClick/BtnExcluirClick/BtnBuscarClick/BtnEncerrarClick` ÔÇö handlers completos com valida├º├Áes e `MsgConfirma`/`MsgAviso` can├┤nicos

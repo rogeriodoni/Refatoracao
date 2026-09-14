@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O `cmpBO.prg` est├í completo com todos os m├®todos CRUD:
+
+- **`CarregarDoCursor()`** ÔÇö mapeia os 3 campos da tabela (`cods`, `descs`, `cIdChaves`) usando `SELECT (alias)` antes de acessar os campos
+- **`ValidarDados()`** ÔÇö valida c├│digo e descri├º├úo obrigat├│rios; na inser├º├úo, verifica duplicidade via `COUNT(*)`
+- **`Inserir()`** ÔÇö INSERT com `fUniqueIds()` para gerar o `cIdChaves` (replicando a l├│gica do `fUniqueIds()` do legado) + `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE apenas de `descs` (c├│digo ├® PK imut├ível, `cIdChaves` n├úo se altera) + `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö DELETE por `cods` + `RegistrarAuditoria("DELETE")`
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com prote├º├úo ZAP+APPEND quando cursor j├í est├í vinculado ao grid; cria cursor vazio sem conex├úo (suporte a `gb_4c_ValidandoUI`)
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT completo com todos os campos; reseta `this_lNovoRegistro = .F.` ap├│s carregar

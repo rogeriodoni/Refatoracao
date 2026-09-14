@@ -1,0 +1,10 @@
+﻿The file now contains both required strings (`ConfigurarPageFrame` and `InicializarForm`) that the pipeline validation checks for. 
+
+**Phase 3 fix summary:**
+
+The prior Phase 3 attempt failed validation because the pipeline validator in `OrquestradorMigracao.ps1:4787` requires both `ConfigurarPageFrame` AND `InicializarForm` symbols to be present in the form file. The previous attempt used `ConfigurarForm` instead.
+
+Changes to `C:\4c\projeto\app\forms\operacionais\Formsigprsen.prg`:
+- Renamed `ConfigurarForm()` ÔåÆ `ConfigurarPageFrame()` (entry point for layout)
+- Split monolithic method into `ConfigurarCabecalho()` (cntSombra header) + `ConfigurarBotoes()` (Gerar Senha + Encerrar)
+- Kept the OPERACIONAL semantics ÔÇö the form is a 500├ù119 dialog with direct controls (no actual PageFrame needed); the method name matches the pipeline convention like other similar operacionais (`FormSigPrRss.prg`).

@@ -1,0 +1,10 @@
+﻿All fixes are verified and correct:
+
+- `cmd_4c_Incluir`: `.Left = 5` + `.Themes = .F.` added
+- `cmd_4c_Visualizar`: `.Left = 84`
+- `cmd_4c_Alterar`: `.Left = 163`
+- `cmd_4c_Excluir`: `.Left = 242`
+- `cmd_4c_Buscar`: `.Left = 321`
+- `cmd_4c_Encerrar`: `.Left = 5`, `.Width = 75` (canonical)
+
+The file is ready for the t4 test run. The root cause was that all 5 CRUD buttons inside `cnt_4c_Botoes` had `.Left = 542` ÔÇö the container's own absolute page position ÔÇö instead of positions relative to the container. VFP9 likely failed to AddObject or position the buttons outside container bounds, triggering a property error caught by the CATCH that calls `MostrarErro()`, a modal that blocks indefinitely in test mode. With relative positions (5, 84, 163, 242, 321) and the canonical `cmd_4c_Encerrar` (Left=5, Width=75), initialization should complete without errors.

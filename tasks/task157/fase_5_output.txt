@@ -1,0 +1,42 @@
+﻿An├ílise completa. Vou reportar a situa├º├úo para o usu├írio.
+
+---
+
+## Resultado da Fase 5/8 ÔÇö FormSigPrCar
+
+**O formul├írio j├í est├í completo ap├│s as fases anteriores.** N├úo existe "Page2 - Campos Dados" para adicionar porque `SigPrCar` ├® um sub-formul├írio operacional **sem p├ígina de dados separada** ÔÇö toda edi├º├úo ocorre diretamente nas c├®lulas do grid.
+
+### Estado atual (ambos completos)
+
+**SigPrCarBO.prg** (265 linhas) ÔÇö completo:
+- `Buscar(par_cCPros)` ÔÇö SELECT + JOIN SIGCRRAP ÔåÆ cursor_4c_Dados
+- `ValidarCaracteristicaDuplicada()` ÔÇö verifica duplicidade por produto/pkchaves
+- `ValidarDados()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`
+- `CarregarDoCursor()`, `ObterChavePrimaria()`
+
+**FormSigPrCar.prg** (822 linhas) ÔÇö completo:
+- `Init` recebe 4 par├ómetros: `par_oFormPai, par_cCPros, par_cCGrus, par_cPcEscolha`
+- `ConfigurarPageFrame()` ÔÇö cabe├ºalho cinza (cntSombra)
+- `ConfigurarGrid()` ÔÇö grid 2 colunas + CREATE CURSOR placeholder
+- `ConfigurarBotoes()` ÔÇö Inserir / Excluir / Encerrar com BINDEVENT
+- `AjustarVisibilidadeBotoes()` ÔÇö INSERIR/ALTERAR vs CONSULTAR
+- `CmdInserirClick()` ÔÇö APPEND BLANK no cursor + SetFocus
+- `CmdExcluirClick()` ÔÇö DELETE no SQL via BO + rebuild do cursor
+- `CmdSairClick()` ÔÇö SCAN + Salvar() para cada linha n├úo vazia ÔåÆ Release
+- `TxtCodigosKeyPress()` / `TxtDescrsKeyPress()` ÔÇö lookup FormBuscaAuxiliar com filtro CGrus
+
+### Por que Phase 5 n├úo tem campos a adicionar
+
+O `SIGPRCAR` original tem **zero TextBox/Label fora do grid**:
+
+| Objeto | Tipo | Localiza├º├úo |
+|--------|------|-------------|
+| cntSombra | Cabe├ºalho | Ô£à feito na Fase 3 |
+| Grade (2 colunas) | Grid com lookup | Ô£à feito na Fase 4 |
+| cmdInserir/Excluir/cmdSair | Bot├Áes | Ô£à feito na Fase 4 |
+
+`ConfigurarPaginaDados()` n├úo se aplica ÔÇö n├úo existe "P├ígina 2 com campos" neste form.
+
+### O que ainda precisa ser feito (Fases 6ÔÇô8)
+
+**Fase 8 / Integra├º├úo**: `FormProduto.prg` precisa abrir `FormSigPrCar` ao clicar no bot├úo de caracter├¡sticas do produto (equivalente ao que `FormSigCdPro` fazia no legado). Por enquanto `FormProduto.prg` n├úo referencia `SigPrCar` ainda. Quando chegar a Fase 8, o ponto de integra├º├úo ser├í `FormProduto` passando `THIS` (form pai), `THIS.this_cCPros`, `THIS.this_cCGrus` e o modo atual (`this_cModoAtual`).

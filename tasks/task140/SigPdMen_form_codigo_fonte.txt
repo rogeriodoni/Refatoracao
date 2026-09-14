@@ -1,0 +1,373 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPdMen.SCX
+* Data/Hora: 18/06/2026 19:06:34
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPDMEN
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPDMEN
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPDMEN.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPDMEN.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGPDMEN
+  Class: shape
+  BaseClass: shape
+
+Objeto: Label2
+  Parent: SIGPDMEN
+  Class: label
+  BaseClass: label
+
+Objeto: ok
+  Parent: SIGPDMEN
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Container1
+  Parent: SIGPDMEN
+  Class: container
+  BaseClass: container
+
+Objeto: getMemo
+  Parent: SIGPDMEN.Container1
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: gettexto
+  Parent: SIGPDMEN.Container1
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 270
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Mensagens"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Themes = .F.
+  Name = "SIGPDMEN"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 691
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "[ Texto ]"
+  Height = 15
+  Left = 376
+  Top = 90
+  Width = 51
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.ok
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "OK"
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.Container1
+------------------------------------------------------------
+  Top = 108
+  Left = 123
+  Width = 554
+  Height = 150
+  SpecialEffect = 1
+  TabIndex = 2
+  BackColor = 255,255,255
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.Container1.getMemo
+------------------------------------------------------------
+  BorderStyle = 0
+  Height = 140
+  Left = 6
+  ReadOnly = .T.
+  ScrollBars = 0
+  Top = 5
+  Visible = .F.
+  Width = 541
+  BackColor = 212,208,200
+  Name = "getMemo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMEN.Container1.gettexto
+------------------------------------------------------------
+  WordWrap = .T.
+  Alignment = 2
+  Caption = ""
+  Height = 123
+  Left = 8
+  Top = 8
+  Width = 520
+  TabIndex = 13
+  Name = "gettexto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPDMEN
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+dodefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pCidChave, pDescr1, pDescr2
+
+Local llMemo 
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+
+=Thisform.PodataMgr.Cursorquery('SigCdMsg','CrSigCdMsg','CidChaves',pCidChave)
+
+ThisForm.Caption = 'Mensagem da Empresa: '+CrSigCdMsg.emps+' para o Produto : '+CrSigCdMsg.Cpros
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+llMemo = (Type('pDescr1') == 'C')
+
+lcCaptionA = Iif(Type('pDescr1')='C', Alltrim(pDescr1), CrSigCdMsg.Linha1s)
+lcCaptionB = Iif(Type('pDescr2')='C', Alltrim(pDescr2), CrSigCdMsg.Linha2s)
+
+If not llMemo 
+	With ThisForm.container1.Gettexto
+		.Caption = Alltrim(lcCaptionA + lcCaptionB)
+		.FontName = Alltrim(CrSigCdMsg.Fontes)
+		.FontSize = CrSigCdMsg.Tamanhos
+		.ForeColor= CrSigCdMsg.Cors
+		.FontBold = .f.
+		.FontItalic=.f.
+		If CrSigCdMsg.Estilos = 'I ' Or CrSigCdMsg.Estilos = 'BI'
+			.FontItalic = .t.
+		EndIf
+		If CrSigCdMsg.Estilos = 'B ' or CrSigCdMsg.Estilos = 'BI'
+			.FontBold   = .t.
+		EndIf
+	EndWith
+Else
+	ThisForm.Container1.Gettexto.Visible = .F.
+	With ThisForm.Container1.GetMemo
+		.Visible = .T.
+		.Value = Alltrim(lcCaptionA + lcCaptionB)
+		.FontName = Alltrim(CrSigCdMsg.Fontes)
+		.FontSize = CrSigCdMsg.Tamanhos
+		.ForeColor= CrSigCdMsg.Cors
+		.FontBold = .f.
+		.FontItalic=.f.
+		If CrSigCdMsg.Estilos = 'I ' Or CrSigCdMsg.Estilos = 'BI'
+			.FontItalic = .t.
+		EndIf
+		If CrSigCdMsg.Estilos = 'B ' or CrSigCdMsg.Estilos = 'BI'
+			.FontBold   = .t.
+		EndIf
+	EndWith 	    
+	ThisForm.Ok.SetFocus 
+Endif	
+ThisForm.Container1.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMEN.ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Lastkey() # 13
+	ThisForm.Release
+Else
+	MessageBox('Click No Botao Ok Para Sair',0+64,'')
+	Clear Typeahead
+	Keyboard Chr(27)
+Endif
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPDMEN
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 4
+================================================================================

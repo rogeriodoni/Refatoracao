@@ -1,0 +1,22 @@
+﻿O arquivo est├í correto. A Fase 5 est├í completa com todas as implementa├º├Áes necess├írias.
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+
+- `BINDEVENT` para `cmd_4c_Confirmar` ÔåÆ `BtnSalvarClick` (estava faltando)
+- `BINDEVENT` para `cmd_4c_Cancelar` ÔåÆ `BtnCancelarClick` (estava faltando)
+- `lbl_4c_Codigo` + `txt_4c_Codigos` ÔÇö campo C├│digo (ReadOnly, auto-gerado; equivale ao `When=Return .F.` do legado)
+- `lbl_4c_Descricao` + `txt_4c_Descricao` ÔÇö campo Descri├º├úo (edit├ível, MaxLength=30)
+
+**Novos m├®todos adicionados:**
+
+| M├®todo | Descri├º├úo |
+|---|---|
+| `BtnSalvarClick()` | Valida Descs n├úo vazia, chama `FormParaBO()` + `Salvar()` |
+| `BtnCancelarClick()` | Retorna ├á Page1 e recarrega lista |
+| `FormParaBO()` | Copia campos do form para o BO |
+| `BOParaForm()` | Copia propriedades do BO para os controles |
+| `LimparCampos()` | Zera os dois campos em Page2 |
+| `HabilitarCampos(par_lHabilitar)` | Controla ReadOnly de txt_4c_Descricao (Codigo sempre ReadOnly) |
+| `AjustarBotoesPorModo()` | Habilita Confirmar em INCLUIR/ALTERAR, Cancelar sempre ativo |
+
+A migra├º├úo do `Formmod.prg` est├í agora funcionalmente completa ÔÇö todos os campos, valida├º├Áes e fluxos CRUD est├úo implementados.

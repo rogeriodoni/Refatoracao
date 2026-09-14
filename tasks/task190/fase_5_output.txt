@@ -1,0 +1,8 @@
+﻿Fase 6/8 conclu├¡da. Foram adicionados:
+
+**BINDEVENTs** (linhas 912-914): `Column10.Text1` da `grd_4c_GradeOpe` agora tem GotFocus/Valid/LostFocus vinculados.
+
+**3 novos m├®todos** (linhas 2259-2297):
+- `GradeOpeCol10GotFocus` ÔÇö salva valor anterior em `this_nAntValue` (propriedade dedicada para col10, evitando colis├úo com `this_nOldValue` usado pela col7)
+- `GradeOpeCol10Valid` ÔÇö valida Fabrs: rejeita negativo, rejeita > `TmpFinal.Saldo`, rejeita > `txt_4c_TotSPrc.Value`; em caso v├ílido faz `REPLACE TmpFinal.Fabrs`
+- `GradeOpeCol10LostFocus` ÔÇö chama `AtualizarTotaisPage2()`

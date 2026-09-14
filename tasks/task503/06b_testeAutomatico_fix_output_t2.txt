@@ -1,0 +1,13 @@
+﻿All 5 fixes applied. Here's a summary of what was wrong and what was fixed:
+
+**Root cause (crash):** `HabilitarCampos` ÔÇö `par_lHabilitar AND (chk.Value)` where `chk.Value` is numeric (0/1). VFP9 `AND` requires both operands to be logical ÔåÆ "Data type mismatch" error 9. Since `HabilitarCampos` has no TRY/CATCH and is called from button handlers also without TRY/CATCH, the error propagated unhandled, SYS(2335,0) auto-dismissed the dialog with Cancel, VFP exited without writing the result JSON.
+
+**Fixes applied:**
+
+| File | Location | Fix |
+|------|----------|-----|
+| FormPrm.prg | `HabilitarCampos` | `AND (chk.Value)` ÔåÆ `AND (chk.Value = 1)` (├ù2) |
+| FormPrm.prg | `chkComissaoChanged` | `IF !chk.Value` ÔåÆ `IF chk.Value = 0` |
+| FormPrm.prg | `chkeCommerceChanged` | `IF !chk.Value` ÔåÆ `IF chk.Value = 0` |
+| PrmBO.prg | `SalvarItens` | Added `ELSE` so body only runs when cursor exists |
+| PrmBO.prg | `SalvarGrupos` | Same `ELSE` fix |

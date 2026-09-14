@@ -1,0 +1,11 @@
+﻿Fase 2 conclu├¡da. `SigPrGf1BO.prg` agora tem 3 m├®todos adicionados:
+
+- **`ObterChavePrimaria()`** ÔÇö override obrigat├│rio do BusinessBase, retorna `""` (form operacional sem tabela)
+- **`ValidarParametros()`** ÔÇö replica o `mChkValid` original: valida data final n├úo-vazia, ordem das datas e limite de 12 meses de per├¡odo
+- **`ProcessarDados()`** ÔÇö replica o `mProcessamento` original: busca nome da empresa em `SigCdEmp`, monta t├¡tulos com CHR() (sem literais acentuados), executa query em `SigCdFea` via `SQLEXEC`, agrega por empresa/m├¬s em cursor `crRel1` via SELECT VFP local com GROUP BY, restaura `SET DECIMALS/FIXED/EXACT` fora do TRY/CATCH
+
+As adapta├º├Áes chave do legado para o novo sistema:
+- `_Empr` ÔåÆ `go_4c_Sistema.cCodEmpresa`
+- `fDtoSQL(data, '23:59:59')` ÔåÆ `DATEADD(day, 1, FormatarDataSQL(data))` no SQL Server
+- `MessageBox()` ÔåÆ `MsgErro()`
+- Literais acentuados ÔåÆ CHR() (225=├í, 231=├º, 227=├ú, 234=├¬, 233=├®, 224=├á, 237=├¡)

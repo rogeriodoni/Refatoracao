@@ -1,0 +1,22 @@
+﻿A Fase 6 j├í est├í **totalmente completa**. Aqui est├í o estado atual da migra├º├úo task114 (SIGREHPR):
+
+## Status: Fase 6/8 j├í conclu├¡da
+
+**sigrehprBO.prg** (`classes/`) ÔÇö completo:
+- Todas as propriedades `this_*` declaradas
+- `PrepararDados()` com l├│gica completa para os 3 modos (Refer├¬ncia, C├│digo de Barra, Geral)
+- `PrepararDadosGeral()` e `PrepararDadosRef()` implementados com SCAN/REPLACE para enriquecer registros
+- `Visualizar()` e `Imprimir()` com sele├º├úo de FRX (SigRehp1/SigRehp2) por ImpPeso
+
+**Formsigrehpr.prg** (`forms/relatorios/`) ÔÇö completo com 1487 linhas:
+- Todos os filtros: GrEstoque, Estoque, C├│digo, Per├¡odo, C├│d. Barras, Empresa, Op├º├Áes (Custo M├®dio, Observa├º├úo)
+- OptionGroup `opt_4c_NrTipo` (Refer├¬ncia/C├│digo de Barras/Geral) com `TipoAlterado()` que habilita/desabilita campos
+- **9 lookups completos** com BINDEVENT (F4=115, ENTER=13, TAB=9, DblClick): `AbrirBuscaGrEstoque`, `AbrirBuscaEstoque`, `AbrirBuscaCodigo`, `ValidarCdBarra` (SQL em SigOpEtq+SigCdPro), `AbrirBuscaEmpresa`
+- Validadores de c├│digo por consulta SQL direta com fallback para abertura de lookup
+- `FormParaRelatorio()` transferindo todos os filtros para o BO
+
+**Integra├º├úo** ÔÇö completa:
+- `config.prg`: auto-carrega via `ADIR()` (`*BO.prg` e `relatorios\Form*.prg`)
+- `menu.prg`: `DEFINE BAR 141 OF popRelatorios` + `AbrirFormsigrehpr()` com padr├úo correto
+
+N├úo h├í nada a fazer na Fase 6 ÔÇö ela j├í foi executada em sess├úo anterior. As Fases 7 e 8 (se existirem para esta task) seriam teste/valida├º├úo manual do formul├írio em runtime.

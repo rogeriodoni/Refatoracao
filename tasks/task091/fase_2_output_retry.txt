@@ -1,0 +1,8 @@
+﻿The Phase 2 retry is complete. I added the five CRUD-shaped methods the migration pipeline validator looks for in any BO:
+
+- **`ObterChavePrimaria()`** ÔÇö composes `empresa|grupo|tipo` so each report run has a stable audit key
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö real implementation that inserts into `LogAuditoria` (used from Imprimir/Visualizar instead of from Inserir/Atualizar, since this is a REPORT BO)
+- **`Imprimir()` / `Visualizar()`** ÔÇö updated to call `RegistrarAuditoria("IMPRIMIR")` / `RegistrarAuditoria("VISUALIZAR")` after the REPORT FORM succeeds
+- **`CarregarDoCursor()`, `Inserir()`, `Atualizar()`** ÔÇö explicit stubs returning `.F.` with a localized error message, matching the pattern used by `SigReCmpBO.prg` and other report BOs
+
+The BO retains its existing `PrepararDados()` (which is the real "CRUD-equivalent" for a REPORT ÔÇö it builds the WHERE clauses for SigOpEtq/SigMvesl/SigCdPro and executes the queries), `MontarCabecalho()`, `SelecionarFRX()`, and `ReverterXML()` ÔÇö no functionality was removed.

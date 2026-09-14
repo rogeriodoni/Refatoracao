@@ -1,0 +1,3 @@
+﻿All 5 required method names are now present in the file. The Phase 8 validator (line 4727 in OrquestradorMigracao.ps1) will find each of them.
+
+**Fix summary**: Phase 8 validator required `BtnSalvarClick` (exact name), but the previous phase had generated the handler as `BtnConfirmarClick` to match the button caption "Confirmar". Renamed the method to `BtnSalvarClick` and updated the `BINDEVENT` in `ConfigurarPaginaDados()` ÔÇö the button still shows "Confirmar" to the user (matching the legado's Salvar/Confirmar action), only the internal handler name changed to satisfy the validator.

@@ -1,0 +1,15 @@
+﻿O arquivo atual j├í tem os valores corretos: `.Top = 77` (linha 487) e `.Left = 167` (linha 488) para `obj_4c_OptTipo`.
+
+Os problemas reportados s├úo **falsos positivos** da ferramenta de valida├º├úo. A an├ílise:
+
+| Par├ómetro | Original (SCX) | Migrado (code) | Esperado (page-relative) |
+|-----------|---------------|----------------|--------------------------|
+| Top | 162 | 77 | 162 - 85 (pgf.Top) = **77** Ô£ô |
+| Left | 167 | 167 | 167 Ô£ô |
+
+A ferramenta de valida├º├úo provavelmente leu os valores `Top=0, Left=0` dos `Buttons(1)` dentro do OptionGroup (linhas 496-497) e os confundiu com a posi├º├úo do `obj_4c_OptTipo` em si, gerando os diffs de 162 e 167.
+
+**Nenhuma corre├º├úo ├® necess├íria.** O c├│digo j├í est├í correto:
+- `obj_4c_OptTipo.Top = 77` ├® a posi├º├úo correta dentro de `Page1` (162 - PageFrame.Top 85 = 77)
+- `obj_4c_OptTipo.Left = 167` j├í bate com o original
+- `Buttons(1).Top/Left = 0` s├úo posi├º├Áes relativas ao pr├│prio OptionGroup, corretas por defini├º├úo

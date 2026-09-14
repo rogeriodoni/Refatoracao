@@ -1,0 +1,14 @@
+﻿The Phase 3 form now has both required methods (`InicializarForm` and `ConfigurarPageFrame`) plus the complete base structure.
+
+Summary of what's in the regenerated `FormSIGREVIS.prg`:
+
+- **Properties**: Width=800, Height=300, TitleBar=0, etc. (EXACT from original SCX)
+- **`Init()`**: `RETURN DODEFAULT()` (single-call pattern - lets FormBase chain to InicializarForm)
+- **`InicializarForm()`**: Creates SIGREVISBO, gated by `gb_4c_ValidandoUI`, calls the three configurators; no `RETURN` inside `TRY/CATCH` (uses `loc_lSucesso` + `loc_lContinuar` flags)
+- **`ConfigurarCabecalho()`**: Dark header `cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo` (3D effect)
+- **`ConfigurarBotoes()`**: `cnt_4c_Botoes` container (top-right) with `cmd_4c_Visualizar`, `cmd_4c_Imprimir`, `cmd_4c_Excel`, `cmd_4c_Sair` ÔÇö click handlers come in later phases
+- **`ConfigurarPageFrame()`**: `pgf_4c_Paginas` with 1 page ("Filtros") ÔÇö fields populate in phases 5-6
+- **`AtualizarEstadoControles()`**: no-op override (no CRUD)
+- **`Destroy()`**: sets `this_oRelatorio = .NULL.` (Custom has no `.Release()`) + `DODEFAULT()`
+
+The previous attempt failed because it used a FLAT layout without `ConfigurarPageFrame`. The validator at `OrquestradorMigracao.ps1:4661` requires both `ConfigurarPageFrame` and `InicializarForm` regex matches ÔÇö now satisfied.

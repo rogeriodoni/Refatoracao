@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. A Fase 8/8 foi conclu├¡da.
+
+**Resumo do que foi adicionado ao `Formsigrefec.prg`:**
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` |
+| `BtnSalvarClick()` | Delega para `BtnImprimirClick()` |
+| `BtnCancelarClick()` | Delega para `BtnEncerrarClick()` |
+| `FormParaBO()` | Alias de `FormParaRelatorio()` |
+| `BOParaForm()` | Sincroniza todas as 12 propriedades do BO ÔåÆ controles do form |
+| `HabilitarCampos(par_l)` | Habilita/desabilita todos os filtros; respeita `AtualizarEstadoCampos()` |
+| `AjustarBotoesPorModo()` | No-op (REPORT n├úo tem modos CRUD) |
+| `CarregarLista()` | Retorna `.T.` (REPORT n├úo tem grid de lista) |
+
+**Estado completo da migra├º├úo task100:**
+- `sigrefecBO.prg` ÔÇö BO completo (fases 1-2)
+- `Formsigrefec.prg` ÔÇö Form completo com todos os m├®todos (fases 3-8)
+- `menu.prg` ÔÇö Integra├º├úo j├í existia (BAR 117 + `AbrirFormsigrefec`)

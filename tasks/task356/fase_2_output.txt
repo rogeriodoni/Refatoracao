@@ -1,0 +1,24 @@
+﻿Arquivo completo e correto. Fase 2 conclu├¡da.
+
+**CCJBO.prg agora tem:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `Init()` | PUBLIC | Configura tabela/chave (Fase 1) |
+| `ObterChavePrimaria()` | PROTECTED | Retorna `this_cCodigo` para auditoria |
+| `CarregarDoCursor()` | PROTECTED | Mapeia cursor ÔåÆ propriedades |
+| `Buscar(filtro)` | PUBLIC | SELECT com JOIN SigCdCli ÔåÆ `cursor_4c_Dados` |
+| `CarregarPorCodigo()` | PUBLIC | SELECT por PK, chama `CarregarDoCursor` |
+| `GerarCodigo()` | PUBLIC | Gera c├│digo ├║nico de 6 chars via `NEWID()` no SQL Server |
+| `BuscarDetalhe(codigo)` | PUBLIC | Carrega `sigdtccj` ÔåÆ `cursor_4c_Detalhe` (ou cria vazio se novo) |
+| `BuscarContaPorCodigo()` | PUBLIC | Valida conta em SigCdCli, preenche `this_cDContas` |
+| `InserirDetalhe()` | PROTECTED | Percorre `cursor_4c_Detalhe` e insere em `sigdtccj` usando NEWID() para `cidchaves` |
+| `Inserir()` | PROTECTED | INSERT `sigcdccj` + chama `InserirDetalhe()` |
+| `Atualizar()` | PROTECTED | DELETE+INSERT `sigcdccj`+`sigdtccj` (padr├úo `msv_alterar` do legado) |
+| `ExecutarExclusao()` | PROTECTED | DELETE `sigdtccj` ÔåÆ DELETE `sigcdccj` (ordem FK) |
+
+Pontos-chave da implementa├º├úo:
+- **Padr├úo `Atualizar`** segue o legado `msv_alterar`: apaga tudo e reinserere (delete+insert, n├úo UPDATE direto)
+- **`cidchaves`** gerado via `LEFT(REPLACE(NEWID(), '-', ''), 20)` inline no SQL ÔÇö evita colis├Áes sem precisar de fGerUniqueKey do legado
+- **Ordem de exclus├úo** respeita a FK: exclui `sigdtccj` antes de `sigcdccj`
+- Todos os `RETURN` fora de `TRY/CATCH` ÔÇö sem viola├º├úo da regra cr├¡tica #1

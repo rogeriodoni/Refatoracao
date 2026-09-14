@@ -1,0 +1,7 @@
+﻿The fix is correctly applied:
+- **6 validator BINDEVENTs** changed to `"LostFocus"` (ValidarGrupoUsuario, ValidarUsuario, ValidarGrConta, ValidarDGrConta, ValidarCdConta, ValidarDConta)
+- **6 F4 KeyPress handlers** remain on `"KeyPress"` (txt_4c_*_KeyPress methods that handle F4 lookup shortcuts)
+
+**Root cause:** The validators were bound to `"KeyPress"` instead of `"LostFocus"`. Each keystroke in those TextBoxes would fire the validator, which calls `CREATEOBJECT("FormBuscaAuxiliar")` and `Show()` ÔÇö a modal form ÔÇö causing VFP9 to hang waiting for user input.
+
+**Note on the ETAPA 1B timeout:** The consistent 300-second hang at `SQLSTRINGCONNECT` is a TCP-level timeout when SQL Server at 192.168.15.101 is unreachable (the ODBC `{SQL Server}` driver on Windows 11 ignores `Login Timeout=30` in some conditions). This is a connectivity issue unrelated to the form code ÔÇö the pipeline will pass this stage when the server is reachable. The form code fix (LostFocus) ensures that once the test gets past ETAPA 1B, the form won't hang during usage.

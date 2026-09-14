@@ -1,0 +1,7 @@
+﻿Tudo correto. Resumo das tr├¬s corre├º├Áes em `FormSigPrCtr.prg`:
+
+1. **CarregarLista** (linha 2886): Quando `gb_4c_ValidandoUI=.T.`, agora cria `cursor_4c_Dados` com as colunas esperadas antes de retornar `.T.` ÔÇö resolve o teste "Nenhum cursor padr├úo foi criado".
+
+2. **AlternarPagina** (linha 2954): Removido `PROTECTED` ÔÇö o TesteAutomatico chamava o m├®todo externamente e recebia "Property ALTERNARPAGINA is not found" por ser protegido.
+
+3. **Duplicatas removidas**: As duas defini├º├Áes `FUNCTION XmlGetNodeText` e `FUNCTION XmlGetAnyNodeText` ap├│s `CarregarArquivosXml` eram duplicatas das `PROTECTED PROCEDURE` j├í definidas acima, e ainda tinham `MsgErro` no CATCH que causaria dialogs durante parsing de XML. Removidas completamente.

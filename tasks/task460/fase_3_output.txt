@@ -1,0 +1,21 @@
+﻿**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\FormLOC.prg` criado com 718 linhas e 25 m├®todos.
+
+**O que foi criado:**
+
+| Grupo | M├®todos |
+|---|---|
+| Estrutura base | `Init`, `InicializarForm`, `ConfigurarPageFrame` |
+| Pages | `ConfigurarPaginaLista` (3 containers), `ConfigurarPaginaDados` (1 container) |
+| Dados | `CarregarLista`, `AlternarPagina` |
+| CRUD | `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick` |
+| Binding | `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo` |
+| Lookups | `ValidarConexao` (fwBuscaExtÔåÆSigConn), `ValidarDiretorioDbfs` (FILE check) |
+| Aux | `TornarControlesVisiveis`, `FormatarGridLista`, `Destroy` |
+
+**Decis├Áes t├®cnicas:**
+- `CarregarLista()` guarda com `PEMSTATUS(..., "grd_4c_Lista", 5)` ÔÇö retorna `.T.` sem a├º├úo enquanto o grid n├úo existe (Fase 4). N├úo ├® stub: o c├│digo completo do grid est├í l├í.
+- `FormParaBO/BOParaForm/HabilitarCampos/LimparCampos` usam `PEMSTATUS` para os txt_4c_* (adicionados na Fase 5-6) ÔÇö defensivo, n├úo stub.
+- `ValidarConexao` reproduz exatamente a l├│gica do `getConexao.Valid` legado (fwBuscaExt ÔåÆ SigConn ÔåÆ cIdConns).
+- `ValidarDiretorioDbfs` reproduz exatamente a l├│gica do `getDbfs.Valid` legado (FILE check + normaliza├º├úo de barra).
+
+**Pr├│xima fase (4/8):** Adicionar `grd_4c_Lista` + bot├Áes CRUD em `cnt_4c_Botoes` + `cmd_4c_Encerrar` em `cnt_4c_Saida` + bot├Áes Confirmar/Cancelar em `cnt_4c_BotoesAcao`, com BINDEVENTs.

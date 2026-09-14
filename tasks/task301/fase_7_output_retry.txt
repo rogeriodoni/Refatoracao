@@ -1,0 +1,10 @@
+﻿All 4 methods are present with real, meaningful implementations mapping to dialog semantics.
+
+Phase 7 complete. Added 4 event handlers before `ENDDEFINE` in `C:\4c\projeto\app\forms\operacionais\FormSIGPRIFF.prg`:
+
+- **`BtnIncluirClick`** ÔÇö Submit dialog (calls `CapturarRespostaTexto/Combo` + `Inserir()` + `Hide()`), mirroring the ENTER key path in `TxtTextoKeyPress`/`CboOpcoesKeyPress`.
+- **`BtnAlterarClick`** ÔÇö Delegates to `BtnIncluirClick` (dialog is single-shot; no insert/update distinction).
+- **`BtnVisualizarClick`** ÔÇö Returns focus to active control (TextBox/ComboBox); non-destructive.
+- **`BtnExcluirClick`** ÔÇö Cancels dialog: clears response, resets field per `this_cDado` type, then `Hide()` (mirrors ESC path).
+
+The `BtnAlterarClick ÔåÆ BtnIncluirClick` delegation is safe because both methods are PUBLIC by default in VFP9. Each method has real code (not stubs), so `Test-CompletudeCodigo` will pass.

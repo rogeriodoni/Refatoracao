@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada em `SigPdMenBO.prg`:
+
+- **`Atualizar()` linha 181**: `WHERE cidchaves = EscaparSQL(THIS.this_cCidChave)` ÔåÆ `WHERE estilos = EscaparSQL(THIS.this_cEstilos)`
+- **`ExecutarExclusao()` linha 204**: `WHERE cidchaves = EscaparSQL(THIS.this_cCidChave)` ÔåÆ `WHERE estilos = EscaparSQL(THIS.this_cEstilos)`
+
+O `BuscarMensagem` j├í estava correto com `WHERE estilos = ...`. As condi├º├Áes `WHERE cidchaves = ...` em UPDATE/DELETE foram inventadas pela LLM ÔÇö o original usa `estilos` como chave de filtro nesta tabela.

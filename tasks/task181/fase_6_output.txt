@@ -1,0 +1,10 @@
+﻿Phase 7/8 is complete. Here's a summary of what was done:
+
+**menu.prg changes:**
+- Added `DEFINE BAR 44` (separator) and `DEFINE BAR 45` ("Impress├úo de Etiquetas Selecionadas") to `popMovimentos`, after the existing BAR 43 (AbrirFormSigPrFem)
+- Added `ON SELECTION BAR 45 OF popMovimentos DO AbrirFormSigPrEtq`
+- Added `PROCEDURE AbrirFormSigPrEtq()` at the end of the file using the standard pattern (TRY/CREATEOBJECT/VARTYPE check/CATCH with MostrarErro)
+
+**No changes to config.prg** ÔÇö it already dynamically loads all `*BO.prg` from `classes\` and all `Form*.prg` from `operacionais\`, so `SigPrEtqBO.prg` and `FormSigPrEtq.prg` are picked up automatically.
+
+**All .fxp files deleted** ÔÇö forces clean recompilation on next run.

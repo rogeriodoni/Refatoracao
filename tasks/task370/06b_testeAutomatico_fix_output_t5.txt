@@ -1,0 +1,28 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito:
+
+**Causa raiz:** `WITH .Buttons(N)` aninhado dentro de um bloco `WITH` de OptionGroup/CommandGroup causa "BUTTONS is not an object" em VFP9. O padr├úo correto (confirmado por `FormCCJ.prg`) ├® configurar as propriedades de bot├Áes com acesso direto **fora** do bloco `WITH`.
+
+**5 blocos corrigidos em `FormCLC.prg`:**
+1. `obj_4c_OptDigitos` (OptionGroup, 3 bot├Áes) ÔÇö `ConfigurarPaginaDados()`
+2. `opt_4c_EnvRecs` (OptionGroup, 2 bot├Áes) ÔÇö `ConfigurarComplementos()`
+3. `cmdg_4c_Compo` (CommandGroup, 2 bot├Áes) ÔÇö `ConfigurarComplementos()` (tamb├®m adicionado `.ButtonCount = 2`)
+4. `cmdg_4c_EstoqueA` (CommandGroup, 2 bot├Áes) ÔÇö `ConfigurarComplementos()` (idem)
+5. `cmdg_4c_EstoqueB` (CommandGroup, 2 bot├Áes) ÔÇö `ConfigurarComplementos()` (idem)
+
+**Padr├úo antes (ERRADO):**
+```foxpro
+WITH loc_oOpt
+    .ButtonCount = 2
+    WITH .Buttons(1)  && ÔåÉ causa "BUTTONS is not an object"
+        .Caption = "X"
+    ENDWITH
+ENDWITH
+```
+
+**Padr├úo depois (CORRETO):**
+```foxpro
+WITH loc_oOpt
+    .ButtonCount = 2
+ENDWITH
+loc_oOpt.Buttons(1).Caption = "X"
+```

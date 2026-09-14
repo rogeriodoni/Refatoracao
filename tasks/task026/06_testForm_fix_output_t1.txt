@@ -1,0 +1,16 @@
+﻿As corre├º├Áes est├úo corretas. Resumo do que foi feito e por qu├¬:
+
+---
+
+**Corre├º├úo 1 ÔÇö `config.prg`** (causa raiz do TIMEOUT):
+
+```
+=SQLSETPROP(0, "DispLogin", 3)
+=SQLSETPROP(0, "DispWarnings", .F.)
+```
+
+O driver ODBC `{SQL Server}` abre um **dialog modal** quando a conex├úo falha ou precisa de credenciais. Em modo n├úo-atendido (VFP9 -T, pipeline), esse dialog fica invis├¡vel mas bloqueia o VFP indefinidamente ÔÇö `ConnectTimeOut=30` n├úo funciona porque o VFP n├úo est├í em timeout de TCP/rede, est├í em **loop de mensagens de dialog**. `DispLogin=3` instrui o driver a nunca mostrar dialog; `DispWarnings=.F.` suprime avisos SQL. Adicionado em duas posi├º├Áes: no n├¡vel global de config.prg e dentro de `ObterStringConexao()` (belt-and-suspenders).
+
+**Corre├º├úo 2 ÔÇö `SIGREADSBO.prg` (Init)**:
+
+`fChecaAcesso` ├® uma fun├º├úo do framework legado que n├úo existe no sistema novo. O `Init()` original a chamava dentro do TRY principal ÔÇö quando a fun├º├úo n├úo existia, o CATCH capturava o erro mas **`DODEFAULT()` nunca era chamado**, fazendo `CREATEOBJECT("SIGREADSBO")` retornar `.F.`, e a form falhar na cria├º├úo. A corre├º├úo isola `fChecaAcesso` em TRY aninhado: se falhar, usa os defaults (`.F.`), e `DODEFAULT()` ├® chamado normalmente.

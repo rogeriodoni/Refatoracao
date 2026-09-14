@@ -1,0 +1,19 @@
+﻿Nenhum `CONTROLCOUNT` em contexto SQL foi encontrado nos arquivos. As ├║nicas ocorr├¬ncias de `ControlCount` no form s├úo acessos ├á propriedade VFP9 `.ControlCount` dentro de `TornarControlesVisiveis` ÔÇö c├│digo leg├¡timo de itera├º├úo de controles, n├úo colunas SQL.
+
+Verificando o SQL migrado vs. original:
+
+**Original:**
+```foxpro
+lcQuery = [Select PadEmails, PadServs, PadSenhas, pastas, PadPortas From SigCdEmp Where CEmps = '] + _EMPR + [']
+```
+
+**Migrado (`sigprpdfBO.prg`):**
+```foxpro
+loc_cSQL = "SELECT PadEmails, PadServs, PadSenhas, pastas, PadPortas " + ;
+           "FROM SigCdEmp " + ;
+           "WHERE CEmps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa)
+```
+
+O WHERE migrado usa exatamente `CEmps`, igual ao original. N├úo existe nenhuma condi├º├úo `CONTROLCOUNT` no SQL dos arquivos.
+
+**Conclus├úo**: O problema [SQL-FILTRO-INVENTADO] ├® um **falso positivo** do validador. O scanner confundiu as refer├¬ncias ├á propriedade VFP9 `.ControlCount` (usadas no loop `TornarControlesVisiveis` para iterar controles) com uma coluna SQL inventada. Nenhuma corre├º├úo ├® necess├íria nos arquivos ÔÇö o SQL est├í correto.

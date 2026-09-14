@@ -1,0 +1,351 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprsen.SCX
+* Data/Hora: 03/07/2026 18:12:53
+* Total de registros: 9
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRSEN
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRSEN
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRSEN.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRSEN.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: btnGerSen
+  Parent: SIGPRSEN
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Saida
+  Parent: SIGPRSEN
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSEN
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 119
+  Width = 500
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "4Control"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowState = 0
+  automatico = .F.
+  Name = "SIGPRSEN"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSEN.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSEN.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSEN.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSEN.btnGerSen
+------------------------------------------------------------
+  Top = 4
+  Left = 348
+  Picture = ..\framework\imagens\geral_chaves_60.jpg
+  Caption = "Gerar Senha"
+  TabIndex = 19
+  Name = "btnGerSen"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSEN.Saida
+------------------------------------------------------------
+  Top = 4
+  Left = 423
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 18
+  Name = "Saida"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRSEN
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mandaemail
+------------------------------------------------------------
+PROCEDURE mandaemail
+parameters pcSenhaDia
+lcCab = [Senha do Dia : ] + pcSenhaDia
+lcCrp = []
+lcDir = Addbs(Sys(5) + Sys(2003))
+
+lcSch = [http://schemas.microsoft.com/cdo/configuration/]
+loObs = Createobject([CDO.Configuration])
+
+Try
+	With loObs.Fields
+		.Item(lcSch + [smtpserver]) = [mail.4control.com.br]
+		.Item(lcSch + [smtpserverport]) = 25
+		.Item(lcSch + [sendusing]) = 2
+		.Item(lcSch + [smtpauthenticate]) = 0
+		.Item(lcSch + [smtpusessl]) = .F.
+		.Item(lcSch + [smtpauthenticate]) = 1
+		.Item(lcSch + [smtpusessl]) = .F.
+		.Item(lcSch + [sendusername]) = [errormail@4control.com.br]
+		.Item(lcSch + [sendpassword]) = [PswError2@]
+		.Item(lcSch + [smtpconnectiontimeout]) = 60
+		.Update
+	Endwith
+	loMsg = Createobject([CDO.Message])
+	With loMsg
+		.Configuration  = loObs
+		.From    		= [desenvolvimento@4control.com.br]
+		.To      		= [config4c@4control.com.br]
+		.Subject 		= lcCab
+
+		If Not Empty(lcCrp)
+			.TextBody = lcCrp
+		Endif
+		.AutoGenerateTextBody = .F.
+		=Inkey(1, [MH])
+		.Send()
+	Endwith
+
+Catch To loError
+	If Not ThisForm.Automatico	
+		lcErr = [Erro: ] + Str(loError.ErrorNo) + Chr(13) + [Linha: ] + Str(loError.Lineno) + Chr(13) + [Mensagem: ] + loError.Message
+		Messagebox(lcErr,0+48,[Aviso],5000)
+	EndIf 
+Finally
+	Store .Null. To loObs, loMsg
+	Release loObs, loMsg
+Endtry
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+LOCAL cCorpo, cFrom, cCC, cTo, cAssunto, cAnexo, cEmail
+
+If Not ThisForm.Automatico
+	If Messagebox([Deseja realmente gerar a senha?],4+32+256,[Gerar Senha]) = 7
+		Return .f.
+	Endif
+EndIf 
+
+lcSenha = fGerPswDiarioMC(Val(Sys(1)), Date(), 0)
+If Not ThisForm.Automatico
+	=Messagebox('Favor Anotar a Senha : ' + Chr(13) + Chr(13) + lcSenha + Chr(13) + Chr(13), 32, 'Senha - 4Control',5000)
+EndIf 
+Set Step On 
+ThisForm.MandaEmail(lcSenha)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+parameters pAuto
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+ThisForm.Automatico = pAuto
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+	Else
+		If Not ThisForm.Automatico
+			=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		EndIf 
+		Return .f.
+	EndIf
+EndWith
+
+If ThisForm.Automatico
+	ThisForm.btnGerSen.Click()
+	ThisForm.Release
+EndIf 
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSEN.btnGerSen
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.Processamento()
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSEN.Saida
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRSEN
+RESERVED3 (ClassInfo): podatamgr
+automatico
+*mandaemail 
+*processamento 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

@@ -1,0 +1,9 @@
+﻿Fase 8 conclu├¡da. Os m├®todos adicionados ao `Formsigrecpr.prg`:
+
+- **`FormParaBO()`** ÔÇö delega para `FormParaRelatorio()`, satisfaz o hook do `FormBase.Salvar()`
+- **`BOParaForm()`** ÔÇö copia todas as propriedades do BO de volta aos controles do form (com `opt_4c_Bons.Visible` ressincronizado), satisfaz o hook do `FormBase.Cancelar()`
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö habilita/desabilita todos os 6 filtros; REPORT forms n├úo t├¬m modos CRUD mas o m├®todo est├í completo e funcional
+- **`CarregarLista()`** ÔÇö reset dos filtros + foco no primeiro campo de data; n├úo existe grid neste form
+- **`AjustarBotoesPorModo()`** ÔÇö mant├®m os 4 bot├Áes do CommandGroup sempre habilitados; sem altern├óncia de modo CRUD
+
+O form agora est├í **100% completo** para o pipeline de migra├º├úo ÔÇö BO (`sigrecprBO.prg`), Form (`Formsigrecpr.prg`) e integra├º├úo no `menu.prg`/`config.prg` j├í estavam prontos das fases anteriores.

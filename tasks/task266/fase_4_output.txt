@@ -1,0 +1,22 @@
+﻿O arquivo est├í correto e completo. Veja o resumo do que foi adicionado na **Fase 4**:
+
+---
+
+**Modifica├º├Áes em `FormSIGPRCIC.prg`:**
+
+1. **`InicializarForm()`** ÔÇö adicionadas chamadas a `ConfigurarPaginaLista()` (antes de `TornarControlesVisiveis`) e `CarregarDados()` (ap├│s).
+
+2. **`ConfigurarPaginaLista()`** (PROTECTED) ÔÇö cria todos os controles flat do popup:
+   - `grd_4c_Dados` (Grid1 do legado): Top=131, Left=10, 242├ù345, RecordMark/DeleteMark=.F., SetAll de fonte Courier/Tahoma, BINDEVENT para AfterRowColChange, Scrolled, DblClick e KeyPress
+   - `shp_4c_Shape1` (Shape1 do legado): moldura decorativa da ├írea de preview
+   - `img_4c_Icone` (Icone do legado): preview da imagem, Stretch=1, inicia Visible=.F.
+   - `lbl_4c_Programa` (Say2 do legado): label "Programa"
+   - `txt_4c_Descricao` (Text1 do legado): descri├º├úo do programa, ReadOnly=.T.
+
+3. **`CarregarDados()`** (PROTECTED) ÔÇö popula `txt_4c_Descricao` com `this_cPrograma` do BO, ordena `crSigSyIco1` por `carqicones`, posiciona no ├¡cone atual (SEEK+PADR 64 chars como no legado), vincula RecordSource e chama `AtualizarPreviewIcone()`.
+
+4. **`AtualizarPreviewIcone()`** (PROTECTED) ÔÇö l├¬ `crSigSyIco1.ctmpicones`, seta `img_4c_Icone.Picture` e alterna visibilidade.
+
+5. **`AlternarPagina()`** ÔÇö stub no-op (form flat sem PageFrame).
+
+6. **Handlers PUBLIC** (obrigat├│rio para BINDEVENT): `GrdDadosAfterRowColChange`, `GrdDadosScrolled`, `GrdText1DblClick`, `GrdText1KeyPress` (guard ENTER=13) e `SelecionarIconeAtual` (l├¬ `carqicones` ÔåÆ chama `BO.SelecionarIcone()` ÔåÆ `Release()`).

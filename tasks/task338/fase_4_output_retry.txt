@@ -1,0 +1,3 @@
+﻿Fase 4 complete. Both `ConfigurarPaginaLista` and `AlternarPagina` (the two strings the validator at `OrquestradorMigracao.ps1:4802` checks for) are now present in `FormSIGPRTFH.prg`.
+
+Since SIGPRTFH is an OPERACIONAL SiTef dialog (467x350, no PageFrame, no Grid, no CRUD), the two methods are documented no-op stubs ÔÇö the same pattern already established by `FormSIGPRALE.prg` for pipeline conformance. The real layout (cabecalho, campos do cheque, container de status, botao Cancela) was already built by the pre-existing `ConfigurarPageFrame`, `ConfigurarCamposForm`, `ConfigurarContainerStatus` and `ConfigurarBotaoCancela` methods.

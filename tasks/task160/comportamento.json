@@ -1,0 +1,131 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCCR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigPrCcr To Printer NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigPrCcr To Print Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCR",
+      "evento": "Init",
+      "linhas": 8,
+      "codigoOriginal": "=DoDefault()\n\nThisForm.lacpdf = fChecaAcesso(ThisForm.Name,'PDF')\n\nWith Thisform\n\t.poDataMgr = CreateObject('fSqlConector')\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "lacpdf = fChecaAcesso",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCR",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Report Form SigPrCcr To Printer NoConsole\n\nDoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCR",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "Wait Window 'Aguarde Processamento !' Nowait\n\nlcSql = [Select Razas From SigCdEmp Where Cemps = ']+_Empr+[']\n=ThisForm.Podatamgr.Sqlexecute(lcSql,'CrSigCdEmp')\nSelect CrSigCdEmp\nGo Top\nlcCbEmpresa = IIf(!IsEmpty(CrSigCdEmp.razas),CrSigCdEmp.razas,'')\nlcCbTitulo  = 'Relação de Produtos com Preço Alterado '\nlcSubTit    = 'Em '+Dtoc(Date())\n\nCreate Cursor CsCabecalho (cb_empresa c(80), titulo c(80), SubTitulo c(80))\n\nInsert Into CsCabecalho (cb_empresa, titulo, SubTitulo) ;\n\t\t\t\t Values (lcCbEmpresa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigPrCcr Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRCCR.Procedure",
+      "queryOriginal": "lcSql = [Select Razas From SigCdEmp Where Cemps = ']+_Empr+['] =ThisForm.Podatamgr.Sqlexecute(lcSql,'CrSigCdEmp')",
+      "tabelas": "SigCdEmp",
+      "colunas": "Razas,Cemps,SqlexecutelcSql,CrSigCdEmp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCCR.Procedure",
+      "queryOriginal": "Insert Into CsCabecalho (cb_empresa, titulo, SubTitulo) ; \t\t\t\t Values (lcCbEmpresa... [TRUNCADO]",
+      "tabelas": "CsCabecalho",
+      "colunas": "cb_empresa,titulo,SubTitulo",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmp", "CsCabecalho"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

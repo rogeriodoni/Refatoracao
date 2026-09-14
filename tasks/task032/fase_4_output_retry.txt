@@ -1,0 +1,6 @@
+﻿Phase 4 changes complete. Added two methods to `Formsigreapp.prg`:
+
+- **`ConfigurarPaginaLista()`** (PROTECTED): wraps `ConfigurarGrids()` since the three selection grids (Empresas/Tipo/Classifica├º├Áes) live on Page1 ÔÇö this is the REPORT-form equivalent of a CRUD list page.
+- **`AlternarPagina(par_nPagina)`**: sets `pgf_4c_Paginas.ActivePage` with bounds-check. No-op in practice since this REPORT form has a single Page1, but satisfies the API contract.
+
+No CRUD buttons (`Incluir/Alterar/Excluir/Buscar`) were added ÔÇö this is a REPORT form and already has the correct `cmg_4c_Botoes` CommandGroup (Visualizar/Imprimir/Doc.Excel/Sair) per the framework.vcx `frmrelatorio` pattern. Adding CRUD buttons would break the form.

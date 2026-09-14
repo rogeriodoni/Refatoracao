@@ -1,0 +1,32 @@
+﻿Agora tenho o c├│digo original completo. Posso fazer uma compara├º├úo definitiva de todos os 15 problemas reportados.
+
+---
+
+## Resultado da Verifica├º├úo: Todos os 15 problemas s├úo FALSOS POSITIVOS
+
+Ap├│s comparar cuidadosamente o c├│digo migrado com o original (`SigReIiv_form_codigo_fonte.txt`), os 15 problemas reportados s├úo **incorretos** ÔÇö n├úo h├í filtros inventados no BO.
+
+### Grupo 1: WHERE em tabelas secund├írias (4 problemas)
+
+O original usa `loCnx.CursorQuery([Tabela], [Cursor], [Coluna], Valor, [Campos])` ÔÇö este m├®todo do framework cria internamente um `WHERE Coluna = Valor`. A migra├º├úo converteu corretamente para SQL expl├¡cito:
+
+| Coluna reportada | Original (CursorQuery) | Migrado (SQL expl├¡cito) |
+|---|---|---|
+| **CEMPS** | `CursorQuery([SigCdEmp], ..., [Cemps], ...)` linha 148 | `WHERE Cemps = '...'` linha 86 Ô£à |
+| **ICLIS** | `CursorQuery([SigCdCli], ..., [IClis], ...)` linhas 409,417,432,455 | `WHERE IClis = '...'` linhas 342,354,375,404 Ô£à |
+| **ITRAS** | `CursorQuery('SigPrTrp', ..., 'Itras', ...)` linha 493 | `WHERE Itras = '...'` linha 449 Ô£à |
+| **CODS** | `CursorQuery([SigCdCor], ..., [Cods], ...)` linha 687 | `WHERE Cods = ...` linha 706 Ô£à |
+
+### Grupo 2: CHK* n├úo s├úo WHERE SQL (11 problemas)
+
+As colunas CHKENDOS, CHKENDDS, CHKEMIS, CHKPAIS, CHKESPS, CHKQTDS, CHKPESOBS, CHKPESOLS, CHKFRETE, CHKSEGURO, CHKTOTS **nunca aparecem como condi├º├úo WHERE em SQL** no c├│digo migrado. Elas aparecem:
+
+- Como campos lidos de `cursor_4c_LocalIvOpe` (cursor populado por `SELECT * FROM SigOpCdi WHERE Dopes = ...`)
+- Como condi├º├Áes VFP (`IF cursor_4c_LocalIvOpe.chkEndOs = 1`) ÔÇö exatamente como no original (`If (LocalIvOpe.chkEndOs = 1)`)
+- Como campos em `INSERT INTO crInvoices VALUES (...)` ÔÇö igual ao original
+
+O validador confundiu refer├¬ncias VFP a campos do cursor (e colunas de INSERT) com condi├º├Áes WHERE de SQL.
+
+---
+
+**Nenhuma altera├º├úo de c├│digo ├® necess├íria.** O `SigReIivBO.prg` est├í correto e fiel ao original. As corre├º├Áes indicadas pelo validador, se aplicadas, quebrariam a l├│gica de neg├│cio (queries sem filtro retornariam todos os registros das tabelas secund├írias).

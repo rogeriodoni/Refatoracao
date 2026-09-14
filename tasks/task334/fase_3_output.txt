@@ -1,0 +1,13 @@
+﻿Arquivo criado em `C:\4c\projeto\app\forms\operacionais\FormSIGPRSTF.prg` (163 linhas). O que foi entregue na Fase 3:
+
+**Estrutura base:**
+- `DEFINE CLASS FormSIGPRSTF AS FormBase` com propriedades visuais na declara├º├úo (`Width=400`, `Height=200`, `TitleBar=0`, `WindowType=1`, `ControlBox=.F.`, etc.) ÔÇö id├¬ntico ao legado SigTfSup
+- Propriedades de retorno: `this_cSenhaRetorno` e `this_lCancelado = .T.` para comunica├º├úo com o chamador ap├│s `Show()`
+- `Init()` ÔåÆ `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö instancia `SIGPRSTFBO`, chama `ConfigurarPageFrame()` + `ConfigurarCabecalho()`, sem RETURN dentro do TRY
+- `ConfigurarPageFrame()` ÔÇö fundo cinza RGB(212,208,200), sem barra de scroll
+- `ConfigurarCabecalho()` ÔÇö cria `cnt_4c_Sombra` com `lbl_4c_Sombra`/`lbl_4c_Titulo` (padr├úo cntSombra do legado), usando AddObject fora de WITH aninhado para evitar silent property skip
+- `AtualizarEstadoControles()` ÔÇö override seguro (di├ílogo sem bot├Áes CRUD)
+- `Destroy()` ÔåÆ libera BO + `DODEFAULT()`
+
+**Pr├│ximas fases:** Fase 4 ÔÇö bot├úo Cancelar (SAIDA CommandGroup), Shape decorativo; Fase 5/6 ÔÇö TextBox senha + label; Fase 7/8 ÔÇö eventos KeyPress (ENTER confirma) e Click (Cancelar limpa/fecha).

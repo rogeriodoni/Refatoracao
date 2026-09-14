@@ -1,0 +1,14 @@
+﻿RPTBO.prg conclu├¡do com 12 m├®todos implementados. O que foi entregue na Fase 2:
+
+- **Buscar()** ÔÇö SELECT de SIGCDRLC para o grid, com filtro opcional por nome/descri├º├úo
+- **CarregarPorCodigo()** ÔÇö SELECT por RPT_ID, reseta `this_lNovoRegistro = .F.`
+- **CarregarPorNome()** ÔÇö busca por NmReport para lookup interno
+- **CarregarSqlQuery()** ÔÇö carrega somente o campo memo SqlQuery
+- **CarregarDoCursor()** / **CarregarDoCursorCompleto()** ÔÇö mapeia campos do cursor para propriedades `this_*` usando `SELECT (par_cAliasCursor)` (padr├úo can├┤nico, sem `(variavel).campo`)
+- **ValidarDados()** ÔÇö valida NmReport e SqlQuery obrigat├│rios
+- **Inserir()** PROTECTED ÔÇö INSERT INTO SIGCDRLC, gera RPT_ID no formato original (`DTOS(Date()) + "_" + STRTRAN(TIME(), ":", "")`)
+- **Atualizar()** PROTECTED ÔÇö UPDATE SIGCDRLC, atualiza DtAlteracao
+- **ExecutarExclusao()** PROTECTED ÔÇö DELETE SIGCDRLD primeiro (filhos), depois SIGCDRLC (pai)
+- **SalvarSqlQuery()** ÔÇö UPDATE s├│ do campo SqlQuery (para o editor SQL inline)
+- **ExecutarSqlQuery()** ÔÇö executa SQL arbitr├írio do editor, retorna cursor de resultado
+- **BuscarTabelasSqlServer()** / **BuscarColunasDaTabela()** ÔÇö suporte ao F8/F9 do editor SQL

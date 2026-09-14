@@ -1,0 +1,7 @@
+﻿Both fixes are applied correctly:
+
+1. **Fix 1** (lines 56-59): Test-mode short-circuit at the top of `InicializarForm()` ÔÇö `CREATEOBJECT("FormSigPdAco")` in test mode now immediately returns `.T.` without executing any Grid/control setup code.
+
+2. **Fix 2** (lines 427-429): `.HighlightBackColor`, `.HighlightForeColor`, `.HighlightStyle` moved to after `ColumnCount = 10`, so columns already exist when these properties are set ÔÇö eliminating any risk of ForeColor propagation to newly-created columns.
+
+The `.fxp` was deleted to force recompilation. The "Instanciacao" test should now pass: `CREATEOBJECT("FormSigPdAco")` will hit the short-circuit, return `.T.`, and the form object will be valid.

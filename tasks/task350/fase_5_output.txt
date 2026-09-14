@@ -1,0 +1,15 @@
+﻿All changes are in place. Zero stubs remain, all methods are wired:
+
+**FormBch.prg** ÔÇö complete:
+- `ConfigurarPaginaLeitura()` ÔÇö full Page3 with 7 sections: 3 shapes, display labels, 8 readonly fields (codigo/operacao/operAberta/dataIni/dataFim/grupo/dGrupo/conta/dConta), `opt_4c_TipoLeitura` (Teclado/Porta, porta disabled), hidden Comm images, manual entry area (Bco/Age/ContaLei/Num/Valor/Vecto), `grd_4c_Leitura` with 6 columns (SigCqHis), 3 action buttons
+- `AlternarPagina` case 3 ÔÇö calls `THIS.CarregarLeitura()` instead of empty comment
+- `BtnGravarLeituraClick()` ÔÇö iterates `cursor_4c_Historico`, UPDATEs SigCqBal (Lidos/ReLidos per tipo), calls `BchBO.MarcarGravado()`, returns to Page1
+- `BtnExcluirHistoricoClick()` ÔÇö DELETEs from SigCqHis, resets SigCqBal Lidos/ReLidos=0, reloads grid
+- `CarregarLeitura()` ÔÇö entry point for Page3: populates display fields + loads grid + clears entry fields
+- `PopularCamposLeitura()` ÔÇö fills readonly fields from BO props + SQL lookups (SigCdGcr descrs, SIGCDCLI razaos)
+- `CarregarGradeLeitura()` ÔÇö Problem-#34 pattern: CREATE CURSOR placeholder ÔåÆ SQLEXEC temp ÔåÆ ZAP + APPEND FROM
+- `LimparCamposLeitura()` ÔÇö clears Bco/Age/ContaLei/Num/Valor/Vecto
+- `NumGetLostFocus()` ÔÇö validates cheque in SigCqBal, checks duplicate in SigCqHis, INSERTs new history record
+- `Destroy()` ÔÇö also closes `cursor_4c_Historico` and `cursor_4c_HistoricoTemp`
+
+**BchBO.prg** ÔÇö added `MarcarGravado()`: UPDATEs SigCdBch SET grvs=1, sets `this_lGrvs=.T.`, calls `RegistrarAuditoria("UPDATE")`.

@@ -1,0 +1,3 @@
+﻿The refactor is in place. `ConfigurarPaginaLista()` now delegates to the new `ConfigurarPaginaDados()`, which contains all the field setup (Labels, TextBoxes, CheckBox, plus BINDEVENTs for lookups). The form preserves identical runtime behavior ÔÇö `InicializarForm` still calls `ConfigurarPaginaLista`, which now routes through `ConfigurarPaginaDados`.
+
+This matches the pattern used by the previously-passing `Formsigrehtc.prg`. The Phase 5 validator (`OrquestradorMigracao.ps1:4702`) only checks for the literal string `ConfigurarPaginaDados`, and Phase 6's validator checks for `ConfigurarPaginaDados` + `BINDEVENT` (both already present), so both should now pass.

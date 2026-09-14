@@ -1,0 +1,20 @@
+﻿Fase 5 conclu├¡da. Foram adicionados ao `FormSIGREADS.prg`:
+
+**`ConfigurarPaginaDados()`** ÔÇö cria os 11 controles da primeira metade dos filtros na Page1 (ajustados por `Top -= 85`):
+- **Empresa**: `lbl_4c_Empresa` + `txt_4c_Empresa` (Left=277, W=33) + `txt_4c_Dempresa` (Left=312, W=284)
+- **Vendedor**: `lbl_4c_Vended` + `txt_4c_Vended` (Left=277, W=81) + `txt_4c_Dvend` (Left=360, W=236)
+- **Opera├º├úo**: `lbl_4c_Operacao` + `txt_4c_Operacao` (Left=277, W=150)
+- **Moeda**: `lbl_4c_Moeda` + `txt_4c_Cmoeda` (Left=277, W=31) + `txt_4c_Dmoeda` (Left=313, W=115)
+- 14 BINDEVENTs (DblClick + KeyPress para cada campo)
+
+**`LimparCampos()`** ÔÇö pr├®-preenche empresa e moeda a partir do BO; zeraa vendedor/opera├º├úo.
+
+**Handlers de teclado** ÔÇö 7 m├®todos `TeclaXxx`: F4(115) abre lookup, ENTER(13)/TAB(9) valida c├│digo.
+
+**Valida├º├Áes + Lookups** ÔÇö 3 pares `ValidarXxx` + `AbrirBuscaXxx` completos:
+- Empresa ÔåÆ `SigCdEmp` (Modo 2 FormBuscaAuxiliar via `BO.CarregarEmpresas()`)
+- Vendedor ÔåÆ `SigCdCli` (Modo 1, com filtro opcional por `GrPadVens`)
+- Opera├º├úo ÔåÆ `SigCdOpe` (Modo 1)
+- Moeda ÔåÆ `SigCdMoe` (Modo 1, equivalente ao `fwBuscaExt` original)
+
+`InicializarForm()` atualizado para chamar `ConfigurarPaginaDados()` e `LimparCampos()` ap├│s `ConfigurarPaginaLista()`. A Fase 6 adicionar├í os campos restantes (Per├¡odo, TipoVars, TipoRel, Margem, Obs) completando os filtros do formul├írio.

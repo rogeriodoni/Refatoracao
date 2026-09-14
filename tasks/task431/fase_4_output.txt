@@ -1,0 +1,11 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormFre.prg` foi atualizado com:
+
+**O que foi adicionado/modificado:**
+
+1. **`ConfigurarPaginaLista()`** ÔÇö adicionados 5 bot├Áes CRUD dentro de `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar ÔÇö cada um com Caption, Picture, PicturePosition=13, FontName="Comic Sans MS", BINDEVENT), mais `cmd_4c_Encerrar` dentro de `cnt_4c_Saida` (padr├úo can├┤nico), e o grid `grd_4c_Lista` com `RecordSource`/`ColumnCount` fora do `WITH` (Problema 36), 2 colunas ("Cidade"=400px, "Valor do Frete"=120px), DblClick vinculado ao `BtnVisualizarClick`. O `cmd_4c_BtnAguarde` tem `.Visible=.F.` refor├ºado ap├│s `TornarControlesVisiveis`.
+
+2. **`CarregarLista()`** ÔÇö corrigido o `RETURN` dentro de `TRY` (Regra #1 CLAUDE.md) e adicionada a vincula├º├úo do grid ao cursor `cursor_4c_Dados` ap├│s `Buscar()`, com redefini├º├úo dos headers (Problema 32).
+
+3. **`AlternarPagina(par_nPagina)`** ÔÇö novo m├®todo que muda `ActivePage` e recarrega lista ao voltar para Page1.
+
+4. **6 m├®todos de clique** ÔÇö `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick` ÔÇö todos PUBLIC para BINDEVENT funcionar, com l├│gica completa e guards `PEMSTATUS` para m├®todos das fases seguintes (BOParaForm, HabilitarCampos, LimparCampos, AjustarBotoesPorModo).

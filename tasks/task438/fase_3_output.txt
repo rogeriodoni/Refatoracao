@@ -1,0 +1,14 @@
+﻿Phase 4 is complete. Here's what was delivered:
+
+**gpdBO.prg** ÔÇö new `BuscarSubgrupos(par_cCgrus)`:
+- Queries `SigCdPsg WHERE cgrus = ?` ÔåÆ `cursor_4c_SubGrupos (codigos, descricaos, marckupa)`
+- Falls back to empty CREATE CURSOR on empty input or SQL failure
+
+**Formgpd.prg** changes:
+- `ConfigurarPaginaLista()` ÔÇö added `grd_4c_Grade` (Top=172, Left=34, 523├ù439, cols 80/304/115) and `grd_4c_Subgrupos` (Top=172, Left=576, 394├ù439, cols 70/230/70); BINDEVENT for `GradeAfterRowColChange`
+- `CarregarLista()` ÔÇö sets RecordSource/ControlSources/Headers on grd_4c_Grade, then loads initial subgroups via `CarregarSubgrupos` for first row
+- `GradeAfterRowColChange(par_nColIndex)` ÔÇö PUBLIC handler, reads current cgrus from cursor_4c_Dados and calls `CarregarSubgrupos`
+- `CarregarSubgrupos(par_cCgrus)` ÔÇö PROTECTED, clears RecordSource, calls BuscarSubgrupos, rebinds grd_4c_Subgrupos with ControlSources/headers
+- `Destroy()` ÔÇö closes `cursor_4c_SubGrupos`
+
+Next step is **Phase 5**: adding the TextBox fields, labels, OptionGroups and the inner subgroups grid to `pgCadastro` (Page1 of pgf_4c_Divisoes).

@@ -1,0 +1,20 @@
+﻿A migra├º├úo do `SIGREAPP` est├í **completa** ÔÇö todas as 8 fases j├í foram executadas em itera├º├Áes anteriores:
+
+**sigreappBO.prg** (1159 linhas):
+- Propriedades `this_*` para todos os filtros
+- `PrepararDados()`, `ProcessaPagRec()`, `BuscaSaldos()`, `NCalcJuros()`, `BuscarCambio()`
+- Integra├º├úo de auditoria e Inserir/Atualizar bloqueados (BO de relat├│rio)
+
+**Formsigreapp.prg** (2051 linhas):
+- `ConfigurarCabecalho()` ÔÇö cmg_4c_Botoes com 4 bot├Áes (Visualizar/Imprimir/Excel/Sair)
+- `ConfigurarFiltros()` ÔÇö todos os controles de filtro: datas, optgroups, grupos, conta, moeda, jobs, juros, pag/rec
+- `CarregarCursores()` ÔÇö SigCdEmp, SigOpOpe, SigCdClc, SigCdCot com ├¡ndices
+- `ConfigurarGrids()` ÔÇö 3 grids com CheckBox interativo por linha
+- Todos os lookups F4/ENTER/TAB para Grupo, Conta, Moeda, Jobs
+- `FormParaRelatorio()`, `HabObjs()`, `LimparCampos()`
+
+**Integra├º├Áes**:
+- `menu.prg`: BAR 33 + `AbrirFormsigreapp()` usando padr├úo VARTYPE correto
+- `config.prg`: carregamento din├ómico via ADIR ÔÇö nenhuma altera├º├úo manual necess├íria
+
+**Por que a Fase 5 n├úo tem nada a adicionar**: este ├® um form REPORT (layout plano, sem Page1/Page2 CRUD). O `ConfigurarFiltros()` j├í cont├®m todos os campos que seriam divididos entre as fases 5-8 de um form CRUD. A migra├º├úo foi conclu├¡da integralmente.

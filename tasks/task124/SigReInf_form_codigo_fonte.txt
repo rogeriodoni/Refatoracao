@@ -1,0 +1,227 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReInf.SCX
+* Data/Hora: 06/06/2026 12:46:45
+* Total de registros: 4
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREINF
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 71
+  Left = 83
+  Width = 582
+  Height = 274
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREINF
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 130
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Impressão de Nota Fiscal"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Arial"
+  FontSize = 9
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 1
+  ForeColor = 0,0,0
+  lacemail = .F.
+  lacexcel = .F.
+  lacpdf = .F.
+  Name = "SIGREINF"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.ZOrderSet = 2
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREINF
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+do SigPrNfs With ThisForm.Podatamgr,"V", ThisForm.pcemps, ThisForm.pcdopes, ThisForm.pcnumes 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+llFalse = .f.
+lcEdn = ThisForm.pcEmps + ThisForm.pcDopes + Str(ThisForm.pcNumes,6)
+lcSql = [Select c.Nfis,c.EmpdopNums From SigMvNfi c, SigCdOpe a ]+;
+		[Where c.emps = ']+ThisForm.pcemps+[' And c.series = ']+Thisform.pcserie+[' ]+;
+		[And c.Impress = ?llFalse and c.cancelas = ?llFalse And c.dopes = a.dopes and ]+;
+		[a.nfiscals in (1,2) and a.tiponfs <> 4 and a.agrupas = 1 ]+;
+		[Union all ]+;
+		[Select c.Nfis,c.EmpDopNums From SigMvNfi c, SigCdOpe a, SigCdSer b ]+;
+		[Where c.emps = ']+ThisForm.pcemps+[' And c.series = ']+Thisform.pcserie+[' ]+;
+		[And c.Impress = ?llFalse And c.cancelas = ?llFalse and c.series = b.cods And ]+;
+		[c.dopes=a.dopes and a.nfiscals in (1,2) and a.tiponfs = 4 and b.impnfs = 1 ]
+If Thisform.PodataMgr.SqlExecute(lcSql,'TmpFiscal') < 0
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Update SigOpEtq)')
+	Return .f.
+EndIf
+Select CrSigCdPam
+Go Top
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pEmp, pDop, pNum, pSerie
+
+ThisForm.pcEmps      = pEmp
+ThisForm.pcDopes     = pDop
+ThisForm.pcNumes     = pNum
+ThisForm.pcSerie     = pSerie
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		=DoDefault()
+
+		.PodataMgr.Cursorquery('SigCdPam','CrSigCdPam',.f.,.f.,[nnfftlns,nnfftcls])
+
+		If (CrSigCdPam.nnfftlns==999 or CrSigCdPam.Nnfftcls==999)
+			.btnReport.Visualiza.Enabled = .t.
+		EndIf
+
+		* Duas linhas colocadas para Barão,podem ser retiradas epois de acertada a impressão e acessos
+		.btnReport.Imprime.Enabled = .t.
+		.lAcImprimir = .t.		
+*!*			.btnReport.Imprime.Enabled = fChecaAcesso('SIGREINF','IMPRIMIR')
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+do SigPrNfs With ThisForm.Podatamgr,"I",ThisForm.pcemps, ThisForm.pcdopes, ThisForm.pcnumes 
+
+ThisForm.Release
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+*!*	If This.Value = 2
+*!*		ThisForm.btnReport.Imprime.Enabled = .f.
+*!*	EndIf
+DoDefault()
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREINF
+RESERVED3 (ClassInfo): pcdopes
+pcemps
+pcnumes
+pcserie
+podatamgr
+*selecionadados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

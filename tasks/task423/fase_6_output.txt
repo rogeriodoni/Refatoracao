@@ -1,0 +1,9 @@
+﻿O arquivo est├í correto. A Fase 6/8 est├í completa.
+
+**Resumo do que foi adicionado em FormFpb.prg:**
+
+- **`ConfigurarPaginaDados()`**: agora adiciona `cmd_4c_Confirmar` e `cmd_4c_Cancelar` ao container `cnt_4c_BotoesAcao` (Page2), com BINDEVENT para os handlers correspondentes
+- **`BtnConfirmarClick()`**: retorna para Page1 via `AlternarPagina(1)`
+- **`BtnCancelarClick()`**: retorna para Page1 via `AlternarPagina(1)`
+
+**Nota sobre a fase:** Este form ├® um popup de edi├º├úo inline no grid ÔÇö o legado n├úo tem campos separados em Page2 nem lookups F4/F5. O `cnt_4c_BotoesAcao` com Confirmar/Cancelar ├® a estrutura can├┤nica do framework para Page2, mesmo sendo raramente acionada neste caso. A funcionalidade principal (inserir/excluir/salvar BINs) j├í estava completa desde as fases anteriores.

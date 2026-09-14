@@ -1,0 +1,27 @@
+﻿`Formsigtosen.prg` criado com sucesso em `C:\4c\projeto\app\forms\operacionais\`. **949 linhas**, zero caracteres acentuados literais.
+
+## Resumo da Fase 3/8
+
+**Arquivo criado**: `C:\4c\projeto\app\forms\operacionais\Formsigtosen.prg`
+
+### Decis├Áes de design (form OPERACIONAL flat - sem PageFrame)
+
+SIGTOSEN ├® um formul├írio de **login** com layout flat (sem PageFrame/CRUD). Adapta├º├Áes em rela├º├úo ao template padr├úo:
+
+| Aspecto | CRUD padr├úo | SIGTOSEN (login) |
+|---------|-------------|-----------------|
+| PageFrame | Sim (Page1=Lista, Page2=Dados) | **N├úo** - layout flat |
+| Bot├Áes CRUD | Incluir/Alterar/Excluir | **SAIDA** (CommandGroup - encerrar) |
+| Init() | Sem par├ómetros | **4 par├ómetros** (GetUsuario, PrimeiraVez, Automatico, Programa) |
+| Fases separadas (grid, campos) | Sim | **Tudo na Fase 3** (form simples) |
+
+### Estrutura implementada
+
+- **Init()** ÔÇö salva par├ómetros como propriedades antes do `DODEFAULT()` (necess├írio porque `InicializarForm` usa essas propriedades)
+- **InicializarForm()** ÔÇö cria BO `sigtosenBO`, suprime menu, cria todos os controles, carrega par├ómetros, define foco
+- **CriarImagemLogo/Labels/CamposLogin/BotaoSaida** ÔÇö constroem a UI com posi├º├Áes exatas do original
+- **VincularEventos()** ÔÇö BINDEVENTs para KeyPress (ENTER/TAB), F4 (lookup empresa), When (desc. somente-leitura)
+- **ValidarUsuario/ValidarSenha/ValidarEmpresa** ÔÇö l├│gica completa do original
+- **Confirmar()** ÔÇö fluxo completo: checa credenciais ÔåÆ licen├ºas ÔåÆ carrega menu ÔåÆ atualiza caption
+- **VerificarExpiracaoSenha()** ÔÇö troca de senha obrigat├│ria ou `DO SigMenOpe.prg`
+- **Destroy()** ÔÇö fecha cursores + `DODEFAULT()` + `fLogoRelatorio()`

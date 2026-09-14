@@ -1,0 +1,278 @@
+{
+  "resumo": {
+    "totalMetodos": 16,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 12,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fwBuscaExt", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGACCCR",
+      "evento": "Init",
+      "linhas": 20,
+      "codigoOriginal": "LPARAMETERS _acesso\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigSyAcc','cIdChaves','crSigSyAcc','gracess',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('gracess','','','Grupo Acesso',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('usuacess','','','Usuario Acesso',90,.t.)\n\t\t.pfSqlTabela(1).pColuna('g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "Parameters Opcao\nIf !dodefault( OPCAO )\n\tThisForm.mAtivapagina1\n\tReturn\nENDIF\n\nIf ThisForm.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codigos', CrSigSyAcc.grcontas)\n\tThisForm.Pagina.Dados.Get_DGrConta.Value = crSigCdGcr.Descrs\nElse\n\tThisForm.Pagina.Dados.Get_DGrConta.Value = ''\nEndif\n\nDECLARE laClis[2,2]\nlaClis[1,1]=\"Grupos\"\nlaClis[1,2]=CrSigSyAcc.GrContas\nlaClis[2,1]=\"IClis\"\nlaClis[2,2]=CrSigSyAcc.CdContas\nIf ThisForm.podatamgr.CursorQuery('SigCdCli','crSigCdCli', @laClis)\n\tThisForm.Pagina... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_DGrConta,Get_DConta,Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "Local lnrec,lcchave\nIf Inlist(Thisform.pcEscolha,'INSERIR')\n\tIf IsEmpty(crSigSyAcc.usuacess) and IsEmpty(crSigSyAcc.gracess)\n\t\tMessagebox('Usuário/Grupo Inválido !!!',0+48,'')\n\t\tThisform.Pagina.Dados.Get_Grupo.SetFocus\t\n\t\tReturn .f.\n\tEndif\nEndif\nIf Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR')\n\tIf \tIsEmpty(thisform.pagina.dados.get_grconta.value) and ;\n\t\tIsEmpty(thisform.pagina.dados.get_cdconta.value)\n\t\tMessagebox('Grupo/Conta Corrente Inválidos !!',0+48,'')\n\t\tthisform.pagina.dados.get_grconta... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Grupo,get_grconta,get_cdconta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGACCCR",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_Grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR' ) And IsEmpty( This.Parent.Get_Usuario.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Usuario",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_Grupo",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGrA','crSigCdGrA','Grupos',This.Value,'Seleção',.t.,'Grupos')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('grupos', '', 'Código', .t.)\n\t\txBrox.Show()\n\tEndIf \n\n\tThis.Value = Iif( LastKey() # 27, EVALUATE('crSigCdGrA.GRUPOS'), '' )\n\nENDIF\n\nRETURN(.T.)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_Usuario",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR' ) And IsEmpty( This.Parent.Get_Grupo.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_Usuario",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','Usuarios',This.Value,'Seleção',.t.,'Usuarios',[Not cAtivos='N'])\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Usuarios', '', 'Código', .t.)\n\t\txBrox.mAddColuna('CCargs', '', 'Cargo', .t.)\n\t\txBrox.Show()\n\tEndIf \n\n\tThis.Value = Iif( LastKey() # 27, EVALUATE('crSigCdUsu.Usuarios'), '' )\n\nENDIF\n\nRETURN(.T.)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_GrConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_GrConta",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Seleção',.t.,'Codigos')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('CODIGOS','','Código',.t.)\n\t\txBrox.mAddColuna('DESCRS','','Descrição',.T.)\n\t\txBrox.Show()\n\tEndIf \n\n\tThis.Value = Iif( LastKey() # 27, EVALUATE('crSigCdGcr.Codigos'), '' )\n\n\tThisform.Pagina.Dados.get_DGrConta.value = evaluate('crSigCdGcr.Descrs')\n\tthisform.Pagina.Dados.get_DGrC... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_DGrConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_CdConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR' ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_CdConta",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "lcGrupo = This.Parent.Get_GrConta.Value\n\nIf !Empty(This.Value) And !fAcessoContas( Usuar, lcGrupo, 'C', This.Value, This, This.Parent.Get_DCONTA )\n\tMessagebox( 'Acesso Negado...', 32, '' )\n\tThis.Value = ''\n\tThis.Parent.Get_dConta.Value = ''\nEndif\nThis.Parent.Get_dConta.Refresh\n\nRETURN(.T.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrConta,Get_DCONTA",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_DCONTA",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) AND EMPTY(This.Parent.Get_CdConta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_CdConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_DCONTA",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "lcGrupo = This.Parent.Get_GrConta.Value\n\nIf !Empty(This.Value) And !fAcessoContas( Usuar, lcGrupo, 'D', This.Value, This, This.Parent.Get_DCONTA )\n\tMessagebox( 'Acesso Negado...', 32, '' )\n\tThis.Value = ''\n\tThis.Parent.Get_cdConta.Value = ''\nEndif\nThis.Parent.Get_cdConta.Refresh\n\nRETURN .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrConta,Get_DCONTA,Get_cdConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_DGrConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') AND EMPTY(This.Parent.Get_GrConta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGACCCR.Pagina.Dados.Get_DGrConta",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGcr','crSigCdGcr','Descrs',This.Value,'Seleção',.t.,'Descrs')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('DESCRS','','Descrição',.T.)\n\t\txBrox.mAddColuna('CODIGOS','','Código',.t.)\n\t\txBrox.Show()\n\tEndIf \n\n\tThis.Value = Iif( LastKey() # 27, EVALUATE('crSigCdGcr.Descrs'), '' )\n\n\tThisform.Pagina.Dados.get_GrConta.value = evaluate('crSigCdGcr.Codigos')\n\tthisform.Pagina.Dados.get_GrConta... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_GrConta",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

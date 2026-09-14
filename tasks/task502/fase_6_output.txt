@@ -1,0 +1,15 @@
+﻿All four edits are in place and correct. Here's a summary of what FASE 6/8 added to `FormPrl.prg`:
+
+**Edit 2 ÔÇö TornarControlesVisiveis**: Added INLIST exclusion for the 6 "sem uso" Page2 fields (`LBL_4C_SEMUSO2/3/22`, `TXT_4C_DIVISAOS`, `TXT_4C_BLOQUEIOS`, `OPT_4C_TIPOS`) so they stay hidden after `TornarControlesVisiveis` runs.
+
+**Edit 3 ÔÇö ConfigurarPaginaLista**: Calls `THIS.ConfigurarPainelEtiquetas(cnt_4c_Etiquetas)` immediately after creating the container, so all 16 internal controls (spinners, OptionGroups, TextBoxes, buttons) are created before `TornarControlesVisiveis` recurses into them.
+
+**Edit 4 ÔÇö BtnEtiquetasClick**: Simplified to just `THIS.ImprimirEtiquetas()` ÔÇö the button is disabled while the panel is open (legacy behavior), so no toggle logic needed.
+
+**Edit 5 ÔÇö Six new methods**:
+- `ConfigurarPainelEtiquetas` ÔÇö creates all 16 controls inside `cnt_4c_Etiquetas` with BINDEVENTs for `CodigosEtqLostFocus`, `CmdOkEtqClick`, `CmdCancelEtqClick`
+- `ImprimirEtiquetas` ÔÇö APrinters + SigCdPam params + SigCdMp label-printer list + dynamic optImpressora population + show panel
+- `CodigosEtqLostFocus` ÔÇö validates code in SigPrLcl WHERE Etiquetas=1; opens lookup if not found
+- `AbrirBuscaCodigosEtq` ÔÇö FormBuscaAuxiliar Pattern A (SQL in caller, DefinirCursor, Mostrar)
+- `CmdOkEtqClick` ÔÇö CREATE CURSOR + populate rows + raw Eltron/Zebra `???` output for Pequena (85px) and Grande (89px) label types; always calls CmdCancelEtqClick to restore panel
+- `CmdCancelEtqClick` ÔÇö hides panel, re-enables grid/buttons/Etiquetas button

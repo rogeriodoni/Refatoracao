@@ -1,0 +1,44 @@
+﻿An├ílise completa conclu├¡da. **Nenhuma altera├º├úo de c├│digo ├® necess├íria.** Todos os 4 itens s├úo falsos positivos da ferramenta automatizada:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### CONTROLCOUNT (FormSIGPRCPR.prg:357, 367, 375)
+**FALSO POSITIVO.** `ControlCount` ├® uma propriedade VFP de objeto (`par_oContainer.ControlCount`), usada no loop de `TornarControlesVisiveis()` para iterar controles filhos. **N├úo ├® coluna SQL nem condi├º├úo WHERE.**
+
+---
+
+### DOPES ÔÇö linha 181 do BO (SigCdOpe)
+```sql
+SELECT TOP 1 Globalizas, Servicos FROM SigCdOpe WHERE Dopes = ...
+```
+**V├üLIDO.** `Dopes` ├® a chave prim├íria de `SigCdOpe` (confirmado pela mem├│ria do projeto: "SigCdOpe eh single-column (Dopes eh PK+descricao)"). O c├│digo legado usava o cursor pr├®-aberto `crSigCdOpe` ÔÇö a migra├º├úo traduz corretamente para SQL inline com `WHERE Dopes = PK`. Remover destruiria a query (retornaria todos os registros).
+
+### DOPES ÔÇö linha 847 do BO (SigMvCab, GerarChaveUnica)
+```sql
+WHERE Emps + Dopes = EscaparSQL(loc_cPref)
+```
+**V├üLIDO.** `EmpDopNums` em `SigMvCab` = `Emps + Dopes + STR(Numes, 6)` ÔÇö tem 3 campos concatenados. O prefixo `loc_cPref` = `Emps + Dopes` (sem Numes), portanto `WHERE EmpDopNums = X` seria errado. A concatena├º├úo `Emps + Dopes = X` ├® a ├║nica forma correta de filtrar por empresa+opera├º├úo para buscar `MAX(Numes)`.
+
+---
+
+### CGRUS (SigCdGrp, linha 211)
+```sql
+SELECT TipoEstos FROM SigCdGrp WHERE CGrus = ...
+```
+**V├üLIDO.** `CGrus` ├® a chave prim├íria de `SigCdGrp`. Lookup necess├írio para determinar `TipoEstos` (tipo de estoque do produto). Sem esse WHERE retornaria todos os grupos.
+
+---
+
+### ICLIS (SigCdCli, linha 232)
+```sql
+SELECT GruProds, ConProds FROM SigCdCli WHERE IClis = ...
+```
+**V├üLIDO.** Confirmado pelo fonte do Framework (`docs/FRAMEWORK_class_codigo_fonte.txt:13729`): `Select IClis, RClis From SigCdCli where IClis in (...)` ÔÇö `IClis` **├® a chave prim├íria** de `SigCdCli`. Lookup correto para obter grupo/conta de destino do cliente.
+
+---
+
+## Conclus├úo
+
+O scanner de PASS SQL comparou apenas os WHERE das instru├º├Áes UPDATE/INSERT do fluxo principal (EMPDOPNUMS, CIDCHAVES, etc.) e n├úo reconheceu as queries SELECT auxiliares sobre tabelas de cadastro (SigCdOpe, SigCdGrp, SigCdCli) ÔÇö que o legado fazia via cursores pr├®-abertos (`cr` prefix) e a migra├º├úo traduz corretamente para SQL inline com seus respectivos PKs. **Nenhum dos 4 itens ├® uma condi├º├úo inventada.** Os arquivos est├úo corretos.

@@ -1,0 +1,15 @@
+﻿Todas as 4 corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito:
+
+**Corre├º├Áes reais aplicadas** (os demais 48 problemas de layout eram falsos positivos ÔÇö o checker rodou em vers├úo anterior do c├│digo, e as posi├º├Áes no arquivo atual j├í estavam corretas):
+
+| Problema | Mudan├ºa |
+|---|---|
+| `cnt_4c_Container1.Left` | `523` ÔåÆ `418` (diff=105px vs original) |
+| `cnt_4c_Aguarde.Left` | `178` ÔåÆ `142` (diff=36px vs original) |
+| `lbl_4c_AguardeMsg.Left` | `260` ÔåÆ `208` (diff=52px vs original Label1) |
+| `lbl_4c_AguardeProc.Left` | `171` ÔåÆ `137` (diff=34px vs original Label2) |
+
+**Problemas verificados como j├í corretos no c├│digo atual:**
+- `[CONTAINER-VISIVEL]`: INLIST com recurs├úo antes do LOOP j├í presente (linhas 1208-1213)
+- `[GRID-WITH]`: Todos os grids j├í definem `ColumnCount`/`RecordSource` fora do WITH antes de acessar colunas
+- `[LAYOUT-POSITION]` (46 dos 50): As posi├º├Áes no c├│digo j├í correspondiam ao original ÔÇö o checker foi executado em vers├úo anterior

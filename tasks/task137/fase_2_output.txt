@@ -1,0 +1,7 @@
+﻿Fase 2 conclu├¡da. O `SigPdM12BO.prg` foi completado com:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia todas as colunas de `xNensiR` (Nenvs, EmpDopNums, Datas, Destinos, Retrabs, Rclis) usando o padr├úo can├┤nico `SELECT (alias)` + acesso direto aos campos.
+- **`CarregarCabecalhoDoCursor(par_cAliasCursor)`** ÔÇö mapeia as colunas de `tmpnens` (numps, emps, dopps) para as propriedades do cabe├ºalho.
+- **`ObterChavePrimaria()`** ÔÇö retorna `TRANSFORM(this_nNenvs)` (Nenvs = n├║mero do envelope/O.S.).
+
+`Inserir`, `Atualizar` e `RegistrarAuditoria` foram corretamente omitidos: este form ├® popup read-only sem tabela pr├│pria ÔÇö os cursores `xNensiR` e `tmpnens` s├úo fornecidos pelo form pai via DataSession compartilhada e n├úo h├í opera├º├Áes de escrita.

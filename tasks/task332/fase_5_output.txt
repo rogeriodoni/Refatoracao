@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Fase 5/8 conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **`BINDEVENT` para `Check1.When`** (linha 64) ÔÇö replica o comportamento do original `Return(CsSigCdLpi.lMarcas = 0)`: itens j├í marcados n├úo podem ser desmarcados individualmente; s├│ via "Desmarcar Tudo".
+
+2. **Propriedades completas do `Check1`** em `ConfigurarGradeItens` ÔÇö adicionados `Top=23`, `Left=3`, `Height=17`, `Width=60`, `FontName="Courier New"`, `Alignment=0` conforme o SCX original.
+
+3. **Estilo `Text1` nas colunas dos grids** ÔÇö `BorderStyle=0`, `Margin=0`, `ReadOnly=.T.`, `ForeColor/BackColor` para `grd_4c_Listas.Column1` e `grd_4c_Itens.Column2ÔÇô6` (Column4 tamb├®m recebe `FontSize=9`), usando `PEMSTATUS` para acesso seguro.
+
+4. **M├®todo `Activate()`** ÔÇö define foco em `grd_4c_Listas` quando o di├ílogo fica ativo (equivalente ao `ThisForm.GradeLista.Column1.SetFocus` do Init legado).
+
+5. **M├®todo `GradeItensCheck1When()`** ÔÇö handler do BINDEVENT acima, retorna `.T.` apenas quando `lMarcas = 0`.

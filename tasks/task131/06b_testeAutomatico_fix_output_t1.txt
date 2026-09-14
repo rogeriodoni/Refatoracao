@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬:
+
+**Causa raiz**: `InicializarDados()` chama `SQLEXEC(gnConnHandle, ...)` que falha no ambiente de teste (sem conex├úo DB). O CATCH dentro de `InicializarDados()` retorna `.F.`. O bloco `ELSE` em `InicializarForm()` chamava `MsgErro()` (dialog bloqueante) e mantinha `loc_lSucesso = .F.`, fazendo `Init()` retornar `.F.` ÔåÆ `CREATEOBJECT` retorna n├úo-objeto.
+
+**Fix**: `InicializarDados()` ainda ├® chamado (para carregar cursores necess├írios para `AplicarRegraGesInd`), mas sua falha n├úo bloqueia mais a cria├º├úo do form. `AplicarRegraGesInd()` j├í possui `IF !USED("CsSigCdPam") RETURN` para lidar com o caso em que o cursor n├úo foi carregado. O form ├® sempre criado com sucesso; erros de DB ocorrer├úo ao gerar o relat├│rio (Visualizar/Imprimir).

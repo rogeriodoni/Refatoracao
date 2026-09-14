@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html slick-uniqueid="1" xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" dir="ltr" lang="fr"><head>
+    <title>FoxPro : Utiliser PDFCreator silencieusement (sans nommer le fichier PDF) - AtoutFox</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    
+    <meta name="description" content="Utiliser PDFCreator silencieusement (sans nommer le fichier PDF)">
+    
+    <meta name="keywords" content="VFP,Visual Foxpro,Microsoft Visual Foxpro,UTILISER,PDFCREATOR,SILENCIEUSEMENT,SANS,NOMMER,FICHIER">
+    
+    <meta name="robots" content="index,follow">
+    <link rel="stylesheet" type="text/css" href="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/atoutfox.css">
+    <link rel="stylesheet" type="text/css" href="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/calendar.css">
+    <script type="text/javascript" src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/mootools.js"></script>
+    <script type="text/javascript" src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/mootools-more.js"></script>
+    <script type="text/javascript" src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/commun.js"></script>
+    <script type="text/javascript" src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/atoutfox.js"></script>
+    <script type="text/javascript" src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/ftiens4.js"></script>
+    <script type="text/javascript" src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/ua.js"></script>
+    <script type="text/javascript" src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/calendar.js"></script>
+    
+<script type="text/javascript">
+sas_tmstp=Math.round(Math.random()*10000000000);sas_masterflag=1;
+function SmartAdServer(sas_pageid,sas_formatid,sas_target) {
+ if (sas_masterflag==1) {sas_masterflag=0;sas_master='M';} else {sas_master='S';};
+ document.write('<scr'+'ipt src="http://www6.smartadserver.com/call/pubj/' + sas_pageid + '/' + sas_formatid + '/' + sas_master + '/' + sas_tmstp + '/' + escape(sas_target) + '?"></scr'+'ipt>');
+}
+</script>
+
+  
+  </head>
+  <body class="atoutfox">
+    <table id="main" align="center" cellpadding="0" cellspacing="0">
+      <tbody><tr>
+        <td id="banniere">
+          <a href="http://www.atoutfox.org/index.asp"><img src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/logoatoutfox3D.jpg" style="float:left" alt="" border="0"></a><br>
+          <font style="color:#828388;font:bold 33pt impact;">ATOUT</font><font style="color:#C97829;font:bold 33pt impact">FOX</font><br>
+          <font style="color:#828388;font: bold 10pt arial; letter-spacing:-1;">COMMUNAUTÉ FRANCOPHONE DES PROFESSIONNELS FOXPRO</font><br>
+          <font style="color:#828388;font: 10pt arial; "><i>Visual FoxPro : le développement durable</i></font>
+        </td>
+      </tr>
+
+      <tr valign="middle">
+        <td id="menu" nowrap="nowrap">
+          <table cellpadding="0" cellspacing="0">
+            <tbody><tr valign="middle">
+              <td nowrap="nowrap"><a href="http://www.atoutfox.org/index.asp">Atoutfox</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/actualite.asp">Evénements</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/membres.asp">Membres</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/nntp.asp">Forum</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/articles.asp">Contributions</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/applis.asp">Applications</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/offres.asp">Offres &amp; Demandes</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/telecharger.asp">Télécharger</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/references.asp">Références</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/url.asp">Liens</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/rss.asp">RSS</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/news.asp">News</a></td><td nowrap="nowrap"><a href="http://www.atoutfox.org/login.asp">Identification</a></td>
+            </tr>
+          </tbody></table>
+        </td>
+      </tr>
+
+<tr><td id="pubms"><script type="text/javascript">
+sas_pageid='38728/268603';	// Page : AtoutFox/home
+sas_formatid=16773;		// Format : Bannière - 728x90 728x90
+sas_target='';			// Ciblage
+SmartAdServer(sas_pageid,sas_formatid,sas_target);
+</script><script src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/a.js"></script><a target="_blank" href="http://www6.smartadserver.com/diff/779/1962441/go1.asp?1962441%3B268603%3B4018816761817253384%3B8539646882%3BV%3Bsystemtarget=%24qc%3d1313073774%3b%24ql%3dmedium%3b%24qpc%3d01001-000%3b%24qpp%3d0%3b%24qt%3d7_1993_11382t%3b%24b%3d12200%3b%24o%3d11061%3b%24sh%3d768%3b%24sw%3d1600%3B7102245%3Bclickvars="><img id="img7102245" src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/728x90-2761-BanniereAnimee_windows_msstore.jpg" alt="" border="0" height="90" width="728"></a>
+<noscript>
+<a href="http://www6.smartadserver.com/call/pubjumpi/38728/268603/16773/M/[timestamp]/?" target="_blank">
+<img src="http://www6.smartadserver.com/call/pubi/38728/268603/16773/M/[timestamp]/?" border="0" alt="" /></a>
+</noscript></td></tr>
+
+      <tr>
+        <td id="titre">
+          <h1 style="cursor:pointer" onclick="window.location = 'articles.asp'">Utiliser PDFCreator silencieusement (sans nommer le fichier PDF)
+          &nbsp;&nbsp;<img src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/fleche.gif" alt=""></h1>
+        </td>
+      </tr>
+  
+      
+  
+      <tr>
+        <td id="page">
+          <table cellpacing="0" cellpadding="0" width="100%">
+            <tbody><tr valign="top">
+              <td style="text-align:center;" width="100%">
+  
+<table class="articles" cellpadding="6">
+  <tbody><tr valign="top">
+    <td rowspan="14" class="cadre_nav2" style="text-align:center;" width="300">
+      <ul class="menu">
+        
+        <li><a href="http://www.atoutfox.org/articles.asp?"><img src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/back.gif"> Retour à la liste</a></li>
+      </ul>
+      <br><br>
+      <b>L'auteur</b><br>
+      <br> <b>Mike Gagnon</b><br><font style="font-size:7pt;"><img src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/CA.gif" class="drapeau" alt="Canada"> Canada<br>Membre Honneur<br># 0000000025<br>enregistré le 14/10/2004<br><script language="JavaScript">MailTo("mikegagnon*mcrgsoftware.com");</script><a href="mailto:mikegagnon@mcrgsoftware.com">mikegagnon@mcrgsoftware.com</a><br><a target="_blank" href="http://www.mcrgsoftware.com/">http://www.mcrgsoftware.com</a><br>Gagnon Mike<br>Pte Claire Quebec - Canada<br>de la société MCRG Software<br><a href="http://www.atoutfox.org/fiche_user.asp?USER=0000000025"> <img src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/fiche.gif" alt=""> Fiche personnelle</a><br></font>
+
+      <br><br>
+      <img src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/notes.gif"> <b>Note des membres</b><br>
+      <font size="+1"><b><font size="-4">pas de note</font></b></font><br><br>
+      
+    </td>
+    <td style="width:100%;">
+      <h1>Contributions &gt; 03 - FRX : Etat, impression, Report</h1>
+      <font size="+2"><b>Utiliser PDFCreator silencieusement (sans nommer le fichier PDF)</b></font><br>
+      <font style="font-size:8pt;">
+        # 0000000729
+        <br>
+        ajouté le <b>09/12/2009 17:24:14</b> et modifié le <b>09/12/2009</b><br>
+        consulté <b>2848</b> fois<br>
+        <img src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/etoile.gif"><img src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/etoile.gif">
+        Niveau
+        initié<br><br>Version(s) Foxpro : <br><input name="checkboxes" value="" type="hidden"><input id="" name="" value="9.0" checked="checked" disabled="disabled" type="checkbox"> VFP 9.0<br><input name="checkboxes" value="" type="hidden"><input id="" name="" value="8.0" checked="checked" disabled="disabled" type="checkbox"> VFP 8.0<br><input name="checkboxes" value="" type="hidden"><input id="" name="" value="7.0" checked="checked" disabled="disabled" type="checkbox"> VFP 7.0<br>
+      </font>
+      <br>
+      
+    </td>
+  </tr>
+  
+    <tr><th>Description</th></tr>
+    <tr><td>Voici un bout de code pour utiliser PDFCreator sans avoir 
+besoin de nommer le fichier PDF. Le code aussi detruit PDFCreator à 
+chaque utilisation sinon cela peut causer un problème.</td></tr>
+  
+    <tr><th>Code source :</th></tr>
+    <tr><td>
+      <code class="vfp"><b>Close</b>&nbsp;<b>Databases</b>&nbsp;<b>All</b><br>
+#<b>Define</b>&nbsp;TH32CS_SNAPPROCESS&nbsp;&nbsp;2<br>
+#<b>Define</b>&nbsp;TH32CS_SNAPTHREAD&nbsp;&nbsp;&nbsp;4<br>
+#<b>Define</b>&nbsp;TH32CS_SNAPMODULE&nbsp;&nbsp;&nbsp;8<br>
+#<b>Define</b>&nbsp;MAX_PATH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;260<br>
+#<b>Define</b>&nbsp;PE32_SIZE&nbsp;&nbsp;296<br>
+<br>
+<b>Local</b>&nbsp;cPrinterNow,cOldPrinter<br>
+cOldPrinter&nbsp;=&nbsp;<b>Set</b>(<u>"Printer"</u>,2)<br>
+<b>Declare</b>&nbsp;Sleep&nbsp;<b>In</b>&nbsp;Win32API&nbsp;<b>Integer</b>&nbsp;nMilliseconds<br>
+<b>Declare</b>&nbsp;<b>Integer</b>&nbsp;CloseHandle&nbsp;<b>In</b>&nbsp;kernel32&nbsp;<b>Integer</b>&nbsp;hObject<br>
+<b>Declare</b>&nbsp;<b>Integer</b>&nbsp;CreateToolhelp32Snapshot&nbsp;<b>In</b>&nbsp;kernel32;<br>
+&nbsp;&nbsp;<b>INTEGER</b>&nbsp;dwFlags,&nbsp;<b>Integer</b>&nbsp;th32ProcessID<br>
+<b>Declare</b>&nbsp;<b>Integer</b>&nbsp;Process32First&nbsp;<b>In</b>&nbsp;kernel32;<br>
+&nbsp;&nbsp;<b>INTEGER</b>&nbsp;hSnapshot,&nbsp;<b>String</b>&nbsp;@&nbsp;lppe<br>
+<b>Declare</b>&nbsp;<b>Integer</b>&nbsp;Process32Next&nbsp;<b>In</b>&nbsp;kernel32;<br>
+&nbsp;&nbsp;<b>INTEGER</b>&nbsp;hSnapshot,&nbsp;<b>String</b>&nbsp;@&nbsp;lppe<br>
+<br>
+checkExe(<u>"PDFCreator.exe"</u>)<br>
+<b>Cd</b>&nbsp;<b>Home</b>(2)+<u>"\tastrade\data\"</u><br>
+PrinterNow&nbsp;=&nbsp;<u>"pdfcreator"</u><br>
+<b>If</b>&nbsp;<b>Upper</b>(PrinterNow)&nbsp;&lt;&gt;&nbsp;<b>Upper</b>(cOldPrinter)<br>
+&nbsp;&nbsp;resetprinter(PrinterNow)<br>
+<b>Endif</b><br>
+<b>Select</b>&nbsp;*&nbsp;<b>From</b>&nbsp;customer&nbsp;<b>Into</b>&nbsp;<b>Cursor</b>&nbsp;tmpCust<br>
+<b>Create</b>&nbsp;<b>Report</b>&nbsp;customer&nbsp;<b>From</b>&nbsp;tmpCust&nbsp;<b>Fields</b>&nbsp;company_name<br>
+oPDFC&nbsp;&nbsp;=&nbsp;<b>Createobject</b>(<u>"PDFCreator.clsPDFCreator"</u>,<u>"pdfcreator"</u>)<br>
+oPDFC.cStart(<u>"/NoProcessingAtStartup"</u>)<br>
+oPDFC.cOption(<u>"UseAutosave"</u>)&nbsp;=&nbsp;1<br>
+oPDFC.cOption(<u>"UseAutosaveDirectory"</u>)&nbsp;=&nbsp;1<br>
+oPDFC.cOption(<u>"PDFUserPass"</u>)&nbsp;=1<br>
+<b>If</b>&nbsp;!<b>Directory</b>(<u>"c:\temp4\"</u>)<br>
+&nbsp;&nbsp;<b>Md</b>&nbsp;<u>"c:\temp4"</u><br>
+<b>Endif</b><br>
+oPDFC.cOption(<u>"AutosaveDirectory"</u>)=<u>"c:\temp4\"</u><br>
+oPDFC.cOption(<u>"AutosaveFormat"</u>)&nbsp;=&nbsp;0<br>
+DefaultPrinter&nbsp;=&nbsp;oPDFC.cDefaultprinter<br>
+oPDFC.cDefaultprinter&nbsp;=&nbsp;<u>"pdfcreator"</u><br>
+oPDFC.cClearCache<br>
+ReadyState&nbsp;=&nbsp;0<br>
+oPDFC.cprinterstop=<b>.F.</b><br>
+<b>For</b>&nbsp;i&nbsp;=&nbsp;1&nbsp;<b>To</b>&nbsp;4<br>
+&nbsp;&nbsp;oPDFC.cOption(<u>"AutosaveFilename"</u>)&nbsp;=&nbsp;<u>"toto"</u>+<b>Alltrim</b>(<b>Str</b>(i))<br>
+&nbsp;&nbsp;<b>Report</b>&nbsp;<b>Form</b>&nbsp;customer&nbsp;<b>To</b>&nbsp;<b>Printer</b>&nbsp;<b>Noconsole</b><br>
+&nbsp;&nbsp;nSleepSeconds&nbsp;=&nbsp;5<br>
+&nbsp;&nbsp;nMilliseconds&nbsp;=&nbsp;nSleepSeconds&nbsp;*&nbsp;1000<br>
+&nbsp;&nbsp;=Sleep(nMilliseconds)<br>
+<b>Endfor</b><br>
+oPDFC.cDefaultprinter&nbsp;=&nbsp;cOldPrinter<br>
+oPDFC.cClearCache<br>
+<b>Release</b>&nbsp;oPDFC<br>
+resetprinter(cOldPrinter)<br>
+<b>Procedure</b>&nbsp;&nbsp;saveProcessData&nbsp;(lcBuffer)<br>
+<b>Local</b>&nbsp;m.execname<br>
+m.execname&nbsp;=&nbsp;<b>Substr</b>(lcBuffer,&nbsp;37)<br>
+m.execname&nbsp;=&nbsp;<b>Substr</b>(m.execname,&nbsp;1,&nbsp;<b>At</b>(<b>Chr</b>(0),m.execname)-1)<br>
+m.processid&nbsp;=&nbsp;buf2dword&nbsp;(<b>Substr</b>(lcBuffer,&nbsp;9,4))<br>
+<b>Insert</b>&nbsp;<b>Into</b>&nbsp;csResult&nbsp;<b>From</b>&nbsp;<b>Memvar</b><br>
+<b>Return</b><br>
+<br>
+<b>Procedure</b>&nbsp;resetprinter(tcPrinter)<br>
+<b>Local</b>&nbsp;oWsh<br>
+oWsh&nbsp;=&nbsp;<b>Createobject</b>(<u>'WScript.Network'</u>)<br>
+oWsh.SetDefaultPrinter(tcPrinter)<br>
+<b>Endproc</b><br>
+<br>
+<b>Function</b>&nbsp;&nbsp;buf2dword&nbsp;(lcBuffer)<br>
+<b>Return</b>&nbsp;<b>Asc</b>(<b>Substr</b>(lcBuffer,&nbsp;1,1))&nbsp;+&nbsp;;<br>
+&nbsp;&nbsp;<b>Asc</b>(<b>Substr</b>(lcBuffer,&nbsp;2,1))&nbsp;*&nbsp;256&nbsp;+;<br>
+&nbsp;&nbsp;<b>Asc</b>(<b>Substr</b>(lcBuffer,&nbsp;3,1))&nbsp;*&nbsp;65536&nbsp;+;<br>
+&nbsp;&nbsp;<b>Asc</b>(<b>Substr</b>(lcBuffer,&nbsp;4,1))&nbsp;*&nbsp;16777216<br>
+<br>
+<b>Function</b>&nbsp;&nbsp;num2dword&nbsp;(lnValue)<br>
+#<b>Define</b>&nbsp;m0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;256<br>
+#<b>Define</b>&nbsp;m1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;65536<br>
+#<b>Define</b>&nbsp;m2&nbsp;&nbsp;16777216<br>
+<b>Local</b>&nbsp;b0,&nbsp;b1,&nbsp;b2,&nbsp;b3<br>
+b3&nbsp;=&nbsp;<b>Int</b>(lnValue/m2)<br>
+b2&nbsp;=&nbsp;<b>Int</b>((lnValue&nbsp;-&nbsp;b3*m2)/m1)<br>
+b1&nbsp;=&nbsp;<b>Int</b>((lnValue&nbsp;-&nbsp;b3*m2&nbsp;-&nbsp;b2*m1)/m0)<br>
+b0&nbsp;=&nbsp;<b>Mod</b>(lnValue,&nbsp;m0)<br>
+<b>Return</b>&nbsp;<b>Chr</b>(b0)+<b>Chr</b>(b1)+<b>Chr</b>(b2)+<b>Chr</b>(b3)<br>
+<br>
+<br>
+<b>Function</b>&nbsp;checkExe(tcExe)<br>
+<b>Create</b>&nbsp;<b>Cursor</b>&nbsp;csResult&nbsp;(;<br>
+&nbsp;&nbsp;execname&nbsp;&nbsp;&nbsp;&nbsp;C(250),;<br>
+&nbsp;&nbsp;processid&nbsp;&nbsp;&nbsp;N(16))<br>
+<b>Local</b>&nbsp;hSnapshot,&nbsp;lcBuffer<br>
+<br>
+hSnapshot&nbsp;=&nbsp;CreateToolhelp32Snapshot&nbsp;(TH32CS_SNAPPROCESS,&nbsp;0)<br>
+lcBuffer&nbsp;=&nbsp;num2dword(PE32_SIZE)&nbsp;+&nbsp;Repli(<b>Chr</b>(0),&nbsp;PE32_SIZE-4)<br>
+<br>
+<b>If</b>&nbsp;Process32First&nbsp;(hSnapshot,&nbsp;@lcBuffer)&nbsp;=&nbsp;1<br>
+&nbsp;&nbsp;=&nbsp;saveProcessData&nbsp;(lcBuffer)<br>
+<br>
+&nbsp;&nbsp;<b>Do</b>&nbsp;<b>While</b>&nbsp;<b>.T.</b><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>If</b>&nbsp;Process32Next&nbsp;(hSnapshot,&nbsp;@lcBuffer)&nbsp;=&nbsp;1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;saveProcessData&nbsp;(lcBuffer)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Else</b><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Exit</b><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Endif</b><br>
+&nbsp;&nbsp;<b>Enddo</b><br>
+<b>Else</b><br>
+<b>Endif</b><br>
+<br>
+=&nbsp;CloseHandle&nbsp;(hSnapshot)<br>
+<b>Select</b>&nbsp;csResult<br>
+Locate&nbsp;<b>For</b>&nbsp;<b>Upper</b>(execname)&nbsp;=&nbsp;<b>Upper</b>(tcExe)<br>
+<b>If</b>&nbsp;<b>Found</b>()<br>
+&nbsp;&nbsp;Killprocess(csResult.ProcessID)<br>
+<b>Endif</b><br>
+<br>
+<b>Procedure</b>&nbsp;Killprocess<br>
+<b>Lparameters</b>&nbsp;tnProcessID<br>
+<b>Local</b>&nbsp;lnHandle<br>
+<b>Declare</b>&nbsp;<b>Integer</b>&nbsp;OpenProcess&nbsp;<b>In</b>&nbsp;Win32API&nbsp;;<br>
+&nbsp;&nbsp;<b>integer</b>&nbsp;dwDesiredAccess,&nbsp;<b>Integer</b>&nbsp;bInheritHandle,&nbsp;<b>Integer</b>&nbsp;dwProcessID<br>
+<b>Declare</b>&nbsp;<b>Integer</b>&nbsp;TerminateProcess&nbsp;<b>In</b>&nbsp;Win32API&nbsp;;<br>
+&nbsp;&nbsp;<b>integer</b>&nbsp;hProcess,&nbsp;<b>Integer</b>&nbsp;uExitCode<br>
+lnHandle&nbsp;=&nbsp;OpenProcess(1,&nbsp;1,&nbsp;tnProcessID)<br>
+llReturn&nbsp;=&nbsp;TerminateProcess(lnHandle,&nbsp;0)&nbsp;&gt;&nbsp;0<br>
+<b>Endproc</b><br>
+<br>
+</code>
+    </td></tr>
+  
+  <tr><th>Commentaires</th></tr>
+  <tr><td>
+    Aucun commentaire enregistré ...<br>
+  </td></tr>
+
+  
+</tbody></table>
+
+                <hr class="clear">
+              </td>
+              
+
+			  </tr>
+          </tbody></table>
+        </td>
+      </tr>
+      <tr>
+        <td id="piedPage" nowrap="nowrap">
+          www.atoutfox.org - Site de la Communauté Francophone des Professionnels FoxPro - v3.4.0 - © 2004-2013.
+        </td>
+      </tr>
+    </tbody></table>
+    <div style="font-size:8pt;" align="center">Cette page est générée par un composant COM+ développé en Visual FoxPro 9.0</div>
+    
+    <!-- Xiti -->
+    <script type="text/javascript">
+    xtnv = document;
+    xtsd = "http://logc15";
+    xtsite = "200222";
+    xtn2 = "";
+    var xtnompage = "Utiliser PDFCreator silencieusement (sans nommer le fichier PDF)";
+    xtnompage = xtnompage.toLowerCase();
+    xtnompage = xtnompage.replace(/[éêèë]/g,"e");
+    xtnompage = xtnompage.replace(/[îï]/g,"i");
+    xtnompage = xtnompage.replace(/[àâ]/g,"a");
+    xtnompage = xtnompage.replace(/[ùüû]/g,"u");
+    xtnompage = xtnompage.replace(/[^a-z]/g, "_")
+    xtpage = xtnompage;
+    xtdmc = "";
+    xtprm = "";
+    </script>
+    <script type="text/javascript" src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/xtexpert.js"></script><img src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/hit.gif" height="1" width="1">
+    <noscript>
+      <img width="1" alt="" height="1" src="http://logc15.xiti.com/hit.xiti?s=200222&p=&" />
+    </noscript>
+    
+    <!-- Google Analytics -->
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script><script src="FoxPro%20%20%20Utiliser%20PDFCreator%20silencieusement%20%28sans%20nommer%20le%20fichier%20PDF%29%20-%20AtoutFox%20-%20KILL%20PROCESS_arquivos/ga.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-3268248-6");
+        pageTracker._trackPageview();
+      } catch (err) { }
+    </script>
+    
+  
+
+  </body></html>

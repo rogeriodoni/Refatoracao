@@ -1,0 +1,248 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 6,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fGerUniqueKey", "fwBuscaInt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFNL",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_ordem.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigFiNal','ordems',ThisForm.Pagina.Dados.Get_ordem.Value)\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_ordem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNL",
+      "evento": "Init",
+      "linhas": 33,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nlcQryFinal = [Select a.*, b.Descrs As Descs from SigFiNal a ] + ;\n             [Left Join SigFiRlg b on a.nRelGers = b.Ordems And a.Imps = b.Imps]\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigFiNal','cidchaves','crSigFiNal','',ThisForm.pagina.lista.grade, lcQryFinal)\n\t\t.pfSqlTabela(1).pColuna('Imps','','','Impressora',160,.t.)\n\t\t.pfSqlTabela(1).pColuna('ordems','','','Ordem',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('descrs','','','Des... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmb_Imp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNL",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "lparameters opcao\n\nselect CrSigFiNal\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\nIf thisform.pcEscolha = 'INSERIR'\n\tReplace CrSigFiNal.Cidchaves With fUniqueIds() in CrSigFiNal\n\tlncod = fGerUniqueKey('SigFiNal')\n\tThisform.Pagina.Dados.get_finalz.value = lncod\nEndif\nDo Case\n\tCase Inlist( thisform.pcEscolha,'INSERIR','PROCURAR')\n\t\tThisForm.Pagina.Dados.Cmb_Imp.SetFocus\n\tCase Inlist( thisform.pcEscolha,'ALTERAR')\n\t\tThisForm.Pagina.Dados.Get_ordem.SetFocus\n\tCase Inlist( thisform.pcE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds,fGerUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_finalz,Cmb_Imp,Get_ordem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNL",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "With ThisForm.Pagina.Dados\n\tif Inlist( thisform.pcEscolha, 'INSERIR')\n\t\tlcSql = [Select * From SigFiNal Where Imps = ']+CrSigFiNal.Imps+[' And Ordems = ]+Str(.Get_ordem.Value)\n\t\tIf ThisForm.Podatamgr.SqlExecute(lcSql,'CrTmpFinal') > 0 And Reccount('CrTmpFinal') > 0\n\t\t\tmessagebox('Ordem já cadastrada ! ',0+48,'')\n\t\t\t.get_ordem.setfocus\n\t\t\tReturn\n\t\tEndif\n\tEndIf\n\tif Inlist( thisform.pcEscolha, 'INSERIR')\n\t\tlcSql = [Select * From SigFiNal Where Imps = ']+CrSigFiNal.Imps+[' And ncodfinzs = ]+Str(.Get... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_ordem,Get_Finalz",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNL",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "Local lncod\n\nlncod = Thisform.pagina.dados.get_finalz.value\n\nDoDefault()\n\nif thisform.plCancelar\n\tIf thisform.pcEscolha = 'INSERIR'\n\t\tfCanUniqueKey(lncod,'SIGFINAL')\n\tEndif\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_finalz",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNL.Pagina.Dados.Get_ordem",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( Inlist( thisform.pcEscolha,'ALTERAR','INSERIR','PROCURAR') )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNL.Pagina.Dados.Get_finalz",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( Inlist( thisform.pcEscolha,'ALTERAR','INSERIR','PROCURAR') )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNL.Pagina.Dados.Get_Vincs",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If !InList(This.Value,'S','N')\n\tReturn .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFNL.Pagina.Dados.GetCodRelGer",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( Inlist( thisform.pcEscolha,'ALTERAR','INSERIR') )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNL.Pagina.Dados.GetCodRelGer",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\n\tThisForm.poDatamgr.SqlExecute([Select * From SigFiRlg Where Imps = '] + Alltrim(This.Parent.Cmb_Imp.Value) + ['], [csTmpRelg])\n\n\tSELECT csTmpRelg\n\tLOCATE FOR Ordems = This.Value\n\n\tIf EOF()\n\t\txBrox = CreateObject('fwBuscaInt','csTmpRelg','Ordems',This.Value,'Rel. Gerencial',.t.)\n\t\txBrox.mAddColuna('Ordems', '', 'Código', .t.)\n\t\txBrox.mAddColuna('Descrs', '', 'Descrição', .t.)\n\t\txBrox.Show()\n\tEndIf \n\n\tThis.Parent.GetCodRelGer.Value = Iif( LastKey() # 27, Ev... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Cmb_Imp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNL.Pagina.Dados.GetDesRelGer",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Inlist( thisform.pcEscolha,'ALTERAR','INSERIR') And Empty(This.Parent.GetCodRelGer.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNL.Pagina.Dados.GetDesRelGer",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\n\tThisForm.poDatamgr.SqlExecute([Select * From SigFiRlg Where Imps = '] + Alltrim(This.Parent.Cmb_Imp.Value) + ['], [csTmpRelg])\n\n\tSELECT csTmpRelg\n\tLOCATE FOR Descrs = This.Value\n\n\tIf EOF()\n\t\txBrox = CreateObject('fwBuscaInt','csTmpRelg','Descrs',This.Value,'Rel. Gerencial',.t.)\n\t\txBrox.mAddColuna('Descrs', '', 'Descrição', .t.)\n\t\txBrox.mAddColuna('Ordems', '', 'Código', .t.)\n\t\txBrox.Show()\n\tEndIf \n\n\tThis.Parent.GetCodRelGer.Value = Iif( LastKey() # 27, Ev... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Cmb_Imp",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFNL.Init",
+      "queryOriginal": "lcQryFinal = [Select a.*, b.Descrs As Descs from SigFiNal a ] + ; [Left Join SigFiRlg b on a.nRelGers = b.Ordems And a.Imps = b.Imps]",
+      "tabelas": "SigFiNal,SigFiRlg",
+      "colunas": "Descrs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFNL.Click",
+      "queryOriginal": "\t\tlcSql = [Select * From SigFiNal Where Imps = ']+CrSigFiNal.Imps+[' And Ordems = ]+Str(.Get_ordem.Value) \t\tIf ThisForm.Podatamgr.SqlExecute(lcSql,'CrTmpFinal') > 0 And Reccount('CrTmpFinal') > 0",
+      "tabelas": "SigFiNal",
+      "colunas": "Imps,Imps+[,Ordems,Value,SqlExecutelcSql,CrTmpFinal,ReccountCrTmpFinal",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFNL.Click",
+      "queryOriginal": "\t\tlcSql = [Select * From SigFiNal Where Imps = ']+CrSigFiNal.Imps+[' And ncodfinzs = ]+Str(.Get... [TRUNCADO]",
+      "tabelas": "SigFiNal",
+      "colunas": "Imps,Imps+[,ncodfinzs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFNL.Pagina.Dados.GetCodRelGer.Valid",
+      "queryOriginal": "\tThisForm.poDatamgr.SqlExecute([Select * From SigFiRlg Where Imps = '] + Alltrim(This.Parent.Cmb_Imp.Value) + ['], [csTmpRelg])",
+      "tabelas": "SigFiRlg",
+      "colunas": "Imps,Value",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFNL.Pagina.Dados.GetDesRelGer.Valid",
+      "queryOriginal": "\tThisForm.poDatamgr.SqlExecute([Select * From SigFiRlg Where Imps = '] + Alltrim(This.Parent.Cmb_Imp.Value) + ['], [csTmpRelg])",
+      "tabelas": "SigFiRlg",
+      "colunas": "Imps,Value",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigFiNal", "SigFiRlg"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

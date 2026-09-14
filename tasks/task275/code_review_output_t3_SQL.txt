@@ -1,0 +1,9 @@
+﻿Nenhuma refer├¬ncia restante ao nome errado. O fix est├í completo.
+
+---
+
+**Resumo do pass SQL:**
+
+**16 problemas GRID-SQL reportados = falsos positivos.** Todos os campos (emps, dopes, numes, grupos, empdopnums em `cursor_4c_CabOpera`; nMarca, emps, grupos, contas em `cursor_4c_Estoques`; cpros, dpros, codcors, codtams, QtdEstoque, QtdSaida, QtdSaldo em `cursor_4c_Disponivel`) existem nos placeholders CREATE CURSOR da linha 72ÔÇô77 do form. O linter n├úo localizou o SELECT correspondente porque ele est├í no BO, n├úo no form.
+
+**Bug real corrigido (n├úo estava na lista):** `BuscarItensOperacao` em `sigprdisBO.prg` criava `cursor_4c_ItnOpera` mas o form verificava e usava `cursor_4c_ItensOper` ÔÇö o grid de itens de opera├º├úo ficava sempre vazio. Renomeado para `cursor_4c_ItensOper` (4 ocorr├¬ncias), alinhando com o placeholder do form (linha 77) e o Destroy (linha 45).

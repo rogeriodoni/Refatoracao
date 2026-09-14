@@ -1,0 +1,14 @@
+﻿Analisando o form completo, identifiquei que Phase 6 j├í estava praticamente conclu├¡da nas fases anteriores (o form tem 1448 linhas com todos os componentes). A ├║nica discrep├óncia de fidelidade visual encontrada foi o `BackStyle` de `cnt_4c_Resultado`.
+
+**Resumo da Fase 6:**
+
+O form `FormSigPrFem.prg` j├í continha toda a estrutura necess├íria de fases anteriores:
+- `ConfigurarPaginaLista()`: campos de entrada (DataI, DataF, Demonstrativo) e 4 bot├Áes
+- `ConfigurarPaginaDados()`: 6 containers de resultado (5 grades + Resumo com 10 totalizadores)  
+- Lookup completo para `txt_4c_Demonstrativo` (F4/DblClick ÔåÆ `AbrirLookupDemonstrativo`, Enter/Tab ÔåÆ `ValidarDemonstrativo`)
+- Todos os handlers de evento (Processar, Visualizar, Imprimir, Encerrar)
+- `AtualizarGrades()`, `AtualizarTotalizadores()`, `TornarControlesVisiveis()`, `Destroy()`
+
+**├Ünica corre├º├úo aplicada:** `cnt_4c_Resultado.BackStyle = 0` (transparente, conforme original) em vez de `BackStyle = 1` com `BackColor=RGB(240,240,240)` ÔÇö o original SIGPRFEM.Resultado tem `BackStyle = 0`.
+
+Nenhum campo estava faltando, nenhum lookup estava incompleto. Para um form OPERACIONAL, os conceitos de "Page2", "cnt_4c_BotoesAcao (Salvar/Cancelar)" n├úo se aplicam. A integra├º├úo (config.prg e menu.prg) fica para as fases 7 e 8.

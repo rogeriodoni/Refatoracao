@@ -1,0 +1,34 @@
+﻿Fase 6 conclu├¡da. Aqui est├í o resumo do que foi implementado:
+
+## Fase 6/8 - Conclu├¡da
+
+**Arquivo**: `C:\4c\projeto\app\forms\cadastros\FormProduto.prg` (3471 ÔåÆ 4578 linhas)
+
+### O que foi adicionado:
+
+**1. BINDEVENTs em `ConfigurarEventos()`** ÔÇö 28 novos bindings para 14 campos de lookup na pgf_4c_DadosInterno.Page1:
+- KeyPress (F4=115) + DblClick em cada campo
+- Bot├úo `cmd_4c_BtnFornecedor` ÔåÆ Click
+
+**2. `AbrirLookupGrupo()`** ÔÇö substitu├¡da a vers├úo stub. Abre `SigCdGrp` (CGrus/DGrus) para o filtro da Page1.
+
+**3. 14 grupos de m├®todos de lookup completos** (nenhum TODO/stub):
+
+| Campo | Tabela | Colunas |
+|-------|--------|---------|
+| `txt_4c_CProEq` | SigCdPro | CPros / DPros |
+| `txt_4c_Cgru` | SigCdGrp | CGrus / DGrus |
+| `txt_4c_CSGru` | SigCdPsg | Codigos / Descricaos |
+| `txt_4c_Lin` | SigCdLin | Linhas / Descs |
+| `txt_4c_Col` | SigCdCol | Colecoes / Descs |
+| `txt_4c_Ifor` | SigCdCli | IClis / RClis |
+| `txt_4c_CorPro` | SigCdCor | Cods / Descs |
+| `txt_4c_Tam` | SigCdTam | Cods / Descs |
+| `txt_4c_CodFinP` | SigCdFip | Cods / Descs |
+| `txt_4c_CodAcb` | SigCdAca | Cods / Descrs |
+| `txt_4c_Class` | SigCdCls | Cods / Descs (filtrado por CGrus) |
+| `txt_4c_Local` | SigPrLcl | Codigos / Descricaos |
+| `txt_4c_Cuni` | SigCdUni | CUnis / DUnis |
+| `txt_4c_Cunip` | SigCdUni | CUnis / DUnis |
+
+Cada lookup tem: KeyPress handler + DblClick handler + `AbrirLookupXxx()` completo + `ValidarXxxDados()` (para ENTER/TAB com valida├º├úo ao sair).

@@ -1,0 +1,3 @@
+﻿**Bug:** `THIS.Parent.Caption` nas linhas 120 e 137 de `ConfigurarCabecalho()` ÔÇö em modo teste o form n├úo est├í anexado a um parent VFP v├ílido (`ShowWindow = 1` + CREATEOBJECT sem Show()), ent├úo `THIS.Parent` n├úo ├® um objeto.
+
+**Fix:** substitu├¡do por `THIS.Caption`, que referencia o caption do pr├│prio form (`"Rec├ílculo de Pre├ºos"`). O form j├í tem `Caption = "Rec" + CHR(225) + "lculo de Pre" + CHR(231) + "os"` definido nas propriedades da classe.

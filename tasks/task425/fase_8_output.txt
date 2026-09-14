@@ -1,0 +1,13 @@
+﻿Tudo correto. Fase 8 est├í conclu├¡da.
+
+**Resumo do que foi feito:**
+
+- **`AjustarBotoesPorModo()`** ÔÇö adicionado em FormFpg.prg (linha 1024): habilita/desabilita Visualizar/Alterar/Excluir conforme sele├º├úo na lista, desabilita Confirmar em modo VISUALIZAR, e posiciona o foco no controle correto conforme o modo (cd_grupo em INCLUIR, ds_grupo em ALTERAR, Cancelar em VISUALIZAR).
+
+- **`BtnSalvarClick()`** ÔÇö aprimorado com valida├º├úo pr├®-TRY: verifica se o campo Grupo est├í vazio em modo INCLUIR antes de tentar salvar (replicando a l├│gica do legado "Grupo n├úo pode ficar em branco!").
+
+- **Chamadas integradas** a `AjustarBotoesPorModo()` em `CarregarLista()`, `BtnIncluirClick()`, `BtnVisualizarClick()` e `BtnAlterarClick()`.
+
+- **menu.prg** ÔÇö adicionado `DEFINE BAR 96 OF popCadastros "Grupos de Pagamento"`, `ON SELECTION BAR 96 DO AbrirFormFpg`, e o procedimento `AbrirFormFpg()` com o padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release()).
+
+- **config.prg** ÔÇö nenhuma altera├º├úo necess├íria: o carregamento din├ómico via `ADIR(*BO.prg)` e `ADIR(cadastros\Form*.prg)` j├í inclui automaticamente FpgBO.prg e FormFpg.prg.

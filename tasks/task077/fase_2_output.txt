@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. Fase 2 conclu├¡da com sucesso.
+
+**O que foi adicionado ao `SigReDdpBO.prg` (576 linhas):**
+
+- **`Init()`** ÔÇö bug corrigido: `CHR(231) + CHR(227)` ÔåÆ `CHR(231)` (era "Balan├º├úo", agora "Balan├ºo")
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro` para o form exibir ao usu├írio
+- **`Visualizar()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... PREVIEW NOCONSOLE`
+- **`Imprimir()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... TO PRINT PROMPT NOCONSOLE`
+- **`PrepararDados()`** (PROTECTED, ~350 linhas) ÔÇö replica fielmente o `processamento` original:
+  1. Carrega `Ouros` de SigCdPam
+  2. Carrega SigCdCli indexado por IClis para lookup reverso
+  3. Monta cabe├ºalho com empresa + t├¡tulo + per├¡odo
+  4. Cria `cursor_4c_Cabecalho` e `cursor_4c_Result`
+  5. Apura saldo inicial via SigCdFcx ÔåÆ SigOpCfe (CPros = Ouros)
+  6. Processa SigCdDpr: T (subtotal/total), E/S (entradas/sa├¡das via SigCdFes), P (pesagens via SigOpCfe), H (hist├│rico via SigMvEst + SigMvHst com SCAN aninhado id├¬ntico ao original)
+  7. CATCH limpa todos os 11 cursores intermedi├írios em caso de erro

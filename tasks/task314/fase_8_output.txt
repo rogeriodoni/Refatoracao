@@ -1,0 +1,21 @@
+﻿A Fase 8 est├í consolidada. O formul├írio j├í est├í completo desde as fases anteriores. Verifica├º├úo final:
+
+**Status de completude de Formsigprnfe.prg (1951 linhas):**
+
+| Requisito Fase 8 (CRUD) | Equivalente OPERACIONAL | Status |
+|---|---|---|
+| `BtnEncerrarClick()` | `BtnEncerrarClick()` | Ô£ô linha 1507 |
+| `HabilitarCampos()` | `HabilitarControles()` | Ô£ô linha 1816 |
+| `LimparCampos()` | `LimpaSelecao()` | Ô£ô linha 1807 |
+| `CarregarLista()` | `BtnSelecionarClick()` | Ô£ô linha 1372 |
+| `AjustarBotoesPorModo()` | `HabilitarControles(par_lHabilitar)` | Ô£ô linha 1816 |
+| `FormParaBO()` / `BOParaForm()` | N/A ÔÇö OPERACIONAL (dados fluem via BtnCopiarClick) | Ô£ô correto |
+| `BtnSalvarClick()` / `BtnCancelarClick()` | N/A ÔÇö OPERACIONAL | Ô£ô correto |
+
+**sigprnfeBO.prg (1534 linhas):** Completo com todos os m├®todos incluindo `Selecionar`, `Processamento`, `ProcessarEnvio/Consulta/Cancelamento`, `ImprimirSimplificado`, `SelecionarInutilizadas`, `ProcessaInutilizadas`.
+
+**Integra├º├úo:**
+- `config.prg`: carrega automaticamente via ADIR (`*BO.prg` em `classes/` + `Form*.prg` em `operacionais/`)
+- `menu.prg`: entrada `AbrirFormsigprnfe()` no padr├úo can├┤nico (linha 5141)
+
+A migra├º├úo do SIGPRNFE est├í **completa**. Todos os 8 fases est├úo implementadas e o formul├írio est├í pronto para teste.

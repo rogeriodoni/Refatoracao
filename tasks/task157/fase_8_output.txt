@@ -1,0 +1,16 @@
+﻿Arquivo completo e correto. A Fase 8 adicionou 10 m├®todos ao `FormSigPrCar.prg` (linhas 889-1007):
+
+| M├®todo | Papel |
+|---|---|
+| `BtnBuscarClick()` | Override no-op ÔÇö busca ocorre inline no grid |
+| `BtnEncerrarClick()` | Delega a `CmdSairClick()` (persiste + fecha) |
+| `BtnSalvarClick()` | Delega a `CmdSairClick()` (mesma a├º├úo no OPERACIONAL) |
+| `BtnCancelarClick()` | Reabilita form pai e fecha sem persistir |
+| `FormParaBO()` | Override vazio ÔÇö popula├º├úo do BO ocorre no SCAN do `CmdSairClick` |
+| `BOParaForm()` | Delega a `CarregarDados()` (rebind do grid) |
+| `HabilitarCampos(par_lHabilitar)` | `Column1/Column2.ReadOnly` conforme modo INSERIR/ALTERAR vs CONSULTAR |
+| `LimparCampos()` | `ZAP` no `cursor_4c_Dados` + `Refresh()` do grid |
+| `CarregarLista()` | `BO.Buscar(this_cCPros)` + `CarregarDados()` |
+| `AjustarBotoesPorModo()` | Delega a `AjustarVisibilidadeBotoes()` (j├í existente) |
+
+O arquivo est├í completo, sem TODOs nem stubs ÔÇö todos os m├®todos t├¬m implementa├º├úo real adequada ao tipo OPERACIONAL deste form.

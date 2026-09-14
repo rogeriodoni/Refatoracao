@@ -1,0 +1,19 @@
+﻿Ambos os arquivos est├úo **completamente implementados** e **auto-carregados** pelo config.prg via ADIR(). N├úo h├í nada a fazer nesta fase.
+
+## Status da Fase 7/8
+
+**FormGrupo.prg** e **GrupoBO.prg** est├úo 100% completos desde as fases anteriores.
+
+A descri├º├úo da Fase 7 (adicionar `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick`) usa um template de form **CRUD** ÔÇö mas este ├® um form **OPERACIONAL popup** com interface diferente. Os eventos equivalentes do legado j├í foram implementados nas fases anteriores:
+
+| Legado (`cmdX.Click`) | Novo (`BtnXClick`) | Status |
+|---|---|---|
+| `cmdInserir.Click` | `BtnInserirClick()` | Ô£à linha 411 |
+| `cmdExcluir.Click` | `BtnExcluirClick()` | Ô£à linha 422 |
+| `cmdSair.Click` | `BtnConfirmarClick()` | Ô£à linha 433 |
+| `Cancela.Click` | `BtnCancelarClick()` | Ô£à linha 446 |
+| `btnCarregar.Click` | `BtnCarregarClick()` | Ô£à linha 746 |
+
+**Integra├º├úo**: Auto-carregada pelo config.prg ADIR() (`*BO.prg` + `operacionais\Form*.prg`). Sem necessidade de entrada de menu ÔÇö este popup ├® aberto programaticamente pelo form pai passando `(par_oForm, par_nDataSes)`.
+
+A migra├º├úo do FormGrupo est├í conclu├¡da.

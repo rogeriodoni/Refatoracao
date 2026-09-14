@@ -1,0 +1,808 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGRECAD.SCX
+* Data/Hora: 16/05/26 15:06:17
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECAD
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDatai
+  Parent: SIGRECAD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDtlI
+  Parent: SIGRECAD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_vencimento_a
+  Parent: SIGRECAD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECAD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDataf
+  Parent: SIGRECAD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDtlf
+  Parent: SIGRECAD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGRECAD
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGRECAD
+  Class: label
+  BaseClass: label
+
+Objeto: lbl_empresa
+  Parent: SIGRECAD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsEmpresa
+  Parent: SIGRECAD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdEmpresa
+  Parent: SIGRECAD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGRECAD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsGrEstoque
+  Parent: SIGRECAD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdGrEstoque
+  Parent: SIGRECAD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_estoque
+  Parent: SIGRECAD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsEstoque
+  Parent: SIGRECAD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdEstoque
+  Parent: SIGRECAD
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 300
+  Left = 88
+  Width = 703
+  Height = 167
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD
+------------------------------------------------------------
+  DataSession = 1
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório de Contas Auditadas"
+  Name = "SIGRECAD"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 4
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 4
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 4
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.SAIR.Top = 4
+  btnReport.SAIR.Left = 204
+  btnReport.SAIR.Name = "SAIR"
+  btnReport.Left = 525
+  btnReport.Top = 1
+  btnReport.ZOrderSet = 2
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.getDatai
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 255
+  MaxLength = 10
+  TabIndex = 7
+  Top = 189
+  Width = 80
+  ZOrderSet = 3
+  Name = "getDatai"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.GetDtlI
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 255
+  MaxLength = 10
+  TabIndex = 9
+  Top = 216
+  Width = 80
+  ZOrderSet = 3
+  Name = "GetDtlI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.lbl_vencimento_a
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 341
+  Top = 196
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_vencimento_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 341
+  Top = 223
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.getDataf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 354
+  MaxLength = 10
+  TabIndex = 8
+  Top = 189
+  Width = 80
+  ZOrderSet = 6
+  Name = "getDataf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.GetDtlf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 354
+  MaxLength = 10
+  TabIndex = 10
+  Top = 216
+  Width = 80
+  ZOrderSet = 6
+  Name = "GetDtlf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Auditado :"
+  Height = 15
+  Left = 199
+  Top = 194
+  Width = 52
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Lançamento :"
+  Height = 15
+  Left = 184
+  Top = 221
+  Width = 67
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Left = 201
+  Top = 111
+  Width = 50
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.getDsEmpresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 288
+  MaxLength = 40
+  TabIndex = 2
+  Top = 108
+  Width = 290
+  ZOrderSet = 10
+  Name = "getDsEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.getCdEmpresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 0
+  Format = "K"
+  Height = 25
+  Left = 255
+  MaxLength = 3
+  TabIndex = 1
+  Top = 108
+  Width = 31
+  ZOrderSet = 12
+  Name = "getCdEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 213
+  Top = 139
+  Width = 38
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.getDsGrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 337
+  MaxLength = 20
+  TabIndex = 4
+  Top = 135
+  Width = 150
+  ZOrderSet = 14
+  Name = "getDsGrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.getCdGrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 255
+  MaxLength = 10
+  TabIndex = 3
+  Top = 135
+  Width = 80
+  ZOrderSet = 15
+  Name = "getCdGrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta :"
+  Left = 213
+  Top = 167
+  Width = 38
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.getDsEstoque
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 337
+  MaxLength = 50
+  TabIndex = 6
+  Top = 162
+  Width = 297
+  ZOrderSet = 17
+  Name = "getDsEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECAD.getCdEstoque
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 255
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 162
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 18
+  Name = "getCdEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECAD
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReCad To Printer NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReCad To Printer Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		.LockScreen = .t.
+		.getCdEmpresa.Value   = Space(03)
+		.getDsEmpresa.Value   = Space(40)
+		.getCdGrEstoque.Value = Space(10)
+		.getDsGrEstoque.Value = Space(20)
+		.getCdEstoque.Value   = Space(10)
+		.getDsEstoque.Value   = Space(40)
+		.getDatai.Value       = Date()
+		.getDataf.Value       = Date()
+
+		.getDatai.Value = Ctod('')
+		.getDataf.Value = Ctod('')
+		.Getdtlf.Value  = Ctod('')
+		.Getdtli.Value  = Ctod('')
+
+		.getCdEmpresa.SetFocus
+		.Refresh
+		.LockScreen = .f.
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+m.lcEmpresa = _Empr + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+m.ldDatai   = ThisForm.getDatai.Value
+m.ldDataf   = ThisForm.getDataf.Value
+m.ldDtlI    = ThisForm.GetdtlI.Value
+m.ldDtlF    = ThisForm.GetDtlf.Value
+m.lcCemp    = ThisForm.getCdEmpresa.Value
+m.lcDemp    = ThisForm.getDsEmpresa.Value
+m.lcCgrupo  = ThisForm.getCdGrEstoque.Value
+m.lcDgrupo  = ThisForm.getDsGrEstoque.Value
+m.lcCconta  = ThisForm.getCdEstoque.Value
+m.lcDconta  = ThisForm.getDsEstoque.Value
+
+lcNmEmpresa = Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+lcNmTitulo  = 'Relatório de Contas Auditadas '
+lcNmPeriodo = 'Periodo: ' + Dtoc(m.ldDatai) + ' à ' + Dtoc(m.ldDataf)
+lcCbEmpresa = ''
+
+Create Cursor csCabecalho (nm_empresa c(80),nm_titulo c(80),nm_periodo c(80),cb_empresa c(80))
+Insert Into csCabecalho (nm_empresa,nm_titulo,nm_periodo,cb_empresa) ;
+				 Values (lcNmEmpresa,lcNmTitulo,lcNmPeriodo,lcCbEmpresa)
+
+pDtI  = fDtoSQL(m.ldDatai)
+pDtF  = fDtoSQL(m.ldDataf, '23:59:59')
+pDtLI = fDtoSQL(m.ldDtlI)
+pDtLF = fDtoSQL(m.ldDtlF, '23:59:59')
+
+lcQuery = [Select a.Datars as datas,a.DtLancs,a.Nopers,a.tplancs,a.usuars,a.obsaudts,b.Valors,b.Hists,]+;
+		  [b.Grupos,b.contas From SigCqOch a, SigMvCcr b Where ] + ;
+		  Iif(IsEmpty(m.ldDataF),[],[a.Datars BetWeen ?pDtI And ?pDtF And ])+;
+		  Iif(IsEmpty(m.ldDtlf),[],[a.Dtlancs BetWeen ?pDtlI And ?pDtlF And ])+;
+		  [a.Nopers = b.Nopers And ] + ;
+		  [a.TpLancs in ('auditado','desauditado') ]+;
+		  Iif(Empty(lccEmp), [], [And b.Emps = '] + lccEmp + [' ]) + ;
+		  Iif(Empty(lcCgrupo), [], [And b.Grupos = '] + lccGrupo + [' ]) + ;
+		  Iif(Empty(lcCconta), [], [And b.Contas = '] + lccConta + [' ]) + ;
+		  [Order By b.Grupos,b.Contas,a.DtLancs,a.Datars,a.Nopers ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpConta') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpConta)')
+	Return 0
+EndIf
+lcOrder = Iif(IsEmpty(m.ldDataF),[1,2,4,3,5],[1,2,3,4,5])
+Select Grupos, Contas, Ttod(Datas) as Datas, Ttod(DtLancs) as DtLancs, Nopers, tplancs, usuars, ;
+ObsAudts, valors, hists From TmpConta;
+Into Cursor Selecao Order by &lcOrder.
+
+Select Selecao
+Go Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReCad Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4)
+	If (ThisForm.getDatai.Value > ThisForm.getDataf.Value)
+		=Messagebox('Data Final Menor Que a Inicial!!!', 16, '')
+		ThisForm.getDataf.SetFocus
+		Return 0
+	EndIf
+	If (ThisForm.GetDtlI.Value > ThisForm.GetDtlf.Value)
+		=Messagebox('Data Final Menor Que a Inicial!!!', 16, '')
+		ThisForm.Getdtlf.SetFocus
+		Return 0
+	EndIf
+EndIf
+frmrelatorio::btnReport.Click
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECAD.getDatai
+* Classe: textbox (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.getDataf.Value = Iif(This.Value>ThisForm.getDataf.Value, This.Value, ThisForm.getDataf.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECAD.GetDtlI
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.getDataf.Value = Iif(This.Value>ThisForm.getDataf.Value, This.Value, ThisForm.getDataf.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECAD.getDsEmpresa
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.GetCdEmpresa, ThisForm.GetDsEmpresa)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCdEmpresa.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECAD.getCdEmpresa
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.value, ThisForm.GetCdEmpresa, ThisForm.GetDsEmpresa)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECAD.getDsGrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoContab(Usuar, 'D', This.Value, This.Parent.getCdGrEstoque, This.Parent.getDsGrEstoque)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(Thisform.getCdGrEstoque.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECAD.getCdGrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoContab(Usuar, 'C', This.Value, This.Parent.getCdGrEstoque, This.Parent.getDsGrEstoque)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECAD.getDsEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+If Empty(This.Value)
+	llRetorno = .t.
+Else	
+	llRetorno = (fAcessoContas(Usuar, ThisForm.getCdGrEstoque.Value, 'D', This.Value, ThisForm.getCdEstoque, ThisForm.getDsEstoque))
+EndIf
+
+If Not llRetorno
+	=MessageBox('Conta Inválida!!! Acesso Negado!!!', 16, '')
+	ThisForm.getCdEstoque.Value = ''
+	ThisForm.getDsEstoque.Value = ''
+	ThisForm.getCdEstoque.Refresh
+	ThisForm.getDsEstoque.Refresh
+EndIf
+
+Return(llRetorno)
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCdEstoque.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECAD.getCdEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+If Empty(This.Value)
+	llRetorno = .t.
+Else	
+	llRetorno = (fAcessoContas(Usuar, ThisForm.getCdGrEstoque.Value, 'C', This.Value, ThisForm.getCdEstoque, ThisForm.getDsEstoque))
+EndIf
+
+If Not llRetorno
+	=MessageBox('Conta Inválida!!! Acesso Negado!!!', 16, '')
+	ThisForm.getCdEstoque.Value = ''
+	ThisForm.getDsEstoque.Value = ''
+	ThisForm.getCdEstoque.Refresh
+	ThisForm.getDsEstoque.Refresh
+EndIf
+
+Return llRetorno
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECAD
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 19
+================================================================================

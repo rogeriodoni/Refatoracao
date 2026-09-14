@@ -1,0 +1,13 @@
+﻿All edits are correctly applied. Summary of changes made to `FormProduto.prg`:
+
+**1. DEFINE CLASS section (lines 53-69):** Added 16 new guard properties for LostFocus handlers that were missing them.
+
+**2. CARGA-DADOS fix (line 10304):** Added `THIS.CarregarDadosFiscais()` call after the `ENDTRY` in `ValidarAliqIPI`, so the fiscal data grid reloads after IPI aliquot validation ÔÇö matching legacy behavior.
+
+**3. LOSTFOCUS-SEM-GUARDIA fixes (16 handlers):** Added the standard guard pattern to each handler:
+- `TabCompo_MoecLostFocus`, `TabCompo_MoecusfLostFocus`, `TabCompo_MoedaLostFocus`, `TabCompo_MoepvLostFocus`, `TabCompo_MoevLostFocus` ÔÇö moeda validators
+- `TabCompo_FtioLostFocus`, `TabCompo_CmkpcLostFocus` ÔÇö feitio validators
+- `TabCompo_DescLostFocus`, `TabCompo_MatPLostFocus`, `TabCompo_DesccpLostFocus`, `TabCompo_MatsubLostFocus` ÔÇö composi├º├úo product validators
+- `ValidarDclfiscal`, `ValidarDorigmerc`, `ValidarDsittricms`, `ValidarDgruccus`, `ValidarDcontaccus` ÔÇö fiscal description validators
+
+Each guard follows the existing pattern from `ValidarOrigmerc`/`ValidarSittricms`: check `IF loc_cXxx == THIS.this_cUltimo... RETURN ENDIF`, then immediately set `THIS.this_cUltimo... = loc_cXxx` before proceeding to the SQL/lookup.

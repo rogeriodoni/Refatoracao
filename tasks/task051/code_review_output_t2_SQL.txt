@@ -1,0 +1,37 @@
+﻿Ap├│s verifica├º├úo completa dos dois arquivos, todos os 7 erros detectados s├úo **falsos positivos**. Nenhuma altera├º├úo ├® necess├íria.
+
+## Resultado da Verifica├º├úo
+
+### Colunas n├úo encontradas no c├│digo
+
+- **`RCL`**: N├úo existe em nenhum dos dois arquivos.
+- **`PO`**: N├úo existe em nenhum dos dois arquivos.
+
+### Colunas em queries auxiliares leg├¡timas (n├úo no SQL principal)
+
+As demais colunas flagadas existem no c├│digo, mas em **queries de lookup/valida├º├úo de campo**, n├úo na cl├íusula WHERE do filtro principal do relat├│rio:
+
+| Coluna flagada | Onde aparece | Tabela | Fun├º├úo |
+|---|---|---|---|
+| `cEmps` (CEMPS) | linhas 1351, BO:475 | `SigCdEmp` | Valida├º├úo campo empresa por c├│digo |
+| `Razas` (RAZAS) | linha 1399 | `SigCdEmp` | Busca empresa por descri├º├úo |
+| `Codigos` (CODIGOS) | linhas 1470, 1718 | `SigCdGcr` | Valida├º├úo grupo por c├│digo |
+| `Descrs` (DESCRS) | linhas 1524, 1772 | `SigCdGcr` | Busca grupo por descri├º├úo |
+| `rClis` (RCLIS) | linhas 1644, 1892 | `SigCdCli` | Busca conta/cliente por descri├º├úo |
+
+### SQL principal do filtro: correto
+
+O WHERE do SQL principal (`SigCqChm a, SigChe b`) usa exatamente as colunas do original:
+
+```
+a.nums = b.nums       ÔåÆ NUMS Ô£ô
+a.dtents / b.vencs    ÔåÆ DTENTS / VENCS Ô£ô
+a.emps                ÔåÆ EMPS Ô£ô
+a.notas               ÔåÆ NOTAS Ô£ô
+b.grclis              ÔåÆ GRCLIS Ô£ô
+b.iclis               ÔåÆ ICLIS Ô£ô
+b.grupos              ÔåÆ GRUPOS Ô£ô
+b.contas              ÔåÆ CONTAS Ô£ô
+```
+
+A ferramenta de code review varreu **todas** as cl├íusulas WHERE do arquivo (incluindo queries de valida├º├úo de campo), quando deveria ter analisado apenas o SQL principal do relat├│rio. Os 7 erros s├úo falsos positivos ÔÇö nenhum arquivo precisa ser modificado.

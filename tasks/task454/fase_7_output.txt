@@ -1,0 +1,10 @@
+﻿Fase 7/8 conclu├¡da. Os 4 eventos j├í estavam presentes no arquivo desde a Fase 6:
+
+| M├®todo | Linha | Implementa├º├úo |
+|--------|-------|---------------|
+| `BtnIncluirClick()` | 1453 | `NovoRegistro()` + `LimparCampos()` + `HabilitarCampos(.T.)` |
+| `BtnVisualizarClick()` | 1464 | `CarregarPorCodigo()` + `BOParaForm()` + `HabilitarCampos(.F.)` |
+| `BtnAlterarClick()` | 1489 | `CarregarPorCodigo()` + `EditarRegistro()` + `BOParaForm()` + `HabilitarCampos(.T.)` |
+| `BtnExcluirClick()` | 1515 | `MsgConfirma()` + `CarregarPorCodigo()` + `Excluir()` |
+
+Todos seguem os padr├Áes cr├¡ticos: `this_cModoAtual` setado antes de `HabilitarCampos()`, `EditarRegistro()` chamado ap├│s `CarregarPorCodigo()`, e `MsgConfirma()` retornando logical. A Fase 8 (integra├º├úo menu/config) ├® a ├║ltima pendente.

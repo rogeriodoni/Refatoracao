@@ -1,0 +1,14 @@
+﻿**Fase 1/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\classes\LGRBO.prg` foi criado com 579 linhas contendo:
+
+**O que foi inclu├¡do:**
+- `DEFINE CLASS LGRBO AS BusinessBase` com todas as **31 propriedades** da tabela SigFiGfd (mapeadas do schema.sql + campo auxiliar `this_cMarcas` do JOIN com SigFiMpm)
+- `Init()` configurando `this_cTabela = "SigFiGfd"` e `this_cCampoChave = "cidchaves"`
+- Todos os m├®todos obrigat├│rios da fase 1: `Buscar()`, `CarregarPorCodigo()`, `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`
+- M├®todos auxiliares espec├¡ficos do dom├¡nio: `VerificarCOODuplicado()`, `ObterModeloDaSerie()`, `ObterMFAdis()`, `ObterNumUsuars()`, `BuscarImpressoras()`, `BuscarModelos()`
+- Valida├º├Áes de neg├│cio em `ValidarAntesDeSalvar()` baseadas na l├│gica do `salva.Click` original (COO obrigat├│rio, CNF obrigat├│rio, etc.)
+
+**Pontos chave:**
+- PK `cidchaves` gerada em `Inserir()` via `SYS(2015)+SYS(2015)` (igual ao legado)
+- `copias` ├® `bit` ÔåÆ mapeado como `this_lCopias = .F.` com convers├úo correta
+- JOIN com `SigFiMpm` para exibir `cmarcas` no grid
+- Sem `RETURN` dentro de `TRY/CATCH` (regra cr├¡tica #1)

@@ -1,0 +1,16 @@
+﻿Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\cadastros\FormMtp.prg` criado com 245 linhas contendo:
+
+**O que foi implementado:**
+- `DEFINE CLASS FormMtp AS FormBase` ÔÇö propriedades visuais completas (Height=600, Width=1000, Caption com CHR() em InicializarForm)
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (regra cr├¡tica)
+- `InicializarForm()` ÔÇö cria MtpBO, chama ConfigurarPageFrame(), propaga Caption para labels do cabe├ºalho, seta Page1 ativa
+- `ConfigurarPageFrame()` ÔÇö PageFrame com Top=-29, Tabs=.F., 2 pages com Picture fundo_cad_1003.jpg
+- `ConfigurarPaginaLista()` ÔÇö cnt_4c_Cabecalho (com lbl_4c_Sombra + lbl_4c_Titulo), cnt_4c_Botoes (Left=542, posi├º├úo can├┤nica), cnt_4c_Saida (Left=917, posi├º├úo can├┤nica per CLAUDE.md #10)
+- `ConfigurarPaginaDados()` ÔÇö cnt_4c_Salva (Top=33, Left=842)
+- `TornarControlesVisiveis()` ÔÇö implementa├º├úo recursiva completa (percorre Pages e Controls)
+- `Destroy()` ÔÇö limpa BO e chama DODEFAULT()
+
+**Pr├│ximas fases:**
+- Fase 4: Grid em Page1 + todos os bot├Áes (Incluir/Alterar/Excluir/Visualizar/Buscar/Encerrar/Salvar/Cancelar) + CarregarLista()
+- Fases 5-6: TextBoxes de dados em Page2 (C├│digo, Grupo, Descri├º├úo, Produ├º├úo M├¡nima, Falha Admitida, Valor Pr├¬mio, Moeda, CheckBox Ganhos)
+- Fases 7-8: Lookups (SigCdMoe por c├│digo/descri├º├úo, SigCdGcr para Grupo), valida├º├Áes e todos os eventos CRUD

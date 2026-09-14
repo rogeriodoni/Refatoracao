@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. Fase 2/8 conclu├¡da.
+
+**DESBO.prg** agora cont├®m todos os m├®todos CRUD:
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `CarregarDoCursor` | PROTECTED | Mapeia todos os 10 campos do cursor via `SELECT (alias)` |
+| `ObterChavePrimaria` | PROTECTED FUNCTION | Retorna `this_cCodigo` para auditoria |
+| `GerarCodigo` | PROTECTED FUNCTION | Gera c├│digo ├║nico: `emps(3) + YYMM(4) + seq(3)` via COUNT |
+| `ValidarSobreposicaoPeriodo` | PROTECTED FUNCTION | Verifica sobreposi├º├úo de per├¡odo por empresa com `CONVERT(DATE)` |
+| `ValidarDados` | PROTECTED FUNCTION | Valida emps/dtini/dtfin obrigat├│rios, dtiniÔëñdtfin, sem sobreposi├º├úo |
+| `Inserir` | PROTECTED | INSERT com c├│digo auto-gerado; valdes inicia em 0 |
+| `Atualizar` | PROTECTED | UPDATE apenas dos campos edit├íveis (valmeta/valcota/valcotac); emps/dtini/dtfin s├úo imut├íveis |
+| `ExecutarExclusao` | PROTECTED | DELETE com guarda: bloqueia se `valdes > 0` (cota j├í utilizada) |
+| `Buscar` | PUBLIC | SELECT para grid `crSigCdDes`, filtro opcional por empresa, ordenado por emps+dtini |
+| `CarregarPorCodigo` | PUBLIC | SELECT por PK com todos os campos; reseta `this_lNovoRegistro = .F.` |
+
+Pontos cr├¡ticos aplicados: nenhum `RETURN` dentro de `TRY/CATCH`, todos os `CATCH` chamam `MsgErro`, cursor `crSigCdDes` (nome exato do legado) para o grid, e `GETDATE()` em `dtalts`.

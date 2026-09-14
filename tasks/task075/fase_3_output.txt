@@ -1,0 +1,14 @@
+﻿Arquivo `C:\4c\projeto\app\forms\relatorios\FormSigReDct.prg` criado com sucesso. Fase 3/8 completa.
+
+**O que foi entregue:**
+
+- **`FormSigReDct AS FormBase`** com dimens├Áes exatas do original (Width=800, Height=150, DataSession=2)
+- **`Init(par_cEmp, par_cDop, par_nNum, par_nImp)`** ÔÇö armazena par├ómetros em `this_cEmps/this_cDopes/this_nNumes`, seta Caption din├ómico `"Impress├úo de Documento (DOP/NUM)"` e retorna `DODEFAULT()` (sem TRY/CATCH ÔÇö regra cr├¡tica respeitada)
+- **`InicializarForm()`** ÔÇö cria `SigReDctBO`, sincroniza par├ómetros ao BO, chama `ConfigurarCabecalho()`, atualiza labels de t├¡tulo
+- **`ConfigurarCabecalho()`** ÔÇö container escuro RGB(100,100,100) com `lbl_4c_Sombra` (preto) e `lbl_4c_Titulo` (branco) sobrepostos, Caption din├ómico
+- **`Destroy()`** ÔÇö `this_oRelatorio = .NULL.` (n├úo `.Release()` ÔÇö BO ├® Custom, n├úo Form) + `DODEFAULT()`
+
+**Pr├│ximas fases via Edit:**
+- Fase 4: `ConfigurarBotoes()` ÔÇö cmg_4c_Botoes com Visualizar/Imprimir/Excel/Encerrar
+- Fase 5: `ConfigurarCampos()` ÔÇö chk_4c_ImpTotal e chk_4c_ImpCodBarra
+- Fases 6-8: m├®todos de evento (BINDEVENTs, BtnVisualizarClick, BtnImprimirClick, BtnExcelClick, BtnSairClick, l├│gica de exclus├úo m├║tua entre checkboxes)

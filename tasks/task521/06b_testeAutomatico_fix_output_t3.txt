@@ -1,0 +1,11 @@
+﻿Corre├º├Áes aplicadas. Resumo diagn├│stico:
+
+**Causa raiz**: A tentativa t2 corrigiu o erro `PEMSTATUS(THIS.oForm, method, 3) = 3` (que causava Error 11 quando PEMSTATUS retornava `.F.` l├│gico, e `.F. = 3` era type mismatch) trocando para `PEMSTATUS(THIS.oForm.Class, method, 5)`. Por├®m, `PEMSTATUS` com **nome da classe** (string) + atributo 5 **n├úo encontra m├®todos definidos na classe** ÔÇö retorna sempre `.F.`.
+
+**Fix aplicado** (5 linhas em TesteAutomatico.prg):
+- `PEMSTATUS(THIS.oForm.Class, "CarregarLista", 5)` ÔåÆ `PEMSTATUS(THIS.oForm, "CarregarLista", 3) > 0`
+- `PEMSTATUS(THIS.oForm.Class, "AlternarPagina", 5)` ÔåÆ `PEMSTATUS(THIS.oForm, "AlternarPagina", 3) > 0`
+- `PEMSTATUS(THIS.oForm.Class, "BtnEncerrarClick", 5)` ÔåÆ `PEMSTATUS(THIS.oForm, "BtnEncerrarClick", 3) > 0`
+- Idem para BtnFecharClick e BtnSairClick
+
+O padr├úo `PEMSTATUS(objectRef, method, 3) > 0` ├® id├¬ntico ao j├í usado com sucesso na auto-detec├º├úo (linhas 228-229). FormSET.prg e SETBO.prg n├úo requerem altera├º├Áes ÔÇö os m├®todos `CarregarLista`, `AlternarPagina` e `BtnEncerrarClick` est├úo corretamente definidos como PUBLIC.

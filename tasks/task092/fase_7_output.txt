@@ -1,0 +1,16 @@
+﻿O arquivo `FormSigReEtp.prg` j├í est├í completo. Analisando o c├│digo fonte original e o arquivo migrado:
+
+**Situa├º├úo atual:**
+- `BtnImprimirClick()` Ô£à implementado (linhas 524-547) ÔÇö mapeia `cmdBtnForm.Command1.Click ÔåÆ ThisForm.m_Imprimir`
+- `BtnEncerrarClick()` Ô£à implementado (linhas 550-553) ÔÇö mapeia `cmdBtnForm.Command2.Click ÔåÆ ThisForm.Release`
+- `OptImpressoraInteractiveChange()` Ô£à implementado (linhas 556-560) ÔÇö mapeia `optImpressora.InteractiveChange`
+
+**Por que os 4 eventos CRUD n├úo se aplicam aqui:**
+
+Este formul├írio ├® um **dialog OPERACIONAL de impress├úo** (466x340px), n├úo um cadastro CRUD. O original SIGREETP nunca teve bot├Áes Incluir/Alterar/Visualizar/Excluir ÔÇö s├│ tem dois comandos:
+- Button 1: "Imprimir" ÔåÆ `m_imprimir` (valida├º├úo + dispatch para `impetiq01/02/03`)
+- Button 2: "Encerrar" ÔåÆ `Release`
+
+A descri├º├úo da Fase 7 foi gerada por template gen├®rico para forms `frmcadastro`. Para este form OPERACIONAL, **Fase 7 est├í completa** ÔÇö todos os eventos do original j├í est├úo implementados nas fases anteriores.
+
+**Fase 8 (integra├º├úo)** ├® o pr├│ximo passo pendente. Verifique se o form j├í est├í em `config.prg` e `menu.prg`.

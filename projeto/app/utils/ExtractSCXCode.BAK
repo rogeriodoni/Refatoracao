@@ -1,0 +1,811 @@
+*============================================================================
+* EXTRACTSCXCODE.PRG
+* Extrai código-fonte de formulários e relatórios Visual FoxPro para arquivo texto
+* Suporta: .SCX (formulários), .VCX (classes visuais), .FRX (relatórios)
+*
+* Uso: DO ExtractSCXCode WITH "C:\Caminho\MeuForm.scx"
+*      DO ExtractSCXCode WITH "C:\Caminho\MeuRelatorio.frx"
+*      DO ExtractSCXCode WITH "C:\Caminho\*.scx"  && Processa múltiplos arquivos
+*      DO ExtractSCXCode  && Modo automacao (usa variaveis _TASK_DIR e _SCX_FILE)
+*============================================================================
+lPARAMETERS tcArquivo
+SET STEP ON 
+*-- Suporta chamada COM ou SEM parametros (para automacao)
+LOCAL tcArquivo, lcOutputFolder, lcLogFile, lnTotalArquivos, lnTotalMethods
+LOCAL lcExtensao, lcTipoArquivo, lcDebugLog
+LOCAL ARRAY laArquivos[1]
+
+SET SAFETY off
+
+*-- Configurações
+#DEFINE CR_LF CHR(13) + CHR(10)
+#DEFINE SEPARADOR REPLICATE("=", 80)
+#DEFINE SEPARADOR_MENOR REPLICATE("-", 60)
+#DEFINE CODEPAGE_WINDOWS_1252 1252
+
+*-- DEBUG LOG (para automacao)
+lcDebugLog = "C:\4c\ExtractSCXCode_debug.log"
+STRTOFILE("=== ExtractSCXCode.prg DEBUG ===" + CR_LF, lcDebugLog)
+STRTOFILE("Parametro tcArquivo: [" + IIF(VARTYPE(tcArquivo)="C", tcArquivo, "VAZIO/INVALIDO") + "]" + CR_LF, lcDebugLog, .T.)
+STRTOFILE("TYPE(_TASK_DIR): [" + TYPE("_TASK_DIR") + "]" + CR_LF, lcDebugLog, .T.)
+STRTOFILE("TYPE(_SCX_FILE): [" + TYPE("_SCX_FILE") + "]" + CR_LF, lcDebugLog, .T.)
+IF TYPE("_TASK_DIR") = "C"
+    STRTOFILE("_TASK_DIR = [" + _TASK_DIR + "]" + CR_LF, lcDebugLog, .T.)
+ENDIF
+IF TYPE("_SCX_FILE") = "C"
+    STRTOFILE("_SCX_FILE = [" + _SCX_FILE + "]" + CR_LF, lcDebugLog, .T.)
+ENDIF
+
+*-- MODO AUTOMACAO: Le variaveis do config.fpw se disponivel
+IF EMPTY(tcArquivo)
+    IF TYPE("_TASK_DIR") = "C" AND TYPE("_SCX_FILE") = "C" AND !EMPTY(_TASK_DIR) AND !EMPTY(_SCX_FILE)
+        *-- Modo automacao: monta caminho a partir das variaveis
+        tcArquivo = ADDBS(_TASK_DIR) + _SCX_FILE + ".scx"
+        ? "Modo Automacao: " + tcArquivo
+        STRTOFILE("Modo Automacao: " + tcArquivo + CR_LF, lcDebugLog, .T.)
+    ELSE
+        *-- Modo interativo: solicita arquivo
+        STRTOFILE("Modo Interativo: Variaveis nao encontradas" + CR_LF, lcDebugLog, .T.)
+        tcArquivo = GETFILE("scx;frx;vcx", "Selecione o arquivo", "Abrir", 0, "Selecionar Arquivo")
+        IF EMPTY(tcArquivo)
+            STRTOFILE("ERRO: Nenhum arquivo selecionado" + CR_LF, lcDebugLog, .T.)
+            MESSAGEBOX("Nenhum arquivo selecionado.", 16, "Extração Cancelada")
+            RETURN .F.
+        ENDIF
+    ENDIF
+ENDIF
+
+*-- Validação de parâmetro
+IF EMPTY(tcArquivo)
+    MESSAGEBOX("Nenhum arquivo selecionado.", 16, "Extração Cancelada")
+    RETURN .F.
+ENDIF
+
+*-- Pasta de saída (mesma pasta do arquivo de entrada)
+lcOutputFolder = JUSTPATH(tcArquivo)
+IF EMPTY(lcOutputFolder)
+    lcOutputFolder = CURDIR()
+ENDIF
+
+*-- Determinar extensão e tipo de arquivo
+lcExtensao = UPPER(JUSTEXT(tcArquivo))
+
+*-- Verificar se é wildcard (múltiplos arquivos)
+IF "*" $ tcArquivo OR "?" $ tcArquivo
+    lnTotalArquivos = ADIR(laArquivos, tcArquivo)
+    IF lnTotalArquivos = 0
+        MESSAGEBOX("Nenhum arquivo encontrado com o padrão: " + tcArquivo, 16, "Erro")
+        RETURN .F.
+    ENDIF
+ELSE
+    IF !FILE(tcArquivo)
+        MESSAGEBOX("Arquivo não encontrado: " + tcArquivo, 16, "Erro")
+        RETURN .F.
+    ENDIF
+    lnTotalArquivos = 1
+    DIMENSION laArquivos[1, 5]
+    laArquivos[1, 1] = JUSTFNAME(tcArquivo)
+ENDIF
+
+*-- Arquivo de log geral
+lcLogFile = ADDBS(lcOutputFolder) + "ExtractionLog_" + DTOS(DATE()) + "_" + STRTRAN(TIME(), ":", "") + ".txt"
+lnTotalMethods = 0
+
+*-- Processar cada arquivo
+FOR lnArq = 1 TO lnTotalArquivos
+    LOCAL lcArquivoOrigem, lcOutputFile, lcNomeBase, lcExtArquivo
+
+    IF lnTotalArquivos = 1 AND !("*" $ tcArquivo)
+        lcArquivoOrigem = tcArquivo
+    ELSE
+        lcArquivoOrigem = ADDBS(lcOutputFolder) + laArquivos[lnArq, 1]
+    ENDIF
+
+    lcNomeBase = JUSTSTEM(lcArquivoOrigem)
+    lcExtArquivo = UPPER(JUSTEXT(lcArquivoOrigem))
+
+    ? "Processando: " + lcArquivoOrigem
+
+    *-- Determinar tipo e nome do arquivo de saida
+    DO CASE
+        CASE lcExtArquivo = "SCX"
+            lcTipoArquivo = "form"
+            lcOutputFile = ADDBS(lcOutputFolder) + lcNomeBase + "_form_codigo_fonte.txt"
+            lnMethodsExtraidos = ProcessarSCX(lcArquivoOrigem, lcOutputFile)
+        CASE lcExtArquivo = "VCX"
+            lcTipoArquivo = "class"
+            lcOutputFile = ADDBS(lcOutputFolder) + lcNomeBase + "_class_codigo_fonte.txt"
+            lnMethodsExtraidos = ProcessarSCX(lcArquivoOrigem, lcOutputFile)
+        CASE lcExtArquivo = "FRX"
+            lcTipoArquivo = "report"
+            lcOutputFile = ADDBS(lcOutputFolder) + lcNomeBase + "_report_codigo_fonte.txt"
+            lnMethodsExtraidos = ProcessarFRX(lcArquivoOrigem, lcOutputFile)
+        OTHERWISE
+            ? "  -> Tipo de arquivo nao suportado: " + lcExtArquivo
+            LOOP
+    ENDCASE
+
+    lnTotalMethods = lnTotalMethods + lnMethodsExtraidos
+
+    ? "  -> Extraidos " + TRANSFORM(lnMethodsExtraidos) + " elementos para: " + lcOutputFile
+ENDFOR
+
+*-- Resumo final
+? ""
+? SEPARADOR
+? "EXTRACAO CONCLUIDA"
+? "Total de arquivos processados: " + TRANSFORM(lnTotalArquivos)
+? "Total de elementos extraidos: " + TRANSFORM(lnTotalMethods)
+? "Arquivos gerados em: " + lcOutputFolder
+? SEPARADOR
+
+MESSAGEBOX("Extracao concluida!" + CR_LF + CR_LF + ;
+           "Arquivos processados: " + TRANSFORM(lnTotalArquivos) + CR_LF + ;
+           "Elementos extraidos: " + TRANSFORM(lnTotalMethods) + CR_LF + CR_LF + ;
+           "Arquivos gerados em:" + CR_LF + lcOutputFolder, ;
+           64, "Extracao de Codigo VFP",10000)
+
+RETURN .T.
+
+
+*============================================================================
+* FUNCAO: ProcessarSCX
+* Processa um arquivo SCX/VCX e extrai todo o codigo para arquivo texto
+* Preserva encoding Windows-1252 para caracteres acentuados
+*============================================================================
+FUNCTION ProcessarSCX(tcSCXFile, tcOutputFile)
+    LOCAL lnHandle, lnMethodCount, lcConteudo
+    LOCAL lcObjName, lcParent, lcClass, lcBaseClass, lcMethods, lcProperties
+    LOCAL lcClassLoc, lcProtected
+    LOCAL lnCodePage, lnChar
+
+    lnMethodCount = 0
+    lcConteudo = ""
+
+    *-- Preservar code page atual e definir Windows-1252 para acentuacao
+    lnCodePage = CPCURRENT()
+    SET CPCOMPILE TO 1252
+
+    *-- Abrir o arquivo SCX como tabela
+    USE (tcSCXFile) ALIAS _SCX_TEMP IN 0 SHARED NOUPDATE
+
+    IF !USED("_SCX_TEMP")
+        ? "ERRO: Nao foi possivel abrir " + tcSCXFile
+        SET CPCOMPILE TO (lnCodePage)
+        RETURN 0
+    ENDIF
+
+    SELECT _SCX_TEMP
+
+    *-- Cabecalho do arquivo de saida
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* EXTRACAO DE CODIGO - VISUAL FOXPRO" + CR_LF
+    lcConteudo = lcConteudo + "* Arquivo Origem: " + JUSTFNAME(tcSCXFile) + CR_LF
+    lcConteudo = lcConteudo + "* Data/Hora: " + DTOC(DATE()) + " " + TIME() + CR_LF
+    lcConteudo = lcConteudo + "* Total de registros: " + TRANSFORM(RECCOUNT()) + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+    
+    *-- Secao 1: Estrutura do Formulario (Arvore de Objetos)
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)" + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+    
+    SCAN
+        lcObjName = ALLTRIM(STRTRAN(_SCX_TEMP.OBJNAME, CHR(0), ""))
+        lcParent = ALLTRIM(STRTRAN(_SCX_TEMP.PARENT, CHR(0), ""))
+        lcClass = ALLTRIM(STRTRAN(_SCX_TEMP.CLASS, CHR(0), ""))
+        lcBaseClass = ALLTRIM(STRTRAN(_SCX_TEMP.BASECLASS, CHR(0), ""))
+        lcClassLoc = ALLTRIM(STRTRAN(_SCX_TEMP.CLASSLOC, CHR(0), ""))
+        
+        IF !EMPTY(lcObjName)
+            lcConteudo = lcConteudo + "Objeto: " + lcObjName + CR_LF
+            lcConteudo = lcConteudo + "  Parent: " + IIF(EMPTY(lcParent), "(raiz)", lcParent) + CR_LF
+            lcConteudo = lcConteudo + "  Class: " + lcClass + CR_LF
+            lcConteudo = lcConteudo + "  BaseClass: " + lcBaseClass + CR_LF
+            IF !EMPTY(lcClassLoc)
+                lcConteudo = lcConteudo + "  ClassLoc: " + lcClassLoc + CR_LF
+            ENDIF
+            lcConteudo = lcConteudo + CR_LF
+        ENDIF
+    ENDSCAN
+    
+    *-- Secao 2: Propriedades Customizadas
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* SECAO 2: PROPRIEDADES CUSTOMIZADAS" + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+    
+    GO TOP
+    SCAN
+        lcObjName = ALLTRIM(STRTRAN(_SCX_TEMP.OBJNAME, CHR(0), ""))
+        lcParent = ALLTRIM(STRTRAN(_SCX_TEMP.PARENT, CHR(0), ""))
+        lcProperties = ALLTRIM(STRTRAN(_SCX_TEMP.PROPERTIES, CHR(0), ""))
+        lcProtected = ALLTRIM(STRTRAN(_SCX_TEMP.PROTECTED, CHR(0), ""))
+        
+        IF !EMPTY(lcProperties)
+            lcConteudo = lcConteudo + SEPARADOR_MENOR + CR_LF
+            IF EMPTY(lcParent)
+                lcConteudo = lcConteudo + "* PROPRIEDADES DE: " + lcObjName + CR_LF
+            ELSE
+                lcConteudo = lcConteudo + "* PROPRIEDADES DE: " + lcParent + "." + lcObjName + CR_LF
+            ENDIF
+            lcConteudo = lcConteudo + SEPARADOR_MENOR + CR_LF
+            lcConteudo = lcConteudo + FormatarPropriedades(lcProperties) + CR_LF
+            lcConteudo = lcConteudo + CR_LF
+        ENDIF
+        
+        IF !EMPTY(lcProtected)
+            lcConteudo = lcConteudo + "* Membros Protegidos:" + CR_LF
+            lcConteudo = lcConteudo + lcProtected + CR_LF + CR_LF
+        ENDIF
+    ENDSCAN
+    
+    *-- Secao 3: Metodos e Eventos (CODIGO FONTE)
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)" + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+
+    GO TOP
+    SCAN
+        lcObjName = ALLTRIM(STRTRAN(_SCX_TEMP.OBJNAME, CHR(0), ""))
+        lcParent = ALLTRIM(STRTRAN(_SCX_TEMP.PARENT, CHR(0), ""))
+        lcClass = ALLTRIM(STRTRAN(_SCX_TEMP.CLASS, CHR(0), ""))
+        lcBaseClass = ALLTRIM(STRTRAN(_SCX_TEMP.BASECLASS, CHR(0), ""))
+
+        *-- Ler campo MEMO de forma mais robusta
+        *-- Tentar multiplas formas de leitura para garantir captura do conteudo
+        lcMethods = ""
+
+        *-- Metodo 1: Leitura direta do campo MEMO
+        IF TYPE("_SCX_TEMP.METHODS") = "M" AND !ISNULL(_SCX_TEMP.METHODS)
+            lcMethods = _SCX_TEMP.METHODS
+        ENDIF
+
+        *-- Metodo 2: Se vazio, tentar com EVALUATE
+        IF EMPTY(lcMethods) OR LEN(lcMethods) < 5
+            LOCAL lcTemp
+            lcTemp = ""
+            TRY
+                lcTemp = EVALUATE("_SCX_TEMP.METHODS")
+                IF !EMPTY(lcTemp) AND LEN(lcTemp) > LEN(lcMethods)
+                    lcMethods = lcTemp
+                ENDIF
+            CATCH
+            ENDTRY
+        ENDIF
+
+        *-- Limpar TODOS os caracteres de controle (0-31) que podem interferir
+        *-- exceto CR (13), LF (10) e TAB (9) que sao necessarios
+        FOR lnChar = 0 TO 8
+            lcMethods = STRTRAN(lcMethods, CHR(lnChar), "")
+        ENDFOR
+        FOR lnChar = 11 TO 12
+            lcMethods = STRTRAN(lcMethods, CHR(lnChar), "")
+        ENDFOR
+        FOR lnChar = 14 TO 31
+            lcMethods = STRTRAN(lcMethods, CHR(lnChar), "")
+        ENDFOR
+
+        *-- Verificar se ha conteudo real (PROCEDURE, FUNCTION, ou qualquer codigo)
+        *-- Usar deteccao mais abrangente
+        LOCAL llTemCodigo
+        llTemCodigo = .F.
+
+        IF LEN(ALLTRIM(lcMethods)) > 0
+            *-- Verificar se contem palavras-chave de codigo VFP
+            LOCAL lcMethodsUpper
+            lcMethodsUpper = UPPER(lcMethods)
+
+            IF "PROCEDURE " $ lcMethodsUpper OR ;
+               "FUNCTION " $ lcMethodsUpper OR ;
+               "ENDPROC" $ lcMethodsUpper OR ;
+               "ENDFUNC" $ lcMethodsUpper OR ;
+               "RETURN" $ lcMethodsUpper OR ;
+               "THIS." $ lcMethodsUpper OR ;
+               "THISFORM." $ lcMethodsUpper OR ;
+               "LOCAL " $ lcMethodsUpper OR ;
+               "IF " $ lcMethodsUpper OR ;
+               "DO " $ lcMethodsUpper OR ;
+               "SELECT " $ lcMethodsUpper OR ;
+               "SCAN" $ lcMethodsUpper OR ;
+               "FOR " $ lcMethodsUpper OR ;
+               "REPLACE " $ lcMethodsUpper OR ;
+               "APPEND " $ lcMethodsUpper OR ;
+               "CREATE" $ lcMethodsUpper OR ;
+               "=" $ lcMethods
+                llTemCodigo = .T.
+            ENDIF
+
+            *-- SEGURANCA: Se ainda nao detectou codigo mas tem conteudo significativo
+            *-- (mais de 10 caracteres), extrair de qualquer forma para nao perder nada
+            IF !llTemCodigo AND LEN(ALLTRIM(lcMethods)) > 10
+                llTemCodigo = .T.
+            ENDIF
+        ENDIF
+
+        IF llTemCodigo
+            lnMethodCount = lnMethodCount + ContarMetodos(lcMethods)
+
+            lcConteudo = lcConteudo + SEPARADOR + CR_LF
+            IF EMPTY(lcParent)
+                lcConteudo = lcConteudo + "* OBJETO: " + lcObjName + CR_LF
+            ELSE
+                lcConteudo = lcConteudo + "* OBJETO: " + lcParent + "." + lcObjName + CR_LF
+            ENDIF
+            lcConteudo = lcConteudo + "* Classe: " + lcClass + " (Base: " + lcBaseClass + ")" + CR_LF
+            lcConteudo = lcConteudo + "* Registro: " + TRANSFORM(RECNO()) + CR_LF
+            lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+
+            *-- Formatar os métodos
+            lcConteudo = lcConteudo + FormatarMetodos(lcMethods, lcObjName, lcParent) + CR_LF
+            lcConteudo = lcConteudo + CR_LF
+        ENDIF
+    ENDSCAN
+    
+    *-- Secao 4: Informacoes Adicionais (USER, RESERVED, OLE, etc)
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* SECAO 4: INFORMACOES ADICIONAIS" + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+
+    GO TOP
+    SCAN
+        LOCAL lcUser, lcReserved1, lcReserved2, lcReserved3, lcReserved7, lcReserved8
+        LOCAL lcOle, lcOlePublic, lcPicture
+        lcObjName = ALLTRIM(STRTRAN(_SCX_TEMP.OBJNAME, CHR(0), ""))
+        lcUser = ALLTRIM(STRTRAN(_SCX_TEMP.USER, CHR(0), ""))
+        lcReserved1 = ALLTRIM(STRTRAN(_SCX_TEMP.RESERVED1, CHR(0), ""))
+        lcReserved2 = ALLTRIM(STRTRAN(_SCX_TEMP.RESERVED2, CHR(0), ""))
+        lcReserved3 = ALLTRIM(STRTRAN(_SCX_TEMP.RESERVED3, CHR(0), ""))
+        lcReserved7 = ALLTRIM(STRTRAN(_SCX_TEMP.RESERVED7, CHR(0), ""))
+        lcReserved8 = ALLTRIM(STRTRAN(_SCX_TEMP.RESERVED8, CHR(0), ""))
+
+        *-- Ler campo OLE se existir (objetos ActiveX/OLE)
+        lcOle = ""
+        lcOlePublic = ""
+        IF TYPE("_SCX_TEMP.OLE") = "M" AND !ISNULL(_SCX_TEMP.OLE)
+            lcOle = ALLTRIM(STRTRAN(_SCX_TEMP.OLE, CHR(0), ""))
+        ENDIF
+        IF TYPE("_SCX_TEMP.OLEPUBLIC") = "M" AND !ISNULL(_SCX_TEMP.OLEPUBLIC)
+            lcOlePublic = ALLTRIM(STRTRAN(_SCX_TEMP.OLEPUBLIC, CHR(0), ""))
+        ENDIF
+
+        *-- Ler campo PICTURE se existir (imagens embutidas)
+        lcPicture = ""
+        IF TYPE("_SCX_TEMP.PICTURE") = "M" AND !ISNULL(_SCX_TEMP.PICTURE)
+            *-- PICTURE em SCX contem dados binarios, extrair apenas se for texto
+            LOCAL lcPictTemp
+            lcPictTemp = _SCX_TEMP.PICTURE
+            *-- Verificar se e texto (caminho de arquivo) ou binario
+            IF LEN(lcPictTemp) < 500 AND !CHR(0) $ LEFT(lcPictTemp, 10)
+                lcPicture = ALLTRIM(STRTRAN(lcPictTemp, CHR(0), ""))
+            ELSE
+                lcPicture = "[Dados binarios - " + TRANSFORM(LEN(lcPictTemp)) + " bytes]"
+            ENDIF
+        ENDIF
+
+        IF !EMPTY(lcUser) OR !EMPTY(lcReserved1) OR !EMPTY(lcReserved2) OR ;
+           !EMPTY(lcReserved3) OR !EMPTY(lcReserved7) OR !EMPTY(lcReserved8) OR ;
+           !EMPTY(lcOle) OR !EMPTY(lcOlePublic) OR !EMPTY(lcPicture)
+            lcConteudo = lcConteudo + "* Objeto: " + lcObjName + CR_LF
+            IF !EMPTY(lcUser)
+                lcConteudo = lcConteudo + "USER: " + lcUser + CR_LF
+            ENDIF
+            IF !EMPTY(lcReserved1)
+                lcConteudo = lcConteudo + "RESERVED1 (Include): " + lcReserved1 + CR_LF
+            ENDIF
+            IF !EMPTY(lcReserved2)
+                lcConteudo = lcConteudo + "RESERVED2 (Comentarios): " + lcReserved2 + CR_LF
+            ENDIF
+            IF !EMPTY(lcReserved3)
+                lcConteudo = lcConteudo + "RESERVED3 (ClassInfo): " + lcReserved3 + CR_LF
+            ENDIF
+            IF !EMPTY(lcReserved7)
+                lcConteudo = lcConteudo + "RESERVED7: " + lcReserved7 + CR_LF
+            ENDIF
+            IF !EMPTY(lcReserved8)
+                lcConteudo = lcConteudo + "RESERVED8: " + lcReserved8 + CR_LF
+            ENDIF
+            IF !EMPTY(lcOle)
+                lcConteudo = lcConteudo + "OLE (ActiveX): " + LEFT(lcOle, 500) + CR_LF
+            ENDIF
+            IF !EMPTY(lcOlePublic)
+                lcConteudo = lcConteudo + "OLEPUBLIC: " + lcOlePublic + CR_LF
+            ENDIF
+            IF !EMPTY(lcPicture)
+                lcConteudo = lcConteudo + "PICTURE: " + lcPicture + CR_LF
+            ENDIF
+            lcConteudo = lcConteudo + CR_LF
+        ENDIF
+    ENDSCAN
+    
+    *-- Rodape
+    lcConteudo = lcConteudo + CR_LF + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* FIM DA EXTRACAO" + CR_LF
+    lcConteudo = lcConteudo + "* Total de metodos/eventos com codigo: " + TRANSFORM(lnMethodCount) + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+
+    *-- Salvar arquivo com encoding Windows-1252
+    STRTOFILE(lcConteudo, tcOutputFile, 0)
+
+    *-- Fechar tabela
+    USE IN _SCX_TEMP
+
+    *-- Restaurar code page original
+    SET CPCOMPILE TO (lnCodePage)
+
+    RETURN lnMethodCount
+ENDFUNC
+
+
+*============================================================================
+* FUNCAO: ProcessarFRX
+* Processa um arquivo FRX (relatorio) e extrai estrutura para arquivo texto
+* Preserva encoding Windows-1252 para caracteres acentuados
+*============================================================================
+FUNCTION ProcessarFRX(tcFRXFile, tcOutputFile)
+    LOCAL lnElementCount, lcConteudo
+    LOCAL lcObjType, lcExpr, lcComment, lcName, lcPicture
+    LOCAL lnCodePage, lcBandName
+
+    lnElementCount = 0
+    lcConteudo = ""
+
+    *-- Preservar code page atual e definir Windows-1252 para acentuacao
+    lnCodePage = CPCURRENT()
+    SET CPCOMPILE TO 1252
+
+    *-- Abrir o arquivo FRX como tabela
+    USE (tcFRXFile) ALIAS _FRX_TEMP IN 0 SHARED NOUPDATE
+
+    IF !USED("_FRX_TEMP")
+        ? "ERRO: Nao foi possivel abrir " + tcFRXFile
+        SET CPCOMPILE TO (lnCodePage)
+        RETURN 0
+    ENDIF
+
+    SELECT _FRX_TEMP
+
+    *-- Cabecalho do arquivo de saida
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* EXTRACAO DE RELATORIO - VISUAL FOXPRO" + CR_LF
+    lcConteudo = lcConteudo + "* Arquivo Origem: " + JUSTFNAME(tcFRXFile) + CR_LF
+    lcConteudo = lcConteudo + "* Data/Hora: " + DTOC(DATE()) + " " + TIME() + CR_LF
+    lcConteudo = lcConteudo + "* Total de registros: " + TRANSFORM(RECCOUNT()) + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+
+    *-- Secao 1: Configuracao do Relatorio (registro 1)
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* SECAO 1: CONFIGURACAO DO RELATORIO" + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+
+    GO TOP
+    IF !EOF()
+        lcConteudo = lcConteudo + "Fonte de Dados (EXPR): " + ALLTRIM(STRTRAN(_FRX_TEMP.EXPR, CHR(0), "")) + CR_LF
+        lcConteudo = lcConteudo + "Tag: " + ALLTRIM(STRTRAN(_FRX_TEMP.TAG, CHR(0), "")) + CR_LF
+        lcConteudo = lcConteudo + "Tag2: " + ALLTRIM(STRTRAN(_FRX_TEMP.TAG2, CHR(0), "")) + CR_LF + CR_LF
+    ENDIF
+
+    *-- Secao 2: Bandas do Relatorio
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* SECAO 2: BANDAS DO RELATORIO" + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+
+    GO TOP
+    SCAN
+        IF _FRX_TEMP.OBJTYPE = 9  && Banda
+            lnElementCount = lnElementCount + 1
+
+            *-- Determinar tipo de banda pelo OBJCODE
+            DO CASE
+                CASE _FRX_TEMP.OBJCODE = 0
+                    lcBandName = "Cabecalho do Titulo"
+                CASE _FRX_TEMP.OBJCODE = 1
+                    lcBandName = "Rodape do Titulo"
+                CASE _FRX_TEMP.OBJCODE = 2
+                    lcBandName = "Cabecalho da Pagina"
+                CASE _FRX_TEMP.OBJCODE = 3
+                    lcBandName = "Rodape da Pagina"
+                CASE _FRX_TEMP.OBJCODE = 4
+                    lcBandName = "Cabecalho de Coluna"
+                CASE _FRX_TEMP.OBJCODE = 5
+                    lcBandName = "Rodape de Coluna"
+                CASE _FRX_TEMP.OBJCODE = 6
+                    lcBandName = "Cabecalho de Grupo"
+                CASE _FRX_TEMP.OBJCODE = 7
+                    lcBandName = "Rodape de Grupo"
+                CASE _FRX_TEMP.OBJCODE = 8
+                    lcBandName = "Detalhe"
+                OTHERWISE
+                    lcBandName = "Banda " + TRANSFORM(_FRX_TEMP.OBJCODE)
+            ENDCASE
+
+            lcConteudo = lcConteudo + "Banda: " + lcBandName + CR_LF
+            lcConteudo = lcConteudo + "  Altura: " + TRANSFORM(_FRX_TEMP.HEIGHT) + CR_LF
+            lcExpr = ALLTRIM(STRTRAN(_FRX_TEMP.EXPR, CHR(0), ""))
+            IF !EMPTY(lcExpr)
+                lcConteudo = lcConteudo + "  Expressao: " + lcExpr + CR_LF
+            ENDIF
+            lcConteudo = lcConteudo + CR_LF
+        ENDIF
+    ENDSCAN
+
+    *-- Secao 3: Campos e Expressoes
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* SECAO 3: CAMPOS E EXPRESSOES" + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+
+    GO TOP
+    SCAN
+        IF _FRX_TEMP.OBJTYPE = 8  && Campo/Expressao
+            lnElementCount = lnElementCount + 1
+
+            lcExpr = ALLTRIM(STRTRAN(_FRX_TEMP.EXPR, CHR(0), ""))
+            lcComment = ALLTRIM(STRTRAN(_FRX_TEMP.COMMENT, CHR(0), ""))
+            lcPicture = ALLTRIM(STRTRAN(_FRX_TEMP.PICTURE, CHR(0), ""))
+            lcName = ALLTRIM(STRTRAN(_FRX_TEMP.NAME, CHR(0), ""))
+
+            lcConteudo = lcConteudo + SEPARADOR_MENOR + CR_LF
+            IF !EMPTY(lcName)
+                lcConteudo = lcConteudo + "Campo: " + lcName + CR_LF
+            ENDIF
+            lcConteudo = lcConteudo + "Expressao: " + lcExpr + CR_LF
+            IF !EMPTY(lcPicture)
+                lcConteudo = lcConteudo + "Mascara: " + lcPicture + CR_LF
+            ENDIF
+            IF !EMPTY(lcComment)
+                lcConteudo = lcConteudo + "Comentario: " + lcComment + CR_LF
+            ENDIF
+            lcConteudo = lcConteudo + "Posicao: " + TRANSFORM(_FRX_TEMP.HPOS) + ", " + TRANSFORM(_FRX_TEMP.VPOS) + CR_LF
+            lcConteudo = lcConteudo + "Tamanho: " + TRANSFORM(_FRX_TEMP.WIDTH) + " x " + TRANSFORM(_FRX_TEMP.HEIGHT) + CR_LF
+            lcConteudo = lcConteudo + CR_LF
+        ENDIF
+    ENDSCAN
+
+    *-- Secao 4: Labels (Textos Fixos)
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* SECAO 4: LABELS (TEXTOS FIXOS)" + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+
+    GO TOP
+    SCAN
+        IF _FRX_TEMP.OBJTYPE = 5  && Label/Texto
+            lnElementCount = lnElementCount + 1
+
+            lcExpr = ALLTRIM(STRTRAN(_FRX_TEMP.EXPR, CHR(0), ""))
+            lcComment = ALLTRIM(STRTRAN(_FRX_TEMP.COMMENT, CHR(0), ""))
+
+            lcConteudo = lcConteudo + "Label: " + lcExpr + CR_LF
+            lcConteudo = lcConteudo + "  Posicao: " + TRANSFORM(_FRX_TEMP.HPOS) + ", " + TRANSFORM(_FRX_TEMP.VPOS) + CR_LF
+            IF !EMPTY(lcComment)
+                lcConteudo = lcConteudo + "  Comentario: " + lcComment + CR_LF
+            ENDIF
+            lcConteudo = lcConteudo + CR_LF
+        ENDIF
+    ENDSCAN
+
+    *-- Secao 5: Imagens
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* SECAO 5: IMAGENS" + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+
+    GO TOP
+    SCAN
+        IF _FRX_TEMP.OBJTYPE = 17  && Imagem
+            lnElementCount = lnElementCount + 1
+
+            lcPicture = ALLTRIM(STRTRAN(_FRX_TEMP.PICTURE, CHR(0), ""))
+            lcName = ALLTRIM(STRTRAN(_FRX_TEMP.NAME, CHR(0), ""))
+
+            lcConteudo = lcConteudo + "Imagem: " + IIF(!EMPTY(lcName), lcName, "(sem nome)") + CR_LF
+            IF !EMPTY(lcPicture)
+                lcConteudo = lcConteudo + "  Arquivo: " + lcPicture + CR_LF
+            ENDIF
+            lcConteudo = lcConteudo + "  Posicao: " + TRANSFORM(_FRX_TEMP.HPOS) + ", " + TRANSFORM(_FRX_TEMP.VPOS) + CR_LF
+            lcConteudo = lcConteudo + "  Tamanho: " + TRANSFORM(_FRX_TEMP.WIDTH) + " x " + TRANSFORM(_FRX_TEMP.HEIGHT) + CR_LF
+            lcConteudo = lcConteudo + CR_LF
+        ENDIF
+    ENDSCAN
+
+    *-- Secao 6: Linhas e Formas
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* SECAO 6: LINHAS E FORMAS" + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF + CR_LF
+
+    GO TOP
+    SCAN
+        IF INLIST(_FRX_TEMP.OBJTYPE, 6, 7)  && Linha ou Retangulo
+            lnElementCount = lnElementCount + 1
+
+            lcConteudo = lcConteudo + IIF(_FRX_TEMP.OBJTYPE = 6, "Linha", "Retangulo") + CR_LF
+            lcConteudo = lcConteudo + "  Posicao: " + TRANSFORM(_FRX_TEMP.HPOS) + ", " + TRANSFORM(_FRX_TEMP.VPOS) + CR_LF
+            lcConteudo = lcConteudo + "  Tamanho: " + TRANSFORM(_FRX_TEMP.WIDTH) + " x " + TRANSFORM(_FRX_TEMP.HEIGHT) + CR_LF
+            lcConteudo = lcConteudo + CR_LF
+        ENDIF
+    ENDSCAN
+
+    *-- Rodape
+    lcConteudo = lcConteudo + CR_LF + SEPARADOR + CR_LF
+    lcConteudo = lcConteudo + "* FIM DA EXTRACAO" + CR_LF
+    lcConteudo = lcConteudo + "* Total de elementos extraidos: " + TRANSFORM(lnElementCount) + CR_LF
+    lcConteudo = lcConteudo + SEPARADOR + CR_LF
+
+    *-- Salvar arquivo com encoding Windows-1252
+    STRTOFILE(lcConteudo, tcOutputFile, 0)
+
+    *-- Fechar tabela
+    USE IN _FRX_TEMP
+
+    *-- Restaurar code page original
+    SET CPCOMPILE TO (lnCodePage)
+
+    RETURN lnElementCount
+ENDFUNC
+
+
+*============================================================================
+* FUNCAO: FormatarMetodos
+* Formata o campo METHODS para melhor legibilidade
+* Detecta PROCEDURE, FUNCTION e eventos nativos do VFP
+*============================================================================
+FUNCTION FormatarMetodos(tcMethods, tcObjName, tcParent)
+    LOCAL lcResult, lcLinha, lnPos, lcMetodoAtual, lnLinhas, i
+    LOCAL lcLinhaUpper, llDentroMetodo
+    LOCAL ARRAY laLinhas[1]
+
+    lcResult = ""
+    llDentroMetodo = .F.
+
+    *-- Separar por linhas
+    lnLinhas = ALINES(laLinhas, tcMethods)
+
+    lcMetodoAtual = ""
+    FOR i = 1 TO lnLinhas
+        lcLinha = laLinhas[i]
+        lcLinhaUpper = UPPER(ALLTRIM(lcLinha))
+
+        *-- Detectar inicio de PROCEDURE ou FUNCTION
+        IF LEFT(lcLinhaUpper, 10) == "PROCEDURE " OR ;
+           LEFT(lcLinhaUpper, 9) == "FUNCTION " OR ;
+           LEFT(lcLinhaUpper, 16) == "HIDDEN PROCEDURE" OR ;
+           LEFT(lcLinhaUpper, 15) == "HIDDEN FUNCTION" OR ;
+           LEFT(lcLinhaUpper, 19) == "PROTECTED PROCEDURE" OR ;
+           LEFT(lcLinhaUpper, 18) == "PROTECTED FUNCTION"
+
+            IF !EMPTY(lcMetodoAtual)
+                lcResult = lcResult + CR_LF
+            ENDIF
+
+            lcMetodoAtual = ALLTRIM(lcLinha)
+            llDentroMetodo = .T.
+            lcResult = lcResult + SEPARADOR_MENOR + CR_LF
+            lcResult = lcResult + "* " + lcLinha + CR_LF
+            lcResult = lcResult + SEPARADOR_MENOR + CR_LF
+        ENDIF
+
+        *-- Detectar fim de metodo
+        IF LEFT(lcLinhaUpper, 7) == "ENDPROC" OR LEFT(lcLinhaUpper, 7) == "ENDFUNC"
+            llDentroMetodo = .F.
+        ENDIF
+
+        lcResult = lcResult + lcLinha + CR_LF
+    ENDFOR
+
+    RETURN lcResult
+ENDFUNC
+
+
+*============================================================================
+* FUNCAO: FormatarPropriedades
+* Formata o campo PROPERTIES para melhor legibilidade
+*============================================================================
+FUNCTION FormatarPropriedades(tcProperties)
+    LOCAL lcResult, lnLinhas, i
+    LOCAL ARRAY laLinhas[1]
+
+    lcResult = ""
+    lnLinhas = ALINES(laLinhas, tcProperties)
+
+    FOR i = 1 TO lnLinhas
+        lcResult = lcResult + "  " + laLinhas[i] + CR_LF
+    ENDFOR
+
+    RETURN lcResult
+ENDFUNC
+
+
+*============================================================================
+* FUNCAO: ContarMetodos
+* Conta a quantidade de metodos/procedures no campo METHODS
+* Inclui PROCEDURE, FUNCTION, HIDDEN e PROTECTED
+*============================================================================
+FUNCTION ContarMetodos(tcMethods)
+    LOCAL lnCount, lcUpper
+    lcUpper = UPPER(tcMethods)
+
+    lnCount = OCCURS("PROCEDURE ", lcUpper) + ;
+              OCCURS("FUNCTION ", lcUpper)
+
+    *-- Nao contar duplicados (HIDDEN PROCEDURE ja conta como PROCEDURE)
+    RETURN lnCount
+ENDFUNC
+
+
+*============================================================================
+* PROGRAMA AUXILIAR: ExtrairTodosFormulariosProjeto
+* Extrai codigo de todos os SCX de um projeto
+*============================================================================
+PROCEDURE ExtrairTodosFormulariosProjeto(tcPJXFile)
+    LOCAL lcPJXPath, lnForms
+    LOCAL ARRAY laForms[1]
+
+    IF EMPTY(tcPJXFile)
+        tcPJXFile = GETFILE("pjx", "Selecione o projeto", "Abrir")
+        IF EMPTY(tcPJXFile)
+            RETURN
+        ENDIF
+    ENDIF
+
+    IF !FILE(tcPJXFile)
+        MESSAGEBOX("Projeto nao encontrado: " + tcPJXFile, 16, "Erro")
+        RETURN
+    ENDIF
+
+    lcPJXPath = JUSTPATH(tcPJXFile)
+
+    *-- Abrir o projeto
+    USE (tcPJXFile) ALIAS _PJX_TEMP IN 0 SHARED NOUPDATE
+    SELECT _PJX_TEMP
+
+    *-- Buscar todos os formularios (Type = "K" para SCX)
+    lnForms = 0
+    SCAN FOR UPPER(ALLTRIM(TYPE)) == "K"
+        lnForms = lnForms + 1
+        DIMENSION laForms[lnForms]
+        laForms[lnForms] = ADDBS(lcPJXPath) + ALLTRIM(STRTRAN(NAME, CHR(0), ""))
+    ENDSCAN
+
+    USE IN _PJX_TEMP
+
+    IF lnForms = 0
+        MESSAGEBOX("Nenhum formulario encontrado no projeto.", 48, "Aviso")
+        RETURN
+    ENDIF
+
+    ? "Encontrados " + TRANSFORM(lnForms) + " formularios no projeto."
+
+    *-- Processar cada formulario
+    FOR i = 1 TO lnForms
+        IF FILE(laForms[i])
+            DO ExtractSCXCode WITH laForms[i]
+        ELSE
+            ? "AVISO: Arquivo nao encontrado: " + laForms[i]
+        ENDIF
+    ENDFOR
+
+    RETURN
+ENDPROC
+
+
+*============================================================================
+* PROGRAMA AUXILIAR: ExtrairVCX
+* Extrai codigo de bibliotecas de classes visuais (.VCX)
+* A estrutura e identica ao SCX
+*============================================================================
+PROCEDURE ExtrairVCX(tcVCXFile)
+    LOCAL lcOutputFile
+
+    IF EMPTY(tcVCXFile)
+        tcVCXFile = GETFILE("vcx", "Selecione a biblioteca VCX", "Abrir")
+        IF EMPTY(tcVCXFile)
+            RETURN
+        ENDIF
+    ENDIF
+
+    lcOutputFile = FORCEEXT(tcVCXFile, "") + "_codigo_fonte.txt"
+
+    lnMethods = ProcessarSCX(tcVCXFile, lcOutputFile)
+
+    MESSAGEBOX("Extracao de VCX concluida!" + CR_LF + ;
+               "Metodos extraidos: " + TRANSFORM(lnMethods), 64, "VCX Extraido")
+
+    RETURN
+ENDPROC

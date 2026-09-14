@@ -1,0 +1,9 @@
+﻿Phase 2 complete. The BO `C:\4c\projeto\app\classes\sigrecomBO.prg` now contains all methods the Phase 2 validator (OrquestradorMigracao.ps1:4647) requires:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö loads saved report filter values (DtInicial, DtFinal, CdMoeda, Vendedor, Tipo, NrOpcao, Quebra, Base, Ordem) from a parameter cursor using `TYPE()` guards and `EVALUATE()`.
+- **`Inserir()`** ÔÇö registers report execution in `LogAuditoria` via `RegistrarAuditoria("REPORT_RUN")`.
+- **`Atualizar()`** ÔÇö registers report re-execution via `RegistrarAuditoria("REPORT_RERUN")`.
+- **`ObterChavePrimaria()`** ÔÇö returns a logical composite key (`Tabela|DtInicial|DtFinal|CdMoeda|TIPOn`) so audit entries are uniquely identifiable.
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö INSERT into `LogAuditoria` with EscaparSQL, GETDATE(), and `gc_4c_UsuarioLogado` fallback.
+
+All methods follow VFP9 critical rules from CLAUDE.md: no RETURN inside TRY/CATCH, accents via CHR(), MsgErro instead of MESSAGEBOX, EscaparSQL with no extra quotes, CHR(231)+CHR(227) for "├º├úo", `SELECT (par_cAliasCursor)` before field access, and no PUBLIC modifier in DEFINE CLASS. The existing REPORT pipeline (PrepararDados, Imprimir, Visualizar, the 4 SCAN loops, helpers) is untouched.

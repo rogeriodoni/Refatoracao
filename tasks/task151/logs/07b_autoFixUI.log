@@ -1,0 +1,27 @@
+[2026-06-19 21:46:19] [INFO] === CLAUDE CLI INVOKER ===
+[2026-06-19 21:46:19] [INFO] Prompt File: C:\4c\tasks\task151\ui_fix_prompt.md
+[2026-06-19 21:46:19] [INFO] Output File: C:\4c\tasks\task151\ui_fix_output.txt
+[2026-06-19 21:46:19] [INFO] Model: sonnet
+[2026-06-19 21:46:19] [INFO] Timeout: 600 segundos
+[2026-06-19 21:46:19] [INFO] Max Output Tokens: 16000
+[2026-06-19 21:46:19] [INFO] Context Files: 0 arquivo(s)
+[2026-06-19 21:46:19] [INFO] Invocando Claude CLI...
+[2026-06-19 21:46:19] [INFO] Prompt carregado: 30496 caracteres
+[2026-06-19 21:46:19] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-06-19 21:46:19] [INFO] Tamanho total do prompt: 30496 caracteres
+[2026-06-19 21:46:19] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-06-19 21:51:52] [INFO] Claude CLI finalizado em 332.9227244 segundos
+[2026-06-19 21:51:52] [INFO] Exit Code: 0
+[2026-06-19 21:51:52] [INFO] Output salvo em: C:\4c\tasks\task151\ui_fix_output.txt
+[2026-06-19 21:51:52] [INFO] Output size: 901 bytes
+[2026-06-19 21:51:52] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-06-19 21:51:52] [INFO] Preview do output:
+[2026-06-19 21:51:52] [INFO] Feito. Sobre as 3 diferen+ºas:
+
+**Diferen+ºa real corrigida (item #139):**
+- `cmd_4c_Pesquisar.FontName`: `"Tahoma"` ÔåÆ `"Comic Sans MS"` (linha ~543)
+
+**Itens #5 e #6 s+úo falsos positivos do validador:**
+- O SCX original tinha `Caption = "Cadastro de Testes"` como valor de **design-time** nos labels `lblSombra`/`lblTitulo`
+- Mas o Init() do SCX imediatamente sobrescreve: `ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption`
+- O form migrado j+í replica esse comportamento com `.Cap

@@ -1,0 +1,1144 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrecsm.SCX
+* Data/Hora: 19/05/26 09:33:31
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECSM
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGRECSM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_estoque
+  Parent: SIGRECSM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_estoque
+  Parent: SIGRECSM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGRECSM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Ds_GrEstoque
+  Parent: SIGRECSM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_Cd_GrEstoque
+  Parent: SIGRECSM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGRECSM
+  Class: label
+  BaseClass: label
+
+Objeto: lbl_empresa
+  Parent: SIGRECSM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_empresa_desc
+  Parent: SIGRECSM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_empresa
+  Parent: SIGRECSM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo
+  Parent: SIGRECSM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGRECSM
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGRECSM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGRECSM
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDmoeda
+  Parent: SIGRECSM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCmoeda
+  Parent: SIGRECSM
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label6
+  Parent: SIGRECSM
+  Class: label
+  BaseClass: label
+
+Objeto: OptRel
+  Parent: SIGRECSM
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: FwChkComissao
+  Parent: SIGRECSM
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 136
+  Left = -16
+  Width = 632
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = " Relatório de Comissão por Condição de Pagamento "
+  ControlBox = .F.
+  ClipControls = .T.
+  Name = "SIGRECSM"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 529
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta :"
+  Height = 15
+  Left = 176
+  Top = 185
+  Width = 38
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.get_ds_estoque
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  Left = 299
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 180
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "get_ds_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.get_cd_estoque
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  InputMask = ""
+  Left = 218
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 12
+  ToolTipText = ""
+  Top = 180
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_cd_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 176
+  Top = 157
+  Width = 38
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.get_Ds_GrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "!"
+  Height = 25
+  Left = 299
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 152
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "get_Ds_GrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.get_Cd_GrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "!"
+  Height = 25
+  Left = 218
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 152
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_Cd_GrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = " Tipo :"
+  Height = 15
+  Left = 182
+  Top = 239
+  Width = 32
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Height = 15
+  Left = 164
+  Top = 129
+  Width = 50
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.get_empresa_desc
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "!"
+  Height = 25
+  Left = 251
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 124
+  Width = 290
+  ForeColor = 0,0,0
+  Name = "get_empresa_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.get_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  InputMask = ""
+  Left = 218
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 124
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "get_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Height = 15
+  Left = 169
+  Top = 101
+  Width = 45
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 25
+  Left = 218
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 96
+  Width = 79
+  ForeColor = 0,0,0
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Height = 15
+  Left = 301
+  Top = 103
+  Width = 8
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 25
+  Left = 312
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 96
+  Width = 79
+  ForeColor = 0,0,0
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.getDmoeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Height = 25
+  Left = 251
+  MaxLength = 15
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 208
+  Width = 115
+  ForeColor = 0,0,0
+  Name = "getDmoeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.getCmoeda
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  Format = "K!"
+  Height = 25
+  InputMask = ""
+  Left = 218
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 15
+  ToolTipText = ""
+  Top = 208
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "getCmoeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Moeda :"
+  Height = 15
+  Left = 173
+  Top = 213
+  Width = 41
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.OptRel
+------------------------------------------------------------
+  ButtonCount = 4
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 15
+  Left = 217
+  Top = 240
+  Width = 463
+  TabIndex = 18
+  Name = "OptRel"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Si\<ntético"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 1
+  Option1.Top = -2
+  Option1.Width = 59
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Analítico"
+  Option2.Height = 15
+  Option2.Left = 80
+  Option2.Top = -2
+  Option2.Width = 58
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Condição de Pagamento"
+  Option3.Height = 15
+  Option3.Left = 162
+  Option3.Top = -2
+  Option3.Width = 134
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.BackStyle = 0
+  Option4.Caption = "Comissão dividida"
+  Option4.Height = 17
+  Option4.Left = 334
+  Option4.ToolTipText = "Esta opcao considera também a divisão de comissões conforme a grade"
+  Option4.Top = -2
+  Option4.Width = 131
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSM.FwChkComissao
+------------------------------------------------------------
+  Top = 258
+  Left = 218
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Não incluir comissão zerada"
+  Value = 0
+  SpecialEffect = 1
+  TabIndex = 19
+  Name = "FwChkComissao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECSM
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+If ThisForm.OptRel.value = 3
+	Report form SigReCs1 to printer prompt noconsole
+Else
+	Report form SigReCs2 to printer prompt noconsole
+Endif
+use in cabecalho
+use in tempo
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQrySigCdEmp   = [Select cemps,razas From SigCdEmp Where cemps=']+_Empr+[']
+lcQrySigCdPam = [Select MoedaPs From SigCdPam ]
+lcQrySigCdMoe   = [Select cmoes,dmoes,cotas,datatrans,fmults,nordrels,disfpres,valadics,grumoes,moeqs,qtdeqs,submoes ]+;
+				  [ From SigCdMoe ] + ;
+				  [ Order By cmoes,dmoes,cotas,datatrans,fmults,nordrels,disfpres,valadics,grumoes,moeqs,qtdeqs,submoes ]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	lcQueryCot   = [Select * From SigCdCot ]
+	lcQueRyMoe   = [Select * From SigCdMoe ] 
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdEmp', 'cemps',     'crSigCdEmp', '',, lcQrySigCdEmp)
+			.AddCursor('SigCdPam', 'cidchaves', 'crSigCdPam', '',, lcQrySigCdPam)
+			.AddCursor('SigCdMoe', 'cmoes',     'crSigCdMoe', '',, lcQrySigCdMoe)
+			.AddCursor('SigCdCot', 'cidchaves', 'CrSigCdCot', '',, lcQueryCot)
+			.AddCursor('SigCdMoe', 'cmoes',     'CrSigCdMoe', '',, lcQueryMoe)
+			
+			lcRetSigCdEmp = .ReQuery('crSigCdEmp')
+			lcRetSigCdPam = .ReQuery('crSigCdPam')
+			lcRetSigCdMoe = .ReQuery('crSigCdMoe')
+		EndWith
+		
+		If 	(lcRetSigCdEmp   < 1) or ;
+			(lcRetSigCdPam < 1) or ;
+			(lcRetSigCdMoe   < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão ( Requery(s) )')
+			Return 0
+		EndIf
+
+		=DoDefault()
+
+		Thisform.podatamgr.Requery('CrSigCdCot')
+		ThisForm.podatamgr.Requery('CrSigCdMoe')
+
+		Select CrSigCdCot
+		Index On Cmoes+Dtos(Datas)       Tag CmoeData
+		Index On cmoes+DTOS(datas)+horas Tag Cotacaos
+
+		Select CrSigCdMoe
+		Index on Dmoes Tag Dmoes
+		Index on Cmoes tag Cmoes
+		
+		* inicializa as variáveis de campos
+		.get_dt_inicial.value = date()
+		.get_dt_final.value = date()
+		.get_empresa.Value = crSigCdEmp.cemps
+		.get_empresa_desc.Value = crSigCdEmp.razas
+		.get_ds_grestoque.value = ''
+		.get_cd_grestoque.value = ''
+		.get_cd_estoque.value = ''
+		.get_ds_estoque.value = ''
+		.getCmoeda.value = crSigCdPam.MoedaPs
+		.getDmoeda.value = ''
+
+		Select crSigCdMoe
+		Index On cmoes tag cmoes
+		Index On dmoes tag dmoes
+
+		if Seek(crSigCdPam.MoedaPs,"crSigCdMoe","CMOES")
+			.getDmoeda.value = crSigCdMoe.dMoes
+		endif	
+
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private dDataIni1,dDataIni2,dDataFim1,dDataFim2
+local dInicial, dFinal, cEmpresa, cGrupo, cConta, nOpt
+local cNomeEmpresa, cRelTitulo, cRelTitul2, cPeriodo,lcCmoeda,lcDmoeda
+
+* Inicializa variáveis de memória
+With ThisForm
+	dInicial   = .get_dt_inicial.value
+	dFinal     = .get_dt_final.value
+	cEmpresa   = .get_empresa.value
+	cGrupo     = PadR(.get_cd_grestoque.Value,10)
+	DGrupo     = PadR(.get_Ds_grestoque.Value,20)
+	cConta     = PadR(.get_cd_estoque.Value,10)
+	m.lcCmoeda = PadR(.getCmoeda.Value,3)
+	m.lcDmoeda = PadR(.getDmoeda.Value,15)
+	nOpt       = .OptRel.value
+EndWith
+
+dDataIni1=fDtoSQL(dInicial)
+dDataIni2=fDtoSQL(dInicial,'23:59:59')
+dDataFim1=fDtoSQL(dFinal)
+dDataFim2=fDtoSQL(dFinal,'23:59:59')
+
+* Inicializa variáveis de cabeçalho de relatorio
+If not Eof('crSigCdEmp')
+	cNomeEmpresa = crSigCdEmp.razas
+Else
+	cNomeEmpresa = ''
+EndIf
+cRelTitulo   = 'Relatório de Comissão de Vendedor por Condição de Pagamento'
+cRelTitul2   = 'Relatório '+iif(nOpt=1,'Sintético',Iif(nOpt=2,'Analítico','Tipo Cond.Pagto'))+'  -  '+;
+				Iif(IsEmpty(cGrupo),'Todos os Grupos','Grupo :'+AllTrim(m.cGrupo)+' - '+AllTrim(m.dGrupo))+'  -  '+;
+                AllTrim(m.lcCmoeda)+'- '+AllTrim(m.lcDmoeda)
+cPeriodo     = 'Período: '+dtoc(dInicial)+' à '+dtoc(dFinal)
+
+* Cria o arquivo temporário para o cabeçalho
+Create cursor cabecalho (pNmEmp C(80), pRelTitulo C(80), pRelTitul2 c(80), pPeriodo C(80))
+Insert   Into cabecalho (pNmEmp,pRelTitulo,pRelTitul2,pPeriodo) values (cNomeEmpresa,cRelTitulo,cRelTitul2,cPeriodo)
+
+
+* Select principal
+Set Talk on
+Set Talk window
+
+*** mena - 05/10/2015 - Se relatorio tipo = 4 não checa vendedor aqui ***
+lcQuery = [ Select a.emps,a.vends,a.datas,a.dopes,a.numes,a.empdopnums, ] + ;
+		  [ b.copers,b.dopes,b.ccomis, ] + ;
+		  [ c.Trocos,c.fpcomiss,c.fpags, c.infos, ] + ;
+		  [ d.empdopnums,d.valos,d.Moefpgs,d.Datas,d.fpags,d.cotfpgs, ] + ;
+		  [ e.cemps,e.razas, ] + ;
+		  [ f.iClis,f.rclis,f.CCargs, ] + ;
+		  [ g.FComis,g.acomis,g.ccargs, a.Resps, h.rclis as DResps, h.Ccargs as CcargResps, a.grvends ] + ;
+		  [ From SigMvCab a Inner Join SigMvPar d On d.empdopnums=a.empdopnums ] +;
+		  [ Inner Join SigCdOpe b On d.dopes = b.dopes And b.ccomis = 1 ] +;
+		  [ Inner Join SigOpFp c On d.fpags = c.fpags And c.bxcomis = 1 ] +;
+		  [ Inner Join SigCdEmp e On a.emps = e.cemps ] +;
+		  [ Left Join SigCdCli h On a.Resps = h.Iclis ] +;
+		  [ Left Join SigCdCli f On a.Vends = f.iclis ] +; 
+		  [ Left join SigCdCrg g On f.ccargs = g.ccargs ] + ;
+		  [ Where a.datas between ?dDataIni1 and ?dDataFim2 ] + ;
+		    iif(IsEmpty(cEmpresa),[],[ and a.emps = ']+cEmpresa+[']) + ;
+			iif(IsEmpty(cGrupo) or nOpt=4,[],[ and (a.GrVends = ']+cGrupo+[' Or a.GrResps = ']+cGrupo+[')]) + ;
+			iif(IsEmpty(cConta) or nOpt=4,[],[ and (a.Vends = ']+cConta+[' Or a.Resps = ']+cConta+[')]) + ;
+		  [ Order By a.emps,a.vends,a.datas,a.dopes,a.numes,a.empdopnums, ] + ;
+		  [ b.copers,b.dopes,b.ccomis, ] + ;
+		  [ c.Trocos,c.fpcomiss,c.fpags, c.infos, ] + ;
+		  [ d.empdopnums,d.valos,d.Moefpgs,d.Datas,d.fpags, ] + ;
+		  [ e.cemps,e.razas, ] + ;
+		  [ f.iClis,f.rclis,f.CCargs, ] + ;
+		  [ g.FComis,g.acomis,g.ccargs ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTemp') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTemp)')
+	Return 0
+EndIf
+
+If nOpt = 1
+	Select vends,datas,emps,fpcomiss,fpags,rclis,razas,rclis as nvens,ccargs,infos,fComis, aComis,;
+	Iif(Not IsEmpty(CCargs) And Not IsNull(FComis) And FComis = [S],acomis/100,Iif(!Empty(Resps) And Vends <> Resps,0.5,01.00)) as fatComis,;
+	Sum(valos*fCarregarCambio(Moefpgs,Datas)/fCarregarCambio(lcCmoeda,Datas)*iif(copers=1,1,-1)*Iif(Trocos = 1,-1,1)) as tots,;
+	[S] as OptRel ;
+	From crTemp ;
+	Group By 1,2,3,4,5,6,7,8,9,10,11,12,13 ;	
+	Union ;
+	Select Resps as vends,datas,emps,fpcomiss,fpags,DResps as rclis,razas, DResps as nvens,CcargResps as ccargs,infos,fComis, aComis,;
+	Iif(Not IsEmpty(CCargs) And Not IsNull(FComis) And FComis = [S],acomis/100,Iif(!Empty(Resps) And Vends <> Resps,0.5,01.00)) as fatComis,;
+	Sum(valos*fCarregarCambio(Moefpgs,Datas)/fCarregarCambio(lcCmoeda,Datas)*iif(copers=1,1,-1)*Iif(Trocos = 1,-1,1)) as tots,;
+	[S] as OptRel ;
+	From crTemp Where !Empty(Resps) And Vends <> Resps ;	
+	Group By 1,2,3,4,5,6,7,8,9,10,11,12,13 ;
+	Order By 3,1,2,5 ;
+	Into Cursor tempo Readwrite
+	*** Tiago - 02/04/2013 - Incluido o Union para checar se tem o segundo vendedor e dividir a comissão
+ENDIF
+
+If INLIST(nOpt,2,3)
+	Select dopes,vends,datas,emps,numes,fpcomiss,fpags,rclis,razas,rclis as nvens,ccargs,infos,;
+	fComis, aComis,	[A] as OptRel, ;
+	Iif(Not IsEmpty(CCargs) And Not IsNull(FComis) And FComis = [S],acomis/100,Iif(!Empty(Resps) And Vends <> Resps,0.5,01.00)) as fatComis,;
+	Sum(valos*fCarregarCambio(Moefpgs,Datas)/fCarregarCambio(lcCmoeda,Datas)*iif(copers=1,1,-1)*Iif(Trocos = 1,-1,1)) as tots ;
+	From crTemp ;
+	Group By 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 ;
+	Union ;
+	Select dopes,Resps as vends,datas,emps,numes,fpcomiss,fpags,DResps as rclis,razas,DResps as nvens,ccargs,infos,;
+	fComis, aComis,	[A] as OptRel, ;
+	Iif(Not IsEmpty(CCargs) And Not IsNull(FComis) And FComis = [S],acomis/100,Iif(!Empty(Resps) And Vends <> Resps,0.5,01.00)) as fatComis,;
+	Sum(valos*fCarregarCambio(Moefpgs,Datas)/fCarregarCambio(lcCmoeda,Datas)*iif(copers=1,1,-1)*Iif(Trocos = 1,-1,1)) as tots ;
+	From crTemp Where !Empty(Resps) And Vends <> Resps ;
+	Group By 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 ;	
+	Order By 4,2,3,1,5,7 ;
+	Into Cursor tempo Readwrite
+	*** Tiago - 02/04/2013 - Incluido o Union para checar se tem o segundo vendedor e dividir a comissão	
+EndIf
+
+*** mena - 02/10/2015 - pega as comissoes da forma de pagamento considerando a grade de comissões ***
+If INLIST(nOpt,4)
+
+	cVerVendedor = iif(Empty(cGrupo),[],[ and a.GrVends = ']+cGrupo+[' ])
+	cVerVendedor = cVerVendedor + iif(Empty(cconta),[],[ and b.contas = ']+cConta+[' ])
+
+	lcQuery = [ Select *, b.rclis as nvens  from sigcdcmm a, sigcdcli b where a.datas between ?dDataIni1 and ?dDataFim2 and a.contas = b.iclis]
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crCmm1') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTemp)')
+		Return 0
+	EndIf
+
+	SELECT empdopnums, COUNT(contas) as qtdv from Crcmm1 group by empdopnums into cursor crCmm2
+	
+	SELECT a.*, b.qtdv from crCmm1 a, crCmm2 b where a.empdopnums = b.Empdopnums into cursor crCdCmm
+	
+	Select a.dopes,b.contas as vends,a.datas,a.emps,a.numes,a.fpcomiss,a.fpags,a.rclis,a.razas,nvens,a.ccargs,a.infos,;
+	a.fComis, b.percs as aComis, [A] as OptRel, ;
+	Iif(Not IsEmpty(a.CCargs) And Not IsNull(a.FComis) And a.FComis = [S],b.percs/100, 01) as fatComis, ;
+ 	Sum(a.valos/b.qtdv*a.cotfpgs/fCarregarCambio(lcCmoeda,a.Datas)) as tots ;
+	From crTemp a, crCdCmm b ;
+	where a.empdopnums = b.empdopnums &cVerVendedor;
+	Group By 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 ;
+	Order By 4,2,3,1,5,7 ;
+	Into Cursor tempo Readwrite
+EndIf
+
+
+**
+* Marcio em 27/03/2013 - alterado para não mostrar comissões zeradas ao selecionar checkbox de filtro
+If ThisForm.fwChkComissao.Value = 1		&& And nOpt = 2
+*	Delete From Tempo Where ( Round( Tots * FpComiss * FatComis /100, 2 ) <= 0)
+	* Richard em 07/10/2014 - Solicitação 
+	Delete From Tempo Where ( Round( Tots * FpComiss * FatComis /100, 2 ) = 0)
+EndIf
+**
+
+Select tempo
+Go Top
+
+If nOpt = 3
+
+	lcQuery = [Select * From SigPrInf ]
+	If ThisForm.PodataMgr.SqlExecute(lcquery,'TmpInfo') < 0
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpInfo)')
+		Return 0
+	Endif
+
+	Select a.Emps, a.Vends, Max(a.nvens) as nvens, a.Infos, Max(b.descrs) as descrs, ;
+		   sum(tots) as Tots, Max(a.razas) as razas, Max(a.ccargs) as ccargs ;
+	  From Tempo a, tmpInfo b ;
+	 Where a.Infos = b.infos ;
+ 	  Into Cursor Tempo2 Group by 1,2,4 order by 1,2,5
+
+EndIf
+
+Return
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+If ThisForm.OptRel.value = 3
+	Report Form SigReCs1 Preview NoConsole
+Else
+	Report form SigReCs2 preview NoConsole
+Endif
+use in cabecalho
+use in tempo
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSM.get_ds_estoque
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ThisForm.get_Cd_GrEstoque.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'D',this.value,This.Parent.get_Cd_estoque,This)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		This.Parent.get_Cd_estoque.Value = ''
+		This.Parent.get_Cd_estoque.Refresh
+		return 0 
+	Endif
+Else
+	This.Parent.get_Cd_estoque.Value = ''
+	This.Parent.get_Cd_estoque.Refresh
+	return(.t.)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.Not.IsEmpty(ThisForm.get_Cd_GrEstoque.Value).And.IsEmpty(ThisForm.get_cd_estoque.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSM.get_cd_estoque
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ThisForm.get_Cd_GrEstoque.Value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'C',this.value,This,This.Parent.get_Ds_estoque)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		This.Parent.get_Ds_estoque.Value = ''
+		This.Parent.get_Ds_estoque.Refresh
+		return 0 
+	Endif
+Else
+	This.Parent.get_Ds_estoque.Value = ''
+	This.Parent.get_Ds_estoque.Refresh
+	return(.t.)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.Not.IsEmpty(ThisForm.get_Cd_GrEstoque.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSM.get_Ds_GrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'D',this.value,This.Parent.get_Cd_Grestoque,This)
+Else
+	This.Parent.get_Cd_Grestoque.value = ''
+	This.Parent.get_Cd_Grestoque.refresh
+endif
+return(.t.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(thisform.get_cd_grestoque.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSM.get_Cd_GrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'C',this.value,This,This.Parent.get_Ds_Grestoque)
+Else
+	This.Parent.get_Ds_Grestoque.value = ''
+	This.Parent.get_Ds_Grestoque.refresh
+endif
+return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSM.get_empresa_desc
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.get_Empresa,ThisForm.get_Empresa_Desc)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(thisform.get_empresa.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSM.get_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.get_Empresa,ThisForm.get_Empresa_Desc)
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSM.getDmoeda
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If .Not.IsEmpty(This.Value)
+
+    Set Near On
+    
+    If .Not.Seek(This.Value,'crSigCdMoe','Dmoes')
+		xBrow=CreateObject('fwbuscasel','crSigCdMoe','DMOES',this.value,'Seleção')
+		xBrowCol=xBrow.AddColuna('DMOES','','Descrição',.T.,'DMOES')
+		xBrowCol=xBrow.AddColuna('CMOES','XXXXXX','Código',.t.,'CMOES')
+		xBrow.Show	     
+	EndIf
+
+	Set Near Off
+	
+   This.Parent.getCmoeda.Value = Evaluate('crSigCdMoe.Cmoes')
+   This.Parent.getDmoeda.Value = Evaluate('crSigCdMoe.Dmoes')
+   This.Parent.getCmoeda.Refresh
+   This.Parent.getDmoeda.Refresh
+
+Else
+
+	ThisForm.getCmoeda.Value = ''
+	ThisForm.getCmoeda.Refresh
+	
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.getCmoeda.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSM.getCmoeda
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If .Not.IsEmpty(This.Value)
+
+    Set Near On
+    
+    If .Not.Seek(This.Value,'crSigCdMoe','Cmoes')
+		xBrow=CreateObject('fwbuscasel','crSigCdMoe','CMOES',this.value,'Seleção')
+		xBrowCol=xBrow.AddColuna('CMOES','XXXXXX','Código',.t.,'CMOES')
+		xBrowCol=xBrow.AddColuna('DMOES','','Descrição',.T.,'DMOES')
+		xBrow.Show	      
+	EndIf
+
+	Set Near Off
+	
+   This.Parent.getCmoeda.Value = Evaluate('crSigCdMoe.Cmoes')
+   This.Parent.getDmoeda.Value = Evaluate('crSigCdMoe.Dmoes')
+   This.Parent.getCmoeda.Refresh
+   This.Parent.getDmoeda.Refresh
+	
+Else
+
+	ThisForm.getDmoeda.Value = ''
+	ThisForm.getDmoeda.Refresh
+	
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECSM
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 18
+================================================================================

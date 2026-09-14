@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. A Fase 2 est├í completa.
+
+**Resumo do que foi implementado em SIGREFXVBO.prg:**
+
+**M├®todos adicionados:**
+
+- **`PrepararDados()`** ÔÇö l├│gica completa do `processamento` legado: valida par├ómetros, busca cota├º├úo da moeda de refer├¬ncia (`fBuscarCotacao`), cria cursor `csCabecalho` para o FRX, cria cursor `CsRelatorio` com ├¡ndice `Quebra`, carrega faixas de pre├ºo (`SigCdPpc/SigCdPpi`), itera os pares Empresa/Grupo do grid (`CsEstoque`), executa SQLEXEC em `SigMvEst` (posi├º├úo atual) ou `SigMvHst` (retroativo com `?pDat`), busca caracter├¡sticas em `SigCdPft`, converte pre├ºos entre moedas, faz SEEK/APPEND no `CsRelatorio`, e gera subtotais e total geral via UNION ALL local.
+
+- **`ValidarGridEstoque()`** ÔÇö valida duplicidades e inconsist├¬ncias (empresa em branco com mesmo grupo) no grid antes de processar.
+
+- **`Visualizar()`** / **`Imprimir()`** / **`ImprimirDireto()`** ÔÇö equivalentes a `visualizacao`/`impressao`/`documento` do legado: chamam `PrepararDados()` e executam `REPORT FORM ... PREVIEW/TO PRINTER`.
+
+- **`ObterMensagemErro()`**, **`ObterChavePrimaria()`**, **`Destroy()`** ÔÇö m├®todos de suporte.
+
+**Propriedades adicionadas:** `this_cArquivoFRX`, `this_cTitulo`.

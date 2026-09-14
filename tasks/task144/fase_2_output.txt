@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto e completo. Fase 2 conclu├¡da.
+
+**O que foi adicionado ao `SigPdMp3BO.prg`:**
+
+| M├®todo | Equivalente Legado | Fun├º├úo |
+|---|---|---|
+| `CarregarDoCursor(par_cAlias)` | ÔÇö | Carrega todas as colunas de xOpi para `this_*` |
+| `ObterDadosProduto()` | `CursorQuery SigCdPro/SigCdGrp/SigCdGpr` | SQLEXEC em 3 tabelas, resolve `this_cMatP` |
+| `ObterDescricaoConta(par_cICli)` | `CursorQuery SigCdCli` | Retorna RClis para exibir nos containers |
+| `ObterDadosOpe(par_cDopes)` | `sqlexecute SigCdOpe` | Define `this_lEspecial` |
+| `ValidarDados()` | ÔÇö | Valida amarra e qtds antes de processar |
+| `Inserir()` | `Column3.Text1.Valid` | DELETE + INSERT xPesa com campo `Especial` |
+| `InserirPorCheckbox()` | `Column5.Check1.InteractiveChange` | DELETE + INSERT xPesa com campo `Divs` |
+| `Atualizar()` | `Column7.Check1.InteractiveChange` | UPDATE xPesa SET Divs para amarra corrente |
+| `AtualizarDivsTodas()` | `Column7.Header1.DblClick` | UPDATE xPesa para todos os registros xOpi |
+| `ProcessarTodasOpi()` | `Column5.Header1.DblClick` | SCAN xOpi + InserirPorCheckbox logic para todos |
+| `ObterChavePrimaria()` | ÔÇö | Retorna `this_cAmarra` |
+| `RegistrarAuditoria()` | ÔÇö | No-op (sem tabela SQL Server) |
+
+**Distin├º├úo cr├¡tica preservada**: `Inserir()` usa campo `Especial` (fluxo Column3/quantidade), `InserirPorCheckbox()` usa campo `Divs` (fluxo Column5/checkbox) ÔÇö fiel ao comportamento diferenciado do legado.

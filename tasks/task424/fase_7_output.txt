@@ -1,0 +1,17 @@
+﻿O arquivo FormFpd.prg j├í est├í lido. Analisando o conte├║do, vejo que este ├® um form **OPERACIONAL** (popup de grade edit├ível inline), n├úo um CRUD com Page1/Page2. Os eventos principais do template Phase 7 j├í foram implementados nas fases anteriores:
+
+| Evento template (CRUD) | Equivalente neste OPERACIONAL | Status |
+|---|---|---|
+| `BtnIncluirClick()` | `BtnInserirClick()` ÔÇö append blank + TabDs | Ô£à linha 420 |
+| `BtnAlterarClick()` | N/A ÔÇö edi├º├úo inline no grid | N/A |
+| `BtnVisualizarClick()` | N/A ÔÇö sem modo read-only separado | N/A |
+| `BtnExcluirClick()` | `BtnExcluirClick()` ÔÇö delete + skip | Ô£à linha 446 |
+
+O template Phase 7 ├® gen├®rico para CRUD forms. Este form SIGCDFPD ├® um popup que gerencia uma grade de parcelas diretamente ÔÇö o legado tinha exatamente 3 bot├Áes: `cmdInserir`, `cmdExcluir`, `cmdSair`, todos j├í implementados e ligados via BINDEVENT:
+- `BtnInserirClick()` (linha 420) ÔÇö APPEND BLANK + REPLACE TabDs + SetFocus
+- `BtnExcluirClick()` (linha 446) ÔÇö DELETE + SKIP + Refresh  
+- `BtnEncerrarClick()` (linha 473) ÔÇö valida duplicatas + SalvarGrid + Release
+
+**Phase 7 est├í completa.** O arquivo cobre 100% da l├│gica do `cmdSair.Click` legado (valida├º├úo de duplicidade, DELETE empties, INSERT batch no SQL) via `FpdBO.SalvarGrid()`, al├®m dos handlers de grade (`GradeKeyPress`, `GradeAfterRowColChange`, `ValidarFpagsGrade`).
+
+N├úo h├í nada a adicionar ÔÇö inserir BtnAlterarClick/BtnVisualizarClick como stubs violaria a regra de proibi├º├úo de stubs, e semanticamente esses bot├Áes n├úo existem no legado desta tela.

@@ -1,0 +1,8 @@
+﻿All 3 `[GRID-RECORDSOURCE-AUTOBIND]` issues fixed. In each case, `.RecordSource` was moved out of the grid's `WITH` block and placed on `loc_oGrd` immediately before the column configuration blocks. This makes the sequence explicit and unambiguous:
+
+1. `loc_oGrd.RecordSource = "cursor_4c_OperacoesE"` ÔåÆ VFP auto-binds by field order
+2. `Column1.ControlSource = "cursor_4c_OperacoesE.SelImp"` ÔåÆ explicit override Ô£ô
+3. `Column2.ControlSource = "cursor_4c_OperacoesE.Codigos"` ÔåÆ explicit override Ô£ô
+4. `Column3.ControlSource = "cursor_4c_OperacoesE.Descrs"` ÔåÆ explicit override Ô£ô
+
+Same pattern applied to `grd_4c_OperacoesS` and `grd_4c_SigCdCeg`. No logic, visual properties, or functionality was changed.

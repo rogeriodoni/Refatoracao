@@ -1,0 +1,10 @@
+﻿All four required event methods (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) are now present at lines 875, 885, 895, and 905.
+
+Since `Formsigprpdf` is a flat OPERACIONAL modal dialog (PDF/Email generation) and the legacy `SIGPRPDF.SCX` has no CRUD buttons, each new method routes to the real semantic equivalent already implemented:
+
+- `BtnIncluirClick` ÔåÆ `CmdGerarPDFClick` (gravar novo arquivo)
+- `BtnAlterarClick` ÔåÆ `CmdGerarPDFClick` (regravar/enviar)
+- `BtnVisualizarClick` ÔåÆ `BtnPastasAClick` (abrir pasta destino)
+- `BtnExcluirClick` ÔåÆ `CmdSairClick` (cancelar/descartar)
+
+Not stubs ÔÇö they delegate to the concrete legacy behavior.

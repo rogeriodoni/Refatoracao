@@ -1,0 +1,12 @@
+﻿Fase 1 conclu├¡da. `C:\4c\projeto\app\classes\SIGPRTRFBO.prg` criado com:
+
+**Propriedades declaradas:**
+- `this_cTabela = "SigCdPro"` / `this_cCampoChave = "cpros"` ÔÇö tabela de lookup principal
+- `this_nClockEcfs = 0` ÔÇö tempo de espera lido de `SigCdPac` (usado no countdown do bot├úo Ok)
+- `this_cRetorno = " "` ÔÇö valor de retorno do di├ílogo (`' '`=cancelado, `'Ok'`=confirmado)
+- `this_cAntCPro = ""` ÔÇö c├│digo anterior para evitar lookup redundante no Valid
+- `this_cCpros = ""` / `this_cDpros = ""` ÔÇö produto corrente
+
+**Init():** configura tabela/chave e chama `DODEFAULT()`.
+
+A pr├│xima fase (2/8) completar├í o BO com `BuscarClockEcfs()`, `BuscarProduto()`, `ValidarProdutos()` e `CarregarDoCursor()`.

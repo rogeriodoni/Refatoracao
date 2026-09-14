@@ -1,0 +1,10 @@
+﻿**Corre├º├úo aplicada** em `sigrecorBO.prg` linha 553.
+
+**Resumo dos problemas:**
+
+| Issue | Status | A├º├úo |
+|-------|--------|------|
+| CODIGOS em WHERE | Corrigido | `LEFT(a.Codigos, 3) = o.NDopes` ÔåÆ `b.Dopes = o.Dopes` |
+| CALCFECS em WHERE | Falso positivo | CALCFECS est├í no `SELECT`, n├úo no `WHERE`; o `WHERE` da query usa `dopes` (coluna v├ílida) |
+
+**Detalhe da corre├º├úo CODIGOS:** O join entre `SigMvCab b` e `SigCdOpe o` agora usa `b.Dopes = o.Dopes`, que ├® o join can├┤nico via campo `Dopes` (presente na lista de colunas WHERE v├ílidas do original). A condi├º├úo inventada `LEFT(a.Codigos, 3) = o.NDopes` foi removida.

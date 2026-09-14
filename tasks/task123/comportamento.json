@@ -1,0 +1,499 @@
+{
+  "resumo": {
+    "totalMetodos": 29,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 11,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral", "fAcessoContas", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIMP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "If (ThisForm.optTipos.Value = 1) && Detalhado\n\tReport Form SigReIp1 Preview NoConsole\nElse\t\t\t\t\t\t\t && Resumido\n\tReport Form SigReIp2 Preview NoConsole\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP",
+      "evento": "Procedure",
+      "linhas": 117,
+      "codigoOriginal": "Private ldDtI, ldDtF, lcEmp, lcEmd, lcDop, lcEmd, lcCep, lcTit, lcSub, lcPer, lcSub\nPrivate pDtI, pDtF\n\nldDtI = ThisForm.getDtInicial.Value\nldDtF = ThisForm.getDtFinal.Value\nlcEmp = ThisForm.getEmpresa.Value\nlcEpD = ThisForm.getDEmpresa.Value\nlcCta = ThisForm.getConta.Value\nlcCtD = ThisForm.getDConta.Value\n\npDtI = fDtoSQL(ldDtI)\npDtF = fDtoSQL(ldDtF, [23:59:59])\n\nlcTep = Iif(Empty(lcEmp), [Global], Alltrim(lcEmp) + [-] + Alltrim(lcEpD)) \nlcTct = Iif(Empty(lcCta), [Global], Alltrim(lcCta) + [-] +... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "chkSubTotDat,optTipos",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIMP",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n\nCreate Cursor csOperacoesE (SelImp l(1), Codigos n(2), Descrs c(30))\nIndex On Codigos Tag Codigos\n\nCreate Cursor csOperacoesS (SelImp l(1), Codigos n(2), Descrs c(30))\nIndex On Codigos Tag Codigos\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP",
+      "evento": "Init",
+      "linhas": 70,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.getDtInicial.Value = Date()\n\t\t.getDtFinal.Value   = Date()\n\t\t.getEmpresa.Value   = _Empr\n\t\t.getDEmpresa.Value  = []\n\t\t\n\t\t.poDataMgr.CursorQuery([SigCdEmp], [LocalEmp], [Cemps], _Empr, [Razas])\n\t\tIf Not Used([LocalEmp])\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalEmp)])\n\t\t\tReturn .f.\n\t\tEndIf\n\t\tSelect LocalEmp\n\t\tIf Not Eof([LocalEmp])\n\t\t\t.getDEmpresa.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIMP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "If (ThisForm.optTipos.Value = 1) && Detalhado\n\tReport Form SigReIp1 To Print Prompt NoConsole\nElse\t\t\t\t\t\t\t && Resumido\n\tReport Form SigReIp2 To Print Prompt NoConsole\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "If (ThisForm.optTipos.Value = 1) && Detalhado\n\tReport Form SigReIp1 To Print\nElse\t\t\t\t\t\t\t && Resumido\n\tReport Form SigReIp2 To Print\nEndIf\n* Fim **************************************************************************************]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP",
+      "evento": "Click",
+      "linhas": 60,
+      "codigoOriginal": "Local lcOpera\nIf (This.Value <> 3)\n\tIf Empty(ThisForm.getDtInicial.Value)\n\t\t=Messagebox([Data Inicial Inválida!!!], 0+48, [Filtros Inválidos])\n\t\tThisForm.getDtInicial.SetFocus\n\t\tReturn .f.\n\tEndIf\n\t\n\tIf Empty(ThisForm.getDtFinal.Value)\n\t\t=Messagebox([Data Final Inválida!!!], 0+48, [Filtros Inválidos])\n\t\tThisForm.getDtFinal.SetFocus\n\t\tReturn .f.\n\tEndIf\n\n\tIf (ThisForm.getDtFinal.Value < ThisForm.getDtInicial.Value)\n\t\t=Messagebox([Data Final Menor Que a Inicial!!!], 0+48, [Filtros Inválidos])\n\t\tThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIMP.cmdBtnGradeE",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Update csOperacoesE Set SelImp = (This.Value = 1)\nGo Top In csOperacoesE\nThisForm.grdOperacoesE.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.getDConta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty(ThisForm.getConta.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.getDConta",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, [], [D], This.Value, ThisForm.getConta, ThisForm.getDConta)\n\t\t=Messagebox([Acesso Negado!!!], 0+48, [Checagem de Acesso])\n\t\tThisForm.getConta.Value  = []\n\t\tThisForm.getDConta.Value = []\n\tEndIf\nElse\n\tThisForm.getConta.Value  = []\n\tThisForm.getDConta.Value = []\nEndIf\nThisForm.getConta.Refresh\nThisForm.getDConta.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.getConta",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, [], [C], This.Value, ThisForm.getConta, ThisForm.getDConta)\n\t\t=Messagebox([Acesso Negado!!!], 0+48, [Checagem de Acesso])\n\t\tThisForm.getConta.Value  = []\n\t\tThisForm.getDConta.Value = []\n\tEndIf\nElse\n\tThisForm.getConta.Value  = []\n\tThisForm.getDConta.Value = []\nEndIf\nThisForm.getConta.Refresh\nThisForm.getDConta.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.getDEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getEmpresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.getDEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [D], This.Value, ThisForm.getEmpresa, ThisForm.getDEmpresa)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.getEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.getEmpresa, ThisForm.getDEmpresa)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.cmdBtnGradeS",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Update csOperacoesS Set SelImp = (This.Value = 1)\nGo Top In csOperacoesS\nThisForm.grdOperacoesS.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesS.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesS.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nReplace SelImp With Not SelImp In csOperacoesS\nThisForm.grdOperacoesS.Refresh\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesS.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(nKeyCode, 13, 32)\n\tReplace SelImp With Not SelImp In csOperacoesS\n\tThisForm.grdOperacoesS.Refresh\n\tNoDefault\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesS.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesS.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesS.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesE.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesE.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nReplace SelImp With Not SelImp In csOperacoesE\nThisForm.grdOperacoesE.Refresh\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesE.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 8,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(nKeyCode, 13, 32)\n\tReplace SelImp With Not SelImp In csOperacoesE\n\tThisForm.grdOperacoesE.Refresh\n\tNoDefault\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesE.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesE.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIMP.grdOperacoesE.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIMP.chkSubTotDat",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.optTipos.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTipos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMP.optTipos",
+      "evento": "InteractiveChange",
+      "linhas": 4,
+      "codigoOriginal": "If (This.Value = 2)\n\tThisForm.chkSubTotDat.Value = .f.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkSubTotDat",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREIMP.cmdBtnGradeE.Click",
+      "queryOriginal": "Update csOperacoesE Set SelImp = (This.Value = 1)",
+      "tabelas": "csOperacoesE",
+      "colunas": "SelImp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREIMP.cmdBtnGradeS.Click",
+      "queryOriginal": "Update csOperacoesS Set SelImp = (This.Value = 1)",
+      "tabelas": "csOperacoesS",
+      "colunas": "SelImp",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csOperacoesE", "csOperacoesS"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

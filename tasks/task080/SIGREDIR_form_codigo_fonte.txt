@@ -1,0 +1,814 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREDIR.SCX
+* Data/Hora: 04/06/2026 04:58:50
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREDIR
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getAnoBase
+  Parent: SIGREDIR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Fornec
+  Parent: SIGREDIR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREDIR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREDIR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREDIR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dforn
+  Parent: SIGREDIR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ck_MarcaEmp
+  Parent: SIGREDIR
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: grdEmps
+  Parent: SIGREDIR
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREDIR.grdEmps.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREDIR.grdEmps.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREDIR.grdEmps.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREDIR.grdEmps.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREDIR.grdEmps.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREDIR.grdEmps.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdEmps
+  Parent: SIGREDIR
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 66
+  Left = 102
+  Width = 485
+  Height = 293
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 350
+  Width = 800
+  DoCreate = .T.
+  Caption = "Demonstrativo de Retenção de Impostos - CSLL, COFINS e PIS/PASEP"
+  Name = "SIGREDIR"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 527
+  btnReport.Top = 3
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.getAnoBase
+------------------------------------------------------------
+  Height = 23
+  InputMask = ""
+  Left = 242
+  MaxLength = 4
+  TabIndex = 2
+  Top = 106
+  Width = 38
+  BackColor = 255,255,255
+  ZOrderSet = 3
+  Name = "getAnoBase"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.Get_Fornec
+------------------------------------------------------------
+  Height = 23
+  Left = 242
+  MaxLength = 10
+  TabIndex = 4
+  Top = 144
+  Width = 81
+  ZOrderSet = 4
+  Name = "Get_Fornec"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Fornecedor :"
+  Left = 171
+  Top = 147
+  Width = 64
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Ano Base :"
+  Left = 181
+  Top = 109
+  Width = 54
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  Caption = "Empresas :"
+  Left = 172
+  Top = 180
+  Width = 63
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.Get_Dforn
+------------------------------------------------------------
+  Height = 23
+  Left = 324
+  TabIndex = 5
+  Top = 144
+  Width = 306
+  ZOrderSet = 6
+  Name = "Get_Dforn"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.ck_MarcaEmp
+------------------------------------------------------------
+  Top = 180
+  Left = 240
+  Height = 16
+  Width = 13
+  Alignment = 0
+  Centered = .F.
+  Caption = ""
+  Value = 1
+  TabIndex = 10
+  ZOrderSet = 14
+  Name = "ck_MarcaEmp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.grdEmps
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 139
+  Left = 238
+  RecordMark = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 7
+  Top = 179
+  Width = 291
+  GridLineColor = 238,238,238
+  ZOrderSet = 13
+  Name = "grdEmps"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 15
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 27
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 220
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.grdEmps.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.grdEmps.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.grdEmps.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp."
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.grdEmps.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.grdEmps.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.grdEmps.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDIR.cmdEmps
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 91
+  Left = 532
+  Top = 204
+  Width = 50
+  TabIndex = 8
+  Name = "cmdEmps"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\vbmp\a_misc1.bmp
+  Command1.Caption = ""
+  Command1.TabIndex = 3
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnMarca"
+  Command2.Top = 46
+  Command2.Left = 5
+  Command2.Height = 40
+  Command2.Width = 40
+  Command2.FontName = "Verdana"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\vbmp\a_misc6.bmp
+  Command2.Caption = ""
+  Command2.ForeColor = 36,84,155
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnDesmarca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREDIR
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE montaemps
+------------------------------------------------------------
+PROCEDURE montaemps
+Local lcEmp, lcVir
+
+Select Cemps ;
+  From crSigCdEmp ;
+ Where Imps ;
+  Into Cursor LocalEmps
+Go Top In LocalEmps
+
+lcEmp = []
+
+Do Case
+	Case Reccount([LocalEmps]) = 1
+		lcEmp = [ And a.Emps = '] + LocalEmps.Cemps + [']
+
+	Case Reccount([LocalEmps]) > 1
+		lcEmp = [ And a.Emps In (]
+		lcVir = []
+		Select LocalEmps
+		Scan
+			lcEmp = lcEmp + lcVir + ['] + LocalEmps.Cemps + [']
+			lcVir = [, ]
+		EndScan
+		lcEmp = lcEmp + [)]
+EndCase
+
+Return lcEmp
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form sigReDir to Print NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form sigReDir to Print Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.getAnoBase.Value = Str(Year(Date()),4)
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',Thisform.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	ENDIF
+	lfalso = .t.
+	* Carregando Cursor com as Empresas
+	If ThisForm.podatamgr.SQLExecute([select ?lfalso as Imps, cemps, razas from SigCdEmp Order by cEmps],'crSigCdEmp') < 1 Then
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdEmp)')
+		Return(.F.)	
+	Endif	
+	Select crSigCdEmp
+	Index on cEmps Tag cEmps
+
+	With .grdEmps
+		.ColumnCount       = 3
+		.RecordSource      = 'crSigCdEmp'
+		.DeleteMark        = .f.
+		.RecordMark        = .f.
+		.ReadOnly          = .f.
+		.AllowHeaderSizing = .f.
+		.AllowRowSizing    = .f.
+
+		.Column1.ControlSource   = 'crSigCdEmp.Imps'
+		.Column1.FontName        = 'Courier New'
+		.Column1.Movable         = .f.
+		.Column1.Resizable       = .f.
+		.Column1.ReadOnly        = .f.
+		.Column1.Sparse          = .f.
+		.Column1.Check1.AutoSize = .t.
+	
+		.Column2.ControlSource   = 'crSigCdEmp.cEmps'
+		.Column3.ControlSource   = 'crSigCdEmp.Razas'
+	
+		For I=2 To .ColumnCount
+			lcCol = Alltrim(Str(I))
+			.Column&lcCol..FontName  = 'Courier New'
+			.Column&lcCol..Movable   = .f.
+			.Column&lcCol..Resizable = .f.
+			.Column&lcCol..ReadOnly  = .t.
+		Next
+	EndWith
+
+Endwith	
+
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pdDataIni, pdDataFin
+Local ldDataIni, ldDataFin, lcEmpresa, lcTitulo, lcPeriodo, lcMoe1, lcMoe2, lcMoe3, lcIdTab1
+
+ldDataIni = Ctod('01/01/'+ThisForm.getAnoBase.Value) 
+ldDataFin = Ctod('31/12/'+ThisForm.getAnoBase.Value)
+
+pdDataIni = fDtoSQL(ldDataIni)
+pdDataFin = fDtoSQL(ldDataFin,'23:59:59')
+
+lcemps = thisform.montaemps()
+
+lcquery = [select d.razsocs, d.cgcs, a.emis, a.totnotas, a.vpis as vimposto, b.codpiss as codservs, a.clifors, c.rclis, c.cpfs as cnpj from SigMvNfi a with (nolock) left join SigCdSrv b with (nolock) on a.codservs=b.codservs ] +;
+			[left join SigCdCli c on c.iclis=a.clifors ] +;
+			[left join SigCdEmp d on a.emps=d.cemps ] +;
+			[where emis between ?pdDataIni and ?pdDataFin and (vpis <> 0 or vcofins <> 0 or vcsll <> 0) ] +;
+			lcemps  +;
+			IIF(not EMPTY(ThisForm.get_Fornec.Value),[ And a.clifors = ']+ThisForm.get_Fornec.Value+[' ] ,[]) + ;
+			[union all ] +;
+			[select d.razsocs, d.cgcs, a.emis, a.totnotas, a.vcofins as vimposto, b.codcofinss as codservs, a.clifors, c.rclis, c.cpfs as cnpj from SigMvNfi a with (nolock) left join SigCdSrv b with (nolock) on a.codservs=b.codservs ] +;
+			[left join SigCdCli c on c.iclis=a.clifors ] +;
+			[left join SigCdEmp d on a.emps=d.cemps ] +;			
+			[where emis between ?pdDataIni and ?pdDataFin and (vpis <> 0 or vcofins <> 0 or vcsll <> 0) ] +;
+			lcemps +;
+			IIF(not EMPTY(ThisForm.get_Fornec.Value),[ And a.clifors = ']+ThisForm.get_Fornec.Value+[' ] ,[]) + ;
+			[union all ] +;
+			[select d.razsocs, d.cgcs, a.emis, a.totnotas, a.vcsll as vimposto,b.codcslls as codservs,a.clifors, c.rclis, c.cpfs as cnpj from SigMvNfi a with (nolock) left join SigCdSrv b with (nolock) on a.codservs=b.codservs ] +;
+			[left join SigCdCli c on c.iclis=a.clifors ] +;
+			[left join SigCdEmp d on a.emps=d.cemps ] +;			
+			[where emis between ?pdDataIni and ?pdDataFin and (vpis <> 0 or vcofins <> 0 or vcsll <> 0) ] +;
+			lcemps +;
+			IIF(not EMPTY(ThisForm.get_Fornec.Value),[ And a.clifors = ']+ThisForm.get_Fornec.Value+[' ] ,[]) + ;
+			[order by cnpj,a.clifors,a.emis,a.codservs]
+
+If( ThisForm.poDataMgr.SQLExecute(m.lcQuery,[crSigMvNfi]) < 1 )
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvNfi)')
+	Return(.F.)
+Endif
+
+Select crSigMvNfi
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form sigReDir Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+IF this.Value # 4
+	IF EMPTY(ThisForm.getAnoBase.Value)
+		MESSAGEBOX('Ano base não informado.',64,'Aviso')
+		RETURN .f.
+	ENDIF
+
+	SELECT crSigCdEmp
+	LOCATE
+	lcemps = thisform.montaemps()
+	IF EMPTY(lcemps)
+		MESSAGEBOX('Nenhuma empresa foi selecionada.',64,'Aviso')
+		RETURN .f.
+	ENDIF
+ENDIF
+
+DODEFAULT()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDIR.Get_Fornec
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Empty(This.Value)
+	ThisForm.get_DForn.Value = ''
+	ThisForm.get_DForn.Refresh
+	Return(.T.)
+EndIf
+
+If !fAcessoContas( Usuar, [], 'C', This.Value, This, ThisForm.get_DForn)
+	MessageBox( 'Acesso Negado...', 48, '' )
+	This.Value = ' '
+	ThisForm.get_DForn.Value = ''
+	Return(.F.)
+EndIf	
+
+ThisForm.get_Fornec.Refresh
+ThisForm.get_DForn.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDIR.Get_Dforn
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Empty(This.Value)
+	ThisForm.get_Fornec.Value = ''
+	ThisForm.get_Fornec.Refresh
+	Return(.T.)
+EndIf
+
+If !fAcessoContas( Usuar, [], 'D', This.Value, ThisForm.get_Fornec, This)
+	MessageBox( 'Acesso Negado...', 48, '' )
+	This.Value = ' '
+	ThisForm.get_Fornec.Value = ''
+	Return(.F.)
+EndIf	
+
+ThisForm.get_Fornec.Refresh
+ThisForm.get_DForn.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_Fornec.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDIR.ck_MarcaEmp
+* Classe: checkbox (Base: checkbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+if( ThisForm.ck_MarcaEmp.Value = 1 ) Then
+	Replace all Imps with 1 in crSigCdEmp
+Else
+	Replace all Imps with 0 in crSigCdEmp
+Endif 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDIR.grdEmps.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+*!*	NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+*!*	Local Imps
+
+*!*	If InList(nKeyCode, 13, 32)
+*!*		m.Imps = Iif( crSigCdEmp.Imps = 1, 0, 1 )
+
+*!*		Select crSigCdEmp
+*!*		Gather Memvar Fields Imps
+*!*		ThisForm.grdEmps.Refresh
+
+*!*		NoDefault
+*!*	EndIf
+*!*	* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+*!*	Local Imps
+
+*!*	m.Imps = Iif( crSigCdEmp.Imps = 0, 1, 0 )
+
+*!*	Select crSigCdEmp
+*!*	Gather Memvar Fields Imps
+*!*	ThisForm.grdEmps.Refresh
+
+*!*	NoDefault
+*!*	* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+*!*	NoDefault
+*!*	* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDIR.grdEmps.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDIR.grdEmps.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDIR.cmdEmps
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Update crSigCdEmp Set Imps = (This.Value = 1)
+ThisForm.grdEmps.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREDIR
+RESERVED3 (ClassInfo): mydopes
+podatamgr
+*montaemps 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 18
+================================================================================

@@ -1,0 +1,11 @@
+﻿Fase 6 conclu├¡da. As altera├º├Áes aplicadas foram:
+
+1. **`TeclaCheckOperacoes`** ÔÇö adicionado `Tab (9)` ÔåÆ `THIS.obj_4c_NrTipo.Buttons(1).SetFocus()` (replica o comportamento original: Tab no grid de Opera├º├Áes foca o OptionGroup de Situa├º├úo)
+
+2. **`TeclaCheckImprimir`** ÔÇö adicionado `Tab (9)` ÔåÆ `THIS.cbo_4c_Ordem.SetFocus()` (replica: Tab no grid Campos foca o ComboBox Ordem)
+
+3. **`CliqueCheckOperacoes`** e **`CliqueCheckImprimir`** ÔÇö novos handlers para click de mouse. O ControlSource atualiza `Marcas` automaticamente; o handler s├│ faz `Refresh()` para sincronizar a exibi├º├úo do grid.
+
+4. **BINDEVENT `Click`** em ambos os `Column1.Check1` dos grids ÔÇö chamam os novos handlers de clique.
+
+O form estava praticamente completo desde a Fase 5 (todos os campos, lookups e valida├º├Áes j├í estavam implementados). A Fase 6 completou a fidelidade comportamental com o original adicionando navega├º├úo por Tab e tratamento de clique de mouse nos checkboxes dos grids.

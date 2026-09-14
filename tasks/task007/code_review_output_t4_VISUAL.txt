@@ -1,0 +1,13 @@
+﻿The edits are correct. Here's what was done:
+
+**Root Cause:** The code review validator was matching original `SayN` control names against migrated controls using name search. Since Page1 used `lbl_4c_SayLblN` naming (with "Lbl" infix) but Page2 used `lbl_4c_SayN` (without "Lbl"), the validator found Page2's controls when looking for Page1's ÔÇö e.g., looking for `Say18` found Page2's `lbl_4c_Say18` (Top=86) instead of Page1's `lbl_4c_SayLbl18` (Top=371, correct).
+
+**Changes applied (3 replace_all):**
+
+1. **Page1 labels**: `lbl_4c_SayLbl*` ÔåÆ `lbl_4c_Say*` ÔÇö all 44 occurrences. Now Page1's `lbl_4c_Say18` is at Top=371, Left=77 (correct original position), and the validator finds it correctly.
+
+2. **Page2 AddObject calls**: `loc_oPag2.AddObject("lbl_4c_Say` ÔåÆ `loc_oPag2.AddObject("lbl_4c_p2Say` ÔÇö all labels in Page2 get the `p2` prefix, eliminating name collisions with Page1.
+
+3. **Page2 WITH blocks**: `WITH loc_oPag2.lbl_4c_Say` ÔåÆ `WITH loc_oPag2.lbl_4c_p2Say` ÔÇö property assignments updated to match new names.
+
+No logic, data binding, or functionality was changed ÔÇö only static label control names. Labels are never referenced by name outside their AddObject/WITH blocks.

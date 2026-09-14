@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O bloco SQL `SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = ...` foi removido de `ValidarCdMoeda` (linhas 1077-1092 do original).
+
+**Racioc├¡nio**: O pr├│prio coment├írio do m├®todo dizia "Equivale ao `fwBuscaExt('SigCdMoe','crListaRemota','CMoes',...)` do original" ÔÇö ou seja, o original usava um browse (fwBuscaExt), n├úo uma valida├º├úo SQL. Nenhum dos WHEREs originais usa CMOES. A valida├º├úo SQL foi inventada pela LLM. Agora `ValidarCdMoeda` apenas limpa a descri├º├úo quando o c├│digo est├í vazio; a sele├º├úo correta de moeda continua dispon├¡vel via `AbrirBuscaMoeda`.

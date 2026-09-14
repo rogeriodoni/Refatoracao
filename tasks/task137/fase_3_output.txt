@@ -1,0 +1,16 @@
+﻿`C:\4c\projeto\app\forms\operacionais\FormSigPdM12.prg` criado com sucesso ÔÇö 407 linhas, implementa├º├úo completa.
+
+**O que foi entregue (Phase 3 + funcionalidade completa, j├í que o form ├® simples):**
+
+| Elemento | Detalhes |
+|---|---|
+| `ADD OBJECT` est├íticos | `cnt_4c_Sombra`, `shp_4c_Shape1`, `cnt_4c_Operacao`, `grd_4c_Dados`, `lbl_4c_Label3`, `txt_4c_Rclis`, `cmd_4c_Ok` |
+| `Init(par_oFormPai)` | Armazena ref ao pai, compartilha DataSession via `THIS.DataSessionId = par_oFormPai.DataSessionId` |
+| `InicializarForm()` | Cria BO, configura layout, carrega dados (com guarda `gb_4c_ValidandoUI`), BINDEVENT |
+| `ConfigurarCabecalho()` | Labels sombra + t├¡tulo sobre fundo cinza escuro |
+| `ConfigurarAreaOperacao()` | Label + 3 TextBoxes read-only com ControlSource `tmpnens.*` |
+| `ConfigurarGrid()` | 5 colunas com headers (O.S., Opera├º├úo, Data, Grupo/Conta, Retrabalhos) |
+| `CarregarDados()` | `SELECT xNensiR / GO TOP`, RecordSource no grid, redefine headers ap├│s RecordSource, ControlSource do Rclis |
+| `BtnOkClick()` | Re-habilita form pai + `THIS.Release()` |
+| `GrdDadosAfterRowColChange()` | `txt_4c_Rclis.Refresh()` |
+| `Destroy()` | Nulifica refer├¬ncias antes de DODEFAULT() |

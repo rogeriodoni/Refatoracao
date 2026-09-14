@@ -1,0 +1,15 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o resumo do que foi feito:
+
+**Adicionado: `AjustarBotoesPorModo()`** (linhas 585ÔÇô613)
+- Modo `LISTA`: habilita bot├Áes CRUD respeitando `this_lPermiteEditar`
+- Modo `INCLUIR`/`ALTERAR`: habilita Confirmar e Cancelar
+- Modo `VISUALIZAR`: desabilita Confirmar, mant├®m Cancelar habilitado
+
+**Integra├º├úo do novo m├®todo:**
+- `InicializarForm()` ÔÇö substituiu `AjustarBotoesPorPermissao()` por `AjustarBotoesPorModo()`
+- `AlternarPagina()` ÔÇö chama `AjustarBotoesPorModo()` ao retornar para LISTA
+- `BtnIncluirClick()`, `BtnVisualizarClick()`, `BtnAlterarClick()` ÔÇö chamam `AjustarBotoesPorModo()` ap├│s definir o modo
+
+**Integra├º├úo ao sistema:** n├úo foi necess├írio alterar `config.prg` nem `menu.prg` ÔÇö o config.prg j├í usa `ADIR()` para auto-carregar `*BO.prg` de `classes/` e `Form*.prg` de `forms/cadastros/`. Como `FormFte` ├® um subformul├írio param├®trico (aberto por um form pai com contexto de Cargo/T├¡tulo), n├úo faz sentido adicion├í-lo ao menu principal.
+
+O arquivo final tem 1028 linhas com todos os m├®todos da Fase 8 implementados e funcionais.

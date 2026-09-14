@@ -1,0 +1,974 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPdMpf.SCX
+* Data/Hora: 19/06/2026 20:44:58
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPDMPF
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPDMPF
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPDMPF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPDMPF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Container1
+  Parent: SIGPDMPF
+  Class: container
+  BaseClass: container
+
+Objeto: get_dt_inicial
+  Parent: SIGPDMPF.Container1
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGPDMPF.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGPDMPF.Container1
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_nm_operacao
+  Parent: SIGPDMPF.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_grupo
+  Parent: SIGPDMPF.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGPDMPF.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGPDMPF.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptConta
+  Parent: SIGPDMPF.Container1
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Dgrupo
+  Parent: SIGPDMPF.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGPDMPF.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGPDMPF.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGPDMPF.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPDMPF.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGPDMPF.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: consulta
+  Parent: SIGPDMPF
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: sair
+  Parent: SIGPDMPF
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 44
+  Left = 91
+  Width = 314
+  Height = 71
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 254
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Movimentações de produção por funcionário"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  AlwaysOnTop = .F.
+  Themes = .F.
+  Name = "SIGPDMPF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1
+------------------------------------------------------------
+  Top = 92
+  Left = 151
+  Width = 498
+  Height = 141
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 2
+  TabIndex = 1
+  BackColor = 255,255,255
+  BorderColor = 136,189,188
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 25
+  Left = 108
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 9
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 14
+  Themes = .F.
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "à"
+  Left = 193
+  Top = 13
+  Width = 8
+  TabIndex = 14
+  ZOrderSet = 15
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 25
+  Left = 206
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 9
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 16
+  Themes = .F.
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.get_nm_operacao
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  Format = "K!"
+  Height = 25
+  InputMask = ""
+  Left = 108
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 3
+  ToolTipText = ""
+  Top = 36
+  Width = 150
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "get_nm_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.Get_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 108
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 63
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.Get_conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 108
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 89
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.Get_dconta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 189
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 89
+  Width = 303
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.OptConta
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  Height = 27
+  Left = 100
+  SpecialEffect = 0
+  Top = 114
+  Width = 200
+  TabIndex = 8
+  ZOrderSet = 18
+  Name = "OptConta"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Origem"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 52
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Destino"
+  Option2.Left = 69
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Todos"
+  Option3.Value = 1
+  Option3.Height = 17
+  Option3.Left = 134
+  Option3.Top = 5
+  Option3.Width = 61
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.get_Dgrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 189
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 63
+  Width = 302
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "get_Dgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Período :"
+  Height = 15
+  Left = 61
+  Top = 13
+  Width = 45
+  TabIndex = 10
+  ZOrderSet = 13
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Movimentação :"
+  Height = 15
+  Left = 28
+  Top = 40
+  Width = 78
+  TabIndex = 12
+  ZOrderSet = 13
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Grupo :"
+  Height = 15
+  Left = 68
+  Top = 67
+  Width = 38
+  TabIndex = 13
+  ZOrderSet = 13
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Conta :"
+  Height = 15
+  Left = 68
+  Top = 93
+  Width = 38
+  TabIndex = 11
+  ZOrderSet = 13
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.Container1.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Filtrar por :"
+  Height = 15
+  Left = 50
+  Top = 120
+  Width = 56
+  TabIndex = 9
+  ZOrderSet = 13
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.consulta
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  Picture = ..\framework\imagens\geral_procura_60.jpg
+  Caption = "Pesquisar"
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "consulta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDMPF.sair
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 720
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 3
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "sair"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Name = "sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPDMPF
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .Container1
+			.get_nm_operacao.Value = ''
+			.get_dt_inicial.Value  = Date()
+			.get_dt_final.Value    = Date()
+			.get_Grupo.Value 	   = Space(10)
+			.get_Conta.Value 	   = Space(10)
+			.get_dConta.Value 	   = Space(10)
+		EndWith
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMPF.Container1.get_nm_operacao
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoMovInd(Usuar, This.Value, This, ThisForm.poDataMgr)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMPF.Container1.Get_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	laFiltro(1,1) = 'GerBals'
+	laFiltro(1,2) = 1
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGcr', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t., .t., @laFiltro)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.mAddColuna('Descrs',  '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value  = Iif(Lastkey()=27,[],crListaRemota.Codigos)
+	thisform.container1.get_Dgrupo.Value = Iif(Lastkey()=27,[],crListaRemota.Descrs)
+	
+	If Not fAcessoContab(Usuar, 'C', This.Value, this, thisform.container1.get_Dgrupo, '', ThisForm.poDataMgr)
+		=Messagebox('Acesso Negado!!!', 48, '')
+		This.Value = ''
+		thisform.container1.get_dgrupo.Value = ''
+	EndIf
+	Use In crListaRemota
+Else
+	This.Value  = ''
+	thisform.container1.get_grupo.Value = ''	
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMPF.Container1.Get_conta
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	laFiltro(1,1) = 'GerBals'
+	laFiltro(1,2) = 1
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'IClis', This.Value, 'Seleção', 500, .t., @laFiltro)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('IClis',  '', 'Código')
+		loLista.mAddColuna('RClis',  '', 'Descrição')
+		loLista.mAddColuna('Grupos', '', 'Grupo')
+		loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+		loLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.Get_Conta.Value  = Iif(Lastkey()=27,[],crListaRemota.IClis)
+	This.Parent.Get_DConta.Value = Iif(Lastkey()=27,[],crListaRemota.RClis)
+	If Empty(This.Parent.get_Grupo.Value)
+		This.Parent.get_Grupo.Value = Iif(Lastkey()=27,[],crListaRemota.Grupos)
+	EndIf
+
+	If Not fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'C', This.Value, '', '', '', '', ThisForm.poDataMgr)
+		=Messagebox('Acesso Negado!!!', 48, '')
+		This.Parent.Get_Conta.Value  = ''
+		This.Parent.Get_DConta.Value = ''
+	EndIf
+	Use In crListaRemota
+Else
+	This.Parent.Get_Conta.Value  = ''
+	This.Parent.Get_DConta.Value = ''
+EndIf
+This.Parent.Get_Conta.Refresh
+This.Parent.Get_DConta.Refresh
+This.Parent.get_Grupo.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMPF.Container1.Get_dconta
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	laFiltro(1,1) = 'GerBals'
+	laFiltro(1,2) = 1
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'RClis', This.Value, 'Seleção', 500, .t., @laFiltro)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('RClis',  '', 'Descrição')
+		loLista.mAddColuna('IClis',  '', 'Código')
+		loLista.mAddColuna('Grupos', '', 'Grupo')
+		loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+		loLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.Get_Conta.Value  = crListaRemota.IClis
+	This.Parent.Get_DConta.Value = crListaRemota.RClis
+	If Empty(This.Parent.get_Grupo.Value)
+		This.Parent.get_Grupo.Value = crListaRemota.Grupos
+	EndIf
+
+	If Not fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'C', This.Parent.Get_Conta.Value, '', '', '', '', ThisForm.poDataMgr)
+		=Messagebox('Acesso Negado!!!', 48, '')
+		This.Parent.Get_Conta.Value  = ''
+		This.Parent.Get_DConta.Value = ''
+	EndIf
+	Use In crListaRemota
+Else
+	This.Parent.Get_Conta.Value  = ''
+	This.Parent.Get_DConta.Value = ''
+EndIf
+This.Parent.Get_Conta.Refresh
+This.Parent.Get_DConta.Refresh
+This.Parent.get_Grupo.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(This.Parent.Get_Grupo.Value) And Empty(This.Parent.Get_Conta.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMPF.Container1.get_Dgrupo
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	Dimension laFiltro(1,2)
+	laFiltro(1,1) = 'GerBals'
+	laFiltro(1,2) = 1
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGcr', ;
+						   'crListaRemota', 'Descrs', This.Value, 'Seleção', .t., .t., @laFiltro)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.mAddColuna('Descrs',  '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value  = Iif(Lastkey()=27,[],crListaRemota.Descrs)
+	thisform.container1.get_grupo.Value = Iif(Lastkey()=27,[],crListaRemota.Codigos)
+
+	If Not fAcessoContab(Usuar, 'D', this.value,Thisform.container1.get_grupo, thisform.container1.get_Dgrupo)
+		=Messagebox('Acesso Negado!!!', 48, '')
+		This.Value = ''
+		thisform.container1.get_grupo.Value = ''
+	EndIf
+	Use In crListaRemota
+Else
+	This.Value  = ''		
+	thisform.container1.get_grupo.Value = ''
+EndIf
+This.Refresh
+
+
+
+
+*!*	If Not Empty(This.Value)
+*!*		If Not Empty(This.Value) And Not Seek(Padr(This.Value,40), 'TmpGccr', 'BalDescrs')
+*!*			loBrowse = CreateObject('fwBuscaSel', 'TmpGccr', 'BalDescrs', This.Value, 'Cadastro de Grupos')
+*!*			loBrowse.AddColuna('Codigos', '', 'Código',    .t., 'BalCodigo')
+*!*			loBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'BalDescrs')
+*!*			loBrowse.Show
+*!*			This.Value = Iif(Lastkey()=27, '', TmpGccr.Descrs)
+*!*			thisform.get_grupo.Value = Iif(Lastkey()=27, '', TmpGccr.Codigos)
+*!*		EndIf
+
+*!*		If Not 	fAcessoContab(Usuar,'D',This.Value,ThisForm.get_grupo,ThisForm.get_Dgrupo) &&fAcessoContab(Usuar, 'D', This.Value, '', '', Thisform.Get_DGrupo.Value, ThisForm.poDataMgr)
+*!*			=Messagebox('Acesso Negado!!!', 48, '')
+*!*			This.Value = ''
+*!*		EndIf
+*!*	Else
+*!*		thisform.get_dgrupo.Value = ''
+*!*	Endif
+*!*	* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(This.Parent.Get_Grupo.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMPF.consulta
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Private pDtI, pDtF
+
+If (ThisForm.Container1.get_dt_final.Value < ThisForm.Container1.get_dt_inicial.Value)
+	=Messagebox('Período Inválido!!! Data Final Menor Que a Data Inicial!!!', 16, '')
+	ThisForm.Container1.get_dt_inicial.SetFocus
+	Return .f.
+EndIf
+
+ldDtInicial	 = ThisForm.Container1.get_dt_inicial.Value
+ldDtFinal	 = ThisForm.Container1.get_dt_final.Value
+lcNmOperacao = ThisForm.Container1.get_nm_operacao.Value
+lcEstoqueo	 = ThisForm.Container1.get_grupo.Value
+lcContao     = ThisForm.Container1.get_conta.Value
+lcWhere = []
+Do Case
+	Case thisform.container1.optConta.Value = 1
+		lcWhere = [(a.GrupoOs = '] + m.lcEstoqueo + [' And a.ContaOs = '] + m.lcContaO + [')]
+	Case thisform.container1.optConta.Value = 2
+		lcWhere = [(a.GrupoDs = '] + m.lcEstoqueo + [' And a.ContaDs = '] + m.lcContaO + [')]
+	OtherWise
+		lcWhere = [(a.GrupoOs = '] + m.lcEstoqueo + [' Or a.GrupoDs = '] + m.lcEstoqueo + [') And ] + ;
+		   		 [(a.ContaOs = '] + m.lcContaO + [' Or a.ContaDs = '] + m.lcContao + [')]
+Endcase
+pDtI = fDtoSQL(ldDtInicial)
+pDtF = fDtoSQL(ldDtFinal, '23:59:59')
+
+lcQuery = [Select a.* ] + ;
+			[From SigCdNec a, SigCdOpd o ] + ;
+		   [Where a.Datas BetWeen ?pDtI And ?pDtF And ] + ;
+		   		 [a.Emps = '] + _Empr + [' And ] + ;
+		   		 [a.Dopps = o.Dopps And ] + ;
+		   		 Iif(Empty(lcNmOperacao), [o.GrComps = 1], [a.Dopps = '] + lcNmOperacao + [']) + [ And ] + ;
+		   		 lcWhere
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'csTemporario') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csTemporario)')
+	Return 0
+EndIf
+
+ThisForm.Enabled = .f.
+Select csTemporario
+If (Reccount() > 0)
+	Use In csTemporario
+
+	Do Form SigPdMp7 With lcQuery, ThisForm
+Else
+	=Messagebox('Nenhum Registro Selecionado!!!', 0+48, '')
+EndIf
+ThisForm.Enabled = .t.
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDMPF.sair
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE sair.Click
+------------------------------------------------------------
+PROCEDURE sair.Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPDMPF
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

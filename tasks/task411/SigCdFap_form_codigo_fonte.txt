@@ -1,0 +1,1342 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFap.SCX
+* Data/Hora: 01/08/2026 21:26:08
+* Total de registros: 37
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFAP
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape1
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: getCodigos
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsGrupo
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdGrupo
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDsConta
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdConta
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_estoque
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDatas
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Container1
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGCDFAP.Pagina.Dados.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDFAP.Pagina.Dados.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGCDFAP.Pagina.Dados.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: get_pesob
+  Parent: SIGCDFAP.Pagina.Dados.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_ifor
+  Parent: SIGCDFAP.Pagina.Dados.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_tpmat
+  Parent: SIGCDFAP.Pagina.Dados.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_dfor
+  Parent: SIGCDFAP.Pagina.Dados.Container1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Container2
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGCDFAP.Pagina.Dados.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDFAP.Pagina.Dados.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: get_Totccb
+  Parent: SIGCDFAP.Pagina.Dados.Container2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SIGCDFAP.Pagina.Dados.Container2
+  Class: label
+  BaseClass: label
+
+Objeto: get_totscb
+  Parent: SIGCDFAP.Pagina.Dados.Container2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Container3
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: container
+  BaseClass: container
+
+Objeto: Label4
+  Parent: SIGCDFAP.Pagina.Dados.Container3
+  Class: label
+  BaseClass: label
+
+Objeto: Get_PTrab
+  Parent: SIGCDFAP.Pagina.Dados.Container3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGCDFAP.Pagina.Dados.Container3
+  Class: label
+  BaseClass: label
+
+Objeto: Get_pfalha
+  Parent: SIGCDFAP.Pagina.Dados.Container3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Container4
+  Parent: SIGCDFAP.Pagina.Dados
+  Class: container
+  BaseClass: container
+
+Objeto: Label4
+  Parent: SIGCDFAP.Pagina.Dados.Container4
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Prdz
+  Parent: SIGCDFAP.Pagina.Dados.Container4
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 93
+  Left = 106
+  Width = 359
+  Height = 168
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Envio para Recuperacao"
+  Name = "SIGCDFAP"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Left = 342
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 717
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 49
+  Pagina.Lista.cntFiltros.Left = 119
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 616
+  Pagina.Dados.Grupo_Salva.Top = 15
+  Pagina.Dados.Grupo_Salva.TabIndex = 11
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 2
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Shape1
+------------------------------------------------------------
+  Top = 174
+  Left = 166
+  Height = 296
+  Width = 466
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  ZOrderSet = 1
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.getCodigos
+------------------------------------------------------------
+  ControlSource = "crSigCdFea.numes"
+  Height = 25
+  InputMask = "999999"
+  Left = 242
+  MaxLength = 7
+  TabIndex = 1
+  Top = 187
+  Width = 52
+  ZOrderSet = 3
+  Name = "getCodigos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Grupo :"
+  Left = 195
+  Top = 218
+  Width = 38
+  TabIndex = 14
+  ZOrderSet = 4
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.getDsGrupo
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "K"
+  Height = 25
+  Left = 323
+  MaxLength = 20
+  TabIndex = 4
+  Top = 214
+  Width = 290
+  ZOrderSet = 5
+  Name = "getDsGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.getCdGrupo
+------------------------------------------------------------
+  FontName = "Courier New"
+  ControlSource = "crSigCdFea.grupos"
+  Format = "K"
+  Height = 25
+  Left = 242
+  MaxLength = 10
+  TabIndex = 3
+  Top = 214
+  Width = 79
+  ZOrderSet = 6
+  Name = "getCdGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.getDsConta
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "K"
+  Height = 25
+  Left = 323
+  MaxLength = 40
+  TabIndex = 6
+  Top = 241
+  Width = 290
+  ZOrderSet = 7
+  Name = "getDsConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.getCdConta
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = "crSigCdFea.contas"
+  Format = "K"
+  Height = 25
+  Left = 242
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 241
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 8
+  Name = "getCdConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Conta :"
+  Left = 196
+  Top = 246
+  Width = 38
+  TabIndex = 15
+  ZOrderSet = 9
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Código :"
+  Left = 189
+  Top = 192
+  Width = 42
+  TabIndex = 13
+  ZOrderSet = 10
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.getDatas
+------------------------------------------------------------
+  ControlSource = "crSigCdFea.datas"
+  Height = 25
+  Left = 534
+  MaxLength = 10
+  TabIndex = 2
+  Top = 187
+  Width = 79
+  ZOrderSet = 11
+  Name = "getDatas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Data :"
+  Left = 496
+  Top = 191
+  Width = 32
+  TabIndex = 12
+  ZOrderSet = 12
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container1
+------------------------------------------------------------
+  Top = 333
+  Left = 192
+  Width = 421
+  Height = 58
+  BackStyle = 0
+  TabIndex = 9
+  BorderColor = 90,90,90
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container1.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Peso Bruto (g) :"
+  Height = 15
+  Left = 9
+  Top = 8
+  Width = 78
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container1.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Recuperadora :"
+  Height = 15
+  Left = 11
+  Top = 32
+  Width = 77
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container1.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo de Material :"
+  Height = 15
+  Left = 193
+  Top = 8
+  Width = 85
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container1.get_pesob
+------------------------------------------------------------
+  ControlSource = "crSigCdFea.brutos"
+  Height = 23
+  InputMask = "999,999.99"
+  Left = 103
+  MaxLength = 10
+  TabIndex = 1
+  Top = 5
+  Width = 80
+  Name = "get_pesob"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container1.get_ifor
+------------------------------------------------------------
+  ControlSource = "crSigCdFea.ifors"
+  Height = 23
+  Left = 103
+  MaxLength = 10
+  TabIndex = 3
+  Top = 30
+  Width = 80
+  Name = "get_ifor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container1.get_tpmat
+------------------------------------------------------------
+  ControlSource = "crSigCdFea.tpmats"
+  Height = 23
+  Left = 294
+  MaxLength = 15
+  TabIndex = 2
+  Top = 5
+  Width = 115
+  Name = "get_tpmat"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container1.get_dfor
+------------------------------------------------------------
+  Height = 23
+  Left = 184
+  TabIndex = 4
+  Top = 30
+  Width = 225
+  Name = "get_dfor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container2
+------------------------------------------------------------
+  Top = 394
+  Left = 192
+  Width = 421
+  Height = 53
+  BackStyle = 0
+  TabIndex = 10
+  BorderColor = 90,90,90
+  Name = "Container2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container2.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Material Recuperado"
+  Height = 15
+  Left = 146
+  Top = 4
+  Width = 120
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container2.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Total C/ Cobrança :"
+  Height = 15
+  Left = 14
+  Top = 28
+  Width = 96
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container2.get_Totccb
+------------------------------------------------------------
+  ControlSource = "crSigCdFea.pesoccbs"
+  Height = 23
+  InputMask = "999,999.99"
+  Left = 129
+  MaxLength = 10
+  TabIndex = 1
+  Top = 24
+  Width = 80
+  Name = "get_Totccb"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container2.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Total S/ Cobrança :"
+  Height = 15
+  Left = 217
+  Top = 27
+  Width = 95
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container2.get_totscb
+------------------------------------------------------------
+  ControlSource = "crSigCdFea.pesoscbs"
+  Height = 23
+  InputMask = "999,999.99"
+  Left = 332
+  MaxLength = 10
+  TabIndex = 2
+  Top = 23
+  Width = 80
+  Name = "get_totscb"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container3
+------------------------------------------------------------
+  Top = 301
+  Left = 192
+  Width = 421
+  Height = 29
+  BackStyle = 0
+  TabIndex = 8
+  BorderColor = 90,90,90
+  Name = "Container3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container3.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Trabalhado (g) :"
+  Height = 15
+  Left = 9
+  Top = 6
+  Width = 80
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container3.Get_PTrab
+------------------------------------------------------------
+  ControlSource = "crSigCdFea.Trabs"
+  Height = 23
+  InputMask = "999,999.99"
+  Left = 104
+  MaxLength = 10
+  TabIndex = 1
+  Top = 3
+  Width = 80
+  Name = "Get_PTrab"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container3.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Falha  (g): "
+  Height = 15
+  Left = 233
+  Top = 6
+  Width = 55
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container3.Get_pfalha
+------------------------------------------------------------
+  ControlSource = "crSigCdFea.falhas"
+  Height = 23
+  InputMask = "999,999.99"
+  Left = 295
+  MaxLength = 10
+  TabIndex = 2
+  Top = 3
+  Width = 80
+  Name = "Get_pfalha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container4
+------------------------------------------------------------
+  Top = 269
+  Left = 192
+  Width = 421
+  Height = 29
+  BackStyle = 0
+  TabIndex = 7
+  BorderColor = 90,90,90
+  Name = "Container4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container4.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Produzido (g) :"
+  Height = 15
+  Left = 15
+  Top = 6
+  Width = 73
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFAP.Pagina.Dados.Container4.Get_Prdz
+------------------------------------------------------------
+  ControlSource = "crSigCdFea.Produzidos"
+  Height = 23
+  InputMask = "999,999.99"
+  Left = 104
+  MaxLength = 10
+  TabIndex = 1
+  Top = 3
+  Width = 80
+  Name = "Get_Prdz"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFAP
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters _Tipo
+
+ThisForm.Tipo = Alltrim(Iif(Type('_Tipo') = 'C', _Tipo, 'F'))
+
+lcQryFape = [Select * From SigCdFea Where Emps = '] + _Empr + [' And Tipos = '] + ThisForm.Tipo + [']
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdFea', 'cIdChaves', 'crSigCdFea', '', ThisForm.Pagina.Lista.Grade, lcQryFape)
+			.pfSqlTabela(1).pColuna('Numes',  '', '', 'Código', 	     052, .t.)
+			.pfSqlTabela(1).pColuna('Datas',  '', '', 'Data',   	     075, .f.)
+			.pfSqlTabela(1).pColuna('IFors',  '', '', 'Recuperadora',   085, .f.)
+			.pfSqlTabela(1).pColuna('Grupos', '', '', 'Setor', 	     085, .f.)
+			.pfSqlTabela(1).pColuna('Contas', '', '', 'Funcionário',    085, .f.)
+			.pfSqlTabela(1).pColuna('TpMats', '', '', 'Tipo Material',  120, .f.)
+			.pfSqlTabela(1).pColuna('Brutos', '', '', 'Peso Bruto (g)', 090, .f.)
+		EndWith
+
+		ThisForm.poDataMgr.CursorQuery('SigCdGcr', 'TmpGccr', 'BalFalPers', 1)
+		Select TmpGccr
+		Index On Codigos Tag Codigos
+
+		lcQuery = [Select a.IClis, a.RClis ] + ;
+					[From SigCdCli a, SigCdGcr b ] + ;
+				   [Where a.Grupos = b.Codigos And ] + ;
+				   		 [b.BalFalPers = 1]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpCli') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpCli)')
+			Return 0
+		EndIf
+		Select TmpCli
+		Index On Iclis Tag Iclis
+
+		ThisForm.LockScreen = .t.
+		Thisform.Name = Alltrim(ThisForm.Name) + ThisForm.Tipo
+
+		=DoDefault()
+
+		Thisform.Pagina.Lista.Grade.SetAll('DynamicForeColor', 'Iif(crSigCdFea.Baixas,RGB(255,0,0),RGB(0,0,0))','Column')
+		ThisForm.Pagina.Lista.Grade.SetFocus
+		ThisForm.LockScreen = .f.
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Lparameters Opcao
+
+Local Codigos, llFechado
+
+If (Type('m.Opcao')='N')
+	This.Value = m.Opcao 
+EndIf
+
+If DoDefault(This.Value)
+	ThisForm.LockScreen = .t.
+
+	With This.Parent.Parent.Dados
+		ThisForm.poDataMgr.CursorQuery('SigCdGcr', 'LocalGccr', 'Codigos', .getCdGrupo.Value, 'Descrs')
+		ThisForm.poDataMgr.CursorQuery('SigCdCli',  'LocalCli',  'IClis',   .getCdCOnta.Value, 'RClis')
+
+		.getDsGrupo.Value = Iif(Eof('LocalGccr'), '', LocalGccr.Descrs)
+		.getDsConta.Value = Iif(Eof('LocalCli'),  '', LocalCli.RClis)
+	EndWith
+
+	Do Case
+		Case InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+			If (ThisForm.pcEscolha = 'INSERIR')
+				Select crSigCdFea
+				m.Numes 	= fGerUniqueKey(_Empr + 'SigCdFea')
+				m.Emps  	= _Empr
+				m.Tipos 	= ThisForm.Tipo
+				m.cIdChaves = fUniqueIds()
+				Gather Memvar Fields Numes, Emps, Tipos, cIdChaves
+			EndIf
+			
+			If (ThisForm.Tipo = [F])
+				This.Parent.Parent.Dados.Container3.Enabled = .t.
+				This.Parent.Parent.Dados.Container1.Enabled = .f.
+				This.Parent.Parent.Dados.Container2.Enabled = .f.
+			Else
+				This.Parent.Parent.Dados.Container3.Enabled = .f.
+				This.Parent.Parent.Dados.Container1.Enabled = .t.
+				This.Parent.Parent.Dados.Container2.Enabled = .t.
+			EndIf
+			
+			This.Parent.Parent.Dados.getDatas.Value = Iif(ThisForm.pcEscolha='INSERIR', Date(), This.Parent.Parent.Dados.getDatas.Value)
+			This.Parent.Parent.Dados.getDatas.SetFocus
+			
+		Case (ThisForm.pcEscolha = 'CONSULTAR')
+			This.Parent.Parent.Dados.Container1.Enabled = .t.
+			This.Parent.Parent.Dados.Container2.Enabled = .t.
+			This.Parent.Parent.Dados.Container3.Enabled = .t.
+			  
+		Case (ThisForm.pcEscolha = 'EXCLUIR')
+			This.Parent.Parent.Dados.Grupo_Salva.Salva.SetFocus
+			This.Parent.Parent.Dados.Container1.Enabled = .t.
+			This.Parent.Parent.Dados.Container2.Enabled = .t.
+			This.Parent.Parent.Dados.Container3.Enabled = .t.
+			  
+		Case (ThisForm.pcEscolha = 'PROCURAR')
+			This.Parent.Parent.Dados.getCodigos.SetFocus
+	EndCase
+	
+	Select crSigCdFea
+	ThisForm.Refresh
+	ThisForm.LockScreen = .f.
+Else
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	Do Case
+		Case Empty(ThisForm.Pagina.Dados.getDatas.Value)
+			=MessageBox('Código Inválido!!!', 48, '')
+			ThisForm.Pagina.Dados.getDatas.SetFocus
+			Return 0
+
+		Case Empty(ThisForm.Pagina.Dados.getCdGrupo.Value) And (ThisForm.Tipo = [F]) And ;
+			 Empty(ThisForm.Pagina.Dados.Container4.Get_Prdz.Value)
+			=MessageBox('Grupo Inválido!!!', 48, '')
+			ThisForm.Pagina.Dados.getCdGrupo.SetFocus
+			Return 0
+
+		Case Empty(ThisForm.Pagina.Dados.getCdConta.Value) And (ThisForm.Tipo = [F]) And ;
+			 Empty(ThisForm.Pagina.Dados.Container4.Get_Prdz.Value)
+			=MessageBox('Conta Inválida!!!', 48, '')
+			ThisForm.Pagina.Dados.getCdConta.SetFocus
+			Return 0
+	EndCase
+EndIf
+
+=DoDefault()
+
+ThisForm.mAtivapagina1
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+Local lnCodigo
+
+lnCodigo = crSigCdFea.Numes
+
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.getCodigos
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = 'PROCURAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.getDsGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.getCdGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If Not Empty(This.Value)
+    Set Near On
+    If Not Seek(This.Value, 'TmpGccr', 'Codigos')
+		xbrox = CreateObject('fwBuscaInt','TmpGccr','Codigos',This.Value,'Grupos',.t.)
+		xBrox.mAddColuna('codigos', '', 'Código', .t.)
+		xBrox.mAddColuna('Descrs', '', 'Descrição', .t.)
+		xBrox.Show()
+	EndIf
+	Set Near Off
+	This.Parent.getCdGrupo.Value = Iif(LastKey()==27,'',Evaluate('TmpGccr.Codigos'))
+	This.Parent.getDsGrupo.Value = Iif(LastKey()==27,'',Evaluate('TmpGccr.Descrs'))
+Else
+	This.Parent.getDsGrupo.Value = Space(20)
+	This.Parent.getCdConta.Value = Space(10)
+	This.Parent.getDsConta.Value = Space(50)
+EndIf
+This.Parent.getDsGrupo.Refresh
+This.Parent.getCdConta.Refresh
+This.Parent.getDsConta.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.getDsConta
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.getCdConta
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If Not Empty(This.Value)
+	Set Near On
+	If Not Seek(This.Value, 'TmpCli', 'Iclis')
+		xbrox = CreateObject('fwBuscaInt','TmpCli','Iclis',This.Value,'Contas',.t.)
+		xBrox.mAddColuna('iclis', '', 'Código', .t.)
+		xBrox.mAddColuna('rclis', '', 'Descrição', .t.)
+		xBrox.Show()
+		
+	EndIf
+	Set Near Off
+	This.Parent.getCdConta.Value = Iif(LastKey()==27,'',Evaluate('TmpCli.Iclis'))
+	This.Parent.getDsConta.Value = Iif(LastKey()==27,'',Evaluate('TmpCli.Rclis'))
+Else
+	This.Parent.getDsConta.Value = Space(50)
+EndIf
+This.Parent.getCdConta.Refresh
+This.Parent.getDsConta.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Not Empty(This.Parent.getCdGrupo.Value)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.getDatas
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.Container1.get_pesob
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(This.Parent.Parent.Container2.get_Totccb.Value) Or ;
+	   Empty(This.Parent.Parent.Container2.get_Totscb.Value)
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.Container1.get_ifor
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'IClis', This.Value, 'Seleção', 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('IClis',  '', 'Código')
+		loLista.mAddColuna('RClis',  '', 'Descrição')
+		loLista.mAddColuna('Grupos', '', 'Grupo')
+		loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+		loLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.get_ifor.Value = crListaRemota.IClis
+	This.Parent.get_dfor.Value = crListaRemota.RClis
+	Use In crListaRemota
+Else
+	This.Parent.get_ifor.Value = ''
+	This.Parent.get_dfor.Value = ''
+EndIf
+This.Parent.get_ifor.Refresh
+This.Parent.get_dfor.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(This.Parent.Parent.Container2.get_Totccb.Value) Or ;
+	   Empty(This.Parent.Parent.Container2.get_Totscb.Value)
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.Container1.get_tpmat
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	ThisForm.poDataMgr.CursorQuery('SigOpOpt', 'TmpOpt', 'Situas', 3, 'Cods, Descs')
+	Select TmpOpt
+	Index On Cods Tag Cods
+
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'TmpOpt', 'Cods', This.Value, 'Cadastro de Tipos de Operação')
+		loBrowse.AddColuna('Cods',  '', 'Código', .t., 'Cods')
+		loBrowse.AddColuna('Descs', '', 'Descrição')
+		loBrowse.Show
+		This.Value = Iif(Lastkey()=27, '', TmpOpt.Cods)
+	EndIf
+	Use In TmpOpt
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(This.Parent.Parent.Container2.get_Totccb.Value) Or ;
+	   Empty( This.Parent.Parent.Container2.get_Totscb.Value)
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.Container1.get_dfor
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'RClis', This.Value, 'Seleção', 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('RClis',  '', 'Descrição')
+		loLista.mAddColuna('IClis',  '', 'Código')
+		loLista.mAddColuna('Grupos', '', 'Grupo')
+		loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+		loLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.get_ifor.Value = crListaRemota.IClis
+	This.Parent.get_dfor.Value = crListaRemota.RClis
+	Use In crListaRemota
+Else
+	This.Parent.get_ifor.Value = ''
+	This.Parent.get_dfor.Value = ''
+EndIf
+This.Parent.get_ifor.Refresh
+This.Parent.get_dfor.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(This.Parent.get_ifor.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.Container2.get_Totccb
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Select crSigCdFea
+Replace Baixas With .f. In crSigCdFea
+
+If Not Empty(This.Parent.Parent.Container2.get_Totccb.Value) Or ;
+   Not Empty(This.Parent.Parent.Container2.get_Totscb.Value)
+	Replace Baixas With .t. In crSigCdFea
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.Container2.get_totscb
+* Classe: textbox (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Select crSigCdFea
+Replace Baixas With .f. In crSigCdFea
+
+If Not Empty(This.Parent.Parent.Container2.get_Totccb.Value) Or ;
+   Not Empty(This.Parent.Parent.Container2.get_Totscb.Value)
+	Replace Baixas With .t. In crSigCdFea
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFAP.Pagina.Dados.Container4.Get_Prdz
+* Classe: textbox (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Return Empty(ThisForm.Pagina.Dados.GetcdGrupo.Value) And Empty(ThisForm.Pagina.Dados.GetcdConta.Value)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDFAP
+RESERVED3 (ClassInfo): tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 23
+================================================================================

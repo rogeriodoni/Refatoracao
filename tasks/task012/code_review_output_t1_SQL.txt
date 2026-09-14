@@ -1,0 +1,11 @@
+﻿Corre├º├Áes aplicadas:
+
+**DATEXCS (1 fix real em 2 arquivos)**
+- `Formsigmvccr.prg` linha 1506-1507: removido `AND a.Datexcs IS NULL` do `CarregarLista()`
+- `sigmvccrBO.prg` linha 157-158: removido `AND a.Datexcs IS NULL` do `Buscar()`
+
+**Falsos positivos n├úo alterados (corretos):**
+- **CONTROLCOUNT**: Propriedade VFP de objeto (`obj.ControlCount`), n├úo cl├íusula SQL
+- **CIDCHAVES**: PK v├ílida usada em `CarregarPorCodigo` / `ExecutarExclusao`
+- **CODIGOS**: Coluna leg├¡tima de SigCdGcr em queries de lookup de grupo
+- **CMOES**: Coluna leg├¡tima de SigCdMoe em queries de valida├º├úo de moeda

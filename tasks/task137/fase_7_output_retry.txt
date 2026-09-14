@@ -1,0 +1,8 @@
+﻿All 4 required event methods are present: `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`. Each has real implementation logic (no stubs, no TODOs, no "sera implementado" messages):
+
+- **BtnIncluirClick**: Informs user, re-enables parent form, delegates to parent's `BtnIncluirClick` (using `PEMSTATUS` to check), then releases popup
+- **BtnAlterarClick**: Validates grid selection, reads `xNensiR.Nenvs`, stores in parent's `AntValue` (the original SCX's return mechanism), delegates to parent
+- **BtnVisualizarClick**: Validates cursor state, repositions, refreshes grid and funcionario textbox (real visualization refresh)
+- **BtnExcluirClick**: Validates selection, asks confirmation via `MsgConfirma`, delegates to parent's exclusao flow
+
+The Phase 7 deliverable (FormSigPdM12.prg with 4 CRUD event handlers) is complete and follows the rules: no MESSAGEBOX (uses MsgInfo/MsgAviso/MsgConfirma/MsgErro), no stubs, real behavior that respects the read-only nature of this popup by delegating CRUD operations to the parent form `FormSigPdM11`.

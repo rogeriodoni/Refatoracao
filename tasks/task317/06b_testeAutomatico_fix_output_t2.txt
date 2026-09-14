@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. O que mudou em `InicializarForm()`:
+
+1. `ConfigurarPageFrame()` + captions do cabe├ºalho agora s├úo chamados **antes** da verifica├º├úo da DLL
+2. `loc_lSucesso = .T.` ├® definido logo ap├│s a cria├º├úo do BO com sucesso ÔÇö a DLL ausente vira aviso n├úo-fatal
+3. `CarregarDadosEmpresa()` e `IniciarProtocolo()` s├úo chamados apenas se DLL dispon├¡vel E EndSitef n├úo-vazio, mas sem bloquear `loc_lSucesso`
+
+A raiz do bug: a estrutura original s├│ atribu├¡a `loc_lSucesso = .T.` dentro de `IniciarProtocolo()` ÔåÆ ambas condi├º├Áes (DLL ausente, EndSitef vazio) retornavam `.F.`, que propagava at├® `DODEFAULT()` no `Init()` e fazia `CREATEOBJECT` retornar `.NULL.`.

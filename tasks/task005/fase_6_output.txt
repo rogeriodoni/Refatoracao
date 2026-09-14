@@ -1,0 +1,13 @@
+﻿All handlers, validators, and lookups are correctly wired. Phase 6/8 is complete. Here's what was added to `FormProduto.prg`:
+
+**New methods (8 KeyPress handlers + 7 Validators + 7 Lookups):**
+- `CmdQtMinClick()` ÔÇö "..." button handler
+- `DadosClassKeyPress/Local/Mctotal/Mpvenda/Mfvenda/Cuni/CunipKeyPress()` ÔÇö 7 KeyPress handlers with ENTER/TABÔåÆValidate, F4ÔåÆLookup
+- `ValidarDadosClass/Local/Cuni/Cunip/Mctotal/Mpvenda/Mfvenda()` ÔÇö 7 PROTECTED validators querying SigCdCls, SigPrLcl, SigCdUni, SigCdMoe
+- `AbrirLookupDadosClass/Local/Cuni/Cunip/Mctotal/Mpvenda/Mfvenda()` ÔÇö 7 PUBLIC lookups via FormBuscaAuxiliar
+
+**Updated methods:**
+- `BOParaForm()` ÔÇö maps all new BO fields to form controls (including memos, checkboxes, dimensions, prices, units, audit)
+- `FormParaBO()` ÔÇö maps all new editable controls back to BO
+- `HabilitarCampos()` ÔÇö enables/disables all new editable fields per mode
+- `CarregarDescricoesForm()` ÔÇö loads descriptions for SigCdCls, SigCdUni (uni + unip)

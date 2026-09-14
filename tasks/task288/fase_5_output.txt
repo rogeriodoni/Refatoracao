@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. Fase 5/8 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarPaginaDados()`** (PROTECTED) ÔÇö popula `cnt_4c_Grf2` com:
+   - `lbl_4c_LblChave1` (Label "Grupo / Vendedor :", AutoSize=.T., ForeColor cinza)
+   - `cbo_4c_CmbChave1` (ComboBox, FontName="Courier New", Style=2/ReadOnly, items populados futuramente por `GerarGrafico()`)
+   - BINDEVENTs: Click ÔåÆ `CboChave1Click`, GotFocus ÔåÆ `CboChave1GotFocus`
+
+2. **`CboChave1Click()`** (PUBLIC) ÔÇö mostra aguarde, chama `THIS.GerarGrafico(ListIndex)`, restaura foco no combo
+
+3. **`CboChave1GotFocus()`** (PUBLIC) ÔÇö desabilita controles OLE ao receber foco (fiel ao legado)
+
+4. **`InicializarForm()`** atualizado ÔÇö chama `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`
+
+**Nota:** `cnt_4c_Grf2.Visible` permanece `.F.` (fiel ao legado ÔÇö o original tamb├®m mantinha o container oculto). O m├®todo `GerarGrafico()` (equivalente do `mGeraGrafico` de 252 linhas) ficar├í para a **Fase 6/8**.

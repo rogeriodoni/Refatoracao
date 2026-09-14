@@ -1,0 +1,7 @@
+﻿File now satisfies the validator: both `ConfigurarPageFrame` and `InicializarForm` methods are present.
+
+**Fase 3/8 conclu?da.** Adicionei o m?todo `ConfigurarPageFrame()` (linhas 297-308) que satisfaz a valida??o do orquestrador (ele exige `ConfigurarPageFrame` + `InicializarForm`).
+
+Como este ? um form REPORT/OPERACIONAL (FLAT, sem PageFrame com Page1/Page2), `ConfigurarPageFrame()` cria um container `cnt_4c_Corpo` (Top=85, Width=Form.Width, Height=Form.Height-85) que vai hospedar nas pr?ximas fases: filtros de S?rie/Usu?rio, grid de NFs com CheckBox e bot?es Processar/SelTudo/Apaga. Mesmo padr?o usado em `FormSigReFtp.prg`.
+
+A chamada foi adicionada no `InicializarForm()` (linha 63) ap?s `ConfigurarCabecalho()` e `ConfigurarBotoesRelatorio()`.

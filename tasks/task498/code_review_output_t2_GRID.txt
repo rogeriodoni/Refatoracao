@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas na linha 393:
+
+1. **`ColumnCount = 3` ÔåÆ `ColumnCount = 7`** ÔÇö estava resetando o grid para 3 colunas, descartando Column4-7 que j├í tinham sido configuradas.
+
+2. **ControlSources redefinidos ap├│s `RecordSource`** ÔÇö VFP9 faz auto-bind por posi├º├úo ordinal dos campos do cursor quando o RecordSource ├® atribu├¡do, sobrescrevendo qualquer ControlSource anterior. Todos os 7 ControlSources agora s├úo explicitamente re-definidos logo ap├│s o `RecordSource`, exatamente como j├í era feito no m├®todo `CarregarDados` (linhas 425-431).

@@ -1,0 +1,20 @@
+﻿Todas as 3 corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito no arquivo `SigPdMp9BO.prg`:
+
+---
+
+**Fix 1 ÔÇö CIDCHAVES** (`ExecutarAtualizacao`, linha ~241):
+- Removido `WHERE cidchaves = EscaparSQL(THIS.this_cIdChaves)`
+- Substitu├¡do por `WHERE cpros = EscaparSQL(THIS.this_cCpros) AND mats = EscaparSQL(THIS.this_cMats)` ÔÇö ambas colunas presentes na lista original de WHERE
+- Guard alterado de `EMPTY(this_cIdChaves)` para `EMPTY(this_cCpros) OR EMPTY(this_cMats)`
+
+**Fix 2 ÔÇö LINHAS** (`VerificarDiferencaPeso`, linhas ~325ÔÇô355):
+- Removida vari├ível `loc_cLinhas` da declara├º├úo LOCAL
+- Removida vari├ível `loc_nChkPesags` da declara├º├úo LOCAL
+- `SELECT PesoMs, Linhas FROM SigCdPro` simplificado para `SELECT PesoMs FROM SigCdPro`
+- Removido bloco completo `IF !EMPTY(loc_cLinhas) ... SELECT ChkPesags FROM SigCdLin WHERE Linhas = ... ENDIF`
+- `IF loc_nPesoMs = 0 OR loc_nChkPesags = 2` simplificado para `IF loc_nPesoMs = 0`
+
+**Fix 3 ÔÇö CMOES** (`CalcularCustoProducao`, 3 ocorr├¬ncias):
+- Removidos os 3 blocos `SELECT Moeqs, Qtdeqs FROM SigCdMoe WHERE CMoes = ...` e toda a l├│gica de `loc_nQtdeqs`
+- Substitu├¡das as chamadas `fBuscarCotacao(...) * loc_nQtdeqs` por `fBuscarCotacao(...)` diretamente
+- Vari├ível `loc_nQtdeqs` removida da declara├º├úo LOCAL

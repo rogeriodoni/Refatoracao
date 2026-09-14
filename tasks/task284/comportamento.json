@@ -1,0 +1,380 @@
+{
+  "resumo": {
+    "totalMetodos": 22,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 12,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For", "fConfigGeral", "fwBuscaExt", "fAcessoEmpresa", "fAcessoMovmto", "fVerificarBarras", "fCarregarImps", "Ordena"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRETQ",
+      "evento": "Init",
+      "linhas": 235,
+      "codigoOriginal": "Local lnTipos, lnTop, lnHeight, lnImp, lnMaxTipos, lnMaxImpres, lnBottom1, lnBottom2, lnPrinters, llOk, lnI\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nSet Step On \nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tlcCpo = 'nMaxTpEtis, TpEtiPads, nMaxImpEti, ImpEtis, TpInstalas, AjVerts, AjHorzs, TpCBars'\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "CursorQuery,sqlexecute",
+        "controlesReferenciados": "Opt_Tipo,Option&lcI,Option1",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRETQ",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor dbImpressao (Cpros C(14), DPros C(40), Reffs c(40), Qtds N(10,3), QtdeEtiq N(10,3), ;\n\t\t\t\t\t\t   Pedido C(30), Obs C(10), PVens n(12,2), PrecoDe N(12,2), Parcelas N(2,0), Cpros2 c(14), Cpros3 c(14), ;\n\t\t\t\t\t\t   Cpros4 c(14), empos c(3), empdopnums c(29), citens n(10), Pesos n(12,2), CodTams c(4), DPro2s c(45))\nIndex On Cpros Tag Cpros\nIndex On Recno() Tag Registros\nSet Order To \nAppend Blank\n\n=DoDefault()\n* Fim *********************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.getLPreco2",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdLpc', ;\n\t\t\t\t\t\t   'crListaRemota', 'LPrecos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('LPrecos', '', 'Lista')\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = crListaRemota.LPrecos\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Get_lpreco",
+      "evento": "Valid",
+      "linhas": 56,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdLpc', ;\n\t\t\t\t\t\t   'crListaRemota', 'LPrecos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('LPrecos', '', 'Lista')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, '', crListaRemota.LPrecos)\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n\nIf Not Empty(This.Value)\n\tllOk = .t.\n\tSelect CPros From dbImpressao Where Not Empty(Cpr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "chkLista,grd_Etiqueta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.getEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, This)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.getDopes",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoMovmto(Usuar, This.Value, This)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoMovmto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Grd_Etiqueta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Grd_Etiqueta.col_cpros.txt_cpros",
+      "evento": "Valid",
+      "linhas": 131,
+      "codigoOriginal": "Local _Prod, sNumero, ck, loLista\n\nIf Empty(this.value)\n\tWith Thisform.Grd_Etiqueta\n\t\t.Col_dpros.txt_dpros.value = ''\n\t\t.Refresh\n\tEndWith\n\tReturn .t.\nEndIf\n\n_Prod = This.Value\n\nIf Not Empty(_Prod)\n\tlnCod = Int(Val(_Prod))\n\tIf (lnCod > 0)\n\t\tThisForm.poDataMgr.CursorQuery([SigCdPro], [crSigCdPro], [Ean13], lnCod, [CPros])\n\t\tIf Used([crSigCdPro]) And Not Eof([crSigCdPro])\n\t\t\tThis.Value = crSigCdPro.Cpros\n\t\t\t_Prod = crSigCdPro.Cpros\n\t\tEndIf\n\tEndIf\nEndIf\n\nsNumero = fVerificarBarras(_Prod)\n\nIf sNumero... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt,fVerificarBarras",
+        "metodosFormChamados": "CursorQuery,Value <> 1) And Not Empty,SqlExecute",
+        "controlesReferenciados": "Grd_Etiqueta,txt_dpros,txt_cpros,get_lpreco,chkLista,txt_qtds",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Grd_Etiqueta.col_cpros.txt_cpros",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(dbimpressao.cpros)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Grd_Etiqueta.col_dpros.txt_dpros",
+      "evento": "Valid",
+      "linhas": 67,
+      "codigoOriginal": "If Empty(This.Value)\n\tWith Thisform.Grd_Etiqueta\n\t\t.col_cpros.txt_cpros.Value = ''\n\t\t.Refresh\n\tEndWith\n\tReturn .t.\nEndIf\n\nThisForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'DPros', This.Value, 'CPros')\nIf Not Eof('crSigCdPro')\n\tWith Thisform.Grd_Etiqueta\n\t\t.col_cpros.txt_cpros.Value = crSigCdPro.Cpros\n\t\t.Refresh\n\tEndWith\n\tReturn .t.\nEndIf\n\nLocal loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;\n\t\t\t\t\t\t   'crListaRemota', 'DPr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Grd_Etiqueta,txt_cpros,txt_dpros,txt_qtds",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Grd_Etiqueta.col_dpros.txt_dpros",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(thisform.Grd_Etiqueta.col_cpros.txt_cpros.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Grd_Etiqueta,txt_cpros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Grd_Etiqueta.col_qtds.txt_qtds",
+      "evento": "Valid",
+      "linhas": 47,
+      "codigoOriginal": "Local cLocIni, cLocFin, cProduto, nApurado\n\nIf (Lastkey() <> 13)\n\tReturn .t.\nEndIf\n\nIf (Lastkey() = 9)\n\tThisForm.opt_preco.option1.SetFocus\n\tReturn .t.\nEndIf\n\nIf (Lastkey() = 15)\n\tThisForm.BtnReport.sair.SetFocus\n\tReturn .t.\nEndIf\n\ncProduto = Padr(dbImpressao.Cpros, 14)\nnApurado = dbImpressao.Qtds\n\nIf Empty(cProduto)\n\tReturn .t.\nEndIf\n\nThisForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', cProduto, 'CPros')\nIf Eof('crSigCdPro')\n\t=Messagebox('Produto Inválido!!!', 16, '')\n\tReturn .t.\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "opt_preco,option1,Grd_Etiqueta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Grd_Etiqueta.col_DPro2s.Text1",
+      "evento": "Valid",
+      "linhas": 51,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigCdPro], ;\n\t\t\t\t\t\t   [crListaRemota], [Dpro2s], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Dpro2s], [], [Descritivo])\n\t\tloLista.mAddColuna([CPros], [], [Código])\n\t\tloLista.mAddColuna([DPros], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tWith Thisform.Grd_Etiqueta\n\t\t.col_cpros.txt_cpros.value = crListaRemota.CPros\n\t\t.col_dpros.txt_dpros.value = crList... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Grd_Etiqueta,txt_cpros,txt_dpros,txt_qtds",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Grd_Etiqueta.col_DPro2s.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(thisform.Grd_Etiqueta.col_cpros.txt_cpros.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Grd_Etiqueta,txt_cpros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Grd_Etiqueta.col_par.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.opt_Preco.Value = 6)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "opt_Preco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Opt_Impressora",
+      "evento": "InteractiveChange",
+      "linhas": 6,
+      "codigoOriginal": "*!*\tloImp = ThisForm.cnt_Impressora\n\n*!*\t=fCarregarImps(ThisForm.Opt_Impressora.Buttons(ThisForm.Opt_Impressora.Value).Tag, loImp.Opcao_Imp, ;\n*!*\t\t\t\t\t   loImp.Spn_AjVerts, loImp.Spn_AjHorzs, loImp.Spn_AjDenss, loImp.Spn_AjVelos, ;\n*!*\t\t\t\t\t   ThisForm.poDataMgr, ThisForm.Opt_Tipo)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.btnCarregar",
+      "evento": "Click",
+      "linhas": 100,
+      "codigoOriginal": "If Empty(ThisForm.getEmps.Value)\n\t=MessageBox('A Empresa Não Foi Informada!!!', 0+48, 'Dados Incompletos') \n\tThisForm.getEmps.SetFocus\n\tReturn 0\nEndIf\n\nIf Empty(ThisForm.getDopes.Value)\n\t=MessageBox('A Operação Não Foi Informada!!!', 0+48, 'Dados Incompletos') \n\tThisForm.getDopes.SetFocus\n\tReturn 0\nEndIf\n\nIf Empty(ThisForm.getNumes.Value)\n\t=MessageBox('O Código Não Foi Informado!!!', 0+48, 'Dados Incompletos') \n\tThisForm.getNumes.SetFocus\n\tReturn 0\nEndIf\n\nlcEdn = Padr(ThisForm.getEmps.Value, 3) ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value, 3) + Padr,CursorQuery,Value <> 1) And Not Empty,SqlExecute",
+        "controlesReferenciados": "chkOperacoes,get_lpreco,chkLista,grd_Etiqueta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.btnexcluir",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "Select dbImpressao\nDelete\nLocate for .f.\n\nSelect dbImpressao\nGo Top In dbImpressao\nIf Eof()\n\tAppend Blank In dbImpressao\nEndif\nGo Top In dbImpressao\n\nThisForm.grd_Etiqueta.Refresh()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "grd_Etiqueta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.Get_Printer",
+      "evento": "InteractiveChange",
+      "linhas": 7,
+      "codigoOriginal": "\t*** mena - 11/03/2015 - incluido para atualizar flags da impressora escolhida ***\t\n\tloImp = ThisForm.cnt_Impressora\n\n\t=fCarregarImps(ALLTRIM(crImpreV.impresS), loImp.Opcao_Imp, ;\n\t\t\t\t\t   loImp.Spn_AjVerts, loImp.Spn_AjHorzs, loImp.Spn_AjDenss, loImp.Spn_AjVelos, ;\n\t\t\t\t\t   ThisForm.poDataMgr, ThisForm.Opt_Tipo)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarImps",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.BTNREPORT",
+      "evento": "Click",
+      "linhas": 92,
+      "codigoOriginal": "Local lnConfirma, lnImpPreco, llImprSepar, lnTipo, lnTpEti, lnTpImp, lnImpres, lcNomeImp, lcLp1, lcLp2\n\nlnImpPreco = Thisform.Opt_Preco.Value\nllImpSepar = (Thisform.Opt_Separador.Value = 1)\nllImpPeso  = (Thisform.Opt_Peso.Value = 1)\nllCompo    = (Thisform.optCompos.Value = 1)\nSet Step On \nWith Thisform.Opt_Tipo\n\tlnTipo = .Value\n\tlnTpEti = Int(Val(.Buttons(lnTipo).Tag))\nEndWith\n\nWith Thisform.Cnt_Impressora \n\tlnTpImp   = .Opcao_Imp.Value\n\tlnAjVerts = .Spn_AjVerts.Value\n\tlnAjHorzs = .Spn_AjHorzs.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Ordena",
+        "metodosFormChamados": "Value) And Not Empty,CursorQuery,Commit,RollBack",
+        "controlesReferenciados": "Opt_Preco,Opt_Separador,Opt_Peso,optCompos,Opt_Tipo,get_Printer,get_lpreco,optOrdem,Grd_Etiqueta,txt_cpros",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRETQ.BTNREPORT",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRETQ.Get_lpreco.Valid",
+      "queryOriginal": "\tSelect CPros From dbImpressao Where Not Empty(Cpr... [TRUNCADO]",
+      "tabelas": "dbImpressao",
+      "colunas": "CPros",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["dbImpressao"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

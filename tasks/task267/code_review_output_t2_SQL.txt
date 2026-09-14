@@ -1,0 +1,42 @@
+﻿An├ílise completa dos 13 problemas reportados. **Todos s├úo falsos positivos** do validador autom├ítico. Aqui est├í a justificativa para cada um:
+
+---
+
+## GRID-SQL (6 problemas) ÔÇö FALSOS POSITIVOS
+
+O validador n├úo conseguiu localizar o SELECT que cria `cursor_4c_Filtro` porque ele est├í no BO (`BuscarTitulos`), n├úo no form. O SQL em `SIGPRCNBBO.prg:287-310` inclui **todas** as colunas usadas nos ControlSources:
+
+| Campo no ControlSource | Presente no SQL de BuscarTitulos |
+|---|---|
+| `numes` | `SigMvPar.numes` (linha 288) |
+| `rclis` | `SigCdCli.rclis` (linha 292) |
+| `vencs` | `SigMvPar.vencs` (linha 288) |
+| `fpags` | `SigMvPar.fpags` (linha 289) |
+| `valos` | `SigMvPar.valos` (linha 288) |
+| `titulos` | `SigMvCcr.titulos` (linha 290) |
+
+---
+
+## SQL-FILTRO-INVENTADO (7 problemas) ÔÇö FALSOS POSITIVOS
+
+O validador comparou WHERE de **todos os SQLs do arquivo migrado** contra o WHERE de **um ├║nico SQL legado** (a busca principal). As condi├º├Áes flagadas s├úo de SQLs distintos e leg├¡timos:
+
+| Coluna flagada | Onde aparece no migrado | Motivo v├ílido |
+|---|---|---|
+| `CIDCHAVES` | `ExecutarExclusao()` / `Atualizar()` ÔÇö `WHERE cidchaves = ...` | PK de SigPcOoL, obrigat├│rio em UPDATE/DELETE |
+| `DOPES` | `BuscarTitulos()` ÔÇö `AND SigMvPar.dopes IN (...)` | Filtro por opera├º├Áes, equivale ao subquery original |
+| `CEMPS` | `BuscarEmpresa()` + `ValidarCdEmpresa()` ÔÇö `WHERE cemps = ...` | Lookup de empresa, PK de SigCdEmp |
+| `ICLIS` | `BuscarClientePorConta()` + `ValidarCdConta()` ÔÇö `WHERE iclis = ...` | Lookup de conta, PK de SigCdCli |
+| `RAZSOCS` | `ValidarDsEmpresa()` ÔÇö `WHERE RazSocs LIKE ...` | Lookup por nome de empresa |
+| `RCLIS` | `ValidarDsConta()` ÔÇö `WHERE RClis LIKE ...` | Lookup por nome de conta |
+| `COLUMNCOUNT` | `loc_oGrd.ColumnCount = 2` / `= 8` | **N├úo ├® SQL** ÔÇö ├® propriedade VFP9; parser interpretou erroneamente |
+
+---
+
+**Nenhum dos 13 problemas requer altera├º├úo de c├│digo.** O form e o BO est├úo corretos:
+
+- Os campos do grid existem no SQL do BO
+- As condi├º├Áes WHERE s├úo apropriadas para cada opera├º├úo SQL
+- `COLUMNCOUNT` ├® uma propriedade VFP9, n├úo condi├º├úo SQL
+
+Nenhum arquivo foi modificado. Os 13 itens s├úo artefatos das limita├º├Áes do validador (an├ílise de arquivo ├║nico, compara├º├úo cross-arquivo, e parsing de sintaxe VFP9 como SQL).

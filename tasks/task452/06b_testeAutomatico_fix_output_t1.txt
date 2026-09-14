@@ -1,0 +1,9 @@
+﻿All three changes applied correctly. Here's a summary of what was fixed:
+
+---
+
+**FormInf.prg ÔÇö Bug #1** (primary TIMEOUT cause): `ConfigurarPaginaDados()` was setting `ColumnCount = 3` before `RecordSource`, creating 3 generic columns on an empty grid, then immediately trying to reduce to 2 with a live cursor ÔÇö a non-standard sequence known to trigger VFP9 internal crashes. Fixed to the canonical Problema36 pattern: `RecordSource = ""` ÔåÆ `ColumnCount = 2` (inside the setup block), then `RecordSource = "cursor_4c_Emps"` after the WITH block.
+
+**FormInf.prg ÔÇö Bug #2** (behavioral): `AjustarBotoesPorModo()` called `PEMSTATUS(THIS, "cmd_4c_Incluir", 5)` inside a `WITH loc_oPg1.cnt_4c_Botoes` block ÔÇö `THIS` refers to the form, not the container. Since `cmd_4c_Incluir` is not a direct property of the form, PEMSTATUS always returned `.F.` and buttons were never explicitly enabled. Fixed to `PEMSTATUS(loc_oPg1.cnt_4c_Botoes, ...)` for all 5 buttons.
+
+**InfBO.prg**: Added `gb_4c_ValidandoUI` guard to `Buscar()` as belt-and-suspenders (already guarded at the form level via `CarregarLista`, but now also at the BO level).

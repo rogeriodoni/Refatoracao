@@ -1,0 +1,159 @@
+=== ORQUESTRADOR DE MIGRACAO ===
+
+Configuracao carregada:
+  Origem: C:\4c\origem
+  Tasks: C:\4c\tasks
+  Max Problemas (ValidarUI): 10
+
+Processando task especifica: task488
+
+Task ID: task488
+
+BaseName obtido do estado da task: SigCdOpt
+[ETAPA 1] JA COMPLETADA - Pulando...
+[ETAPA 2] JA COMPLETADA - Pulando...
+BaseName recuperado do estado: SigCdOpt
+[ETAPA 2.2] Arquivo (114.31 KB) abaixo do limite (400 KB) - Pulando reducao
+[ETAPA 2.5] JA COMPLETADA - Pulando...
+[ETAPA 2.7] JA COMPLETADA - Pulando...
+[ETAPA 2.8] JA COMPLETADA - Pulando...
+[ETAPA 3] JA COMPLETADA - Pulando...
+[ETAPA 4] JA COMPLETADA - Pulando...
+[ETAPA 4.5] JA COMPLETADA - Pulando...
+[ETAPA 5] JA COMPLETADA - Pulando...
+[ETAPA 5.5] JA COMPLETADA - Pulando...
+[ETAPA 5.5b] JA COMPLETADA - Pulando...
+[ETAPA 5.6] JA COMPLETADA - Pulando...
+[ETAPA 5.7] JA COMPLETADA - Pulando...
+[ETAPA 5.8] JA COMPLETADA - Pulando...
+
+============================================================================
+ [ETAPA 5.9] Validacao SQL Schema (colunas vs schema.sql)
+============================================================================
+
+[TaskManager] Estado atualizado: task488
+[TaskManager] Etapa iniciada: 05f_validarSQLSchema (tentativa 2)
+  [Inferencia] SigCdOpt -> FormOpt
+  [Inferencia] SigCdOpt -> OptBO
+  [SQL-SCHEMA] Modo DB ativo: 192.168.15.101,1435/DB_MBAHIA (fallback: schema.sql)
+  [SQL-SCHEMA] Schema arquivo parseado: 683 tabelas
+  [SQL-SCHEMA] Statements SQL encontrados: 12
+AVISO: Erro ao consultar DB para tabela 'sigcdopt': Exce‡Æo ao chamar "Open" com "0" argumento(s): "Erro de rede ou 
+espec¡fico … instƒncia ao estabelecer conexÆo com o SQL Server. O servidor nÆo foi encontrado ou nÆo estava acess¡vel. 
+Verifique se o nome da instƒncia est  correto e se o SQL Server est  configurado para permitir conexäes remotas. 
+(provider: TCP Provider, error: 0 - O tempo limite de espera foi atingido.)"
+AVISO: Erro ao consultar DB para tabela 'sigcqdev': Exce‡Æo ao chamar "Open" com "0" argumento(s): "Erro de rede ou 
+espec¡fico … instƒncia ao estabelecer conexÆo com o SQL Server. O servidor nÆo foi encontrado ou nÆo estava acess¡vel. 
+Verifique se o nome da instƒncia est  correto e se o SQL Server est  configurado para permitir conexäes remotas. 
+(provider: TCP Provider, error: 0 - O tempo limite de espera foi atingido.)"
+AVISO: Erro ao consultar DB para tabela 'sigopope': Exce‡Æo ao chamar "Open" com "0" argumento(s): "Erro de rede ou 
+espec¡fico … instƒncia ao estabelecer conexÆo com o SQL Server. O servidor nÆo foi encontrado ou nÆo estava acess¡vel. 
+Verifique se o nome da instƒncia est  correto e se o SQL Server est  configurado para permitir conexäes remotas. 
+(provider: TCP Provider, error: 0 - O tempo limite de espera foi atingido.)"
+AVISO: Erro ao consultar DB para tabela 'sigopfp': Exce‡Æo ao chamar "Open" com "0" argumento(s): "Erro de rede ou 
+espec¡fico … instƒncia ao estabelecer conexÆo com o SQL Server. O servidor nÆo foi encontrado ou nÆo estava acess¡vel. 
+Verifique se o nome da instƒncia est  correto e se o SQL Server est  configurado para permitir conexäes remotas. 
+(provider: TCP Provider, error: 0 - O tempo limite de espera foi atingido.)"
+  [SQL-SCHEMA] PASSOU - Nenhuma coluna invalida detectada
+  [OK] Validacao SQL Schema PASSOU - todas as colunas validas
+[TaskManager] Estado atualizado: task488
+[TaskManager] Etapa completada: 05f_validarSQLSchema
+[ETAPA 6] JA COMPLETADA - Pulando...
+[ETAPA 6.5] JA COMPLETADA - Pulando...
+[ETAPA 6.8] JA COMPLETADA - Pulando...
+
+============================================================================
+ [ETAPA 7] Validar UI Fidelity (ValidarUIFidelity.prg)
+============================================================================
+
+[TaskManager] Estado atualizado: task488
+[TaskManager] Etapa iniciada: 07_validarUI (tentativa 2)
+  [Inferencia] SigCdOpt -> FormOpt
+  Removidos 772 arquivos .fxp (cache)
+[2026-08-22 13:38:49] [INFO] === VFP EXECUTOR v2.0 ===
+[2026-08-22 13:38:49] [INFO] Config FPW: (nao fornecido)
+[2026-08-22 13:38:49] [INFO] Script PRG: C:\4c\projeto\app\utils\ValidarUIFidelity.prg
+[2026-08-22 13:38:49] [INFO] Timeout: 300 segundos
+[2026-08-22 13:38:49] [INFO] Wrapper PRG criado para parametros: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_nk3qyub3.prg
+[2026-08-22 13:38:49] [INFO] Conteudo do wrapper:
+[2026-08-22 13:38:49] [INFO] * Auto-generated wrapper for parameters
+* Script: C:\4c\projeto\app\utils\ValidarUIFidelity.prg
+* Parameters: 'C:\4c\tasks\task488\SigCdOpt_form_codigo_fonte.txt', 'FormOpt'
+
+* Anti-dialog protections for unattended execution
+SET SAFETY OFF
+SET RESOURCE OFF
+SET TALK OFF
+SET NOTIFY OFF
+SYS(2335, 0)
+
+DO "C:\4c\projeto\app\utils\ValidarUIFidelity" WITH 'C:\4c\tasks\task488\SigCdOpt_form_codigo_fonte.txt', 'FormOpt'
+QUIT
+
+[2026-08-22 13:38:49] [INFO] Comando VFP: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_nk3qyub3.prg
+[2026-08-22 13:38:49] [INFO] VFP output esperado em: C:\4c\tasks\task488\vfp_output.txt
+[2026-08-22 13:38:49] [INFO] Executando Visual FoxPro 9...
+[2026-08-22 13:38:49] [INFO] Comando completo: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_nk3qyub3.prg
+[2026-08-22 13:38:49] [INFO] Executando: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_nk3qyub3.prg
+[2026-08-22 13:38:49] [INFO] Timeout configurado: 300 segundos
+[2026-08-22 13:38:51] [INFO] VFP9 finalizou normalmente com exit code: 
+[2026-08-22 13:38:51] [INFO] VFP9 finalizado em 1.5957357 segundos
+[2026-08-22 13:38:51] [INFO] Exit Code: 
+[2026-08-22 13:38:51] [INFO] 
+[2026-08-22 13:38:51] [INFO] Arquivos temporarios preservados para inspecao:
+[2026-08-22 13:38:51] [INFO]   Wrapper.prg: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_nk3qyub3.prg
+[2026-08-22 13:38:51] [INFO] 
+[2026-08-22 13:38:51] [INFO] === Conteudo do Wrapper.prg temporario ===
+[2026-08-22 13:38:51] [INFO] * Auto-generated wrapper for parameters
+[2026-08-22 13:38:51] [INFO] * Script: C:\4c\projeto\app\utils\ValidarUIFidelity.prg
+[2026-08-22 13:38:51] [INFO] * Parameters: 'C:\4c\tasks\task488\SigCdOpt_form_codigo_fonte.txt', 'FormOpt'
+[2026-08-22 13:38:51] [INFO] 
+[2026-08-22 13:38:51] [INFO] * Anti-dialog protections for unattended execution
+[2026-08-22 13:38:51] [INFO] SET SAFETY OFF
+[2026-08-22 13:38:51] [INFO] SET RESOURCE OFF
+[2026-08-22 13:38:51] [INFO] SET TALK OFF
+[2026-08-22 13:38:51] [INFO] SET NOTIFY OFF
+[2026-08-22 13:38:51] [INFO] SYS(2335, 0)
+[2026-08-22 13:38:51] [INFO] 
+[2026-08-22 13:38:51] [INFO] DO "C:\4c\projeto\app\utils\ValidarUIFidelity" WITH 'C:\4c\tasks\task488\SigCdOpt_form_codigo_fonte.txt', 'FormOpt'
+[2026-08-22 13:38:51] [INFO] QUIT
+[2026-08-22 13:38:51] [INFO] 
+[2026-08-22 13:38:51] [INFO] === Fim do Wrapper.prg ===
+[2026-08-22 13:38:51] [WARN] AVISO: VFP9 retornou exit code  (normal para VFP9 GUI - validar pelo arquivo de saida)
+
+Resultado da validacao UI:
+  Total de problemas: 1178
+  Erros: 0 (max aceitavel: 4 Dataenvironment)
+  Avisos: 1178 (objetos renomeados na nova arquitetura - NAO bloqueiam)
+  Diferencas: 0 (max aceitavel: 0)
+
+  [LAYOUT] Erro ao validar layout: NÆo ‚ poss¡vel associar o argumento ao parƒmetro 'Path' porque ele ‚ nulo.
+Status: UI FIDELITY OK - Apenas diferencas aceitaveis (4 Dataenvironment + 1178 FormBase)
+  Relatorio HTML: C:\4c\projeto\app\utils\relatorios\UIFidelity_FormOpt_20260822133851.html
+  Log detalhado: C:\4c\tasks\task488\logs\07_validarUI.log
+[TaskManager] Estado atualizado: task488
+[TaskManager] Etapa completada: 07_validarUI
+
+
+============================================================================
+ [ETAPA 8] Gerar solicitacao de teste manual
+============================================================================
+
+[TaskManager] Estado atualizado: task488
+[TaskManager] Etapa iniciada: 08_gerarTestManual (tentativa 1)
+  [Inferencia] SigCdOpt -> FormOpt
+  [Inferencia] SigCdOpt -> OptBO
+Solicitacao de teste manual gerada: C:\4c\SolicitacaoTesteManual\task488_SigCdOpt.md
+[TaskManager] Estado atualizado: task488
+[TaskManager] Etapa completada: 08_gerarTestManual
+[TaskManager] Estado atualizado: task488
+
+============================================================================
+ TASK COMPLETA: task488
+============================================================================
+
+Proximos passos:
+  1. Revisar solicitacao de teste manual em: C:\4c\SolicitacaoTesteManual
+  2. Executar testes manuais
+  3. Se aprovado, fazer commit do codigo
+

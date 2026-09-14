@@ -1,0 +1,131 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 4,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDICD",
+      "evento": "Init",
+      "linhas": 20,
+      "codigoOriginal": "Parameters pcParentForm\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.poDatamgr = pcParentForm.poDataMgr\n\nlcTipo = Space(4)\n\nlcSqlTri = [Select * From SigPrTri Where Tipos = ?lcTipo ]\n\nWith ThisForm\n\tWith .poDataMgr\n\t\t.AddCursor('SigPrTri', 'cIdChaves', 'cnSigPrTri', '', .f., lcSqlTri)\n\tEndWith\nEndWith\n* Fim **************************************************************************************\n\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICD.Container1.GetTipo",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrTri', ;\n\t\t\t\t\t\t   'crListaRemota', 'Tipos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Tipos', '', 'Tipo',.t.)\n\t\tloLista.mAddColuna('Descs', '', 'Tipo',.t.)\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.Container1.GetTipo.Value = crListaRemota.Tipos\n\tThisForm.Container1.GetDesc.Value = crListaRemota.Descs\n\tThisForm.Container1.fwget2.Value = crListaRemota.D... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICD.Container1.GetDesc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Container1.GetTipo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICD.Container1.GetDesc",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrTri', ;\n\t\t\t\t\t\t   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descs', '', 'Tipo',.t.)\n\t\tloLista.mAddColuna('Tipos', '', 'Tipo',.t.)\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.Container1.GetTipo.Value = crListaRemota.Tipos\n\tThisForm.Container1.GetDesc.Value = crListaRemota.Descs\n\tThisForm.Container1.fwget2.Value = crListaRemota.D... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICD.Command2",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Release Windows",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICD.Command1",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "With ThisForm.Container1\n\n\tThisForm.poDatamgr.SqlExecute([Select * From SigPrTri Where Tipos = ']+ThisForm.Container1.fwget1.Value+['],\"CsSigPrTri\")\n\tSelect csSigPrTri\n\tIf ! Eof()\n\t\tMessageBox(\"Novo Tipo Ja Cadastrado\",16,\"\")\n\t\tReturn\n\tEndIf\n\t\n\tlcTipo = .GetTipo.Value\n\tThisForm.poDatamgr.Requery(\"cnSigPrTri\")\n\t\n\tReplace all Tipos     With .fwget1.Value,;\n\t            Descs     With .fwget2.Value,;\n\t            cIdChaves With fUniqueIds()\n\t\n\tThisForm.poDatamgr.UpDate(\"cnSigPrTri\")\n\tThisForm.poDat... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute,Requery,UpDate,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDICD.Init",
+      "queryOriginal": "lcSqlTri = [Select * From SigPrTri Where Tipos = ?lcTipo ]",
+      "tabelas": "SigPrTri",
+      "colunas": "Tipos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDICD.Command1.Click",
+      "queryOriginal": "\tThisForm.poDatamgr.SqlExecute([Select * From SigPrTri Where Tipos = ']+ThisForm.Container1.fwget1.Value+['],\"CsSigPrTri\") \tSelect csSigPrTri",
+      "tabelas": "SigPrTri",
+      "colunas": "Tipos,Value+[],\"CsSigPrTri\"",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPrTri"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,9 @@
+﻿Todas as corre├º├Áes est├úo corretas. Resumo das 4 mudan├ºas aplicadas em `FormSigPrSer.prg`:
+
+1. **`CarregarDados`** ÔÇö removido `PROTECTED` ÔåÆ m├®todo agora ├® PUBLIC, o teste `CarregarDadosReais` consegue chamar `oForm.CarregarDados()` (corrige "Property CARREGARDADOS is not found")
+
+2. **`ConfigurarRecordSourceGrade`** ÔÇö substitu├¡do `RETURN` dentro de TRY por `IF/ENDIF` envolvendo o corpo do m├®todo
+
+3. **`BtnIncluirClick`** ÔÇö substitu├¡do `RETURN` dentro de TRY por `ELSE` (regra #1: RETURN nunca dentro de TRY/CATCH)
+
+4. **`BtnAlterarClick`** e **`BtnExcluirClick`** ÔÇö mesmo padr├úo: `RETURN` removido, fluxo reescrito com `ELSE`/`IF loc_lConfirmar` aninhados

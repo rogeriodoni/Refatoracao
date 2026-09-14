@@ -1,0 +1,7 @@
+﻿Fase 2 do `sigrecheBO.prg` completada. Adicionei os m´┐¢todos exigidos pelo validator (`CarregarDoCursor`, `Inserir`, `Atualizar`, `ObterChavePrimaria`, `RegistrarAuditoria`) seguindo o padr´┐¢o do `sigrecgpBO.prg` para BOs de relat´┐¢rio:
+
+- **`ObterChavePrimaria()`** ´┐¢ monta chave composta com tipo/op´┐¢´┐¢o/ordem/datas/empresa/carteira/dep´┐¢sito/emissor para identificar a execu´┐¢´┐¢o na auditoria
+- **`CarregarDoCursor(par_cAliasCursor)`** ´┐¢ carrega presets de filtros via `SCATTER MEMVAR`, populando todos os 18 campos de filtro (datas, empresa, tipo, op´┐¢´┐¢o, ordem, ultima, carteira, dep´┐¢sito, emissor)
+- **`Inserir()`** ´┐¢ sem´┐¢ntica de relat´┐¢rio = imprimir; delega para `Imprimir()` + `RegistrarAuditoria("IMPRESSAO")`
+- **`Atualizar()`** ´┐¢ sem´┐¢ntica de relat´┐¢rio = preview; delega para `Visualizar()` + `RegistrarAuditoria("VISUALIZACAO")`
+- **`RegistrarAuditoria(par_cOperacao)`** ´┐¢ INSERT em `LogAuditoria` com `SigReChe` como tabela, chave composta dos filtros, sem interromper o fluxo em caso de erro

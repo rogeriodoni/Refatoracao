@@ -1,0 +1,20 @@
+﻿O form e o BO est├úo **completos**. A Fase 7 para este form OPERACIONAL j├í est├í implementada nas fases anteriores.
+
+**Resumo do estado atual:**
+
+| Evento esperado (template CRUD) | Equivalente OPERACIONAL | Status |
+|---|---|---|
+| BtnIncluirClick | `AoProcessar()` (linhas 904ÔÇô946) | Ô£à Completo |
+| BtnAlterarClick | `AoSelTudo()` (linhas 972ÔÇô977) | Ô£à Completo |
+| BtnVisualizarClick | `AoApagar()` (linhas 962ÔÇô967) | Ô£à Completo |
+| BtnExcluirClick | `AoCancelar()` (linhas 952ÔÇô957) | Ô£à Completo |
+
+O template da Fase 7 ├® voltado para forms CRUD. Para este form OPERACIONAL (sem PageFrame CRUD), todos os handlers dos bot├Áes principais foram gerados nas fases 3ÔÇô6:
+
+- `AoProcessar()` ÔÇö l├│gica de 390 linhas do legado totalmente implementada no BO (`ProcessarOperacoes`)
+- `AoCancelar()` ÔÇö reabilita form pai e libera o form
+- `AoApagar()` / `AoSelTudo()` ÔÇö REPLACE ALL Flag no TmpCabec
+
+O BO (`SigPrGl2BO.prg`) tamb├®m est├í completo com `ProcessarOperacoes` (11 passos, ~640 linhas) e `OrdenarOperacoes`.
+
+**Nenhuma edi├º├úo necess├íria.** A Fase 7/8 est├í conclu├¡da. Pr├│ximo passo seria a Fase 8/8: integra├º├úo em `config.prg` e `menu.prg`.

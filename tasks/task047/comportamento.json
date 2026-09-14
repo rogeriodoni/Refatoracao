@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECGC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReCgc to Print Prompt NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGC",
+      "evento": "Init",
+      "linhas": 8,
+      "codigoOriginal": "LParameters pGru, pCon\n\n=DoDefault()\n\n=fConfigGeral()\n\nThisForm.Grupo = pGru\nThisForm.Conta = pCon",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGC",
+      "evento": "Procedure",
+      "linhas": 52,
+      "codigoOriginal": "Local ldDtIni, ldDtFin, lcDatas, lcCond, lcOrdem, lcCon\nLocal lcTitulo, lcSubTit, lcEmpresa, lcPeriodo\n\nldDtIni = ThisForm.getDtIni.Value\nldDtFin = ThisForm.getDtFin.Value\nlcDatas = Iif(ThisForm.optDatas.Value = 1,'D','V')\n\n=Seek(_Empr,'CrSigCdEmp','cemps')\nlcEmpresa = _Empr + ' - ' + Alltrim(CrSigCdEmp.razas)\n\nlcTitulo  = 'RELATÓRIO GENÉRICO DE COMPRAS'\n\nSelect TmpCli\nlcCon = ' - ' + Alltrim(TmpCli.rclis)\n\nlcSubTit  = 'GRUPO : ' + Alltrim(ThisForm.Grupo) + '/CONTA : ' + ;\n\t\t\t\t\t\t Alltrim(ThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optDatas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReCgc Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGC",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECGC",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "If This.Value # 3\n\tIf Empty(ThisForm.GetDtIni.Value)\n\t\tMessagebox('Data inicial inválida !!!',16,'')\n\t\tThisForm.getDtIni.SetFocus\n\t\tReturn(.F.)\n\tEndIf\n\n\tIf Empty(ThisForm.GetDtFin.Value)\n\t\tMessagebox('Data final inválida !!!',16,'')\n\t\tThisForm.getDtFin.SetFocus\n\t\tReturn(.F.)\n\tEndIf\n\n\tIf ThisForm.GetDtIni.Value > ThisForm.GetDtFin.Value\n\t\tMessagebox('Data inicial não pode ser maior que a final!',16,'')\n\t\tThisForm.GetDtIni.SetFocus\n\t\tReturn(.F.)\n\tEndIf\nEndIf\n\nfrmrelatorio::btnReport.Click",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

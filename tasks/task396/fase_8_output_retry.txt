@@ -1,0 +1,9 @@
+﻿Phase 8 validation should now pass. 
+
+**Root cause**: The Phase 8 validator in `automation/OrquestradorMigracao.ps1:4895` checks that FormDpi.prg contains the string `BtnSalvarClick`, but the code was using `BtnConfirmarClick`. The previous Claude attempt confirmed everything was "complete" without noticing this naming mismatch.
+
+**Fix**: Renamed the handler `BtnConfirmarClick` ÔåÆ `BtnSalvarClick` (matches canonical FormCor.prg pattern where the button `cmd_4c_Confirmar` binds to handler `BtnSalvarClick`). Updated at:
+- `FormDpi.prg:415` ÔÇö `BINDEVENT` target
+- `FormDpi.prg:820` ÔÇö procedure definition
+
+All 5 validator terms now present. Menu/config integration was already in place from the earlier fase_8 run.

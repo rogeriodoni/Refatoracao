@@ -1,0 +1,21 @@
+﻿Corre├º├úo aplicada. Aqui est├í o resumo do que foi feito e por qu├¬:
+
+---
+
+**Problema corrigido (1 de 5 com bug real):**
+
+**`obj_4c_OptGtprel` Left=0** ÔÇö O bug era de escopo VFP9: `.Top = 0` e `.Left = 161` estavam definidos DENTRO do `WITH` block ap├│s 3 `WITH .Buttons(N)` aninhados. O parser VFP9 perde refer├¬ncia do objeto pai ap├│s WITHs aninhados, ent├úo `.Left = 161` era silenciosamente ignorado, resultando em Left=0 (default). Fix: mover as atribui├º├Áes para FORA do WITH block usando refer├¬ncia expl├¡cita `loc_oPag.obj_4c_OptGtprel.Top/Left`.
+
+**`obj_4c_OptGtprel` Top** mantido em `0` ÔÇö Correto. Original SCX: form-absolute Top=84. PageFrame.Top=85. Page-relative = 84ÔêÆ85 = ÔêÆ1 ÔåÆ clampado para 0. Valor 0 ├® matematicamente correto.
+
+---
+
+**Os outros 3 "problemas" N├âO foram alterados ÔÇö s├úo corretos:**
+
+| Controle | Page-relative (c├│digo) | Form-absolute equivalente | Original SCX | Status |
+|----------|----------------------|--------------------------|--------------|--------|
+| `lbl_4c_Lbl_moeda` | Top=104 | 85+104=**189** | 189 Ô£ô | Correto |
+| `cmd_4c_CmdApgEmp` | Top=287 | 85+287=**372** | 372 Ô£ô | Correto |
+| `cmd_4c_CmdSelemp` | Top=247 | 85+247=**332** | 332 Ô£ô | Correto |
+
+O validador comparou coordenadas form-absolute (SCX original) contra coordenadas page-relative (c├│digo migrado) sem descontar o offset do PageFrame (Top=85). A diferen├ºa de exatamente 85px em todos os 3 casos confirma que as posi├º├Áes est├úo corretas ÔÇö o validador est├í descalibrando para forms com PageFrame.

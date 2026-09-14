@@ -1,0 +1,3 @@
+﻿Correto. Nenhum `WITH ... grd` permanece no arquivo, e todos os `RecordSource` usam refer├¬ncias expl├¡citas.
+
+**Corre├º├úo aplicada:** Em `BtnBuscarClick` (linha 1555) e `CarregarLista` (linha 1657), os blocos `WITH THIS.pgf_4c_Paginas.Page1.grd_4c_Grade` foram substitu├¡dos por refer├¬ncia expl├¡cita via `LOCAL loc_oGrade`. O `RecordSource` e `RecordSourceType` agora s├úo atribu├¡dos fora de qualquer bloco WITH, eliminando o risco de "Unknown member COLUMN1" que ocorre quando VFP9 tenta acessar colunas antes de elas serem completamente inicializadas dentro de um bloco WITH.

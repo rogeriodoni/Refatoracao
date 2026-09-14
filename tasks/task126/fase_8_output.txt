@@ -1,0 +1,10 @@
+﻿A fase 8 est├í conclu├¡da. Resumo das altera├º├Áes feitas:
+
+**FormSigReInv.prg** ÔÇö adicionado `AjustarBotoesPorModo(par_cModo)` stub (├║nico m├®todo que faltava na se├º├úo de compatibilidade com o FormBase pipeline).
+
+**menu.prg** ÔÇö tr├¬s adi├º├Áes:
+- `DEFINE BAR 160` (separador) e `DEFINE BAR 161` com "Invent├írio de Estoque" no `popRelatorios`
+- `ON SELECTION BAR 161 OF popRelatorios DO AbrirFormSigReInv`
+- `PROCEDURE AbrirFormSigReInv()` no padr├úo can├┤nico (VARTYPE check, Show() sem par├ómetro, MostrarErro no catch com Erro+Linha+Procedure)
+
+Os dois arquivos principais (`FormSigReInv.prg` com 1638 linhas e `SigReInvBO.prg` com 1370 linhas) estavam j├í completos das fases anteriores ÔÇö todos os m├®todos essenciais implementados: `InicializarForm`, `ConfigurarCabecalho`, `ConfigurarBotoes`, `ConfigurarFiltros`, `LimparCampos`, `ValidacaoEntrada`, `FormParaRelatorio`, `BtnVisualizarClick`, `BtnImprimirClick`, `BtnGerarTxtClick`, `BtnSairClick`, todos os eventos dos controles e todos os m├®todos de lookup.

@@ -1,0 +1,7 @@
+﻿Todas as 4 corre├º├Áes aplicadas:
+
+| Problema | Corre├º├úo |
+|----------|----------|
+| `[SQL-COLUNA] Valligs` em SELECT/INSERT | Renomeado para `Valliqs` em todo o BO (property, SELECT em CarregarPorCodigo/CarregarPorNopers, CarregarDoCursor, INSERT INTO) |
+| `[SQL-FILTRO-INVENTADO] DATEXCS` | Removido `AND a.Datexcs IS NULL` dos WHERE em `Buscar()` e `BuscarPorPeriodo()` |
+| `[SQL-FILTRO-INVENTADO] CIDCHAVES` | Os 3 handlers (BtnVisualizarClick, BtnAlterarClick, BtnExcluirClick) passaram a ler `Emps`+`Nopers` do cursor e chamar `CarregarPorNopers()` em vez de `CarregarPorCodigo()` com Cidchaves no WHERE |

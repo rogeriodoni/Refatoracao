@@ -1,0 +1,20 @@
+﻿Fase 4 conclu├¡da. Aqui est├í o resumo do que foi adicionado em `FormUfs.prg`:
+
+**M├®todos adicionados:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `ConfigurarPaginaLista()` | PROTECTED | Cria 5 bot├Áes CRUD + Encerrar + Grid com 5 colunas + TornarControlesVisiveis |
+| `AlternarPagina(par_nPagina)` | PROTECTED | Navega entre Page1/Page2, recarrega lista ao voltar |
+| `CarregarLista()` | PROTECTED | Chama BO.Buscar(), seta RecordSource + ColumnCount (fora de WITH), define ControlSource + Headers ap├│s, formata grid |
+| `FormatarGridLista(par_oGrid)` | PROTECTED | SetAll FontName/FontSize nas colunas |
+| `TornarControlesVisiveis(par_oContainer)` | PROTECTED | Percorre recursivamente Pages e Controls |
+| `BtnIncluirClick()` | PUBLIC | NovoRegistro() + LimparCampos() + modo INCLUIR + navega Page2 |
+| `BtnVisualizarClick()` | PUBLIC | CarregarPorCodigo() + BOParaForm() + modo VISUALIZAR (read-only) |
+| `BtnAlterarClick()` | PUBLIC | CarregarPorCodigo() + EditarRegistro() + BOParaForm() + modo ALTERAR |
+| `BtnExcluirClick()` | PUBLIC | Verifica dep. SigCdCli, confirma via MsgConfirma(), chama BO.Excluir() |
+| `BtnBuscarClick()` | PUBLIC | FormBuscaAuxiliar + Buscar(filtro) + recarrega grid |
+| `BtnEncerrarClick()` | PUBLIC | THIS.Release() |
+| `AjustarChkboxesPorBoConteudo()` | PROTECTED | Habilita/desabilita chkGer54 (dependente de Ger50) e chkGer60I/D/R/P (dependentes de Ger60) |
+
+**`InicializarForm()` atualizado** para chamar `ConfigurarPaginaLista()` e `CarregarLista()` (com guarda `gb_4c_ValidandoUI`).

@@ -1,0 +1,13 @@
+﻿As tr├¬s corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi corrigido em `FormSigPrEtq.prg`:
+
+**1. [CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` (linha 194): Removido `"CNT_4C_CABECALHO"` do INLIST. O `cnt_4c_Cabecalho` tem `Visible=.T.` definido explicitamente em `ConfigurarPageFrame` e n├úo deve ser exclu├¡do do processamento normal do TCV. Apenas `OBJ_4C_OPT_IMPRESSORA` permanece na lista de exce├º├úo (controle intencionalmente oculto).
+
+**2. [OPTIONGROUP-LEFT] `obj_4c_Opcao_imp` Buttons(1)** (linha 1043): Adicionado `.Themes = .F.` que estava ausente apenas no primeiro bot├úo do grupo de 3 (os bot├Áes 2 e 3 j├í tinham).
+
+**3. [OPTIONGROUP-LEFT] `obj_4c_Opt_Impressora`** (linhas 1207ÔÇô1240):
+- `ButtonCount` corrigido de 1 para 2 (original SIGPRETQ tinha 2 bot├Áes Sistema/Windows)
+- `Buttons(1).Top` corrigido de 52 para 6 (estava fora dos bounds do grupo Height=47)
+- `Buttons(1).Width` ajustado de 210 para 130 para caber ao lado do Buttons(2)
+- Adicionado `Buttons(2)` completo com `Caption="Windows"`, `Left=149`, `Top=6`, `Themes=.F.`
+
+Os problemas [LAYOUT-POSITION] s├úo falsos positivos do checker ÔÇö ele confunde `OptionGroup.Buttons(1).Top/Left` com `OptionGroup.Top/Left`. Os valores no c├│digo est├úo corretos (ex.: `obj_4c_Opt_Tipo.Top=431` no c├│digo, checker l├¬ `Buttons(1).Top=10` e reporta como diverg├¬ncia).

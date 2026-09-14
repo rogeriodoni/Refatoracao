@@ -1,0 +1,13 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSigPdMp5.prg` est├í completo com todos os m├®todos implementados:
+
+**M├®todos adicionados na Fase 8:**
+- `CarregarLista()` ÔÇö wrapper para `CarregarGrade()` (compatibilidade pipeline)
+- `AjustarBotoesPorModo()` ÔÇö mant├®m cmd_4c_Ok habilitado e ajusta `Column5.ReadOnly` conforme modo + TipoSubNivel + apontas
+- `HabilitarCampos()` ÔÇö todos os campos do form s├úo read-only por design; delega Column5 para `AjustarBotoesPorModo()`
+- `LimparCampos()` ÔÇö limpa txt_4c_Descr, TotQt e a imagem do produto
+- `FormParaBO()` ÔÇö l├¬ xMFas (linha corrente), TmpNens, crSigCdOpd e contexto do form pai para o BO
+- `BOParaForm()` ÔÇö empurra descri├º├úo do produto, total de qtds, nomes de origem/destino e visibilidade dos containers de volta ao form
+- `BtnBuscarClick()` ÔÇö recarrega o grid (atualiza totais via BO + CarregarGrade)
+- `BtnEncerrarClick()` ÔÇö alias para CmdOkClick
+- `BtnSalvarClick()` ÔÇö percorre xMFas e sincroniza xPesa.Qtds para cada Nops (replicando o `Column3.Text1.Valid` do legado em modo batch)
+- `BtnCancelarClick()` ÔÇö fecha o sub-dialog (alias para CmdOkClick, pois os cursores em mem├│ria s├úo de responsabilidade do form pai)

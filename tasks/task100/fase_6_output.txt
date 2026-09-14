@@ -1,0 +1,11 @@
+﻿Todos os 5 fixes est├úo aplicados corretamente. Resumo das altera├º├Áes na Fase 6:
+
+1. **`AtualizarEstadoCampos`** ÔÇö agora desmarca `chkResFpg`, `chkOpePag` e `chkAnaPag` (Value=0) quando o campo Vendedor n├úo est├í vazio, replicando o comportamento do `getVends.Valid` original
+
+2. **`AbrirBuscaEmps`** ÔÇö padr├úo corrigido: sempre adiciona colunas e chama `Show()`, depois verifica `this_lSelecionou`; cobre os 3 casos (1 match auto-select, 0 matches, m├║ltiplos matches)
+
+3. **`AbrirBuscaUsuars`** ÔÇö mesmo fix de padr├úo
+
+4. **`AbrirBuscaFPags`** ÔÇö mesmo fix de padr├úo
+
+5. **`AbrirBuscaVends`** ÔÇö mesmo fix + chama `AtualizarEstadoCampos()` ap├│s sele├º├úo para atualizar estado dos checkboxes imediatamente

@@ -1,0 +1,11 @@
+﻿Fase 3 conclu?da. Criei `C:\4c\projeto\app\forms\relatorios\Formsigrecog.prg` com a estrutura base do form REPORT:
+
+- **Propriedades**: Width=800, Height=300 (id?nticas ao SCX original), `this_oRelatorio`, `this_cMensagemErro`
+- **Init()**: delega para `DODEFAULT()` (FormBase chama `InicializarForm`)
+- **InicializarForm()**: instancia `sigrecogBO`, configura Caption, Picture, cabe?alho, bot?es e PageFrame
+- **ConfigurarCabecalho()**: container escuro RGB(100,100,100) com label de t?tulo branco
+- **ConfigurarBotoes()**: `cmg_4c_Botoes` CommandGroup ButtonCount=4 (Visualizar/Imprimir/Documento/Encerrar) seguindo o padr?o `btnReport` do framework
+- **ConfigurarPageFrame()**: `pgf_4c_Paginas` com 1 p?gina "Filtros" (PageCount=1, Tabs=.F., fundo claro)
+- **Destroy()**: limpa BO via `.NULL.` (Custom n?o tem `.Release()`)
+
+Bindings de eventos e controles internos dos filtros ficam para as pr?ximas fases (5-8), conforme escopo definido.

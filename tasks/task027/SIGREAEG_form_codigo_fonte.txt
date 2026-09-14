@@ -1,0 +1,1797 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREAEG.SCX
+* Data/Hora: 16/05/26 00:39:47
+* Total de registros: 20
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREAEG
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGREAEG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_estoque
+  Parent: SIGREAEG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_estoque
+  Parent: SIGREAEG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say2
+  Parent: SIGREAEG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Ds_GrEstoque
+  Parent: SIGREAEG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_Cd_GrEstoque
+  Parent: SIGREAEG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_codigo
+  Parent: SIGREAEG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_ggrupo
+  Parent: SIGREAEG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_ggrupo
+  Parent: SIGREAEG
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo
+  Parent: SIGREAEG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREAEG
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGREAEG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREAEG
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmpresa
+  Parent: SIGREAEG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREAEG
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesEmpresa
+  Parent: SIGREAEG
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 76
+  Left = 12
+  Width = 792
+  Height = 449
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Análise de Estoque por Grande Grupo"
+  ControlBox = .F.
+  ClipControls = .T.
+  Name = "SIGREAEG"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 81
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 157
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.AutoSize = .F.
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 233
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 490
+  btnReport.Top = -2
+  btnReport.Width = 313
+  btnReport.TabIndex = 11
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta de Estoque :"
+  Left = 179
+  Top = 204
+  Width = 95
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.get_ds_estoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Height = 25
+  Left = 361
+  MaxLength = 40
+  TabIndex = 8
+  Top = 199
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "get_ds_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.get_cd_estoque
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  Format = "K!"
+  Height = 25
+  Left = 279
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 7
+  ToolTipText = ""
+  Top = 199
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_cd_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo de Estoque :"
+  Left = 179
+  Top = 177
+  Width = 95
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.get_Ds_GrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Height = 25
+  Left = 361
+  MaxLength = 20
+  TabIndex = 6
+  Top = 172
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_Ds_GrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.get_Cd_GrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Height = 25
+  Left = 279
+  MaxLength = 10
+  TabIndex = 5
+  Top = 172
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "get_Cd_GrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.lbl_codigo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grande Grupo :"
+  Left = 198
+  Top = 150
+  Width = 76
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "lbl_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.get_ds_ggrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Height = 25
+  Left = 312
+  MaxLength = 40
+  TabIndex = 4
+  Top = 145
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "get_ds_ggrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.get_cd_ggrupo
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K!"
+  Height = 25
+  Left = 279
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 3
+  ToolTipText = ""
+  Top = 145
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "get_cd_ggrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Período :"
+  Left = 229
+  Top = 231
+  Width = 45
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 279
+  MaxLength = 10
+  TabIndex = 9
+  Top = 226
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 364
+  Top = 231
+  Width = 8
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 376
+  MaxLength = 10
+  TabIndex = 10
+  Top = 226
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.getEmpresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 279
+  MaxLength = 3
+  TabIndex = 1
+  Top = 120
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "getEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 224
+  Top = 123
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAEG.getDesEmpresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 312
+  TabIndex = 2
+  Top = 120
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 18
+  Name = "getDesEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREAEG
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE processa
+------------------------------------------------------------
+PROCEDURE processa
+LParameters pcEmpEst, pcGruEst, pcEstEst, pcGGrupo
+
+Private lcDtIni, lcDtFin, lcDtAnt
+
+Local lcDsEstoque, lcCdGGrupo,lcDsGGrupo, ldDtInicial, ldDtFinal, lcConexao, lnCdBarra, lcTalk, ;
+	  lcEscape, lcMacro1, llObs, lcWhere, lcBusca, lcEmpEst, lcGruEst, lcEstEst, lcGGrupo
+
+ldDtInicial = ThisForm.get_dt_inicial.Value
+ldDtFinal   = ThisForm.get_dt_final.Value
+ldDtAnt     = ldDtInicial - 1
+lcConexao   = ThisForm.podataMgr.GetDriver()
+lcDtIni     = fDtoSQL(ldDtInicial)
+lcDtFin     = fDtoSQL(ldDtFinal,'23:59:59')
+lcDtAnt     = fDtoSQL(ldDtAnt,'23:59:59')
+lcEmpEst    = Padr(pcEmpEst, 03)
+lcGruEst    = Padr(pcGruEst, 10)
+lcEstEst    = Padr(pcEstEst, 10)
+lcGGrupo    = Padr(pcGGrupo, 03)
+
+If Used([CrSigMvHst])
+	Use In CrSigMvHst
+EndIf
+If Used([TmpEst])
+	Use In TmpEst
+EndIf
+If Used([CsMov])
+	Use In CsMov
+EndIf
+If Used([CsPrd])
+	Use In CsPrd
+EndIf
+If Used([CsRel])
+	Use In CsRel
+EndIf
+If Used([TmpEstoque])
+	Use In TmpEstoque
+EndIf
+
+Create Cursor CrSigMvHst (Emps c(3),Grupos c(10),Estos c(10),Dopes c(20), Numes n(6,0),CPros c(14),Datas t Null,;
+						Qtds n(12,3),Opers c(1),SQtds n(12,3),EmpGruEsts c(23),CIdChaves c(20))
+
+Create Cursor TmpEst (CIdChaves c(20),Emps c(3),Grupos c(10),Estos c(10),CPros c(14),SalIni n(16,3),SalAtu n(16,3),GGrupo c(3))
+
+Create Cursor CsMov (emps c(3),ggrupo c(3),dopes c(20),numes n(6,0),opers c(1),cpros c(14),qtds n(12,3), Pesos n(9,3))
+
+Create Cursor CsPrd (emps c(3),ggrupo c(3),dopes c(20),numes n(6,0),opers c(1),qtds n(12,3))
+
+Create Cursor CsRel (emps c(3),ggrupo c(3),dopes c(20),sldini n(12,3),entmov n(12,3),saimov n(12,3),salmov n(12,3),;
+					 enthis n(12,3),saihis n(12,3),salhis n(12,3),sldfin n(12,3),difs n(12,3), PesoEs n(12,3), PesoSs n(12,3))
+
+If !Empty(lcGruEst) And !Empty(lcEstEst)
+	Create Cursor TmpEstoque (Emps c(3),Grupos c(10),Estos c(10))
+	Insert Into TmpEstoque (Emps,Grupos,Estos) Values (Padr(lcEmpEst,3),Padr(lcGruEst,10),Padr(lcEstEst,10))
+Else
+	lStrQuery = [Select Emps,Grupos,Estos From SigMvEst ]+;
+				[Where Emps = ']+lcEmpEst+[' ]+;
+				Iif(!Empty(lcGruEst),[ And Grupos = ']+lcGruEst+[' ],'')+;
+				Iif(!Empty(lcEstEst),[ And Estos  = ']+lcEstEst+[' ],'')+;
+				[Group By Emps,Grupos,Estos ]+;
+				[Order By Emps,Grupos,Estos ]
+	If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpEstoque') < 1
+		Return(.F.)
+	EndIf
+EndIf
+Select TmpEstoque
+Index On Emps+Grupos+Estos Tag EmpGruEsts
+Go Top
+
+If !Empty(lcEmpEst) And !Empty(lcGruEst) And !Empty(lcEstEst)
+	lcFiltro = [a.empgruests = ']+lcEmpEst+lcGruEst+lcEstEst+[' ]
+Else
+	lcEmpIni = Iif(!Empty(lcEmpEst),lcEmpEst,Space(03))
+	lcEmpFin = Iif(!Empty(lcEmpEst),lcEmpEst,Replicate(Chr(254),3))
+	lcGruIni = Iif(!Empty(lcGruEst),lcGruEst,Space(10))
+	lcGruFin = Iif(!Empty(lcGruEst),lcGruEst,Replicate(Chr(254),10))
+	lcEstIni = Iif(!Empty(lcEstEst),lcEstEst,Space(10))
+	lcEstFin = Iif(!Empty(lcEstEst),lcEstEst,Replicate(Chr(254),10))
+	lcFiltro = [a.empgruests Between ']+lcEmpIni+lcGruIni+lcEstIni+[' And ']+lcEmpFin+lcGruFin+lcEstFin+[' ]
+EndIf
+
+If Used('TmpHis')
+	Use In TmpHis
+EndIf
+
+Wait Window 'Aguarde! Selecionando Produtos...' NoWait
+
+lcQuery = [Select a.cIdChaves, a.Emps, a.Grupos, a.Estos, a.Cpros, c.Mercs as GGrupo ] + ;
+			[From SigMvEst a, SigCdPro b, SigCdGrp c ] + ;
+		   [Where ] + lcFiltro + [ And ] + ;
+		   		 [b.Cpros = a.Cpros And ] + ;
+		   		 [c.Cgrus = b.Cgrus ] + ;
+				  Iif(Empty(lcGGrupo), [], [And c.Mercs = '] + lcGGrupo + [' ]) + ;
+		   [Group By a.cIdChaves, a.Emps, a.Grupos, a.Estos, a.Cpros, c.Mercs]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [TmpSigMvEst]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (TmpSigMvEst)])
+	Return .f.
+EndIf
+
+Zap In TmpEst
+
+Select TmpSigMvEst
+Scan
+	Scatter MemVar
+	m.SalIni = 0
+	m.SalAtu = 0
+	Insert Into TmpEst From MemVar
+EndScan
+
+Wait Clear
+
+*-[ Calcula o saldo antes da data inicial do período solicitado ]-*
+Select TmpEst
+Index On Emps + Grupos + Estos + CPros + GGrupo Tag EmpProGG
+Go Top
+If (lcConexao = 'foxpro')
+	If Not Eof()
+		lcTblHis = (Addbs(JustPath(ThisForm.poDataMgr.GetDatabase()))+'SigMvHst.dbf')
+		If Not Used('SigMvHst')
+			Use (lcTblHis) In 0
+			Select SigMvHst
+			Set Order To EmpEstPro Descending
+		EndIf
+	EndIf
+Else
+	loBarraHis = CreateObject('fwprogressbar','Selecionando Históricos...',Reccount('TmpEstoque'))
+	loBarraHis.Show
+	Select TmpEstoque
+	Go Top
+	Scan
+		loBarraHis.Update(.T.)
+		lcEGEs = Padr(TmpEstoque.Emps,3) + Padr(TmpEstoque.Grupos,10) + Padr(TmpEstoque.Estos,10)
+
+		lStrQuery = [Select Emps,Grupos,Estos,CPros,Dopes,Numes,Datas,Qtds,Opers,SQtds,EmpGruEsts,CIdChaves ]+;
+					  [From SigMvHst ]+;
+					 [Where EmpGruEsts = "]+lcEGEs+[" And Datas <= ?lcDtFin ]+;
+					 [Order By Emps,Grupos,Estos,CPros,CIdChaves]
+
+		If ThisForm.poDataMgr.SqlExecute(lStrQuery,'CsHis') < 1
+			Return(.F.)
+		EndIf
+
+		Select CsHis
+		Scan
+			Scatter MemVar
+			Insert Into CrSigMvHst From MemVar
+		EndScan
+	EndScan
+	loBarraHis.Complete(.T.)
+
+	Select CrSigMvHst
+	Index On EmpGruEsts Tag EmpGruEsts
+	Index On CPros Tag CPros
+	Index On Dtos(Datas) Tag Datas
+	Index On EmpGruEsts+CPros+CidChaves Tag EmpEstPro
+	Go Top
+EndIf
+
+Wait Clear
+
+Select TmpEst
+loBarraEst = CreateObject('fwprogressbar','Verificando Saldo Anterior...',Reccount('TmpEst'))
+loBarraEst.Show
+Scan
+	loBarraEst.Update(.T.,'Produto: ' + TmpEst.cpros)
+	lnSQtds = 0
+	If (lcConexao = 'foxpro')
+		Select SigMvHst
+		Go Top
+		Set Near On
+		Seek TmpEst.emps + TmpEst.grupos + TmpEst.estos + TmpEst.cpros + DtoS(ldDtAnt)
+		Set Near Off
+		If SigMvHst.emps + SigMvHst.grupos + SigMvHst.estos + SigMvHst.cpros = ;
+			TmpEst.emps + TmpEst.grupos + TmpEst.estos + TmpEst.cpros
+			lnSqtds = SigMvHst.sqtds
+		EndIf
+	Else
+		If Used('CrTmpHis')
+			Use In CrTmpHis
+		EndIf
+		lcEGEs = TmpEst.Emps + TmpEst.Grupos + TmpEst.Estos
+		Select Top 1 Emps,Grupos,Estos,CPros,Datas,SQtds ;
+		From CrSigMvHst ;
+		Where EmpGruEsts = lcEGEs And CPros = TmpEst.CPros And Datas <= lcDtAnt ;
+		Order By CIdChaves Desc ;
+		Into Cursor CrTmpHis ReadWrite
+		Select CrTmpHis
+		Go Top
+		If !Eof()
+			lnSQtds = CrTmpHis.SQtds
+		EndIf
+	EndIf
+	Replace SalIni With lnSQtds In TmpEst
+EndScan
+loBarraEst.Complete(.T.)
+
+Select Emps, GGrupo, Max(Grupos) as Grupos, Max(Estos) as Estos, Sum(SalIni) as Saldo ;
+  From TmpEst ;
+ Group By Emps, GGrupo ;
+  Into Cursor csSaldoIni
+
+Select csSaldoIni
+Index On GGrupo Tag GGrupo
+Go Top
+
+Select TmpEst
+loBarraEst = CreateObject('fwprogressbar','Verificando Saldo Atual...',Reccount('TmpEst'))
+loBarraEst.Show
+Scan
+	loBarraEst.Update(.T.,'Produto: ' + TmpEst.cpros)
+	lnSQtds = 0
+	If (lcconexao = 'foxpro')
+		Select SigMvHst
+		Go Top
+		Set Near On
+		Seek TmpEst.emps + TmpEst.grupos + TmpEst.estos + TmpEst.cpros + DtoS(ldDtFinal)
+		Set Near Off
+		If SigMvHst.emps + SigMvHst.grupos + SigMvHst.estos + SigMvHst.cpros = ;
+			TmpEst.emps + TmpEst.grupos + TmpEst.estos + TmpEst.cpros
+			lnSqtds = SigMvHst.sqtds
+		EndIf
+	Else
+		If Used('CrTmpHis')
+			Use In CrTmpHis
+		EndIf
+		lcEGEs = TmpEst.Emps + TmpEst.Grupos + TmpEst.Estos
+		Select Top 1 Emps,Grupos,Estos,CPros,Datas,SQtds ;
+		From CrSigMvHst ;
+		Where EmpGruEsts = lcEGEs And CPros = TmpEst.CPros And Datas <= lcDtFin;
+		Order By CIdChaves Desc ;
+		Into Cursor CrTmpHis ReadWrite
+		Select CrTmpHis
+		Go Top
+		If !Eof()
+			lnSQtds = CrTmpHis.SQtds
+		EndIf
+	EndIf
+	Select TmpEst
+	Replace TmpEst.salatu With lnSqtds
+EndScan
+loBarraEst.Complete(.T.)
+
+Select Emps, GGrupo, Max(Grupos) as Grupos, Max(Estos) as Estos, Sum(SalAtu) as Saldo ;
+  From TmpEst ;
+ Group By Emps, GGrupo ;
+  Into Cursor csSaldoFin
+
+Select csSaldoFin
+Index On GGrupo Tag GGrupo
+Go Top
+
+If Used('SigMvHst')
+	Use In SigMvHst
+EndIf
+
+If Used('TmpHis')
+	Use In TmpHis
+EndIf
+
+Wait Window 'Aguarde! Analisando Estoque no Período...' NoWait
+If (lcConexao = 'foxpro')
+	Select a.Emps,a.Grupos,a.Estos,a.Dopes,a.Numes,a.CPros,a.Qtds,a.Opers,'   ' As ggrupo ;
+	  From SigMvHst a ;
+	 Where &lcFiltro. And a.Datas Between lcDtIni And lcDtFin ;
+	 Order By a.Emps,a.Grupos,a.Estos,a.Dopes,a.Numes,a.CPros,a.Qtds,a.Opers ;
+	  Into Cursor TmpHis ReadWrite
+Else
+	Select a.Emps,a.Grupos,a.Estos,a.Dopes,a.Numes,a.CPros,a.Qtds,a.Opers,'   ' As ggrupo ;
+	  From CrSigMvHst a ;
+	 Where a.Datas Between lcDtIni And lcDtFin ;
+	 Order By a.Emps,a.Grupos,a.Estos,a.Dopes,a.Numes,a.CPros,a.Qtds,a.Opers ;
+	  Into Cursor TmpHis ReadWrite
+EndIf
+
+Wait Clear
+
+Select TmpHis
+loBarraHis = CreateObject('fwprogressbar','Verificando Grandes Grupos...',Reccount('TmpHis'))
+loBarraHis.Show
+Scan
+	loBarraHis.Update(.T.)
+	lcGGrp = ''
+	If Used('TmpPro')
+		Use In TmpPro
+	EndIf
+	lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cpros,cgrus From SigCdPro Where cpros = ']+TmpHis.cpros+[' ],'TmpPro')
+	If lnQueryOk < 1
+		Return(.F.)
+	EndIf
+	Select TmpPro
+	Go Top
+	If !Eof()
+		If Seek(TmpPro.cgrus,'CrSigCdGrp','cgrus')
+			lcGGrp = CrSigCdGrp.mercs
+		EndIf
+	EndIf
+
+	Replace GGrupo With lcGGrp In TmpHis
+EndScan
+loBarraHis.Complete(.T.)
+
+Select Emps, GGrupo, Dopes, Numes, ;
+	   Sum(Iif(Opers='E', Qtds, 00000000.000)) as Entradas, ;
+	   Sum(Iif(Opers='S', Qtds, 00000000.000)) as Saidas ;
+  From TmpHis ;
+ Where Not Empty(GGrupo) ;
+ Group By Emps, GGrupo, Dopes, Numes ;
+  Into Cursor csHistorico ReadWrite
+
+Select Emps, GGrupo, Dopes, Numes, ;
+	   Sum(Iif(Opers='E', Qtds, 00000000.000)) as Entradas, ;
+	   Sum(Iif(Opers='S', Qtds, 00000000.000)) as Saidas ;
+  From TmpHis ;
+ Where Not Empty(GGrupo) ;
+ Group By Emps, GGrupo, Dopes, Numes ;
+  Into Cursor csHist ReadWrite
+
+Select Emps, GGrupo, Dopes, Sum(Entradas) as Entradas, Sum(Saidas) as Saidas ;
+  From csHist ;
+ Group By Emps, GGrupo, Dopes ;
+ Order By Emps, GGrupo, Dopes ;
+  Into Cursor csTotHis
+
+Select TmpEstoque
+loBarraEst = CreateObject('fwprogressbar','Selecionando Movimentações...',Reccount('TmpEstoque'))
+loBarraEst.Show
+Scan
+	loBarraEst.Update(.T.)
+	
+	If Used('TprMvCab')
+		Use In TprMvCab
+	EndIf
+
+	loBarraEst.Rodape.Caption = 'Origem...'
+
+	lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.cidchaves,a.empdopnums,a.grupoos,a.grupods,a.contaos,a.contads,]+;
+					[o.opers,o.origems,o.destinos,o.estorigs,o.estdests ]+;
+				[From SigMvCab a, SigCdOpe o ]+;
+				[Where a.emps = ']+TmpEstoque.Emps+[' And a.grupoos = ']+TmpEstoque.Grupos+[' ]+;
+					[And a.contaos = ']+TmpEstoque.Estos+[' ]+;
+					[And a.datas Between ?lcDtIni And ?lcDtFin And o.dopes = a.dopes And o.estoqs = 1 ]+;
+				[Order By a.cidchaves,a.empdopnums,o.opers,o.origems,o.destinos,o.estorigs,o.estdests ],'TmpMvO')
+	If lnQueryOk < 1
+		Return(.F.)
+	EndIf
+
+	Select TmpMvO
+	Go Top
+
+	loBarraEst.Rodape.Caption = 'Destino...'
+
+	lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.cidchaves,a.empdopnums,a.grupoos,a.grupods,a.contaos,a.contads,]+;
+					[o.opers,o.origems,o.destinos,o.estorigs,o.estdests ]+;
+				[From SigMvCab a, SigCdOpe o ]+;
+				[Where a.emps = ']+TmpEstoque.Emps+[' And a.grupods = ']+TmpEstoque.Grupos+[' ]+;
+					[And a.contads = ']+TmpEstoque.Estos+[' ]+;
+					[And a.datas Between ?lcDtIni And ?lcDtFin And o.dopes = a.dopes ]+;
+					[And o.estoqs = 1 And o.transs <> 1 ]+;
+				[Order By a.cidchaves,a.empdopnums,o.opers,o.origems,o.destinos,o.estorigs,o.estdests ],'TmpMvD')
+	If lnQueryOk < 1
+		Return(.F.)
+	EndIf
+
+	Select TmpMvD
+	Go Top
+
+	loBarraEst.Rodape.Caption = 'Transferências...'
+	lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.cidchaves,a.empds,a.emps,a.dopes,a.numes,a.grupoos,a.grupods,]+;
+					[a.contaos,a.contads,o.opers,o.origems,o.destinos,o.estorigs,o.estdests ]+;
+				[From SigMvCab a, SigCdOpe o ]+;
+				[Where a.empds = ']+TmpEstoque.Emps+[' And a.grupods = ']+TmpEstoque.Grupos+[' ]+;
+					[And a.contads = ']+TmpEstoque.Estos+[' ]+;
+					[And a.datas Between ?lcDtIni And ?lcDtFin And o.dopes = a.dopes ]+;
+					[And o.estoqs = 1 And o.transs = 1 ]+;
+				[Order By a.cidchaves,a.empds,a.emps,a.dopes,a.numes,o.opers,o.origems,o.destinos,o.estorigs,o.estdests ],'TmpTrf')
+	If lnQueryOk < 1
+		Return(.F.)
+	EndIf
+
+	Select TmpTrf
+	Go Top
+
+	loBarraEst.Rodape.Caption = 'Agrupando Movimentações...'
+
+	Select a.empdopnums,a.grupoos,a.grupods,a.contaos,a.contads,a.opers,a.origems,a.destinos,a.estorigs,a.estdests ;
+	  From TmpMvO a ;
+	 Union All ;
+	Select b.empdopnums,b.grupoos,b.grupods,b.contaos,b.contads,b.opers,b.origems,b.destinos,b.estorigs,b.estdests ;
+	  From TmpMvD b ;
+	 Union All ;
+	Select c.emps+c.dopes+Str(c.numes,6) As empdopnums,c.grupoos,c.grupods,c.contaos,c.contads,c.opers,c.origems,;
+		   c.destinos,c.estorigs,c.estdests ;
+	  From TmpTrf c ;
+	  Into Cursor CsEest ReadWrite
+
+	Select empdopnums,Max(grupoos) as grupoos,Max(grupods) as grupods,Max(contaos) as contaos, ;
+		   Max(contads) as contads,Max(opers) as opers,Max(origems) as origems,Max(destinos) as destinos,;
+		   Max(estorigs) as estorigs,Max(estdests) as estdests ;
+	From CsEest ;
+	Group By empdopnums ;
+	Into Cursor TprMvCab ReadWrite
+
+	loBarEest = CreateObject('fwprogressbar','Selecionando Itens das Movimentações...',Reccount('TprMvCab'))
+	loBarEest.Top = loBarEest.Top + loBarEest.Height
+	loBarEest.Show
+
+	Select TprMvCab
+	Scan
+		lcEDNs = TprMvCab.empdopnums
+		loBarEest.Update(.T.,Substr(lcEDNs,1,3) + ' - ' + AllTrim(Substr(lcEDNs,4,20)) + ' - ' + Alltrim(Substr(lcEDNs,24,6)))
+
+		llOrigem = .F.
+		llDestino = .F.
+		If TprMvCab.estorigs = 4 Or TprMvCab.opers = 3
+			If TprMvCab.origems = 1 And TprMvCab.grupoos = TmpEstoque.Grupos And TprMvCab.contaos = TmpEstoque.Estos
+				llOrigem = .T.
+			Else
+				If TprMvCab.destinos = 1 And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+					llDestino = .T.
+				Endif
+			Endif
+		Else
+			If TprMvCab.origems = 1 And TprMvCab.grupoos = TmpEstoque.Grupos And TprMvCab.contaos = TmpEstoque.Estos
+				If Inlist(TprMvCab.estorigs,1,2)
+					llOrigem = .T.
+				Endif
+			Endif
+			If TprMvCab.destinos = 1 And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+				If Inlist(TprMvCab.estdests,1,2)
+					llDestino = .T.
+				Endif
+			Endif
+		Endif
+		If !llOrigem And !llDestino
+			Loop
+		Endif
+		
+		If Used('crLclMvItn')
+			Use In crLclMvItn
+		EndIf
+		lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.cidchaves,a.emps,a.dopes,a.numes,a.cpros,a.opers,a.qtds,a.qtds * a.pesos as Pesos,p.cgrus ]+;
+					[From SigMvItn a, SigCdPro p ]+;
+					[Where a.empdopnums = "]+lcEDNs+[" And p.cpros = a.cpros ]+;
+					[Group By a.cidchaves,a.emps,a.dopes,a.numes,a.cpros,a.opers,a.qtds,a.pesos,p.cgrus ],'crLclMvItn')
+		If lnQueryOk < 1
+			Return(.F.)
+		EndIf
+		Select crLclMvItn
+		Go Top
+		Scan
+			=Seek(crLclMvItn.cgrus,'CrSigCdGrp','cgrus')
+			If CrSigCdGrp.cestoqs <> 1
+				Loop
+			EndIf
+			m.GGrupo = CrSigCdGrp.mercs
+
+			lcOpers = ' '
+			If TprMvCab.estorigs = 4
+				llOrigem  = .F.
+				llDestino = .F.
+				If crLclMvItn.opers = 'S' And TprMvCab.grupoos = TmpEstoque.Grupos And TprMvCab.contaos = TmpEstoque.Estos
+					llOrigem = .T.
+					lcOpers = 'S'
+				Else
+					If crLclMvItn.opers = 'E' And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+						llDestino = .T.
+						lcOpers = 'E'
+					Endif
+				Endif
+			Else
+				If TprMvCab.opers = 3
+					If TprMvCab.origems = 1
+						If Substr(TprMvCab.empdopnums,1,3) = lcEmpEst
+							If crLclMvItn.opers = 'S' And TprMvCab.grupoos = TmpEstoque.Grupos And TprMvCab.contaos = TmpEstoque.Estos
+								llOrigem = .T.
+								lcOpers = 'S'
+							Else
+								If crLclMvItn.opers = 'E' And TprMvCab.grupoos = TmpEstoque.Grupos And TprMvCab.contaos = TmpEstoque.Estos
+									llDestino = .T.
+									lcOpers = 'E'
+								Else
+									If crLclMvItn.opers = 'S' And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+										llOrigem = .T.
+										lcOpers = 'S'
+									Else
+										If crLclMvItn.opers = 'E' And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+											llDestino = .T.
+											lcOpers = 'E'
+										EndIf
+									EndIf
+								Endif
+							EndIf
+						Else
+							If crLclMvItn.opers = 'S' And TprMvCab.grupoos = TmpEstoque.Grupos And TprMvCab.contaos = TmpEstoque.Estos
+								llDestino = .T.
+								lcOpers = 'E'
+							Else
+								If crLclMvItn.opers = 'E' And TprMvCab.grupoos = TmpEstoque.Grupos And TprMvCab.contaos = TmpEstoque.Estos
+									llOrigem = .T.
+									lcOpers = 'S'
+								Else
+									If crLclMvItn.opers = 'S' And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+										llDestino = .T.
+										lcOpers = 'E'
+									Else
+										If crLclMvItn.opers = 'E' And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+											llOrigem = .T.
+											lcOpers = 'S'
+										EndIf
+									EndIf
+								Endif
+							EndIf
+						EndIf
+					Else
+						If TprMvCab.destinos = 1
+							If Substr(TprMvCab.empdopnums,1,3) = lcEmpEst
+								If crLclMvItn.opers = 'S' And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+									llOrigem = .T.
+									lcOpers = 'S'
+								Else
+									If crLclMvItn.opers = 'E' And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+										llDestino = .T.
+										lcOpers = 'E'
+									Endif
+								Endif
+							Else
+								If crLclMvItn.opers = 'S' And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+									llDestino = .T.
+									lcOpers = 'E'
+								Else
+									If crLclMvItn.opers = 'E' And TprMvCab.grupods = TmpEstoque.Grupos And TprMvCab.contads = TmpEstoque.Estos
+										llOrigem = .T.
+										lcOpers = 'S'
+									Endif
+								Endif
+							Endif
+						EndIf
+					Endif
+				Else
+					If llOrigem And TprMvCab.estorigs = 1
+						lcOpers = 'E'
+					Else
+						If llOrigem And TprMvCab.estorigs = 2
+							lcOpers = 'S'
+						Else
+							If llDestino And TprMvCab.estdests = 1
+								lcOpers = 'E'
+							Else
+								If llDestino And TprMvCab.estdests = 2
+									lcOpers = 'S'
+								Endif
+							Endif
+						Endif
+					Endif
+				Endif
+			Endif
+			
+			If llOrigem Or llDestino
+				Select crLclMvItn
+				Scatter MemVar
+				m.emps   = lcEmpEst
+				m.opers  = lcOpers
+				Insert Into CsMov From MemVar
+			EndIf
+			Select crLclMvItn
+		EndScan
+	EndScan				
+	loBarEest.Complete(.T.)
+	Select TmpEstoque
+EndScan
+loBarraEst.Complete(.T.)
+
+Select CsMov
+Go Top
+
+Wait Window 'Aguarde! Analisando Movimentações...' NoWait
+
+Select Emps, GGrupo, Dopes, Numes, ;
+	   Sum(Iif(Opers = 'E', Qtds,  00000000.000)) as Entradas, ;
+	   Sum(Iif(Opers = 'S', Qtds,  00000000.000)) as Saidas, ;
+	   Sum(Iif(Opers = 'E', Pesos, 00000000.000)) as PesoEs, ;
+	   Sum(Iif(Opers = 'S', Pesos, 00000000.000)) as PesoSs ;
+  From CsMov ;
+ Where Not Empty(GGrupo) ;
+ Group By Emps, GGrupo, Dopes, Numes ;
+ Order By Emps, GGrupo, Dopes, Numes ;
+  Into Cursor csMovimento ReadWrite
+
+Select csMovimento
+Go Top
+
+Select Emps, GGrupo, Dopes, Numes, ;
+	   Sum(Iif(Opers = 'E', Qtds,  00000000.000)) as Entradas, ;
+	   Sum(Iif(Opers = 'S', Qtds,  00000000.000)) as Saidas, ;
+	   Sum(Iif(Opers = 'E', Pesos, 00000000.000)) as PesoEs, ;
+	   Sum(Iif(Opers = 'S', Pesos, 00000000.000)) as PesoSs ;
+  From CsMov ;
+ Where Not Empty(GGrupo) ;
+ Group By Emps, GGrupo, Dopes, Numes ;
+ Order By Emps, GGrupo, Dopes, Numes ;
+  Into Cursor csMovs ReadWrite
+
+Select csmovs
+Go top
+
+Select Emps, GGrupo, Dopes, Sum(Entradas) as Entradas, Sum(Saidas) as Saidas, Sum(PesoEs) as PesoEs, Sum(PesoSs) as PesoSs ;
+  From csMovs ;
+ Group By Emps, GGrupo, Dopes ;
+ Order By Emps, GGrupo, Dopes ;
+  Into Cursor csTotMov
+  
+Select csTotMov
+Go top
+
+Wait Window 'Aguarde! Selecionando Produção (Entradas)...' NoWait
+
+lcDopps = Padr('ENCERRAMENTO DIRETO',20)
+If Used('TmpPdE')
+	Use In TmpPdE
+EndIf
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.emps,a.dopps As dopes,a.numps As numes,b.codpds As cpros,b.qtds,]+;
+				['E' As opers,c.cgrus ]+;
+			[From SigCdNec a, SigPdMvf b, SigCdPro c ]+;
+			[Where a.emps = ']+lcEmpEst+[' And a.dopps = ']+lcDopps+[' And a.datas Between ?lcDtIni And ?lcDtFin ]+;
+				[And b.emps = a.emps And b.dopps = a.dopps And b.numps = a.numps And c.cpros = b.codpds ]+;
+			[Order By a.emps,a.dopps,a.numps ],'TmpPdE')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+lcDopps = Padr('ENCERRAMENTO',20)
+If Used('TmpPdE2')
+	Use In TmpPdE2
+EndIf
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.emps,a.dopps As dopes,a.numps As numes,b.codpds As cpros,b.qtds,]+;
+				['E' As opers,c.cgrus ]+;
+			[From SigCdNec a, SigPdMvf b, SigCdPro c ]+;
+			[Where a.emps = ']+lcEmpEst+[' And a.dopps = ']+lcDopps+[' And a.datas Between ?lcDtIni And ?lcDtFin ]+;
+				[And b.emps = a.emps And b.dopps = a.dopps And b.numps = a.numps And c.cpros = b.codpds ]+;
+			[Order By a.emps,a.dopps,a.numps ],'TmpPdE2')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select TmpPdE
+Scan
+	Scatter MemVar
+	m.ggrupo = Iif(Seek(TmpPdE.cgrus,'CrSigCdGrp','cgrus'),CrSigCdGrp.mercs,'')
+	Insert Into CsPrd From MemVar
+EndScan
+
+Select TmpPdE2
+Scan
+	Scatter MemVar
+	m.ggrupo = Iif(Seek(TmpPdE2.cgrus,'CrSigCdGrp','cgrus'),CrSigCdGrp.mercs,'')
+	Insert Into CsPrd From MemVar
+EndScan
+
+Wait Window 'Aguarde! Selecionando Produção (Saídas)...' NoWait
+
+If Used('TmpPdS')
+	Use In TmpPdS
+EndIf
+
+lcDopps = Padr('ENCERRAMENTO DIRETO',20)
+If Used('TmpEnc')
+	Use In TmpEnc
+EndIf
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.emps,a.dopps As dopes,a.numps As numes,b.cmats As cpros,b.qtds,]+;
+				['S' As opers,c.cgrus ]+;
+			[From SigCdNec a, SigCdNei b, SigCdPro c ]+;
+			[Where a.emps = ']+lcEmpEst+[' And a.dopps = ']+lcDopps+[' And a.datas Between ?lcDtIni And ?lcDtFin ]+;
+				[And b.emps = a.emps And b.dopps = a.dopps And b.numps = a.numps And c.cpros = b.cmats ]+;
+			[Order By a.emps,a.dopps,a.numps ],'TmpEnc')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+lcDopps = Padr('FUNDIÇÃO',20)
+If Used('TmpFun')
+	Use In TmpFun
+EndIf
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.emps,a.dopps As dopes,a.numps As numes,b.cmats As cpros,b.qtds,]+;
+				['E' As opers,c.cgrus ]+;
+			[From SigCdNec a, SigCdNei b, SigCdPro c ]+;
+			[Where a.emps = ']+lcEmpEst+[' And a.dopps = ']+lcDopps+[' And a.datas Between ?lcDtIni And ?lcDtFin ]+;
+				[And b.emps = a.emps And b.dopps = a.dopps And b.numps = a.numps And c.cpros = b.cmats ]+;
+			[Order By a.emps,a.dopps,a.numps ],'TmpFun')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select * From TmpEnc ;
+ Union All ;
+Select * From TmpFun ;
+  Into Cursor TmpPdS
+
+Select TmpPdS
+Scan
+	Scatter MemVar
+	If Seek(TmpPdS.cgrus,'CrSigCdGrp','cgrus')
+		If CrSigCdGrp.cestoqs <> 1
+			Loop
+		EndIf
+		m.ggrupo = CrSigCdGrp.mercs
+		Insert Into CsPrd From MemVar
+	EndIf
+EndScan
+
+Wait Window 'Aguarde! Analisando Produção...' NoWait
+
+Select Emps, GGrupo, Dopes, Numes, ;
+	   Sum(Iif(Opers = 'E', Qtds, 00000000.000)) as Entradas, ;
+	   Sum(Iif(Opers = 'S', Qtds, 00000000.000)) as Saidas ;
+  From csPrd ;
+ Where Not Empty(GGrupo) ;
+ Group By Emps, GGrupo, Dopes, Numes ;
+ Order By Emps, GGrupo, Dopes, Numes ;
+  Into Cursor csProducao ReadWrite
+
+Select Emps, GGrupo, Dopes, Numes, ;
+	   Sum(Iif(Opers = 'E', Qtds, 00000000.000)) as Entradas, ;
+	   Sum(Iif(Opers = 'S', Qtds, 00000000.000)) as Saidas ;
+  From csPrd ;
+ Where Not Empty(GGrupo) ;
+ Group By Emps, GGrupo, Dopes, Numes ;
+ Order By Emps, GGrupo, Dopes, Numes ;
+  Into Cursor CsPrds ReadWrite
+
+Select Emps, GGrupo, Dopes, Sum(Entradas) as Entradas, Sum(Saidas) as Saidas ;
+  From csPrds ;
+ Group By Emps, GGrupo, Dopes ;
+ Order By Emps, GGrupo, Dopes ;
+  Into Cursor csTotPrd
+
+Select a.emps,a.ggrupo,a.dopes,a.entradas As entmov,a.saidas As saimov,00000000.000 As enthis,00000000.000 As saihis, ;
+	   a.PesoEs, a.PesoSs ;
+  From CsTotMov a ;
+ Union All ;
+Select a.emps,a.ggrupo,a.dopes,a.entradas As entmov,a.saidas As saimov,00000000.000 As enthis,00000000.000 As saihis, ;
+	   00000000.000 As PesoEs, 00000000.000 As PesoSs ;
+  From CsTotPrd a ;
+ Union All ;
+Select b.emps,b.ggrupo,b.dopes,00000000.000 As entmov,00000000.000 As saimov,b.entradas As enthis,b.saidas As saihis, ;
+	   00000000.000 As PesoEs, 00000000.000 As PesoSs ;
+  From CsTotHis b ;
+  Into Cursor TmpMovHis ReadWrite
+
+Select Emps, GGrupo, Dopes, Sum(EntMov) as EntMov, Sum(SaiMov) as SaiMov, Sum(EntHis) as EntHis, ;
+	   Sum(SaiHis) as SaiHis, Sum(PesoEs) as PesoEs, Sum(PesoSs) as PesoSs ;
+  From TmpMovHis ;
+ Group By Emps, GGrupo, Dopes ;
+  Into Cursor csMovHis ReadWrite
+
+Select CsMovHis
+Index On GGrupo Tag GGrupo
+Go Top
+
+Select CsSaldoIni
+loBarraMov = CreateObject('fwprogressbar','Recalculando Saldos...',RecCount('CsSaldoIni'))
+loBarraMov.Show
+Scan
+	loBarraMov.Update(.T.)
+	llFirst   = .T.
+	m.sldini  = 0
+	m.entmov  = 0
+	m.saimov  = 0
+	m.enthis  = 0
+	m.saihis  = 0
+	m.salmov  = 0
+	m.salhis  = 0
+	m.sldfin  = 0
+	m.difs    = 0
+	=Seek(CsSaldoIni.GGrupo, 'CsSaldoFin', 'ggrupo')
+	m.emps   = CsSaldoIni.emps
+	m.ggrupo = CsSaldoIni.ggrupo
+	lnSldIni = CsSaldoIni.saldo
+	lnSldFin = CsSaldoFin.saldo
+	m.salmov = lnSldIni
+	m.salhis = lnSldIni
+	Select CsMovHis
+	Go Top
+	If Seek(CsSaldoIni.ggrupo,'CsMovHis','ggrupo')
+		Do While !Eof() And CsMovHis.ggrupo = CsSaldoIni.ggrupo
+			m.dopes  = CsMovHis.dopes
+			m.entmov = CsMovHis.entmov
+			m.saimov = CsMovHis.saimov
+			m.enthis = CsMovHis.enthis
+			m.saihis = CsMovHis.saihis
+			m.PesoEs = CsMovHis.PesoEs
+			m.PesoSs = CsMovHis.PesoSs
+			m.sldini = 0
+			m.salmov = m.salmov + (m.entmov - m.saimov)
+			m.salhis = m.salhis + (m.enthis - m.saihis)
+			m.sldfin = 0
+			If llFirst
+				m.sldini = lnSldIni
+				llFirst = .F.
+			EndIf
+			Insert Into CsRel From MemVar
+			Select CsMovHis
+			Skip
+		EndDo
+		Select CsRel
+		Replace CsRel.sldfin With lnSldFin ,;
+				CsRel.difs   With CsRel.salmov - CsRel.sldfin
+	EndIf
+	Select CsSaldoIni
+EndScan
+loBarraMov.Complete(.T.)
+
+Select * ;
+  From CsMovimento ;
+ Union All ;
+Select *, 00000000.000 as PesoEs, 00000000.000 as PesoSs ;
+  From CsProducao ;
+  Into Cursor CsMovPrd
+
+Select Emps, Dopes, Numes, GGrupo, Sum(Entradas) as Entradas, Sum(Saidas) as Saidas, Sum(PesoEs) as PesoEs, Sum(PesoSs) as PesoSs ;
+  From CsMovPrd ;
+ Group By Emps, Dopes, Numes, GGrupo ;
+  Into Cursor CsMoviProd
+
+Select a.emps,a.dopes,a.numes,a.GGrupo,a.entradas As entmov,a.saidas As saimov,b.entradas As enthis,b.saidas As saihis, a.PesoEs, a.PesoSs ;
+  From CsMoviProd a, csHistorico b ;
+ Where a.emps+a.dopes+Str(a.numes,6)+a.GGrupo = b.emps+b.dopes+Str(b.numes,6)+b.GGrupo And ;
+ 	  (a.entradas <> b.entradas Or a.saidas <> b.saidas) ;
+ Union All ;
+Select a.emps,a.dopes,a.numes,a.GGrupo,a.entradas As entmov,a.saidas As saimov,00000000.000 As enthis,00000000.000 As saihis, ;
+	   00000000.000 as PesoEs, 00000000.000 as PesoSs ;
+  From CsMoviProd a ;
+ Where a.emps+a.dopes+Str(a.numes,6)+a.GGrupo Not In (Select b.emps+b.dopes+Str(b.numes,6)+b.GGrupo As empdopnums From CsHistorico b) ;
+ Union All ;
+Select a.emps,a.dopes,a.numes,a.GGrupo,00000000.000 As entmov,00000000.000 As saimov,a.entradas As enthis,a.saidas As saihis, ;
+	   00000000.000 as PesoEs, 00000000.000 as PesoSs ;
+  From CsHistorico a ;
+ Where a.emps+a.dopes+Str(a.numes,6)+a.GGrupo Not In (Select b.emps+b.dopes+Str(b.numes,6)+b.GGrupo As empdopnums From CsMoviProd b) ;
+  Into Cursor CsDif
+
+Select CsDif
+Go Top
+
+Select CsRel
+Go Top
+
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReAe1 Preview NoConsole
+
+Select CsDiferenca
+Go Top
+If !Eof()
+	If MessageBox('Deseja Visualizar o Relatório de Divergências ?',1+32,'') = 1
+		Report Form SigReAe2 Preview NoConsole
+	EndIf
+EndIf
+
+If Used('CsCabecalho')
+	Use In CsCabecalho
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcEmpresa, lcGrupo, lcEstoque, lcGGrp, ldDtInicial, ldDtFinal, llInicio, llProcessa
+
+lcEmpresa   = ThisForm.getEmpresa.Value
+lcGrupo     = ThisForm.get_Cd_GrEstoque.Value
+lcEstoque   = ThisForm.get_cd_estoque.Value
+lcGGrp      = ThisForm.get_cd_ggrupo.Value
+ldDtInicial = ThisForm.get_dt_inicial.Value
+ldDtFinal   = ThisForm.get_dt_final.Value
+
+lcTitulo1   = 'Análise de Estoque por Grande Grupo'
+lcTitulo2   = 'Grupo: ' + IIf(Empty(lcGrupo),'Todos',AllTrim(lcGrupo) + ' - ' + AllTrim(ThisForm.get_Ds_GrEstoque.Value)) + ' / ' +;
+				'Estoque: ' + IIf(Empty(lcEstoque),'Todos',AllTrim(lcEstoque) + ' - ' + AllTrim(ThisForm.get_ds_estoque.Value)) + ' / ' +;
+				'Grande Grupo: ' + IIf(Empty(lcGGrp),'Todos',AllTrim(lcGGrp))
+
+lcNomeEmpresa = _Empr + IIf(Seek(_Empr,'CrSigCdEmp','cemps'),' - ' + CrSigCdEmp.razas,'')
+lcPeriodo     = 'Período: ' + DtoC(ldDtInicial) + ' à ' + DtoC(ldDtFinal)
+
+Create Cursor CsCabecalho (nomeempresa c(80),titulo1 c(80),titulo2 c(150),periodo c(80))
+Insert Into CsCabecalho (nomeempresa,titulo1,titulo2,periodo);
+				Values (lcNomeEmpresa,lcTitulo1,lcTitulo2,lcPeriodo)
+
+
+If Empty(lcEmpresa)
+	loBarraEmp = CreateObject('fwprogressbar','Verificando as empresas...',RecCount('CrSigCdEmp'))
+	loBarraEmp.Top = loBarraEmp.Top - loBarraEmp.Height
+	loBarraEmp.Show()
+	llInicio = .T.
+
+	Select CrSigCdEmp
+	Scan
+		loBarraEmp.Update(.T.,'Empresa: ' + CrSigCdEmp.cemps + ' - ' + CrSigCdEmp.razas)
+		loBarraEmp.Refresh
+		lcCodEmp = CrSigCdEmp.cemps
+
+		If CrSigCdEmp.ativas = 1
+			If Not ThisForm.Processa(lcCodEmp, lcGrupo, lcEstoque, lcGGrp)
+				Return .f.
+			EndIf
+
+			If llInicio
+				Select * From CsRel Into Cursor CsRelatorio ReadWrite
+				Select * From CsDif Into Cursor CsDiferenca ReadWrite
+				llInicio = .f.
+			Else
+				Select CsRel
+				Scan
+					Scatter Memvar Memo 
+					Insert Into CsRelatorio From MemVar
+				EndScan
+
+				Select CsDif
+				Scan
+					Scatter Memvar Memo 
+					Insert Into CsDiferenca From MemVar
+				EndScan
+			EndIf
+		EndIf
+	EndScan
+	loBarraEmp.Complete(.T.)
+Else
+	llProcessa = ThisForm.Processa(lcEmpresa,lcGrupo,lcEstoque,lcGGrp)
+	If !(llProcessa)
+		Return(.F.)
+	EndIf
+	Wait Window 'Aguarde a emissão do relatório...' NoWait
+	Select * From CsRel Into Cursor CsRelatorio ReadWrite
+	Select * From CsDif Into Cursor CsDiferenca ReadWrite
+EndIf
+
+Select CsDiferenca
+Index On emps+dopes+Str(numes) Tag EmpDopNums
+Go Top
+
+Select CsRelatorio
+Go Top
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+=DoDefault()
+
+ThisForm.poDataMgr = CreateObject('fSqlConector',thisform.Name)
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cemps,razas,ativas From SigCdEmp ],'CrSigCdEmp')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select CrSigCdEmp
+Index On cemps Tag cemps
+Go Top
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cgrus,mercs,cestoqs From SigCdGrp ],'CrSigCdGrp')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select CrSigCdGrp
+Index On cgrus Tag cgrus
+Go Top
+ThisForm.getEmpresa.Value       = Space(03)
+ThisForm.getDesEmpresa.Value    = Space(40)
+ThisForm.get_cd_grestoque.Value = Space(10)
+ThisForm.get_cd_estoque.Value   = Space(10)
+ThisForm.get_ds_estoque.Value   = Space(40)
+ThisForm.get_cd_ggrupo.Value    = Space(03)
+ThisForm.get_ds_ggrupo.Value    = Space(40)
+ThisForm.get_dt_inicial.Value   = Date()
+ThisForm.get_dt_final.Value     = Date()
+ThisForm.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReAe1 To Printer Prompt NoConsole
+
+Select CsDiferenca
+Go Top
+If !Eof()
+	If MessageBox('Deseja Imprimir o Relatório de Divergências ?',1+32,'') = 1
+		Report Form SigReAe2 To Printer Prompt NoConsole
+	EndIf
+EndIf
+
+If Used('CsCabecalho')
+	Use In CsCabecalho
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+With ThisForm
+
+	If !(This.Value = 4)
+		* Consiste o campo estoque
+		lcCdGruEst = .get_cd_grestoque.Value
+		If !Empty(lcCdGruEst) And !(.poDataMgr.ChkRegister('SigCdGcr','codigos',lcCdGruEst))
+			MessageBox('Grupo de Estoque Inválido.',16,'')
+			.get_cd_grestoque.SetFocus
+			Return(.F.)
+		EndIf
+
+		lcCdEst = .get_cd_estoque.Value
+		If !Empty(lcCdEst) And !(.poDataMgr.ChkRegister('SigCdCli','iclis',lcCdEst))
+			MessageBox('Conta de Estoque Inválida.',16,'')
+			.get_cd_estoque.SetFocus
+			Return(.F.)
+		EndIf
+		
+		lcCdGGrupo = .get_cd_ggrupo.Value
+		If !Empty(lcCdGGrupo) And !(.poDataMgr.ChkRegister('SigCdGpr','codigos',lcCdGGrupo))
+			MessageBox('Grande Grupo Inválido.',16,'')
+			.get_cd_ggrupo.SetFocus
+			Return(.F.)
+		EndIf
+
+		* Consiste o campo data inicial
+		If Empty(.get_dt_inicial.Value)
+			MessageBox('Data inicial inválida !',16,'')
+			.get_dt_inicial.SetFocus
+			Return(.F.)
+		EndIf
+		
+		* Consiste o campo data final
+		If Empty(.get_dt_final.Value)
+			MessageBox('Data final inválida !',16,'')
+			.get_dt_final.SetFocus
+			Return(.F.)
+		EndIf
+		
+		* Consiste os campos de datas
+		If .get_dt_final.Value < .get_dt_inicial.Value
+			MessageBox('Data inicial maior que data final !',16,'')
+			.get_dt_inicial.SetFocus
+			Return(.T.)
+		EndIf
+	EndIf
+
+EndWith
+
+frmrelatorio::btnReport.Click
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAEG.get_ds_estoque
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_estoque.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcGrupo
+lcGrupo = ThisForm.get_cd_grestoque.Value
+
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,lcGrupo,'D',This.Value,This.Parent.get_cd_estoque,This.Parent.get_ds_estoque)
+		MessageBox('Acesso Negado !!',0+48,'')
+		This.Value   = ''
+		This.Refresh
+		This.Parent.get_cd_estoque.Value   = ''
+		This.Parent.get_cd_estoque.Refresh
+		Return 0
+	EndIf
+Else
+	This.Parent.get_cd_estoque.Value   = ''
+	This.Parent.get_cd_estoque.Refresh
+	Return(.T.)
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAEG.get_cd_estoque
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.get_cd_grestoque.Value
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,grupo,'C',This.Value,This,This.Parent.get_ds_estoque)
+		MessageBox('Acesso Negado !!',0+48,'')
+		This.Value   = ''
+		This.Refresh
+		This.Parent.get_ds_estoque.Value   = ''
+		This.Parent.get_ds_estoque.Refresh
+		Return 0
+	EndIf
+Else
+	This.Parent.get_ds_estoque.Value = ''
+	This.Parent.get_ds_estoque.Refresh
+	Return(.T.)
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAEG.get_Ds_GrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_grestoque.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	fAcessoContab(Usuar,'D',This.Value,This.Parent.get_cd_grestoque,This.Parent.get_ds_grestoque)
+Else
+	This.Parent.get_cd_grestoque.Value = ''
+	This.Parent.get_cd_grestoque.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAEG.get_Cd_GrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	fAcessoContab(Usuar,'C',This.Value,This,This.Parent.get_ds_grestoque)
+Else
+	This.Parent.get_ds_grestoque.Value = ''
+	This.Parent.get_ds_grestoque.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAEG.get_ds_ggrupo
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_ggrupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.Value)
+	ThisForm.get_cd_ggrupo.Value = ''
+	ThisForm.get_cd_ggrupo.Refresh
+Else
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGpr','TmpGGrupo','descs',This.Value,'Grande Grupo',.T.)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('descs','','Descrição')
+		m.loLista.mAddColuna('codigos','','Código')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('TmpGGrupo')
+		ThisForm.get_cd_ggrupo.Value = Evaluate('TmpGGrupo.codigos')
+		ThisForm.get_ds_ggrupo.Value = Evaluate('TmpGGrupo.descs')
+	Else
+		ThisForm.get_cd_ggrupo.Value = ''
+		ThisForm.get_ds_ggrupo.Value = ''
+	EndIf
+	ThisForm.get_cd_ggrupo.Refresh
+	ThisForm.get_ds_ggrupo.Refresh
+	If Used('TmpGGrupo')
+		Use In TmpGGrupo
+	EndIf
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAEG.get_cd_ggrupo
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.Value)
+	ThisForm.get_cd_ggrupo.Value = ''
+	ThisForm.get_cd_ggrupo.Refresh
+Else
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGpr','TmpGGrupo','codigos',This.Value,'Grande Grupo',.T.)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('codigos','','Código')
+		m.loLista.mAddColuna('descs','','Descrição')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('TmpGGrupo')
+		ThisForm.get_cd_ggrupo.Value = Evaluate('TmpGGrupo.codigos')
+		ThisForm.get_ds_ggrupo.Value = Evaluate('TmpGGrupo.descs')
+	Else
+		ThisForm.get_cd_ggrupo.Value = ''
+		ThisForm.get_ds_ggrupo.Value = ''
+	EndIf
+	ThisForm.get_cd_ggrupo.Refresh
+	ThisForm.get_ds_ggrupo.Refresh
+	If Used('TmpGGrupo')
+		Use In TmpGGrupo
+	EndIf
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAEG.getEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.getEmpresa,ThisForm.getDesEmpresa))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAEG.getDesEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.getEmpresa.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'D',This.value,ThisForm.getEmpresa,ThisForm.getDesEmpresa))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREAEG
+RESERVED3 (ClassInfo): podatamgr
+tipo
+*processa 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 20
+================================================================================

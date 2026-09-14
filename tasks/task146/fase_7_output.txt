@@ -1,0 +1,7 @@
+﻿Fase 7/8 conclu├¡da. Os 4 eventos foram adicionados ao `FormSigPdMp5.prg` (linhas 1069ÔÇô1117).
+
+**O que foi implementado:**
+
+Cada m├®todo segue o mesmo padr├úo funcional: atualiza `this_cEscolha` com o modo correspondente, chama `CarregarGrade()` para reconfigurar a editabilidade da Column5 (Tempo/min) conforme as condi├º├Áes do legado (`TipoSubNivel=ENV` + `crSigCdOpd.apontas=1`), e devolve o foco ao grid.
+
+**Nota sobre este form OPERACIONAL:** o sub-dialog SIGPDMP5 n├úo tem bot├Áes CRUD f├¡sicos no layout original ÔÇö o modo (`pcEscolha`) ├® recebido do form pai na inicializa├º├úo. Os m├®todos implementados permitem que o form pai mude o modo em runtime chamando diretamente `BtnIncluirClick()`/`BtnAlterarClick()`/etc., recarregando a grade com o estado de edi├º├úo correto para cada modo.

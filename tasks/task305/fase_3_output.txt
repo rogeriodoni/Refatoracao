@@ -1,0 +1,13 @@
+﻿Arquivo criado em `C:\4c\projeto\app\forms\operacionais\FormSigPrIns.prg`. Este ├® um dialog modal completo ÔÇö a Fase 3 foi executada como arquivo **completo** (n├úo parcial) porque o form ├® simples o suficiente para n├úo precisar das fases 4-8 separadas.
+
+**Decis├Áes de arquitetura:**
+
+| Aspecto | Decis├úo |
+|---------|---------|
+| PageFrame | **Ausente** ÔÇö dialog pequeno (685├ù153), controles diretamente no form |
+| DataSession | `= 1` ÔÇö acesso direto ao cursor `LocalSacOp` do form pai |
+| Init(par_oFormPai) | Armazena `this_oFormPai` **antes** do `DODEFAULT()` para que `InicializarForm()` acesse o pai |
+| Descrever servi├ºo | Via `SigPrInsBO.BuscarDescricaoServico()` com `SQLEXEC` em `SigCdPro` |
+| Bot├Áes | `BINDEVENT Click` em `BtnConfirmarClick`/`BtnCancelarClick` (m├®todos PUBLIC) |
+| Retorno ao pai | `this_oFormPai.cCodServ` e `this_oFormPai.nVlServ` + `Enabled=.T.` antes do `Release()` |
+| Auditoria | `RegistrarAuditoria("CONFIRMAR")` via BO no Confirmar; Cancelar n├úo audita |

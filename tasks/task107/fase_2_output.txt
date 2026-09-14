@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. O `SigReGlaBO.prg` foi atualizado com os m├®todos CRUD:
+
+- **`CarregarDoCursor()`** ÔÇö faz `SELECT (par_cAliasCursor)` antes de acessar campos, seguindo o padr├úo can├┤nico
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` (form operacional sem tabela CRUD)
+- **`Inserir()`** ÔÇö retorna `.T.` com chamada a `RegistrarAuditoria("I")` e CATCH n├úo-silencioso
+- **`Atualizar()`** ÔÇö retorna `.T.` com chamada a `RegistrarAuditoria("A")` e CATCH n├úo-silencioso
+
+O form `SigReGla.SCX` original ├® um placeholder vazio (`Form1`, width=375, sem campos, sem SQL, sem m├®todos) ÔÇö por isso n├úo h├í colunas para mapear em `CarregarDoCursor` nem queries INSERT/UPDATE para gerar. A implementa├º├úo reflete fielmente essa realidade.

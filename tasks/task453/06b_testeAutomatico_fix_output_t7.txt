@@ -1,0 +1,9 @@
+﻿All 4 fixes are in place. Here's what was changed in `Formint.prg`:
+
+**Fix 1 ÔÇö `GrdDadosAfterRowColChange`** (line 2950): Wrapped body in TRY/CATCH. If this handler fires during grid navigation with an uninitialized cursor or missing property, the error was propagating unhandled and triggering a VFP9 native error dialog that SYS(2335,0) cannot dismiss ÔÇö causing the 300s kill.
+
+**Fix 2 ÔÇö `GrdBalancoAfterRowColChange`** (line 3335): Same fix. This handler accesses `Page3.cnt_4c__CCusto1` and `Page3.grd_4c_Dados.Column8` ÔÇö any property not yet initialized during the test flow would throw without a CATCH.
+
+**Fix 3 ÔÇö `GrdColOcorWhen`** (line 3370): Wrapped body in TRY/CATCH, with `RETURN .T.` correctly placed **outside** the TRY block (per CLAUDE.md rule #1 ÔÇö never RETURN inside TRY/CATCH).
+
+**Fix 4 ÔÇö `BtnConfirmarClick`** (line 2448): Added `gb_4c_ValidandoUI` guard in the INCLUIR/ALTERAR branch. If TesteAutomatico ever reaches this path, it skips `Salvar()` ÔåÆ no SQLEXEC ÔåÆ no 300s TCP timeout waiting for SQL Server.

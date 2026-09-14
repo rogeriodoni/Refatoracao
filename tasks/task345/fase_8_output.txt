@@ -1,0 +1,13 @@
+﻿**Fase 8/8 conclu├¡da.** O arquivo `Formale.prg` passou de 834 para 956 linhas com os seguintes m├®todos adicionados:
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `CarregarLista()` | Wrapper PROTECTED para `CarregarAlertas()` + `Refresh()` |
+| `FormParaBO()` | L├¬ linha corrente do `crSigCdAle` via `BO.CarregarDoCursor()` |
+| `BOParaForm()` | Refresca o grid (form OPERACIONAL ÔÇö sem campos individuais) |
+| `HabilitarCampos(par_lHabilitar)` | Controla `Enabled` do Confirmar/grid/OptTabela |
+| `LimparCampos()` | `ZAP` no cursor + `BO.LimparDados()` |
+| `AjustarBotoesPorModo()` | Confirmar depende de `this_cContas`, Cancelar sempre .T. |
+| `BtnEncerrarClick()` | Alias can├┤nico para `THIS.Release()` |
+
+`BtnBuscarClick()` n├úo foi adicionado ÔÇö o original SIGCDALE n├úo tinha bot├úo Buscar, e adicionar handler sem bot├úo correspondente seria c├│digo morto. O registro em `config.prg` n├úo precisou de ajuste pois o CLAUDE.md confirma que o `ADIR()` carrega todos os `Form*.prg` automaticamente.

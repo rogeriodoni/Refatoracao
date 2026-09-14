@@ -1,0 +1,5 @@
+﻿Fase 5 entregue. As duas mudan├ºas:
+
+1. **`ConfigurarPaginaDados()`** (Formsigrecmm.prg, linha 373) ÔÇö substitu├¡do o stub `RETURN .T.` por c├│digo real que pr├®-inicializa os cursores de trabalho do BO (`InicializarCursores()`), garantindo que `cursor_4c_Analitico`, `cursor_4c_Impressao`, etc. existam antes do primeiro clique do usu├írio.
+
+2. **`GerarExcel()`** (sigrecmmBO.prg, linha 792) ÔÇö corrigido bug onde o bot├úo "Doc. Excel" falharia silenciosamente se clicado diretamente sem ter rodado Visualizar/Imprimir primeiro. Agora chama `PrepararDados()` antes de exportar, igual ao padr├úo de `Imprimir()` e `Visualizar()`.

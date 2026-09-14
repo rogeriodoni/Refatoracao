@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada em `LinBO.prg` nos dois m├®todos afetados:
+
+- `CarregarMateriasPrimas()` (linhas 701-702): substitu├¡do `INDEX ON CPros TAG CPros IN crMtPrima` + `INDEX ON DPros TAG DPros IN crMtPrima` por `SELECT crMtPrima` seguido dos `INDEX ON` sem cl├íusula `IN`.
+- `CarregarGruposContaCorrente()` (linha 729): mesmo padr├úo ÔÇö `SELECT crSigCdGcr` antes do `INDEX ON Codigos`.
+
+A sintaxe `INDEX ON ... IN <alias>` n├úo existe no VFP9; o cursor precisa estar selecionado antes de ser indexado.

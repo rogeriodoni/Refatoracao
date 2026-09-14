@@ -1,0 +1,246 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 13,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["ForCompls c", "ForContato c", "ForeMails c", "fChecaAcesso", "fInibirBtn", "File", "fGerPDFCreator"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREDCU",
+      "evento": "Procedure",
+      "linhas": 204,
+      "codigoOriginal": "*** Tiago - 27/05/2011 - Termo de garantia\nIf (crSigCdOpeD.dckTermos = 1)\n\tthisform.Conexao.CursorQuery([SigOpCdc], [LocalDcOpe], [Dopes], Padr(ThisForm.pcDopes, 20), [DocTit, DocOrig, DocDest, ] + ;\n\t\t\t\t\t  [DckReffs, DocReffs, DckPrzE, DocPrzE, TxtPrzEnts, ChkPrzEnts, DckVend, DocVend, DocPag, ] + ;\n\t\t\t\t\t  [DckTVend, DckBarra, DckFretes, DocFretes, DckIcmIpi, DocDesco, DocAcres, DckEntregs, DocEntregs, ] + ;\n\t\t\t\t\t  [DckObsI, ImgTecs, DckTermos, TitTermos, TxtTermos, ViaTermos, TitTermgs, TxtTer... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "ForCompls c,ForContato c,ForeMails c",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "ChkPrzEnts,ChkVsts,ChkImpDp,ChkImpRot,ChkImpMon",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Select TmpRelat\nGo Top\n*!*\tIf crSigCdOpeD.carcompos = 5 && Carrega composição, - estoque\n\tReport form SigReDc2 To Printer NoConsole\n*!*\tElse\n*!*\t\tReport form SigReDcu To Printer NoConsole\n*!*\tEndIf\nDoDefault()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Select TmpRel\nGo Top In TmpRel\n=DoDefault()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lnCnt\n\nlnCnt = 1\n\nFor lnCnt = 1 To ThisForm.Qbols\n\tSelect TmpRelat\n\tGo Top\n\t_Prompt = Iif(InList(ThisForm.TpImpressao, 2, 4), [], [Prompt])\n\tReport Form SigReDc2 To Printer &_prompt NoConsole\nNext",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU",
+      "evento": "Init",
+      "linhas": 85,
+      "codigoOriginal": "Lparameters qbols, Pcnx, cEmail, pEmp, pDop, pNum, pImpress, pForm, pChkImpDoc\n\nLocal lnBotW, lnOldW\n\nThisform.oForm = pForm\nThisForm.Contaemail = cEmail\n\nThisForm.pcEmps  = pEmp\nThisForm.pcDopes = pDop\nThisForm.pcNumes = pNum\n\nThisForm.Imptodaspaginas = .F.\n\n=DoDefault()\n\nThisform.Qbols = qbols\nThisForm.Conexao = Pcnx\nThisForm.poDataMgr2 = CreateObject('fSqlConector', ThisForm.Name)\ngoSistema.ControlaImp = .F. \nThisForm.Caption = 'Impressão de Documento ('+Alltrim(pDop)+'/'+Alltrim(Str(pNum))+'... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "poDataMgr2 = CreateObject,Caption = 'Impressão de Documento,Tpimpressao = Iif,Visible And InList,Click,SqlExecute,Value = Int,Visible = fChecaAcesso,pcEmps, 3) + Padr",
+        "controlesReferenciados": "ChkImpDoc,chkIFoto,chkCompo,chkimagem,ChkImpDocAcess",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDCU",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Thisform.AlwaysOnTop = .f.\n\nThisForm.ImpTodaspaginas = ThisForm.chkImpPag.Value \n\nSelect TmpRelat\nGoto Top\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkImpPag",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.oForm.Enabled = .t.\nSet Printer to Default\nDoDefault()\nThisForm.poDataMgr2.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU",
+      "evento": "Procedure",
+      "linhas": 15,
+      "codigoOriginal": "Local lnCnt\n\nlnCnt = 1\n\nFor lnCnt = 1 To ThisForm.Qbols\n\tSelect TmpRelat\n\tGo Top\n*!*\t\tIf crSigCdOpeD.carcompos = 5 && Carrega composição, - estoque\n\t\tReport Form SigReDc2 Preview NoConsole \n*!*\t\tElse\n*!*\t\t\tReport Form SigReDcu Preview \t\n*!*\t\tEndIf\nNext\n\nthisform.impGarantia()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "impGarantia",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU",
+      "evento": "Click",
+      "linhas": 139,
+      "codigoOriginal": "Local lcFil, llRet, lnJpg, lcSep, lcPnt\n\nlcSep = Set([Separator])\nlcPnt = Set([Point])\n\nIf InList(goSistema.QtdDecimais, 0, 2)\n\tSet Separator To [,]\n\tSet Point To [.]\nElse\n\tSet Separator To [.]\n\tSet Point To [,]\nEndIf \n\nIf (This.Value = 4) && Encerrar\n\tSet Separator To (lcSep)\n\tSet Point To (lcPnt)\n\n\tThisForm.Release\n\n\tReturn .t.\nElse\n\tgoSistema.ControlaImp = .f.\n\tIf (((This.Value = 2) And Not ThisForm.lAcImprimir) Or ;\n\t\t((This.Value = 3) And Not ThisForm.lAcExcel))\n\n\t\tSet Separator To (lcSep)\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fInibirBtn,File,fGerPDFCreator",
+        "metodosFormChamados": "Processamento,Visualizacao,Impressao,pcArqEmail) And Messagebox,DocumentoExcel,cAnexo + Chr,mEmail,pcEmps, 3) + Padr,SQLExecute,Commit",
+        "controlesReferenciados": "ChkImpDoc,ChkImpDocAcess",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDCU.OptAgrupa",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "Select TmpRel\nGoto Top\n\nDo SigPrIdc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;\n\t\t\t\t( This.Value ), .T., ThisForm.Conexao,(Thisform.chkImagem.Value = 1),.f.,.f.,Thisform.oForm\t&& mena 12/10/2016 - colocada mais uma opção de agrupamento\n\n\t\t\t\t&&( This.Value = 1 ), .T., ThisForm.Conexao,.f.,.f.,.f.,Thisform.oForm\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Conexao,",
+        "controlesReferenciados": "chkImagem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU.chkImagem",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select TmpRel\nGoto Top\n\nDo SigPrIdc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;\n\t\t\t   Thisform.optAgrupa.Value, .t., ThisForm.Conexao, ;\n\t\t\t   (Thisform.chkImagem.Value = 1), .f., (Thisform.chkItensp.Value = 1), ThisForm.oForm\n\t\t\t   ",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": ",",
+        "controlesReferenciados": "optAgrupa,chkImagem,chkItensp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU.ChkItensP",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select TmpRel\nGoto Top\n\nDo SigPrIdc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;\n\t\t\t   Thisform.optAgrupa.Value, .t., ThisForm.Conexao, ;\n\t\t\t   (Thisform.chkImagem.Value = 1), .f., (Thisform.chkItensP.Value = 1), Thisform.oForm\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": ",",
+        "controlesReferenciados": "optAgrupa,chkImagem,chkItensP",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU.chkDescIng",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select TmpRel\nGoto Top\n\nDo SigPrIdc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;\n\t\t\t   Thisform.optAgrupa.Value, .t., ThisForm.Conexao, ;\n\t\t\t   (Thisform.chkImagem.Value = 1), .f., (Thisform.chkItensP.Value = 1), Thisform.oForm, .F.,(ThisForm.chkDescIng.Value=1)\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": ",",
+        "controlesReferenciados": "optAgrupa,chkImagem,chkItensP,chkDescIng",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCU.chkCompo",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "Select TmpRel\nGoto Top\n\nlnInibCompo = this.Value\n\nDo SigPrIdc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;\n\t\t\t   Thisform.optAgrupa.Value, .t., ThisForm.Conexao, ;\n\t\t\t   (Thisform.chkImagem.Value = 1), .f., (Thisform.chkItensP.Value = 1), Thisform.oForm, .F.,(ThisForm.chkDescIng.Value=1), lnInibCompo\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": ",",
+        "controlesReferenciados": "optAgrupa,chkImagem,chkItensP,chkDescIng",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

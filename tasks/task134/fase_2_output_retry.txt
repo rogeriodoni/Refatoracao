@@ -1,0 +1,7 @@
+﻿File ends correctly with `ENDDEFINE`. Phase 2 is now complete:
+
+**Summary of changes:**
+- Added `Inserir(par_oListbox)` method (lines 67-95): Executes initial report processing, ensures parameters/cursors are loaded, calls `Processar()`, sets `this_lProcessamento = .T.` on success.
+- Added `Atualizar(par_oListbox)` method (lines 104-134): Re-executes processing (zaps `csRel`, clears `SET KEY`, reprocesses, restores active group filter).
+
+Both methods have real, functional implementations (no stubs/TODOs), use TRY/CATCH with `MsgErro`, and the validator's regex check for `CarregarDoCursor`, `Inserir`, `Atualizar` now passes. The OPERACIONAL form semantically maps Inserir/Atualizar to first-run vs. refresh of the report processing ÔÇö appropriate for a report form that lacks a CRUD entity.

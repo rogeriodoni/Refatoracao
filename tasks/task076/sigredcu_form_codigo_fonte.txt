@@ -1,0 +1,966 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigredcu.SCX
+* Data/Hora: 03/06/2026 23:53:30
+* Total de registros: 11
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREDCU
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptAgrupa
+  Parent: SIGREDCU
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: chkImpPag
+  Parent: SIGREDCU
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkImagem
+  Parent: SIGREDCU
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkItensP
+  Parent: SIGREDCU
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkDescIng
+  Parent: SIGREDCU
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkCompo
+  Parent: SIGREDCU
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SayAgrupa
+  Parent: SIGREDCU
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCU
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 250
+  Width = 798
+  DoCreate = .T.
+  Caption = "Impressão de Documento"
+  ControlBox = .F.
+  WindowType = 1
+  AlwaysOnTop = .T.
+  chkimpdoc = .F.
+  chkimpdocacess = .F.
+  pcdopes = .F.
+  pcemps = .F.
+  pcnumes = .F.
+  podatamgr2 = .F.
+  imptodaspaginas = .F.
+  Name = "SIGREDCU"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.PicturePosition = 7
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 492
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 48
+  REGISTRY1.Left = 336
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCU.OptAgrupa
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 57
+  Left = 117
+  Top = 174
+  Width = 193
+  TabIndex = 4
+  Name = "OptAgrupa"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Produto, Cor, Valor Unitário"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 6
+  Option1.Top = 5
+  Option1.Width = 151
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Nenhum"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 6
+  Option2.Top = 20
+  Option2.Width = 78
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Ref fornecedor, Cor, Tamanho"
+  Option3.Height = 15
+  Option3.Left = 6
+  Option3.Top = 37
+  Option3.Width = 194
+  Option3.AutoSize = .F.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCU.chkImpPag
+------------------------------------------------------------
+  Top = 156
+  Left = 36
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir o Cabeçalho em Todas as Páginas"
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "chkImpPag"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCU.chkImagem
+------------------------------------------------------------
+  Top = 88
+  Left = 36
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir Imagem"
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "chkImagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCU.ChkItensP
+------------------------------------------------------------
+  Top = 105
+  Left = 36
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir Apenas Itens Pendentes"
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "ChkItensP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCU.chkDescIng
+------------------------------------------------------------
+  Top = 122
+  Left = 36
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir Descrição em Inglês"
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "chkDescIng"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCU.chkCompo
+------------------------------------------------------------
+  Top = 139
+  Left = 36
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Inibir Composição Desmembrada"
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "chkCompo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCU.SayAgrupa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Agrupar por :"
+  Height = 15
+  Left = 36
+  Top = 180
+  Width = 67
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "SayAgrupa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREDCU
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impgarantia
+------------------------------------------------------------
+PROCEDURE impgarantia
+*** Tiago - 27/05/2011 - Termo de garantia
+If (crSigCdOpeD.dckTermos = 1)
+	thisform.Conexao.CursorQuery([SigOpCdc], [LocalDcOpe], [Dopes], Padr(ThisForm.pcDopes, 20), [DocTit, DocOrig, DocDest, ] + ;
+					  [DckReffs, DocReffs, DckPrzE, DocPrzE, TxtPrzEnts, ChkPrzEnts, DckVend, DocVend, DocPag, ] + ;
+					  [DckTVend, DckBarra, DckFretes, DocFretes, DckIcmIpi, DocDesco, DocAcres, DckEntregs, DocEntregs, ] + ;
+					  [DckObsI, ImgTecs, DckTermos, TitTermos, TxtTermos, ViaTermos, TitTermgs, TxtTermgs, TitTermGs, ] + ;
+					  [TxtTermBs, DocFxSemVl, DocFxVencs, DckTpFats, DckFiscal, DckImpIte, DckSubN, DckObsg, ObsResu, ] + ;
+					  [DckObs, ObsCab, DckOpes, nChkVsts, DocPeso, DckPeso, DckPaga])
+
+	thisform.Conexao.CursorQuery([SigOpCdd], [LocalOpe2], [Dopes], Padr(ThisForm.pcDopes, 20), [DckLogos, DckAcess, DocAcess, ] + ;
+					  [ChkImpDp, ChkImpRot, ChkImpMon, DckDPro3s, CasQtds, DckImpIss, ImpFxSers, PafEcfs, EditAgends, nCarDims])
+	Go Top In LocalOpe2
+	If Eof([LocalOpe2])
+		Insert Into LocalOpe2 (DckLogos, DckAcess, DocAcess, ChkImpDp, ChkImpRot, ChkImpMon) Values (0, 0, [], 0, 0, 0)
+		Go Top In LocalOpe2
+	EndIf
+
+	Create Cursor crCabecalho (Dopes c(20), Numes n(6), Datas d(8), RazSocs c(50), Cgcs c(20), RespFretes c(16), ;
+							   Obses m(4), ObsMoes m(4), Ies c(15), GrVends c(10), Vends c(10), DVends c(50), DddVends c(4), ;
+							   Tel1sVends c(20), Tel2sVends c(20), eMailVends c(50), GrResps c(10), Resps c(10), ;
+							   DResps c(40), ForIClis c(10), ForRClis c(50), ForEndes c(60), ForNums c(10), ;
+							   ForCompls c(15), ForCeps c(9), ForCidas c(30), ForBairs c(40), ForEstas c(2), ;
+							   ForContato c(20), ForDdds c(4), ForTel1s c(20), ForTel2s c(20), ForFaxs c(20), ;
+							   ForeMails c(50), ForCgcs c(20), ForIes c(15), ForIMuns c(20), ForTpClis n(1), ;
+							   EntIClis c(10), EntRClis c(50), EntEndes c(80), EntNums c(10), EntCompls c(15), ;
+							   EntCeps c(9), EntCidas c(30), EntBairs c(40), EntEstas c(2), EntContato c(20), ;
+							   EntDdds c(4), EntTel1s c(20), EntTel2s c(20), EntFaxs c(20), EnteMails c(50), ;
+							   EntCgcs c(20), EntIes c(15), EntTpClis n(1), PrazoEnts d(8), Icms n(16,2), ;
+							   TipoVars c(20), Variacao n(16,2), VariacaoP n(16,4), EditAgends n(1), CondPagto m(4), ;
+							   TotPag n(4), Fretes c(12), TitFornec c(15), DckPrzE n(1), DocPrzE c(15), DckReffs n(1), ;
+							   DocReffs c(20), DckVend n(1), TitVend c(15), DckTVend n(1), Barras c(10), ImpCabBar l(1), ;
+							   Imagem c(64), ImgTec c(64), DckFretes n(1), DocFretes c(12), DckAcess n(1), ;
+							   DocAcess c(12), DckIcmIpi n(1), DocPag c(12), DckEntregs n(1), DocEntregs c(12), ;
+							   DckObsI n(1), Telefone c(41), VlFretes n(16,2), VlAcess n(16,2), BarVends c(10), ;
+							   TitTermos m(4), TxtTermos m(4), TitTermgs m(4), TxtTermgs m(4), TxtTermBs m(4), ;
+							   Pagina n(4), ObsEntrega c(254), DocFxSemVl n(1), DckTpFats n(1), TpFats c(3), ;
+							   DckLogos n(1), Rotas c(10), Localizas c(6), CodTrans c(10), QtdImpIte n(12,3), ;
+							   Subniveis m(4), DckImpIss n(1), VlrIss n(12,2), IcmsS n(12,2), VlSeguros n(12,2), ;
+							   ObsResu m(4), ObsCab m(4), TotQtds n(12,2), ChkImpMon n(1), TitPaf01 c(100), ;
+							   TitPaf02 c(100), TitPaf03 c(100), TitPaf04 c(100), nCupoms c(6), nCaixas c(3), ;
+							   CMoes c(3), DckPaga n(1), ImprimeLinhas n(1))
+
+	* Título do Label do Fornecedor: "Dados do ..."
+	lcFor = [Fornecedor]
+	If InList(crSigCdOpeD.Opers, 1, 3) And Not Empty(LocalDcOpe.DocOrig)
+		lcFor = Alltrim(LocalDcOpe.DocOrig)
+	EndIf
+	If InList(crSigCdOpeD.Opers, 2, 3) And Not Empty(LocalDcOpe.DocDest)
+		lcFor = Alltrim(LocalDcOpe.DocDest)
+	EndIf
+
+	* Título do Label da Data de Entrega
+	lcEnt = [Data de Entrega]
+	If Not Empty(LocalDcOpe.DocPrzE)
+		lcEnt = Alltrim(LocalDcOpe.DocPrzE)
+	EndIf
+
+	* Título da Coluna de Referência do Fornecedor
+	lcRef = [Ref. Fornecedor]
+	If Not Empty(LocalDcOpe.DocReffs)
+		lcRef = Alltrim(LocalDcOpe.DocReffs)
+	EndIf
+
+	* Título do Label do Comprador
+	lcVen = [Comprador]
+	If Not Empty(LocalDcOpe.DocVend)
+		lcVen = Alltrim(LocalDcOpe.DocVend)
+	EndIf
+
+	* Título do Label das Condições Comerciais
+	lcPag = [Comerciais]
+	If Not Empty(LocalDcOpe.DocPag)
+		lcPag = Alltrim(LocalDcOpe.DocPag)
+	EndIf
+
+	* Título do Label da Dados de Entrega
+	lcDad = [de Entrega]
+	If Not Empty(LocalDcOpe.DocEntregs)
+		lcDad = Alltrim(LocalDcOpe.DocEntregs)
+	EndIf
+
+	llBar = (LocalDcOpe.DckBarra = 1)
+	lcBar = fAltBar2de5(Padl(crSigCdOpeD.NDopes, 4, '0') + Padl(ThisForm.pcNumes, 6, '0')) && Barra do Cabeçalho
+	lcTel = Alltrim(crTmpEmp.Tel1s) + Iif(Empty(Alltrim(crTmpEmp.Tel2s)), '', '/' + Alltrim(crTmpEmp.Tel2s))
+
+	lnNum = Iif(crSigCdOpeD.TipoNfs = 5, Int(Val(CrTprMvCab.Notas)), ThisForm.pcNumes)
+	
+	Select TmpRelat
+	Go top
+	
+	Insert Into crCabecalho (Dopes, Numes, Datas, RazSocs, Cgcs, Ies, Obses, TitFornec, DckPrzE, DocPrzE, DckReffs, ;
+							 DocReffs, DckVend, TitVend, DckTVend, Barras, ImpCabBar, DckFretes, DocFretes, DckAcess, ;
+							 DocAcess, DckIcmIpi, DocPag, DckEntregs, DocEntregs, DckObsI, Telefone, TitTermos, ;
+							 TxtTermos, TitTermgs, TxtTermgs, TxtTermBs, DocFxSemVl, DckTpFats, TpFats, DckLogos, ;
+							 Localizas, CodTrans, DckImpIss, ChkImpMon, nCaixas, nCupoms, CMoes, DckPaga, EditAgends, ImprimeLinhas, Imagem) ;
+					 Values (LocalDcOpe.DocTit, lnNum, Nvl(CrTprMvCab.Datas, Ctod('')), crTmpEmp.RazSocs, ;
+					 		 crTmpEmp.Cgcs, crTmpEmp.Ies, Nvl(CrTprMvCab.Obses, ''), lcFor, LocalDcOpe.DckPrzE, lcEnt, ;
+					 		 LocalDcOpe.DckReffs, lcRef, LocalDcOpe.DckVend, lcVen, LocalDcOpe.DckTVend, lcBar, llBar, ;
+					 		 LocalDcOpe.DckFretes, LocalDcOpe.DocFretes, LocalOpe2.DckAcess, LocalOpe2.DocAcess, ;
+					 		 LocalDcOpe.DckIcmIpi, lcPag, LocalDcOpe.DckEntregs, lcDad, LocalDcOpe.DckObsI, lcTel, ;
+					 		 Nvl(LocalDcOpe.TitTermos, []), Nvl(LocalDcOpe.TxtTermos, []), Nvl(LocalDcOpe.TitTermgs, []), ;
+					 		 Nvl(LocalDcOpe.TxtTermgs, []), Nvl(LocalDcOpe.TxtTermBs, []), LocalDcOpe.DocFxSemVl, ;
+					 		 LocalDcOpe.DckTpFats, CrTprMvCab.TpFats, LocalOpe2.DckLogos, CrTprMvCab.Localizas, ;
+					 		 CrTprMvCab.CodTrans, LocalOpe2.DckImpIss, LocalOpe2.ChkImpMon, Left(CrTprMvCab.nEmps,3), ;
+					 		 Substr(CrTprMvCab.nEmps,5,6), crSigCdOpeD.CMoes, LocalDcOpe.DckPaga, LocalOpe2.EditAgends, LocalOpe2.nCarDims, TmpRelat.Logos)
+
+	* Inserindo Dados do Fornecedor	
+	If InList(crSigCdOpeD.Opers, 1, 3) And Not Empty(LocalDcOpe.DocOrig)
+		lcFor = CrTprMvCab.ContaOs
+	EndIf
+	If InList(crSigCdOpeD.Opers, 2, 3) And Not Empty(LocalDcOpe.DocDest)
+		lcFor = CrTprMvCab.ContaDs
+	EndIf
+	
+	thisform.Conexao.CursorQuery('SigCdCli', 'LocalCli', 'IClis', lcFor, ;
+					  'Razaos, RClis, Endes, Nums, Compls, Ceps, Cidas, Bairs, Estas, Contato, ' + ;
+					  'Ddds, Tel1s, Tel2s, Faxs, eMails, Cpfs, Rgs, InscMuns, TpClis')
+
+	Replace ForIClis   With lcFor, ;
+			ForRClis   With Iif(Empty(LocalCli.Razaos), LocalCli.RClis, LocalCli.Razaos), ;
+			ForEndes   With LocalCli.Endes, ;
+			ForNums    With LocalCli.Nums, ;
+			ForCompls  With LocalCli.Compls, ;
+			ForCeps    With LocalCli.Ceps, ;
+			ForCidas   With LocalCli.Cidas, ;
+			ForBairs   With LocalCli.Bairs, ;
+			ForEstas   With LocalCli.Estas, ;
+			ForContato With LocalCli.Contato, ;
+			ForDdds    With LocalCli.Ddds, ;
+			ForTel1s   With LocalCli.Tel1s, ;
+			ForTel2s   With LocalCli.Tel2s, ;
+			ForFaxs    With LocalCli.Faxs, ;
+			ForeMails  With LocalCli.eMails, ; 
+			ForCgcs    With LocalCli.Cpfs, ;
+			ForIes     With LocalCli.Rgs, ;
+			ForIMuns   With LocalCli.InscMuns, ;
+			ForTpClis  With LocalCli.TpClis In crCabecalho
+
+	* Inserindo Dados de Entrega
+	thisform.Conexao.CursorQuery('SigCdCli', 'LocalCli', 'IClis', CrTprMvCab.ContaEs, 'Razaos, RClis, eMails, Faxs, Cpfs, Rgs, TpClis')
+	If Not Eof('LocalCli')
+		Replace EntIClis    With CrTprMvCab.ContaEs, ;
+				EntRClis    With Iif(Empty(LocalCli.Razaos), LocalCli.RClis, LocalCli.Razaos), ;
+				EntFaxs     With LocalCli.Faxs, ;
+				EnteMails   With LocalCli.eMails, ;
+				EntCgcs     With LocalCli.Cpfs, ;
+				EntIes      With LocalCli.Rgs, ;
+				EntTpClis	With LocalCli.TpClis In crCabecalho
+		
+		Dimension laArray(2)
+		laArray(1) = CrTprMvCab.ContaEs
+		laArray(2) = CrTprMvCab.LocalEnts
+
+		If fEndEntrega(@laArray, thisform.Conexao)
+			lcEnd = Alltrim(laArray(06)) + ;
+					Iif(Empty(laArray(07)), '', ', ' + Alltrim(laArray(07))) + ;
+					Iif(Empty(laArray(08)), '', ' - ' + Alltrim(laArray(08)))
+			
+			Replace EntEndes    With lcEnd, ;
+					EntCeps     With laArray(04), ;
+					EntBairs    With laArray(09), ;
+					EntCidas    With laArray(10), ;
+					EntEstas    With laArray(11), ;
+					EntDdds     With laArray(12), ;
+					EntTel1s    With laArray(13), ;
+					EntTel2s    With laArray(14), ;
+					EntContato  With laArray(15) In crCabecalho
+		EndIf
+	Else
+		thisform.Conexao.CursorQuery('SigCdCli', 'LocalCli', 'IClis', lcFor, ;
+						  'Razaos, RClis, Endes, Nums, Compls, Ceps, Cidas, Bairs, Estas, Contato, ' + ;
+						  'Ddds, Tel1s, Tel2s, Faxs, eMails, Cpfs, Rgs, InscMuns, TpClis')
+
+		lcEnd = Alltrim(LocalCli.Endes) + ;
+				Iif(Empty(LocalCli.Nums), '', ', ' + Alltrim(LocalCli.Nums)) + ;
+				Iif(Empty(LocalCli.Compls), '', ' - ' + Alltrim(LocalCli.Compls))
+
+		Replace EntIClis    With lcFor, ;
+				EntRClis    With Iif(Empty(LocalCli.Razaos), LocalCli.RClis, LocalCli.Razaos), ;
+				EntFaxs     With LocalCli.Faxs, ;
+				EnteMails   With LocalCli.eMails, ;
+				EntCgcs     With LocalCli.Cpfs, ;
+				EntIes      With LocalCli.Rgs, ;
+				EntTpClis	With LocalCli.TpClis, ;
+				EntEndes    With lcEnd, ;
+				EntCeps     With LocalCli.Ceps, ;
+				EntBairs    With LocalCli.Bairs, ;
+				EntCidas    With LocalCli.Cidas, ;
+				EntEstas    With LocalCli.Estas, ;
+				EntDdds     With LocalCli.Ddds, ;
+				EntTel1s    With LocalCli.Tel1s, ;
+				EntTel2s    With LocalCli.Tel2s, ;
+				EntContato  With LocalCli.Contato In crCabecalho
+	EndIf
+
+	lnVia = Iif(LocalDCOpe.ViaTermos > 0, LocalDCOpe.ViaTermos, 1)
+	
+	For I = 1 To lnVia
+		Select crCabecalho
+		Go Top
+		Report Form SigReIft Preview NoConsole
+	Next
+EndIf
+***
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Select TmpRelat
+Go Top
+*!*	If crSigCdOpeD.carcompos = 5 && Carrega composição, - estoque
+	Report form SigReDc2 To Printer NoConsole
+*!*	Else
+*!*		Report form SigReDcu To Printer NoConsole
+*!*	EndIf
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documentoexcel
+------------------------------------------------------------
+PROCEDURE documentoexcel
+Select TmpRel
+Go Top In TmpRel
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Local lnCnt
+
+lnCnt = 1
+
+For lnCnt = 1 To ThisForm.Qbols
+	Select TmpRelat
+	Go Top
+	_Prompt = Iif(InList(ThisForm.TpImpressao, 2, 4), [], [Prompt])
+	Report Form SigReDc2 To Printer &_prompt NoConsole
+Next
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters qbols, Pcnx, cEmail, pEmp, pDop, pNum, pImpress, pForm, pChkImpDoc
+
+Local lnBotW, lnOldW
+
+Thisform.oForm = pForm
+ThisForm.Contaemail = cEmail
+
+ThisForm.pcEmps  = pEmp
+ThisForm.pcDopes = pDop
+ThisForm.pcNumes = pNum
+
+ThisForm.Imptodaspaginas = .F.
+
+=DoDefault()
+
+Thisform.Qbols = qbols
+ThisForm.Conexao = Pcnx
+ThisForm.poDataMgr2 = CreateObject('fSqlConector', ThisForm.Name)
+goSistema.ControlaImp = .F. 
+ThisForm.Caption = 'Impressão de Documento ('+Alltrim(pDop)+'/'+Alltrim(Str(pNum))+')'
+ThisForm.Tpimpressao = Iif(Type('pImpress')#'N',0,pImpress)
+
+thisform.pChkImpDoc=pChkImpDoc
+
+If ThisForm.BtnReport.Imprime.Visible And InList(ThisForm.Tpimpressao,3,4)
+	Thisform.BtnReport.Value = 1
+	ThisForm.BtnReport.Click()
+	ThisForm.Release
+	Return .f.
+Endif
+
+*CHECAGEM DE REIMPRESSAO ------------------------------------------------------------------------------------------------
+lcQuery = [ Select a.Ndopes, b.chkImpDoc, b.carcompos, b.dckTermos, a.Cmoes, a.TipoNfs, a.Opers, c.lbltxidCs, c.chkIFoto ] + ;
+		    [ From SigCdOpe a, SigOpCdc b, SigOpCdi c ]+ ;
+		    [ Where a.Dopes = ']+ThisForm.pcDopes +[' and b.Dopes = a.Dopes And c.Dopes = a.Dopes ]
+
+If (ThisForm.Conexao.SqlExecute(lcQuery, [crSigCdOpeD]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdOpeD)])
+	Return 0
+EndIf
+
+thisform.chkCompo.Value = Int(Val(Substr(crSigCdOpeD.lbltxidCs, 21, 1)))
+thisform.chkCompo.Visible = fChecaAcesso(padl(crSigCdOpeD.nDopes,8,'0'), "INIBCOMPO" ) 
+
+*!*	chkIPres
+*!*	chkIPedWeb
+*!*	chkINf
+*!*	chkIFoto
+
+Thisform.chkimagem.Value = crSigCdOpeD.chkIFoto
+Thisform.chkimagem.Refresh 
+
+If crSigCdOpeD.chkIFoto = 1
+	Thisform.chkimagem.Click()	
+EndIf 
+
+
+If thisform.pChkImpDoc
+	With ThisForm
+
+		If crSigCdOpeD.chkImpDoc <> 0 
+			ThisForm.ChkImpDoc = .T.
+
+			lcEdn = Padr(ThisForm.pcEmps, 3) + Padr(ThisForm.pcDopes, 20) + Str(ThisForm.pcNumes, 6)
+			.Conexao.CursorQuery([SigMvCab], [crSigMvEtd], [EmpDopNums], lcEdn, [Impress])
+			If Not Used([crSigMvEtd])
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigMvEtd)])
+				Return 0
+			EndIf
+
+			If !Eof('crSigMvEtd') And crSigMvEtd.Impress <> 0 &&Já Foi Impresso
+				llAcessReImp = fChecaAcesso(padl(crSigCdOpeD.nDopes,8,'0'), "REIMPDOC" ) 
+				ThisForm.ChkImpDocAcess = llAcessReImp 
+				With .BtnReport
+					.docExcel.Enabled = llAcessReImp And ThisForm.lAcExcel
+					.Imprime .Enabled = llAcessReImp And ThisForm.lAcImprimir
+					.Value = 2				
+				EndWith 
+			EndIf 
+		EndIf 
+	EndWith 
+EndIf 
+*----------------------------------------------------------------------------------------------------------------------------		
+		
+		
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Thisform.AlwaysOnTop = .f.
+
+ThisForm.ImpTodaspaginas = ThisForm.chkImpPag.Value 
+
+Select TmpRelat
+Goto Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.oForm.Enabled = .t.
+Set Printer to Default
+DoDefault()
+ThisForm.poDataMgr2.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Local lnCnt
+
+lnCnt = 1
+
+For lnCnt = 1 To ThisForm.Qbols
+	Select TmpRelat
+	Go Top
+*!*		If crSigCdOpeD.carcompos = 5 && Carrega composição, - estoque
+		Report Form SigReDc2 Preview NoConsole 
+*!*		Else
+*!*			Report Form SigReDcu Preview 	
+*!*		EndIf
+Next
+
+thisform.impGarantia()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+Local lcFil, llRet, lnJpg, lcSep, lcPnt
+
+lcSep = Set([Separator])
+lcPnt = Set([Point])
+
+If InList(goSistema.QtdDecimais, 0, 2)
+	Set Separator To [,]
+	Set Point To [.]
+Else
+	Set Separator To [.]
+	Set Point To [,]
+EndIf 
+
+If (This.Value = 4) && Encerrar
+	Set Separator To (lcSep)
+	Set Point To (lcPnt)
+
+	ThisForm.Release
+
+	Return .t.
+Else
+	goSistema.ControlaImp = .f.
+	If (((This.Value = 2) And Not ThisForm.lAcImprimir) Or ;
+		((This.Value = 3) And Not ThisForm.lAcExcel))
+
+		Set Separator To (lcSep)
+		Set Point To (lcPnt)
+
+		Return .T.
+	EndIf
+EndIf
+
+llRet = ThisForm.Processamento()
+
+llRet = Iif(Type([llRet]) = [L], llRet, .t.)
+
+If llRet
+	If (Used() And Not Eof())
+		Do Case
+			Case (This.Value = 1) && Vídeo
+				=fInibirBtn(ThisForm.btnReport.Imprime.Enabled)
+				Set Sysmenu Off
+				Define Window Visualizar From 0, 0 To 37, 80 Title [ ] + Alltrim(Prompt()) + [ ]
+				ThisForm.Visualizacao()
+				Release Window Visualizar
+				Set Sysmenu On
+
+			Case (This.Value = 2) And ThisForm.lAcImprimir && Impressora
+				ThisForm.Impressao()
+
+			Case (This.Value = 3) And ThisForm.lAcExcel && Excel
+				lcTabela = Alias()
+				Thisform.pcArqEmail = []
+				Do form SigPrPdf With thisform
+				Select (lcTabela)
+				
+				If !Empty(Thisform.pcArqEmail)
+					If File(Thisform.pcArqEmail) And Messagebox([Já existe o arquivo ] + Thisform.pcArqEmail + [. Deseja continuar?],4+32+256,[Geração Arquivo]) = 7
+						Return .f.
+					Endif
+					
+					If Inlist(Lower(Alltrim(JustExt(Thisform.pcArqEmail))),[xls],[txt])
+						ThisForm.DocumentoExcel()
+						lPrintPDFCreator = .t.
+					Else				
+						lPrintPDFCreator = fGerPDFCreator(ThisForm)
+					Endif
+
+					If lPrintPDFCreator = .T.
+						If Type([Thisform.oEMAIL]) = [O]
+							If !File(Thisform.pcArqEmail)
+*!*									MessageBox([Problemas na geração do arquivo ] + Thisform.pcArqEmail + [!], 48, [Atenção])
+								Return .f.
+							EndIf						
+							** Anexar o Arquivo no Email. Enviar o Email
+							Wait Window Chr(13)+ [Aguarde... gerando EMAIL com o Arquivo] + Chr(13) + Thisform.oEMAIL.cAnexo + Chr(13) Nowait NoClear
+
+												** As Propriedades do objeto oEMAIL, foram acrescentadas no form SigPrPdf
+							If Thisform.mEmail( 	Thisform.oEMAIL.cFrom, ;
+													Thisform.oEMAIL.cTo, ;
+													Thisform.oEMAIL.cCC, ;
+													Thisform.oEMAIL.cAssunto, ;
+													Thisform.oEMAIL.cCorpo, ;
+													Thisform.oEMAIL.cAnexo, ;
+													Thisform.oEMAIL.cSmtpServer, ;
+													Thisform.oEMAIL.nSmtpServerPort, ;
+													Thisform.oEMAIL.cSendUserName, ;
+													Thisform.oEMAIL.cSendPassWord 	)
+								Wait Clear
+								MessageBox([Email enviado com sucesso.], 64, [Envio de Email])
+								Thisform.oEMAIL = Null
+							EndIf 						
+						Else 
+							If File(Thisform.pcArqEmail)
+								MessageBox([Arquivo ] + Thisform.pcArqEmail + [ gerado com sucesso!],64,[Aviso])
+							EndIf
+						EndIf
+					EndIf				
+				Endif
+		EndCase
+
+		llSetImpress = .F.
+
+		If This.Value = 1
+			If goSistema.ControlaImp
+				llSetImpress = .T.
+			Else
+				llSetImpress = .F.
+			EndIf 
+		Else
+			llSetImpress = .T. 
+		EndIf		
+
+		If llSetImpress 
+			lcEdn = Padr(ThisForm.pcEmps, 3) + Padr(ThisForm.pcDopes, 20) + Str(ThisForm.pcNumes, 6)	
+			If (ThisForm.poDataMgr2.SQLExecute([Update SigMvCab Set Impress = 1 Where EmpDopNums =  '] + lcEdn + ['], '') < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (cr)])
+				Return 0
+			EndIf 
+			ThisForm.poDataMgr2.Commit()
+		EndIf 
+
+		If thisform.pChkImpDoc
+			If ThisForm.ChkImpDoc And Not ThisForm.ChkImpDocAcess 
+				ThisForm.Release
+				Return .t.
+			EndIf 
+		EndIf 
+	Else
+		=Messagebox([Não Existe Movimentação...],0+48, [Geração de Relatório])
+	EndIf
+Else
+	=MessageBox([Falha Na Conexão! Favor Reinicializar o Processo!], 0+48, [Erro])
+EndIf
+
+Set Separator To (lcSep)
+Set Point To (lcPnt)
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDCU.OptAgrupa
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Select TmpRel
+Goto Top
+
+Do SigPrIdc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;
+				( This.Value ), .T., ThisForm.Conexao,(Thisform.chkImagem.Value = 1),.f.,.f.,Thisform.oForm	&& mena 12/10/2016 - colocada mais uma opção de agrupamento
+
+				&&( This.Value = 1 ), .T., ThisForm.Conexao,.f.,.f.,.f.,Thisform.oForm
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDCU.chkImagem
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpRel
+Goto Top
+
+Do SigPrIdc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;
+			   Thisform.optAgrupa.Value, .t., ThisForm.Conexao, ;
+			   (Thisform.chkImagem.Value = 1), .f., (Thisform.chkItensp.Value = 1), ThisForm.oForm
+			   
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDCU.ChkItensP
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpRel
+Goto Top
+
+Do SigPrIdc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;
+			   Thisform.optAgrupa.Value, .t., ThisForm.Conexao, ;
+			   (Thisform.chkImagem.Value = 1), .f., (Thisform.chkItensP.Value = 1), Thisform.oForm
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDCU.chkDescIng
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpRel
+Goto Top
+
+Do SigPrIdc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;
+			   Thisform.optAgrupa.Value, .t., ThisForm.Conexao, ;
+			   (Thisform.chkImagem.Value = 1), .f., (Thisform.chkItensP.Value = 1), Thisform.oForm, .F.,(ThisForm.chkDescIng.Value=1)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDCU.chkCompo
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpRel
+Goto Top
+
+lnInibCompo = this.Value
+
+Do SigPrIdc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;
+			   Thisform.optAgrupa.Value, .t., ThisForm.Conexao, ;
+			   (Thisform.chkImagem.Value = 1), .f., (Thisform.chkItensP.Value = 1), Thisform.oForm, .F.,(ThisForm.chkDescIng.Value=1), lnInibCompo
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREDCU
+RESERVED3 (ClassInfo): chkimpdoc
+chkimpdocacess
+conexao
+oform
+pcdopes
+pcemps
+pchkimpdoc
+pcnumes
+podatamgr2
+qbols
+tpimpressao
+imptodaspaginas
+*impgarantia 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

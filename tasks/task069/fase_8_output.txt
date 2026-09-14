@@ -1,0 +1,25 @@
+﻿A migra├º├úo da task069 j├í est├í **completamente implementada**. Aqui est├í o resumo:
+
+**Status da Fase 8/8 ÔÇö COMPLETA**
+
+O arquivo `Formsigrecsm.prg` j├í cont├®m todos os m├®todos exigidos:
+
+| M├®todo | Linha | Descri├º├úo |
+|--------|-------|-----------|
+| `BtnBuscarClick()` | 1555 | Preview com filtros atuais |
+| `BtnEncerrarClick()` | 1593 | Fecha o formul├írio |
+| `BtnSalvarClick()` | 1600 | Informa que n├úo se aplica a relat├│rios |
+| `BtnCancelarClick()` | 1610 | Fecha o formul├írio |
+| `FormParaBO()` | 1515 | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | 1522 | Carrega todos os 11 campos do BO |
+| `HabilitarCampos()` | 1489 | Habilita filtros edit├íveis |
+| `LimparCampos()` | 1470 | Redefine todos os filtros |
+| `CarregarLista()` | 1501 | No-op (REPORT n├úo tem grid) |
+| `AjustarBotoesPorModo()` | 1508 | No-op (REPORT n├úo tem modos) |
+
+**Integra├º├úo:**
+- `sigrecsmBO.prg` em `app/classes/` ÔåÆ carregado via `ADIR(*BO.prg)` no config.prg Ô£ô
+- `Formsigrecsm.prg` em `app/forms/relatorios/` ÔåÆ carregado via `ADIR(Form*.prg)` Ô£ô  
+- `menu.prg` com `AbrirFormsigrecsm()` e item no `popRelatorios` (BAR 81) Ô£ô
+
+A migra├º├úo da task069 est├í completa em todas as 8 fases.

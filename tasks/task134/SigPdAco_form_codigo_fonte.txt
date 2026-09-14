@@ -1,0 +1,1328 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPdAco.SCX
+* Data/Hora: 18/06/2026 09:25:46
+* Total de registros: 40
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPDACO
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPDACO
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPDACO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPDACO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Aguarde
+  Parent: SIGPDACO
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPDACO.Aguarde
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGPDACO.Aguarde
+  Class: label
+  BaseClass: label
+
+Objeto: ShpRp
+  Parent: SIGPDACO
+  Class: shape
+  BaseClass: shape
+
+Objeto: CmdRpview
+  Parent: SIGPDACO
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: CmdRpPrint
+  Parent: SIGPDACO
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Processar
+  Parent: SIGPDACO
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: GrdF
+  Parent: SIGPDACO
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPDACO.GrdF.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDACO.GrdF.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDACO.GrdF.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDACO.GrdF.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDACO.GrdF.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDACO.GrdF.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDACO.GrdF.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDACO.GrdF.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDACO.GrdF.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDACO.GrdF.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDACO.GrdF.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDACO.GrdF.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDACO.GrdF.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDACO.GrdF.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDACO.GrdF.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDACO.GrdF.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDACO.GrdF.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDACO.GrdF.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDACO.GrdF.Column10
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDACO.GrdF.Column10
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdGprocessa
+  Parent: SIGPDACO
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Label3
+  Parent: SIGPDACO
+  Class: label
+  BaseClass: label
+
+Objeto: Arquivos
+  Parent: SIGPDACO
+  Class: listbox
+  BaseClass: listbox
+
+Objeto: Label7
+  Parent: SIGPDACO
+  Class: label
+  BaseClass: label
+
+Objeto: Label4
+  Parent: SIGPDACO
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 146
+  Left = 95
+  Width = 546
+  Height = 147
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Acompanhamento de Material por Grupo"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  ZoomBox = .F.
+  ContinuousScroll = .F.
+  Name = "SIGPDACO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.Aguarde
+------------------------------------------------------------
+  Top = 287
+  Left = 117
+  Width = 516
+  Height = 139
+  SpecialEffect = 0
+  Visible = .F.
+  TabIndex = 2
+  ZOrderSet = 1
+  Name = "Aguarde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.Aguarde.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 14
+  Caption = "Aguarde..."
+  Height = 29
+  Left = 206
+  Top = 28
+  Width = 105
+  ForeColor = 255,0,0
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.Aguarde.Label2
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 14
+  Caption = "Processando Dados ......"
+  Height = 27
+  Left = 135
+  Top = 79
+  Width = 242
+  ForeColor = 0,0,160
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.ShpRp
+------------------------------------------------------------
+  Top = 7
+  Left = 552
+  Height = 110
+  Width = 229
+  BackStyle = 0
+  BorderStyle = 0
+  Visible = .F.
+  BorderColor = 136,189,188
+  Name = "ShpRp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.CmdRpview
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .F.
+  Picture = ..\framework\imagens\relatorio_video_26.jpg
+  Caption = "    \<Vídeo            "
+  TabIndex = 4
+  Visible = .F.
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CmdRpview"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.CmdRpPrint
+------------------------------------------------------------
+  Top = 3
+  Left = 575
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .F.
+  Picture = ..\framework\imagens\relatorio_impressora_26.jpg
+  Caption = " \<Impressora    "
+  TabIndex = 5
+  Visible = .F.
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CmdRpPrint"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.Processar
+------------------------------------------------------------
+  Top = 3
+  Left = 500
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Cancel = .F.
+  Caption = "Processar"
+  TabIndex = 10
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 5
+  Themes = .F.
+  Name = "Processar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF
+------------------------------------------------------------
+  ColumnCount = 10
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 272
+  Left = 34
+  Panel = 1
+  RowHeight = 16
+  ScrollBars = 2
+  SplitBar = .F.
+  TabIndex = 3
+  Top = 205
+  Width = 732
+  GridLineColor = 238,238,238
+  Name = "GrdF"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.BackColor = 255,197,138
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 130
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 27
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 63
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.BackColor = 201,204,248
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 63
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.BackColor = 255,255,196
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.Width = 65
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.BackColor = 223,255,255
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.Width = 65
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.Format = "Z"
+  Column7.BackColor = 255,234,255
+  Column7.Name = "Column7"
+  Column8.FontName = "Tahoma"
+  Column8.FontSize = 8
+  Column8.Width = 65
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.BackColor = 255,235,215
+  Column8.Name = "Column8"
+  Column9.FontName = "Tahoma"
+  Column9.FontSize = 8
+  Column9.Width = 65
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.ReadOnly = .T.
+  Column9.BackColor = 255,202,202
+  Column9.Name = "Column9"
+  Column10.FontName = "Tahoma"
+  Column10.FontSize = 8
+  Column10.Width = 70
+  Column10.BackColor = 220,255,220
+  Column10.Name = "Column10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Material"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,197,138
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Unid"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Qt.Minima"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 201,204,248
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Saldo Atual"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,196
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Requisição"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 223,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ped.Compra"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,234,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Compra"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column8.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,235,215
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Empenho"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column9.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  BackColor = 255,202,202
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column10.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Pos.Final *"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.GrdF.Column10.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 220,255,220
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.cmdGprocessa
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 720
+  SpecialEffect = 1
+  Top = -2
+  Width = 85
+  TabIndex = 6
+  BorderColor = 136,189,188
+  Name = "cmdGprocessa"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.PicturePosition = 13
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.Label3
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "( * ) Pos.Final = Saldo Atual + Requisição + Ped.Compra + Compra - Empenho - Qt.Mínima"
+  Height = 15
+  Left = 117
+  Top = 487
+  Width = 585
+  TabIndex = 8
+  ForeColor = 90,90,90
+  BackColor = 212,208,200
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.Arquivos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  RowSourceType = 1
+  RowSource = ""
+  Height = 79
+  Left = 84
+  Sorted = .T.
+  TabIndex = 1
+  Top = 122
+  Width = 169
+  Name = "Arquivos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.Label7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  BackStyle = 0
+  Caption = "Grupos :"
+  Height = 15
+  Left = 34
+  Top = 124
+  Width = 48
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 35
+  Name = "Label7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDACO.Label4
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição = [ * ]   Calculado pelo Peso Médio do Material"
+  Height = 15
+  Left = 118
+  Top = 507
+  Width = 372
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPDACO
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE processa
+------------------------------------------------------------
+PROCEDURE processa
+ThisForm.Aguarde.visible = .t.
+ThisForm.Aguarde.Zorder
+
+Set Talk Off
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+
+lcCab = 'Relatório de Acompanhamento de Material por Grupo'
+lcSub = ' '
+lcEmp = _Empr + ' - ' + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+
+Create Cursor dbCabecalho (Titulo c(100), SubTitulo c(100), NomeEmpresa c(100))
+Insert Into dbCabecalho (Titulo, SubTitulo, NomeEmpresa) Values (lcCab, lcSub, lcEmp)
+
+Select csRel
+Set Order to Mats
+Zap
+
+m.lcOnEscape = On('Escape')
+m.llEscape = .f.
+      	  
+On Escape m.llEscape = .t.
+
+lcQuery = [Select Cgrus, Dgrus ] + ;
+			[From SigCdGrp ] + ;
+		   [Where Not GruEstPs = '] + Space(10) + [' And ] + ;
+		   		 [Not ConEstPs = '] + Space(10) + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crGrupo') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crGrupo)')
+	Return 0
+EndIf
+Select crGrupo
+Index On Cgrus Tag Cgrus
+
+lcQuery = [Select Distinct GruEstPs as Grupos, ConEstps as Estos ] + ;
+			[From SigCdGrp ] + ;
+		   [Where Not GruEstPs = '] + Space(10) + [' And ] + ;
+		   		 [Not ConEstPs = '] + Space(10) + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdGrp') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdGrp)')
+	Return 0
+EndIf
+
+If (Reccount('crSigCdGrp') = 1)
+	Select crSigCdGrp
+	Go Top
+	lcEmpGE = _Empr + crSigCdGrp.Grupos + crSigCdGrp.Estos
+	
+	lcQuery = [Select * ] + ;
+				[From SigMvEst ] + ;
+			   [Where EmpGruEsts = '] + lcEmpGE + [' And ] + ;
+			   		 [Not Sqtds = 0]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'pEstoque') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (pEstoque - 1)')
+		Return 0
+	EndIf
+Else
+	lcQuery = [Select * ] + ;
+				[From SigMvEst ] + ;
+			   [Where 1 = 0]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'pEstoque') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (pEstoque - 2)')
+		Return 0
+	EndIf
+
+	Select crSigCdGrp
+	Scan
+		lcEmpGE = _Empr + crSigCdGrp.Grupos + crSigCdGrp.Estos
+		
+		lcQuery = [Select * ] + ;
+					[From SigMvEst ] + ;
+				   [Where EmpGruEsts = '] + lcEmpGE + [' And ] + ;
+				   		 [Not Sqtds = 0]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpEst') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpEst)')
+			Return 0
+		EndIf
+		
+		Select TmpEst
+		Scan
+			Scatter Memvar
+			Insert Into pEstoque From Memvar
+		EndScan
+	EndScan
+EndIf
+
+ThisForm.Arquivos.Clear
+
+Select crGrupo
+Scan
+	ThisForm.Arquivos.AddItem(crGrupo.Cgrus + '-' + crGrupo.Dgrus)
+EndScan
+
+Select pEstoque
+Scan
+	ThisForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', pEstoque.CPros, 'DPros, CUnis, CGrus, QMins, cUniPs, PesoMs')
+
+	If Not Seek(crSigCdPro.Cgrus, 'crGrupo', 'Cgrus')
+		Loop
+	EndIf
+
+	Select csRel
+	If Not Seek(pEstoque.Cpros + CrSigCdPro.cUnis)
+		Append Blank
+	EndIf
+
+	Replace Qtds     With Qtds + pEstoque.Sqtds, ;
+			QtdMins  with crSigCdPro.QMins, ;
+			Mats     With pEstoque.CPros, ;
+			Mat2s    With pEstoque.CPros, ;
+			Dcompos  With crSigCdPro.DPros, ;
+			Dcompo2s With crSigCdPro.DPros, ;
+			CUnis    With crSigCdPro.CUnis, ;
+			CGrus    With crSigCdPro.CGrus, ;
+			Seqs     With '1'
+
+	If Not Empty(CrSigCdPro.cUniPs) And CrSigCdPro.Pesoms <> 0
+		_qtMin = Round(CrSigCdPro.QMins / CrSigCdPro.PesoMs,0)
+		Select csRel
+		If Not Seek(pEstoque.Cpros + CrSigCdPro.cUnips)
+			Append Blank
+		EndIf
+		Replace Qtds     With Qtds + pEstoque.sPesos, ;
+				QtdMins  with _qtMin, ;
+				Mats     With pEstoque.CPros, ;
+				Dcompos  With crSigCdPro.DPros, ;
+				CUnis    With crSigCdPro.CUnips, ;
+				CGrus    With crSigCdPro.CGrus, ;
+				PesoMs   With CrSigCdPro.Pesoms,;
+				Seqs     With '2'
+	Endif
+EndScan
+
+For x=1 To 5
+	lcOperBusca = Iif(x=1, crSigCdPam.DopEmphs, ;
+				  Iif(x=2, crSigCdPam.DopReqcs, ;
+				  Iif(x=3, crSigCdPam.DopPedcs, ;
+				  Iif(x=4, crSigCdPam.DopComps, ;
+				  		   crSigCdPam.DopTrfCps))))
+
+	If IsEmpty(lcOperBusca)
+		Loop
+	EndIf
+	
+	lcCampo = 'Qtd' + Iif(x=1, 'Emphs', Iif(x=2, 'Reqs', Iif(x=3, 'Pedcs', 'Comps')))
+
+	lcEdI = _Empr + lcOperBusca + Str(0, 6)
+	lcEdF = _Empr + lcOperBusca + Str(999999, 6)
+
+	lcQuery = [Select b.EmpDopNums, b.CPros, b.Qtds, b.QtBaixas, c.Cgrus, c.QMins, c.Dpros, c.CUnis, c.cUnips, c.PesoMs ] + ;
+			    [From SigMvCab a, SigMvItn b, SigCdPro c ] + ;
+			   [Where a.EmpDopNums BetWeen '] + lcEdI + [' And '] + lcEdF + [' And ] + ;
+			   		 [a.EmpDopNums = b.EmpDopNums And ] + ;
+			   		 [Not ((b.Qtds - b.QtBaixas) = 0) And ] + ;
+			   		 [b.CPros = c.CPros ] + ;
+			   [Order By b.EmpDopNums, b.CPros, b.Qtds, b.QtBaixas, c.Cgrus, c.QMins, c.Dpros, c.CUnis]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crOperacao') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crOperacao)')
+		Return 0
+	EndIf
+
+	Select crOperacao
+	Scan
+		If Seek(crOperacao.Cgrus, 'crGrupo', 'Cgrus')
+			Select csRel
+			If Not Seek(crOperacao.Cpros+CrOperacao.cUnis)
+				Append Blank
+				Replace QtdMins With crOperacao.QMins, ;
+						Mats    With crOperacao.Cpros, ;
+						Dcompos With crOperacao.Dpros, ;
+						Mat2s    With crOperacao.Cpros, ;
+						Dcompo2s With crOperacao.Dpros, ;
+						Cunis   With crOperacao.cUnis, ;
+						Cgrus   With crOperacao.Cgrus, ;
+						Pesoms  With crOperacao.Pesoms,;
+						Seqs    With '1'
+			EndIf
+			Replace &lcCampo. With &lcCampo. + (crOperacao.Qtds - crOperacao.QtBaixas)
+
+			If Not Empty(CrOperacao.cUniPs) And CrOperacao.PesoMs <> 0
+				_qtMin = Round(CrOperacao.QMins / CrOperacao.PesoMs,0)
+
+				If Not Seek(crOperacao.Cpros+CrOperacao.cUniPs)
+					Append Blank
+					Replace QtdMins With _qtMin, ;
+							Mats    With crOperacao.Cpros, ;
+							Dcompos With crOperacao.Dpros, ;
+							Cunis   With crOperacao.cUnips, ;
+							Cgrus   With crOperacao.Cgrus, ;
+							Pesoms  With crOperacao.Pesoms,;
+							Seqs    With '2'
+				EndIf
+				Replace &lcCampo. With &lcCampo. + (crOperacao.Qtds - crOperacao.QtBaixas)
+			EndIf
+		EndIf
+	EndScan
+Next
+
+Select csRel
+Scan
+	If Seqs = '2'
+		Replace QtdReqs  With Round(QtdReqs  / Pesoms,0),;
+				Qtdpedcs With Round(QtdPedcs / Pesoms,0),;
+				Qtdcomps With Round(QtdComps / Pesoms,0),;
+				QtdEmphs With Round(QtdEmphs / Pesoms,0),;
+				dcompo2s With Padc('*',35)
+	Endif
+	Replace QtdPfins With (Qtds - QtdMins + QtdReqs + QtdPedcs + QtdComps - QtdEmphs)
+	Replace Flags    With Iif(QtdReqs > 0 And QtdPfins > 0,.t.,.f.)
+EndScan
+	
+Wait Clear
+
+ThisForm.Aguarde.Visible = .f.
+
+ThisForm.Arquivos.ListIndex = 1
+Grupo = Left(ThisForm.Arquivos.Value, 3)
+
+If Used('csRel')
+	Select csRel
+	Go Top
+	If Eof()
+		=MessageBox('Não Existe Movimentação!!!', 48, '')
+		Return 0
+	Else
+		Select csRel
+		Set Order To GruMat
+		Set Key to Grupo
+		Go Top
+	EndIf
+Else
+	Return
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+* Cria o Cursor temporario do Relatório
+Create Cursor csCab (cbemp C(60), cbtit C(100), cbsubtit C(100))
+Append Blank
+
+* Cria o Cursor temporario do Relatório
+Create Cursor csRel (Cgrus c(3), mats C(10), dcompos C(30), Qtds n(10,3), QtdMins n(10,3), ;
+					 CUnis C(03), QtdReqs n(10,3), QtdPedcs n(10,3), QtdComps n(10,3), ;
+					 QtdEmphs n(10,3), QtdPfins n(10,3), QtdPfMs n(10,3), Flags l,;
+					 Mat2s c(10), dCompo2s c(30), Seqs c(1), PesoMs n(12,3) ) 
+Index On Cgrus + Mats + Seqs Tag GruMat
+Index On Mats + cUnis Tag Mats
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		ThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., ;
+									   'DopEmphs, DopReqcs, DopPedcs, DopComps, DopTrfCps')
+
+		.Processamento = .f.
+
+		With .GrdF
+			.RecordSource     		= 'csRel'
+			.RecordSourceType 		= 1
+			.Column1.ControlSource  = 'csRel.Mat2s'
+			.Column2.ControlSource  = 'csRel.dCompo2s'
+			.Column3.ControlSource  = 'csRel.cUnis'
+			.Column4.ControlSource  = 'csRel.qtdMins'
+			.Column5.ControlSource  = 'csRel.Qtds'
+			.Column6.ControlSource  = 'csRel.QtdReqs'
+			.Column7.ControlSource  = 'csRel.QtdPedcs'
+			.Column8.ControlSource  = 'csRel.QtdComps'
+			.Column9.ControlSource  = 'csRel.QtdEmphs'
+			.Column10.ControlSource = 'csRel.QtdPfins'
+			.SetAll('DynamicForeColor','iif(csRel.Flags And CsRel.Seqs <> [2],RGB(255,0,0),;
+									    Iif(CsRel.Seqs = [2],Rgb(0,0,255),RGB(0,0,0)))','Column')
+			.Refresh
+		EndWith
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Activate
+------------------------------------------------------------
+PROCEDURE Activate
+If Not ThisForm.Processamento
+	Thisform.Processa()
+	Select csRel
+	If (Reccount() <> 0)
+		ThisForm.Grdf.Refresh
+		ThisForm.Processamento = .t.
+		ThisForm.CmdRpview.Visible = .t.
+		ThisForm.CmdRpPrint.Visible = .t.
+		ThisForm.Arquivos.SetFocus
+	EndIf
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDACO.CmdRpview
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Replace Subtitulo With ThisForm.Arquivos.Value In dbCabecalho
+
+Report Form SigPdAco Preview
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDACO.CmdRpPrint
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Replace Subtitulo With ThisForm.Arquivos.Value In dbCabecalho
+Report Form SigPdAco To Printer Prompt NoConsole
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDACO.Processar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Processa()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDACO.cmdGprocessa
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdSair.Click
+------------------------------------------------------------
+PROCEDURE cmdSair.Click
+With ThisForm
+	.LockScreen = .t.
+	.Release
+	.Refresh
+	.LockScreen = .f.
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDACO.Arquivos
+* Classe: listbox (Base: listbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+Grupo = Left(ThisForm.Arquivos.Value, 3)
+
+Select csRel
+Set Order To GruMat
+Set Key To Grupo
+Go Top
+ThisForm.GrdF.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPDACO
+RESERVED3 (ClassInfo): podatamgr
+processamento
+*processa 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

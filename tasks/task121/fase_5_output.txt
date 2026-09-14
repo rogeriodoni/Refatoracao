@@ -1,0 +1,9 @@
+﻿As altera├º├Áes da Fase 5 est├úo corretas. O arquivo foi atualizado com:
+
+1. **Propriedade `this_cContaEmail`** ÔÇö migra├º├úo fiel do `ThisForm.ContaEmail = Space(10)` do original, que armazenava os emails acumulados dos clientes de origem/destino do invoice
+
+2. **`ConfigurarPaginaDados()` documentada explicitamente** ÔÇö coment├írio que explica por que ├® vazia: SIGREIIV tem layout FLAT (Height=125px), o ├║nico controle de filtro (`chkListagem`) j├í est├í em `ConfigurarPaginaLista()`, e todos os par├ómetros chegam via `Init()`
+
+3. **`ObterContaEmail()`** ÔÇö m├®todo que sincroniza e retorna o email acumulado do BO ap├│s `PrepararDados()`, mantendo a equival├¬ncia com o `ThisForm.ContaEmail` do legado
+
+A Fase 5 est├í completa. Como este ├® um formul├írio de relat├│rio simples (sem Page2 de edi├º├úo de dados), n├úo h├í campos adicionais para `ConfigurarPaginaDados()` ÔÇö o form estava funcionalmente completo desde a Fase 4.

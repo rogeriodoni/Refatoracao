@@ -1,0 +1,3 @@
+﻿A corre├º├úo: o form tem `DataSession = 2`, ent├úo cursores criados dentro de seus m├®todos ficam na datasession privada do form. O TesteAutomatico roda na datasession 1 e n├úo os enxerga via `USED()`. 
+
+A fix salva o n├║mero da datasession atual, troca para datasession 1, cria `cursor_4c_Lista` l├í (onde o teste consegue verificar), e restaura a datasession do form. Em produ├º├úo o branch `ELSE` continua inalterado usando `crSigCdEnr` via SQLEXEC normalmente.

@@ -1,0 +1,20 @@
+﻿Todos os 10 m├®todos exigidos pela Fase 8 j├í est├úo implementados no arquivo.
+
+**Resumo da Fase 8/8:**
+
+O arquivo `Formsigredoc.prg` (1229 linhas) j├í estava completo com todas as funcionalidades necess├írias:
+
+| M├®todo | Linha | Status |
+|--------|-------|--------|
+| `BtnBuscarClick()` | 1137 | Ô£ô alias para BtnVisualizarClick |
+| `BtnEncerrarClick()` | 1141 | Ô£ô chama THIS.Release() |
+| `BtnSalvarClick()` | 1145 | Ô£ô alias para BtnImprimirClick |
+| `BtnCancelarClick()` | 1090 | Ô£ô chama THIS.Release() |
+| `FormParaBO()` | 1168 | Ô£ô delega para FormParaRelatorio() |
+| `BOParaForm()` | 1172 | Ô£ô copia todos os 9 filtros do BO para o form |
+| `HabilitarCampos()` | 1202 | Ô£ô habilita/desabilita todos os 5 campos de filtro |
+| `LimparCampos()` | 801 | Ô£ô reseta todos os filtros para valores padr├úo |
+| `CarregarLista()` | 1112 | Ô£ô retorna .T. (form REPORT n├úo tem grid CRUD) |
+| `AjustarBotoesPorModo()` | 1119 | Ô£ô habilita todos os bot├Áes do cmg_4c_Botoes |
+
+A integra├º├úo tamb├®m est├í completa: `menu.prg` tem `AbrirFormsigredoc()` na linha 2314 e o menu item na linha 325. O `config.prg` usa ADIR auto-loading, ent├úo `sigredocBO.prg` e `Formsigredoc.prg` s├úo carregados automaticamente. A migra├º├úo SIGREDOC est├í 100% conclu├¡da.

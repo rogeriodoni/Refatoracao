@@ -1,0 +1,21 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\SigPrEmlBO.prg` criado com:
+
+**Propriedades declaradas:**
+| Propriedade | Tipo | Prop├│sito |
+|---|---|---|
+| `this_cTabela` | C | `"SigAlert"` (banco ALERTA) |
+| `this_cCampoChave` | C | `"pkchaves"` |
+| `this_cEmpDopNums` | C | Par├ómetro completo Emp(3)+Dopes(20)+Numes(6) |
+| `this_cEmp` | C | Empresa (3 chars) |
+| `this_cDopes` | C | C├│digo da opera├º├úo (20 chars) |
+| `this_cNumes` | C | N├║mero do movimento (6 chars) |
+| `this_cEscolha` | C | `"INSERIR"` / `"ALTERAR"` / `"EXCLUIR"` |
+| `this_nConnAlerta` | N | Handle de conex├úo separada para banco ALERTA |
+| `this_cCursorTotal` | C | Nome do cursor principal (`cursor_4c_Total`) |
+| `this_cCursorAlerta` | C | Cursor para gravar em SigAlert |
+| `this_lEmailEnviado` | L | Estado do envio |
+| `this_cMsgEmailRetorno` | C | Mensagem de retorno do envio |
+
+**Init():** define tabela/chave, chama `DODEFAULT("SigAlert")` para inicializar a DataAccess, com TRY/CATCH verboso.
+
+**Pr├│xima fase (2/8):** completar o BO com `CarregarDados()`, `EnviarEmails()` e m├®todos auxiliares.

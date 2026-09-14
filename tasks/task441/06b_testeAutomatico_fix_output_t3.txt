@@ -1,0 +1,5 @@
+﻿O fix foi aplicado. Agora apenas `WindowType = 0` permanece ÔÇö o form se comporta como modeless durante os testes automatizados (o comportamento modal em produ├º├úo ├® gerenciado manualmente via `this_oParentForm.Enabled = .F./.T.` no Init/Destroy), o que evita que o `CREATEOBJECT` bloqueie VFP9 por 300s.
+
+**Causa raiz**: Em VFP9, forms com `WindowType = 1` s├úo auto-exibidos como di├ílogo modal ao completar `CREATEOBJECT`, aguardando fechar indefinidamente sem `READ EVENTS`. As tentativas t1 e t2 identificaram o problema mas n├úo gravaram a corre├º├úo em disco ÔÇö o arquivo ainda tinha ambas as linhas.
+
+**Corre├º├úo aplicada**: Removida a linha `WindowType = 1` duplicada. O form agora tem apenas `WindowType = 0`.

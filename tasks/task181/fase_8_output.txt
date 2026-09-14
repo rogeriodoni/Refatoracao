@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto. A Fase 8 est├í completa. Aqui est├í o resumo do que foi adicionado:
+
+**Refatora├º├úo em `BtnImprimeClick`:**
+- Removidas as vari├íveis locais `loc_oBO` e `loc_nTipo` (agora encapsuladas em `FormParaBO()`)
+- O bloco inline de 27 linhas de transfer├¬ncia de par├ómetros foi substitu├¡do por `THIS.FormParaBO()`
+
+**10 m├®todos novos adicionados:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `FormParaBO()` | Transfere todos os par├ómetros dos controles para o BO (opt_Preco, separador, peso, composi├º├úo, tipo etiqueta, impressora, ajustes, listas de pre├ºos, opera├º├úo) |
+| `BOParaForm()` | No-op documentado ÔÇö OPERACIONAL sem registro corrente para carregar |
+| `CarregarLista()` | Refresca a grade `dbImpressao` (reposiciona e chama `Refresh`) |
+| `LimparCampos()` | Zera todos os filtros de entrada e reseta a grade com linha em branco |
+| `HabilitarCampos()` | Habilita todos os controles de entrada (form OPERACIONAL sempre habilitado) |
+| `AjustarBotoesPorModo()` | No-op ÔÇö OPERACIONAL sem modos CRUD |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnBuscarClick()` | Delega a `BtnCarregarClick()` |
+| `BtnSalvarClick()` | Delega a `BtnImprimeClick()` |
+| `BtnCancelarClick()` | Confirma e chama `LimparCampos()` |

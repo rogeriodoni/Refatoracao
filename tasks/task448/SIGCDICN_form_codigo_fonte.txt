@@ -1,0 +1,609 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDICN.SCX
+* Data/Hora: 09/08/2026 06:24:35
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDICN
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDICN
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDICN.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDICN.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grid1
+  Parent: SIGCDICN
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDICN.Grid1.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDICN.Grid1.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDICN.Grid1.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDICN.Grid1.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Botão_okcancel
+  Parent: SIGCDICN
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICN
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 578
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Ícones de Acesso"
+  ControlBox = .F.
+  FontItalic = .T.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  Name = "SIGCDICN"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICN.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICN.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICN.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICN.Grid1
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 432
+  Left = 30
+  Panel = 1
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 114
+  Width = 741
+  GridLineColor = 238,238,238
+  Name = "Grid1"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 529
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 190
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICN.Grid1.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Programa"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICN.Grid1.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICN.Grid1.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Ícone"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICN.Grid1.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICN.Botão_okcancel
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 643
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  BorderColor = 136,189,188
+  Name = "Botão_okcancel"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Ok"
+  Command1.ToolTipText = "Confirmar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "ok"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ToolTipText = "[ESC] Cancelar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 2, 9, 5, 15, 12, 23, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDICN
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+
+Local lnErro1,lcMcrSql1,lcDirTmp1,lcArqIcone1,lnTamIcone1
+
+With ThisForm
+	.poDatamgr1 = CreateObject('fSqlConector',.Name)
+	.Caption = Prompt() && 'Faixa p/ Cor'
+	m.lnErro1 = .poDatamgr1.pnIdconn
+		
+	.cntSombra.lblSombra.Caption = .Caption
+	.cntSombra.lblTitulo.Caption = .Caption
+	
+	If m.lnErro1>0 
+		.Grid1.Visible = .f.
+		.Botão_okcancel.Visible = .f.
+		.Refresh()
+		.Show()
+		.Draw()
+		.LockScreen = .t.
+		m.lcMcrSql1 = [select a.descricaos,a.programas,a.barrapict,a.barraforms,a.pkChaves from sigcdprg a order by 1]
+		If m.lnErro1>0
+			m.lnErro1 = .poDatamgr1.SQLExecute(m.lcMcrSql1,'crProg1')
+		EndIf
+		If Used('crProg1')
+			Select ('crProg1')
+			Index On pkChaves Tag pkChaves
+			Set Order To ('') In ('crProg1')
+			Update crProg1 Set barrapict=Lower(Alltrim(JustFname(barrapict)))
+			If Used('crTmpProg2')
+				USE In ('crTmpProg2')
+			EndIf 
+			Select a.* From crProg1 a Where Not IsEmpty(a.descricaos) Order By a.descricaos Into Cursor crTmpProg2
+			Select ('crTmpProg2')
+			Index On pkChaves Tag pkChaves
+			If Used('crProg2')
+				USE In ('crProg2')
+			EndIf 
+			USE Dbf('crTmpProg2') Again Alias ('crProg2') In 0
+			Select ('crProg2')
+			Set Order To ('') In ('crProg2')
+			Locate 
+			With .Grid1
+				.SetAll("FontName","Courier New","Column")
+				.SetAll("FontName","Arial","Header")
+				.SetAll("FontName","Courier New","TextBox")
+				.SetAll("FontName","Courier New","CommandButton")
+				.SetAll("FontSize",9,"Column")
+				.SetAll("FontSize",8,"Header")
+				.SetAll("FontSize",9,"TextBox")
+				.SetAll("FontSize",9,"CommandButton")
+				.SetAll("Format","K","Column")
+				.SetAll("Format","K","TextBox")
+				.SetAll("Movable",.f.,"Column")
+				.SetAll("ReadOnly",.t.,"Column")
+				.SetAll("ReadOnly",.t.,"TextBox")
+				.SetAll("Resizable",.f.,"Column")
+				.SetAll("Alignment",3,"Column")
+				.SetAll("Alignment",3,"TextBox")
+				.SetAll("Alignment",2,"Header")
+				.SetAll("BorderStyle",0,"TextBox")
+				.SetAll("Margin",0,"TextBox")
+				.SetAll("Visible",.t.,"TextBox")
+				.HeaderHeight = 15
+				.RowHeight = 15
+				.LinkMaster = ''
+				.RelationalExpr = ''
+				.RecordSource = 'crProg2' 
+				.Column1.ControlSource = 'crProg2.descricaos'
+				.Column2.ControlSource = 'crProg2.barrapict'
+				.Refresh
+				.Visible = .t.
+			EndWith 
+		EndIf 
+		m.lcMcrSql1 = ([select a.carqicones,a.marqicones,']+Space(128)+[' as ctmpicones from SigSyIco a order by 1])
+		If m.lnErro1>0
+			m.lnErro1 = .poDatamgr1.SQLExecute(m.lcMcrSql1,'crSigSyIco1')
+		EndIf
+		If Used('crSigSyIco1')
+			m.lcDirTmp1 = Addbs(Sys(2023))
+			Select ('crSigSyIco1')
+			Index On carqicones Tag carqicones
+			Set Order To ('') In ('crSigSyIco1')
+			Locate 
+			
+			If Not Eof('crSigSyIco1')
+				Insert Into crSigSyIco1 (carqicones) Values (' < Nenhum >')
+			EndIf 
+			Locate 
+			
+			Scan While m.lnErro1>0
+				m.lcArqIcone1 = (m.lcDirTmp1+'ArqIcone'+Sys(2015)+'.ico')
+				m.lnTamIcone1 = StrToFile(crSigSyIco1.marqicones,m.lcArqIcone1)
+				If m.lnTamIcone1>0
+					Replace ctmpicones With m.lcArqIcone1 In ('crSigSyIco1')
+				EndIf 
+			EndScan 
+		EndIf 
+		= DoDefault(.Name)
+		.Botão_okcancel.Visible = .t.
+	Else 
+		= Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	EndIf 
+	.LockScreen = .f.
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Local lcDirTmp1,lcArqIcone1
+
+With ThisForm
+	If Used('crSigSyIco1')
+		.Grid1.Visible = .f.
+		.Botão_okcancel.Visible = .f.
+
+		m.lcDirTmp1 = Addbs(Sys(2023))
+
+		Select ('crSigSyIco1')
+		Set Order To ('') In ('crSigSyIco1')
+		Locate 
+		
+		Scan
+			m.lcArqIcone1 = Alltrim(crSigSyIco1.ctmpicones)
+			If (Not IsEmpty(m.lcArqIcone1) And File(m.lcArqIcone1))
+				Delete File (m.lcArqIcone1)
+			EndIf 
+		EndScan 
+	EndIf 
+	.poDatamgr1.Release
+EndWith 
+= DoDefault()
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDICN.Grid1.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+
+If (Used('crSigSyIco1') And Reccount('crSigSyIco1')>0)
+	DO FORM SIGPRCIC TO GCTESTE With ThisForm,crProg2.pkChaves
+Else
+	MessageBox('Nenhum Registro de Icone Encontrado.',48,'')
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+IF NKeyCode = 13 && chama a próxima tela para escolher o ícone
+	If (Used('crSigSyIco1') And Reccount('crSigSyIco1')>0)
+		DO FORM SIGPRCIC TO GCTESTE With ThisForm,crProg2.pkChaves
+	Else
+		MessageBox('Nenhum Registro de Icone Encontrado.',48,'')
+	EndIf
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDICN.Grid1.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+
+If (Used('crSigSyIco1') And Reccount('crSigSyIco1')>0)
+	DO FORM SIGPRCIC TO GCTESTE With ThisForm,crProg2.pkChaves
+Else
+	MessageBox('Nenhum Registro de Icone Encontrado.',48,'')
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+IF NKeyCode = 13 && chama a próxima tela para escolher o ícone
+	If (Used('crSigSyIco1') And Reccount('crSigSyIco1')>0)
+		DO FORM SIGPRCIC TO GCTESTE With ThisForm,crProg2.pkChaves
+	Else
+		MessageBox('Nenhum Registro de Icone Encontrado.',48,'')
+	EndIf 
+EndIf 
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDICN.Botão_okcancel
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE ok.Click
+------------------------------------------------------------
+PROCEDURE ok.Click
+
+Local lnErro1,lcMcrSql1, lcBar
+With ThisForm
+	m.lnErro1 = .poDataMgr1.pnIdConn
+
+	If Used('crProg1')
+		.Grid1.Visible = .f.
+		.Botão_okcancel.Visible = .f.
+
+		Select ('crProg1')
+		Set Order To ('') In ('crProg1')
+		Locate 
+		
+		Scan While m.lnErro1>0
+			*** mena - 10/11/2014 - substitui aspa simples por aspa dupla para não dar erro no update ***
+			lcBar = STRTRAN(Alltrim(crProg1.barraforms),['],["])	
+			m.lcMcrsql1 = ([update sigcdprg set barrapict=']+Alltrim(crProg1.barrapict)+[',barraforms=']+lcBar+[']+;
+							[ where pkChaves=']+crProg1.pkChaves+['])
+			If m.lnErro1>0
+				m.lnErro1 = .poDatamgr1.SQLExecute(m.lcMcrSql1)
+			EndIf
+		EndScan 
+		If m.lnErro1>0 
+			m.lnErro1 = .poDatamgr1.Commit()
+		EndIf 
+		If Not m.lnErro1>0 
+			= .poDatamgr1.RollBack()
+		EndIf 
+	EndIf 
+	.Release
+EndWith 
+
+
+*!*	 foi substituido pela linha acima m.lcMcrsql1 = ([update sigcdprg set barrapict=']+Alltrim(crProg1.barrapict)+[',barraforms=']+Alltrim(crProg1.barraforms)+[']+;
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cancela.Click
+------------------------------------------------------------
+PROCEDURE cancela.Click
+
+If MessageBox('Confirma o cancelamento',4+32+256,'Cancelamento')=6
+	ThisForm.poDatamgr1.RollBack()
+	Thisform.Release
+EndIf 
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDICN
+RESERVED3 (ClassInfo): podatamgr1
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

@@ -1,0 +1,429 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReDct.SCX
+* Data/Hora: 03/06/2026 22:56:02
+* Total de registros: 6
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREDCT
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ImpTotal
+  Parent: SIGREDCT
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ImpCodBarra
+  Parent: SIGREDCT
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 71
+  Left = 83
+  Width = 582
+  Height = 274
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCT
+------------------------------------------------------------
+  DataSession = 2
+  Height = 150
+  Width = 800
+  DoCreate = .T.
+  Caption = "Impressão de Documento"
+  Name = "SIGREDCT"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = 0
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 495
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 36
+  REGISTRY1.Left = 444
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCT.ImpTotal
+------------------------------------------------------------
+  Top = 90
+  Left = 24
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "ImprimirTotalização"
+  TabIndex = 2
+  ZOrderSet = 3
+  Name = "ImpTotal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDCT.ImpCodBarra
+------------------------------------------------------------
+  Top = 108
+  Left = 24
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Imprimir somente Cod. de Barras"
+  TabIndex = 2
+  ZOrderSet = 4
+  Name = "ImpCodBarra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREDCT
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+If ThisForm.ImpTotal.Value = 1
+	Report Form SigReDct Preview NoConsole
+Else
+	Report Form SigReDc3 Preview NoConsole
+EndIf 
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Create Cursor CsRelatorio (cBars n(14), Cpros c(14), Dpros c(40), Nops n(10), cmats c(14), dMats c(40), qtd1s n(12,3),;
+			cUni1s c(3), Peso1s n(12,3), cUnip1s c(3), qtd2s n(12,3), cUni2s c(3), Qtds n(6), Quebras n(10), ;
+			peso2s n(12,3), cunip2s c(3), PesoFs n(12,3), Ordem n(10), cestos c(1), GrupoOs c(10), ContaOs c(10), ;
+			Rclis c(40), Qtdb n(6), ImpCodBar c(20))
+Index On Str(Nops,10) + cMats Tag NopMat
+Index On Str(Quebras,10) + Str(Nops,10) + Str(Ordem,10) + Str(Cbars,14) Tag Nops
+
+lcEdn  = ThisForm.pcemps + ThisForm.pcDopes + Str(ThisForm.pcNumes,10)
+lcEdn2 = ThisForm.pcemps + ThisForm.pcDopes + Str(ThisForm.pcNumes,6)
+
+lcSql = [Select Nops, cmats, sum(qtds) as Qtds, sum(Pesos) as Pesos, sum(Peso2s) as Peso2s From SigCdNei ]+;
+		[Where EmpDnPs = ']+lcEdn+[' group by nops, cmats ]
+ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpNensi')
+Select TmpNensi
+Index On Str(Nops,10) + cmats Tag Nops
+
+lcSql = [Select Nops, cbars, Cpros, Qtds From SigOpEtq Where EmpDopNums = ']+lcEdn2+[']
+ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpEti')
+Select TmpEti
+Index On Str(Nops,10) + Str(Cbars,14) Tag Nops
+
+Select TmpEti
+Scan
+	lcSql = [Select Dpros,cUnis, cUniPs From SigCdPro Where Cpros = ']+TmpEti.Cpros+[']
+	=ThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpPro')
+	lnOp    = TmpEti.Nops
+	lnOrdem = 0
+	
+	lcSql = [Select a.Nops,b.GrupoOs,b.ContaOs,c.Rclis From SigOpPic a, SigMvCab b, SigCdCli c ]+;
+			[Where a.Nops = ]+Str(lnOp)+[ And a.EmpDopNums = b.EmpDopNums and b.ContaOs = c.Iclis ]
+
+	ThisForm.Podatamgr.Sqlexecute(lcSql,'CrTmpCli')
+	
+	_ImpCodBar = fAltBar2de5(Transform(TmpEti.Cbars, '@L 99999999999999'))
+	
+	Select TmpNensi
+	Set Order To Nops
+	=Seek(Str(lnOp,10))
+	
+	lcSql = [Select * From SigPrCpo Where Cpros = ']+TmpEti.Cpros+[' Order by Mats ]
+	=ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpCompo')
+	
+	lnQtdB = 0
+	Select TmpEti
+	Scan While Nops = lnOp
+		lnQtdB = lnQtdB + TmpEti.Qtds
+		lnOrdem = lnOrdem + 1
+		Insert Into CsRelatorio (Nops, cbars, Cpros, Dpros, Ordem, Qtds, GrupoOs, ContaOs, Rclis, Quebras, QtdB, ImpCodBar) Values ;
+				(TmpEti.Nops, TmpEti.Cbars, TmpEti.Cpros, crTmpPro.Dpros, lnOrdem, 1,;
+					CrTmpCli.GrupoOs, CrTmpCli.ContaOs, CrTmpCli.Rclis, Iif(ThisForm.ImpTotal.Value<>1,TmpEti.Nops,0), TmpEti.Qtds, _ImpCodBar)
+
+		Select TmpNensi
+		If Nops = LnOp
+			lcSql = [Select a.Dpros,a.cUnis,a.cUnips,b.cestos From SigCdPro a, SigCdUni b where ]+;
+					[a.Cpros = ']+TmpNensi.Cmats+[' And a.Cunis = b.Cunis ]
+			=ThisForm.Podatamgr.Sqlexecute(lcsql,'TmpPro')
+			Replace cmats  With TmpNensi.Cmats,;
+					Dmats  With TmpPro.Dpros,;
+					qtd1s   With TmpNensi.Qtds,;
+					cuni1s  With TmpPro.Cunis,;
+					cUnip1s With TmpPro.Cunips,;
+					Peso1s  With TmpNensi.Peso2s,;
+					PesoFs  With TmpNensi.Pesos, ;
+					Cestos  With TmpPro.Cestos in CsRelatorio
+			Select TmpNensi
+			Skip
+		EndIf
+	EndScan
+	Skip -1
+
+	Select TmpNensi
+	Scan While Nops = lnOp
+		lnOrdem = lnOrdem + 1
+		Insert Into CsRelatorio (Nops, cbars, Cpros, Dpros, Ordem, GrupoOs, ContaOs, Rclis, Quebras, ImpCodBar ) Values ;
+				(TmpEti.Nops, 0, TmpEti.Cpros, crTmpPro.Dpros, lnOrdem, CrTmpCli.GrupoOs, CrTmpCli.ContaOs, ;
+				CrTmpCli.Rclis, Iif(ThisForm.ImpTotal.Value<>1,TmpEti.Nops,0), _ImpCodBar)
+
+		lcSql = [Select a.Dpros,a.cUnis,a.cUnips,b.Cestos From SigCdPro a, SigCdUni b where ]+;
+				[a.Cpros = ']+TmpNensi.Cmats+[' And a.Cunis = b.Cunis ]
+		=ThisForm.Podatamgr.Sqlexecute(lcsql,'TmpPro')
+		Replace cmats  With TmpNensi.Cmats,;
+				Dmats  With TmpPro.Dpros,;
+				qtd1s   With TmpNensi.Qtds,;
+				cuni1s  With TmpPro.Cunis,;
+				cUnip1s With TmpPro.Cunips,;
+				Peso1s  With TmpNensi.Peso2s,;
+				cestos  With TmpPro.Cestos,;
+				PesoFs  With TmpNensi.Pesos in CsRelatorio
+	EndScan
+	
+	Select TmpCompo
+	Scan
+		Select CsRelatorio
+		Set Order To NopMat
+		If Not Seek(Str(lnOp,10) + TmpCompo.mats)
+			lcSql = [Select Dpros,cUnis,cUnips From SigCdPro where Cpros = ']+TmpCompo.mats+[']
+			=ThisForm.Podatamgr.Sqlexecute(lcsql,'TmpPro')
+			lnOrdem = lnOrdem + 1
+			Insert Into CsRelatorio (Nops, cbars, Cpros, Dpros, Ordem, CMats, dMats,Grupoos,ContaOs,Rclis, Quebras) Values ;
+					(TmpEti.Nops, 0, TmpEti.Cpros, crTmpPro.Dpros, lnOrdem, TmpCompo.Mats, TmpPro.Dpros,;
+					 CrTmpCli.GrupoOs,CrTmpCli.ContaOs,CrTmpCli.Rclis,Iif(ThisForm.ImpTotal.Value<>1,TmpEti.Nops,0))
+		
+		EndIf
+		Replace qtd2s   With TmpCompo.Qtds * lnQtdB,;
+				cuni2s  With Tmpcompo.UniCompos,;
+				cUnip2s With TmpCompo.Cunips,;
+				Peso2s  With TmpCompo.Pesos * lnQtdB In CsRelatorio
+	EndScan
+EndScan
+
+If ThisForm.ImpTotal.Value = 1
+	Select 9999999999 as Nops, Sum(Qtds) as Qtds, Sum(QtdB) as Qtdb, Sum(Pesofs) as PesoFs From CsRelatorio ;
+	Into Cursor Selecao Group by 1
+
+	Select CsRelatorio
+	Append Blank
+	Replace Nops   With  Selecao.Nops,;
+			Qtds   With  Selecao.Qtds,;
+			QtdB   With  Selecao.Qtdb,;
+			PesoFs With  Selecao.Pesofs In CsRelatorio
+Endif
+
+lcSql = [Select Ndopps From SigCdOpd Where Dopps = ']+ThisForm.pcDopes+[']
+=ThisForm.Podatamgr.Sqlexecute(lcsql,'TmpOpp')
+
+_ImpCodBar = fAltBar2de5(Transform(TmpOpp.NDopps, '@L 99') + Transform(ThisForm.pcNumes, '@L 9999999999'))
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcEmp = _Empr + ' - ' + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+lcCab = Alltrim(ThisForm.pcDopes) + ' - ' + Str(ThisForm.pcNumes,10)
+lcSub = '' 
+
+Create Cursor dbCabecalho (Titulo c(100), SubTitulo m, NomeEmpresa c(100), ImpCodBar c(20))
+Insert Into dbCabecalho (Titulo, SubTitulo, NomeEmpresa, ImpCodBar) ;
+					Values (lcCab, lcSub, lcEmp, _ImpCodBar)
+
+Select CsRelatorio
+Set Order To Nops
+Go top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE memail
+------------------------------------------------------------
+PROCEDURE memail
+Select CsRelatorio
+Go Top
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pEmp, pDop, pNum, pImp
+
+ThisForm.pcEmps  = pEmp
+ThisForm.pcDopes = pDop
+ThisForm.pcNumes = pNum
+ThisForm.Caption = 'Impressão de Documento (' + Alltrim(pDop) + '/' + Alltrim(Str(pNum)) + ')'
+ThisForm.Contaemail = ' '
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		=DoDefault()
+
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+If ThisForm.ImpTotal.Value = 1
+	Report Form SigReDct To Printer Prompt NoConsole
+Else
+	Report Form SigReDc3 To Printer Prompt NoConsole
+EndIf 
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDCT.ImpTotal
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If This.Value = 1
+	ThisForm.impCodBarra.Value = 0 
+EndIf 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDCT.ImpCodBarra
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = 1
+	ThisForm.ImpTotal.Value = 0 
+EndIf 
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREDCT
+RESERVED3 (ClassInfo): imgbranco
+imglogotipo
+imgtecnicas
+pcdopes
+pcemps
+pcnumes
+podatamgr
+tpimpressao
+*selecionadados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

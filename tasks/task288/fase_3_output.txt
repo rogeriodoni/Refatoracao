@@ -1,0 +1,15 @@
+﻿Estrutura correta verificada:
+- `RETURN DODEFAULT()` em Init ÔÇö fora de qualquer TRY Ô£ô
+- `RETURN loc_lSucesso` em InicializarForm ÔÇö ap├│s ENDTRY Ô£ô  
+- CATCH com MsgErro em todos os blocos TRY Ô£ô
+
+**Fase 3 conclu├¡da.** Arquivo criado em `C:\4c\projeto\app\forms\operacionais\FormSigPrGf2.prg` com:
+
+| Elemento | Implementado |
+|----------|-------------|
+| `Init(par_loForm1)` | Armazena `poform1`, compartilha `DataSessionId`, chama `DODEFAULT()` |
+| `InicializarForm()` | Cria BO, define Caption/Picture, inicializa cursor via BO, monta layout, estado inicial Aguarde vis├¡vel |
+| `ConfigurarLayout()` | `cnt_4c_Cabecalho` (labels Sombra/Titulo), `obj_4c_CmdgGrafico` (vazio), `cnt_4c_Grf1` (vazio), `cnt_4c_Aguarde` (com labels), `cnt_4c_Grf2` (vazio) |
+| `Destroy()` | Limpa cursor via BO, re-habilita form pai, `DODEFAULT()` |
+
+**Fases seguintes**: Fase 4 adiciona `oleGrafico1` em `cnt_4c_Grf1` e configura os bot├Áes do `obj_4c_CmdgGrafico`. Fase 5 adiciona `cmbChave1` e `lblChave1` em `cnt_4c_Grf2`. Fases 7-8 implementam eventos (`mGeraGrafico`, Click do ComboBox, Click dos bot├Áes).

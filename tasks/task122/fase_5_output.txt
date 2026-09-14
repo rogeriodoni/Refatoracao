@@ -1,0 +1,9 @@
+﻿Fase 5 conclu├¡da. O arquivo `Formsigreimc.prg` foi atualizado com:
+
+1. **`ConfigurarPaginaDados()`** adicionado ÔÇö retorna `.T.` imediatamente pois o SIGREIMC ├® um form REPORT (layout FLAT, sem Page2 de dados). O m├®todo existe para compliance com a interface FormBase.
+
+2. **`InputMask = "999"`** adicionado em `txt_4c_Copias` ÔÇö presente no original (`GetCopias.InputMask = "999"`), estava ausente na implementa├º├úo anterior. Garante que apenas d├¡gitos sejam aceitos no campo de c├│pias.
+
+3. **`ForeColor = RGB(0,0,0)`** corrigido nos tr├¬s TextBoxes (`txt_4c_NotaIni`, `txt_4c_NotaFim`, `txt_4c_Copias`) ÔÇö o original especifica `ForeColor = 0,0,0` (preto) para todos esses campos.
+
+4. **Cabe├ºalho atualizado** para refletir a Fase 5/8.

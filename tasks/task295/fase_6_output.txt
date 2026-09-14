@@ -1,0 +1,9 @@
+﻿As corre├º├Áes est├úo aplicadas corretamente. Fase 6 conclu├¡da.
+
+**O que foi corrigido:**
+
+1. **Caption ausente** (`InicializarForm`, linha 74-75): `THIS.Caption` agora ├® setado com CHR() antes de `ConfigurarCabecalho()`, garantindo que os labels `lbl_4c_Sombra` e `lbl_4c_Titulo` exibam "Gera├º├úo de Movimenta├º├Áes de Estoque" em vez de vazio.
+
+2. **Column6.Text1.ForeColor verde** (`ConfigurarTextosGrdCab`, linhas 575-579): O `SetAll("ForeColor", RGB(0,0,0), "Text")` sobrescrevia a cor verde do Text1 da coluna "Confirma├º├úo". Adicionado `WITH .Column6.Text1` para restaurar `ForeColor=RGB(0,128,0)` e `FontBold=.T.` diretamente no Text1, conforme o SCX original.
+
+Este form OPERACIONAL n├úo tem campos de lookup (├® read-only com 2 grids) ÔÇö `ConfigurarPaginaDados` j├í estava completo desde a Fase 5. As fases 7 e 8 podem prosseguir normalmente (o form est├í funcionalmente completo, restando apenas integra├º├úo/testes).

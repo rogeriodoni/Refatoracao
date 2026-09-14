@@ -1,0 +1,278 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigRecch.SCX
+* Data/Hora: 16/05/26 15:13:11
+* Total de registros: 6
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECCH
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmbTpRel1
+  Parent: SIGRECCH
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGRECCH
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECCH
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 191
+  Width = 619
+  DoCreate = .T.
+  Caption = (prompt())
+  FontName = "Verdana"
+  Name = "SIGRECCH"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = -24
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 81
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 156
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 231
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 311
+  btnReport.Top = -1
+  btnReport.Width = 311
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECCH.cmbTpRel1
+------------------------------------------------------------
+  Height = 24
+  Left = 192
+  TabIndex = 1
+  Top = 131
+  Width = 100
+  Name = "cmbTpRel1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECCH.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Situação :"
+  Height = 15
+  Left = 131
+  Top = 135
+  Width = 50
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECCH
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+
+Do SigRecch With ThisForm.pcTitulo2,ThisForm.pcTitulo1,'PRINT',0,ThisForm.pcEmpresa,AllTrim(Str(ThisForm.cmbTpRel1.ListIndex,20,0))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+=DoDefault()
+
+WITH Thisform
+
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+Endwith	
+
+With ThisForm
+	.LockScreen = .t.
+	.pcTitulo1 = ''
+	.pcTitulo2 = ''
+	.pcEmpresa = ''
+	.cmbTpRel1.Clear
+	.cmbTpRel1.Alignment = 0
+	.cmbTpRel1.ColumnCount = 0
+	.cmbTpRel1.ColumnLines = .f.
+	.cmbTpRel1.IncrementalSearch = .t.
+	.cmbTpRel1.SpecialEffect = 0
+	.cmbTpRel1.Style = 2
+	.cmbTpRel1.FontName = 'Courier New'
+	.cmbTpRel1.FontSize = 9
+	.cmbTpRel1.AddItem('Descrição')
+	.cmbTpRel1.AddItem('Código')
+	.cmbTpRel1.ListIndex = 1
+	.cmbTpRel1.SetFocus
+	.Refresh
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+
+Local lnDecimals,lcFixed,lcEmpresa,lcTitulo1,lnTpRel1
+      
+m.lnDecimals = Set('Decimals',1)
+m.lcFixed = Set('Fixed',1)
+
+Set Decimals To 2
+Set Fixed On
+
+ThisForm.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _Empr)
+
+m.lnTpRel1 = ThisForm.cmbTpRel1.ListIndex
+m.lcEmpresa = crSigCdEmp.razas
+m.lcTitulo1 = 'Acompanhamento da Carteira de Clientes'
+m.lcTitulo2 = 'Vendedor'
+If m.lnTpRel1==1
+	m.lcMcrSql1 = ([select b.contavens as cvendedors,]+;
+	               [a.descrs as csituacaos,count(*) as nnreg1s]+;
+	               [ from SigCdCst a]+;
+	               [ inner join SigCdCli b on b.situas=a.codigos]+;
+	               [ group by b.Contavens,a.descrs]+;
+	               [ order by 1,2,3])
+Else
+	m.lcMcrSql1 = ([select b.contavens as cvendedors,]+;
+	               [a.codigos as csituacaos,count(*) as nnreg1s]+;
+	               [ from SigCdCst a]+;
+	               [ inner join SigCdCli b on b.situas=a.codigos]+;
+	               [ group by b.ContaVens,a.codigos]+;
+	               [ order by 1,2,3])
+EndIf
+
+ThisForm.podatamgr.SqlExecute(m.lcmcrSql1,"crRelCart1")
+If Used('crRelcart1')
+	Select ('crRelcart1')
+	Locate
+
+	If .Not.Eof('crRelcart1')
+		With ThisForm
+			.pcTitulo1 = m.lcTitulo1
+			.pcTitulo2 = m.lcTitulo2
+			.pcEmpresa = m.lcEmpresa
+		EndWith
+	EndIf
+EndIf
+Set Decimals To (m.lnDecimals)
+Set Fixed &lcFixed.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+
+Do SigRecch With ThisForm.pcTitulo2,ThisForm.pcTitulo1,'PREVIEW',0,ThisForm.pcEmpresa,AllTrim(Str(ThisForm.cmbTpRel1.ListIndex,20,0))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECCH
+RESERVED3 (ClassInfo): pcempresa
+pctitulo1
+pctitulo2
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

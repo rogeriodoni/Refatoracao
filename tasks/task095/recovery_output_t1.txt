@@ -1,0 +1,7 @@
+﻿Corrigido. O problema e a solu├º├úo:
+
+**Causa raiz**: O arquivo `FormSIGREEVV_mapeamento.json` tinha um mapeamento incorreto ÔÇö `SIGREEVV.cntMensagem` apontava para `cnt_4c_Cabecalho` (o container do cabe├ºalho escuro do form), quando deveria apontar para `pgf_4c_Paginas.Page1.cnt_4c_Mensagem` (o container de mensagem dentro da p├ígina de filtros).
+
+**Por que as diferen├ºas eram essas**: O validador lia `form.cnt_4c_Cabecalho` e encontrava Top=0, Left=0, Width=800, Height=80, SpecialEffect=2 (default). O original esperava Top=510, Left=152, Width=473, Height=56, SpecialEffect=0 ÔÇö que s├úo exatamente os valores que o c├│digo do form define corretamente em `cnt_4c_Mensagem`.
+
+**Fix aplicado**: Apenas o mapeamento JSON, sem alterar nenhum c├│digo `.prg`. As 5 diferen├ºas visuais ser├úo zeradas na pr├│xima execu├º├úo do validador.

@@ -1,0 +1,17 @@
+﻿Todas as edi├º├Áes est├úo corretas. A Fase 6 est├í completa.
+
+**Resumo das altera├º├Áes feitas em `FormSigPdMp4.prg`:**
+
+1. **`Col7ValidarQtd`** ÔÇö `Refresh()` movido para fora do `IF` de falha, garantindo que o grid mostre o `Pesof2s`/`Pesos` recalculado pelo BO ap├│s valida├º├úo bem-sucedida.
+
+2. **`Col10ValidarPeso`** ÔÇö Mesmo padr├úo: `Refresh()` incondicional ao final.
+
+3. **`Col11ValidarPesoFabr`** ÔÇö `Refresh()` incondicional ao final (o BO atualiza `Qtd2s` ou `Peso2s` derivados).
+
+4. **`ConfigurarPaginaLista`** ÔÇö Adicionado `BINDEVENT(Column11.Text1, "GotFocus", THIS, "Col11GotFocus")` para ativar a balan├ºa ao entrar na coluna.
+
+5. **`InicializarForm`** ÔÇö Adicionada chamada `THIS.ConfigurarBalanca()` ap├│s cria├º├úo do BO.
+
+6. **Novo m├®todo `ConfigurarBalanca()`** ÔÇö Tenta criar `CREATEOBJECT("fwbalanca")` e configura portas seriais com par├ómetros de `CrSigCdPam`. Falha graciosamente (`this_oBalanca = .NULL.`) se o cursor ou a classe n├úo estiver dispon├¡vel.
+
+7. **Novo m├®todo `Col11GotFocus()`** ÔÇö R├®plica fiel do `Column11.Text1.When` do legado: ativa a balan├ºa se `PesoBals=1`, l├¬ o peso capturado, e calcula `Qtd2s` ou `Peso2s` derivados usando as mesmas consultas a `SigCdUni`/`SigCdPro`/`SigCdGrp` j├í presentes no BO.

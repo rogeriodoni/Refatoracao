@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fTamanhoImagem", "fConfigGeral", "fVerificaPasta"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRIMA",
+      "evento": "Procedure",
+      "linhas": 262,
+      "codigoOriginal": "Local lcDir, lnArq, lcImg, lcPro, lcDpro2, lcDpro3, lcReff, lcFig, llOks\nLocal Array laArq(1)\n\nllOks = .t.\n\nlcDir = Alltrim(ThisForm.getArquivo.Value)\nlnTip = ThisForm.OptTipo.Value \n\nIf IsEmpty(lcDir)\n\t=MessageBox([O Diretório Não Foi Informado!!!], 0+64, [Diretório Inválido!!!], ThisForm.pnTimerMsg1)\n\tReturn .f.\t\nEndIf\n\nlnArq = ADir(laArq, lcDir + [*.JPG])\n\nIf (lnArq < 1)\n\t=MessageBox([O Diretório Não Contém Nenhuma Imagem do Tipo .JPG!!!], 0+64, [Arquivos Inválidos!!!], ThisForm.pnTimerMsg1)\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fTamanhoImagem",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "OptTipo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRIMA",
+      "evento": "Procedure",
+      "linhas": 121,
+      "codigoOriginal": "*** Mena - 30/01/2020 Exporta a imagem atual para arquivo e converte para base64\nLocal lcDir, lnArq, lcImg, lcPro, lcDpro2, lcDpro3, lcReff, lcFig, llOks\nLocal Array laArq(1)\n\nllOks = .T.\n\nlcDir = Alltrim(Thisform.getArquivo.Value)\n\nIf IsEmpty(lcDir)\n\t=Messagebox([O Diretório Não Foi Informado!!!], 0+64, [Diretório Inválido!!!], Thisform.pnTimerMsg1)\n\tReturn .F.\nEndif\n\n*!*\toProg = Createobject([fwprogressbar], [Processando Imagens...])\n*!*\toProg.Show\n\nlcFiltro = []\n\n*lcFiltro = [ AND CPROS IN(se... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRIMA",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "If ThisForm.pcTipo1 == 'A'\n\tClear Events\n\tCancel\n\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIMA",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n= DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIMA",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIMA",
+      "evento": "Init",
+      "linhas": 48,
+      "codigoOriginal": "parameters lcTipo1, lcPath1\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nm.lcTipo1 = Upper(Alltrim(Iif(Type('m.lcTipo1') == 'C', m.lcTipo1, '')))\nm.lcPath1 = Addbs(Alltrim(Iif(Type('m.lcPath1') == 'C', m.lcPath1, '')))\n\nThisForm.pnTimerMsg1 = Iif(m.lcTipo1 == 'A', 10000, 0)\n\nIf Not m.lcTipo1 == 'A' Or fVerificaPasta(m.lcPath1, 1) && checar se diretorio existe e se tem direito de gravacao...\n\tWith ThisForm\n\t\t.pcTipo1 = m.lcTipo1... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fVerificaPasta",
+        "metodosFormChamados": "pnTimerMsg1 = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRIMA.btnArquivo",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Local lcDir\n\nThisForm.getArquivo.Value = []\n\nlcDir = GetDir([C:\\], [Selecione o Diretório Abaixo :], [Seleção de Diretório de Imagens])\n\nIf Not IsEmpty(lcDir)\n\tThisForm.getArquivo.Value = lcDir\nEndIf\nThisForm.getArquivo.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIMA.btnProcessar",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Thisform.OptTipo.Value = 3\n\tThisform.Exportar\nElse\n\tThisform.Processamento\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIMA.btnSair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIMA.getArquivo",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "Local lcDir\n\nlcDir = Alltrim(This.Value)\n\nIf Not Empty(lcDir) And Not Directory(lcDir)\n\tlcDir = GetDir([C:\\], [Selecione o Diretório Abaixo :], [Seleção de Diretório de Imagens])\nEndIf\nThis.Value = lcDir\nThis.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

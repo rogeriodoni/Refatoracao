@@ -1,0 +1,56 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTPD.prg",
+    "timestamp":  "2026-09-10T00:07:54",
+    "correcoes":  [
+                      {
+                          "Tipo":  "OPTIONGROUP-WIDTH-ACOMODA",
+                          "Linha":  599,
+                          "Original":  "(auto-fix)",
+                          "Corrigido":  "(auto-fix)",
+                          "Descricao":  "OptionGroup obj_4c_OptTipos.Width=185 -\u003e 190 (acomodar Buttons + 10 margem)"
+                      },
+                      {
+                          "Tipo":  "CONTAINER_BOTOES_TRANSPARENTE",
+                          "Linha":  671,
+                          "Original":  ".BackStyle   = 1",
+                          "Corrigido":  ".BackStyle = 0",
+                          "Descricao":  "Container cnt_4c_BotoesAcao (hospeda botoes CRUD) deve ser transparente - NAO criar caixa cinza ao redor dos botoes"
+                      },
+                      {
+                          "Tipo":  "BOTAO-SAIDA-CANONICO",
+                          "Linha":  705,
+                          "Original":  "(auto-fix)",
+                          "Corrigido":  "(auto-fix)",
+                          "Descricao":  "Caption=\"Cancelar\" -\u003e \"Encerrar\" (padrao canonico CRUD)"
+                      },
+                      {
+                          "Tipo":  "CNT-OVERLAY-GRID-BACKSTYLE",
+                          "Linha":  671,
+                          "Original":  ".BackStyle = 0",
+                          "Corrigido":  ".BackStyle = 1",
+                          "Descricao":  "Container cnt_4c_botoesacao sobrepoe Grid com BackStyle=0 (ghost trails) - Pattern #107 forcou BackStyle=1"
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  866,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "AUTO-178-CONFIRMAR-DISABLED-EXCLUIR",
+                          "Linha":  1014,
+                          "Original":  "        loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando",
+                          "Corrigido":  "        loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando OR (THIS.this_cModoAtual = \"EXCLUIR\")",
+                          "Descricao":  "Pattern #178: cmd_4c_Confirmar.Enabled = loc_lEditando desabilita Confirmar em modo EXCLUIR (BtnExcluirClick chama HabilitarCampos(.F.) -\u003e loc_l\u003cEdit*\u003e=.F. -\u003e Confirmar disabled). Adicionado \u0027 OR (THIS.this_cModoAtual = \"EXCLUIR\")\u0027 para manter Confirmar habilitado em modo EXCLUIR (campos ficam readonly mas Confirmar precisa clicar). Origem: Erro140 (2026-09-01 FormDepartamento)."
+                      },
+                      {
+                          "Tipo":  "WARN-183-COLUMNCOUNT-EM-CARREGAR",
+                          "Linha":  380,
+                          "Original":  "loc_oGrid.ColumnCount = 2",
+                          "Corrigido":  "(remover — ColumnCount ja definido em ConfigurarAba*)",
+                          "Descricao":  "Pattern #183 (Erro144): ColumnCount reatribuido em metodo Carregar* (linha 380). Em VFP9, qualquer atribuicao a ColumnCount recria TODOS os objetos de coluna, destruindo controles AddObject (CheckBox/ComboBox). Remover esta linha se ColumnCount ja foi definido em ConfigurarAba*/ConfigurarGrid* durante inicializacao. Adicionar protecao defensiva: PEMSTATUS(grid.ColumnN, \u0027controle\u0027, 5) antes de acessar."
+                      }
+                  ],
+    "totalCorrecoes":  7
+}

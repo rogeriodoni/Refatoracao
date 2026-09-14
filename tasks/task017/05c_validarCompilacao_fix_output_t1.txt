@@ -1,0 +1,9 @@
+﻿**Corre├º├úo aplicada:**
+
+**Causa do erro**: `PUBLIC` s├│ aceita nomes de vari├íveis simples ou arrays. `go_4c_Sistema.cCodEmpresa` ├® uma propriedade de objeto ÔÇö o VFP9 n├úo consegue declarar propriedades de objetos como PUBLIC, gerando "Must be a variable or array".
+
+**Corre├º├úo**:
+- `Formsigtosen.prg` linha 79: removido `go_4c_Sistema.cCodEmpresa` do `PUBLIC`
+- `sigtosenBO.prg` linha 790: removido `go_4c_Sistema.cCodEmpresa` do `PUBLIC`
+
+A atribui├º├úo `go_4c_Sistema.cCodEmpresa = ...` logo abaixo permanece inalterada em ambos os arquivos ÔÇö ├® v├ílida pois `go_4c_Sistema` j├í ├® um objeto PUBLIC global, e acessar/atribuir suas propriedades n├úo requer declara├º├úo adicional.

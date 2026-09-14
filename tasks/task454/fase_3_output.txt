@@ -1,0 +1,19 @@
+﻿O arquivo foi criado corretamente. Resumo do que foi entregue na **Fase 3/8**:
+
+---
+
+**`FormJrn.prg`** ÔÇö 322 linhas, 9 m├®todos:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | `RETURN DODEFAULT()` ÔÇö FormBase chama InicializarForm automaticamente |
+| `InicializarForm()` | Cria JrnBO, chama ConfigurarPageFrame, guarda `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | PageFrame com `Top=-29`, `Tabs=.F.`, 2 pages; chama ConfigurarPaginaLista/Dados |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (+ lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (vazio), `cnt_4c_Saida` (vazio) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (vazio) |
+| `CarregarLista()` | Chama `JrnBO.Buscar("")` ÔÇö sem binding ao grid (Fase 4 completa) |
+| `AlternarPagina(n)` | Muda `ActivePage` e recarrega lista ao voltar para Page1 |
+| `TornarControlesVisiveis()` | Percorre Controls + Pages recursivamente |
+| `Destroy()` | Libera BO, fecha cursor_4c_Dados e cursor_4c_Meses, `DODEFAULT()` |
+
+**Regras aplicadas:** compensa├º├úo `+29` nos `Top` dos containers (`cntSombra.Top=1ÔåÆ30`, `Grupo_Op.Top=-1ÔåÆ28`, `Grupo_Salva.Top=13ÔåÆ42`), padr├úo can├┤nico `cnt_4c_Saida.Left=917`, nenhum `RETURN` dentro de `TRY/CATCH`, propriedades `this_cAnoAtual`/`this_cMesAtual` mapeadas do legado (`anoatu`/`mesatu`).

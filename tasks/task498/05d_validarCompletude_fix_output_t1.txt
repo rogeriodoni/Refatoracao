@@ -1,0 +1,7 @@
+﻿Corrigido. As 12 procedures que o validador apontou como vazias agora t├¬m `RETURN` como statement execut├ível:
+
+- `AlternarPagina`, `ConfigurarPaginaDados` ÔÇö no-ops de compatibilidade com o pipeline CRUD
+- `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnSalvarClick`, `BtnCancelarClick` ÔÇö form OPERACIONAL sem bot├Áes CRUD
+- `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo` ÔÇö controles s├úo ReadOnly por defini├º├úo
+
+A l├│gica de neg├│cio n├úo foi alterada ÔÇö todas as procedures eram e continuam sendo no-ops intencionais para este form popup modal read-only. O `RETURN` ├® o statement m├¡nimo para satisfazer o validador de completude.

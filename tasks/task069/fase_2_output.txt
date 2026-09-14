@@ -1,0 +1,15 @@
+﻿Phase 3 is done. The file `C:\4c\projeto\app\forms\relatorios\Formsigrecsm.prg` has been created (620 lines).
+
+Key design decisions applied:
+- **Pixel-perfect layout**: all filter controls at exact original Top/Left/Width positions from the SCX
+- **Flat form structure** (no PageFrame): same pattern as `Formsigrebal.prg`
+- **Cascading state management**: `txt_4c__Ds_GrEstoque` editable only when code is empty; `txt_4c__cd_estoque`/`txt_4c__ds_estoque` enabled only after a group is selected ÔÇö mirrors the original `When` clauses
+- **4 lookups with F4/Enter/DblClick**: empresa (SigCdEmp), grupo (SigCdCrg.ccargs/dcargs), conta/vendedor (SigCdCli.iclis/rclis), moeda (SigCdMoe)
+- **Default moeda** initialized from `SigCdPam.MoedaPs` (same as original)
+- **Default empresa** from `go_4c_Sistema.cCodEmpresa`
+- **OptionGroup** with 4 options (Sint├®tico/Anal├¡tico/Condi├º├úo de Pagamento/Comiss├úo dividida) matching original positions
+- **CheckBox** `chk_4c_FwChkComissao` for "N├úo incluir comiss├úo zerada"
+- **FormParaRelatorio** maps all 12 filter fields to `sigrecsmBO` properties
+- **ValidarFiltros** requires both dates + moeda (critical for currency conversion)
+- **BtnExcelClick** exports `tempo` cursor to XLS with ShellExecute
+- All Portuguese accents via `CHR()` ÔÇö no literal accented characters

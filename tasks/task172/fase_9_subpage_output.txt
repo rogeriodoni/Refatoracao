@@ -1,0 +1,8 @@
+﻿The implementation is correct. FASE 9 is complete. 
+
+Summary of what was found and done:
+- `ConfigurarAba3Operacoes()` was already mostly implemented (lines 2192-2426) with all the structural controls: `cnt_4c_Operacao` (container with label/textbox/editbox), `cmd_4c_ProcessarFinal` button, `pgf_4c_Operacoes` sub-pageframe with `grd_4c_CabOperas` (8 cols) and `grd_4c_ItnOperas` (9 cols)
+- **Missing**: `BINDEVENT` for `pgf_4c_Operacoes.Page2.Activate` and `THIS.TornarControlesVisiveis(loc_oPage)` at the end of the method
+- **Missing**: The `PgItensActivate()` PUBLIC handler (legacy `pgItens.Activate` set order/filter on `crItnOpera`; new version does `GO TOP` + `Refresh()` on `cursor_4c_ItnOperas`)
+
+Both gaps are now filled at lines 2427-2450.

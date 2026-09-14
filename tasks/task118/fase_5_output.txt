@@ -1,0 +1,10 @@
+﻿Fase 5 conclu├¡da. Foram adicionados ao `FormSigReIfp.prg`:
+
+1. **`ConfigurarPaginaDados()`** ÔÇö m├®todo chamado em `InicializarForm()` que:
+   - Corrige lacuna funcional: `BINDEVENT` para `txt_4c__dt_final.KeyPress` que estava ausente em `ConfigurarPaginaFiltros()`
+   - Adiciona `DblClick` na descri├º├úo do setor (`txt_4c_DsGrupo`) para abrir lookup mesmo sendo ReadOnly
+   - Define `ToolTipText` em todos os controles de filtro (datas, spinner, tipo material, recuperadora, setor)
+
+2. **`TeclaDtFinal()`** ÔÇö handler do `KeyPress` da data final que valida que ela n├úo ├® menor que a inicial, com aviso ao usu├írio e corre├º├úo autom├ítica
+
+Para forms REPORT n├úo existe Page2 (Dados), ent├úo `ConfigurarPaginaDados()` complementa a configura├º├úo da p├ígina ├║nica de filtros ÔÇö fixando o BINDEVENT faltante do `dt_final` e enriquecendo a UX com tooltips.

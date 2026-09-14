@@ -1,0 +1,23 @@
+[2026-04-28 10:53:39] [INFO] === CLAUDE CLI INVOKER ===
+[2026-04-28 10:53:39] [INFO] Prompt File: C:\4c\tasks\task021\runtime_fix_prompt_06_testForm_t2.md
+[2026-04-28 10:53:39] [INFO] Output File: C:\4c\tasks\task021\06_testForm_fix_output_t2.txt
+[2026-04-28 10:53:39] [INFO] Model: sonnet
+[2026-04-28 10:53:39] [INFO] Timeout: 3600 segundos
+[2026-04-28 10:53:39] [INFO] Max Output Tokens: 128000
+[2026-04-28 10:53:39] [INFO] Context Files: 0 arquivo(s)
+[2026-04-28 10:53:39] [INFO] Invocando Claude CLI...
+[2026-04-28 10:53:39] [INFO] Prompt carregado: 91705 caracteres
+[2026-04-28 10:53:39] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-04-28 10:53:39] [INFO] Tamanho total do prompt: 91705 caracteres
+[2026-04-28 10:53:39] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-04-28 10:56:55] [INFO] Claude CLI finalizado em 196.3895986 segundos
+[2026-04-28 10:56:55] [INFO] Exit Code: 0
+[2026-04-28 10:56:55] [INFO] Output salvo em: C:\4c\tasks\task021\06_testForm_fix_output_t2.txt
+[2026-04-28 10:56:55] [INFO] Output size: 714 bytes
+[2026-04-28 10:56:55] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-04-28 10:56:55] [INFO] Preview do output:
+[2026-04-28 10:56:55] [INFO] Corre+º+úo aplicada. O IP do servidor voltou para `192.168.15.101`.
+
+**Causa raiz:** `config.prg` tinha `DB_SERVER "192.168.200.10"` (servidor inexistente) em vez de `192.168.15.101`. O `SQLSTRINGCONNECT` tentava conectar a um host inacess+¡vel e, sem resposta TCP, aguardava o timeout do SO (~300s) ÔÇö bem al+®m dos 30s configurados pelo `SQLSETPROP(0, "ConnectTimeOut", 30)`, que funciona para conex+Áes recusadas mas n+úo para hosts completamente inacess+¡veis.
+
+**O que foi corrigido:** Um +

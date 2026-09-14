@@ -1,0 +1,230 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRGL2",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "LParameters plTipo\n\nLocal lcOrdemConta\n\nlcOrdemConta = Upper(Iif(Type('Thisform.cOrdConta')='C', Thisform.cOrdConta, ''))\n\nSelect TmpCabec\nIf Not Empty(lcOrdemConta) And InList(lcOrdemConta, 'ENTREGA', 'EMPDOPNUM')\n\tSet Order To &lcOrdemConta.\nElse\n\tSet Order To EmpDopNum\n\tThisform.cOrdConta = Order('TmpCabec')\nEndIf\n\nIf plTipo\n\tlnRGB4 = RGB(192,192,192)\n\tlnRGB7 = RGB(192,192,192)\n\tDo Case\n\t\tCase (Upper(Thisform.cOrdConta) = 'EMPDOPNUM')\n\t\t\tlnRGB4 = RGB(220,255,220)\n\n\t\tCase (Upper(Thisform.cOrdC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Order",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGL2",
+      "evento": "Init",
+      "linhas": 62,
+      "codigoOriginal": "LParameters _ParentForm, _Data, _ReservaAuto, pCnx, _nGerEmphPdr, _Autom, _NumeroOp\n\n=fConfigGeral()\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nIf (Type('pCnx') <> 'O')\n\t=Messagebox('Não Foi Passado o Parâmetro da Conexão!!!', 32, 'Contate o Suporte Técnico!!!' )\n\tReturn .f.\nEndIf\n\nThisForm.ParentForm    = _ParentForm\nThisForm.Datasessionid = _Data\nThisForm.Reserva       = _ReservaAuto\nThisForm.poDataMgr \t   = pCnx\nThisForm.P... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRGL2",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Thisform.mOrdemConta(.t.)\nThisForm.GradeOperação.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mOrdemConta",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGL2",
+      "evento": "Activate",
+      "linhas": 4,
+      "codigoOriginal": "Thisform.mOrdemConta(.t.)\nThisForm.GradeOperação.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mOrdemConta",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGL2.GradeOperação",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "Lparameters nColIndex\n\nSelect TmpItens\nSet Order to EmpDopNum\nSet Key To TmpCabec.Emps + TmpCabec.Dopes + Str(TmpCabec.Numes, 6)\nGo Top\n\nThisForm.getCliente.Refresh \nThisForm.ObsOperação.Refresh\nThisForm.GradeItens.Refresh\nThisForm.ObsItens.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGL2.GradeOperação.Column2.Header1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If (Upper(Order('TmpCabec')) <> 'EMPDOPNUM')\n\tSelect TmpCabec\n\tSet Order to EmpDopNum\n\tThisForm.gradeoperação.Refresh\n\tGo Top\n\tThisform.cOrdConta = Upper(Order('TmpCabec'))\n\tWith Thisform.gradeoperação\n\t\t.Column2.Header1.BackColor = RGB(220,255,220)\n\t\t.Column5.Header1.BackColor = RGB(192,192,192)\n\t\t.Refresh\n\tEndWith\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGL2.GradeOperação.Column5.Header1",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "If (Upper(Order('TmpCabec')) <> 'ENTREGA')\n\tSelect TmpCabec\n\tSet Order to Entrega\n\tThisForm.gradeoperação.Refresh\n\tGo Top\n\tThisform.cOrdConta = Upper(Order('TmpCabec'))\n\tWith Thisform.gradeoperação\n\t\t.Column2.Header1.BackColor = RGB(192,192,192) \n\t\t.Column5.Header1.BackColor = RGB(220,255,220)\n\t\t.Refresh\n\tEndWith\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGL2.GradeItens",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.ObsItens.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGL2.Processar",
+      "evento": "Click",
+      "linhas": 390,
+      "codigoOriginal": "Private pEdI, pEdF, pItn\n\nSelect TmpCabec\nSet Order To EmpDopNum\n\n_Contador = 0\nGo top\nlcJob = TmpCabec.Jobs\nScan For Flag\n\t_Contador = _Contador + 1\n\t*** Tiago - 10/04/2014 - SRCOM - Alterado para checar operações com JOB diferente\n\tIf lcJob <> TmpCabec.Jobs\n\t\tMessagebox([Não é permitido gerar OPs de operações com Jobs diferentes.],48,[Aviso])\n\t\tReturn .f.\n\tEndif\t\nEndScan\n\nIf (_Contador = 0)\n\t=Messagebox('Nenhuma Operação Foi Selecionada!!!', 32, '')\n\tThisForm.GradeOperação.Column1.SetFocus\n\tRe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute,UpDate,RollBack,commit,fSqlApagarTmp,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRGL2.Cancelar",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "If (Type('ThisForm.ParentForm') <> 'L')\n\tThisForm.ParentForm.Enabled = .t.\nEndIf\nThisForm.Release\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGL2.apaga",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Replace all Flag With .f. In TmpCabec\nThisForm.GradeOperação.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGL2.SelTudo",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Replace all Flag With .t. In TmpCabec\nThisForm.GradeOperação.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRGL2.getCliente",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

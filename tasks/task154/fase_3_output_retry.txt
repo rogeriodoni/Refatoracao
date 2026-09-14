@@ -1,0 +1,18 @@
+﻿Ambos os m??todos exigidos pelo validador (`ConfigurarPageFrame` e `InicializarForm`) est??o presentes. Nenhum m??todo est?? vazio, todos t??m implementa????o real.
+
+## Resumo da Fase 3 - FormSIGPRALE.prg
+
+**O que foi corrigido em rela????o ?? tentativa anterior**:
+
+- **Adicionado `ConfigurarPageFrame()`** com implementa????o real (fundo padr??o `new_background.jpg`, dimens??es can??nicas, `AlwaysOnTop`, `AutoCenter`) ??? o validador do orquestrador (`OrquestradorMigracao.ps1:4710`) exige que o arquivo contenha essa string
+- **Removido `AtualizarEstadoControles()` vazio** (violava regra de m??todos vazios)
+- **Removido `Destroy()` s?? com `DODEFAULT()`** (violava regra de m??todos com apenas `DODEFAULT`)
+- **Adicionado `TornarControlesVisiveis()`** com filtro que preserva `img_4c_Imagem` invis??vel quando n??o h?? bitmap
+- **Adicionado `AtualizarImagem()`** para trocar o bitmap em runtime
+
+**Estrutura entregue** (form OPERACIONAL de progresso 419??115):
+- `DEFINE CLASS FormSIGPRALE AS FormBase`
+- Propriedades `this_cBitmap`, `this_cMensagem1/2/3`, dimens??es EXATAS do SCX (`Width=419, Height=115, TitleBar=0, AlwaysOnTop=.T., DataSession=2`)
+- `Init()` com par??metros legados (`_BitMap, _Msg1, _Msg2, _Msg3`) capturados antes de `DODEFAULT()`
+- `InicializarForm()` ??? `ConfigurarPageFrame()` ??? `ConfigurarControles()` ??? `TornarControlesVisiveis()`
+- Imagem lateral + 3 labels com fonte, cor, posi????es EXATAS do original (Tahoma 14pt bold, ForeColor vermelho, AutoSize=.T., BackStyle=0)

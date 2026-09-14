@@ -1,0 +1,11 @@
+﻿O arquivo `Formsigredco.prg` foi criado com sucesso em `C:\4c\projeto\app\forms\relatorios\`.
+
+**Fase 3/8 entregue com:**
+
+- **DEFINE CLASS Formsigredco AS FormBase** ÔÇö dimens├Áes exatas do original (798├ù128), todas as propriedades do form e custom (this_nQbols, this_cEmps, this_cDopes, this_nNumes, this_nTpImpressao, etc.)
+- **Init() com LPARAMETERS** ÔÇö recebe os 9 par├ómetros do form chamador (qbols, Pcnx, cEmail, pEmp, pDop, pNum, pImpress, pForm, pChkImpDoc), desabilita o form chamador, seta Caption din├ómico, chama DODEFAULT(), e implementa l├│gica de impress├úo direta para TpImpressao 3/4 (incluindo cleanup antes de RETURN .F.)
+- **InicializarForm()** ÔÇö cria sigredcoBO, transfere par├ómetros, carrega DivNotas via CarregarLocalEmp() (com guard gb_4c_ValidandoUI), carrega m├íscaras decimais, chama ConfigurarCabecalho()
+- **ConfigurarCabecalho()** ÔÇö container cinza (100,100,100) cobrindo os 85px superiores do form, com lbl_4c_Sombra e lbl_4c_Titulo
+- **Destroy()** ÔÇö reabilita form chamador, reseta impressora, libera BO, chama DODEFAULT()
+
+Fases 4-8 adicionar├úo: CommandGroup cmg_4c_Botoes (Fase 4), CheckBoxes chk_4c_ChkNf/chk_4c_ChkIcentivo e AjustarCheckboxesPorTipo() (Fase 5), e BINDEVENTs + handlers de bot├Áes (Fases 7-8).

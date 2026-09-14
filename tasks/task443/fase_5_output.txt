@@ -1,0 +1,13 @@
+﻿Fase 5/8 conclu├¡da. O arquivo `FormGrupo.prg` foi atualizado com:
+
+- **`ConfigurarPaginaDados()`** ÔÇö cria `lbl_4c_GrandeGrupo` (Say4 do legado, `Left=588, Top=137`) e `txt_4c_GdeGrps` (getGdeGrps, `Left=667, Top=134, MaxLength=3`). O campo ├® habilitado/desabilitado com base no `this_cModoAtual` do form pai (replicando o comportamento `When` do legado que verificava `pcEscolha`).
+
+- **`TxtGdeGrpsKeyPress()`** ÔÇö guard Enter(13)/Tab(9)/F4(115), depois chama `ValidarGdeGrps()`.
+
+- **`ValidarGdeGrps()`** ÔÇö busca exata em `SigCdGpr WHERE Codigos = <valor>`; se n├úo encontrar, abre o picker.
+
+- **`AbrirBuscaGdeGrps()`** ÔÇö `FormBuscaAuxiliar` para `SigCdGpr` com colunas `Codigos` + `Descs` (nota: `SigCdGpr` usa `Descs`, n├úo `Descrs`).
+
+- `ConfigurarPageFrame()` atualizado para chamar `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`.
+
+A fase 6/8 adicionar├í o bot├úo `cmd_4c_BtnCarregar` (btnCarregar) com seu handler `BtnCarregarClick()`.

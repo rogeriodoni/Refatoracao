@@ -1,0 +1,16 @@
+﻿Fase 6 conclu├¡da. As altera├º├Áes no `Formsigrecnt.prg`:
+
+**`ConfigurarPaginaDados()`** ÔÇö 6 novos BINDEVENTs adicionados:
+- `TeclaNvl3` + `LimparNvl3Descendentes` para `txt_4c_Nvl3`
+- `TeclaNvl4` + `LimparNvl4Descendentes` para `txt_4c_Nvl4`
+- Clicks de todos os 4 bot├Áes do `cmg_4c_Botoes`
+
+**Novos m├®todos implementados:**
+- `TeclaNvl3/4` ÔÇö guard clause id├¬ntica ao `getNvl3/4.When` do legado (bloqueia se n├¡vel anterior vazio)
+- `ValidarNvl3/4` ÔÇö busca no cursor pr├®-carregado (`cursor_4c_SigLcNv3/4`); abre lookup se n├úo achar
+- `AbrirBuscaNvl3/4` ÔÇö filtra cursor por `Cods = nivel_anterior`, exibe `FormBuscaAuxiliar`
+- `LimparNvl3Descendentes` ÔÇö limpa DNvl3 + Nvl4 + DNvl4 (equivale ao `getNvl3.InteractiveChange`)
+- `LimparNvl4Descendentes` ÔÇö limpa apenas DNvl4 (equivale ao `getNvl4.InteractiveChange`)
+- `ValidarDataParaRelatorio` ÔÇö guard clause do `btnReport.Click` legado (data obrigat├│ria para bot├Áes 1-3)
+- `BtnVisualizarClick/ImprimirClick/ExcelClick` ÔÇö valida data ÔåÆ `FormParaRelatorio()` ÔåÆ chama m├®todo do BO
+- `BtnEncerrarClick` ÔÇö `THIS.Release()` sem valida├º├úo de data

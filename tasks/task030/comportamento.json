@@ -1,0 +1,86 @@
+{
+  "resumo": {
+    "totalMetodos": 4,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREANI",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "report form SigReAni preview NoConsole\nuse in CsCabecalho\nuse in CsRelatorio\n\nthisform.get_dt_inicial.setfocus\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_inicial",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREANI",
+      "evento": "Procedure",
+      "linhas": 158,
+      "codigoOriginal": "* declara as variáveis de cabeçalho\nlocal lcCbEmpresa,lcCbTitulo,lcCbPeriodo\n* declara as variáveis de campos\nlocal ldDtInicial,ldDtFinal\n* declara as variáveis auxiliares\nlocal lnDiaInicial,lnMesInicial,lnDiaFinal,lnMesFinal\n\n\n* inicializa as variáveis de campos\nldDtInicial = thisform.get_dt_inicial.value\nldDtFinal   = thisform.get_dt_final.value\n\n* inicializa as variáveis de cabeçalho\nThisForm.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _Empr)\nlcCbEmpresa = crSigCdEmp.Razas\nlcCbTit... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,Sqlexecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREANI",
+      "evento": "Init",
+      "linhas": 16,
+      "codigoOriginal": "=DoDefault()\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\nEndwith\t\n\n* inicialização das variáveis do formulário\nthisform.get_dt_inicial.value = date()\nthisform.get_dt_final.value = date()\nthisform.refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "value = date",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREANI",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "report form SigReAni to printer noconsole\nuse in CsRelatorio\nuse in CsCabecalho\n\nthisform.get_dt_inicial.setfocus\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_inicial",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

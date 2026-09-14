@@ -1,0 +1,39 @@
+﻿Analisei o arquivo completo. Ambos os problemas detectados s├úo **falsos positivos** do checker autom├ítico. N├úo h├í nada a corrigir.
+
+---
+
+## An├ílise dos 2 Problemas
+
+### Problema 1: [METODO-INEXISTENTE] `THIS.Width()`
+
+**Resultado da busca:** zero ocorr├¬ncias de `THIS.Width()` com par├¬nteses no arquivo.
+
+Todos os usos s├úo acesso de propriedade `THIS.Width` (sem par├¬nteses), que ├® sintaxe VFP9 correta:
+- Linha 131: `.Width = THIS.Width`
+- Linha 142: `.Width = THIS.Width`
+- Linha 157: `.Width = THIS.Width`
+- Linha 292: `loc_oPgf.Width = THIS.Width + 2`
+
+O checker gerou um falso positivo ÔÇö provavelmente confundido pelo padr├úo `.Width = THIS.Width` dentro de blocos `WITH` aninhados. **Nenhuma corre├º├úo necess├íria.**
+
+---
+
+### Problema 2: [LAYOUT-POSITION] `lbl_4c_Lbl_fornecedor` Top=113 vs original Top=198
+
+**Resultado:** Top=113 est├í **matematicamente correto**. O checker comparou coordenadas de origens diferentes sem considerar o offset do PageFrame.
+
+O padr├úo consistente em todo o arquivo ├® `top_pagina = top_original - PageFrame.Top`:
+
+| Controle | Top original (form) | Top migrado (page) | C├ílculo |
+|---|---|---|---|
+| lbl_4c_Label1 | 98 | 13 | 98ÔêÆ85=13 Ô£ô |
+| lbl_4c_Label2 | 123 | 38 | 123ÔêÆ85=38 Ô£ô |
+| lbl_4c_Label16 | 173 | 88 | 173ÔêÆ85=88 Ô£ô |
+| **lbl_4c_Lbl_fornecedor** | **198** | **113** | **198ÔêÆ85=113 Ô£ô** |
+| lbl_4c_Label5 | 226 | 141 | 226ÔêÆ85=141 Ô£ô |
+
+O PageFrame est├í em `Top=85` (linha 290). Alterar `113` para `198` deslocaria o label 85px para baixo dentro da p├ígina, quebrando o layout. **Nenhuma corre├º├úo necess├íria.**
+
+---
+
+O arquivo `FormSIGREAPR.prg` est├í correto. Os dois problemas reportados foram falsos positivos do pass de code review.

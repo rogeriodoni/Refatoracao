@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada: `.Check1.Value = .F.` ÔåÆ `.Check1.Value = 0`.
+
+**Causa raiz**: `CheckBox.Value` em VFP9 ├® tipado como num├®rico (`0`/`1`) por padr├úo. O ControlSource `crGrade.Atuals` (tipo `L`) s├│ ativa o binding depois que o controle j├í est├í inicializado. Nesse intervalo, atribuir `.F.` (l├│gico) ao `Value` num├®rico causa "Data type mismatch", que aborta `InicializarForm` e faz `CREATEOBJECT("FormEnd")` retornar `.NULL.`.
+
+Os outros dois erros (`Connection handle is invalid`) s├úo esperados no ambiente de teste automatizado sem conex├úo real com SQL Server ÔÇö eles s├úo capturados pelo CATCH e n├úo causam falha do teste de instancia├º├úo.

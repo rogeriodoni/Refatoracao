@@ -1,0 +1,3 @@
+﻿**Causa raiz**: No modo UI validation (`gb_4c_ValidandoUI = .T.`), `InicializarForm()` chama `ConfigurarGrid()` sem ter executado `CarregarCursoresIniciais()` ÔÇö portanto o cursor `CsSigCqChi` n├úo existe. A linha `RecordSource = "CsSigCqChi"` no VFP9 tenta validar o alias e lan├ºa `Alias 'CSSIGCQCHI' is not found`, abortando o CREATEOBJECT.
+
+**Corre├º├úo**: Envolver as atribui├º├Áes de `RecordSource`/`ControlSource` em `IF USED("CsSigCqChi")`. No caminho normal (com conex├úo BD), o cursor j├í foi criado por `CarregarCursoresIniciais()` antes de `ConfigurarGrid()` ser chamado, ent├úo o bind funciona normalmente. No modo UI validation, o bloco ├® ignorado e o grid fica sem binding (aceit├ível para valida├º├úo visual).

@@ -1,0 +1,14 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormSigPdMp8.prg` foi atualizado com todos os elementos esperados:
+
+**O que foi adicionado:**
+- **`ConfigurarPaginaLista()`** expandida para chamar 5 sub-m├®todos
+- **`ConfigurarGrdRetrab()`** ÔÇö cria `grd_4c_Retrab` (leitura, 4 colunas com ColumnOrder fiel ao original: Envelope|O.P.|Produto|Qtde)
+- **`ConfigurarGrdInc()`** ÔÇö cria `grd_4c_Inc` (edit├ível, 4 colunas: Codigo|Qtde|Funcionario|Descricao)
+- **`ConfigurarCmdgCompo()`** ÔÇö cria `cmdg_4c_Compo` (CommandGroup 2 bot├Áes: adicionar/remover NC, transparente como no original)
+- **`AdicionarTxtDescricao()`** ÔÇö cria `txt_4c_Descricao` com `ControlSource = "xNensiN.descs"`
+- **`AdicionarBtnOk()`** ÔÇö cria `cmd_4c_Ok` (posi├º├úo left=906 escalada de 725 no form 800px)
+- **`ConfigurarPaginaDados()`** expandida ÔÇö adiciona label + 3 TextBox read-only dentro de `cnt_4c_Operacao` (tmpnens.emps, tmpnens.dopps, tmpnens.numps)
+- **`CarregarGradeRetrab()`** ÔÇö vincula ambos os grids aos cursores `xMfas`/`xNensiN` com RecordSource + ControlSources + reconfigura├º├úo de headers
+- **`AlternarPagina()`** ÔÇö stub (form OPERACIONAL sem PageFrame)
+
+Todas as regras cr├¡ticas aplicadas: sem acentos literais (CHR()), headers reconfigurados ap├│s RecordSource, ColumnCount antes de RecordSource, RecordMark=.F./DeleteMark=.F., BackStyle=0/BorderStyle=0 no CommandGroup, FontName nos Buttons (n├úo no grupo).

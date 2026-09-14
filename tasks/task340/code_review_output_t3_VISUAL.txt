@@ -1,0 +1,12 @@
+﻿Agora vejo o fluxo completo. O `InicializarForm` j├í faz a propaga├º├úo corretamente nas linhas 93-94 ÔÇö **ap├│s** `ConfigurarCabecalho()` (linha 75) ter criado os objetos. A sequ├¬ncia ├®:
+
+1. Linha 72: `ConfigurarPageFrame()`
+2. Linha 75: `ConfigurarCabecalho()` ÔåÆ cria `cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo` com `Caption = ""`
+3. Linhas 78ÔÇô88: demais configura├º├Áes + `TornarControlesVisiveis()`
+4. **Linha 92**: `THIS.Caption = loc_cTitulo`
+5. **Linha 93**: `THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo` Ô£ô
+6. **Linha 94**: `THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo` Ô£ô
+
+O problema [TITULO-NAO-PROPAGADO] **n├úo existe** neste arquivo. A detec├º├úo automatizada foi um falso positivo: o analisador est├ítico viu `Caption = ""` dentro de `ConfigurarCabecalho` e concluiu que n├úo havia propaga├º├úo ÔÇö mas n├úo detectou as linhas 93ÔÇô94 que sobrescrevem esse valor ap├│s a cria├º├úo dos objetos.
+
+Nenhuma altera├º├úo ├® necess├íria. O c├│digo est├í correto.

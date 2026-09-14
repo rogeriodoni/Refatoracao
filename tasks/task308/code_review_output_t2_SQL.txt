@@ -1,0 +1,13 @@
+﻿An├ílise completa. Agora tenho o quadro claro dos dois problemas flagados.
+
+**Resultado da verifica├º├úo:**
+
+**[SQL-FILTRO-INVENTADO] `CONTROLCOUNT`** ÔÇö Falso positivo. As linhas 1151 e 1162 do Form cont├¬m `loc_oCtrl.ControlCount > 0`, que ├® uma propriedade VFP de objeto (conta filhos de um container), dentro de um loop `FOR`. N├úo h├í nenhuma cl├íusula SQL WHERE com essa palavra. O checker confundiu uma propriedade VFP com um filtro SQL. **Nenhuma corre├º├úo necess├íria.**
+
+**[SQL-FILTRO-INVENTADO] `CITENS`** ÔÇö Falso positivo. O `AND CItens = ...` aparece nas cl├íusulas WHERE de `Atualizar()` (linha 385) e `ExecutarExclusao()` (linha 415) do BO. O checker comparou o WHERE dessas opera├º├Áes UPDATE/DELETE com o WHERE do SELECT principal (`BuscarItens`), que usa `EmpDopNums + Dopes (join) + CPros (join)`. S├úo opera├º├Áes SQL diferentes:
+- O SELECT original filtra por `EmpDopNums + Dopes + CPros` ÔÇö correto, o migrado faz o mesmo.
+- O UPDATE/DELETE usa `EmpDopNums + CItens` ÔÇö `CItens` ├® o n├║mero sequencial do item e ├® o discriminador correto para identificar uma linha ├║nica em `SigMvItn`. Remov├¬-lo faria o UPDATE/DELETE afetar TODOS os itens da OP pelo `EmpDopNums` sozinho.
+
+Adicionalmente, o BO est├í marcado como `OPERACIONAL (somente leitura)`, ent├úo `Atualizar()` e `ExecutarExclusao()` s├úo c├│digo defensivo que nunca deveria ser chamado ÔÇö mas o WHERE com `CItens` est├í correto.
+
+**Conclus├úo: ambos os problemas flagados s├úo falsos positivos do checker.** O c├│digo migrado est├í correto em ambos os casos. Nenhuma altera├º├úo ├® necess├íria nos arquivos.

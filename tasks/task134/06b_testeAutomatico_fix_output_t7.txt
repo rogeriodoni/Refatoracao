@@ -1,0 +1,3 @@
+﻿The fix is applied. The root cause was that VFP9's `Shape` class does not have a `ForeColor` property ÔÇö when `AddObject()` is called, VFP9 internally tries to propagate the Form's default `ForeColor` to the newly added child control, and this throws `Property FORECOLOR is not found` when the child is a `Shape`.
+
+The fix replaces `"Shape"` with `"Container"`, which fully supports `ForeColor`. The visual properties are adjusted accordingly: `BackStyle = 1` (opaque) and `BackColor = RGB(136, 189, 188)` replaces the Shape-specific `BorderColor`. The object name `shp_4c_ShpRp`, its position/size, and `Visible = .F.` all remain unchanged ÔÇö all existing references to this object elsewhere in the form continue to work correctly.

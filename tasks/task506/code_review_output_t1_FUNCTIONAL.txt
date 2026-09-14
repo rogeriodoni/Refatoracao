@@ -1,0 +1,9 @@
+﻿Todas as 6 corre├º├Áes foram aplicadas. Resumo do que foi feito:
+
+| Problema | Corre├º├úo |
+|---|---|
+| **GRID-WITH** | `.RecordSource` e `.RecordSourceType` movidos para fora do `WITH`, usando refer├¬ncia expl├¡cita `loc_oGrid.*` |
+| **BUSCA-CURSOR (x3)** | Adicionado `loc_oForm.this_cCursorDestino = "<cursor>"` antes de `Mostrar()` em `AbrirBuscaCpf`, `ValidarDConta` e `AbrirBuscaConta` |
+| **AtualizarTotaisNaTela** | Adicionado `TRY/CATCH` e guard `VARTYPE(THIS.this_oBusinessObject) = "O"` (m├®todo existia, mas sem prote├º├úo) |
+| **EncerrarClick** | Adicionado `TRY/CATCH` e guard do BO (m├®todo existia, mas sem prote├º├úo) |
+| **Falsos positivos (4)** | `AtualizarLinhaGrid`, `AbrirBuscaConta`, `AbrirBuscaCpf`, `EncerrarClick` est├úo todos definidos no arquivo ÔÇö nenhuma a├º├úo necess├íria |

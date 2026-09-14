@@ -1,0 +1,9 @@
+﻿As edi├º├Áes est├úo corretas. A Fase 6 do `FormSigPrIbb.prg` est├í conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **`MontarGrade()`** ÔÇö `.Columns(loc_nI).FontName = "Courier New"` no loop (paridade com legado: `Column&lcCol..FontName = [Courier New]`) + binding defensivo de ControlSource dos EditBoxes (`obj_4c_GetLocals` / `obj_4c_GetTxtCds`) ap├│s o RecordSource ser definido, garantindo que o binding esteja ativo mesmo se `cursor_4c_Grade` n├úo existia durante o `AddObject`.
+
+2. **`SelecionarDadosForm()`** ÔÇö `THIS.grd_4c_Dados.Column1.SetFocus` ap├│s o Refresh, dentro de TRY/CATCH, equivalente ao `.grdItens.Column1.Setfocus` do legado.
+
+**Por que n├úo h├í mais mudan├ºas:** todos os controles do SCX original j├í estavam adicionados nas fases anteriores (Form ├® OPERACIONAL puro ÔÇö sem PageFrame CRUD, sem lookups, sem Salvar/Cancelar). A Fase 6 completou os ajustes de fidelidade que faltavam.

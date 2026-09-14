@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+File v├ílido e completo. Fase 4/8 conclu├¡da.
+
+**Resumo do que foi adicionado a `C:\4c\projeto\app\forms\cadastros\FormSRV.prg`:**
+
+1. **`ConfigurarPaginaLista()`** ÔÇö completada com:
+   - `cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo` (t├¡tulo din├ómico via `THIS.Caption`)
+   - `cnt_4c_Botoes` (Left=542) com os 5 bot├Áes CRUD (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones/captions can├┤nicos e `BINDEVENT` para cada um
+   - `cnt_4c_Saida` (Left=917, can├┤nico CLAUDE.md #10) com `cmd_4c_Encerrar`
+   - `grd_4c_Lista` com 2 colunas (C├│digo/Descri├º├úo), fonte Verdana, `GridLines=3`
+
+2. **`CarregarLista()`** ÔÇö busca via `SRVBO.Buscar("")` (filtra por `this_cTipo` j├í propagado no Init), reconfigura `ControlSource` + `Header1.Caption` ap├│s o `RecordSource` (evita reset de cabe├ºalhos), com guard `gb_4c_ValidandoUI`.
+
+3. **`AlternarPagina(par_nPagina)`** ÔÇö alterna Page1/Page2, recarrega a lista ao voltar para Page1.
+
+4. **`FormatarGridLista()`** ÔÇö Tahoma 8.
+
+5. **6 handlers `Btn*Click`** (todos `PUBLIC`, exigido pelo BINDEVENT): `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick` ÔÇö usam `NovoRegistro()`/`EditarRegistro()`/`CarregarPorCodigo()`/`Excluir()` do `SRVBO` j├í existentes, lendo o c├│digo selecionado de `cursor_4c_Dados.codservs`. Eles referenciam `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()` e `BOParaForm()` que ser├úo implementados nas pr├│ximas fases (Page2/campos) ÔÇö mesmo padr├úo usado em `FormCargo.prg`.

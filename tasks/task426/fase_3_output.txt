@@ -1,0 +1,14 @@
+﻿`C:/4c/projeto/app/forms/operacionais/FormFpm.prg` criado (402 linhas). Fase 3 entregue com estrutura completa:
+
+**O que foi criado:**
+- `DEFINE CLASS FormFpm AS FormBase` com todas as propriedades do SCX original (Width=683, Height=363, TitleBar=0, ControlBox=.F., DataSession=2)
+- `Init(par_oParentForm, par_cFpags)` ÔÇö armazena ref ao pai, cria FpmBO, desabilita pai, define Caption com CHR(237)/CHR(225) para acentos, chama DODEFAULT()
+- `InicializarForm()` ÔÇö chama ConfigurarPageFrame ÔåÆ ConfigurarContainersBase ÔåÆ ConfigurarPaginaLista ÔåÆ ConfigurarPaginaDados ÔåÆ CarregarDados ÔåÆ ativa Page1
+- `ConfigurarPageFrame()` ÔÇö PageFrame Top=-29, Height=Form.Height+29 (compensa├º├úo obrigat├│ria)
+- `ConfigurarContainersBase()` ÔÇö cnt_4c_Cabecalho (cinza RGB 100,100,100) e cnt_4c_Botoes (Left=457, alinhado com bot├Áes originais) em Page1; espelho em Page2
+- `ConfigurarPaginaLista/Dados()` ÔÇö labels lbl_4c_Sombra + lbl_4c_Titulo com AutoSize=.F. (regra #98)
+- `CarregarDados()` ÔÇö chama FpmBO.BuscarPorCondicao(this_cFpags)
+- `TornarControlesVisiveis()` ÔÇö recursivo, percorre Pages de PageFrames
+- `Destroy()` ÔÇö fecha cursores cursor_4c_FpagI/FpagITemp/ValidTT, reabilita pai, DODEFAULT() (regra #145)
+
+**Pr├│xima fase (4):** Adicionar `grd_4c_Dados` (4 colunas: Parcelas/ValMin/ValMax/Emp) e bot├Áes Inserir/Excluir/Encerrar com seus handlers Click.

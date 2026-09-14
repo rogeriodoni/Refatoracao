@@ -1,0 +1,18 @@
+﻿Fase 2 conclu├¡da. O `SIGREHPEBO.prg` agora est├í completo com todos os m├®todos necess├írios.
+
+**O que foi implementado:**
+
+| M├®todo | Equivalente no Legado | Descri├º├úo |
+|---|---|---|
+| `PrepararDados()` | `PROCEDURE processamento` | Executa `SELECT SigChe JOIN SigCdOpt WHERE Tipos='DB' GROUP BY Umovs` ÔåÆ `CsRelatorio` |
+| `MontarCabecalho()` | In├¡cio do `processamento` | Busca `SigCdEmp` pelo c├│digo da empresa ÔåÆ `CsCabecalho` |
+| `Imprimir()` | `PROCEDURE impressao` | Prepara dados + `REPORT FORM ... TO PRINTER PROMPT NOCONSOLE` |
+| `Visualizar()` | `PROCEDURE visualizacao` | Prepara dados + `REPORT FORM ... PREVIEW NOCONSOLE` |
+| `LimparCursores()` | ÔÇö | Fecha `CsRelatorio` e `CsCabecalho` ap├│s uso |
+| `ObterChavePrimaria()` | ÔÇö | Retorna `"RELATORIO=SIGREHPE"` |
+| `Inserir()` | ÔÇö | Delega para `Imprimir()` + registra auditoria IMPRESSAO |
+| `Atualizar()` | ÔÇö | Delega para `Visualizar()` + registra auditoria VISUALIZACAO |
+| `RegistrarAuditoria()` | ÔÇö | Grava em `LogAuditoria` sem interromper o relat├│rio |
+| `Destroy()` | ÔÇö | `LimparCursores()` + `DODEFAULT()` |
+
+**Diferen├ºa da vari├ível legada:** `_empr` ÔåÆ `go_4c_Sistema.cCodEmpresa` na query de `SigCdEmp`.

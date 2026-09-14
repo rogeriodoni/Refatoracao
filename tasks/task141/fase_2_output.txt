@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. A Fase 2 foi executada com sucesso.
+
+**Resumo do que foi implementado em `SigPdMfaBO.prg`:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `ObterChavePrimaria()` | PUBLIC | Retorna `this_cSigKey` |
+| `CarregarDoCursor()` | PUBLIC | Mapeia Grupods, Contads, NOps, cIdChaves |
+| `ValidarDados()` | PROTECTED | Valida Linha, Op, Grupo, Conta obrigat├│rios |
+| `CarregarParametros()` | PUBLIC | Carrega SigCdPac.SigKeys + SigCdPam params |
+| `CarregarGruposContabeis()` | PUBLIC | Cria TmpGccr com ├¡ndices BalCodigo/BalDescrs |
+| `CarregarContas()` | PUBLIC | Cria TmpCli com ├¡ndices IClis/BalCodigo/BalNome |
+| `GerarNumBatch()` | PROTECTED | MAX(Numps)+1 de SigCdNec para o DOP/empresa |
+| `GerarIdChaves()` | PROTECTED | DTOS + sequ├¬ncia 6-digits + SigKey = 20 chars |
+| `ProcessarMudancaFase()` | PUBLIC | L├│gica completa do Processa.Click: filtra OPs por faixa (lnOp├ù10000 a +9999), verifica ChkSubn em SigCdNec, calcula peso via SigOpPic, determina fase via SigCdPrf, INSERT em SigCdNec + SigPdMvf em transa├º├úo |
+| `Inserir()` | PUBLIC | Delega para `ProcessarMudancaFase()` |
+| `Atualizar()` | PUBLIC | Retorna .F. (n├úo aplic├ível) |
+| `RegistrarAuditoria()` | PUBLIC | INSERT em LogAuditoria |

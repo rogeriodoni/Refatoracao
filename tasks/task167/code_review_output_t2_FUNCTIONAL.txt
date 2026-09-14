@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬:
+
+**Problema 1 (CONTAINER-VISIVEL) ÔÇö CORRIGIDO:**  
+`shp_4c_Shape2` e `img_4c_FigJpg2` s├úo criados com `Visible=.F.` (linhas 1018 e 1030) dentro de `cnt_4c_InfoProd`. Como `cnt_4c_InfoProd` estava no INLIST mas a recurs├úo nos seus filhos continuava, esses dois controles eram for├ºados a `Visible=.T.` ÔÇö exibindo caixas vazias na Page2 antes do usu├írio selecionar um produto com foto. Adicionados ao INLIST (linha 224) para que permane├ºam `Visible=.F.` at├® `GrdDadosAfterRowColChange` habilit├í-los explicitamente quando h├í foto dispon├¡vel.
+
+**Problema 2 (NAVEGACAO-PAGINA) ÔÇö J├ü ESTAVA CORRETO:**  
+`GrdDadosDblClick` (linha 1253) j├í chama `THIS.GrdDadosAfterRowColChange(0)` antes de navegar para Page2. Esse handler executa `CarregarDoCursor` ÔåÆ `ObterDetalheProduto`, e popula `cnt_4c_DetalheLinha` (linhas 861ÔÇô875) e `cnt_4c_InfoProd` (linhas 877ÔÇô891) com os dados da linha selecionada. Nenhuma altera├º├úo necess├íria.

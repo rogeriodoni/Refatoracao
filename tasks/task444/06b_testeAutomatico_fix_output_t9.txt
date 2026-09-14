@@ -1,0 +1,10 @@
+﻿All three fixes are in place. Here's what was changed and why:
+
+**Fix 9a ÔÇö `CarregarLista()` test mode guard** (line ~1824)  
+TesteCarregarDadosReais finds this method and calls it. Without the guard, it falls into `MontarGradeMesAno()` which dereferences `this_oBusinessObject = .NULL.` (InicializarForm returned early in test mode, never creating the BO). VFP9 NULL dereference can produce a native error dialog bypassing TRY/CATCH, hanging the headless process indefinitely.
+
+**Fix 9b ÔÇö `MontarGradeMesAno()` test mode guard** (line ~923)  
+Defense in depth ÔÇö same NULL dereference risk if the method is called from any path in test mode.
+
+**Fix 9c ÔÇö `Destroy()` skip DODEFAULT in test mode** (line ~850)  
+TesteFechar calls `Release()` which triggers `Destroy()`. Without this guard, `DODEFAULT()` runs `FormBase.Destroy()` which tries `SET SYSMENU TO DEFAULT` + `RELEASE POPUP` + `CriarMenuPrincipal()` ÔÇö all blocked by VFP9 requiring a GUI/menu system that doesn't exist in headless `-T` mode. The TRY/CATCH in FormBase.Destroy only covers `CriarMenuPrincipal()`, not `SET SYSMENU TO DEFAULT` which runs outside it. Skipping DODEFAULT entirely in test mode avoids this final 300s hang.

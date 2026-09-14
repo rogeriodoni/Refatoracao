@@ -1,0 +1,15 @@
+﻿`C:\4c\projeto\app\classes\SigReJobBO.prg` criado com sucesso.
+
+**Fase 1 conclu├¡da.** O BO foi criado com:
+
+- **7 propriedades** mapeadas do form original:
+  - `this_oParentForm` ÔÇö refer├¬ncia ao form pai (acesso a cursors `TprMvCab`, `crSigOpCdI`, `crSigMvJbC`)
+  - `this_cCompTits` ÔÇö complemento dos t├¡tulos (obs do cabecalho do movimento)
+  - `this_nPassagem` ÔÇö controla qual relat├│rio gerar (1=crImpressao, 2=crImpressa2)
+  - `this_lChkImpDoc` / `this_lChkImpDocAcess` ÔÇö flags do form original
+  - `this_cContaEmail` ÔÇö para envio de email (bot├úo DocExcel=passagem dupla)
+  - `this_cCaminhoFRX` ÔÇö path para `SigReJb1.frx`
+
+- **Init()** configura tabela vazia (sem CRUD), caminho do FRX e passagem inicial = 1, depois chama `DODEFAULT()`.
+
+- **Pr├│xima fase (2/8):** implementar `PrepararDados()` com toda a l├│gica de `SelecionaDados()` ÔÇö cria `crCabecalho`, `crImpressao` e `crImpressa2` via SQL atrav├®s de `this_oParentForm.poDataMgr`.

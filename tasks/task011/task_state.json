@@ -1,0 +1,276 @@
+﻿{
+    "taskId":  "task011",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-04-11T11:12:27",
+    "atualizadoEm":  "2026-04-11T15:59:44",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-04-11T11:12:27",
+                                            "fim":  "2026-04-11T11:12:27",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task011\\sigcdpro.sct",
+                                            "baseName":  "sigcdpro",
+                                            "scxFile":  "C:\\4c\\tasks\\task011\\sigcdpro.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-04-11T11:12:27",
+                                          "fim":  "2026-04-11T11:12:28",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigcdpro",
+                                          "txtFile":  "C:\\4c\\tasks\\task011\\sigcdpro_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-11T11:12:30",
+                                              "fim":  "2026-04-11T11:12:32",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task011\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-11T11:12:35",
+                                              "fim":  "2026-04-11T11:12:35",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task011\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task011\\meta_prompt.md",
+                                              "boClass":  "ProdutoBO",
+                                              "formClass":  "FormProduto",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task011\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-11T11:12:35",
+                                              "fim":  "2026-04-11T11:12:37",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task011\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-04-11T11:12:37",
+                                               "fim":  "2026-04-11T11:12:39",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task011\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formpro_esqueleto.prg",
+                                                                "proBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-04-11T11:12:39",
+                                       "fim":  "2026-04-11T14:24:16",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\ProdutoBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  998.67,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormProduto.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  33480
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-04-11T14:24:16",
+                                                  "fim":  "2026-04-11T14:27:59",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormProduto.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\ProdutoBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-04-11T14:28:00",
+                                                 "fim":  "2026-04-11T14:28:03",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-04-11T15:54:47",
+                                       "fim":  "2026-04-11T15:54:50",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-04-11T15:54:50",
+                                               "fim":  "2026-04-11T15:59:32",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task011\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-04-11T15:59:39",
+                                        "fim":  "2026-04-11T15:59:44",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormProduto_20260411155943.html",
+                                        "diferencas":  0,
+                                        "erros":  4,
+                                        "totalProblemas":  4456,
+                                        "avisos":  4452
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-04-11T15:59:44",
+                                              "fim":  "2026-04-11T15:59:44",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task011_sigcdpro.md"
+                                          },
+                   "02a_reduzirArquivo":  {
+                                              "inicio":  "2026-04-11T11:12:28",
+                                              "status":  "COMPLETED",
+                                              "tentativas":  1,
+                                              "erro":  null,
+                                              "fim":  "2026-04-11T11:12:30",
+                                              "arquivoOriginal":  "C:\\4c\\tasks\\task011\\sigcdpro_form_codigo_fonte.txt",
+                                              "reducaoPercent":  65.9,
+                                              "tamanhoOriginalKB":  998.67,
+                                              "arquivoSlim":  "C:\\4c\\tasks\\task011\\sigcdpro_form_codigo_fonte_slim.txt",
+                                              "tamanhoSlimKB":  340.81
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-04-11T11:12:32",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-04-11T11:12:33",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task011\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-04-11T11:12:33",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-04-11T11:12:35"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-04-11T14:27:59",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-04-11T14:28:00",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormProduto_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormProduto.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task011\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-04-11T14:28:03",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-04-11T14:34:43",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  2,
+                                                 "mensagem":  "Corrigido automaticamente apos 2 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-04-11T14:34:43",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-04-11T15:54:46",
+                                          "passes":  6,
+                                          "problemas":  "[METODO-INEXISTENTE] Metodo \u0027THIS.MontarFiltro()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDPRO.Pagina.Lista.cntMensagem): Top original=32 vs migrado \u0027lbl_4c_Label10\u0027 Top=256 (diff=224px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Botoes\u0027 (parent: SIGCDPRO.Pagina.Lista): Top original=171 vs migrado \u0027cnt_4c_Botoes\u0027 Top=28 (diff=143px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Botoes\u0027 (parent: SIGCDPRO.Pagina.Lista): Left original=959 vs migrado \u0027cnt_4c_Botoes\u0027 Left=542 (diff=417px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDPRO.Pagina.Lista.CntAcabado): Top original=32 vs migrado \u0027lbl_4c_Say5\u0027 Top=316 (diff=284px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDPRO.Pagina.Lista.CntAcabado): Left original=31 vs migrado \u0027lbl_4c_Say5\u0027 Left=85 (diff=54px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Lista.CntAcabado): Top original=10 vs migrado \u0027lbl_4c_Say18\u0027 Top=341 (diff=331px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Lista.CntAcabado): Top original=61 vs migrado \u0027lbl_4c_Say22\u0027 Top=542 (diff=481px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDPRO.Pagina.Lista.CntAcabado): Top original=10 vs migrado \u0027lbl_4c_Say3\u0027 Top=266 (diff=256px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDPRO.Pagina.Lista.CntAcabado): Left original=223 vs migrado \u0027lbl_4c_Say3\u0027 Left=74 (diff=149px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say12\u0027 (parent: SIGCDPRO.Pagina.Lista.CntAcabado): Top original=10 vs migrado \u0027lbl_4c_Say12\u0027 Top=433 (diff=423px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say12\u0027 (parent: SIGCDPRO.Pagina.Lista.CntAcabado): Left original=272 vs migrado \u0027lbl_4c_Say12\u0027 Left=124 (diff=148px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lblGrupo\u0027 (parent: SIGCDPRO.Pagina.Lista.cntFiltros): Top original=18 vs migrado \u0027lbl_4c_LblGrupo\u0027 Top=182 (diff=164px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lblGrupo\u0027 (parent: SIGCDPRO.Pagina.Lista.cntFiltros): Left original=21 vs migrado \u0027lbl_4c_LblGrupo\u0027 Left=73 (diff=52px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label8\u0027 (parent: SIGCDPRO.Pagina.Dados.CntQtMin): Top original=5 vs migrado \u0027lbl_4c_Label8\u0027 Top=281 (diff=276px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label8\u0027 (parent: SIGCDPRO.Pagina.Dados.CntQtMin): Left original=8 vs migrado \u0027lbl_4c_Label8\u0027 Left=72 (diff=64px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=379 vs migrado \u0027lbl_4c_Say3\u0027 Top=266 (diff=113px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=546 vs migrado \u0027lbl_4c_Say3\u0027 Left=74 (diff=472px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=400 vs migrado \u0027lbl_4c_Say41\u0027 Top=290 (diff=110px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=505 vs migrado \u0027lbl_4c_Say41\u0027 Left=558 (diff=53px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say6\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=422 vs migrado \u0027lbl_4c_Say6\u0027 Top=291 (diff=131px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say6\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=539 vs migrado \u0027lbl_4c_Say6\u0027 Left=48 (diff=491px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=134 vs migrado \u0027lbl_4c_Label2\u0027 Top=331 (diff=197px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label10\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=451 vs migrado \u0027lbl_4c_Label10\u0027 Top=256 (diff=195px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label10\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=967 vs migrado \u0027lbl_4c_Label10\u0027 Left=74 (diff=893px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label9\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=451 vs migrado \u0027lbl_4c_Label9\u0027 Top=231 (diff=220px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label9\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=884 vs migrado \u0027lbl_4c_Label9\u0027 Left=58 (diff=826px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say11\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=278 vs migrado \u0027lbl_4c_Say11\u0027 Top=433 (diff=155px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say11\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=47 vs migrado \u0027lbl_4c_Say11\u0027 Left=494 (diff=447px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say12\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=301 vs migrado \u0027lbl_4c_Say12\u0027 Top=433 (diff=132px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say12\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=23 vs migrado \u0027lbl_4c_Say12\u0027 Left=124 (diff=101px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say15\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=157 vs migrado \u0027lbl_4c_Say15\u0027 Top=458 (diff=301px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say15\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=590 vs migrado \u0027lbl_4c_Say15\u0027 Left=498 (diff=92px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say16\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=230 vs migrado \u0027lbl_4c_Say16\u0027 Top=165 (diff=65px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say16\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=77 vs migrado \u0027lbl_4c_Say16\u0027 Left=138 (diff=61px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say17\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=253 vs migrado \u0027lbl_4c_Say17\u0027 Top=189 (diff=64px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say17\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=25 vs migrado \u0027lbl_4c_Say17\u0027 Left=138 (diff=113px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say8\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=182 vs migrado \u0027lbl_4c_Say8\u0027 Top=291 (diff=109px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say8\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=73 vs migrado \u0027lbl_4c_Say8\u0027 Left=250 (diff=177px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say9\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=206 vs migrado \u0027lbl_4c_Say9\u0027 Top=320 (diff=114px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say9\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=56 vs migrado \u0027lbl_4c_Say9\u0027 Left=756 (diff=700px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=181 vs migrado \u0027lbl_4c_Say18\u0027 Top=341 (diff=160px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=568 vs migrado \u0027lbl_4c_Say18\u0027 Left=117 (diff=451px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=137 vs migrado \u0027lbl_4c_Say22\u0027 Top=542 (diff=405px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=560 vs migrado \u0027lbl_4c_Say22\u0027 Left=9 (diff=551px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say10\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=158 vs migrado \u0027lbl_4c_Say10\u0027 Top=483 (diff=325px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say10\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=55 vs migrado \u0027lbl_4c_Say10\u0027 Left=147 (diff=92px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say14\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=398 vs migrado \u0027lbl_4c_Say14\u0027 Top=542 (diff=144px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say14\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=41 vs migrado \u0027lbl_4c_Say14\u0027 Left=360 (diff=319px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say13\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=203 vs migrado \u0027lbl_4c_Say13\u0027 Top=316 (diff=113px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say13\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=553 vs migrado \u0027lbl_4c_Say13\u0027 Left=495 (diff=58px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=374 vs migrado \u0027lbl_4c_Say5\u0027 Top=316 (diff=58px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=364 vs migrado \u0027lbl_4c_Say5\u0027 Left=85 (diff=279px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say18\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=398 vs migrado \u0027lbl_4c_Say18\u0027 Top=341 (diff=57px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say18\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=301 vs migrado \u0027lbl_4c_Say18\u0027 Left=117 (diff=184px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say24\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=384 vs migrado \u0027lbl_4c_Say24\u0027 Top=542 (diff=158px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say24\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=833 vs migrado \u0027lbl_4c_Say24\u0027 Left=324 (diff=509px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say25\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=384 vs migrado \u0027lbl_4c_Say25\u0027 Top=581 (diff=197px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say25\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=914 vs migrado \u0027lbl_4c_Say25\u0027 Left=678 (diff=236px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=269 vs migrado \u0027lbl_4c_Say7\u0027 Top=523 (diff=254px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=558 vs migrado \u0027lbl_4c_Say7\u0027 Left=25 (diff=533px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say31\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=448 vs migrado \u0027lbl_4c_Say31\u0027 Top=144 (diff=304px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say31\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=23 vs migrado \u0027lbl_4c_Say31\u0027 Left=583 (diff=560px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say41\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=502 vs migrado \u0027lbl_4c_Say41\u0027 Top=290 (diff=212px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say41\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=775 vs migrado \u0027lbl_4c_Say41\u0027 Left=558 (diff=217px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say42\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=323 vs migrado \u0027lbl_4c_Say42\u0027 Left=609 (diff=286px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say22\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Top original=247 vs migrado \u0027lbl_4c_Say22\u0027 Top=542 (diff=295px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say22\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDados): Left original=529 vs migrado \u0027lbl_4c_Say22\u0027 Left=9 (diff=520px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say6\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=581 vs migrado \u0027lbl_4c_Say6\u0027 Top=291 (diff=290px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say6\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=10 vs migrado \u0027lbl_4c_Say6\u0027 Left=48 (diff=38px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say8\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=542 vs migrado \u0027lbl_4c_Say8\u0027 Top=291 (diff=251px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say8\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=161 vs migrado \u0027lbl_4c_Say8\u0027 Left=250 (diff=89px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=473 vs migrado \u0027lbl_4c_Say18\u0027 Top=341 (diff=132px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=47 vs migrado \u0027lbl_4c_Say18\u0027 Left=117 (diff=70px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=474 vs migrado \u0027lbl_4c_Say22\u0027 Top=542 (diff=68px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=361 vs migrado \u0027lbl_4c_Say22\u0027 Left=9 (diff=352px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say13\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=542 vs migrado \u0027lbl_4c_Say13\u0027 Top=316 (diff=226px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say13\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=416 vs migrado \u0027lbl_4c_Say13\u0027 Left=495 (diff=79px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say12\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=542 vs migrado \u0027lbl_4c_Say12\u0027 Top=433 (diff=109px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say12\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=563 vs migrado \u0027lbl_4c_Say12\u0027 Left=124 (diff=439px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say15\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=324 vs migrado \u0027lbl_4c_Say15\u0027 Top=458 (diff=134px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say15\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=421 vs migrado \u0027lbl_4c_Say15\u0027 Left=498 (diff=77px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say16\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=324 vs migrado \u0027lbl_4c_Say16\u0027 Top=165 (diff=159px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say16\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=45 vs migrado \u0027lbl_4c_Say16\u0027 Left=138 (diff=93px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=435 vs migrado \u0027lbl_4c_Say3\u0027 Top=266 (diff=169px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=39 vs migrado \u0027lbl_4c_Say3\u0027 Left=74 (diff=35px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=435 vs migrado \u0027lbl_4c_Say5\u0027 Top=316 (diff=119px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=465 vs migrado \u0027lbl_4c_Say5\u0027 Left=85 (diff=380px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=36 vs migrado \u0027lbl_4c_Say41\u0027 Left=558 (diff=522px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Top original=581 vs migrado \u0027lbl_4c_Say7\u0027 Top=523 (diff=58px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgComposicao): Left original=161 vs migrado \u0027lbl_4c_Say7\u0027 Left=25 (diff=136px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDadosFiscais): Top original=216 vs migrado \u0027lbl_4c_Say18\u0027 Top=341 (diff=125px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDadosFiscais): Top original=241 vs migrado \u0027lbl_4c_Say22\u0027 Top=542 (diff=301px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDadosFiscais): Left original=87 vs migrado \u0027lbl_4c_Say22\u0027 Left=9 (diff=78px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDadosFiscais): Top original=458 vs migrado \u0027lbl_4c_Say7\u0027 Top=523 (diff=65px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDadosFiscais): Left original=122 vs migrado \u0027lbl_4c_Say7\u0027 Left=25 (diff=97px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgDadosFiscais): Left original=395 vs migrado \u0027lbl_4c_Say41\u0027 Left=558 (diff=163px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Top original=474 vs migrado \u0027lbl_4c_Say18\u0027 Top=341 (diff=133px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Left original=527 vs migrado \u0027lbl_4c_Say18\u0027 Left=117 (diff=410px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say13\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Top original=156 vs migrado \u0027lbl_4c_Say13\u0027 Top=316 (diff=160px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say13\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Left original=33 vs migrado \u0027lbl_4c_Say13\u0027 Left=495 (diff=462px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Top original=306 vs migrado \u0027lbl_4c_Say7\u0027 Top=523 (diff=217px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Left original=72 vs migrado \u0027lbl_4c_Say7\u0027 Left=25 (diff=47px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Top original=331 vs migrado \u0027lbl_4c_Say22\u0027 Top=542 (diff=211px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Left original=45 vs migrado \u0027lbl_4c_Say22\u0027 Left=9 (diff=36px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say8\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Left original=72 vs migrado \u0027lbl_4c_Say8\u0027 Left=250 (diff=178px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say9\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Top original=231 vs migrado \u0027lbl_4c_Say9\u0027 Top=320 (diff=89px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say9\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Left original=58 vs migrado \u0027lbl_4c_Say9\u0027 Left=756 (diff=698px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Top original=181 vs migrado \u0027lbl_4c_Say5\u0027 Top=316 (diff=135px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say10\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Top original=256 vs migrado \u0027lbl_4c_Say10\u0027 Top=483 (diff=227px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say10\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Left original=74 vs migrado \u0027lbl_4c_Say10\u0027 Left=147 (diff=73px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Top original=206 vs migrado \u0027lbl_4c_Say41\u0027 Top=290 (diff=84px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP): Left original=79 vs migrado \u0027lbl_4c_Say41\u0027 Left=558 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosConsP): Top original=521 vs migrado \u0027lbl_4c_Say18\u0027 Top=341 (diff=180px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosConsP): Left original=642 vs migrado \u0027lbl_4c_Say18\u0027 Left=117 (diff=525px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say16\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgCusto): Top original=415 vs migrado \u0027lbl_4c_Say16\u0027 Top=165 (diff=250px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say16\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgCusto): Left original=52 vs migrado \u0027lbl_4c_Say16\u0027 Left=138 (diff=86px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgCusto): Top original=159 vs migrado \u0027lbl_4c_Say18\u0027 Top=341 (diff=182px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgCusto): Top original=415 vs migrado \u0027lbl_4c_Say22\u0027 Top=542 (diff=127px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgCusto): Left original=479 vs migrado \u0027lbl_4c_Say22\u0027 Left=9 (diff=470px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgCusto): Top original=445 vs migrado \u0027lbl_4c_Say3\u0027 Top=266 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDPRO.Pagina.Dados.pgframeDados.pgCusto): Left original=35 vs migrado \u0027lbl_4c_Say3\u0027 Left=74 (diff=39px, tolerancia=30px)",
+                                          "tentativas":  5,
+                                          "problemasRestantes":  122
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-04-11T15:54:46",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-04-11T15:54:47",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\ProdutoBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormProduto.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-04-11T15:59:32",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-04-11T15:59:39",
+                                             "thresholdPx":  5,
+                                             "unmatched":  300,
+                                             "errors":  303,
+                                             "matched":  102,
+                                             "warnings":  268,
+                                             "reportFile":  "C:\\4c\\tasks\\task011\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

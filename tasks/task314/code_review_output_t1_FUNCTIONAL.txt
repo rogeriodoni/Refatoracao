@@ -1,0 +1,5 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente. Resumo:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` substitu├¡do: o `DODEFAULT()` era no-op (FormBase n├úo define esse m├®todo), portanto nunca iterava os controles. Agora usa `FOR EACH` sobre `THIS.Controls`, seta `Visible=.T.` para todos exceto `cnt_4c_sombra` e `cnt_4c_grade` (que ficam no INLIST e t├¬m sua visibilidade gerenciada individualmente via `ConfigurarPaginaLista/ConfigurarPaginaDados`). `cnt_4c_Inu` e `cmd_4c_Inu` s├úo explicitamente ocultados ap├│s o loop.
+
+**[GRID-WITH]** ÔÇö Em `CmdInuClick` (linha 1638): `.RecordSource = "csInutil"` foi movido para fora do `WITH grd_4c_Inu`, eliminando o risco de "Unknown member COLUMN1" causado pelo rebind interno do grid ainda dentro do WITH.

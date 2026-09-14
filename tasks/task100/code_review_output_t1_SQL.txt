@@ -1,0 +1,9 @@
+﻿All three fixes are in place and look correct. Here's a summary of what was changed:
+
+**sigrefecBO.prg:**
+- **USUARS fix**: Removed `AND e.Usuars = EscaparSQL(...)` from the main SQL query. Added a VFP-side `DELETE FROM crDados WHERE Usuars != PADR(...)` after the data is fetched ÔÇö consistent with the existing VFP-side DELETE pattern already in the file.
+- **NUMES fix**: Replaced the 3-table join query (`SigMvCab e, SigCdOpe o, SigMvPec p`) that used `p.Codigos = e.Numes + (o.NDopes * 1000000)` in WHERE with a direct single-table lookup `WHERE p.Codigos = LTRIM(STR(crDetalhe.Codigos, 10))` ÔÇö same pattern already used at line 167 for crPags2.
+
+**Formsigrefec.prg:**
+- **CEMPS fix (LimparCampos)**: Removed the `SQLEXEC` call to `SigCdEmp WHERE Cemps = ...`. Company description is now read directly from `go_4c_Sistema.cEmpresa`, which is already available as a global.
+- **CEMPS fix (ValidarEmps)**: Removed the SQL validation block. Now checks if the entered code matches `go_4c_Sistema.cCodEmpresa` to fill the description; otherwise opens the search dialog.

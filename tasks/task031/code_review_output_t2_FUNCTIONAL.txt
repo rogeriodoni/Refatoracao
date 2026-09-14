@@ -1,0 +1,9 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito:
+
+**Problema real**: Dentro dos blocos `WITH .Buttons(N)`, `THIS.Width` retorna a largura do Form (800px) e estava sendo atribu├¡da ├á largura de cada bot├úo do CommandGroup. Isso causava bot├Áes de 800px sobrepostos e o CommandGroup se estendendo al├®m dos limites do form (Left=527 + Width=800 = 1327px).
+
+**Corre├º├úo**:
+- `cmg_4c_Botoes.Width`: `THIS.Width - 527` ÔåÆ 273px (preenche o espa├ºo restante do cabe├ºalho a partir de Left=527)
+- `Buttons(1-4).Width`: `65` ÔåÆ compat├¡vel com o espa├ºamento de 66px entre os Left values (5, 71, 137, 203)
+
+`Width` ├® uma propriedade nativa de VFP9 (n├úo um m├®todo), portanto `THIS.Width` sem par├¬nteses ├® sintaxe v├ílida ÔÇö o detector de c├│digo confundiu o padr├úo. O erro real era sem├óntico: valor incorreto sendo propagado para os bot├Áes.

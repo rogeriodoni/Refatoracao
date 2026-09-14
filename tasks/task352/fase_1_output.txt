@@ -1,0 +1,13 @@
+﻿O arquivo `CADBO.prg` est├í completo e correto. Aqui um resumo do que foi criado:
+
+**`C:\4c\projeto\app\classes\CADBO.prg`** ÔÇö BO completo para `SigCdCad`:
+
+| Aspecto | Detalhe |
+|---------|---------|
+| **Propriedades** | `this_cTipoCads`, `this_cPkChaves`, `this_cCodCads`, `this_cDesCads`, `this_cTxtCads`, `this_cUsuars`, `this_dDtIncs`, `this_cUsuAlts`, `this_dDtAlts` |
+| **PK** | `pkchaves char(20)` ÔÇö gerado via `SELECT LEFT(NEWID(),20)` no SQL Server |
+| **Filtro param├®trico** | `this_cTipoCads` filtra todas as queries ÔÇö essencial porque o mesmo form serve m├║ltiplos tipos de cadastro |
+| **M├®todos** | `Init`, `ObterChavePrimaria`, `LimparDados`, `CarregarDoCursor`, `Buscar`, `CarregarPorCodigo`, `VerificarDuplicidade`, `Inserir`, `Atualizar`, `ExecutarExclusao`, `InicializarValoresPadrao` |
+| **Regras cr├¡ticas** | Nenhum RETURN dentro de TRY/CATCH; `SELECT (par_cAliasCursor)` antes de acessar campos; `ISNULL()` guardando campos datetime nullable |
+
+A Fase 1 est├í entregue. Como este ├® um BO parametrizado (o mesmo form abre diferentes categorias via `this_cTipoCads`), o FormCAD tamb├®m precisar├í receber o par├ómetro de tipo na pr├│xima fase.

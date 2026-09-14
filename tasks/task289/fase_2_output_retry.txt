@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. Adicionei ao `SigPrGl2BO.prg`:
+
+- **`Inserir()`** (PROTECTED) ÔÇö INSERT em `SigMvCab` com 15 colunas mapeadas das propriedades `this_*`, usando `EscaparSQL`, `FormatarNumeroSQL` e `FormatarDataSQL`. Chama `RegistrarAuditoria("INSERT")` no sucesso.
+- **`Atualizar()`** (PROTECTED) ÔÇö UPDATE em `SigMvCab` filtrando por `EmpDopNums` (chave C(29)), atualiza 11 campos + `DtAlts = GETDATE()`. Chama `RegistrarAuditoria("UPDATE")` no sucesso.
+- **`ExecutarExclusao()`** (PROTECTED) ÔÇö DELETE por `EmpDopNums`. Chama `RegistrarAuditoria("DELETE")` antes do DELETE (para preservar chave no log).
+- **`ObterChavePrimaria()`** promovida a `PROTECTED` (alinhando com `BusinessBase`).
+
+Todos os m├®todos seguem o padr├úo: `loc_lSucesso` inicial `.F.` ÔåÆ TRY com SQL ÔåÆ CATCH com `MsgErro` verboso (Message + LN) ÔåÆ RETURN da flag. `RegistrarAuditoria` ├® herdada de `BusinessBase` e usa `ObterChavePrimaria()` para gravar em `LogAuditoria`.

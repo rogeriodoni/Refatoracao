@@ -1,0 +1,3 @@
+﻿O problema era `DataSession = 2` na defini├º├úo do form. Com essa propriedade, o form criava uma sess├úo de dados privada ÔÇö o cursor `cursor_4c_Dados` gerado em `CarregarLista()` ficava isolado nessa sess├úo, enquanto o teste verificava `USED("cursor_4c_Dados")` na sess├úo compartilhada (DataSession 1) e n├úo encontrava nada.
+
+A corre├º├úo: removido `DataSession = 2` do `FormSIGPRINT.prg`. O form passa a usar a sess├úo padr├úo (DataSession 1), o cursor fica vis├¡vel para o framework de teste, e os outros 8 testes j├í passando continuam inalterados.

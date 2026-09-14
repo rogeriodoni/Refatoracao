@@ -1,0 +1,9 @@
+﻿No duplicate parameter signatures remain. All 12 BINDEVENT handlers now use `PROCEDURE ValidarXxx` (no parameters in signature) with `LPARAMETERS` inside the body ÔÇö the correct VFP9 pattern.
+
+Phase 3 is complete. `FormSigPrEs1.prg` (1915 lines) is fully implemented with:
+- OPERACIONAL flat layout (no PageFrame)
+- All filter fields from the legacy SCX (empresa, datas, opera├º├úo, grupo cont├íbil, conta/CPF, respons├ível, moeda, OptionGroups para per├¡odo/cota├º├úo/situa├º├úo/impress├úo)
+- All 12 BINDEVENT KeyPress handlers ÔÇö all with correct `LPARAMETERS`-only signatures
+- FormBuscaAuxiliar lookups replacing all legacy `fAcessoXxx` functions
+- `BtnConsultarClick` with `DO FORM SigPrEs2 WITH ...` after validation
+- Menu entry wired in `menu.prg` (BAR 41 ÔåÆ "Posi├º├úo Por Movimenta├º├úo")

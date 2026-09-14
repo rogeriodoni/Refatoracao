@@ -1,0 +1,611 @@
+{
+  "resumo": {
+    "totalMetodos": 36,
+    "metodosComSQL": 10,
+    "metodosComValidacao": 11,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoEmpresa", "fwBuscaInt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCNF",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "pSeries    = ThisForm.Pagina.Lista.cntFiltros.Get_Serie.Value\npEmisDe    = IIf(!Empty(pSeries),ThisForm.Pagina.Lista.cntFiltros.DtIni.Value,Null)\npEmisAte   = IIf(!Empty(pSeries),ThisForm.Pagina.Lista.cntFiltros.DtFim.Value,Null)\npNFisDe    = Space(6)\npNFisAte   = Replicate(Chr(254),6)\npCancelas  = .F.\npOpE\t   = Iif(ThisForm.Pagina.Lista.cntFiltros.optFiltro.Value = 2, [S], [E])\npOpS\t   = Iif(ThisForm.Pagina.Lista.cntFiltros.optFiltro.Value = 1, [E], [S])\npcemps     = ThisForm.pEmps \n\nSelect CrS... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Serie,optFiltro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF",
+      "evento": "Init",
+      "linhas": 156,
+      "codigoOriginal": "LParameters _acesso\n\nPrivate pEmisDe,pEmisAte,pSeries,pNFisDe,pNFisAte,pCancelas,pItras,pDopes,pNumes,pIclis,pCpros,pFPags,lcDtIni,lcDtFim,;\n\t\tpItras,pDopes,pNumes,pIclis,pCpros,pFpags,pNEmps,pOpE,pOpS\n\nThisForm.poDataMgr = CreateObject('fSqlConector')\n\nthisform.pagina.lista.cntFiltros.getEmp.Value = _empr\n\nthisform.pemps = _empr\npcemps     = _empr\t\npSeries    = ''\npEmisDe    = Null\npEmisAte   = Null\npOpE\t   = [E]\npOpS       = [S]\npNFisDe    = ''\npNFisAte   = ''\npCancelas  = .F.\npItras     = ''\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr = CreateObject,SqlExecute,Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF",
+      "evento": "Click",
+      "linhas": 59,
+      "codigoOriginal": "LParameters Opcao\nLocal lcSerie, lcNota\n\nIf Type('Opcao') = 'N'\n\tThis.Value = Opcao\nEndIf\nIf Inlist(This.Value,1,3,4)\n\tThisForm.mAtivapagina1\n\tReturn\nEndIf\nIf !DoDefault(Opcao)\n\tThisForm.mAtivapagina1\n\tReturn\nEndIf\n\nIf ThisForm.pcEscolha = 'CONSULTAR'\n\tpItras = CrSigMvNfi.CodTrans\n\tThisForm.poDataMgr.Requery('CrSigPrTrp')\n\tSelect CrSigPrTrp\n\tGo Top\n\tThis.Parent.Parent.Dados.Pagina.Impostos.Get_Transp.Refresh\n\tThis.Parent.Parent.Dados.Pagina.Impostos.Get_Nome.Refresh\n\tThis.Parent.Parent.Dados.Pag... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery,SetFocus",
+        "controlesReferenciados": "Get_Transp,Get_Nome,Get_Endereço,Get_Cidade,Get_Estado,Get_Placa,Get_UFPlaca,Get_Frete,Get_Nota",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "DoDefault()\nThisForm.mAtivapagina1",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.InserirCarta",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "Local lcSerie,ldEmisDe,ldEmisAte,lnNota\n\nlcSerie   = ThisForm.Pagina.Lista.cntFiltros.Get_Serie.Value\nldEmisDe  = ThisForm.Pagina.Lista.cntFiltros.DtIni.Value\nldEmisAte = ThisForm.Pagina.Lista.cntFiltros.DtFim.Value\npOpE\t  = Iif(ThisForm.Pagina.Lista.cntFiltros.optFiltro.Value = 2, [S], [E])\npOpS\t  = Iif(ThisForm.Pagina.Lista.cntFiltros.optFiltro.Value = 1, [E], [S])\n\nIf !Empty(lcSerie) And !Empty(ldEmisDe) And !Empty(ldEmisAte) And reccount('CrSigMvNfi')<>0\n\tSelect CrSigMvNfi\n\tlnNota = CrSigMvN... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Serie,optFiltro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.AlteraCarta",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "Local lcSerie,ldEmisDe,ldEmisAte\n\nlcSerie   = ThisForm.Pagina.Lista.cntFiltros.Get_Serie.Value\nldEmisDe  = ThisForm.Pagina.Lista.cntFiltros.DtIni.Value\nldEmisAte = ThisForm.Pagina.Lista.cntFiltros.DtFim.Value\npOpE\t  = Iif(ThisForm.Pagina.Lista.cntFiltros.optFiltro.Value = 2, [S], [E])\npOpS\t  = Iif(ThisForm.Pagina.Lista.cntFiltros.optFiltro.Value = 1, [E], [S])\n\nIf !CrSigMvNfi.Correcs\n\tMessageBox('Nota sem Correção !!',0+48,'')\nElse\n\tIf !Empty(lcSerie) And !Empty(ldEmisDe) And !Empty(ldEmisAte) A... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Serie,optFiltro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.ImpCarta",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "Local lcSerie,ldEmisDe,ldEmisAte,lcEDNs,lcNFisDe,lcNFisAte\n\nlcSerie   = ThisForm.Pagina.Lista.cntFiltros.Get_Serie.Value\nldEmisDe  = ThisForm.Pagina.Lista.cntFiltros.DtIni.Value\nldEmisAte = ThisForm.Pagina.Lista.cntFiltros.DtFim.Value\nlcEDNs    = CrSigMvNfi.EmpDopNums\nlcNFisDe  = CrSigMvNfi.nFis\nlcNFisAte = CrSigMvNfi.nFis\npOpE\t  = Iif(ThisForm.Pagina.Lista.cntFiltros.optFiltro.Value = 2, [S], [E])\npOpS\t  = Iif(ThisForm.Pagina.Lista.cntFiltros.optFiltro.Value = 1, [E], [S])\n\nIf !Empty(lcSerie) A... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Serie,optFiltro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.DtFim",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(!Empty(ThisForm.Pagina.Lista.cntFiltros.DtIni.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.DtFim",
+      "evento": "Valid",
+      "linhas": 38,
+      "codigoOriginal": "Local lcSeries,ldEmisDe,ldEmisAte\n\nlcSeries  = ThisForm.Pagina.Lista.cntFiltros.Get_Serie.Value\nldEmisDe  = ThisForm.Pagina.Lista.cntFiltros.DtIni.Value\nldEmisAte = ThisForm.Pagina.Lista.cntFiltros.DtFim.Value\nlnOperas  = ThisForm.Pagina.Lista.cntFiltros.optFiltro.Value\n\nIf This.Value < ThisForm.Pagina.Lista.cntFiltros.DtIni.Value\n\tMessageBox('Data Inválida !!',0+48,'')\n\tThis.Value = {}\n\tThis.Refresh\n\tReturn\nElse\n\tIf !Empty(This.Value) And !Empty(ThisForm.Pagina.Lista.cntFiltros.Get_Serie.Value)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "Get_Serie,optFiltro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.DtFim",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "*ThisForm.Pagina.Lista.Grade.Column1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.optFiltro",
+      "evento": "InteractiveChange",
+      "linhas": 29,
+      "codigoOriginal": "Local lcSeries,ldEmisDe,ldEmisAte\n\nlcSeries  = ThisForm.Pagina.Lista.cntFiltros.Get_Serie.Value\nldEmisDe  = ThisForm.Pagina.Lista.cntFiltros.DtIni.Value\nldEmisAte = ThisForm.Pagina.Lista.cntFiltros.DtFim.Value\n\nIf Not Empty(ThisForm.Pagina.Lista.cntFiltros.Get_Serie.Value) And Not Empty(ThisForm.Pagina.Lista.cntFiltros.DtIni.Value) And Not Empty(ThisForm.Pagina.Lista.cntFiltros.DtFim.Value)\n\tpSeries   = ThisForm.Pagina.Lista.cntFiltros.Get_Serie.Value\n\tldEmisDe  = ThisForm.Pagina.Lista.cntFiltro... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "Get_Serie,optFiltro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.GetEmp",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (.T.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.GetEmp",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t= fAcessoEmpresa(Usuar,'C', This.value, This, '', ThisForm.Podatamgr, .t.)\n\nElse\n\tMessageBox('Preenchimento Obrigatorio!!!',0+48,'Empresa')\n\t\n\tReturn 0\n\t\nEndIf\n\nThisform.pEmps = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.GetEmp",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.Pagina.Lista.cntFiltros.Get_Serie.SetFocus \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Serie",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.Get_Serie",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (.T.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.Get_Serie",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If !Empty(This.Value)\n\tSelect Distinct a.Cods, a.Descs ;\n\t  From crSigCdSer a ;\n\t  Into Cursor crSerie ReadWrite\n\n\tSelect CrSerie\n\tGo Top\n\tLocate for Crserie.cods = This.Value\n\tIf !Found()\n\t\tm.loLista = CreateObject('fwBuscaInt','CrSerie','cods',This.Value,'Séries')\n\t\tm.loLista.mAddColuna('Cods','XXXXX','Série')\n\t\tm.loLista.mAddColuna('descs','XXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\tm.loLista.Show()\n\t\tThis.Value  = IIf(LastKey() == 27,'',Evaluate('CrSerie.cods'))\n\t\tThis.Refresh\n\tEndif\t\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.Get_Serie",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pagina.Lista.cntFiltros.DtIni.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.DtIni",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (.T.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.DtIni",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(ThisForm.Pagina.Lista.cntFiltros.DtFim.Value) And This.Value > ThisForm.Pagina.Lista.cntFiltros.DtFim.Value\n\tMessageBox('Data Inválida !!',0+48,'')\n\tThis.Value = {}\n\tThis.Refresh\n\tReturn \nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Lista.cntFiltros.DtIni",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.Pagina.Lista.cntFiltros.DtFim.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Get_nota",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Get_nota",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Get_BaseIPI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Get_ValorIPI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Get_BaseICMS",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Get_TotalProds",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Get_TotalNf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Dados",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(ThisForm.pcEscolha,'CONSULTAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Dados",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "ThisForm.Enabled = .F.\nlcSql = [Select Dopes From SigCdOpe Where Dopes = ']+CrSigMvNfi.Dopes+[']\nIf thisform.Podatamgr.SqlExecute(lcsql,'TmpOpe') > 0 And Reccount('TmpOpe') > 0\n\tDo Form SigMvExp With CrSigMvNfi.Dopes, 'C', CrSigMvNfi.Numes, CrSigMvNfi.Emps, .t.\nENDIF\n\nThisForm.Enabled = .T.",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Get_Estado",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Get_Cidade",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Get_Endereço",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Get_Frete",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNF.Pagina.Dados.Pagina.Servicos.Get_vtotser",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCNF.Pagina.Lista.cntFiltros.Get_Serie.Valid",
+      "queryOriginal": "\tSelect Distinct a.Cods, a.Descs ; \t  From crSigCdSer a ; \t  Into Cursor crSerie ReadWrite",
+      "tabelas": "crSigCdSer",
+      "colunas": "Cods",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCNF.Pagina.Dados.Pagina.Impostos.Dados.Click",
+      "queryOriginal": "lcSql = [Select Dopes From SigCdOpe Where Dopes = ']+CrSigMvNfi.Dopes+['] If thisform.Podatamgr.SqlExecute(lcsql,'TmpOpe') > 0 And Reccount('TmpOpe') > 0",
+      "tabelas": "SigCdOpe",
+      "colunas": "Dopes,Dopes+[],SqlExecutelcsql,TmpOpe,ReccountTmpOpe",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigCdSer", "SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

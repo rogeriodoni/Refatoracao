@@ -1,0 +1,14 @@
+﻿Phase 4/8 is complete. `C:\4c\projeto\app\forms\cadastros\Formche.prg` now has:
+
+**Edit 2** ÔÇö `CarregarLista()` updated to:
+- Build date filter using `FormatarDataSQL()` for both ini/fim (simplified ÔÇö no DATETIME wrap needed for DATE column)
+- After `Buscar()`, bind grid: `RecordSource` outside `WITH`, then `ControlSource` for all 6 columns + re-set Header captions inside `WITH`
+- Call `FormatarGridLista()`
+
+**Edit 3** ÔÇö 12 new PUBLIC methods added before `Destroy()`:
+- `BtnIncluirClick` / `BtnVisualizarClick` / `BtnAlterarClick` ÔÇö standard CRUD navigation to Page2 via `CarregarPorCodigo` + `AlternarPagina(2)`
+- `BtnExcluirClick` ÔÇö loads record, confirms with `MsgConfirma()`, calls `Excluir()`, refreshes list
+- `BtnBuscarClick` ÔÇö reads date fields into properties, calls `CarregarLista()`
+- `BtnLimpaDTClick` ÔÇö confirms, runs `UPDATE SigCqLcm/SigCcChm SET datatrans = NULL` for selected lote, refreshes
+- `DtInicialLostFocus` / `DtFinalLostFocus` ÔÇö validate date range cross-direction, guard against inversion with `MsgAviso`, call `CarregarLista()`
+- `HabilitarCampos` / `LimparCampos` / `BOParaForm` / `FormParaBO` ÔÇö minimal-but-real stubs ready to be expanded in Phase 5 when Page2 fields are added

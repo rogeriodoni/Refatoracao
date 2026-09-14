@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e correto. Fase 6/8 conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **OptionGroup `opt_4c_Op_con`** (campo `impops` ÔÇö "Imprimir OF Pendente") com 2 bot├Áes:
+   - Option1: "Sim" (Left=4)
+   - Option2: "N├úo" (Left=55)
+   - Top=263 (234+29 compensa├º├úo PageFrame)
+
+2. **Label `lbl_4c_Label1`** ÔÇö "Imprimir OF Pendente :" (Top=265, Left=332)
+
+3. **Todos os m├®todos CRUD completos e funcionais:**
+   - `FormParaBO()` / `BOParaForm()` ÔÇö mapeamento bidirecional (inclui `opt_4c_Op_con.Value`)
+   - `LimparCampos()` ÔÇö zera os 3 campos
+   - `HabilitarCampos()` ÔÇö l├│gica fiel ao original: c├│digo s├│ em INCLUIR, OptionGroup em INCLUIR/ALTERAR, Confirmar em INCLUIR/ALTERAR/EXCLUIR
+   - `BtnIncluirClick()` / `BtnAlterarClick()` / `BtnVisualizarClick()` / `BtnExcluirClick()` ÔÇö com foco correto conforme o original (`SetFocus` em Get_Codigo para INSERIR, Get_Descricao para ALTERAR)
+   - `BtnBuscarClick()` ÔÇö SQLEXEC com filtro por c├│digo e descri├º├úo + reconfigura├º├úo de headers
+   - `BtnSalvarClick()` ÔÇö valida├º├Áes do original: c├│digo n├úo vazio + c├│digo j├í cadastrado (via COUNT(*))
+   - `BtnCancelarClick()` ÔÇö volta para lista e recarrega

@@ -1,0 +1,638 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFis.SCX
+* Data/Hora: 05/08/2026 16:42:00
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFIS
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Say1
+  Parent: SIGCDFIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDFIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDFIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDFIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDFIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cmb_Hand
+  Parent: SIGCDFIS
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Set
+  Parent: SIGCDFIS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chk_dtr
+  Parent: SIGCDFIS
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chk_rts
+  Parent: SIGCDFIS
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Spinner1
+  Parent: SIGCDFIS
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: Say6
+  Parent: SIGCDFIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cmb_Imp
+  Parent: SIGCDFIS
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntSombra
+  Parent: SIGCDFIS
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDFIS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDFIS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cancela
+  Parent: SIGCDFIS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Ok
+  Parent: SIGCDFIS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 273
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Cadastro da Impressora Fiscal"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGCDFIS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Porta de Comunicação : "
+  Left = 79
+  Top = 101
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "HandShaking : "
+  Left = 124
+  Top = 128
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Settings : "
+  Left = 147
+  Top = 153
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "DTRenable : "
+  Left = 134
+  Top = 192
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "RTSenable : "
+  Left = 135
+  Top = 212
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Cmb_Hand
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  RowSourceType = 0
+  RowSource = ""
+  Value = 
+  ControlSource = "crSigFiFis.hands"
+  Height = 24
+  Left = 202
+  TabIndex = 4
+  Top = 123
+  Width = 141
+  ForeColor = 90,90,90
+  Name = "Cmb_Hand"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Get_Set
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigFiFis.settings"
+  Left = 202
+  TabIndex = 6
+  Top = 149
+  ForeColor = 90,90,90
+  Name = "Get_Set"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.chk_dtr
+------------------------------------------------------------
+  Top = 191
+  Left = 202
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = ""
+  Value = .F.
+  ControlSource = "crSigFiFis.dtrs"
+  TabIndex = 8
+  Name = "chk_dtr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.chk_rts
+------------------------------------------------------------
+  Top = 211
+  Left = 202
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = ""
+  Value = .F.
+  ControlSource = "crSigFiFis.rtss"
+  TabIndex = 10
+  Name = "chk_rts"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Spinner1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 25
+  KeyboardHighValue = 10
+  KeyboardLowValue = 1
+  Left = 202
+  SpinnerHighValue =  10.00
+  SpinnerLowValue =   1.00
+  TabIndex = 2
+  ToolTipText = "Escolher COM9 para setar USB"
+  Top = 96
+  Width = 48
+  ForeColor = 90,90,90
+  Value = 1
+  ControlSource = "crSigFiFis.portas"
+  Name = "Spinner1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Impressora : "
+  Left = 132
+  Top = 236
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Cmb_Imp
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  RowSourceType = 0
+  RowSource = ""
+  Value = 
+  ControlSource = "crSigFiFis.imps"
+  Height = 24
+  Left = 202
+  TabIndex = 12
+  Top = 231
+  Width = 141
+  ForeColor = 90,90,90
+  Name = "Cmb_Imp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = -1
+  Width = 801
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 724
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFIS.Ok
+------------------------------------------------------------
+  Top = 3
+  Left = 649
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "Confirmar"
+  Name = "Ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFIS
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	=fLerFiscal()
+
+	Select crSigFiFis
+	Go Top
+
+	If Eof()
+		Append Blank
+	EndIf
+
+	If IsEmpty(crSigFiFis.Settings)
+		Replace crSigFiFis.Settings with '9600,n,8,1'
+	Endif
+
+	With This.Cmb_Hand
+		.Clear
+		.AddItem( '0-None    ' )
+		.AddItem( '1-Xon Xoff' )
+		.AddItem( '2-RTS     ' )
+		.AddItem( 'Em Branco ' )
+	Endwith
+	With This.Cmb_Imp
+		.Clear
+		.AddItem( 'DATAREGIS   ' )
+		.AddItem( 'SWEDA       ' )
+		.AddItem( 'BEMATECH    ' )
+		.AddItem( 'BEMA8501    ' )
+		.AddItem( 'NDATAREGIS  ' )
+		.AddItem( 'DARUMA      ' )
+		.AddItem( 'S/IMPRESSORA' )
+		.AddItem( 'NSWEDA      ' )
+		.AddItem( 'EPSON       ' )
+		.AddItem( 'Em Branco   ' )
+	Endwith
+
+	If (crSigFiFis.Imps = Space(20))
+		Replace Imps With 'Em Branco' In crSigFiFis
+	EndIf
+
+	If (crSigFiFis.Hands = Space(20))
+		Replace Hands With 'Em Branco' In crSigFiFis
+	EndIf
+
+	=DoDefault()
+
+EndWith
+ThisForm.Spinner1.SetFocus
+ThisForm.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+Create Cursor CrSigFiFis (Portas n(1), Hands c(20), Settings c(20), Dtrs L, Rtss L, Imps c(20), Termicas L)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+=DoDefault()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFIS.cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFIS.Ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+DO Case
+
+	Case ATC('SIGFIOP5', upper(SET('PROCEDURE'))) <> 0
+		Release Procedure SIGFIOP5.Prg 
+
+	Case ATC('SIGFIOP4', upper(SET('PROCEDURE'))) <> 0
+		Release Procedure SIGFIOP4.Prg 
+		
+	Case ATC('SIGFIOP3', upper(SET('PROCEDURE'))) <> 0
+		Release Procedure SIGFIOP3.Prg 
+
+	Case ATC('SIGFIOP0', upper(SET('PROCEDURE'))) <> 0
+		Release Procedure SIGFIOP0.Prg 
+
+	Case ATC('SIGFIOP2', upper(SET('PROCEDURE'))) <> 0
+		Release Procedure SIGFIOP2.Prg 
+
+	Case ATC('SIGFIOP1', upper(SET('PROCEDURE'))) <> 0
+		Release Procedure SIGFIOP1.Prg 
+
+	Case ATC('SIGFIOP8', upper(SET('PROCEDURE'))) <> 0
+		Release Procedure SIGFIOP8.Prg 
+
+EndCase
+
+Do Case
+	Case crSigFiFis.Imps=='SWEDA'
+		Set Procedure to SIGFIOP0.Prg  Additive
+
+	Case crSigFiFis.Imps=='BEMATECH'
+		Set Procedure to SIGFIOP1.Prg  Additive
+
+	Case crSigFiFis.Imps=='BEMA8501'
+		Set Procedure to SIGFIOP2.Prg  Additive
+
+	Case crSigFiFis.Imps=='DATAREGIS'
+		Set Procedure to SIGFIOP3.Prg  Additive
+
+	Case crSigFiFis.Imps=='NDATAREGIS'
+		Set Procedure to SIGFIOP4.Prg  Additive
+
+	Case crSigFiFis.Imps=='DARUMA'
+		Set Procedure to SIGFIOP5.Prg  Additive
+
+	Case crSigFiFis.Imps=='S/IMPRESSORA'
+		Set Procedure to SIGFIOP9.Prg  Additive
+
+	Case crSigFiFis.Imps=='NSWEDA'
+		Set Procedure to SIGFIOP8.Prg  Additive
+
+	Case crSigFiFis.Imps=='EPSON'
+		Set Procedure to SIGFIOP7.Prg  Additive
+
+EndCase
+
+If (Alltrim(crSigFiFis.Imps) = 'Em Branco')
+	Replace Imps With '' In crSigFiFis
+EndIf
+
+If (Alltrim(crSigFiFis.Hands) = 'Em Branco')
+	Replace Hands With '' In crSigFiFis
+EndIf
+
+lcArq = Sys(5)+Sys(2003)+'\SetFiscal.Ini'
+Select CrSigFiFis
+Go Top
+Copy To &lcArq. type sdf
+Go Top
+
+lcFile = GetEnv("SystemRoot") + '\system32\BEMAFI32.INI'
+If File(lcFile)
+	lcConfig = FileToStr(lcFile)
+	lcComs   = StrExtract(lcConfig, 'Porta', Chr(13) + Chr(10), 1, 1)
+	*** mena - 27/02/2015 - se porta = 9 considera USB ***
+	lcPor  = Alltrim(Str(ThisForm.Spinner1.Value))
+	lcNewCon = Strtran(lcConfig, 'Porta' + lcComs, IIF(lcPor='9', 'Porta=USB', 'Porta=COM' + lcPor), -1, 1, 1)
+	StrToFile(lcNewCon, lcFile)
+EndIf  
+
+*** Tiago - 06/05/2015 - Atualiza DarumaFramework.xml
+lcFile = Sys(5)+Sys(2003) + '\DarumaFramework.xml'
+If File(lcFile)
+	lcConfig = FileToStr(lcFile)
+	lcComs   = StrExtract(lcConfig, '<PortaSerial>', Chr(13) + Chr(10),1,1)
+	lcNewCon = Strtran(lcConfig, '<PortaSerial>' + lcComs, '<PortaSerial>COM' + Alltrim(Str(ThisForm.Spinner1.Value)) + '</PortaSerial>', -1, 1, 1)
+	
+	lcComs   = StrExtract(lcNewCon, '<Velocidade>', Chr(13) + Chr(10),2,1)
+	lcVel = Substr(Alltrim(crSigFiFis.settings),1,At([,],Alltrim(crSigFiFis.settings))-1)
+	lcNewCon = Strtran(lcNewCon, '<Velocidade>' + lcComs, '<Velocidade>' + lcVel + '</Velocidade>', -1, 1, 1)
+	StrToFile(lcNewCon, lcFile)	
+EndIf 
+
+Thisform.Release()
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDFIS
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 21
+================================================================================

@@ -1,0 +1,11 @@
+﻿Cabe├ºalho atualizado corretamente. O arquivo tem 1118 linhas agora (25 linhas a mais pelo novo cabe├ºalho).
+
+**Fase 6/8 conclu├¡da.** Este ├® um form VIEWER puro (`frmrelatorio` filho), diferente dos forms CRUD. Ap├│s an├ílise completa:
+
+- **Nenhum campo de filtro** a adicionar ÔÇö o form apenas exibe cursores pr├®-carregados pelo form pai via `DataSession` compartilhado
+- **Nenhum lookup** ÔÇö o original n├úo tem `fwbuscaext`, `fwBuscaSel` nem `sigacess`  
+- **Nenhum `cnt_4c_BotoesAcao`** ÔÇö o padr├úo de bot├Áes ├® `cmg_4c_Botoes` com 4 bot├Áes do tipo `frmrelatorio`
+- **Integra├º├úo autom├ítica** ÔÇö `config.prg` j├í carrega via `ADIR()` todos os `Form*.prg` de `forms/relatorios/` e todos os `*BO.prg` de `classes/`; nenhum `SET PROCEDURE` manual necess├írio
+- **Sem entrada de menu** ÔÇö form filho aberto por form pai com par├ómetro `par_oFormPai`, n├úo acess├¡vel diretamente pelo menu
+
+O arquivo `FormSigReEqT.prg` est├í completo com todos os 19 m├®todos implementados.

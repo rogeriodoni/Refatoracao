@@ -1,0 +1,502 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPREST.SCX
+* Data/Hora: 03/07/2026 02:24:53
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPREST
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPREST
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPREST.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPREST.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Commandgroup3
+  Parent: SIGPREST
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: OK
+  Parent: SIGPREST
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cancela
+  Parent: SIGPREST
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape1
+  Parent: SIGPREST
+  Class: shape
+  BaseClass: shape
+
+Objeto: GeraArquivos
+  Parent: SIGPREST
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: GeraÍndices
+  Parent: SIGPREST
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Mensagem1
+  Parent: SIGPREST
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 67
+  Left = 70
+  Width = 562
+  Height = 301
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 191
+  Width = 600
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Gerar Estrutura"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  Name = "SIGPREST"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST.cntSombra
+------------------------------------------------------------
+  Top = -1
+  Left = -1
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST.Commandgroup3
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 0
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 110
+  Left = 417
+  SpecialEffect = 1
+  Top = 7
+  Width = 173
+  TabIndex = 7
+  BorderColor = 136,189,188
+  ZOrderSet = 1
+  Name = "Commandgroup3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST.OK
+------------------------------------------------------------
+  Top = 3
+  Left = 450
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Gerar"
+  Name = "OK"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST.Cancela
+------------------------------------------------------------
+  Top = 3
+  Left = 525
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST.Shape1
+------------------------------------------------------------
+  Top = 9
+  Left = 49
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  SpecialEffect = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST.GeraArquivos
+------------------------------------------------------------
+  Top = 90
+  Left = 55
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  AutoSize = .F.
+  Picture = ..\framework\imagens\geral_limpa_grade_60.jpg
+  Alignment = 2
+  BackStyle = 1
+  Caption = "Estrutura"
+  Value = .T.
+  Style = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "GeraArquivos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST.GeraÍndices
+------------------------------------------------------------
+  Top = 90
+  Left = 136
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  AutoSize = .F.
+  Picture = ..\framework\imagens\geral_limpa_grade_60.jpg
+  Alignment = 2
+  BackStyle = 1
+  Caption = "Índice"
+  Value = .T.
+  Style = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "GeraÍndices"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREST.Mensagem1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 11
+  Alignment = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = ""
+  Height = 24
+  Left = 48
+  Top = 132
+  Width = 480
+  ForeColor = 90,90,90
+  Name = "Mensagem1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPREST
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREST.OK
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lnArq, lcArquivo, lnGeraArq, lnGeraInd, lnKey
+Local lcChave, lcFiltro, lcTag, lcAlias, loBarra, lcDbc,lcCampo,lcDirAtual1
+
+Close Tables All 
+This.Enabled = .f.
+ThisForm.Cancela.Enabled = .f.
+ThisForm.Draw
+
+Set Default To .\basededados\
+
+If ThisForm.GeraArquivos.Value
+
+	Select 0 
+
+	Create Table ArqDBF Free ( Arquivos c(20), Dbcs c(50), Campos c(20), Tipos c(1), Tamanhos n(3) , ;
+							Fracaos n(2), C_05s l, C_06s l, C_07s c(20), C_08s c(20),;
+							C_09s c(20), C_10s c(20), C_11s c(20), C_12s c(20),;
+							C_13s c(20), C_14s c(20), C_15s c(20), C_16s c(20) )
+
+	Index on Arquivos + Campos Tag ArqCamp
+	lnArq = ADir( laArq, '*.Dbf' )
+	=ASort( laArq )
+
+	loBarra = CreateObject( 'fwProgressBar', 'Processando Estrutura de Arquivos.', lnArq )
+	loBarra.Titulo.FontBold = .t.
+	loBarra.Show
+
+	For lnGeraArq = 1 to lnArq
+
+		lcArquivo = laArq( lnGeraArq, 1 )
+
+		loBarra.Update( .t. )
+		loBarra.SubTitulo.Caption = 'Processando Arquivo : ' + Alltrim( lcArquivo )
+
+		If Inlist( Alltrim( lcArquivo ), 'ARQDBF.DBF', 'ARQIND.DBF', 'FOXUSER.DBF')
+			Loop
+		Endif
+
+		Use &lcArquivo in 0 Alias TmpArquivo Again 
+
+		Select TmpArquivo
+		lcDbc = Alltrim( JustFName( CursorGetProp( "DataBase" ) ) ) 
+		lnCampos = AFields( laCampos )
+
+		For LnCCampos = 1 to LnCampos
+
+			If lnCCampos = 1
+				If Empty( laCampos( lnCCampos, 12 ) )
+					laCampos( lnCCampos, 12 ) = Strt( lcArquivo, '.DBF', '' )
+				Endif
+			EndIf
+			lcCampo = Padr(Upper(Alltrim(JustStem(lcArquivo))+'.'+Alltrim(laCampos( lnCCampos, 1 ))),64)
+
+			Select ArqDBF
+			Insert Into ArqDBF ( Arquivos, Dbcs, Campos, Tipos, Tamanhos, Fracaos, C_05s, C_06s, C_07s,;
+								C_08s, C_09s, C_10s, C_11s, C_12s, C_13s, C_14s, C_15s, C_16s ) ;
+					Values ( lcArquivo, lcDbc, ;
+							laCampos( lnCCampos, 1 ), laCampos( lnCCampos, 2 ),;
+							laCampos( lnCCampos, 3 ), laCampos( lnCCampos, 4 ),; 
+							laCampos( lnCCampos, 5 ), laCampos( lnCCampos, 6 ),; 
+							laCampos( lnCCampos, 7 ), laCampos( lnCCampos, 8 ),; 
+							laCampos( lnCCampos, 9 ), laCampos( lnCCampos, 10 ),; 
+							laCampos( lnCCampos, 11 ), laCampos( lnCCampos, 12 ),; 
+							laCampos( lnCCampos, 13 ), laCampos( lnCCampos, 14 ),; 
+							laCampos( lnCCampos, 15 ), laCampos( lnCCampos, 16 ) )
+		Endfor
+		Use in TmpArquivo
+	Endfor
+	loBarra.Complete( "Finalizando Processo de Estrutura." )
+	ThisForm.Refresh
+
+Endif
+
+Close Tables All 
+
+If ThisForm.GeraÍndices.Value And !File( "ArqDBF.Dbf" )
+	Messagebox( 'Antes de gerar os Índices, é necessário que seja gerada a Estrutura de Arquivos...', 32, '' )
+	ThisForm.Mensagem1.Caption = "Processamento Interrompido."
+	ThisForm.Ok.Enabled = .t.
+	ThisForm.Cancela.Enabled = .t.
+	Return
+Endif
+
+If ThisForm.GeraÍndices.Value 
+
+	Select 0 
+	Use ArqDBF Order ArqCamp
+
+	lnArq = ADir( laArq, '*.Dbf' )
+	=ASort( laArq )
+
+	If File( 'ArqInd.Dbf' )
+		Delete File ArqInd.Dbf
+		Delete File ArqInd.Cdx
+	Endif
+	
+	Create Table ArqInd Free ( Arquivos c(20), Tags c(15), Indices c(240), Filtros c(240), Indexs l, c_12s c(20) )
+	Index on Arquivos + Tags Tag Arquivos 
+	Index on Arquivos Tag Temp Unique
+
+	loBarra = CreateObject( 'fwProgressBar', 'Processando Índices de Arquivos.', lnArq )
+	loBarra.Titulo.FontBold = .t.
+	loBarra.Show
+
+	For lnGeraInd = 1 to lnArq
+	
+		lcArquivo = laArq( lnGeraInd, 1 )
+
+		loBarra.Update( .t. )
+		loBarra.SubTitulo.Caption = 'Processando Arquivo : ' + Alltrim( lcArquivo )
+
+		If Inlist( Alltrim( lcArquivo ), 'ArqDBF.DBF', 'ArqInd.DBF', 'FoxUser.DBF')
+			Loop
+		Endif
+		Select 0
+		Use &lcArquivo Alias TmpArquivo Again
+		lnKey = 1
+		Do While !Empty( Tag( lnKey ) )
+			lcChave = Key( lnKey )
+			lcFiltro = Sys( 2021, lnKey )
+			lcTag = Tag( lnKey )
+			Insert Into ArqInd ( Arquivos, Tags, Indices, Filtros ) ;
+					Values ( lcArquivo, lcTag, lcChave, lcFiltro )
+
+			Select TmpArquivo
+			lnKey = lnKey + 1
+		Enddo
+		Use
+	Endfor
+
+	loBarra.Complete( "Finalizando Processo de Índice." )
+	ThisForm.Refresh
+Endif
+
+Close Tables All 
+
+ThisForm.Mensagem1.Caption = "Processamento Finalizado."
+ThisForm.Ok.Enabled = .t.
+ThisForm.Cancela.Enabled = .t.
+
+If Not Used('csLogoTipo')
+	Select Logos as gnLogos From SigCdPam Into Cursor csLogoTipo
+	Use In SigCdPam
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREST.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+THISFORM.RELEASE
+
+If Not Used('csLogoTipo')
+	Select Logos as gnLogos From SigCdPam Into Cursor csLogoTipo
+	Use In SigCdPam
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPREST
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 3
+================================================================================

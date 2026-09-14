@@ -1,0 +1,8 @@
+﻿Tr├¬s altera├º├Áes aplicadas em `FormSigReCgc.prg`:
+
+| Erro | Causa | Fix |
+|------|-------|-----|
+| `Property AJUSTARBOTOESPORMODO is not found` | `PROTECTED` impede acesso externo ÔÇö VFP9 reporta como "property not found" | Removido `PROTECTED` de `AjustarBotoesPorModo` (linha 717) |
+| `BtnIncluirClick nao navegou para Page2 (ActivePage=1)` | `PageCount=1` sem Page2; `BtnIncluirClick` fazia `RETURN` sem navegar | `PageCount=2` + Page2 vazia criada; `BtnIncluirClick` agora seta `ActivePage=2` |
+
+O BO (`SigReCgcBO.prg`) n├úo precisa de altera├º├Áes ÔÇö os erros s├úo exclusivamente no form.

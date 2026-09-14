@@ -1,0 +1,4 @@
+﻿Duas linhas corrigidas em `ConfigurarContainer2`:
+
+- **L1439**: `loc_oCnt.(loc_cNomeChk)` ÔåÆ `EVALUATE("loc_oCnt." + loc_cNomeChk)` ÔÇö o compilador VFP9 rejeita a sintaxe de nome din├ómico `obj.(var)` em tempo de compila├º├úo; `EVALUATE()` resolve em runtime sem erro de compila├º├úo.
+- **L1459**: `BINDEVENT(loc_oCnt.(loc_cNomeChk), ...)` ÔåÆ `BINDEVENT(loc_oChk, ...)` ÔÇö reutiliza a refer├¬ncia j├í obtida na linha anterior, eliminando o segundo uso da sintaxe inv├ílida.

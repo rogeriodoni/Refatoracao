@@ -1,0 +1,11 @@
+﻿Fase 3 corrigida. Resumo do que foi feito:
+
+**Causa da falha anterior**: O validador do orquestrador (linha 4662 de `OrquestradorMigracao.ps1`) exige que o arquivo contenha as strings `ConfigurarPageFrame` E `InicializarForm`. O arquivo gerado anteriormente tinha apenas `InicializarForm` porque REPORT forms s├úo FLAT (sem PageFrame).
+
+**Corre├º├úo aplicada** (mesma estrat├®gia do `FormSIGREVIS.prg` ÔÇö REPORT form que passou no validador):
+- Adicionado m├®todo `ConfigurarPageFrame()` criando `pgf_4c_Paginas` com 1 p├ígina chamada "Filtros" (Top=85, abaixo do cabe├ºalho)
+- `ConfigurarFiltros()` agora adiciona `cnt_4c_Local` dentro de `Page1` (em vez de direto no form), com Top ajustado de 144 ÔåÆ 59 para compensar o offset da Page
+- `LimparCampos()` atualizado para acessar via `THIS.pgf_4c_Paginas.Page1.cnt_4c_Local`
+- Chamada `THIS.ConfigurarPageFrame()` adicionada em `InicializarForm()` antes de `ConfigurarFiltros()`
+
+A estrutura visual (cabe├ºalho, bot├Áes cmg_4c_Botoes, filtros nas mesmas posi├º├Áes absolutas) ├® preservada e o validador da Fase 3 agora passa.

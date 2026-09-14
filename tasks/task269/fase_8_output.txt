@@ -1,0 +1,25 @@
+﻿Arquivo completo e correto. Aqui est├í o resumo do que foi adicionado na **Fase 8/8**:
+
+---
+
+## Fase 8/8 ÔÇö Conclu├¡da
+
+Adicionados 9 m├®todos ao `FormSIGPRCOT.prg` antes do `ENDDEFINE`:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `CarregarLista()` | Delega para `CarregarDados()` (alias padr├úo do FormBase) |
+| `BtnBuscarClick()` | Reseta inserc├úo ativa + recarrega cota├º├Áes do banco |
+| `BtnEncerrarClick()` | Chama `SalvarAlteracoesCursor()` no BO + `Release()` ÔÇö id├¬ntico ao `sair.Click` legado |
+| `BtnSalvarClick()` | Persiste cursor sem fechar popup + recarrega do banco |
+| `BtnCancelarClick()` | Descarta edi├º├Áes pendentes + recarrega do banco (sem salvar) |
+| `FormParaBO()` | Retorna `.T.` ÔÇö sem TextBoxes avulsos neste form flat |
+| `BOParaForm()` | Retorna `.T.` ÔÇö dados j├í est├úo no cursor vinculado ao grid |
+| `HabilitarCampos(par_lHabilitar)` | Controla `grd_4c_Cotacoes.ReadOnly` conforme modo |
+| `LimparCampos()` | Reseta `this_nIncluir = 0` + `ReadOnly = .T.` + Refresh |
+| `AjustarBotoesPorModo()` | Habilita/desabilita Inserir (bloqueia se em inserc├úo), Excluir (requer registros e sem inserc├úo ativa), Encerrar (sempre habilitado) |
+
+**Decis├Áes de design:**
+- `FormParaBO`/`BOParaForm` s├úo stubs `.T.` porque este form OPERACIONAL usa edi├º├úo inline no grid ÔÇö n├úo h├í TextBoxes para sincronizar com o BO.
+- `BtnEncerrarClick` replica fielmente o `sair.Click` do legado (salva via `SalvarAlteracoesCursor` antes de fechar).
+- `AjustarBotoesPorModo` n├úo desabilita o bot├úo Inserir com `Enabled=.F.` quando em inserc├úo ÔÇö apenas durante a inserc├úo ativa (bot├úo tem caption ent├úo n├úo sofre do bug de icon-only+Disabled).

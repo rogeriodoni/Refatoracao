@@ -1,0 +1,15 @@
+﻿Todas as 7 TextBoxes foram atualizadas corretamente. A **Fase 6/8 est├í completa**.
+
+**O que foi adicionado** em `ConfigurarCamposForm()` para fidelidade visual (PILAR 1):
+
+| Campo | Propriedades adicionadas |
+|-------|--------------------------|
+| `txt_4c_Praca` | `Alignment=3` (direita) + `DisabledForeColor=RGB(0,0,0)` |
+| `txt_4c_Banco` | `Alignment=3` (direita) + `DisabledForeColor=RGB(0,0,0)` |
+| `txt_4c_Agencia` | `BackColor=RGB(255,255,255)` |
+| `txt_4c_DvAgencia` | `BackColor=RGB(255,255,255)` + `DisabledForeColor=RGB(64,0,64)` (roxo, id├¬ntico ao original) |
+| `txt_4c_Cheque` | `DisabledForeColor=RGB(0,0,0)` |
+| `txt_4c_DvCheque` | `DisabledForeColor=RGB(0,0,0)` |
+| `txt_4c_Cpf` | `Alignment=3` (direita) + `DisabledForeColor=RGB(0,0,0)` |
+
+**Por que n├úo havia lookups/cnt_4c_BotoesAcao**: Este form ├® um di├ílogo operacional de consulta SiTef (467├ù350) onde todos os TextBoxes s├úo somente-leitura (`Enabled=.F.`). O original usava `When=Return(.F.)` para o mesmo efeito. N├úo h├í lookups nem CRUD ÔÇö o ├║nico bot├úo interativo ├® o `cmd_4c_Cancela` que dispara a consulta ├á DLL no GotFocus.

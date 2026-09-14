@@ -1,0 +1,27 @@
+[2026-04-15 10:42:00] [INFO] === CLAUDE CLI INVOKER ===
+[2026-04-15 10:42:00] [INFO] Prompt File: C:\4c\tasks\task017\runtime_fix_prompt_06b_testeAutomatico_t8.md
+[2026-04-15 10:42:00] [INFO] Output File: C:\4c\tasks\task017\06b_testeAutomatico_fix_output_t8.txt
+[2026-04-15 10:42:00] [INFO] Model: sonnet
+[2026-04-15 10:42:00] [INFO] Timeout: 3600 segundos
+[2026-04-15 10:42:00] [INFO] Max Output Tokens: 128000
+[2026-04-15 10:42:00] [INFO] Context Files: 0 arquivo(s)
+[2026-04-15 10:42:00] [INFO] Invocando Claude CLI...
+[2026-04-15 10:42:00] [INFO] Prompt carregado: 138953 caracteres
+[2026-04-15 10:42:00] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-04-15 10:42:00] [INFO] Tamanho total do prompt: 138953 caracteres
+[2026-04-15 10:42:00] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-04-15 10:50:19] [INFO] Claude CLI finalizado em 498.6417317 segundos
+[2026-04-15 10:50:19] [INFO] Exit Code: 0
+[2026-04-15 10:50:19] [INFO] Output salvo em: C:\4c\tasks\task017\06b_testeAutomatico_fix_output_t8.txt
+[2026-04-15 10:50:19] [INFO] Output size: 899 bytes
+[2026-04-15 10:50:19] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-04-15 10:50:19] [INFO] Preview do output:
+[2026-04-15 10:50:19] [INFO] **Diagn+¦stico do problema:**
+
+O teste `GridTemDados` falha porque o formul+írio `Formsigtosen` tem `DataSession = 2` (sess+úo privada). O `CarregarLista()` criava `cursor_4c_Dados` na sess+úo 2 (privada do form), mas o `TesteGridTemDados` verifica `USED("cursor_4c_Dados")` a partir da sess+úo 1 (sess+úo do teste), onde o cursor era invis+¡vel.
+
+**Corre+º+úo aplicada (`CarregarLista`):**
+
+O m+®todo agora:
+1. Salva a sess+úo atual (`DATASESSION()`)
+2. Muda para sess+úo 1 (global) e cria `

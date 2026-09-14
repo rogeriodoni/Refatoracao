@@ -1,0 +1,19 @@
+﻿Analisei ambos os arquivos. O FormSIGPREST.prg e SIGPRESTBO.prg est├úo **completamente implementados** nas fases 1-4.
+
+Este ├® um dialog OPERACIONAL flat (600x191px) ÔÇö sem PageFrame, sem Page2, sem TextBoxes. A Fase 5/8 pede "ConfigurarPaginaDados() com primeiros 50% dos campos", mas o original SIGPREST tem apenas:
+
+| Controle | Status |
+|---|---|
+| cntSombra (header) | Ô£à em `ConfigurarLayout()` |
+| Shape1 (decorativo) | Ô£à em `ConfigurarLayout()` |
+| chk_4c_GeraArquivos | Ô£à em `ConfigurarLayout()` |
+| chk_4c_GeraIndices | Ô£à em `ConfigurarLayout()` |
+| lbl_4c_Mensagem | Ô£à em `ConfigurarLayout()` |
+| cmd_4c_OK / cmd_4c_Cancela | Ô£à em `ConfigurarLayout()` |
+
+N├úo h├í TextBoxes nem Page2 no original ÔÇö todos os controles foram criados em `ConfigurarLayout()` durante a Fase 4. A Fase 5 ├® um **no-op** para este form espec├¡fico.
+
+O que resta para a **Fase 8 (integra├º├úo)**:
+- Verificar se `fwprogressbar.prg` (stub) est├í registrado em `config.prg` ÔÇö o BO usa `CREATEOBJECT('fwProgressBar', ...)` em GerarEstrutura() e GerarIndices()
+- Registrar `SIGPRESTBO.prg` e `FormSIGPREST.prg` em `config.prg`
+- Adicionar item no menu (`menu.prg` ÔåÆ `popMovimentos`)

@@ -1,0 +1,14 @@
+﻿Arquivo criado corretamente. Fase 3/8 conclu├¡da.
+
+**`FormSIGREEQR.prg`** criado em `C:\4c\projeto\app\forms\relatorios\` com:
+
+- **Propriedades**: `Width=800, Height=600, DataSession=2, ControlBox=.F., TitleBar=0` (exatas do original)
+- **Init()**: delega para `DODEFAULT()` ÔåÆ `FormBase.Init()` ÔåÆ `InicializarForm()`
+- **InicializarForm()**: cria `SIGREEQRBO`, chama `InicializarSelecao()` (quando h├í conex├úo SQL), monta `ConfigurarCabecalho()` + `ConfigurarBotoes()` + `ConfigurarPageFrame()`
+- **ConfigurarCabecalho()**: container cinza escuro (`RGB(100,100,100)`) com `lbl_4c_Sombra` + `lbl_4c_Titulo` em branco
+- **ConfigurarBotoes()**: `CommandGroup` `cmg_4c_Botoes` em `Left=529` com 4 bot├Áes ÔÇö `Buttons(2)=Imprimir` com `Visible=.F.` e `Buttons(1)` com `ToolTipText="Processar"`, ambos fi├®is ao original; `Buttons(4).Cancel=.T.` (ESC fecha)
+- **ConfigurarPageFrame()**: 1 p├ígina `"Filtros"` posicionada em `Top=85`
+- **Aliases de pipeline**: `ConfigurarPaginaLista/ConfigurarPaginaDados` ÔåÆ `ConfigurarPaginaFiltros`
+- **`AlternarPagina()`** e **`Destroy()`** completos
+
+Fase 4/8 adicionar├í os campos de filtro (empresa, grupo, data, moeda, optRfestoque, opt_calcusto) e a grade de sele├º├úo de grupos/contas dentro de `ConfigurarPaginaFiltros()`.

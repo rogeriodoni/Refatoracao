@@ -1,0 +1,10 @@
+﻿Both fixes are in place and correct. Here's a summary of what was changed:
+
+**BO `SigPdM11BO.prg` ÔÇö `ValidarServico` (CCATS fix):**
+- Replaced SQLEXEC approach (`FROM SigCdSvc WHERE CCats = ...`) with SEEK on the shared `crSigCdSvc` cursor ÔÇö exactly as the original code used (`SELECT crSigCdSvc` + `SEEK(Cats + GrupoFs + ContaFs)` with 3 priority levels). Fields are read directly from `crSigCdSvc.*` after SEEK.
+
+**Form `FormSigPdM11.prg` ÔÇö `ValidarRetrabalho` (CODS fix):**
+- Removed the first targeted query (`WHERE Cods = ... AND Emps = ...`) that didn't exist in the original
+- Now uses a single query matching the original pattern (`WHERE Emps = ... OR Emps = ''`), then does `INDEX ON Cods` + `SEEK` to check if the current value exists ÔÇö showing the picker only when not found
+
+**XNENS:** This was a false positive ÔÇö all occurrences of `SELECT xNensiS` in the code are VFP alias-select commands, not SQL WHERE conditions. No change needed.

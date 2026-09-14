@@ -1,0 +1,23 @@
+﻿Confirmei tudo que preciso. Vou explicar o estado atual.
+
+**FormSigPdMp9.prg j├í est├í completo** ÔÇö a Fase 7 foi essencialmente incorporada nas fases anteriores.
+
+**Por que BtnIncluirClick/Alterar/Visualizar/Excluir n├úo se aplicam aqui:**
+- Este ├® um form OPERACIONAL, n├úo CRUD
+- FormBase n├úo define esses m├®todos ÔÇö eles s├úo exclusivos de forms de cadastro
+- Os "eventos principais" deste form s├úo os 4 bot├Áes do rodap├®, todos j├í implementados
+
+**O que j├í existe no arquivo (handlers de bot├úo completos):**
+
+| Bot├úo legado | Handler novo | Linha |
+|---|---|---|
+| `Resumo.Click` | `BtnResumoClick()` | 1289 |
+| `CustoP.Click` | `BtnCustoPClick()` | 1296 |
+| `Processar.Click` | `BtnProcessarClick()` | 1324 |
+| `Cancelar.Click` | `BtnCancelarClick()` | 1367 |
+
+**Integra├º├úo j├í resolvida:**
+- `config.prg` usa `ADIR()` din├ómico ÔÇö carrega automaticamente todos os `Form*.prg` de `forms\operacionais\` e todos os `*BO.prg` de `classes\`. Nenhuma entrada manual necess├íria.
+- `menu.prg` n├úo precisa de entrada ÔÇö FormSigPdMp9 ├® um **subformul├írio** aberto por `FormSigPdMp3` (linha 1558: `CREATEOBJECT("FormSigPdMp9", THIS)`), n├úo acessado diretamente pelo menu.
+
+**Fase 7 est├í conclu├¡da.** O arquivo `FormSigPdMp9.prg` tem implementa├º├úo completa com 1769 linhas cobrindo todos os handlers do grid (9 colunas ├ù eventos When/Valid/LostFocus/KeyPress/DblClick), lookups de Tamanho e Cor, distribui├º├úo de rateio, c├ílculo de custo, processamento de pe├ºa especial e todos os 4 bot├Áes de a├º├úo.

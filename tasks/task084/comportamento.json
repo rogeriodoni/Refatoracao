@@ -1,0 +1,344 @@
+{
+  "resumo": {
+    "totalMetodos": 18,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 11,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fMensagemFixa", "fLerSettings", "fValorExtenso", "fMesExtenso"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREECH",
+      "evento": "Procedure",
+      "linhas": 72,
+      "codigoOriginal": "=ThisForm.PodataMgr.CursorQuery('SigCdPam','CrTmpParam',.f.,.f.,[ImpCheqs])\n\n=fMensagemFixa( \"Posicione o cheque na impressora...\", 48, \"IMPRIME CHEQUE\", .F., .F., \"a_print4.bmp\" )\n\n**** Configura Leitora de Cheques\nIf Not fLerSettings('CrSigSyCom',ThisForm.Podatamgr)\n\tReturn 0\nEndIf\nSelect * From crSigSyCom Where Tipos = 'Impressora de Cheque' Into Cursor CrTmpCfCom ReadWrite\nSelect CrTmpCfCom\nGo Top\n\nIF ! ThisForm.oModem.portopen\n\tWith ThisForm.oModem\n\t\t.commport = crTmpCfCom.Portas\n\t\t.Setting... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fMensagemFixa,fLerSettings",
+        "metodosFormChamados": "CursorQuery,Output = Chr,Sqlexecute,commit",
+        "controlesReferenciados": "Option2,Option3",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREECH",
+      "evento": "Procedure",
+      "linhas": 170,
+      "codigoOriginal": "Local _Fechar, lnNopers\n\nDeclare LaCampo3(2,2)\n\n=Seek( _Empr, 'crSigCdEmp','Cemps' )\n\n_Extenso = fValorExtenso( crPar.Valos )\n_Mes     = fMesExtenso( crPar.Vencs )\n_ObsPg   = ' '\n\n=ThisForm.PodataMgr.CursorQuery('SigCdPam','CrTmpParam',.f.,.f.,[GrupoRecs,ContaRecs])\n\nSelect CrTmpParam\nGo Top\n\nCreate Cursor TmpConta2 (Titulo c(10), Vencimento d(8), Fornecedor c(10), DescriForn c(50), Despesa c(10), ;\n\t\t\t\t\t\t DescriDesp c(50), Valor n(12,2), Moeda c(3), Hists c(40), Hist2s c(40), Imprime l(1), ;\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fValorExtenso,fMesExtenso",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREECH",
+      "evento": "Procedure",
+      "linhas": 71,
+      "codigoOriginal": "If crSigCqChi.Emitidos\n\n\t=ThisForm.PodataMgr.CursorQuery('SigCdPam','CrTmpParam',.f.,.f.,[ImpCheqs])\n\n\t=fMensagemFixa( \"Posicione o cheque na impressora para impressão do verso...\", 48, \"IMPRIME CHEQUE\", .F., .F., \"a_print4.bmp\" )\n\n\t**** Configura Leitora de Cheques\n\tIf Not fLerSettings('CrSigSyCom',ThisForm.Podatamgr)\n\t\tReturn 0\n\tEndIf\n\tSelect * From crSigSyCom Where Tipos = 'Impressora de Cheque' Into Cursor CrTmpCfCom ReadWrite\n\tSelect CrTmpCfCom\n\tGo Top\n\n\tIF ! ThisForm.oModem.portopen\n\t\tWith... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fMensagemFixa,fLerSettings",
+        "metodosFormChamados": "CursorQuery,Output = Spac,Output = Chr,Sqlexecute,commit",
+        "controlesReferenciados": "Get_Verso",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREECH",
+      "evento": "Init",
+      "linhas": 42,
+      "codigoOriginal": "Parameters _Emps, _Dopes, _Numes, _pcEscolha, _ncheque\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.Emps = _Emps\nThisForm.Dopes = Padr( _Dopes, 20 )\nThisForm.Numes = _Numes\nThisForm.Op_Escolha = _pcEscolha\nlcEDN = _Emps + _Dopes + STR(_Numes,6)\nlcChq = Iif(Type('_nCheque')='C',_nCheque,'')\n\nlcQueryChi = [Select * From SigCqChi Where EmpDopNums = ?lcEDN ]+;\n\t\t\t Iif(Not Empty(lcChq),[And ncheques = ']+lcChq+['],[])\nlcQue... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Dopes = Padr,Requery,Cursorquery,Value = Iif",
+        "controlesReferenciados": "Option2,Option3",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREECH.Get_favorecido",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.Op_Escolha, \"INSERIR\", \"ALTERAR\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREECH.Cheque.Get_bco",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREECH.Cheque.Get_age",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREECH.Cheque.Get_num",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREECH.Cheque.Get_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREECH.Cheque.Get_Valor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREECH.Cheque.Get_Vencimento",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREECH.Get_Copia",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREECH.Get_Verso",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.peantvalue = This.Value\nReturn Inlist( ThisForm.Op_Escolha, \"INSERIR\", \"ALTERAR\" ) And CrSigCqChi.ImpVersos = 0",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREECH.Get_Verso",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Alltrim(This.Value) == Alltrim(ThisForm.peantvalue)\n\tlcSql = [Update SigCqChi Set versos = ']+This.Value+[' Where CidChaves = ']+CrSigCqChi.CidChaves+[']\n\t=ThisForm.Podatamgr.Sqlexecute(lcSql,'')\n\tThisForm.Podatamgr.commit()\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREECH.Opcao_Imprime",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Visualizar.Enabled = InList(This.Value, 3, 4)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Enabled = InList",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREECH.Sair",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If !crSigCqChi.Emitidos\n\tllEmit = .f.\n\tlcSql = [Update SigCqChi Set Emitidos = ?llEmit, Favos = ']+CrSigCqChi.Favos+[', nEmissoes = ]+Str(CrSigCqChi.nEmissoes)+[ Where CidChaves = ']+CrSigCqChi.CidChaves+[']\n\t=ThisForm.Podatamgr.Sqlexecute(lcSql,'')\n\tThisForm.Podatamgr.commit()\n\tIf Messagebox( 'ATENÇÃO!!!' + Chr( 13 ) + 'Este cheque não será emitido...' + Chr( 13 ) + ;\n\t\t\t\t\t'Confirmando a sua saída, este cheque ficará pendente até a sua emissão.'+ Chr( 13 ) + ;\n\t\t\t\t\t'Confirma a Saída ? ', 4+32, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREECH.Visualizar",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.EnviaImp = .f.\n\nThisForm.EmiteCopia\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREECH.imprimir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Do Case\n\tCase ThisForm.Opcao_Imprime.Value = 1\n\t\t ThisForm.EmiteCheque\n\tCase ThisForm.Opcao_Imprime.Value = 2\n\t\t ThisForm.EmiteVerso\n\tCase ThisForm.Opcao_Imprime.Value = 3 .or. ;\n\t\t ThisForm.Opcao_Imprime.Value = 4\n\t\t ThisForm.EnviaImp = .t.\n\t\t ThisForm.EmiteCopia\nEndcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREECH.Procedure",
+      "queryOriginal": "Select * From crSigSyCom Where Tipos = 'Impressora de Cheque' Into Cursor CrTmpCfCom ReadWrite",
+      "tabelas": "crSigSyCom",
+      "colunas": "Tipos,Impressora,Cheque,CrTmpCfCom,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREECH.Procedure",
+      "queryOriginal": "\tSelect * From crSigSyCom Where Tipos = 'Impressora de Cheque' Into Cursor CrTmpCfCom ReadWrite",
+      "tabelas": "crSigSyCom",
+      "colunas": "Tipos,Impressora,Cheque,CrTmpCfCom,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREECH.Init",
+      "queryOriginal": "lcQueryChi = [Select * From SigCqChi Where EmpDopNums = ?lcEDN ]+; \t\t\t Iif(Not Empty(lcChq),[And ncheques = ']+lcChq+['],[]) lcQue... [TRUNCADO]",
+      "tabelas": "SigCqChi",
+      "colunas": "EmpDopNums,IifNot,ncheques",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREECH.Get_Verso.Valid",
+      "queryOriginal": "\tlcSql = [Update SigCqChi Set versos = ']+This.Value+[' Where CidChaves = ']+CrSigCqChi.CidChaves+['] \t=ThisForm.Podatamgr.Sqlexecute(lcSql,'')",
+      "tabelas": "SigCqChi",
+      "colunas": "versos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREECH.Sair.Click",
+      "queryOriginal": "\tlcSql = [Update SigCqChi Set Emitidos = ?llEmit, Favos = ']+CrSigCqChi.Favos+[', nEmissoes = ]+Str(CrSigCqChi.nEmissoes)+[ Where CidChaves = ']+CrSigCqChi.CidChaves+['] \t=ThisForm.Podatamgr.Sqlexecute(lcSql,'')",
+      "tabelas": "SigCqChi",
+      "colunas": "Emitidos,Favos,nEmissoes",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigSyCom", "SigCqChi"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

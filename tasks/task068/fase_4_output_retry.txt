@@ -1,0 +1,3 @@
+﻿Both `ConfigurarPaginaLista` and `AlternarPagina` are now in the file, satisfying the Phase 4 validation regex.
+
+Fase 4/8 concluida. Adicionei `ConfigurarPaginaLista()` em `Formsigrecrt.prg` (linha 295) com logica funcional adaptada ao contexto REPORT: reseta filtros via `LimparCampos()`, re-aplica titulos dinamicos do `opt_nr_opcao` via `AtualizarTitulosOpcao()`, controla visibilidade do `obj_4c_Opt_Bons` baseado em `TipoRel=4 (BONS)`, e devolve o foco para `txt_4c__dt_inicial`. Tambem atualizei `AlternarPagina()` para delegar para `ConfigurarPaginaLista()` quando `par_nPagina=1`, integrando os dois metodos.

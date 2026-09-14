@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. UfsBO.prg agora tem os 6 m├®todos CRUD completos:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com filtro opcional por estados/descrs, ordena por estados, popula `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cEstados)`** ÔÇö SELECT completo (incluindo chkgnre, ChaveConsultaHomologacao, ChaveConsultaProducao, Homologacao, Producao), reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö usa `SELECT (par_cAliasCursor)` obrigat├│rio antes de acessar campos; campos opcionais verificados com `PEMSTATUS`
+- **`Inserir()`** ÔÇö INSERT completo com todos os 35 campos; chama `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE completo com todos os campos exceto PK `estados`; chama `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö DELETE por `estados`; chama `RegistrarAuditoria("DELETE")`

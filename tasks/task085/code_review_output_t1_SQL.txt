@@ -1,0 +1,7 @@
+﻿**Corre├º├Áes aplicadas:**
+
+**[SQL-ASPAS] BO linhas 479-480** ÔÇö substitu├¡das duas concatena├º├Áes diretas com aspas literais por `EscaparSQL()`:
+- `"'" + loc_cEGEs + "'"` ÔåÆ `EscaparSQL(loc_cEGEs)`
+- `"'" + ALLTRIM(TmpEst.cpros) + "'"` ÔåÆ `EscaparSQL(ALLTRIM(TmpEst.cpros))`
+
+**[SQL-FILTRO-INVENTADO] CMOES** ÔÇö ap├│s verifica├º├úo: `CMoes` aparece somente na query de valida├º├úo de lookup da Moeda (`SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = ...`), que ├® uma consulta leg├¡tima contra a tabela SigCdMoe para validar a entrada do usu├írio no campo Moeda. **N├úo ├® um filtro inventado** nas queries principais de dados ÔÇö nenhuma altera├º├úo necess├íria.

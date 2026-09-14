@@ -1,0 +1,15 @@
+﻿Arquivo criado. Verifiquei contra o padr├úo de `sigrecntBO.prg` (relat├│rio similar de contagem por localiza├º├úo):
+
+**Propriedades declaradas** (mapeadas dos campos do formul├írio original):
+- `this_dData` ÔåÉ `GetDatas` (data ├║nica, n├úo intervalo)
+- `this_cConta` / `this_cDConta` ÔåÉ `getConta` / `getDConta` (vendedor: iclis/rclis)
+- `this_cCods` ÔåÉ `GetCods` (c├│digo do documento sigcdcrf.cods)
+- `this_cProduto` / `this_cDsProduto` ÔåÉ `get_Produto` / `get_descricao` (cpros/dpros)
+- `this_cCdGrEstoque` / `this_cDsGrEstoque` ÔåÉ `Get_Cd_GrEstoque` / `Get_Ds_GrEstoque` (grupos)
+- `this_cCdEstoque` / `this_cDsEstoque` ÔåÉ `Get_Cd_Estoque` / `Get_Ds_Estoque` (estos)
+- `this_nOptLocal = 4` (padr├úo "Diferen├ºas" conforme Init() original)
+- `this_cGrPadVens` (carregado de SigCdPam ÔÇö ser├í usado nas queries de vendedor nas fases seguintes)
+
+**Init()** define t├¡tulo usando CHR() e chama `DODEFAULT()`, seguindo exatamente o padr├úo de `sigrecntBO.prg`.
+
+Fase 1/8 conclu├¡da. A Fase 2 adicionar├í `CarregarParametros()`, `PrepararDados()`, `Visualizar()`, `Imprimir()`, etc.

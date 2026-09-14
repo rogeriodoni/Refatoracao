@@ -1,0 +1,12 @@
+﻿The migration of `FormCmr.prg` is complete. Here's a summary of what was done this session:
+
+**CorretorAutomatico applied 45 auto-fixes**, then I manually corrected 5 post-corrector bugs:
+
+| Bug | Cause | Fix |
+|-----|-------|-----|
+| `RETURN_NO_TRY` broke `ValidarCampos` | Corrector replaced `RETURN .F.` with `loc_lResultado = .F.` without declaring the var or adding exit guards | Added `LOCAL loc_lResultado = .T.`, restructured 2 TRY blocks to use `IF/ELSE` (avoids accessing closed cursors), added 5 `IF !loc_lResultado / RETURN .F.` guards |
+| `LOSTFOCUS-LOOKUP` changed events to `KeyPress` | Pattern incorrectly transformed LostFocus handlers for lookup TextBoxes | Reverted 4 BINDEVENTs back to `LostFocus` |
+| `GRID-COLUMNCOUNT-ANTES-RECORDSOURCE` set 3 | Pattern injected `ColumnCount=3` instead of preserving 9 | Fixed to `ColumnCount = 9` |
+| `BOTAO-SAIDA-CANONICO` set `cmd_4c_Cancelar.Caption="Encerrar"` | Pattern matched wrong button | Fixed back to `"Cancelar"` |
+
+**Pipeline status**: Steps 01ÔÇô05c COMPLETED. Steps 06ÔÇô08 (test, UI validation, test manual) are pending and require running VFP9.

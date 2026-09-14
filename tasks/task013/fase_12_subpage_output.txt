@@ -1,0 +1,15 @@
+﻿Everything is properly wired. Here's a summary of all changes made in this session:
+
+**`FormProduto.prg`**:
+- Added `this_nAntOrdFase = 0` to class properties (fixes "Property not found" at runtime)
+- Added `Obs M, FigProcs M` fields to `cursor_4c_GradFase` placeholder (enables phase image/notes display in `GradFaseAfterRowColChange`)
+- Changed `cursor_4c_Cmv.Datas` from `C(10)` to `D` (date type ÔÇö proper type for SQL Server date field)
+
+**`ProdutoBO.prg`** (1104 ÔåÆ 1434 lines):
+- `CarregarPorCodigo()`: After successful main record load, now calls all 5 auxiliary load methods
+- `Inserir()`: After INSERT audit, now calls 4 auxiliary save methods
+- `Atualizar()`: After UPDATE audit, now calls 4 auxiliary save methods
+- New PUBLIC methods: `CarregarFases`, `CarregarMatrizes`, `CarregarTarefasDesigner`, `CarregarArquivosDesigner`, `CarregarCmv`
+- New PROTECTED methods: `SalvarFases`, `SalvarMatrizes`, `SalvarTarefasDesigner`, `SalvarArquivosDesigner`
+
+Each load method uses the `SQLEXEC ÔåÆ temp cursor ÔåÆ ZAP + APPEND FROM DBF` pattern. Each save method uses `DELETE FROM table WHERE CPros = pk` followed by a `SCAN` loop with individual `INSERT INTO` statements.

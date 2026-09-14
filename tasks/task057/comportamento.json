@@ -1,0 +1,294 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 12,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fBuscarCotacao", "fAcessoContas", "fAcessoContab", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECND",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCnd To Printer\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCnd To Print Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND",
+      "evento": "Init",
+      "linhas": 12,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECND",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND",
+      "evento": "Procedure",
+      "linhas": 75,
+      "codigoOriginal": "Private pDtR\n\nldDat = ThisForm.cntLocal.getDtInicial.Value\nlcGru = Padr(ThisForm.cntLocal.getGrupo.Value, 10)\nlcCon = Padr(ThisForm.cntLocal.getConta.Value, 10)\nlcMoe = Padr(ThisForm.cntLocal.getMoeda.Value, 03)\n\nlcTit = ThisForm.Caption\nlcSub = 'Data Referência : ' + Dtoc(ldDat) + ' - ' + ;\n\t\t'Grupo : ' + Alltrim(lcGru) + ' - ' + ;\n\t\t'Conta : ' + Iif(Empty(lcCon), 'Todas', Alltrim(lcCon))\nThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')\nlcCep = Alltrim(_Empr) + ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fBuscarCotacao",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCnd Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND",
+      "evento": "Click",
+      "linhas": 23,
+      "codigoOriginal": "If (This.Value <> 4) && Se Não Clicou em Saída\n\tIf Empty(ThisForm.cntLocal.getDtInicial.Value)\n\t\t=Messagebox('Data de Referência Inválida!!!', 0+48, '')\n\t\tThisForm.cntLocal.getDtInicial.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(ThisForm.cntLocal.getGrupo.Value)\n\t\t=Messagebox('Grupo Inválido!!!', 0+48, '')\n\t\tThisForm.cntLocal.getGrupo.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(ThisForm.cntLocal.getMoeda.Value)\n\t\t=Messagebox('Moeda Inválida!!!', 0+48, '')\n\t\tThisForm.cntLocal.getMoeda.SetFocus\n\t\tReturn 0\n\tE... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND.cntLocal.getDConta",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.cntLocal.GetGrupo.Value\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.cntLocal.GetConta, This, ThisForm.poDataMgr)\n\t\t=Messagebox('Acesso Negado!!!', 48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.cntLocal.GetConta.Value = ''\n\t\tThisForm.cntLocal.GetConta.Refresh\n\tEndIf\nElse\n\tThisForm.cntLocal.GetConta.Value = ''\n\tThisForm.cntLocal.GetConta.Refresh\nEndIf\n* Fim ****************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND.cntLocal.getDConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.cntLocal.GetGrupo.Value) And Empty(ThisForm.cntLocal.GetConta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND.cntLocal.getDGrupo",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "Local llRet\n\nllRet = .t.\nIf Not Empty(This.Value)\n\tllRet = fAcessoContab(Usuar, 'D', This.Value, ThisForm.cntLocal.GetGrupo, This, ThisForm.poDataMgr)\nElse\n\tThisForm.cntLocal.GetGrupo.Value = ''\n\tThisForm.cntLocal.GetGrupo.Refresh\nEndIf\nReturn llRet\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND.cntLocal.getDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.cntLocal.GetGrupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND.cntLocal.getConta",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Grupo = This.Parent.GetGrupo.Value\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'C', This.Value, This, ThisForm.cntLocal.GetDConta, ThisForm.poDataMgr)\n\t\t=Messagebox('Acesso Negado!!!', 48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.cntLocal.GetDConta.Value = ''\n\t\tThisForm.cntLocal.GetDConta.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.cntLocal.GetDConta.Value = ''\n\tThisForm.cntLocal.GetDConta.Refresh\n\tReturn .t.\nEndIf\n* Fim ******************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND.cntLocal.getGrupo",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "Local llRet\n\nllRet = .t.\nIf Not Empty(This.Value)\n\tllRet = fAcessoContab(Usuar, 'C', This.Value, This, ThisForm.cntLocal.GetDGrupo, ThisForm.poDataMgr)\nElse\n\tThisForm.cntLocal.GetDGrupo.Value = ''\n\tThisForm.cntLocal.GetDGrupo.Refresh\nEndIf\n\nReturn llRet\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND.cntLocal.getMoeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.cntLocal.getMoeda.Value  = crListaRemota.CMoes\n\tThisForm.cntLocal.getDMoeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThisForm.cntLocal.getMoe... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND.cntLocal.getDMoeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.cntLocal.getMoeda.Value  = crListaRemota.CMoes\n\tThisForm.cntLocal.getDMoeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThisForm.cntLocal.getMoe... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECND.cntLocal.getDMoeda",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty(ThisForm.cntLocal.getMoeda.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

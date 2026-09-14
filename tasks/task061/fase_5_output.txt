@@ -1,0 +1,8 @@
+﻿Fase 5 conclu├¡da. As altera├º├Áes implementam a l├│gica dos `When events` do original:
+
+- **`txt_4c_CdEstoque.ReadOnly = .T.`** no `ConfigurarPaginaLista` ÔÇö Conta come├ºa bloqueada (original: `When = !IsEmpty(get_Cd_GrEstoque)`)
+- **`AtualizarEstadoCamposEstoque()`** ÔÇö novo m├®todo que habilita/desabilita Conta e limpa seus valores quando Grupo ├® apagado
+- **`TeclaCdGrEstoque`** ÔÇö agora chama `AtualizarEstadoCamposEstoque` ao sair do campo (Enter/Tab)
+- **`LimparCampos`** ÔÇö chama `AtualizarEstadoCamposEstoque` ao final para garantir estado inicial correto
+
+O `ConfigurarPaginaDados()` permanece corretamente como stub retornando `.T.` ÔÇö este ├® um form REPORT com layout flat, sem Page2 de edi├º├úo.

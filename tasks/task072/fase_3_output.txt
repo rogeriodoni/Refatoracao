@@ -1,0 +1,19 @@
+﻿Fase 3 conclu├¡da. Aqui est├í o resumo do que foi feito:
+
+**Arquivos criados/modificados:**
+
+1. **`SIGRECTLBO.prg`** ÔÇö Removido `PROTECTED` de `PrepararDados()` (linha 73), tornando-o p├║blico para que o Form possa cham├í-lo diretamente, exatamente como o FormSIGREVIS faz com seu BO.
+
+2. **`FormSIGRECTL.prg`** ÔÇö Criado completo (710 linhas) seguindo o padr├úo can├┤nico do FormSIGREVIS:
+
+| Componente | Detalhes |
+|---|---|
+| Dimens├Áes | Width=800, Height=143 (id├¬ntico ao original ÔÇö PILAR 1) |
+| Layout | TitleBar=0, DataSession=2, WindowType=1 (modal) |
+| `cnt_4c_Cabecalho` | Header cinza escuro RGB(100,100,100) com lbl_4c_Sombra/Titulo |
+| `cmg_4c_Botoes` | CommandGroup can├┤nico Top=0, Left=529, Width=273 ÔÇö 4 bot├Áes |
+| `pgf_4c_Paginas` | PageFrame 1 p├ígina (Filtros), Top=85, Height=58 |
+| Page1 | lbl/txt_4c_Mes, lbl/txt_4c_Ano, chk_4c_ImpTempo em posi├º├Áes page-relativas (Top original ÔêÆ 85) |
+| Valida├º├úo | TxtMesKeyPress/TxtAnoKeyPress (Enter/Tab) ÔÇö regra BINDEVENT Valid n├úo funciona em TextBox |
+| Bot├Áes | BtnVisualizarClick (PREVIEW), BtnImprimirClick (PROMPT), BtnExcelClick (COPY TO XLS), BtnSairClick |
+| Modo autom├ítico | Init(par_lAutomatico, par_cEmailExc) ÔåÆ EnviarEmail() via CDO SMTP com fGerPDFCreator |

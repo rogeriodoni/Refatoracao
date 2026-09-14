@@ -1,0 +1,1880 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprdft.SCX
+* Data/Hora: 07/07/2026 10:49:50
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRDFT
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRDFT
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRDFT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRDFT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: SAIDA
+  Parent: SIGPRDFT
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Shape2
+  Parent: SIGPRDFT
+  Class: shape
+  BaseClass: shape
+
+Objeto: Label5
+  Parent: SIGPRDFT
+  Class: label
+  BaseClass: label
+
+Objeto: GetValor
+  Parent: SIGPRDFT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGPRDFT
+  Class: label
+  BaseClass: label
+
+Objeto: GetDigitos
+  Parent: SIGPRDFT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label8
+  Parent: SIGPRDFT
+  Class: label
+  BaseClass: label
+
+Objeto: Container1
+  Parent: SIGPRDFT
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPRDFT.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: GetCartao
+  Parent: SIGPRDFT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label11
+  Parent: SIGPRDFT
+  Class: label
+  BaseClass: label
+
+Objeto: Label4
+  Parent: SIGPRDFT
+  Class: label
+  BaseClass: label
+
+Objeto: Optiongroup1
+  Parent: SIGPRDFT
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label6
+  Parent: SIGPRDFT
+  Class: label
+  BaseClass: label
+
+Objeto: Text1
+  Parent: SIGPRDFT
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDatas
+  Parent: SIGPRDFT
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT
+------------------------------------------------------------
+  Height = 370
+  Width = 500
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Sitef - Cartão de Débito"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  pcbandeira = 
+  pctvenda = .T.
+  Name = "SIGPRDFT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.SAIDA
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  ControlSource = "OPSENHA"
+  Height = 85
+  Left = 420
+  Top = -2
+  Width = 85
+  TabIndex = 8
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "SAIDA"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Command1.Cancel = .F.
+  Command1.Caption = "\<Cancelar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "CANCELA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Shape2
+------------------------------------------------------------
+  Top = 93
+  Left = 17
+  Height = 202
+  Width = 466
+  SpecialEffect = 0
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "VALOR :"
+  Height = 15
+  Left = 175
+  Top = 102
+  Width = 45
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.GetValor
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 0
+  Enabled = .F.
+  Format = ""
+  Height = 23
+  InputMask = "99,999,999.99"
+  Left = 222
+  TabIndex = 1
+  Top = 99
+  Width = 100
+  ForeColor = 0,0,0
+  DisabledForeColor = 0,0,0
+  Name = "GetValor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Label2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "4 ULTIMOS DIGITOS :"
+  Height = 17
+  Left = 101
+  Top = 171
+  Width = 119
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.GetDigitos
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Enabled = .T.
+  Height = 23
+  InputMask = "9999"
+  Left = 222
+  TabIndex = 3
+  Top = 168
+  Width = 40
+  ForeColor = 0,0,0
+  BackColor = 212,208,200
+  Name = "GetDigitos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Label8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BorderStyle = 0
+  Caption = "NUMERO CARTAO :"
+  Height = 15
+  Left = 116
+  Top = 136
+  Width = 104
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Container1
+------------------------------------------------------------
+  Top = 298
+  Left = 54
+  Width = 392
+  Height = 58
+  SpecialEffect = 0
+  Visible = .T.
+  TabIndex = 9
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Container1.Label1
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  Alignment = 2
+  Caption = "Insira ou Passe o Cartao"
+  Height = 29
+  Left = 18
+  Top = 14
+  Width = 349
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.GetCartao
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  Enabled = .F.
+  Format = ""
+  Height = 23
+  InputMask = "9999999999999999999"
+  Left = 222
+  MaxLength = 19
+  TabIndex = 2
+  Top = 133
+  Width = 160
+  ForeColor = 0,0,0
+  DisabledForeColor = 0,0,0
+  Name = "GetCartao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Label11
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "1ª PARCELA/VENCTO :"
+  Height = 15
+  Left = 98
+  Top = 268
+  Width = 122
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "TIPO DE VENDA :"
+  Height = 15
+  Left = 129
+  Top = 204
+  Width = 91
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Optiongroup1
+------------------------------------------------------------
+  ButtonCount = 2
+  Value = 1
+  Enabled = .T.
+  Height = 26
+  Left = 222
+  Top = 200
+  Width = 161
+  TabIndex = 5
+  Name = "Optiongroup1"
+  Option1.FontBold = .T.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Caption = " A vista"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.Width = 61
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .T.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.Caption = " Predatado"
+  Option2.Height = 15
+  Option2.Left = 73
+  Option2.Top = 5
+  Option2.Width = 80
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Nº PARCELAS :"
+  Height = 15
+  Left = 139
+  Top = 238
+  Width = 81
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Enabled = .F.
+  Format = ""
+  Height = 23
+  InputMask = "99"
+  Left = 222
+  TabIndex = 6
+  Top = 235
+  Width = 27
+  ForeColor = 0,0,0
+  DisabledForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDFT.GetDatas
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = {}
+  Enabled = .F.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 222
+  TabIndex = 7
+  Top = 266
+  Width = 75
+  ForeColor = 0,0,0
+  DisabledForeColor = 0,0,0
+  Name = "GetDatas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRDFT
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE errotef
+------------------------------------------------------------
+PROCEDURE errotef
+PARAMETERS pnRetornos
+
+If Type("lnRetorno") <> "N" and (lnRetorno > -1 Or lnRetorno < -5)
+	ThisForm.RetornoFalha("Operacao Cancelada pelo Usuario", "0,00")
+Endif
+
+IF pnRetornos = -1
+	ThisForm.RetornoFalha("Modulo Nao Iniciado", "0,00")
+ENDIF
+IF pnRetornos = -2
+	ThisForm.RetornoFalha("Operacao Cancelada pelo Usuario", "0,00")
+ENDIF
+IF pnRetornos = -3
+	ThisForm.RetornoFalha("Fornecida uma Modalidade Invalida", "0,00")
+ENDIF
+IF pnRetornos = -4
+	ThisForm.RetornoFalha("Falta Memoria para Rodar a Funcao", "0,00")
+ENDIF
+IF pnRetornos = -5
+	ThisForm.RetornoFalha("Sem Comunicacao com o SiTef", "0,00")
+ENDIF
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montaretorno
+------------------------------------------------------------
+PROCEDURE montaretorno
+PARAMETERS lsTipTran, lsDataHora, lsCupom, lsCartao, lsNsu, lsAutoriza, lsFinaliza, lnValPago, MenRet
+
+lsValPago=STRTRAN(ALLTRIM(Transform(lnValPago,"99999999999.99")),".",",")
+
+DECLARE laCartao[11]
+laCartao[1]="Outro, nao definido"
+laCartao[2]="Visa"
+laCartao[3]="Mastercard"
+laCartao[4]="Diners"
+laCartao[5]="American Express"
+laCartao[6]="Sollo"
+laCartao[7]="Sidecard (Redecard)"
+laCartao[8]="Private Label (Redecard)"
+laCartao[9]="Redeshop"
+laCartao[10]=""
+laCartao[11]="Fininvest"
+
+IF VAL(ThisForm.pcBandeira) > 10 .or. VAL(ThisForm.pcBandeira) < 0
+	lsCartao="0"
+Else
+	lsCartao = ThisForm.pcBandeira
+Endif
+
+CREATE CURSOR crSiTef (tef c(100))
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = "+STR(ltIdent,10))
+INSERT INTO crSiTef (Tef) VALUES ("002-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("003-000 = "+lsValPago)
+INSERT INTO crSiTef (Tef) VALUES ("004-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("009-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("010-000 = "+laCartao[VAL(lsCartao)+1])
+INSERT INTO crSiTef (Tef) VALUES ("011-000 = "+lsTipTran)
+INSERT INTO crSiTef (Tef) VALUES ("012-000 = "+lsNsu)
+INSERT INTO crSiTef (Tef) VALUES ("013-000 = "+lsAutoriza)
+INSERT INTO crSiTef (Tef) VALUES ("015-000 = "+SUBSTR(lsDataHora,7,2)+SUBSTR(lsDataHora,5,2)+SUBSTR(lsDataHora,9,6))
+INSERT INTO crSiTef (Tef) VALUES ("017-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("018-000 = "+ThisForm.Text1.Value)
+INSERT INTO crSiTef (Tef) VALUES ("017-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("019-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("020-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("021-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("022-000 = "+SUBSTR(lsDataHora,7,2)+SUBSTR(lsDataHora,5,2)+SUBSTR(lsDataHora,1,4))
+INSERT INTO crSiTef (Tef) VALUES ("023-000 = "+SUBSTR(lsDataHora,9,6))
+INSERT INTO crSiTef (Tef) VALUES ("023-000 = "+lsFinaliza)
+INSERT INTO crSiTef (Tef) VALUES ("027-000 = "+SUBSTR(lsDataHora,9,6))
+lsPos=1
+lnLinha=1
+DO WHILE lsPos <> 0
+	lsPos=AT(CHR(10),lsCupom)
+	INSERT INTO crSiTef (Tef) VALUES ("029-"+TRANSFORM(lnLinha,"@L 999")+" = "+IIF(lsPos<>0,SUBSTR(lsCupom,1,lsPos-1),lsCupom))
+	lsCupom=SUBSTR(lscupom,lsPos+1)
+	lnLinha=lnLinha+1
+Enddo
+INSERT INTO crSiTef (Tef) VALUES ("028-000 = "+ALLTRIM(STR(lnLinha-2)))
+INSERT INTO crSiTef (Tef) VALUES ("030-000 = "+MenRet)
+INSERT INTO crSiTef (Tef) VALUES ("150-000 = 00000000")
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+SELECT crSitef 
+COPY TO C:\client\Resp\IntPos.001 SDF
+ZAP
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = "+STR(ltIdent,10))
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+COPY TO C:\client\Resp\IntPos.STS SDF
+	
+USE
+	
+Return
+
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE retornofalha
+------------------------------------------------------------
+PROCEDURE retornofalha
+PARAMETERS lcMensagem, lnValPago
+
+lcMensagem=Iif(Empty(lcMensagem),"Operação Cancelada Pelo Usuario",lcMensagem)
+
+lsValPago=STRTRAN(ALLTRIM(Transform(lnValPago,"99999999999.99")),".",",")
+
+CREATE CURSOR crSiTef (tef c(100))
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = "+STR(ltIdent,10))
+INSERT INTO crSiTef (Tef) VALUES ("002-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("003-000 = "+lsValPago)
+INSERT INTO crSiTef (Tef) VALUES ("004-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("009-000 = FF")
+INSERT INTO crSiTef (Tef) VALUES ("010-000 = 05")
+INSERT INTO crSiTef (Tef) VALUES ("028-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("030-000 = "+IIF("AGUARDE"$UPPER(lcMensagem),"TRANSACAO CANCELADA",lcMensagem))
+INSERT INTO crSiTef (Tef) VALUES ("150-000 = 00000000")
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+SELECT crSitef 
+COPY TO C:\client\Resp\IntPos.001 SDF
+ZAP
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = "+STR(ltIdent,10))
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+COPY TO C:\client\Resp\IntPos.STS SDF
+
+USE
+	
+Return
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+*CLEAR DLLS "ConfiguraIntSiTefInterativo"
+*CLEAR DLLS "IniciaFuncaoSiTefInterativo"
+*CLEAR DLLS "ContinuaFuncaoSiTefInterativo"
+*CHRSAW(2)
+If ! Type('ThisForm.pcBandeira') = [C] or Empty(ThisForm.pcBandeira)
+	ThisForm.pcBandeira = [00000]
+Endif
+If ! Type('ThisForm.lsCartao') = [C] or Empty(ThisForm.lsCartao)
+	ThisForm.lsCartao = [00000]
+Endif
+RETURN(lcSaque+"/"+lnParcs+"/"+DTOC(ldData)+ThisForm.pcBandeira+ThisForm.lsCartao)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+dodefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Move
+------------------------------------------------------------
+PROCEDURE Move
+LPARAMETERS nLeft, nTop, nWidth, nHeight
+
+llCancela=.f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+DECLARE Integer ConfiguraIntSiTefInterativo IN "CliSiTef32I.DLL" string lsEndereco, String lsLoja, String lsTerminal, Integer lnReservado 
+DECLARE Integer IniciaFuncaoSiTefInterativo IN "CliSiTef32I.DLL" Integer lnModalidade, String lsValor, String lsCupom, String lsData, String lsHorario, String lsOperador, String lsRestricao 
+DECLARE Integer ContinuaFuncaoSiTefInterativo IN "CliSiTef32I.DLL" Integer @lnComando, Integer @lnTipo, Integer @lnMinimo, Integer @lnMaximo, String @lsBuffer, Integer lnTamanho, Integer lnResultado 
+DECLARE integer FinalizaTransacaoSiTefInterativo IN "CliSiTef32I.DLL" Integer lnConfirma, String lsCupom, String lsData, String lsHorario 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+If nKeyCode = 27 And  nShiftAltCtrl = 0 And ThisForm.pcKeyEsc
+	NoDefault
+	ThisForm.SAIDA.CANCELA.Click
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+PARAMETERS EndSiTef, ValPago, Cupom, Caixa, DebCred, TipPagto, NumParcs, lcIdent, pcOpers
+
+Public lsEndSiTef, lsIdTerminal, lnValPago, lsCupom, lsCaixa, lsDebCred, lsTipPagto, lnNumParcs, DCD, ldData
+Public ProximoComando, TipoCampo, TamanhoMinimo, TamanhoMaximo, Buffer, lnContinua, ltIdent, lcSaque, lnParcs, lnCiclos
+Local lnKey
+
+PRIVATE lcOpers
+
+ThisForm.pckeyesc = .t.
+
+Local lcOnErroCmd1,llOnErro1
+
+m.llOnErro1 = .f.
+m.lcOnErroCmd1 = On('Error')
+On Error m.llOnErro1 = .t.
+
+Keyboard Chr(32)
+lnKey=Inkey(0)
+
+On Error &lcOnErroCmd1.
+
+lcSaque="0,00"
+lcOpers = pcOpers
+lnCiclos = 0
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		DO Form SigTfDss With "Erro na Conexão","",'Impossivel Efetuar Conexão com','Servidor de Banco de Dados.',"","VM",ThisForm.Left,ThisForm.Top 
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+	ENDWITH
+	
+	.poDatamgr.SqlExecute([Select * From SigOpFp Where FPags = ?lcOpers],'crSigOpFp')
+	.poDatamgr.SqlExecute([Select * From SigCdEmp Where cEmps = ?_Empr],'crSigCdEmp')
+	
+Endwith	
+
+ThisForm.GetDigitos.BackColor=12632256
+
+ltIdent=lcIdent
+lsEndSiTef=ALLTRIM(EndSiTef)
+lnEmp=fConverteStr(CrSigCdEmp.nEmps)
+lsIdTerminal="00000"+_Empr
+lnValPago=ValPago
+lsCupom=TRANSFORM(Cupom,"@L 999999")
+lsCaixa=Caixa
+lsDebCred=DebCred
+lsTipPagto=TipPagto
+lnNumParcs=NumParcs
+lnParcs=TRANSFORM(NumParcs,"@L 99")
+ldData=DATE()
+DCD=.f.
+
+WITH Thisform
+	.GetDatas.Value=DATE()
+	.GetValor.Value = lnValPago
+	IF crSigOpFp.lCartao = "S"
+		.GetCartao.Enabled=.t.
+		.Label2.Caption = "Validade Cartao :"
+	EndIf
+EndWith
+
+ThisForm.Container1.Label1.Caption="Insira ou Passe"+CHR(13)+"o Cartao"
+IF !Thisform.getDatas.Enabled
+	IF crSigOpFp.lCartao = "N"
+		ThisForm.Container1.Label1.Caption="Insira ou Passe"+CHR(13)+"o Cartao"
+	ELSE
+		ThisForm.Container1.Label1.Caption="Digite o Numero"+CHR(13)+"do Cartao"
+	ENDIF
+EndIf
+ThisForm.AlwaysOnTop = .T.
+Thisform.ZOrder(0)
+ThisForm.Text1.Value = TRANSFORM(lnNumParcs,"@L 99")
+ThisForm.Refresh
+ThisForm.GetValor.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDFT.SAIDA
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Move
+------------------------------------------------------------
+PROCEDURE Move
+LPARAMETERS nLeft, nTop, nWidth, nHeight
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE CANCELA.Click
+------------------------------------------------------------
+PROCEDURE CANCELA.Click
+lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), -1)
+ThisForm.RetornoFalha("Oper. Cancelada pelo Usuario(1)",lnValPago)
+Thisform.release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDFT.Shape2
+* Classe: shape (Base: shape)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Move
+------------------------------------------------------------
+PROCEDURE Move
+LPARAMETERS nLeft, nTop, nWidth, nHeight
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDFT.GetDigitos
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If Empty(This.Value)
+	Set Confirm Off
+Endif
+Return(EMPTY(This.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+IF tHISfORM.abandona
+	Thisform.release
+eNDIF
+
+IF LEN(Alltrim(This.Value)) <> 4 .and. ! EMPTY(This.Value)
+	DO Form SigTfDss With "Erro na Transação","","Quantidade de Digitos Invalida","","","VM",ThisForm.Left,ThisForm.Top 
+	This.Value = ""
+	Return(.f.)
+ENDIF
+
+IF EMPTY(This.Value)
+	RETURN
+Endif
+
+PRIVATE lsNsu, lsAutoriza, lsDataHora, lsTipTran, lsCupom, lsCartao, lsFinaliza
+
+Parcelas=.f.
+lsMensagem=''
+Buffer=Alltrim(This.Value)+REPLICATE(CHR(0),2000-LEN(Alltrim(This.Value)))
+lnContinua=1000
+lnRetorno=10000
+lnCampo=1
+lsMRet=""
+
+DO WHILE lnRetorno = 10000
+	lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+	If Lastkey() = 27
+		lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), -1)
+		Thisform.RetornoFalha("Operação Cancelada pelo Usuario")
+		Thisform.release
+	Endif
+	If ProximoComando = 23
+		ThisForm.Saida.CANCELA.Enabled = .f.
+	Else
+		ThisForm.Saida.CANCELA.Enabled = .t.
+	Endif
+ 	IF "SENHA"$UPPER(ALLTRIM(Buffer))
+		ThisForm.Container1.Label1.Caption="Digite a Senha"
+	ENDIF
+	IF lnretorno = 0 
+		EXIT
+	Endif
+	IF lnRetorno < 0
+		ThisForm.ErroTef(lnRetorno)
+		Thisform.release
+	ENDIF
+	IF ProximoComando = 22
+		DO Form SigTfDss With "Erro na Trasação","",ALLTRIM(Substr(Buffer,1,32)),ALLTRIM(Substr(Buffer,33,32)),"","VM",ThisForm.Left,ThisForm.Top 
+		lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+		IF lnretorno <> 10000
+			EXIT
+		ELSE
+			IF Parcelas
+				ThisForm.Text1.Enabled=.t.
+				ThisForm.Optiongroup1.Enabled=.f.
+				This.Value=.f.
+				RETURN .t.
+			Else
+				RETURN .f.
+			Endif
+		ENDIF
+	Endif
+	If ProximoComando = 23
+		ThisForm.Saida.CANCELA.Enabled = .f.
+	Else
+		ThisForm.Saida.CANCELA.Enabled = .t.
+	Endif
+	IF ProximoComando = 21
+		Buffer=IIF(lnNumParcs=1,IIf(ThisForm.getDatas.Value=DATE(),"1","2"),IIF(lsDebCred="P","3","4"))+REPLICATE(CHR(0),1999)
+		IF Buffer = "1"
+			EXIT
+		ENDIF
+		DCD=.t.
+		lnContinua=1000
+		loop
+	Endif
+	IF ProximoComando = 23
+		ThisForm.Container1.Label1.Caption="Digite a Senha"
+	ENDIF
+	IF ProximoComando = 30 .and. TipoCampo = 510
+		IF crSigOpFp.Garantias = "S"
+*		IF SigOpFp.Garantias = "S"
+			Buffer="1"+REPLICATE(CHR(0),1999)
+		Else
+			Buffer="2"+REPLICATE(CHR(0),1999)
+		Endif
+		lnContinua=1000
+	Endif	
+	IF ProximoComando = 34 AND TipoCampo = 130
+		IF crSigOpFp.lSaque = "S"
+*		IF SigOpFp.lSaque = "S"
+			lcSaque="0,00"
+			DO FORM SigCsTef WITH ThisForm.Top, ThisForm.Left TO lcSaque
+			Buffer=lcSaque
+		Else
+			Buffer="0,00"
+		Endif
+		Buffer=buffer+REPLICATE(CHR(0),2000-LEN(buffer))
+		lnContinua=1000
+		Loop
+	Endif
+	IF ProximoComando = 30 .and. (TipoCampo = -1 OR TipoCampo = 506) .and. lsDebCred<>"P"
+		ThisForm.GetDatas.Enabled=.t.
+		EXIT
+	Endif	
+	IF ProximoComando = 30 .and. TipoCampo = 514
+		ThisForm.GetCodSeg.Enabled=.t.
+		Exit
+	ENDIF
+	IF ProximoComando = 30 .and. (lsDebCred="P" .or. TipoCampo = 511)
+		IF lnCampo = 1
+		    Buffer=TRANSFORM(lnNumParcs,"@L 99")+REPLICATE(CHR(0),1999)
+		    Parcelas=.t.
+		    lnCampo=2
+		    LOOP
+		ELSE
+			ThisForm.GetDatas.Enabled=.t.
+			EXIT
+		Endif
+	Endif
+ 	IF UPPER(ALLTRIM(Buffer)) = "DIGITE A SENHA"
+		ThisForm.Container1.Label1.Caption="Digite a Senha"
+	Endif
+	IF ProximoComando = 3
+		lsMRet=ALLTRIM(Buffer)
+	Endif
+	IF TipoCampo = 100
+		lsTipTran=Buffer
+	Endif
+	IF TipoCampo = 105
+		lsDataHora=Buffer
+	Endif
+	IF TipoCampo = 121
+		lsCupom=Buffer
+	Endif
+	IF TipoCampo = 131
+		ThisForm.lsCartao = Left(Buffer, 5)
+	Endif
+	IF TipoCampo = 132
+		ThisForm.pcBandeira=Left(Buffer,5)
+	Endif
+	IF TipoCampo = 134
+		lsNsu=ALLTRIM(STR(VAL(Buffer)))
+	Endif
+	IF TipoCampo = 135
+		lsAutoriza=Buffer
+	ENDIF
+	IF lnRetorno <> 0
+		lsFinaliza=Buffer
+	ENDIF
+	IF ProximoComando = 22 .and. lsDebCred="P"
+		lsCupom=Buffer
+		lnRetorno = 0
+		EXIT
+	Endif
+	IF ProximoComando <> 21 .and. ProximoComando <> 30 .and. ProximoComando <> 34
+		lsMensagem=Buffer
+		Buffer=SPACE(2000)
+		lnContinua=0
+	ENDIF
+Enddo 
+IF lnRetorno <> 10000
+	IF lsDebCred="P" .and. crSigOpFp.Tcdc <> "S"
+		DO FORM SigCoCDC WITH lsCupom
+		ThisForm.retornofalha("Consulta CDC Realizada",lnValPago)
+	Else
+		IF lnRetorno = 0
+			ThisForm.MontaRetorno(lsTipTran, lsDataHora, lsCupom, ThisForm.pcBandeira, lsNsu, lsAutoriza, lsFinaliza, lnValPago, lsMRet)
+		ENDIF
+	Endif
+	Thisform.release
+ENDIF
+IF ProximoComando = 30 .and. TipoCampo = 514
+	ThisForm.Container1.Label1.Caption="Digite Codigo"+CHR(13)+"de Seguranca"
+ELSE
+	IF  lsDebCred<>"P" .and. ! DCD
+		ThisForm.Container1.Label1.Caption="Digite o Tipo"+CHR(13)+"Venda"
+		ThisForm.optiongroup1.Enabled=.t.
+		ThisForm.getDatas.Enabled=.t.
+	Else
+		ThisForm.optiongroup1.Enabled=.f.
+	Endif
+Endif
+ThisForm.GetDigitos.Enabled=.f.
+Thisform.optiongroup1.enabled=.t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Set Confirm On
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+lcIdTerminal=fConverteStr(CrSigCdEmp.nEmps)+TRANSFORM(VAL(crSigFiMpF.Cncaixas),"@L 999999")
+
+lcValpago=ALLTRIM(TRANSFORM(lnValPago,"99999999.99"))
+lcValPago=STRTRAN(lcValPago,".",",")
+
+IF ConfiguraIntSiTefInterativo(lsEndSitef,lsIdTerminal,lcIdTerminal,0) <> 0
+	Thisform.RetornoFalha("Sem comunicacao com SiTef")
+	Thisform.release
+Endif
+
+lcData=STR(YEAR(DATE()),4)+SUBSTR(DTOC(DATE()),4,2)+SUBSTR(DTOC(DATE()),1,2)
+lchora=STRTRAN(TIME(),":","")
+
+IF IniciaFuncaoSiTefInterativo(0, lcValPago, lsCupom, lcData,lcHora, lsCaixa, "") <> 10000
+	Thisform.RetornoFalha("Sem comunicacao com SiTef")
+	Thisform.release
+ENDIF
+
+ProximoComando=0 
+TipoCampo=0 
+TamanhoMinimo=0 
+TamanhoMaximo=0 
+Buffer=Space(2000) 
+lnContinua=0 
+Mensagem=""
+lnTipo=1
+lnCard=1
+lncdc=1
+llTipoVenda = .f.
+lnTipoVenda = 0
+
+PRIVATE lsNsu, lsAutoriza, lsDataHora, lsTipTran, lsCupom, lsCartao, lsFinaliza
+lsFinaliza=""
+lnCiclos=0
+lsMRet=""
+lsNSU=""
+llContinua=IIF(crSigOpFp.lCartao="N",.t.,.f.)
+*llContinua=IIF(SigOpFp.lCartao="N",.t.,.f.)
+lcBandeira=""
+Thisform.optiongroup1.enabled=.f.
+
+DO WHILE llContinua
+	lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+	If Lastkey() = 27
+		lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), -1)
+		Thisform.RetornoFalha("Operação Cancelada pelo Usuario")
+		Thisform.release
+	Endif
+	If "SELECIONE A FORMA DE PAGAMENTO PAGAMENTO"$Upper(BUFFER)
+		If lnTipoVenda = 2
+			llTipoVenda = .t.
+		Else
+			lnTipoVenda = 2
+		Endif
+	Endif
+	If ProximoComando = 23
+		ThisForm.Saida.CANCELA.Enabled = .f.
+	Else
+		ThisForm.Saida.CANCELA.Enabled = .t.
+	Endif
+	IF ProximoComando = 22
+		IF LEN(ALLTRIM(Buffer)) <> 0
+			DO Form SigTfDss With "Erro na Transação","",ALLTRIM(Substr(Buffer,1,32)),ALLTRIM(Substr(Buffer,33,32)),"","VM",ThisForm.Left,ThisForm.Top 
+			lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+			lnRetorno=-1
+			Exit
+		endif
+	ENDIF
+ 	IF UPPER(ALLTRIM(Buffer)) = "DIGITE A SENHA"
+		ThisForm.Container1.Label1.Caption="Digite a Senha"
+	ENDIF
+	IF lnRetorno = 0
+		EXIT
+	ENDIF
+	IF lnRetorno < 0
+		ThisForm.ErroTef(lnRetorno)
+		ThisForm.Release
+		exit
+	Endif
+*	IF ProximoComando = 22
+*		MESSAGEBOX(ALLTRIM(Buffer),64)
+*		ThisForm.Text1.Enabled=.t.
+*		ThisForm.optiongroup1.Enabled=.f.
+*		This.Enabled=.f.
+*		EXIT
+*	Endif
+	IF ProximoComando = 3
+		lsMRet=ALLTRIM(Buffer)
+	Endif
+	IF TipoCampo = 100
+		lsTipTran=Buffer
+		Buffer=SPACE(2000)
+		lnContinua=0
+		loop
+	Endif
+	IF TipoCampo = 105
+		lsDataHora=Buffer
+		Buffer=SPACE(2000)
+		loop
+	Endif
+	IF TipoCampo = 121
+		lsCupom=Buffer
+		Buffer=SPACE(2000)
+		loop
+	Endif
+	IF TipoCampo = 131
+		ThisForm.lsCartao = Left(Buffer, 5)
+	Endif
+	IF TipoCampo = 132
+		ThisForm.pcBandeira=Left(Buffer,5)
+		Buffer=SPACE(2000)
+		loop
+	Endif
+	IF TipoCampo = 134
+		lsNsu=ALLTRIM(STR(VAL(Buffer)))
+		Buffer=SPACE(2000)
+		loop
+	Endif
+	IF TipoCampo = 135
+		lsAutoriza=Buffer
+		Buffer=SPACE(2000)
+		loop
+	ENDIF
+	IF ProximoComando = 20 AND TipoCampo = 507
+		IF MESSAGEBOX("Primeira Parcela A Vista",36,"") = 6
+			Buffer="0"+REPLICATE(CHR(0),1999)
+		Else
+			Buffer="1"+REPLICATE(CHR(0),1999)
+		Endif
+		lnContinua=1000
+		Loop
+	Endif
+	IF ProximoComando = 21
+		IF lnTipo = 1
+			Buffer=IIF(lsDebCred="D".or.lsDebCred="P","2","3")+REPLICATE(CHR(0),1999)
+			lnContinua=1000
+			lnTipo=2
+			loop
+		ENDIF
+		IF lnTipo = 2
+			IF lnNumParcs = 1
+				EXIT
+			ELSE
+				IF crSigOpFp.Tcdc = "S" 
+					IF lsDebCred <> "P"
+						Buffer="5"+REPLICATE(CHR(0),1999)
+					Else
+						Buffer="4"+REPLICATE(CHR(0),1999)
+					Endif
+				eLSE
+					Buffer="3"+REPLICATE(CHR(0),1999)
+				eNDIF
+				LOOP
+			ENDIF
+		Endif
+	ENDIF
+	IF TipoCampo = 131
+		lcBandeira=Buffer
+		ThisForm.lsCartao = Left(Buffer, 5)
+	Endif
+*	IF ProximoComando = 30 .and. TipoCampo = -1 .AND. crSigOpFp.Tcdc = "S"
+*		Exit
+*	endif
+	IF ProximoComando = 30 .and. lcBandeira = "00004"
+		Exit
+	Endif
+	IF ProximoComando = 30 .and. TipoCampo = 506
+		lcData=DTOC(ThisForm.GetDatas.Value)
+		Buffer=ALLTRIM(SUBSTR(lcData,1,2))+ALLTRIM(SUBSTR(lcData,4,2))+ALLTRIM(SUBSTR(lcData,7,4))+REPLICATE(CHR(0),1992)
+		lnContinua=1000
+		loop
+	endif
+	IF ProximoComando = 30 .and. TipoCampo = 508
+		Buffer=ALLTRIM(STR(crSigOpFp.Dias))+REPLICATE(CHR(0),1998)
+*		Buffer=ALLTRIM(STR(SigOpFp.Dias))+REPLICATE(CHR(0),1998)
+		lnContinua=1000
+		loop
+	endif
+	IF ProximoComando = 20 .and. TipoCampo = 509
+		Buffer=ALLTRIM(STR(crSigOpFp.MesFec-1))+REPLICATE(CHR(0),1999)
+*		Buffer=ALLTRIM(STR(SigOpFp.MesFec-1))+REPLICATE(CHR(0),1999)
+		lnContinua=1000
+		loop
+	endif
+	IF (ProximoComando = 30 .and. TipoCampo = 511 .AND. crSigOpFp.Tcdc = "S") OR ;
+	   (ProximoComando = 30 .and. TipoCampo = 505) OR ;
+	   (ProximoComando = 30 .and. TipoCampo = -1 .AND. crSigOpFp.Tcdc = "S" .and. lsDebCred = "P" .and. ! 'DDMMAAAA'$Buffer)
+		Buffer=ALLTRIM(STR(lnNumParcs))+REPLICATE(CHR(0),1998)
+*		Buffer=ALLTRIM(STR(SigOpFp.Dias))+REPLICATE(CHR(0),1998)
+		lnContinua=1000
+		loop
+	endif
+	IF (ProximoComando = 30 .and. TipoCampo = -1 .and. 'DDMMAAAA'$Buffer)
+		This.Enabled=.f.
+		EXIT
+	Endif
+	IF ProximoComando <> 21
+		mensagem=Buffer
+		Buffer=SPACE(2000)
+		lnContinua=0
+    ENDIF 
+Enddo 
+
+ThisForm.container1.label1.Visible=.t.
+
+IF lnRetorno < 0 .or. ThisForm.Abandona
+	Thisform.release
+ENDIF
+
+IF !EMPTY(lsNSU)
+	ThisForm.MontaRetorno(lsTipTran, lsDataHora, lsCupom, ThisForm.pcBandeira, lsNsu, lsNSU, lsFinaliza, lnValPago, lsMRet)
+	Thisform.release
+ENdif
+
+ThisForm.GetDigitos.BackColor=16777215
+	
+ThisForm.GetCartao.Value = '#### #### #### ####'
+IF llTipoVenda
+*IF lcBandeira<>"0004"
+	IF ! Thisform.text1.Enabled
+		ThisForm.Container1.Label1.Caption="Informe o Tipo"+CHR(13)+"da Venda"
+		This.Enabled=.f.
+		Thisform.optiongroup1.Enabled=.t.
+		ThisForm.getDatas.Enabled=.t.
+	Endif
+Else
+	ThisForm.Container1.Label1.Caption="Digite os 4 Ultimos"+CHR(13)+"Digitos do Cartao"
+	Thisform.optiongroup1.Enabled=.t.
+Endif
+ThisForm.Saida.Enabled=.t.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDFT.Container1
+* Classe: container (Base: container)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Move
+------------------------------------------------------------
+PROCEDURE Move
+LPARAMETERS nLeft, nTop, nWidth, nHeight
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDFT.Optiongroup1
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.pctvenda)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.getDatas.Enabled=.t.
+IF This.Value = 1
+	ThisForm.getdatas.Value=DATE()
+ELSE
+	ThisForm.getdatas.Value=ctod("")
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Option1.KeyPress
+------------------------------------------------------------
+PROCEDURE Option1.KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+IF nKeyCode = 13
+	KEYBOARD '{TAB}'
+Endif
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Option1.GotFocus
+------------------------------------------------------------
+PROCEDURE Option1.GotFocus
+ThisForm.getDatas.Enabled=.t.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDFT.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Set Confirm off
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+IF EMPTY(THIS.Value)
+	RETURN .t.
+Endif
+lnParcs=This.Value
+Buffer=This.Value+REPLICATE(CHR(0),1990)
+lnContinua=1000
+lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+If ProximoComando = 23
+	ThisForm.Saida.CANCELA.Enabled = .f.
+Else
+	ThisForm.Saida.CANCELA.Enabled = .t.
+Endif
+IF "SENHA"$UPPER(ALLTRIM(Buffer)) or ProximoComando = 23
+	ThisForm.Container1.Label1.Caption="Digite a Senha"
+ENDIF
+IF ProximoComando = 22
+	DO Form SigTfDss With "Erro na Transação","",ALLTRIM(Substr(Buffer,1,32)),ALLTRIM(Substr(Buffer,33,32)),"","VM",ThisForm.Left,ThisForm.Top 
+	lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+	RETURN .f.
+Endif
+Buffer=""
+lncontinua=0
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Set Confirm on
+This.Value=TRANSFORM(VAL(This.Value),"@L 99")
+This.Enabled=.f.
+ThisForm.getDatas.Enabled=.t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.pcTvenda = .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDFT.GetDatas
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Set Confirm Off
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+IF LASTKEY() = 27
+	RETURN .t.
+ENDIF
+ldData=IIF(EMPTY(This.Value),DATE()+30,This.Value)
+This.Value = ldData
+This.Refresh
+IF ThisForm.Optiongroup1.Value = 2 .and. This.Value <= DATE() .and. ! EMPTY(This.Value)
+	DO Form SigTfDss With "Erro na Transação","","Data Invalida","","","VM",ThisForm.Left,ThisForm.Top 
+	RETURN .f.
+ENDIF
+DO WHILE ProximoComando <> 30
+	lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+	If ProximoComando = 23
+		ThisForm.Saida.CANCELA.Enabled = .f.
+	Else
+		ThisForm.Saida.CANCELA.Enabled = .t.
+	Endif
+ 	IF "SENHA"$UPPER(ALLTRIM(Buffer)) or ProximoComando = 23
+		ThisForm.Container1.Label1.Caption="Digite a Senha"
+	Endif
+	IF lnRetorno < 0
+		ThisForm.ErroTef(lnRetorno)
+		Thisform.release
+	ENDIF
+Enddo
+
+lsMREt=""
+primo=1
+lsAutoriza=""
+lnRetorno=10000
+lsMensagem=''
+lcData=DTOC(ThisForm.GetDatas.Value)
+Buffer=ALLTRIM(SUBSTR(lcData,1,2))+ALLTRIM(SUBSTR(lcData,4,2))+ALLTRIM(SUBSTR(lcData,7,4))+REPLICATE(CHR(0),1992)
+lnContinua=1000
+lsAutoriza=""
+lnCiclos = 0
+DO WHILE lnRetorno = 10000
+	lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+	If Lastkey() = 27
+		lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), -1)
+		Thisform.RetornoFalha("Operação Cancelada pelo Usuario")
+		Thisform.release
+	Endif
+	If ProximoComando = 23
+		ThisForm.Saida.CANCELA.Enabled = .f.
+	Else
+		ThisForm.Saida.CANCELA.Enabled = .t.
+	Endif
+ 	IF "SENHA"$UPPER(ALLTRIM(Buffer)) or ProximoComando = 23
+		ThisForm.Container1.Label1.Caption="Digite a Senha"
+	Endif
+	IF lnRetorno < 0
+		ThisForm.ErroTef(lnRetorno)
+		Thisform.release
+	ENDIF
+	IF ProximoComando = 22
+		IF lsDebCred <> "P"
+			IF LEN(ALLTRIM(Buffer)) <> 0
+				DO Form SigTfDss With "Erro na Transação","",IIF(UPPER(ALLTRIM(Buffer))="AGUARDE, EM PROCESSAMENTO","TRANSACAO CANCELADA",ALLTRIM(Buffer)),"","","VM",ThisForm.Left,ThisForm.Top 
+			 	IF "SENHA"$UPPER(ALLTRIM(Buffer)) or "CANC. CLIENTE"$UPPER(ALLTRIM(Buffer))
+					lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), -1)
+			 		lnretorno = -8
+			 	    exit
+			 	Endif
+				RETURN .f.
+			ELSE
+				lnRetorno=0
+				EXIT
+			ENDIF
+		ELSE
+			lsCupom=ALLTRIM(buffer)
+			lnRetorno=-1
+			Exit
+		endif
+	ENDIF
+	IF lnRetorno <> 10000
+		ThisForm.RetornoFalha(IIF(EMPTY(lsMensagem),"Operacao Cancelada pelo Usuario",lsMensagem), lnValPago)
+		EXIT
+	ENDIF
+	IF ProximoComando = 23
+		ThisForm.Container1.Label1.Caption="Digite a Senha"
+	ENDIF
+	IF ProximoComando = 30 .and. TipoCampo = 500
+		DO FORM SigPrStf TO Senha
+		IF EMPTY(Senha)
+			llchecaSigTef = .f.
+			If !Used('SigTef')
+				Use goSistema.DirTefEcfs + [\SigTef] in 0
+				llchecaSigTef = .t.
+			ENDIF
+			ThisForm.RetornoFalha("Operacao Cancelada pelo Usuario", lnValPago)
+			lcData=STR(YEAR(DATE()),4)+SUBSTR(DTOC(DATE()),4,2)+SUBSTR(DTOC(DATE()),1,2)
+			lchora=STRTRAN(TIME(),":","")
+			FinalizaTransacaoSiTefInterativo(0, IIF(EMPTY(SigTef.nCupom),"1",SigTef.nCupom), lcData, lcHora) 
+			lnRetorno=-2
+			IF llchecaSigTef
+				SELECT SigTef
+				USE
+			eNDIF
+			EXIT
+		ELSE
+			Buffer=Senha+REPLICATE(CHR(0),1900)
+			LOOP
+		ENDIF
+	Endif
+	IF UPPER(Buffer) = "ASSUME GARANTIA" .and. primo = 1
+		IF MESSAGEBOX("Assume Inversao de Risco ?",36,"") = 6
+			Buffer="0"+REPLICATE(CHR(0),1999)
+		Else
+			Buffer="1"+REPLICATE(CHR(0),1999)
+		ENDIF
+		primo=2
+		Loop
+	ENdif
+	IF ProximoComando = 34 AND TipoCampo = 130
+		IF crSigOpFp.lSaque = "S"
+*		IF SigOpFp.lSaque = "S"
+			lcSaque="0,00"
+			DO FORM SigCsTef WITH ThisForm.Top, ThisForm.Left TO lcSaque
+			Buffer=lcSaque
+		Else
+			Buffer="0,00"
+		Endif
+		Buffer=buffer+REPLICATE(CHR(0),2000-LEN(buffer))
+		lnContinua=1000
+		Loop
+	ENDIF
+	IF ProximoComando = 34 AND TipoCampo = -1
+		DO FORM SigCsTef WITH ThisForm.Top, ThisForm.Left, "Entrada CDC" TO lcSaque 
+		Buffer=lcSaque+REPLICATE(CHR(0),1900)
+		lcSaque="0,00"
+		LOOP
+	Endif
+	IF ProximoComando = 3
+		lsMRet=ALLTRIM(Buffer)
+	Endif
+	IF TipoCampo = 100
+		lsTipTran=Buffer
+	Endif
+	IF TipoCampo = 105
+		lsDataHora=Buffer
+	Endif
+	IF TipoCampo = 121
+		lsCupom=Buffer
+	Endif
+	IF TipoCampo = 131
+		ThisForm.lsCartao = Left(Buffer, 5)
+	Endif
+	IF TipoCampo = 132
+		ThisForm.pcBandeira=Left(Buffer,5)
+	Endif
+	IF TipoCampo = 134
+		lsNsu=ALLTRIM(STR(VAL(Buffer)))
+	Endif
+	IF TipoCampo = 135
+		lsAutoriza=Buffer
+	ENDIF
+	IF lnRetorno <> 0
+		lsFinaliza=Buffer
+	Endif
+	IF ProximoComando <> 21 .and. ProximoComando <> 30
+		lsMensagem=Buffer
+		Buffer=SPACE(3000)
+		lnContinua=0
+	ENdif
+Enddo 
+WAIT clear
+IF lnRetorno <> 10000
+	IF lsDebCred="P"
+		DO FORM SigCoCDC WITH lsCupom
+		ThisForm.retornofalha("Consulta CDC Realizada",lnValPago)
+	Else
+		IF lnRetorno = 0
+			ThisForm.MontaRetorno(lsTipTran, lsDataHora, lsCupom, ThisForm.pcBandeira, lsNsu, lsAutoriza, lsFinaliza, lnValPago, lsMRet)
+		Else
+			If lnRetorno >= -5
+				ThisForm.ErroTef(lnRetorno)
+			Endif
+		ENDIF
+	Endif
+Endif
+Thisform.release
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Set Confirm On
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.pcTvenda = .f.
+lsTipTran=""
+lsDataHora=""
+lsCupom=""
+lsCartao=""
+lsNsu=""
+lsAutoriza=""
+lsFinaliza=""
+ThisForm.Container1.Label1.Caption="Digite a Data"+CHR(13)+"de Vencimento"
+lsMRet=""
+
+IF lsDebCred <> "P" .and. ! DCD .and. crSigOpFp.Tcdc <> "S"
+	lnRetorno=10000
+	lsMensagem=''
+	IF Thisform.Optiongroup1.Enabled
+		Buffer=STR(ThisForm.Optiongroup1.Value,1)+REPLICATE(CHR(0),1999)
+	ELSE
+		DO WHILE ProximoComando <> 30
+			lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+		 	IF "SENHA"$UPPER(ALLTRIM(Buffer)) or ProximoComando = 23
+				ThisForm.Container1.Label1.Caption="Digite a Senha"
+			ENDIF
+			If ProximoComando = 23
+				ThisForm.Saida.CANCELA.Enabled = .f.
+			Else
+				ThisForm.Saida.CANCELA.Enabled = .t.
+			Endif
+			IF lnRetorno < 0
+				ThisForm.ErroTef(lnRetorno)
+				Thisform.release
+			ENDIF
+		ENDDO
+		Buffer=ThisForm.Text1.Value+REPLICATE(CHR(0),1998)
+	Endif
+	lnContinua=1000
+	lsAutoriza=""
+	DO WHILE lnRetorno = 10000
+		lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+		If Lastkey() = 27
+			lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), -1)
+			Thisform.RetornoFalha("Operação Cancelada pelo Usuario")
+			Thisform.release
+		Endif
+		If ProximoComando = 23
+			ThisForm.Saida.CANCELA.Enabled = .f.
+		Else
+			ThisForm.Saida.CANCELA.Enabled = .t.
+		Endif
+	 	IF "SENHA"$UPPER(ALLTRIM(Buffer))
+			ThisForm.Container1.Label1.Caption="Digite a Senha"
+		ENDIF
+		IF lnRetorno < 0
+			ThisForm.ErroTef(lnRetorno)
+			Thisform.release
+		ENDIF
+		IF ProximoComando = 22
+			DO Form SigTfDss With "Erro na Transação","",ALLTRIM(Substr(Buffer,1,32)),ALLTRIM(Substr(Buffer,33,32)),"","VM",ThisForm.Left,ThisForm.Top 
+			If "CANC. CLIENTE"$Upper(Alltrim(Buffer))
+				lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), -1)
+				lnRetorno = -8
+				Exit
+			Endif
+			lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+			IF lnRetorno <> 10000
+				Thisform.release
+			ELSE
+				RETURN .f.
+			ENDIF		
+			If ProximoComando = 23
+				ThisForm.Saida.CANCELA.Enabled = .f.
+			Else
+				ThisForm.Saida.CANCELA.Enabled = .t.
+			Endif
+		Endif
+		IF lnRetorno < 0
+			ThisForm.RetornoFalha(IIF(EMPTY(lsMensagem),"Operacao Cancelada pelo Usuario",lsMensagem), lnValPago)
+			EXIT
+		Endif
+		IF ProximoComando = 30 .and. ThisForm.Optiongroup1.Value = 2
+			IF ProximoComando = 30 .and. TipoCampo = 510
+				IF crSigOpFp.Garantias = "S"
+*				IF SigOpFp.Garantias = "S"
+					Buffer="1"+REPLICATE(CHR(0),1999)
+				Else
+					Buffer="2"+REPLICATE(CHR(0),1999)
+				Endif
+				lnContinua=1000
+				Loop
+			Endif	
+			Exit
+		Endif	
+		IF ProximoComando = 30 .and. TipoCampo = 506
+			lcData=DTOC(ThisForm.GetDatas.Value)
+			Buffer=ALLTRIM(SUBSTR(lcData,1,2))+ALLTRIM(SUBSTR(lcData,4,2))+ALLTRIM(SUBSTR(lcData,7,4))+REPLICATE(CHR(0),1992)
+			lnContinua=1000
+			loop
+		endif
+		IF ProximoComando = 30 .and. TipoCampo = 505
+			Buffer=ALLTRIM(TRANSFORM(lnNumParcs,"@L 99"))+REPLICATE(CHR(0),1998)
+			lnContinua=1000
+			loop
+		endif
+		IF ProximoComando = 20 AND TipoCampo = 507
+			IF MESSAGEBOX("Primeira Parcela A Vista",36,"") = 6
+				Buffer="0"+REPLICATE(CHR(0),1999)
+			Else
+				Buffer="1"+REPLICATE(CHR(0),1999)
+			Endif
+			lnContinua=1000
+			Loop
+		Endif
+		IF ProximoComando = 30 .and. TipoCampo = 508
+			Buffer=ALLTRIM(STR(crSigOpFp.Dias))+REPLICATE(CHR(0),1998)
+*			Buffer=ALLTRIM(STR(SigOpFp.Dias))+REPLICATE(CHR(0),1998)
+			lnContinua=1000
+			loop
+		endif
+		IF ProximoComando = 20 .and. TipoCampo = 509
+			Buffer=ALLTRIM(STR(crSigOpFp.MesFec-1))+REPLICATE(CHR(0),1999)
+*			Buffer=ALLTRIM(STR(SigOpFp.MesFec-1))+REPLICATE(CHR(0),1999)
+			lnContinua=1000
+			loop
+		endif
+		IF ProximoComando = 30 
+			lcData=DTOC(ThisForm.GetDatas.Value)
+			Buffer=ALLTRIM(SUBSTR(lcData,1,2))+ALLTRIM(SUBSTR(lcData,4,2))+ALLTRIM(SUBSTR(lcData,7,4))+REPLICATE(CHR(0),1992)
+		Endif		
+		IF lnRetorno <> 0
+			lsFinaliza=Buffer
+		Endif
+	 	IF UPPER(ALLTRIM(Buffer))$"DIGITE A SENHA"
+			ThisForm.Container1.Label1.Caption="Digite a Senha"
+		Endif
+		IF ProximoComando = 34 AND TipoCampo = 130
+			IF crSigOpFp.lSaque = "S"
+*			IF SigOpFp.lSaque = "S"
+				lcSaque="0,00"
+				DO FORM SigCsTef WITH ThisForm.Top, ThisForm.Left TO lcSaque
+				Buffer=lcSaque
+			Else
+				Buffer="0,00"
+			Endif
+			Buffer=buffer+REPLICATE(CHR(0),2000-LEN(buffer))
+			lnContinua=1000
+			Loop
+		Endif
+		IF ProximoComando = 3
+			lsMRet=ALLTRIM(Buffer)
+		Endif
+		IF TipoCampo = 100
+			lsTipTran=Buffer
+		Endif
+		IF TipoCampo = 105
+			lsDataHora=Buffer
+		Endif
+		IF TipoCampo = 121
+			lsCupom=Buffer
+		Endif
+		IF TipoCampo = 131
+			ThisForm.lsCartao = Left(Buffer, 5)
+		Endif
+		IF TipoCampo = 132
+			ThisForm.pcBandeira=Left(Buffer,5)
+		Endif
+		IF TipoCampo = 134
+			lsNsu=ALLTRIM(STR(VAL(Buffer)))
+		Endif
+		IF TipoCampo = 135
+			lsAutoriza=Buffer
+		ENDIF
+		IF lnRetorno <> 0
+			lsFinaliza=Buffer
+		ENDIF
+		IF ProximoComando <> 21 .and. ProximoComando <> 30
+			lsMensagem=Buffer
+			Buffer=SPACE(2000)
+			lnContinua=0
+		ENdif
+	Enddo 
+	WAIT clear
+	IF lnRetorno <> 10000
+		IF lnRetorno = 0
+			ThisForm.MontaRetorno(lsTipTran, lsDataHora, lsCupom, ThisForm.pcBandeira, lsNsu, lsAutoriza, lsFinaliza, lnValPago, lsMRet)
+			Thisform.release
+		ENDIF
+	Endif
+	ThisForm.Container1.Label1.Caption="Digite a Data"+CHR(13)+"de Vencimento"
+Endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRDFT
+RESERVED3 (ClassInfo): abandona
+pcbandeira
+pckeyesc
+pctvenda
+podatamgr
+*errortef 
+*errotef 
+*montaretorno 
+*retornofalha 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 29
+================================================================================

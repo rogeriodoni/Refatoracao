@@ -1,0 +1,17 @@
+﻿All `RETURN` statements outside of `TRY/CATCH` are guard clauses at method start ÔÇö no violations of CLAUDE.md Rule #1.
+
+Phase 4/8 of `Formpag.prg` is complete. Here's a summary of what was added in this phase (1,432 lines total):
+
+**Grid (grd_4c_Lista)** ÔÇö 5 columns (C├│digo/fpags, Descri├º├úo/descrs, Moeda/moefpgs, Dias/dias, T.Venc/tvens), Top=160, Width=960, Height=480. ColumnCount and RecordSource set outside WITH block, ControlSources after RecordSource (correct order per Problem 36/48).
+
+**CRUD buttons in cnt_4c_Botoes** ÔÇö Incluir, Visualizar, Alterar, Excluir, Buscar at Left=5/80/155/230/305, all with canonical icons and BINDEVENT.
+
+**6 extra SIGCDPAG buttons** in new `cnt_4c_BotoesEspeciais` (Top=115, below CRUD area): Exportar, Importar, Copiar, M├¡nimo, Desconto, BIN ÔÇö styled as text-only buttons (no icon, matching original which had no Picture set).
+
+**Confirmar/Cancelar buttons** in cnt_4c_BotoesAcao on Page2 with canonical icons.
+
+**All event handlers**: BtnIncluirClick, BtnVisualizarClick, BtnAlterarClick, BtnExcluirClick (with MsgConfirma returning LOGICAL), BtnBuscarClick (FormBuscaAuxiliar Mode 1), BtnSalvarClick, BtnCancelarClick, BtnCopiarClick, BtnMinimoClick, BtnDescontoClick, BtnBINClick, BtnExportarClick, BtnImportarClick.
+
+**FormParaBO/BOParaForm/HabilitarCampos/LimparCampos** ÔÇö use `PEMSTATUS()` guards to check each field before accessing, so Phase 4 is safe even without the Page2 fields (added in Phase 5). AjustarBotoesPorModo also covers cnt_4c_BotoesEspeciais buttons.
+
+**Next phase (5/8)**: Add header fields directly on Page2 (Get_Descrs/txt_4c_Descrs, Get_TitFPags, Get_forma, Get_nfpag, Get_codigo, Get_modfpg, Get_grupo/conta/dconta, Opt_ContaMov, get_formas, getModalidade) plus all pgf_4c_Dados.Page1 (Geral) fields with their labels.

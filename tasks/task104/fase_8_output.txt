@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi adicionado:
+
+**FormSIGREFUN.prg** ÔÇö 8 m├®todos de consolida├º├úo inseridos antes do `ENDDEFINE`:
+- `BtnBuscarClick()` ÔÇö delega para `BtnVisualizarClick()` (sem├óntica de REPORT)
+- `BtnEncerrarClick()` ÔÇö `THIS.Release()`
+- `BtnSalvarClick()` ÔÇö delega para `BtnVisualizarClick()` (confirmar = gerar relat├│rio)
+- `FormParaBO()` ÔÇö alias de `FormParaRelatorio()` para compatibilidade com FormBase
+- `BOParaForm()` ÔÇö stub vazio (filtros s├úo entrada do usu├írio, sem carregamento do BO)
+- `HabilitarCampos()` ÔÇö mant├®m todos os 3 controles de filtro habilitados
+- `CarregarLista()` ÔÇö stub retornando `.T.` (sem grid de lista em REPORT)
+- `AjustarBotoesPorModo()` ÔÇö stub vazio (bot├Áes sempre habilitados em REPORT)
+
+**menu.prg** ÔÇö integra├º├úo completa:
+- BAR 124 (separador) + BAR 125 (`Rela├º├úo Tubos Fundi├º├úo`) em `popRelatorios`
+- `ON SELECTION BAR 125` vinculado a `AbrirFormSIGREFUN`
+- Procedure `AbrirFormSIGREFUN()` seguindo o padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, `MostrarErro()` com Linha+Procedure)

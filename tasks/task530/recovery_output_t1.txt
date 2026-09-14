@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo da corre├º├úo ÔÇö FormTBI (Erro UI Fidelity: 13 diferen├ºas visuais)
+
+**Causa raiz identificada (m├║ltiplas):**
+
+1. **Picture ausente no form** ÔÇö `FormTBI.prg` n├úo definia `THIS.Picture`, enquanto o legado (`SIGCDTBI.Picture = ..\framework\imagens\new_background.jpg`) e todo o padr├úo can├┤nico de forms operacionais (`FormEnd`, `FormDCC`, `FormGps`, etc.) sempre definem `THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"` em `InicializarForm()`.
+
+2. **`lbl_4c_LblSombra`/`lbl_4c_LblTitulo` com FontSize/Width divergentes do padr├úo can├┤nico** ÔÇö o c├│digo usava `FontSize=12` e `Width=THIS.Width` (284), mas o padr├úo j├í estabelecido em outros forms (ex.: `FormPzo.ConfigurarCabecalho`) e a pr├│pria classe base do framework legado (`fwcep`, `frmprod`, etc.) usam `FontSize=18` e `Width=769` fixos ÔÇö o container (`cnt_4c_Sombra`) ├® intencionalmente mais estreito que os labels internos, sem impacto visual (a ├írea do form j├í corta o excedente).
+
+3. **Bug real no validador `ComparadorUI.prg`** (causa de 3 dos 13 itens): a resolu├º├úo de mapeamento usa `=` (compara├º├úo de string VFP com `SET EXACT OFF`, que faz *prefix match*). Como `"SIGCDTBI.get_moeda_desc"` aparece **antes** de `"SIGCDTBI.get_moeda"` no JSON de mapeamento, e `"get_moeda"` ├® prefixo de `"get_moeda_desc"`, o loop `FOR` casava errado, comparando as propriedades de `txt_4c__moeda` contra os valores de `txt_4c__moeda_desc` (Alignment/Left/Width). Troquei os 3 pontos de compara├º├úo de `=` para `==` (compara├º├úo exata, independente de `SET EXACT`).
+
+**Diferen├ºas remanescentes (n├úo corrigidas, por serem falsos-positivos leg├¡timos do relat├│rio, n├úo bugs):**
+- `cntSombra.Width` (800 boilerplate do framework vs `THIS.Width`=284) ÔÇö padr├úo intencional j├í usado em outros forms.
+- `lblSombra`/`lblTitulo.Caption` ("Cadastro de Testes") ÔÇö placeholder de design-time da classe base; em runtime o framework legado sempre sobrescreve com `ThisForm.Caption` (confirmado em `framework_class_codigo_fonte.txt`), que ├® exatamente o que `FormTBI.prg` j├í faz.
+- `lbl_moeda`/`lbl_copias.Width` ÔÇö labels com `AutoSize=.T.`, diferen├ºa de poucos pixels por varia├º├úo de m├®trica de fonte entre ambiente de design e runtime; for├ºar `AutoSize=.F.` com largura fixa divergiria do comportamento correto.
+
+**Arquivos alterados:**
+- `C:\4c\projeto\app\forms\operacionais\FormTBI.prg`
+- `C:\4c\projeto\app\utils\ComparadorUI.prg`
+
+`TBIBO.prg` n├úo precisou de altera├º├úo ÔÇö o erro ├® exclusivamente de fidelidade visual do form.

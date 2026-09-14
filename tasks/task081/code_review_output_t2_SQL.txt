@@ -1,0 +1,19 @@
+﻿An├ílise completa. Os 5 problemas reportados s├úo **falsos positivos** do validador. Aqui est├í o que foi encontrado:
+
+**Colunas inspecionadas:**
+
+| Coluna | Onde aparece | Tipo de ocorr├¬ncia |
+|--------|-------------|-------------------|
+| `VALVARS` | `sigredocBO.prg:279,330,1156,1163,1522,1526,1529,1533,1536,1546` | Acesso a campo de cursor VFP9 (`TmpRel.valvars`) em `IF`/`SELECT` ÔÇö n├úo ├® filtro SQL |
+| `DCKDEVO` | `sigredocBO.prg:1510,1536` | Campo do cursor `CrTmpDcOpe` em condi├º├úo `IF` VFP9 ÔÇö n├úo ├® WHERE SQL |
+| `DCKACRES` | `sigredocBO.prg:1156,1522,1536` | Campo do cursor `CrTmpDcOpe` em condi├º├úo `IF` VFP9 ÔÇö n├úo ├® WHERE SQL |
+| `DCKDESCO` | `sigredocBO.prg:1163,1529,1536` | Campo do cursor `CrTmpDcOpe` em condi├º├úo `IF` VFP9 ÔÇö n├úo ├® WHERE SQL |
+| `CAMPO` | `sigredocBO.prg:1807,1816` | Coment├írio de docstring + par├ómetro din├ómico `par_cCampo` na fun├º├úo helper `CursorQuery` ÔÇö n├úo ├® coluna inventada |
+
+**Por que s├úo falsos positivos:**
+
+1. `ValVars`, `DckDevo`, `DckAcres`, `DckDesco` s├úo campos **leg├¡timos** dos cursores VFP9 (`TmpRel` e `CrTmpDcOpe`), usados em condi├º├Áes `IF` nativas do VFP9, n├úo em strings SQL entre `[...]`.
+2. Nenhuma dessas colunas aparece em uma cl├íusula `WHERE` de string SQL. Confirmado com grep por `\[.*WHERE.*VALVARS/DCKDEVO/DCKACRES/DCKDESCO\]` ÔÇö zero resultados.
+3. O `par_cCampo` na `CursorQuery` ├® um par├ómetro din├ómico recebido pelo caller ÔÇö correto por design.
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos est├úo corretos. O validador confundiu condi├º├Áes `IF` VFP9 (que acessam campos de cursores) com filtros SQL inventados.

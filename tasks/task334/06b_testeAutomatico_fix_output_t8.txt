@@ -1,0 +1,3 @@
+﻿Fix aplicado. O `CommandGroup` criado via `AddObject` inicia com `ButtonCount=0` por padr├úo ÔÇö sem definir `ButtonCount = 1` antes de acessar `.Buttons(1)`, o VFP9 lan├ºa "BUTTONS is not an object".
+
+A corre├º├úo foi adicionar `.ButtonCount = 1` como primeira instru├º├úo dentro do `WITH loc_oCmg` (linha 341), antes de qualquer acesso a `.Buttons(N)`.

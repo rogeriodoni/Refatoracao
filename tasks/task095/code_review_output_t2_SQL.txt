@@ -1,0 +1,32 @@
+﻿Analisei o c├│digo legado (`SIGREEVV_form_codigo_fonte.txt`) e o c├│digo migrado. Aqui est├úo os resultados da verifica├º├úo dos 5 problemas reportados:
+
+---
+
+## Resultado: Todos os 5 problemas s├úo FALSOS POSITIVOS
+
+Nenhuma altera├º├úo ├® necess├íria. Justificativa detalhada:
+
+### 1. `CMOES` (BO linha 70, 230, 245)
+- **Linha 70** (`ObterCotacao`): `WHERE cmoes = ` ├® a consulta equivalente ao `fBuscarCotacao()` do legado, que pesquisava cota├º├úo pelo c├│digo de moeda. **Existe no original.**
+- **Linhas 230 e 245** (joins de cursores): `b.moevs = c.cmoes` e `a.moecusfs = b.cmoes` ÔÇö o legado (linhas 608-609 e 614) tem exatamente:
+  ```
+  Where a.CPros = b.CPros And b.Moevs = c.CMoes
+  Where a.MoecusFs = b.CMoes
+  ```
+  **Existe no original.**
+
+### 2. `MOEVS` (BO linha 230)
+- Cl├íusula `b.moevs = c.cmoes` espelha exatamente a linha 609 do legado: `b.Moevs = c.CMoes`. **Existe no original.**
+
+### 3. `INICIAL`
+- **N├úo aparece em nenhuma cl├íusula WHERE** no c├│digo migrado. A palavra existe apenas em coment├írios (`*-- Valor inicial`) e em textos de mensagem. **Falso positivo puro do validador.**
+
+### 4. `CODIGOS` (Form linha 684)
+- `WHERE Codigos = ` para validar `SigOpTdz` ├® equivalente ao `fwBuscaExt` do legado que recebe `'Codigos'` como campo de busca (legado linha 740: `'crListaRemota', 'Codigos', Padr(This.Value, 10)`). **Existe no original.**
+
+### 5. `CONTAS` (Form linha 927)
+- `WHERE contas = ` para validar `SigReCtb` ├® a query de valida├º├úo do campo de conta cont├íbil, equivalente ao `fAcessoContas` do legado. **Existe no original.**
+
+---
+
+O validador autom├ítico inspecionou apenas as colunas WHERE dos `SQLEXEC` para SQL Server (PASSO 2/3) e n├úo considerou: (1) condi├º├Áes de JOIN em cursores VFP locais, (2) queries de valida├º├úo de lookup nos m├®todos do Form. O c├│digo migrado est├í correto ÔÇö nenhuma das 5 condi├º├Áes ├® inventada.

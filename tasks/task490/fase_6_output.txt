@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e bem estruturado. Fase 6 conclu├¡da com sucesso.
+
+**Resumo das mudan├ºas:**
+
+**`ConfigurarPaginaDados()`** ÔÇö adicionados os 2 objetos restantes:
+- `lbl_4c_Descricao` (Say2: Top=191, Left=278, Width=55, Height=15)
+- `txt_4c_Descricao` (getDescricao: Top=186, Left=335, Width=290, MaxLength=40)
+
+**Novos m├®todos:**
+- `LimparCampos()` ÔÇö zera `txt_4c_Codigo` e `txt_4c_Descricao`
+- `BOParaForm()` ÔÇö popula campos da Page2 a partir das propriedades do OrgBO
+- `HabilitarCampos(par_lHabilitar)` ÔÇö controla `Enabled`/`ReadOnly` conforme o modo: c├│digo edit├ível s├│ em INCLUIR; descri├º├úo edit├ível em INCLUIR e ALTERAR; Confirmar desabilitado em VISUALIZAR
+
+**Bot├Áes de a├º├úo atualizados:**
+- `BtnIncluirClick` ÔÇö agora chama `LimparCampos()` e `HabilitarCampos(.T.)`
+- `BtnAlterarClick` ÔÇö agora chama `BOParaForm()` e `HabilitarCampos(.T.)` ap├│s carregar o registro
+- `BtnVisualizarClick` ÔÇö agora chama `BOParaForm()` e `HabilitarCampos(.F.)`
+
+**`BtnSalvarClick` completado** ÔÇö adicionadas as valida├º├Áes do legado: c├│digo duplicado (via `ValidarCodigoExistente`) em modo INCLUIR, e descri├º├úo vazia.

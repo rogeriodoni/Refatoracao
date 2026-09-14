@@ -1,0 +1,15 @@
+﻿Arquivo correto. Fase 4 conclu├¡da. Resumo do que foi adicionado ao `Formsigrecor.prg`:
+
+**`InicializarForm()`** ÔÇö agora chama `ConfigurarPaginaLista()` e `LimparCampos()` logo ap├│s `ConfigurarPageFrame()`.
+
+**`ConfigurarPaginaLista()`** (nova) ÔÇö popula `Page1` com todos os controles de filtro do legado SIGRECOR em posi├º├Áes proporcionais (Top original ÔêÆ 85 para compensar PageFrame.Top=85):
+- Labels: Per├¡odo, Grupo, Conta, Moeda, Op├º├úo, Tipo, Quebra
+- TextBoxes: datas (Format="D", Value={}), c├│digo/descri├º├úo grupo, conta e moeda
+- CheckBox `chk_4c_OptPenPag` (Value=0 num├®rico, conforme regra)
+- OptionGroups: `obj_4c_OptSNA` (3=Ambos), `obj_4c_OptTipo` (1=Anal├¡tico), `obj_4c_OptQuebras` (1=Datas), cada um com bot├Áes posicionados explicitamente
+
+**`LimparCampos()`** (nova) ÔÇö inicializa datas com `DATE()`, demais filtros vazios, options nos defaults do BO.
+
+**`FormParaRelatorio()`** (nova) ÔÇö transfere todos os 12 campos do form para as propriedades correspondentes do `sigrecorBO`.
+
+**`AlternarPagina()`** (nova) ÔÇö trivial para form REPORT de p├ígina ├║nica.

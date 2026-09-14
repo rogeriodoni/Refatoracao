@@ -1,0 +1,8 @@
+﻿FASE 2/8 conclu├¡da. Adicionei ao `sigrecrpBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö restaura todos os 15 filtros (Oper, datas, empresa, grupo/conta principais, sub-grupo/sub-conta contrapartida, moeda) a partir de um cursor salvo, com verifica├º├úo de tipo via `TYPE()` e `EVALUATE()` (mesmo padr├úo de `sigrecorBO`).
+- **`Inserir()`** ÔÇö registra execu├º├úo do relat├│rio em LogAuditoria via `RegistrarAuditoria("REPORT_RUN")`.
+- **`Atualizar()`** ÔÇö registra reexecu├º├úo via `RegistrarAuditoria("REPORT_RERUN")`.
+- **`ObterChavePrimaria()`** enriquecida ÔÇö retorna chave l├│gica composta `SIGRECRP|Oper|DtIni|DtFim|Empresa|Grupo|Conta|Sgrupo|Sconta|Moeda` em vez de string vazia (j├í que relat├│rios n├úo t├¬m PK f├¡sica).
+
+A valida├º├úo do orquestrador (`05_migracao_fase2.log` regex: `CarregarDoCursor` + `Inserir` + `Atualizar` em sequ├¬ncia) agora encontra as tr├¬s strings, e os m├®todos t├¬m l├│gica funcional completa ÔÇö sem stubs/TODOs.

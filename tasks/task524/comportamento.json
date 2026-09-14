@@ -1,0 +1,294 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDSRE",
+      "evento": "Init",
+      "linhas": 15,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdSer','EmpCods','crSigCdSer','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Emps','','','Emp',31,.t.)\n\t\t.pfSqlTabela(1).pColuna('cods','','','Código',52,.t.)\n\t\t.pfSqlTabela(1).pColuna('descs','','','Descrição',150,.t.)\n\t\t.pfSqlTabela(1).pColuna('ctiponfs','','','Tipo N.F.',50,.f.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lcBusca\n\nIf !Empty(ThisForm.Pagina.Dados.getcods.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdSer','cods',ThisForm.Pagina.Dados.Getcods.Value)\nElse\n\tIf !Empty(ThisForm.Pagina.Dados.getdescs.Value)\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdSer','descs',ThisForm.Pagina.Dados.Getdescs.Value)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "parameters lnOpcao\n\nSelect CrSigCdSer\n\nIf !dodefault( lnOpcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nThisForm.Pagina.Dados.getDEmps.Value = ''\nIf InList(ThisForm.pcEscolha, 'ALTERAR', 'CONSULTAR', 'EXCLUIR')\n\tThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', crSigCdSer.Emps)\n\tThisForm.Pagina.Dados.getDEmps.Value = crSigCdEmp.Razas\nEndIf\n\ndo case\n\tcase thisform.pcEscolha='INSERIR'\n\t\tthisform.Pagina.Dados.getemps.setfocus\n\tcase thisform.pcEscolha='PROCURAR'\n\t\tthisform.Pagina.Dado... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "local lnRecno,llRetorno\n\nm.llRetorno = .t.\n\nif inlist(thisform.Pagina.Lista.Grupo_op.value,1,3)\n   with thisform.Pagina.Dados\n      if empty(.getcods.value)\n         = messagebox('Série inválida.',0+64,goSistema.NomeSistema)\n         .getcods.setfocus\n\t\tReturn\n      else\n      \n         if thisform.Pagina.Lista.Grupo_op.value=1 \n\n\t\t\tlcKey = ThisForm.Pagina.Dados.GetEmps.Value + ThisForm.Pagina.Dados.GetCods.Value\n\n\t\t\tif ThisForm.poDataMgr.ChkRegister('SigCdSer','EmpCods',lcKey)\n                 ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdSer',ChkRegister('SigMvNfi'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDSRE",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "=Dodefault()\nif ThisForm.plCancelar\n\tthisform.mAtivapagina1\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.Getcods",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "local saida\nsaida = .t.\nif inlist(thisform.Pagina.Lista.Grupo_op.value,2,3)\n\tsaida = .f.\nendif\nreturn saida",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.Op_TipoNF",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.fwoption1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.Op_AlteraPeso",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.Optiongroup1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.getDEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.Pagina.Dados.getEmps, ThisForm.Pagina.Dados.getDEmps)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.getDEmps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Pagina.Dados.getEmps.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.getEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.Pagina.Dados.getEmps, ThisForm.Pagina.Dados.getDEmps)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.getEmps",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "local saida\nsaida = .t.\nif inlist(thisform.Pagina.Lista.Grupo_op.value,2,3)\n\tsaida = .f.\nendif\nreturn saida",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.fwoption2",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And This.parent.Op_TipoNF.Value = 2 )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.optSeloTrans",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRE.Pagina.Dados.ck_BlqInss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') and CrSigCdSer.impnfs = 1 )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,20 @@
+﻿Ap├│s ler ambos os arquivos completos (963 e 543 linhas), posso confirmar:
+
+**O problema `CONTROLCOUNT` reportado n├úo existe nos arquivos.** Os arquivos est├úo corretos.
+
+Aqui est├í o que foi verificado:
+
+- `Formale.prg`: `ControlCount` aparece **apenas** nas linhas 609/615/616 como propriedade VFP9 para iterar controles do form no m├®todo `TornarControlesVisiveis()` ÔÇö nada a ver com SQL ou WHERE.
+- `aleBO.prg`: n├úo cont├®m `CONTROLCOUNT` em nenhum lugar.
+
+As condi├º├Áes WHERE presentes no c├│digo migrado s├úo todas v├ílidas e correspondem ao original:
+
+| Localiza├º├úo | WHERE migrado | Coluna original? |
+|---|---|---|
+| `aleBO.prg:333` | `inserirs <> 0 OR alterars <> 0 OR excluirs <> 0 OR baixas <> 0` | Sim (INSERIRS/ALTERARS/EXCLUIRS/BAIXAS) |
+| `aleBO.prg:340` | `DELETE FROM SigCdAle WHERE Contas = ...` | Sim (CONTAS) |
+| JOIN em `CarregarAlertas` | `CDC.OpeInatvs = 0` | Sim (OPEINATVS) |
+
+O relat├│rio do code review cont├®m um **falso positivo**: o scanner provavelmente confundiu a propriedade VFP9 `ControlCount` (usada corretamente em loop de controles visuais) com uma coluna SQL inventada em WHERE.
+
+**Nenhuma corre├º├úo ├® necess├íria.** Os arquivos `Formale.prg` e `aleBO.prg` est├úo corretos conforme o c├│digo legado original.

@@ -1,0 +1,8 @@
+﻿Adicionei os 4 m├®todos de eventos principais em `C:\4c\projeto\app\forms\operacionais\FormSIGPRCIC.prg`, todos com l├│gica funcional real (sem stubs):
+
+- **BtnIncluirClick** ÔÇö atribui o ├¡cone selecionado no grid ao programa via `BO.Salvar()` e fecha o dialog
+- **BtnAlterarClick** ÔÇö troca o ├¡cone atribu├¡do via `BO.SelecionarIcone()` e fecha o dialog
+- **BtnVisualizarClick** ÔÇö atualiza o preview (`img_4c_Icone`) da linha ativa via `AtualizarPreviewIcone()`
+- **BtnExcluirClick** ÔÇö confirma com `MsgConfirma()` e remove o ├¡cone via `BO.Excluir()` (zera `barrapict`/`barraforms` em crProg1/crProg2)
+
+Tamb├®m extra├¡ um helper `ObterIconeSelecionadoNoGrid()` para n├úo duplicar a leitura de `crSigSyIco1.carqicones` + tratamento de `< nenhum >`. Todos os handlers delegam ├á l├│gica CRUD j├í existente no `SIGPRCICBO` (Fases 1-2), respeitam TRY/CATCH sem RETURN interno, usam `MsgAviso`/`MsgErro`/`MsgConfirma` (n├úo MESSAGEBOX) e acentos via CHR().

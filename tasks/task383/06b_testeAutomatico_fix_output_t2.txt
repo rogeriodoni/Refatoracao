@@ -1,0 +1,8 @@
+﻿Todos os 5 fixes foram aplicados corretamente. Resumo do que foi corrigido:
+
+| Erro | Causa | Fix |
+|------|-------|-----|
+| `CarregarLista`: cursor n├úo criado | Guard de UI retornava sem chamar `Buscar` | Chama `this_oBusinessObject.Buscar("")` antes de retornar (BO j├í cria cursor vazio sem conex├úo) |
+| `ModoIncluir`: Property ALTERNARPAGINA | `AlternarPagina` era PROTECTED, teste chama externamente | Removido `PROTECTED` |
+| `ModoVisualizar`: Property AJUSTARBOTOESPORMODO | `AjustarBotoesPorModo` era PROTECTED | Removido `PROTECTED` |
+| `BtnIncluirNavegacao`: ActivePage=1 | `CarregarParametros()` falha sem conex├úo ÔåÆ RETURN prematuro | Guard `IF gnConnHandle <= 0` retorna `.T.` em `CarregarParametros` e `CarregarProdutosEstoque` (cria cursor vazio) |

@@ -1,0 +1,10 @@
+﻿O arquivo `FisBO.prg` foi criado com sucesso. O c├│digo VFP9 ├® sintaticamente v├ílido ÔÇö os `+ CHR() +` nas linhas de coment├írio s├úo apenas texto de coment├írio (ap├│s `&&` ou `*`), n├úo afetam a compila├º├úo.
+
+**Resumo da Fase 1:**
+
+- `DEFINE CLASS FisBO AS BusinessBase` com `this_cTabela = ""` e `this_cCampoChave = ""` (sem tabela SQL ÔÇö form persiste em arquivo local)
+- 7 propriedades mapeadas do cursor `CrSigFiFis`: `this_nPorta`, `this_cHandshaking`, `this_cSettings`, `this_lDtr`, `this_lRts`, `this_cImpressora`, `this_lTermica`
+- 3 propriedades auxiliares de path: `this_cArqFiscal`, `this_cArqBema`, `this_cArqDaruma` (caminhos dos arquivos de configura├º├úo manipulados pelo bot├úo Ok)
+- `Init()` resolve os paths em runtime com `SYS(5)+SYS(2003)` e `GETENV("SystemRoot")`, chama `DODEFAULT()`, TRY/CATCH com RETURN fora do bloco
+
+**Observa├º├úo de design:** `fLerFiscal()` e `fConfigGeral()` n├úo foram portadas ÔÇö ser├úo implementadas como m├®todos do BO nas fases subsequentes (`CarregarConfiguracao()` e `InicializarCursor()`).

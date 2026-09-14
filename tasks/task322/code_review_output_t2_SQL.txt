@@ -1,0 +1,33 @@
+﻿Analisei os dois arquivos completos. Ambos os alertas s├úo **falsos positivos** do scanner:
+
+**[SQL-FILTRO-INVENTADO] CIDCHAVES**
+
+`cidchaves` ├® a PK de `sigprpre`. No BO migrado, aparece em WHERE apenas nos m├®todos corretos:
+- `CarregarPorCodigo()` ÔåÆ `WHERE a.cidchaves = ...` (carregar por PK ÔÇö correto)
+- `Atualizar()` ÔåÆ `WHERE cidchaves = ...` (atualizar por PK ÔÇö correto)
+- `ExecutarExclusao()` ÔåÆ `WHERE cidchaves = ...` (excluir por PK ÔÇö correto)
+
+O `Buscar()` usa exatamente DATAS, CPROS, CGRUS no WHERE, igual ao original:
+```foxpro
+WHERE a.datas BETWEEN ... AND ...
+AND a.cpros BETWEEN ... AND ...
+AND b.cgrus BETWEEN ... AND ...
+```
+
+Nenhuma condi├º├úo inventada.
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT**
+
+`ControlCount` aparece nas linhas 1376 e 1390 do Form, no m├®todo `TornarControlesVisiveis()`:
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount
+IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+```
+
+├ë a propriedade VFP9 nativa de objetos container (`Controls.ControlCount`), **n├úo ├® SQL**. O scanner confundiu o nome com uma coluna de banco de dados.
+
+---
+
+**Conclus├úo: nenhuma corre├º├úo necess├íria.** Os dois arquivos est├úo corretos. Modificar o c├│digo quebraria funcionalidades leg├¡timas:
+- Remover `cidchaves` do WHERE em `CarregarPorCodigo` tornaria imposs├¡vel carregar um registro espec├¡fico
+- `ControlCount` n├úo ├® SQL ÔÇö ├® propriedade VFP9 padr├úo para itera├º├úo de controles

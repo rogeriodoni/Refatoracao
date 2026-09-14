@@ -1,0 +1,17 @@
+﻿Arquivo correto. Fase 6 conclu├¡da. Resumo do que foi adicionado ao `FormAli.prg`:
+
+**Campos adicionados em `ConfigurarPaginaDados()`:**
+- `lbl_4c_Label4` + `txt_4c_OpSaidas` ÔÇö "Opera├º├úo de Saida de Cheque" (Say4/GetOpSaidas, top=272)
+- `lbl_4c_Label5` + `txt_4c_FPagSAutos` ÔÇö "Condi├º├úo de Pagamento Automatica" (Say5/GetFPagSAutos, top=297)
+- `lbl_4c_Label6` ÔÇö "Gera Pend├¬ncias Financeiras" (Say6, top=324)
+- `opt_4c_OptPefins` ÔÇö OptionGroup Sim/N├úo com `Value=2` (N├úo padr├úo), Buttons configurados via WITH aninhado sem setar `.Value` individual
+
+**BINDEVENT adicionados:**
+- `txt_4c_OpSaidas` ÔåÆ `ValidarOpSaidas` (LostFocus)
+- `txt_4c_FPagSAutos` ÔåÆ `ValidarFPagSAutos` (LostFocus)
+
+**M├®todos de lookup adicionados:**
+- `ValidarOpSaidas()` ÔÇö busca em `SigCdOpt / Operacaos`
+- `ValidarFPagSAutos()` ÔÇö busca em `SigOpFp / Fpags`
+
+Todos os campos j├í referenciados em `FormParaBO`, `BOParaForm`, `LimparCampos` e `HabilitarCampos` (das fases anteriores) agora existem fisicamente no form.

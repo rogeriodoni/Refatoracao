@@ -1,0 +1,17 @@
+﻿Arquivo completo e correto. A Fase 2 est├í conclu├¡da.
+
+**Resumo do que foi adicionado ao ICNBO.prg:**
+
+**Propriedades novas:**
+- `this_cCursorProgFiltrado` ÔÇö cursor para exibi├º├úo no Grid (apenas programas com descri├º├úo preenchida)
+- `this_cDescricaos`, `this_cProgramas`, `this_cBarrapict`, `this_cBarraforms`, `this_cPkChaves` ÔÇö estado do registro corrente
+
+**M├®todos adicionados:**
+- `InicializarDados()` ÔÇö ponto de entrada p├║blico que encadeia CarregarProgramas + CarregarIcones
+- `CarregarProgramas()` (protected) ÔÇö SQLEXEC em `sigcdprg`, normaliza `barrapict` com JUSTFNAME/LOWER, cria `cursor_4c_ProgFiltrado` filtrado por NOT EMPTY(descricaos)
+- `CarregarIcones()` (protected) ÔÇö SQLEXEC em `SigSyIco`, extrai bin├írio de cada ├¡cone para `.ico` tempor├írio via STRTOFILE, insere entrada `' < Nenhum >'` para remo├º├úo de ├¡cone
+- `SalvarAlteracoes()` ÔÇö loop SCAN em `cursor_4c_Prog` gerando `UPDATE sigcdprg SET barrapict, barraforms WHERE pkChaves` com transa├º├úo expl├¡cita (SQLSETPROP + SQLTRANSACT COMMIT/ROLLBACK)
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö carrega this_* properties do registro corrente
+- `LimparArquivosTemp()` ÔÇö apaga arquivos `.ico` tempor├írios ao fechar
+- `ObterChavePrimaria()` (protected) ÔÇö retorna `this_cPkChaves`
+- `Destroy()` ÔÇö limpa arquivos temp, fecha cursores em ordem, chama `DODEFAULT()`

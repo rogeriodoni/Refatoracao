@@ -1,0 +1,14 @@
+﻿Tudo correto. Fase 8 conclu├¡da.
+
+**Resumo do que foi feito:**
+
+**FormMtp.prg** (o arquivo j├í estava 95% completo das fases anteriores):
+- Adicionado `AjustarBotoesPorModo()` ÔÇö replica o comportamento do legado: foco em `txt_4c_Tipos` no INCLUIR, `txt_4c_Descricao` no ALTERAR, `cmd_4c_Cancelar` no VISUALIZAR
+- Chamada ao novo m├®todo adicionada nos handlers `BtnIncluirClick()`, `BtnVisualizarClick()` e `BtnAlterarClick()` ap├│s `AlternarPagina(2)`
+
+**menu.prg** (integra├º├úo completa):
+- `DEFINE BAR 131 OF popCadastros` ÔÇö "Modelos de Trabalho de Produ├º├úo"
+- `ON SELECTION BAR 131 OF popCadastros DO AbrirFormMtp`
+- Procedure `AbrirFormMtp()` adicionada no final (padr├úo can├┤nico: `VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+
+**config.prg** ÔÇö n├úo precisou de altera├º├úo: o ADIR carrega automaticamente `*BO.prg` da pasta classes e `Form*.prg` da pasta `cadastros`.

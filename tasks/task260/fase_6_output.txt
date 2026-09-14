@@ -1,0 +1,11 @@
+﻿Fase 6 conclu├¡da. As duas altera├º├Áes foram aplicadas:
+
+**O que foi feito:**
+
+1. **Header atualizado** ÔÇö Fases 6 e 7 agora documentadas: Fase 6 com a entrega real (ReadOnly), Fase 7 marcada como N/A (form OPERACIONAL sem Page2).
+
+2. **`AjustarBotoesVisibilidade()`** ÔÇö Adicionado `THIS.grd_4c_Grade.ReadOnly = !loc_lVis` na linha 485. Isso replica o comportamento do evento `When` do legado:
+   - `Column1.Text1.When` retornava `InList(pcEscolha,'INSERIR','ALTERAR')` ÔåÆ grid bloqueado em CONSULTAR
+   - `Column2.Text1.When` retornava a mesma coisa ÔåÆ coberto pela mesma instru├º├úo
+
+**Por que apenas isso:** Este ├® um form OPERACIONAL puro ÔÇö sem Page2, sem TextBoxes/Labels extras, sem Salvar/Cancelar. Toda a l├│gica (grid, lookups com pickers SIGCRRAP, handlers KeyPress, valida├º├úo de duplicidade, carregamento via SQLEXEC) j├í estava completa nas fases 3-5. A ├║nica lacuna era o controle de editabilidade do grid no modo leitura.

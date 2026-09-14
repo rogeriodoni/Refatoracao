@@ -1,0 +1,10 @@
+﻿Corre├º├Áes aplicadas. Resumo dos 4 problemas corrigidos em `SigPdMfaBO.prg`:
+
+| Problema | Local | Corre├º├úo |
+|---|---|---|
+| `WHERE Emps = ... AND Dopps = ...` | `GerarNumBatch()` linha ~192 | Removido ÔÇö original usa `fGerUniqueKey()`, sem filtro por empresa/DOP |
+| `WHERE EmpDNps = loc_cEmpDNpsOp` | Loop DoppPads linha ~359 | Trocado por `WHERE cIdChaves = cursor_4c_SigPdMvf.cIdChaves` (coluna original) |
+| `WHERE EmpDNps = loc_cEmpDNpsSvc` | Loop DoppServs linha ~378 | Trocado por `WHERE cIdChaves = cursor_4c_SigPdMvf.cIdChaves` (coluna original) |
+| `WHERE CPros = ...` | Busca SigCdPro linha ~406 | Trocado por `WHERE Produtos = ...` (coluna presente no WHERE original) |
+
+As vari├íveis `loc_cEmpDNpsOp` e `loc_cEmpDNpsSvc` (que montavam o filtro inventado) tamb├®m foram removidas j├í que n├úo tinham mais uso.

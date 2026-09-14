@@ -1,0 +1,13 @@
+﻿O arquivo est├í completo e correto. Fase 2/8 conclu├¡da.
+
+**OpsBO.prg** agora tem todos os m├®todos CRUD completos:
+
+- **CarregarDoCursor()** ÔÇö l├¬ todos os 13 campos de SigCdOpe + OpeInatvs de SigOpCdc (com guard `TYPE("OpeInatvs") != "U"` para quando o cursor n├úo tem esse campo)
+- **ValidarDados()** ÔÇö valida Dopes obrigat├│rio, unicidade no INSERT, TitOpes obrigat├│rio
+- **VerificarCodigoExistente()** ÔÇö COUNT(*) em SigCdOpe por Dopes
+- **AtualizarSigOpCdc()** ÔÇö upsert (INSERT ou UPDATE) em SigOpCdc para o flag de inativa├º├úo
+- **Inserir()** ÔÇö INSERT em SigCdOpe + chama AtualizarSigOpCdc + auditoria
+- **Atualizar()** ÔÇö UPDATE em SigCdOpe + chama AtualizarSigOpCdc + auditoria
+- **ExecutarExclusao()** ÔÇö verifica depend├¬ncias em SigOpFin, deleta SigOpCdd/SigOpCdc antes do principal
+- **Buscar()** ÔÇö SELECT com JOIN em SigOpCdc + SigOpCdd (DopMenus), filtro por "Ativo"/"Inativo"/todos, padr├úo cursor_4c_Dados com ZAP+APPEND quando cursor j├í existe
+- **CarregarPorCodigo()** ÔÇö SELECT com JOIN em SigOpCdc para carregar todos campos + OpeInatvs, reseta `this_lNovoRegistro = .F.`

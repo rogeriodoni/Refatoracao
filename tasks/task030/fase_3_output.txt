@@ -1,0 +1,26 @@
+﻿Arquivo criado com sucesso. Aqui est├í o que foi implementado na Fase 3:
+
+**`Formsigreani.prg`** ÔÇö 354 linhas, completo e funcional:
+
+| M├®todo | Status |
+|--------|--------|
+| `Init()` | `RETURN DODEFAULT()` |
+| `InicializarForm()` | Cria BO, cabe├ºalho, bot├Áes, PageFrame; vincula BINDEVENT |
+| `ConfigurarCabecalho()` | Container RGB(100,100,100) + lbl_4c_Sombra/Titulo |
+| `ConfigurarBotoes()` | CommandGroup (Top=0, Left=529, W=273, H=80, 4 bot├Áes) |
+| `ConfigurarPageFrame()` | PageFrame com 1 p├ígina (Filtros), Top=85, H=215 |
+| `ConfigurarPaginaLista()` | "Periodo :" + txt_4c_DtInicial + "├á" + txt_4c_DtFinal com posi├º├Áes exatas do original |
+| `ConfigurarPaginaDados()` | Intencionalmente vazio ÔÇö form REPORT com p├ígina ├║nica |
+| `LimparCampos()` | `Value = DATE()` em ambas as datas |
+| `FormParaRelatorio()` | Copia `this_dDtInicial`/`this_dDtFinal` para o BO |
+| `ValidarFiltros()` | Valida que ambas as datas est├úo preenchidas |
+| `TeclaDataInicial/Final` | ESC restaura DATE() |
+| `BtnVisualizar/Imprimir/Excel/SairClick` | L├│gica completa com `ValidarFiltros()` + `FormParaRelatorio()` |
+| Stubs CRUD (`BtnAlterarClick`, etc.) | Aliases para compatibilidade com pipeline |
+| `Destroy()` | `this_oRelatorio = .NULL.` + `DODEFAULT()` |
+
+**Posi├º├Áes replicadas do original** (controles em Page1 = top_original ÔêÆ 85):
+- `lbl_4c_Periodo`: Top=87, Left=333
+- `txt_4c_DtInicial`: Top=83, Left=384, Width=45, InputMask="99/99"
+- `lbl_4c_LblA` (CHR(224)): Top=87, Left=433
+- `txt_4c_DtFinal`: Top=83, Left=444, Width=45, InputMask="99/99"

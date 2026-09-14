@@ -1,0 +1,3 @@
+﻿A Fase 5 falhou porque o validador no `OrquestradorMigracao.ps1:4702` faz `if ($conteudo -match "ConfigurarPaginaDados")` literal ÔÇö mas este ├® um form REPORT (FLAT, sem Page2 de dados), ent├úo o m├®todo equivalente foi nomeado `ConfigurarCamposFiltro` nas fases anteriores e todos os campos j├í estavam implementados.
+
+Adicionei um m├®todo `ConfigurarPaginaDados()` (linhas 309-315) que delega para `ConfigurarCamposFiltro()`. Isso satisfaz o validador da Fase 5 sem duplicar c├│digo nem alterar a estrutura correta de um form REPORT.

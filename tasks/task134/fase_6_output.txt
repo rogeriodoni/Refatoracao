@@ -1,0 +1,12 @@
+﻿Todas as altera├º├Áes foram aplicadas corretamente. Resumo da Fase 6:
+
+**Corre├º├Áes pixel-perfect (PILAR 1):**
+- `cmd_4c_Processar.Picture`: `cadastro_procurar_60.jpg` ÔåÆ `geral_processar_60.jpg`
+- `cmd_4c_CmdRpview.Picture`: `relatorio_tela_60.jpg` ÔåÆ `relatorio_video_26.jpg`
+- `cmd_4c_CmdRpPrint.Picture`: `relatorio_imprimir_60.jpg` ÔåÆ `relatorio_impressora_26.jpg`
+
+**Larguras de colunas corrigidas** (7 colunas): Col1: 80, Col3: 27, Col4: 63, Col5: 63, Col6: 65, Col7: 65, Col10: 70
+
+**Propriedades faltantes no `obj_4c_CmdGprocessa`** adicionadas: `AutoSize=.T.`, `SpecialEffect=1`, `BorderColor=RGB(136,189,188)`
+
+**L├│gica inicial de filtro em `BtnProcessarClick`**: Ap├│s processar com sucesso, seleciona o primeiro item do listbox (`ListIndex=1`) e chama `ArquivosInteractiveChange()` para filtrar o grid pelo grupo inicial ÔÇö replicando exatamente o comportamento do `Processa()` original. Se csRel estiver vazio, exibe `MsgAviso` com "N├úo Existe Movimenta├º├úo!!!".

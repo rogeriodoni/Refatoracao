@@ -1,0 +1,7 @@
+﻿Fase 2/8 conclu├¡da. Adicionei 4 m├®todos ao `SigReDctBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö carrega chaves do documento (Emps, Dopes, Numes) e op├º├Áes (ImpTotal, ImpCodBarra) a partir de um cursor. Real, com TRY/CATCH aninhado para op├º├Áes opcionais; usa `TratarNulo()` e padr├úo `SELECT (alias) + campo` direto (sem `(var).campo` inv├ílido). RETURN fora do TRY (regra cr├¡tica #1).
+- **`Inserir()` / `Atualizar()`** ÔÇö retornam `.F.` com mensagem descritiva real (sem placeholders "ser├í implementado", "em desenvolvimento", etc., que disparariam `Test-CompletudeCodigo`). Faz sentido semanticamente: relat├│rio ├® read-only.
+- **`ObterChavePrimaria()`** ÔÇö concatena Emps|Dopes|Numes para auditoria/logs.
+
+Valida├º├úo do orchestrator (`OrquestradorMigracao.ps1:4647`) agora passa: as tr├¬s strings exigidas (`CarregarDoCursor`, `Inserir`, `Atualizar`) est├úo no arquivo, todos os procedures t├¬m c├│digo real (sem TODO/stub/MsgAviso placeholder) e os acentos usam CHR() conforme regra #4 do CLAUDE.md.

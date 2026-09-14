@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. A Fase 5 foi implementada com sucesso. Aqui est├í o resumo do que foi adicionado:
+
+**ConfigurarPaginaDados() ÔÇö agora completa:**
+- `cnt_4c_Cabecalho` com `lbl_4c_Sombra` (sombra preta) e `lbl_4c_Titulo` (branco) ÔÇö padr├úo can├┤nico
+- `cnt_4c_BotoesAcao` com `cmd_4c_Confirmar` (├¡cone `cadastro_salvar_60.jpg`) e `cmd_4c_Cancelar`
+- `lbl_4c_Empresa` ÔÇö label "Empresa" (Say22 original, top=59 com compensa├º├úo +29)
+- `txt_4c_Empresa` ÔÇö c├│digo da empresa, MaxLength=3, BINDEVENT LostFocusÔåÆValidarEmpresa
+- `txt_4c_DEmpresa` ÔÇö descri├º├úo auto-preenchida, ReadOnly
+
+**Novos m├®todos:**
+- `BtnSalvarClick()` ÔÇö popula `cursor_4c_UsuariosAcesso` do `lst_4c_Usuemp` (fase 6) e chama `Salvar()`
+- `BtnCancelarClick()` ÔÇö volta para Page1
+- `BOParaForm()` ÔÇö preenche empresa + carrega listboxes (com PEMSTATUS guard para fase 6)
+- `LimparCampos()` ÔÇö limpa todos os campos
+- `HabilitarCampos()` ÔÇö `txt_4c_Empresa` edit├ível s├│ em INCLUIR; ativa/desativa bot├Áes de transfer├¬ncia (fase 6)
+- `ValidarEmpresa()` ÔÇö busca SQL ao sair do campo; se n├úo encontrar, abre `AbrirBuscaEmpresa()`
+- `AbrirBuscaEmpresa()` ÔÇö FormBuscaAuxiliar para SigCdEmp
+
+**BtnIncluirClick/AlterarClick/VisualizarClick** atualizados para chamar `BOParaForm()` e `HabilitarCampos()` ao navegar para Page2.

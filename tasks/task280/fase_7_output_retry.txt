@@ -1,0 +1,8 @@
+﻿Fase 7 completa. Adicionei os 4 m├®todos `Btn*Click` exigidos pelo contrato do pipeline em `C:\4c\projeto\app\forms\operacionais\FormSigPrEop.prg:590-694`, mapeando cada um para uma a├º├úo real do popup OPERACIONAL:
+
+- **BtnIncluirClick** ÔåÆ marca todas as opera├º├Áes na sele├º├úo (delega a `MarcarDesmarcarTodos(1)`)
+- **BtnAlterarClick** ÔåÆ alterna sele├º├úo do registro corrente (delega a `AlternarSelecao`)
+- **BtnVisualizarClick** ÔåÆ refresh completo: topo do cursor + grid + textboxes
+- **BtnExcluirClick** ÔåÆ confirma e desmarca todas (`MarcarDesmarcarTodos(0)`)
+
+Cada m├®todo tem l├│gica real (sem `TODO`/stub), guard de cursor vazio via `MsgAviso`, `TRY/CATCH` com `MsgErro` detalhado (LineNo + Procedure), e sincroniza a UI (chk_4c_Ck_Marca, grid, txts). Preserva as regras cr├¡ticas do CLAUDE.md: `CHR()` para acentos, RETURN apenas fora do TRY, `MsgConfirma` retornando l├│gico.

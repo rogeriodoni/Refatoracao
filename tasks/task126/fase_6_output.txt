@@ -1,0 +1,20 @@
+﻿O arquivo est├í completo e bem formado. A Fase 6 foi implementada com sucesso. Aqui est├í o resumo do que foi adicionado:
+
+**Fase 6 conclu├¡da ÔÇö adi├º├Áes ao `FormSigReInv.prg`:**
+
+1. **DblClick BINDEVENTs** em `ConfigurarFiltros()` para os 4 campos com lookup:
+   - `txt_4c_CdEmpresa` ÔåÆ `EmpresaDblClick`
+   - `txt_4c_MoeFator` ÔåÆ `MoeFatorDblClick`
+   - `txt_4c_Moeda` ÔåÆ `MoedaDblClick`
+   - `txt_4c_MoedaDesc` ÔåÆ `MoedaDescDblClick`
+
+2. **Handlers Tecla* atualizados** com suporte a F4 (c├│digo 115):
+   - `TeclaCdEmpresa`, `TeclaMoeFator`, `TeclaMoeda`, `TeclaMoedaDesc` ÔÇö todos agora tratam `par_nKeyCode = 115` chamando o `AbrirLookup*` correspondente
+
+3. **Handlers DblClick** (4 m├®todos PUBLIC que delegam para `AbrirLookup*`)
+
+4. **M├®todos `AbrirLookup*` completos e funcionais** (sem TODOs):
+   - `AbrirLookupEmpresa()` ÔÇö busca em `SigCdEmp` (CEmps + Razas)
+   - `AbrirLookupMoeda()` ÔÇö busca em `SigCdMoe` por c├│digo (CMoes + DMoes)
+   - `AbrirLookupMoedaDesc()` ÔÇö busca em `SigCdMoe` por descri├º├úo (DMoes + CMoes)
+   - `AbrirLookupMoeFator()` ÔÇö busca em `SigCdMoe` + carrega cota├º├úo via `CarregarCambio()` do BO ap├│s sele├º├úo

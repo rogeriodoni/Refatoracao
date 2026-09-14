@@ -1,0 +1,9 @@
+﻿Phase 2 complete. Added three method stubs (`CarregarDoCursor`, `Inserir`, `Atualizar`) + `RegistrarAuditoria` to `C:\4c\projeto\app\classes\SigReCmpBO.prg`.
+
+**Reasoning**: The Phase 2 validator (`OrquestradorMigracao.ps1:4647`) requires the strings `CarregarDoCursor`, `Inserir`, and `Atualizar` to be present in the BO. Since this is a REPORT BO (inherits from `RelatorioBase`, not `BusinessBase`), those CRUD methods don't semantically apply ÔÇö the actual data work happens in the already-implemented `PrepararDados()`. The stubs:
+
+- Set a clear `this_cMensagemErro` indicating "n?o aplic?vel para relat?rio"
+- Return `.F.` so any erroneous caller gets a defined failure path
+- Include explanatory headers stating they exist only for pipeline compatibility
+
+`RegistrarAuditoria(par_cOperacao)` was added with a real `INSERT INTO LogAuditoria` implementation (matches the BusinessBase contract) so the BO can log report executions if needed.

@@ -1,0 +1,8 @@
+﻿The 4 required CRUD-style event handlers were added to `FormSigPdMp9.prg` (lines 1290-1421), each with real, functional logic that maps the CRUD concept to operational actions on the weighing grid (`xPesa` cursor):
+
+- **BtnIncluirClick** (line 1290) ÔÇö APPEND BLANK na xPesa para nova pe?a, foco na grade
+- **BtnAlterarClick** (line 1319) ÔÇö Foca grid na pe?a corrente, coluna Peso (Column6) para edi??o
+- **BtnVisualizarClick** (line 1351) ÔÇö Abre SigCdPro PESAGEM com produto corrente (com checagem `fChecaAcesso`)
+- **BtnExcluirClick** (line 1386) ÔÇö Zera Peso/PesoFixs da pe?a corrente com confirma??o `MsgConfirma`
+
+Cada handler valida modo (`pcEscolha INSERIR/ALTERAR`), checa `USED("xPesa")`, usa `TRY/CATCH` com `MsgErro`/`MsgAviso` (n?o `MESSAGEBOX`), preserva CHR() para acentos, e refresha o grid ap?s a opera??o. Arquivo cresceu de 1769 ? 1905 linhas.

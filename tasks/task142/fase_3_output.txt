@@ -1,0 +1,14 @@
+﻿Arquivo criado em `C:\4c\projeto\app\forms\operacionais\FormSigPdMp1.prg` (226 linhas).
+
+**Fase 3/8 entregue.** O arquivo cont├®m:
+
+- **DEFINE CLASS FormSigPdMp1 AS FormBase** com todas as propriedades visuais do original (Width=800, Height=600, TitleBar=0, ControlBox=.F., DataSession=2, etc.)
+- **ADD OBJECT** para os 3 containers principais: `cnt_4c_Sombra` (cabe├ºalho cinza), `shp_4c_Shape1` (shape decorativo), `cnt_4c_Operacao` (container de dados da opera├º├úo)
+- **Init(par_oFormPai)** que captura a refer├¬ncia ao form pai, o modo (`pcEscolha`) e compartilha o DataSession via `THIS.DataSessionId = par_oFormPai.DataSessionId` (padr├úo FormSigPdM10)
+- **InicializarForm()** que cria o BO, determina o caption din├ómico ("Fase Anterior" se modo INSERIR), obt├®m o t├¡tulo din├ómico 2 n├¡veis acima, chama `InicializarDistrib` e `InicializarResumo` do BO, e monta os containers
+- **ConfigurarCabecalho()** que adiciona `lbl_4c_LblSombra` e `lbl_4c_LblTitulo` no container cinza
+- **ConfigurarContainerOperacao()** que adiciona o label "Opera├º├úo :" (textboxes v├¬m na Fase 5)
+- **TornarControlesVisiveis()** recursivo padr├úo
+- **Destroy()** que limpa BO e refer├¬ncia ao form pai
+
+Pr├│xima fase (4/8): grids `grd_4c_Dados` (11 colunas) e `grd_4c_Resumo` (6 colunas) + bot├Áes `cmd_4c_Ok` e `cmd_4c_Alterar`.

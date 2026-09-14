@@ -1,0 +1,6 @@
+﻿Corre├º├Áes aplicadas em `ConfigurarGrades()` (linhas 768 e 789):
+
+- **`grd_4c_GradeOpe`**: `.RecordSource = "TmpCabec"` movido para fora do WITH como `THIS.grd_4c_GradeOpe.RecordSource = "TmpCabec"`. O WITH agora cont├®m apenas os `.ColumnN.ControlSource`.
+- **`grd_4c_GradeItens`**: Idem ÔÇö `.RecordSource = "TmpItens"` movido para fora do WITH.
+
+Isso evita o erro `Unknown member COLUMN1` que ocorria porque o VFP9 n├úo cria as colunas imediatamente ao definir `.RecordSource` dentro de um bloco WITH ÔÇö as colunas s├│ ficam acess├¡veis ap├│s o WITH ser fechado.

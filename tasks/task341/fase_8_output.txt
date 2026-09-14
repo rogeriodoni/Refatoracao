@@ -1,0 +1,12 @@
+﻿Tudo correto. Fase 8/8 conclu├¡da. Resumo do que foi feito:
+
+**FormACE.prg** ÔÇö adicionados os 2 m├®todos faltantes:
+- `FormParaBO()` (linha 1251): transfere `txt_4c_Empresa` e `txt_4c_DEmpresa` para as propriedades do BO
+- `AjustarBotoesPorModo()` (linha 1266): habilita Incluir/Buscar sempre; Visualizar/Alterar/Excluir s├│ quando h├í sele├º├úo no grid
+
+**menu.prg** ÔÇö integra├º├úo completa:
+- `DEFINE BAR 25 OF popCadastros PROMPT "Acesso de Empresas"` adicionado
+- `ON SELECTION BAR 25 OF popCadastros DO AbrirFormACE` vinculado
+- `PROCEDURE AbrirFormACE()` adicionada seguindo o padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+O config.prg **n├úo precisou de altera├º├úo** ÔÇö o ADIR() autom├ítico j├í carrega `*BO.prg` de `classes/` e `Form*.prg` de `forms/cadastros/`, cobrindo tanto ACEBO.prg quanto FormACE.prg.

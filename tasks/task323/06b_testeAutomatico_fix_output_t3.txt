@@ -1,0 +1,9 @@
+﻿Dois arquivos corrigidos. Resumo das 4 altera├º├Áes:
+
+**Erro 1 ÔÇö `Property CARREGARDADOS is not found` (linha 424, Form):**
+- `PROTECTED PROCEDURE CarregarDados()` ÔåÆ `PROCEDURE CarregarDados()`
+- O m├®todo era PROTECTED, por isso o framework de teste n├úo conseguia cham├í-lo de fora da classe.
+
+**Erro 2 ÔÇö `Function requires row or table buffering mode` (linha 201, Destroy):**
+- Removido `TABLEREVERT(.T., "cursor_4c_Carac")` de 3 lugares: `Destroy()` e `InicializarForm()` no Form, e `BuscarCaracteristicas()` no BO.
+- `TABLEREVERT()` exige buffering ativado. O cursor foi criado com `CREATE CURSOR` (sem `CURSORSETPROP("Buffering",...)`), portanto n├úo tem buffering ÔÇö basta `USE IN` para fechar ou `ZAP` para limpar.

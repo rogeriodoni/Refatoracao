@@ -1,0 +1,17 @@
+﻿Arquivo criado corretamente. Fase 1 conclu├¡da.
+
+**`C:\4c\projeto\app\classes\CCJBO.prg`** criado com:
+
+| Propriedade | Tipo | Origem |
+|---|---|---|
+| `this_cCodigo` | `""` | `sigcdccj.codigo` char(6) PK |
+| `this_cContas` | `""` | `sigcdccj.contas` char(10) |
+| `this_dDataBase` | `{}` | `sigcdccj.data_base` datetime |
+| `this_nFator` | `0` | `sigcdccj.fator` numeric(5,2) |
+| `this_nTotal` | `0` | `sigcdccj.total` numeric(11,2) |
+| `this_nTotLiq` | `0` | `sigcdccj.totliq` numeric(11,2) |
+| `this_cDContas` | `""` | exibi├º├úo (SigCdCli.Rclis) |
+| `this_nQtde` / `this_nMedia` | `0` | calculadas de crDetalhe |
+| `this_nTiposDias` | `1` | optDias (1=Corridos, 2=├Üteis) |
+
+`Init()` configura `this_cTabela = "SigCdCcj"` e `this_cCampoChave = "codigo"` (confirmados no schema: PK `[codigo] [char](6) NOT NULL`). A Fase 2 adicionar├í `CarregarDoCursor`, `Buscar`, `CarregarPorCodigo`, `Inserir`, `Atualizar` e `ExecutarExclusao`.

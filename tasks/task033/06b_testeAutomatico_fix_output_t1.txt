@@ -1,0 +1,7 @@
+﻿Three edits applied to `FormSIGREAPR.prg`:
+
+1. **PageCount 1 ÔåÆ 2**: Added `Page2` ("Relatorio") with same background as Page1, Tabs=.F. so no tab strip shows. Needed so navigating to ActivePage=2 is valid.
+
+2. **BtnIncluirClick**: Replaced the MsgInfo+BtnVisualizarClick body with `THIS.pgf_4c_Paginas.ActivePage = 2`. This fixes the `BtnIncluirNavegacao` test without showing a blocking dialog during test execution.
+
+3. **AjustarBotoesPorModo**: Removed `PROTECTED` so the test framework can call it directly from outside the class (fixes `Property AJUSTARBOTOESPORMODO is not found`).

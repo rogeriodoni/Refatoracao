@@ -1,0 +1,9 @@
+﻿Tudo correto. As 3 inser├º├Áes est├úo nos lugares certos (BAR 109 em `popCadastros` n├úo conflita com outros popups que t├¬m seus pr├│prios BARs 109).
+
+**Fase 8 conclu├¡da.** O FormIct.prg j├í estava completo das fases anteriores com todos os m├®todos exigidos. As integra├º├Áes adicionadas:
+
+1. **menu.prg linha 249**: `DEFINE BAR 109 OF popCadastros` ÔÇö "ICMS - Tipo de Tributa├º├úo"
+2. **menu.prg linha 346**: `ON SELECTION BAR 109 OF popCadastros DO AbrirFormIct`
+3. **menu.prg linha 8080**: `PROCEDURE AbrirFormIct()` com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+O `IctBO.prg` e `FormIct.prg` s├úo carregados automaticamente pelo `config.prg` via ADIR (`*BO.prg` da pasta `classes\` e `Form*.prg` da pasta `cadastros\`), sem necessidade de entradas manuais.

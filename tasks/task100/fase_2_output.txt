@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O `sigrefecBO.prg` foi completado com os seguintes m├®todos implementados:
+
+- **`PrepararDados()`** ÔÇö wrapper TRY/CATCH que chama `PrepararDadosInterno()`
+- **`PrepararDadosInterno()`** ÔÇö l├│gica completa do `processamento` original: query principal em `SigCdOpe/SigMvCab/SigCdCli`, loop per-row para `SigMvPar/SigMvPec`, montagem do `crPagamentos`, JOIN final em `crDetalhe READWRITE`, preenchimento de `NVends/RPags/RChqs`, e montagem do `crImpressao` chamando os helpers condicionalmente
+- **`Cabecalho()`** ÔÇö cabe├ºalho com empresa, per├¡odo (usando `CHR(224)` para "├á"), usu├írio e timestamp
+- **`Detalhado()`** ÔÇö se├º├úo detalhada por opera├º├úo com l├│gica de vendedor e cliente
+- **`PagtoXFpags()`** ÔÇö resumo opera├º├Áes ├ù formas de pagamento com detalhes de cheques
+- **`ResumoPagto()`** ÔÇö resumo por formas com subtotal VALE+DINHEIRO
+- **`ResVends()`** ÔÇö resumo por vendedor com breakdown por opera├º├úo
+- **`AnaFPags()`** ÔÇö anal├¡tico por pagamentos com RPags/RChqs
+- **`Imprimir()` / `Visualizar()`** ÔÇö chamam `PrepararDados()` + `REPORT FORM RelSigReFec`
+- **`ObterMensagemErro()` / `ObterChavePrimaria()`**

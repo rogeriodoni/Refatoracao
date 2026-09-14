@@ -1,0 +1,17 @@
+﻿Fase 2 conclu├¡da. O `sigrecrfBO.prg` agora est├í completo com:
+
+**M├®todos adicionados:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Carrega `GrPadVens` de `SigCdPam`; retorna `.F.` se n├úo configurado |
+| `PrepararDados()` | PROTECTED ÔÇö executa as 2 queries SQL Server, filtra/agrega cursores VFP locais, aplica os 4 modos de `OptLocal`, gera `crRel` para o `REPORT FORM` |
+| `Visualizar()` | Chama `PrepararDados()` ÔåÆ `REPORT FORM SigReCrf PREVIEW NOCONSOLE` |
+| `Imprimir()` | Chama `PrepararDados()` ÔåÆ `REPORT FORM SigReCrf TO PRINT PROMPT NOCONSOLE` |
+| `ObterMensagemErro()` | Retorna `this_cMensagemErro` |
+| `BuscarVendedores()` | SQL com filtro por `GrPadVens`, empresa, acesso `SigCdAcJ` ÔåÆ `cursor_4c_SigrecrfVends` |
+| `BuscarProduto(filtro, tipo)` | LIKE search em `SigCdPro` por c├│digo ou descri├º├úo ÔåÆ `cursor_4c_SigrecrfPro` |
+| `ObterChavePrimaria()` | Retorna `""` (relat├│rio sem chave) |
+| `Destroy()` | Libera `crRel`, `csCabecalho` e cursores de lookup |
+
+**Pontos cr├¡ticos implementados:** SEEK com alias (n├úo muda work area, DELETE opera em crTmpCrf corretamente), `WHERE NOT DELETED()` na agrega├º├úo de crTmpCrf, limpeza de cursores intermedi├írios ap├│s agrega├º├úo final, valida├º├úo de data obrigat├│ria apenas quando `OptLocal <> 4`.

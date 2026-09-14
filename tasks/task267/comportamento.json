@@ -1,0 +1,568 @@
+{
+  "resumo": {
+    "totalMetodos": 32,
+    "metodosComSQL": 16,
+    "metodosComValidacao": 21,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fLimpaTexto", "fGerUniqueKey", "fCalcMod11BB", "fGerBar2de5", "fCalcMod10", "fConfigGeral", "fAcessoEmpresa", "fAcessoContas", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 63,
+      "codigoOriginal": "lcconta = Thisform.pgfprincipal.pgfiltro.get_cd_car_conta.Value\nlcemp = Thisform.pgfprincipal.pgfiltro.get_Cd_Empresa.Value\nldti = Thisform.pgfprincipal.pgfiltro.get_Datai.Value\nldtf = Thisform.pgfprincipal.pgfiltro.get_Dataf.Value\nllNPr = (Thisform.pgfprincipal.pgfiltro.optProcessados.Value = 1) && 1-Não Processados; 2-Já Processados\nlnPer = thisform.pgfPrincipal.pgfiltro.optPeriodo.Value\n\nlcope = [(]\n\nSelect crSigCdOpe\nScan\n\tIf crSigCdOpe.marca\n\t\tlcope = lcope + Iif(lcope==[(],['],[,']) + crSi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh,sqlexecute,SetAll",
+        "controlesReferenciados": "get_cd_car_conta,get_Cd_Empresa,get_Datai,get_Dataf,optProcessados,optPeriodo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 118,
+      "codigoOriginal": "Lparameters pTipo\n\nlcconta = Thisform.pgfprincipal.pgfiltro.get_cd_car_conta.Value\nlcemp = Thisform.pgfprincipal.pgfiltro.get_Cd_Empresa.Value\nldti = Thisform.pgfprincipal.pgfiltro.get_Datai.Value\nldtf = Thisform.pgfprincipal.pgfiltro.get_Dataf.Value\n\n* Apanhando o Nome da Empresa\nThisform.poDataMgr.CursorQuery('SigCdEmp', 'crEmpresa', 'Cemps', lcemp, 'RazSocs, Cgcs, Tel1s, Ceps, Endes, Numeros, Bairs, Cidas, Estas, Compls ')\nIf Eof('crEmpresa') Or Empty(crEmpresa.RazSocs) Or Empty(crEmpresa.Cgc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute,cnabBrasil,CnabItau,CnabBradesco,CnabSantander,CnabSantander240",
+        "controlesReferenciados": "get_cd_car_conta,get_Cd_Empresa,get_Datai,get_Dataf,get_titban",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 214,
+      "codigoOriginal": "Local lcTit, lcBcn, lcCnv, lcAge, lcBco, lcRaz, lcCgc, lcTpC, lcRbc, lcDat, lcEnv, lnMor, ;\n\t  lcPri, lcPrt, lcCdC, lcDig, lcArq, lcStr, lnSeq, lcSeq, lcVct, lcVal, lcMor, ;\n\t  lcCpf, lcNom, lcEnd, lcCep, lcNtt, lcChr, llOks, llAtu, lcBol, lcNossoNum, lcDV\n\nlcTit = Padr(thisform.pgfprincipal.pgfiltro.get_titban.value,12)\nlcBcn = Padl(Alltrim(crConvenio.nbancos),3,'0') && Número banco\nlcCnv = [009] && Padl(Alltrim(crConvenio.Convenios), 3, '0') && Código do Convênio\nlcAge = Padl(Alltrim(crConveni... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto,fGerUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_titban",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 123,
+      "codigoOriginal": "lctit = Padr(thisform.pgfprincipal.pgfiltro.get_titban.value,12)\nlcCnv = Padl(Alltrim(crConvenio.Convenios), 8, '0') && Código do Convênio\nlcAge = Padl(Alltrim(crConvenio.NAgencias), 4, '0') && Agência do Cliente\nlcbco = PADL(ALLTRIM(CHRTRAN(crConvenio.contas,'.-','')),5,'0') + crConvenio.DigiAgen && Banco + DAC\nlcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) \t\t&& Razão Social do Empresa\nlcCgc = Padl(Strtran(Strtran(Strtran(crEmpresa.Cgcs,  [/], []), [.], []), [-], []), 14, [0])\nlctpcgc = IIF(LEN(A... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_titban",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 196,
+      "codigoOriginal": "lctit = Padr(Thisform.pgfprincipal.pgfiltro.get_titban.Value,12)\nlcBanco = Padl(Alltrim(crConvenio.nbancos),3,'0') && Número banco\nlcCnv = Padl(Alltrim(crConvenio.Convenios), 3, '0') && Código do Convênio\n\n*** 08/12/2016 - instrucoes do Rafael, substituir as linhas de baixo por estas ***\nlcAge = Padl(Alltrim(crConvenio.NAgencias), 5, '0') && Agência do Cliente + DAC\nlcbco = Padl(Alltrim(Chrtran(ALLTRIM(crConvenio.contas)+Padl(crConvenio.DigiAgen,1,[0]),'.-','')),9,'0')  && Banco\n\n*!*\tlcAge = Pad... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto,fGerUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_titban",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 184,
+      "codigoOriginal": "Lparameters pReimp\n\nlcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) && Razão Social do Empresa\nlcAge = Left(Alltrim(crConvenio.NAgencias),4) && Agência do Cliente\nlcbco = Padl(Alltrim(Chrtran(crConvenio.contas,'.-','')),8,'0') && Banco\nlcCdC = Padl(Alltrim(crConvenio.Convenios),7, [0]) && Código do Convênio do Cliente\nlcTpCtArq = Alltrim(crConvenio.TpCtArqs) && Tipo carteira\nlcTpCtBol = Alltrim(crConvenio.TpCtBols) && Tipo carteira de boleto\n\nSelect a.*, Space(44) as nBarras, Space(30) as ImgBarra,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCalcMod11BB,fGerBar2de5,fCalcMod10",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 207,
+      "codigoOriginal": "lctit = Padr(Thisform.pgfprincipal.pgfiltro.get_titban.Value,12)\nlcBanco = Padl(Alltrim(crConvenio.nbancos),3,'0') && Número banco\nlcCnv = Padl(Alltrim(crConvenio.Convenios), 3, '0') && Código do Convênio\nlcAge = Padl(Alltrim(crConvenio.NAgencias), 5, '0') && Agência do Cliente\nlcbco = Padl(Alltrim(Chrtran(crConvenio.contas,'.-','')),8,'0') + Padl(crConvenio.DigiAgen,1,[0]) && Banco + DAC\nlcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) \t\t&& Razão Social do Empresa\nlcCgc = Padl(Strtran(Strtran(Strtr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto,fGerUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_titban",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 185,
+      "codigoOriginal": "lctit = Padr(Thisform.pgfprincipal.pgfiltro.get_titban.Value,12)\nlcCnv = Padl(Alltrim(crConvenio.Convenios), 8, '0') && Código do Convênio\nlcAge = Padl(Alltrim(crConvenio.NAgencias), 4, '0') && Agência do Cliente\nlcbco = Padl(Substr(Chrtran(crConvenio.contas,'.-',''),1,7),8,'0')  &&+ crConvenio.DigiAgen && Banco + DAC\nlcRaz = Padr(Alltrim(crEmpresa.RazSocs), 30) \t\t&& Razão Social do Empresa\nlcCgc = Padl(Strtran(Strtran(Strtran(crEmpresa.Cgcs,  [/], []), [.], []), [-], []), 14, [0])\nlctpcgc = Iif... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto,fGerUniqueKey,fCalcMod11BB",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_titban",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 306,
+      "codigoOriginal": "*** Mena - 18/04/2018 - novo layout para o Santander - JAL ***\n\nlctit = Padr(Thisform.pgfprincipal.pgfiltro.get_titban.Value,13)\nlcCnv = Padl(Alltrim(crConvenio.Convenios), 11, '0') && Código do Convênio\nlcAge = Padl(Alltrim(crConvenio.NAgencias), 4, '0') && Agência do Cliente\nlcDigA= ALLTRIM(crConvenio.DigiAgen)\t\t\t\t&& digito da agencia\nlcCtaC= alltrim(Chrtran(crConvenio.contas,'.-',''))\nlcDigC= right(lcCtaC,1)\nlcCta= PADL(LEFT(lcCtaC, LEN(lcCtaC)-1),9,'0')\nlcRaz = Padr(Alltrim(crEmpresa.RazSocs... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_titban",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 312,
+      "codigoOriginal": "*** Mena - 18/04/2018 - novo layout para o Santander - JAL ***\n\nlctit = Padr(Thisform.pgfprincipal.pgfiltro.get_titban.Value,13)\nlcCnv = Padl(Alltrim(crConvenio.Convenios), 11, '0') && Código do Convênio\nlcAge = Padl(Alltrim(crConvenio.NAgencias), 5, '0') && Agência do Cliente\nlcDigA= Alltrim(crConvenio.DigiAgen)\t\t\t\t&& digito da agencia\nlcCtaC= Alltrim(Chrtran(crConvenio.contas,'.-',''))\nlcDigC= Right(lcCtaC,1)\nlcCta= Padl(Left(lcCtaC, Len(lcCtaC)-1),9,'0')\nlcRaz = Padr(Alltrim(crEmpresa.RazSocs... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fLimpaTexto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_titban",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Init",
+      "linhas": 33,
+      "codigoOriginal": "ThisForm.pgfprincipal.pgfiltro.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.pgfprincipal.pgfiltro.cntSombra.lblTitulo.Caption = ThisForm.Caption\nWith Thisform\n\t.poDataMgr = Createobject('fSqlConector', Thisform.Name)\n\n\tIf (.poDataMgr.pnIdconn < 0)\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...',48,'Create Object')\n\t\tReturn(.F.)\n\tEndif\n\n\t.poDataMgr.AddCursor('SigPcOol','cidchaves','crSigPcOol','empdopnums')\n\n\tlcQuery = [Select * ] + ;\n\t\t[From SigOpFp ] + ;\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_Cd_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.cmdTestaPos",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "If Empty(Thisform.pgfprincipal.pgfiltro.get_Cd_Empresa.Value)\n\tMessagebox('Empresa inválida',64,'Aviso')\n\tThisform.pgfprincipal.pgfiltro.get_Cd_Empresa.SetFocus()\n\tReturn .F.\nEndif\n\nIf Empty(Thisform.pgfprincipal.pgfiltro.get_Datai.Value) Or Empty(Thisform.pgfprincipal.pgfiltro.get_Dataf.Value)\n\tMessagebox('Período inválido',64,'Aviso')\n\tThisform.pgfprincipal.pgfiltro.get_Datai.SetFocus()\n\tReturn .F.\nEndif\n\nIf Empty(Thisform.pgfprincipal.pgfiltro.get_cd_car_conta.Value)\n\tMessagebox('Banco inváli... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "processamento",
+        "controlesReferenciados": "get_Cd_Empresa,get_Datai,get_Dataf,get_cd_car_conta",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.cmdTestaPos",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "thisform.Release()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.Get_Dataf",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If This.Value < ThisForm.pgfprincipal.pgfiltro.Get_Datai.Value And Not Empty(ThisForm.pgfprincipal.pgfiltro.Get_Datai.Value)\n\t=Messagebox('Data Final Deve Ser Maior Que a Inicial!!!', 48, '')\n\tReturn 0\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Datai",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "*!*\tIF !EMPTY(this.Value)\n\tfAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.pgfprincipal.pgfiltro.get_Cd_Empresa, ThisForm.pgfprincipal.pgfiltro.get_Ds_Empresa)\n*!*\tENDIF",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.get_ds_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.pgfprincipal.pgfiltro.get_cd_empresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "*!*\tIF !EMPTY(this.Value)\n\tfAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.pgfprincipal.pgfiltro.get_Cd_Empresa, ThisForm.pgfprincipal.pgfiltro.get_Ds_Empresa)\n*!*\tENDIF",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.get_ds_car_conta",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local llRetorno,lcGrupo\n\nLocal llRetorno\n\nm.lcGrupo = ''\n\nm.llRetorno = (fAcessoContas(Usuar,m.lcGrupo,'D',This.Value,ThisForm.pgfprincipal.pgfiltro.get_Cd_Car_Conta,ThisForm.pgfprincipal.pgfiltro.get_Ds_Car_Conta))\n\nIf .Not.m.llRetorno\n\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\n\tThisForm.pgfprincipal.pgfiltro.get_Cd_Car_Conta.Value = ''\n\tThisForm.pgfprincipal.pgfiltro.get_Ds_Car_Conta.Value = ''\nEndIf\n\nReturn(m.llRetorno)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Car_Conta,get_Ds_Car_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.get_ds_car_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.pgfprincipal.pgfiltro.get_cd_Car_conta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_Car_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.get_cd_car_conta",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local llRetorno,lcGrupo\n\nLocal llRetorno\n\nm.lcGrupo = ''\n\nm.llRetorno = (fAcessoContas(Usuar,m.lcGrupo,'C',This.Value,ThisForm.pgfprincipal.pgfiltro.get_Cd_Car_Conta,ThisForm.pgfprincipal.pgfiltro.get_Ds_Car_Conta))\n\nIf .Not.m.llRetorno\n\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\n\tThisForm.pgfprincipal.pgfiltro.get_Cd_Car_Conta.Value = ''\n\tThisForm.pgfprincipal.pgfiltro.get_Ds_Car_Conta.Value = ''\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Car_Conta,get_Ds_Car_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.Get_titban",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect * ;\n\t  From CrSigOpFp ;\n  \t  Into Cursor LocalFpag ReadWrite\n\n\tSelect LocalFpag\n\tIndex On Fpags Tag FpagSgru\n\tSet Near On\n\tIf Not Seek(This.Value)\n\t\tloBrow = CreateObject('fwBuscaSel', 'LocalFPag', 'FPagsGru', This.Value, 'Formas de Pagamento')\n\t\tloBrow.AddColuna('FPags', Repl( 'X', 12 ), 'Código' , .T., 'FPagsGru')\n\t\tloBrow.Show\n\t\tThis.Value = Iif(Lastkey()=27, [], Padr(LocalFPag.FPags, 12))\n\tEndIf \n\tSet Near Off\nEndIf \n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.Commandgroup2",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select crSigCdOpe\nUpdate crSigCdOpe Set marca = .T.\nLocate\nGo Top\n\nThisform.pgfprincipal.pgfiltro.grdope.Refresh()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgfiltro.Commandgroup2",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select crSigCdOpe\nUpdate crSigCdOpe Set marca = .F.\nLocate\nGo Top\n\nThisform.pgfprincipal.pgfiltro.grdope.Refresh()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgdados.grdope.Column1.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return crFiltro.EndErro = 0",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgdados.cmdTestaPos",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "thisform.pgfprincipal.pgDados.grdope.RecordSource = []\nthisform.pgfprincipal.pgfiltro.Enabled = .t.\nthisform.pgfprincipal.pgDados.Enabled = .f.\nthisform.pgfprincipal.ActivePage = 1",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgdados.Commandgroup1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "thisform.geracnab([A])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "geracnab",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgdados.Commandgroup1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "thisform.geracnab([V])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "geracnab",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgdados.Commandgroup1",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "thisform.geracnab([I])\nthisform.impboleto(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "geracnab,impboleto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgdados.Commandgroup2",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "SELECT crfiltro\nUpdate crfiltro set marca = .t.\n*!*\treplace all marca with .t.\nLocate\nGo top\n\n\nthisform.pgfprincipal.pgdados.grdope.Refresh()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgdados.Commandgroup2",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "SELECT crfiltro\nUpdate crfiltro set marca = .f.\n*!*\treplace all marca with .f.\nLocate\nGo top\n\nthisform.pgfprincipal.pgdados.grdope.Refresh()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCNB.pgfprincipal.pgdados.Botao1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRCNB.pgfprincipal.pgfiltro.Get_titban.Valid",
+      "queryOriginal": "\tSelect * ; \t  From CrSigOpFp ; \t  Into Cursor LocalFpag ReadWrite",
+      "tabelas": "CrSigOpFp",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCNB.pgfprincipal.pgfiltro.Commandgroup2.Click",
+      "queryOriginal": "Update crSigCdOpe Set marca = .T.",
+      "tabelas": "crSigCdOpe",
+      "colunas": "marca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCNB.pgfprincipal.pgfiltro.Commandgroup2.Click",
+      "queryOriginal": "Update crSigCdOpe Set marca = .F.",
+      "tabelas": "crSigCdOpe",
+      "colunas": "marca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCNB.pgfprincipal.pgdados.Commandgroup2.Click",
+      "queryOriginal": "Update crfiltro set marca = .t.",
+      "tabelas": "crfiltro",
+      "colunas": "marca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCNB.pgfprincipal.pgdados.Commandgroup2.Click",
+      "queryOriginal": "Update crfiltro set marca = .f.",
+      "tabelas": "crfiltro",
+      "colunas": "marca",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["CrSigOpFp", "crSigCdOpe", "crfiltro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

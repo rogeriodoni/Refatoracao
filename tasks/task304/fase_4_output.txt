@@ -1,0 +1,21 @@
+﻿O arquivo j├í est├í completo. Este form OPERACIONAL (SIGPRIMP) n├úo tem estrutura CRUD de Page1/Page2 ÔÇö ├® um form flat para importa├º├úo de arquivos TXT. A Fase 4 do pipeline espera adicionar Grid+bot├Áes CRUD, mas essa fase **n├úo se aplica aqui** pois:
+
+1. **`ConfigurarPaginaLista()`** ÔÇö j├í existe como stub correto (`RETURN`) ÔÇö OPERACIONAL n├úo tem grid CRUD
+2. **`AlternarPagina()`** ÔÇö j├í existe como stub correto (`RETURN`) ÔÇö sem p├íginas para alternar
+
+**O form j├í est├í completo desde a Fase 3.** Toda a funcionalidade foi implementada:
+
+| M├®todo | Status |
+|--------|--------|
+| `ConfigurarCabecalho()` | Ô£à Completo |
+| `ConfigurarBotoes()` (MovEst/Visualizar/Imprimir/Cancela) | Ô£à Completo |
+| `ConfigurarCampos()` (label + textbox + listbox) | Ô£à Completo |
+| `CarregarArquivos()` (via BO.BuscarArquivos) | Ô£à Completo |
+| `BtnMovEstClick()` (processa diret├│rio completo) | Ô£à Completo |
+| `TornarControlesVisiveis()` (oculta Visualizar/Imprimir) | Ô£à Completo |
+
+**SIGPRIMPBO.prg** tamb├®m est├í completo com `ProcessarArquivo()` implementando toda a l├│gica de INSERT nas tabelas SigMvCab, SigMvItn, SigMvIts e SigMvMov com transa├º├úo SQL Server.
+
+**Um ponto de aten├º├úo**: o BO usa `fKeyGen()`, `fGerUniqueKey()`, `fGerMascara()`, `fUniqueIds()` e `fBuscarCotacao()` ÔÇö fun├º├Áes utilit├írias do Framework legado. Antes de testar, confirme que essas est├úo dispon├¡veis em `utils/functions.prg`.
+
+A Fase 4 est├í conclu├¡da ÔÇö os stubs corretos para OPERACIONAL j├í est├úo no lugar desde a Fase 3.

@@ -1,0 +1,419 @@
+{
+  "resumo": {
+    "totalMetodos": 24,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 12,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fCarregaGrade"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDOPS",
+      "evento": "Init",
+      "linhas": 89,
+      "codigoOriginal": "LParameters _Acesso\n\nPrivate lcProg, pDop, pStI, pStF\n\npDop   = []\npStI   = 0\npStF   = 1\nlcProg = []\n\nWith Thisform\n\t.poDataMgr = CreateObject([fSqlConector], .Name, .t.)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\n\tlcQryOpe = [Select a.*, b.OpeInatvs as Inativas, Left(Right(d.ConfigGers, 89), 30) as DopMenus ] + ;\n\t\t\t\t [From SigCdOpe a ] + ;\n\t\t    \t [Left Join SigOpCdc b On a.Dopes... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "OpTrf',OpTdo'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS",
+      "evento": "KeyPress",
+      "linhas": 3,
+      "codigoOriginal": "LPARAMETERS nkeycode,nshiftaltctrl\n\n=DoDefault( nkeycode,nshiftaltctrl )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Private pStI, pStF\n\nlcDop = crSigCdOpe.Dopes\npStI = Iif(ThisForm.Pagina.Lista.optFilSituas.Value = 3, 1, 0)\npStF = Iif(ThisForm.Pagina.Lista.optFilSituas.Value = 2, 0, 1) \n* 1-Geral; 2-Ativos; 3-Inativos\n\n=DoDefault()\n\nSelect crSigCdOpe\nGo Top In crSigCdOpe\nLocate For Dopes = lcDop",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optFilSituas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Private pStI, pStF\n\nlcDop = crSigCdOpe.Dopes\npStI = Iif(ThisForm.Pagina.Lista.optFilSituas.Value = 3, 1, 0)\npStF = Iif(ThisForm.Pagina.Lista.optFilSituas.Value = 2, 0, 1) \n* 1-Geral; 2-Ativos; 3-Inativos\n\nThisForm.poDataMgr.LocateCursor('crSigCdOpe','dopes',ThisForm.Pagina.Dados.Get_desc.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "optFilSituas,Get_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS",
+      "evento": "Click",
+      "linhas": 37,
+      "codigoOriginal": "LParameters Opcao\n\nPrivate lcDopes, pStI, pStF\n\nIf !DoDefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndIf\n\npStI = Iif(ThisForm.Pagina.Lista.optFilSituas.Value = 3, 1, 0)\npStF = Iif(ThisForm.Pagina.Lista.optFilSituas.Value = 2, 0, 1) \n* 1-Geral; 2-Ativos; 3-Inativos\n\nThisform.podatamgr.sqlexecute([Select Dopes, Cmoes, nFiscals, Abrevs From SigCdOpe Order by Dopes],'nivel')\n\nSelect Nivel\nGo Top\n\nThisForm.poDataMgr.CursorQuery('SigOpCdd', 'crSigOpCdd', 'Dopes', crSigCdOpe.Dopes)\nThisForm.poDataM... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "sqlexecute,CursorQuery",
+        "controlesReferenciados": "optFilSituas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select crSigCdOpe\n\n=DoDefault()\n\nUnLock All\n\nThisForm.mAtivapagina1",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Lista.optFilSituas",
+      "evento": "InteractiveChange",
+      "linhas": 14,
+      "codigoOriginal": "Private pStI, pStF\n\npStI = Iif(ThisForm.Pagina.Lista.optFilSituas.Value = 3, 1, 0)\npStF = Iif(ThisForm.Pagina.Lista.optFilSituas.Value = 2, 0, 1) \n* 1-Geral; 2-Ativos; 3-Inativos\n\nThisForm.poDataMgr.Requery([crSigCdOpe])\n\nThisForm.LockScreen = .T.\nThisForm.Pagina.Lista.Grade.Refresh\nThisForm.Pagina.Lista.Grade.Column1.SetFocus\n=fCarregaGrade(ThisForm.Pagina.Lista.Grade)\nThisForm.LockScreen = .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fCarregaGrade",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "optFilSituas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Lista.optFilSituas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Lista.cmdFPOper",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If Reccount() <> 0\n\tDo Form SigCdFpo With Thisform, ThisForm.DataSessionId\nEndIf\nSelect CrSigCdOpe\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Lista.TabDesconto",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If Reccount() <> 0\n\tDo Form SigCdTbO With Thisform, ThisForm.DataSessionId\nEndIf\nSelect CrSigCdOpe\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Lista.MontaLista",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If Reccount() <> 0\n\tDo Form SigLlOpe With Thisform, CrSigCdOpe.Dopes\nEndIf\nSelect CrSigCdOpe\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.Get_desc",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.Get_NDopes",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.Get1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.cmbMenus",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.cmbTOpers",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.getSubMenus",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.Chk_Inativar",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.Get_ordem",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.Get_moeda",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.op_ocx",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPS.Pagina.Dados.MemoObs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDOPS.Init",
+      "queryOriginal": "\tlcQryOpe = [Select a.*, b.OpeInatvs as Inativas, Left(Right(d.ConfigGers, 89), 30) as DopMenus ] + ; \t\t\t\t [From SigCdOpe a ] + ; \t\t    \t [Left Join SigOpCdc b On a.Dopes... [TRUNCADO]",
+      "tabelas": "SigOpCdc",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDOPS.Click",
+      "queryOriginal": "Thisform.podatamgr.sqlexecute([Select Dopes, Cmoes, nFiscals, Abrevs From SigCdOpe Order by Dopes],'nivel')",
+      "tabelas": "SigCdOpe",
+      "colunas": "Dopes,Cmoes,nFiscals,Abrevs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpCdc", "SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

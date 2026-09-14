@@ -1,0 +1,9 @@
+﻿All 6 BINDEVENT calls changed to `"LostFocus"` and all 6 handler signatures updated (no unused parameters). The BO has no issues ÔÇö no changes needed there.
+
+**Root cause analysis:**
+
+The 300-second timeout at ETAPA 1B (`SQLSTRINGCONNECT`) was a TCP connection hang to the SQL Server ÔÇö the `{SQL Server}` legacy ODBC driver on Windows 11 sometimes ignores the `Login Timeout=30` connection string attribute, causing the OS-level TCP timeout (~300s) to apply instead.
+
+**Code fix applied:**
+
+The 6 `ValidarXxx` handlers were incorrectly bound to `"KeyPress"` (fires on every keystroke). Since these handlers open `FormBuscaAuxiliar` modal when the field has a value, this would trigger a blocking modal dialog on **every keystroke** in the data entry page. Changed to `"LostFocus"` ÔÇö the correct equivalent of the legacy SCX `Valid` event, which fires only when the user exits the field.

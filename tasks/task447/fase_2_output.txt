@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. O `ICMBO.prg` agora tem todos os m├®todos CRUD completos:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com LEFT JOINs em SigCdEmp, SigCdCrg e SigOpTdz para trazer descri├º├Áes; ORDER BY emps, tabdes, cargos, fpags
+- **`CarregarPorCodigo(par_cIdChaves)`** ÔÇö SELECT por cidchaves (PK), reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAlias)`** ÔÇö usa `SELECT (alias)` antes de acessar campos; carrega campos de descri├º├úo condicionalmente via `TYPE()`
+- **`Inserir()`** ÔÇö valida duplicidade (combina├º├úo Emps+Cargos+FPags+TabDes+DtInis+DtFins), gera `cidchaves` via `fUniqueIds()`, INSERT com auditoria; sem RETURN dentro do TRY
+- **`Atualizar()`** ÔÇö UPDATE por cidchaves com `dtalts = GETDATE()`, auditoria
+- **`ExecutarExclusao()`** ÔÇö DELETE por cidchaves, auditoria

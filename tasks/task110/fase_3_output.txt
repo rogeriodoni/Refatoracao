@@ -1,0 +1,17 @@
+﻿Fase 3 conclu├¡da. O arquivo `Formsigrehbr.prg` foi criado com 1008 linhas e o BO foi atualizado com o m├®todo `ImprimirDireto()`.
+
+**O que foi entregue na Fase 3:**
+
+- **`Formsigrehbr.prg`** (novo, 1008 linhas) ÔÇö estrutura base completa:
+  - `DEFINE CLASS Formsigrehbr AS FormBase` com propriedades (Height=650, Width=800, TitleBar=0, etc.)
+  - `Init()` ÔåÆ `DODEFAULT()`
+  - `InicializarForm()` ÔÇö cria BO, cabe├ºalho, CommandGroup, PageFrame (1 p├ígina), BINDEVENTs dos bot├Áes
+  - `ConfigurarCabecalho()` ÔÇö container cinza escuro RGB(100,100,100) com lbl_4c_Sombra/Titulo
+  - `ConfigurarBotoes()` ÔÇö `cmg_4c_Botoes` com 4 bot├Áes (Visualizar, Imprimir, Documento, Encerrar)
+  - `ConfigurarPageFrame()` ÔÇö PageFrame 1 p├ígina, Top=85, sem abas
+  - `LimparCampos()` / `FormParaRelatorio()` / `BOParaForm()` / `HabilitarCampos()` ÔÇö todos com `PEMSTATUS` para seguran├ºa na fase parcial (controles ainda n├úo existem)
+  - `ValidarFiltros()` ÔÇö valida per├¡odo (obrigat├│rio) diretamente nas propriedades do BO
+  - `BtnVisualizarClick` / `BtnImprimirClick` / `BtnDocumentoClick` / `BtnSairClick` ÔÇö completos
+  - Aliases de compatibilidade CRUD e `Destroy()`
+
+- **`sigrehbrBO.prg`** (modificado) ÔÇö adicionado `ImprimirDireto()` p├║blico para o bot├úo Documento (imprime sem di├ílogo de sele├º├úo).

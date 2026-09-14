@@ -1,0 +1,8 @@
+﻿Fase 5 conclu├¡da. O m├®todo `ConfigurarPaginaDados()` foi adicionado ao `FormSigReFtp.prg` com os primeiros 50% dos campos do corpo do form:
+
+- `lbl_4c_Label10` ÔÇö label "Produto :" (Say10 legado, top=46, left=58)
+- `txt_4c_Cpro` ÔÇö c├│digo do produto read-only, inicializado com `this_cCodProd` (getCpro legado, top=43, left=114)
+- `txt_4c_Dpro` ÔÇö descri├º├úo do produto read-only, inicializada com `this_cNomProd` (getDpro legado, top=43, left=223)
+- `img_4c_FigJpg` ÔÇö imagem do processo, inicia invis├¡vel (ImgFigJpg legado, top=79, left=53, Stretch=1)
+
+O `InicializarForm()` foi atualizado para chamar `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`. As coordenadas foram ajustadas subtraindo 85 (Top do cnt_4c_Corpo) das coordenadas originais do form. A imagem come├ºa invis├¡vel conforme o original, sendo controlada pelo `GrdAfterRowColChange` j├í implementado.

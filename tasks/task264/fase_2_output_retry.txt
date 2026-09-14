@@ -1,0 +1,8 @@
+﻿Phase 2 requirements met. Added four CRUD-layer methods to `SigPrCfnBO.prg`:
+
+- `CarregarDoCursor(par_cAliasCursor)` (line 348) ÔÇö loads the 8 calc input properties from any cursor with matching field names, using `TYPE()` guards so missing columns don't crash. Recomputes `this_nDias` if absent.
+- `Inserir()` (line 405) ÔÇö overrides `BusinessBase.Inserir()`. Since this is an OPERACIONAL calculator form (`this_cTabela = ""`), it delegates to `Calcular()` (real business op for this form) rather than SQL INSERT.
+- `Atualizar()` (line 422) ÔÇö same pattern: recompute via `Calcular()` in edit mode.
+- `RegistrarAuditoria(par_cOperacao)` (line 439) ÔÇö overrides base method (which would return `.F.` here because `ObterChavePrimaria()` is empty). Writes a compact param summary (`VB|TC|JM|D|VJ`) directly to `LogAuditoria` so calculation runs remain auditable.
+
+Validator regex `CarregarDoCursor.*Inserir.*Atualizar` will now match.

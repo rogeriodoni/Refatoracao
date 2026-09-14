@@ -1,0 +1,556 @@
+{
+  "resumo": {
+    "totalMetodos": 33,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 21,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "MontaGrade", "fAcessoContab", "fAcessoContas", "File", "fVerificaBloqueio", "fBloqueioPorPeriodo", "fDtoSQL"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRES2",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "With Thisform.Pagina.Lista.Grupo_Op\n\t.Width \t\t    = 10 + 80\n\t.Consultar.Left = 5\n\n\tThisform.plAcinserir = .f.\n\t.Inserir.Enabled = .f.\n\t.Inserir.Visible = .f.\n\n\tThisform.plAcalterar = .f. \n\t.Alterar.Enabled = .f.\n\t.Alterar.Visible = .f.\n\n\t.Procurar.Enabled = .f.\n\t.Procurar.Visible = .f.\n\n\tThisform.plAcexcluir = .f. \n\t.Excluir.Enabled = .f.\n\t.Excluir.Visible = .f.\nEndWith\n* Fim ********************************************************************************* \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2",
+      "evento": "Procedure",
+      "linhas": 60,
+      "codigoOriginal": "With ThisForm.Pagina.Lista.Grade\n\t.RecordSource = 'csTemporario'\n\t.Column1.ControlSource = 'csTemporario.Numes'\n\t.Column2.ControlSource = 'csTemporario.Datas'\n\t.Column3.ControlSource = 'csTemporario.GrupoOs'\n\t.Column4.ControlSource = 'csTemporario.ContaOs'\n\t.Column5.ControlSource = 'csTemporario.GrupoDs'\n\t.Column6.ControlSource = 'csTemporario.ContaDs'\n\t.Column7.ControlSource = 'csTemporario.Nops'\n\t.Column8.ControlSource = 'csTemporario.Usuars'\t\n\t.Column9.ControlSource = 'csTemporario.PStatus'\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2",
+      "evento": "Init",
+      "linhas": 53,
+      "codigoOriginal": "Lparameters _Chave, pDataSes, poForm\n\nSet DataSession to pDataSes\n\nWith ThisForm\n\t.Caption    = _Chave\n\t.cDopes     = _Chave\n\t.ParentForm = poForm\n\n\t.poDataMgr = CreateObject('fSqlConector', .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tGoto Top In csTemporario\n\n\t\t.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'MascNums')\n\n\t\tpEdn = csTemporario.Emps + csTemporario.Dopes + Str(csTemporario.Numes, 6)\n\n\t\t.poDataMgr.CursorQuery('SigMvPec', 'crSigMvPec',  'EmpDopNums', pEdn)\n\t\t.poDataMgr.Cursor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkSubn,ChkBxParcs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRES2",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "Local Array laCtrlgrid1(1)\nLocal lnErro1, lcMcrsql1, lnCnt1, loObjgrid1\n\nWith ThisForm\n\t.poDataMgr.RollBack\n\n\t.KeyPreview = .t.\n\t.Pagina.Lista.Enabled = .t.\n\t.Pagina.Lista.Grupo_op.Value = 2\n\t.Pagina.ActivePage = 1\n\t.pcEscolha = ''\n\tWith .Pagina.Lista.Grade\n\t\t.Refresh\n\t\t.SetFocus\n\t\t.Columns(Max(1,.ActiveColumn)).Controls(.Columns(Max(1,.ActiveColumn)).ControlCount).SetFocus\n\tEndWith\nEndWith\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2",
+      "evento": "Click",
+      "linhas": 153,
+      "codigoOriginal": "Parameters Opcao\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndIf\n\nThisForm.LockScreen = .t.\n\nIf Inlist(This.Value, 1, 3, 4, 5)\n\tThisForm.LockScreen = .f.\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nSelect csTemporario\npEdn = csTemporario.Emps + csTemporario.Dopes + Str(csTemporario.Numes, 6)\n\nNoDefault\n\nWith ThisForm\n\tloGBotaosalva = .Pagina.Dados.Grupo_Salva\n\tDo Case\n\t\tCase (This.Value = 2)\n\t\t\t.pcEscolha = 'CONSULTAR'\n*!*\t\t\t\tloGBotaosalva.Salva.Caption = '\\<Ok'\n\n\t\tCase (This.Value = 5)\n\t\t\t.pcE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_dconta,Get_dcontad,Get_Dresps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\n\nThisform.mAtivapagina1\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.fwgrade1",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "Lparameters nColIndex\n\nLocal lcArquivo\n\nlcArquivo = Sys(2023)+'\\Temp3.jpg'\n\nWith Thisform.Pagina.Dados\n\tClear Resources\n\t.FigJpg.Picture = ''\n\t.FigJpg.Visible = .f.\n\n\tThisForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', xEestI.CPros)\n\n\t* Figura no Campo Memo\n\tIf Not Empty(crSigCdPro.FigJpgs) And Not IsNull(crSigCdPro.FigJpgs)\n\t\tIf (StrToFile(crSigCdPro.FigJpgs, lcArquivo) > 0)\n\t\t\t.FigJpg.Picture = (lcArquivo)\n\t\t\t.FigJpg.Visible = .t.\n\t\tEndIf\n\tEndIf\nENDWITH\n\n&& substitui o valor do c... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_grupo",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoContab(Usuar, 'C', This.Value, This, '', Thisform.Pagina.Dados.Origem.get_conta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_conta",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value) And fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'C', This.Value, This, This.Parent.Get_DConta)\n\tThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', This.Value)\n\tIf Empty(This.Parent.get_grupo.Value) \n\t\tThis.Parent.get_grupo.Value = crSigCdCli.Grupos\n\tEndIf\n\n\tThis.Parent.get_conta.Refresh\n\tThis.Parent.get_dconta.Refresh\n\tThis.Parent.get_grupo.Refresh\nElse\n\tThis.Parent.Get_DConta.Value = ''\n\tIf Not Empty(This.Value)\n\t\t=Messagebox('Acesso Negado!!!', 32,... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Grupo,Get_DConta,get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_dconta",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value) And fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'D', This.Value, This.Parent.Get_Conta, This)\n\tThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', This.Parent.Get_Conta.Value)\n\tIf Empty(This.Parent.get_grupo.Value) \n\t\tThis.Parent.get_grupo.Value = crSigCdCli.Grupos\n\tEndIf\n\n\tThis.Parent.get_conta.Refresh\n\tThis.Parent.get_dconta.Refresh\n\tThis.Parent.get_grupo.Refresh\nElse\n\tThis.Parent.Get_Conta.Value = ''\n\tIf Not Empty(This.Value)\n\t\t=Messagebox('Acesso ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,get_dconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_dconta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty(This.Parent.Get_Conta.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_ContaD",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value) And fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'C', This.Value, This, This.Parent.Get_DConta)\n\tThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', This.Parent.Get_Conta.Value)\n\tIf Empty(This.Parent.get_grupo.Value) \n\t\tThis.Parent.get_grupo.Value = crSigCdCli.Grupos\n\tEndIf\n\n\tThis.Parent.get_conta.Refresh\n\tThis.Parent.get_dconta.Refresh\n\tThis.Parent.get_grupo.Refresh\nElse\n\tThis.Parent.Get_DConta.Value = ''\n\tIf Not Empty(This.Value)\n\t\t=Messagebox('Acess... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Grupo,Get_DConta,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_dcontad",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty(This.Parent.Get_Conta.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_dcontad",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value) And fAcessoContas(Usuar, This.Parent.Get_Grupo.Value, 'D', This.Value, This.Parent.Get_Conta, This)\n\tThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', This.Parent.Get_Conta.Value)\n\tIf Empty(This.Parent.get_grupo.Value) \n\t\tThis.Parent.get_grupo.Value = crSigCdCli.Grupos\n\tEndIf\n\n\tThis.Parent.get_conta.Refresh\n\tThis.Parent.get_dconta.Refresh\n\tThis.Parent.get_grupo.Refresh\nElse\n\tThis.Parent.Get_Conta.Value = ''\n\tIf Not Empty(This.Value)\n\t\t=Messagebox('Acesso ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,get_dconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_dcontad",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Parent.Grupo_Salva.Salva.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_resps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_dresps",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Parent.Grupo_Salva.Salva.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.Get_dresps",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Origem.btnCadastros",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "*** mena - 30/09/2015 incluido botão para consultar conta - vcz ***\nIf !Empty(This.Parent.Get_ContaD.Value)\n\tDo Form SIGCDCTA With 0, [SIGCDCTA], This.Parent.Get_contaD.Value, .t., [], [], .T.\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ContaD",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Get_tabd",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.getPStatus",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Get_nop",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.SubNiveis",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "*!*\tThisForm.LocRegister = ListaEest.Numes\n*!*\tCidChav = ListaEest.CidChaves\n*!*\t=ThisForm.poDataMgr.Requery('crSigMvCab')\n*!*\tSelect crSigMvCab \n*!*\tIf Eof()\n*!*\t\tReturn\n*!*\tEndif\n\n*!*\tpEdn = csTemporario.Emps + csTemporario.Dopes + Str(csTemporario.Numes, 6)\n\nDo Form SigMvSbn with Thisform, csTemporario.Emps, csTemporario.Dopes, csTemporario.Numes, [csTemporario]\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Get_prvEnts",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.FigJpg",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "Local lcArquivo\n\n*** Tiago - 08/02/2016 - Rotina para dar zoom na imagem\nlcArquivo = Sys(2023) + '\\' + m.gcIdTmp + Sys(2015) + '.Jpg'\n\nSelect xEestI\nlcCodPro  = xEestI.Cpros\n\nlcSql = [Select a.cpros,a.FigJpgs From SigCdPro a Where a.cpros = ']+lcCodPro+[' ]\nThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpPro')\n\n* Figura no Campo Memo\nIf Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(CrTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;bas... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Get_codigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.Get_nota",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.fweditdata_data",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( Thisform.pcEscolha, 'INSERIR', 'ALTERAR' ) And crSigCdOpe.BlqDatas<>1",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.fweditdata_data",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "okdt = fVerificaBloqueio(This.Value,ThisForm.podatamgr)=0\nIf !okdt\n\tMessageBox('Periodo Bloqueado !!!',0+48,'')\n\treturn 0\nEndIf\nokdt = fBloqueioPorPeriodo(This.Value,ThisForm.podatamgr)=0\nIf !okdt\n\tMessageBox('Periodo Bloqueado !!!',0+48,'')\n\treturn 0\nEndIf\nThisform.SelecionaTabD()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerificaBloqueio,fBloqueioPorPeriodo",
+        "metodosFormChamados": "SelecionaTabD",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRES2.Pagina.Dados.cmdEntrega",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "Local ldDat, lnMin, ldEst\n\nldDat = Iif(IsEmpty(CsTemporario.PrazoEnts), Date(), CsTemporario.PrazoEnts)\nlnMin = 0\nlnMax = 0\nldEst = Ttod(fDtoSQL(Nvl(CsTemporario.Datas, Date())))\n\nDo Form SigOpEnt With CsTemporario.Emps, CsTemporario.Dopes, CsTemporario.Numes, ldDat, ThisForm, lnMin, ldEst, .t., lnMax\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRES2.Pagina.Dados.FigJpg.Click",
+      "queryOriginal": "lcSql = [Select a.cpros,a.FigJpgs From SigCdPro a Where a.cpros = ']+lcCodPro+[' ] ThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpPro')",
+      "tabelas": "SigCdPro",
+      "colunas": "cpros,FigJpgs,Sqlexecutelcsql,CrTmpPro",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

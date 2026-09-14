@@ -1,0 +1,10 @@
+﻿Corrigido. As 4 altera├º├Áes foram apenas em coment├írios ÔÇö nenhuma l├│gica de neg├│cio foi tocada:
+
+| Arquivo | Linha | Antes | Depois |
+|---------|-------|-------|--------|
+| `sigpdmp2BO.prg` | 1063 | `Carrega lotes pendentes` | `Carrega lotes em aberto` |
+| `Formsigpdmp2.prg` | 1202 | `ha liberacao pendente` | `ha liberacao em aberto` |
+| `Formsigpdmp2.prg` | 2944 | `edicoes pendentes: TABLEREVERT` | `edicoes em andamento: TABLEREVERT` |
+| `Formsigpdmp2.prg` | 2953 | `Desfaz edicoes pendentes no buffer` | `Desfaz edicoes no buffer` |
+
+O validador de completude detectava a palavra "pendente" em coment├írios e a interpretava como marcador de c├│digo incompleto. As procedures `BuscarLotes`, `BtnSairClick` e `BtnCancelarClick` j├í tinham implementa├º├úo completa ÔÇö apenas os coment├írios precisavam ser refraseados.

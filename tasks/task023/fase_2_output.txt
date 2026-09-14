@@ -1,0 +1,9 @@
+﻿Fase 2/8 conclu├¡da. O `SIGREVISBO.prg` agora tem implementa├º├úo completa com 4 m├®todos novos:
+
+- **`InicializarFiltros()`** ÔÇö Carrega `GrPadVens` de `SigCdPam` ÔåÆ `this_cGrupo`. Equivale ao bloco de Init do legado que chamava `fChecaAcesso`. No sistema novo, todos os usu├írios t├¬m acesso (sem bloqueio de representante).
+
+- **`PrepararDados()`** ÔÇö Tradu├º├úo fiel do m├®todo `processamento` legado: normaliza datas (sem data = faixa `1900-2099`), monta WHERE com filtros opcionais de conta/representante/venda/pedido, executa JOIN duplo em `SigCdCli`, cria cursor `CsCabecalho` com empresa/t├¡tulo/per├¡odo para o FRX, seleciona `crSigCdVis` ao final.
+
+- **`ObterChavePrimaria()`** / **`ObterMensagemErro()`** / **`Destroy()`** ÔÇö Housekeeping padr├úo do padr├úo RelatorioBase.
+
+Diferen├ºa intencional em rela├º├úo ao legado: filtro Vendas/Pedidos usa `= 1` para Sim e `= 0` para N├úo (l├│gica correta para campo BIT), em vez do padr├úo `?lnVen=''` do ODBC que se apoiava em convers├úo impl├¡cita de tipo do SQL Server.

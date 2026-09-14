@@ -1,0 +1,23 @@
+﻿Tudo correto. A Fase 6 est├í completa. Aqui est├í o resumo do que foi implementado:
+
+**Fase 6/8 conclu├¡da ÔÇö `FormGcp.prg` atualizado com:**
+
+1. **Cores corrigidas (PILAR 1)**:
+   - `lbl_4c_LegO/D/A`: FontName="Verdana", FontBold=.T., ForeColor=RGB(216,39,70) (vermelho do legado)
+   - `lbl_4c_LblGrupo/Conta`: ForeColor=RGB(90,90,90) em vez de preto
+   - `txt_4c_Dgru`: BackColor=RGB(255,255,225) (amarelo do legado)
+
+2. **`ConfigurarPaginaDados()` completo** com:
+   - `txt_4c_DConta` (read-only, BackColor amarelo, ControlSource setado em CarregarDados)
+   - `opt_4c_Permite` OptionGroup com 2 bot├Áes (Permitidas/N├úo Permitidas) com posi├º├Áes/fontes do legado
+   - BINDEVENT para `OptPermiteInteractiveChange`
+
+3. **BINDEVENTs para c├®lulas do grid** (Column1/2/3 Text1): When, Valid, LostFocus
+
+4. **7 novos handlers de evento (PUBLIC)**:
+   - `GridCol1WhenEvent` / `GridCol1ValidEvent` / `GridCol1LostFocusEvent` ÔÇö salva valor anterior, busca Descrs em SigCdGcr, move foco se vazio
+   - `GridCol2WhenEvent` / `GridCol2ValidEvent` ÔÇö busca Rclis em SigCdCli
+   - `GridCol3ValidEvent` ÔÇö valida O/D/A
+   - `OptPermiteInteractiveChange` ÔÇö UPDATE TmpGcOpe.BlqCts + Refresh grid
+
+5. **`CarregarDados()` atualizado** com ControlSource dos campos de display, DynamicForeColor (azul/rosa por BlqCts) e valor inicial do OptionGroup.

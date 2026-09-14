@@ -1,0 +1,19 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito:
+
+**Removido do WHERE principal (SigMvCcr):**
+- `loc_cWhereConta` (`AND Contas = ...`) ÔÇö condi├º├úo inventada, n├úo existe no original
+- `AND Datas <= FormatarDataSQL(...)` ÔÇö condi├º├úo inventada, n├úo existe no original
+- Bloco `IF !EMPTY(THIS.this_cContas)` que montava `loc_cWhereConta`
+- Vari├ível `loc_cWhereConta` da declara├º├úo LOCAL
+
+**WHERE final agora alinhado com o original** (`GRUPOS` + `DATACONCS`):
+```foxpro
+WHERE Grupos = EscaparSQL(loc_cGru)
+AND (DataConcs IS NULL OR DataConcs > FormatarDataSQL(data_ref))
+```
+
+**Mantidos sem altera├º├úo (n├úo s├úo inventados):**
+- `WHERE Cemps = ...` (SigCdEmp) ÔÇö lookup para nome da empresa no cabe├ºalho do relat├│rio
+- `WHERE IClis = ...` (SigCdCli) ÔÇö lookup de descri├º├úo do cliente dentro do SCAN
+- `WHERE CMoes = ...` (SigCdMoe) ÔÇö valida├º├úo do filtro Moeda no form
+- `WHERE Codigos = ...` (SigCdGcr) ÔÇö valida├º├úo do filtro Grupo no form

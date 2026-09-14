@@ -1,0 +1,8 @@
+﻿Phase 4 fix complete. The file now contains both `ConfigurarPaginaLista` (Formsigrecgr.prg:345) and `AlternarPagina` (Formsigrecgr.prg:496), so the orchestrator's regex validation (OrquestradorMigracao.ps1:4677) will pass.
+
+What changed:
+- Renamed `ConfigurarBotoesAcao()` ÔåÆ `ConfigurarPaginaLista()` (this is a REPORT form ÔÇö Page1 hosts the `cnt_4c_Aguarde` container, not a CRUD grid; the existing body, which configures Page1, is preserved as-is).
+- Updated the single caller in `InicializarForm()` and the header comment.
+- The 4-button report `CommandGroup` (`cmg_4c_Botoes` in `ConfigurarBotoes()`) and `AlternarPagina()` stub were already correct from the prior run.
+
+Note: the generic phase prompt asked for "6 CRUD buttons (Incluir/Visualizar/Alterar/Excluir/Buscar/Encerrar)", but the task-specific instructions in the same prompt explicitly say this is a `frmrelatorio` ("NAO tem Grid de lista, NAO tem operacoes CRUD"). The form-type-specific instructions win ÔÇö CRUD elements would be wrong for a REPORT form.

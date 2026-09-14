@@ -1,0 +1,19 @@
+﻿All checks pass:
+- `AbrirBusca*` (DblClick BINDEVENT targets) ÔåÆ PUBLIC Ô£ô
+- `Tecla*` (KeyPress BINDEVENT targets) ÔåÆ PUBLIC Ô£ô
+- `Validar*` (called via `THIS.` from handlers) ÔåÆ PROTECTED Ô£ô
+- `Btn*Click` (button BINDEVENT targets) ÔåÆ PUBLIC Ô£ô
+
+The migration for task093 is complete. Here's a summary of what was done across this session and the previous one:
+
+**Phase 2/8 ÔÇö `sigreeunBO.prg`** (done in previous session): Full BO with 8 filter properties, `PrepararDados()` that builds `dbCabecalho` + `dbRelatorio` cursors for the FRX, cota├º├úo logic, and defensive `Inserir`/`Atualizar` overrides.
+
+**Phase 3/8 ÔÇö `FormSIGREEUN.prg`** (done in previous session): Complete REPORT form with all 8 filter rows across `ConfigurarPaginaLista` and `ConfigurarPaginaDados`, 4 lookup groups ├ù 4 methods each (16 lookup procedures), 16 BINDEVENTs, `AtualizarEstadoCamposDescricao` enforcing the `When`-equivalent logic from the legacy form, and all FormBase interface stubs.
+
+**Menu integration** (done this session):
+- Added `DEFINE BAR 112/113` and `ON SELECTION BAR 113 ÔåÆ AbrirFormSIGREEUN` to `menu.prg:311`
+- Added `PROCEDURE AbrirFormSIGREEUN()` at the end of `menu.prg`
+
+**Task state**: `05_migracao` marked COMPLETED. The orchestrator's automated phases (05b `corrigirAutomatico` ÔåÆ 05c `validarCompilacao` ÔåÆ 06 `testForm` ÔåÆ 07 `validarUI`) remain pending.
+
+**One pending item**: `SigReEun.frx` does not exist in the repository. The same gap exists for `SigReEgg.frx`, `SigReEqr.frx`, and other SIGREE* report layouts ÔÇö FRX migration for this group is a separate pending task. The form will open and filter correctly but the Visualizar/Imprimir buttons will fail until the FRX is provided.

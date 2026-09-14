@@ -1,0 +1,10 @@
+﻿Arquivo criado corretamente em `C:\4c\projeto\app\classes\crfBO.prg`.
+
+**Fase 1 conclu├¡da.** O BO foi criado com:
+
+- **7 propriedades da tabela SigCdCrf**: `this_cCods` (PK), `this_cEmps`, `this_cVends`, `this_cDesVends` (virtual do JOIN), `this_dDatas`, `this_nConferido` (0=aberta/1=encerrada), `this_cIdChaves`
+- **3 propriedades auxiliares**: `this_cGrPadVens` (grupo padr├úo de vendedores de SigCdPam), `this_cCursorItens` (cursor de trabalho csSigCdCri), `this_cCursorSalvar` (cursor de grava├º├úo crSigCdCri)
+- **Init()** com padr├úo TRY/CATCH e `RETURN` fora do bloco ÔÇö define `this_cTabela = "SigCdCrf"` e `this_cCampoChave = "Cods"`
+- **ObterChavePrimaria()** retornando `this_cCods`
+
+Nota: as tabelas SigCdCrf/SigCdCri n├úo constam no schema.sql ÔÇö as propriedades foram extra├¡das diretamente do c├│digo-fonte `sigcdcrf_form_codigo_fonte.txt`. A pr├│xima fase (Fase 2) adicionar├í `CarregarDoCursor()`, `Inserir()` e `Atualizar()`.

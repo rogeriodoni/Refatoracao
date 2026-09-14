@@ -1,0 +1,16 @@
+﻿Todas as altera├º├Áes foram aplicadas corretamente. Fase 6 conclu├¡da.
+
+**O que foi feito na Fase 6:**
+
+O `FormSIGREEQR.prg` ├® um formul├írio de **RELAT├ôRIO** (layout flat, sem Page2 de edi├º├úo). As fases 4-7 foram consolidadas em sess├Áes anteriores:
+- Fase 4: todos os controles de filtro (`ConfigurarPaginaFiltros`)  
+- Fase 5-6 NAO APLICAVEL: `ConfigurarPaginaDados` apenas delega para filtros  
+- Fase 7: m├®todos `Validar*` e `AbrirBusca*`
+
+**Adi├º├úo real da Fase 6** ÔÇö 8 BINDEVENTs `DblClick` + 8 m├®todos handlers para todos os campos de lookup:
+- `TxtCdEmpresaDblClick` / `TxtDsEmpresaDblClick` ÔåÆ `AbrirBuscaEmpresa()`
+- `TxtCdGrupoDblClick` / `TxtDsGrupoDblClick` ÔåÆ `AbrirBuscaGrupo("cgrus"/"dgrus")`  
+- `TxtCdMoedaDblClick` / `TxtDsMoedaDblClick` ÔåÆ `AbrirBuscaMoeda("cmoes"/"dmoes")`
+- `TxtCdGrupoCalcDblClick` / `TxtDsGrupoCalcDblClick` ÔåÆ `AbrirBuscaGrupoCalc("cgrus"/"dgrus")`
+
+Pr├│xima fase: **Fase 8/8 ÔÇö Integra├º├úo** (`config.prg` + entrada no menu `popRelatorios`).

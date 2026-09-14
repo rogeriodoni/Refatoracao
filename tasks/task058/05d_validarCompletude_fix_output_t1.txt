@@ -1,0 +1,10 @@
+﻿Os tr├¬s arquivos foram corrigidos. O problema era um falso positivo no validador: o regex `pendente` estava casando com a substring `pendente` dentro de `dependentes` nos coment├írios de cabe├ºalho das procedures.
+
+**Causa:** Regex `pendente` no script 05d_validarCompletude casava com `dependentes` (palavra t├®cnica leg├¡tima para "niveis filhos na hierarquia").
+
+**Corre├º├úo:** Substitu├¡do `dependentes` por `filhos` nos coment├írios de tr├¬s procedures:
+- `LimparBaseDescendentes` (linha 1040)
+- `LimparNvl2Descendentes` (linha 1141)  
+- `LimparNvl3Descendentes` (linha 1240)
+
+As procedures em si n├úo foram alteradas ÔÇö j├í tinham implementa├º├úo completa e funcional.

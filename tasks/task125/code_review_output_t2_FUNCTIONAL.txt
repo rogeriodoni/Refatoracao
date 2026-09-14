@@ -1,0 +1,6 @@
+﻿All 11 `Buttons(1)` blocks (lines 332, 478, 717, 778, 838, 898, 958, 1018, 1078, 1138, 1198) now have `.FontName = "Tahoma"` immediately after `.Caption`. The `replace_all` on `\<Sim` handled 7 of them, and the 4 individual edits covered the rest.
+
+**Summary of changes made:**
+- Added `.FontName = "Tahoma"` and `.FontSize = 8` to `Buttons(1)` of all 11 OptionGroups (`optg_4c_TipoRel`, `optg_4c_TipoAnal`, `optg_4c_TipoDif`, `optg_4c_TipoLeitura`, `optg_4c_TpCusto`, `optg_4c_TpVenda`, `optg_4c_Foto`, `optg_4c_Etiq`, `optg_4c_Obs`, `optg_4c_Ctg`, `optg_4c_Col`) ÔÇö resolving all 11 OPTIONGROUP-LEFT issues.
+
+**LAYOUT-POSITION issues** ÔÇö no changes needed: `optg_4c_TipoLeitura` is at `Top=181, Left=131` (correct: 266-85=181, original Left=131), `cmd_4c_SelTudo.Top=194` (correct: 279-85=194), `cmd_4c_Apaga.Top=235` (correct: 320-85=235). The validator was misreading `Buttons(1).Top/Left=5` as the OptionGroup's own position, and not accounting for the PageFrame.Top=85 offset for the buttons.

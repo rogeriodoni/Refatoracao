@@ -1,0 +1,737 @@
+{
+  "resumo": {
+    "totalMetodos": 43,
+    "metodosComSQL": 11,
+    "metodosComValidacao": 12,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCLF",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lcBusca\n\nIf !IsEmpty(ThisForm.Pagina.Dados.getCodigo.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdClf','codigos',ThisForm.Pagina.Dados.Getcodigo.Value)\nElse\nIf !IsEmpty(ThisForm.Pagina.Dados.getDescricao.Value)\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdClf','descricaos',ThisForm.Pagina.Dados.Getdescricao.Value)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF",
+      "evento": "Init",
+      "linhas": 42,
+      "codigoOriginal": "LPARAMETERS lcacesso\nLOCAL lcCod\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdClf','codigos','crSigCdClf','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Codigos','','','Codigo',94,.t.)\n\t\t.pfSqlTabela(1).pColuna('descricaos','','','Descrição',290,.t.)\n\t\t.pfSqlTabela(1).pColuna('aipis','','','Alíq. IPI',45,.t.)\n\t\t.pfSqlTabela(1).pColuna('unidades','','','UN',31,.t.)\n\t\t.pfSqlTabela(1).pColuna('cest','','','CEST',70,.t.)\n\t\t.A... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF",
+      "evento": "Click",
+      "linhas": 93,
+      "codigoOriginal": "parameters lnOpcao\nLOCAL lcCLF\n\nIf !dodefault( lnOpcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\n\n*** Mena - 28/11/2013 - incluido para ter ivas por estado dentro de cada classificação fiscal ***\n*** Prepara Grade de IVAs ***\nSelect crIva\nZap\n\n*** pega chave secundária se houver ***\nlcCLF = IIF(ThisForm.PcEscolha='INSERIR', '', CrSigcdclf.codigos)\n\nlcSql = [Select * From SigCdIva Where codigos = '] + lcClf + [']\n\n=ThisForm.PodataMgr.SqlExecute(lcSql,'TmpIva')\nSelect TmpIva\nScan\n\tSelect crIva\n\tApp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF",
+      "evento": "Click",
+      "linhas": 112,
+      "codigoOriginal": "local lnRecno,llRetorno,llOks\n\nif thisform.pcEscolha $ 'INSERIR ALTERAR'\n   \n   with thisform.Pagina.Dados\n      if IsEmpty(.getCodigo.value)\n         = messagebox('Código em branco !!!',0+64,goSistema.NomeSistema)\n         .getCodigo.setfocus\n\t\t return\n      else\n\t\tIf ThisForm.poDataMgr.ChkRegister('SigCdClf','codigos',ThisForm.Pagina.Dados.GetCodigo.Value) and thisform.pcEscolha = 'INSERIR'\n\n\t         = messagebox('Código já cadastrado !!!',0+64,goSistema.NomeSistema)\n\t         .getCodigo.setf... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister,Update,Rollback,SQLExecute",
+        "controlesReferenciados": "ChkRegister('SigCdClf'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCLF",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\nselect CrSigCdClf\nif thisform.plCancelar\n\tThisForm.mAtivapagina1\nendif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF",
+      "evento": "Activate",
+      "linhas": 57,
+      "codigoOriginal": "=dodefault()\n\nif (thisform.pcEscolha=='INSERIR'.or.!eof('CrSigCdClf'))\n\n\tif inlist(thisform.pcEscolha,'INSERIR','ALTERAR','PROCURAR')\n\t\tthisform.Pagina.Dados.getCodigo.setfocus\n\telse\n\t   thisform.Pagina.Dados.Grupo_salva.Salva.setfocus\n\tendif   \n\n\twith thisform.Pagina.Dados\n\n\t\t*!* inicializa combo operacao...\n\t\t.cmbBred.clear\n\t\t.cmbBred.additem(padr('\\<Sim',5))\n\t\t.cmbBred.additem(padr('\\<Não',5))\n\t\t.cmbBred.value = padr(iif(upper(CrSigCdClf.Basereds)='S',;\n\t\t\t\t\t\t\t\t\t\t\t\t'Sim',;\n\t\t\t\t\t\t\t\t\t\t\t\t'Não'),... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "!eof",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.getCodigo",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "local saida\nsaida = .t.\nif inlist(thisform.Pagina.Lista.Grupo_op.value,2,3)\n\tsaida = .f.\nendif\nreturn saida",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.getDescricao",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.getIVAST",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.opt_TpSubSt.Value == 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "opt_TpSubSt",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.getAliqFcp",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.getAliqFcp",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value < 0 or This.Value > 2 \n\tMessageBox('Valor da Alíquota Inválida.', 48, '' )\n\tReturn 0 \nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.getAreduzida",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value < 0\n\tMessageBox('Valor da Alíquota Inválida.', 48, '' )\n\tReturn 0 \nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.Cmbbred",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.CmbAred",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.cmbIpi",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.CmbIPip",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR') And Not ThisForm.TemProduto )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.CmbTipoMerc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.CmbTipoMerc",
+      "evento": "InteractiveChange",
+      "linhas": 91,
+      "codigoOriginal": "Local ar_Msgs(76)\n\nar_Msgs(1) = [Medicamentos constantes da Lista Positiva da Incidência do PIS/PASEP e COFINS]\nar_Msgs(2) = [Medicamentos constantes da Lista Negativa da Incidência do PIS/PASEP e COFINS]\nar_Msgs(3) = [Medicamentos constantes da Lista Neutra da Incidência do PIS/PASEP e COFINS]\nar_Msgs(4) = [Produtos Cosméticos e de Perfumaria Sujeitos à alíquota de 18%]\nar_Msgs(5) = [Produtos Cosméticos e de Perfumaria Sujeitos à alíquota de 25%]\nar_Msgs(6) = [Produtos de Higiene Pessoal Sujeit... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.getAreduzidaS",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value < 0\n\tMessageBox('Valor da Alíquota Inválida.', 48, '' )\n\tReturn 0 \nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.getCest",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.inserir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.inserir",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nSelect crIva\nLocate For estasO=' '\nIf Eof()\n\tAppend Blank\nENDIF\nThisform.Pagina.Dados.gradIva.Column1.SetFocus\nreplace crIva.codigos With crSigCdClf.codigos\nreplace crIva.estasO With SPACE(2)\nreplace crIva.estasD With SPACE(2)\nreplace crIva.indivast With 0\nreplace crIva.indivastpi With 0\n\nThisform.Pagina.Dados.gradIva.column1.text1.Value= ''\nThisform.Pagina.Dados.gradIva.Refresh\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.excluir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.excluir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Select crIva\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\n\nSELECT crIva\nDelete\nThisForm.pagina.Dados.gradIva.Refresh\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradIva",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Eof()\n\tSkip\n\tSkip -1\nENDIF\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradIva.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradIva.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUfs', ;\n\t\t\t\t\t\t   'crListaRemota', 'Estados', Padr(This.Value,2), 'Seleção', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Estados', '', 'UF')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tIf crListaRemota.Estados <> '  '\n\t\tThis.Value = crListaRemota.Estados\n\tEndif\nEndIf\nThis.Refresh\nThisForm.Pagina.Dados.gradIva.Refresh\n  \n* Fim **************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradIva.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 9,
+      "codigoOriginal": "Select estasO, estasD from crIva into cursor Duplica group by estasO, estasD  having count(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('IVA já lançado!!!',0+32,'')\n\tSelect crIva\nEndIf\nSelect crIva\nRETURN .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradIva.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradIva.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUfs', ;\n\t\t\t\t\t\t   'crListaRemota', 'Estados', Padr(This.Value,2), 'Seleção', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Estados', '', 'UF')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tIf crListaRemota.Estados <> '  '\n\t\tThis.Value = crListaRemota.Estados\n\tEndif\nEndIf\nThis.Refresh\nThisForm.Pagina.Dados.gradIva.Refresh\n* Fim ****************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradIva.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "Select estasO, estasD from crIva into cursor Duplica group by estasO, estasD  having count(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('IVA já lançado!!!',0+32,'')\n\tSelect crIva\nEndIf\nSelect crIva\nRETURN .f.\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradIva.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradIva.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.InsRed",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.InsRed",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nSelect crRed\nLocate For estas=' '\nIf Eof()\n\tAppend Blank\nENDIF\nThisform.Pagina.Dados.gradRed.Column1.SetFocus\nreplace crRed.codigos With crSigCdClf.codigos\nreplace crRed.estas With SPACE(2)\nreplace crRed.areds With 0\nreplace crRed.breds With 0\n\nThisform.Pagina.Dados.gradRed.column1.text1.Value= ''\nThisform.Pagina.Dados.gradRed.Refresh\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.ExcRed",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.ExcRed",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Select crRed\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\n\nSELECT crRed\nDelete\nThisForm.pagina.Dados.gradRed.Refresh\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradRed",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Eof()\n\tSkip\n\tSkip -1\nENDIF\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradRed.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradRed.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUfs', ;\n\t\t\t\t\t\t   'crListaRemota', 'Estados', Padr(This.Value,2), 'Seleção', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Estados', '', 'UF')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tIf crListaRemota.Estados <> '  '\n\t\tThis.Value = crListaRemota.Estados\n\tEndif\nEndIf\nThis.Refresh\nThisForm.Pagina.Dados.gradIva.Refresh\n  \n* Fim **************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradRed.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 9,
+      "codigoOriginal": "Select estasO, estasD from crIva into cursor Duplica group by estasO, estasD  having count(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('IVA já lançado!!!',0+32,'')\n\tSelect crIva\nEndIf\nSelect crIva\nRETURN .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradRed.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLF.Pagina.Dados.GradRed.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCLF.Click",
+      "queryOriginal": "lcSql = [Select * From SigCdIva Where codigos = '] + lcClf + [']",
+      "tabelas": "SigCdIva",
+      "colunas": "codigos,lcClf",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCLF.Pagina.Dados.GradIva.Column1.Text1.LostFocus",
+      "queryOriginal": "Select estasO, estasD from crIva into cursor Duplica group by estasO, estasD  having count(1) > 1",
+      "tabelas": "crIva",
+      "colunas": "estasO,estasD",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCLF.Pagina.Dados.GradIva.Column2.Text1.LostFocus",
+      "queryOriginal": "Select estasO, estasD from crIva into cursor Duplica group by estasO, estasD  having count(1) > 1",
+      "tabelas": "crIva",
+      "colunas": "estasO,estasD",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCLF.Pagina.Dados.GradRed.Column1.Text1.LostFocus",
+      "queryOriginal": "Select estasO, estasD from crIva into cursor Duplica group by estasO, estasD  having count(1) > 1",
+      "tabelas": "crIva",
+      "colunas": "estasO,estasD",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdIva", "crIva"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

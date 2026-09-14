@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito e do que n├úo foi:
+
+**Corrigido (BINDEVENT-PARAMS ÔÇö 2 itens reais):**
+- Linha 620: `ValidarGrupo` movido de `"KeyPress"` para `"LostFocus"` ÔÇö o coment├írio no c├│digo (`"ao sair do campo"`) confirmava que era LostFocus; ligado a KeyPress abria o picker a cada tecla
+- Linha 690: `ValidarEmps` movido de `"KeyPress"` para `"LostFocus"` ÔÇö mesma raz├úo
+- Assinaturas de `ValidarGrupo` e `ValidarEmps` removeram os par├ómetros `(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö evento LostFocus n├úo passa par├ómetros
+
+**N├úo alterado (GRID-HEADER ÔÇö 21 falsos positivos):**
+Os headers "Empresa, Grupo, C├│digo, Prior., Faixa De, Faixa At├®, Selecio." s├úo do `grd_4c_Lista` (Page1 de lista), que ├® uma adi├º├úo arquitetural nova sem equivalente no legado. O legado SigCdCco.SCX s├│ tinha o grid `grd_4c_Motivos` com 3 colunas (Motivo/Descri├º├úo/Tipo), que j├í est├úo corretos nas linhas 790, 818 e 847. A ferramenta de review comparou todos os headers do c├│digo migrado contra os 3 headers do legado e sinalizou como "inventado" tudo que n├úo estava nos 3 ÔÇö mas os headers da lista s├úo apropriados para a nova arquitetura.

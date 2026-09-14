@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investiguei os dois achados do pass SQL antes de aplicar qualquer altera├º├úo, e conclu├¡ que **ambos s├úo falsos positivos** ÔÇö n├úo vou remov├¬-los. Aqui est├í a evid├¬ncia:
+
+## Por que os dois achados s├úo falsos positivos
+
+O pass de review comparou o WHERE do SQL migrado com o WHERE "do c├│digo original" extra├¡do do SCX (`SigCdSre.scx` ÔåÆ `tasks/task524/SigCdSre_form_codigo_fonte.txt`), e s├│ enxergou 3 colunas (`IMPNFS`, `EMPCODS`, `SERIES`) porque essas s├úo as ├║nicas condi├º├Áes **inline no form**. Mas o form legado delega a valida├º├úo de empresa para uma fun├º├úo do Framework, n├úo implementada no SCX:
+
+```
+SigCdSre_form_codigo_fonte.txt:979  ÔåÆ CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', crSigCdSer.Emps)
+SigCdSre_form_codigo_fonte.txt:1146 ÔåÆ fAcessoEmpresa(Usuar, 'D', This.Value, ...)   ' D = busca por Descricao
+SigCdSre_form_codigo_fonte.txt:1167 ÔåÆ fAcessoEmpresa(Usuar, 'C', This.Value, ...)   ' C = busca por Codigo
+```
+
+Fui at├® a implementa├º├úo real de `fAcessoEmpresa` em `C:\4c\Framework\sigacess.PRG:762-822`, e ela monta exatamente isto:
+
+```foxpro
+Select Cemps, Razas From SigCdEmp Where ... 
+...
+Seek(pChv, [crAr3], Iif(pTip = [C], [Cemps], [Razas]))   && busca por Cemps (codigo) ou Razas (descricao)
+```
+
+Ou seja, o legado **valida empresa contra `SigCdEmp.Cemps`/`SigCdEmp.Razas`** ÔÇö s├│ que via chamada de framework externo (`sigacess.PRG`), invis├¡vel para a ferramenta de review que s├│ leu o SCX do form. As duas condi├º├Áes WHERE apontadas em `FormSre.prg` (linhas 1232-1233 `WHERE Cemps = ...` e 1277-1279 `WHERE Razas LIKE ...`) s├úo a reimplementa├º├úo fiel dessa l├│gica na arquitetura nova (framework wrapper VCX n├úo est├í dispon├¡vel no sistema novo, ent├úo a l├│gica precisa ser inline no Form/BO ÔÇö padr├úo j├í usado em outros forms, ex. `BuscarDescricaoEmpresa` no pr├│prio `SreBO.prg`).
+
+Remov├¬-las quebraria:
+- **PILAR 1 (UX)** ÔÇö comportamento id├¬ntico ao legado (digitar c├│digo/descri├º├úo da empresa e validar contra `SigCdEmp`)
+- **REGRA FUNDAMENTAL** ÔÇö paridade funcional 100%, proibido remover lookups/funcionalidades
+
+## A├º├úo tomada
+
+Nenhuma altera├º├úo nos arquivos. Os dois achados `SQL-FILTRO-INVENTADO` (`CEMPS` e `RAZAS`) s├úo falso-positivo do pass autom├ítico ÔÇö a extra├º├úo de "WHERE original" n├úo tinha visibilidade sobre `sigacess.PRG`. Recomendo ajustar a ferramenta de review para considerar chamadas a fun├º├Áes de framework legado (`fAcessoEmpresa`, `fChecaAcesso*`, etc.) como fonte de WHERE v├ílido antes de sinalizar `SQL-FILTRO-INVENTADO`, j├í que isso j├í gerou mem├│rias correlatas (`feedback_sigacess_prg_startup`, `feedback_public_vars_legado_fortyus`) sobre esse framework ser fonte de comportamento oculto.

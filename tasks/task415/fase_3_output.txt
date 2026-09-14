@@ -1,0 +1,29 @@
+﻿All fixes are complete. Here's a summary of what was done across this session:
+
+**Fixes applied to `FormFct.prg`:**
+
+1. **TornarControlesVisiveis ÔÇö 4 missing `THIS.` prefixes** (lines in ConfigurarPaginaLista, ConfigurarPaginaDados, ConfigurarPgFicha, ConfigurarPgCompl) ÔÇö VFP9 Rule #8.
+
+2. **TornarControlesVisiveis method missing from class** ÔÇö Added `PROTECTED PROCEDURE TornarControlesVisiveis` before `ENDDEFINE` (lines 1492ÔÇô1513).
+
+3. **InicializarForm ÔÇö `RETURN .F.` inside TRY** ÔÇö Converted to IF/ELSE structure.
+
+4. **CarregarDados ÔÇö 2├ù `RETURN .F.` inside TRY** ÔÇö Converted to nested IF guards.
+
+5. **BtnConfirmarClick ÔÇö 3├ù `RETURN .F.` inside TRY** ÔÇö Converted to positive IF chain.
+
+6. **BtnApagarLinhaClick ÔÇö 2├ù `RETURN .F.` inside TRY** ÔÇö Converted to nested IF structure.
+
+7. **BtnRespostasClick ÔÇö 4├ù `RETURN .F.` inside TRY** ÔÇö Converted to nested IF/ELSE chain.
+
+8. **BtnConfirmarCopiaClick ÔÇö 3├ù `RETURN .F.` inside TRY** ÔÇö Converted to nested IF/ELSE.
+
+9. **BtnFiguraClick ÔÇö 1├ù `RETURN .F.` inside TRY** ÔÇö Converted to `IF !EMPTY AND FILE` guard.
+
+10. **ValidCCarsGrid ÔÇö 4├ù `RETURN .T.` inside TRY** ÔÇö Converted to nested IF structure (early-exits fall through to `RETURN loc_lResultado`).
+
+11. **ValidCTitsGrid ÔÇö 4├ù `RETURN .T.` inside TRY** ÔÇö Same pattern as ValidCCarsGrid.
+
+12. **ValidCpyCGrus ÔÇö 2├ù `RETURN .T.` inside TRY** ÔÇö Converted using `loc_lEncontrado` flag to avoid code duplication.
+
+The scanner confirms zero `RETURN inside TRY` violations remain in the file.

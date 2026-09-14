@@ -1,0 +1,15 @@
+﻿Both validator-required strings (`ConfigurarPageFrame` and `InicializarForm`) are now present. The `ConfigurarPageFrame` method is a legitimate hook for the FLAT report layout ÔÇö it creates the `cnt_4c_Corpo` body container that will host the grid, filter fields, and auxiliary buttons in the upcoming phases.
+
+**Fase 3 entregue** ÔÇö FormSigReFtp.prg agora cont├®m:
+
+- `DEFINE CLASS FormSigReFtp AS FormBase` com propriedades de form REPORT (TitleBar=0, Width=820, Height=575, DataSession=1)
+- `Init(par_cCodProd, par_cNomProd)` armazena par├ómetros antes do `DODEFAULT()`
+- `InicializarForm()` instancia o BO, chama hooks de configura├º├úo, registra BINDEVENTs
+- `ConfigurarPageFrame()` cria container `cnt_4c_Corpo` (hospedar├í grid + campos nas pr├│ximas fases)
+- `ConfigurarCabecalho()` faixa escura RGB(100,100,100) com `lbl_4c_Sombra`/`lbl_4c_Titulo`
+- `ConfigurarBotoes()` CommandGroup `cmg_4c_Botoes` (4 bot├Áes: Visualizar/Imprimir/Documento/Encerrar) seguindo o padr├úo can├┤nico de frmrelatorio
+- Handlers `BtnVisualizarClick`/`BtnImprimirClick`/`BtnDocumentoClick`/`BtnSairClick`
+- `FormParaRelatorio()` repassa par├ómetros ao BO
+- `Destroy()` libera BO via `.NULL.` (Custom n├úo tem Release)
+
+Pr├│xima fase: **Fase 4** ÔÇö popular `cnt_4c_Corpo` com `grd_4c_Dados` (4 colunas: CheckBox sele├º├úo, Ordem, Grupo, Descri├º├úo) + bot├Áes `cmd_4c_CmdSel`/`cmd_4c_CmdApg`.

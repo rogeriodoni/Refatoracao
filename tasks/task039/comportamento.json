@@ -1,0 +1,246 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 7,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fCarregarCambio", "fAcessoEmpresa", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREBNC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReBct To Printer Noconsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReBct To Printer Prompt Noconsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC",
+      "evento": "Init",
+      "linhas": 59,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.get_dt_inicial.Value = {}\n\t\t.get_dt_final.Value   = Date()\n\t\t.get_cd_moeda.Value   = ''\n\t\t.get_ds_moeda.Value   = ''\n\t\t.get_cd_empresa.Value = ''\n\t\t.get_ds_empresa.Value = ''\n\t\t.optGtprel.Value      = 1\n\t\t.Refresh\n\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'GrPadClis')\n\n\t\tThisForm.poDataMgr.CursorQuery('SigCdCot', 'crSigCdCot', .f., .f., 'CMoes, Datas, Valos')\n\t\tSe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,getDriver,GetDatabase",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cd_moeda,get_ds_moeda,get_cd_empresa,get_ds_empresa,optGtprel",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREBNC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC",
+      "evento": "Procedure",
+      "linhas": 158,
+      "codigoOriginal": "Private pSal\n\nLocal ldDtSaldo, lcCdEmp, lcDsEmp, lcCdMoeda, lcDsMoeda, lnContaz, lnOptRel, lcEmpresa, lcTitulo1s, lcTitulo2s, ;\n\t  lcEscape, lnDecimals, lcFixed, laOrd, laStrArea, cEmpresa, cTitulo1s, cTitulo2s, cContas, cDcontas, cIps, ;\n\t  nSaldos, cPs, cOrds, lnSaldos, Grupos, Contas, Moedas, lcClasse2, lnNivels, lnConta1, lnCtRfr, lnCtMvt\n\nm.ldDtInicial = ThisForm.get_dt_Inicial.Value\nm.ldDtSaldo   = ThisForm.get_dt_final.Value\nm.lcCdEmp     = ThisForm.get_cd_empresa.Value\nm.lcDsEmp     = Th... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fCarregarCambio",
+        "metodosFormChamados": "getDriver,GetDatabase,SqlExecute",
+        "controlesReferenciados": "OptRel,get_dt_Inicial,get_dt_final,get_cd_empresa,get_ds_empresa,get_cd_moeda,get_ds_moeda,optGtprel,OptCot,OptCotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReBct Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC",
+      "evento": "Click",
+      "linhas": 37,
+      "codigoOriginal": "Local cChave \n\nIf (This.Value <> 4)\n\tIf Empty(ThisForm.get_dt_final.Value)\n\t\t=Messagebox('Data Final Inválida!!!', 16, '')\n\t\tThisForm.get_dt_final.SetFocus\n\t\tReturn .f.\n\tEndIf\n\n\tIf Empty(ThisForm.get_cd_moeda.Value)\n\t\t=Messagebox('Moeda Inválida!!!', 16, '')\n\t\tThisForm.get_cd_moeda.SetFocus\n\t\tReturn .f.\n\tEndIf\n\n\tIf Empty(ThisForm.get_Cd_Empresa.Value)\n\t\t=Messagebox('Empresa Inválida!!!', 16, '')\n\t\tThisForm.get_Cd_Empresa.SetFocus\n\t\tReturn .f.\n\tEndIf\n\n\tIf Not ThisForm.optgtprel.Value > 0\n\t\t=Messa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_final,get_cd_moeda,get_Cd_Empresa,optgtprel,optGcontaz,optContaz1,optTprel1",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREBNC.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.get_Cd_Empresa, ThisForm.get_Ds_Empresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC.get_ds_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_empresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.get_Cd_Empresa, ThisForm.get_Ds_Empresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.CMoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Va... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBNC.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.CMoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Va... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

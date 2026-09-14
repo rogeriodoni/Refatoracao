@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. O problema era a coluna `obsmkt` que n├úo existe na tabela `SigCdPro`.
+
+**Altera├º├Áes em `ProdutoBO.prg`:**
+
+1. **`Inserir()` - `loc_cCols`** (linha 477): removido `obsmkt` da lista de colunas do INSERT
+2. **`Inserir()` - `loc_cVals`** (linha 585): removida linha `EscaparSQL(THIS.this_cObsmkt)` dos valores
+3. **`Atualizar()`** (linha 845): removida linha `" obsmkt = " + EscaparSQL(THIS.this_cObsmkt)` do UPDATE SET

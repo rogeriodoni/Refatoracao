@@ -1,0 +1,2369 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigredoc.SCX
+* Data/Hora: 04/06/2026 06:01:31
+* Total de registros: 29
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREDOC
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptAgrupa
+  Parent: SIGREDOC
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: chkImagem
+  Parent: SIGREDOC
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ChkItensP
+  Parent: SIGREDOC
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_operacao
+  Parent: SIGREDOC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_a
+  Parent: SIGREDOC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREDOC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREDOC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkreimp
+  Parent: SIGREDOC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: lbl_periodo
+  Parent: SIGREDOC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dopes
+  Parent: SIGREDOC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGREDOC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREDOC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Operaçãoi
+  Parent: SIGREDOC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GrdEmp
+  Parent: SIGREDOC
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREDOC.GrdEmp.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREDOC.GrdEmp.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREDOC.GrdEmp.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREDOC.GrdEmp.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREDOC.GrdEmp.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREDOC.GrdEmp.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Operaçãof
+  Parent: SIGREDOC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: CmdApgEmp
+  Parent: SIGREDOC
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label9
+  Parent: SIGREDOC
+  Class: label
+  BaseClass: label
+
+Objeto: cmdSelemp
+  Parent: SIGREDOC
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: lblemp
+  Parent: SIGREDOC
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC
+------------------------------------------------------------
+  Height = 500
+  Width = 800
+  DoCreate = .T.
+  Caption = "Impressão de Documento"
+  podatamgr2 = .F.
+  Name = "SIGREDOC"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 531
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.OptAgrupa
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 27
+  Left = 283
+  Top = 416
+  Width = 267
+  TabIndex = 18
+  ZOrderSet = 3
+  Name = "OptAgrupa"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Produto, Cor, Valor Unitário"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 151
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Nenhum"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 193
+  Option2.Top = 5
+  Option2.Width = 69
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.chkImagem
+------------------------------------------------------------
+  Top = 368
+  Left = 288
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir Imagem"
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "chkImagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.ChkItensP
+------------------------------------------------------------
+  Top = 384
+  Left = 288
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprimir Apenas Itens Pendentes"
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "ChkItensP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.lbl_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Operação : "
+  Left = 225
+  Top = 293
+  Width = 59
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "lbl_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.lbl_a
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 371
+  Top = 319
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "lbl_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Left = 382
+  MaxLength = 10
+  TabIndex = 9
+  Top = 314
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  Left = 288
+  MaxLength = 10
+  TabIndex = 7
+  Top = 314
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.chkreimp
+------------------------------------------------------------
+  Top = 400
+  Left = 288
+  Height = 15
+  Width = 79
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Reimpressão"
+  Value = 0
+  ControlSource = ""
+  SpecialEffect = 0
+  Style = 0
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "chkreimp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Periodo : "
+  Left = 236
+  Top = 318
+  Width = 48
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.get_dopes
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 288
+  MaxLength = 20
+  SpecialEffect = 0
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 289
+  Width = 150
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 13
+  Name = "get_dopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Número : "
+  Left = 235
+  Top = 341
+  Width = 49
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Agrupar por: "
+  Left = 217
+  Top = 420
+  Width = 67
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.Get_Operaçãoi
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 23
+  InputMask = "999999"
+  Left = 288
+  MaxLength = 6
+  TabIndex = 11
+  Top = 339
+  Width = 55
+  ForeColor = 0,0,0
+  ZOrderSet = 17
+  Name = "Get_Operaçãoi"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.GrdEmp
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 164
+  Left = 216
+  Panel = 1
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 22
+  Top = 120
+  Width = 327
+  GridLineColor = 238,238,238
+  ZOrderSet = 18
+  Name = "GrdEmp"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 15
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.CurrentControl = "Text1"
+  Column2.Width = 33
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.CurrentControl = "Text1"
+  Column3.Width = 245
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.GrdEmp.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.GrdEmp.Column1.Check1
+------------------------------------------------------------
+  Top = 23
+  Left = 25
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = ""
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.GrdEmp.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cód."
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.GrdEmp.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.GrdEmp.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nome da Empresa"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.GrdEmp.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.Get_Operaçãof
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 23
+  InputMask = "999999"
+  Left = 363
+  MaxLength = 6
+  TabIndex = 13
+  Top = 339
+  Width = 55
+  ForeColor = 0,0,0
+  ZOrderSet = 18
+  Name = "Get_Operaçãof"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.CmdApgEmp
+------------------------------------------------------------
+  Top = 204
+  Left = 547
+  Height = 40
+  Width = 40
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\vbmp\cancelab.bmp
+  Caption = ""
+  TabIndex = 3
+  TabStop = .F.
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 19
+  Themes = .F.
+  Name = "CmdApgEmp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.Label9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Height = 15
+  Left = 349
+  Top = 344
+  Width = 8
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "Label9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.cmdSelemp
+------------------------------------------------------------
+  Top = 164
+  Left = 547
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\vbmp\a_save1.bmp
+  Caption = ""
+  TabIndex = 2
+  TabStop = .F.
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 20
+  Themes = .F.
+  Name = "cmdSelemp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREDOC.lblemp
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresas :"
+  Height = 15
+  Left = 217
+  Top = 104
+  Width = 63
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "lblemp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREDOC
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cabecalho
+------------------------------------------------------------
+PROCEDURE cabecalho
+lParameters pMaxCols
+
+SELECT TmpRel
+goto top	
+CabecN = ''
+Cabec  = ''
+If CrTmpDcOpe.DckTit = 1
+	titul=alltrim(CrTmpDcOpe.DocTit)+' : ' + TRANSFORM(numes,"@L 999999") + chr(13) + chr(10)
+Endif
+	
+If CrTmpDcOpe.DckDig = 1
+	CabecN = CabecN + Padl(Alltrim(CrTmpDcOpe.DocDig),13) + ' : ' + chr(13) + chr(10)
+	Cabec = cabec + AllTrim( Usuars ) + Chr(13) + Chr(10)
+Endif
+
+If !IsEmpty(TmpRel.GrVends + TmpRel.Vends) And CrTmpOpe.Vendes <> 3 and CrTmpDcOpe.DckVend = 1
+	cabecn = cabecn + PADL( Alltrim( CrTmpDcOpe.DocVend ), 13 ) + ' : ' + Chr(13) + Chr(10)
+	cabec  = cabec + iif( CrTmpDcOpe.DckGVend = 1, AllTrim(TmpRel.GrVends)+ ' / ', '' ) + ;
+			 AllTrim( TmpRel.Vends )
+	If CrTmpDcOpe.Dcknvend = 1
+		=ThisForm.Podatamgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',TmpRel.Vends)
+		Cabec = Cabec + ' - ' + Proper( AllTrim( CrTmpCli.RClis ) )
+	Endif
+	Cabec = Cabec+ Chr(13) + Chr(10)
+Endif
+
+If !IsEmpty(TmpRel.GrResps + TmpRel.Resps) And CrTmpOpe.ComisDivS <> 2 and CrTmpDcOpe.DckVend2 = 1
+	cabecn = cabecn + PADL( Alltrim( CrTmpDcOpe.DocVend2 ), 13 ) + ' : ' + Chr(13) + Chr(10)
+	cabec  = cabec + iif( CrTmpDcOpe.DckGVen2 = 1, AllTrim(TmpRel.GrResps)+ ' / ', '' ) + ;
+			 AllTrim( TmpRel.Resps )
+	If CrTmpDcOpe.Dcknven2 = 1
+		=ThisForm.Podatamgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',TmpRel.resps)
+		Cabec = Cabec + ' - ' + Proper( AllTrim( CrTmpCli.RClis ) )
+	Endif
+	Cabec = Cabec+ Chr(13) + Chr(10)
+Endif
+
+If CrTmpOpe.Origems = 1 and CrTmpDcOpe.DckOri = 1
+	=ThisForm.Podatamgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',TmpRel.Contaos)
+	=ThisForm.Podatamgr.Cursorquery('SigCdGcr','CrTmpGccr','Codigos',TmpRel.Grupoos)
+	_Cpf = ''
+	If CrTmpGccr.TpCads = 1 
+		_Cpf = '       Cpf : '+Alltrim(CrTmpCli.Cpfs)+'  '
+	Endif
+	cabecn=cabecn+PADL(Alltrim(CrTmpDcOpe.DocOrig),13)+" : " + chr(13) + chr(10)
+	cabec=cabec+iif(CrTmpDcOpe.dckGOri=1,Allt(TmpRel.Grupoos)+' / ','')+Allt(TmpRel.Contaos)
+	If CrTmpDcOpe.DckNOri = 1
+		cabec=cabec+ ' - ' +Proper(Alltrim(CrTmpCli.RClis))
+	Endif
+	If CrTmpDcOpe.DckFOri = 1
+		lnLinha = RAt( Chr(10), Cabec )
+		lnLinha = Iif( lnLinha = 0, Len( Cabec ), Len( Cabec ) - lnLinha )
+		
+		If lnLinha + Len( _Cpf ) > pMaxCols
+			CabecN = CabecN + Chr(13) + Chr(10)
+			Cabec  = Cabec + Chr(13) + Chr(10) + AllTrim( _Cpf )
+		Else
+			Cabec = Cabec + _Cpf
+		EndIf
+	Endif
+	cabec = cabec + chr(13) + chr(10)
+Endif
+
+If CrTmpOpe.Destinos = 1 and CrTmpDcOpe.DckDest = 1
+	=ThisForm.Podatamgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',TmpRel.Contads)
+	=ThisForm.Podatamgr.Cursorquery('SigCdGcr','CrTmpGccr','Codigos',TmpRel.Grupods)
+	_Cpf = ''
+	If crtmpGccr.TpCads = 1
+		_Cpf = '       Cpf : '+Alltrim(crtmpCli.Cpfs)+ '  '
+	Endif
+	cabecn=cabecn+PADL(Alltrim(CrTmpDcOpe.DocDest),13)+" : " + chr(13) + chr(10)
+	cabec=cabec+iif(CrTmpDcOpe.dckgDest=1,Allt(TmpRel.Grupods)+' / ','')+Allt(TmpRel.Contads)
+	If CrTmpDcOpe.DckNDest = 1
+		cabec=cabec+' - '+Proper(Alltrim(crtmpCli.RClis))
+	Endif
+	If CrTmpDcOpe.DckFDest = 1
+		lnLinha = RAt( Chr(10), Cabec )
+		lnLinha = Iif( lnLinha = 0, Len( Cabec ), Len( Cabec ) - lnLinha )
+		
+		If lnLinha + Len( _Cpf ) > pMaxCols
+			CabecN = CabecN + Chr(13) + Chr(10)
+			Cabec  = Cabec + Chr(13) + Chr(10) + AllTrim( _Cpf )
+		Else
+			Cabec = Cabec + _Cpf
+		EndIf
+	Endif
+	cabec=cabec+ chr(13) + chr(10)
+Endif
+
+If CrTmpDcOpe.DckData = 1
+	OpcDef = Set('date')
+	If CrTmpDcOpe.OpcData = 2
+		Set Date to American
+	Else
+		Set Date to British
+	Endif
+	Cabecn = Cabecn + PadL(Alltrim(CrTmpDcOpe.DocData),13) + " : " + Chr(13) + Chr(10)
+	Cabec = Cabec + Nvl(DtoC( Datas ),'') + Chr(13) + Chr(10)
+	Set Date to &opcdef
+Endif
+
+If CrTmpDcOpe.DckHora = 1
+	Cabecn = CabecN + PadL( AllTrim( CrTmpDcOpe.DocHora ), 13 ) + " : " + Chr(13) + Chr(10)
+	Cabec = Cabec + Left( Time(), 5 ) + Chr(13) + Chr(10)
+Endif
+
+If CrTmpDcOpe.DckTDesc = 1
+	cabecn=cabecn+PADL(Alltrim(CrTmpDcOpe.DocTDesc),13)+" : "+ chr(13) + chr(10)
+	Cabec = Cabec + TmpRel.tabds + Iif(CrTmpDcOpe.DckpDesc = 1, '('+Transform(TmpRel.Descos,"@Z 9999.99%")+')','') + Chr(13) + Chr(10)
+Endif
+
+If CrTmpDcOpe.DckLpre = 1
+	cabecn=cabecn+PADL(Alltrim(CrTmpDcOpe.DocLpre),13)+" : "+ chr(13) + chr(10)
+	cabec = cabec+ TmpRel.lprecos + Chr(13) + Chr(10)
+Endif
+
+If CrTmpDcOpe.DckNf = 1
+	cabecn=cabecn+PADL(Alltrim(CrTmpDcOpe.DocNf),13)+" : "+ chr(13) + chr(10)
+	cabec = cabec+ TmpRel.Notac + Chr(13) + Chr(10)
+Endif
+
+If CrTmpDcOpe.DckObs = 1
+	cabecn=cabecn+PADL(Alltrim(CrTmpDcOpe.DocObs),13)+" : "+ chr(13) + chr(10)
+	If !IsEmpty( Alltrim(CrTmpDcOpe.ObsCab) )
+		cabec=cabec+Alltrim(CrTmpDcOpe.ObsCab) + Chr(13) + Chr(10)
+	Endif
+	If !IsEmpty( Alltrim(TmpRel.Obses) )
+		cabec=cabec+Alltrim(TmpRel.Obses)
+	Endif
+	cabec=cabec+ chr(13) + chr(10)
+Endif
+
+If CrTmpDcOpe.DckEmpDs=1 And CrTmpOpe.Transs = 1 And !IsEmpty(TmpRel.EmpDs)
+	cabecn = CabecN + Padl(AllTrim(CrTmpDcOpe.DocEmpDs),13) + " : " + Chr(13) + Chr(10)
+	cabec  = cabec + TmpRel.EmpDs + Chr(13) + Chr(10)
+EndIf
+
+If CrTmpDcOpe.DckSubn = 1 And llTemSubN
+	CabecN   = CabecN + PadL( Alltrim( CrTmpDcOpe.DocSubn ), 13 ) + " : " + Chr(13) + Chr(10)
+	Select TmpEstPe
+	Goto Top
+	SubNivel = TmpEstPe.cDopes
+	Cabec    = Cabec + Iif( CrTmpOpe.SubNs = 4 And Not IsEmpty(TmpEstPe.cAbrevs), ;
+			   AllTrim(TmpEstPe.cAbrevs) + '-', '' ) + AllTrim(SubNivel) + ' ( '
+	LnQtdSubn = 0
+	Scan
+		If TmpEstPe.cDopes # SubNivel
+			SubNivel = TmpEstPe.cDopes
+			Cabec = Cabec + ' ) ' + Iif(CrTmpOpe.SubNs = 4 And Not IsEmpty(TmpEstPe.cAbrevs), ;
+					AllTrim(TmpEstPe.cAbrevs) + '-', '' ) + AllTrim(SubNivel) + ' ( '
+		EndIf
+		lcCod = fGerMascara( Val( Right( Str( TmpEstPe.Codigos, 10 ), 6 ) ) )
+		Cabec = Cabec + AllTrim( lcCod ) + ' '
+		LnQtdSubn = LnQtdSubn + 1
+	EndScan
+	Cabec = Cabec + ' )' + Chr(13) + Chr(10) + 'Total doc:' + Str(LnQtdSubn,3)
+Endif
+Return .t.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE finaliza
+------------------------------------------------------------
+PROCEDURE finaliza
+lParameters pDev, pMaxCols, pTotQtds
+IF not BOF()
+	SKIP -1
+ENDIF
+
+If CrTmpDcOpe.DckSubt = 1
+	final=final+Padl(Alltrim(CrTmpDcOpe.DocSubt),13)+' : '
+	final=final+space(11)+TRANSFORM(iif(isnull(xvlr),TmpRel.ValInis,xvlr),"999,999.99")+ chr(13) + chr(10)
+Endif
+If CrTmpDcOpe.DckDevo = 1	
+	IF pDev<>0
+		final=final+Padl(Alltrim(CrTmpDcOpe.DocDevo),13)+' : '
+		final=final+space(11)+TRANSFORM(iif(isnull(pDev),0,pDev),"999,999.99")+ chr(13) + chr(10)
+	ENDIF
+Endif
+If CrTmpDcOpe.DckEnca = 1
+	IF TmpRel.ValEncs # 0
+		final=final+Padl(Alltrim(CrTmpDcOpe.DocEnca),13)+' : '
+		final=final+space(11)+TRANSFORM(TmpRel.ValEncs,"999,999.99") + chr(13) + chr(10)
+	ENDIF
+Endif
+If CrTmpDcOpe.DckAcres = 1
+	IF TmpRel.valvars>0
+		final=final+Padl(Alltrim(CrTmpDcOpe.DocAcres),13)+' :  '
+		final=final+TRANSFORM(iif(isnull(TmpRel.vars),0,TmpRel.vars),"9999.99")+"%  "+;
+			 TRANSFORM(iif(isnull(TmpRel.valvars),0,TmpRel.valvars),"999,999.99")+ chr(13) + chr(10)
+	ENDIF
+Endif
+If CrTmpDcOpe.DckDesco = 1
+	IF TmpRel.valvars<0
+		final=final+Padl(Alltrim(CrTmpDcOpe.DocDesco),13)+' :  '
+		final=final+TRANSFORM(iif(isnull(TmpRel.vars),0,TmpRel.vars),"9999.99")+"%  "+;
+			 TRANSFORM(iif(isnull(TmpRel.valvars),0,TmpRel.valvars),"999,999.99")+ chr(13)
+	ENDIF
+Endif
+	
+If (CrTmpDcOpe.DckSubt = 1) Or (CrTmpDcOpe.DckDevo = 1) Or (CrTmpDcOpe.DckEnca = 1) Or ;
+   (CrTmpDcOpe.DckAcres = 1) Or (CrTmpDcOpe.DckDesco = 1)
+	Final = Final + Space(15) + REPLICATE(CHR(45),22)+ chr(13) + chr(10)
+EndIf
+
+If CrTmpDcOpe.DckTota = 1
+	final=final+Padl(Alltrim(CrTmpDcOpe.DocTota),13)+' : ';
+		+space(11)+TRANSFORM(iif(IsNull(xvlr) Or xVlr=0,TmpRel.Valos,xvlr)-pDev+TmpRel.valvars+TmpRel.ValEncs,"999,999.99")+ chr(13) + chr(10)
+Endif
+
+*-[ Total dos Itens ]-*
+If CrTmpDcOpe.DckImpIte = 1
+	nlTotIte = 0
+	Select TmpRel
+	Goto Top
+	if seek(TmpRel.Dopes,"CrTmpOpe","DOPES")
+		If !IsEmpty(CrTmpOpe.cmoes)
+			Sum Iif(TmpRel.Opers='E', -1, 1) * (TmpRel.Qtds * TmpRel.Units) to nlTotIte 
+			nlTotIte = Abs(nlTotIte)
+		else	
+			Select TmpRel
+			Scan
+				lnCotaIte = fBuscarCotacao( TmpRel.Moedas, TmpRel.Datas, ThisForm.Podatamgr )
+				nlValIte  = Round(TmpPag.Valos * lnCotaIte,2)
+				nlTotIte  = nlTotIte + nlValIte
+			EndScan
+		Endif
+	Endif
+	Select TmpRel
+	Goto Top
+	final=final+Padl(Alltrim(CrTmpDcOpe.DocImpIte),13)+' : '+space(11)+TRANSFORM(nlTotIte,"999,999.99")+CHR(13)+CHR(10)
+Endif
+
+
+*-[ Total das Parcelas ]-*
+if CrTmpDcOpe.DckImpPar =1
+	Select TmpRel
+	Goto Top
+	nlTotPar = 0
+	if seek(TmpRel.Dopes,"CrTmpOpe","DOPES")
+		lnCotaOpe = iif( empt(CrTmpOpe.cmoes),1,fBuscarCotacao( CrTmpOpe.cmoes, TmpRel.Datas, ThisForm.Podatamgr ) )
+		Select TmpPag
+		Scan
+			nlValPar = Round(TmpPag.Valos*TmpPag.cotfPgs/lnCotaOpe,2)
+			nlTotPar = nlTotPar + nlValPar
+		EndScan
+	endif
+	Select TmpRel
+	Goto Top
+	final=final+Padl(Alltrim(CrTmpDcOpe.DocImpPar),13)+' : '+space(11)+TRANSFORM(nlTotPar,"999,999.99")+CHR(13)+CHR(10)
+endif
+
+If CrTmpDcOpe.DckNite = 1
+	If xitm > 0 
+		final=final+Padl(Alltrim(CrTmpDcOpe.DocNite),13)+' : '+AllTrim(STR(xitm,6))+CHR(13)+CHR(10)
+	Endif
+Endif
+If CrTmpDcOpe.Dckprze = 1
+	final=final+Padl(Alltrim(CrTmpDcOpe.DocPrze),13)+' : '+Nvl(Dtoc(TmpRel.prazoents),'')+CHR(13)+CHR(10)
+Endif
+final=final+CHR(10)+ chr(13) + chr(10)
+
+Return .t.
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montacabgrade
+------------------------------------------------------------
+PROCEDURE montacabgrade
+LParameters pcTexto, pnTam
+
+If nTamLinha + pnTam > pMaxCols
+	nTamLinha = 0
+	CabGrade = CabGrade + PadC(CabGradeP, pMaxCols) + Chr(13) + Chr(10)
+	If tnDeslObsi = -1
+		tnDeslObsI = Int( ( pMaxCols - Len( CabGradeP ) ) / 2 )
+	EndIf
+	If tnTamCabGradeP = 0
+		tnTamCabGradeP = Len( CabGradeP )
+	EndIf
+	Store '' to CabGradeP
+EndIf
+
+nTamLinha = nTamLinha + pnTam
+CabGradeP  = CabGradeP + PadC( AllTrim( pcTexto ), pnTam - 1 ) + ' '
+Return .t.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montadetalhe
+------------------------------------------------------------
+PROCEDURE montadetalhe
+LParameters pcTexto, pnTam, pTpAlign
+
+If nTamLinha + pnTam > pMaxCols
+	nTamLinha = 0
+	Detalhe = Detalhe + PadC(DetalheP, pMaxCols) + Chr(13) + Chr(10)
+	Store '' to DetalheP
+EndIf
+
+nTamLinha = nTamLinha + pnTam
+Do Case
+	Case Type('pTpAlign') = 'C' And pTpAlign = 'R'
+		DetalheP = DetalheP + PadL( AllTrim( pcTexto ), pnTam - 1 ) + ' '
+
+	Case Type('pTpAlign') = 'C' And pTpAlign = 'L'
+		DetalheP = DetalheP + PadR( AllTrim( pcTexto ), pnTam - 1 ) + ' '
+
+	Case Type('pTpAlign') = 'C' And pTpAlign = 'N'
+		DetalheP = DetalheP + PadR( pcTexto, pnTam )
+
+	OtherWise
+		DetalheP = DetalheP + PadC( AllTrim( pcTexto ), pnTam - 1 ) + ' '
+EndCase
+Return .t.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montagrade
+------------------------------------------------------------
+PROCEDURE montagrade
+ThisForm.GrdEmp.RecordSource = ''
+
+lcQuery = [ Select 0 as Marca, cEmps, Razas From SigCdEmp ]
+			
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crEmpsT') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Init - crEmps)')
+	Return .f.
+EndIf				
+
+Select * from CrEmpsT where 1 = 0 Into Cursor crEmps ReadWrite
+
+Select crEmpsT
+Scan
+	Scatter Memo Memvar
+	*If fAcesEmp(Usuar, 'C', crEmpsT.cEmps)
+		Insert into crEmps From Memvar
+	*EndIf 
+EndScan 
+
+ThisForm.GrdEmp.RecordSource = 'crEmps'
+Thisform.GrdEmp.Column1.ControlSource = 'crEmps.Marca'
+Thisform.GrdEmp.Column2.ControlSource = 'crEmps.cEmps'
+Thisform.GrdEmp.Column3.ControlSource = 'crEmps.Razas'
+
+Select crEmps 
+Index On cEmps Tag Emps
+Index On Razas Tag Razas 
+
+Thisform.grdEmp.SetFocus 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Select TmpRelat
+Go Top
+Report form SigReDoc To Printer NoConsole
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Select TmpRelat
+Go Top
+Repo form SigReDoc to printer Prompt noconsole 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr  = CreateObject('fSqlConector')
+	.poDataMgr2 = CreateObject('fSqlConector')
+	If (.poDataMgr.pnIdconn > 0) And (.poDataMgr2.pnIdconn > 0)
+		.get_dopes.Value       = ''
+		.get_dt_inicial.Value  = {}
+		.get_dt_final.Value    = {}
+		.get_Operaçãoi.Value   = 0
+		.get_operaçãof.Value   = 0
+		.MontaGrade()
+		.Refresh
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE memail
+------------------------------------------------------------
+PROCEDURE memail
+Select TmpRel
+Goto Top
+Select TmpRelat
+Go Top
+Report form SigReDoc To Printer NoConsole
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+With ThisForm
+	lcDp  = .Get_dopes.Value
+	ldDtI = .Get_dt_inicial.Value
+	ldDtF = .Get_Dt_Final.Value
+	lnNu1 = .Get_operaçãoi.Value
+	lnNu2 = .Get_operaçãof.Value
+	lcRimp= .ChkReimp.Value
+EndWith
+
+pAgrupa     = ( ThisForm.OptAgrupa.Value = 1 )
+pImagem     = ( ThisForm.ChkImagem.Value = 1 )
+pItPendente = ( ThisForm.ChkItensP.Value = 1 )
+pDev        = 0
+
+Create Cursor TmpRelat (Numes n(6), Tipo n(1), Titulo m Null, Linha m Null, LinhaNeg m Null, CDetalhe m Null, ;
+						IDetalhe m Null, IDetalheD m Null, IDetalheO m Null, IDetalheR m Null, ;
+						Finaliza m Null, Descr n(1), ObsI n(1), Imagem c(100), Barras c(10), ImpCabBar l(1))
+
+
+
+pMaxCols  = 100
+nTamLinha = 0
+tnTamCabGradeP = 0
+nOldMemoWidth = Set('MemoWidth')
+
+Set MemoWidth to ( pMaxCols )
+
+lcQuery = [Select * From SigCdOpe ]
+If ThisForm.Podatamgr.SqlExecute(lcQuery,'CrTmpOpe') < 1
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Operações)')
+	Return .f.
+EndIf
+Select CrTmpOpe
+Index On Dopes Tag Dopes
+
+lcQuery = [Select * From SigOpCdc ]
+If ThisForm.Podatamgr.SqlExecute(lcQuery,'CrTmpDcOpe') < 1
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Operações)')
+	Return .f.
+EndIf
+Select CrTmpDcOpe
+Index On dopes Tag Dopes
+
+lcQuery = [Select * From SigOpTdz ]
+If ThisForm.Podatamgr.SqlExecute(lcQuery,'CrTmpTabD') < 1
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Tabela Desconto)')
+	Return .f.
+EndIf
+
+lcQuery = [Select * From SigCdPam ]
+If Thisform.Podatamgr.SqlExecute(lcQuery,'CrTmpParam') < 1
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Parametros)')
+	Return .f.
+EndIf
+
+lcQuery = [Select * From SigCdPac ]
+If ThisForm.Podatamgr.SqlExecute(lcQuery,'CrTmpParac') < 1
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Parametros c)')
+	Return .f.
+EndIf
+
+Select * From crEmps Where Marca = 1 Into Cursor csCemps
+Select csCemps
+Scan 
+	lcEmp = csCemps.cEmps
+
+	=Thisform.Podatamgr.Cursorquery('SigCdEmp','CrTmpEmp','cEmps',lcEmp)
+
+	lcSql = [Select Emps,Dopes,Numes,EmpDopNums From SigMvCab Where Emps = ']+lcEmp+[' And Dopes = ']+lcDp+[' ]+;
+			Iif(Not IsEmpty(ldDtI),[And Datas Between ?ldDtI And ?ldDtF ],[ ])+;
+			Iif(lnNu1 > 0,[ And Numes Between ?lnNu1 And ?lnNu2 ],[ ])+;
+			[ And Impress in (] +Iif(lcRimp = 1,[0,1],[0])+[)]  +;
+			[ Order by empdopnums ]
+
+	If ThisForm.Podatamgr.Sqlexecute(lcSql,'TprMvCab') < 1
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TprMvCab)')
+		Return .f.
+	EndIf
+
+	Select TprMvCab
+	loBarra = CreateObject('fwprogressbar','Processando Documentos...',Reccount('TprMvCab'))
+	loBarra.Show
+	
+	Scan
+		pEmp = TprMvCab.Emps
+		pDop = TprMvCab.Dopes
+		pNum = TprMvCab.Numes
+		
+		loBarra.Update(.T.,pEmp +' - ' + pDop + ' -  ' + Str(pNum,6))
+		lcSql = [Select * From SigMvPec Where EmpDopNums = ']+TprMvCab.EmpdopNums+[']
+		If ThisForm.Podatamgr.SqlExecute(lcSql,'CrTmpEstPe') < 1
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TprMvCab)')
+			Return .f.
+		EndIf
+		
+		Select a.Codigos, Nvl(b.Dopes, 0) As cDopes, Nvl(b.Abrevs,'') As cAbrevs ;
+			From CrTmpEstPe a;
+			Left Join CrTmpOpe b On b.NDopes = Val( Left( Str( a.Codigos, 10 ), 4 ) ) ;
+			Where a.Emps + a.Dopes + Str( a.Numes, 6 ) == pEmp + pDop + Str( pNum, 6 ) ;
+			Into Cursor TmpEstPe
+		Index On Codigos Tag Codigos
+
+		=ThisForm.Podatamgr.CursorQuery('SigMvPar','TmpPag','EmpDopNums',pEmp + pDop + Str( pNum, 6 ),[FPags, Bancos, Agencias, Contas, Numeros, Cartaos, Datas, Valos, Vencs, MoeFPgs, CotFPgs ])
+		=ThisForm.Podatamgr.CursorQuery('SigMvCab','CrTprMvCab'  ,'EmpDopNums',pEmp + pDop + Str( pNum, 6 ))
+		=ThisForm.Podatamgr.CursorQuery('SigMvItn','CrTprMvCabi','EmpDopNums',pEmp + pDop + Str( pNum, 6 ))
+		=ThisForm.Podatamgr.CursorQuery('SigMvIts','CrTmpEsti2','EmpDopNums',pEmp + pDop + Str( pNum, 6 ))
+
+		If Not pAgrupa
+
+			Select c.Emps, c.Dopes, c.Numes, c.Usuars, c.GrVends, c.Valos, c.ValInis, ;
+			       c.Vends, c.GrupoOs, c.ContaOs, c.GrupoDs, c.ContaDs, c.ValVars, c.Obses, ;
+			       c.Vars, c.ValEncs, c.Datas, c.TabDs, c.Acres, c.PrazoEnts, c.LPrecos, c.EmpDs, c.Notas as NotaC,;
+			       c.grResps, c.Resps, Nvl(d.Descos,0) as Descos, ;
+			       NVL(o.PrecoPs,0)   As PrecoPs,   NVL(o.nDopes,0)   As nDopes, ;
+			       Nvl(o.Caixas,0)    As Caixas,    Nvl(o.Parcs,0)    As Parcs, ;
+			       Nvl(o.QtdPesos,0) As QtdPesos, ;
+			       Nvl(o.QtdPrecos,0) As QtdPrecos, ;
+			       Nvl(o.PesoVts,0)   As PesoVts,   Nvl(o.EPrecos,0)  As EPrecos, ;
+			       NVL(i.Fators,0)    As Fators,    NVL(i.Opers,' ')  As Opers, ;
+			       Nvl(i.nCodigos,0)  As nCodigos,  NVL(i.MoeFats,'') As moefats, ;
+			       NVL(i.fatvals,0)   As FatVals,   NVL(i.Moedas,'')  As moedas,;
+			       NVL(i.moevals,0)   As MoeVals,   NVL(i.CItens,0)   As citens,;
+			       NVL(i.pesos,0)     As Pesos,     NVL(i.Qtds - Iif(pItPendente,i.QtBaixas,0),0) As qtds, ;
+			       NVL(i.units,0)     As Units,     NVL(i.UniVals,0)  As univals, ;
+			       NVL(i.cpros,'')    As CPros,     NVL(i.UniVals,0)  As Bases, ;
+			       NVL(i.codbarras,0) As CodBarras, NVL(i.DPros,'')   As dpros,;
+			       NVL(i.totas,0)     As Totas,     NVL(i.Obs,'')     As obs ,;
+				   Nvl(i.Notas,'')     As Notas;
+				From CrTprMvCab c ;
+					Left Join CrTmpOpe o   On c.Dopes == o.Dopes ;
+					Left Join CrTmpTabd d  On c.Tabds == d.Codigos ;
+					Left Join CrTmpdcOpe p  On c.Dopes == p.Dopes ;
+					left Join CrTprMvCabi i On c.Emps+c.Dopes+Str(c.Numes,6) == i.Emps+i.Dopes+Str(i.Numes,6) ;
+				Where c.Emps + c.Dopes + Str(c.Numes,6) == pEmp + pDop + Str(pNum,6) And ;
+					Iif(p.dckOpes=1,i.Opers=[E],Iif(p.DckOpes=2,i.Opers=[S],.t.)) ;
+				Into Cursor TmpRel
+
+			Select i.cItens, i.Qtds - Iif(pItPendente,i.QtBaixas,0) as Qtds, i.CodEmbs, i.CodTams, i.CodCors, i.QtdEmbs, i.QtdEnts, i.CodEmbEnts, ;
+				   i.CodBarras ;
+					From crTmpEsti2 i ;
+					Where i.emps + i.dopes + Str( i.numes, 6 ) == pEmp + pDop + Str( pNum, 6 ) ;
+					Into Cursor TmpRel2
+			Index On Str(cItens,4)+CodCors+CodTams+CodEmbs Tag cItens
+		Else
+			If Used('TmpRel')
+				Use In TmpRel
+			EndIf
+			
+			If Used('TmpRel2')
+				Use In TmpRel2
+			EndIf
+
+			Select c.Acres,   c.ContaDs, c.ContaOs, c.Datas,   c.Dopes, c.Emps,    c.EmpDs, ;
+				   c.GrupoOs, c.GrupoDs, c.GrVends, c.LPrecos, c.Numes, c.Obses,   c.PrazoEnts, ;
+				   c.TabDs,   c.Usuars,  c.ValEncs, c.ValInis, c.Valos, c.ValVars, c.Vars, ;
+				   c.Vends, c.Notas as NotaC, c.grResps, c.Resps, Nvl(d.Descos,0) as Descos, ;
+			       NVL(o.PrecoPs,0)    As PrecoPs,    NVL(o.nDopes,0)      As nDopes, ;
+			       Nvl(o.Caixas,0)     As Caixas,     Nvl(o.Parcs,0)       As Parcs, ;
+			       Nvl(o.QtdPesos,0)   As QtdPesos, ;
+			       Nvl(o.QtdPrecos,0)  As QtdPrecos,;
+			       Nvl(o.PesoVts,0)    As PesoVts,    Nvl(o.EPrecos,0)     As EPrecos, ;
+			       NVL(i.Fators,0)     As Fators,     NVL(i.Opers,' ')     As Opers, ;
+			       Nvl(i.nCodigos,0)   As nCodigos,   NVL(i.MoeFats,'')    As moefats, ;
+			       NVL(i.fatvals,0)    As FatVals,    NVL(i.Moedas,'')     As moedas,;
+			       NVL(i.moevals,0)    As MoeVals,    NVL(i.CItens,0)      As citens,;
+			       NvL(i.Pesos,0)      As Pesos,      NVL(i.Obs,'')        As obs, ;
+			       NVL(i.units,0)      As Units,      NVL(i.UniVals,0)     As univals, ;
+			       NVL(i.cpros,'')     As CPros,      NVL(i.UniVals,0)     As Bases, ;
+			       NVL(i.codbarras,0)  As CodBarras,  NVL(i.DPros,'')      As dpros, ;
+			       NVL(i.totas,0)      As Totas,      1           		   As nTotal, ;
+				   Nvl(j.CItens,0)     As CItens2,    Nvl(j.Qtds-Iif(pItPendente,j.QtBaixas,0),0)   As Qtds2, ;
+				   Nvl(j.CodEmbs,'')   As CodEmbs,    Nvl(j.CodCors,'')    As CodCors, ;
+				   Nvl(j.QtdEmbs,1)    As QtdEmbs,    Nvl(j.QtdEnts,1)     As QtdEnts, ;
+				   Nvl(j.CodBarras,0)  As CodBarras2, Nvl(j.CodEmbEnts,'') As CodEmbEnts, ;
+				   Nvl(j.Pesos,0)      As Pesos2, 	  NVL(i.Qtds-Iif(pItPendente,i.QtBaixas,0),0)        As Qtds ,;
+				   Nvl(i.Notas,'')     As Notas,      Space(4) 			   As CodTams ;
+				From CrTprMvCab c ;
+					Left Join CrTmpOpe   o On c.Dopes == o.Dopes ;
+					Left Join CrTmpTabd  d On c.TabDs == d.Codigos ;
+					Left Join CrTmpDcope p on c.Dopes == p.Dopes ;
+					Left Join CrTprMvCabi i On c.Emps+c.Dopes+Str(c.Numes,6) == i.Emps+i.Dopes+Str(i.Numes,6) ;
+					Left Join CrTmpEsti2 j On i.Emps + i.Dopes + Str(i.Numes,6) + Str(i.CItens,4) = j.Emps + j.Dopes + Str(j.Numes,6) + Str(j.CItens,4) ;
+				Where c.Emps + c.Dopes + Str(c.Numes,6) == pEmp + pDop + Str(pNum,6) And ;
+					Iif(p.DckOpes=1,i.Opers=[E],Iif(p.DckOpes=2,i.Opers=[S],.t.)) ;
+				Into Cursor TmpRelPi
+				
+			Select * from TmpRelPi Where 1 = 0 Into Cursor TmpRelP ReadWrite
+			Select TmpRelP 
+			Index on Emps+Dopes+Str(Numes,6)+Opers+Cpros+Str(Units,15,6)+Moedas+CodCors Tag IdxTmpRelP 
+			
+			Select TmpRelPi
+			Scan
+				Scatter Memo Memvar
+				lcSeek = M.Emps+M.Dopes+Str(M.Numes,6)+M.Opers+M.Cpros+Str(M.Units,15,6)+M.Moedas+M.CodCors
+				If !Seek(lcSeek,'TmpRelP','IdxTmpRelP') 
+					Insert into TmpRelP from Memvar 
+				Else
+					Replace TmpRelP.Pesos	with TmpRelP.Pesos + M.Pesos ,;
+							TmpRelP.totas	with TmpRelP.totas + M.totas ,;
+							TmpRelP.nTotal	with TmpRelP.nTotal+ 1 ,;						
+							TmpRelP.Qtds2	with TmpRelP.Qtds2 + M.Qtds2 ,;
+							TmpRelP.Pesos2	with TmpRelP.Pesos2+ M.Pesos2
+				EndIf 
+			EndScan 	
+			
+				
+			Select TmpRelP
+			=AFields(laCampos)
+			Create Cursor TmpRel From Array laCampos
+			Create Cursor TmpRel2 ( CItens N(4), Qtds N(12,2), CodEmbs C(3), CodCors C(4), ;
+									QtdEmbs N(12,2), QtdEnts N(12,2), CodBarras N(8), ;
+									CodEmbEnts C(3), CodTams C(4) )
+			Index On Str(CItens,4)+CodCors+CodTams+CodEmbs Tag CItens
+
+			Select TmpRelP
+			lnCItens = 1
+			Scan
+				Scatter MemVar Memo
+				m.CItens    = lnCItens
+				m.CodBarras = 0
+				m.Pesos     = m.Pesos2
+				m.Qtds      = Iif( m.Qtds2 # 0, m.Qtds2, m.Qtds )
+				m.Totas     = m.Qtds * m.Units
+				Insert Into TmpRel From MemVar
+				If Not IsEmpty(m.CodCors)
+					Insert Into TmpRel2 From Memvar
+				EndIf
+				lnCItens = lnCItens + 1
+			EndScan
+		EndIf
+
+		Create Cursor TmpResIte (Numes n(6), Cpros c(14), Cmats c(14), Qtds n(9,3), Cunis c(3), QtScons n(6), cItens n(4))
+		Index On Str(Numes,6) + Cpros + Cmats + Str(cItens,4) TAg Cmats
+
+		Create Cursor xTotIte ( Numes n(6), xMoeda C(3), xTotal N(12,2) )
+		Index On Str(Numes,6) + xMoeda Tag xMoeda
+
+		lnCorTams = 0		&& Não Tem Itens Com Cor/Tamanho
+		Select TmpRel2
+		Goto Top
+		If Not Eof()
+			Select TmpRel
+			Scan
+				If Not IsEmpty(TmpRel.CPros)
+					Select TmpRel2
+					Set Order to cItens
+					Set Key to Str(TmpRel.CItens,4)
+					Count to lnCorTam2s
+					lnCorTams = BitOr( lnCorTams, Iif( lnCorTam2s = 0, 0, ;
+								Iif( lnCorTam2s = 1, 1, 2 ) ) )
+				EndIf
+			EndScan
+		EndIf
+
+		Select TmpEstPe
+		Goto Top
+		llTemSubN = Not Eof('TmpEstPe')
+
+		Select TmpRel
+		Go Top
+		=Seek( TmpRel.Dopes, 'CrTmpOpe'  , 'Dopes' )
+		If (CrTmpOpe.itemalfas=1)
+			Index On Cpros Tag CPros
+		Else 
+			If (CrTmpOpe.itemalfas=3)
+				Index On Moedas + Reffs Tag Moedas
+			Else
+				Index On CItens Tag CItens
+			endif
+		EndIf
+		Goto Top
+		=Seek(TmpRel.Dopes,'CrTmpDcOpe','Dopes')
+
+		If CrTmpDcOpe.DckRite = 1 Or CrTmpDcOpe.DckRiteI = 1
+			Select Cpros,cItens,Sum(Qtds) as Qtds From TmpRel Group by Cpros,cItens Into cursor wEesti
+			Select wEesti
+			Scan
+				=ThisForm.Podatamgr.Cursorquery('SigPrCpo','CrCompo','Cpros',wEesti.Cpros,[Mats,UniCompos,Qtds,QtScons])
+				Select CrCompo
+				Scan
+					=ThisForm.Podatamgr.Cursorquery('SigCdPro','CrPro','Cpros',CrCompo.Mats,[Cgrus])
+					=ThisForm.Podatamgr.Cursorquery('SigCdGrp','CrGru','Cgrus',CrPro.Cgrus,[mtprimas])
+					If CrGru.Mtprimas # 1
+						Loop
+					Endif
+					Select TmpResIte
+					If Not Seek(wEesti.Cpros + CrCompo.Mats + Str(wEesti.cItens,4))
+						Append Blank
+						Replace Cmats With  CrCompo.Mats,;
+								Cpros With  wEesti.Cpros,;
+								Cunis With  CrCompo.UniCompos,;
+								cItens With wEesti.cItens
+					EndIf
+					Replace Qtds    With Qtds + ( CrCompo.Qtds * wEesti.Qtds) , ;
+							QtScons with QtScons + ( CrCompo.QtScons * wEesti.Qtds )
+				EndScan
+			EndScan
+		EndIf
+
+		PrVenCus   = TmpRel.Precops
+		SomaPeso   = TmpRel.Pesovts
+		xVlr       = .NULL. 
+		xItm       = 0
+		Cabecn     = ''
+		Cabec      = ''
+		CabGrade   = ''
+		CabGradeP  = ''
+		cabgrade2  = ''
+		Detalhe    = ''
+		Detalhed   = ''
+		Detalheo   = ''
+		Obsi       = 0
+		Descr      = 0
+		Titul      = ''
+		tnDeslObsi = -1
+		Final      = Chr(13) + Chr(10)
+		pMaxCols  = 100
+		nTamLinha = 0
+		tnTamCabGradeP = 0
+
+		ThisForm.Cabecalho(pMaxCols)
+
+		If CrTmpDcOpe.DckSubn = 1 And llTemSubN And CrTmpOpe.SubNs = 4
+			=ThisForm.MontaCabGrade( CrTmpDcOpe.DocSubN, 13 )
+		EndIf
+
+		If CrTmpDcOpe.DckItem = 1
+			lnDocItem = Len( AllTrim( CrTmpDcOpe.DocItem ) ) + 1
+			lnDocItem = Max( lnDocItem, 5 )
+			ThisForm.MontaCabGrade( AllTrim( CrTmpDcOpe.DocItem ), lnDocItem )
+		Endif
+
+		If CrTmpDcOpe.DckCbar = 1
+			lnDocBarra = Len( AllTrim( CrTmpDcOpe.DocBarra ) ) + 1
+			lnDocBarra = Max( lnDocBarra, 9 )
+			ThisForm.MontaCabGrade( AllTrim( CrTmpDcOpe.DocBarra ), lnDocBarra )
+		Endif
+
+		If CrTmpDcOpe.DckQtd = 1
+			lnDocQtd = Len( AllTrim( CrTmpDcOpe.DocQtd ) ) + 1
+			lnDocQtd = Max( lnDocQtd, 10 )
+			ThisForm.MontaCabGrade( AllTrim( CrTmpDcOpe.DocQtd ), lnDocQtd )
+		Endif
+
+		If CrTmpDcOpe.DckPeso = 1
+			lnDocPeso = Len( AllTrim( CrTmpDcOpe.DocPeso ) ) + 1
+			lnDocPeso = Max( lnDocPeso, 10 )
+			ThisForm.MontaCabGrade( AllTrim( CrTmpDcOpe.DocPeso ), lnDocPeso )
+		Endif
+
+		If CrTmpDcOpe.DckCod = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocCod, 13 )
+		Endif
+
+		If CrTmpDcOpe.DckUni = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocUni, 13 )
+		Endif
+
+		If CrTmpDcOpe.DckVen = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocVen, 13 )
+		Endif
+
+		If CrTmpDcOpe.DckReffs = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocReffs, 21 )
+		Endif
+
+		If CrTmpDcOpe.DckFeitios = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocFeitios, 12)
+		Endif
+
+		If !IsEmpty(CrTmpOpe.Cmoes)
+			If PrVenCus<>2 and CrTmpDcOpe.DckCoef = 1
+				ThisForm.MontaCabGrade( CrTmpDcOpe.DocCoef, 13 )
+			Endif				
+		Endif
+
+		If CrTmpDcOpe.Dckunit = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocUnit, 13 )
+		Endif
+
+		If CrTmpDcOpe.DckBase = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocBase, 13 )
+		Endif
+
+		If CrTmpDcOpe.DckToti = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocToti, 13 )
+		Endif				
+
+		If CrTmpDcOpe.DckTaCor = 1
+			lnDocTaCor = Len( AllTrim( CrTmpDcOpe.DocTaCor ) ) + 1
+			lnDocTaCor = Max( lnDocTaCor, 8 )
+		EndIf
+
+		If CrTmpDcOpe.DckGrv = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocGrv, 10 )
+		Endif
+
+		If CrTmpDcOpe.DckNota = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocNota, 6 )
+		Endif
+
+		If CrTmpDcOpe.Dckftecs = 1
+			ThisForm.MontaCabGrade( CrTmpDcOpe.Docftecs, 13 )
+		Endif
+
+		If CrTmpDcOpe.DckDescr = 1
+			If CrTmpDcOpe.DckFiscal = 1
+				If CrTmpDcOpe.DckTaCor = 1 And BitAnd( lnCorTams, 1 ) # 0
+					ThisForm.MontaCabGrade( AllTrim( CrTmpDcOpe.DocTaCor ), lnDocTaCor )
+				EndIf
+
+				If Not IsEmpty(CabGradeP)
+					If tnTamCabGradeP = 0
+						tnTamCabGradeP = Len( CabGradeP )
+					EndIf
+					CabGrade = CabGrade + PadC(CabGradeP, pMaxCols) + Chr(13) + Chr(10)
+					If tnDeslObsi = -1
+						tnDeslObsI = Int( ( pMaxCols - Len( CabGradeP ) ) / 2 )
+					EndIf
+					Store '' to CabGradeP
+				EndIf
+			EndIf
+			ThisForm.MontaCabGrade( CrTmpDcOpe.DocDescr, 40 )
+		Endif
+
+		If ( CrTmpDcOpe.DckTaCor = 1 ) And ( CrTmpDcOpe.DckDescr # 1 Or ( CrTmpDcOpe.DckDescr = 1 And ;
+				CrTmpDcOpe.DckFiscal # 1 ) ) And BitAnd( lnCorTams, 1 ) # 0
+			ThisForm.MontaCabGrade( AllTrim( CrTmpDcOpe.DocTaCor ), lnDocTaCor )
+		EndIf
+
+		If tnTamCabGradeP = 0
+			tnTamCabGradeP = Len( CabGradeP )
+		EndIf
+
+		CabGrade = CabGrade + Iif( Not IsEmpty(CabGradeP), PadC(CabGradeP,pMaxCols),'')
+
+		If tnDeslObsi = -1
+			tnDeslObsI = Int( ( pMaxCols - Len(CabGradeP) ) / 2 )
+		EndIf
+		Store '' to CabGradeP
+
+		lcFigJpg = fCriarIcone([brjpg.jpg], .f., ThisForm.Podatamgr)
+
+		Create Cursor crBranco (Branco M)
+		Select crBranco
+		Append Blank
+		Append Memo Branco From (lcFigJpg) Overwrite
+
+		Select TmpRel
+		If CrTmpDcOpe.DckItens = 1
+			xvlr = 0
+			Scan
+				llBar = (CrTmpDcOpe.DckBarra = 1)
+				lcBar = fAltBar2de5(Padl(TmpRel.NDopes, 4, '0') + Padl(TmpRel.Numes, 6, '0')) && Barra do Cabeçalho
+
+				Select TmpRel2
+				Set Order to CItens
+				Set Key to Str(TmpRel.CItens,4)
+				Count to lnItem2s
+				Goto Top
+				Select TmpRel
+
+				Store '' To Detalhe, DetalheD, DetalheO, DetalheP, DetalheDP, DetalheOP
+				Store 0 To nTamLinha
+				
+				If !IsEmpty(CPros)
+					xitm = xitm + 1
+				Endif
+				fmoe     = TmpRel.MoeFats
+				xmoe     = TmpRel.Moedas
+				lPrCusto = TmpRel.Moevals / TmpRel.FatVals * TmpRel.Univals
+				lpQtds    = 1
+				luQtds    = 1
+				If QtdPesos = 1
+					lpQtds = TmpRel.Qtds
+				Endif
+				If QtdPrecos = 1
+					luQtds = TmpRel.Qtds
+				EndIf
+				m.Totas = TmpRel.Qtds * TmpRel.Units
+				=ThisForm.Podatamgr.CursorQuery('SigCdPro','CrTmpPro','Cpros',TmpRel.Cpros)
+				=ThisForm.Podatamgr.CursorQuery('SigCdGrp','CrTmpGru','CGrus',CrTmpPro.Cgrus)
+
+				lcArquivo = ''
+				If pImagem And Used('crTmpPro') And Not Eof('crTmpPro')
+					lcProduto = Strtran(Strtran(CrTmpPro.Cpros,'/',''),' ','')
+					lcArquivo = Sys(2023) + '\' + Alltrim(lcProduto) + '.JPG'
+					Clear Resources
+					If Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)
+						lcFoto=Strconv(Strtran(Strtran(Strtran(crTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)	
+						=StrToFile(lcFoto, lcArquivo)
+					Else
+						=StrToFile(crBranco.Branco, lcArquivo)
+					EndIf
+				EndIf
+
+				If CrTmpDcOpe.DckSubN = 1 And llTemSubN And ( CrTmpOpe.SubNs = 4 )
+					lcSubNivel = ''
+					If Not IsEmpty( TmpRel.nCodigos ) And Seek( TmpRel.nCodigos, 'TmpEstPe', 'Codigos' )
+						lcSubNivel = PadL(AllTrim(TmpEstPe.cAbrevs),2) + '.' + ;
+									 AllTrim(fGerMascara(Val(Right(Str(TmpRel.nCodigos,10),6))))
+					EndIf
+					=ThisForm.MontaDetalhe( lcSubNivel, 13 )
+				Endif
+
+				If CrTmpDcOpe.DckItem = 1
+					=ThisForm.MontaDetalhe( Str(xItm,3), lnDocItem )
+				Endif
+
+				lcCodBarras = ''
+				If CrTmpDcOpe.DckBarPro = 1
+					lcCodBarras = Transform( CrTmpPro.Cbars, "99999999999999" )
+				Else
+					If Not IsEmpty( TmpRel.CodBarras )
+						lcCodBarras = Transform( TmpRel.CodBarras, "99999999999999" )
+					Else
+						If lnItem2s = 1 And Not IsEmpty( TmpRel2.CodBarras )
+							lcCodBarras = Transform( TmpRel2.CodBarras, "99999999999999" )
+						EndIf
+					EndIf
+				Endif
+				If CrTmpDcOpe.DckCbar = 1
+					ThisForm.MontaDetalhe( lcCodBarras, lnDocBarra )
+				Endif
+
+				If CrTmpDcOpe.DckQtd = 1
+					ThisForm.MontaDetalhe( Transf(TmpRel.Qtds,"999999.99")+Iif(CrTmpDcOpe.DckOpers=1," "+TmpRel.Opers,""), lnDocQtd )
+				Endif
+
+				If CrTmpDcOpe.DckPeso = 1
+					ThisForm.MontaDetalhe( Transf(TmpRel.Pesos,"999999.99"), lnDocPeso )
+				Endif
+
+				If CrTmpDcOpe.DckCod = 1
+					ThisForm.MontaDetalhe( TmpRel.CPros, 13 )
+				Endif
+
+				If CrTmpDcOpe.DckUni = 1
+					ThisForm.MontaDetalhe( CrTmpPro.Cunis, 13 )
+				Endif
+
+				If CrTmpDcOpe.DckVen = 1
+					lnQtd = Iif(CrTmpDcope.DckTabCv=1,fStringChr(Str(CrTmpPro.Pvens,9,2),CrTmpParac.fTabelas),;
+							Transform(CrTmpPro.Pvens,'99999.99'))
+					ThisForm.MontaDetalhe( lnQtd, 13 )
+				Endif
+
+				If CrTmpDcOpe.DckReffs = 1
+					ThisForm.MontaDetalhe( CrTmpPro.Reffs , 21 )
+				Endif
+
+				If CrTmpDcOpe.DckFeitios = 1
+					ThisForm.MontaDetalhe( CrTmpPro.Cftios , 12)
+				Endif
+
+				If IsEmpty(CrTmpOpe.Cmoes)
+					If PrVenCus = 3
+						_Moeda = CrTmpParam.MoePadVens
+					Else
+						_Moeda = CrTmpPro.MoeCusFs
+					Endif
+
+					If CrTmpDcOpe.Dckunit = 1
+						lnQtd = Iif(CrTmpDcope.DckTabCv=1,fStringChr(Str(TmpRel.Units,9,2),CrTmpParac.fTabelas),;
+						Transf(TmpRel.Units,'99999.99' ))
+						ThisForm.MontaDetalhe( lnqtd +' '+AllTrim(TmpRel.Moedas), 13 )
+					Endif
+
+					If CrTmpDcOpe.DckBase = 1
+						ThisForm.MontaDetalhe( Transf(TmpRel.Bases,'99999.99' )+' '+AllTrim(TmpRel.Moedas), 13 )
+					Endif
+
+					If CrTmpDcOpe.DckToti = 1
+						lnQtd = Iif(CrTmpDcope.DckTabCv=1,fStringChr(Str(m.Totas,12,2),CrTmpParac.fTabelas),;
+						Transform(m.Totas,'9999999.99'))
+						ThisForm.MontaDetalhe( lnQtd, 13 )
+					Endif
+
+					If CrTmpDcOpe.Dckunit = 1 and CrTmpDcOpe.DckLinAd = 1
+						lnQtd = Iif(CrTmpDcope.DckTabCv=1,fStringChr(Str(TmpRel.Units,9,2),CrTmpParac.fTabelas),;
+								Transform(TmpRel.Units,'99999.99'))
+						Detalhe = Detalhe + Chr(13) + Chr(10) + Space(22) + ;
+								  AllTrim( lnQtd ) + ' ' + ;
+								  AllTrim( TmpRel.Moedas ) + ' ' + Chr(43) + ' ' + ;
+								  AllTrim( Transf( TmpRel.Pesos, '999.99' ) ) + ' * ' + ;
+								  AllTrim( Transf( TmpRel.Fators, '99.99') ) + ' ' + ;				
+								  AllTrim( TmpRel.MoeFats ) + Chr(13) + Chr(10)
+						nTamLinha = 0								
+					Endif
+					lPrFator = Round( TmpRel.Fators * TmpRel.Pesos * lpQtds, 2 )
+					lPrUnits = Round( TmpRel.Units * luQtds, 2 ) 
+					Select xtotite
+					if lPrUnits # 0
+						if !seek( TmpRel.Moedas )
+							insert into xtotite ( xmoeda ) values ( TmpRel.Moedas )
+						endif
+						replace xTotal with xTotal + lPrUnits
+					endif
+					if lPrFator # 0 AND SomaPeso = 1
+						if !seek( TmpRel.MoeFats )
+							insert into xtotite ( xmoeda ) values ( TmpRel.MoeFats )
+						endif
+						replace xTotal with xTotal + lPrFator
+					endif
+				Else
+					CotaMov = fBuscarCotacao(crTmpOpe.Cmoes,Date(),ThisForm.Podatamgr)
+					Select TmpRel
+					If Fators # 0
+						lPrFator = TmpRel.FatVals * TmpRel.MoeVals / CotaMov
+					Else
+						lPrFator = TmpRel.MoeVals / CotaMov
+					Endif
+					xttm = (TmpRel.Qtds * TmpRel.Units )&&totas 
+					If PrVenCus = 3
+						If CrTmpDcOpe.DckCoef = 1
+							ThisForm.MontaDetalhe( Transf(TmpRel.fators*TmpRel.pesos*lpqtds*TmpRel.FatVals/CotaMov,"99999.99"), 13 )
+						Endif
+
+						If CrTmpDcOpe.DckUnit = 1
+							lnPreco = TmpRel.Units*TmpRel.Moevals/CotaMov
+							lnQtd = Iif(CrTmpDcope.DckTabCv=1,fStringChr(Str(lnPreco,9,2),CrTmpParac.fTabelas),;
+									Transform(lnPreco,'99999.99'))
+							ThisForm.MontaDetalhe( lnqtd, 13 )
+						Endif
+						
+						If CrTmpDcOpe.DckBase = 1
+							lnPreco = TmpRel.Bases*TmpRel.Moevals/CotaMov
+							lnQtd = Iif(CrTmpDcope.DckTabCv=1,fStringChr(Str(lnPreco,9,2),CrTmpParac.fTabelas),;
+									Transform(lnPreco,"99999.99"))
+							Thisform.MontaDetalhe( lnQtd, 13 )
+						Endif
+					Else
+						If CrTmpDcOpe.DckCoef = 1
+							ThisForm.MontaDetalhe( Transf( TmpRel.UniVals,"99999.99"), 13 )
+						Endif
+						If CrTmpDcOpe.DckUnit = 1
+							lnQtd = Iif(CrTmpDcope.DckTabCv=1,fStringChr(Str(TmpRel.Units,9,2),CrTmpParac.fTabelas),;
+									Transform(TmpRel.Units,"99999.99"))
+							ThisForm.MontaDetalhe( lnQtd, 13 )
+						Endif
+						If CrTmpDcOpe.DckBase = 1
+							lnQtd = Iif(CrTmpDcope.DckTabCv=1,fStringChr(Str(TmpRel.Bases,9,2),CrTmpParac.fTabelas),;
+									Transform( TmpRel.Bases,"99999.99"))
+							ThisForm.MontaDetalhe( lnQtd , 13 )
+						Endif
+					Endif
+					If CrTmpDcOpe.DckToti = 1
+						lnQtd = Iif(CrTmpDcope.DckTabCv=1,fStringChr(Str(xttm,9,2),CrTmpParac.fTabelas),;
+								Transform(xttm,"9999999.99"))
+						ThisForm.MontaDetalhe( lnQtd, 11 )
+					Endif
+					xvlr = xvlr + xttm
+				Endif
+
+				If CrTmpDcOpe.DckGrv = 1
+					ThisForm.MontaDetalhe( CrTmpPro.Colecoes, 11 )
+				Endif						
+
+				If CrTmpDcOpe.DckNota = 1
+					ThisForm.MontaDetalhe( TmpRel.Notas, 07 )
+				Endif						
+				
+				If CrTmpDcOpe.Dckftecs = 1
+					lcSql = [Select Resps From SigCdPft Where Cpros = ']+TmpRel.Cpros+[' And ctits = ']+CrTmpDcope.ctits+[']
+					ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpProft')
+					Select TmpProft
+					Go Top
+					lcResp = Strtran(TmpProft.Resps,Chr(13),'')
+					lcResp = Strtran(lcResp,Chr(10),'')
+					lcResp = left(lcResp,20)
+					lcResp = Padr(Iif(isEmpty(lcResp),' ',lcResp),20)
+					ThisForm.MontaDetalhe( lcResp, 21 )
+				Endif
+
+				If CrTmpDcOpe.DckDescr = 1
+					If CrTmpDcOpe.DckFiscal = 1
+						If CrTmpDcOpe.DckTaCor = 1 And lnItem2s = 1
+							Select TmpRel2
+							Set Order to
+							Set Order to CItens
+							Set Key to Str(TmpRel.CItens,4)
+							Goto Top
+							ThisForm.MontaDetalhe( TmpRel2.CodTams + ' ' + TmpRel2.CodCors, lnDocTaCor, 'N' )
+							lnItem2s = 0
+						EndIf
+						If Not IsEmpty( Alltrim( CrTmpPro.DescFis ) )
+							lmDescFis = CrTmpPro.DescFis
+							lnMemoWAnt = Set( 'MEMOWIDTH', 1 )
+							Set Memowidth to ( pMaxCols - 2 )
+							lnNumLines = MemLines( lmDescFis )
+							For lnCount = 1 to lnNumLines
+								If Not IsEmpty( MLine( lmDescFis, lnCount ) )
+									DetalheD = DetalheD + PadC(AllTrim(MLine(lmDescFis,lnCount)),pMaxCols-2) + ;
+											   Chr(13) + Chr(10)
+								Endif
+							Next
+							Set MemoWidth to lnMemoWAnt
+						Else
+							DetalheD = DetalheD + PadC( AllTrim(TmpRel.Dpros), pMaxCols ) + Chr(13) + Chr(10)
+						EndIf
+					Else
+						ThisForm.MontaDetalhe( TmpRel.Dpros, 40, 'R' )
+					Endif
+				Endif
+				
+				If CrTmpDcOpe.DckTaCor = 1 And lnItem2s = 1
+					Select TmpRel2
+					Set Order to
+					Set Order to CItens
+					Set Key to Str(TmpRel.CItens,4)
+					Goto Top
+					ThisForm.MontaDetalhe( TmpRel2.CodTams + ' ' + TmpRel2.CodCors, lnDocTaCor, 'N' )
+					lnItem2s = 0
+				EndIf
+
+				Store '' to DetalheDP, DetalheR
+				If CrTmpDcOpe.DckTaCor = 1 And lnItem2s # 0
+					If InList( CrTmpGru.TipoEstos, 2, 3, 4 ) Or CrTmpGru.Cores = 1 Or CrTmpGru.Tams = 1
+						Select TmpRel2
+						If Seek( Str(TmpRel.CItens,4) )
+							DetalheDP = DetalheDP + Space(3)
+							lcReplica = Space(3)
+
+							If CrTmpDcOpe.DckCbar = 1
+								DetalheDP = DetalheDP + 'C.Barra  '
+								lcReplica = lcReplica + Space(9)
+							EndIf
+
+							If CrTmpGru.Tams = 1
+								DetalheDP = DetalheDP + 'Tam '
+								lcReplica = lcReplica + '--- '
+							EndIf
+							
+							If CrTmpGru.Cores = 1
+								DetalheDP = DetalheDP + Space(8) + 'Cor ' + Space(8) + ' '
+								lcReplica = lcReplica + Replicate('-',20) + ' '
+							EndIf
+							
+							DetalheDP = DetalheDP + '  Qtds   '
+							lcReplica = lcReplica + Replicate('-',8) + ' '
+							
+							If CrTmpGru.Embs = 1
+								DetalheDP = DetalheDP + 'Emb '
+								lcReplica = lcReplica + '--- '
+							Endif
+							
+							If CrTmpGru.Entregas = 1
+								DetalheDP = DetalheDP + '  Qtds   Emb'
+								lcReplica = lcReplica + Replicate('-',8) + ' ---'
+							EndIf
+
+							DetalheD = DetalheD + PadC( DetalheDP, pMaxCols ) + Chr(13) + Chr(10) + ;
+									   PadC( lcReplica, pMaxCols ) + Chr(13) + Chr(10)
+							Store '' to DetalheDP							   
+						Endif
+						Tot_Qtd = 0
+						Tot_QtdEnt = 0
+						Scan While TmpRel2.CItens = TmpRel.CItens
+							lnReplica = 3
+							DetalheDP = DetalheDP + Space(3)
+
+							If CrTmpDcOpe.DckCbar = 1
+								DetalheDP = DetalheDP + Transf(Iif(TmpRel2.CodBarras=0,0,TmpRel2.CodBarras),"99999999") + ' '
+								lnReplica = lnReplica + 9
+							Endif
+
+							If CrTmpGru.Tams = 1
+								DetalheDP = DetalheDP + TmpRel2.CodTams + '  '
+								lnReplica = lnReplica + 4
+							EndIf
+							
+							If CrTmpGru.Cores = 1
+								ThisForm.Podatamgr.Cursorquery('SigCdCor','CrTmpCor','Cods',TmpRel2.CodCors)
+								DetalheDP = DetalheDP + TmpRel2.CodCors + '-' + Padr( CrTmpCor.Descs,15) + ' ' 
+								lnReplica = lnReplica + 21
+							EndIf
+							
+							DetalheDP = DetalheDP + Transf( TmpRel2.Qtds, '99999.99' ) + ' ' 
+							
+							If CrTmpGru.Embs = 1
+								DetalheDP = DetalheDP + TmpRel2.CodEmbs + ' '
+							EndIf
+							
+							If CrTmpGru.Entregas = 1
+								DetalheDP = DetalheDP + Transf( TmpRel2.QtdEnts, '99999.99' ) + ' ' + TmpRel2.CodEmbEnts
+							EndIf
+							Detalhed   = Detalhed + PadC( DetalheDP, pMaxCols ) + Chr(13) + Chr(10)
+							Store '' to DetalheDP								 
+							Tot_Qtd    = Tot_Qtd + TmpRel2.Qtds
+							Tot_QtdEnt = Tot_QtdEnt + TmpRel2.QtdEnts
+						Endscan
+						If Tot_Qtd <> 0 or Tot_QtdEnt <> 0
+							Detalhed = Detalhed + PadC( Space(lnReplica-1) + '----------' + ' ' + ;
+									   Iif(Tot_QtdEnt # 0, '  ----------' + Space(5),' '), pMaxCols ) + ;
+									   Chr( 13 ) + Chr( 10 )
+							Detalhed = Detalhed + PadC( Space(lnReplica-1) + Transf( Tot_Qtd, '9999999.99' ) + ' ' + ;
+									   Iif(Tot_QtdEnt # 0,'  ' + Transf( Tot_QtdEnt, '9999999.99' ) + Space(5),' '), pMaxCols ) + ;
+									   Chr( 13 ) + Chr( 10 )
+						Endif
+					Endif
+					Select TmpRel
+				Endif
+				If CrTmpDcOpe.DckObsi = 1
+					If Not IsEmpty(TmpRel.Obs)
+						lmObs      = TmpRel.Obs
+						lnMemoWAnt = Set( 'MEMOWIDTH', 1 )
+						Set Memowidth to ( pMaxCols - 2 * tnDeslObsi )
+						lnNumLines = MemLines( lmObs )
+						lcCabObsi  = PadL( Alltrim(CrTmpDcOpe.DocObsi) + ' : ', 13)
+						For lnCount = 1 to lnNumLines
+							If Not IsEmpty( MLine( lmObs, lnCount ) )
+								DetalheO = DetalheO + Iif( tnDeslObsi > 0, Space(tnDeslObsi), '' ) + ;
+										   lcCabObsi + MLine( lmObs, lnCount ) + Chr(13) + Chr(10)
+								lcCabObsi = Space(13)								   
+							Endif
+						Next
+						Set MemoWidth to lnMemoWAnt
+					Endif
+				EndIf
+
+				If CrTmpDcOpe.Dckdsccps = 1
+					If Not IsEmpty(CrTmpPro.DscCompras)
+						lmObs      = CrTmpPro.DscCompras
+						lnMemoWAnt = Set( 'MEMOWIDTH', 1 )
+						Set Memowidth to ( pMaxCols - 2 * tnDeslObsi )
+						lnNumLines = MemLines( lmObs )
+						lcCabObsi  = PadL( Alltrim(CrTmpDcOpe.DocDscCps) + ' : ', 13)
+						For lnCount = 1 to lnNumLines
+							If Not IsEmpty( MLine( lmObs, lnCount ) )
+								DetalheO = DetalheO + Iif( tnDeslObsi > 0, Space(tnDeslObsi), '' ) + ;
+										   lcCabObsi + MLine( lmObs, lnCount ) + Chr(13) + Chr(10)
+								lcCabObsi = Space(13)								   
+							Endif
+						Next
+						Set MemoWidth to lnMemoWAnt
+					Endif
+				EndIf
+				If CrTmpDcOpe.DckrIteI = 1
+					Select TmpResIte
+					Set Order To Cmats
+					=Seek(TmpRel.Cpros)
+					Scan While Cpros = TmpRel.cpros
+						If cItens = TmpRel.cItens
+							DetalheR = DetalheR + 'Componente:'+TmpResIte.Cmats+'   Qtde: '+Str(Qtds,9,3)+' '+cUnis+'   Consumo:'+Str(QtScons,6)+ Chr(13) + Chr(10)
+						Endif
+					EndScan
+				Endif
+
+				Detalhe = Detalhe + Iif( Not IsEmpty(DetalheP), Padc(DetalheP, pMaxCols), '')
+				Insert Into TmpRelat (Numes, Tipo, TITULO, LINHA, LINHANEG, CDETALHE, IDETALHE, IDETALHED, ;
+									  IDETALHEO,FINALIZA,DESCR,OBSI, IDETALHER, Imagem, Barras, ImpCabBar);
+						VALUES (pNum, 1, TITUL, CABEC, CABECN, CABGRADE, DETALHE, DETALHED, DETALHEO, FINAL, ;
+								CrTmpDcOpe.DckDESCR, (Iif(CrTmpDcOpe.DckOBSI=1 Or CrTmpDcOpe.Dckdsccps=1,1,0)), DetalheR, lcArquivo, lcBar, llBar)
+			Endscan
+
+			lnTotQtds = 0
+			lnTotPess = 0
+			Select TmpRel
+			Scan
+				lnTotQtds = lnTotQtds + Iif( TmpRel.Opers = 'E', -1, 1 ) * TmpRel.Qtds
+				If pAgrupa And Type('TmpRel.nTotal') = 'N' And TmpRel.nTotal > 1
+					lnTotPess = lnTotPess + Round( Iif( TmpRel.Opers = 'E', -1, 1 ) * TmpRel.Pesos, 2 )
+				Else
+					lnTotPess = lnTotPess + Round( Iif( TmpRel.Opers = 'E', -1, 1 ) * TmpRel.Pesos * ;
+								Iif( CrTmpOpe.QtdPesos = 1 And IsEmpty(TmpRel.CodBarras), TmpRel.Qtds, 1 ), 2 )
+				EndIf
+			EndScan
+			lnTotQtds = Abs(lnTotQtds)
+			lnTotPess = Abs(lnTotPess)
+
+			Select TmpRel
+			Goto Top
+			If !Eof() And (CrTmpDcOpe.DckQtd = 1 Or CrTmpDcOpe.DckPeso = 1)
+				
+				lnX = Iif(CrTmpDcOpe.DckItem = 1, lnDocItem, 0 ) 
+				lnX = lnX + Iif(CrTmpDcOpe.DckCbar = 1, lnDocBarra, 0 )
+				lnX = lnX + Iif( ( CrTmpDcOpe.DckSubN = 1 ) And llTemSubN, 13, 0 )
+				lnX = lnX + Iif( tnTamCabGradeP < pMaxCols, Int((pMaxCols - tnTamCabGradeP)/2), 0 )
+				Detalhe = PadL(Iif( lnX > 9, 'Totais -> ', 'T: ' ), lnX ) + Iif( CrTmpDcOpe.DckQtd = 1, ;
+						  PadC(AllTrim(Transf(lnTotQtds,"99,999.99")), lnDocQtd - 1) + ' ', '' ) + ;
+						  Iif( CrTmpDcOpe.DckPeso = 1, PadC(AllTrim(Transf(lnTotPess,"99,999.99")),lnDocPeso-1), '' )
+				
+				Insert INTO TMPRELAT (Numes,TIPO,TITULO,LINHA,LINHANEG,CDETALHE,IDETALHE,IDETALHED,;
+							IDETALHEO,FINALIZA,DESCR,OBSI, Barras, ImpCabBar);
+						VALUES (pNum,1,TITUL,CABEC,CABECN,CABGRADE,DETALHE,'','',FINAL,;
+								CrTmpDcOpe.DckDESCR,9, lcBar, llBar)
+				Store '' TO DETALHE, DETALHED, DETALHEO
+			EndIf
+
+		Endif
+
+		Store '' TO Detalhe, DetelaheD, DetalheO, DetalheR
+
+		Select TmpRel
+		Goto Top
+		llBar = (CrTmpDcOpe.DckBarra = 1)
+		lcBar = fAltBar2de5(Padl(TmpRel.NDopes, 4, '0') + Padl(TmpRel.Numes, 6, '0')) && Barra do Cabeçalho
+
+		If CrTmpDcOpe.DckResu = 1
+
+			If IsEmpty( CrTmpOpe.CMoes ) And Reccount('xtotite') > 0
+				select xtotite
+				scan
+					If CrTmpDcOpe.DckTota = 1
+						lnQtd = Iif(CrTmpDcope.DckTabCv=1,fStringChr(Str(xtotite.xtotal,12,2),CrTmpParac.fTabelas),;
+								Transform(xtotite.xtotal,'999,999.99'))
+						final=final+Padl(Alltrim(CrTmpDcOpe.DocTota),13)+' '+PADL(alltrim(xtotite.xmoeda),3,' ') + ' : ' + ;
+								lnQtd + ;
+								chr(13) + chr(10)
+					Endif
+				EndScan
+				If CrTmpDcOpe.DckAcres = 1
+					IF TmpRel.valvars>0
+						final=final+Padl(Alltrim(CrTmpDcOpe.DocAcres),13)+' '+PADL(alltrim(crTmpParam.Moedaps),3,' ') + ' : '
+						final=final+TRANSFORM(iif(isnull(TmpRel.vars),0,TmpRel.vars),"99999.99")+"%  "+chr(13) + chr(10)
+					ENDIF
+				Endif
+				If CrTmpDcOpe.DckDesco = 1
+					IF TmpRel.valvars<0
+						final=final+Padl(Alltrim(CrTmpDcOpe.DocDesco),13)+' '+PADL(alltrim(crTmpParam.MoedaPs),3,' ') + ' : '
+						final=final+TRANSFORM(iif(isnull(TmpRel.vars),0,TmpRel.vars),"99999.99")+"%  "+chr(13)+ chr(10)
+					ENDIF
+				Endif	
+				If CrTmpDcOpe.DckEnca = 1
+					IF TmpRel.ValEncs # 0
+						final=final+Padl(Alltrim(CrTmpDcOpe.DocEnca),13)+'    '+' : '
+						final=final+TRANSFORM( ( TmpRel.ValEncs / TmpRel.Valinis * 100 ),"9999.99")+"%  "+chr(13) + chr(10)
+					ENDIF
+				Endif
+
+				select TmpRel
+				If CrTmpDcOpe.DckNite = 1
+					If xitm > 0
+						final=final+Padl(Alltrim(CrTmpDcOpe.DocNite),17)+' : '+STR(xitm,6)+CHR(13)+CHR(10)
+					Endif
+				Endif
+				If CrTmpDcOpe.Dckprze = 1
+					final=final+Padl(Alltrim(CrTmpDcOpe.DocPrze),17)+' : '+Nvl(Dtoc(TmpRel.prazoents),'')+CHR(13)+CHR(10)
+				Endif
+			Else
+				ThisForm.Finaliza(pDev,pMaxCols, lnTotQtds)
+			Endif
+		Endif
+		If CrTmpDcOpe.DckPaga = 1
+			Select TmpPag
+			Goto Top
+			If Not Eof()
+				If CrTmpDcOpe.DckPag = 1
+					final=final+"============="+Chr(13)+Chr(10)
+					final=final+Padc(Alltrim(CrTmpDcOpe.DocPag),13)+Chr(13)+Chr(10)
+					final=final+"============="+Chr(13)+Chr(10)
+				Endif
+				SCAN
+					final=final+fpags + " " + iif(IsEmpty(numeros),cartaos+' ',bancos+'.'+contas+'.'+numeros) + " "
+					final=final+Nvl(DTOC(vencs),'') + " " + TRANSFORM(valos,"999,999.99") + CHR(13) + CHR(10)
+				ENDSCAN
+			ENDIF
+		Endif
+		If CrTmpDcOpe.DckObsg = 1
+			final=final+chr(13)+chr(10)
+			If not IsEmpty(CrTmpDcOpe.DocObsg)
+				final=final+alltrim(CrTmpDcOpe.DocObsg)+' : '
+			Endif
+
+			If (CrTmpDcOpe.DckObsC = 1)
+				final=final+chr(13)+chr(10)+Alltrim(Nvl(TmpRel.Obses,''))+chr(13)+chr(10)
+			Else
+				final=final+NVL(CrTmpDcOpe.ObsResu,'')+chr(13)+chr(10)
+			Endif
+		EndIf
+		If CrTmpDcOpe.DckRite = 1
+			final=final+chr(13)+chr(10)
+			Select Cmats, Cunis, sum(Qtds) as Qtds, Sum(QtScons) as QtScons From TmpResIte Group By 1,2 Into Cursor TmpResumo
+			Select TmpResumo
+			Goto Top
+			If Not Eof()
+				final=final+"======[ Resumo de Itens ] ======="+Chr(13)+Chr(10)
+				final=final+"Componente Quantidade Uni Consumo"+Chr(13)+Chr(10)
+				final=final+"========== ========== === ======="+Chr(13)+Chr(10)
+				Scan
+					final=final+cmats + " " + Transf(Qtds,"99,999.999") + " " + Cunis + Transform(QtsCons,"999999") + CHR(13) + CHR(10)
+				EndScan
+			ENDIF
+		ENDIF
+
+		lcEmail = ''
+		SELECT CrTprMvCab
+		IF NOT EMPTY(CrTprMvCab.ContaOs)
+			=ThisForm.Podatamgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',CrTprMvCab.Contaos,[Emails])
+			SELECT CrTmpCli
+			IF NOT isempty(CrTmpCli.Emails)
+				lcEmail = ALLTRIM(CrTmpCli.Emails)+';'
+			ENDIF
+		Endif
+		IF NOT EMPTY(CrTprMvCab.ContaDs)
+			=ThisForm.Podatamgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',CrTprMvCab.Contads,[Emails])
+			SELECT CrTmpCli
+			IF NOT isempty(CrTmpCli.Emails)
+				lcEmail = lcEmail + ALLTRIM(CrTmpCli.Emails)
+			ENDIF
+		Endif
+
+		INSERT INTO TMPRELAT (Numes,TIPO,TITULO,LINHA,LINHANEG,CDETALHE,IDETALHE,IDETALHED,IDETALHEO,FINALIZA,;
+					DESCR,OBSI, Barras, ImpCabBar) ;
+				VALUES (pNum,1,TITUL,CABEC,CABECN,CABGRADE,DETALHE,DETALHED,DETALHEO,FINAL,;
+									CrTmpDcOpe.DckDESCR,CrTmpDcOpe.DckOBSI, lcBar, llBar)
+
+		Set MemoWidth to ( pMaxCols )
+	EndScan 
+	loBarra.Complete(.T.)
+EndScan
+Set MemoWidth to nOldMemoWidth
+Select TmpRelat
+Go Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+=DoDefault()
+
+ThisForm.poDataMgr.Release
+ThisForm.poDataMgr2.Release
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Select TmpRelat
+Go Top
+Report form SigReDoc preview  NoConsole
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDOC.get_dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.Get_operaçãoi.Value = 0 And ThisForm.Get_operaçãof.Value = 0)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDOC.get_dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.Get_operaçãoi.Value = 0 And ThisForm.Get_Operaçãof.Value = 0)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDOC.get_dopes
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoMovmto(Usuar, This.Value, This)
+
+With ThisForm
+	If Not IsEmpty(This.Value)
+		lcQuery = [ Select a.Ndopes, b.chkImpDoc ] + ;
+				    [ From SigCdOpe a, SigOpCdc b ]+ ;
+				    [ Where a.Dopes = ']+This.Value +[' and b.Dopes = a.Dopes ]
+		If (ThisForm.PODatamgr.SqlExecute(lcQuery, [crSigCdOpeD]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdOpeD)])
+			Return 0
+		EndIf
+		
+		If  crSigCdOpeD.chkImpDoc = 1		
+			.Chkreimp.Enabled = fChecaAcesso(padl(crSigCdOpeD.nDopes,8,'0'), "REIMPDOC" ) 
+			.Chkreimp.Value = Iif(.Chkreimp.Enabled,.Chkreimp.Value,0 )
+		Else
+			.Chkreimp.Enabled = .t.
+			.Chkreimp.Value = .Chkreimp.Value
+		EndIf 
+	Else
+		.Chkreimp.Enabled = .t.
+		.Chkreimp.Value = .Chkreimp.Value
+	EndIf 
+EndWith	
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDOC.Get_Operaçãoi
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value) And Empty(ThisForm.Get_Operaçãof.Value)
+	ThisForm.Get_Operaçãof.Value = This.Value
+	ThisForm.Get_Operaçãof.Refresh
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty(Thisform.Get_dt_inicial.Value) And Isempty(ThisForm.Get_dt_final.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDOC.GrdEmp.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDOC.GrdEmp.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDOC.Get_Operaçãof
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty(Thisform.Get_dt_inicial.Value) And Isempty(ThisForm.Get_dt_final.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDOC.CmdApgEmp
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crEmps
+Replace All Marca With 0
+Go Top 
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREDOC.cmdSelemp
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crEmps
+Replace All Marca With 1
+Go Top 
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREDOC
+RESERVED3 (ClassInfo): conexao
+podatamgr
+podatamgr2
+qbols
+*cabecalho 
+*finaliza 
+*montacabgrade 
+*montadetalhe 
+*montagrade 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 23
+================================================================================

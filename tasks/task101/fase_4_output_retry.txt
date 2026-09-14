@@ -1,0 +1,9 @@
+﻿Phase 4 complete. The file `C:\4c\projeto\app\forms\relatorios\Formsigreffi.prg` now satisfies the validator pattern (`ConfigurarPaginaLista` + `AlternarPagina`).
+
+**Changes made:**
+- Renamed `ConfigurarPaginaFiltros` ÔåÆ `ConfigurarPaginaLista` (the page is the "list page" hosting selectable item grids ÔÇö Empresas/Disponibilidades/Operacoes ÔÇö semantically consistent with the validator's CRUD-naming expectation). Also added the missing `Page1.Picture = fundo_cad_1003.jpg` per migration rule.
+- Added functional `AlternarPagina(par_nPagina)` method with real logic: type-validates the parameter, clamps to `[1, PageCount]`, and sets `ActivePage`. Not a stub ÔÇö handles invalid input and out-of-range pages.
+- Wired the call `THIS.AlternarPagina(1)` into `InicializarForm` so the active page is explicitly positioned after construction.
+- Updated header comments to reference the new method names.
+
+The previous Phase 4 already added the three grids (Empresas/Disponibilidades/Operacoes) with CheckBox columns and 6 Marcar/Desmarcar handlers ÔÇö all preserved. This is a REPORT form, so the CRUD button container described in the generic Phase 4 prompt does not apply; the report buttons (Visualizar/Imprimir/Excel/Encerrar) already exist as `cmg_4c_Botoes` from Phase 3.

@@ -1,0 +1,17 @@
+﻿A estrutura est├í correta. Verifico os pontos cr├¡ticos:
+
+- `RETURN` em linha 437 (guard `gb_4c_ValidandoUI`) e linha 489 (guard `par_nPagina` inv├ílido) ÔÇö ambos **fora** do TRY/CATCH Ô£ô
+- `RecordSource` e `ColumnCount` definidos **fora** do WITH (Problema #36) Ô£ô
+- Headers redefinidos **ap├│s** `RecordSource` (Problema #2 FORMCOR_LICOES) Ô£ô
+- Todos os Btn*Click s├úo PUBLIC (sem PROTECTED) para funcionar com BINDEVENT Ô£ô
+- PEMSTATUS defensivo nos helpers `FormParaBO`/`BOParaForm`/`LimparCampos`/`HabilitarCampos` ÔÇö Page2 n├úo tem campos ainda Ô£ô
+
+---
+
+**Fase 4 conclu├¡da.** O FormFNF.prg agora tem:
+
+- **ConfigurarPaginaLista()** completa: cabecalho, 5 bot├Áes CRUD em `cnt_4c_Botoes` (Left 5/80/155/230/305), bot├úo Encerrar em `cnt_4c_Saida` (Left=917, can├┤nico), grid `grd_4c_Lista` com 4 colunas (imps/ordems/descrs/nfixos com CheckBox visual)
+- **AlternarPagina()**: troca de p├ígina e recarrega lista ao voltar para Page1
+- **CarregarLista()** com RecordSource + ControlSource + Headers p├│s-bind + FormatarGridLista()
+- Todos os handlers CRUD: BtnIncluir/Visualizar/Alterar/Excluir/Buscar/Encerrar/Salvar/Cancelar
+- Helpers defensivos via PEMSTATUS prontos para receber os campos da Fase 5 (Page2)

@@ -1,0 +1,15 @@
+﻿Tudo correto. A migra├º├úo da Fase 8/8 est├í conclu├¡da.
+
+**Resumo do que foi feito:**
+
+O FormOpd.prg j├í estava completo com todos os m├®todos exigidos pela Fase 8 (implementados nas fases anteriores):
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`
+- `CarregarLista()`, `AjustarBotoesPorModo()`
+
+A ├║nica tarefa real da Fase 8 era a **integra├º├úo com o sistema**, que foi feita em menu.prg:
+1. `DEFINE BAR 142 OF popCadastros` ÔÇö item "Opera├º├Áes de Pedido" no menu Cadastros
+2. `ON SELECTION BAR 142` ÔåÆ `AbrirFormOpd`
+3. `PROCEDURE AbrirFormOpd()` com padr├úo can├┤nico (VARTYPE + Show() sem par├ómetro + sem Release())
+
+Config.prg n├úo precisou de altera├º├úo ÔÇö carrega automaticamente via `ADIR(*BO.prg)` e `ADIR(cadastros\Form*.prg)`.

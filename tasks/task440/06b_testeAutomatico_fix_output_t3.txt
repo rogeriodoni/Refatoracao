@@ -1,0 +1,11 @@
+﻿All 6 fixes confirmed:
+- 5 ├ù `PCOUNT() = 0` guards (all lookup handlers)
+- 6 ├ù `gb_4c_ModoTeste` guards (all `.Show()` calls including `BtnBuscarClick`)
+
+The fixes are complete. Here's the root cause analysis for T3:
+
+**Root cause**: `BtnBuscarClick` creates `FormBuscaAuxiliar` with `gnConnHandle=0` and `loc_cCodigo=""`. With no SQL connection, `this_lAchouRegistro = .F.`, so the code falls through to `loc_oBusca.Show()` ÔÇö which is `WindowType=1` (modal) and blocks VFP9 for 300s in server mode. Unlike the lookup handlers (which have an EMPTY() value guard as backstop), `BtnBuscarClick` has no such protection and reaches `.Show()` unconditionally.
+
+**Fixes applied** (two-layer defence):
+1. `IF PCOUNT() = 0 / RETURN / ENDIF` added to `AbrirLookupCodConPads`, `AbrirLookupDCodConPads`, `AbrirLookupLin`, `AbrirLookupDLin` ÔÇö same pattern as T2's MatPrincs fix
+2. `IF !(TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)` wraps every `loc_oBusca.Show()` call in all 5 lookup handlers AND `BtnBuscarClick` ÔÇö prevents `FormBuscaAuxiliar` from ever being shown in test mode regardless of how the code path is reached

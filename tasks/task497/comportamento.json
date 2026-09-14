@@ -1,0 +1,555 @@
+{
+  "resumo": {
+    "totalMetodos": 29,
+    "metodosComSQL": 21,
+    "metodosComValidacao": 13,
+    "totalQueries": 10,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["MontaGrade", "fConfigGeral", "fUniqueIds", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Procedure",
+      "linhas": 78,
+      "codigoOriginal": "*-- Incrementar o Proximo numero da ordem\nLparameters lcChavePai\n\nLocal lnProx\nSelect MAX(Ordems) As npro from crSigCdPeI into cursor crsProximo readwrite \n\nlnProx = NVL(crsProximo.npro,0)\n*-- Fim incrementar \n\nZap in csDestinos\n\nSelect crSigCdPei\nindex on Ordems to indordems\n\nGo top in crSigCdPei\n\n*!* 08/08/2014 - Wellington\nlcQuery = \t[Select distinct GCR.codigos,GCR.descrs,CLI.iclis,CLI.rclis ] + ;\n\t\t\t\t[From SigCdGcr GCR ] + ;\n\t\t\t\t[inner join SigCdCli CLI on GCR.codigos = CLI.Grupos ] + ;\n\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Procedure",
+      "linhas": 60,
+      "codigoOriginal": "Private pPro\n\npPro = crSigCdPec.pkChaves   \n\nZap in csDestinos\n\nThisForm.poDataMgr.Requery([crSigCdPei])\n\nlcQuery = [select PEC.descs,PEC.pkchaves,PEI.codigos,PEI.fkchaves,PEI.grupos,PEI.contas,PEI.ordems,GCR.descrs,CLI.iclis,CLI.rclis, PEI.Opers ] + ;\n\t\t  [from SigCdPec PEC ] + ;\n\t\t  [left outer join SigCdPei PEI on PEI.fkchaves = '] + pPro + [' ] + ;\n\t\t  [inner join SigCdCli CLI on CLI.iclis = PEI.contas ] + ;\n\t\t  [inner join SigCdGcr GCR on GCR.codigos = PEI.grupos ] + ;\n\t\t  [where PEC.pkchav... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "Requery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Procedure",
+      "linhas": 51,
+      "codigoOriginal": "* Acertando a Grade Da Página Dados e Os 'ControlSources'\nWITH thisform.pagina.Dados.GrdGrupos\n\t.ColumnCount = 2\n\t.AllowHeaderSizing = .F.\n\t.AllowRowSizing = .F.\n\t.DeleteMark = .F.\n\t.RecordSource = 'crsSigCdGcr'\n\t.Name = 'grdGrupos'\n\n\t.SetAll(\"Resizable\", .F., \"Column\")\n\t.SetAll(\"Movable\",   .F., \"Column\")\n\n    .Column1.ControlSource  = 'crsSigCdGcr.Codigos'\n\t.Column1.Width          = 75\n    .Column2.ControlSource  = 'crsSigCdGcr.Descrs'\n\t.Column2.Width          = 256\nENDWITH\n\nWith ThisForm.Pagi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Init",
+      "linhas": 49,
+      "codigoOriginal": "LParameters lcAcesso\n\nPrivate pPro, pKey\n\npPro = Replicate(Chr(254), 20)\npKey = Replicate(Chr(254), 20)\n\nlcQryCdPec = 'Select * From SigCdPec'\nlcQryCdPeI = 'Select * From SigCdPeI Where FkChaves = ?pPro'\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\t\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t* Cursor Principal Para Montagem da Lista (Tabela Grande)\n\t\t\t.AddCursor('SigCdPec', 'PkChaves', 'crSigCdPec', '', ThisForm.Pagina.Lista.Grade, lcQryCdPec)\n\t\t\t.pfSqlTabela... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "=fConfigGeral()\n\n*!* 21/05/2014 - 26/05/2014 - Wellington\n*!* Foi acrescentado o campo Descrs(50) / Acrescentados campos CongaT(10) e DescontaG(50)\nCreate Cursor csDestinos (PkChaves c(20), fkChaves c(20), Marcas n(1), Grupos c(10), Descrs c(50), ContaG c(10), DescontaG c(50), Codigos c(50), Opers c(1), Ordems n(4))\nIndex On fkChaves  Tag fkChaves\nIndex On Descrs\t   Tag Descrs\nIndex On DescontaG Tag DescontaG\nIndex On ContaG    Tag ContaG\nIndex On Ordems\t   Tag Ordems\n\n=DoDefault()\n* Fim *******... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Private pPro\n\nSelect crSigCdPec\npPro = crSigCdPec.pkChaves\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Private pPro\n\npPro = crSigCdPec.PkChaves\n\n* Eliminando os Registros\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdPeI Where FkChaves = ?pPro], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 1)')\n\tReturn 0\nEndIf\n\n* Incluindo os Registros\nIf Not ThisForm.poDataMgr.Update('crSigCdPeI')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 3)')\n\tReturn 0\nEndIf\n\n=DoDefault()\n* Fim *********************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Update",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Private pPro\n\npPro = crSigCdPec.PkChaves\n\n* Eliminando os Registros\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdPeI Where FkChaves = ?pPro], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Excluir - 1)')\n\tReturn 0\nEndIf\n\n=DoDefault()\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Private pPro\n\npPro = crSigCdPec.PkChaves\n\n* Incluindo os Registros\nIf Not ThisForm.poDataMgr.Update('crSigCdPeI')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - 1)')\n\tReturn 0\nEndIf\n\n=DoDefault()\n\nThisForm.msv_Procurar\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Select crSigCdPec\nindex on descs to descs\nSet Near On\nIf Not Empty(ThisForm.Pagina.Dados.GETRELATORIO.Value)\n\tSeek Alltrim(ThisForm.Pagina.Dados.GetRelatorio.Value)\n\tThisform.carregagrid()\nEndIf\nSet Near Off\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "carregagrid",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Click",
+      "linhas": 79,
+      "codigoOriginal": "LParameters Opcao\n\nPrivate pPro, pKey\n\nLocal lnCount && Incrementar Ordens da tabela sigCdPeI\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndIf\n\nSelect crSigCdPec\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf \n\npPro = Iif(Type(\"pPro\")=\"U\",crSigCdPec.pkChaves,pPro)\npKey = Iif(Type(\"pKey\")=\"U\",\"\",pKey)\n\nIf InList(Thisform.pcEscolha, 'CONSULTAR', 'ALTERAR', 'EXCLUIR')\n\tIf !EMPTY(pPro)\n\t    *-- Abro a tabela de grupos e crio o indice chave\n\t    This.parent.parent.Dados.getRelato... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "pcEscolha = 'PROCURAR') or,Value=Space,carregagrid",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Click",
+      "linhas": 93,
+      "codigoOriginal": "Private pPro, pKeyW\n\npPro  = crSigCdPec.pkChaves\nlcRel = This.parent.parent.getRelatorio.Value \nlcEmp = This.parent.parent.getEmpresa.Value \t\n\nIf InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Empty(This.parent.parent.getRelatorio.Value)\n\t\t=Messagebox('O Nome do Relatório Tem Que Ser Preenchido!!!', 0+48, 'Informe os dados requisitados!!!')\n\t\tThis.parent.parent.getRelatorio.SetFocus()\n\t\tReturn 0\t\t\n\tEndif\t\nEndIf\n\n*!* Verificando se foi selecionada a Empresa\n*\nIf InList(Thisform.pcEscolha, '... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,pcEscolha <> 'EXCLUIR') and",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Private pPro, pKey\n\npPro = crSigCdPec.PkChaves\npKey = Replicate(Chr(254), 20)\n\nSELECT csDestinos\nZAP \n\n*=DoDefault()\n\nThisform.mAtivapagina1\n\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "This.cmdgCompo.cmdCompoInserir.Enabled= .F.\nThis.cmdgCompo.cmdCompoIexcluir.Enabled= .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Lista.btnCopiar",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(crSigCdPec.PkChaves)\n*!*\t\tThisForm.LockScreen = .t.\n\n*!*\t\tDo Form SigOpCpr With ThisForm, crSigCdPec.Processos\n\n*!*\t\tlcDes = crSigCdPec.Processos\n\n*!*\t\tThisForm.mAtivaPagina1\n\n*!*\t\tSelect crSigCdPec\n*!*\t\tLocate For Processos = lcDes\n\n*!*\t\tThisForm.LockScreen = .f.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.cmdgCompo",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "*-- Incrementa o Proximo numero da ordem\nLocal lnProx\nSelect MAX(Ordems) As npro from csDestinos into cursor crsProximo readwrite \n\nlnProx = NVL(crsProximo.npro,0)\nlnProx = lnProx+1\n\nSelect csDestinos\n\nInsert Into csDestinos (FkChaves, Marcas, Grupos, Codigos, Opers, Ordems) ;\n\t\t\t\tValues (Space(20), 0, Space(10), Space(15), \"+\", lnProx)\n*-- Fim Incrementa o Proximo numero da ordem\n\t\t\t\t\nKeyBoard \"{DnArrow}\"\n\n* Fim ***********************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.cmdgCompo",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select csDestinos\nIf Not Eof() And Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Messagebox('Deseja Excluir Esta Operação?', 4+32+256, '')=6\n\tEndIf\nEndIf \n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.getEmpresa",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdEmp], ;\n\t\t\t\t\t\t   [crListaRemota], [Cemps], This.Value, [Empresas], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Cemps], [], [Emp])\n\t\tloLista.mAddColuna([Razas], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.Pagina.Dados.getEmpresa.Value = crListaRemota.Cemps\n\t*ThisForm.Pagina.Dados.get_Class.Value = crListaRemota.Class\n\tUse In crListaRemota\nElse\n\tThisForm.Pagina.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Class",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.FwbtnpSobe",
+      "evento": "Click",
+      "linhas": 197,
+      "codigoOriginal": "*!*\tIf Used(\"csSobe\")\n*!*\t   Use in csSobe\n*!*\tEndif\n\n*!*\tIf Used(\"csDesce\")\n*!*\t   Use in csDesce\n*!*\tEndif\n\n*!*\t*!* 22/05/2014 - Wellington\n*!*\t*!* Foi acrescentado o campo DESCRS c(50) nos dois cursores\n*!*\tCREATE CURSOR csSobe( codigos c(15), fkchaves c(20), grupos c(10), descrs c(50), ContaG c(10), DescontaG c(50), marcas n(1), opers c(1), ordems n(4),pkchaves c(20))\n*!*\tCREATE CURSOR csDesce( codigos c(15), fkchaves c(20), grupos c(10), descrs c(50), ContaG c(10), DescontaG c(50), marcas n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.FwbtnpDesce",
+      "evento": "Click",
+      "linhas": 192,
+      "codigoOriginal": "*!*\tIf Used(\"csSobe\")\n*!*\t   use in csSobe\n*!*\tEndIf\n\n*!*\tIf Used(\"csDesce\")\n*!*\t   use in csDesce\n*!*\tEndIf \n\n*!*\t*!* 22/05/2014 - Wellington\n*!*\t*!* Foi acrescentado o campo DESCRS c(50) nos dois cursores\n*!*\tCREATE CURSOR csDesce( codigos c(15), fkchaves c(20), grupos c(10), descrs c(50), ContaG c(10), DescontaG c(50), marcas n(1), opers c(1), ordems n(4),pkchaves c(20))\n*!*\tCREATE CURSOR csSobe( codigos c(15), fkchaves c(20), grupos c(10), descrs c(50), ContaG c(10), DescontaG c(50), marcas ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.Txt_Procura_Grupo",
+      "evento": "Init",
+      "linhas": 1,
+      "codigoOriginal": "chave_descrs = \"\"",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.Txt_Procura_Grupo",
+      "evento": "InteractiveChange",
+      "linhas": 17,
+      "codigoOriginal": "SELECT csDestinos\nSET ORDER TO Descrs\nntp=lastkey()\ndo while .t.\n\tif ntp=13 .or. ntp=5 .or. ntp=24 .and. len(alltrim(chave_descrs))=0\n\t\texit\n\tendif\n\tchave_descrs\t=\talltrim(UPPER(this.Value))\n\tseek chave_descrs\n\tpchave1 = DESCRS\n\tpchave2 = chave_descrs+\"z\"\n\tset key to range pchave1,pchave2\n\tthisform.pagina.dados.grdDestinos.Refresh\n\texit\nenddo\nset key to\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.Txt_Procura_Grupo",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "chave_descrs = \"\"\nSELECT csDestinos\nSET ORDER TO Ordems\nGO top \n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.Txt_Procura_Conta",
+      "evento": "Init",
+      "linhas": 1,
+      "codigoOriginal": "chave_descontag = \"\"",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.Txt_Procura_Conta",
+      "evento": "InteractiveChange",
+      "linhas": 17,
+      "codigoOriginal": "SELECT csDestinos\nSET ORDER TO DescontaG\nntp=lastkey()\ndo while .t.\n\tif ntp=13 .or. ntp=5 .or. ntp=24 .and. len(alltrim(DescontaG))=0\n\t\texit\n\tendif\n\tchave_descontag\t=\talltrim(UPPER(this.Value))\n\tseek chave_descontag\n\tpchave1 = DescontaG\n\tpchave2 = chave_descontag + \"z\"\n\tset key to range pchave1,pchave2\n\tthisform.pagina.dados.grdDestinos.Refresh\n\texit\nenddo\nset key to\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.Txt_Procura_Conta",
+      "evento": "LostFocus",
+      "linhas": 6,
+      "codigoOriginal": "chave_descontag = \"\"\nSELECT csDestinos\nSET ORDER TO Ordems\n\nGO top\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.CmdExpandir",
+      "evento": "Click",
+      "linhas": 72,
+      "codigoOriginal": "lcCodGrupo\t= Alltrim(Thisform.Pagina.Dados.GrdGrupos.Column1.Text1.Value )\n\n* -- 2ª Grade\n\nlcQuery = \t[Select distinct GCR.codigos,GCR.descrs,CLI.iclis,CLI.rclis ] + ;\n\t[From SigCdGcr GCR ] + ;\n\t[inner join SigCdCli CLI on GCR.codigos = CLI.Grupos ] + ;\n\t[where CLI.grupos = '] + lcCodGrupo + [' ] + ;\n\t[UNION ] + ;\n\t[Select distinct CCR.grupos as codigos,GCR.descrs,CCR.contas as iclis, CLI.rclis ] + ;\n\t[From SigMvCCR CCR ] + ;\n\t[inner join SigCdCli CLI on CCR.contas = CLI.iclis ] + ;\n\t[left outer... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.grdDestinos.Column1.Check1",
+      "evento": "InteractiveChange",
+      "linhas": 13,
+      "codigoOriginal": "If this.Value > 0\n\t* Wellington - 02/06/2014\n\t* Alterei o preenchimento da coluna CODIGO, preenchendo com os 50 primeiros caracteres da Descrição da Conta\n\t* Solicitação Marcelo\n\tThis.Parent.Parent.Column4.Text1.Value = SUBSTR(csDestinos.DescontaG,1,50)\n\tThis.parent.parent.Column4.Text1.Refresh\nELSE\n\tThis.parent.parent.Column4.Text1.Value = \" \"\n\tThis.parent.parent.Column4.Text1.Refresh\nEndIf    \n\nthisform.Refresh \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPEC.Pagina.Dados.grdDestinos.Column5.Combo1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\t\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDPEC.Procedure",
+      "queryOriginal": "Select MAX(Ordems) As npro from crSigCdPeI into cursor crsProximo readwrite",
+      "tabelas": "crSigCdPeI",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPEC.Procedure",
+      "queryOriginal": "lcQuery = \t[Select distinct GCR.codigos,GCR.descrs,CLI.iclis,CLI.rclis ] + ; \t\t\t\t[From SigCdGcr GCR ] + ; \t\t\t\t[inner join SigCdCli CLI on GCR.codigos = CLI.Grupos ] + ; \t\t\t... [TRUNCADO]",
+      "tabelas": "SigCdCli",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPEC.Procedure",
+      "queryOriginal": "lcQuery = [select PEC.descs,PEC.pkchaves,PEI.codigos,PEI.fkchaves,PEI.grupos,PEI.contas,PEI.ordems,GCR.descrs,CLI.iclis,CLI.rclis, PEI.Opers ] + ; \t\t  [from SigCdPec PEC ] + ; \t\t  [left outer join SigCdPei PEI on PEI.fkchaves = '] + pPro + [' ] + ; \t\t  [inner join SigCdCli CLI on CLI.iclis = PEI.contas ] + ; \t\t  [inner join SigCdGcr GCR on GCR.codigos = PEI.grupos ] + ; \t\t  [where PEC.pkchav... [TRUNCADO]",
+      "tabelas": "SigCdPei,SigCdCli,SigCdGcr",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPEC.Init",
+      "queryOriginal": "lcQryCdPec = 'Select * From SigCdPec'",
+      "tabelas": "SigCdPec",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPEC.Init",
+      "queryOriginal": "lcQryCdPeI = 'Select * From SigCdPeI Where FkChaves = ?pPro'",
+      "tabelas": "SigCdPeI",
+      "colunas": "FkChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPEC.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdPeI Where FkChaves = ?pPro], '') < 1)",
+      "tabelas": "SigCdPeI",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPEC.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdPeI Where FkChaves = ?pPro], '') < 1)",
+      "tabelas": "SigCdPeI",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPEC.Pagina.Dados.cmdgCompo.Click",
+      "queryOriginal": "Select MAX(Ordems) As npro from csDestinos into cursor crsProximo readwrite",
+      "tabelas": "csDestinos",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPEC.Pagina.Dados.cmdgCompo.Click",
+      "queryOriginal": "Insert Into csDestinos (FkChaves, Marcas, Grupos, Codigos, Opers, Ordems) ; \t\t\t\tValues (Space(20), 0, Space(10), Space(15), \"+\", lnProx)",
+      "tabelas": "csDestinos",
+      "colunas": "FkChaves,Marcas,Grupos,Codigos,Opers,Ordems",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPEC.Pagina.Dados.CmdExpandir.Click",
+      "queryOriginal": "lcQuery = \t[Select distinct GCR.codigos,GCR.descrs,CLI.iclis,CLI.rclis ] + ; \t[From SigCdGcr GCR ] + ; \t[inner join SigCdCli CLI on GCR.codigos = CLI.Grupos ] + ; \t[where CLI.grupos = '] + lcCodGrupo + [' ] + ; \t[UNION ] + ; \t[Select distinct CCR.grupos as codigos,GCR.descrs,CCR.contas as iclis, CLI.rclis ] + ; \t[From SigMvCCR CCR ] + ; \t[inner join SigCdCli CLI on CCR.contas = CLI.iclis ] + ; \t[left outer... [TRUNCADO]",
+      "tabelas": "SigCdCli",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigCdPeI", "SigCdCli", "SigCdPei", "SigCdGcr", "SigCdPec", "csDestinos"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,5 @@
+﻿Ambas as corre├º├Áes aplicadas em `SigPrDscBO.prg`:
+
+- **Linha 112**: `BETWEEN '" + loc_cPrI + "' AND '" + loc_cPrF + "'"` ÔåÆ `BETWEEN " + EscaparSQL(loc_cPrI) + " AND " + EscaparSQL(loc_cPrF)`
+- **Linha 182**: `"WHERE a.CPros = '" + loc_cPro + "'"` ÔåÆ `"WHERE a.CPros = " + EscaparSQL(loc_cPro)`
+- **[SQL-FILTRO-INVENTADO]**: Falso positivo ÔÇö `ControlCount` nas linhas 469/481 ├® propriedade VFP9 de `TornarControlesVisiveis`, n├úo coluna SQL. Nenhuma remo├º├úo necess├íria.

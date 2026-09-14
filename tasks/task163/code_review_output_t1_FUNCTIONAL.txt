@@ -1,0 +1,10 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL]** ÔÇö `cnt_4c_Cabecalho`
+- `ConfigurarCabecalho()`: adicionado `loc_oCab.Visible = .T.` expl├¡cito ao final do m├®todo
+- `TornarControlesVisiveis()`: recurs├úo movida para **antes** do filtro INLIST (evita que filhos do container fiquem `Visible=.F.`), depois INLIST+LOOP impede que TCV sobrescreva a visibilidade do `cnt_4c_Cabecalho`
+
+**[METODO-INEXISTENTE]** ÔÇö `ObterIconeSelecionadoNoGrid` ÔÇö falso positivo: m├®todo existe na linha 507, nenhuma altera├º├úo necess├íria
+
+**[GRID-WITH] ├ù2** ÔÇö `CarregarDados()` e `CarregarLista()`
+- `.RecordSource = "crSigSyIco1"` movido para fora do WITH (refer├¬ncia expl├¡cita via `loc_oPagina.grd_4c_Dados.RecordSource`), eliminando o risco de `'Unknown member COLUMN1'` ao acessar `.Column1` no mesmo bloco WITH

@@ -1,0 +1,147 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "From SigCdOpe Where"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREHEV",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Report Form SigReHev Preview NoConsole\nThisForm.get_Op.Setfocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Op",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHEV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHEV",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHEV",
+      "evento": "Procedure",
+      "linhas": 119,
+      "codigoOriginal": "Private lnOp, llAcesso\nLocal lcCbEmpresa, lcCbTitulo\n\nlcCbEmpresa = _SCreen.Caption\nlcCbTitulo  = 'Análise do Envelope nº ' + Alltrim(Str(ThisForm.Get_Op.Value))\n\nCreate Cursor csCabecalho (cb_empresa c(80), cb_titulo c(80))\nInsert Into csCabecalho (cb_empresa, cb_titulo) Values (lcCbEmpresa, lcCbTitulo)\n\nlcQuery = [Select Distinct DigEnves From SigCdOpe Where (Servicos = 1 Or Servicos = 2) Or ]+;\n\t\t\t[(Globalizas = 1 Or Globalizas = 2)]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpOpe') < 1... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChecaAcesso,From SigCdOpe Where",
+        "metodosFormChamados": "SqlExecute,Envelope > 0 And fChecaAcesso",
+        "controlesReferenciados": "Get_Op",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHEV",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "Lparameters pEnvelope\n\nThisForm.Envelope = 0\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tENDIF\n\n\tIF TYPE('pEnvelope') = [N]\n\t\tThisForm.Envelope = pEnvelope\n\t\tThisForm.Get_Op.Value = pEnvelope\n\t\tThisForm.Processamento()\n\t\tThisForm.Release\n\t\tRETURN .f.\n\tEndif\nEndWith\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processamento",
+        "controlesReferenciados": "Get_Op",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREHEV",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Report Form SigReHev To Printer Prompt NoConsole\nThisForm.get_Op.Setfocus\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Op",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHEV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReHev To Printer NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREHEV.Procedure",
+      "queryOriginal": "Insert Into csCabecalho (cb_empresa, cb_titulo) Values (lcCbEmpresa, lcCbTitulo)",
+      "tabelas": "csCabecalho",
+      "colunas": "cb_empresa,cb_titulo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREHEV.Procedure",
+      "queryOriginal": "lcQuery = [Select Distinct DigEnves From SigCdOpe Where (Servicos = 1 Or Servicos = 2) Or ]+; \t\t\t[(Globalizas = 1 Or Globalizas = 2)]",
+      "tabelas": "SigCdOpe",
+      "colunas": "Servicos,Globalizas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csCabecalho", "SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

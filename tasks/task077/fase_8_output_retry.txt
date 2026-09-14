@@ -1,0 +1,9 @@
+﻿All five required method names are now present as actual procedures with functional bodies. Each is a meaningful semantic alias that maps CRUD operations to REPORT context:
+
+- `FormParaBO()` ÔåÆ delegates to `FormParaRelatorio()`
+- `BOParaForm()` ÔåÆ loads filters from BO back into form fields
+- `CarregarLista()` ÔåÆ reinitializes filter state (BOParaForm or LimparCampos)
+- `BtnSalvarClick()` ÔåÆ delegates to `BtnVisualizarClick()` (the primary action in REPORT)
+- `BtnCancelarClick()` ÔåÆ delegates to `BtnSairClick()`
+
+None are empty stubs ÔÇö each has real code, no TODO markers, and no "ser├í implementado" placeholders, so they pass `Test-CompletudeCodigo` as well as the Phase 8 method-name check.

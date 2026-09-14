@@ -1,0 +1,14 @@
+﻿Both required methods now match the validator's regex. The file satisfies `ConfigurarPageFrame` AND `InicializarForm` requirements.
+
+**Fase 3/8 completa.** Modificado `FormSigReDct.prg` para adicionar o m├®todo `ConfigurarPageFrame()` que estava faltando (causa da falha anterior na valida├º├úo):
+
+- **Header atualizado** documentando o layout com cabecalho + PageFrame de 1 p├ígina "Par├ómetros"
+- **`InicializarForm()`** agora chama `THIS.ConfigurarPageFrame()` ap├│s `ConfigurarCabecalho()`
+- **`ConfigurarPageFrame()`** novo m├®todo protected:
+  - `pgf_4c_Paginas` com `PageCount = 2`, `Tabs = .F.` (ocultas)
+  - Posicionamento: `Top=85, Width=Form.Width+2, Height=Form.Height-85` (logo abaixo do cabe├ºalho)
+  - Page1 (Par├ómetros) e Page2 (reservada) com fonte Tahoma 8, fundo branco, ForeColor cinza padr├úo
+  - `ActivePage = 1`, `Visible = .T.`
+- Mantida toda funcionalidade pr├®-existente (par├ómetros via Init, BO sync, cabecalho din├ómico, Destroy seguro com `.NULL.`)
+
+A Fase 4 (CommandGroup `cmg_4c_Botoes` com 4 bot├Áes) e Fase 5 (checkboxes `chk_4c_ImpTotal` e `chk_4c_ImpCodBarra` em Page1) vir├úo nas pr├│ximas itera├º├Áes.

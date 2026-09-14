@@ -1,0 +1,21 @@
+﻿The file is complete and correct. Here's a summary of what was implemented in Phase 6:
+
+**Checkboxes adicionados em `ConfigurarPaginaDados()`** (20 controles):
+- **Coluna 1** (left=21): chkGer50, chkGer51, chkGer53, chkGer54, chkGer60, chkGer60I
+- **Coluna 2** (left=354): chkGer60D, chkGer60R, chkGer60P, chkGer61, chkGer70, chkGer74
+- **Coluna 3** (left=688): chkGer75, fwcheckbox5 (NCM), fwcheckbox1 (Tipo77), fwcheckbox3 (PB), fwcheckbox8 (MS), fwcheckbox2 (Sefaz), fwcheckbox7 (Codidents)
+- **Sem uso**: fwcheckbox4 (Visible=.F.)
+
+**BINDEVENTs** para os checkboxes dependentes:
+- `chk_4c_ChkGer50` ÔåÆ `ChkGer50InteractiveChange` (controla Ger54)
+- `chk_4c_ChkGer60` ÔåÆ `ChkGer60InteractiveChange` (controla Ger60I/D/R/P)
+
+**M├®todos novos implementados**:
+- `ChkGer50InteractiveChange()` ÔÇö habilita/desabilita chkGer54
+- `ChkGer60InteractiveChange()` ÔÇö habilita/desabilita chkGer60I/D/R/P
+- `BtnSalvarClick()` ÔÇö valida├º├úo + FormParaBO + Salvar()
+- `BtnCancelarClick()` ÔÇö volta para lista + CarregarLista()
+- `FormParaBO()` ÔÇö transfere todos os 26 campos do form para o BO (incluindo mapeamento IPI T/I/O)
+- `BOParaForm()` ÔÇö transfere todos os campos do BO para o form
+- `HabilitarCampos()` ÔÇö respeita regras do original: Estado/UFIBGES s├│ em INCLUIR, fwcheckbox3 s├│ para PB, fwcheckbox8 s├│ para MS
+- `LimparCampos()` ÔÇö limpa todos os 26 campos

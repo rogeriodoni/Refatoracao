@@ -1,0 +1,17 @@
+﻿Fix applied. Here's the full status of all 55 issues from the review:
+
+**pagBO.prg**
+- `[NULL-CURSOR]` `CREATE CURSOR cursor_4c_Dados` (error path, lines 199-210) ÔÇö `SET NULL ON/OFF` already present Ô£ô
+- `[NULL-CURSOR]` `CREATE CURSOR cursor_4c_Dados` (CATCH block, lines 215-225) ÔÇö `SET NULL ON/OFF` already present Ô£ô
+
+**Formpag.prg**
+- `[CONTAINER-VISIVEL]` `TornarControlesVisiveis` missing `"cnt_4c_botoes"` in INLIST ÔÇö **fixed now** (line 2775) Ô£ô
+- `[OPTIONGROUP-LEFT]` `obj_4c_Opt_ContaMov` Left=479 + all 4 Button blocks ÔÇö already present Ô£ô
+- `[OPTIONGROUP-LEFT]` All 33 S/N OptionGroups in `CriarPaginaGeral` with `WITH .Buttons(N)` blocks ÔÇö already present Ô£ô
+- `[OPTIONGROUP-LEFT]` `obj_4c_Optiongroup3/4/12` positions ÔÇö already at original SCX values Ô£ô
+- `[OPTIONGROUP-LEFT]` `obj_4c_Optiongroup2_p2` (Left=479, Top=386) + Button blocks ÔÇö already present Ô£ô
+- `[OPTIONGROUP-LEFT]` `obj_4c_Optiongroup1_p2` (Left=670, Top=237) + Button blocks ÔÇö already present Ô£ô
+- `[LAYOUT-POSITION]` Button Top values in `cnt_4c_BotoesEspeciais` ÔÇö false positives (Top=5 within container at Top=79 = absolute 84 = correct) Ô£ô
+- `[BUSCA-CURSOR]` `BtnBuscarClick` pattern ÔÇö `this_cCursorDestino` already set before `Mostrar()` Ô£ô
+
+The only actual change needed in the entire code review was the single-word addition of `"cnt_4c_botoes",` in `TornarControlesVisiveis`. Everything else had already been corrected in prior sessions.

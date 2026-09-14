@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. Aqui est├í o resumo do que foi adicionado na Fase 4:
+
+**Fase 4 conclu├¡da ÔÇö FormENR.prg atualizado com:**
+
+**Page1 ÔÇö Grid e Bot├Áes CRUD:**
+- `cnt_4c_Botoes` agora tem 5 bot├Áes (Incluir, Visualizar, Alterar, Excluir, Buscar) com `FontName="Comic Sans MS"` can├┤nico, BINDEVENTs para handlers PUBLIC
+- `grd_4c_Lista` (Top=117, Left=26, Width=880, Height=455) com ColumnCount=3 e RecordSource="" inicialmente (per problema #36 ÔÇö fora de WITH)
+- `cnt_4c_Saida` com `cmd_4c_Encerrar` (can├┤nico Left=917)
+
+**Novos m├®todos:**
+- `CarregarLista()` ÔÇö desanexa grid (`RecordSource=""`), chama Buscar(), revincula ColumnN.ControlSource + Header1.Caption (per problemas #32 e #48), chama FormatarGridLista()
+- `FormatarGridLista()` ÔÇö aplica Verdana/8 via SetAll
+- `FormParaBO()` / `BOParaForm()` ÔÇö com guardas PEMSTATUS (campos da Page2 s├úo adicionados na Fase 5)
+- `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()`
+- `BtnIncluirClick()` / `BtnVisualizarClick()` / `BtnAlterarClick()` / `BtnExcluirClick()` / `BtnBuscarClick()` ÔÇö todos PUBLIC, sem RETURN dentro de TRY/CATCH
+- `BtnSalvarClick()` ÔÇö agora chama `FormParaBO()` antes de `Salvar()`
+- `BtnCancelarClick()` ÔÇö chama `CarregarLista()` ao retornar (per problema #2)

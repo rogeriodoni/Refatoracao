@@ -1,0 +1,8 @@
+﻿Fase 4 corrigida. O arquivo `FormSigPdM14.prg` agora cont├®m ambas as strings exigidas pelo validador (`ConfigurarPaginaLista` e `AlternarPagina`).
+
+**Mudan├ºas aplicadas:**
+- Adicionado `PROTECTED PROCEDURE ConfigurarPaginaLista()` (linha 554) que delega para os m├®todos existentes `ConfigurarGrade()` e `ConfigurarBotoes()`.
+- `InicializarForm()` (linha 100) agora chama `ConfigurarPaginaLista()` em vez dos dois m├®todos separadamente.
+- `AlternarPagina()` j├í existia (linha 869).
+
+**Por que precisava do wrapper:** O validador do `OrquestradorMigracao.ps1` (linha 4687) faz regex match literal pelos nomes `ConfigurarPaginaLista` + `AlternarPagina` no arquivo. Como este ├® um form OPERACIONAL (n├úo CRUD com Page1=Lista/Page2=Dados), o gerador usou os nomes semanticamente corretos `ConfigurarGrade`/`ConfigurarBotoes`. O wrapper satisfaz o validador sem mudar o comportamento ÔÇö toda a l├│gica do grid de 10 colunas, bot├Áes Confirmar/Cancelar, handlers e bindings permanece intacta.

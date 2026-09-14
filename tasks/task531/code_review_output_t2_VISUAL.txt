@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investiguei os dois achados (duplicados) de `GRID-HEADER` sobre o caption `Opera├º├úo` na coluna 1 do grid de `FormTbO.prg`, comparando com o fonte legado real (`SigCdTbO_form_codigo_fonte.txt`, extra├¡do de `SIGCDTBV.SCX`).
+
+**Conclus├úo: falso positivo ÔÇö nenhuma altera├º├úo feita.**
+
+Evid├¬ncia do legado (`SIGCDTBV.GradeSubN`):
+```
+ColumnCount = 2
+Column1.Header1.Caption = "Tab.Desconto"
+Column2.Header1.Caption = "Descri├º├úo"
+```
+De fato n├úo existe nenhum header "Opera├º├úo" no legado ÔÇö mas isso n├úo ├® porque o Claude abreviou/inventou um texto errado, e sim porque **o legado nunca precisou dessa coluna**: `SIGCDTBV` ├® um popup modal filho, sempre aberto para uma ├║nica opera├º├úo (`Init(poForm, pnDataSes, pcEscolha)` usa `crSigCdOpe.Dopes` fixo, `lcSql = "...Where a.Dopes = '"+CrSigCdOpe.Dopes+"'..."`). N├úo havia ambiguidade de "a qual opera├º├úo pertence esta linha" porque s├│ uma opera├º├úo era exibida por vez.
+
+O `FormTbO.prg` migrado, seguindo o PILAR 3 (arquitetura obrigatoriamente diferente ÔÇö CRUD padr├úo FormBase/BusinessBase com p├ígina "Lista"), passou a oferecer uma listagem agregada de **todos** os v├¡nculos (`this_cFiltroDopesAtual = ""` por padr├úo, `TbOBO.Buscar()` sem filtro retorna todas as opera├º├Áes). Nesse cen├írio a coluna "Opera├º├úo" ├® necess├íria para o usu├írio n├úo confundir v├¡nculos de opera├º├Áes diferentes ÔÇö o pr├│prio c├│digo j├í documenta isso (linhas 379-383 e 423-424) e reaproveita o termo exato j├í usado no label `lbl_4c_Operacao` ("Opera├º├úo : ", linha 609), n├úo ├® uma abrevia├º├úo nem inven├º├úo arbitr├íria de texto.
+
+Corrigir esse achado exigiria uma de duas coisas fora do escopo deste pass VISUAL:
+1. Remover a coluna/funcionalidade "Opera├º├úo" ÔÇö mas isso ├® mudan├ºa de l├│gica/funcionalidade (regra do pass pro├¡be: "N├âO alterar l├│gica de neg├│cio", "N├âO remover funcionalidades"), ou
+2. Reverter a arquitetura de listagem agregada para o modelo modal de opera├º├úo ├║nica do legado ÔÇö o que contraria diretamente o PILAR 3 (CLAUDE.md).
+
+Como n├úo h├í um caption legado real para "copiar", e a ├║nica corre├º├úo poss├¡vel violaria as regras do pr├│prio pass, optei por n├úo alterar `FormTbO.prg` nem `TbOBO.prg`. Nenhum outro problema de alinhamento/checkbox/fontname foi reportado nesta rodada, ent├úo nenhum outro arquivo foi tocado.

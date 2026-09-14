@@ -1,0 +1,124 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["Fortyus.Exe", "fConfigGeral", "fRecalculaC"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRRCU",
+      "evento": "Activate",
+      "linhas": 4,
+      "codigoOriginal": "If ThisForm.Parametrizado\n\tThisForm.OK.Click()\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRCU",
+      "evento": "Init",
+      "linhas": 35,
+      "codigoOriginal": "LParameters pParam\n\nThisForm.Parametrizado = (Type('pParam')='C')\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', 'reccpro',.t.)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\tIf Not ThisForm.Parametrizado\n\t\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tEndif\n\t\tReturn .f.\n\tEndIf\nEndWith\n\nIf ThisForm.Parametrizado &&... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Fortyus.Exe",
+        "metodosFormChamados": "Parametrizado =",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRRCU",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRCU",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRCU.SAIR",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRRCU.OK",
+      "evento": "Click",
+      "linhas": 121,
+      "codigoOriginal": "Local llOk, lnErro1\n\nThis.Enabled = .f.\n\nSet Cursor Off\n\nlnMov = 1\nllErrCnx = .f.\n\nKeyboard '{LEFTARROW}'\n\nDo While .t.\n\tThisForm.Sair.Enabled = .f.\n\n\tThisForm.Label1.Caption = 'Aguardando Produtos Para Processar' + Replicate('.', lnMov)\n\tlnMov = Iif(lnMov < 5, lnMov + 1, 1)\n\n\tlcSql = [Select 0 as Flag,* From SigOpClC Order by EmpCpros ]\n\tllOk  = ( ThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigOpClC') > 0 )\n\n\tIf Not llOk\n\t\tllErrCnx = .t.\n\tElse\n\n\t\tSelect CrSigOpClC\n\n\t\tScan\n\n\t\t\tlcCidChave = CrSigOpClC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fRecalculaC",
+        "metodosFormChamados": "Sqlexecute,Rollback,Commit,MouseSobreBotaoSair,Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRRCU.OK.Click",
+      "queryOriginal": "\tlcSql = [Select 0 as Flag,* From SigOpClC Order by EmpCpros ]",
+      "tabelas": "SigOpClC",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpClC"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

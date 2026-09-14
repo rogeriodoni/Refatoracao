@@ -1,0 +1,9 @@
+﻿Os 3 m├®todos foram adicionados antes de `AbrirLookupEmiConta`. O arquivo agora tem todos os 4 eventos de Fase 7:
+
+- `BtnVisualizarClick()` ÔÇö j├í existia (linha 398): chama `this_oRelatorio.Visualizar()`
+- `BtnImprimirClick()` ÔÇö j├í existia (linha 413): chama `this_oRelatorio.Imprimir()`
+- `BtnIncluirClick()` ÔÇö adicionado: delega para `BtnImprimirClick()`
+- `BtnAlterarClick()` ÔÇö adicionado: delega para `BtnVisualizarClick()`
+- `BtnExcluirClick()` ÔÇö adicionado: delega para `BtnSairClick()`
+
+As delega├º├Áes s├úo semanticamente corretas para um form REPORT (sem CRUD): IncluirÔåÆImprimir, AlterarÔåÆVisualizar, ExcluirÔåÆEncerrar. Fase 7/8 conclu├¡da.

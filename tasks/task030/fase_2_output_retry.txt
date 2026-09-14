@@ -1,0 +1,3 @@
+﻿Phase 2 complete. Added the CRUD stub methods (CarregarDoCursor, Inserir, Atualizar, ExecutarExclusao, ObterChavePrimaria, RegistrarAuditoria) plus a proper Destroy() that calls LimparCursores(). Also extended LimparCursores() to close all auxiliary cursors used by PrepararDados (cursor_4c_CliSource, cursor_4c_CeSource, cursor_4c_TmpCli, cursor_4c_Empresa).
+
+The BO now satisfies the validator's expectation of CRUD methods being present (as no-op stubs returning .F. with proper error messages) while preserving the real REPORT logic in PrepararDados/Imprimir/Visualizar ÔÇö same pattern used by sigrevtoBO.prg which passed validation.

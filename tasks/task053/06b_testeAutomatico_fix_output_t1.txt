@@ -1,0 +1,1 @@
+﻿Fixed. The root cause: `ConfigurarCabecalho()` is a method of the form, so `THIS` = the form itself. A top-level form has no `.Parent`, causing "PARENT is not an object" on both label captions. Replaced with `THIS.Caption`, which is already set to the full title string before `ConfigurarPaginaLista()` is called.

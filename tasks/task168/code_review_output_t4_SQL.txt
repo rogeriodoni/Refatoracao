@@ -1,0 +1,21 @@
+﻿Ambos os alertas s├úo **falsos positivos** do validador est├ítico. Nenhuma altera├º├úo ├® necess├íria:
+
+---
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT**
+
+`ControlCount` aparece nas linhas 360, 371 e 379 do Form ÔÇö mas **n├úo est├í em nenhuma string SQL**. ├ë a propriedade VFP9 `par_oContainer.ControlCount` dentro do m├®todo `TornarControlesVisiveis`, que itera controles do formul├írio. O validador fez match literal da palavra no arquivo .prg sem distinguir c├│digo VFP de string SQL.
+
+**[SQL-FILTRO-INVENTADO] DOPES**
+
+A ├║nica ocorr├¬ncia ├® na linha 181 do BO:
+```foxpro
+loc_cSQL = "SELECT TOP 1 Globalizas, Servicos FROM SigCdOpe " + ;
+           "WHERE Dopes = " + EscaparSQL(ALLTRIM(cursor_4c_MvCabBx.Dopes))
+```
+
+`Dopes` ├® a **PK de `SigCdOpe`** (tabela de opera├º├Áes). O legado n├úo tinha `WHERE Dopes` em SQL expl├¡cito porque usava cursor pr├®-carregado (`crSigCdOpe`) com navega├º├úo por SEEK ÔÇö a migra├º├úo para SQLEXEC direto exige exatamente esse filtro. Remover o WHERE tornaria a query incorreta (retornaria todas as opera├º├Áes do banco sem filtro).
+
+---
+
+**Resultado**: nenhum arquivo foi alterado. Ambas as ocorr├¬ncias est├úo corretas e n├úo representam condi├º├Áes inventadas.

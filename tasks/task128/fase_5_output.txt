@@ -1,0 +1,23 @@
+﻿O arquivo est├í correto. A Fase 5 foi implementada com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö cria os 13 controles da primeira metade dos filtros em Page1 (posi├º├Áes ajustadas: top original ÔêÆ 82 para compensar PageFrame):
+   - `lbl_4c_Label1` ("Sele├º├úo:")
+   - `txt_4c_Codigo` + `txt_4c_Desc` com BINDEVENTs KeyPress/DblClick
+   - `lbl_4c_Lbl_dopes` + `txt_4c__nm_operacao` com BINDEVENTs KeyPress/LostFocus
+   - `lbl_4c_Lbl_periodo` + `txt_4c__dt_inicial` + `lbl_4c_Lbl_periodo_a` + `txt_4c__dt_final` com BINDEVENT KeyPress
+   - `lbl_4c_Label8` + `obj_4c_Spn_qtdetiq`
+   - `lbl_4c_Label5` + `obj_4c_Opt_conta` com BINDEVENT InteractiveChange
+
+2. **`AtualizarEstadoControles()`** ÔÇö replica os eventos `When` do original (habilita/desabilita controles conforme get_codigo e get_nm_operacao)
+
+3. **Handlers de teclado**: `TxtCodigoKeyPress`, `TxtDescKeyPress`, `TxtNmOperacaoKeyPress`, `TxtNmOperacaoLostFocus`, `TxtDtFinalKeyPress`, `OptContaInteractiveChange`
+
+4. **Lookups**: `ValidarCodigo`, `ValidarDesc`, `AbrirBuscaCodigo`, `AbrirBuscaDesc` usando FormBuscaAuxiliar em SigMlItn
+
+5. **`ValidarNmOperacao()`** ÔÇö replica `fAcessoMovmto` verificando exist├¬ncia em SigMvCab
+
+6. **`ValidarDtFinal()`** ÔÇö consulta cr├¡tica: SigMvCab JOIN SigCdCli com todos os campos necess├írios para impress├úo, resultado em cursor READWRITE para permitir marca├º├úo via CheckBox no grid
+
+7. **`LimparCampos()`** atualizado ÔÇö reseta os controles de formul├írio e chama `AtualizarEstadoControles()`

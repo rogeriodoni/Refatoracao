@@ -1,0 +1,12 @@
+﻿A estrutura est├í correta. Ambos os blocos (SigMvItn linhas 215-249, SigMvIts linhas 250-310) agora executam sequencialmente, como no legado original.
+
+Resumo das 4 corre├º├Áes aplicadas em `SIGPRCPRBO.prg`:
+
+| Problema | A├º├úo |
+|---|---|
+| **CGRUS** (`WHERE CGrus = ...` em SigCdGrp) | Removido bloco inteiro de lookup TipoEstos (inven├º├úo da LLM). `loc_nTipoEstos` tamb├®m removido do LOCAL. |
+| **ICLIS** (`WHERE IClis = ...` em SigCdCli) | Removido bloco inteiro de override grupo/conta pelo cliente (inven├º├úo da LLM). |
+| **DOPES** (`WHERE Emps + Dopes = ...`) | Reescrito como `WHERE LEFT(EmpDopNums, N) = value` usando `EmpDopNums` (coluna da lista original). |
+| **CONTROLCOUNT** | FALSE POSITIVE do validator ÔÇö ├® propriedade VFP9 `par_oContainer.ControlCount` em loop de `TornarControlesVisiveis`, n├úo coluna SQL. Nenhuma mudan├ºa necess├íria. |
+
+Como efeito colateral correto: o `IF loc_nTipoEstos = 1 / ELSE / ENDIF` foi removido e ambos os paths (SigMvItn E SigMvIts) agora sempre executam, alinhando com o comportamento do legado original que fazia os dois updates sequencialmente.

@@ -1,0 +1,19 @@
+﻿Fase 8 conclu├¡da com sucesso. Resumo do que foi implementado:
+
+**FormSigPrAop.prg** ÔÇö 9 m├®todos adicionados antes do `Destroy`:
+- `CarregarLista()` ÔÇö reseta estado (form operacional n├úo tem lista inicial)
+- `FormParaBO()` ÔÇö popula `this_nNops` e `this_cCodPds` do BO a partir da tela
+- `BOParaForm()` ÔÇö popula `txt_4c_Produto` a partir do BO
+- `HabilitarCampos()` ÔÇö `txt_4c_OP` sempre habilitado; `Buttons(1)` habilitado s├│ com OP carregada
+- `LimparCampos()` ÔÇö zera campos, ZAP cursor_4c_DivOp, reseta propriedades do BO
+- `AjustarBotoesPorModo()` ÔÇö habilita/desabilita Confirmar conforme `this_nNops > 0`
+- `BtnBuscarClick()` ÔÇö carrega a OP digitada (valida├º├úo + CarregarOP)
+- `BtnSalvarClick()` ÔÇö alias de `BtnConfirmarClick`
+- `BtnCancelarClick()` ÔÇö alias de `LimparCampos`
+
+**menu.prg** ÔÇö 3 altera├º├Áes:
+- BAR 19 (separador) e BAR 20 ("Altera├º├úo de Quantidade da O.P.") em `popMovimentos`
+- `ON SELECTION BAR 20` ativando `AbrirFormSigPrAop`
+- Procedure `AbrirFormSigPrAop()` no padr├úo can├┤nico (`VARTYPE = "O"` + `Show()` sem par├ómetro + `MostrarErro` no CATCH)
+
+**config.prg** ÔÇö nenhuma altera├º├úo necess├íria (ADIR carrega automaticamente todos `Form*.prg` da pasta `operacionais\`).

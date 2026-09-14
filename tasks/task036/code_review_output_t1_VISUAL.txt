@@ -1,0 +1,6 @@
+﻿Dois problemas corrigidos em `SIGREAUPBO.prg`:
+
+1. **`cursor_4c_Cabecalho`** (linha 129): `SET NULL ON` inserido antes do `CREATE CURSOR`, `SET NULL OFF` ap├│s o `INSERT INTO`.
+2. **`cursor_4c_TmpInc`** (linha 196, branch ELSE): `SET NULL ON` antes do `CREATE CURSOR`, `SET NULL OFF` ap├│s o fechamento do cursor vazio.
+
+O `SELECT ... INTO CURSOR cursor_4c_TmpInc` do branch `IF loc_nWQtd > 0` n├úo precisou corre├º├úo ÔÇö `SELECT...INTO CURSOR` herda o ambiente NULL automaticamente sem `CREATE CURSOR` expl├¡cito.

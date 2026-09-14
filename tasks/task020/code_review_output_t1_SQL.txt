@@ -1,0 +1,5 @@
+﻿**Corre├º├úo aplicada** em `SIGMDETQBO.prg` linhas 480-503:
+
+**Problema raiz**: O original VFP usava um cursor local `CqSigMvHst` (preenchido pelos 2 INSERTs) e depois fazia `Select * From CqSigMvHst Into Cursor LocalHis`. A LLM substituiu isso por uma query contra o banco com `WHERE Dopes = X AND Numes = Y` ÔÇö filtros que nunca aparecem no c├│digo original.
+
+**Solu├º├úo**: Substituir a query inventada por `CREATE CURSOR` local montado diretamente das vari├íveis j├í dispon├¡veis (`loc_cCorOld`/`loc_cCorNew` para Sa├¡da/Entrada), fiel ao comportamento original. Os 2 registros exatos s├úo inseridos no cursor e o SCAN com `SqlCalcP2`/`fRecalculaC` permanece inalterado.

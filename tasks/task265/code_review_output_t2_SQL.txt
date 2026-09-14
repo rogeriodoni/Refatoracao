@@ -1,0 +1,36 @@
+﻿Ap├│s verificar o schema e o BO, tenho a an├ílise completa dos 3 flags.
+
+**Resultado da verifica├º├úo** ÔÇö todos os 3 s├úo **falsos positivos** do validador automatizado:
+
+---
+
+**[SQL-FILTRO-INVENTADO] CODIGOS** (linha 2284)
+```foxpro
+loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE RTRIM(codigos) = " + ...
+```
+- Schema confirma: `SigCdGcr` tem coluna `[codigos] [char](10) NOT NULL` Ô£ô
+- ├ë um lookup leg├¡timo de c├│digo de grupo. O validador comparou erroneamente com a lista de colunas WHERE de `SigCqChi`.
+
+---
+
+**[SQL-FILTRO-INVENTADO] EMITIDOS** (linha 2075)
+```foxpro
+loc_cSQL = "SELECT bancos, valors, ncheques, datas, emitidos, cancelas, favos FROM SigCqChi WHERE bancos = ..."
+```
+- Schema confirma: `SIGCQCHI` tem `[emitidos] [bit]` e `[cancelas] [bit]` Ô£ô
+- `emitidos` est├í no **SELECT**, n├úo no WHERE. O validador confundiu coluna de sele├º├úo com condi├º├úo de filtro.
+- O BO usa `LOCATE FOR emitidos = 1` em `cursor_4c_MatrizTemp` ÔÇö os nomes batem perfeitamente.
+
+---
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT** (linhas 1666, 1684, 1694, 1702)
+```foxpro
+FOR loc_i = 1 TO THIS.ControlCount
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+- `ControlCount` ├® uma **propriedade nativa VFP9** de containers e forms ÔÇö n├úo ├® SQL.
+- O validador regex varreu o arquivo inteiro e capturou acessos a propriedades de objetos como se fossem colunas SQL.
+
+---
+
+**Conclus├úo**: Nenhuma corre├º├úo necess├íria em `FormSigPrChr.prg` para este pass. Os 3 flags s├úo ru├¡do do validador ÔÇö corrigir o c├│digo "inventado" quebraria funcionalidade v├ílida. O arquivo est├í correto para os problemas listados.

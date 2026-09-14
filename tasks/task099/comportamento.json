@@ -1,0 +1,445 @@
+{
+  "resumo": {
+    "totalMetodos": 23,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 10,
+    "totalQueries": 8,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fBuscarCambio", "fGerMascara", "For", "fConfigGeral", "fAcessoEmpresa", "fwBuscaExt", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Parameters lcDetalhe, lcSemLinha, pUsuarios, pQtde, ldDtCab\n\nlnTipoOpc = ThisForm.Opc_Tipo.Value\n\n=This.Linha('',2,pUsuarios,ldDtCab)\n=This.Linha( 1,2,pUsuarios,ldDtCab)\nIf pQtde\n\t=This.Linha(PadC(' ' + AllTrim(lcDetalhe ) + ' ',48,'*'),2,pUsuarios,ldDtCab)\nElse\n\t=This.Linha(PadC(' ' + AllTrim(lcDetalhe ) + ' ',40,'*'),2,pUsuarios,ldDtCab)\nEndIf\nIf !lcSemLinha\n\t=This.Linha('',2,pUsuarios,ldDtCab)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "LParameters _Linha, _Tipo, _Usuario, _Datas\n\nlcArq = Iif(ThisForm.Segunda, [dbTmpRel2], [dbTmpRel])\n\nIf !Type('_Usuario') = 'C'\n\t_Usuario = ''\nEndIf\n\nDo Case\n\tCase Type('_Linha') = 'U' Or Type('_Linha') = 'L'\n\t\tInsert Into &lcArq. (detalhe,tipo,usuars,datas) Values (Space(40),_Tipo,_Usuario,_Datas)\n\tCase Type('_Linha') = 'C'\n\t\tIf Empty(_Linha)\n\t\t\tInsert Into &lcArq. (detalhe,tipo,usuars,datas) Values (Space(40),_Tipo,_Usuario,_Datas)\n\t\tElse\n\t\t\tInsert Into &lcArq. (detalhe,tipo,usuars,datas) Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Procedure",
+      "linhas": 1828,
+      "codigoOriginal": "LParameters ldDtInicial,ldDtFinal\n\nLocal lnOptQuebra,lcQuebraUsuario, lnOptTipo, lnTotCard\nLocal ldDtImp, llTipoSel, lnImpNomCli, lcChkE,lcChkEb\n\nPrivate lcDtInicial,lcDtFinal,lcDtSldAnt\n\nlcArq = Iif(ThisForm.Segunda, [dbTmpRel2], [dbTmpRel])\n\nSet Talk Windows\nSet Talk On\nThisForm.MousePointer = 11\n\nlcCdMoeda   = ThisForm.get_cd_moeda.Value\nlcDsMoeda   = ThisForm.get_ds_moeda.Value\nlcUsuario   = ThisForm.get_usuario.Value\nlcOperador  = ThisForm.getOperador.Value\nlcEmpresa   = ThisForm.get_cd_emp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fBuscarCambio",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "OptQuebra,OptTipo,ChkE,ChkEb,get_cd_moeda,get_ds_moeda,get_usuario,get_cd_empresa,Opt_Nr_Opcao,OptCol,OptMov\t,OptImpNomCli,ChkE\t,ChkEa\t,ChkEb\t",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Procedure",
+      "linhas": 160,
+      "codigoOriginal": "LParameters ldRelIni\n\nlcArq = Iif(ThisForm.Segunda, [dbTmpRel2], [dbTmpRel])\n\nLocal TotValCal, lcUserDopes, lnImpNomCli\n\nlnImpNomCli = ThisForm.OptImpNomCli.Value\n\nTotValCal   = 0\nlcUserDopes = ''\n\n*-[ Impressão de Cabeçalho ]-*\nSelect dbRelIni\nSet Order To UsDop\nGo Top\nDo While !Eof()\n\tIf lcUserDopes <> dbRelIni.usuars + dbRelIni.dopes\n\t\tTotValCal = 0\n\t\tlcUserDopes = dbRelIni.usuars + dbRelIni.dopes\n\t\t\n\t\t=Seek(dbRelIni.dopes,'CrSigCdOpe','dopes')\n\t\n\t\t*-[ Cabecalho ]-*\n\t\tlcCabecalho = ''\n\t\tlcCab... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerMascara",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptImpNomCli",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Procedure",
+      "linhas": 47,
+      "codigoOriginal": "LParameters ldRelIni\n\nlcArq = Iif(ThisForm.Segunda, [dbTmpRel2], [dbTmpRel])\n\nLocal TotValCal, lcUserDopes\n\nTotValCal   = 0\nlcUserDopes = ''\n\n*-[ Impressão de Cabeçalho ]-*\n\nSelect dbRelIni\nSet Order To Vendedor\nGo Top\nDo While !Eof()\n\tIf lcUserDopes <> dbRelIni.usuars + dbRelIni.Vends\n\t\tTotValCal = 0\n\t\tlcUserDopes = dbRelIni.usuars + dbRelIni.Vends\n\t\t\n\t\t*-[ Cabecalho ]-*\n\t\t=ThisForm.Cabecalho('DETALHADO POR VENDEDOR:'+Alltrim(DbRelIni.Vends),.f.,TmpUsuarios.usuarios,.f.,Ctod(''))\n\n\t\tlcCabecalho... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerMascara",
+        "metodosFormChamados": "Cabecalho",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Procedure",
+      "linhas": 106,
+      "codigoOriginal": "Local lnImpress, lcLastUsuar, llEncontrou\nlnImpress = 0\nllEncontrou = .F.\n\nIf ThisForm.OptCol.Value = 1\n\n\tOk = .F.\n\tlnEtqImpres = 0\n\tIf (APrinters(gaPrinters) = 0)\n\t\t=MessageBox('O Painel de Controle Não Possui Impressoras Configuradas!!!', 0+48, '')\n\t\tReturn .f.\n\tEndif\n\n\t* Apanhando Dados de Configuração de Impressoras (SigCdmp)\n\tpTip = 1\n\tlcSQLCmd = [Select * From SigCdmp ] + ;\n\t\t\t\t[Where nTpImpres = ?pTip]\n\t\t\t\t\n\tlnSQLErr = ThisForm.Podatamgr.SQLExecute(lcSQLCmd, 'Tmp1')\n\tIf (lnSQLErr < 1)\t\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "OptCol",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Init",
+      "linhas": 141,
+      "codigoOriginal": "Public m.reslanca, m.resforma, m.rescheque, m.rescartao, m.resvende, m.resconta, m.reslanfor, m.resqtdes, m.ResvDets\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tlnQueryOk = ThisForm.podataMgr.SqlExecute([Select * From SigCdPam ],'CrSigCdPam')\n\t\tIf lnQueryOk < 1\n\t\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\t\t\tReturn(.F.)\n\t\tEndIf\n\n\t\tlnQueryOk = ThisForm.podataMgr.SqlExecute([Select * From SigCdPac ],'CrSigCdPac')\n\t\tIf ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "opt_nr_opcao,option1,option2,option3",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor cs_SigCdTom (Marca n(1), Descri c(40), Codigos n(2))\nIndex On Codigos Tag Codigos\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Procedure",
+      "linhas": 86,
+      "codigoOriginal": "Local lnOpcTipo, ldDtIni, ldDtFim\n\nlnOpcTipo = ThisForm.Opc_Tipo.Value\nlnOpcCol  = ThisForm.Optcol.Value\nldDtIni   = ThisForm.Get_Dt_Inicial.Value\nldDtFim   = ThisForm.Get_Dt_Final.Value\n\n\nThisForm.MaxCols = Iif(ThisForm.OptCol.Value = 1,40,254)\n\nCreate Cursor dbTmpRel(detalhe c(ThisForm.MaxCols) Null,tipo n(1),usuars c(10),datas d)\nIndex On usuars Tag Usuars\n\nCreate Cursor dbTmpRel2(detalhe c(ThisForm.MaxCols) Null,tipo n(1),usuars c(10),datas d)\nIndex On usuars Tag Usuars\n\nIf lnOpcCol = 1\n\tFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MaxCols = Iif,MaxCols) Null,tipo n,Segunda =,Processa",
+        "controlesReferenciados": "Optcol,Get_Dt_Inicial,Get_Dt_Final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poSigSyPar.fGravaUserCfg()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "fGravaUserCfg",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "If ThisForm.OptCol.Value = 1\n\tReport Form SigReFc1 Preview NoConsole In Screen To File Sys(2023) + '\\Nul.txt'\nElse\n\tReport Form SigReFc2 Preview NoConsole\nEndIf\n\nUse In dbRelatorio",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptCol",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa,get_ds_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "If Empty(This.Value)\n\tThisForm.get_ds_moeda.Value = ''\n\tThisForm.get_ds_moeda.Refresh\nElse\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','cmoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cmoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('dmoes','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value                  = Evaluate('CrMoedas.cmoes')\n\t\tThisForm.get_ds_moeda.Value =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa,get_ds_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.get_ds_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_cd_moeda.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "If Empty(This.Value)\n\tThisForm.get_cd_moeda.Value = ''\n\tThisForm.get_cd_moeda.Refresh\nElse\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','dmoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('dmoes','','Descrição')\n\t\tm.loLista.mAddColuna('cmoes','XXXXXX','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value                  = Evaluate('CrMoedas.dmoes')\n\t\tThisForm.get_cd_moeda.Value =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_cd_moeda.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.getOperador",
+      "evento": "Valid",
+      "linhas": 36,
+      "codigoOriginal": "Local loLista\n\nlcQuery = [Select Usuarios From SigCdUsu]\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crListaRemota1') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crListaRemota1)')\n\tReturn 0\nEndIf\n\nSelect Usuarios ;\n  From crListaRemota1 ;\n Where Len(Alltrim(Usuarios)) < 4 And ;\n \t   Int(Val(Usuarios)) > 0 ;\n  Into Cursor crListaRemota ReadWrite\n\nSelect crListaRemota\nIndex On Usuarios Tag Usuarios\n\nIf Not Empty(This.Value)\n\tSet Near On\n\tIf Not Seek(Padr(This.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.get_usuario",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdUsu','CrUsuarios','usuarios',This.Value,'Usuários',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('usuarios','XXXXXXXXXX','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrUsuarios')\n\t\tThis.Value = Evaluate('CrUsuarios.usuarios')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\n\tThis.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.optImpNomCli",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.OptCol.Value = 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptCol",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.Optcol",
+      "evento": "InteractiveChange",
+      "linhas": 3,
+      "codigoOriginal": "If( This.Value = 1 )\n\tThisForm.OptImpNomCli.Value = 2\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptImpNomCli",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.apaga",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "sele cs_SigCdTom\nreplace all marca with 0\ngo top\nthisform.refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCX.SelTudo",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "sele cs_SigCdTom\nreplace all marca with 1\ngo top\nthisform.refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREFCX.Procedure",
+      "queryOriginal": "\t\tInsert Into &lcArq. (detalhe,tipo,usuars,datas) Values (Space(40),_Tipo,_Usuario,_Datas)",
+      "tabelas": "",
+      "colunas": "detalhe,tipo,usuars,datas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFCX.Procedure",
+      "queryOriginal": "\t\t\tInsert Into &lcArq. (detalhe,tipo,usuars,datas) Values (Space(40),_Tipo,_Usuario,_Datas)",
+      "tabelas": "",
+      "colunas": "detalhe,tipo,usuars,datas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFCX.Procedure",
+      "queryOriginal": "\t\t\tInsert Into &lcArq. (detalhe,tipo,usuars,datas) Valu... [TRUNCADO]",
+      "tabelas": "",
+      "colunas": "detalhe,tipo,usuars,datas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFCX.Procedure",
+      "queryOriginal": "\tlcSQLCmd = [Select * From SigCdmp ] + ; \t\t\t\t[Where nTpImpres = ?pTip]",
+      "tabelas": "SigCdmp",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFCX.Init",
+      "queryOriginal": "\t\tlnQueryOk = ThisForm.podataMgr.SqlExecute([Select * From SigCdPam ],'CrSigCdPam')",
+      "tabelas": "SigCdPam",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFCX.Init",
+      "queryOriginal": "\t\tlnQueryOk = ThisForm.podataMgr.SqlExecute([Select * From SigCdPac ],'CrSigCdPac')",
+      "tabelas": "SigCdPac",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFCX.getOperador.Valid",
+      "queryOriginal": "lcQuery = [Select Usuarios From SigCdUsu]",
+      "tabelas": "SigCdUsu",
+      "colunas": "Usuarios",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFCX.getOperador.Valid",
+      "queryOriginal": "Select Usuarios ; From crListaRemota1 ; Where Len(Alltrim(Usuarios)) < 4 And ; \t   Int(Val(Usuarios)) > 0 ; Into Cursor crListaRemota ReadWrite",
+      "tabelas": "crListaRemota1",
+      "colunas": "LenAlltrimUsuarios,IntValUsuarios,crListaRemota,ReadWrite",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdmp", "SigCdPam", "SigCdPac", "SigCdUsu", "crListaRemota1"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. A Fase 6 est├í completa com:
+
+1. **`lbl_4c_Label3` + `txt_4c_Traducao`** adicionados em `ConfigurarPaginaDados()` (linhas 474ÔÇô508) com posi├º├Áes compensadas do legado (+29): `Say3.Top=226ÔåÆ255`, `GetTraducao.Top=222ÔåÆ251`, `MaxLength=60`.
+
+2. **`FormParaBO()`** (linhas 666ÔÇô679): transfere os 3 campos do form para o BO.
+
+3. **`BtnSalvarClick()`** (linhas 682ÔÇô766): l├│gica completa replicando o legado:
+   - Modo BUSCAR: localiza registro no cursor por Express├úo e retorna ├á lista
+   - Modos INCLUIR/ALTERAR: valida os 3 campos obrigat├│rios na mesma ordem do original (Express├úo ÔåÆ Idioma ÔåÆ Tradu├º├úo)
+   - Modo INCLUIR: verifica duplicidade por `Expressao + Idioma` com SQLEXEC
+   - Chama `FormParaBO()` + `Salvar()` + navega para lista
+
+4. **`BtnCancelarClick()`** (linhas 769ÔÇô772): reseta modo e navega para Page1.

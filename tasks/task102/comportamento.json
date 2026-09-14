@@ -1,0 +1,749 @@
+{
+  "resumo": {
+    "totalMetodos": 42,
+    "metodosComSQL": 15,
+    "metodosComValidacao": 13,
+    "totalQueries": 8,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["Financeiro' + Iif", "fUniqueIds", "fAcessoTitulo", "fBuscarCotacao", "fwBuscaExt", "fBuscarCambio"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREFFN",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "LPARAMETERS ldData, lnDia\n\nLOCAL ldDataRet\n\nldDataRet = ldData\nIf( DOW(ldDataRet) <> lnDia )\n\tIF DOW(ldData) < lnDia\n\t\tDO WHILE DOW(ldDataRet) < lnDia\n\t\t\tldDataRet = ldDataRet + 1\n\t\tEndDo\t\t\n\tELSE\n\t\tDO WHILE DOW(ldDataRet) > lnDia\n\t\t\tldDataRet = ldDataRet - 1\n\t\tEndDo\t\t\t\n\tEndif\nENDIF\nReturn(ldDataRet)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "If (ThisForm.Check1.Value = 0)\n\tIf( ThisForm.Opt_tipo.Value = 2 or ThisForm.Opt_tipo.Value = 3 )\n\t\tReport Form SigReFf1 Preview NoConsole\n\tElse\t\n\t\tReport Form SigReFf2 Preview NoConsole\n\tEndif\t\t\nElse\n\tReport Form SigReFf3 Preview NoConsole\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN",
+      "evento": "Procedure",
+      "linhas": 729,
+      "codigoOriginal": "Private pGcm, pDat, pDtI, pDtF, lcMoeLanc\nLocal lcNmEmpresa, lcNmTitulo, lcNmPeriodo, lcCbEmpresa, lcCbMoeda, lcCbMoeRef, ldDtInicial, ldDtFinal, ;\n\t  lcCdMoeda, lcDsMoeda, lnVlCotacao, lnCtReferencia, lnVlConvertido, lnVlSaldoTotal, lnPagamentos, ;\n\t  lnRecebimentos, lnDoDia, lnAcumulado, lnSaldo, llImprime, lnTipoImp, lnConsAtra, lnTotAtrasos, lnValor, ;\n\t  lnListaAtra, lnNrPrev\n\nldDtInicial = ThisForm.get_dt_inicial.Value\nldDtFinal   = ThisForm.get_dt_final.Value\nlcCdMoeda   = ThisForm.get_cd... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Financeiro' + Iif,fUniqueIds",
+        "metodosFormChamados": "CursorQuery,GoDayOfWeek,SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cd_moeda,get_ds_moeda,get_vl_cotacao,OptSaldo,Opt_Opcao,Get_Cd_Moedl,Opt_tipo,Opt_Consid_Atra,opt_situa,Opt_Lista_Atra,OptPrev",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN",
+      "evento": "Init",
+      "linhas": 138,
+      "codigoOriginal": "Local lcEscape,ImpEmps\n\nm.lcEscape = Set('Escape')\n\nSet Escape off\n\nThisForm.LockScreen = .t.\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\t* Apanhando as Operações de Título Para Mostrar na Grade\n\tThisForm.poDataMgr.CursorQuery('SigOpOpe', 'TmpSigOpOpe', .f., .f., 'Dopes, Opers, RealPrevs, OpeCancs')\n\n\tSelect .f. as SeleOp, Dopes, RealPrevs, Opers ;\n\t  From TmpSigOpOpe ;\n\t Where fAcessoTitulo(Usuar, Dopes, '', ThisForm.poDataMgr) And OpeCancs <> 1 ;\n\t Order By Dopes... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoTitulo,fBuscarCotacao",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,Get_Cd_Moeda,Get_Ds_Moeda,Get_Vl_Cotacao,Grd_Oper",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFN",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "If (ThisForm.Check1.Value = 0)\n\tIf( ThisForm.Opt_tipo.Value = 2 or ThisForm.Opt_tipo.Value = 3 )\n\t\tReport Form SigReFf1 To Printer Prompt NoConsole\n\tElse\t\n\t\tReport Form SigReFf2 To Printer Prompt NoConsole\n\tEndif\t\t\nElse\n\tReport Form SigReFf3 To Printer Prompt NoConsole\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN",
+      "evento": "Procedure",
+      "linhas": 42,
+      "codigoOriginal": "If( ThisForm.Opt_tipo.Value = 2 or ThisForm.Opt_tipo.Value = 3 )\n\n\tSELECT ' ' as Titulo, dData1 as Coluna1, dData2 as Coluna2, dData3 as Coluna3, dData4 as Coluna4,;\n\t\t   dData5 as Coluna5, dData6 as Coluna6, dData7 as Coluna7, dData8 as Coluna8 ;\n\t\t   FROM crRel ;\n\tUNION ALL ;\n\tSELECT 'Saldo no início da '+Tipo as Titulo, STR(nSaldoIni1,12,2) as Coluna1, STR(nSaldoIni2,12,2) as Coluna2, STR(nSaldoIni3,12,2) as Coluna3, STR(nSaldoIni4,12,2) as Coluna4,;\n\t\t   STR(nSaldoIni5,12,2) as Coluna5, STR(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "If (ThisForm.Check1.Value = 0)\n\tIf( ThisForm.Opt_tipo.Value = 2 or ThisForm.Opt_tipo.Value = 3 )\n\t\tReport Form SigReFf1 To Printer NoConsole\n\tElse\t\n\t\tReport Form SigReFf2 To Printer NoConsole\n\tEndif\t\t\nElse\n\tReport Form SigReFf3 To Printer NoConsole\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.DesmarcarOpe",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update crSigOpOpe Set SeleOp = .f.\nGo Top In crSigOpOpe\nThisForm.Grid1.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.MarcarOpe",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update crSigOpOpe Set SeleOp = .t.\nGo Top In crSigOpOpe\nThisForm.Grid1.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grd_Oper.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grd_Oper.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nLocal SeleOp\nThisForm.LockScreen = .t.\nm.SeleOp = (Not crSigOpOpe.SeleOp)\nSelect crSigOpOpe\nGather Memvar Fields SeleOp\nThis.Parent.Parent.Refresh\nThisForm.LockScreen = .f.\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grd_Oper.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nLocal SeleOp\nIf InList(m.nKeyCode,13,32)\n\tThisForm.LockScreen = .t.\n\tm.SeleOp = (Not crSigOpOpe.SeleOp)\n\tSelect crSigOpOpe\n\tGather Memvar Fields seleop\n\tThis.Parent.Parent.Refresh\n\tThisForm.LockScreen = .f.\n\tNoDefault\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grd_Oper.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grd_Oper.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFN.DesmarcarEmp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update cEmp Set ImpEmps = .f.\nGo Top In cEmp\nThisForm.Grid1.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.MarcarEmp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update cEmp Set ImpEmps = .t.\nGo Top In cEmp\nThisForm.Grid1.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid1.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid1.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nLocal ImpEmps\nThisForm.LockScreen = .t.\nm.ImpEmps = (Not cEmp.ImpEmps)\nSelect cEmp\nGather Memvar Fields ImpEmps\nThis.Parent.Parent.Refresh\nThisForm.LockScreen = .f.\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid1.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nLocal ImpEmps\nIf InList(m.nKeyCode,13,32)\n\tThisForm.LockScreen = .t.\n\tm.ImpEmps = (Not cEmp.ImpEmps)\n\tSelect cEmp\n\tGather Memvar Fields ImpEmps\n\tThis.Parent.Parent.Refresh\n\tThisForm.LockScreen = .f.\n\tNoDefault\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid1.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid1.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid1.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid2.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid2.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters nButton, nShift, nXCoord, nYCoord\n\nLocal ImpDisps\nThisForm.LockScreen = .t.\nm.ImpDisps = (Not cDisp.ImpDisps)\nSelect cDisp\nGather Memvar Fields ImpDisps\nThis.Parent.Parent.Refresh\nThisForm.LockScreen = .f.\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid2.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 14,
+      "codigoOriginal": "Lparameters nKeyCode, nShiftAltCtrl\n\nLocal ImpDisps\nIf InList(m.nKeyCode,13,32)\n\tThisForm.LockScreen = .t.\n\tm.ImpDisps = (Not cDisp.ImpDisps)\n\tSelect cDisp\n\tGather Memvar Fields ImpDisps\n\tThis.Parent.Parent.Refresh\n\tThisForm.LockScreen = .f.\n\tNoDefault\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid2.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid2.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Grid2.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFFN.DesmarcarDisp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update cDisp Set ImpDisps = .f.\nGo Top In cDisp\nThisForm.Grid2.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.MarcarDisp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Update cDisp Set ImpDisps = .t.\nGo Top In cDisp\nThisForm.Grid2.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.get_ds_Moedl",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_cd_moedl.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moedl",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.get_ds_Moedl",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Dmoes','xxxxxxxxxxxxxxx','Descrição',.t.)\n\t\tloLista.mAddColuna('Cmoes','xxxxxx','Código',.t.)\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisform.get_Cd_Moedl.Value = Evaluate('crListaRemota.Cmoes')\n\tThisForm.get_Ds_Moedl.Value = Evaluate('crListaRemota.Dmoes')\n\tThisform.get_C... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "get_Cd_Moedl,get_Ds_Moedl",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.get_ds_Moedl",
+      "evento": "LostFocus",
+      "linhas": 8,
+      "codigoOriginal": "* atualiza campo de cotação da moeda\nlnVlCotacao = 0\n=fBuscarCambio({},date(),space(03),ThisForm.get_cd_moeda.Value)\nlnVlCotacao = iif(lnVlCotacao=0,1,lnVlCotacao)\n\nThisForm.get_vl_cotacao.Value = lnVlCotacao\nThisForm.get_vl_cotacao.refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCambio",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_vl_cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Get_Cd_Moedl",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'cMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cmoes','xxxxxx','Código',.t.)\n\t\tloLista.mAddColuna('Dmoes','xxxxxxxxxxxxxxx','Descrição',.t.)\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisform.get_Cd_Moedl.Value = Evaluate('crListaRemota.Cmoes')\n\tThisForm.get_Ds_Moedl.Value = Evaluate('crListaRemota.Dmoes')\n\tThisform.get_C... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "get_Cd_Moedl,get_Ds_Moedl",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.Cmoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.Dmoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.get_cd_moeda",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "* Atualiza o Campo de Cotação da Moeda\n\nlnVlCotacao = 0\n=fBuscarCambio({}, Date(), Space(03), ThisForm.get_cd_moeda.Value)\nlnVlCotacao = Iif(lnVlCotacao=0, 1, lnVlCotacao)\n\nThisForm.get_vl_cotacao.Value = lnVlCotacao\nThisForm.get_vl_cotacao.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCambio",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_vl_cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.Cmoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.Dmoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.get_ds_moeda",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "* Atualiza o Campo de Cotação da Moeda\n\nlnVlCotacao = 0\n=fBuscarCambio({}, Date(), Space(03), ThisForm.get_cd_moeda.Value)\nlnVlCotacao = Iif(lnVlCotacao=0, 1, lnVlCotacao)\n\nThisForm.get_vl_cotacao.Value = lnVlCotacao\nThisForm.get_vl_cotacao.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCambio",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_vl_cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.Opt_Consid_Atra",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.opt_Lista_Atra.Value = 1) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "opt_Lista_Atra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFFN.opt_Lista_Atra",
+      "evento": "InteractiveChange",
+      "linhas": 3,
+      "codigoOriginal": "If( This.Value = 2 ) \n\tThisForm.opt_Consid_Atra.Value = 2 \nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "opt_Consid_Atra",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREFFN.Init",
+      "queryOriginal": "\tSelect .f. as SeleOp, Dopes, RealPrevs, Opers ; \t  From TmpSigOpOpe ; \t Where fAcessoTitulo(Usuar, Dopes, '', ThisForm.poDataMgr) And OpeCancs <> 1 ; \t Order By Dopes... [TRUNCADO]",
+      "tabelas": "TmpSigOpOpe",
+      "colunas": "Dopes,RealPrevs,fAcessoTituloUsuar,poDataMgr,OpeCancs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFN.Procedure",
+      "queryOriginal": "\tSELECT ' ' as Titulo, dData1 as Coluna1, dData2 as Coluna2, dData3 as Coluna3, dData4 as Coluna4,; \t\t   dData5 as Coluna5, dData6 as Coluna6, dData7 as Coluna7, dData8 as Coluna8 ; \t\t   FROM crRel ; \tUNION ALL ; \tSELECT 'Saldo no início da '+Tipo as Titulo, STR(nSaldoIni1,12,2) as Coluna1, STR(nSaldoIni2,12,2) as Coluna2, STR(nSaldoIni3,12,2) as Coluna3, STR(nSaldoIni4,12,2) as Coluna4,; \t\t   STR(nSaldoIni5,12,2) as Coluna5, STR(... [TRUNCADO]",
+      "tabelas": "crRel",
+      "colunas": "dData1,dData2,dData3,dData4,dData6,dData7,dData8",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFN.DesmarcarOpe.Click",
+      "queryOriginal": "Update crSigOpOpe Set SeleOp = .f.",
+      "tabelas": "crSigOpOpe",
+      "colunas": "SeleOp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFN.MarcarOpe.Click",
+      "queryOriginal": "Update crSigOpOpe Set SeleOp = .t.",
+      "tabelas": "crSigOpOpe",
+      "colunas": "SeleOp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFN.DesmarcarEmp.Click",
+      "queryOriginal": "Update cEmp Set ImpEmps = .f.",
+      "tabelas": "cEmp",
+      "colunas": "ImpEmps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFN.MarcarEmp.Click",
+      "queryOriginal": "Update cEmp Set ImpEmps = .t.",
+      "tabelas": "cEmp",
+      "colunas": "ImpEmps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFN.DesmarcarDisp.Click",
+      "queryOriginal": "Update cDisp Set ImpDisps = .f.",
+      "tabelas": "cDisp",
+      "colunas": "ImpDisps",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFFN.MarcarDisp.Click",
+      "queryOriginal": "Update cDisp Set ImpDisps = .t.",
+      "tabelas": "cDisp",
+      "colunas": "ImpDisps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpSigOpOpe", "crRel", "crSigOpOpe", "cEmp", "cDisp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

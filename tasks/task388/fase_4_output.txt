@@ -1,0 +1,12 @@
+﻿Phase 4 was already complete in `FormCTA.prg`. I made one targeted fix in `CarregarLista()`:
+
+- Removed the redundant `.ColumnCount = 5` (already set during init)
+- Removed the `IF RECCOUNT > 0` guard ÔÇö ControlSource is now always assigned after RecordSource
+- Added header caption re-set after RecordSource change (per the known VFP9 lesson that headers can reset when RecordSource changes)
+
+The file at 5280 lines has all Phase 4 components already in place:
+- `ConfigurarPaginaLista()` (lines 103ÔÇô535): header, CRUD buttons (Incluir/Visualizar/Alterar/Excluir/Buscar + Encerrar), filters container, and 5-column grid with all BINDEVENT calls
+- `CarregarLista()` (line 4138): loads via `CTABO.Buscar()`/`BuscarComFiltro()`, wires RecordSource + ControlSource
+- `AlternarPagina()` (line 4198): switches ActivePage and triggers CarregarLista on return to LISTA
+
+Ready to proceed to Phase 5 when you are.

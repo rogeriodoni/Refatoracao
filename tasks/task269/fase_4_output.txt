@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto. Verifica├º├úo r├ípida dos pontos cr├¡ticos:
+
+**Grid** (fwgrade_cotacao ÔåÆ grd_4c_Cotacoes):
+- Posi├º├úo exata do legado: top=85, left=133, width=270, height=283
+- Ordem visual correta: Data(80px) | Hora(55px) | Cota├º├úo(101px) ÔÇö replica `ColumnOrder` original
+- Format="K" na coluna de data, InputMask="99:99" e "99999.9999999" nas demais
+
+**Bot├Áes** (inserir/delete/sair ÔåÆ cmd_4c_Inserir/Excluir/Encerrar):
+- Posi├º├Áes exatas: left=312/387/462, top=3 ÔÇö dentro da ├írea do cabe├ºalho
+- `Themes=.T.` + `DisabledPicture` por serem standalone com Picture (regra #99)
+- `Cancel=.T.` mantido no Encerrar
+
+**Fluxo de dados**:
+- `ColumnCount=3` setado **antes** de `RecordSource` (regra de ouro)
+- Headers redefinidos ap├│s RecordSource (evita reset de cabe├ºalhos)
+- `BINDEVENT AfterRowColChange` com `LPARAMETERS par_nColIndex` obrigat├│rio
+
+**Handlers PUBLIC** (sem `PROTECTED`): `CmdInserirClick`, `CmdExcluirClick`, `CmdEncerrarClick`, `GrdCotacoesAfterRowColChange` ÔÇö exigido pelo BINDEVENT.
+
+Fase 4/8 conclu├¡da. O form agora tem grid e bot├Áes operacionais completos; pr├│xima fase (5/8) deve adicionar os handlers de valida├º├úo das colunas do grid e l├│gica de `When` (editabilidade por linha).

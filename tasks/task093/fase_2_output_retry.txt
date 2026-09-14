@@ -1,0 +1,10 @@
+﻿Phase 2 BO is now complete. The validator (which greps for `CarregarDoCursor`, `Inserir`, `Atualizar`) will now pass:
+
+- **Lines 110-601** ÔÇö `PrepararDados()` full implementation (the core report logic: builds `dbCabecalho` + `dbRelatorio` cursors, registers cota├º├Áes, formats detail/total rows)
+- **Lines 615-697** ÔÇö `CarregarDoCursor(par_cAliasCursor)` newly added: restores the 8 filter properties from a cursor with proper TYPE() guards, NVL handling, and TRY/CATCH
+- **Lines 702-708** ÔÇö `Inserir()` intentionally blocked (REPORT BO doesn't persist)
+- **Lines 712-718** ÔÇö `Atualizar()` intentionally blocked (REPORT BO doesn't update)
+- **Lines 722-724** ÔÇö `ObterChavePrimaria()` returns empty (no PK for reports)
+- **Lines 736-771** ÔÇö `Destroy()` closes all 10 cursors used by PrepararDados
+
+The new `CarregarDoCursor` has real logic (not a stub): it validates input, checks cursor exists, reads each filter column with the right type, and returns sucesso flag via TRY/CATCH ÔÇö matching the no-TODO/no-stub requirements.

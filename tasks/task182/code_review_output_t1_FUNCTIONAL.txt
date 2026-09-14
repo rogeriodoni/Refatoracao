@@ -1,0 +1,9 @@
+﻿Todas as corre├º├Áes aplicadas com sucesso. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` agora usa `INLIST` para tamb├®m proteger `CNT_4C_DETALHE`, `CNT_4C_DETALHE2`, `CNT_4C_DETALHE3`, `CNT_4C_DETALHE4`, `CNT_4C_DETALHE5` e `CNT_4C_RESUMO`. A recurs├úo ainda acontece (filhos dos containers ficam acess├¡veis), mas o container em si n├úo recebe `Visible=.T.` indevidamente.
+
+**[GRID-WITH]** ÔÇö Nos 5 blocos de `AtualizarGrades`, `.ColumnCount` e `.RecordSource` foram movidos para **fora** do `WITH .grd_4c_Dados` (usando refer├¬ncia expl├¡cita `.grd_4c_Dados.RecordSource = ...` dentro do WITH externo). Isso elimina o erro `Unknown member COLUMN1` que ocorria porque as colunas n├úo eram reconhecidas enquanto o RecordSource ainda estava sendo atribu├¡do dentro do mesmo WITH.
+
+**[GRID-HEADER]** ÔÇö Captions inventados pelo Claude (`Fase`, `Qtde`, `Opera├º├úo`, `Falha`) substitu├¡dos por `"Header1"` em todas as 10 ocorr├¬ncias, mantendo apenas `"Emp"` na Column3 (├║nico caption confirmado no legado).
+
+**[LAYOUT-POSITION]** ÔÇö N├úo houve altera├º├úo: o c├│digo j├í tinha os valores corretos (`Left=336`, `Left=659`, `Top=184`, etc.) que batem com o legado.

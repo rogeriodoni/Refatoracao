@@ -1,0 +1,7 @@
+﻿Fix aplicado. Aqui est├í o diagn├│stico completo:
+
+**Causa raiz do TIMEOUT**: `FormGr1` tem `WindowType = 1` (modal) e sua `InicializarForm()` **n├úo faz nenhuma chamada SQL** (n├úo precisa de banco para inicializar). Isso significa que a inicializa├º├úo retorna `.T.` com sucesso. O VFP9 ent├úo exibe a form automaticamente ÔÇö e por ser modal (`WindowType = 1`), entra num loop de eventos que bloqueia at├® a form ser fechada. Como o teste nunca fecha a form programaticamente, VFP9 fica travado 300 segundos at├® o timeout.
+
+**Por que outros forms OPERACIONAIS n├úo t├¬m esse problema**: Forms como `Formsigopind` executam `SQLEXEC` no `InicializarForm()`. Com `gnConnHandle=0` (conex├úo desabilitada no teste), o SQLEXEC falha ÔåÆ `InicializarForm()` retorna `.F.` ÔåÆ o form nunca ├® exibido ÔåÆ nenhum loop modal.
+
+**Fix aplicado** em `FormGr1.Init()`: antes de chamar `DODEFAULT()`, seta `THIS.Visible = .F.` quando `gb_4c_ModoTeste = .T.`. Isso impede a exibi├º├úo autom├ítica do form no teste, sem afetar o comportamento em produ├º├úo (onde `gb_4c_ModoTeste` ├® `.F.`).

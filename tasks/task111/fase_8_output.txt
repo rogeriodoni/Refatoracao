@@ -1,0 +1,18 @@
+﻿A migra├º├úo da Fase 8 est├í **completa**. Todos os m├®todos j├í est├úo implementados:
+
+**FormSIGREHCP.prg** (arquivo completo):
+- `BtnBuscarClick()` ÔåÆ linha 1201 (delega ao Visualizar)
+- `BtnEncerrarClick()` ÔåÆ linha 1205 (delega ao Sair)
+- `BtnSalvarClick()` ÔåÆ linha 1209 (delega ao Imprimir)
+- `BtnCancelarClick()` ÔåÆ linha 1213 (limpa campos e foca data inicial)
+- `FormParaBO()` / `BOParaForm()` ÔåÆ linhas 1094-1118, com todos os campos (datas, produto, empresa, tipo impress├úo)
+- `HabilitarCampos()` ÔåÆ linha 1120, cobre todos os controles edit├íveis
+- `LimparCampos()` ÔåÆ linha 574, restaura estado inicial
+- `CarregarLista()` ÔåÆ linha 1081, foca no campo de data inicial
+- `AjustarBotoesPorModo()` ÔåÆ linha 1145, todos os 4 bot├Áes habilitados
+
+**Integra├º├úo**:
+- `config.prg` usa ADIR() que carrega automaticamente `*BO.prg` (classes/) e `Form*.prg` (forms/relatorios/) ÔÇö nenhuma linha manual necess├íria
+- `menu.prg` j├í tem `DEFINE BAR 135 OF popRelatorios` e `ON SELECTION BAR 135` com `AbrirFormSIGREHCP`
+
+A migra├º├úo do FormSIGREHCP est├í 100% conclu├¡da e funcional.

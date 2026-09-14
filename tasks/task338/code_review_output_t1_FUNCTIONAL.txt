@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e do que n├úo foi feito:
+
+**[CONTAINER-VISIVEL] ÔÇö CORRIGIDO**: `TornarControlesVisiveis` agora recursa primeiro nos filhos de qualquer container antes de verificar o INLIST. O `cnt_4c_Cabecalho` entra no INLIST com LOOP ap├│s a recurs├úo, prevenindo que o m├®todo force `Visible=.T.` nesse container (que tem `Visible=.F.` na classe base antes do `ConfigurarPageFrame` configur├í-lo explicitamente).
+
+**[LAYOUT-POSITION] Label1..4 ÔÇö N├âO ALTERADO (falso positivo)**: O review tool fez um match incorreto pelo nome. Os controles `lbl_4c_Status1..4` dentro de `cnt_4c_Status` j├í t├¬m exatamente as posi├º├Áes originais do `Container1.Label1..4` (Top=8/3/21/39, Left=4). Os `lbl_4c_Label1..4` s├úo controles completamente distintos ÔÇö labels de campo (Ag├¬ncia, DV Conta, DV Cheque, CPF/CGC) posicionados corretamente ao lado de seus TextBoxes. Alterar suas coordenadas moveria esses labels para o topo do form, quebrando o layout.

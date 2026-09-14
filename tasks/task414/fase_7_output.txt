@@ -1,0 +1,7 @@
+﻿Fase 7/8 conclu├¡da. Os 4 eventos j├í estavam implementados de fases anteriores, ent├úo corrigi as viola├º├Áes da Regra VFP9 #1 encontradas:
+
+**Corre├º├Áes aplicadas:**
+- `BtnVisualizarClick`: guard `!USED/RECCOUNT` movido para fora do TRY
+- `BtnAlterarClick`: guard movido para fora do TRY + adicionada chamada `EditarRegistro()` antes de `this_cModoAtual = "ALTERAR"` (Problema 18)
+- `BtnExcluirClick`: todos os 3 `RETURN` movidos para fora do TRY (guard, CarregarPorCodigo, MsgConfirma)
+- `BtnSalvarClick`: as 2 valida├º├Áes obrigat├│rias movidas para fora do TRY

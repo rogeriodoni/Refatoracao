@@ -1,0 +1,406 @@
+{
+  "resumo": {
+    "totalMetodos": 24,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 22,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["From Dbf", "fConfigGeral", "fAcessoContab", "fAcessoContas", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECPE",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "report form SIGRECPE preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE",
+      "evento": "Procedure",
+      "linhas": 158,
+      "codigoOriginal": "local cNomeEmpresa\nlocal cRelTitulo\nlocal cGrest,cEstoque,cGrupo,cFornecedor,cDescricao,lDescricao\nlocal lcTalk,lcEscape,lnDecimals,lcFixed,lnMouse,lcMacro1,lcMacro2,lnCestmin\n\ncGrupoA    = Padr(thisform.get_cd_grestoque.value,10)\ncEstoqA    = Padr(thisform.get_cd_estoque.value,10)\ncGrupoB    = Padr(ThisForm.Get_Grupob.Value,10)\ncEstoqB    = Padr(ThisForm.Get_ContaB.Value,10)\nlnTipo     = ThisForm.Opt_Tipo.Value\nlnOpt      = ThisForm.Opc_Situacao.Value\nlnOpt      = ThisForm.Opt_CorTam.Value\n\ncRe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From Dbf",
+        "metodosFormChamados": "sqlexecute",
+        "controlesReferenciados": "get_cd_grestoque,get_cd_estoque,Get_Grupob,Get_ContaB,Opt_Tipo,Opt_CorTam",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE",
+      "evento": "Init",
+      "linhas": 26,
+      "codigoOriginal": "=fConfigGeral()\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t\n\t\t.get_ds_grestoque.value = ''\n\t\t.get_cd_grestoque.value = ''\n\t\t.get_cd_estoque.value = ''\n\t\t.get_ds_estoque.value = ''\n\t\t.get_grupob.value = ''\n\t\t.get_dgrupob.value = ''\n\t\t.get_ContaB.value = ''\n\t\t.get_dContaB.value = ''\n\t\t.opt_CorTam.value = 2\n\t\t.refresh\n\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject'... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ds_grestoque,get_cd_grestoque,get_cd_estoque,get_ds_estoque,get_grupob,get_dgrupob,get_ContaB,get_dContaB,opt_CorTam",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECPE",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "report form SigReCpE to printer prompt noconsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.get_Ds_GrEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(empty(thisform.get_cd_grestoque.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grestoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.get_Ds_GrEstoque",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !empty(this.value)\n\tfAcessoContab(Usuar,'D',this.value,ThisForm.get_Cd_GrEstoque,ThisForm.get_Ds_GrEstoque)\nElse\n\tThisForm.get_Cd_GrEstoque.value = ''\n\tThisForm.get_Cd_GrEstoque.refresh\nendif\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_Ds_GrEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.get_Cd_GrEstoque",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !empty(this.value)\n\tfAcessoContab(Usuar,'C',this.value,ThisForm.get_Cd_GrEstoque,ThisForm.get_Ds_GrEstoque)\nElse\n\tThisForm.get_Ds_GrEstoque.value = ''\n\tThisForm.get_Ds_GrEstoque.refresh\nendif\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_Ds_GrEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.get_ds_estoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_cd_estoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.get_ds_estoque",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = ThisForm.get_Cd_GrEstoque.Value\nIf !empty(this.value)\n\tIf NOT fAcessoContas(Usuar,grupo,'D',this.value,ThisForm.get_cd_estoque,ThisForm.get_ds_estoque)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.get_cd_estoque.Value = ''\n\t\tThisForm.get_cd_estoque.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThisForm.get_cd_estoque.Value = ''\n\tThisForm.get_cd_estoque.Refresh\n\treturn(.t.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_cd_estoque,get_ds_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.get_cd_estoque",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = ThisForm.get_Cd_GrEstoque.Value\nIf !empty(this.value)\n\tIf NOT fAcessoContas(Usuar,grupo,'C',this.value,ThisForm.get_cd_estoque,ThisForm.get_ds_estoque)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.get_ds_estoque.Value = ''\n\t\tThisForm.get_ds_estoque.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThisForm.get_ds_estoque.Value = ''\n\tThisForm.get_ds_estoque.Refresh\n\treturn(.t.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_cd_estoque,get_ds_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.Get_Dgrupob",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(empty(thisform.get_Grupob.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Grupob",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.Get_Dgrupob",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !empty(this.value)\n\tfAcessoContab(Usuar,'D',this.value,ThisForm.get_Grupob,ThisForm.get_DGrupob)\nElse\n\tThisForm.get_Grupob.value = ''\n\tThisForm.get_grupob.refresh\nendif\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Grupob,get_DGrupob",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.Get_Grupob",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !empty(this.value)\n\tfAcessoContab(Usuar,'C',this.value,ThisForm.get_GrupoB,ThisForm.get_dGrupoB)\nElse\n\tThisForm.get_dGrupoB.value = ''\n\tThisForm.get_Dgrupob.refresh\nendif\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_GrupoB,get_dGrupoB",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.get_dContab",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_ContaB.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ContaB",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.get_dContab",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = ThisForm.get_GrupoB.Value\nIf !empty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',this.value,ThisForm.get_ContaB,ThisForm.get_dcontaB)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.get_ContaB.Value = ''\n\t\tThisForm.get_ContaB.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThisForm.get_ContaB.Value = ''\n\tThisForm.get_ContaB.Refresh\n\treturn(.t.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_GrupoB,get_ContaB,get_dcontaB",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.get_Contab",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = ThisForm.get_grupob.Value\nIf !empty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.value,ThisForm.get_ContaB,ThisForm.get_dContaB)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisForm.get_dContab.Value = ''\n\t\tThisForm.get_dContaB.Refresh\n\t\treturn 0\n\tEndif\nElse\n\tThisForm.get_dContaB.Value = ''\n\tThisForm.get_dContaB.Refresh\n\treturn(.t.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupob,get_ContaB,get_dContaB",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.getCunii",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL loLista\nIf NOT Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.podataMgr.pnIdConn,'SigCdUni','CrUni','cUnis',This.Value,'Unidades',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cUnis','','Código')\n\t\tm.loLista.mAddColuna('dUnis','','Descrição')\n\t\tm.loLista.Show()\n\tENDIF\n\tThis.Value  = Evaluate('CrUni.cUnis')\nEndIf\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.GetLini",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL loLista\nIf NOT Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.podataMgr.pnIdConn,'SigCdLin','CrLin','Linhas',This.Value,'Linhas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Linhas','','Código')\n\t\tm.loLista.mAddColuna('Descs','','Descrição')\n\t\tm.loLista.Show()\n\tENDIF\n\tThis.Value  = Evaluate('CrLin.Linhas')\nEndIf\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.GetColi",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL loLista\nIf NOT Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.podataMgr.pnIdConn,'SigCdCol','Crcol','Colecoes',This.Value,'Grupos de Venda',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Colecoes','','Código')\n\t\tm.loLista.mAddColuna('Descs','','Descrição')\n\t\tm.loLista.Show()\n\tENDIF\n\tThis.Value  = Evaluate('CrCol.Colecoes')\nEndIf\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.getCgrui",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "LOCAL loLista\nIf NOT Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.podataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\tm.loLista.Show()\n\tENDIF\n\tThis.Value  = Evaluate('CrGrupos.cgrus')\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.getCgruf",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "LOCAL loLista\nIf NOT Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.podataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\tm.loLista.Show()\n\tENDIF\n\tThis.Value  = Evaluate('CrGrupos.cgrus')\nEndIf\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.getCunif",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL loLista\nIf NOT Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.podataMgr.pnIdConn,'SigCdUni','CrUni','cUnis',This.Value,'Unidades',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cUnis','','Código')\n\t\tm.loLista.mAddColuna('dUnis','','Descrição')\n\t\tm.loLista.Show()\n\tENDIF\n\tThis.Value  = Evaluate('CrUni.cUnis')\nEndIf\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.GetLinf",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL loLista\nIf NOT Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.podataMgr.pnIdConn,'SigCdLin','CrLin','Linhas',This.Value,'Linhas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Linhas','','Código')\n\t\tm.loLista.mAddColuna('Descs','','Descrição')\n\t\tm.loLista.Show()\n\tENDIF\n\tThis.Value  = Evaluate('CrLin.Linhas')\nEndIf\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPE.GetColf",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "LOCAL loLista\nIf NOT Empty(This.Value)\n\tm.loLista = CreateObject('fwbuscaext',ThisForm.podataMgr.pnIdConn,'SigCdCol','Crcol','Colecoes',This.Value,'Grupos de Venda',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Colecoes','','Código')\n\t\tm.loLista.mAddColuna('Descs','','Descrição')\n\t\tm.loLista.Show()\n\tENDIF\n\tThis.Value  = Evaluate('CrCol.Colecoes')\nEndIf\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

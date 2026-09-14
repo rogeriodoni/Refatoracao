@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. Resumo das decis├Áes:
+
+**Corrigido:**
+- `DEPTOS` removido da condi├º├úo ON do LEFT JOIN em `CarregarCopiaParaCursor` (linha 511). O original usa chave `cpros + codtams + codcores` sem `deptos` ÔÇö condi├º├úo genuinamente inventada.
+
+**Mantidos com justificativa:**
+- `CODTAMS` / `CODCORES` no JOIN ON ÔÇö s├úo a tradu├º├úo direta da chave concatenada `b.cpros + b.codtams + b.codcores` do original; remover alteraria a l├│gica de detec├º├úo de duplicatas (passaria a considerar "existe" qualquer registro com mesmo `cpros`, ignorando varia├º├úo tam/cor).
+- `CIDCHAVES` no WHERE de `Atualizar` e `ExecutarExclusao` ÔÇö o original usava cursor VFP com `poDataMgr.Update()`, mas a tradu├º├úo SQL exige PK no WHERE; remover causaria UPDATE/DELETE em todos os registros da tabela.

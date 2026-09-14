@@ -1,0 +1,11 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\sigrefc2BO.prg` criado com:
+
+**Propriedades declaradas (9 filtros + configura├º├úo + resultado):**
+- `this_dDtInicial`, `this_dDtFinal` ÔÇö per├¡odo do relat├│rio (mapeados de `get_dt_inicial`/`get_dt_final`)
+- `this_cCodEmpresa`, `this_cNomEmpresa` ÔÇö empresa (mapeados de `get_cd_empresa`/`get_ds_empresa`)
+- `this_nTipoRelatorio` ÔÇö OptionGroup `TpRel` (1=Vis├úo detalhada, 2=Mapa de Fechamento)
+- `this_cArquivoRelatorio` = `"SigReFc3"` ÔÇö nome do FRX original
+- `this_cOperacao`, `this_cConserto` ÔÇö par├ómetros carregados de `SigCdPam` (usados nas queries do `processamento`)
+- `this_nResLanca` .. `this_nResVDets` ÔÇö 9 vari├íveis de resultado que no legado eram `PUBLIC m.xxx` (ser├úo declaradas como PUBLIC em `PrepararDados()` antes de executar o `REPORT FORM`)
+
+**Init():** Define valores default (`DATE()` para datas, `go_4c_Sistema.cCodEmpresa` para empresa, 1 para tipo) com TRY/CATCH correto ÔÇö RETURN fora do bloco TRY.

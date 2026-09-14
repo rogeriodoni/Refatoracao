@@ -1,0 +1,19 @@
+﻿Fase 5/8 conclu├¡da. O arquivo `Formgem.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- `cmd_4c_Salvar` ("Confirmar") com ├¡cone `cadastro_salvar_60.jpg`, vinculado a `BtnSalvarClick`
+- `cmd_4c_Cancelar` com ├¡cone `cadastro_cancelar_60.jpg`, vinculado a `BtnCancelarClick`
+- `lbl_4c_Grupo` ("Grupo :") ÔÇö Top=205, Left=430 (compensa├º├úo +29)
+- `txt_4c_Grupo` ÔÇö Top=202, Left=470, Width=115, InputMask="!!!!!!!!!!!!!!!"
+- `lbl_4c_Class` ("Classifica├º├úo :") ÔÇö Top=232, Left=398
+
+**Novos m├®todos adicionados:**
+- `BtnSalvarClick()` ÔÇö valida Grupo/Class no modo INCLUIR, verifica duplicata via `ValidarDuplicata()`, depois `FormParaBO()` + `Salvar()`
+- `BtnCancelarClick()` ÔÇö volta para lista e recarrega
+- `FormParaBO()` ÔÇö l├¬ `txt_4c_Grupo`, `txt_4c_Class`, `opt_4c_Tipo` ÔåÆ BO
+- `BOParaForm()` ÔÇö popula os 3 controles a partir do BO
+
+**Corre├º├Áes em m├®todos existentes:**
+- `BtnVisualizarClick()` e `BtnAlterarClick()` agora chamam `THIS.BOParaForm()` ap├│s `CarregarPorCodigo()`
+
+A Fase 6/8 completar├í `ConfigurarPaginaDados()` com `txt_4c_Class`, `lbl_4c_Tipo` e `opt_4c_Tipo`.

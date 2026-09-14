@@ -1,0 +1,18 @@
+﻿Fase 4 conclu├¡da. O `FormPrl.prg` foi atualizado com:
+
+**ConfigurarPaginaLista() completa:**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones, fontes e BINDEVENTs
+- `cmd_4c_Encerrar` em `cnt_4c_Saida` (padr├úo can├┤nico Left=917)
+- `cmd_4c_Etiquetas` independente (Top=28, Left=464 ÔÇö original top=-1+29)
+- `grd_4c_Lista` com 2 colunas (C├│digo 100px, Descri├º├úo 290px), ColumnCount fora de WITH
+- `cnt_4c_Etiquetas` iniciando oculto, com filtragem no TornarControlesVisiveis
+
+**CarregarLista() com binding completo** ÔÇö RecordSource + ControlSource + Header captions (redefinidos ap├│s RecordSource conforme regra do grid)
+
+**12 novos m├®todos funcionais:**
+- `BtnIncluirClick` ÔÇö chama `GerarCodigo()` do BO, navega para Page2
+- `BtnVisualizarClick` / `BtnAlterarClick` / `BtnExcluirClick` ÔÇö leem cursor do grid, carregam por c├│digo
+- `BtnBuscarClick` ÔÇö INPUTBOX + SQL LIKE por c├│digo ou descri├º├úo
+- `BtnSalvarClick` ÔÇö valida├º├Áes fora do TRY (descri├º├úo vazia, c├│digo>3 chars para etiqueta), delega ao `BO.Salvar()`
+- `BtnCancelarClick`, `BtnEncerrarClick`, `BtnEtiquetasClick`
+- `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo` ÔÇö com PEMSTATUS para compatibilidade com Fase 5 quando os campos de Page2 forem adicionados

@@ -1,0 +1,13 @@
+﻿Balances perfectly: 96 PROCEDURE/FUNCTION = 96 ENDPROC/ENDFUNC; 30 TRY = 30 ENDTRY; no TODO/FIXME/PLACEHOLDER markers.
+
+**Phase 8 complete.** Summary of changes to `C:\4c\projeto\app\forms\cadastros\FormNfl.prg`:
+
+1. **`HabilitarCampos(par_lHabilitar)`** (new, PROTECTED) ÔÇö enables/disables Page2 input controls. Keeps `txt_4c_Series` (the PK) editable **only** in INCLUIR mode.
+2. **`AplicarEnabledRecursivo(par_oContainer, par_lEnabled)`** (new, PROTECTED helper) ÔÇö walks the inner PageFrame + Containers recursively and toggles `Enabled` on TextBox/EditBox/ComboBox/CheckBox/OptionGroup/Spinner across all 10 tabs.
+3. **`AjustarBotoesPorModo(par_cModo)`** (new, PROTECTED) ÔÇö disables Page1 CRUD/Copiar/XML buttons when editing, and enables Confirmar/Cancelar on Page2 according to mode (LISTA / INCLUIR / ALTERAR / VISUALIZAR).
+4. **Wired** the new methods into `InicializarForm`, `AlternarPagina`, `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `ConfirmarClick`, `CancelarClick`.
+5. **`ConfirmarClick`** now shows a success message and calls `CarregarLista()` after save.
+
+**FormParaBO/BOParaForm completeness verified**: all 113 property references (`loc_oBO.this_*`) in the Form match exactly the 113 properties declared in `NflBO.prg` ÔÇö no typos, no missing fields.
+
+**VFP9 compliance**: refactored new methods to avoid `RETURN` inside `TRY/CATCH` (Rule #1). All 96 PROCEDURE openings pair with 96 ENDPROCs; all 30 TRYs pair with 30 ENDTRYs; zero TODO/FIXME/PLACEHOLDER markers.

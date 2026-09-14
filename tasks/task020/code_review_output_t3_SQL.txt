@@ -1,0 +1,25 @@
+﻿The issue has already been fixed in the current code. Comparing the files:
+
+**`.pre_review` (old, problematic)** at Passo 9 had:
+```foxpro
+loc_cSQL = "SELECT TOP 2 Emps, Grupos, Estos, CPros, DataS, CodCors, CodTams " + ;
+           "FROM SigMvHst WHERE Dopes = " + EscaparSQL(ALLTRIM(THIS.this_cDopCorTam)) + ;
+           " AND Numes = " + FormatarNumeroSQL(loc_nNume) + ;
+           " ORDER BY Seqs DESC"
+IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalHis") >= 1
+```
+
+That `WHERE Dopes = ... AND Numes = ...` on `SigMvHst` was the invented filter ÔÇö it doesn't exist in the original logic. The automated validator truncated `cursor_4c_LocalHis` to `CURSOR_4C_LOCALH` in its report.
+
+**Current `SIGMDETQBO.prg`** (Passo 9, lines 480ÔÇô505) already has the correct implementation:
+```foxpro
+CREATE CURSOR cursor_4c_LocalHis ;
+    (Emps C(10), Grupos C(10), Estos C(20), CPros C(15), DataS D, CodCors C(6), CodTams C(6))
+SET NULL OFF
+INSERT INTO cursor_4c_LocalHis VALUES ;
+    (loc_cEmps, loc_cGrupos, loc_cEstos, loc_cProd, loc_dData, loc_cCorOld, loc_cTamOld)
+INSERT INTO cursor_4c_LocalHis VALUES ;
+    (loc_cEmps, loc_cGrupos, loc_cEstos, loc_cProd, loc_dData, loc_cCorNew, loc_cTamNew)
+```
+
+The cursor is now built directly from local variables (no invented server-side WHERE filter). No changes are needed ÔÇö the SQL pass issue is already resolved.

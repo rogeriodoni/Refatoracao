@@ -1,0 +1,11 @@
+﻿**Causa raiz identificada:** `FormICD.prg` tinha duas declara├º├Áes conflitantes na classe:
+```foxpro
+ShowWindow  = 0   ÔåÉ primeira (ignorada)
+ShowWindow = 1    ÔåÉ segunda (efetiva ÔÇö BUG)
+```
+
+Em VFP9 `-T` (headless), `ShowWindow=1` (top-level form) bloqueia a cria├º├úo do objeto por exatamente 300 segundos ao tentar inicializar a janela Windows sem GUI dispon├¡vel. O mesmo padr├úo existe em `FormHOR` mas na ordem inversa (`ShowWindow=1` depois `ShowWindow=0`), resultando em `ShowWindow=0` e funcionando corretamente.
+
+**Corre├º├Áes aplicadas em `FormICD.prg`:**
+1. Removeu o `ShowWindow = 1` duplicado ÔÇö classe agora tem `ShowWindow = 0` definitivo
+2. Guard no `Init()` fortalecido para checar `gb_4c_ModoTeste` OU `gb_4c_ValidandoUI` ÔÇö produ├º├úo restaura `ShowWindow=1` + `WindowType=1` apenas quando nenhum dos dois flags de teste estiver ativo

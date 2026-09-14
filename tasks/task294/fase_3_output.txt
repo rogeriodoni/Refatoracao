@@ -1,0 +1,11 @@
+﻿Fase 3 conclu├¡da. `FormSigPrGmi.prg` criado em `C:\4c\projeto\app\forms\operacionais\` com:
+
+- **DEFINE CLASS FormSigPrGmi AS FormBase** com todas as propriedades visuais do original (Width=800, Height=292, TitleBar=0, DataSession=2, ControlBox=.F., sem bot├Áes de max/min)
+- **Init()** ÔÇö fix obrigat├│rio de DataSession=2 (SET DATE BRITISH + SET CENTURY ON) antes de DODEFAULT()
+- **InicializarForm()** ÔÇö cria SigPrGmiBO, carrega cursor de linhas de produ├º├úo para lookup, monta cabe├ºalho
+- **ConfigurarPageFrame()** ÔÇö define Picture com `new_background.jpg` do Framework (sem PageFrame, pois ├® form OPERACIONAL flat)
+- **ConfigurarCabecalho()** ÔÇö cria `cnt_4c_Sombra` com `lbl_4c_Sombra` (sombra preta) e `lbl_4c_Titulo` (branco), labels com AutoSize=.F. + Width=THIS.Width-10 (evita bug de label longa sobre bot├Áes)
+- **TornarControlesVisiveis()** ÔÇö recursivo, aceita container opcional
+- **Destroy()** ÔÇö limpa BO e fecha cursor `cursor_4c_SigCdLin`
+
+Pr├│xima fase (Fase 4): adicionar controles de filtro (TextBoxes de Empresa, GrEstoque, Estoque, Linha, Negativo, Data) e bot├Áes Processar/Encerrar ao form.

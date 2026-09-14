@@ -1,0 +1,12 @@
+﻿Todos os RETURN est├úo corretos: linha 93 ├® ANTES do TRY (permitido) e linhas 81/117 s├úo AP├ôS o ENDTRY.
+
+**Fase 3/8 conclu├¡da.** Arquivo criado em `C:\4c\projeto\app\forms\operacionais\FormSigPrCtc.prg` (233 linhas) com:
+
+- **DEFINE CLASS** com 11 propriedades visuais do original (Height=384, Width=550, TitleBar=0, ControlBox=.F., DataSession=2, etc.) + 7 propriedades de neg├│cio (this_oParentForm, this_pcEdn, this_pcEmps, this_pcDopes, this_pnNumes, this_pcEscolha, this_lHouveIns, this_lHouveExcl)
+- **Init()** aceita os 6 par├ómetros do legado (poForm, pnDataSes, pcEscolha, pcEmps, pcDopes, pnNumes), armazena antes de DODEFAULT() para que InicializarForm() os encontre dispon├¡veis via `this_xxx`
+- **InicializarForm()** (PROTECTED): verifica├º├úo de gb_4c_ValidandoUI ANTES do TRY, cria SigPrCtcBO, chama InicializarCursor() e ConfigurarCabecalho()
+- **ConfigurarCabecalho()**: cria `cnt_4c_Sombra` com `lbl_4c_LblSombra` (sombra preta) e `lbl_4c_LblTitulo` (branco), Caption derivado de THIS.Caption
+- **TornarControlesVisiveis()**: padr├úo OPERACIONAL sem par├ómetro, exclui cnt_4c_Sombra do loop (gerenciado diretamente)
+- **Destroy()**: reabilita formul├írio pai, fecha cursores cursor_4c_CtMoe/Totais/StgCtc, libera refer├¬ncias, chama DODEFAULT()
+
+**Pr├│xima fase (4/8)**: adicionar via Edit o `ConfigurarGrid()` com grd_4c_Dados (3 colunas) e `ConfigurarBotoes()` com cmd_4c_Inserir/Excluir/Encerrar, al├®m de chamar BO.Buscar() para carregar os dados.

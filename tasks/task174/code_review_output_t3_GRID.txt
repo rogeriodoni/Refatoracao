@@ -1,0 +1,12 @@
+﻿O arquivo j├í cont├®m o fix correto. As linhas 329-334 j├í re-definem o `ControlSource` de todas as 5 colunas **ap├│s** o bloco `WITH` que cont├®m o `RecordSource` (linha 201):
+
+```foxpro
+*-- Re-definir ControlSource apos RecordSource (evita auto-bind por posicao de campo)
+loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.Checks"
+loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.Contas"
+loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.Rclis"
+loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.emails"
+loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.EmpDopNums"
+```
+
+O problema [GRID-RECORDSOURCE-AUTOBIND] j├í est├í corrigido em `Formsigprema.prg`. Nenhuma altera├º├úo necess├íria ÔÇö o arquivo est├í em conformidade com o padr├úo exigido.

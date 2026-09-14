@@ -1,0 +1,23 @@
+[2026-08-09 21:57:22] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-09 21:57:22] [INFO] Prompt File: C:\4c\tasks\task451\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-08-09 21:57:22] [INFO] Output File: C:\4c\tasks\task451\06b_testeAutomatico_fix_output_t1.txt
+[2026-08-09 21:57:22] [INFO] Model: sonnet
+[2026-08-09 21:57:22] [INFO] Timeout: 3600 segundos
+[2026-08-09 21:57:22] [INFO] Max Output Tokens: 128000
+[2026-08-09 21:57:22] [INFO] Context Files: 0 arquivo(s)
+[2026-08-09 21:57:23] [INFO] Invocando Claude CLI...
+[2026-08-09 21:57:23] [INFO] Prompt carregado: 114994 caracteres
+[2026-08-09 21:57:23] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-09 21:57:23] [INFO] Tamanho total do prompt: 114994 caracteres
+[2026-08-09 21:57:23] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-09 22:06:14] [INFO] Claude CLI finalizado em 531.2200775 segundos
+[2026-08-09 22:06:14] [INFO] Exit Code: 0
+[2026-08-09 22:06:14] [INFO] Output salvo em: C:\4c\tasks\task451\06b_testeAutomatico_fix_output_t1.txt
+[2026-08-09 22:06:14] [INFO] Output size: 1214 bytes
+[2026-08-09 22:06:14] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-09 22:06:14] [INFO] Preview do output:
+[2026-08-09 22:06:14] [INFO] Ambas as corre+º+Áes est+úo corretas. Resumo do que foi corrigido:
+
+**Causa do TIMEOUT de 300s ÔÇö dois bloqueios:**
+
+**1. `ImpBO.CarregarTiposEtiqueta()` (causa principal):** O m+®todo chamava `SQLEXEC(gnConnHandle, ...)` sem verificar se `gnConnHandle <= 0`. O TesteAutomatico seta `gnConnHandle = 0` propositalmente, mas `SQLEXEC(0)` no VFP9 usa "a conex+úo mais recente aberta" em vez de falhar imediatamente ÔÇö se o servidor SQL Server (192.168.15.101) estiver inacess+¡vel, bloqueia pelo t

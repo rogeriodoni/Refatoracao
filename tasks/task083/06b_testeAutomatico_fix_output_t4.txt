@@ -1,0 +1,3 @@
+﻿**Causa raiz**: em `ConfigurarCampos()`, o checkbox do `grd_4c_Orcs.Column1` foi adicionado com `AddObject("check12", ...)` mas a linha seguinte `CurrentControl = "Check1"` referenciava um nome inexistente na coluna ÔÇö VFP9 n├úo encontra o controle e gera "Expression evaluated to an illegal value".
+
+**Corre├º├úo**: renomear `"check12"` ÔåÆ `"Check1"` no `AddObject` e no bloco `WITH`, alinhando com o nome esperado tanto pelo `CurrentControl` quanto pelos `BINDEVENT` em `ConfigurarBINDEVENTs()`.

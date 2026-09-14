@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced, and every `RETURN` sits outside its `TRY`/`ENDTRY` block (each is either right after the `ENDTRY` or in a method with no `TRY` at all, like `ObterChavePrimaria`). No `RETURN`/`RETRY` inside any TRY block ÔÇö Rule #1 compliant.
+
+## Resumo da Fase 2/8 ÔÇö TpcBO.prg
+
+Completei o BO com os m├®todos CRUD, seguindo o padr├úo can├┤nico do `CargoBO.prg`:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `tipos` (PK)
+- **`Buscar(par_cFiltro)`** ÔÇö popula `cursor_4c_Dados` (tipos, descrs) para a grade da Lista
+- **`CarregarPorCodigo(par_cTipo)`** ÔÇö carrega o registro principal + dispara `CarregarGrupos()`; reseta `this_lNovoRegistro`
+- **`CarregarDoCursor()`** ÔÇö `SELECT (alias)` + mapeamento direto dos 7 campos (sem sintaxe `(var).campo`)
+- **`CarregarGrupos(par_cTipo)`** ÔÇö `SELECT SigCdCom LEFT JOIN SigCdGrp` para preencher a grade de grupos vinculados (`cursor_4c_Grupos`), espelhando o `crGrdCdCom` do legado
+- **`InicializarCursoresGrid()`** ÔÇö cursor vazio (`SET NULL ON/OFF`) para modo INCLUIR
+- **`SalvarGrupos()`** ÔÇö `DELETE` + `SCAN`/`INSERT` com `cidchaves = LEFT(fUniqueIds(),20)`, em transa├º├úo com `COMMIT`/`ROLLBACK`, reproduzindo a l├│gica do legado (`Zap` + `Select Distinct CGrus` + `Insert`)
+- **`Inserir()` / `Atualizar()`** ÔÇö SQL completo cobrindo as 7 colunas `NOT NULL` de `SigCdTpc` (evita o Erro151 de coluna omitida) + chamam `RegistrarAuditoria()` e `SalvarGrupos()`
+- **`ExecutarExclusao()`** ÔÇö apaga `SigCdCom` (filhos) antes de `SigCdTpc` (pai)
+
+Nomes de tabela/coluna conferidos direto no `schema.sql` (SigCdTpc, SigCdCom, SigCdGrp ÔÇö todos NOT NULL confirmados). Nenhum `RETURN` dentro de TRY/CATCH; TRY/IF/PROCEDURE balanceados. Arquivo pronto para a Fase 3 (cria├º├úo do `FormTpc.prg`).

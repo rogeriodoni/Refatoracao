@@ -1,0 +1,4352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Fidelity Report - FormSigPrChr</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 30px; background: #fafafa; }
+        .card { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }
+        .card h3 { font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
+        .card .numero { font-size: 36px; font-weight: bold; color: #333; }
+        .card.erro { border-left-color: #e74c3c; }
+        .card.erro .numero { color: #e74c3c; }
+        .card.aviso { border-left-color: #f39c12; }
+        .card.aviso .numero { color: #f39c12; }
+        .card.diferenca { border-left-color: #e67e22; }
+        .card.diferenca .numero { color: #e67e22; }
+        .card.total { border-left-color: #3498db; }
+        .card.total .numero { color: #3498db; }
+        .conteudo { padding: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #667eea; color: white; padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f8f9fa; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .badge.erro { background: #ffe6e6; color: #e74c3c; }
+        .badge.aviso { background: #fff4e6; color: #f39c12; }
+        .badge.diferenca { background: #ffe8dc; color: #e67e22; }
+        .sucesso { padding: 30px; text-align: center; color: #27ae60; }
+        .sucesso h2 { font-size: 32px; margin-bottom: 10px; }
+        .rodape { padding: 20px 30px; background: #fafafa; color: #666; font-size: 12px; text-align: center; border-top: 1px solid #eee; }
+        code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>&#128269; UI Fidelity Report</h1>
+            <p>Formulario: FormSigPrChr | Data: 02/07/2026 06:58:48</p>
+        </div>        <div class="resumo">
+            <div class="card total">
+                <h3>Total de Problemas</h3>
+                <div class="numero">474</div>
+            </div>
+            <div class="card erro">
+                <h3>Erros Criticos</h3>
+                <div class="numero">4</div>
+            </div>
+            <div class="card aviso">
+                <h3>Avisos</h3>
+                <div class="numero">344</div>
+            </div>
+            <div class="card diferenca">
+                <h3>Diferencas Visuais</h3>
+                <div class="numero">126</div>
+            </div>
+        </div><div class="conteudo">
+  <h2>Detalhes das Diferencas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tipo</th>
+        <th>Objeto</th>
+        <th>Propriedade</th>
+        <th>Valor Original</th>
+        <th>Valor Migrado</th>
+        <th>Linha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>94</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>401</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>12</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>402</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>709</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>403</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><span class="badge erro">ERRO</span></td>
+        <td><code>Dataenvironment</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>301</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>404</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>800</code></td>
+        <td><code>1000</code></td>
+        <td>415</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>434</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>435</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>800</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>436</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>80</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>437</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra</code></td>
+        <td><strong>BorderWidth</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>438</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>100,100,100</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>439</td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblSombra</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>446</td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblSombra</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>447</td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblSombra</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>18</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>448</td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblSombra</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>451</td>
+      </tr>
+      <tr>
+        <td>16</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblSombra</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Cadastro de Testes</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>453</td>
+      </tr>
+      <tr>
+        <td>17</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblSombra</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>40</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>454</td>
+      </tr>
+      <tr>
+        <td>18</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblSombra</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>10</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>455</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblSombra</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>25</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>456</td>
+      </tr>
+      <tr>
+        <td>20</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblSombra</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>769</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>457</td>
+      </tr>
+      <tr>
+        <td>21</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblSombra</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>458</td>
+      </tr>
+      <tr>
+        <td>22</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblTitulo</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>466</td>
+      </tr>
+      <tr>
+        <td>23</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblTitulo</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>467</td>
+      </tr>
+      <tr>
+        <td>24</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblTitulo</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>18</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>468</td>
+      </tr>
+      <tr>
+        <td>25</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblTitulo</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>470</td>
+      </tr>
+      <tr>
+        <td>26</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblTitulo</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Cadastro de Testes</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>472</td>
+      </tr>
+      <tr>
+        <td>27</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblTitulo</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>46</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>473</td>
+      </tr>
+      <tr>
+        <td>28</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblTitulo</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>10</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>474</td>
+      </tr>
+      <tr>
+        <td>29</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblTitulo</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>24</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>475</td>
+      </tr>
+      <tr>
+        <td>30</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblTitulo</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>769</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>476</td>
+      </tr>
+      <tr>
+        <td>31</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntSombra.lblTitulo</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>477</td>
+      </tr>
+      <tr>
+        <td>32</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Shape1</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>18</code></td>
+        <td><code>23</code></td>
+        <td>487</td>
+      </tr>
+      <tr>
+        <td>33</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Shape1</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>774</code></td>
+        <td><code>968</code></td>
+        <td>489</td>
+      </tr>
+      <tr>
+        <td>34</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label5</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>24</code></td>
+        <td><code>30</code></td>
+        <td>504</td>
+      </tr>
+      <tr>
+        <td>35</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label5</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>62</code></td>
+        <td><code>78</code></td>
+        <td>506</td>
+      </tr>
+      <tr>
+        <td>36</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label5</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>RGB(0,0,0)</code></td>
+        <td>508</td>
+      </tr>
+      <tr>
+        <td>37</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Shape2</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>18</code></td>
+        <td><code>23</code></td>
+        <td>516</td>
+      </tr>
+      <tr>
+        <td>38</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Shape2</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>774</code></td>
+        <td><code>968</code></td>
+        <td>518</td>
+      </tr>
+      <tr>
+        <td>39</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Shape2</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>6</code></td>
+        <td><code>1</code></td>
+        <td>520</td>
+      </tr>
+      <tr>
+        <td>40</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>24</code></td>
+        <td><code>30</code></td>
+        <td>534</td>
+      </tr>
+      <tr>
+        <td>41</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>710</code></td>
+        <td><code>888</code></td>
+        <td>540</td>
+      </tr>
+      <tr>
+        <td>42</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column1.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>543</td>
+      </tr>
+      <tr>
+        <td>43</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column1.Width</strong></td>
+        <td><code>79</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>546</td>
+      </tr>
+      <tr>
+        <td>44</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column2.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>552</td>
+      </tr>
+      <tr>
+        <td>45</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column2.Width</strong></td>
+        <td><code>79</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>554</td>
+      </tr>
+      <tr>
+        <td>46</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column3.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>560</td>
+      </tr>
+      <tr>
+        <td>47</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column3.Width</strong></td>
+        <td><code>51</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>562</td>
+      </tr>
+      <tr>
+        <td>48</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column3.InputMask</strong></td>
+        <td><code>999999</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>567</td>
+      </tr>
+      <tr>
+        <td>49</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column4.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>569</td>
+      </tr>
+      <tr>
+        <td>50</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column4.Width</strong></td>
+        <td><code>30</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>571</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column5.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>577</td>
+      </tr>
+      <tr>
+        <td>52</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column5.Width</strong></td>
+        <td><code>37</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>579</td>
+      </tr>
+      <tr>
+        <td>53</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column6.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>585</td>
+      </tr>
+      <tr>
+        <td>54</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column6.Width</strong></td>
+        <td><code>79</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>587</td>
+      </tr>
+      <tr>
+        <td>55</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column7.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>593</td>
+      </tr>
+      <tr>
+        <td>56</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column7.Width</strong></td>
+        <td><code>51</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>595</td>
+      </tr>
+      <tr>
+        <td>57</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column8.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>601</td>
+      </tr>
+      <tr>
+        <td>58</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column8.Width</strong></td>
+        <td><code>79</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>603</td>
+      </tr>
+      <tr>
+        <td>59</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column9.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>609</td>
+      </tr>
+      <tr>
+        <td>60</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column9.Width</strong></td>
+        <td><code>110</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>611</td>
+      </tr>
+      <tr>
+        <td>61</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column9.InputMask</strong></td>
+        <td><code>999,999,999.99</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>616</td>
+      </tr>
+      <tr>
+        <td>62</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column10.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>618</td>
+      </tr>
+      <tr>
+        <td>63</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques</code></td>
+        <td><strong>Column10.Width</strong></td>
+        <td><code>55</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>621</td>
+      </tr>
+      <tr>
+        <td>64</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnDatas.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>632</td>
+      </tr>
+      <tr>
+        <td>65</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnDatas.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>633</td>
+      </tr>
+      <tr>
+        <td>66</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnDatas.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Data</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>634</td>
+      </tr>
+      <tr>
+        <td>67</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnDatas.Header1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>635</td>
+      </tr>
+      <tr>
+        <td>68</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnDatas.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>642</td>
+      </tr>
+      <tr>
+        <td>69</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnDatas.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>643</td>
+      </tr>
+      <tr>
+        <td>70</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnDatas.Text1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>648</td>
+      </tr>
+      <tr>
+        <td>71</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnContas.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>655</td>
+      </tr>
+      <tr>
+        <td>72</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnContas.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>656</td>
+      </tr>
+      <tr>
+        <td>73</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnContas.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Conta</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>657</td>
+      </tr>
+      <tr>
+        <td>74</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnContas.Header1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>658</td>
+      </tr>
+      <tr>
+        <td>75</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnContas.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>665</td>
+      </tr>
+      <tr>
+        <td>76</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnContas.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>666</td>
+      </tr>
+      <tr>
+        <td>77</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcopias.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>677</td>
+      </tr>
+      <tr>
+        <td>78</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcopias.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>679</td>
+      </tr>
+      <tr>
+        <td>79</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcopias.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Cópia</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>680</td>
+      </tr>
+      <tr>
+        <td>80</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcopias.Header1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>681</td>
+      </tr>
+      <tr>
+        <td>81</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcopias.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>688</td>
+      </tr>
+      <tr>
+        <td>82</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcopias.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>689</td>
+      </tr>
+      <tr>
+        <td>83</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcopias.Text1</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code>999999</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>691</td>
+      </tr>
+      <tr>
+        <td>84</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnBancos.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>701</td>
+      </tr>
+      <tr>
+        <td>85</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnBancos.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>702</td>
+      </tr>
+      <tr>
+        <td>86</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnBancos.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Bco</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>703</td>
+      </tr>
+      <tr>
+        <td>87</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnBancos.Header1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>704</td>
+      </tr>
+      <tr>
+        <td>88</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnBancos.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>711</td>
+      </tr>
+      <tr>
+        <td>89</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnBancos.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>712</td>
+      </tr>
+      <tr>
+        <td>90</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnAgencias.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>723</td>
+      </tr>
+      <tr>
+        <td>91</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnAgencias.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>724</td>
+      </tr>
+      <tr>
+        <td>92</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnAgencias.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Ag.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>725</td>
+      </tr>
+      <tr>
+        <td>93</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnAgencias.Header1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>726</td>
+      </tr>
+      <tr>
+        <td>94</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnAgencias.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>733</td>
+      </tr>
+      <tr>
+        <td>95</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnAgencias.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>734</td>
+      </tr>
+      <tr>
+        <td>96</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcontas.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>745</td>
+      </tr>
+      <tr>
+        <td>97</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcontas.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>746</td>
+      </tr>
+      <tr>
+        <td>98</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcontas.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>C.Corrente</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>747</td>
+      </tr>
+      <tr>
+        <td>99</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcontas.Header1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>748</td>
+      </tr>
+      <tr>
+        <td>100</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcontas.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>755</td>
+      </tr>
+      <tr>
+        <td>101</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcontas.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>756</td>
+      </tr>
+      <tr>
+        <td>102</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcheques.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>767</td>
+      </tr>
+      <tr>
+        <td>103</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcheques.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>768</td>
+      </tr>
+      <tr>
+        <td>104</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcheques.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Cheque</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>769</td>
+      </tr>
+      <tr>
+        <td>105</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcheques.Header1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>770</td>
+      </tr>
+      <tr>
+        <td>106</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcheques.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>777</td>
+      </tr>
+      <tr>
+        <td>107</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnNcheques.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>778</td>
+      </tr>
+      <tr>
+        <td>108</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnSituacaos.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>789</td>
+      </tr>
+      <tr>
+        <td>109</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnSituacaos.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>790</td>
+      </tr>
+      <tr>
+        <td>110</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnSituacaos.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Situação</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>791</td>
+      </tr>
+      <tr>
+        <td>111</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnSituacaos.Header1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>792</td>
+      </tr>
+      <tr>
+        <td>112</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnSituacaos.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>799</td>
+      </tr>
+      <tr>
+        <td>113</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnSituacaos.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>800</td>
+      </tr>
+      <tr>
+        <td>114</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnValors.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>811</td>
+      </tr>
+      <tr>
+        <td>115</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnValors.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>812</td>
+      </tr>
+      <tr>
+        <td>116</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnValors.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Valor</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>813</td>
+      </tr>
+      <tr>
+        <td>117</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnValors.Header1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>814</td>
+      </tr>
+      <tr>
+        <td>118</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnValors.Text1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>821</td>
+      </tr>
+      <tr>
+        <td>119</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnValors.Text1</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>822</td>
+      </tr>
+      <tr>
+        <td>120</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnValors.Text1</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code>999,999,999.99</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>824</td>
+      </tr>
+      <tr>
+        <td>121</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Header1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>834</td>
+      </tr>
+      <tr>
+        <td>122</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Header1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>2</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>835</td>
+      </tr>
+      <tr>
+        <td>123</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Header1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Imprime</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>836</td>
+      </tr>
+      <tr>
+        <td>124</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Header1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>837</td>
+      </tr>
+      <tr>
+        <td>125</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Check1</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>32</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>844</td>
+      </tr>
+      <tr>
+        <td>126</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Check1</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>845</td>
+      </tr>
+      <tr>
+        <td>127</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Check1</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>17</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>846</td>
+      </tr>
+      <tr>
+        <td>128</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Check1</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>60</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>847</td>
+      </tr>
+      <tr>
+        <td>129</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Check1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>848</td>
+      </tr>
+      <tr>
+        <td>130</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Check1</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>849</td>
+      </tr>
+      <tr>
+        <td>131</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.grdCcheques.clnImprime.Check1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>850</td>
+      </tr>
+      <tr>
+        <td>132</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.txtFavorecido</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>.F.</code></td>
+        <td>858</td>
+      </tr>
+      <tr>
+        <td>133</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.txtFavorecido</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>99</code></td>
+        <td><code>124</code></td>
+        <td>862</td>
+      </tr>
+      <tr>
+        <td>134</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.txtFavorecido</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td>866</td>
+      </tr>
+      <tr>
+        <td>135</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.txtFavorecido</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>286</code></td>
+        <td><code>358</code></td>
+        <td>869</td>
+      </tr>
+      <tr>
+        <td>136</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.txtFavorecido</code></td>
+        <td><strong>Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>.T.</code></td>
+        <td>870</td>
+      </tr>
+      <tr>
+        <td>137</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>11</code></td>
+        <td><code>14</code></td>
+        <td>883</td>
+      </tr>
+      <tr>
+        <td>138</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>789</code></td>
+        <td><code>986</code></td>
+        <td>886</td>
+      </tr>
+      <tr>
+        <td>139</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.Top</strong></td>
+        <td><code>121</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>891</td>
+      </tr>
+      <tr>
+        <td>140</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.Left</strong></td>
+        <td><code>473</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>892</td>
+      </tr>
+      <tr>
+        <td>141</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.Height</strong></td>
+        <td><code>37</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>893</td>
+      </tr>
+      <tr>
+        <td>142</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.Width</strong></td>
+        <td><code>120</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>894</td>
+      </tr>
+      <tr>
+        <td>143</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>895</td>
+      </tr>
+      <tr>
+        <td>144</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>896</td>
+      </tr>
+      <tr>
+        <td>145</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>897</td>
+      </tr>
+      <tr>
+        <td>146</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>898</td>
+      </tr>
+      <tr>
+        <td>147</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.Picture</strong></td>
+        <td><code>..\framework\imagens\geral_pastas_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>899</td>
+      </tr>
+      <tr>
+        <td>148</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.Caption</strong></td>
+        <td><code>\&lt;Documento</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>900</td>
+      </tr>
+      <tr>
+        <td>149</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.PicturePosition</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>902</td>
+      </tr>
+      <tr>
+        <td>150</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>903</td>
+      </tr>
+      <tr>
+        <td>151</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>904</td>
+      </tr>
+      <tr>
+        <td>152</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command1.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>905</td>
+      </tr>
+      <tr>
+        <td>153</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.Top</strong></td>
+        <td><code>6</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>907</td>
+      </tr>
+      <tr>
+        <td>154</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.Left</strong></td>
+        <td><code>713</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>908</td>
+      </tr>
+      <tr>
+        <td>155</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.Height</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>909</td>
+      </tr>
+      <tr>
+        <td>156</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.Width</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>910</td>
+      </tr>
+      <tr>
+        <td>157</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>911</td>
+      </tr>
+      <tr>
+        <td>158</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>912</td>
+      </tr>
+      <tr>
+        <td>159</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>913</td>
+      </tr>
+      <tr>
+        <td>160</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>914</td>
+      </tr>
+      <tr>
+        <td>161</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.Picture</strong></td>
+        <td><code>..\framework\imagens\cadastro_sair_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>915</td>
+      </tr>
+      <tr>
+        <td>162</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.Caption</strong></td>
+        <td><code>Encerrar</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>917</td>
+      </tr>
+      <tr>
+        <td>163</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>920</td>
+      </tr>
+      <tr>
+        <td>164</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>921</td>
+      </tr>
+      <tr>
+        <td>165</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command2.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>922</td>
+      </tr>
+      <tr>
+        <td>166</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.Top</strong></td>
+        <td><code>84</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>924</td>
+      </tr>
+      <tr>
+        <td>167</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.Left</strong></td>
+        <td><code>353</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>925</td>
+      </tr>
+      <tr>
+        <td>168</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.Height</strong></td>
+        <td><code>37</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>926</td>
+      </tr>
+      <tr>
+        <td>169</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.Width</strong></td>
+        <td><code>120</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>927</td>
+      </tr>
+      <tr>
+        <td>170</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>928</td>
+      </tr>
+      <tr>
+        <td>171</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>929</td>
+      </tr>
+      <tr>
+        <td>172</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>930</td>
+      </tr>
+      <tr>
+        <td>173</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>931</td>
+      </tr>
+      <tr>
+        <td>174</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.Picture</strong></td>
+        <td><code>..\framework\imagens\geral_impressora_normal_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>932</td>
+      </tr>
+      <tr>
+        <td>175</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.Caption</strong></td>
+        <td><code>\&lt;Imprimir</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>933</td>
+      </tr>
+      <tr>
+        <td>176</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.PicturePosition</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>935</td>
+      </tr>
+      <tr>
+        <td>177</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>936</td>
+      </tr>
+      <tr>
+        <td>178</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>937</td>
+      </tr>
+      <tr>
+        <td>179</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command3.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>938</td>
+      </tr>
+      <tr>
+        <td>180</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.Top</strong></td>
+        <td><code>84</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>940</td>
+      </tr>
+      <tr>
+        <td>181</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.Left</strong></td>
+        <td><code>593</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>941</td>
+      </tr>
+      <tr>
+        <td>182</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.Height</strong></td>
+        <td><code>37</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>942</td>
+      </tr>
+      <tr>
+        <td>183</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.Width</strong></td>
+        <td><code>120</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>943</td>
+      </tr>
+      <tr>
+        <td>184</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>944</td>
+      </tr>
+      <tr>
+        <td>185</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>945</td>
+      </tr>
+      <tr>
+        <td>186</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>946</td>
+      </tr>
+      <tr>
+        <td>187</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>947</td>
+      </tr>
+      <tr>
+        <td>188</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.Picture</strong></td>
+        <td><code>..\framework\imagens\cadastro_procurar_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>948</td>
+      </tr>
+      <tr>
+        <td>189</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.Caption</strong></td>
+        <td><code>\&lt;Procurar</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>949</td>
+      </tr>
+      <tr>
+        <td>190</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.PicturePosition</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>951</td>
+      </tr>
+      <tr>
+        <td>191</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>952</td>
+      </tr>
+      <tr>
+        <td>192</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>953</td>
+      </tr>
+      <tr>
+        <td>193</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command4.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>954</td>
+      </tr>
+      <tr>
+        <td>194</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.Top</strong></td>
+        <td><code>121</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>956</td>
+      </tr>
+      <tr>
+        <td>195</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.Left</strong></td>
+        <td><code>593</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>957</td>
+      </tr>
+      <tr>
+        <td>196</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.Height</strong></td>
+        <td><code>37</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>958</td>
+      </tr>
+      <tr>
+        <td>197</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.Width</strong></td>
+        <td><code>120</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>959</td>
+      </tr>
+      <tr>
+        <td>198</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>960</td>
+      </tr>
+      <tr>
+        <td>199</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>961</td>
+      </tr>
+      <tr>
+        <td>200</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>962</td>
+      </tr>
+      <tr>
+        <td>201</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>963</td>
+      </tr>
+      <tr>
+        <td>202</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.Picture</strong></td>
+        <td><code>..\framework\imagens\geral_pendencia_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>964</td>
+      </tr>
+      <tr>
+        <td>203</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.Caption</strong></td>
+        <td><code>\&lt;Recibo</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>965</td>
+      </tr>
+      <tr>
+        <td>204</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.PicturePosition</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>967</td>
+      </tr>
+      <tr>
+        <td>205</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>968</td>
+      </tr>
+      <tr>
+        <td>206</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>969</td>
+      </tr>
+      <tr>
+        <td>207</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command5.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>970</td>
+      </tr>
+      <tr>
+        <td>208</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.Top</strong></td>
+        <td><code>84</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>972</td>
+      </tr>
+      <tr>
+        <td>209</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.Left</strong></td>
+        <td><code>473</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>973</td>
+      </tr>
+      <tr>
+        <td>210</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.Height</strong></td>
+        <td><code>37</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>974</td>
+      </tr>
+      <tr>
+        <td>211</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.Width</strong></td>
+        <td><code>120</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>975</td>
+      </tr>
+      <tr>
+        <td>212</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>976</td>
+      </tr>
+      <tr>
+        <td>213</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>977</td>
+      </tr>
+      <tr>
+        <td>214</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>978</td>
+      </tr>
+      <tr>
+        <td>215</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>979</td>
+      </tr>
+      <tr>
+        <td>216</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.Picture</strong></td>
+        <td><code>..\framework\imagens\cadastro_excluir_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>980</td>
+      </tr>
+      <tr>
+        <td>217</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.Caption</strong></td>
+        <td><code>E\&lt;xclui Docto.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>981</td>
+      </tr>
+      <tr>
+        <td>218</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.PicturePosition</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>984</td>
+      </tr>
+      <tr>
+        <td>219</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>985</td>
+      </tr>
+      <tr>
+        <td>220</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>986</td>
+      </tr>
+      <tr>
+        <td>221</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command6.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>987</td>
+      </tr>
+      <tr>
+        <td>222</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.Top</strong></td>
+        <td><code>121</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>989</td>
+      </tr>
+      <tr>
+        <td>223</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.Left</strong></td>
+        <td><code>353</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>990</td>
+      </tr>
+      <tr>
+        <td>224</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.Height</strong></td>
+        <td><code>37</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>991</td>
+      </tr>
+      <tr>
+        <td>225</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.Width</strong></td>
+        <td><code>120</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>992</td>
+      </tr>
+      <tr>
+        <td>226</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>993</td>
+      </tr>
+      <tr>
+        <td>227</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>994</td>
+      </tr>
+      <tr>
+        <td>228</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>995</td>
+      </tr>
+      <tr>
+        <td>229</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>996</td>
+      </tr>
+      <tr>
+        <td>230</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.Picture</strong></td>
+        <td><code>..\framework\imagens\geral_boleto_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>997</td>
+      </tr>
+      <tr>
+        <td>231</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.Caption</strong></td>
+        <td><code>Che\&lt;que</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>998</td>
+      </tr>
+      <tr>
+        <td>232</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.PicturePosition</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1001</td>
+      </tr>
+      <tr>
+        <td>233</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1002</td>
+      </tr>
+      <tr>
+        <td>234</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1003</td>
+      </tr>
+      <tr>
+        <td>235</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command7.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1004</td>
+      </tr>
+      <tr>
+        <td>236</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.Top</strong></td>
+        <td><code>84</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1006</td>
+      </tr>
+      <tr>
+        <td>237</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.Left</strong></td>
+        <td><code>233</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1007</td>
+      </tr>
+      <tr>
+        <td>238</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.Height</strong></td>
+        <td><code>37</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1008</td>
+      </tr>
+      <tr>
+        <td>239</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.Width</strong></td>
+        <td><code>120</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1009</td>
+      </tr>
+      <tr>
+        <td>240</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1010</td>
+      </tr>
+      <tr>
+        <td>241</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1011</td>
+      </tr>
+      <tr>
+        <td>242</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1012</td>
+      </tr>
+      <tr>
+        <td>243</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1013</td>
+      </tr>
+      <tr>
+        <td>244</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.Picture</strong></td>
+        <td><code>..\framework\imagens\cheque.png</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1014</td>
+      </tr>
+      <tr>
+        <td>245</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.Caption</strong></td>
+        <td><code>Chq. \&lt;Matric.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1015</td>
+      </tr>
+      <tr>
+        <td>246</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.PicturePosition</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1018</td>
+      </tr>
+      <tr>
+        <td>247</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1019</td>
+      </tr>
+      <tr>
+        <td>248</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1020</td>
+      </tr>
+      <tr>
+        <td>249</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command8.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1021</td>
+      </tr>
+      <tr>
+        <td>250</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.Top</strong></td>
+        <td><code>121</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1023</td>
+      </tr>
+      <tr>
+        <td>251</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.Left</strong></td>
+        <td><code>233</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1024</td>
+      </tr>
+      <tr>
+        <td>252</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.Height</strong></td>
+        <td><code>37</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1025</td>
+      </tr>
+      <tr>
+        <td>253</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.Width</strong></td>
+        <td><code>120</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1026</td>
+      </tr>
+      <tr>
+        <td>254</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1027</td>
+      </tr>
+      <tr>
+        <td>255</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1028</td>
+      </tr>
+      <tr>
+        <td>256</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1029</td>
+      </tr>
+      <tr>
+        <td>257</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1030</td>
+      </tr>
+      <tr>
+        <td>258</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.Picture</strong></td>
+        <td><code>..\framework\imagens\cadastro_excluir_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1031</td>
+      </tr>
+      <tr>
+        <td>259</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.Caption</strong></td>
+        <td><code>Excluir Chq.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1032</td>
+      </tr>
+      <tr>
+        <td>260</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.PicturePosition</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1035</td>
+      </tr>
+      <tr>
+        <td>261</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1036</td>
+      </tr>
+      <tr>
+        <td>262</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1037</td>
+      </tr>
+      <tr>
+        <td>263</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdGok</code></td>
+        <td><strong>Command9.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1038</td>
+      </tr>
+      <tr>
+        <td>264</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label1</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>34</code></td>
+        <td><code>43</code></td>
+        <td>1051</td>
+      </tr>
+      <tr>
+        <td>265</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label1</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>38</code></td>
+        <td><code>48</code></td>
+        <td>1053</td>
+      </tr>
+      <tr>
+        <td>266</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>RGB(0,0,0)</code></td>
+        <td>1055</td>
+      </tr>
+      <tr>
+        <td>267</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.getCdContas</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>75</code></td>
+        <td><code>94</code></td>
+        <td>1065</td>
+      </tr>
+      <tr>
+        <td>268</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.getCdContas</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td>1067</td>
+      </tr>
+      <tr>
+        <td>269</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.getCdContas</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>100</code></td>
+        <td><code>125</code></td>
+        <td>1070</td>
+      </tr>
+      <tr>
+        <td>270</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.getCdContas</code></td>
+        <td><strong>Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>.T.</code></td>
+        <td>1071</td>
+      </tr>
+      <tr>
+        <td>271</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.getDsContas</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>177</code></td>
+        <td><code>221</code></td>
+        <td>1081</td>
+      </tr>
+      <tr>
+        <td>272</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.getDsContas</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td>1083</td>
+      </tr>
+      <tr>
+        <td>273</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.getDsContas</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>360</code></td>
+        <td><code>450</code></td>
+        <td>1086</td>
+      </tr>
+      <tr>
+        <td>274</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.getDsContas</code></td>
+        <td><strong>Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>.T.</code></td>
+        <td>1087</td>
+      </tr>
+      <tr>
+        <td>275</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>375</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1094</td>
+      </tr>
+      <tr>
+        <td>276</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>742</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1095</td>
+      </tr>
+      <tr>
+        <td>277</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>40</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1096</td>
+      </tr>
+      <tr>
+        <td>278</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>40</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1097</td>
+      </tr>
+      <tr>
+        <td>279</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1098</td>
+      </tr>
+      <tr>
+        <td>280</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>FontItalic</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1099</td>
+      </tr>
+      <tr>
+        <td>281</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Verdana</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1100</td>
+      </tr>
+      <tr>
+        <td>282</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1101</td>
+      </tr>
+      <tr>
+        <td>283</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>Picture</strong></td>
+        <td><code>..\framework\imagens\cadastro_excluir_26.jpg</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1102</td>
+      </tr>
+      <tr>
+        <td>284</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1103</td>
+      </tr>
+      <tr>
+        <td>285</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>36,84,155</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1107</td>
+      </tr>
+      <tr>
+        <td>286</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1108</td>
+      </tr>
+      <tr>
+        <td>287</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdApaga1</code></td>
+        <td><strong>Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1110</td>
+      </tr>
+      <tr>
+        <td>288</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Dt_inicial</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>598</code></td>
+        <td><code>748</code></td>
+        <td>1119</td>
+      </tr>
+      <tr>
+        <td>289</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Dt_inicial</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td>1120</td>
+      </tr>
+      <tr>
+        <td>290</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Dt_final</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>701</code></td>
+        <td><code>876</code></td>
+        <td>1131</td>
+      </tr>
+      <tr>
+        <td>291</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Dt_final</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td>1132</td>
+      </tr>
+      <tr>
+        <td>292</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Say2</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>a</code></td>
+        <td><code>Período :</code></td>
+        <td>1142</td>
+      </tr>
+      <tr>
+        <td>293</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Say2</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>RGB(0,0,0)</code></td>
+        <td>1146</td>
+      </tr>
+      <tr>
+        <td>294</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label2</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>550</code></td>
+        <td><code>688</code></td>
+        <td>1159</td>
+      </tr>
+      <tr>
+        <td>295</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label2</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>45</code></td>
+        <td><code>56</code></td>
+        <td>1161</td>
+      </tr>
+      <tr>
+        <td>296</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label2</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>RGB(0,0,0)</code></td>
+        <td>1163</td>
+      </tr>
+      <tr>
+        <td>297</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Command2</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>598</code></td>
+        <td><code>748</code></td>
+        <td>1171</td>
+      </tr>
+      <tr>
+        <td>298</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Command2</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>88</code></td>
+        <td><code>110</code></td>
+        <td>1173</td>
+      </tr>
+      <tr>
+        <td>299</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Command2</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>.F.</code></td>
+        <td>1174</td>
+      </tr>
+      <tr>
+        <td>300</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Command2</code></td>
+        <td><strong>FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>.F.</code></td>
+        <td>1175</td>
+      </tr>
+      <tr>
+        <td>301</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Command2</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>Tahoma</code></td>
+        <td>1176</td>
+      </tr>
+      <tr>
+        <td>302</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Command2</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>RGB(0,0,0)</code></td>
+        <td>1180</td>
+      </tr>
+      <tr>
+        <td>303</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Command2</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>RGB(236,233,216)</code></td>
+        <td>1181</td>
+      </tr>
+      <tr>
+        <td>304</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Command2</code></td>
+        <td><strong>Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>.T.</code></td>
+        <td>1182</td>
+      </tr>
+      <tr>
+        <td>305</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label3</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>34</code></td>
+        <td><code>43</code></td>
+        <td>1195</td>
+      </tr>
+      <tr>
+        <td>306</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label3</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>38</code></td>
+        <td><code>48</code></td>
+        <td>1197</td>
+      </tr>
+      <tr>
+        <td>307</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.Label3</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>RGB(0,0,0)</code></td>
+        <td>1199</td>
+      </tr>
+      <tr>
+        <td>308</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.GetCdGrupos</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>75</code></td>
+        <td><code>94</code></td>
+        <td>1209</td>
+      </tr>
+      <tr>
+        <td>309</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.GetCdGrupos</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td>1211</td>
+      </tr>
+      <tr>
+        <td>310</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.GetCdGrupos</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>100</code></td>
+        <td><code>125</code></td>
+        <td>1214</td>
+      </tr>
+      <tr>
+        <td>311</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.GetCdGrupos</code></td>
+        <td><strong>Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>.T.</code></td>
+        <td>1215</td>
+      </tr>
+      <tr>
+        <td>312</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.GetDsGrupos</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>177</code></td>
+        <td><code>221</code></td>
+        <td>1225</td>
+      </tr>
+      <tr>
+        <td>313</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.GetDsGrupos</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>0</code></td>
+        <td>1227</td>
+      </tr>
+      <tr>
+        <td>314</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.GetDsGrupos</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>360</code></td>
+        <td><code>450</code></td>
+        <td>1230</td>
+      </tr>
+      <tr>
+        <td>315</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.GetDsGrupos</code></td>
+        <td><strong>Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>.T.</code></td>
+        <td>1231</td>
+      </tr>
+      <tr>
+        <td>316</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>395</code></td>
+        <td><code>494</code></td>
+        <td>1239</td>
+      </tr>
+      <tr>
+        <td>317</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>350</code></td>
+        <td><code>438</code></td>
+        <td>1240</td>
+      </tr>
+      <tr>
+        <td>318</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa</code></td>
+        <td><strong>BorderWidth</strong></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td>1242</td>
+      </tr>
+      <tr>
+        <td>319</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>0</code></td>
+        <td><code>2</code></td>
+        <td>1243</td>
+      </tr>
+      <tr>
+        <td>320</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>RGB(236,233,216)</code></td>
+        <td>1245</td>
+      </tr>
+      <tr>
+        <td>321</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.Label5</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>143</code></td>
+        <td><code>179</code></td>
+        <td>1260</td>
+      </tr>
+      <tr>
+        <td>322</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.Label5</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>RGB(0,0,0)</code></td>
+        <td>1262</td>
+      </tr>
+      <tr>
+        <td>323</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td>1271</td>
+      </tr>
+      <tr>
+        <td>324</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>243</code></td>
+        <td><code>304</code></td>
+        <td>1274</td>
+      </tr>
+      <tr>
+        <td>325</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>107</code></td>
+        <td><code>134</code></td>
+        <td>1276</td>
+      </tr>
+      <tr>
+        <td>326</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.Top</strong></td>
+        <td><code>4</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1279</td>
+      </tr>
+      <tr>
+        <td>327</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1280</td>
+      </tr>
+      <tr>
+        <td>328</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.Height</strong></td>
+        <td><code>40</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1281</td>
+      </tr>
+      <tr>
+        <td>329</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.Width</strong></td>
+        <td><code>48</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1282</td>
+      </tr>
+      <tr>
+        <td>330</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.FontName</strong></td>
+        <td><code>Verdana</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1283</td>
+      </tr>
+      <tr>
+        <td>331</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1284</td>
+      </tr>
+      <tr>
+        <td>332</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.Picture</strong></td>
+        <td><code>..\framework\imagens\geral_escudo_ok_32.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1285</td>
+      </tr>
+      <tr>
+        <td>333</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.Caption</strong></td>
+        <td><code></code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1286</td>
+      </tr>
+      <tr>
+        <td>334</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.ForeColor</strong></td>
+        <td><code>36,84,155</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1289</td>
+      </tr>
+      <tr>
+        <td>335</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1290</td>
+      </tr>
+      <tr>
+        <td>336</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command1.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1291</td>
+      </tr>
+      <tr>
+        <td>337</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.Top</strong></td>
+        <td><code>4</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1293</td>
+      </tr>
+      <tr>
+        <td>338</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.Left</strong></td>
+        <td><code>53</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1294</td>
+      </tr>
+      <tr>
+        <td>339</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.Height</strong></td>
+        <td><code>40</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1295</td>
+      </tr>
+      <tr>
+        <td>340</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.Width</strong></td>
+        <td><code>48</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1296</td>
+      </tr>
+      <tr>
+        <td>341</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.FontName</strong></td>
+        <td><code>Verdana</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1297</td>
+      </tr>
+      <tr>
+        <td>342</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1298</td>
+      </tr>
+      <tr>
+        <td>343</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.Picture</strong></td>
+        <td><code>..\framework\imagens\cadastro_sair_32.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1299</td>
+      </tr>
+      <tr>
+        <td>344</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.Caption</strong></td>
+        <td><code></code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1301</td>
+      </tr>
+      <tr>
+        <td>345</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.ForeColor</strong></td>
+        <td><code>36,84,155</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1303</td>
+      </tr>
+      <tr>
+        <td>346</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1304</td>
+      </tr>
+      <tr>
+        <td>347</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.cmdGconf</code></td>
+        <td><strong>Command2.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1305</td>
+      </tr>
+      <tr>
+        <td>348</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.get_justificativa</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>238</code></td>
+        <td><code>298</code></td>
+        <td>1315</td>
+      </tr>
+      <tr>
+        <td>349</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.get_justificativa</code></td>
+        <td><strong>DisabledBackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>15790320</code></td>
+        <td>1317</td>
+      </tr>
+      <tr>
+        <td>350</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntjustificativa.get_justificativa</code></td>
+        <td><strong>DisabledForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>7171437</code></td>
+        <td>1318</td>
+      </tr>
+      <tr>
+        <td>351</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>334</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1325</td>
+      </tr>
+      <tr>
+        <td>352</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>742</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1326</td>
+      </tr>
+      <tr>
+        <td>353</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>40</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1327</td>
+      </tr>
+      <tr>
+        <td>354</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>40</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1328</td>
+      </tr>
+      <tr>
+        <td>355</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Verdana</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1329</td>
+      </tr>
+      <tr>
+        <td>356</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1330</td>
+      </tr>
+      <tr>
+        <td>357</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>Picture</strong></td>
+        <td><code>..\framework\imagens\geral_marcar_26.jpg</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1331</td>
+      </tr>
+      <tr>
+        <td>358</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1332</td>
+      </tr>
+      <tr>
+        <td>359</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>36,84,155</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1336</td>
+      </tr>
+      <tr>
+        <td>360</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1337</td>
+      </tr>
+      <tr>
+        <td>361</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cmdTudo1</code></td>
+        <td><strong>Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1339</td>
+      </tr>
+      <tr>
+        <td>362</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>240</code></td>
+        <td><code>300</code></td>
+        <td>1347</td>
+      </tr>
+      <tr>
+        <td>363</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>314</code></td>
+        <td><code>393</code></td>
+        <td>1348</td>
+      </tr>
+      <tr>
+        <td>364</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>0</code></td>
+        <td><code>2</code></td>
+        <td>1350</td>
+      </tr>
+      <tr>
+        <td>365</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.lblBanco</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>66</code></td>
+        <td><code>83</code></td>
+        <td>1363</td>
+      </tr>
+      <tr>
+        <td>366</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.lblBanco</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>38</code></td>
+        <td><code>48</code></td>
+        <td>1365</td>
+      </tr>
+      <tr>
+        <td>367</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.lblAgencia</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>28</code></td>
+        <td><code>35</code></td>
+        <td>1375</td>
+      </tr>
+      <tr>
+        <td>368</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.lblAgencia</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>76</code></td>
+        <td><code>95</code></td>
+        <td>1377</td>
+      </tr>
+      <tr>
+        <td>369</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.lblCheque</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>172</code></td>
+        <td><code>215</code></td>
+        <td>1387</td>
+      </tr>
+      <tr>
+        <td>370</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.lblCheque</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>71</code></td>
+        <td><code>89</code></td>
+        <td>1389</td>
+      </tr>
+      <tr>
+        <td>371</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.getBanco</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>107</code></td>
+        <td><code>134</code></td>
+        <td>1398</td>
+      </tr>
+      <tr>
+        <td>372</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.getBanco</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>31</code></td>
+        <td><code>39</code></td>
+        <td>1401</td>
+      </tr>
+      <tr>
+        <td>373</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.getChfin</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>245</code></td>
+        <td><code>306</code></td>
+        <td>1411</td>
+      </tr>
+      <tr>
+        <td>374</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.getChfin</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>52</code></td>
+        <td><code>65</code></td>
+        <td>1415</td>
+      </tr>
+      <tr>
+        <td>375</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td>1425</td>
+      </tr>
+      <tr>
+        <td>376</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>134</code></td>
+        <td><code>167</code></td>
+        <td>1428</td>
+      </tr>
+      <tr>
+        <td>377</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>173</code></td>
+        <td><code>216</code></td>
+        <td>1431</td>
+      </tr>
+      <tr>
+        <td>378</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.Top</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1436</td>
+      </tr>
+      <tr>
+        <td>379</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.Left</strong></td>
+        <td><code>13</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1437</td>
+      </tr>
+      <tr>
+        <td>380</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.Height</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1438</td>
+      </tr>
+      <tr>
+        <td>381</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.Width</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1439</td>
+      </tr>
+      <tr>
+        <td>382</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1440</td>
+      </tr>
+      <tr>
+        <td>383</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1441</td>
+      </tr>
+      <tr>
+        <td>384</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1442</td>
+      </tr>
+      <tr>
+        <td>385</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1443</td>
+      </tr>
+      <tr>
+        <td>386</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.Picture</strong></td>
+        <td><code>..\framework\imagens\geral_impressora_normal_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1444</td>
+      </tr>
+      <tr>
+        <td>387</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.Caption</strong></td>
+        <td><code>\&lt;Imprimir</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1445</td>
+      </tr>
+      <tr>
+        <td>388</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1446</td>
+      </tr>
+      <tr>
+        <td>389</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1447</td>
+      </tr>
+      <tr>
+        <td>390</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command1.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1448</td>
+      </tr>
+      <tr>
+        <td>391</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.Top</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1450</td>
+      </tr>
+      <tr>
+        <td>392</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.Left</strong></td>
+        <td><code>95</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1451</td>
+      </tr>
+      <tr>
+        <td>393</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.Height</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1452</td>
+      </tr>
+      <tr>
+        <td>394</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.Width</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1453</td>
+      </tr>
+      <tr>
+        <td>395</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1454</td>
+      </tr>
+      <tr>
+        <td>396</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1455</td>
+      </tr>
+      <tr>
+        <td>397</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1456</td>
+      </tr>
+      <tr>
+        <td>398</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1457</td>
+      </tr>
+      <tr>
+        <td>399</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.Picture</strong></td>
+        <td><code>..\framework\imagens\cadastro_sair_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1458</td>
+      </tr>
+      <tr>
+        <td>400</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.Caption</strong></td>
+        <td><code>Encerrar</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1460</td>
+      </tr>
+      <tr>
+        <td>401</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1461</td>
+      </tr>
+      <tr>
+        <td>402</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1462</td>
+      </tr>
+      <tr>
+        <td>403</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.impchmat.cmdGprocurar</code></td>
+        <td><strong>Command2.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1463</td>
+      </tr>
+      <tr>
+        <td>404</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.Label1</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>65</code></td>
+        <td><code>81</code></td>
+        <td>1478</td>
+      </tr>
+      <tr>
+        <td>405</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.Getchini</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>107</code></td>
+        <td><code>134</code></td>
+        <td>1489</td>
+      </tr>
+      <tr>
+        <td>406</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.impchmat.Getchini</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>52</code></td>
+        <td><code>65</code></td>
+        <td>1493</td>
+      </tr>
+      <tr>
+        <td>407</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>240</code></td>
+        <td><code>300</code></td>
+        <td>1502</td>
+      </tr>
+      <tr>
+        <td>408</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>314</code></td>
+        <td><code>393</code></td>
+        <td>1503</td>
+      </tr>
+      <tr>
+        <td>409</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>0</code></td>
+        <td><code>2</code></td>
+        <td>1505</td>
+      </tr>
+      <tr>
+        <td>410</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar</code></td>
+        <td><strong>BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>RGB(236,233,216)</code></td>
+        <td>1509</td>
+      </tr>
+      <tr>
+        <td>411</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblBanco</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>36</code></td>
+        <td><code>45</code></td>
+        <td>1518</td>
+      </tr>
+      <tr>
+        <td>412</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblBanco</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>38</code></td>
+        <td><code>48</code></td>
+        <td>1520</td>
+      </tr>
+      <tr>
+        <td>413</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblAgencia</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>27</code></td>
+        <td><code>34</code></td>
+        <td>1530</td>
+      </tr>
+      <tr>
+        <td>414</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblAgencia</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>47</code></td>
+        <td><code>59</code></td>
+        <td>1532</td>
+      </tr>
+      <tr>
+        <td>415</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblConta</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>36</code></td>
+        <td><code>45</code></td>
+        <td>1542</td>
+      </tr>
+      <tr>
+        <td>416</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblConta</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>38</code></td>
+        <td><code>48</code></td>
+        <td>1544</td>
+      </tr>
+      <tr>
+        <td>417</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblCheque</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>164</code></td>
+        <td><code>205</code></td>
+        <td>1554</td>
+      </tr>
+      <tr>
+        <td>418</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblCheque</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>46</code></td>
+        <td><code>58</code></td>
+        <td>1556</td>
+      </tr>
+      <tr>
+        <td>419</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getBanco</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code>999</code></td>
+        <td><code></code></td>
+        <td>1564</td>
+      </tr>
+      <tr>
+        <td>420</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getBanco</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>77</code></td>
+        <td><code>96</code></td>
+        <td>1565</td>
+      </tr>
+      <tr>
+        <td>421</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getBanco</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>31</code></td>
+        <td><code>39</code></td>
+        <td>1568</td>
+      </tr>
+      <tr>
+        <td>422</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getAgencia</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code>9999</code></td>
+        <td><code></code></td>
+        <td>1576</td>
+      </tr>
+      <tr>
+        <td>423</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getAgencia</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>77</code></td>
+        <td><code>96</code></td>
+        <td>1577</td>
+      </tr>
+      <tr>
+        <td>424</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getAgencia</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>40</code></td>
+        <td><code>50</code></td>
+        <td>1581</td>
+      </tr>
+      <tr>
+        <td>425</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getConta</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code>9999999999</code></td>
+        <td><code></code></td>
+        <td>1590</td>
+      </tr>
+      <tr>
+        <td>426</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getConta</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>77</code></td>
+        <td><code>96</code></td>
+        <td>1591</td>
+      </tr>
+      <tr>
+        <td>427</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getConta</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>81</code></td>
+        <td><code>101</code></td>
+        <td>1595</td>
+      </tr>
+      <tr>
+        <td>428</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getCheque</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code>999999</code></td>
+        <td><code></code></td>
+        <td>1604</td>
+      </tr>
+      <tr>
+        <td>429</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getCheque</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>213</code></td>
+        <td><code>266</code></td>
+        <td>1605</td>
+      </tr>
+      <tr>
+        <td>430</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getCheque</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>52</code></td>
+        <td><code>65</code></td>
+        <td>1609</td>
+      </tr>
+      <tr>
+        <td>431</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblEmissão</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Emissão :</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1617</td>
+      </tr>
+      <tr>
+        <td>432</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblEmissão</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>15</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1618</td>
+      </tr>
+      <tr>
+        <td>433</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblEmissão</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>163</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1619</td>
+      </tr>
+      <tr>
+        <td>434</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblEmissão</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>163</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1620</td>
+      </tr>
+      <tr>
+        <td>435</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblEmissão</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>47</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>1621</td>
+      </tr>
+      <tr>
+        <td>436</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblValor</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>177</code></td>
+        <td><code>221</code></td>
+        <td>1631</td>
+      </tr>
+      <tr>
+        <td>437</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.lblValor</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>33</code></td>
+        <td><code>41</code></td>
+        <td>1633</td>
+      </tr>
+      <tr>
+        <td>438</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getEmissao</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>213</code></td>
+        <td><code>266</code></td>
+        <td>1643</td>
+      </tr>
+      <tr>
+        <td>439</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getEmissao</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>81</code></td>
+        <td><code>101</code></td>
+        <td>1647</td>
+      </tr>
+      <tr>
+        <td>440</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getValor</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code>999,999.99</code></td>
+        <td><code>999,999,999.99</code></td>
+        <td>1656</td>
+      </tr>
+      <tr>
+        <td>441</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getValor</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>213</code></td>
+        <td><code>266</code></td>
+        <td>1657</td>
+      </tr>
+      <tr>
+        <td>442</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.getValor</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>81</code></td>
+        <td><code>101</code></td>
+        <td>1661</td>
+      </tr>
+      <tr>
+        <td>443</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.Label1</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>9</code></td>
+        <td><code>8</code></td>
+        <td>1672</td>
+      </tr>
+      <tr>
+        <td>444</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.Label1</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>54</code></td>
+        <td><code>68</code></td>
+        <td>1678</td>
+      </tr>
+      <tr>
+        <td>445</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.Label1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>RGB(0,0,0)</code></td>
+        <td>1680</td>
+      </tr>
+      <tr>
+        <td>446</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>BorderStyle</strong></td>
+        <td><code>0</code></td>
+        <td><code>1</code></td>
+        <td>1689</td>
+      </tr>
+      <tr>
+        <td>447</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>135</code></td>
+        <td><code>169</code></td>
+        <td>1692</td>
+      </tr>
+      <tr>
+        <td>448</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>173</code></td>
+        <td><code>216</code></td>
+        <td>1695</td>
+      </tr>
+      <tr>
+        <td>449</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.Top</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1700</td>
+      </tr>
+      <tr>
+        <td>450</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.Left</strong></td>
+        <td><code>21</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1701</td>
+      </tr>
+      <tr>
+        <td>451</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.Height</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1702</td>
+      </tr>
+      <tr>
+        <td>452</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.Width</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1703</td>
+      </tr>
+      <tr>
+        <td>453</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1704</td>
+      </tr>
+      <tr>
+        <td>454</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1705</td>
+      </tr>
+      <tr>
+        <td>455</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1706</td>
+      </tr>
+      <tr>
+        <td>456</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1707</td>
+      </tr>
+      <tr>
+        <td>457</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.Picture</strong></td>
+        <td><code>..\framework\imagens\cadastro_procurar_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1708</td>
+      </tr>
+      <tr>
+        <td>458</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.Caption</strong></td>
+        <td><code>\&lt;Procurar</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1709</td>
+      </tr>
+      <tr>
+        <td>459</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1710</td>
+      </tr>
+      <tr>
+        <td>460</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1711</td>
+      </tr>
+      <tr>
+        <td>461</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command1.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1712</td>
+      </tr>
+      <tr>
+        <td>462</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.Top</strong></td>
+        <td><code>1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1714</td>
+      </tr>
+      <tr>
+        <td>463</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.Left</strong></td>
+        <td><code>97</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1715</td>
+      </tr>
+      <tr>
+        <td>464</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.Height</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1716</td>
+      </tr>
+      <tr>
+        <td>465</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.Width</strong></td>
+        <td><code>75</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1717</td>
+      </tr>
+      <tr>
+        <td>466</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1718</td>
+      </tr>
+      <tr>
+        <td>467</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.FontItalic</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1719</td>
+      </tr>
+      <tr>
+        <td>468</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.FontName</strong></td>
+        <td><code>Comic Sans MS</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1720</td>
+      </tr>
+      <tr>
+        <td>469</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1721</td>
+      </tr>
+      <tr>
+        <td>470</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.Picture</strong></td>
+        <td><code>..\framework\imagens\cadastro_sair_60.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1722</td>
+      </tr>
+      <tr>
+        <td>471</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.Caption</strong></td>
+        <td><code>Encerrar</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1724</td>
+      </tr>
+      <tr>
+        <td>472</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1725</td>
+      </tr>
+      <tr>
+        <td>473</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.BackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1726</td>
+      </tr>
+      <tr>
+        <td>474</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGPRCHR.cntProcurar.cmdgprocurar</code></td>
+        <td><strong>Command2.Themes</strong></td>
+        <td><code>.F.</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>1727</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <div class="rodape">
+            <p>Gerado automaticamente por ValidarUIFidelity.prg | Sistema de Refatoracao VFP9</p>
+        </div>
+    </div>
+</body>
+</html>

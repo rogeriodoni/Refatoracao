@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. A Fase 8 est├í conclu├¡da com 1549 linhas no total.
+
+**Resumo dos m├®todos adicionados na Fase 8:**
+
+| M├®todo | Comportamento no Form OPERACIONAL |
+|--------|-----------------------------------|
+| `BtnBuscarClick()` | Re-executa `GetOpValid()` para recarregar a OP atual |
+| `BtnEncerrarClick()` | Rollback + `Release()` ÔÇö equivalente ao bot├úo "Encerrar" |
+| `BtnSalvarClick()` | Delega para `GrupoConfClick` (revis├úo) ou `GrupoSalvaClick` (entrada) |
+| `BtnCancelarClick()` | Rollback + ZAP cursores + retorno ao estado inicial sem confirma├º├úo |
+| `FormParaBO()` | Propaga `this_nNops`, `this_cOperacao`, `this_cEmps` para o BO |
+| `BOParaForm()` | Atualiza `txt_4c_Produto` com `this_cProduto` do BO |
+| `HabilitarCampos()` | `txt_4c_Op` edit├ível apenas enquanto `Temporario` estiver vazio |
+| `LimparCampos()` | ZAP de Temp_DivOp/Temporario/xNensi + reset dos campos + `AlternarPagina(1)` |
+| `CarregarLista()` | Re-executa `GetOpValid()` se OP informada + `Refresh()` do grid |
+| `AjustarBotoesPorModo()` | Mapeia modos "DADOS"/"REVISAO" ÔåÆ `AlternarPagina(2)`, demais ÔåÆ pagina 1 |
+
+O arquivo `Formsigopdiv.prg` est├í completo e funcional ÔÇö todas as 8 fases conclu├¡das.

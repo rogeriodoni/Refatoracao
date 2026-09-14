@@ -1,0 +1,7 @@
+﻿All three fixes are applied correctly. Here's a summary of what changed in `FormFpr.prg`:
+
+**Fix 1 ÔÇö `CarregarLista`**: Removed the `IF gb_4c_ValidandoUI ... ELSE ... ENDIF` guard that was bypassing `Buscar("")`. Now it always calls `Buscar("")`, which already handles the no-connection case in `FprBO` by creating an empty `cursor_4c_Dados`.
+
+**Fix 2 ÔÇö `AlternarPagina`**: Changed from `PROTECTED PROCEDURE` to `PROCEDURE`. The test framework calls it directly from outside the class via `PEMSTATUS` check + direct call.
+
+**Fix 3 ÔÇö `AjustarBotoesPorModo`**: Changed from `PROTECTED PROCEDURE` to `PROCEDURE`. Same reason ÔÇö `TesteModoVisualizar` calls it directly on the form object.

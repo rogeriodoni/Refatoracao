@@ -1,0 +1,353 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReHev.SCX
+* Data/Hora: 05/06/2026 23:31:02
+* Total de registros: 6
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREHEV
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_operacao
+  Parent: SIGREHEV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Op
+  Parent: SIGREHEV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 15
+  Left = 49
+  Width = 268
+  Height = 73
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHEV
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Histórico de Envelopes"
+  placesso = .F.
+  Name = "SIGREHEV"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 530
+  btnReport.Top = 0
+  btnReport.ZOrderSet = 4
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHEV.lbl_operacao
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Envelope  :"
+  Left = 323
+  Top = 159
+  Width = 56
+  TabIndex = 3
+  ZOrderSet = 2
+  Name = "lbl_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHEV.Get_Op
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  InputMask = ""
+  Left = 384
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 156
+  Width = 85
+  ZOrderSet = 3
+  Name = "Get_Op"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREHEV
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReHev Preview NoConsole
+ThisForm.get_Op.Setfocus
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private lnOp, llAcesso
+Local lcCbEmpresa, lcCbTitulo
+
+lcCbEmpresa = _SCreen.Caption
+lcCbTitulo  = 'Análise do Envelope nº ' + Alltrim(Str(ThisForm.Get_Op.Value))
+
+Create Cursor csCabecalho (cb_empresa c(80), cb_titulo c(80))
+Insert Into csCabecalho (cb_empresa, cb_titulo) Values (lcCbEmpresa, lcCbTitulo)
+
+lcQuery = [Select Distinct DigEnves From SigCdOpe Where (Servicos = 1 Or Servicos = 2) Or ]+;
+			[(Globalizas = 1 Or Globalizas = 2)]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpOpe') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpOpe)')
+	Return 0
+EndIf
+
+_pVez = 1
+
+lcSql = [Select DopEnvels From SigCdPam ]
+ThisForm.Podatamgr.Sqlexecute(lcsql,'TmpParam')
+lcDopeE = TmpParam.DopEnvels
+
+llAcesso = ThisForm.Envelope > 0 And fChecaAcesso('SigReHev','RESUMIDO',.f.,.f.,.t.)
+
+SELECT CrTmpOpe
+Scan
+
+	lnOp     = Val(STR(DigEnves,1)+TRANSFORM(ThisForm.Get_Op.Value,"@L 999999"))
+
+	lcQuery = [Select Nenvs, cIdChaves, Datas, Emps, Dopps, Numps, GrupoOs, ] + ;
+					 [ContaOs, GrupoDs, ContaDs, Pesos, Qtds, Dopes, EmpDnPs, EmpDnPs as ObsOps, ?llAcesso As Acesso ] + ;
+			    [From SigPdMvf ] + ;
+			   [Where (Nenvs = ]+Str(LnOp)+[ And Dopps <> ']+lcDopeE+[') Or (Dopps = ']+lcDopeE+[' And Numps = ]+Str(LnOp)+[) ] + ;
+			   [Order By Nenvs, cIdChaves ]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigPdMvf') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPdMvf)')
+		Return 0
+	EndIf
+
+	Select crSigPdMvf
+	Index On cIdChaves Tag Nenvs
+	Set Order To Nenvs
+
+	IF _pVez = 1
+		=Afields(xMfas)
+		Create Cursor Temp_HisOp From Array xMfas
+		Index on CidChaves Tag CidChaves
+	EndIf
+
+	Select crSigPdMvf
+	Scan
+		_ChaveMfas = Emps + Dopps + Str(Numps,10)
+
+		lnPeso = 0
+		lnQtde = 0
+		Scan While Emps + Dopps + Str(Numps,10) = _ChaveMfas
+			lnPeso = lnPeso + Pesos
+			lnQtde = lnQtde + Qtds
+		EndScan
+		Skip - 1
+		Scatter Memvar Memo
+		
+		lcQuery = [Select Rclis From SigCdCli Where Iclis = ']+m.ContaOs+[']
+		=ThisForm.PodataMgr.SqlExecute(lcQuery,'CrTmpCli')
+		m.Dopes = CrTmpCli.Rclis
+		
+		lcQuery = [Select Rclis From SigCdCli Where Iclis = ']+m.ContaDs+[']
+		=ThisForm.PodataMgr.SqlExecute(lcQuery,'CrTmpCli')
+		m.empDnPs = CrTmpCli.Rclis
+
+		Select Temp_HisOp
+		Append Blank
+		Gather Memvar
+		Replace Pesos  With lnPeso, ;
+				Qtds   With lnQtde, ; 
+				ObsOps With ' '
+				
+	EndScan
+
+	_pVez = _pVez + 1
+
+EndScan
+Select Temp_HisOp
+Go Bottom
+
+If ! llAcesso
+	lcConta = Temp_HisOp.ContaDs
+	lcSql = [Select ObsOps From SigCdCe Where Iclis = ']+lcConta+[']
+	If Thisform.Podatamgr.Sqlexecute(lcsql,'TmpCliE') > 0
+		Select Temp_HisOp
+		Replace ObsOps With TmpCliE.ObsOps in Temp_HisOp
+	EndIf
+Else 
+	Select Temp_HisOp
+	Scan
+		lcConta = Temp_HisOp.ContaDs
+		lcSql = [Select ObsOps From SigCdCe Where Iclis = ']+lcConta+[']
+		Select Temp_HisOp
+		If Thisform.Podatamgr.Sqlexecute(lcsql,'TmpCliE') > 0
+			Replace ObsOps With Temp_HisOp.Emps + ' '+TmpCliE.ObsOps in Temp_HisOp
+		Else
+			Replace ObsOps With '' in Temp_HisOp
+		EndIf
+	EndScan
+Endif
+
+Select Temp_HisOp
+Go Top
+
+IF ThisForm.Envelope > 0
+	If Eof('Temp_HisOp')
+		=Messagebox('O Envelope Não Foi Encontrado!!!', 16, '')
+	Else
+		Report Form SigReHev Preview NoConsole
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pEnvelope
+
+ThisForm.Envelope = 0
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	ENDIF
+
+	IF TYPE('pEnvelope') = [N]
+		ThisForm.Envelope = pEnvelope
+		ThisForm.Get_Op.Value = pEnvelope
+		ThisForm.Processamento()
+		ThisForm.Release
+		RETURN .f.
+	Endif
+EndWith
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReHev To Printer Prompt NoConsole
+ThisForm.get_Op.Setfocus
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReHev To Printer NoConsole
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREHEV
+RESERVED3 (ClassInfo): envelope
+placesso
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

@@ -1,0 +1,19 @@
+﻿FASE 3/8 complete. `C:\4c\projeto\app\forms\cadastros\Formccr.prg` created (~640 lines).
+
+**What's included:**
+
+- **ConfigurarPageFrame**: outer 2-page (Page1=Lista, Page2=Dados), `Top=-29`, `Width=1003`
+- **ConfigurarPaginaLista**: header, 5 CRUD buttons + Encerrar, filtros container, `grd_4c_Lista` (5 cols: Codigos/Descrs/Internos/TpCods/DClasses at `Top=121, Left=11, Width=938`)
+- **ConfigurarPaginaDados**: Save/Cancel buttons, Row1 (Codigos/Descrs/Interno), Row2 (`opt_4c_TpCods` OptionGroup, Digito, Classes+DClasses, `chk_4c_LimCrds`/`chk_4c_LimEsts`), inner `pgf_4c_AbaDados` with 4 empty tab pages (Geral/Cadastro/Estoque/Faturamento)
+- **CarregarLista**: sets all 5 column ControlSources + headers + widths
+- **FormParaBO / BOParaForm**: identification fields + TpCods visibility + checkboxes; `*-- TODO FASE 4` stubs for tab controls
+- **LimparCampos / HabilitarCampos**: identification layer complete; `*-- TODO FASE 4/7` for tabs
+- **All button handlers**: complete logic (Incluir/Visualizar/Alterar/Excluir/Buscar/Encerrar/Salvar/Cancelar)
+- **opt_4c_TpCods_InteractiveChange**: controls Digito/LblDigito visibility
+- **Classes lookup**: `txt_4c_Classes_KeyPress` (F4), `txt_4c_Classes_LostFocus`, `AbrirLookupClasses`, `ValidarClasses`
+
+**Remaining phases:**
+- **FASE 4**: Add controls inside the 4 inner tab pages (OptionGroups, TextBoxes, Labels for Geral/Cadastro/Estoque/Faturamento)
+- **FASE 6**: Additional lookups (GrupoGeral/GrupoEst via `fAcessoContab`, Situas via `fwBuscaSel`, ContaFalha/GrupoFalha via `fAcessoContas`, CdMoeda)
+- **FASE 7**: Complete `HabilitarCampos` + TpEmps visibility logic
+- **FASE 8**: Menu item in `menu.prg` + `AbrirFormccr()` procedure

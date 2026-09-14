@@ -1,0 +1,10 @@
+﻿O arquivo est├í correto. Fase 8 conclu├¡da: os 4 m├®todos foram adicionados antes do `ENDDEFINE`.
+
+**Resumo do que foi feito:**
+
+- `FormParaBO()` ÔÇö transfere todos os campos vis├¡veis da Page2 para as propriedades do BO (`this_cCPros`, `this_cDPros`, `this_cCGrus`, `this_cDGrus`, `this_cIFors`, `this_cRClis`, `this_cReffs`, `this_nSituas`)
+- `BOParaForm()` ÔÇö sentido inverso: popula os campos da Page2 a partir do BO, incluindo sincroniza├º├úo das flags `this_lTemTam`/`this_lTemCor`/`this_nTipoEstos`
+- `HabilitarCampos(par_lHabilitar)` ÔÇö controla `ReadOnly` do produto e da grade, visibilidade do btn Excluir, `ReadOnly` das colunas de varia├º├úo, e `Enabled` dos bot├Áes Confirmar/Cancelar, tudo conforme `this_cPCEscolha`
+- `AjustarBotoesPorModo()` ÔÇö ajusta `Enabled` dos 5 bot├Áes CRUD da Page1 (Visualizar/Alterar/Excluir ficam desabilitados quando n├úo h├í registros no cursor)
+
+**Integra├º├úo:** config.prg carrega automaticamente via ADIR() (`*BO.prg` e `Form*.prg`). Menu.prg j├í tem `AbrirFormsigprcom()` e o item de menu. Nenhuma altera├º├úo adicional necess├íria.

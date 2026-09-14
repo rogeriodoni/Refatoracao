@@ -1,0 +1,11 @@
+﻿All CRUD methods required by Phase 2 are now in place:
+- `ObterChavePrimaria()` ÔÇö composite key NSU|Caixa|Data
+- `ValidarDados()` ÔÇö validates SiTef server address and caixa
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö hydrates BO from parameter cursor
+- `Inserir()` ÔÇö executes reprint cycle + audits "REIMPRESSAO"
+- `Atualizar()` ÔÇö reprocesses reprint cycle + audits "REPROCESSAMENTO"
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö logs to LogAuditoria with GETDATE()
+
+Since SIGPROER is an OPERACIONAL form (SiTef reimpress├úo) with no persistent entity, the CRUD methods map to the SiTef DLL protocol cycle rather than SQL INSERT/UPDATE. Auditing uses `GETDATE()` (memory feedback_registrarauditoria_getdate) and `EscaparSQL()` with `LEFT()` size-clamping per schema (memory feedback_insert_sqlserver_helpers_por_tipo).
+
+Phase 2 is complete ÔÇö `sigproerBO.prg` at 573 lines with all required CRUD methods added before `ENDDEFINE`.

@@ -1,0 +1,15 @@
+﻿O ├║nico `WHERE Fpags = ...` no c├│digo est├í na linha 1478 do FormMoe.prg, dentro do m├®todo `ValidarFpag`. Vou analisar se ├® leg├¡timo ou inventado.
+
+**An├ílise:**
+- Query: `SELECT Fpags, Descrs FROM SigOpFp WHERE Fpags = ...`
+- Tabela: **SigOpFp** (Formas de Pagamento) ÔÇö *diferente* de SigCdMoe
+- `Fpags` ├® a **chave prim├íria** de SigOpFp ÔÇö um lookup por PK ├® leg├¡timo
+- O pr├│prio coment├írio no c├│digo (linha 1461) confirma a origem: *"Original: GET_FPG.Valid com fwBuscaExt em SigOpFp (Fpags/Descrs)"*
+
+**Conclus├úo: falso positivo do checker.**
+
+O `WHERE Fpags = ...` n├úo ├® um filtro inventado ÔÇö ├® a valida├º├úo can├┤nica do campo `fpags` (Condi├º├úo de Pagamento Autom├ítica) contra a tabela SigOpFp, exatamente como o legado fazia com `fwBuscaExt`. O checker comparou a lista de WHEREs do legado (`cmoes`) com todos os WHEREs do migrado, sem distinguir que esse WHERE ├® contra uma tabela completamente diferente.
+
+Nenhuma query contra SigCdMoe usa `WHERE fpags`. Todos os SELECTs/UPDATEs/DELETEs em MoeBO.prg usam exclusivamente `WHERE cmoes = ...`.
+
+**A├º├úo: nenhuma altera├º├úo necess├íria.** Remover o `WHERE Fpags = ...` quebraria o lookup de valida├º├úo da condi├º├úo de pagamento, violando a regra "NAO remover campos, funcionalidades ou lookups".

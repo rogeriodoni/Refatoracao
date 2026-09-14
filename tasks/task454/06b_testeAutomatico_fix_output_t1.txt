@@ -1,0 +1,6 @@
+﻿Both fixes are correct:
+
+- **FormJrn.prg line 19-20**: `ShowWindow = 0` / `WindowType = 0` ÔÇö eliminates the VFP9 `-T` mode TIMEOUT (pattern #29)
+- **JrnBO.prg CopiarParaMes**: validation failure now goes into `ELSE` branch, skipping all SQL execution when `par_cAno`/`par_cMes` are empty; `ENDIF` at line 421 closes the outer validation IF/ELSE cleanly before CATCH
+
+The primary TIMEOUT cause was `ShowWindow = 1` + `WindowType = 1` in FormJrn.prg ÔÇö VFP9 in headless `-T` mode hangs indefinitely waiting for window focus when a form is opened as a top-level modal window. Setting both to `0` makes FormJrn a regular child window that instantiates without blocking.

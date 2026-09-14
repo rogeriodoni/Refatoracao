@@ -1,0 +1,21 @@
+﻿Todos os RETURNs foram movidos para fora dos blocos TRY/CATCH. O arquivo est├í completo e correto.
+
+**Fase 2/8 conclu├¡da.** O `SigPrCarBO.prg` foi expandido de 35 para 431 linhas com os seguintes m├®todos adicionados:
+
+**CRUD SQL Server** (tabela `sigprcar` ÔÇö schema: `codigos` char(20), `cpros` char(14), `pkchaves` char(20)):
+- `CarregarDoCursor()` ÔÇö l├¬ todas as colunas do cursor local (incluindo `descrs` se presente)
+- `ObterChavePrimaria()` ÔÇö retorna `this_cPkChaves`
+- `Inserir()` ÔÇö SQL INSERT com RegistrarAuditoria
+- `Atualizar()` ÔÇö SQL UPDATE por pkchaves com auditoria
+- `ExecutarExclusao()` ÔÇö SQL DELETE por pkchaves com auditoria
+
+**Gerenciamento do cursor local** (para o form OPERACIONAL):
+- `InserirNovaLinha(cursor, cpros)` ÔÇö insere linha vazia (equivale ao cmdInserir.Click do legado), gera pkchaves via `SELECT NEWID()` no SQL Server
+- `ExcluirLinhaAtual(cursor, cpros)` ÔÇö marca como deletado no cursor (equivale ao cmdExcluir.Click)
+- `LimparLinhasVazias(cursor)` ÔÇö remove linhas sem c├│digo (equivale ao cmdSair.Click)
+- `SalvarTodasCaracteristicas(cursor, cpros)` ÔÇö DELETE+INSERT bulk para o form pai ao salvar o produto
+
+**Lookup em SIGCRRAP** (para valida├º├úo do grid):
+- `BuscarCodigoExato()` / `BuscarDescricaoExata()` ÔÇö match exato com filtro por grupo + universais (`cgrus IN ('GRP', '   ')`)
+- `BuscarCaracteristicasPorCodigo()` / `BuscarCaracteristicasPorDescricao()` ÔÇö lista LIKE para o picker FormBuscaAuxiliar
+- `VerificarDuplicidade()` ÔÇö checa duplicata no cursor local excluindo o registro corrente

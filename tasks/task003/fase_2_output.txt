@@ -1,0 +1,9 @@
+﻿**Fase 2/8 concluida.** `ProdutoBO.prg` agora tem todos os metodos CRUD:
+
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos, mapeia todos os 6 campos com `TratarNulo()`
+- `ObterChavePrimaria()` ÔÇö retorna `this_cPkchaves`
+- `Inserir()` ÔÇö PROTECTED, INSERT com `EscaparSQL`/`FormatarNumeroSQL`, `RegistrarAuditoria("INSERT")`
+- `Atualizar()` ÔÇö PROTECTED, UPDATE por `pkchaves`, `RegistrarAuditoria("UPDATE")`
+- `ExecutarExclusao()` ÔÇö PROTECTED, DELETE por `pkchaves`, `RegistrarAuditoria("DELETE")`
+
+Todos os metodos seguem o padrao: flag `loc_lSucesso`, TRY/CATCH com `MsgErro()`, RETURN fora do TRY/CATCH.

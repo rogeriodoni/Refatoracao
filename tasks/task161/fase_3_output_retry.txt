@@ -1,0 +1,9 @@
+﻿Fase 3 complete. `FormSigPrCfn.prg` now has both required methods (`InicializarForm` + `ConfigurarPageFrame`) plus the mandated empty containers.
+
+Changes:
+- Added `ConfigurarPageFrame()` ÔÇö creates `pgf_4c_Paginas` with 2 pages (Page1="C├ílculo", Page2="Vencimentos"), `.Tabs=.F.`, sized to fill area below the header.
+- Restructured `InicializarForm()` to call `ConfigurarCabecalho()` ÔåÆ `ConfigurarPageFrame()` ÔåÆ `ConfigurarBotoes()` ÔåÆ `ConfigurarBotoesAcao()` ÔåÆ `TornarControlesVisiveis(THIS)` ÔåÆ activate Page1.
+- Renamed `cnt_4c_Saida` ÔåÆ `cnt_4c_Botoes` (overlay with `cmd_4c_Encerrar`) to match the required container name.
+- Added empty `cnt_4c_BotoesAcao` at the bottom, reserved for action buttons in later phases.
+- Added `this_cModoAtual = "CALCULO"` property.
+- Form height increased 320 ÔåÆ 350 to fit header + PageFrame.

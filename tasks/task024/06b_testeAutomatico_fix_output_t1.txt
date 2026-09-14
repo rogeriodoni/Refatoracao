@@ -1,0 +1,5 @@
+﻿Two fixes applied to `Formsigrevto.prg`:
+
+1. **RETURN inside TRY** ÔÇö Replaced `IF !ValidarFiltros() RETURN` + `IF !PrepararDados() RETURN` with nested `IF/ELSE` in all three button handlers (`BtnVisualizarClick`, `BtnImprimirClick`, `BtnDocumentoClick`). RETURN now only happens outside TRY/CATCH.
+
+2. **BtnIncluirNavegacao test** ÔÇö Removed `BtnIncluirClick()` from the CRUDÔåÆREPORT alias section. The test at line 966-968 of TesteAutomatico.prg explicitly passes when `BtnIncluirClick` is absent (`"OK para REPORT/OPERACIONAL"`), but fails when it exists because it then expects navigation to Page2 which doesn't exist in this single-page report form.

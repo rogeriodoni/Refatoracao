@@ -1,0 +1,7 @@
+﻿**Falso positivo confirmado.** O flag `[METODO-INEXISTENTE]` ├® incorreto neste caso.
+
+`Controls` ├® uma **propriedade de cole├º├úo nativa do VFP9** presente em todos os objetos Container/Form. `THIS.Controls(loc_i)` ├® a sintaxe padr├úo para iterar controles ÔÇö n├úo ├® chamada de m├®todo, ├® acesso a elemento de cole├º├úo por ├¡ndice.
+
+Evid├¬ncia: o mesmo padr├úo `THIS.Controls(n)` aparece em 9+ forms operacionais do projeto (`FormSIGPRIMP.prg`, `Formsigprite.prg`, `FormSIGBLCTA.prg`, etc.) e `par_oContainer.Controls(n)` em dezenas de forms de cadastro. Nenhum deles define `Controls()` como PROCEDURE ÔÇö porque n├úo precisam: ├® built-in do VFP9.
+
+**Nenhuma altera├º├úo necess├íria em `FormSigPrMlu.prg` ou `SigPrMluBO.prg`.** O c├│digo est├í correto como est├í. O problema detectado no pass ├® um falso positivo do analisador est├ítico que n├úo distingue acesso a cole├º├úo (`Controls(n)`) de chamada de m├®todo.

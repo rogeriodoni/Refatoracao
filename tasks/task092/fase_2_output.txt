@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. Fase 2 conclu├¡da.
+
+**Resumo do que foi implementado em `SigReEtpBO.prg`:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `ObterChavePrimaria()` | PUBLIC | Retorna `this_cDopes` como identificador |
+| `CarregarDoCursor()` | PUBLIC | Carrega `dopes` e `ndopes` de cursor |
+| `CarregarDados(par_cDopes)` | PUBLIC | L├¬ `SigCdPam` (par├ómetros) e `SigCdOpe` (NDopes) |
+| `CarregarImpressoras()` | PUBLIC | L├¬ impressoras autorizadas via `SigSyImp`/`SigCdAcG`/`SigCdmp` + filtro `APRINTERS()` |
+| `Imprimir(par_cDopes)` | PUBLIC | Valida e despacha para o tipo correto (01/02/03) |
+| `ImprimirEtiqueta01()` | PROTECTED | 4 Colunas Vertical Simples ÔÇö 4 por p├ígina, c├│digo ├║nico por posi├º├úo |
+| `ImprimirEtiqueta02()` | PROTECTED | 4 Colunas Vertical Dupla ÔÇö pares de colunas compartilham c├│digo, STEP 2 |
+| `ImprimirEtiqueta03()` | PROTECTED | 2 Colunas Horizontal ÔÇö esquerda + direita com mesmo c├│digo |
+
+Regras VFP9 respeitadas: sem RETURN dentro de TRY/CATCH (flags `loc_lValidado`/`loc_lContinuar`), sem acentos literais (CHR()), sem ISEMPTY(), CATCH nunca silencioso.

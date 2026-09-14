@@ -1,0 +1,9 @@
+﻿Tudo est├í correto. A migra├º├úo est├í completa. Aqui est├í o resumo do que a Fase 8/8 validou e corrigiu:
+
+**Estado encontrado:** O arquivo `FormSigAcCcr.prg` j├í estava completo das fases anteriores com todos os m├®todos solicitados (`BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`).
+
+**Bug corrigido:** 4 chamadas a `EscaparSQL2()` que n├úo existe em `functions.prg`. Substitu├¡das por `STRTRAN(val, "'", "''")` ÔÇö o equivalente correto para embed em padr├Áes LIKE sem aspas externas.
+
+**Integra├º├úo confirmada:**
+- `config.prg` usa carregamento din├ómico via `ADIR()` ÔÇö carrega automaticamente `*BO.prg` de `classes/` e `Form*.prg` de `forms/cadastros/`, sem necessidade de linhas manuais
+- `menu.prg` j├í tem: `DEFINE BAR 21` ("Acesso a C/C"), `ON SELECTION BAR 21 DO AbrirFormSigAcCcr`, e a fun├º├úo `AbrirFormSigAcCcr()` com o padr├úo correto (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)

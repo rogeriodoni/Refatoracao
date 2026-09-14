@@ -1,0 +1,994 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrehtc.SCX
+* Data/Hora: 06/06/2026 02:22:46
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREHTC
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Op_Emitido
+  Parent: SIGREHTC
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsGrEstoque
+  Parent: SIGREHTC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdGrEstoque
+  Parent: SIGREHTC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo
+  Parent: SIGREHTC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREHTC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREHTC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGREHTC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREHTC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optDatas
+  Parent: SIGREHTC
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Op_Baixados
+  Parent: SIGREHTC
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Op_Cancelado
+  Parent: SIGREHTC
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCdContas
+  Parent: SIGREHTC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDsContas
+  Parent: SIGREHTC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Op_Ordem
+  Parent: SIGREHTC
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREHTC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREHTC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREHTC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 43
+  Left = 39
+  Width = 698
+  Height = 297
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Cheques Emitidos"
+  ControlBox = .F.
+  ClipControls = .T.
+  HelpContextID = 0
+  Name = "SIGREHTC"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 530
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.Op_Emitido
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 24
+  Left = 248
+  SpecialEffect = 0
+  Top = 197
+  Width = 262
+  TabIndex = 14
+  ZOrderSet = 3
+  Name = "Op_Emitido"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Emitido"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 52
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não Emitido"
+  Option2.Value = 0
+  Option2.Left = 92
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Todos"
+  Option3.Value = 0
+  Option3.Height = 15
+  Option3.Left = 201
+  Option3.Top = 5
+  Option3.Width = 47
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.getDsGrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 25
+  Left = 336
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 96
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "getDsGrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.getCdGrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 25
+  Left = 254
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 96
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "getCdGrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Período  :"
+  Left = 201
+  Top = 154
+  Width = 48
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 211
+  Top = 101
+  Width = 38
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Left = 254
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 150
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "à"
+  Left = 338
+  Top = 153
+  Width = 9
+  TabIndex = 9
+  ForeColor = 36,84,155
+  ZOrderSet = 8
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Left = 350
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 150
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.optDatas
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 25
+  Left = 430
+  SpecialEffect = 0
+  Top = 149
+  Width = 189
+  TabIndex = 11
+  ZOrderSet = 10
+  Name = "optDatas"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Movimentação"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 87
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Vencimento"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 111
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 73
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.Op_Baixados
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 27
+  Left = 248
+  SpecialEffect = 0
+  Top = 240
+  Width = 144
+  TabIndex = 16
+  ZOrderSet = 10
+  Name = "Op_Baixados"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 0
+  Option2.Height = 17
+  Option2.Left = 92
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 40
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.Op_Cancelado
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 24
+  Left = 248
+  SpecialEffect = 0
+  Top = 219
+  Width = 262
+  TabIndex = 15
+  ZOrderSet = 10
+  Name = "Op_Cancelado"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Válidos"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 51
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Cancelados"
+  Option2.Value = 0
+  Option2.Left = 92
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Todos"
+  Option3.Value = 0
+  Option3.Height = 15
+  Option3.Left = 201
+  Option3.Top = 5
+  Option3.Width = 47
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.getCdContas
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 25
+  Left = 254
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 123
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "getCdContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.getDsContas
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K"
+  Height = 25
+  Left = 336
+  MaxLength = 50
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 123
+  Width = 345
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "getDsContas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.Op_Ordem
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 27
+  Left = 248
+  Top = 172
+  Width = 280
+  TabIndex = 13
+  ZOrderSet = 14
+  Name = "Op_Ordem"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "por Cópia"
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 72
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "por Data"
+  Option2.Height = 17
+  Option2.Left = 92
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 72
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "por Conta"
+  Option3.Height = 17
+  Option3.Left = 201
+  Option3.Style = 0
+  Option3.Top = 5
+  Option3.Width = 77
+  Option3.AutoSize = .F.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 211
+  Top = 128
+  Width = 38
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Imprime Baixadas :"
+  Left = 156
+  Top = 245
+  Width = 93
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHTC.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ordem :"
+  Left = 208
+  Top = 177
+  Width = 41
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREHTC
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+If !Eof()
+	report form SigReHtc to printer prompt noconsole
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+Endwith	
+
+=DoDefault()
+
+Local lcEscape,lcTalk
+
+ThisForm.LockScreen = .t.
+
+m.lcEscape = Set('Escape')
+m.lcTalk = Set('Talk')
+
+Set Escape Off
+Set Talk On
+
+lcSql=[Select Distinct b.Iclis, b.Rclis ]+;
+      [From SigOpFp a,SigCdCli b ]+;
+      [Where a.EmiChqs = 1  And b.Iclis = a.Contads]
+ThisForm.podatamgr.SqlExecute(lcSql,"crTmpContas0")
+  
+Select Iclis,;
+  	   Rclis ;
+  From crTmpContas0 ;
+  WHERE fAcessoContas(Iclis);
+  Order By 1;
+  Into Cursor crTmpContas
+
+Index On Iclis Tag Iclis
+
+Use Dbf('crTmpContas') Again Alias crContas In 0
+
+Select crContas
+Index On Rclis Tag Rclis
+
+Insert Into crContas (Iclis,Rclis) Values ('','')
+
+Set Order To Iclis In crContas
+= Seek('','crContas','Iclis')
+
+Set Talk &lcTalk.
+Set Escape &lcEscape.
+
+ThisForm.LockScreen = .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+PRIVATE ldDtInicial,ldDtFinal
+PRIVATE lcGrupo,lcIclis,lcPeriodo,lcOrdem,lcEmp, lcContas, lcGrupos, lcCancelados, lcEmitidos
+PRIVATE lnOpCancela,lnOpEmitido,lnOpOrdem,lnOpBaixas
+
+ldDtInicial = fDtoSQL(thisform.get_dt_inicial.value)
+ldDtFinal   = fDtoSQL(thisform.get_dt_final.value,"23:59:59")
+
+lnOpCancela = ThisForm.Op_Cancelado.Value
+lnOpEmitido = ThisForm.Op_Emitido.Value
+lnOpOrdem   = ThisForm.Op_Ordem.Value
+lnOpBaixas  = ThisForm.Op_Baixados.Value
+lnTpDat		= ThisForm.optDatas.Value 
+lcGrupo     = ThisForm.getCdGrEstoque.Value
+lcIclis     = ThisForm.getCdContas.Value
+lcTitulo1   = 'Relatório de Cheques Emitidos de ' + Dtoc(thisform.get_dt_inicial.value) + ' à ' + Dtoc(thisform.get_dt_final.value) + ;
+			  ' - ' + Iif(lnTpDat = 1, [Movimentação], [Vencimento])
+			  
+If !IsEmpty(lcGrupo)
+	lcPeriodo = 'Grupo : ' + AllTrim(lcGrupo)+' - '+AllTrim(ThisForm.getDsGrEstoque.Value) + ' - '
+Else	
+	lcPeriodo = 'Grupo : Todos - '
+Endif	
+If !IsEmpty(lcIclis)
+	lcPeriodo = lcPeriodo + 'Conta : ' + AllTrim(lcIclis) + ' - ' + AllTrim(ThisForm.getDsContas.Value)
+Else	
+	lcPeriodo = lcPeriodo + 'Conta : Todas'
+Endif	
+lcOrdem     = 'Emissão em Ordem de ' + Iif(lnOpOrdem=1, 'Número de Cópia', ;
+									   Iif(lnOpOrdem=2, 'Data', 'Conta'))
+lcEmp       = _Screen.Caption
+
+Create Cursor Resultado ( NCopias n(6), Favos c(40), Valors n(12,2), Vencs d, Datas d, ;
+						  Hists c(60), Valos n(12,2), Emps c(3), Dopes c(20), MascNum c(6), ;
+						  Cheques c(26), Cancelas l, Moedas c(3), Periodos c(254), ;
+						  cEmpresas c(50), Grupos c(10), Contas c(10), Titulo1s c(254),;
+						  Ordem c(254), Saltar c(20), Total l, Baixas n(1), TotCon n(12,4))
+
+Do Case
+	Case lnOpOrdem = 1  && Ordem = Cópias
+		Index on Str(Ncopias, 6) tag Ncopias
+
+	Case lnOpOrdem = 2  && Ordem = Data
+		If (lnTpDat = 1)
+			Index on Dtos(Datas) + Str(Ncopias,6) tag DataNCop
+		Else 
+			Index on Dtos(Vencs) + Str(Ncopias,6) tag DataNCop
+		EndIf
+		
+	Case lnOpOrdem = 3  && Ordem = Conta
+		If (lnTpDat = 1)
+			Index on Grupos + Contas + Cheques + Dtos(Datas) + Str(Ncopias,6) tag GruConDat
+		Else 
+			Index on Grupos + Contas + Cheques + Dtos(Vencs) + Str(Ncopias,6) tag GruConDat
+		EndIf 
+EndCase
+
+lcGrupos=IIF(Empty(m.lcIclis),[],[ and Contas = ?m.lcIclis])
+lcContas=IIF(Empty(m.lcGrupo),[],[ and Grupos = ?m.lcGrupo])
+
+lcSql = [Select * ] + ;
+		  [From SigCqChi ] + ;
+         [Where ] + Iif(lnTpDat = 1, [Datas], [Vencs]) + [ Between ?ldDtInicial and ?ldDtFinal ] + ;
+      			lcContas + lcGrupos + [ ] + ;
+      	 [Order By ] + Iif(lnTpDat = 1, [Datas], [Vencs])
+
+ThisForm.podatamgr.SqlExecute(lcSql,"crSigCqChi")
+
+Select crSigCqChi
+Scan 
+	If (lnOpCancela=1 .and. (Cancelas .or. !Emitidos)) .or. ;
+	   (lnOpCancela=2 .and. (Emitidos .or. !Cancelas))
+		Loop
+	EndIf
+	
+	If Cancelas
+		Insert Into Resultado ( NCopias, Favos, Valors, Vencs, Datas, Emps, Dopes, MascNum,;
+								Cheques, Cancelas, Periodos, cEmpresas, Grupos, Contas, ;
+								Titulo1s, Ordem, Saltar, Total, Baixas ) ;
+				Values ( crSigCqChi.NCopias, crSigCqChi.Favos, crSigCqChi.Valors, crSigCqChi.Vencs, ;
+						crSigCqChi.Datas, crSigCqChi.Emps, crSigCqChi.Dopes, Alltrim(fGerMascara(crSigCqChi.Numes)),;
+						crSigCqChi.Bancos + '-' + crSigCqChi.Agencias + '-' + crSigCqChi.NContas + '-' + ;
+						crSigCqChi.NCheques, crSigCqChi.Cancelas, lcPeriodo, lcEmp, crSigCqChi.Grupos, ;
+						crSigCqChi.Contas, lcTitulo1, lcOrdem, Iif(lnOpOrdem = 3, crSigCqChi.Grupos + ;
+						crSigCqChi.Contas, ''), (lnOpOrdem = 3), lnOpBaixas)
+						
+	Else
+		_Favor = crSigCqChi.Favos
+		lcSql=[Select * From SigCdPit Where Emps = ']+crSigCqChi.Emps+;
+		                           [' and Dopes = ']+crSigCqChi.Dopes+;
+		                            [' and Numes = ]+ALLTRIM(STR(crSigCqChi.Numes))
+		ThisForm.poDatamgr.SqlExecute(lcSql,"crSigCdPit")
+		Select crSigCdPit
+		Scan 
+			If Tipos = "P"
+				lcSql=[Select * From SigMvPar Where Emps = ']+crSigCdPit.Empos+;
+				                           [' and nopers = ]+ALLTRIM(STR(crSigCdPit.Nopers))
+				ThisForm.podatamgr.SqlExecute(lcSql,"crSigMvPar")
+				SELECT crSigMvPar
+			Else
+				lcSql=[Select * From SigMvCcr Where Emps = ']+crSigCdPit.Empos+;
+ 				                            [' and nopers = ]+ALLTRIM(STR(crSigCdPit.Nopers))
+				ThisForm.podatamgr.SqlExecute(lcSql,"crSigMvCcr")
+				SELECT crSigMvCcr
+			Endif
+			If crSigCdPit.Tipos = "P"
+				_Hists  = Emps+Alltrim(Dopes)+" "+Alltrim(fGerMascara(Numes))+" ( "+Alltrim(FPags)+" ) "
+				_Moedas = MoeFpgs
+			eLSE	
+				_Hists  = Hists
+				_Moedas = Moedas
+			Endif
+
+			Insert Into Resultado ( NCopias, Favos, Valors, Vencs, Datas, Hists, Moedas, Emps, ;
+							Dopes, MascNum, Cheques, Valos, Cancelas, Periodos, cEmpresas, ;
+							Grupos, Contas, Titulo1s, Ordem, Saltar, Total, Baixas) ;
+					Values ( crSigCqChi.NCopias, _Favor, crSigCqChi.Valors, crSigCqChi.Vencs, crSigCqChi.Datas, ;
+							_Hists, _Moedas, crSigCqChi.Emps, crSigCqChi.Dopes, Alltrim(fGerMascara(crSigCqChi.Numes)),;
+							crSigCqChi.Bancos + '-' + crSigCqChi.Agencias + '-' + crSigCqChi.NContas + ;
+							'-' + crSigCqChi.NCheques, crSigCdPit.Acertos, crSigCqChi.Cancelas, lcPeriodo, ;
+							lcEmp, crSigCqChi.Grupos, crSigCqChi.Contas, lcTitulo1, lcOrdem,;
+							Iif(lnOpOrdem = 3, crSigCqChi.Grupos + crSigCqChi.Contas, ''), (lnOpOrdem=3),;
+							lnOpBaixas)
+			_Favor = ''
+		Select crSigCdPit
+		Endscan
+	Endif
+	Select crSigCqChi
+Endscan
+
+Select Resultado
+Go Top
+If lnOpOrdem = 3
+	lcCopia = 0
+	Do While !Eof()
+		If lcCopia # NCopias
+			lcCopia = NCopias
+			Replace TotCon With Valors
+		Endif
+		Select Resultado
+		Skip
+	Enddo
+	Go Top
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+If !Eof()
+	report form SigReHtc preview NoConsole
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHTC.getDsGrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'D',this.value,ThisForm.getCdGrEstoque,ThisForm.getDsGrEstoque)
+Else
+	ThisForm.getCdGrEstoque.value = ''
+	ThisForm.getCdGrEstoque.refresh
+endif
+return(.t.)
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(ThisForm.getcdgrestoque.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHTC.getCdGrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'C',this.value,ThisForm.getCdGrEstoque,ThisForm.getDsGrEstoque)
+Else
+	ThisForm.getDsGrEstoque.value = ''
+	ThisForm.getDsGrEstoque.refresh
+endif
+return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHTC.getCdContas
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.getCdGrEstoque.Value,'C',This.Value,ThisForm.getCdContas,ThisForm.getDsContas))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.getCdContas.Value = ''
+	ThisForm.getDsContas.Value = ''
+	ThisForm.getCdContas.Refresh
+	ThisForm.getDsContas.Refresh
+	
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHTC.getDsContas
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Local llRetorno
+
+m.llRetorno = (fAcessoContas(Usuar,ThisForm.getCdGrEstoque.Value,'D',This.Value,ThisForm.getCdContas,ThisForm.getDsContas))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.getCdContas.Value = ''
+	ThisForm.getDsContas.Value = ''
+	ThisForm.getCdContas.Refresh
+	ThisForm.getDsContas.Refresh
+	
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+Return(IsEmpty(ThisForm.getCdContas.Value))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREHTC
+RESERVED3 (ClassInfo): podatamgr
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

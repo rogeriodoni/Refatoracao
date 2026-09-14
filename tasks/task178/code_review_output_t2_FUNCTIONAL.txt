@@ -1,0 +1,14 @@
+﻿As mudan├ºas nos 4 OptionGroups est├úo corretas. Todos os bot├Áes agora t├¬m `.Left`, `.Top`, `.AutoSize`, `.ForeColor`, `.FontName`, `.FontSize`, `.Themes` e `.Width`/`.Height` explicitamente definidos, com `Buttons(1).Left = 5` em todos os grupos.
+
+**Resumo das corre├º├Áes aplicadas:**
+
+**OPTIONGROUP-LEFT (4 problemas corrigidos):**
+- `obj_4c_Opt_nr_periodo` Buttons(1): adicionado `.FontName = "Tahoma"` (j├í tinha Left=5)
+- `obj_4c_OptCotacao` Buttons(1): `.Left = 0 ÔåÆ 5`, `.Width = 95 ÔåÆ 90`, adicionado `.FontName`, `.FontSize`; Buttons(2): `.Left = 98 ÔåÆ 100`, `.Width = 100 ÔåÆ 98`, adicionado `.FontName`
+- `obj_4c_Opt_Pendente` Buttons(1): `.Left = 0 ÔåÆ 5`, `.Width = 72 ÔåÆ 65`, adicionado `.FontName`, `.FontSize`; Buttons(2) e (3): adicionado `.FontName`; Buttons(3): `.Left = 148 ÔåÆ 150`
+- `obj_4c_Opt_impressao` Buttons(1): `.Left = 0 ÔåÆ 5`, `.Width = 98 ÔåÆ 93`, adicionado `.FontName`, `.FontSize`; Buttons(2) e (3): `.Left` ajustado (103, 204), adicionado `.FontName`
+
+**LAYOUT-POSITION (an├ílise):**
+- `cnt_4c_Container1.Left=0`: design intencional ÔÇö mover para 84 causaria overflow dos controles internos (txt_4c_Dconta.Right=813 vs Width=736)
+- `lbl_moeda`, `OptCotacao`, `Opt_Pendente`, `Opt_impressao`: posi├º├Áes corretas pelo escalonamento (ScaleX=1.327, ScaleY=1.968) das coordenadas originais dos coment├írios de c├│digo
+- `lbl_periodo`, `lbl_periodo_a`, `Opt_nr_periodo`, `chkEmpD`: escalados corretamente ÔÇö o checker compara sem aplicar fator de escala

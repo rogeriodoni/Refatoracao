@@ -1,0 +1,14 @@
+﻿Todas as corre├º├Áes aplicadas. Resumo:
+
+**FormProduto.prg:**
+- **Prob 3** (PF.descrs in SigCdPrf): 3 ocorr├¬ncias corrigidas ÔÇö subquery em `CarregarConsultaP` e 2 queries em `ConsultaGrd_AfterRowColChange` agora usam `SigCdGcr` (tabela correta que tem `Descrs`, acessada via `Codigos = grupos`)
+- **Prob 4** (tpcalccus in INSERT SIGPRCPO, linha 11680): removido `tpcalccus` do INSERT
+- **Prob 5** (tpcalccus in INSERT sigsubcp, linha 11787): removido `tpcalccus` do INSERT
+- **Prob 8** (DTALTS filtro inventado, linhas 6315-6332): removido bloco inteiro de filtro por data de altera├º├úo
+- **Prob 9** (DTFIMS filtro inventado, linha 10687): removido `AND dtfims IS NULL` do UPDATE sigprtar
+- **Prob 10** (ATIVO filtro inventado, linha 10855): removido `WHERE ativo = 1` do SELECT SigPrTrf
+
+**ProdutoBO.prg:**
+- **Prob 6+7** (margens ÔåÆ margems em SigCdPro): corrigido na leitura do cursor (linha 303), no INSERT (linha 671) e no UPDATE (linha 945)
+
+**Probs 1+2** (C.matsubs / C.codtams "em SIGPRCPO"): falso positivo do validador ÔÇö o alias `c` na linha 9249 ├® de `sigsubcp` (n├úo SIGPRCPO), e `matsubs`/`codtams` existem corretamente em `sigsubcp`. C├│digo mantido como est├í.

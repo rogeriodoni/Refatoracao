@@ -1,0 +1,12 @@
+﻿FASE 6 completa. Resumo do que foi feito:
+
+**Edit 1** (sess├úo anterior): BINDEVENTs para F4/DblClick nos 4 campos de lookup + LostFocus em Titulo ÔÇö adicionados em `ConfigurarPaginaDados()` (linhas 1096ÔÇô1106).
+
+**Edit 2** (agora): 9 novos m├®todos inseridos antes de `CalcularProximaOrdem()`:
+- 4 KeyPress handlers (`CdGruposKeyPress`, `DsGruposKeyPress`, `ClasseKeyPress`, `DclasseKeyPress`) ÔÇö F4=115 dispara o picker
+- 4 `AbrirLookupXxx()` ÔÇö `FormBuscaAuxiliar` em `SigCdGcr` (por Codigos e por Descrs) e em `SigCdCss` (por Classes e por Descrs); lookup de Grupo auto-popula `txt_4c_Titulo` se vazio e modo INCLUIR+Mapas=2
+- `ValidarTitulo()` ÔÇö verifica unicidade em `SigCdMri` (WHERE Balancos+Titulos, excluindo CidChaves atual)
+
+**Edit 3** (agora): Bloco de unicidade de Titulo adicionado em `ValidarCampos()` ap├│s o check de campo vazio, usando `cursor_4c_DupTit`.
+
+**Pr├│ximo passo ÔÇö FASE 7**: Integra├º├úo em `config.prg` (verificar se `CmrBO.prg` e `FormCmr.prg` j├í s├úo carregados pelo ADIR autom├ítico) e item de menu em `menu.prg`.

@@ -1,0 +1,12 @@
+﻿Phase 2/8 complete. `ProdutoBO.prg` now has all CRUD methods:
+
+- **`CarregarDoCursor`** (PROTECTED) ÔÇö maps all 150+ SigCdPro columns using `SELECT (par_cAliasCursor)` pattern; char fields with `TratarNulo()`, BIT fields with `NVL(field,0)=1`, DateTime with `TTOD()` conversion
+- **`Inserir`** (PROTECTED) ÔÇö full INSERT INTO SigCdPro with all columns, using `loc_cCols/loc_cVals` split for readability, correct precision in `FormatarNumeroSQL()`, `IIF(...,"1","0")` for BIT/boolean fields
+- **`Atualizar`** (PROTECTED) ÔÇö full UPDATE SigCdPro SET for all non-PK fields, same helper patterns, `WHERE cpros = EscaparSQL(...)`
+- **`ExecutarExclusao`** (PROTECTED) ÔÇö DELETE FROM SigCdPro WHERE cpros matches
+- **`Buscar`** (PUBLIC) ÔÇö SELECT list columns (cpros, dpros, cgrus, sgrus, reffs, usuaalts, situas) with ZAP+APPEND guard for grid safety, empty cursor fallback when no connection
+- **`CarregarPorCodigo`** (PUBLIC) ÔÇö SELECT * WHERE cpros, calls CarregarDoCursor, sets `this_lNovoRegistro = .F.`
+- **`Validar`** (PROTECTED) ÔÇö validates required fields cpros and dpros
+- **`ObterChavePrimaria`** changed to PROTECTED per convention
+
+Key rules followed: no RETURN inside TRY/CATCH, all SQL helpers used correctly, accented chars via CHR(), `custoccp` SQL column name used for `this_nCustocp` property.

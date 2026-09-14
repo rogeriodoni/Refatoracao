@@ -1,0 +1,186 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 4,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt", "From ]+Iif"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDGPS",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPS",
+      "evento": "Init",
+      "linhas": 72,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pTpGgp, pEscolha\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm          = poForm\nThisform.ParentForm.Enabled  = .F.\n\nThisform.Escolha = pEscolha\n\nThisform.GravaDados = .f.\nThisform.Tipoggp = pTpGgp\n\nThisForm.cmdInserir.Enabled  = InList(Thisform.Escolha,'INSERIR','ALTERAR')\nThisForm.cmdExcluir.Enabled  = InList(Thisform.Escolha,'INSERIR','ALTERAR')\n\n\nWith Thisform\n\t.Caption = 'Grupos de Produtos ' + AllTrim(crSigCdOpe.Dopes)\nEndWith\n\n\nThisForm.cntSombra.lblSom... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Enabled  = InList,Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPS.GradeOpe.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.AntValue = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPS.GradeOpe.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lcFpags, lnRecNo, loBrowse\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Cgrus', This.Value, 'Grupo de Produto', .t.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cgrus', '', 'Grupo',.t.)\n\t\tloLista.mAddColuna('Dgrus', '', 'Descrição',.t.)\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = CrListaRemota.Cgrus\n\tReplace Dgrus with CrListaRemota.Dgrus In xOpe\n\tUse In CrListaRemota\nElse\n\tThis.Value = ''\nEndIf\nTh... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPS.GradeOpe.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGPS.cmdInserir",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Insert Into xOpe (Cgrus) Values ( Space(20))\nSelect xOpe\nThisForm.GravaDados = .t.\nThisform.GradeOpe.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPS.cmdExcluir",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "Select xOpe\nIf Not Eof()\n\tSelect xOpe\n\tDelete \n\tSkip\n\tIf Eof()\n\t\tGo Bott\n\tEndif\nEndIf\nThisform.GradeOpe.SetFocus\nThisForm.GravaDados = .t.\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPS.cmdSair",
+      "evento": "Click",
+      "linhas": 54,
+      "codigoOriginal": "If ThisForm.GravaDados\n\n\tSelect Cgrus, Sum(1) as Qt From xOpe Group by 1 Into Cursor Selecao where cgrus <> ' ' having Sum(1) > 1\n\tIf Reccount('Selecao') > 0\n\t\tMessageBox('Existem lancamentos de Grupos Em Duplicidade!!!',0+16,'')\n\t\tReturn .f.\n\tEndIf\n\t\n\tSelect CrSigCdGgp\n\tZap\n\tSelect CrSigCdGps\n\tZap\n\t\n\tSelect xOpe\n\tScan\n\t\tIf Not Empty(Cgrus)\n\t\t\tIf ThisForm.Tipoggp\n\t\t\t\tInsert Into CrSigCdGgp (Dopes, Cgrus, pkchave) ;\n\t\t\t\t\t\t\tValues (crSigCdOpe.Dopes, xOpe.Cgrus, fUniqueIds())\n\t\t\tElse\n\t\t\t\tInsert Int... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "From ]+Iif",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGPS.Cancela",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.parentform.enabled = .T.\nThisform.release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDGPS.cmdInserir.Click",
+      "queryOriginal": "Insert Into xOpe (Cgrus) Values ( Space(20))",
+      "tabelas": "xOpe",
+      "colunas": "Cgrus",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDGPS.cmdSair.Click",
+      "queryOriginal": "\tSelect Cgrus, Sum(1) as Qt From xOpe Group by 1 Into Cursor Selecao where cgrus <> ' ' having Sum(1) > 1",
+      "tabelas": "xOpe",
+      "colunas": "Cgrus,having,Sum1",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDGPS.cmdSair.Click",
+      "queryOriginal": "\t\t\t\tInsert Into CrSigCdGgp (Dopes, Cgrus, pkchave) ; \t\t\t\t\t\t\tValues (crSigCdOpe.Dopes, xOpe.Cgrus, fUniqueIds())",
+      "tabelas": "CrSigCdGgp",
+      "colunas": "Dopes,Cgrus,pkchave",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["xOpe", "CrSigCdGgp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

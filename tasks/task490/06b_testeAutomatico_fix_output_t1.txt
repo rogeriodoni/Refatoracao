@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormOrg.prg`:
+
+1. **`CarregarLista`**: adicionado `CREATE CURSOR cursor_4c_Dados` no branch `gb_4c_ValidandoUI = .T.` ÔÇö o teste exige que um cursor padr├úo exista ap├│s chamar o m├®todo.
+
+2. **`AlternarPagina`**: removido `PROTECTED` ÔÇö o TesteAutomatico chama este m├®todo diretamente no objeto (`loForm.AlternarPagina(2)`); m├®todo PROTECTED ├® invis├¡vel fora da classe e gera "Property not found".
+
+3. **`AjustarBotoesPorModo`**: idem ÔÇö removido `PROTECTED` pelo mesmo motivo (linha 559 do test chama `loForm.AjustarBotoesPorModo()`).

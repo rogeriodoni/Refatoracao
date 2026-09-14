@@ -1,0 +1,12 @@
+﻿Todas as corre├º├Áes aplicadas corretamente. Resumo do que foi feito no arquivo `sigpdmp2BO.prg`:
+
+**SQL-TABELA: SigPdNlm** (linha 1103 original)
+- Removido o bloco de query inventada que buscava saldo em `SigPdNlm` (tabela inexistente no c├│digo original). Substitu├¡do por inser├º├úo direta de cada `nLote` no cursor de resultado ÔÇö o mesmo padr├úo do original que usava `SigPdNlt` apenas para a lista de lotes. Isso tamb├®m resolve o **SQL-FILTRO-INVENTADO: NLOTES** (a condi├º├úo `WHERE a.nLotes = ...` estava na query de SigPdNlm).
+
+**SQL-ASPAS: 4 ocorr├¬ncias corrigidas**
+- Linha 812: `"WHERE a.Cpros = '" + loc_cMat + "'"` ÔåÆ `"WHERE a.Cpros = " + EscaparSQL(loc_cMat)`
+- Linha 907: `"WHERE a.Cpros = '" + loc_cMat + "'"` ÔåÆ `"WHERE a.Cpros = " + EscaparSQL(loc_cMat)`
+- Linha 992: `"WHERE Cpros = '" + loc_cMats + "'"` ÔåÆ `"WHERE Cpros = " + EscaparSQL(loc_cMats)`
+- Linha 1208: `"WHERE Cpros = '" + loc_cMatAtual + "'"` ÔåÆ `"WHERE Cpros = " + EscaparSQL(loc_cMatAtual)`
+
+**SQL-FILTRO-INVENTADO: SERVICOS e PCCS** ÔÇö Verificados como falsos positivos: `!Servicos` est├í presente no c├│digo original do legado em m├║ltiplos DELETE/SELECT VFP (ex.: `Delete All For _Cmats = xNensi.CMats and !servicos`), e `Pccs` n├úo aparece em nenhuma cl├íusula WHERE do c├│digo migrado (apenas em checagem de visibilidade de bot├úo). Nenhuma altera├º├úo necess├íria para esses dois.

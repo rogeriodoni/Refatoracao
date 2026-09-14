@@ -1,0 +1,13 @@
+﻿Fase 4 conclu├¡da. O arquivo foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com propriedades can├┤nicas (Comic Sans MS, PicturePosition=13, ├¡cones corretos) + BINDEVENT para cada um
+- Bot├úo Encerrar em `cnt_4c_Saida` (posi├º├úo can├┤nica Left=917)
+- Grid `grd_4c_Lista` com 2 colunas (Cods=80px, Descs=856px), cursor placeholder criado previamente, RecordSource e ColumnCount definidos fora do WITH (regra #36), headers em CHR()
+- DblClick no grid vinculado ao BtnVisualizarClick
+
+**Novos m├®todos:**
+- `AlternarPagina(par_nPagina)` ÔÇö troca de p├ígina e recarrega lista ao voltar para Page1
+- `CarregarLista()` atualizado ÔÇö reaplica headers ap├│s ZAP+APPEND, chama FormatarGridLista e Refresh
+- `FormatarGridLista()` ÔÇö aplica Verdana/8 via SetAll
+- `BtnIncluirClick/BtnVisualizarClick/BtnAlterarClick/BtnExcluirClick/BtnBuscarClick/BtnEncerrarClick` ÔÇö todos PUBLIC (sem PROTECTED), com valida├º├úo de sele├º├úo de grid, confirma├º├úo de exclus├úo e tratamento de erro

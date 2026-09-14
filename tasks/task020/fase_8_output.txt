@@ -1,0 +1,22 @@
+﻿Both files are correctly updated. Here's a summary of what was added in Phase 8:
+
+**FormSIGMDETQ.prg** ÔÇö 9 new methods added before `Destroy()`:
+
+| Method | Purpose |
+|--------|---------|
+| `FormParaBO()` | Transfers `txt_4c_CorNew`/`TamNew` ÔåÆ BO properties |
+| `BOParaForm()` | Transfers all 4 BO Cor/Tam properties ÔåÆ form fields |
+| `HabilitarCampos(par_lHabilitar)` | Enables/disables `txt_4c_Barras`, `CorNew`, `TamNew`, `cmd_4c_Processar` |
+| `LimparCampos()` | Clears all 5 fields + resets 6 BO properties |
+| `CarregarLista()` | No-op returning `.T.` (operacional has no list) |
+| `AjustarBotoesPorModo()` | Keeps Processar/Cancelar enabled (fixed state form) |
+| `BtnBuscarClick()` | Validates barcode with guard on empty value |
+| `BtnEncerrarClick()` | Delegates to `BtnCancelarClick()` |
+| `BtnSalvarClick()` | Delegates to `BtnProcessarClick()` |
+
+**menu.prg** ÔÇö 3 changes:
+- Added `BAR 11` (separator) and `BAR 12` ("Muda Cor / Tamanho Etiqueta") to `popMovimentos`
+- Added `ON SELECTION BAR 12 OF popMovimentos DO AbrirFormSIGMDETQ`
+- Added `AbrirFormSIGMDETQ()` procedure at end of file
+
+config.prg requires no changes ÔÇö it already auto-loads all `*BO.prg` from `classes\` and all `Form*.prg` from `forms\operacionais\` dynamically.

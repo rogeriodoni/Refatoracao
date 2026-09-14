@@ -1,0 +1,188 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDACO",
+      "evento": "Procedure",
+      "linhas": 240,
+      "codigoOriginal": "ThisForm.Aguarde.visible = .t.\nThisForm.Aguarde.Zorder\n\nSet Talk Off\n\nThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')\n\nlcCab = 'Relatório de Acompanhamento de Material por Grupo'\nlcSub = ' '\nlcEmp = _Empr + ' - ' + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)\n\nCreate Cursor dbCabecalho (Titulo c(100), SubTitulo c(100), NomeEmpresa c(100))\nInsert Into dbCabecalho (Titulo, SubTitulo, NomeEmpresa) Values (lcCab, lcSub, lcEmp)\n\nSelect csRel\nSet Order to Mats\nZap\n\nm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute,AddItem",
+        "controlesReferenciados": "opTrfCps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDACO",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDACO",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "=fConfigGeral()\n\n* Cria o Cursor temporario do Relatório\nCreate Cursor csCab (cbemp C(60), cbtit C(100), cbsubtit C(100))\nAppend Blank\n\n* Cria o Cursor temporario do Relatório\nCreate Cursor csRel (Cgrus c(3), mats C(10), dcompos C(30), Qtds n(10,3), QtdMins n(10,3), ;\n\t\t\t\t\t CUnis C(03), QtdReqs n(10,3), QtdPedcs n(10,3), QtdComps n(10,3), ;\n\t\t\t\t\t QtdEmphs n(10,3), QtdPfins n(10,3), QtdPfMs n(10,3), Flags l,;\n\t\t\t\t\t Mat2s c(10), dCompo2s c(30), Seqs c(1), PesoMs n(12,3) ) \nIndex On Cgrus + Mats + ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDACO",
+      "evento": "Init",
+      "linhas": 37,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., ;\n\t\t\t\t\t\t\t\t\t   'DopEmphs, DopReqcs, DopPedcs, DopComps, DopTrfCps')\n\n\t\t.Processamento = .f.\n\n\t\tWith .GrdF\n\t\t\t.RecordSource     \t\t= 'csRel'\n\t\t\t.RecordSourceType \t\t= 1\n\t\t\t.Column1.ControlSource  = 'csRel.Mat2s'\n\t\t\t.Col... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "opTrfCps'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDACO",
+      "evento": "Activate",
+      "linhas": 13,
+      "codigoOriginal": "If Not ThisForm.Processamento\n\tThisform.Processa()\n\tSelect csRel\n\tIf (Reccount() <> 0)\n\t\tThisForm.Grdf.Refresh\n\t\tThisForm.Processamento = .t.\n\t\tThisForm.CmdRpview.Visible = .t.\n\t\tThisForm.CmdRpPrint.Visible = .t.\n\t\tThisForm.Arquivos.SetFocus\n\tEndIf\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processa",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDACO.CmdRpview",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Replace Subtitulo With ThisForm.Arquivos.Value In dbCabecalho\n\nReport Form SigPdAco Preview\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDACO.CmdRpPrint",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Replace Subtitulo With ThisForm.Arquivos.Value In dbCabecalho\nReport Form SigPdAco To Printer Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDACO.Processar",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Processa()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Processa",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDACO.cmdGprocessa",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "With ThisForm\n\t.LockScreen = .t.\n\t.Release\n\t.Refresh\n\t.LockScreen = .f.\nEndWith\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDACO.Arquivos",
+      "evento": "InteractiveChange",
+      "linhas": 9,
+      "codigoOriginal": "Grupo = Left(ThisForm.Arquivos.Value, 3)\n\nSelect csRel\nSet Order To GruMat\nSet Key To Grupo\nGo Top\nThisForm.GrdF.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPDACO.Procedure",
+      "queryOriginal": "Insert Into dbCabecalho (Titulo, SubTitulo, NomeEmpresa) Values (lcCab, lcSub, lcEmp)",
+      "tabelas": "dbCabecalho",
+      "colunas": "Titulo,SubTitulo,NomeEmpresa",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["dbCabecalho"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

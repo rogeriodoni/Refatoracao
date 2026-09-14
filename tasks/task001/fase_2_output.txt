@@ -1,0 +1,11 @@
+﻿Fase 2 conclu├¡da. O `DepartamentoBO.prg` agora tem todos os m├®todos CRUD completos:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCodigo` para auditoria
+- **`LimparDados()`** ÔÇö reseta todas as 6 propriedades
+- **`ValidarDados()`** ÔÇö valida `codigos` e `descricaos` obrigat├│rios
+- **`CarregarDoCursor()`** ÔÇö usa `SELECT (par_cAliasCursor)` + acesso direto aos campos (padr├úo correto, sem `(var).campo`)
+- **`CarregarPorCodigo()`** ÔÇö SELECT por PK, seta `this_lNovoRegistro = .F.`
+- **`Buscar()`** ÔÇö cursor placeholder com `SET NULL ON`, padr├úo ZAP+APPEND para preservar Grid
+- **`Inserir()`** ÔÇö INSERT com todos os 6 campos + `RegistrarAuditoria("I")`
+- **`Atualizar()`** ÔÇö UPDATE dos campos edit├íveis (exceto PK) + `RegistrarAuditoria("A")`
+- **`ExecutarExclusao()`** ÔÇö DELETE por PK + `RegistrarAuditoria("E")` (nome correto que BusinessBase chama internamente)

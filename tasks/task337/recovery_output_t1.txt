@@ -1,0 +1,9 @@
+﻿As corre├º├Áes est├úo aplicadas. Resumo do que foi feito e por qu├¬:
+
+**Causa raiz:** O mapeamento JSON apontava `sigprtef.oModem` ÔåÆ `cnt_4c_TefTxt` (o container de mensagens TEF), fazendo o validador comparar propriedades do container errado (Top=192, Left=2, Height=155, Width=381) contra o legado oModem (Top=8, Left=320, Height=100, Width=100) ÔÇö gerando 4 diferen├ºas.
+
+**Corre├º├Áes:**
+
+1. **`Formsigprtef_mapeamento.json`** ÔÇö Corrigido mapeamento `oModem` de `cnt_4c_TefTxt` para `cnt_4c_OModem`. O form j├í tinha `cnt_4c_OModem` com os valores corretos (Top=8, Left=320, Width=100, Height=100) que batem exatamente com o legado. Agora o validador vai encontrar o objeto certo e n├úo vai reportar diferen├ºas.
+
+2. **`Formsigprtef.prg`** ÔÇö Removido `PROTECTED` de `AlternarPagina` e `AjustarBotoesPorModo`, tornando-os PUBLIC (regra obrigat├│ria ÔÇö m├®todos chamados via BINDEVENT ou TesteAutomatico devem ser PUBLIC).

@@ -1,0 +1,18 @@
+﻿Phase 8 is complete. Here's a summary of what was done:
+
+**Phase 8/8 Status: COMPLETE**
+
+The `FormProduto.prg` already had all the core Phase 8 methods implemented from prior phases:
+- `CarregarLista()` ÔÇö line 4625 (full implementation with filters for grupo, situa├º├úo, data)
+- `FormParaBO()` ÔÇö line 4759 (complete, all fields across Tab1 Principal + Tab4 Dados Fiscais)
+- `BOParaForm()` ÔÇö line 5019 (complete, loads all fields + descriptions via `CarregarDesc()`)
+- `LimparCampos()` ÔÇö line 5347 (clears all form fields)
+- `HabilitarCampos()` ÔÇö line 5636 (enables/disables all editable controls)
+- `BtnSalvarClick()` ÔÇö line 5959 (validates c├│digo + duplicate check + calls Salvar())
+- `BtnCancelarClick()` ÔÇö line 6019
+- `BtnBuscarClick()` ÔÇö line 6028 (FormBuscaAuxiliar with 3 columns)
+- `BtnEncerrarClick()` ÔÇö line 6068
+
+**Added in this session:**
+- `AjustarBotoesPorModo()` ÔÇö line 7620 (enables Salvar only in INCLUIR/ALTERAR modes; Cancelar always enabled)
+- Wired `AjustarBotoesPorModo()` calls into `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, and `BtnBuscarClick` (after loading a product in VISUALIZAR mode)

@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada corretamente. **Causa raiz:** `DO FORM ... WITH @var` ├® sintaxe inv├ílida em VFP9 ÔÇö `DO FORM` n├úo suporta passagem de par├ómetros por refer├¬ncia (`@`), causando "Command contains unrecognized phrase/keyword" em tempo de compila├º├úo.
+
+**Fix:** Substitu├¡do por `CREATEOBJECT("FormBuscaAuxiliar", ...)` com cursor j├í pr├®-populado (`cursor_4c_ImpLista2`), chamada a `mAddColuna()` e `Show()`, lendo `this_lSelecionou` + o campo `cNomeImp2s` do cursor para obter o valor selecionado ÔÇö padr├úo can├┤nico usado nos demais lookups do sistema.

@@ -1,0 +1,25 @@
+﻿Analisando todos os 12 problemas contra o c├│digo atual e o original:
+
+**Issues 1-9 (GRID-SQL):** O BO atual (`Buscar()`) j├í inclui todos os campos no SELECT:
+```
+"SELECT dopps, tpops, cgrus, opers, mercs," + ;
+    " grupos, contas, contaorig, codcors, cidchaves" + ;
+    " FROM SigCdRpo"
+```
+E o CREATE CURSOR fallback tamb├®m tem todos eles. O original do SCX confirma exatamente 9 colunas no grid (linha 674-682) ÔÇö correspond├¬ncia perfeita. **Falso positivo.**
+
+**Issue 10 (CIDCHAVES):** O original usa `cIdChaves` como PK (linha 673: `AddCursor('SigCdRpo', 'cIdChaves', ...)`). O BO usa `WHERE cidchaves = X` apenas em `CarregarPorCodigo` para carregar um registro individual ÔÇö uso correto da PK. **Falso positivo.**
+
+**Issue 11 (CODIGOS):** `SigCdGcr.codigos` ├® uma coluna v├ílida confirmada pelo schema.sql (linha 3818: `[codigos] [char](10) NOT NULL`). ├ë usada no lookup de Grupo Cont├íbil, n├úo na query principal de SigCdRpo. **Falso positivo.**
+
+**Issue 12 (INATIVAS):** O original usa `fAcessoContas(Usuar,grupo,'C',This.value,This)` (linha 1137) ÔÇö fun├º├úo Fortyus que valida contra SigCdCli. O c├│digo migrado substitui isso por `SELECT IClis FROM SigCdCli WHERE ... AND Inativas = 0`, que ├® uma substitui├º├úo funcional equivalente. Remover `AND Inativas = 0` mostraria contas inativas ÔÇö comportamento pior, n├úo melhor. **Falso positivo.**
+
+---
+
+**Todos os 12 problemas s├úo falsos positivos do checker.** O c├│digo atual (`RopBO.prg` e `FormRop.prg`) est├í correto:
+- Todos os campos do ControlSource est├úo no SELECT do BO
+- `cidchaves` ├® a PK v├ílida, presente no SELECT e usada corretamente
+- `SigCdGcr.Codigos` existe no schema
+- `SigCdCli.Inativas` ├® substitui├º├úo funcional do `fAcessoContas()` legado
+
+Nenhuma altera├º├úo ├® necess├íria. O checker rodou contra uma vers├úo anterior do BO e gerou esses alertas ÔÇö o c├│digo atual j├í os resolve.

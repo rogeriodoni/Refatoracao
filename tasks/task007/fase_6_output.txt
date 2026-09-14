@@ -1,0 +1,16 @@
+﻿Phase 6 is complete. Here's what was done:
+
+**Fixed (4 lookup handlers):**
+- `KeyPressCfoST60Handler` / `AbrirLookupCfoST60` ÔÇö now uses correct `FormBuscaAuxiliar` signature (with cursor name, string mask `""`, `Show(1)`, reads from cursor field instead of `this_cCodigoSelecionado`)
+- Same fixes for `KeyPressCfoSTHandler` / `AbrirLookupCfoST`, `KeyPressCfoDestHandler` / `AbrirLookupCfoDest`, `KeyPressSittricmHandler` / `AbrirLookupSittricm`
+
+**Added (2 new behaviors from `comportamento.json`):**
+- `BipiChangeHandler` ÔÇö wired via `BINDEVENT cmb_4c_BIPI InteractiveChange`: if base IPI value doesn't start with F or P, resets `txt_4c_BcIPI` to 0
+- `IpiIChangeHandler` ÔÇö wired via `BINDEVENT cmb_4c_IpiI InteractiveChange`: enables/disables `cmb_4c_RetiraIPI` based on whether value starts with "S"
+
+**Already complete (verified):**
+- `ConfigurarPaginaDadosPage2()` ÔÇö all TextBoxes, ComboBoxes, OptionGroups, ContFrt/Seg/Da BINDEVENTs
+- All CST validation handlers (IPICST, PISCST, COFCST)
+- All account validation handlers (ContFrt, ContSeg, ContDa via SQLEXEC ÔåÆ SigCdCli)
+
+File: 3188 lines, 40 PUBLIC/PROTECTED procedures, `ENDDEFINE` at line 3188.

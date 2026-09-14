@@ -1,0 +1,40 @@
+﻿Analisei os 4 alertas. Todos s├úo **falsos positivos** do revisor. Aqui est├í o diagn├│stico:
+
+---
+
+## Diagn├│stico: Todos os 4 alertas s├úo falsos positivos
+
+O revisor confundiu **acessos a campos do cursor** com **condi├º├Áes WHERE de SQL**.
+
+### LCARTAO, TCDC, GARANTIAS
+
+As ocorr├¬ncias no c├│digo s├úo **leituras de campo de cursor**, n├úo cl├íusulas WHERE:
+
+```foxpro
+crSigOpFp.lCartao = "S"   ÔåÉ acesso a campo do cursor, n├úo WHERE
+crSigOpFp.Tcdc = "S"      ÔåÉ acesso a campo do cursor, n├úo WHERE
+crSigOpFp.Garantias = "S" ÔåÉ acesso a campo do cursor, n├úo WHERE
+```
+
+O cursor `crSigOpFp` ├® carregado com `SELECT * FROM SigOpFp WHERE FPags = ...` ÔÇö um SELECT *, portanto traz todas as colunas. Essas tr├¬s colunas **existem de fato na tabela SigOpFp**, confirmado no `schema.sql`:
+
+- `[garantias] [char](1)` ÔÇö linha 15965
+- `[lcartao] [char](1)` ÔÇö linha 15966  
+- `[tcdc] [char](1)` ÔÇö linha 15972
+
+O c├│digo original legado tamb├®m as usa exatamente assim (via `crSigOpFp.lCartao`, `crSigOpFp.Tcdc`, etc.) ap├│s `SqlExecute([Select * From SigOpFp...], 'crSigOpFp')`.
+
+### CONTROLCOUNT
+
+Ocorre em `TornarControlesVisiveis` como **propriedade de objeto VFP**:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount    ÔåÉ propriedade VFP, n├úo SQL
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+
+N├úo tem nenhuma rela├º├úo com SQL.
+
+---
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto ÔÇö os campos `lcartao`, `tcdc` e `garantias` s├úo colunas reais de `SigOpFp` acessadas como valores (n├úo como filtros WHERE inventados), e `ControlCount` ├® propriedade VFP padr├úo. O pass SQL n├úo requer modifica├º├Áes neste arquivo.

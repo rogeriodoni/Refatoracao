@@ -1,0 +1,9 @@
+﻿MTVBO.prg completo. Fase 2 conclu├¡da ÔÇö os m├®todos CRUD foram adicionados ao BO existente:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCodigo` para o sistema de auditoria
+- **`CarregarDoCursor()`** ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo can├┤nico)
+- **`Buscar()`** ÔÇö SELECT com filtro opcional por c├│digo ou descri├º├úo
+- **`CarregarPorCodigo()`** ÔÇö SELECT por PK, reseta `this_lNovoRegistro = .F.` ap├│s carregar
+- **`Inserir()`** ÔÇö verifica duplicidade antes do INSERT, chama `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE por Cods, chama `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö DELETE por Cods (PROTECTED, chamado via `Excluir()` p├║blico do BusinessBase), chama `RegistrarAuditoria("DELETE")`

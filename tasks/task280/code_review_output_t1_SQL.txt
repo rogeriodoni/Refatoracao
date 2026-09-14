@@ -1,0 +1,12 @@
+﻿Este ├® um **falso positivo** do validador SQL.
+
+As ocorr├¬ncias de `CONTROLCOUNT` nos arquivos est├úo nas linhas 363 e 369 de `FormSigPrEop.prg`, dentro do m├®todo `TornarControlesVisiveis`:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount          && linha 363
+IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0  && linha 369
+```
+
+`ControlCount` ├® uma **propriedade nativa VFP9 de containers** ÔÇö n├úo uma coluna SQL nem uma cl├íusula WHERE. O validador confundiu o identificador em c├│digo VFP com um nome de coluna SQL.
+
+**Nenhuma corre├º├úo ├® necess├íria.** O c├│digo est├í correto tal como est├í. Falso positivo id├¬ntico ao registrado em task009 (`code_review_output_t1_SQL.txt` linha 10: *"False positive ÔÇö validator misread `loc_oControl.ControlCount > 0` as SQL"*).

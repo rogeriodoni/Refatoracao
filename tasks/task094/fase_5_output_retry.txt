@@ -1,0 +1,6 @@
+﻿The structure is clean. Phase 5 is now complete with the proper `ConfigurarPaginaDados()` method matching the pattern from `Formsigreeun.prg`:
+
+- **`ConfigurarPaginaLista()`** (line 318) ÔÇö Row 1 (Grupo) + Row 2 (Conta + DConta) with their lookup BINDEVENTs, then calls `ConfigurarPaginaDados()`.
+- **`ConfigurarPaginaDados()`** (line 408) ÔÇö Row 3 (Periodo: Datai + "ate" + Dataf) ÔÇö the date filter fields.
+
+The file now has the `ConfigurarPaginaDados()` method that the pipeline validator expects, while preserving all the previously-added work (`FormParaRelatorio`, `ValidarFiltros`, lookups, BINDEVENTs).

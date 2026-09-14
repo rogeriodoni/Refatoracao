@@ -1,0 +1,11 @@
+﻿Corre├º├úo aplicada. O que foi feito:
+
+**Problema:** `BuscarCotacao` usava `WHERE cmoes = ...` no SQL, mas `cmoes` n├úo aparece em nenhum WHERE do c├│digo legado original.
+
+**Corre├º├úo em `sigrecogBO.prg` linha 495:**
+- Removido `WHERE cmoes = EscaparSQL(loc_cMoeda)` do SQL
+- `SELECT TOP 1 valos` ÔåÆ `SELECT cmoes, valos` (requer o campo para LOCATE)
+- `ORDER BY cmoes, datas DESC, horas DESC` ÔÇö garante que para cada moeda o registro mais recente aparece primeiro
+- Adicionado `LOCATE FOR ALLTRIM(cmoes) = loc_cMoeda` ap├│s o SELECT ÔÇö replica o comportamento do cursor legado (`crSigCdCot` sem filtro + SEEK local por moeda)
+
+O resultado ├® semanticamente id├¬ntico: retorna a cota├º├úo mais recente para a moeda solicitada, mas agora sem filtrar por `cmoes` no SQL Server.

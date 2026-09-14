@@ -1,0 +1,15 @@
+﻿O arquivo est├í completo e correto. Fase 6 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **Campos de moeda** em `ConfigurarPaginaDados()` (├║ltimos 50%):
+   - `lbl_4c_Moeda` + `txt_4c_CodMoeda` (c├│digo, 3 chars, `InputMask="!!!"`) + `txt_4c_DescMoeda` (descri├º├úo)
+   - BINDEVENTs de `LostFocus` para ambos os campos
+
+2. **M├®todos de dados** (FormParaBO, BOParaForm, LimparCampos, HabilitarCampos, AjustarBotoesPorModo)
+
+3. **M├®todos CRUD completos** (BtnIncluirClick, BtnVisualizarClick, BtnAlterarClick, BtnExcluirClick, BtnBuscarClick, BtnEncerrarClick, BtnSalvarClick, BtnCancelarClick)
+
+4. **Lookups de moeda** (CodMoedaLostFocus, DescMoedaLostFocus, AbrirLookupMoedaCodigo, AbrirLookupMoedaDescricao) ÔÇö comportamento id├¬ntico ao legado: busca por `cmoes` OU `dmoes` em SigCdMoe, com `txt_4c_DescMoeda.Enabled=.F.` quando c├│digo preenchido
+
+5. **Bug fix** em `CstBO.CarregarPorCodigo` ÔÇö agora retorna `.T.` corretamente ap├│s carga bem-sucedida (sem esse fix, BtnVisualizarClick e BtnAlterarClick nunca navegavam para Page2)

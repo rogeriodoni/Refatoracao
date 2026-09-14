@@ -1,0 +1,17 @@
+﻿Tudo correto. Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**`Formsigrechp.prg`** ÔÇö 7 m├®todos adicionados antes de `ENDDEFINE`:
+- `BtnBuscarClick()` ÔåÆ delega para `BtnVisualizarClick()`
+- `BtnEncerrarClick()` ÔåÆ chama `THIS.Release()`
+- `BtnSalvarClick()` ÔåÆ delega para `BtnImprimirClick()`
+- `BtnCancelarClick()` ÔåÆ chama `THIS.Release()`
+- `HabilitarCampos(par_lHabilitar)` ÔåÆ no-op (form REPORT sem modos)
+- `CarregarLista()` ÔåÆ retorna `.T.` (sem lista CRUD em REPORT)
+- `AjustarBotoesPorModo()` ÔåÆ no-op (sem modos em REPORT)
+
+**`menu.prg`** ÔÇö integra├º├úo completa:
+- Bar 48 = separador `\-`
+- Bar 49 = "Cheques Pendentes" ÔåÆ `AbrirFormsigrechp`
+- `PROCEDURE AbrirFormsigrechp()` adicionado ao final (padr├úo can├┤nico com `VARTYPE` + `MostrarErro`)
+
+O `config.prg` **n├úo precisou de altera├º├úo** ÔÇö j├í carrega automaticamente `*BO.prg` de `classes\` e `Form*.prg` de `relatorios\`.

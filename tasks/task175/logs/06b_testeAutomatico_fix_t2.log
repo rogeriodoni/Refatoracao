@@ -1,0 +1,21 @@
+[2026-07-03 00:54:21] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-03 00:54:21] [INFO] Prompt File: C:\4c\tasks\task175\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-07-03 00:54:21] [INFO] Output File: C:\4c\tasks\task175\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-03 00:54:21] [INFO] Model: sonnet
+[2026-07-03 00:54:21] [INFO] Timeout: 3600 segundos
+[2026-07-03 00:54:21] [INFO] Max Output Tokens: 128000
+[2026-07-03 00:54:21] [INFO] Context Files: 0 arquivo(s)
+[2026-07-03 00:54:22] [INFO] Invocando Claude CLI...
+[2026-07-03 00:54:22] [INFO] Prompt carregado: 93954 caracteres
+[2026-07-03 00:54:22] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-03 00:54:22] [INFO] Tamanho total do prompt: 93954 caracteres
+[2026-07-03 00:54:22] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-03 00:54:50] [INFO] Claude CLI finalizado em 28.3273522 segundos
+[2026-07-03 00:54:50] [INFO] Exit Code: 0
+[2026-07-03 00:54:50] [INFO] Output salvo em: C:\4c\tasks\task175\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-03 00:54:50] [INFO] Output size: 421 bytes
+[2026-07-03 00:54:50] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-03 00:54:50] [INFO] Preview do output:
+[2026-07-03 00:54:50] [INFO] **Causa**: `TABLEREVERT(.T., "cursor_4c_Dados")` na linha 292 exige que o cursor tenha buffering habilitado (modo 3, 4 ou 5). O `cursor_4c_Dados` +® criado com `CREATE CURSOR` no BO, que n+úo tem buffering ÔÇö logo a fun+º+úo falha.
+
+**Corre+º+úo**: Removida a chamada `TABLEREVERT`. Cursores criados com `CREATE CURSOR` s+úo descartados diretamente com `USE IN`, sem necessidade de revert.

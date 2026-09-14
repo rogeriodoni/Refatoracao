@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. A Fase 2 est├í conclu├¡da.
+
+**Resumo do que foi implementado em `SIGRECNDBO.prg`:**
+
+- **`PrepararDados()`** ÔÇö Replica o `PROCEDURE processamento` do legado:
+  - Valida├º├Áes dos 3 filtros obrigat├│rios **fora do TRY** (conforme regra #1)
+  - Busca nome da empresa via `SigCdEmp` para cabe├ºalho
+  - Cria cursor `dbCabecalho` com dados do cabe├ºalho do relat├│rio
+  - Cria cursor `TmpHist` com estrutura id├¬ntica ao legado (14 campos, indexado por `Grupos+Contas+cIdChaves`)
+  - Query em `SigMvCcr` com filtros de grupo, conta (opcional), data e concilia├º├úo
+  - Loop SCAN que: detecta quebra de grupo/conta para resetar saldo, busca descri├º├úo em `SigCdCli`, converte moeda via `BuscarCotacao`, acumula saldo corrente, insere em `TmpHist`
+
+- **`Imprimir()`** ÔÇö `PrepararDados()` + `REPORT FORM SigReCnd.frx TO PRINTER`
+- **`ImprimirComPrompt()`** ÔÇö `PrepararDados()` + `REPORT FORM ... TO PRINT PROMPT`
+- **`Visualizar()`** ÔÇö `PrepararDados()` + `REPORT FORM ... PREVIEW NOCONSOLE`
+- **`BuscarCotacao()`** (PROTECTED) ÔÇö Consulta `SigCdCot` para taxa de c├ómbio hist├│rica (mesmo padr├úo do `SIGRECMVBO`)
+- **`ObterMensagemErro()`** ÔÇö Retorna `this_cMensagemErro`

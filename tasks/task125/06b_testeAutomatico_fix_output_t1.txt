@@ -1,0 +1,5 @@
+﻿As duas corre├º├Áes foram aplicadas:
+
+1. **`sigreinrBO.prg` ÔÇö CATCH de `InicializarDadosBasicos`**: Quando a conex├úo falha e lan├ºa exce├º├úo, cria o cursor `CsOperacaos` vazio. Isso ├® necess├írio porque `ConfigurarPaginaLista` define `grd_4c_Operacaos.RecordSource = "CsOperacaos"` ÔÇö sem o cursor, causaria "Alias is not found".
+
+2. **`Formsigreinr.prg` ÔÇö `InicializarForm`**: Quando `InicializarDadosBasicos` retorna `.F.`, o erro ├® armazenado em `this_cMensagemErro` mas a instancia├º├úo n├úo ├® bloqueada. O form abre normalmente; se o usu├írio tentar gerar o relat├│rio sem conex├úo, `PrepararDados()` falhar├í com mensagem de erro adequada.

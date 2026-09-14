@@ -1,0 +1,11 @@
+﻿Tudo correto. A Fase 5/8 foi conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **`THIS.ConfigurarPaginaDados()`** ÔÇö chamada inserida em `InicializarForm()` na sequ├¬ncia de inicializa├º├úo (linha 94), ap├│s `ConfigurarPaginaLista()` e antes de `ConfigurarBalanca()`.
+
+2. **`PROTECTED PROCEDURE ConfigurarPaginaDados()`** ÔÇö novo m├®todo (linhas 673ÔÇô712) que adiciona os dois elementos visuais decorativos faltantes do original:
+   - `shp_4c_Shape2` (Shape2 do legado): moldura esquerda, `Top=11, Left=10, Width=172, Height=110`, borda cor `RGB(136,189,188)`, transparente
+   - `shp_4c_Shape1` (Shape1 do legado): moldura direita, `Top=11, Left=817, Width=172, Height=110`, borda preta, transparente
+
+**Observa├º├úo:** Para este form OPERACIONAL flat (sem PageFrame Page1/Page2), `ConfigurarPaginaDados()` n├úo tem o papel CRUD tradicional. Os ├║nicos elementos visuais do original ainda n├úo migrados eram os dois Shapes decorativos ÔÇö ambos com `BackStyle=0` e `BorderStyle=0` (visualmente quase impercept├¡veis, mas presentes no legado para conformidade PILAR 1).

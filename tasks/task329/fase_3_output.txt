@@ -1,0 +1,12 @@
+﻿Fase 3 entregue. **`FormSigPrSdd.prg`** criado em `projeto/app/forms/operacionais/` com 258 linhas.
+
+**O que foi implementado:**
+
+- `DEFINE CLASS FormSigPrSdd AS FormBase` ÔÇö Width=1000, Height=360 (escalonado de 799├ù288), **TitleBar=0, ControlBox=.F., Closable=.F.** conforme o original (dialog sem barra de t├¡tulo)
+- `Init(par_lProducao)` ÔÇö captura o par├ómetro de produ├º├úo **antes** de `DODEFAULT()`, garantindo que `InicializarForm()` j├í tem `this_lProducao` dispon├¡vel
+- `InicializarForm()` ÔÇö cria SigPrSddBO, repassa `lProducao` para o BO, aplica background `new_background.jpg`, chama `ConfigurarCabecalho()` e `TornarControlesVisiveis()`
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Cabecalho` (RGB 100,100,100) com `lbl_4c_Sombra/Titulo` + os 3 bot├Áes como **filhos diretos do Form** (igual ao original): Boleto (Left=770), Gerar Senha (Left=845), Encerrar (Left=920, `Cancel=.T.`) ÔÇö todos `Themes=.T.` + `DisabledPicture` (standalone CommandButton)
+- `TornarControlesVisiveis()` ÔÇö recursivo, trata PageFrame e containers (robusto para fases seguintes)
+- `Destroy()` ÔÇö zera BO + `DODEFAULT()`
+
+**Pr├│ximas fases:** Fase 4 adicionar├í os Labels e TextBoxes (Solicitante, Empresa, Opera├º├úo, Documento, Cond. Pagto, Data, Valor, Motivo). Fases 5-8 adicionar├úo lookups e eventos (BINDEVENTs para KeyPress com guard ENTER/TAB/F4, substitui├º├úo de `fAcessoEmpresa` por `FormBuscaAuxiliar`).

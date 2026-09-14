@@ -1,0 +1,12 @@
+﻿Arquivo ├¡ntegro. A Fase 6/8 est├í completa. Foram adicionados a `ConfigurarPaginaDados()`:
+
+**5 OptionGroups com seus respectivos Labels:**
+- `lbl_4c_LblSeparador` + `obj_4c_OptSeparador` (Sim/N├úo) ÔÇö Left=532/601, Top=417/412
+- `lbl_4c_LblPreco` + `obj_4c_OptPreco` (6 op├º├Áes: Sim/N├úo/Ideal/Atual/Pre├ºo DE\Por/Parcelamento) ÔÇö Left=561/601, Top=440/439
+- `lbl_4c_LblPeso` + `obj_4c_OptPeso` (Sim/N├úo) ÔÇö Left=565/601, Top=540/535
+- `lbl_4c_LblCompos` + `obj_4c_OptCompos` (Sim/N├úo) ÔÇö Left=531/601, Top=567/562
+- `lbl_4c_LblOrdem` + `obj_4c_OptOrdem` (Produto/Nenhuma) ÔÇö Left=556/601, Top=594/589
+
+**Em `AplicarConfiguracoes()`:** adicionada inicializa├º├úo de `obj_4c_OptSeparador.Value` a partir de `this_lImpSepar` do BO (carregado de `SigCdPac.EtqSeps`).
+
+Todos os controles usam `WITH .Buttons(N)` aninhado dentro do `WITH THIS.obj_4c_Opt*` (regra Erro42) e n├úo setam `.Value` nos bot├Áes individuais (regra de `.Value != 0` em OptionButtons).

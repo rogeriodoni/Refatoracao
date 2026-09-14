@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fLerFiscal", "fConfigGeral", "File", "FileToStr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFIS",
+      "evento": "Init",
+      "linhas": 52,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t=fLerFiscal()\n\n\tSelect crSigFiFis\n\tGo Top\n\n\tIf Eof()\n\t\tAppend Blank\n\tEndIf\n\n\tIf IsEmpty(crSigFiFis.Settings)\n\t\tReplace crSigFiFis.Settings with '9600,n,8,1'\n\tEndif\n\n\tWith This.Cmb_Hand\n\t\t.Clear\n\t\t.AddItem( '0-None    ' )\n\t\t.AddItem( '1-Xon Xoff' )\n\t\t.AddItem( '2-RTS     ' )\n\t\t.AddItem( 'Em Branco ' )\n\tEndwith\n\tWith This.Cmb_Imp\n\t\t.Clear\n\t\t.AddItem( 'DATAREGIS   ' )\n\t\t.A... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fLerFiscal",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmb_Hand,Cmb_Imp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFIS",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "=fConfigGeral()\nCreate Cursor CrSigFiFis (Portas n(1), Hands c(20), Settings c(20), Dtrs L, Rtss L, Imps c(20), Termicas L)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFIS",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFIS.cancela",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFIS.Ok",
+      "evento": "Click",
+      "linhas": 93,
+      "codigoOriginal": "DO Case\n\n\tCase ATC('SIGFIOP5', upper(SET('PROCEDURE'))) <> 0\n\t\tRelease Procedure SIGFIOP5.Prg \n\n\tCase ATC('SIGFIOP4', upper(SET('PROCEDURE'))) <> 0\n\t\tRelease Procedure SIGFIOP4.Prg \n\t\t\n\tCase ATC('SIGFIOP3', upper(SET('PROCEDURE'))) <> 0\n\t\tRelease Procedure SIGFIOP3.Prg \n\n\tCase ATC('SIGFIOP0', upper(SET('PROCEDURE'))) <> 0\n\t\tRelease Procedure SIGFIOP0.Prg \n\n\tCase ATC('SIGFIOP2', upper(SET('PROCEDURE'))) <> 0\n\t\tRelease Procedure SIGFIOP2.Prg \n\n\tCase ATC('SIGFIOP1', upper(SET('PROCEDURE'))) <> 0\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File,FileToStr",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

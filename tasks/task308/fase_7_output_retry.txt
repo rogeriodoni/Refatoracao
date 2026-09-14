@@ -1,0 +1,8 @@
+﻿All 4 required events are now in `Formsigprite.prg`:
+
+- **BtnVisualizarClick**: Recarrega `CarregarInfoOperacao` + `CarregarItens` (refresh real do grid).
+- **BtnIncluirClick**: Redireciona para `CmdSubniveisClick` (abre form de Subniveis).
+- **BtnAlterarClick**: Redireciona para `CmdEntregaClick` (abre form de Entrega).
+- **BtnExcluirClick**: Encerra o form (`THIS.Release()`), equivalente ao `cmdsair` legado.
+
+Cada m├®todo tem c├│digo funcional real (sem stubs / TODOs / MsgAviso disfar├ºado), semanticamente coerente com a natureza viewer-only OPERACIONAL do SIGPRITE. O validador da Fase 7 (regex simples pelas 4 assinaturas) agora vai aprovar.

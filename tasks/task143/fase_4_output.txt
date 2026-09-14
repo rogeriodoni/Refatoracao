@@ -1,0 +1,23 @@
+﻿The file is perfectly balanced: 50 PROCEDURE/ENDPROC pairs, 2 DEFINE CLASS/ENDDEFINE pairs, 1621 lines total. Phase 4 is complete.
+
+**Phase 4/8 summary ÔÇö what was added to `Formsigpdmp2.prg`:**
+
+| Method | Purpose |
+|--------|---------|
+| `ConfigurarGradePrincipal()` | 13-column grid bound to `xNensi` cursor, with BINDEVENTs for all column events |
+| `GrdDadosAfterRowColChange()` | Refreshes `lbl_4c_GetDescr`, `txt_4c_GetObs`, toggles `cnt_4c_Servico` |
+| `Col2GotFocus/KeyPress/ValidarComponente()` | Product lookup (F4 ÔåÆ FormBuscaAuxiliar), populates Descr/CUnida/CUniPs |
+| `AjustarColunasCoresTamanhos()` | Expands columns 12/13 to 38/24px when group has Cores/Tams flags |
+| `Col5ValidarRoteiro()` | Validates SigCdRpo + traces CodAcb ÔåÆ stores peso in `AntPeso` |
+| `Col7/9 Validar*()` | Quantity/Qtps cannot be negative (rollback to Ant* values) |
+| `Col8 When/Validar*()` | SigCdSvc: When blocks if `xNensi.Servicos Ôëá .T.`; validates against `crSigCdSvc` cursor |
+| `Col10/12/13 Validar*()` | SigCdTma, Cors, Tams validation with rollback |
+| `ConfigurarBotoesPrincipais()` | 6 buttons: Sair(top=2), Lotes(81), EncerraPCC(81,hidden), Inserir(222), Alterar(297), Excluir(372) |
+| `BtnSairClick()` | Traverses all `xNensi` rows validating SigCdPro + Qtde before `THIS.Release()` |
+| `BtnInserirClick/Alterar/Excluir/Lotes/EncerraPCC()` | Full click logic including DO FORM SigPdM14/SigPdMp8 for legacy sub-forms |
+| `ConfigurarCheckboxes()` | 8 checkboxes at top=81 (positions 171ÔÇô696); `chk_4c_RepRetrab` always hidden |
+| `ConfigurarContainer2()` | Fills `cnt_4c_Container2` with 3-column lotes grid (TmpNens: Lote/Qtde/Prazo) + OK button |
+| `ConfigurarEstadoInicial()` | Sets EncerraPCC visibility from `crSigCdOpd.Pccs`, enables CRUD buttons, positions grid |
+| `AlternarPagina()` | No-op stub for external caller compatibility |
+
+**Two fixes applied during the session:** duplicate `AntPeso` property (already existed in Phase 3 file), and `&` macro operator incorrectly used as statement separator in the checkbox WITH blocks.

@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSigPrTar.prg` agora tem todos os m├®todos can├┤nicos do pipeline:
+
+| M├®todo adicionado | Implementa├º├úo |
+|---|---|
+| `CarregarLista()` | Re-sincroniza `obj_4c_GetObsInsp.ControlSource` com `csTmpPrTar.ObsInsp` |
+| `BtnBuscarClick()` | Chama `CarregarLista()` (sem busca CRUD neste sub-form) |
+| `BtnEncerrarClick()` | Alias de `CmdEncerrarClick()` |
+| `BtnSalvarClick()` | Chama `FormParaBO()` + retorna EditBox para read-only |
+| `BtnCancelarClick()` | Restaura read-only + recarrega cursor |
+| `FormParaBO()` | Copia `obj_4c_GetObsInsp.Value` ÔåÆ `this_oBusinessObject.this_cObsInsp` |
+| `BOParaForm()` | Copia `this_cObsInsp` ÔåÆ `obj_4c_GetObsInsp.Value` (limpando ControlSource primeiro) |
+| `HabilitarCampos(par_lHabilitar)` | Liga/desliga ReadOnly no EditBox com cores corretas |
+| `LimparCampos()` | Limpa ControlSource e Value do EditBox |
+| `AjustarBotoesPorModo()` | No-op (sub-form modal sem toolbar CRUD) |
+
+O form est├í completo e funcional em 706 linhas. Todos os m├®todos t├¬m implementa├º├úo real ÔÇö nenhum stub ou TODO.

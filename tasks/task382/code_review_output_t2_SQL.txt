@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. O bloco inventado foi removido inteiramente:
+
+- **Removido**: TRY/CATCH de `WHERE descrs = ...` (linhas 125ÔÇô144 originais) ÔÇö condi├º├úo n├úo existente no WHERE do legado
+- **Removido**: early-exit intermedi├írio `IF !loc_lValido / RETURN / ENDIF` que ficou orf├úo
+- **Mantido**: verifica├º├úo de duplicidade por `codigos` (original) e por `Caracteris` em `ExecutarExclusao` (original)
+
+O `ValidarDados` agora segue apenas as colunas que o c├│digo legado usa em WHEREs: `CODIGOS` e `CARACTERIS`.

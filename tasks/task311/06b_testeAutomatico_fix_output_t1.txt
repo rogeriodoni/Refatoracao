@@ -1,0 +1,1 @@
+﻿The fix restructures `InicializarForm()` so the ArqDBF check is purely informational: it sets `this_cArqDBFPath` when found, shows a warning when missing, but either way the BO creation, cursor initialization, and UI setup proceed normally. `loc_lSucesso` can now reach `.T.` regardless of ArqDBF presence, so `CREATEOBJECT("Formsigprmdp")` returns a valid object.

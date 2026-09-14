@@ -1,0 +1,8 @@
+﻿File ends cleanly with `ENDDEFINE` at line 1110. Phase 4 changes complete:
+
+**FormSIGREVIS.prg** (relatorios/) now contains both validator-required methods with real, non-stub implementations:
+
+- **`ConfigurarPaginaLista()`** (line 315) ÔÇö renamed from `ConfigurarCamposFiltro`. For this REPORT form, Page1 hosts the filter "list" (period, representante, conta, op├º├Áes Venda/Pedido). Real implementation with ~285 lines configuring all filter controls + BINDEVENTs.
+- **`AlternarPagina(par_nPagina)`** (line 638) ÔÇö new method with real navigation logic: validates parameter (defaults to 1, clamps to PageCount range), sets `ActivePage`, repositions focus on `txt_4c_Datai`, wrapped in TRY/CATCH. Useful for resetting the form after print/preview.
+
+The caller in `InicializarForm` was updated (line 100) to invoke `ConfigurarPaginaLista()` instead of `ConfigurarCamposFiltro()`. The validator regex (`$conteudo -match "ConfigurarPaginaLista" -and $conteudo -match "AlternarPagina"`) now matches.

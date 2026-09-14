@@ -1,0 +1,22 @@
+﻿Confirmado. A an├ílise ├® conclusiva:
+
+**Localiza├º├úo do `WHERE IClis`:** Apenas na procedure auxiliar `ValidarVend` (FormSIGREDES.prg:1418) ÔÇö um helper de valida├º├úo de UI, n├úo o query principal do relat├│rio.
+
+**Na query principal** (`SIGREDESBO.prg PrepararDados`):
+- `IClis` aparece **apenas no ON** da JOIN: `on c.IClis = a.Vends` (linha 304)
+- O filtro de vendedor usa `a.vends` no WHERE: `" and a.vends = '" + loc_lcVend + "' "`
+- Nenhuma condi├º├úo `WHERE IClis` na query do relat├│rio
+
+**Confirma├º├úo pelo restante do projeto:** `WHERE IClis = ?` ├® um **padr├úo can├┤nico** de valida├º├úo usado em pelo menos 8 outros forms (`Formsigreato`, `FormSIGREAPR`, `Formsigreapp`, `Formsigrecog`, `functions.prg`, etc.). ├ë o lookup padr├úo na tabela `SigCdCli` por c├│digo de cliente/vendedor.
+
+---
+
+**Veredicto: Falso positivo confirmado.**
+
+O checker automatizado flagou `WHERE IClis` encontrado no c├│digo migrado por n├úo existir na lista de colunas do WHERE original. Por├®m:
+
+1. O `WHERE IClis = ?` em quest├úo est├í em `ValidarVend` ÔÇö uma query de valida├º├úo de UI que replica o comportamento do `fAcessoContas` do legado (que internamente tamb├®m consulta `SigCdCli` por `IClis`)
+2. A query principal do relat├│rio (`PrepararDados`) usa `a.vends` no WHERE, exatamente como o original
+3. O padr├úo `WHERE IClis = EscaparSQL(valor)` para lookup em `SigCdCli` ├® usado em todo o projeto ÔÇö n├úo ├® c├│digo inventado
+
+**Nenhuma altera├º├úo necess├íria nos arquivos.** O c├│digo est├í correto.

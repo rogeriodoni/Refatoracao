@@ -1,0 +1,8 @@
+﻿Both edits are correctly in place. Fase 8/8 is complete:
+
+- **menu.prg lines 179-183**: Added BAR 37 (separator) and BAR 38 "Controle de Movimenta├º├úo por XML" to `popMovimentos`, with `ON SELECTION BAR 38 DO AbrirFormSigPrCtr`
+- **menu.prg lines 4142-4165**: Added `AbrirFormSigPrCtr()` procedure following the canonical pattern (TRY/CATCH, VARTYPE check, MostrarErro on failure)
+
+Config.prg requires no changes ÔÇö `SigPrCtrBO.prg` loads automatically via the `*BO.prg` ADIR scan, and `FormSigPrCtr.prg` loads automatically via the `cadastros\Form*.prg` ADIR scan.
+
+Migration of `FormSigPrCtr` is fully complete across all 8 phases. The form is now accessible via **Movimentos ÔåÆ Controle de Movimenta├º├úo por XML** in the system menu.

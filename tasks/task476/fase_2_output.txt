@@ -1,0 +1,21 @@
+﻿O arquivo est├í correto e completo. A Fase 2/8 est├í conclu├¡da.
+
+**ObsBO.prg agora cont├®m todos os m├®todos CRUD:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `ObterChavePrimaria()` | PUBLIC | Retorna `this_nCodigos` para auditoria |
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT ÔåÆ `cursor_4c_Dados` (colunas do grid) |
+| `CarregarPorCodigo(par_nCodigo)` | PUBLIC | SELECT completo por PK; reseta `this_lNovoRegistro=.F.` |
+| `CarregarDoCursor(par_cAliasCursor)` | PROTECTED | `SELECT (alias)` + mapeamento de todas as 8 colunas |
+| `Inserir()` | PROTECTED | INSERT com todos os campos; chama `RegistrarAuditoria("INSERT")` |
+| `Atualizar()` | PROTECTED | UPDATE sem o PK; chama `RegistrarAuditoria("UPDATE")` |
+| `ExecutarExclusao()` | PROTECTED | DELETE por PK; chama `RegistrarAuditoria("DELETE")` |
+| `BuscarOperacoesNivel()` | PUBLIC | SELECT SigCdOpe filtrado por Abrevs n├úo-vazio ÔåÆ `cursor_4c_Nivel` (para lookup MovAutDop) |
+
+**Pontos cr├¡ticos respeitados:**
+- `PUBLIC FUNCTION` n├úo usado (em DEFINE CLASS ├® syntax error) ÔÇö `PUBLIC` ├® default, sem modificador
+- RETURN apenas fora do TRY/CATCH
+- `SELECT (par_cAliasCursor)` antes de acessar campos em `CarregarDoCursor`
+- `cursor_4c_Carrega` fechado no finally ap├│s `CarregarPorCodigo`
+- Colunas confirmadas no schema.sql (`codigos`, `descrs`, `observas`, `comiss`, `classifs`, `grupos`, `agrupas`, `movautdop`)

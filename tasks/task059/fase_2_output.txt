@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. A Fase 2/8 foi executada com sucesso.
+
+**Resumo do que foi adicionado ao `sigrecogBO.prg`:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `ObterMensagemErro()` | Retorna `this_cMensagemErro` para o form |
+| `ObterChavePrimaria()` | Chave de auditoria: empresa/dt_ini/dt_fim |
+| `RegistrarAuditoria()` | INSERT em LogAuditoria (nunca bloqueia) |
+| `PrepararDados()` | Replica `processamento` do SCX legado ÔÇö cria cursores `cabecalho`, `sumitens`, `cursor_4c_MvItn` e `tempo` com convers├úo de moeda via `BuscarCotacao()` |
+| `LimparCursores()` | Fecha os 4 cursores ap├│s impress├úo/visualiza├º├úo |
+| `Imprimir()` | PrepararDados ÔåÆ REPORT TO PRINTER PROMPT |
+| `Visualizar()` | PrepararDados ÔåÆ REPORT PREVIEW |
+| `GerarExcel()` | PrepararDados ÔåÆ REPORT TO PRINTER (sem PROMPT) |
+| `CarregarMoedas()` | Carrega SigCdMoe indexado por cmoes/dmoes para uso nos lookups do form |
+| `BuscarCotacao()` | Substitui `fBuscarCotacao()` legado ÔÇö busca SigCdCot com fallback 1.0 |

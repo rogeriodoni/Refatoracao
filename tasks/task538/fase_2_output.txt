@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Todos os helpers usados j├í existem no sistema. O arquivo `TopBO.prg` est├í completo para a Fase 2/8:
+
+**M├®todos adicionados** (`C:\4c\projeto\app\classes\TopBO.prg`):
+- `ObterChavePrimaria()` ÔÇö `TRANSFORM(this_nCodigos)` (PK num├®rica, mesmo padr├úo de `AliBO`)
+- `InicializarValoresPadrao()` ÔÇö replica `Replace CrSigCdTom.lAlts with .t.` do legado ao incluir novo registro
+- `CarregarDoCursor()` ÔÇö mapeia as 22 colunas de `SigCdTom`, usando `ConverterParaLogico()` para o bit `lalts` (regra CLAUDE.md #13) e `TratarNulo(campo, "N"/"C")` no padr├úo do resto do codebase
+- `Inserir()` ÔÇö INSERT com todas as 22 colunas (todas `NOT NULL`, nenhuma omitida)
+- `Atualizar()` ÔÇö UPDATE de todos os campos exceto a PK
+- `ExecutarExclusao()` ÔÇö DELETE simples (n├úo h├í checagem de depend├¬ncia ativa no legado ÔÇö o bloco que checava `lAlts` antes de excluir est├í comentado com `*!*` no c├│digo original, portanto n├úo foi replicado)
+- `Buscar()` / `CarregarPorCodigo()` ÔÇö SELECT completos, populando `cursor_4c_Dados` / `cursor_4c_Carrega`
+
+Todos os m├®todos usam `RETURN` apenas fora do `TRY/CATCH` e `CATCH` sempre chama `MsgErro`, conforme as regras cr├¡ticas do CLAUDE.md.

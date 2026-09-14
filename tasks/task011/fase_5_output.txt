@@ -1,0 +1,28 @@
+﻿The file is complete and well-formed. Phase 5 is done. Here's a summary of all changes made to `FormProduto.prg`:
+
+---
+
+**Phase 5/8 ÔÇö Changes made:**
+
+**`ConfigurarPaginaDadosPrincipal` (full replacement):**
+- Removed wrong Phase 4 placeholders: `txt_4c_Coefs` (top=226), `txt_4c_Valors` (top=250), `txt_4c_Pkchaves` (top=274)
+- Added **8 rows** of pgDados fields at correct original layout.json positions:
+  1. Row 1 (top=130): `txt_4c_Cpros` + `txt_4c_Dpros` ÔÇö kept
+  2. Row 2 (top=154/155): `txt_4c_DPro2s` (segunda descri├º├úo) + `txt_4c_Cbar` (c├│digo de barras, lado direito)
+  3. Row 3 (top=178): `txt_4c_Cgrus` + `txt_4c_DgruDisplay` ÔÇö kept
+  4. Row 4 (top=202): `txt_4c_Cods` + `txt_4c_DcodsDisplay` ÔÇö kept
+  5. Row 5 (top=226): `txt_4c_Lin` + `txt_4c_DLinDisplay` ÔÇö Linha / SigCdLin
+  6. Row 6 (top=250): `txt_4c_Col` + `txt_4c_DColDisplay` ÔÇö Grupo de Venda / SigCdCol
+  7. Row 7 (top=274): `txt_4c_Ifor` + `txt_4c_DforDisplay` ÔÇö Fornecedor / SigCdCli
+  8. Row 8 (top=298): `txt_4c_Refs` ÔÇö Ref. Fornecedor
+  - BINDEVENTs: `TxtLinKeyPress`, `TxtColKeyPress`, `TxtIforKeyPress`
+
+**`BOParaForm`:** Delegates to new `CarregarDadosSigCdPro()` which loads all SigCdPro fields in one SQL query and populates all display fields + calls desc helpers.
+
+**`FormParaBO`:** Now only maps cpros/cgrus/cods (SigPrFtp fields). coefs/valors remain as BO defaults (0) until pgCusto phase.
+
+**`LimparCampos` / `HabilitarCampos`:** Updated to reference all new controls.
+
+**New methods added:** `CarregarDadosSigCdPro`, `CarregarDescGrupo`, `CarregarDescCods`, `CarregarDescLin`, `CarregarDescCol`, `CarregarDescIfor`, `ValidarLin`, `ValidarCol`, `ValidarIfor`, `TxtLinKeyPress`, `TxtColKeyPress`, `TxtIforKeyPress`, `AbrirLookupLin`, `AbrirLookupCol`, `AbrirLookupIfor`.
+
+**`Destroy`:** Now uses an array loop to clean up all 10 possible cursors.

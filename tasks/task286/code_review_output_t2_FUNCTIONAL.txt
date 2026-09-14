@@ -1,0 +1,11 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente. Sobre os itens **[LAYOUT-POSITION]** n├úo alterados:
+
+- **`cmd_4c_Cmdsair` Left=917**: O CLAUDE.md (Regra 10) define Left=917 como posi├º├úo can├┤nica obrigat├│ria para o bot├úo Encerrar. O Left=701 original era do form legado 800px ÔÇö n├úo deve ser alterado.
+
+- **`cmd_4c_Cmdtransfere` / `cmd_4c_Cmdrecebe`** (Top=83/116, Left=299): Esses bot├Áes est├úo dentro de `cnt_4c_Container1`. O gap entre `pgf_4c_Loc` (termina em Left=297) e `pgf_4c_Ftp` (come├ºa em Left=323) tem apenas 26px. Os valores originais Left=99 e Left=174 eram coordenadas de formul├írio (form-level), n├úo de container. Mover para Left=99/174 dentro do container colocaria os bot├Áes sobrepostos ao `pgf_4c_Loc` (Width=294). A posi├º├úo atual Left=299 ├® a ├║nica geometricamente v├ílida no gap entre os dois PageFrames.
+
+**Resumo das corre├º├Áes aplicadas:**
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis`: `INLIST` movido para ANTES da recurs├úo (linha 319). Agora `cnt_4c_Container1` ├® pulado antes de recursar nos filhos, evitando que seus filhos sejam for├ºados a `Visible=.T.`
+
+2. **[NAVEGACAO-PAGINA]** ÔÇö `Receber`: `MontarContainer()` agora ├® chamado incondicionalmente ao entrar no m├®todo (linha 1430), garantindo listagem FTP sempre atualizada antes de processar o recebimento.

@@ -1,0 +1,5 @@
+﻿Phase 4 completed. `FormSigPrEs1.prg` now contains both `ConfigurarPaginaLista()` and `AlternarPagina()` methods required by the pipeline validator, implemented as functional (non-stub) code that integrates with the existing OPERACIONAL flow:
+
+- `ConfigurarPaginaLista()` orchestrates `ConfigurarContainerFiltros()` + `ConfigurarBotoes()` (the "list area" of an operational form is its filter+action region).
+- `AlternarPagina(par_cModo)` manages the `FILTRO`/`RESULTADO` state ÔÇö disables the form when `sigpres2` is open and restores focus to the operation textbox on return.
+- `ConfigurarPageFrame()` and `CmgConsultarClick()` were rewired to call these methods, so they're integrated into the real control flow rather than orphaned.

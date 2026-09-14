@@ -1,0 +1,28 @@
+﻿Ambas as ocorr├¬ncias s├úo **falsos positivos** do scanner automatizado. Veja a an├ílise:
+
+---
+
+**CIDCHAVES** ÔÇö Encontrado em 3 contextos leg├¡timos:
+
+| Linha | Contexto | ├ë correto? |
+|-------|----------|-----------|
+| 156 | `CarregarPorCodigo`: `WHERE a.cidchaves = ...` | Ô£à PK lookup ÔÇö m├®todo separado do Buscar |
+| 243 | `Atualizar`: `WHERE cidchaves = ...` | Ô£à UPDATE por PK |
+| 267 | `ExecutarExclusao`: `WHERE cidchaves = ...` | Ô£à DELETE por PK |
+
+O `Buscar()` ÔÇö ├║nico m├®todo que deveria filtrar por DATAS/CPROS/CGRUS ÔÇö usa exatamente esses tr├¬s filtros, **sem CIDCHAVES**. O scanner confundiu o SELECT list (`a.cidchaves` na proje├º├úo) com uma condi├º├úo WHERE inventada.
+
+---
+
+**CONTROLCOUNT** ÔÇö Encontrado nas linhas 1356 e 1370 do Form:
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount       && linha 1356
+IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) ...    && linha 1370
+```
+
+Isso ├® a **propriedade VFP9 `.ControlCount`** de um container ÔÇö n├úo ├® SQL. O scanner fez correspond├¬ncia de string com "CONTROLCOUNT" fora de contexto.
+
+---
+
+**Conclus├úo**: Nenhuma corre├º├úo necess├íria. O SQL do `Buscar()` filtra corretamente por DATAS, CPROS e CGRUS (igual ao legado). Os usos de `cidchaves` em WHERE s├úo todos leg├¡timos como chave prim├íria em opera├º├Áes CRUD individuais. `.ControlCount` ├® propriedade VFP9, n├úo coluna SQL.

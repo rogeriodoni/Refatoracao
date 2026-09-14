@@ -1,0 +1,8 @@
+﻿Four required methods added to `FormPzo.prg` (lines 1458, 1511, 1552, 1597), each with real implementation over `CsPrazE`:
+
+- **BtnIncluirClick**: `APPEND BLANK` into `CsPrazE` inheriting `Dopes/Abrevs/ContaEs` from current row, then refresh grid and totals.
+- **BtnAlterarClick**: sets BO mode to `"ALTERAR"`, positions on current row, focuses first editable grid column.
+- **BtnVisualizarClick**: sets BO mode to `"VISUALIZAR"`, marks grid and entrega/observacao fields `ReadOnly`, refreshes panels.
+- **BtnExcluirClick**: confirms via `MsgConfirma`, `DELETE + PACK` in `CsPrazE`, repositions and clears panels when empty.
+
+All four wrap logic in `TRY/CATCH` with `MsgErro` including `LineNo` + `Procedure`, honor "no MsgAviso stubs" and no `TODO`, and use `MsgAviso` only for legitimate UI-validation branches (missing cursor / empty grid).

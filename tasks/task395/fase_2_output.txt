@@ -1,0 +1,13 @@
+﻿The migration is complete. Here's a summary of what was done in this session:
+
+**Phase 4/8 ÔÇö Configuration & Quality:**
+
+1. **menu.prg**: Added `DEFINE BAR 108` (separator) + `DEFINE BAR 109` ("Desmontagem de Produtos") to `popMovimentos` and `PROCEDURE AbrirFormDmo()` at the end of the file.
+
+2. **config.prg**: No changes needed ÔÇö ADIR() auto-loading already covers `operacionais\Form*.prg` (picks up Formdmo.prg) and `*BO.prg` (picks up dmoBO.prg).
+
+3. **VFP9 Rule #1 fixes** ÔÇö removed all `RETURN` statements from inside TRY blocks in both files:
+   - **Formdmo.prg**: Fixed 11 violations across BtnConsultarClick, BtnAlterarClick, BtnExcluirClick, BtnSalvarClick, BtnPendentesClick, AbrirLookupGrupo, and AdicionarOperacaoLote ÔÇö replaced with `loc_lContinuar = .F.` pattern
+   - **dmoBO.prg**: Fixed 8 violations across CarregarParametros, CarregarLookups, Buscar, CarregarPorCodigo, Atualizar, CarregarItens, ProcessarDesmontagem, and CancelarDesmontagem
+
+Both files now have zero RETURN-inside-TRY violations and close correctly with `ENDDEFINE`.

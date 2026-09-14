@@ -1,0 +1,16 @@
+﻿Os valores no arquivo j├í est├úo corretos. Aqui est├í o diagn├│stico:
+
+**Falsos positivos ÔÇö nenhuma corre├º├úo necess├íria.**
+
+O validador visual confundiu os `.Top`/`.Left` do bloco `WITH .Buttons(1)` aninhado com os do pr├│prio `OptionGroup` pai:
+
+| Controle | Propriedade | Valor no arquivo | Original SCX | Status |
+|---|---|---|---|---|
+| `obj_4c_Opt_Tipo` | `.Top` | **179** (linha 268) | 179 | Ô£ô correto |
+| `obj_4c_Opt_Tipo` | `.Left` | **140** (linha 266) | 140 | Ô£ô correto |
+| `obj_4c_Opt_Impressora` | `.Top` | **180** (linha 319) | 180 | Ô£ô correto |
+| `obj_4c_Opt_Impressora` | `.Left` | **396** (linha 317) | 396 | Ô£ô correto |
+
+O `Top=10` e `Left=10` que o validador reportou como sendo do OptionGroup s├úo na verdade os valores de `WITH .Buttons(1)` ÔÇö posi├º├Áes relativas do primeiro radio button **dentro** do grupo, o que ├® totalmente correto (radio come├ºa 10px do topo/esquerda do container).
+
+O form `Formsigprenv.prg` n├úo precisa de nenhuma altera├º├úo neste pass visual.

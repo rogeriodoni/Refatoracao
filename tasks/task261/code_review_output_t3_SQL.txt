@@ -1,0 +1,12 @@
+﻿Corre├º├Áes aplicadas em `SigPrCccBO.prg`:
+
+**`RecalcularSaldosConta`**:
+- SELECT de SigMvCcr: removido `cidchaves` (n├úo ├® coluna real ÔÇö legado criava `Space(20) as CidChaves`)
+- UPDATE WHERE: substitu├¡do `WHERE cidchaves = X` pela chave composta natural: `emps + grupos + contas + moedas + datas + numes`
+
+**`RecalcularSaldosEstoque`**:
+- SELECT de SigMvHst: removido `cidchaves`
+- UPDATE WHERE: substitu├¡do `WHERE cidchaves = X` pela chave composta: `cpros + emps + grupos + estos + datas + numes`
+
+**`RecalcularSaldosCompra`**:
+- SELECT TOP 1 de SigMvHst: removido `cidchaves` (n├úo era usado ap├│s o SELECT, mesma raiz do problema)

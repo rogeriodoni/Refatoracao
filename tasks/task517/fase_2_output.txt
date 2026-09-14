@@ -1,0 +1,11 @@
+﻿`SclBO.prg` est├í completo. Fase 2 conclu├¡da ÔÇö os m├®todos adicionados foram:
+
+- **`CarregarDoCursor()`** ÔÇö `SELECT (alias)` + mapeamento de todas as 10 colunas via `TratarNulo`
+- **`Buscar(par_cFiltro)`** ÔÇö `SELECT` com filtro opcional, `ORDER BY codigos`, `USE IN` antes de recriar
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por PK, chama `CarregarDoCursor`, reseta `this_lNovoRegistro = .F.`
+- **`Validar()`** ÔÇö valida `codigos` obrigat├│rio + `cmalads` InList('S','N') (l├│gica do legado)
+- **`Inserir()`** ÔÇö INSERT com todos os 10 campos, `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE de 9 campos (codigos ├® PK), `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö DELETE por PK, `RegistrarAuditoria("DELETE")`
+
+Pontos not├íveis: `cmalads` for├ºado em `UPPER()` no INSERT/UPDATE (consistente com valida├º├úo S/N do legado); `ultcompra` usa `ultcompra` lowercase conforme schema.sql (o ControlSource do legado usava `UltCompra` mas SQL Server ├® case-insensitive).

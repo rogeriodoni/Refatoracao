@@ -1,0 +1,16 @@
+﻿The file looks correct. Fase 5 is complete. Here's a summary of what was done:
+
+**ConfigurarPaginaDados() ÔÇö expandida com:**
+- `cmd_4c_Salvar` + `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesDados` (├¡cones corretos, BINDEVENTs)
+- **Grupo 1**: `lbl_4c_Label1` + `txt_4c_Codigos` (top compensado: 187/181)
+- **Grupo 2**: `lbl_4c_Label2` + `txt_4c_Descricaos` (top compensado: 210/206)
+- **Grupo 3**: `lbl_4c_Label3` + `txt_4c_Diretores` (top compensado: 235/231, com BINDEVENT LostFocus ÔåÆ `ValidarDiretor`)
+
+**Novos m├®todos adicionados:**
+- `BtnSalvarClick()` ÔÇö valida├º├úo fora do TRY, chama `FormParaBO()` + `Salvar()`, retorna para lista
+- `BtnCancelarClick()` ÔÇö volta para Page1
+- `ValidarDiretor()` ÔÇö guard de valor, busca exata em SigCdUsu, abre `FormBuscaAuxiliar` se n├úo encontrado (equivalente ao `getDiretores.Valid` com `fwBuscaExt` do legado)
+
+**Bugs corrigidos em m├®todos existentes:**
+- `BOParaForm` e `FormParaBO` agora usam os nomes corretos do BO: `this_cCodigo`, `this_cDescricao`, `this_cDiretor`, `this_nChkSubs`, `this_nChkTipos`, `this_nAutos` (os nomes anteriores estavam errados e causariam "Property not found")
+- OptionGroups mapeados como num├®rico (1/2) em vez de l├│gico

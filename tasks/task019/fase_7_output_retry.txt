@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionados os 4 eventos principais em `Formsigopdiv.prg:1293-1368`:
+
+- **BtnIncluirClick**: delega para `GrupoSalvaClick` (Gerar O.P.) ÔÇö o fluxo de inclus├úo real do form operacional.
+- **BtnAlterarClick**: move foco para a coluna edit├ível apropriada (Column2 da Grade2 em revis├úo, Column4 da Grade principal em entrada, ou txt_4c_Op se grade vazia).
+- **BtnVisualizarClick**: alterna para p├ígina de revis├úo (Grade2) quando h├í `Temporario` preenchido.
+- **BtnExcluirClick**: confirma com `MsgConfirma`, faz rollback no BO, zapa cursores (Temp_DivOp, Temporario, xNensi) e retorna ao estado inicial.
+
+Todos os m├®todos t├¬m l├│gica real (sem stubs/MsgAviso) coerente com o fluxo operacional do SIGOPDIV.

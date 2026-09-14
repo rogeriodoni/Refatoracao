@@ -1,0 +1,12 @@
+﻿All accented characters are correctly encoded via `CHR()` ÔÇö no literal accents. The file structure is complete.
+
+**Fase 4/8 conclu├¡da.** `Formsigrecrt.prg` agora tem 1,477 linhas com:
+
+- **`ConfigurarCamposFiltro()`** ÔÇö cria todos os 35+ controles de filtro com posi├º├Áes exatas do legado: `obj_4c_GetTipoDat` (OptionGroup 2 bot├Áes), datas De/At├®, `txt_4c_Juros` (InputMask 999.99), `cbo_4c_GetTipoRel` (5 op├º├Áes), `obj_4c_Opt_Bons` (oculto, aparece em BONS), `cbo_4c_Get_ordem`, `obj_4c_Opt_nr_opcao` (3 bot├Áes), empresa, e 3 se├º├Áes grupo+conta (Emissor/Origem/Destino) ÔÇö mais 15 BINDEVENTs
+- **`MudarTipoRel()`** ÔÇö mostra/oculta `obj_4c_Opt_Bons` quando TipoRel=4
+- **14 `Tecla*`** ÔÇö handlers PUBLIC de KeyPress: F4/F5 abrem lookup, Enter/Tab validam c├│digo
+- **`AbrirLookupEmpresa()`** + **`ValidarCdEmpresa()`** ÔÇö `sigcdemp/cemps/razas`
+- **`AbrirLookupGrupo()`** + **`ValidarCdGrupo()`** ÔÇö gen├®rico `SigCdGcr/codigos/descrs`, limpa conta ao trocar grupo
+- **`AbrirLookupConta()`** + **`ValidarCdConta()`** ÔÇö `SigCdCli/iclis/rclis` com filtro `grupos=` via 9┬║ par├ómetro do `FormBuscaAuxiliar`
+
+Pr├│xima etapa: **Fase 5/8** ÔÇö implementa├º├úo do BO (`sigrecrtBO.prg`) com `PrepararDados()`, SQL de consulta e gera├º├úo do relat├│rio.

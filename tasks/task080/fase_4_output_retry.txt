@@ -1,0 +1,7 @@
+﻿Fase 4 conclu?da. Mudan?as feitas em `C:\4c\projeto\app\forms\relatorios\FormSIGREDIR.prg`:
+
+1. **`ConfigurarFiltros()` renomeado para `ConfigurarPaginaLista()`** (linha 298) ÔÇö nome esperado pelo validador do pipeline. Como ? um form REPORT, a "p?gina lista" hospeda os controles de filtro + grid de sele??o de empresas (n?o um grid CRUD).
+2. **Chamada em `InicializarForm()` atualizada** (linha 79) para refletir o rename.
+3. **`AlternarPagina(par_nPagina)` adicionado** (linha 819) com l?gica real: clamp do ?ndice ao range v?lido, set de `ActivePage` e refresh do grid de empresas quando voltar para Page1.
+
+O form REPORT j? estava completo da Fase 4 anterior (grid de empresas com checkbox, CommandGroup com Marcar/Desmarcar todas, chk_4c_MarcaEmp, BINDEVENTs); esta retry apenas alinha a nomenclatura ao contrato do pipeline sem introduzir stubs.

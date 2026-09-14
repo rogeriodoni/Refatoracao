@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **Campos restantes em `ConfigurarPaginaDados()`** (50% faltando):
+   - `lbl_4c_Say4` / `opt_4c_Conta` (Origem/Destino) ÔÇö Top=167/164
+   - `lbl_4c_Say3` / `txt_4c_Grupo` / `txt_4c_DGrupo` ÔÇö Top=189/186
+   - `lbl_4c_Estoque` / `txt_4c_Conta` / `txt_4c_DConta` ÔÇö Top=214/211
+   - `lbl_4c_Say5` / `txt_4c_Obses` ÔÇö Top=235
+   - 4 novos BINDEVENTs: `TeclaGrupo`, `TeclaDGrupo`, `TeclaConta`, `TeclaDConta`
+
+2. **`FormParaRelatorio()` atualizado** com `this_cDContas` e `this_cDGrupos`
+
+3. **8 novos m├®todos completamente implementados:**
+   - `TeclaGrupo` / `ValidarCodGrupo` ÔÇö valida c├│digo contra `SigCdGcr.codigos`, preenche `descs`
+   - `TeclaDGrupo` / `AbrirBuscaGrupo` ÔÇö abre `FormBuscaAuxiliar(SigCdGcr)`, respeita o "When=IsEmpty(getGrupo)" do legado
+   - `TeclaConta` / `ValidarCodConta` ÔÇö valida c├│digo contra `SigCdCli.iclis`, filtra por grupo se preenchido
+   - `TeclaDConta` / `AbrirBuscaConta` ÔÇö abre `FormBuscaAuxiliar(SigCdCli)`, respeita o "When=IsEmpty(getConta)" do legado

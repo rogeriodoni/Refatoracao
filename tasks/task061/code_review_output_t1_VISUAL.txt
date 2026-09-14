@@ -1,0 +1,6 @@
+﻿Corre├º├Áes aplicadas em `sigrecopBO.prg`:
+
+- **Linha 398** (`cursor_4c_TmpVende`): adicionado `SET NULL ON` antes e `SET NULL OFF` depois do CREATE CURSOR.
+- **Linha 502** (`cursor_4c_CotMov`): idem.
+
+Ambos os cursors agora aceitam NULLs ao serem criados como fallback vazio, evitando o erro "Field XXX does not accept null values" quando o SQL Server retorna campos nulos.

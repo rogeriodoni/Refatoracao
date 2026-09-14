@@ -1,0 +1,3 @@
+﻿Fix applied. The invented `WHERE IIF(loc_nTipo = 1, Emps = loc_cEmp, .T.)` was removed from the Balancos cursor creation (line 261). The original code loads all `CsBal` records without pre-filtering ÔÇö per-company filtering for Type 1 happens inside the SCAN via the `SigIvTrT` query's `WHERE a.Emps = Balancos.Emps` condition.
+
+**Note on the validator flag**: The `WHERE DtBases IS NOT NULL` at line 130 is **correct and unchanged** ÔÇö it directly matches the original's `Where Not DtBases Is Null`. The validator likely flagged `DtBases` from the SELECT expression (`LEFT(DTOS(DtBases),6) AS Bases`) on the line immediately before the invented WHERE, causing the misidentification. Only the actual invented WHERE was removed.

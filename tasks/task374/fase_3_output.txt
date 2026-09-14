@@ -1,0 +1,12 @@
+﻿Fase 3/8 conclu├¡da. `FormCmr.prg` criado em `C:\4c\projeto\app\forms\cadastros\FormCmr.prg` (399 linhas) com:
+
+- **DEFINE CLASS FormCmr AS FormBase** com propriedades visuais completas (Height=600, Width=1000, etc.)
+- **Init(par_cBalancos, par_nMapas)** ÔÇö recebe contexto do form pai antes do `DODEFAULT()`, seta `this_cBalancos` e `Caption = "Itens : " + Balancos`; RETURN fora do TRY
+- **InicializarForm()** ÔÇö cria CmrBO, propaga `this_cBalancos` para o BO, chama os 3 m├®todos Configurar*, propaga Caption para labels do cabe├ºalho
+- **ConfigurarPageFrame()** ÔÇö PageFrame Top=-29, 2 p├íginas com fundo `fundo_cad_1003.jpg`
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (Top=31, com lbl_4c_Sombra + lbl_4c_Titulo), `cnt_4c_Botoes` (Left=542, Top=28), `cnt_4c_Saida` (Left=917, can├┤nico)
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` (Left=842, Top=33), `cnt_4c_Saida` (can├┤nico)
+- **CarregarLista()** e **AlternarPagina()** com l├│gica real (n├úo stubs)
+- **Destroy()**, **TornarControlesVisiveis()**, **FormatarGridLista()** completos
+
+Pr├│xima fase (4/8): adicionar grid e bot├Áes CRUD em Page1.

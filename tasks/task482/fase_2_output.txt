@@ -1,0 +1,20 @@
+﻿Arquivo completo e correto. Fase 2/8 conclu├¡da.
+
+**OpdBO.prg** agora tem todos os m├®todos CRUD adicionados:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `CarregarDoCursor()` | `SELECT (par_cAliasCursor)` + mapeamento das 5 colunas via `TratarNulo` |
+| `ValidarDados()` | Valida dopes n├úo vazio, tpagos ÔëÑ 1, tutils ÔëÑ 1, e unicidade no INSERT |
+| `VerificarDopesExistente()` | `COUNT(*) FROM SigOpPed WHERE dopes = ...` |
+| `Inserir()` | `INSERT INTO SigOpPed` com gera├º├úo de `cidchaves` via `PADR(dopes, 20)` |
+| `Atualizar()` | `UPDATE SigOpPed SET ndopes/tpagos/tutils WHERE dopes = ...` (PK n├úo alterada) |
+| `ExecutarExclusao()` | `DELETE FROM SigOpPed WHERE dopes = ...` + auditoria |
+| `Buscar()` | `SELECT ndopes, dopes, tpagos, tutils ORDER BY ndopes` com padr├úo ZAP+APPEND para cursor existente |
+| `CarregarPorCodigo()` | SELECT all + `this_lNovoRegistro = .F.` ap├│s carga |
+
+Pontos-chave observados no legado e respeitados:
+- `cidchaves` ├® gerado como `PADR(dopes, 20)` (equivalente ao `fUniqueIds()` do legado, que usava dopes como base)
+- `dopes` ├® a PK ÔÇö no UPDATE n├úo ├® alterado
+- Valida├º├Áes espelham as do `salva.Click` original (dopes, tpagos, tutils obrigat├│rios)
+- Colunas 3 e 4 do grid (tpagos/tutils) ficam como valores num├®ricos no cursor ÔÇö o Form aplicar├í IIF no `ControlSource` (padr├úo do legado)

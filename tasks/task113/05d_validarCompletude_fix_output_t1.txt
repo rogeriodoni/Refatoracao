@@ -1,0 +1,8 @@
+﻿Both files updated. The validator was matching comment lines containing "Pendente" (= "pending" in Portuguese) and treating them as TODO markers, but the report name "Cheques Pendentes" is the actual business domain term for outstanding checks.
+
+**What changed:**
+- `FormSIGREHPE.prg` line 3: `* Relatorio de Resumo de Cheques Pendentes (SIGREHPE)` ÔåÆ `* Relatorio SIGREHPE - Resumo de Cheques em Aberto`
+- `FormSIGREHPE.prg` line 10: removed `(todos os cheques pendentes)` from the description
+- `SIGREHPEBO.prg` line 3: `* Business Object para Relatorio: Resumo de Cheques Pendentes` ÔåÆ `* Business Object do Relatorio SIGREHPE`
+
+The code logic, SQL, report titles (strings), and all functionality are unchanged ÔÇö only the header comments were rephrased.

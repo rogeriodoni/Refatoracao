@@ -1,0 +1,20 @@
+﻿Verifica├º├úo completa. Resultado da an├ílise dos 3 flags SQL-FILTRO-INVENTADO:
+
+**SALBASES** (linha 659): aparece em `IF !EOF() AND LocalCmVen.SalBases > 0 AND crVends.ValComiss < LocalCmVen.SalBases` ÔÇö condicional VFP, **n├úo** um WHERE SQL enviado ao servidor. A coluna ├® legitimamente carregada via `SELECT a.SalBases FROM SigCmItn` na linha 479.
+
+**VALCOMISS** (linhas 61, 286, 399, etc.): aparece em `CREATE CURSOR`, `INSERT INTO`, `UPDATE SET`, e opera├º├Áes `WHERE` em cursores locais VFP ÔÇö **n├úo** em queries SQLEXEC ao SQL Server.
+
+**BONUS** (linha 687): aparece em `IF !EOF() AND crVends.ValComiss > 0 AND LocalCmFxa.Bonus > 0` ÔÇö condicional VFP. A coluna ├® carregada via `SELECT a.Bonus FROM SigCmItn` na linha 425.
+
+Nenhum dos tr├¬s aparece em cl├íusula WHERE de query SQL enviada via SQLEXEC. O detector confundiu condicionais VFP com filtros SQL. **Nada a remover.**
+
+---
+
+**Corre├º├Áes aplicadas no `sigrecmmBO.prg`:**
+
+| Linha | Problema | Corre├º├úo |
+|-------|---------|---------|
+| 153 | `"Where a.Cods = '" + loc_lcPrc + "'"` | `"Where a.Cods = " + EscaparSQL(loc_lcPrc)` |
+| 246 | `"Where a.EmpDopNums = '" + loc_lcEdn + "' And "` | `"Where a.EmpDopNums = " + EscaparSQL(loc_lcEdn) + " And "` |
+
+Os 3 flags SQL-FILTRO-INVENTADO s├úo falsos positivos: as colunas existem no original, s├úo carregadas via SELECT leg├¡timo e usadas apenas em condicionais VFP ÔÇö nenhuma altera├º├úo necess├íria.

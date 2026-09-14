@@ -1,0 +1,24 @@
+﻿O arquivo j├í cont├®m os valores corretos. Vou verificar a posi├º├úo exata e comparar com o que o detector reportou.
+
+No arquivo real (linhas 455-501):
+- `obj_4c_OptConta.Left = 100` (linha 463)
+- `obj_4c_OptConta.Top = 114` (linha 465)
+
+Esses valores correspondem exatamente ao **original** (Top=114, Left=100). O detector gerou um **falso positivo** ao confundir as propriedades do `Buttons(1)` interno com as do pr├│prio OptionGroup:
+
+```foxpro
+WITH .Buttons(1)
+    .Left = 5   <<< detector confundiu isso com obj_4c_OptConta.Left
+    .Top  = 5   <<< detector confundiu isso com obj_4c_OptConta.Top
+```
+
+O parser do detector n├úo tratou corretamente o bloco `WITH .Buttons(1)` aninhado dentro de `WITH loc_oCnt.obj_4c_OptConta`, e atribuiu os valores internos do bot├úo (Top=5, Left=5) ao OptionGroup pai.
+
+**Nenhuma corre├º├úo necess├íria.** O c├│digo j├í est├í correto:
+
+| Propriedade | Original | C├│digo atual | Status |
+|---|---|---|---|
+| `obj_4c_OptConta.Top` | 114 | 114 (linha 465) | Ô£à Correto |
+| `obj_4c_OptConta.Left` | 100 | 100 (linha 463) | Ô£à Correto |
+
+Os problemas detectados s├úo falsos positivos causados por limita├º├úo do parser de compara├º├úo, que n├úo diferenciou o escopo `WITH .Buttons(1)` aninhado do escopo `WITH loc_oCnt.obj_4c_OptConta`.

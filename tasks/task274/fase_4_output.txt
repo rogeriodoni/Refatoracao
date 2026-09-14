@@ -1,0 +1,8 @@
+﻿All handler methods are PUBLIC (no `PROTECTED` prefix) as required by BINDEVENT (Rule #3). Both files are clean. 
+
+Migration of `Formsigprdft.prg` is complete:
+- **Form** (`C:\4c\projeto\app\forms\operacionais\Formsigprdft.prg`): 1779 lines, all TEF controls + 14 handler methods
+- **BO** (`C:\4c\projeto\app\classes\sigprdftBO.prg`): complete with DLL declarations, `MontaRetorno`, `RetornoFalha`, `ErroTef`, `ObterRetornoStr`
+- **Auto-loading**: both files are picked up by config.prg's ADIR scans (`Form*.prg` in operacionais, `*BO.prg` in classes)
+- **No menu entry needed**: this form is a modal sub-dialog called by payment processing forms via `CREATEOBJECT("Formsigprdft", ...)` / `loForm.Show()` / `loForm.this_cResultado`
+- **Fixes applied**: SPACE(3000)ÔåÆSPACE(2000) buffer consistency in TxtDatasKeyPress; silent CATCHÔåÆverbose CATCH in BO's CarregarDoCursor

@@ -1,0 +1,18 @@
+﻿Phase 6 is complete. Here's a summary of what was added:
+
+**4 edits applied to `Formsigprdis.prg`** (now ~2168 lines):
+
+1. **Bottom info panel controls** in `ConfigurarAba2Distribuicao()` ÔÇö 25 controls across 4 rows (top 470ÔÇô540):
+   - Row 1: Grupo (code+desc) + Linha (code+desc)  
+   - Row 2: Subgrupo (code+desc) + Fornecedor (code+desc)
+   - Row 3: Modelo (code+desc) + Ref.Fornecedor
+   - Row 4: Grupo de Venda (code+desc) + Pre├ºo Venda + Moeda + Peso M├®dio
+   - All `ReadOnly = .T.`, positions pixel-perfect from `layout.json`
+
+2. **`GrdDisponivelAfterRowColChange()`** ÔÇö now calls `THIS.PopularInfoProduto(loc_cCodPro)` after filtering `cursor_4c_Distribui`
+
+3. **New `PopularInfoProduto(par_cCodPro)` method** ÔÇö runs a single SQL query against `SigCdPro` with LEFT JOINs to `SigCdGrp`, `SigCdPsg`, `SIGCDCLI`, `SigCdCol`, `SigCdLin`, `SigCdFip`; clears all fields first, then populates from the result cursor; full CATCH guard
+
+4. **`Destroy()`** ÔÇö added `cursor_4c_InfoPro` cleanup
+
+**Next: Phase 7/8** ÔÇö `ConfigurarAba3Operacoes()` with `pgf_4c_Operacoes` sub-pageframe (2 pages: `grdCabOperas` 8-col + `grdItnOperas` 9-col), `cntOperacao` container, and `cmdProcessar` button in Page3 of `pgf_4c_Dados`.

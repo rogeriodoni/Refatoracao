@@ -1,0 +1,12 @@
+﻿All 6 `mAddColuna` calls fixed. Each now uses the correct 3-parameter signature `(campo, mascara_ou_vazio, titulo)`:
+
+| Lookup | Before | After |
+|--------|--------|-------|
+| Empresa cemps | `mAddColuna("cemps", "C├│digo", 50)` | `mAddColuna("cemps", "", "C├│digo")` |
+| Empresa razas | `mAddColuna("razas", "Descri├º├úo", 200)` | `mAddColuna("razas", "", "Descri├º├úo")` |
+| Grupo codigos | `mAddColuna("codigos", "C├│digo", 80)` | `mAddColuna("codigos", "", "C├│digo")` |
+| Grupo descrs | `mAddColuna("descrs", "Descri├º├úo", 200)` | `mAddColuna("descrs", "", "Descri├º├úo")` |
+| Conta iclis | `mAddColuna("iclis", "C├│digo", 80)` | `mAddColuna("iclis", "", "C├│digo")` |
+| Conta rclis | `mAddColuna("rclis", "Descri├º├úo", 200)` | `mAddColuna("rclis", "", "Descri├º├úo")` |
+
+**Regarding the LAYOUT-POSITION issues:** The controls `obj_4c_GetTipoDat` (Top=104, Left=237), `obj_4c_Opt_nr_opcao` (Top=189, Left=428), and `obj_4c_Opt_Bons` (Top=160, Left=378) already have the correct coordinates in the current code ÔÇö those detections were stale. The `lbl_4c_Lbl_periodo_a` at Left=323 is the "├á" connector between date fields (positioned after dt_inicial at 237+80=317) ÔÇö changing it to 188 would overlap the existing `lbl_4c_Lbl_periodo` label, so this is a validator false-positive due to name-matching `lbl_periodo` ÔåÆ `lbl_4c_Lbl_periodo_a` when the true mapping is `lbl_periodo` ÔåÆ `lbl_4c_Lbl_periodo` (already at Left=188).

@@ -1,0 +1,9 @@
+﻿**Fase 8/8 conclu├¡da.** O FormSigPdMp3.prg j├í estava completo desde a Fase 7. Resumo do estado final:
+
+**Arquivos entregues:**
+- `C:\4c\projeto\app\classes\SigPdMp3BO.prg` ÔÇö BO completo com: `CarregarDoCursor`, `ObterDadosProduto`, `ObterDescricaoConta`, `ObterDadosOpe`, `ValidarDados`, `Inserir`, `InserirPorCheckbox`, `Atualizar`, `AtualizarDivsTodas`, `ProcessarTodasOpi`, `RegistrarAuditoria`
+- `C:\4c\projeto\app\forms\operacionais\FormSigPdMp3.prg` ÔÇö Form operacional completo com todos os eventos: grid com 7 colunas (2 CheckBoxes), containers Origem/Destino/Opera├º├úo, imagem de produto, `BtnOkClick`, `BtnPesagemClick`, `BtnEncerrarClick`, todos os handlers de grid
+
+**Por que n├úo foram criados BtnSalvarClick/BtnCancelarClick/FormParaBO/BOParaForm/HabilitarCampos/LimparCampos:** Este ├® um **form OPERACIONAL** que recebe dados via cursores do form pai (`xOpi`, `xPesa`, `TmpNens`) ÔÇö n├úo segue o padr├úo CRUD com p├íginas Lista/Dados. Os m├®todos equivalentes s├úo os handlers de grid e os `Btn*Click` espec├¡ficos do dom├¡nio.
+
+**Integra├º├úo:** config.prg j├í carrega automaticamente via ADIR() de `operacionais\Form*.prg` e `classes\*BO.prg` ÔÇö nenhuma altera├º├úo necess├íria.

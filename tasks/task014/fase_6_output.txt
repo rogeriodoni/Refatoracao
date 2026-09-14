@@ -1,0 +1,16 @@
+﻿No missing handlers. All BINDEVENT-bound methods now have implementations. The Phase 6/8 additions are complete:
+
+**Summary of changes made to FormProduto.prg:**
+
+Added 10 missing PUBLIC/PROTECTED methods that were bound via BINDEVENT but had no implementation (which would have caused VFP9 to crash trying to find `*.prg` files):
+
+1. **`TabFiscal_ClfiscalKeyPress`** (PUBLIC) ÔÇö F4 on fiscal classification field triggers `AbrirLookupClassFiscal()`
+2. **`AbrirLookupClassFiscal`** (PROTECTED) ÔÇö Full FormBuscaAuxiliar lookup against `SigCdClf` table (fields: `clfiscals`, `dclfiscals`)
+3. **`TabFiscal_MetalKeyPress`** (PUBLIC) ÔÇö LPARAMETERS stub; Metal/Teor are free-entry IPI fields without auxiliary lookup table
+4. **`TabFiscal_TeorKeyPress`** (PUBLIC) ÔÇö Same pattern as Metal
+5. **`BtnIniTarefaClick`** (PUBLIC) ÔÇö Inserts record in `sigprtar` with start date + user, refreshes Designer grid
+6. **`BtnFimTarefaClick`** (PUBLIC) ÔÇö Updates `dtfims` on the most recent open task in `sigprtar`
+7. **`BtnInsArqsClick`** (PUBLIC) ÔÇö GETFILE dialog ÔåÆ INSERT into `sigprarq`, refreshes grid
+8. **`BtnExcArqsClick`** (PUBLIC) ÔÇö Confirms + DELETE from `sigprarq` for selected row
+9. **`BtnOpnArqsClick`** (PUBLIC) ÔÇö ShellExecute("open") to launch file with default Windows app
+10. **`CarregarDesigner`** (PROTECTED) ÔÇö Loads both `sigprtar` and `sigprarq` data into their grid cursors via ZAP+APPEND pattern

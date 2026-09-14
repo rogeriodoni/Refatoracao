@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O arquivo `SIGACGCTBO.prg` foi atualizado com os seguintes m├®todos CRUD completos:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com filtro opcional por gracess/usuacess, cria `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por PK (`cIdChaves`), chama `CarregarDoCursor`, reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö popula as 6 propriedades usando `SELECT (alias)` antes de acessar campos (padr├úo obrigat├│rio)
+- **`CarregarDescricoes()`** ÔÇö busca as descri├º├Áes dos lookups (SigCdGcr para grupos, SigCdCli para conta)
+- **`Inserir()`** ÔÇö PROTECTED, gera PK via `fUniqueIds()`, INSERT com todos os campos, chama `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö PROTECTED, UPDATE por `cIdChaves`, chama `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö PROTECTED, DELETE por `cIdChaves`, chama `RegistrarAuditoria("DELETE")`
+- **`VerificarDuplicidade()`** ÔÇö checa chave composta (5 campos) para evitar duplicatas, exclui o pr├│prio registro no UPDATE

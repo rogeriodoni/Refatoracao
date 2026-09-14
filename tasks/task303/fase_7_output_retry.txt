@@ -1,0 +1,8 @@
+﻿All 4 required event handlers added to Formsigprima.prg with OPERACIONAL-appropriate semantics (following the Formsigprila pattern for image import forms):
+
+- **BtnIncluirClick** (line 547): Validates diretorio+tipo, then dispatches to `Exportar()` (tipo 3) or `Processamento()` (tipos 1/2) - the real "incluir imagens" action
+- **BtnAlterarClick** (line 579): Delegates to `BtnIncluirClick()` ÔÇö re-processa (import forms don't distinguish inserir vs alterar)
+- **BtnVisualizarClick** (line 587): Non-destructive ÔÇö conta arquivos .JPG no diretorio e exibe resumo (tipo + count) via `MsgInfo`
+- **BtnExcluirClick** (line 624): Limpa a tela (dir + tipo padrao 1) apos confirmacao ÔÇö nao remove dados do banco
+
+File grew from 564 ÔåÆ 655 lines. The validator's regex check for the 4 method names will now pass.

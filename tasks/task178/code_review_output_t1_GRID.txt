@@ -1,0 +1,6 @@
+﻿Both fixes applied:
+
+1. **Line 1459** (`AbrirLookupEmpresa`): `mAddColuna("razas", "Raz├úo Social", 280)` ÔåÆ `mAddColuna("razas", "", "Raz├úo Social")`
+2. **Line 1499** (`AbrirLookupGrupo`): `mAddColuna("descrs", "Descri├º├úo", 280)` ÔåÆ `mAddColuna("descrs", "", "Descri├º├úo")`
+
+The numeric `280` (width) was not a valid parameter ÔÇö restructured to the canonical `(campo, mascara, titulo)` pattern with empty-string mask, as used throughout `textboxgridlookup.PRG` and `FormBuscaAuxiliar.prg`.

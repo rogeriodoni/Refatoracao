@@ -1,0 +1,29 @@
+﻿The Phase 6 implementation is complete. Let me provide a summary of what was done:
+
+**FASE 6/8 conclu├¡da.** O arquivo `Formsigpdmp6.prg` passou de 2198 para 3892 linhas com as seguintes adi├º├Áes:
+
+**Controles adicionados em `ConfigurarPaginaDados()`:**
+- `cnt_4c_Origem` (Top=260) com txt_4c_GrupoOrig, txt_4c_ContaOrig, txt_4c_DcontaOrig + labels/linha
+- `cnt_4c_Destino` (Top=340) com a mesma estrutura
+- `cnt_4c_Responsavel` (Top=419) com a mesma estrutura
+- `grd_4c_GradeOperacao` (Top=79, Left=598, Visible=.F., ColumnCount=2) com colunas Codigos/TmpMins
+- `lbl_4c_LblObs`, `txt_4c_Codobs` (Top=263, InputMask="999")
+- `edt_4c_Mmobs` (EditBox Top=288, 397├ù205)
+- `cmd_4c_BtnCompoOp` (Top=510, ÔåÆ `BtnEtqCompoClick`)
+
+**BINDEVENTs adicionados:** LostFocus + KeyPress (F4/F5) para todos os 9 campos de grupo/conta/nome nos 3 containers, CodObs, e Click do BtnCompoOp.
+
+**Propriedades do form:** `this_cNomeContaos`, `this_cNomeContads`, `this_cNomeVends` para cache dos nomes de conta.
+
+**M├®todos adicionados (19 novos):**
+- `GrupoOrigemLostFocus` / `TeclaGrupoOrigemKP`
+- `ContaOrigemLostFocus` / `TeclaContaOrigemKP` / `DcontaOrigemLostFocus`
+- `GrupoDestinoLostFocus` / `TeclaGrupoDestinoKP`
+- `ContaDestinoLostFocus` / `TeclaContaDestinoKP` / `DcontaDestinoLostFocus`
+- `GrupoRespLostFocus` / `TeclaGrupoRespKP`
+- `ContaRespLostFocus` / `TeclaContaRespKP` / `DcontaRespLostFocus`
+- `CodobsLostFocus` / `TeclaCodobsKP`
+
+**Lookups:** `FormBuscaAuxiliar` com `SigCdGcr` (grupos financeiros: `codigos`/`descrs`) e `SIGCDCLI` (contas: `iclis`/`rclis`) ÔÇö sem stubs ou TODOs. `CodobsLostFocus` consulta `SigCdObs` com fallback para busca completa.
+
+**Valida├º├Áes VFP9:** TRY/CATCH=34 pares balanceados, nenhum LOCAL dentro de TRY, nenhum RETURN dentro de TRY, nenhum `MostrarAviso`/`ISEMPTY`/`PUBLIC FUNCTION`.

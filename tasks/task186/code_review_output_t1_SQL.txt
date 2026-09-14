@@ -1,0 +1,14 @@
+﻿As duas corre├º├Áes SQL-ASPAS foram aplicadas corretamente.
+
+**Resumo das corre├º├Áes:**
+
+- **Linha 257**: `'" + loc_lcEdn + "'"` ÔåÆ `EscaparSQL(loc_lcEdn)` ÔÇö `EscaparSQL()` j├í retorna o valor com aspas inclu├¡das.
+- **Linha 271**: mesma corre├º├úo para o segundo `SELECT * FROM SigMvIts`.
+
+**Falsos positivos descartados ap├│s verifica├º├úo:**
+
+| Flag | Motivo para n├úo remover |
+|------|------------------------|
+| `CIDQUERYS` em WHERE | Est├í em `DELETE FROM SigTempd WHERE CidQuerys = ...`. Remover tornaria o DELETE sem filtro, apagando toda a tabela ÔÇö ├® isolamento de sess├úo que substitui o `Podatamgr2.UpDate('CrSigTempd')` do framework legado. |
+| `CIDCHAVES` em WHERE | Aparece nos m├®todos `Atualizar`/`ExecutarExclusao` com `EscaparSQL()` correto (linha 871/906). ├ë a PK de `SigTempd`, necess├íria para UPDATE/DELETE por registro. |
+| `CONTROLCOUNT` | Linhas 1112/1127 do Form s├úo `par_oContainer.ControlCount` ÔÇö propriedade VFP de itera├º├úo de controles, n├úo coluna SQL. |

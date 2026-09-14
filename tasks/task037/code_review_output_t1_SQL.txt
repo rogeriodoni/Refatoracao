@@ -1,0 +1,7 @@
+﻿**1 corre├º├úo aplicada**, 5 falsos positivos descartados ap├│s verifica├º├úo:
+
+- **[SQL-ASPAS] sigrebalBO.prg:316** ÔÇö Corrigido: `"WHERE Datas <= '" + loc_lcDtSQL + "'"` ÔåÆ `"WHERE Datas <= " + EscaparSQL(loc_lcDtSQL)`. `EscaparSQL()` j├í retorna o valor com aspas, eliminando a concatena├º├úo manual.
+
+- **[SQL-FILTRO-INVENTADO] OPBALANCOS** ÔÇö Falso positivo. A coluna s├│ aparece em compara├º├úo VFP de cursor (`cursor_4c_BalCss.OpBalancos = 1`), n├úo em SQL `WHERE`. O original usa a mesma l├│gica (`crSigCdCss.OpBalancos=1`).
+
+- **[SQL-FILTRO-INVENTADO] CMOES, DMOES, CEMPS, RAZAS** ÔÇö Falso positivo. S├úo `WHERE` de queries de lookup em tabelas distintas (`SigCdMoe`, `SigCdEmp`) para valida├º├úo de campos do formul├írio ÔÇö n├úo s├úo filtros sobre `SigMvCcr`. J├í usam `EscaparSQL()` corretamente.

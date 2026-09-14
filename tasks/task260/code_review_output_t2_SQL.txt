@@ -1,0 +1,40 @@
+﻿Analisei o arquivo completo (1065 linhas). Ap├│s verifica├º├úo detalhada dos 4 filtros flagados:
+
+---
+
+## Resultado da Verifica├º├úo ÔÇö Todos os 4 s├úo Falsos Positivos
+
+### [SQL-FILTRO-INVENTADO] PKCHAVES
+**Linha 222 do BO (`VerificarDuplicidade`):**
+```foxpro
+SELECT codigos FROM (par_cCursorCarac) ;
+    WHERE RTRIM(codigos) == RTRIM(par_cCodigos) ;
+    AND RTRIM(pkchaves) != RTRIM(par_cPkChaveAtual) ;
+```
+**Diagn├│stico:** ├ë um SELECT VFP **local** (cursor em mem├│ria), n├úo SQL Server. `pkChaves` existe no `CREATE CURSOR` (linha 361). A condi├º├úo `!= par_cPkChaveAtual` exclui o registro corrente da checagem de duplicidade ÔÇö l├│gica essencial e correta. **Manter.**
+
+### [SQL-FILTRO-INVENTADO] CGRUS
+**Linhas 800 e 875 do Form + m├®todos do BO (`BuscarCodigoExato`, `BuscarDescricaoExata`, etc.):**
+```foxpro
+loc_cFiltro = "cgrus IN (" + EscaparSQL(THIS.this_cCgrus) + ", '   ')"
+```
+**Diagn├│stico:** Filtra a tabela **SIGCRRAP** (cat├ílogo de caracter├¡sticas), n├úo `sigprcar`. `cgrus` ├® coluna de SIGCRRAP que segmenta caracter├¡sticas por grupo de produto. O pr├│prio coment├írio do form (linha 22) confirma: *"AbrirPickerCodigo/Descricao: FormBuscaAuxiliar com filtro CGrus em SIGCRRAP"*. **Manter.**
+
+### [SQL-FILTRO-INVENTADO] DESCRS
+**M├®todos `BuscarDescricaoExata` e `BuscarCaracteristicasPorDescricao` do BO:**
+```foxpro
+WHERE descrs = " + EscaparSQL(par_cDescrs) + " AND cgrus IN (...)
+```
+**Diagn├│stico:** Busca por descri├º├úo na tabela **SIGCRRAP** ÔÇö ├® a coluna de pesquisa do picker de Column2. Existe em SIGCRRAP e no cursor local (linha 361). **Manter.**
+
+### [SQL-FILTRO-INVENTADO] CONTROLCOUNT
+**Linhas 207 e 222 do Form (`TornarControlesVisiveis`):**
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+**Diagn├│stico:** Falso positivo do analisador. `ControlCount` ├® uma **propriedade VFP de container** (conta objetos filhos), n├úo uma coluna SQL nem um filtro WHERE. O analisador confundiu o texto "ControlCount" com um nome de coluna.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** Os 4 flags s├úo falsos positivos: os filtros WHERE s├úo todos leg├¡timos e corretos para a arquitetura migrada. O c├│digo dos dois arquivos est├í correto como est├í.

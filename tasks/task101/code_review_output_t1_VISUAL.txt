@@ -1,0 +1,15 @@
+﻿Nenhum `.ColumnCount` dentro de WITH. As corre├º├Áes est├úo completas.
+
+---
+
+## Resumo das corre├º├Áes aplicadas
+
+**3 corre├º├Áes [GRID-WITH] aplicadas** nos grids `grd_4c_Empresas`, `grd_4c_Disps` e `grd_4c_Oper`:
+- `.ColumnCount = 3` movido para **antes** do `WITH` (usando `loc_oGrd.ColumnCount = 3`)
+- `IF USED(...) / .RecordSource = ...` movido para **antes** do `WITH` (usando `loc_oGrd.RecordSource = ...`)
+- O bloco `WITH` mant├®m apenas propriedades visuais e configura├º├Áes de coluna (que funcionam corretamente pois `ColumnCount` j├í est├í definido antes de entrar no `WITH`)
+
+**32 issues n├úo alterados (falsos positivos do validador):**
+- **[GRID-HEADER] (10x)**: Os captions est├úo corretos (`C├│digo`, `Raz├úo Social`, etc. via `CHR()`). O validador n├úo decodifica `CHR()` e reporta `C?digo` ÔÇö as captions est├úo certas.
+- **[LAYOUT-POSITION] bot├Áes (12x)**: Diferen├ºa exata de 85px = offset do PageFrame (`pgf_4c_Paginas.Top = 85`). Posi├º├úo visual = `85 + migrado = original`. Correto.
+- **[LAYOUT-POSITION] OptionGroups (10x)**: O validador l├¬ `Top=5` dos `Buttons(1)` internos, n├úo do OptionGroup. Os OptionGroups t├¬m `Top` correto no c├│digo (228, 246, 263, 155, 173, 138, 49).

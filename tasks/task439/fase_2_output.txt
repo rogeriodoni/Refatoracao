@@ -1,0 +1,14 @@
+﻿Todos os RETURNs est├úo fora do TRY/CATCH. O arquivo est├í correto.
+
+**Fase 2/8 conclu├¡da.** GpeBO.prg (548 linhas) foi completado com:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT dgopes/ngopes em `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cDgopes)`** ÔÇö SELECT de todos os 60 campos com cursor tempor├írio e reset de `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeamento completo usando `SELECT (alias)` antes de acessar campos (padr├úo correto)
+- **`Inserir()`** ÔÇö INSERT com gera├º├úo autom├ítica de `ngopes` via `fGerUniqueKey("SigCdGpe")` + auditoria
+- **`Atualizar()`** ÔÇö UPDATE com todos os 58 campos edit├íveis + auditoria
+- **`ExecutarExclusao()`** ÔÇö DELETE em cascata: primeiro `SigCdGpo` (filhos) depois `SigCdGpe` + auditoria
+- **`BuscarOperacoes(par_cDgopes)`** ÔÇö SELECT do grid `SigCdGpo` (dopers + confops + cidchaves)
+- **`SalvarOperacoes(par_cDgopes, par_cCursorOps)`** ÔÇö estrat├®gia DELETE+INSERT para salvar o grid de opera├º├Áes
+
+Duas corre├º├Áes de nomes de coluna aplicadas (diverg├¬ncia schema vs Phase 1): `dtatuals` (n├úo `dtaatuals`) e `subniveis` (n├úo `subnivels`).

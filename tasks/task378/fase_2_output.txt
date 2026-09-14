@@ -1,0 +1,24 @@
+﻿O COCBO.prg est├í completo com todos os m├®todos CRUD. Aqui est├í o resumo do que foi implementado:
+
+**M├®todos adicionados ao COCBO.prg:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `ObterChavePrimaria()` | PUBLIC | Retorna `this_cCodigos` para auditoria |
+| `CarregarParametros()` | PUBLIC | Busca captions do OptionGroup OpcaoSNA de SigCdPac |
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT com filtro opcional, cursor `cursor_4c_Dados` |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | SELECT por PK, popula propriedades, reseta `this_lNovoRegistro=.F.` |
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | Mapeia cursor ÔåÆ propriedades via `SELECT (alias)` + TratarNulo |
+| `BuscarGrupo(par_cCodigo)` | PUBLIC | Valida Grupo em SigCdGcr (usado no lookup do form) |
+| `VerificarCodigoExiste(par_cCodigo)` | PUBLIC | Verifica duplicata de PK antes do INSERT |
+| `Inserir()` | PROTECTED | INSERT em SigOpOco com auditoria |
+| `Atualizar()` | PROTECTED | UPDATE em SigOpOco com auditoria |
+| `ExecutarExclusao()` | PROTECTED | DELETE com guard de integridade referencial em SigMvTtl |
+
+**Regras cr├¡ticas respeitadas:**
+- Sem `RETURN` dentro de TRY/CATCH ÔÇö usa `loc_lSucesso`
+- `CarregarDoCursor` usa `SELECT (par_cAliasCursor)` antes de acessar campos
+- `Inserir`/`Atualizar` com PROTECTED + auditoria
+- `ExecutarExclusao` (n├úo `Excluir`) conforme BusinessBase
+- Colunas da tabela copiadas exatamente dos ControlSource do original (`Codigos`, `Descrs`, `Grupos`, `Contas`, `DContas`, `Opers`, `Contabs`, `Notas`)
+- CATCH sempre com `MostrarErro`, nunca silencioso

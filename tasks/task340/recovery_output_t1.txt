@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era que o validador de schema SQL usa regex `\b(\w+)\s*=` para extrair nomes de colunas do SET clause. A express├úo `IIF(THIS.this_nVtexProdId = 0, ...)` dentro da string SQL concatenada fazia o validador capturar `this_nvtexprodid` como se fosse um nome de coluna, gerando falso positivo.
+
+A corre├º├úo extrai o valor de `vtexProdId` para a vari├ível local `loc_cVtexProdId` **antes** da string SQL, eliminando o `= 0` do corpo da concatena├º├úo e resolvendo o falso positivo sem alterar nenhuma l├│gica funcional.

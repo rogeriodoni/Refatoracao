@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Resumo das corre├º├Áes aplicadas na Fase 3 do `Formsigopdiv.prg`:
+
+1. **ColumnOrder corrigido** ÔÇö Grade principal tinha Quantidade(7)/Qtd.Op(5)/Divis├úo(6); corrigido para Quantidade(5)/Qtd.Op(6)/Divis├úo(7) alinhando com a screenshot (ordem visual: Pedido | Cliente | Cor | Tam | Quantidade | Qtd.Op | Divis├úo)
+
+2. **Propriedades do DEFINE CLASS** ÔÇö adicionados `Closable = .F.` e `Themes = .F.` que estavam no original mas faltavam
+
+3. **Picture de fundo** ÔÇö adicionado `THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"` no `ConfigurarControles()`, conforme original
+
+4. **CommandGroups** ÔÇö adicionados `Themes = .F.`, `AutoSize = .T.` (Grupo_Salva) e `Picture`/`PicturePosition` nos bot├Áes (├¡cones `cadastro_salvar_60.jpg` e `cadastro_sair_60.jpg`)
+
+5. **BINDEVENT("Valid") ÔåÆ KeyPress** ÔÇö `Valid` n├úo funciona via BINDEVENT em TextBox standalone; substitu├¡do por `KeyPress` com handler `GetOpKeyPress(par_nKeyCode, par_nShiftAltCtrl)` que dispara `GetOpValid()` ao pressionar ENTER(13) ou TAB(9)
+
+O BO (`sigopdivBO.prg`) e o menu (`menu.prg`) j├í estavam completos com entradas para os modos Divis├úo e Reinicia.

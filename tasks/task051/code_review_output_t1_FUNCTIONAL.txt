@@ -1,0 +1,7 @@
+﻿As tr├¬s corre├º├Áes foram aplicadas:
+
+**[OPTIONGROUP-LEFT] opt_4c_NrTipo (ButtonCount=2):** Substitu├¡das as linhas soltas de Caption/FontName/FontSize por blocos `WITH...ENDWITH` para cada Button, adicionando `.Left` (0, 125), `.Top=0`, `.AutoSize=.T.`, `.ForeColor=RGB(90,90,90)` e `.Themes=.F.` ÔÇö os bot├Áes agora ficam lado a lado em vez de sobrepostos em Left=0.
+
+**[OPTIONGROUP-LEFT] opt_4c_NrOpcao (ButtonCount=3):** Mesma corre├º├úo com 3 bot├Áes em `.Left` = 0, 64, 128. O Caption de cada bot├úo foi internalizado no `WITH` (eliminando o bloco IF/ELSE externo) usando IIF direto.
+
+**[LAYOUT-POSITION] chk_4c_ImpFollow:** Adicionado `.Themes = .F.` que estava ausente. O `Top=38` ├® a coordenada correta de Page1 ÔÇö o diff=85px reportado pelo validador ├® exatamente o offset do PageFrame (`pgf.Top=85`), e a posi├º├úo absoluta resultante ├® 85+38=**123**, id├¬ntica ao original SCX.

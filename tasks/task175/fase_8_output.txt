@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto e completo. A Fase 8/8 foi conclu├¡da.
+
+**Resumo do que foi adicionado** ao `FormSigPrEml.prg` (1037 ÔåÆ 1131 linhas):
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnBuscarClick()` | Chama `CarregarDados()` para reload do grid |
+| `BtnEncerrarClick()` | Chama `THIS.Release()` |
+| `BtnSalvarClick()` | Delega a `CmdBtnEmailClick()` (sem├óntica OPERACIONAL: enviar = salvar) |
+| `BtnCancelarClick()` | Desmarca tudo + fecha |
+| `CarregarLista()` | Alias para `CarregarDados()` (compatibilidade pipeline) |
+| `FormParaBO()` | Stub ÔÇö dados carregados diretamente pelo BO via SQL |
+| `BOParaForm()` | Chama `CarregarDados()` para sincronizar grade |
+| `HabilitarCampos()` | Stub ÔÇö grid inline n├úo depende de modo CRUD |
+| `LimparCampos()` | Zera `Checks=0` em todos os registros do cursor |
+| `AjustarBotoesPorModo()` | Stub ÔÇö sem bot├Áes CRUD com estado vari├ível |
+
+O form OPERACIONAL `FormSigPrEml` est├í agora 100% funcional e compat├¡vel com o pipeline de migra├º├úo multi-fase.

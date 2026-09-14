@@ -1,0 +1,172 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREDDP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReDdp Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDDP",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "If Used('crSigCdCli')\n\tUse In crSigCdCli\nEndIf\nIf Used('crSigMvHst')\n\tUse In crSigMvHst\nEndIf\nIf Used('crSigMvEst')\n\tUse In crSigMvEst\nEndIf\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDDP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDDP",
+      "evento": "Procedure",
+      "linhas": 265,
+      "codigoOriginal": "Private pDtI, pDtF\nldFinal     = ThisForm.get_dt_final.Value\nlcConfig\t= ThisForm.get_Demonstrativo.Value\nThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')\nlcCbEmpresa = _Empr + ' - ' + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)\nlcCbTitulo  = 'Demonstrativo de Balanço ' + Alltrim(lcConfig)\nlcCbPeriodo = 'Data : ' + Dtoc(ldFinal)\n\t\nCreate Cursor csCabecalho (cb_empresa c(80), cb_titulo c(80), cb_periodo c(80), SdInicial n(12,3))\nInsert Into csCabecalho (cb_empresa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "get_dt_final,get_Demonstrativo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDDP",
+      "evento": "Init",
+      "linhas": 33,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tThisForm.poDataMgr.CursorQuery('SigCdPam', 'crSigCdPam', .f., .f., 'Ouros')\n\n\t\tIf (ThisForm.poDataMgr.getDriver() = 'foxpro')\n\t\t\tlcDiretorio = Addbs(JustPath(ThisForm.poDataMgr.GetDatabase()))\n\t\t\tUse &lcDiretorio.\\SigMvHst Alias crSigMvHst In 0\n\t\t\tUse &lcDiretorio.\\SigMvEst Alias crSigMvEst In 0\n\t\t\tUse &lcDiretorio.\\SigCdCli Alias crSigCdCli In 0\n\t\tElse\n\t\t\tlcQuery = [Select IClis, RClis ] + ;... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,getDriver,GetDatabase,SqlExecute",
+        "controlesReferenciados": "get_dt_final",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDDP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReDdp to Print Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDDP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReDdp to Print NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDDP",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "If (This.Value <> 4)\n\tIf Empty(ThisForm.get_Demonstrativo.Value)\n\t\t=Messagebox('Nome do Demonstrativo Inválido!!!', 16, '')\n\t\tThisForm.get_Demonstrativo.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(ThisForm.get_dt_final.Value)\n\t\t=Messagebox('Data Inválida!!!', 16, '')\n\t\tThisForm.get_dt_final.SetFocus\n\t\tReturn 0\n\tEndIf\nEndIf\n\nfrmrelatorio::btnReport.Click\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Demonstrativo,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDDP.Get_Demonstrativo",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrDmo', ;\n\t\t\t\t\t\t   'crListaRemota', 'Nome', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Nome', '', 'Demonstrativo')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Nome\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREDDP.Procedure",
+      "queryOriginal": "Insert Into csCabecalho (cb_empresa... [TRUNCADO]",
+      "tabelas": "csCabecalho",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["csCabecalho"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

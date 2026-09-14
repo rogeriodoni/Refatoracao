@@ -1,0 +1,11 @@
+﻿Fase 5 conclu├¡da. O arquivo `FormFAPP.prg` foi atualizado com:
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+- `lbl_4c_Cods` ÔÇö label "C├│digo:" em Top=133, Left=30 (com compensa├º├úo +29 do PageFrame)
+- `txt_4c_Cods` ÔÇö TextBox em Top=130, Left=135, Width=120, MaxLength=20 (compat├¡vel com `cods C(20)` do BO)
+
+**FormParaBO / BOParaForm** ÔÇö preenchidos com o campo `cods` (primeira metade):
+- `FormParaBO`: copia `txt_4c_Cods.Value` ÔåÆ `this_oBusinessObject.this_cCods`
+- `BOParaForm`: copia `this_oBusinessObject.this_cCods` ÔåÆ `txt_4c_Cods.Value`
+
+A Fase 6 adicionar├í o campo `descs` (segunda metade) e completar├í os dois m├®todos.

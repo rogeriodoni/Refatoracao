@@ -1,0 +1,31 @@
+﻿An├ílise completa conclu├¡da. Nenhuma das tr├¬s colunas aparece em cl├íusulas WHERE inventadas no form ÔÇö zero ocorr├¬ncias. No BO, vejo exatamente onde elas aparecem:
+
+**CIDCHAVES** ÔåÆ linhas 330 e 364 do BO:
+- Linha 330: `WHERE cidchaves = ...` em `Atualizar()` ÔÇö UPDATE por PK
+- Linha 364: `WHERE cidchaves = ...` em `ExecutarExclusao()` ÔÇö DELETE por PK
+
+**CODTAMS / CODCORES** ÔåÆ linha 510 do BO:
+- Dentro da cl├íusula `LEFT JOIN ... ON d.cpros = o.cpros AND d.emps = ... AND d.codtams = o.codtams AND d.codcores = o.codcores` ÔÇö condi├º├úo do JOIN, n├úo do WHERE
+
+---
+
+## Resultado da verifica├º├úo: Falsos positivos ÔÇö nenhuma corre├º├úo necess├íria
+
+**Por que o detector errou:**
+
+| Flag | Localiza├º├úo real | Classifica├º├úo |
+|------|-----------------|---------------|
+| `CIDCHAVES` | `WHERE cidchaves = EscaparSQL(...)` em UPDATE e DELETE | PK leg├¡tima ÔÇö n├úo ├® filtro inventado |
+| `CODTAMS` | Cl├íusula `ON d.codtams = o.codtams` do LEFT JOIN (linha 508ÔÇô510) | Condi├º├úo de JOIN, n├úo WHERE |
+| `CODCORES` | Cl├íusula `ON d.codcores = o.codcores` do LEFT JOIN (linha 510) | Condi├º├úo de JOIN, n├úo WHERE |
+
+**Por que remover quebraria o sistema:**
+
+1. `WHERE cidchaves = ...` no UPDATE ÔåÆ sem WHERE, o UPDATE atingiria **todos** os registros da tabela SigCdMax.
+2. `d.codtams = o.codtams AND d.codcores = o.codcores` no JOIN ÔåÆ sem isso, o JOIN n├úo distinguiria variantes de tamanho/cor ao verificar exist├¬ncia na empresa destino, quebrando a funcionalidade de c├│pia entre empresas.
+
+**Correspond├¬ncia com o legado:**
+- O original usava `poDataMgr.Update('CrSigCdMax')` (cursor-sync) ÔåÆ migra├º├úo usa UPDATE/DELETE por PK (`cidchaves`). Mesma l├│gica, arquitetura diferente.
+- O original usava subquery com concatena├º├úo `b.cpros + b.codtams + b.codcores` ÔåÆ migra├º├úo usa LEFT JOIN com `ON ... codtams = o.codtams AND codcores = o.codcores`. Mesma l├│gica, SQL mais eficiente.
+
+**Nenhum arquivo alterado.** As condi├º├Áes s├úo corretas e remover qualquer uma introduziria bugs cr├¡ticos de dados.

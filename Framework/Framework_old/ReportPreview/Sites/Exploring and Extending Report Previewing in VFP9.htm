@@ -1,0 +1,639 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir="ltr"><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="author" content="Colin Nicholls">
+	<meta name="copyright" content="Spacefold">
+	<link rel="stylesheet" type="text/css" href="Exploring%20and%20Extending%20Report%20Previewing%20in%20VFP9_arquivos/article.css">
+	<title>Exploring and Extending Report Previewing in VFP9</title>
+</head>
+
+<body style="margin: 30px; background-image: url('../../../pics/wall_bg.jpg')">
+
+<div id="div_container" style="background-color: #FFFFFF; margin: 0 auto; border: 1px solid #808080; width: 780px;">
+
+	<div id="div_banner" style="padding: 5px;  height: 97px; color: #FFFFFF; text-align: left; background-image: url('../../../../images/ViewFromAShortHill.jpg');">
+
+		<table style="width: 100%">
+			<tbody><tr>
+				<td style="width:50%; text-align: center;">
+				<img alt="S P A C E F O L D" src="Exploring%20and%20Extending%20Report%20Previewing%20in%20VFP9_arquivos/spacefold.png"></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="text-align: center">
+					<span style="color: #FFFFFF">data... any distance... minimal time</span>
+				</td>
+				<td>&nbsp;</td>
+			</tr>
+		</tbody></table>
+	</div>
+
+	<div id="div_menu" class="menubar">
+	
+		<table cellpadding="0" cellspacing="0"><tbody><tr>
+			<td style="width:5%;">&nbsp;</td>
+			<td style="width:15%;"><a href="http://spacefold.com/" class="menulink"><span class="menulink">Home</span></a></td>
+			<td style="width:15%;"><a href="http://spacefold.com/articles.aspx" class="menulink"><span class="menulink">Article Index</span></a></td>
+			<td style="width:15%;"><a href="http://spacefold.com/colin/" class="menulink"><span class="menulink">Colin's Blog</span></a></td>
+			<td style="width:15%;"><a href="http://spacefold.com/lisa/" class="menulink"><span class="menulink">Lisa's Blog</span></a></td>
+			<td style="width:15%;">&nbsp;</td>
+		</tr></tbody></table>
+
+	</div>
+
+	<div id="div_body">
+		<table cellpadding="0" cellspacing="0" width="100%">
+		<tbody><tr>
+		<td style="width:6px;  vertical-align:top; background-color: #E0E0CD">
+			&nbsp;
+		</td>
+		<td style="vertical-align:top;background-color: #ffffff ; background-position: right top; background-image: url(../images/sf_logo_med_watermark.png); background-repeat: no-repeat;">
+			<div style="padding: 5px ;">
+			
+			<h1>Exploring and Extending Report Previewing in VFP9</h1>
+			<p>By Colin Nicholls<br>
+			June 2005</p>
+
+<div class="article_tip">
+		<p style="font-style:italic">This article is based on a session I gave at the Advisor Visual FoxPro DevCon 
+in June 2005, in which I described the new report previewing abilities of Visual 
+FoxPro 9.0, and demonstrated the basic techniques that it uses "behind the 
+scenes".</p>
+</div>
+
+<h2>Introduction</h2>
+<h3>A quick history lesson</h3>
+<p>Visual FoxPro 8.0 and earlier versions featured a "closed system" when it 
+came to reporting. If you didn't like the results of a standard
+<span class="filename">REPORT FORM ... PREVIEW</span> command, or required more 
+flexibility, your only alternative was to write your own FRX parser and output 
+generator in pure FoxPro code. This is possible to do, but complicated and 
+frustrating, because you would need to re-implement most of the existing 
+functionality built-in to the FoxPro reporting engine.</p>
+			<p>The older, VFP8-and-earlier reporting system is still there in VFP9 if you 
+need it. There are good reasons - including guaranteed backward-compatibility - 
+to use it occasionally:</p>
+<pre class="code">SET REPORTBEHAVIOR 80
+REPORT FORM ... [PREVIEW]</pre>
+<h3>A quick "preview" of reporting options in VFP 9</h3>
+<p>In 9.0, the FoxPro reporting system gets an exciting addition of a new base 
+class packed with reporting goodness: The <b>ReportListener</b> class. This is 
+your object-oriented gateway to the powerful FoxPro reporting engine. In 
+addition to this base ReportListener class, VFP9 contains some additional 
+"hooks" that allow you to attach components written in pure FoxPro. This enables 
+a kind of hybrid reporting model, leveraging the power of the built-in reporting 
+engine with the flexibility of custom FoxPro code.</p>
+<p>You attach a ReportListener object to a report run using the new OBJECT 
+clause:</p>
+<pre class="code">REPORT FORM ... OBJECT &lt;ref&gt;</pre>
+<p>Or, you can attach "factory" applications" to the report engine so that it 
+gets the ReportListener objects it needs, automatically:</p>
+<pre class="code">SET REPORTBEHAVIOR 90
+_reportoutput  = "listenerfactory.app"
+_reportpreview = "previewfactory.app"
+REPORT FORM ... </pre>
+<p>This is a very powerful and flexible architecture, and in the rest of this 
+article I'm only going to cover the previewing aspect.</p>
+<h2><a name="CH_Simplest_Preview"></a>The Simplest Preview Ever</h2>
+<p>I'm going to start out by showing you how to create the simplest preview 
+ever. You're going to use two attributes of the ReportListener class: the
+<b>ListenerType</b><sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/ad1bf074-a169-4fd4-b160-c39bdd8c8402.asp">msdn</a>]</sup> 
+property and the <b>OutputPage</b>()<sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/10e876bb-83c2-4309-8adf-cdd9f565d658.asp">msdn</a>]</sup> method. First, you create a base ReportListener object:</p>
+<pre class="code">rl = newobject("ReportListener")
+rl.ListenerType = 3</pre>
+<p>This property is a special one that controls how the listener responds when 
+attached to a report run. (More on this later on.) Now kick off a report run, 
+with the listener object plugged into the process:</p>
+<pre class="code">REPORT FORM _samples + "\Solution\Reports\colors.frx" OBJECT m.rl</pre>
+<p>Nothing appears to happen. Why? I'll get to that in a minute. Now it's time 
+to use another attribute of the listener object: OutputPage.</p>
+<h3>OutputPage() parameters</h3>
+<p>Intellisense will tell you the parameters:</p>
+<pre class="code">rl.OutputPage( <i>nPageNo, eDevice, nDeviceType</i> )</pre>
+<p><b>nDeviceType</b> tells the listener what the parameter <b>eDevice</b> is:</p>
+<ul>
+	<li>nDeviceType = 0: eDevice is a GDI printer handle.</li>
+	<li>nDeviceType = 1: eDevice is a GDI+ graphics handle.</li>
+	<li>nDeviceType = 2: eDevice is a reference to a FoxPro Shape or Control 
+	object.</li>
+</ul>
+<p>You're going to use nDeviceType = 2, so you need to create a target object:</p>
+<pre class="code">_SCREEN.AddObject("canvas","Shape")
+_SCREEN.Canvas.Width = 250
+_SCREEN.Canvas.Height = 300</pre>
+<p>And now invoke the listener's OutputPage() method to render page 1 of the 
+report:</p>
+<pre class="code">rl.OutputPage( 1, _screen.Canvas, 2 )</pre>
+<p>Et Voila: you get an image of the report drawn on the screen:</p>
+<p align="center"><img src="Exploring%20and%20Extending%20Report%20Previewing%20in%20VFP9_arquivos/rp_extend_01.gif" border="0" height="261" width="374"></p>
+<p>Note that we didn't make _screen.Canvas Visible. There's more. Try the 
+following from the Command window:</p>
+<pre class="code">_SCREEN.Canvas.Width = 500
+rl.OutputPage( 2, _screen.Canvas, 2 )
+clear
+rl.OutputPage( 1, _screen.Canvas, 2 )</pre>
+<p>You have now observed the following:</p>
+<ul>
+	<li>The target object need not be visible;</li>
+	<li>The listener's OutputPage() method uses the <b> <i>dimensions</i></b> of the 
+	target object as a template when displaying the image of the report page;</li>
+	<li>The listener can output the pages of the report in any order.</li>
+</ul>
+<p>From this you can deduce that:</p>
+<ul>
+	<li>the entire pre-rendered report is available to the ReportListener;</li>
+	<li>OutputPage() draws on the <b><i>surface of the parent form</i></b> (or 
+	screen), and not 
+	the target object itself.</li>
+</ul>
+<div class="article_tip">
+			<h4>Aside: Is OutputPage() a method or an event?</h4>
+			<p>Although the help file will tell you that ReportListener's OutputPage() is a 
+			method rather than an event, it is important to understand that - 
+			depending on the value of the ListenerType property - it can behave 
+			as either!</p>
+			<ul>
+				<li>When ListenerType is <b>0</b> or <b>2</b>, OutputPage() is 
+				called <i>by the report engine</i> every time a page of the 
+				report is rendered.</li>
+				<li>When ListenerType is <b>1</b> or <b>3</b>, OutputPage() is 
+				not called by the report engine. The method may be called by 
+				your own code to display a specific page of the fully 
+				pre-rendered report.</li>
+				<li>When ListenerType is <b>2</b> or <b>3</b>, the "normal" 
+				output behavior of the report engine is suppressed, i.e. the 
+				output is not sent to the printer device or the default preview 
+				window. </li>
+			</ul>
+			<p>The following table summarizes this: </p>
+			<div align="center">
+				<table style="border-collapse: collapse" id="table2" border="1" cellpadding="6">
+					<tbody><tr>
+						<td align="center" bgcolor="#E1E1C0">ListenerType</td>
+						<td align="center" bgcolor="#E1E1C0">Mode</td>
+						<td align="center" bgcolor="#E1E1C0">OutputPage(..)</td>
+						<td align="center" bgcolor="#E1E1C0">Output goes to</td>
+					</tr>
+					<tr>
+						<td align="center" bgcolor="#FFFFFF">0</td>
+						<td align="center" bgcolor="#FFFFFF">Page-at-a-time</td>
+						<td align="center" bgcolor="#FFFFFF">Event</td>
+						<td align="center" bgcolor="#FFFFFF">Printer</td>
+					</tr>
+					<tr>
+						<td align="center" bgcolor="#FFFFFF">1</td>
+						<td align="center" bgcolor="#FFFFFF">Spool all pages</td>
+						<td align="center" bgcolor="#FFFFFF">Method</td>
+						<td align="center" bgcolor="#FFFFFF">Preview</td>
+					</tr>
+					<tr>
+						<td align="center" bgcolor="#FFFFFF">2</td>
+						<td align="center" bgcolor="#FFFFFF">Page-at-a-time</td>
+						<td align="center" bgcolor="#FFFFFF">Event</td>
+						<td align="center" bgcolor="#FFFFFF">n/a</td>
+					</tr>
+					<tr>
+						<td align="center" bgcolor="#FFFFFF">3</td>
+						<td align="center" bgcolor="#FFFFFF">Spool all pages</td>
+						<td align="center" bgcolor="#FFFFFF">Method</td>
+						<td align="center" bgcolor="#FFFFFF">n/a</td>
+					</tr>
+				</tbody></table>
+			</div>
+</div>
+
+<p>In the example above, you used a ListenerType of 3. This meant that 
+OutputPage() is not invoked as each page is rendered and cached by the report 
+engine. After the report run, the method is available for your programs to use 
+to manually output each page to the device of your choice. You can use this to 
+create your own report preview window.</p>
+<h2><a name="CH_Examples"></a>More interesting examples</h2>
+<h3><a name="EXAMPLE_PROOFSHEET"></a>Example: ProofSheet</h3>
+<p>It is very easy for you to construct a FoxPro form that uses a reference to a 
+ReportListener object to preview a report. Consider the example <b>proofsheet</b> 
+class included in the <a href="http://spacefold.com/colin/archive/articles/reportpreview/rp_extend.zip">source files</a>:</p>
+<pre class="code">REPORT FORM HOME()+"\Tools\Filespec\90frx.frx" OBJECT m.rl</pre>
+<pre class="code">x = NEWOBJECT("proofsheet","proofsheet.vcx")
+x.SetReport( m.rl )
+x.Show()</pre>
+<p>You should see something like this:</p>
+<p align="center"><img src="Exploring%20and%20Extending%20Report%20Previewing%20in%20VFP9_arquivos/rp_extend_02.jpg" border="0" height="228" width="473"></p>
+<p>Dismiss the window by clicking the close box and let's modify the class and 
+take a look at the code:</p>
+<pre class="code">MODIFY CLASS proofsheet OF proofsheet.vcx</pre>
+<h5>SetReport() method:</h5>
+<p>The SetReport() method stores the listener reference to a property of the 
+form for later use:</p>
+<pre class="xml">lparameter oReport
+THIS.ReportListener = m.oReport</pre>
+<h5>Show() method:</h5>
+<p>The Show() method uses the .<b>OutputPageCount</b><sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/03726feb-d818-4008-83b7-74f6662b1578.asp">msdn</a>]</sup> 
+property of the listener reference to figure out how many canvas Shapes to add 
+to the form:</p>
+<pre class="xml">FOR i = 1 to MIN( 36, THIS.ReportListener.OutputPageCount )</pre>
+<pre class="xml">   THIS.NewObject( SYS(2015), "ProofShape", "proofsheet.vcx" )</pre>
+<pre class="xml">   THIS.Objects[m.i].PageNo = m.i
+   THIS.Objects[m.i].Top  = ...
+   THIS.Objects[m.i].Left = ...
+   :</pre>
+<pre class="xml">ENDFOR</pre>
+<pre class="xml">DODEFAULT(nStyle)</pre>
+<p>Note that this code relies on the fact that there are no pre-existing 
+controls on the form in order to refer to each added shape by the Objects[i] 
+array. There is additional code (not shown) that arranges the shapes into rows 
+and columns on the form.</p>
+<h5>Paint() event:</h5>
+<p>This is where the magic happens: The code cycles through all the pages and 
+invokes the OutputPage() method to display each pre-rendered page on the form:</p>
+<pre class="xml">IF NOT ISNULL( THIS.ReportListener )
+   FOR i = 1 to MIN( 36, THIS.ReportListener.OutputPageCount )</pre>
+<pre class="xml">      THIS.ReportListener.OutputPage( m.i, THIS.Objects[m.i], 2 )</pre>
+<pre class="xml">   ENDFOR
+ENDIF</pre>
+<h3>Example: SimplePreview</h3>
+<p>Let's take a look at another simple preview form class, this one called <b>
+SimplePreview</b>:, included in the <a href="http://spacefold.com/colin/archive/articles/reportpreview/rp_extend.zip">source files</a>:</p>
+<pre class="code">MODIFY CLASS SimplePreview OF previewcontainers.vcx</pre>
+<p>This form contains a Shape and two buttons:</p>
+<p align="center"><img src="Exploring%20and%20Extending%20Report%20Previewing%20in%20VFP9_arquivos/rp_extend_04.jpg" border="0" height="148" width="327"></p>
+<p>In addition to the expected <b>ListenerRef</b> and <b>SetReport</b>() 
+members, this form class also has a <b>PageNo</b> property.</p>
+<h5>Shape.Click() event:</h5>
+<p>This form displays one page at a time. If you direct the code snippet window 
+to the Shape.Click() event, you will see that the preview will advance to the 
+next page when the user clicks on the shape:</p>
+<pre class="xml">IF THISFORM.PageNo &lt; THISFORM.ListenerRef.OutputPageCount
+   THISFORM.PageNo = THISFORM.PageNo + 1
+ELSE
+   THISFORM.PageNo = 1
+ENDIF
+THISFORM.Refresh()</pre>
+<h5>cmdOK.Click()</h5>
+<p>This code introduces another member of the ReportListener class: the
+<b>OnPreviewClose</b>()<sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/481b543d-7a57-4a98-91ed-96ec3bac29ca.asp">msdn</a>]</sup> event. The single boolean parameter indicates whether or 
+not you want the report engine to send the report to the printer for you. Note 
+that I've called it an <i>event</i>. In my opinion, this is the first case of a 
+VFP base class having an event that is only ever called by FoxPro code! Nothing 
+in the product calls it for you. Is it really a method? No! In my opinion, it's 
+an event. Our custom code is "raising an event" that the ReportListener must 
+respond to.</p>
+<pre class="xml">IF NOT ISNULL( THISFORM.ListenerRef )
+   THISFORM.ListenerRef.OnPreviewClose(.F.)
+   THISFORM.ListenerRef = .NULL.
+ENDIF
+THISFORM.Hide()</pre>
+<h5>cmdPrint.Click()</h5>
+<p>The code behind the Print button is exactly the same as the OK button - 
+except that the OnPreviewClose method is passed .T. instead of .F.</p>
+<h4>Getting the ReportListener to instantiate the preview form automatically</h4>
+<p>You could just demonstrate this preview form like you did the other one. But 
+you know what? It's still too much code to call SetReport() and Show() manually. 
+You can make the report engine talk to your preview form automatically for 
+multiple reports. All you need to do is use a differrent ListenerType.</p>
+<p>A ListenerType of <b>1</b> is what you need. That - and the use of another 
+member property of ReportListener:&nbsp;
+<b>PreviewContainer</b><sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/b6e4d5f2-b291-45df-86df-0cac4ba2f5c4.asp">msdn</a>]</sup>:</p>
+<pre class="code">rl.ListenerType = 1
+rl.PreviewContainer = NEWOBJECT("SimplePreview","previewcontainers.vcx")</pre>
+<p><a name="CACHED_PREVIEW_EXAMPLE"></a>And now kick off another report:</p>
+<pre class="code">REPORT FORM _samples + "\Solution\Reports\colors.frx" OBJECT m.rl</pre>
+<p>Neat:</p>
+<p align="center"><img src="Exploring%20and%20Extending%20Report%20Previewing%20in%20VFP9_arquivos/rp_extend_05.jpg" border="0" height="139" width="277"></p>
+<p>Click on the shape to advance to the next page. Now try a different report:</p>
+<pre class="code">REPORT FORM _samples + "\Solution\Reports\wrapping.frx" OBJECT m.rl</pre>
+<p>Neat again. Different report - same preview window. No additional object 
+instantiation required. Now click the <b>Close &amp; Print</b> button to confirm 
+that it really will print the report!</p>
+<h2><a name="CH_PreviewContainer_API"></a>Introducing the Preview Container API</h2>
+<p>Let's review. What you've really been doing here is implementing something 
+called the "<b>Preview 
+Container API</b>"<sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/66975043-814c-4886-901c-53d3924ca1bb.asp">msdn</a>]</sup>. This is the minimum set of properties and methods that an 
+object must implement in order to be used as a Preview Container by the report 
+engine in VFP 9.0:</p>
+<ul>
+	<li>Show( iModal )</li>
+	<li>SetReport( oListener )</li>
+</ul>
+<p>It's really that simple - on the outside. As you've seen in the examples 
+above, however, it takes a little more work to implement a truly functional 
+preview window.</p>
+<h2>Changing the default Report Preview window</h2>
+<p>Wouldn't it be nice to be able to write a preview surface that you could use 
+throughout your existing applications, in place of the default Report Preview 
+window? And without using any special new syntax? Well, in VFP 9.0 you can.</p>
+<h3><a name="PREVIEW_CONTAINER_FACTORY"></a>Introducing _REPORTPREVIEW</h3>
+<p>You're going to use a system variable new to Visual FoxPro 9.0,
+<b>_REPORTPREVIEW</b><sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/7e0ce0ab-435d-480c-9729-534c0c5a7a4c.asp">msdn</a>]</sup>. Similar to _GENMENU, this variable identifies a program. VFP 
+uses _REPORTPREVIEW to identify the <i>preview container factory application</i>.</p>
+<p>This program is called by Visual FoxPro when:</p>
+<ul>
+	<li>the report engine is assisted by a ReportListener object, and</li>
+	<li>the ReportListener has a ListenerType of 1, and</li>
+	<li>the ReportListener does not already have an object reference assigned to 
+	its .PreviewContainer property.</li>
+</ul>
+<p>You would not believe how much easier this is than it sounds:</p>
+<pre class="code">CLEAR ALL
+MODIFY COMMAND</pre>
+<p>Enter the following code into the program editor:</p>
+<pre class="xml">LPARAMETER x
+x = NEWOBJECT("SimplePreview","previewcontainers.vcx")
+RETURN</pre>
+<p>Save this program as <span class="filename">pfactory.prg</span>. and set it 
+as the value of _REPORTPREVIEW in the Command window:</p>
+<pre class="code">_REPORTPREVIEW = "pfactory.prg"</pre>
+<p>Now set the
+<b>REPORTBEHAVIOR</b><sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/5d6e4527-8b6f-4f39-a670-c3397eff3bfd.asp">msdn</a>]</sup> setting to 90:</p>
+<pre class="code">SET REPORTBEHAVIOR 90</pre>
+<p>(I'm going to talk about this setting
+<a href="#SET_REPORTBEHAVE" class="internal">shortly</a>, ok? Bear with me 
+here). Now modify a report in the Report Designer:</p>
+<pre class="code">MODIFY REPORT _samples + "\Solution\Reports\colors.frx"</pre>
+<p>Select Print Preview from the Report menu, and if all has gone according to 
+plan, you should see your SimplePreview form, transparently integrated into the 
+Visual FoxPro IDE. What did you just do? You created a preview factory, and told 
+VFP to use it to create preview containers whenever a ReportListener object 
+needs one.</p>
+<p>It works with all variations of the familiar syntax:</p>
+<pre class="code">REPORT FORM _samples + "\Solution\Reports\colors.frx" PREVIEW</pre>
+<p>Or, if you like, you can change it to use a different style of preview 
+window. You may have noticed that the ProofSheet class from the earlier example 
+also complies with the Preview Container API. Edit the <span class="filename">
+pfactory.prg</span> program thusly:</p>
+<pre class="xml">LPARAMETER x
+<font color="#808080">* x = NEWOBJECT("SimplePreview","previewcontainers.vcx")</font>
+x = NEWOBJECT("proofsheet","proofsheet.vcx")
+RETURN</pre>
+<p>Save the program and run another report:</p>
+<pre class="code">REPORT FORM _samples + "\Solution\Reports\wrapping.frx" PREVIEW</pre>
+<p>Uh Oh. You should still see the SimplePreview form. Why did this happen?</p>
+<h3>On the caching of Listener instances</h3>
+<p>Behind the scenes, the first time you ran the report with REPORTBEHAVIOR=90, 
+Visual FoxPro instantiated a ReportListener object to assist in the report run. 
+It also asked for a preview container by invoking _REPORTPREVIEW. It then cached 
+the ReportListener <a href="#FN_REPORTOUTPUT" class="internal">[1]</a>, and its 
+preview container. You've <a href="#CACHED_PREVIEW_EXAMPLE" class="internal">
+already seen</a> how that works across report runs. On your second report run, 
+the listener object already has a preview container, and so the report system 
+doesn't re-invoke _REPORTPREVIEW to get a new one. So your revised code hasn't 
+executed yet. This is easy to correct:</p>
+<pre class="code">CLEAR ALL
+REPORT FORM _samples + "\Solution\Reports\wrapping.frx" PREVIEW</pre>
+<p>Ah, that's better. There's the proofsheet report preview. </p>
+<p>Obviously, the CLEAR ALL statement is a bit severe. A more gentle way of 
+releasing the cached reference is to do the following:</p>
+<pre class="code">_oReportOutput["1"].PreviewContainer = .NULL.</pre>
+<h3><a name="SET_REPORTBEHAVE"></a>About that SET REPORTBEHAVIOR command</h3>
+<p>Earlier you used the
+<b>SET REPORTBEHAVIOR</b><sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/5d6e4527-8b6f-4f39-a670-c3397eff3bfd.asp">msdn</a>]</sup> command. The transparent integration of ReportListeners 
+and custom preview windows into the traditional REPORT FORM syntax only works if 
+REPORTBEHAVIOR is set to <b>90</b>. By default, REPORTBEHAVIOR is set to <b>80</b> 
+to ensure backward compatibility with existing applications that may assume that 
+the reporting system and preview windows work a certain way. You can still use 
+the new REPORT FORM .. OBJECT syntax to process reports with the new report 
+engine, if you wish. Observe:</p>
+<pre class="code">SET REPORTBEHAVIOR 80</pre>
+<pre class="code">REPORT FORM _samples + "\Solution\Reports\colors.frx" PREVIEW
+REPORT FORM _samples + "\Solution\Reports\colors.frx" OBJECT TYPE 1
+REPORT FORM _samples + "\Solution\Reports\colors.frx" OBJECT _oReportOutput["1"]</pre>
+<h2><a name="CH_ReportPreviewApp"></a>ReportPreview.App - the default Preview Container Factory</h2>
+<p><a href="#PREVIEW_CONTAINER_FACTORY" class="internal">Earlier</a> I talked 
+about a preview container factory. Visual FoxPro 9.0 ships with a default 
+preview container factory application, <span class="filename">ReportPreview.App</span>. 
+It returns instances of a default preview container that is used to preview 
+reports.</p>
+<p>By default, the _REPORTPREVIEW system variable will be pointing to this 
+application:</p>
+<pre class="code">_REPORTPREVIEW = HOME() + "ReportPreview.App"</pre>
+<p>Although it looks very similar to the native report preview window seen in 
+previous versions of VFP, the default preview container is actually an instance 
+of a FoxPro form class. As you should expect, this class supports the Preview 
+Container API, but it also supports additional features that allow you to 
+control its appearance, and even extend its functionality.</p>
+<h4>Controlling the default preview window</h4>
+<p>The additional features of the default preview container are
+well-documented in the help file<sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/9f96f0e9-9b5d-423d-be13-3c905e963681.asp">msdn</a>]</sup>, but here's a simple example of how to 
+manually invoke and control the preview window:</p>
+<pre class="code">pc = .NULL.
+DO (_REPORTPREVIEW) WITH m.pc
+pc.Caption = "This is a custom caption"
+pc.TopForm = .T.
+pc.Top = 75
+pc.Left = 75
+pc.Height = 250
+pc.Width = 550
+pc.CanvasCount = 2
+pc.ZoomLevel = 3</pre>
+<pre class="code">rl = NEWOBJECT("ReportListener")
+rl.ListenerType = 1
+rl.PreviewContainer = m.pc</pre>
+<pre class="code">REPORT FORM _samples + "\Solution\Reports\wrapping.frx" OBJECT m.rl</pre>
+<p>You should see the preview window appear with the attributes you have 
+specified:</p>
+<p align="center"><img src="Exploring%20and%20Extending%20Report%20Previewing%20in%20VFP9_arquivos/rp_extend_06.jpg" border="0" height="266" width="487"></p>
+<h3>Pre-Setting the default preview container</h3>
+<p>Nothing prevents you from replacing _REPORTPREVIEW with a custom factory 
+program - <span class="filename">myfactory.prg</span>, say - that wraps the 
+ReportPreview.App:</p>
+<pre class="xml">LPARAMETER x
+DO HOME() + "ReportPreview.App" WITH x
+x.Caption = "My Application Report Preview"
+x.AllowPrintFromPreview = .F.
+x.CanvasCount = 2
+x.ZoomLevel = 3
+RETURN</pre>
+<p>Now, in your applications:</p>
+<pre class="xml">_REPORTPREVIEW = "myfactory.prg"
+SET REPORTBEHAVIOR 90
+:
+REPORT FORM myreport PREVIEW</pre>
+<p>Your applications will feature the customized report preview.</p>
+<h3><a name="CH_Preview_Extension_Api"></a>Introducing Preview Extension Hooks</h3>
+<p>The default preview container also exposes "hooks" that allow you to extend 
+the existing functionality with your own custom features. These hooks are 
+exposed by assigning a "handler" object to the preview window that will have its 
+methods called automatically as the preview window executes. Unlike
+<b>project hooks</b><sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/91ed2ca5-3f9c-4641-b2fd-07b1c341a78c.asp">msdn</a>]</sup>, the handler object is not instantiated for you: you must 
+instantiate it yourself and hand it to the preview container using the 
+SetExtensionHandler() method. </p>
+<p>The Handler object must expose a public <b>previewForm</b> property. At the 
+time that SetExtensionHandler() is called, the preview container will assign 
+this property a reference to itself so that the extension handler object can 
+call back to it.</p>
+<p>Additionally, the Handler object must support the following methods: </p>
+<ul>
+	<li>Method: AddBarsToMenu( cPopup, iNextBar )</li>
+	<li>Method: HandledKeyPress( iKey, iModifier )</li>
+	<li>Method: Show( iStyle )</li>
+	<li>Method: Paint()</li>
+	<li>Method: Release()</li>
+</ul>
+<p>For more information, these preview container extension hooks are
+documented<sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/9f96f0e9-9b5d-423d-be13-3c905e963681.asp">msdn</a>]</sup> in the help file
+<a href="#FN_PREVIEW_EXTENSION_API" class="internal">[2]</a>.</p>
+<p class="article_tip">See the Appendix
+<a href="#APX_EXTENSION_API" class="internal">Changes to the Preview Extension 
+Hooks API in SP1</a> below for some breaking news.</p>
+<p>Here's an 
+example that re-uses some code you looked at earlier.</p>
+<h4>Example: proofextend</h4>
+<p>Consider the example <b>proofextend</b> program included in the
+<a href="http://spacefold.com/colin/archive/articles/reportpreview/rp_extend.zip">source files</a>. This extension adds a button to the 
+preview toolbar (and a corresponding bar to the preview context menu) that 
+displays the proofsheet preview form you saw
+<a href="#EXAMPLE_PROOFSHEET" class="internal">earlier</a>. It does this by 
+adding code that runs at the appropriate points as the preview container "hooks" 
+the methods of the extension handler. First, the class defines a custom 
+DoProof() method that displays the form:</p>
+<h5>DoProof()</h5>
+<pre class="xml">x = NEWOBJECT("ProofSheet","proofsheet.vcx")
+x.SetReport( THIS.PreviewForm.oReport )
+x.Show(1)
+THIS.PreviewForm.SetCurrentPage( x.Currentpage )</pre>
+<p>If you looked closely at the ProofSheet class, you would have noticed that 
+clicking on one of the rendered pages sets the .<b>CurrentPage</b> property. 
+This method leverages that by allowing you to use ProofSheet as a glorified "Go 
+To Page..." dialog!</p>
+<h5>Show()</h5>
+<p>This method adds a button to the preview toolbar. The MyButton class 
+definition is in the same source <span class="filename">proofextend.prg</span> 
+source file:</p>
+<pre class="xml">THIS.previewForm.Toolbar.AddObject("cmdProof", "MyButton")
+THIS.previewForm.Toolbar.cmdProof.Visible = .T.</pre>
+<h5>AddBarsToMenu()</h5>
+<pre class="xml">:
+DEFINE BAR iNextBar OF (cPopup) ;
+   PROMPT "\&lt;Proof Sheet..."
+ON SELECTION BAR iNextBar OF (cPopup) ;
+   oRef.ExtensionHandler.DoProof()</pre>
+<p>This method adds a bar to the context menu. Note the oRef variable reference.</p>
+<div align="center">
+	<table style="border-collapse: collapse" id="table5" bgcolor="#FFFFDD" border="1" cellpadding="4" cellspacing="4" width="95%">
+		<tbody><tr>
+			<td>
+			<h4>Aside: Where did oRef come from?</h4>
+			<p>Because the ON SELECTION command sets up a program interrupt that 
+			takes the executing code outside of the context of an object method, 
+			the only way for a menu bar to reference the preview container is 
+			through a regularly scoped variable reference. The preview container 
+			understands this requirement, and creates the private m.<b>oRef</b> 
+			variable prior to the ACTIVATE POPUP command. Your extension 
+			handlers can rely on m.oRef being in scope when an option is 
+			selected from the preview window's context menu.</p></td>
+		</tr>
+	</tbody></table>
+</div>
+<p>So let's put it into action. You need to get an instance of the default 
+preview container using the standard trick you saw earlier, and then invoke the 
+SetExtensionHandler() method, passing it your extension handler object:</p>
+<pre class="code">pc = .NULL.
+DO (_REPORTPREVIEW) WITH m.pc
+pc.SetExtensionHandler( NEWOBJECT("MyExtension","proofextension.prg") )</pre>
+<p>Now you plug it into a ReportListener:</p>
+<pre class="code">rl = NEWOBJECT("ReportListener")
+rl.ListenerType = 1
+rl.PreviewContainer = m.pc</pre>
+<pre class="code">REPORT FORM _samples + "\Solution\Reports\wrapping.frx" ;
+  TO PRINTER PROMPT ;
+  OBJECT m.rl</pre>
+<p>You should see the preview window now features a "Proof" button on the 
+toolbar - and an option on the right-click menu:</p>
+<p align="center"><img src="Exploring%20and%20Extending%20Report%20Previewing%20in%20VFP9_arquivos/rp_extend_07.jpg" border="0" height="267" width="442"></p>
+<p>Selecting this option will display the proofsheet window:</p>
+<p align="center"><img src="Exploring%20and%20Extending%20Report%20Previewing%20in%20VFP9_arquivos/rp_extend_08.jpg" border="0" height="232" width="547"></p>
+<p>You can click on one of the thumbnail pages to go to that page in the main 
+preview window. Here's a last take-away for you: Click on Print button on the 
+toolbar.</p>
+<h4>New in 9.0: the Print Dialog has current page enabled</h4>
+<table style="border-collapse: collapse" id="table6" border="0" cellspacing="1" width="98%">
+	<tbody><tr>
+		<td valign="top">Yes, in Visual FoxPro 9.0 the "Current page" option is 
+		enabled in the Printer Prompt dialog.<p>However this is only true if you 
+		are using the new report engine. (SET REPORTBEHAVIOR 90 or the new 
+		OBJECT syntax). </p></td>
+		<td>
+		<img src="Exploring%20and%20Extending%20Report%20Previewing%20in%20VFP9_arquivos/rp_extend_09.gif" align="right" border="0" height="128" width="235"></td>
+	</tr>
+</tbody></table>
+<h2>Finally</h2>
+<p>I hope this article has given you some insight into how the new report 
+preview features of the reporting system in Visual FoxPro 9.0 work, and also 
+given you some ideas of how to extend it with your own functionality.</p>
+<p>You can download a zip file containing the example source files for this article here:
+<a href="http://spacefold.com/colin/archive/articles/reportpreview/rp_extend.zip">rp_extend.zip</a></p>
+
+<hr>
+<h2>Footnotes:</h2>
+<p><a name="FN_REPORTOUTPUT"></a>[1] Exactly how Visual FoxPro obtains and 
+caches ReportListener objects is beyond the scope of this article - but if you 
+are curious, check out the
+documentation<sup>[<a target="msdn" href="http://msdn.microsoft.com/library/en-us/dv_foxhelp9/html/36753dd4-25b1-412c-854b-256f84e49388.asp">msdn</a>]</sup>.</p>
+<p><a name="FN_PREVIEW_EXTENSION_API"></a>[2] The preview extension API is 
+expanded slightly in Visual FoxPro 9.0 SP1. Also a number of bugs have been 
+fixed.</p>
+
+<hr>
+<h2><a name="APX_EXTENSION_API"></a>Appendix: Changes to the Preview Extension 
+Hooks&nbsp; API in SP1</h2>
+<p>In VFP9 SP1 a report preview extension handler object no longer needs to 
+implement every method. The ReportPreview application uses <i>reflection</i> 
+(via a PEMSTATUS() call) to only call a hook method if it exists in the 
+extension object. Also, a new hook method, InitializeToolbar(), has been added 
+to ensure that customizations to the toolbar remain persistent even when the 
+user closes the toolbar via the close box and then brings it back with the 
+preview window's context menu option.</p>
+<h3>Properties:</h3>
+<h4>.PreviewForm</h4>
+<p>If this property exists in your class, the Preview assigns it a reference to 
+the preview form itself. This is useful if your code needs to interact with the 
+preview form and/or the toolbar.</p>
+<h3>Methods:</h3>
+<h4>.InitializeToolbar()</h4>
+<p><font color="#FF0000">[New in SP1]</font> This hook is called from the 
+preview form's .CreateToolbar() method, immediately after the toolbar object is 
+instantiated.</p>
+<p>This hook is also called from the top of the preview form's Show(). The 
+toolbar was created in the preview form's Init() which happened prior to the 
+extension object availability. This hook allows the extension object to decorate 
+the toolbar.</p>
+<p>The toolbar can be referenced through THIS.PreviewForm.Toolbar</p>
+<h4>.Show( iStyle )</h4>
+<p>This hook is called from within the preview form's Show().</p>
+<h4>.AddBarsToMenu( cPopup, iNextBar )</h4>
+<p>This hook is called at the point that the context menu is being constructed.</p>
+<p>Any ON SELECTION BAR.. code you implement can rely on a private variable 
+"m.oRef" being in scope that references the preview form itself. This reference 
+is used by the existing context menu bars so you know it's good.</p>
+<h4>.HandledKeypress( iKey, iModifier )</h4>
+<p>This hook is called from the preview form's KeyPress() event. Return .T. if 
+your code has handled the keypress. Return .F. if you want the default key 
+handling code to continue processing the keypress.</p>
+<h4>.Paint()</h4>
+<p>This hook is called from within the preview form's Paint() event, as the last 
+step after the pages have been rendered, and just prior to a DOEVENTS statement.</p>
+<h4>.Release()</h4>
+<p>This hook is called from within the preview form's Release() event. You may 
+return .F. if you wish to prevent the preview form from being released.</p>
+
+<hr>
+<h2>Acknowledgements:</h2>
+<p>I would like to acknowlege the help of Lisa Slater Nicholls in preparing for 
+this session, and therefore this article as well. Thanks, hon.</p>
+
+			</div>
+		</td>
+		</tr>
+		</tbody></table>	
+	
+	</div>
+
+	<div id="div_footer" style="padding: 5px; border: 1px none #808080; text-align:right; background-color: #E0E0CD">
+			<span class="smalltext">Copyright © 2005 Spacefold</span>
+	</div>
+
+</div>
+
+
+
+
+</body></html>

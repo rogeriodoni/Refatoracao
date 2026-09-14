@@ -1,0 +1,9 @@
+﻿Fase 7/8 conclu├¡da. Foram adicionados ao `FormSigPdM11.prg` (linha 1256ÔÇô1313):
+
+- **`BtnIncluirClick()`** ÔÇö muda para modo INSERIR e torna grid edit├ível
+- **`BtnAlterarClick()`** ÔÇö muda para modo ALTERAR e torna grid edit├ível  
+- **`BtnVisualizarClick()`** ÔÇö muda para modo VISUALIZAR e torna grid somente leitura
+- **`BtnExcluirClick()`** ÔÇö exibe mensagem de regra de neg├│cio (exclus├úo ├® responsabilidade do form pai SigPdM10)
+- **`AjustarModoEdicao()`** (PROTECTED) ÔÇö centraliza a l├│gica de ReadOnly que antes estava embutida em `ConfigurarPaginaLista()`
+
+**Nota sobre adapta├º├úo**: Como este ├® um form OPERACIONAL (n├úo CRUD), os 4 m├®todos foram implementados como gerenciadores de modo de edi├º├úo ÔÇö comportamento real e funcional. O form recebe seu modo inicial via `pcEscolha` do form pai; estes m├®todos permitem altera├º├úo program├ítica do modo ap├│s abertura, com `AjustarModoEdicao()` propagando o estado para as colunas edit├íveis do grid (Cat., Conta, Grupo, Retrab.).

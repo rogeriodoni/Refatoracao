@@ -1,0 +1,16 @@
+﻿Menu j├í est├í integrado corretamente. A Fase 8 est├í completa.
+
+**Resumo do que foi adicionado:**
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `BtnBuscarClick()` | Delega a `BtnVisualizarClick()` |
+| `BtnSalvarClick()` | No-op (REPORT n├úo salva dados) |
+| `BtnCancelarClick()` | Chama `THIS.Release()` |
+| `FormParaBO()` | Delega a `FormParaRelatorio()` (contrato FormBase) |
+| `BOParaForm()` | Restaura datas do BO caso estejam em branco |
+| `HabilitarCampos()` | Garante todos os 17 controles como `.Enabled = .T.` |
+| `CarregarLista()` | Retorna `.T.` (sem grid de lista em REPORT) |
+| `AjustarBotoesPorModo()` | Mant├®m os 4 bot├Áes do CommandGroup habilitados |
+
+O formul├írio `FormSIGRECPM.prg` est├í finalizado e funcional, com todos os m├®todos do contrato `FormBase` implementados adequadamente para o tipo REPORT.

@@ -1,0 +1,7 @@
+﻿A corre├º├úo est├í correta. Aqui est├í o racioc├¡nio:
+
+**Problema identificado:** `TornarControlesVisiveis` impedia o assignment direto `Visible=.T.` no `CNT_4C_CABECALHO` (via `!INLIST`), mas o bloco de recurs├úo nas linhas seguintes ainda entrava no container e for├ºava os filhos (`lbl_4c_Sombra`, `lbl_4c_Titulo`) para `.T.` ÔÇö isso ├® o que o code review descreveu como "forcado a .T. pelo metodo recursivo".
+
+**Corre├º├úo aplicada:** Substitu├¡do o padr├úo `IF !INLIST ... ENDIF` por `IF INLIST(...) / LOOP / ENDIF` que faz o `FOR` avan├ºar para o pr├│ximo objeto, ignorando tanto o assignment `Visible=.T.` quanto a recurs├úo no `cnt_4c_Cabecalho`.
+
+**Por que LOOP ├® seguro aqui** (ao contr├írio do anti-padr├úo do `feedback_tcv_skip_recursao.md`): os filhos de `cnt_4c_Cabecalho` (`lbl_4c_Sombra` e `lbl_4c_Titulo`) j├í s├úo criados explicitamente com `Visible=.T.` (linhas 138 e 154). O anti-padr├úo da mem├│ria ├® sobre containers ocultos cujos filhos **precisam** do TCV para ficarem vis├¡veis ÔÇö aqui n├úo ├® o caso.

@@ -1,0 +1,20 @@
+﻿O arquivo foi criado corretamente. Fase 2 conclu├¡da.
+
+**`sigrefcdBO.prg` completo** com os seguintes m├®todos adicionados:
+
+- **`PrepararDados()`** ÔÇö replica integralmente o `PROCEDURE processamento` do legado:
+  - Busca dados da empresa (`SigCdEmp`)
+  - Monta cursor `csCabecalho` para o FRX
+  - Define `pDtI`/`pDtF` como DATETIME para queries parametrizadas com `?pDtI`/`?pDtF`
+  - 3 queries SQL: `csDadosV` (vendas gerais), `csDadosP` (pag efetuado), `csDadosR` (recebimentos)
+  - Processamento VFP local: UNION ÔåÆ `Curt` ÔåÆ `curPag` ÔåÆ `curPagT`
+  - SCAN com query `SigEmInf` por linha para aplicar percentuais
+  - Agrega `crMovimento` por data via `csMovimento`
+
+- **`Imprimir()`** ÔÇö chama `PrepararDados()` + `REPORT FORM SigReFcD TO PRINTER PROMPT NOCONSOLE`
+
+- **`Visualizar()`** ÔÇö chama `PrepararDados()` + `REPORT FORM SigReFcD PREVIEW`
+
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro` para o Form exibir ao usu├írio
+
+O `Init()` existente foi expandido para carregar `SigCdPam` e `SigOpFp` (equivalente ao `Load` + in├¡cio do `Init` do legado).

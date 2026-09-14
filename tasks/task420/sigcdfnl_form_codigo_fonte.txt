@@ -1,0 +1,715 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigcdfnl.SCX
+* Data/Hora: 05/08/2026 18:11:02
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFNL
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_ordem
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_descr
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opc_fixo
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_finalz
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say32
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Vincs
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCodRelGer
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDesRelGer
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cmb_Imp
+  Parent: SIGCDFNL.Pagina.Dados
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Tabela de Finalizações"
+  Name = "SIGCDFNL"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 32
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 108
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 184
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 260
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 336
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 312
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 417
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 15
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ordem Finalizadora :"
+  Left = 143
+  Top = 179
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Relatório Gerencial :"
+  Left = 145
+  Top = 280
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Vinculado (S/N) :"
+  Left = 162
+  Top = 255
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Get_ordem
+------------------------------------------------------------
+  ControlSource = "crSigFiNal.ordems"
+  InputMask = "99"
+  Left = 249
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 176
+  Width = 24
+  ZOrderSet = 4
+  plprocurar = .T.
+  Name = "Get_ordem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Get_descr
+------------------------------------------------------------
+  ControlSource = "crSigFiNal.descrs"
+  Left = 249
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 200
+  Width = 290
+  ZOrderSet = 5
+  Name = "Get_descr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Fixo :"
+  Left = 215
+  Top = 230
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Opc_fixo
+------------------------------------------------------------
+  AutoSize = .T.
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigFiNal.nfixos"
+  Left = 249
+  Top = 225
+  TabIndex = 5
+  ZOrderSet = 7
+  Name = "Opc_fixo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 47
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Get_finalz
+------------------------------------------------------------
+  ControlSource = "crSigFiNal.ncodfinzs"
+  InputMask = "99"
+  Left = 249
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 151
+  Width = 24
+  ZOrderSet = 8
+  Name = "Get_finalz"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Say32
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 202
+  Top = 154
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "Say32"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Get_Vincs
+------------------------------------------------------------
+  ControlSource = "crSigFiNal.vincs"
+  Left = 249
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 252
+  Width = 17
+  ZOrderSet = 5
+  Name = "Get_Vincs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 189
+  Top = 203
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.GetCodRelGer
+------------------------------------------------------------
+  ControlSource = "crSigFiNal.nRelGers"
+  InputMask = "99"
+  Left = 249
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 277
+  Width = 24
+  ZOrderSet = 4
+  plprocurar = .T.
+  Name = "GetCodRelGer"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.GetDesRelGer
+------------------------------------------------------------
+  ControlSource = "crSigFiNal.descs"
+  Height = 23
+  Left = 275
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 277
+  Width = 272
+  ZOrderSet = 5
+  Name = "GetDesRelGer"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Impressora :"
+  Left = 181
+  Top = 129
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNL.Pagina.Dados.Cmb_Imp
+------------------------------------------------------------
+  RowSourceType = 0
+  RowSource = ""
+  Value = 
+  ControlSource = "crSigFiNal.imps"
+  Height = 24
+  Left = 249
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 125
+  Width = 105
+  Name = "Cmb_Imp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFNL
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.Get_ordem.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigFiNal','ordems',ThisForm.Pagina.Dados.Get_ordem.Value)
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+lcQryFinal = [Select a.*, b.Descrs As Descs from SigFiNal a ] + ;
+             [Left Join SigFiRlg b on a.nRelGers = b.Ordems And a.Imps = b.Imps]
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigFiNal','cidchaves','crSigFiNal','',ThisForm.pagina.lista.grade, lcQryFinal)
+		.pfSqlTabela(1).pColuna('Imps','','','Impressora',160,.t.)
+		.pfSqlTabela(1).pColuna('ordems','','','Ordem',80,.t.)
+		.pfSqlTabela(1).pColuna('descrs','','','Descrição',200,.t.)
+		.pfSqlTabela(1).pColuna("Iif(CrSigFiNal.nfixos=1, 'SIM', 'NÃO')",'','','Fixo',50,.t.)
+		.pfSqlTabela(1).pColuna('ncodfinzs','','','Código',80,.t.)
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+
+	With ThisForm.Pagina.Dados.Cmb_Imp
+		.Clear
+		.AddItem( 'DATAREGIS   ' )
+		.AddItem( 'SWEDA       ' )
+		.AddItem( 'BEMATECH    ' )
+		.AddItem( 'BEMA8501    ' )
+		.AddItem( 'NDATAREGIS  ' )
+		.AddItem( 'EPSON       ' )
+		.AddItem( 'DARUMA      ' )
+		.AddItem( 'S/IMPRESSORA' )
+		.AddItem( 'NSWEDA      ' )
+		.AddItem( 'Em Branco   ' )
+	Endwith
+
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+lparameters opcao
+
+select CrSigFiNal
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+If thisform.pcEscolha = 'INSERIR'
+	Replace CrSigFiNal.Cidchaves With fUniqueIds() in CrSigFiNal
+	lncod = fGerUniqueKey('SigFiNal')
+	Thisform.Pagina.Dados.get_finalz.value = lncod
+Endif
+Do Case
+	Case Inlist( thisform.pcEscolha,'INSERIR','PROCURAR')
+		ThisForm.Pagina.Dados.Cmb_Imp.SetFocus
+	Case Inlist( thisform.pcEscolha,'ALTERAR')
+		ThisForm.Pagina.Dados.Get_ordem.SetFocus
+	Case Inlist( thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endcase
+Select CrSigFiNal
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+With ThisForm.Pagina.Dados
+	if Inlist( thisform.pcEscolha, 'INSERIR')
+		lcSql = [Select * From SigFiNal Where Imps = ']+CrSigFiNal.Imps+[' And Ordems = ]+Str(.Get_ordem.Value)
+		If ThisForm.Podatamgr.SqlExecute(lcSql,'CrTmpFinal') > 0 And Reccount('CrTmpFinal') > 0
+			messagebox('Ordem já cadastrada ! ',0+48,'')
+			.get_ordem.setfocus
+			Return
+		Endif
+	EndIf
+	if Inlist( thisform.pcEscolha, 'INSERIR')
+		lcSql = [Select * From SigFiNal Where Imps = ']+CrSigFiNal.Imps+[' And ncodfinzs = ]+Str(.Get_Finalz.Value)
+		If ThisForm.Podatamgr.SqlExecute(lcSql,'CrTmpFinal') > 0 And Reccount('CrTmpFinal') > 0
+			messagebox('Codigo já cadastrado ! ',0+48,'')
+			.get_Finalz.setfocus
+			Return
+		Endif
+	EndIf
+EndWith
+
+=DoDefault()
+
+ThisForm.Refresh
+Thisform.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+Local lncod
+
+lncod = Thisform.pagina.dados.get_finalz.value
+
+DoDefault()
+
+if thisform.plCancelar
+	If thisform.pcEscolha = 'INSERIR'
+		fCanUniqueKey(lncod,'SIGFINAL')
+	Endif
+	thisform.mAtivapagina1
+endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFNL.Pagina.Dados.Get_ordem
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( Inlist( thisform.pcEscolha,'ALTERAR','INSERIR','PROCURAR') )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFNL.Pagina.Dados.Get_finalz
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( Inlist( thisform.pcEscolha,'ALTERAR','INSERIR','PROCURAR') )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFNL.Pagina.Dados.Get_Vincs
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !InList(This.Value,'S','N')
+	Return .f.
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFNL.Pagina.Dados.GetCodRelGer
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( Inlist( thisform.pcEscolha,'ALTERAR','INSERIR') )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+
+	ThisForm.poDatamgr.SqlExecute([Select * From SigFiRlg Where Imps = '] + Alltrim(This.Parent.Cmb_Imp.Value) + ['], [csTmpRelg])
+
+	SELECT csTmpRelg
+	LOCATE FOR Ordems = This.Value
+
+	If EOF()
+		xBrox = CreateObject('fwBuscaInt','csTmpRelg','Ordems',This.Value,'Rel. Gerencial',.t.)
+		xBrox.mAddColuna('Ordems', '', 'Código', .t.)
+		xBrox.mAddColuna('Descrs', '', 'Descrição', .t.)
+		xBrox.Show()
+	EndIf 
+
+	This.Parent.GetCodRelGer.Value = Iif( LastKey() # 27, Evaluate('csTmpRelg.Ordems'), '' )
+	This.Parent.GetDesRelGer.Value = Iif( LastKey() # 27, Evaluate('csTmpRelg.Descrs'), '' )
+
+Else
+
+	This.Parent.GetCodRelGer.Value = []
+	This.Parent.GetDesRelGer.Value = []
+
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFNL.Pagina.Dados.GetDesRelGer
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( Inlist( thisform.pcEscolha,'ALTERAR','INSERIR') And Empty(This.Parent.GetCodRelGer.Value) )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+
+	ThisForm.poDatamgr.SqlExecute([Select * From SigFiRlg Where Imps = '] + Alltrim(This.Parent.Cmb_Imp.Value) + ['], [csTmpRelg])
+
+	SELECT csTmpRelg
+	LOCATE FOR Descrs = This.Value
+
+	If EOF()
+		xBrox = CreateObject('fwBuscaInt','csTmpRelg','Descrs',This.Value,'Rel. Gerencial',.t.)
+		xBrox.mAddColuna('Descrs', '', 'Descrição', .t.)
+		xBrox.mAddColuna('Ordems', '', 'Código', .t.)
+		xBrox.Show()
+	EndIf 
+
+	This.Parent.GetCodRelGer.Value = Iif( LastKey() # 27, Evaluate('csTmpRelg.Ordems'), '' )
+	This.Parent.GetDesRelGer.Value = Iif( LastKey() # 27, Evaluate('csTmpRelg.Descrs'), '' )
+
+Else
+
+	This.Parent.GetCodRelGer.Value = []
+	This.Parent.GetDesRelGer.Value = []
+
+Endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

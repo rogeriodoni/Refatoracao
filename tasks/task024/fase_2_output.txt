@@ -1,0 +1,8 @@
+﻿Arquivo com 406 linhas, completo. Fase 2/8 conclu├¡da: `sigrevtoBO.prg` agora possui:
+
+- **`InicializarFiltros()`** ÔÇö carrega moeda padr├úo de `SigCdPam.MoedaPs` e define datas para hoje (equivale ao `Init` legado)
+- **`PrepararDados()`** ÔÇö l├│gica completa do `processamento` legado: valida filtros, cria `CsCabecalho`, busca moeda da opera├º├úo em `SigCdOpe`, e executa branch dupla:
+  - **Branch A** (sem CMoes): query `SigMvPar`, converte `MoeFpgs ÔåÆ this_cMoeda` via `fBuscarCotacao`
+  - **Branch B** (com CMoes): query `SigMvCab`, converte `ValVars/ValDevs/Valos` para `this_cMoeda` via `fBuscarCotacao`
+- **`Visualizar()`** / **`Imprimir()`** / **`Documento()`** ÔÇö executam `PrepararDados()` + `REPORT FORM SigReVto` (preview/impressora com prompt/impressora direta)
+- **`Destroy()`** atualizado ÔÇö fecha tamb├®m `crSigMvPar` e `crSigMvCab`

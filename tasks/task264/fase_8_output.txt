@@ -1,0 +1,14 @@
+﻿O arquivo est├í completo e correto. A Fase 8/8 foi conclu├¡da. Os m├®todos adicionados ao `FormSigPrCfn.prg` foram:
+
+| M├®todo | Fun├º├úo |
+|---|---|
+| `FormParaBO()` | Sincroniza todos os 18 campos (inputs + 10 vencimentos) do form ÔåÆ BO |
+| `BOParaForm()` | Sincroniza BO ÔåÆ form, incluindo os 3 resultados calculados |
+| `HabilitarCampos(par_lEnable)` | Centraliza enable/disable de todos os campos dependentes do ValorBase |
+| `LimparCampos()` | Reseta todos os 21 campos para o estado inicial |
+| `CarregarLista()` | Adaptado para calculator: chama `BOParaForm()` (sem grid) |
+| `AjustarBotoesPorModo()` | Mant├®m `cmd_4c_BtnOK` sempre habilitado (sem modos CRUD) |
+| `BtnBuscarClick()` | `FormParaBO()` + `Calculos()` |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnSalvarClick()` | `FormParaBO()` + `Calculos()` |
+| `BtnCancelarClick()` | Confirma├º├úo + `LimparCampos()` + `LimparPropriedades()` do BO |

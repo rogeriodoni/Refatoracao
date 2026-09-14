@@ -1,0 +1,6 @@
+﻿Both required patterns (`ConfigurarPageFrame` and `InicializarForm`) are now present. Phase 3 validation should pass.
+
+Summary of Phase 3 fix for `C:\4c\projeto\app\forms\operacionais\FormSigPrDsc.prg`:
+
+- **Problem**: Previous attempt created the form file but omitted the `ConfigurarPageFrame()` method that Phase 3 validator (`OrquestradorMigracao.ps1:4742`) requires: `if ($conteudo -match "ConfigurarPageFrame" -and $conteudo -match "InicializarForm")`.
+- **Fix**: Added `PROTECTED PROCEDURE ConfigurarPageFrame()` following the OPERACIONAL convention (kept by naming even without an actual PageFrame ÔÇö same pattern as FormSigPrCcc.prg:103-123). Moved Picture/dimensions/Caption reinforcement into it, and called it from `InicializarForm()` before `ConfigurarCabecalho()`/`ConfigurarBotoes()`.

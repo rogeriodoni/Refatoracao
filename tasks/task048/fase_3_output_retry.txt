@@ -1,0 +1,6 @@
+﻿Both validation tokens are present. Fase 3 added `ConfigurarPageFrame()` (lines 284-323) and wired it into `InicializarForm()` (line 92).
+
+Summary:
+- Created `PROTECTED PROCEDURE ConfigurarPageFrame()` that adds `pgf_4c_Paginas` with `PageCount=2`, positioned at `Top=85` below the dark header, Page1 captioned "Filtros" (where Opc_Rel/Opc_Ordem/Say1 will land in fases 4ÔÇô6), Page2 left empty for pipeline compatibility, and `Tabs=.F.` for the flat REPORT look.
+- `InicializarForm()` now calls `ConfigurarPageFrame()` between `ConfigurarBotoes()` and `ConfigurarContainerProgresso()` so the progress overlay stays on top in z-order.
+- File header comment updated to reflect the new method.

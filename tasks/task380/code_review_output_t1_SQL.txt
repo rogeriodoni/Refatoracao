@@ -1,0 +1,10 @@
+﻿Corre├º├úo aplicada. Resumo:
+
+**Problema 1 ÔÇö SQL-TABELA (`SigCdCfg`):** Corrigido em `CarregarConfigGeral()`:
+- Tabela `SigCdCfg` ÔåÆ `SigCdPam` (tabela real confirmada no schema)
+- Coluna `GrPadRess` ÔåÆ `GrPadResps` (nome real: `grpadresps` no schema)
+- Coluna `GrPadGers` removida (n├úo existe em SigCdPam)
+- `WHERE Emps = ...` removido (inventada ÔÇö original usa `SELECT GrPadVens, GrPadResps From SigCdPam` sem WHERE)
+- `TOP 1` removido (n├úo est├í no original)
+
+**Problema 2 ÔÇö SQL-FILTRO-INVENTADO (`FXAFIMS`):** Falso positivo do scanner. `fxafims` e `fxainis` existem em SigCmItn (schema confirmado). No c├│digo migrado aparecem apenas na lista de colunas do SELECT (linha 262) e do INSERT ÔÇö nunca em cl├íusula WHERE. O WHERE dessa query usa `fkchaves` e `tipos`, ambos v├ílidos no original. Nenhuma altera├º├úo necess├íria.

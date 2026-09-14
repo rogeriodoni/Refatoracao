@@ -1,0 +1,14 @@
+﻿A Fase 7 j├í est├í completa. O arquivo `FormSIGREADS.prg` j├í cont├®m todos os eventos principais do relat├│rio, implementados nas fases anteriores:
+
+| M├®todo | Linha | Fun├º├úo |
+|--------|-------|--------|
+| `BtnVisualizarClick()` | 1488 | Chama `this_oRelatorio.Atualizar()` ÔåÆ preview na tela |
+| `BtnImprimirClick()` | 1504 | Chama `this_oRelatorio.Inserir()` ÔåÆ envia para impressora |
+| `BtnExcelClick()` | 1521 | Chama `PrepararDados()` + `COPY TO ... TYPE XL5` |
+| `BtnEncerrarClick()` | 1551 | `THIS.Release()` |
+
+O template da Fase 7 menciona `BtnIncluirClick/BtnAlterarClick/BtnExcluirClick`, mas esses s├úo m├®todos CRUD que n├úo se aplicam a este form de relat├│rio (tipo `frmrelatorio`). Os equivalentes corretos s├úo os quatro acima, todos j├í implementados e ligados via `BINDEVENT` no `ConfigurarBotoes()` (linhas 290-293).
+
+O `SIGREADSBO.prg` tamb├®m est├í correto: `Inserir()` delega para `ImprimirRelatorio(.F.)` (impressora) e `Atualizar()` delega para `ImprimirRelatorio(.T.)` (preview), exatamente como o legado fazia com os dois PROCEDURE do form original.
+
+**FormSIGREADS.prg est├í completo ÔÇö sem altera├º├Áes necess├írias para a Fase 7.**

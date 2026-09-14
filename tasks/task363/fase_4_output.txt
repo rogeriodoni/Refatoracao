@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado ao `FormCES.prg`:**
+
+1. **5 bot├Áes CRUD em `cnt_4c_Botoes`** (Incluir/Visualizar/Alterar/Excluir/Buscar) com ├¡cones, `Comic Sans MS`, `Themes=.F.`, posi├º├Áes can├┤nicas (Left: 5/80/155/230/305)
+
+2. **`grd_4c_Lista`** na Page1 ÔÇö Top=127 (98+29 compensa├º├úo), Width=939, Height=487, 4 colunas, GridLines=3, Verdana/8
+
+3. **`CarregarLista(par_cFiltro)`** ÔÇö conecta RecordSource, ControlSources, Headers (C├│digo/Grupo/Conta/Setor) e chama FormatarGridLista. Par├ómetro opcional de filtro reutilizado pelo BtnBuscarClick
+
+4. **BINDEVENT do `cmd_4c_Confirmar`** em ConfigurarPaginaDados ÔåÆ `BtnSalvarClick`
+
+5. **10 novos m├®todos completos:**
+   - `BtnIncluirClick/BtnVisualizarClick/BtnAlterarClick/BtnExcluirClick/BtnBuscarClick/BtnSalvarClick` ÔÇö todos PUBLIC sem PROTECTED (compat├¡vel com BINDEVENT)
+   - `FormParaBO/BOParaForm/LimparCampos/HabilitarCampos` ÔÇö PROTECTED, completos com l├│gica de modo (INCLUIR: todos edit├íveis; ALTERAR: apenas Conta e Setor; VISUALIZAR: todos readonly)

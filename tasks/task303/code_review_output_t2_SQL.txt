@@ -1,0 +1,10 @@
+﻿**Falso positivo ÔÇö nenhuma corre├º├úo necess├íria.**
+
+An├ílise da flag `[SQL-FILTRO-INVENTADO]`:
+
+- `cidchaves` **existe de facto** em `sigscjim` e ├® a **PK** confirmada pelo schema: `CONSTRAINT [sigscjim_cidchaves] PRIMARY KEY CLUSTERED`
+- O ├║nico `WHERE cidchaves = ...` est├í na linha 113, dentro do m├®todo `Atualizar()` ÔÇö que ├® o padr├úo can├┤nico BusinessBase de UPDATE por PK
+- O m├®todo `Processamento()` (que replica a l├│gica do legado) usa `idimagem` e `CPros` nos seus WHERE, exatamente como o original
+- O legado n├úo tinha `Atualizar()` expl├¡cito porque usava `poDataMgr.Update([crSigScjIm])` (mecanismo VFP de record-update sem WHERE SQL) ÔÇö a nova arquitetura substitui isso corretamente com `WHERE cidchaves = PK`
+
+O c├│digo migrado est├í correto. Nenhum arquivo precisa ser alterado.

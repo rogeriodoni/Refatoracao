@@ -1,0 +1,15 @@
+﻿LinBO.prg is clean ÔÇö all procedures properly closed, ENDDEFINE at line 793. The procedure list shows the complete implementation:
+
+**Phase 7/8 complete.** Here's what changed in LinBO.prg:
+
+**Added:**
+- `Salvar()` override (line 285): calls `DODEFAULT()` (BusinessBase saves main record), then cascades to `SalvarFases` ÔåÆ `SalvarComposicao` ÔåÆ `SalvarComposicaoObrigatoria`
+- `BuscarFases(par_cLinhas)` (line 309): populates `cursor_4c_Fases` via `SigCdLnf LEFT JOIN SigCdGcr` (loads description column)
+- `BuscarComposicao(par_cLinhas)` (line 375): populates `cursor_4c_Composicao` via `SigCdLni`
+- `BuscarCompObrig(par_cLinhas)` (line 438): populates `cursor_4c_CompObrig` via `SigPrPrc`
+
+**Replaced** (old versions used wrong cursor names `cqSigCdLnf`/`crSigCdLni`/`CrSigPrPrc`):
+- `SalvarFases` (line 495): now uses `cursor_4c_Fases`, generates `cidchaves` via `fUniqueIds()`, handles nullable `Obs` with `NVL`, sets `matprdts=''` and `etiquetas=0` for columns not in the form
+- `SalvarComposicao` (line 561): now uses `cursor_4c_Composicao`, generates `cidchaves`, auto-increments `ordems`/`ordcompos`, defaults all non-form columns
+- `SalvarComposicaoObrigatoria` (line 632): now uses `cursor_4c_CompObrig`, generates `cidchaves`
+- `LimparCursoresAuxiliares` (line 775): now closes `cursor_4c_Fases/Composicao/CompObrig`

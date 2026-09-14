@@ -1,0 +1,16 @@
+﻿Fase 2 conclu├¡da. O `DepartamentoBO.prg` agora tem todos os m├®todos CRUD completos:
+
+**M├®todos adicionados:**
+- `ObterChavePrimaria()` ÔÇö retorna `this_cCodigo` para auditoria
+- `Buscar(par_cFiltro)` ÔÇö SELECT com ORDER BY codigos, popula `cursor_4c_Dados`
+- `CarregarPorCodigo(par_cCodigo)` ÔÇö SELECT por PK, seta `this_lNovoRegistro = .F.`
+- `CarregarDoCursor()` ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (sem alias direto)
+- `Inserir()` ÔÇö INSERT com valida├º├Áes: c├│digo duplicado + autos=1 duplicado
+- `Atualizar()` ÔÇö UPDATE com valida├º├úo: autos=1 duplicado
+- `ExecutarExclusao()` ÔÇö DELETE com verifica├º├úo de depend├¬ncia em `SigCdUsu.deptos`
+
+**Regras cr├¡ticas respeitadas:**
+- Nenhum `RETURN` dentro de TRY/CATCH ÔÇö uso de flag `loc_lAbortou`
+- Colunas exatas do schema: `codigos`, `Descricaos`, `Diretors`, `nChkSubs`, `nChkTipos`, `autos`
+- ChkRegister substitu├¡do por `SELECT COUNT(*) AS nExiste` (regra #55 do CLAUDE.md)
+- Todos os CATCH com `MsgErro()` ÔÇö nunca silenciosos

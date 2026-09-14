@@ -1,0 +1,7 @@
+﻿All three edits are in place. The integration is complete:
+
+- **menu.prg line 292-294**: BAR 100 (separator) + BAR 101 "Posi├º├úo de Estoque por Grande Grupo" added to `popRelatorios`
+- **menu.prg line 345**: `ON SELECTION BAR 101 OF popRelatorios DO AbrirFormSIGREEGG`  
+- **menu.prg line 2451-2475**: `PROCEDURE AbrirFormSIGREEGG()` with full TRY/CATCH error handling
+
+No changes to `config.prg` were needed ÔÇö it already dynamically loads all `*BO.prg` from `app/classes/` and all `Form*.prg` from `app/forms/relatorios/`, so `SIGREEGGBO.prg` and `FormSIGREEGG.prg` are picked up automatically.

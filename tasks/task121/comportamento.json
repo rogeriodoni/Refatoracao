@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIIV",
+      "evento": "Procedure",
+      "linhas": 120,
+      "codigoOriginal": "Local lcEdn, loCnx\n\nlcEdn = Padr(ThisForm.pcEmps, 3) + Padr(ThisForm.pcDopes, 20) + Str(ThisForm.pcNumes, 6)\nloCnx = ThisForm.poDataMgr\n\n* Campos Usados Do SigCdPam\nloCnx.CursorQuery([SigCdPam], [LocalParam], .f., .f., [CGruEstPs])\nGo Top In LocalParam\nIf Eof([LocalParam])\n\tReturn .f.\nEndIf\n\n* Campos Usados Do SigCdEmp\n* RazSocs\t= Razão Social\n* Razas\t    = Nome\n* Endes\t\t= Endereço\n* Numeros   = Número\n* Bairs     = Bairro\n* Cidas     = Cidade\n* Estas     = Estado\n* Ceps      = CEP\nloCnx.CursorQ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEmps, 3) + Padr",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIIV",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Local lcPmt\n\nlcPmt = Iif(InList(ThisForm.pcTpImp, 2, 4), [], [Prompt])\n\nReport Form SigReIiv To Printer &lcPmt. NoConsole\n\nIf (ThisForm.chkListagem.Value = 1) && Imprimir Listagem\n\tSelect crInvoices\n\tGo Top\n\n\tReport Form SigReIpk To Printer &lcPmt. NoConsole\nEndIf\n\nlcArq = Sys(2023) + [\\SigReIiv_*.jpg]\nDelete File &lcArq.\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkListagem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIIV",
+      "evento": "Init",
+      "linhas": 40,
+      "codigoOriginal": "Lparameters pEmp, pDop, pNum, pImp \n\nWith ThisForm\n\t.pcEmps     = pEmp\n\t.pcDopes    = pDop\n\t.pcNumes    = pNum\n\t.Caption    = [Impressão de Invoice (] + Alltrim(pDop) + [/] + Alltrim(Str(pNum)) + [)]\n\t.pcTpImp    = Iif(Type([pImp])=[N], pImp, 0)\n\t.ContaEmail = Space(10)\n\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tSet Point To [,]\n\t\tSet Separator To [.]\n\n\t\tlcQuery = [Select Expressao, Traducao ] + ;\n\t\t\t\t\t[From SigCdDic ] + ;\n\t\t\t\t   [Where Idioma = 'INGLES  ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIIV",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIIV",
+      "evento": "Procedure",
+      "linhas": 503,
+      "codigoOriginal": "Local loCnx\n\nloCnx = ThisForm.poDataMgr\n\nlcQuery = [Select CasQtds ] + ;\n\t\t    [From SigOpCdd ] + ;\n\t\t   [Where Dopes = '] + Padr(ThisForm.pcDopes, 20) + [' ] + ;\n\t\t   [Order By Dopes]\n\nIf (loCnx.SqlExecute(lcQuery, [LocalOpe]) < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalOpe)')\n\tReturn .f.\nEndIf\nSelect LocalOpe\nGo Top\n\nlcQuery = [Select * ] + ;\n\t\t    [From SigOpCdi ] + ;\n\t\t   [Where Dopes = '] + Padr(ThisForm.pcDopes, 20) + [' ] + ;\n\t\t   [Order By Dopes]\n\nI... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SelecionaDados",
+        "controlesReferenciados": "chkInvs,chkTits,chkLists,chkOrigs,chkEndOs,chkDests,chkEndDs,chkEmps,chkEndEs,optEmis,chkTrans,chkEmis,chkPais,chkVols,chkEsps,chkQtds,chkPesoBs,chkPesoLs,chkTots,chkItens,chkPags,chkRods,ChkTxIds,chkDescLng,chkFrete,chkSeguro,chkCabs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIIV",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Local lcArq\n\nThisForm.poDataMgr.Release\n\nSet Point To [.]\nSet Separator To [,]\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIIV",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Report Form SigReIiv Preview NoConsole\n\nIf (ThisForm.chkListagem.Value = 1) && Imprimir Listagem\n\tSelect crInvoices\n\tGo Top\n\n\tReport Form SigReIpk Preview NoConsole\nEndIf\n\nlcArq = Sys(2023) + [\\SigReIiv_*.jpg]\nDelete File &lcArq.\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkListagem",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

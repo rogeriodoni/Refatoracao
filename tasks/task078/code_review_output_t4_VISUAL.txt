@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada com sucesso. O que foi feito:
+
+1. **`RecordSource = "cursor_4c_OpFp"`** movido para ANTES do WITH (linha 840) ÔÇö o VFP9 cria as colunas a partir do cursor antes do bloco WITH ser executado
+2. **`ColumnCount = 2`** mantido logo ap├│s (linha 841), limitando a 2 colunas
+3. **Bloco `IF USED` removido** ÔÇö eliminando o bug cr├¡tico de `ColumnCount = 3` (que criava uma Column3 sem configura├º├úo) e as atribui├º├Áes duplicadas de `ControlSource`
+
+O acesso a `.Column1` e `.Column2` dentro do WITH agora ├® seguro porque o `RecordSource` + `ColumnCount` j├í foram definidos fora do WITH, garantindo que as colunas existam quando o WITH as referencia.

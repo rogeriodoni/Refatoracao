@@ -1,0 +1,10 @@
+﻿As duas corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito:
+
+**Fix 1 ÔÇö BINDEVENT-PARAMS (linha 1747-1748):**
+Mudou de `PROCEDURE ValidarVendedor(par_nKeyCode, par_nShiftAltCtrl)` para `PROCEDURE ValidarVendedor` + `LPARAMETERS par_nKeyCode, par_nShiftAltCtrl` ÔÇö necess├írio porque BINDEVENT requer LPARAMETERS expl├¡cito, n├úo par├ómetros na assinatura.
+
+**Fix 2 ÔÇö GRID-HEADER (linhas 1060, 1064):**
+- Column3: `"Vend"` ÔåÆ `"Vendedor"` (corresponde ao legado: `pColuna([Vends], [], [], [Vendedor], ...)`)
+- Column7: `"Status"` ÔåÆ `"Conferido"` (campo real da tabela `SigCdCnL.conferido`)
+
+Os outros 5 headers flaggeados eram falsos-positivos do review (encoding OEM vs UTF-8 impediu encontrar "C├│digo" e "Data" no SCT bin├írio ÔÇö ambos constam no legado via `pColuna([Cods], ..., [C├│digo], ...)` e `pColuna([Datas], ..., [Data], ...)`).

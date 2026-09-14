@@ -1,0 +1,8 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com as seguintes adi├º├Áes ao `FormSigPrGl2.prg`:
+
+1. **`shp_4c_Shape3`** ÔÇö shape decorativo do original (top=7, left=732, 60├ù29) adicionado no final de `MontarLayout()`
+2. **`FontName/FontSize/ForeColor`** corrigidos em `Column10.Header1` (grd_4c_GradeOpe) e `Column8.Header1` (grd_4c_GradeItens), que estavam sem essas propriedades
+3. **`ConfigurarPaginaLista()`** ÔÇö m├®todo adicionado como ponto de entrada compat├¡vel com o pipeline multi-fase; delega para `ConfigurarGrades()` se o grid j├í existe
+4. **`AlternarPagina()`** ÔÇö m├®todo adicionado como no-op expl├¡cito (form OPERACIONAL n├úo tem PageFrame CRUD)
+
+O form estava funcionalmente completo desde a Fase 3; a Fase 4 complementou os detalhes visuais e adicionou os dois m├®todos exigidos pelo pipeline.

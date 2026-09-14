@@ -1,0 +1,20 @@
+﻿Tudo correto. A fase 8/8 est├í completa.
+
+**O que foi feito:**
+
+O `Formsigreimc.prg` j├í estava completo desde a fase 7 com todos os m├®todos relevantes para um formul├írio de tipo REPORT:
+- `FormParaRelatorio()` ÔÇö equivalente ao `FormParaBO()` para relat├│rios
+- `LimparCampos()` ÔÇö propaga par├ómetros do Init para o BO
+- `AtualizarEstadoCampos()` ÔÇö equivalente ao `HabilitarCampos()` para relat├│rios
+- `BtnVisualizarClick()`, `BtnImprimirClick()`, `BtnSairClick()` ÔÇö todos os handlers de bot├Áes
+- `ConfigurarPaginaLista()`, `ConfigurarPaginaDados()`, `AlternarPagina()` ÔÇö m├®todos exigidos pelo FormBase
+- `Destroy()` ÔÇö limpa o BO corretamente
+
+Os m├®todos listados na fase 8 (BtnBuscarClick, BtnSalvarClick, CarregarLista, AjustarBotoesPorModo, BOParaForm) s├úo padr├Áes de formul├írios CRUD e n├úo se aplicam a este formul├írio REPORT.
+
+**Integra├º├úo adicionada ao `menu.prg`:**
+1. `DEFINE BAR 152` (separador) e `DEFINE BAR 153` ÔÇö "Impress├úo de Cartas"
+2. `ON SELECTION BAR 153 OF popRelatorios DO AbrirFormsigreimc`
+3. `PROCEDURE AbrirFormsigreimc()` com suporte a par├ómetros opcionais (para chamadas de outros formul├írios passando contexto de NF)
+
+O `config.prg` j├í carrega automaticamente `sigreimcBO.prg` (via `*BO.prg` ADIR) e `Formsigreimc.prg` (via `Form*.prg` ADIR da pasta `forms\relatorios\`).

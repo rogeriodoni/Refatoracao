@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. Fase 2 conclu├¡da.
+
+**O que foi adicionado ao `SIGPRVTXBO.prg`:**
+
+| M├®todo | Visibilidade | Descri├º├úo |
+|--------|-------------|-----------|
+| `CarregarDoCursor(par_cAliasCursor)` | PROTECTED | Mapeia skuid/nomesku/skuativo/refsku do cursor para propriedades this_ |
+| `Inserir()` | PUBLIC | INSERT completo em sigprvtx com fUniqueIds() para cidchaves + RegistrarAuditoria("I") |
+| `Atualizar()` | PUBLIC | UPDATE completo em sigprvtx por cidchaves + RegistrarAuditoria("A") |
+| `ProcessarGrade(par_cCursorGrade)` | PUBLIC | Orquestra o batch: BEGIN TRANSACTION ÔåÆ DELETE FROM sigprvtx ÔåÆ SCAN+CarregarDoCursor+Inserir por linha ÔåÆ COMMIT/ROLLBACK |
+
+**Decis├Áes de implementa├º├úo:**
+- Colunas bit NULL (`chkatustock`, `ckvtexup`, `ckAtudesc`): mapeadas para `NULL` quando `.F.` (padr├úo), refletindo o comportamento original do `Append Blank`
+- `vtexProdId`: `NULL` quando 0 (n├úo informado pela planilha Excel)
+- Transa├º├úo SQL Server expl├¡cita em `ProcessarGrade` via `BEGIN TRANSACTION`/`COMMIT`/`ROLLBACK`, com rollback garantido no CATCH
+- `fUniqueIds()` portada e dispon├¡vel em `utils/functions.prg` ÔÇö uso direto sem wrapper

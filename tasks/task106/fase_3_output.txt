@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto e completo. Resumo do que foi criado:
+
+**`C:\4c\projeto\app\forms\relatorios\FormSIGREGDP.prg`** ÔÇö Fase 3/8 conclu├¡da com estrutura completa (n├úo apenas base, pois a fase ├® FLAT sem PageFrame CRUD):
+
+- **`DEFINE CLASS FormSIGREGDP AS FormBase`** com dimens├Áes exatas do original (800├ù700), `TitleBar=0`, `WindowType=1`
+- **`Init()`** ÔåÆ `RETURN DODEFAULT()` (padr├úo can├┤nico)
+- **`InicializarForm()`** ÔÇö cria SIGREGDPBO, configura cabecalho + botoes + filtros + grade + botoes de sele├º├úo
+- **`ConfigurarCabecalho()`** ÔÇö `cnt_4c_Cabecalho` RGB(100,100,100) com sombra/t├¡tulo brancos
+- **`ConfigurarBotoes()`** ÔÇö `cmg_4c_Botoes` (CommandGroup 4 bot├Áes: Visualizar/Imprimir/DocExcel/Sair) com geometria exata do framework `frmrelatorio`
+- **`ConfigurarFiltros()`** ÔÇö S├®rie, NF Inicial, NF Final, `opt_4c_Selecao` (Duplicatas/Boletos), bot├úo Processar com posi├º├Áes exatas do original
+- **`ConfigurarGrade()`** ÔÇö 8 colunas com CheckBox em Column1 (ordem correta: AddObjectÔåÆCurrentControlÔåÆControlSource), `ColumnOrder` preservados do original
+- **`ConfigurarBotoesSelecao()`** ÔÇö SelTudo e Desmarcar com posi├º├Áes/├¡cones originais
+- Todos os handlers de eventos: `BtnProcessarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnSairClick`, `BtnSelTudoClick`, `BtnDesmarcarClick`, `TeclaSerieKeyPress` (F4/ENTER/TAB)
+- **`Destroy()`** ÔÇö `this_oRelatorio = .NULL.` + `DODEFAULT()`

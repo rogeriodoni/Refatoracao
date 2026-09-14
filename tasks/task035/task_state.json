@@ -1,0 +1,265 @@
+﻿{
+    "taskId":  "task035",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-05-16T10:31:31",
+    "atualizadoEm":  "2026-05-16T11:53:42",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-05-16T10:31:31",
+                                            "fim":  "2026-05-16T10:31:31",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task035\\sigreato.sct",
+                                            "baseName":  "sigreato",
+                                            "scxFile":  "C:\\4c\\tasks\\task035\\sigreato.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-05-16T10:31:31",
+                                          "fim":  "2026-05-16T10:31:32",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigreato",
+                                          "txtFile":  "C:\\4c\\tasks\\task035\\sigreato_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T10:31:32",
+                                              "fim":  "2026-05-16T10:31:32",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task035\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T10:31:33",
+                                              "fim":  "2026-05-16T10:31:33",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "REPORT",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task035\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task035\\meta_prompt.md",
+                                              "boClass":  "sigreatoBO",
+                                              "formClass":  "Formsigreato",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task035\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T10:31:33",
+                                              "fim":  "2026-05-16T10:31:34",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task035\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-05-16T10:31:34",
+                                               "fim":  "2026-05-16T10:31:34",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task035\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigreato_esqueleto.prg",
+                                                                "sigreatoBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-05-16T10:31:34",
+                                       "fim":  "2026-05-16T11:34:24",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+                                                               "C:\\4c\\projeto\\app\\classes\\sigreatoBO.prg",
+                                                               "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreato.prg"
+                                                           ],
+                                       "comentario":  "Formsigreato.prg + sigreatoBO.prg (com ExportarExcel)",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigreatoBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  61.16,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreato.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  2286
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-05-16T11:34:24",
+                                                  "fim":  "2026-05-16T11:34:33",
+                                                  "tentativas":  2,
+                                                  "correcoesAplicadas":  15,
+                                                  "erro":  null,
+                                                  "comentario":  "12 RETURN_NO_TRY no BO, 3 no Form (PAGEFRAME_VISIBLE_AUSENTE + ADDOBJECT_DUPLICADO revertidos)",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreato.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigreatoBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-05-16T11:34:33",
+                                                 "fim":  "2026-05-16T11:34:35",
+                                                 "tentativas":  2,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "sigreatoBO.fxp + Formsigreato.fxp gerados sem .err",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-05-16T11:48:17",
+                                       "fim":  "2026-05-16T11:49:02",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  "SQL Server 192.168.15.101 nao acessivel neste ambiente",
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-05-16T11:49:02",
+                                               "fim":  "2026-05-16T11:53:41",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "Form RELATORIO - sem operacoes CRUD automatizaveis",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  4,
+                                               "resultFile":  "C:\\4c\\tasks\\task035\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-05-16T11:53:41",
+                                        "fim":  "2026-05-16T11:53:42",
+                                        "tentativas":  2,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_Formsigreato_20260516115342.html",
+                                        "diferencas":  0,
+                                        "erros":  4,
+                                        "totalProblemas":  464,
+                                        "avisos":  460
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-05-16T11:53:42",
+                                              "fim":  "2026-05-16T11:53:42",
+                                              "tentativas":  2,
+                                              "arquivoGerado":  "C:\\4c\\tasks\\task035\\teste_manual.md",
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task035_sigreato.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-05-16T10:31:32",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-05-16T10:31:33",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task035\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-05-16T10:31:33",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-05-16T10:31:33"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-05-16T11:34:33",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-05-16T11:34:33",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigreato_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreato.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task035\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-05-16T11:34:35",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-05-16T11:35:12",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-05-16T11:35:12",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-05-16T11:48:00",
+                                          "passes":  5,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027EMPS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ORDEM, ESTOS, CPROS, I, CODIGOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027DATAS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ORDEM, ESTOS, CPROS, I, CODIGOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CGRUS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ORDEM, ESTOS, CPROS, I, CODIGOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027LINHAS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ORDEM, ESTOS, CPROS, I, CODIGOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027IFORS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ORDEM, ESTOS, CPROS, I, CODIGOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027ICLIS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: ORDEM, ESTOS, CPROS, I, CODIGOS",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  6
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-05-16T11:48:00",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-05-16T11:48:17",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigreatoBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\Formsigreato.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-05-16T11:53:41",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-05-16T11:53:41",
+                                             "thresholdPx":  5,
+                                             "unmatched":  13,
+                                             "errors":  14,
+                                             "matched":  16,
+                                             "warnings":  21,
+                                             "reportFile":  "C:\\4c\\tasks\\task035\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

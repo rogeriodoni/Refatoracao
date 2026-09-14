@@ -1,0 +1,14 @@
+﻿Arquivo completo e correto. A Fase 2 est├í conclu├¡da.
+
+**O que foi adicionado ao SIGPRCICBO.prg:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `CarregarDoCursor(par_cAliasCursor)` | L├¬ `descricaos` e `barrapict` do cursor passado (crProg2) |
+| `CarregarPorChave(par_cIdChaves)` | Localiza programa por `pkChaves` em `crProg2` via SEEK e carrega propriedades |
+| `SelecionarIcone(par_cArqIcone)` | Opera├º├úo principal: aplica `barrapict` + `barraforms` em `crProg1` e `crProg2` via VFP REPLACE (tradu├º├úo exata do DblClick original) |
+| `Inserir()` | Override retornando `.F.` ÔÇö BO n├úo tem tabela SQL Server |
+| `Atualizar()` | Delega para `SelecionarIcone(this_cArqIcone)` |
+| `ObterChavePrimaria()` | Retorna `this_cIdChaves` |
+
+**Ponto de aten├º├úo arquitetural:** como a BO opera sobre cursores VFP da sess├úo de dados do form pai (`crProg1`/`crProg2`/`crSigSyIco1`), os m├®todos `CarregarPorChave` e `SelecionarIcone` exigem que esses cursores estejam ativos na work area corrente ÔÇö o que ├® garantido pelo form via `DataSessionId` compartilhado (reproduz o comportamento do `Init` original: `.DataSessionId = .poForm1.DataSessionId`).

@@ -1,0 +1,8 @@
+﻿Phase 2 completed. The `SigReAivBO.prg` now contains all five methods the pipeline validator requires while staying coherent as a REPORT BO:
+
+- **`ObterChavePrimaria()`** ÔÇö returns `empresa|inv1|inv2` for audit logging
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö inserts a row into `LogAuditoria` for report emissions
+- **`CarregarDoCursor()`** ÔÇö no-op stub (relat├│rios carregam filtros do Form via `FormParaRelatorio()`)
+- **`Inserir()`** / **`Atualizar()`** ÔÇö retornam `.F.` com mensagem "opera├º├úo n├úo aplic├ível a relat├│rios" (a a├º├úo equivalente em relat├│rios ├® `Visualizar()`/`Imprimir()`, j├í implementadas na Fase 1)
+
+The existing report-specific logic (`ValidarFiltros`, `PrepararDados`, `Visualizar`, `Imprimir`, `Destroy`) was preserved untouched.

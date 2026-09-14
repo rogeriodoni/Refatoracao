@@ -1,0 +1,124 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "from sigche where umovs in"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECPR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReCpr To Printer Prompt Noconsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPR",
+      "evento": "Init",
+      "linhas": 27,
+      "codigoOriginal": "Lparameters _Acesso\n\nWith Thisform\n\n\t.poDatamgr = Createobject('fSqlConector')\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.F.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.SqlExecute([Select * From SigCdOpt],'crSigCdOpt')\n\tEndWith\n\tThisForm.Titulo\t\t\t   = []\n\tThisForm.Opcao.Value \t   = 1\n\tThisForm.DataIni.Value \t   = Ctod('')\n\tThisForm.DataFin.Value \t   = Ctod('')\n\tThisForm.OptFiltro.Value   = 1\n\tthisform.getTip... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value \t   = Ctod",
+        "controlesReferenciados": "Opt],Opt',OptFiltro,Opt_Bons",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPR",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "dodefault()\nset century on\nset date to british\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPR",
+      "evento": "Procedure",
+      "linhas": 92,
+      "codigoOriginal": "PRIVATE opcao, dataini, datafin, Tipo\n\nLocal lnTipoRel, lnBons\n\nopcao\t  = thisform.opcao.value\ndataini\t  = fDtoSQL(thisform.dataini.value)\ndatafin\t  = fDtoSQL(thisform.datafin.value,\"23:59:59\")\nTipo\t  = ThisForm.OptFiltro.Value\n\nlnBons\t  = ThisForm.Opt_Bons.Value\nlnTipoRel = Thisform.getTipoRel.ListIndex\n\n*--Titulo\nThisForm.Titulo = [Filtros: ] + Iif(Tipo=1,[Prorrogados], [Vencimento]) + [ - ] + ;\n\t\t\t\t  Iif(lnTipoRel=1 Or Empty(lnTipoRel),[Ativos],;\n\t\t\t\t  Iif(lnTipoRel=2,[Baixados],;\n\t\t\t\t  Iif(l... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,from sigche where umovs in",
+        "metodosFormChamados": "Titulo = [Filtros: ] + Iif,SqlExecute",
+        "controlesReferenciados": "OptFiltro,Opt_Bons",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "report form SigReCpr preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPR.GetTipoRel",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If This.ListIndex = 4\n\tThisForm.Opt_Bons.Visible = .T.\nElse\n\tThisForm.Opt_Bons.Visible = .F.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Bons",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECPR.Init",
+      "queryOriginal": "\t\t.SqlExecute([Select * From SigCdOpt],'crSigCdOpt')",
+      "tabelas": "SigCdOpt",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpt"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

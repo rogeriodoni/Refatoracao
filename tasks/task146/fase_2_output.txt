@@ -1,0 +1,8 @@
+﻿O arquivo est├í correto. Fase 2 conclu├¡da com sucesso. Os m├®todos adicionados ao `SigPdMp5BO.prg` foram:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `TRANSFORM(this_nNops)`, a chave da linha do grid (xMFas.Nops)
+- **`ValidarDados()`** (PROTECTED) ÔÇö valida que `this_nQtds >= 0` antes de qualquer opera├º├úo
+- **`Inserir()`** ÔÇö valida dados e registra auditoria (este sub-dialog n├úo insere linhas em xMFas ÔÇö o form pai ├® respons├ível; mas o framework requer o m├®todo)
+- **`Atualizar()`** ÔÇö valida, chama `AtualizarQtdPesa()` para sincronizar `xPesa.Qtds` (replicando a l├│gica do `Column3.Text1.Valid` do legado: `SEEK + REPLACE`), e registra auditoria
+
+A decis├úo de n├úo fazer SQL INSERT/UPDATE direto ├® correta para este form: o `comportamento.json` confirma `sqlQueries = []` (zero queries SQL no original) ÔÇö o form trabalha com cursores VFP passados pelo form pai, que cuida da persist├¬ncia no SQL Server.

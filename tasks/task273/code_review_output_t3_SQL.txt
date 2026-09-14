@@ -1,0 +1,10 @@
+﻿Feito. Dois bugs reais corrigidos:
+
+- **Linha 2522**: `ColumnCount = 3 ÔåÆ 7` para `grd_4c_Disponivel` ÔÇö em VFP9, reduzir ColumnCount de 7 para 3 em runtime destr├│i as colunas 4-7, tornando `Qtds`, `QtBaixas`, `QtReservas` e `Saldo` inacess├¡veis via grid mesmo estando no cursor
+- **Linha 2536**: `ColumnCount = 3 ÔåÆ 4` para `grd_4c_ItemXml` ÔÇö Column4 (`Total` de `cursor_4c_Distribui`) ficava inacess├¡vel
+
+**Falsos positivos n├úo alterados:**
+- `cursor_4c_Pendentes.Emps/Dopes/Numes/Grupos` ÔÇö campos presentes no SELECT do `BuscarMovimentosPendentes` no BO; validator n├úo analisa cross-file
+- `RCLIS WHERE` (linha 1996) ÔÇö lookup de `SigCdCli` por nome no handler `TxtDcontaLostFocus`; presente no padr├úo original
+- `CMOES WHERE` (linhas 3515/3527) ÔÇö lookup de `SigCdCot`; presente no original
+- `QTDOS WHERE` ÔÇö n├úo existe em nenhum WHERE no c├│digo

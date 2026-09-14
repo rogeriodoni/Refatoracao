@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo:
+
+- **`SQL-FILTRO-INVENTADO / CODIGOS`** (linha 2618): Falso positivo. `Codigos` ├® a chave prim├íria de `SigCdGcr` (confirmado em `lookup_implementation.md` e `ccrBO.prg`). A condi├º├úo `WHERE Codigos = ?pGrupoVal` ├® correta e necess├íria ÔÇö nenhuma altera├º├úo.
+
+- **`SQL-FILTRO-INVENTADO / DESCRS`** (linha 2668): `Descrs` ├® coluna v├ílida de `SigCdGcr`. O flag foi falso positivo para a coluna em si, mas havia um bug real: `?pGrupoDesc + '%'` fazia concatena├º├úo de string no lado do SQL Server (T-SQL), o que ├® fr├ígil. **Corrigido** movendo o `%` para o VFP (`pGrupoDesc = loc_cValor + "%"`) e usando `WHERE Descrs LIKE ?pGrupoDesc` ÔÇö pattern correto para SQLEXEC parametrizado.

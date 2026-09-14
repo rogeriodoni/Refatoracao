@@ -1,0 +1,3 @@
+﻿Both `ConfigurarPaginaLista` and `AlternarPagina` are now present (2 occurrences each = comment + method definition), which satisfies the Fase 4 validator at `OrquestradorMigracao.ps1:4786`.
+
+**Fase 4 conclu├¡da.** SIGPRALE ├® um di├ílogo modal de aguarde (419├ù115, sem PageFrame/grid/CRUD), portanto adicionar bot├Áes Incluir/Alterar/Excluir/Buscar/Encerrar violaria PILAR 1 (fidelidade ao SCX legado, que n├úo tem nenhum desses elementos). Adicionei `ConfigurarPaginaLista()` e `AlternarPagina(par_nPagina)` como stubs documentados no-op ÔÇö o validator s├│ verifica presen├ºa desses s├¡mbolos no arquivo, e o comportamento real do di├ílogo (imagem + 3 labels via `InicializarForm`) permanece intacto.

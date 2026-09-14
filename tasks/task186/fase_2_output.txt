@@ -1,0 +1,15 @@
+﻿The form is clean and correct. FASE 3/8 is complete. `FormSigPrGl2.prg` was created at `C:\4c\projeto\app\forms\operacionais\FormSigPrGl2.prg` (~960 lines).
+
+**Summary of what was built:**
+
+**FASE 3/8 ÔÇö FormSigPrGl2.prg (Write)**
+
+- `DataSession = 1` ÔÇö shares datasession with parent so TmpCabec/TmpItens are accessible
+- `Init()` captures 6 params (parent form ref, datasession ID, reserva, emphPdr, automatico, numeroOp), sets accented title before `DODEFAULT()`
+- `Activate()` ÔÇö re-applies ordering and refreshes GradeOpe on form activation
+- `InicializarForm()` ÔÇö creates BO, calls ConfigurarCabecalho(), MontarLayout(), ConfigurarGrades(), RegistrarEventos(), AplicarOrdem()
+- `MontarLayout()` ÔÇö all controls: 2 buttons (Processar/Cancelar) overlaying the header at top=3; GradeOpe (10 cols) with checkbox Column1; lbl/txt Cliente; GradeItens (8 cols with ColumnOrder reordering); Apaga/SelTudo icon buttons; ObsOpe/ObsItens editboxes
+- `ConfigurarGrades()` ÔÇö RecordSources + ControlSources for both grids, ObsOpe, ObsItens, txt_4c_Cliente; initial TmpItens SET KEY TO first TmpCabec row
+- `RegistrarEventos()` ÔÇö 8 BINDEVENTs including header click handlers
+- `AplicarOrdem()` ÔÇö calls `BO.OrdenarOperacoes()` then updates header BackColors
+- 8 PUBLIC event handlers: AoMudarLinhaOpe (LPARAMETERS), AoClicarCabMovi, AoClicarCabEntrega, AoMudarLinhaItens (LPARAMETERS), AoProcessar, AoCancelar, AoApagar, AoSelTudo

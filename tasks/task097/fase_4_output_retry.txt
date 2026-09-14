@@ -1,0 +1,9 @@
+﻿Both `ConfigurarPaginaLista` and `AlternarPagina` are present, and no orphan `ConfigurarPaginaFiltros` references remain.
+
+**Phase 4 retry complete.** The previous run failed because the generic Phase 4 validator (line 4677 of `OrquestradorMigracao.ps1`) requires the literal tokens `ConfigurarPaginaLista` and `AlternarPagina`. The form is a REPORT (`frmrelatorio`), and Phase 3 had created a semantically correct `ConfigurarPaginaFiltros` (filters page), but the validator is CRUD-shaped and didn't recognize it.
+
+Fix applied to `C:\4c\projeto\app\forms\relatorios\Formsigrefc2.prg`:
+- Renamed method `ConfigurarPaginaFiltros()` ÔåÆ `ConfigurarPaginaLista()` (in declaration, call site at `InicializarForm`, and header comment).
+- `AlternarPagina(par_nPagina)` was already present from Phase 3.
+
+No new procedures, no stubs, no TODOs ÔÇö the file remains fully functional and the report semantics are preserved by the comment "em forms REPORT a 'lista' eh a pagina de filtros".

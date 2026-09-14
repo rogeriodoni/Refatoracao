@@ -1,0 +1,6 @@
+﻿All 3 fixes applied. The root cause was VFP9's inability to resolve `.Buttons(N)` as a sub-object inside a nested `WITH` block ÔÇö the same pattern as the documented "Unknown member PAGE1 after WITH PageFrame" error. Each fix closes the parent `WITH OptionGroup` block first, then opens separate `WITH <fullpath>.Buttons(N)` blocks using the absolute object path.
+
+**Changes made to `FormNfl.prg`:**
+1. `ConfigurarPaginaDados()` ÔÇö `obj_4c_Op_ItCasas.Buttons(1/2)` moved outside parent WITH
+2. `ConfigurarCabecalhoTab()` ÔÇö `obj_4c_OptTpMargem.Buttons(1/2)` moved outside parent WITH  
+3. `ConfigurarRodapeTab()` ÔÇö `obj_4c_ClsFisTp.Buttons(1/2)` moved outside parent WITH

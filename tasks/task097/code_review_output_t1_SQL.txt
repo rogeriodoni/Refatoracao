@@ -1,0 +1,33 @@
+﻿Analisei o arquivo completo e o BO correspondente. Posso determinar a conclus├úo agora.
+
+---
+
+## An├ílise dos Problemas Detectados
+
+### WHERE `CEMPS` e `RAZAS` ÔÇö **Falsos Positivos**
+
+Ambas as ocorr├¬ncias est├úo **exclusivamente em queries auxiliares de lookup da tabela `SigCdEmp`** (cadastro de empresas), **n├úo no SQL principal do relat├│rio**:
+
+| M├®todo | Query | Prop├│sito |
+|---|---|---|
+| `LimparCampos()` linha 650-651 | `SELECT Razas FROM SigCdEmp WHERE Cemps = ...` | Preenche raz├úo social quando s├│ o c├│digo est├í dispon├¡vel |
+| `ValidarCdEmpresa()` linha 752-753 | `SELECT Cemps, Razas FROM SigCdEmp WHERE Cemps = ...` | Valida c├│digo empresa digitado pelo usu├írio |
+| `ValidarNomEmpresa()` linha 810-812 | `SELECT Cemps, Razas FROM SigCdEmp WHERE Razas LIKE ...` | Busca empresa por raz├úo social parcial |
+| `sigrefc2BO.prg` linha 163 | `SELECT Razas FROM SigCdEmp WHERE Cemps = ...` | Busca nome empresa para o cabe├ºalho do relat├│rio |
+
+O validador automatizado comparou **todas** as cl├íusulas `WHERE` do arquivo contra a lista de colunas do SQL principal do relat├│rio (DATAS, EMPS, FPAGS, etc.) e marcou `CEMPS`/`RAZAS` como "inventados" ÔÇö mas essas s├úo colunas leg├¡timas e corretas da tabela `SigCdEmp`:
+- `Cemps` = c├│digo da empresa (PK de SigCdEmp)  
+- `Razas` = raz├úo social da empresa
+
+Remover essas condi├º├Áes `WHERE` quebraria completamente a funcionalidade de sele├º├úo de empresa (lookup retornaria dados aleat├│rios em vez de filtrar pela empresa correta). Al├®m disso, a regra "**NAO remover campos, funcionalidades ou lookups**" veda essa remo├º├úo.
+
+### Verifica├º├úo de outros problemas no mesmo pass
+
+Aproveitei para checar as demais regras do pass SQL no c├│digo:
+- Nenhum SQL com aspas duplicadas ou `EscaparSQL` ausente encontrado  
+- Nenhum `COMMIT`/`ROLLBACK` sem `BEGIN TRANSACTION`  
+- Nenhum `ControlSource` apontando para campo inexistente no cursor
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** Os dois alertas s├úo falsos positivos do validador autom├ítico ÔÇö ele n├úo distingue entre queries auxiliares de lookup de tabelas mestre e o SQL principal do relat├│rio. O c├│digo est├í correto como est├í.

@@ -1,0 +1,20 @@
+﻿Phase 4 retry complete. Here's what was added to `FormProduto.prg`:
+
+**New elements in ConfigurarPage1:**
+- **cnt_4c_Mensagem** (Visible=.F.) - "Aguarde!!! Selecionando Produtos..." loading overlay
+- **cmd_4c_CopiarProduto** (Visible=.F.) - "Copiar um Produto" button
+- **cnt_4c_Acabado** (Visible=.F.) - Complete copy-product dialog with all fields (OldCPro, NewCPro, OldCGrus, NewCGrus, OldReffs, NewReffs, situacao OptionGroup, Ok/Cancel buttons)
+- **cnt_4c_BotoesCor** - 3 color indicator textboxes (Botao1/2/3)
+- **img_4c_FigJpg** (Visible=.F.) - Product image placeholder
+- **lbl_4c_SemMenu** (Visible=.F.) - "MENU FISCAL INACESSIVEL NESTA TELA"
+
+**New event handlers:**
+- **GridDblClick** - Double-click on grid opens record for editing
+- **FiltroDataFimKeyPress** - ENTER/TAB on end date reloads list
+- **ValidarGrupoFiltro** - Validates group code against SigCdGrp and fills description
+
+**Improvements:**
+- **TornarControlesVisiveis** now filters floating containers (cnt_4c_Acabado, cnt_4c_Mensagem, img_4c_FigJpg, lbl_4c_SemMenu, cmd_4c_CopiarProduto) to keep them hidden
+- **FiltroGrupoKeyPress** now handles F4(115) for lookup and ENTER/TAB for validation+reload
+
+File grew from ~1063 to 1515 lines. All PROCEDURE/ENDPROC balanced, ENDDEFINE present.

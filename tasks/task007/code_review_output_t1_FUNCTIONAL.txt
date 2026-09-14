@@ -1,0 +1,7 @@
+﻿Both fixes applied:
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` now has an INLIST check (`Formcfo.prg:1371`). Containers named `CNT_4C_CABECALHO` are excluded from being forced to `Visible=.T.`. Since `cnt_4c_Cabecalho` is already set to `.Visible = .T.` in its WITH block before the method runs, behavior is unchanged ÔÇö the guard protects against future hidden containers being accidentally exposed.
+
+2. **[NULL-CURSOR]** ÔÇö `cfoBO.Buscar()` fallback `CREATE CURSOR` (line 445 in `cfoBO.prg`) now has `SET NULL ON` before and `SET NULL OFF` after, preventing `APPEND FROM` failures when SQL Server returns NULLs.
+
+3. **[LAYOUT-POSITION]** ÔÇö All 50 layout warnings are **false positives**. The code review tool incorrectly mapped original `Say1ÔåÆlbl_4c_Say17` etc. The actual migrated labels (`lbl_4c_Say1`, `lbl_4c_Say2`, `lbl_4c_Say3`ÔÇª) already have the exact original positions (e.g. `lbl_4c_Say1` at `Top=11, Left=91`; `lbl_4c_Say2` at `Top=38, Left=23`; `lbl_4c_Say17` at `Top=319, Left=273`). No position changes were needed.

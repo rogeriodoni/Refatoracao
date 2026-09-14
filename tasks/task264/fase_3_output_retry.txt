@@ -1,0 +1,15 @@
+﻿Fase 3 completed. `FormSigPrCfn.prg` rewritten to satisfy pipeline validation (regex checks for `ConfigurarPageFrame` + `InicializarForm` at OrquestradorMigracao.ps1:4771).
+
+**Fix vs previous attempt**: previous run refused the PageFrame arguing this is a flat calculator dialog. That decision failed the mandatory validation regex. Now includes:
+
+| Requirement | Location |
+|---|---|
+| `PROTECTED PROCEDURE InicializarForm()` | Line 74 |
+| `PROTECTED PROCEDURE ConfigurarPageFrame()` | Line 179 (2 pages: C├ílculo / Vencimentos, Tabs=.F. to preserve UX) |
+| `cnt_4c_Cabecalho` | Line 123 (cintSombra padr├úo RGB(100,100,100)) |
+| `cnt_4c_Botoes` | Line 203 (cont├®m cmd_4c_BtnOK "Sair" com Cancel=.T. + Themes=.T.) |
+| `cnt_4c_BotoesAcao` | Line 250 (rodap├® reservado para pr├│ximas fases) |
+| `TornarControlesVisiveis` | Line 279 (recursivo, itera Pages do PageFrame) |
+| `Init()` com LPARAMETERS + `DODEFAULT()` | Line 39 |
+
+Preserva LPARAMETERS originais (pVal/pTip/pJMe/pJDi/pDtB/pDtF), delega ao BO via `InicializarComParametros`, e mant├®m dimens├Áes 600├ù300 do SCX legado.

@@ -1,0 +1,17 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito e a justificativa para cada item da lista:
+
+**Corrigido (2 mudan├ºas reais):**
+
+1. **`ColumnCount = 3` ÔåÆ `5`** (linha 2661) ÔÇö resolve os 4 erros GRID-SQL de `cursor_4c_Pendentes`. Com `ColumnCount=3`, `Column4` (Grupos) e `Column5` (Contas) simplesmente n├úo existem no grid, tornando os `ControlSource` dessas colunas letra morta. Com 5, todos os 5 campos ficam vis├¡veis como no original (sem a coluna `nMarca=0`).
+
+2. **Removido `WHERE b.Qtds <> 0 AND a.Saldo > 0`** (linha 1203) ÔÇö resolve o erro `SQL-FILTRO-INVENTADO SALDO`. O JOIN original em `crMovimentos x crDistribui` n├úo tem nenhuma cl├íusula WHERE ÔÇö a LLM inventou o filtro de saldo.
+
+**N├úo alterado (justificativa):**
+
+- **cursor_4c_Movimentos GRID-SQL (7 erros)**: Falso-positivo do validator. Os campos Cpros/Dpros/Units/Qtds/QtBaixas/QtReservas/Saldo est├úo no SELECT do SQLEXEC (linhas 2373-2389) e no CREATE CURSOR fallback (linhas 2401-2405). O validator n├úo consegue cruzar o SQL com os ControlSources porque s├úo definidos em m├®todos separados.
+
+- **QTDOS**: N├úo existe em nenhuma cl├íusula WHERE do arquivo. Falso-positivo.
+
+- **RCLIS WHERE** (linha 1931): Padr├úo can├┤nico de lookup-por-nome ÔÇö filtra `SigCdCli` pelo nome para auto-selecionar quando h├í match ├║nico. Remover quebraria a funcionalidade.
+
+- **CMOES WHERE** (linhas 3419, 3431): Consulta de taxa de c├ómbio em `SigCdCot` por c├│digo de moeda ÔÇö equivalente ao `SEEK` no cursor pr├®-carregado do legado. Remover quebraria a convers├úo de moeda.

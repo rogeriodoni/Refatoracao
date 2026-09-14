@@ -1,0 +1,21 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\SigPdM10BO.prg",
+    "timestamp":  "2026-06-18T14:52:49",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  129,
+                          "Original":  "THIS.this_lExibeCntOps = (NVL(cursor_4c_TmpOpd.ResumoPOp, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(cursor_4c_TmpOpd.ResumoPOp)=\"L\" / THIS.this_lExibeCntOps = ... / ELSE / THIS.this_lExibeCntOps = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1072,
+                          "Original":  "loc_lGlobaliza = (NVL(globalizas, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(globalizas)=\"L\" / loc_lGlobaliza = ... / ELSE / loc_lGlobaliza = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  2
+}

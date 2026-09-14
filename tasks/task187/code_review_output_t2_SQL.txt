@@ -1,0 +1,40 @@
+﻿Agora tenho o quadro completo. Posso fazer a an├ílise definitiva de todos os 5 problemas reportados:
+
+---
+
+## An├ílise: Todos os 5 itens s├úo Falsos Positivos
+
+### 1. `CONTROLCOUNT` (FormSigPrGlo.prg:388,396,404,413,419)
+
+**N├âO ├® coluna SQL.** ├ë propriedade VFP ÔÇö aparece como `THIS.ControlCount` e `loc_oCtrl.ControlCount` em c├│digo de itera├º├úo de controles visuais:
+
+```foxpro
+FOR loc_i = 1 TO THIS.ControlCount
+    ...
+    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+```
+
+O validador fez parse incorreto de acesso a propriedade de objeto como se fosse cl├íusula WHERE de SQL.
+
+---
+
+### 2ÔÇô5. `CEMPS`, `DOPPS`, `CGRUS`, `ICLIS` (SigPrGloBO.prg)
+
+S├úo **PKs leg├¡timas** usadas em queries de lookup secund├írias ÔÇö confirmado contra o schema:
+
+| Coluna | Tabela | Schema confirma | Query no BO |
+|--------|--------|-----------------|-------------|
+| `Cemps` | `sigcdemp` | `[cemps] char(3) NOT NULL` ÔÇö PK | `WHERE Cemps = ?` em `CarregarEmpresa` |
+| `Dopps` | `SigCdOpd` | `[dopps] char(20) NOT NULL` ÔÇö PK | `WHERE Dopps = ?` para opera├º├úo padr├úo |
+| `CGrus` | `SigCdGrp` | `[cgrus] char(3) NOT NULL` ÔÇö PK | `WHERE CGrus = ?` para grupo do produto |
+| `IClis` | `SigCdCli` | `[iclis] char(10) NOT NULL` ÔÇö PK | `WHERE IClis = ?` para raz├úo social do cliente |
+
+Nenhuma dessas condi├º├Áes ├® inventada. S├úo queries independentes de lookup por PK, necess├írias para buscar dados auxiliares (GrDests/ConDests de SigCdOpd, GeraTubs de SigCdGrp, RClis de SigCdCli, Razas de SigCdEmp). Remover qualquer WHERE retornaria a tabela inteira, quebrando a l├│gica.
+
+A causa do falso positivo no validador: o original VFP usava `SEEK` em tabelas DBF locais para acessar esses dados ÔÇö o c├│digo migrado traduziu corretamente SEEK ÔåÆ `SQLEXEC com WHERE`, mas o validador n├úo reconheceu essas queries secund├írias como migra├º├Áes leg├¡timas de SEEK.
+
+---
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.** Os arquivos `FormSigPrGlo.prg` e `SigPrGloBO.prg` est├úo corretos para este pass. Todos os 5 itens s├úo falsos positivos gerados pelo validador de SQL que:
+1. Confundiu propriedade VFP `.ControlCount` com coluna SQL
+2. N├úo distinguiu queries de lookup por PK (leg├¡timas) de filtros inventados na query principal

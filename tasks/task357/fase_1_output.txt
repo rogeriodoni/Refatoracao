@@ -1,0 +1,11 @@
+﻿`C:\4c\projeto\app\classes\CcoBO.prg` criado com sucesso. **Fase 1 conclu├¡da.**
+
+**O que foi feito:**
+- `DEFINE CLASS CcoBO AS BusinessBase` com todas as propriedades extra├¡das do fonte original
+- 9 campos de `SigCdClc`: `this_cIdChaves`, `this_cEmps`, `this_cGrupos`, `this_cCodigos`, `this_cDescs`, `this_nPrioridades`, `this_nFaixaIs`, `this_nFaixaFs`, `this_nClcStatus`
+- 2 propriedades de cursores auxiliares (motivos/grupos)
+- 2 propriedades de contexto de filtragem (`this_cGruposFiltro`, `this_lClientesFiltro`) ÔÇö equivalentes ├ás propriedades `Grupos` e `Clientes` do form legado
+- `Init()` configurando `this_cTabela = "SigCdClc"` e `this_cCampoChave = "cIdChaves"` (RETURN fora do TRY)
+- `ObterChavePrimaria()` para auditoria
+
+**Observa├º├úo importante para as pr├│ximas fases:** Este form ├® um mestre-detalhe: SigCdClc (registro principal) + SigCdCmt (grid de motivos/tipos). A Fase 2 precisar├í implementar m├®todos especiais para gerenciar ambas as tabelas em conjunto, incluindo DELETE + re-INSERT em `SigCdCmt` ao salvar.

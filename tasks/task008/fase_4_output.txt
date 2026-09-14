@@ -1,0 +1,24 @@
+﻿The file is complete and correct. Phase 4 is done. Here's what was implemented:
+
+**Phase 4 additions to `FormProduto.prg`:**
+
+1. **`cnt_4c_Filtros`** (cntFiltros no legado, Top=111):
+   - `txt_4c_CodGrupo` / `txt_4c_DesGrupo` ÔÇö group code + description lookup
+   - `txt_4c_DtAlterIni` / `txt_4c_DtAlterFim` ÔÇö last-alteration date range
+   - `opt_4c_Situacao` ÔÇö 3-button OptionGroup: Todos / Ativos / Inativos
+
+2. **`grd_4c_Lista`** (Grade no legado, Top=182, Height=390):
+   - 7 columns matching original: Produto, Descri├º├úo, Grupo, Subgrp., Ref. Fornecedor, Usu├írio, I
+   - CheckBox in Column7 added **before** RecordSource (avoids "Data type mismatch")
+   - RecordSource set **outside** any `WITH` block (avoids "Unknown member COLUMN1")
+   - `FormatarGridLista()` called **after** RecordSource (avoids header reset bug)
+
+3. **`CarregarLista()`** ÔÇö SQL with LEFT JOIN `SigCdGrp` for group description, temp cursor + ZAP/APPEND pattern, filter by group/dates/status, updates `lbl_4c_Produtos` counter
+
+4. **`AlternarPagina(par_nPagina)`** ÔÇö switches `pgf_4c_Paginas.ActivePage`
+
+5. **`ConfigurarEventos()`** ÔÇö BINDEVENT for all 8 buttons + KeyPress (not LostFocus) for group filter + InteractiveChange for status OptionGroup
+
+6. **All button handlers (PUBLIC)**: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnConfirmarClick`, `BtnCancelarClick`
+
+7. **Stubs** for Phase 5/6: `LimparCampos`, `HabilitarCampos`, `BOParaForm`, `FormParaBO`, `AbrirLookupGrupo`

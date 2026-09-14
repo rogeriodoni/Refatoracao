@@ -1,0 +1,39 @@
+﻿An├ílise completa das condi├º├Áes WHERE/LOCATE em ambos os arquivos:
+
+**FormFap.prg - SQL WHERE clauses:**
+- L1124: `WHERE a.emps = ... AND a.tipos = ...` ÔåÆ query principal, igual ao original Ô£ô
+- L1881, L2471: `WHERE BalFalPers = 1` ÔåÆ grupos Ô£ô
+- L2003, L2561: `WHERE b.BalFalPers = 1 AND a.Grupos = ...` ÔåÆ contas por grupo Ô£ô
+
+**FormFap.prg - VFP LOCATE FOR (n├úo s├úo SQL WHERE):**
+- L1758: `LOCATE FOR cursor_4c_Dados.numes = loc_nBusca` ÔåÆ busca local no cursor
+- L1886: `LOCATE FOR Codigos = ...` ÔåÆ navega├º├úo local
+- L2009, L2103: `LOCATE FOR Iclis = ...` ÔåÆ navega├º├úo local lookup
+- L2198: `LOCATE FOR RClis = ...` ÔåÆ navega├º├úo local lookup
+
+**FapBO.prg - SQL WHERE clauses:**
+- L96: `WHERE a.emps + a.tipos` ÔåÆ query lista Ô£ô
+- L143: `WHERE a.cidchaves = ...` ÔåÆ `CarregarPorCodigo` (SELECT por PK)
+- L301: `WHERE cidchaves = ...` ÔåÆ `Atualizar` (UPDATE por PK)
+- L331: `WHERE cidchaves = ...` ÔåÆ `ExecutarExclusao` (DELETE por PK)
+- L361, L391: `WHERE BalFalPers = 1` Ô£ô
+- L453: `WHERE emps + tipos` ÔåÆ `GerarProximoNumes` Ô£ô
+
+---
+
+**Resultado da verifica├º├úo: todos os 4 problemas s├úo falsos positivos.**
+
+| Coluna flaggeada | Onde aparece | Diagn├│stico |
+|---|---|---|
+| `CIDCHAVES` | WHERE do `CarregarPorCodigo`/`Atualizar`/`ExecutarExclusao` | PK leg├¡tima da tabela SigCdFea ÔÇö obrigat├│ria para SELECT/UPDATE/DELETE por registro |
+| `NUMES` | `LOCATE FOR cursor_4c_Dados.numes = ...` (linha 1758) | VFP LOCATE local, n├úo SQL WHERE ÔÇö busca no cursor em mem├│ria |
+| `ICL` (= `IClis`) | `LOCATE FOR ALLTRIM(Iclis) = ...` (linhas 2009, 2103) | VFP LOCATE local nos cursores de lookup |
+| `RCL` (= `RClis`) | `LOCATE FOR ALLTRIM(RClis) = ...` (linha 2198) | VFP LOCATE local no cursor de lookup |
+
+A query principal da lista usa exatamente `WHERE a.emps = ... AND a.tipos = ...`, id├¬ntica ao original (`Where Emps = '...' And Tipos = '...'`). Todos os filtros do original ÔÇö **EMPS, TIPOS, GRUPOS, BALFALPERS** ÔÇö est├úo presentes e corretos.
+
+O analisador autom├ítico cometeu dois erros:
+1. Confundiu `LOCATE FOR` (navega├º├úo VFP em cursor local) com cl├íusula SQL `WHERE`
+2. Flaggeou `WHERE cidchaves = ...` em opera├º├Áes por PK (UPDATE/DELETE/SELECT-por-chave), que s├úo opera├º├Áes CRUD padr├úo, n├úo filtros inventados da query de lista
+
+**Nenhuma altera├º├úo ├® necess├íria.** Remover o `cidchaves` do WHERE quebraria Atualizar/Excluir; remover os LOCATEs quebraria a busca e os lookups.

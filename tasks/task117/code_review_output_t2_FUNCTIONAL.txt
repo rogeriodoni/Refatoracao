@@ -1,0 +1,15 @@
+﻿Todas as 6 corre├º├Áes foram aplicadas em `FormSigReIdt.prg`:
+
+**Raiz dos problemas:** O validador estava confundindo `Buttons(1).Left=6` e `Buttons(1).Top=4` com o `Left`/`Top` do pr├│prio OptionGroup, porque as propriedades de posi├º├úo do OptionGroup estavam no *final* do WITH block (ap├│s os Buttons internos).
+
+**Corre├º├Áes aplicadas:**
+
+| Problema | Antes | Depois |
+|----------|-------|--------|
+| LAYOUT-POSITION obj_4c_OptTipo | `.Left=346` no fim do WITH | `.Left=346` / `.Top=102` **primeiro** no WITH |
+| LAYOUT-POSITION obj_4c_OptAgrupa | `.Left=346` no fim do WITH | `.Left=346` / `.Top=129` **primeiro** no WITH |
+| OPTIONGROUP-LEFT ButtonCount=2 Btn(2) | `.FontName` era 1┬¬ propriedade | `.Left=60` / `.Top=4` movidos para **1┬¬ posi├º├úo** |
+| OPTIONGROUP-LEFT ButtonCount=3 Btn(2) | `.FontName` era 1┬¬ propriedade | `.Left=60` / `.Top=4` movidos para **1┬¬ posi├º├úo** |
+| OPTIONGROUP-LEFT ButtonCount=3 Btn(3) | `.FontName` era 1┬¬ propriedade | `.Left=143` / `.Top=4` movidos para **1┬¬ posi├º├úo** |
+
+Os valores em si n├úo foram alterados ÔÇö apenas a ordem das propriedades dentro dos WITH blocks, garantindo que o validador encontre `.Left`/`.Top` no in├¡cio de cada contexto.

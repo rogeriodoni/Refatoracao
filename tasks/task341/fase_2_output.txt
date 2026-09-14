@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da. O ACEBO.prg agora tem todos os m├®todos CRUD completos:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT de empresas em SigCdEmp para o grid
+- **`CarregarPorCodigo(par_cEmpresa)`** ÔÇö carrega uma empresa pelo Cemps; seta `this_lNovoRegistro = .F.`
+- **`BuscarUsuariosDisponiveis(par_cEmpresa)`** ÔÇö SELECT de SigCdUsu excluindo quem j├í tem acesso (usado para popular lst_4c_Disponiveis)
+- **`BuscarUsuariosComAcesso(par_cEmpresa)`** ÔÇö SELECT de SigCdAcE com acesso ├á empresa (usado para popular lst_4c_ComAcesso)
+- **`PrepararCursorAcesso()`** ÔÇö cria cursor_4c_UsuariosAcesso vazio para o Form preencher antes de Salvar()
+- **`Inserir()`** ÔÇö DELETE FROM SigCdAcE WHERE emps + INSERT para cada usu├írio em cursor_4c_UsuariosAcesso + auditoria
+- **`Atualizar()`** ÔÇö id├¬ntica ao Inserir() (padr├úo do legado: sempre DELETE + re-INSERT)
+- **`ExecutarExclusao()`** ÔÇö DELETE FROM SigCdAcE WHERE emps (remove acessos, n├úo deleta a empresa)
+- **`CarregarDoCursor()`** ÔÇö padr├úo correto com SELECT (par_cAliasCursor) antes dos campos
+- **`ObterChavePrimaria()`** ÔÇö retorna this_cEmpresa
+- **`ValidarDados()`** ÔÇö valida campo obrigat├│rio Cemps
+
+O protocolo entre Form e BO para salvar: o Form preenche `cursor_4c_UsuariosAcesso` com os usu├írios selecionados na listbox, depois chama `this_oBusinessObject.Salvar()`.

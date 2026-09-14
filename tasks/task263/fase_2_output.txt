@@ -1,0 +1,12 @@
+﻿Fase 2 completa. O `SIGPRCCRBO.prg` agora tem:
+
+**Adicionado nesta fase:**
+- `Atualizar()` ÔÇö alias p├║blico para `Imprimir()`, necess├írio pelo Pattern #122 (handlers do form usam `this_oRelatorio.Atualizar()` antes de `ExecutarReportForm`)
+- `Imprimir()` agora limpa `this_cMensagemErro = ""` antes de chamar `PrepararDados()`, evitando mensagem de erro fantasma de execu├º├úo anterior
+- `Destroy()` fecha tamb├®m `CsCabecalho` e `CsRelatorio` al├®m de `cursor_4c_Emp`
+
+**J├í existia da Fase 1 (mantido):**
+- `PrepararDados()` com l├│gica completa: verifica `CrProdutos`, busca raz├úo social da empresa via SQLEXEC, cria `CsCabecalho` e `CsRelatorio` com aliases legados exatos (que o FRX SigPrCcr espera)
+- `ObterMensagemErro()`
+
+Este BO ├® um caso especial ÔÇö n├úo tem filtros pr├│prios (formul├írio tem apenas os 4 bot├Áes de relat├│rio), opera sobre o cursor `CrProdutos` j├í existente em mem├│ria (criado pelos forms pai como `FormSigPrCcc`/`FormSigPrCcp`). A Fase 3 criar├í o `FormSIGPRCCR.prg`.

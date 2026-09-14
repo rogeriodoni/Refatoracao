@@ -1,0 +1,21 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\SigReIr1BO.prg",
+    "timestamp":  "2026-06-06T20:05:00",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  160,
+                          "Original":  "THIS.this_lTrataPeso = (NVL(CsSigCdBal.trtporpeso, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(CsSigCdBal.trtporpeso)=\"L\" / THIS.this_lTrataPeso = ... / ELSE / THIS.this_lTrataPeso = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  304,
+                          "Original":  "THIS.this_lTrataPeso = (NVL(CsSigCdBal.trtporpeso, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(CsSigCdBal.trtporpeso)=\"L\" / THIS.this_lTrataPeso = ... / ELSE / THIS.this_lTrataPeso = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  2
+}

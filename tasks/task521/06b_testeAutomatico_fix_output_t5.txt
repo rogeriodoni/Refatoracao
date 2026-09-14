@@ -1,0 +1,13 @@
+﻿Zero remaining occurrences of the broken pattern. The fix is complete.
+
+All 5 lines in `TesteAutomatico.prg` that caused VFP9 Error 11 have been corrected:
+
+| Line | Before | After |
+|------|--------|-------|
+| 358 | `PEMSTATUS(..., "CarregarLista", 3) > 0` | `!EMPTY(PEMSTATUS(..., "CarregarLista", 2))` |
+| 444 | `PEMSTATUS(..., "AlternarPagina", 3) > 0` | `!EMPTY(PEMSTATUS(..., "AlternarPagina", 2))` |
+| 1087 | `PEMSTATUS(..., "BtnEncerrarClick", 3) > 0` | `!EMPTY(PEMSTATUS(..., "BtnEncerrarClick", 2))` |
+| 1094 | `PEMSTATUS(..., "BtnFecharClick", 3) > 0` | `!EMPTY(PEMSTATUS(..., "BtnFecharClick", 2))` |
+| 1095 | `PEMSTATUS(..., "BtnSairClick", 3) > 0` | `!EMPTY(PEMSTATUS(..., "BtnSairClick", 2))` |
+
+Root cause: `PEMSTATUS(obj, name, 3)` returns LOGICAL `.F.` for PUBLIC class-level methods. Comparing LOGICAL to NUMERIC (`> 0`) throws Error 11. Fix: attr=2 always returns CHARACTER (class name string when the PEM exists, `""` when it doesn't), so `!EMPTY(...)` is always a safe LOGICAL comparison.

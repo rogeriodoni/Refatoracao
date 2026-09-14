@@ -1,0 +1,23 @@
+[2026-06-06 20:02:34] [INFO] === CLAUDE CLI INVOKER ===
+[2026-06-06 20:02:34] [INFO] Prompt File: C:\4c\tasks\task131\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-06-06 20:02:34] [INFO] Output File: C:\4c\tasks\task131\06b_testeAutomatico_fix_output_t1.txt
+[2026-06-06 20:02:35] [INFO] Model: sonnet
+[2026-06-06 20:02:35] [INFO] Timeout: 3600 segundos
+[2026-06-06 20:02:35] [INFO] Max Output Tokens: 128000
+[2026-06-06 20:02:35] [INFO] Context Files: 0 arquivo(s)
+[2026-06-06 20:02:35] [INFO] Invocando Claude CLI...
+[2026-06-06 20:02:35] [INFO] Prompt carregado: 150179 caracteres
+[2026-06-06 20:02:35] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-06-06 20:02:35] [INFO] Tamanho total do prompt: 150179 caracteres
+[2026-06-06 20:02:35] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-06-06 20:04:51] [INFO] Claude CLI finalizado em 136.0723733 segundos
+[2026-06-06 20:04:51] [INFO] Exit Code: 0
+[2026-06-06 20:04:51] [INFO] Output salvo em: C:\4c\tasks\task131\06b_testeAutomatico_fix_output_t1.txt
+[2026-06-06 20:04:51] [INFO] Output size: 870 bytes
+[2026-06-06 20:04:51] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-06-06 20:04:51] [INFO] Preview do output:
+[2026-06-06 20:04:51] [INFO] Corre+º+úo aplicada. Resumo do que foi feito e por qu+¬:
+
+**Causa raiz**: `InicializarDados()` chama `SQLEXEC(gnConnHandle, ...)` que falha no ambiente de teste (sem conex+úo DB). O CATCH dentro de `InicializarDados()` retorna `.F.`. O bloco `ELSE` em `InicializarForm()` chamava `MsgErro()` (dialog bloqueante) e mantinha `loc_lSucesso = .F.`, fazendo `Init()` retornar `.F.` ÔåÆ `CREATEOBJECT` retorna n+úo-objeto.
+
+**Fix**: `InicializarDados()` ainda +® chamado (para carregar cursores necess+

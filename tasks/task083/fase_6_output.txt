@@ -1,0 +1,15 @@
+﻿O `config.prg` usa carregamento din├ómico via ADIR() conforme documentado no CLAUDE.md - n├úo precisa de SET PROCEDURE manual.
+
+**Fase 6 conclu├¡da.**
+
+**O que foi feito:**
+
+O `Formsigredtv.prg` j├í estava **100% completo** das Fases 3-5, contendo:
+- Todos os campos de filtro (demonstrativo, per├¡odo, moeda, tipo de datas, cota├º├úo, comparativo, snt, contrapartida)
+- Lookups completos com BINDEVENT para Moeda (por c├│digo e descri├º├úo) e Demonstrativo (F4/DblClick/ENTER/TAB)
+- Grids de Empresas e Or├ºamentos com CheckBoxes funcionais
+- Todos os handlers de bot├Áes e interatividade do comparativo
+
+**Bug corrigido no BO** (`sigredtvBO.prg:DisponibilizarOrcamentos()`):
+- `SELECT (0) INTO CURSOR crQtdEmp` ÔåÆ sintaxe inv├ílida que criava cursor sem campo `cEmps`
+- `csSigCdEmp.cEmps` lido sem garantia de posicionamento ÔåÆ corrigido para `crQtdEmp.cEmps` ap├│s `GO TOP IN crQtdEmp`

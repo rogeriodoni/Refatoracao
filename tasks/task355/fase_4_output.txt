@@ -1,0 +1,21 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormCat.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD no `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com todos os props can├┤nicos (Picture, PicturePosition=13, Comic Sans MS, Themes=.F., etc.)
+- `cmd_4c_Encerrar` no `cnt_4c_Saida` (padr├úo can├┤nico Left=917, Width=90)
+- `grd_4c_Lista` com 4 colunas (cods, descs, gdegrps, prazos) ÔÇö ColumnCount fora do WITH (Problema 36)
+- BINDEVENTs para todos os bot├Áes e DblClick no grid
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- `cmd_4c_Confirmar` e `cmd_4c_Cancelar` no `cnt_4c_BotoesAcao`
+- BINDEVENTs para os bot├Áes de a├º├úo
+
+**`CarregarLista()` ÔÇö completo:**
+- RecordSource + ColumnCount fora do WITH
+- ControlSource, Width, Header1.Caption e ReadOnly para cada coluna
+- Cabe├ºalhos reconfigurados ap├│s RecordSource (Problema 2 FORMCOR)
+
+**Novos m├®todos:**
+- `AlternarPagina()` ÔÇö navega entre p├íginas e recarrega lista ao voltar
+- `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick` ÔÇö todos PUBLIC com l├│gica completa
+- `FormParaBO()`, `BOParaForm()`, `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()` ÔÇö com guards PEMSTATUS para funcionar mesmo antes da Fase 5 adicionar os campos da Page2

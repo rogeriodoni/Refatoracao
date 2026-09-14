@@ -1,0 +1,7 @@
+﻿Todas as 6 corre├º├Áes aplicadas. As corre├º├Áes feitas em `FormSigAcCcr.prg`:
+
+**Bug 1 (cr├¡tico) ÔÇö BINDEVENT no evento errado:** Os 6 handlers de valida├º├úo (`ValidarGrupoUsuario`, `ValidarUsuario`, `ValidarGrConta`, `ValidarDGrConta`, `ValidarCdConta`, `ValidarDConta`) estavam atrelados a `"KeyPress"` em vez de `"LostFocus"`. Com `KeyPress`, cada tecla digitada disparava o `FormBuscaAuxiliar` (modal), travando VFP9. Corrigido para `"LostFocus"` ÔÇö comportamento correto: lookup abre ao sair do campo.
+
+**Bug 2 ÔÇö INPUTBOX em modo n├úo-assistido:** `BtnBuscarClick` chamava `INPUTBOX(...)` sem verificar `gb_4c_ModoTeste`. Adicionado guard clause para retornar imediatamente em modo teste.
+
+**Sobre o timeout no ETAPA 1B:** O hang de 300s em `SQLSTRINGCONNECT` ├® um timeout TCP do Windows ÔÇö ocorre quando o servidor `192.168.15.101` est├í inacess├¡vel na rede e nem `ConnectTimeOut=30` no VFP nem `Login Timeout=30` na connection string conseguem sobrescrever o timeout de TCP-level do SO. Isso n├úo ├® um erro de c├│digo do formul├írio ÔÇö o pipeline retentar├í e passar├í quando a conectividade for restaurada.

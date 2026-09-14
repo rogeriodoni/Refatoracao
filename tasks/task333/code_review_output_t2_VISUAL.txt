@@ -1,0 +1,17 @@
+﻿Nenhuma corre├º├úo necess├íria. O `cnt_4c_Saida.Left = 917` **j├í est├í correto** ÔÇö ├® o valor can├┤nico definido na Regra 10 do CLAUDE.md:
+
+> **Padrao Canonico Saida/Encerrar (PREVALECE sobre PILAR 1)**
+> | `cnt_4c_Saida` | Left | **917** |
+>
+> Se o SCX legado tem `Grupo_Saida.Left=935` (ou qualquer outro valor), **IGNORAR e usar o can├┤nico**.
+
+O code review flagou a diferen├ºa entre o legado (Left=425) e o migrado (Left=917) como "LAYOUT-POSITION", mas essa diferen├ºa ├® **intencional e obrigat├│ria** ÔÇö o form migrado opera em 1000px, e o bot├úo Encerrar deve sempre ficar em Left=917 independente do que o SCX legado tinha.
+
+Todos os valores can├┤nicos est├úo corretos no arquivo:
+- `cnt_4c_Saida.Left = 917` Ô£ô
+- `cnt_4c_Saida.Width = 90` Ô£ô  
+- `cnt_4c_Saida.Height = 85` Ô£ô
+- `cmd_4c_Encerrar.Left = 5`, `Top = 5`, `Width = 75`, `Height = 75` Ô£ô
+- `cmd_4c_Encerrar.Caption = "Encerrar"` Ô£ô
+
+Nenhuma altera├º├úo no arquivo ├® necess├íria.

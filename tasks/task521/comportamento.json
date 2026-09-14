@@ -1,0 +1,255 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 8,
+    "totalQueries": 6,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "MontaGrade", "From crSigCdSei Where Empty", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDSET",
+      "evento": "Procedure",
+      "linhas": 23,
+      "codigoOriginal": "Private pKey\n\npKey = crSigCdSet.Setores\n\nWith ThisForm.Pagina.Dados.grdLocalizacoes\n\t.RecordSource = ''\n\n\tThisForm.poDataMgr.Requery('crSigCdSei')\n\tSelect crSigCdSei\n\tScan\n\t\tThisForm.poDataMgr.CursorQuery('SigPrLcl', 'LocalPrLoc', 'Codigos', crSigCdSei.Locals, 'Descricaos')\n\t\tIf Not Eof('LocalPrLoc')\n\t\t\tReplace Descricaos With LocalPrLoc.Descricaos In crSigCdSei\n\t\tEndIf\n\tEndScan\n\tGo Top In crSigCdSei\n\n\t.RecordSource          = 'crSigCdSei'\n\t.Column1.ControlSource = 'crSigCdSei.Locals'\n\t.Column2.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSET",
+      "evento": "Init",
+      "linhas": 28,
+      "codigoOriginal": "Private pKey\n\npKey = Replicate(Chr(254), 10)\n\nlcQrySetor = [Select * From SigCdSet]\nlcQrySetoI = [Select *, Space(20) as Descricaos From SigCdSei Where Setores = ?pKey]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdSet', 'Setores', 'crSigCdSet', '', ThisForm.Pagina.Lista.Grade, lcQrySetor)\n\t\t\t.pfSqlTabela(1).pColuna('Setores', '', '', 'Setor',     080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Descrs',  '', ''... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDSET",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSET",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "loDad = ThisForm.Pagina.Dados\n\nSelect crSigCdSet\nDo Case\n\tCase Not Empty(loDad.getSetores.Value)\n\t\tLocate For Setores = loDad.getSetores.Value\n\n\tCase Not Empty(loDad.getDescrs.Value)\n\t\tLocate For Descrs = loDad.getDescrs.Value\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSET",
+      "evento": "Click",
+      "linhas": 40,
+      "codigoOriginal": "LParameters lnOpcao\n\nIf (Type('lnOpcao') = 'N')\n\tThis.Value = lnOpcao\nEndIf\n\nSelect crSigCdSet\n\nIf Not DoDefault(lnOpcao)\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf\n\nThisForm.MontaGrade\n\nloDad = ThisForm.Pagina.Dados\n\nDo Case\n\tCase Inlist(ThisForm.pcEscolha, 'PROCURAR', 'INSERIR')\n\t\tloDad.getSetores.Setfocus\t\n\n\tCase (ThisForm.pcEscolha = 'ALTERAR')\n\t\tloDad.grdLocalizacoes.Column1.Setfocus\t\n\n\tCase Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tloDad.Grupo_Salva.Salva.Setfocus\nEndCase\n\nloDad.cm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSET",
+      "evento": "Click",
+      "linhas": 63,
+      "codigoOriginal": "Private pKey\n\npKey = crSigCdSet.Setores\n\nloDad = ThisForm.Pagina.Dados\n\nDelete From crSigCdSei Where Empty(Locals)\n\nIf InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Empty(loDad.getSetores.Value)\n\t\t=MessageBox('Obrigatório Informar o Setor!!!', 48, '')\n\t\tloDad.getSetores.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(loDad.getDescrs.Value)\n\t\t=MessageBox('Obrigatório Informar a Descrição!!!', 48, '')\n\t\tloDad.getDescrs.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tSelect * ;\n\t  From crSigCdSei ;\n\t  Into Cursor csIten... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade,From crSigCdSei Where Empty",
+        "metodosFormChamados": "CursorQuery,Update",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSET",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSET.pagina.dados.grdLocalizacoes.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 70,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrLcl', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tThisForm.Pagina.Dados.grdLocalizacoes.Column2.Text1.Value = crListaRemota.Descricaos\n\tUse In crListaRemota\nElse\n\tThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Sqlexecute,Antvalue Or",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSET.pagina.dados.grdLocalizacoes.Column1.Text1",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "loDad = ThisForm.Pagina.Dados\n\nThisForm.AntValue = This.Value\nReturn Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n\t   Not Empty(loDad.getSetores.Value) And Not Empty(loDad.getDescrs.Value)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSET.pagina.dados.grdLocalizacoes.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDSET.pagina.dados.cmdApagar",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "Select CrSigCdSei\nIf Not Eof('crSigCdSei')\n\tDelete In crSigCdSei\n\tSkip\n\tSkip -1\n\n\tSelect * ;\n\t  From crSigCdSei ;\n\t Where Empty(Locals) ;\n\t  Into Cursor TmpInsGrupo\n\n\tIf (Reccount('TmpInsGrupo') = 0)\n\t\tGo Bottom In crSigCdSei\n\n\t\tInsert Into crSigCdSei (Setores, cIdChaves) Values (crSigCdSet.Setores, fUniqueIds())\n\tEndIf\n\tThisForm.Pagina.Dados.grdLocalizacoes.Column1.Text1.SetFocus\n\tKeyboard '{DnArrow}'\n\n\tThisForm.Pagina.Dados.grdLocalizacoes.Refresh\nEndIf\n* Fim **********************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSET.pagina.dados.cmdApagar",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "loDad = ThisForm.Pagina.Dados\n\nReturn Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n\t   Not Empty(loDad.getSetores.Value) And Not Empty(loDad.getDescrs.Value)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDSET.Init",
+      "queryOriginal": "lcQrySetor = [Select * From SigCdSet]",
+      "tabelas": "SigCdSet",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDSET.Init",
+      "queryOriginal": "lcQrySetoI = [Select *, Space(20) as Descricaos From SigCdSei Where Setores = ?pKey]",
+      "tabelas": "SigCdSei",
+      "colunas": "Setores",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDSET.Click",
+      "queryOriginal": "Delete From crSigCdSei Where Empty(Locals)",
+      "tabelas": "crSigCdSei",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDSET.Click",
+      "queryOriginal": "\tSelect * ; \t  From crSigCdSei ; \t  Into Cursor csIten... [TRUNCADO]",
+      "tabelas": "crSigCdSei",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDSET.pagina.dados.cmdApagar.Click",
+      "queryOriginal": "\tSelect * ; \t  From crSigCdSei ; \t Where Empty(Locals) ; \t  Into Cursor TmpInsGrupo",
+      "tabelas": "crSigCdSei",
+      "colunas": "TmpInsGrupo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDSET.pagina.dados.cmdApagar.Click",
+      "queryOriginal": "\t\tInsert Into crSigCdSei (Setores, cIdChaves) Values (crSigCdSet.Setores, fUniqueIds())",
+      "tabelas": "crSigCdSei",
+      "colunas": "Setores,cIdChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdSet", "SigCdSei", "crSigCdSei"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

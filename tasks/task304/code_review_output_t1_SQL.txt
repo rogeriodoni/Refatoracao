@@ -1,0 +1,5 @@
+﻿Both fixes applied:
+
+1. **BO `SIGPRIMPBO.prg`** ÔÇö `UPDATE SigMvCab WHERE CidChaves = ...` ÔåÆ `WHERE EmpDopNums = EscaparSQL(LEFT(loc_cEDN, 29))`. `EmpDopNums` is the column the original code uses as identity key (`EMPDOPNUMS` is in the original WHERE list and the field was already computed as `loc_cEDN = loc_cEmps + loc_cDopes + STR(loc_nInicio, 6)`).
+
+2. **FORM `FormSIGPRIMP.prg`** ÔÇö Removed the dead block referencing the undefined variable `loc_oControl` (should have been `loc_oObjeto`) and the invalid recursive call. Since `cmd_4c_Visualizar`/`cmd_4c_Imprimir` are CommandButtons with no child controls, the `LOOP` alone is correct.

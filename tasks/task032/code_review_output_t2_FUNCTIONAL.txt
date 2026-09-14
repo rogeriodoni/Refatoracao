@@ -1,0 +1,31 @@
+﻿All 19 detected problems are **false positives**. Here's the analysis:
+
+**[METODO-INEXISTENTE] - FALSE POSITIVE**  
+`CarregarCursores()` is defined at line 975 as `PROTECTED FUNCTION CarregarCursores()`. The validator failed to detect it.
+
+**[LAYOUT-POSITION] ÔÇö Labels and CheckBoxes (13 issues) - FALSE POSITIVES**  
+The validator compares original SCX coordinates (relative to the form) against migrated coordinates (relative to Page1). Since `pgf_4c_Paginas.Top = 85`, the correct migrated coordinate is `original ÔêÆ 85`. Every flagged control follows this exactly:
+
+| Control | Original Top | Expected (ÔêÆ85) | Code Top |
+|---------|-------------|---------------|----------|
+| lbl_4c_LblPeriodo | 129 | 44 | 44 Ô£ô |
+| lbl_4c_Lbl_fator | 183 | 98 | 98 Ô£ô |
+| lbl_4c_Lbl_estoque | 184 | 99 | 99 Ô£ô |
+| chk_4c_Ck_Pagamentos | 159 | 74 | 74 Ô£ô |
+| chk_4c_Ck_Recebimentos | 182 | 97 | 97 Ô£ô |
+| chk_4c_Ck_MarcaEmp/Ope/Cla | 283 | 198 | 198 Ô£ô |
+
+**[LAYOUT-POSITION] ÔÇö OptionGroups (6 issues) - FALSE POSITIVES**  
+The validator reports `Top=5`/`Top=6` and `Left=5` for all OptionGroups ÔÇö these are the coordinates of `Buttons(1)` inside each group, not the group itself. The OptionGroup containers are correctly positioned:
+
+| Control | Validator (wrong) | Code (correct) | Expected |
+|---------|------------------|----------------|---------|
+| obj_4c_Opt_AnaSi | Top=6, Left=5 | Top=13, Left=92 | 98ÔêÆ85=13 Ô£ô |
+| obj_4c_OptDatas | Top=6, Left=5 | Top=39, Left=287 | 124ÔêÆ85=39 Ô£ô |
+| obj_4c_OptSaldos | Top=6, Left=5 | Top=40, Left=798 | 125ÔêÆ85=40 Ô£ô |
+| obj_4c_Opt_Juros | Top=5, Left=5 | Top=68, Left=646 | 153ÔêÆ85=68 Ô£ô |
+| obj_4c_OptAutorizados | Top=5, Left=5 | Top=145, Left=92 | 230ÔêÆ85=145 Ô£ô |
+
+**No changes are needed.** The form is functionally and positionally correct. The validator has two systemic bugs affecting this form:
+1. It doesn't subtract `PageFrame.Top` (85) when checking controls inside Page1
+2. It reads `Buttons(1).Top/.Left` instead of the OptionGroup's own `Top`/`Left`

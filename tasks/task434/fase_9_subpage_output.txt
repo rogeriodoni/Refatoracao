@@ -1,0 +1,10 @@
+﻿FASE 9 conclu├¡da. O `ConfigurarPgPage1()` foi inserido corretamente:
+
+- **Linha 1230**: `THIS.ConfigurarPgPage1()` adicionado em `ConfigurarPaginaDados()` antes de `TornarControlesVisiveis`
+- **Linhas 1237ÔÇô1312**: Novo `PROTECTED PROCEDURE ConfigurarPgPage1()` com todos os 11 objetos esperados:
+  - `grd_4c_Grade` (grid principal, RecordSource="csGrade")
+  - 5 Column WITH blocks (ColumnOrder, ControlSource, Width, Movable, Resizable, Sparse onde necess├írio)
+  - 5 cabe├ºalhos via `.Header1.Caption` (incluindo "Descri"+CHR(231)+CHR(227)+"o" sem literal acentuado)
+  - `Column3.Text1.InputMask = "999.9999"` para Coeficiente (campo num├®rico)
+  - `Column2.ReadOnly = .T.` para Descri├º├úo
+  - 6 BINDEVENTs para Column1/3/4 (When/Valid/LostFocus)

@@ -1,0 +1,11 @@
+﻿Fase 2 conclu├¡da. O `SigPrPpcBO.prg` foi completado com os seguintes m├®todos:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna combina├º├úo empresa+opera├º├úo (form OPERACIONAL n├úo tem PK singular)
+- **`ValidarGrupo(par_cGrupo)`** ÔÇö verifica SigCdGcr.codigos, popula `this_cDGrupo`
+- **`ValidarConta(par_cConta)`** ÔÇö verifica SigCdCli.IClis, popula `this_cContaDesc`
+- **`ValidarOperacao(par_cOperacao)`** ÔÇö verifica SigCdOpe.Dopes
+- **`ValidarEmpresa(par_cEmpresa)`** ÔÇö verifica SigCdEmp.Cemps/Razas, popula `this_cEmpresaDesc`
+- **`ValidarFiltros()`** ÔÇö orquestra todas as valida├º├Áes obrigat├│rias (Grupo, Conta, Per├¡odo) e opcionais (Opera├º├úo, Empresa); retorna `""` se tudo v├ílido ou mensagem de erro descritiva
+- **`ConsultarMovimentacoes()`** ÔÇö executa o SELECT em SigMvCab com BETWEEN nas datas (fim com 23:59:59), filtros AND opcionais por Grupo/Conta/Opera├º├úo/Empresa, ORDER BY Emps, Dopes, Numes ÔåÆ popula cursor `TprMvCab` (nome preservado para compatibilidade com SigPrPpp)
+
+Pontos t├®cnicos respeitados: colunas reais do schema (`GrupoOs/GrupoDs`, `ContaOs/ContaDs`, `Cemps/Razas`), CHR() para acentos, TRY/CATCH com MsgErro, cursores tempor├írios de valida├º├úo fechados ap├│s uso, RETURN fora do TRY.

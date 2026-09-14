@@ -1,0 +1,718 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPdM13.SCX
+* Data/Hora: 18/06/2026 17:09:10
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPDM13
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPDM13
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPDM13.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPDM13.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGPDM13
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPDM13.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM13.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM13.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM13.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM13.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM13.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPDM13.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPDM13.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Operação
+  Parent: SIGPDM13
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGPDM13.Operação
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCodigo
+  Parent: SIGPDM13.Operação
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetEmpresa
+  Parent: SIGPDM13.Operação
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetOperação
+  Parent: SIGPDM13.Operação
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape1
+  Parent: SIGPDM13
+  Class: shape
+  BaseClass: shape
+
+Objeto: Qtd_os
+  Parent: SIGPDM13
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Ok
+  Parent: SIGPDM13
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Checagem de Devolução de Pedras"
+  ControlBox = .F.
+  Closable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Name = "SIGPDM13"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Grade
+------------------------------------------------------------
+  ColumnCount = 4
+  Height = 426
+  Left = 67
+  Panel = 1
+  TabIndex = 2
+  Top = 132
+  Width = 673
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Courier New"
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 216
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.ColumnOrder = 4
+  Column2.ControlSource = ""
+  Column2.Width = 122
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column4"
+  Column3.ColumnOrder = 3
+  Column3.ControlSource = ""
+  Column3.Width = 150
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 2
+  Column4.ControlSource = ""
+  Column4.Width = 150
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentação"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Grade.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tipo de Material"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Grade.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Componente"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Grade.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Operação
+------------------------------------------------------------
+  Top = 94
+  Left = 60
+  Width = 372
+  Height = 40
+  BackStyle = 0
+  BorderWidth = 0
+  TabIndex = 1
+  BorderColor = 136,189,188
+  Name = "Operação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Operação.Say1
+------------------------------------------------------------
+  FontSize = 8
+  Caption = "Movimentação :"
+  Left = 10
+  Top = 12
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Operação.GetCodigo
+------------------------------------------------------------
+  ControlSource = "tmpnens.numps"
+  Format = "L"
+  InputMask = "9999999999"
+  Left = 300
+  ReadOnly = .T.
+  Top = 8
+  Width = 81
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 3
+  Name = "GetCodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Operação.GetEmpresa
+------------------------------------------------------------
+  ControlSource = "tmpnens.emps"
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 104
+  ReadOnly = .T.
+  Top = 8
+  Width = 36
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 3
+  Name = "GetEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Operação.GetOperação
+------------------------------------------------------------
+  ControlSource = "tmpnens.dopps"
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 142
+  ReadOnly = .T.
+  Top = 8
+  Width = 156
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 3
+  Name = "GetOperação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 699
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Qtd_os
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 21
+  InputMask = "9999"
+  Left = 596
+  MaxLength = 4
+  TabIndex = 7
+  Top = 566
+  Width = 124
+  Name = "Qtd_os"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPDM13.Ok
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<OK"
+  Name = "Ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPDM13
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pForm,pEnvelope
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Set DataSession To pForm.DataSessionId
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		lcSql = [Select a.EmpDnPs, a.Cmats, a.Qtds, a.TpOps From SigCdNei a, SigCdOpd b, SigOpOpt c ]+;
+				[Where a.Nenvs = ]+Str(pEnvelope,10)+[ And a.Dopps = b.Dopps And b.SepPedras = 1 ]+;
+				[And b.ChkDests <> 4 And a.TpOps = c.Cods And c.chkDevs = 'S' ]+;
+				[union all ]+;
+				[Select a.EmpDnPs, a.Cmats, (a.Qtds*-1) as Qtds, a.TpOps From SigCdNei a, SigCdOpd b ]+;
+				[Where a.Nenvs = ]+Str(pEnvelope,10)+[ And a.Dopps = b.Dopps ]+;
+				[And b.ChkDests = 4 ]+;
+				[Order by a.Cmats ]
+		If (ThisForm.poDataMgr.SqlExecute(lcSql, 'LocalNoo') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalNoo)')
+			Return 0
+		EndIf
+		Select LocalNoo
+		Sum Qtds to _Total
+		Go Top
+
+		With ThisForm.Grade
+			.RecordSource = 'LocalNoo'
+			.Column1.ControlSource   = 'LocalNoo.EmpDnPs'  	
+			.Column2.ControlSource   = 'LocalNoo.Cmats' 	
+			.Column3.ControlSource   = 'LocalNoo.TpOPs'
+			.Column4.ControlSource   = 'LocalNoo.Qtds'
+			.Refresh
+		EndWith
+		ThisForm.Qtd_os.Value = _Total
+		ThisForm.Qtd_os.Refresh
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM13.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM13.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM13.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (LocalUni.Fators <> 0) And Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Not Empty(xNensi.CMats)
+	Select xNensi
+	Replace Pesos With (xNensi.Qtds * LocalUni.Fators) In xNensi
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM13.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM13.Operação.GetCodigo
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM13.Operação.GetEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM13.Operação.GetOperação
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM13.Qtd_os
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPDM13.Ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPDM13
+RESERVED3 (ClassInfo): parentform
+pcescolha
+podatamgr
+recnoant
+usulibs
+zsen
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

@@ -1,0 +1,11 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\sigprmdpBO.prg` foi criado com:
+
+- **`DEFINE CLASS sigprmdpBO AS BusinessBase`** com `this_cTabela = "SigOpClC"` e `this_cCampoChave = "CidChaves"`
+- **Propriedades declaradas**:
+  - `this_lCheckCadPro`, `this_lManterBarra`, `this_lCalculaCusto` ÔÇö flags de comportamento (par├ómetros do form original: `checkcadpro`, `manterbarra`, `calculacusto`)
+  - `this_cCprosAnt`, `this_cCprosNov` ÔÇö par de c├│digos sendo processado
+  - `this_nBarraAnt` ÔÇö c├│digo de barras do produto antigo (usado no modo MantterBarra)
+  - `this_nTotal`, `this_nProcessados`, `this_nErro` ÔÇö estado do processamento em lote
+  - `this_cArquivoAtual`, `this_cCampoAtual` ÔÇö feedback visual durante o loop
+  - `this_cUsuar` ÔÇö usu├írio logado para `fGravarLog`
+- **`Init()`** chama `DODEFAULT()`, configura tabela/chave e captura o usu├írio logado

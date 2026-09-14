@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. A Fase 5 foi implementada com sucesso.
+
+**O que foi adicionado em `Formsigprcom.prg`:**
+
+**`ConfigurarPaginaDados()` expandido com:**
+- `cnt_4c_BotoesAcao` ÔÇö container com bot├Áes Confirmar (`cadastro_salvar_60.jpg`) e Cancelar, ambos com BINDEVENT para os handlers corretos
+- `lbl_4c_Label1` ÔÇö "Produto :" (Top=108, compensa├º├úo +29)
+- `txt_4c__produto` ÔÇö campo c├│digo do produto com BINDEVENT LostFocus ÔåÆ `ValidarProdutoCodigo`
+- `txt_4c_Dpro` ÔÇö campo descri├º├úo do produto com BINDEVENT LostFocus ÔåÆ `ValidarProdutoDescricao`
+- `lbl_4c_Label8` ÔÇö "Grupo :" (Top=134)
+- `txt_4c_Cgru` / `txt_4c_Dgru` ÔÇö campos de grupo somente-leitura (`ReadOnly=.T., Enabled=.F.`), pois o `When` original retorna `.F.`
+
+**Novos m├®todos adicionados (PUBLIC):**
+- `BtnSalvarClick` ÔÇö valida produto em modo INSERIR, chama `SalvarEstoqueMaximo`, navega de volta ou fecha se modo externo
+- `BtnCancelarClick` ÔÇö seta `this_lPlCancelar`, volta ├á lista ou fecha se modo externo
+- `ValidarProdutoCodigo` ÔÇö lookup FormBuscaAuxiliar em SigCdPro por c├│digo; preenche descri├º├úo, grupo e acerta o grid
+- `ValidarProdutoDescricao` ÔÇö lookup por descri├º├úo, habilitado apenas quando c├│digo ainda n├úo informado
+- `PreencherCabecalhoProduto` ÔÇö popula `txt_4c_Cgru` e `txt_4c_Dgru` a partir das propriedades do BO
+- `AcertarGridPorProduto` ÔÇö chama `BuscarPorProduto` no BO e atualiza flags `lTemCor`/`lTemTam`/`nTipoEstos`

@@ -1,0 +1,16 @@
+﻿Encontrei os dois casos. Ambos s├úo **falsos positivos** do review autom├ítico ÔÇö nenhuma corre├º├úo ├® necess├íria.
+
+**CIDCHAVES** ÔÇö Ocorre exclusivamente em:
+- `LGRBO.prg:151` ÔÇö `WHERE a.cidchaves = EscaparSQL(par_cIdChaves)` ÔåÆ lookup por PK em `CarregarPorCodigo()`, opera├º├úo CRUD padr├úo
+- `LGRBO.prg:324` ÔÇö `WHERE cidchaves = ...` no UPDATE
+- `LGRBO.prg:348-349` ÔÇö `WHERE cidchaves = ...` no DELETE
+
+Nenhum desses ├® filtro inventado no m├®todo `Buscar()`. O `Buscar()` usa corretamente `cserifab` e `cdatas` (alinhado com o original). As ocorr├¬ncias de `cidchaves` em WHERE s├úo opera├º├Áes leg├¡timas de PK ÔÇö equivalentes ao `CODIGO` que o original passa via `Get_codigo.Value`.
+
+**CONTROLCOUNT** ÔÇö N├úo ├® coluna SQL. ├ë a propriedade VFP9 `ControlCount` nos m├®todos de itera├º├úo de controles do form:
+- `FormLGR.prg:1457` ÔÇö `FOR loc_i = 1 TO par_oContainer.ControlCount`
+- `FormLGR.prg:1471` ÔÇö `PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0`
+
+O review confundiu o nome da propriedade de objeto VFP9 com um nome de coluna SQL.
+
+**Conclus├úo:** Nenhum arquivo precisa ser alterado. Os dois alertas s├úo falsos positivos ÔÇö o c├│digo migrado est├í correto.

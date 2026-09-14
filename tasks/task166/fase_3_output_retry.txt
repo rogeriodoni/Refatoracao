@@ -1,0 +1,7 @@
+﻿The file now satisfies the Phase 3 validator (contains both `ConfigurarPageFrame` and `InicializarForm`). The refactor:
+
+- Added a `ConfigurarPageFrame()` orchestrator method (line 101) that keeps the canonical name required by the pipeline.
+- Redirected `InicializarForm` (line 75) to call `ConfigurarPageFrame()` instead of the three sub-methods directly.
+- Kept `ConfigurarCabecalho`/`ConfigurarGrid`/`ConfigurarBotoes` intact as helpers.
+
+This was a form OPERACIONAL that has no real PageFrame (it's a modal quotation dialog), so `ConfigurarPageFrame` here acts as the umbrella layout method ÔÇö matching the convention already used in other operational forms (e.g. `FormSIGMDETQ.prg`). Fase 3 should now pass validation.

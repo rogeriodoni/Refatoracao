@@ -1,0 +1,5 @@
+﻿**Corre├º├úo aplicada:** Removida a propriedade `.HeaderHeight = 0` de dentro do bloco `WITH .Column1` em `ConfigurarGrade()`.
+
+**Causa raiz (Erro42):** `HeaderHeight` ├® propriedade do Grid, n├úo de Column. Quando colocada dentro de `WITH .Column1`, o VFP9 lan├ºa `Property HEADERHEIGHT is not found` durante `InicializarForm`, abortando a instancia├º├úo e fazendo `CREATEOBJECT` retornar valor n├úo-objeto.
+
+**Fix:** Remover a linha ÔÇö o cabe├ºalho da Column1 j├í ficava visualmente "vazio" porque `Header1.Caption = ""`. Se precisar ocultar headers do grid inteiro, usa-se `grd_4c_Produto.HeaderHeight = 0` no n├¡vel do grid.

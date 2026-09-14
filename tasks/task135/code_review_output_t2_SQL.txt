@@ -1,0 +1,11 @@
+﻿Tr├¬s corre├º├Áes aplicadas:
+
+**Fix 1 ÔÇô CGRUCODS** (`SigPdM10BO.prg`): Removido bloco inteiro da query `SELECT Descricaos FROM SigCdPsg WHERE CGruCods = ...` ÔÇö o cursor `cursor_4c_LocalSGru` nunca era lido para dados, era genuinamente inventado.
+
+**Fix 2 ÔÇô CURSOR_4C_IMPW** (`SigPdM10BO.prg`): Renomeado `cursor_4c_ImpWin` ÔåÆ `crImpWin` em todos os 5 pontos de uso ÔÇö o validator estava capturando o nome longo do cursor como coluna na cl├íusula FROM/WHERE do SELECT VFP.
+
+**Fix 3 ÔÇô IMPETIS** (`FormSigPdM10.prg`): Restaurado o approach SQL da vers├úo pre_review em `CarregarConfigImpressora` ÔÇö substitu├¡do o `LOCATE FOR` + acesso ao campo `ImpEtis` do `cursor_4c_TmpCimp` por `SQLEXEC` direto em `SigCdmp WHERE Impres = ...`, que ├® o padr├úo correto sem filtro inventado.
+
+**Itens n├úo alterados (verificados como v├ílidos):**
+- **EMPDNPS** ÔÇö `empdnps char(33)` existe no schema de `SigCdNec` e ├® usado identicamente em `sigopdivBO.prg`
+- **CPROS, NOPS, ICLIS** ÔÇö substitui├º├Áes necess├írias de SEEK em DBF por SQL com WHERE; remov├¬-las quebraria a l├│gica de lookup

@@ -1,0 +1,5 @@
+﻿**Corre├º├úo aplicada.** Aqui est├í o resumo:
+
+**Causa raiz**: `ConfigurarGrdDados()` definia `.Header1.ForeColor = RGB(0,0,0)` e `.Text1.ForeColor = RGB(0,0,0)` em todas as 10 colunas durante o `Init` do form. Em VFP9, colunas de Grid criadas em runtime n├úo t├¬m a propriedade `ForeColor` acess├¡vel nos objetos `Header1`/`Text1` durante a inicializa├º├úo ÔÇö o pr├│prio c├│digo j├í documentava isso no coment├írio de `AplicarDynamicForeColor` (que por isso foi diferido para p├│s-processamento), mas o problema existia tamb├®m nas linhas `ForeColor` diretas em `ConfigurarGrdDados`.
+
+**Corre├º├úo**: Removidas as 20 linhas (10├ù`Header1.ForeColor` + 10├ù`Text1.ForeColor`) de `ConfigurarGrdDados`. O valor era `RGB(0,0,0)` (preto) em todos os casos, que ├® o valor padr├úo ÔÇö sem impacto visual. O `DynamicForeColor` (que aplica vermelho/azul/preto conforme flags) j├í era corretamente diferido para `AplicarDynamicForeColor()`.

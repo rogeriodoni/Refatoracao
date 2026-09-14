@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCIC",
+      "evento": "Init",
+      "linhas": 67,
+      "codigoOriginal": "Lparameters loForm1, lcIdChave1\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.LockScreen = .t.\n\tm.loForm1 = Iif(Type('m.loForm1')=='O',m.loForm1,ThisForm)\n\tm.lcIdchave1 = Iif(Type('m.lcIdchave1')=='C', m.lcIdchave1, '')\n\t.poForm1 = m.loForm1\n\t.pcIdChaves = m.lcIdChave1\n\t.DataSessionId = .poForm1.DataSessionId\n\tm.lcArqIcone = ''\n\n\tIf (Used('crProg2') And Seek(.pcIdChaves,'crProg2','pkChaves'))\n\t\tIf Not IsEmpty(crP... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCIC",
+      "evento": "KeyPress",
+      "linhas": 6,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIf nKeyCode = 27\n\tThisForm.Release \nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCIC",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCIC.Grid1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS nColIndex\nLocal lcarquivo\n\nlcarquivo = Alltrim(crSigSyIco1.ctmpicones)\n\nIf Not IsEmpty(lcarquivo)\n\tThisForm.Icone.picture = lcarquivo\n\tThisForm.Icone.visible = .t.\nElse \n\tThisForm.Icone.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCIC.Grid1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS nColIndex\nLocal lcarquivo\n\nlcarquivo = Alltrim(crSigSyIco1.ctmpicones)\n\nIf Not IsEmpty(lcarquivo)\n\tThisForm.Icone.picture = lcarquivo\n\tThisForm.Icone.visible = .t.\nElse \n\tThisForm.Icone.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCIC.Grid1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS nDirection\nLocal lcarquivo\n\nlcarquivo = Alltrim(crSigSyIco1.ctmpicones)\n\nIf Not IsEmpty(lcarquivo)\n\tThisForm.Icone.picture = lcarquivo\n\tThisForm.Icone.visible = .t.\nElse \n\tThisForm.Icone.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCIC.Grid1.Column1.Text1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "Local lcArqIcone\n\nm.lcArqIcone = Lower(Alltrim(This.Value))\nm.lcArqIcone = Iif(m.lcArqIcone=='< nenhum >','',m.lcArqIcone)\nIf (Used('crProg1') And Seek(ThisForm.pcIdChaves,'crProg1','pkChaves'))\n\tSelect ('crProg1')\n\tReplace barrapict With m.lcArqIcone,barraforms With Iif(!Empty(barraforms),barraforms,crProg1.programas) In ('crProg1')\nEndIf \nIf (Used('crProg2') And Seek(ThisForm.pcIdChaves,'crProg2','pkChaves'))\n\tSelect ('crProg2')\n\tReplace barrapict With m.lcArqIcone,barraforms With Iif(!Empty(b... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCIC.Grid1.Column1.Text1",
+      "evento": "KeyPress",
+      "linhas": 6,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIf nKeyCode = 13\n\tthis.dblclick\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCIC.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (.f.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

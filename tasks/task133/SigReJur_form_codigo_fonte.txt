@@ -1,0 +1,1372 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReJur.SCX
+* Data/Hora: 06/06/2026 21:02:06
+* Total de registros: 43
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREJUR
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGREJUR
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGREJUR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGREJUR.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGREJUR
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape3
+  Parent: SIGREJUR
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape2
+  Parent: SIGREJUR
+  Class: shape
+  BaseClass: shape
+
+Objeto: Grid1
+  Parent: SIGREJUR
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREJUR.Grid1.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREJUR.Grid1.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREJUR.Grid1.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREJUR.Grid1.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREJUR.Grid1.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREJUR.Grid1.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREJUR.Grid1.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREJUR.Grid1.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREJUR.Grid1.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREJUR.Grid1.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREJUR.Grid1.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREJUR.Grid1.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREJUR.Grid1.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREJUR.Grid1.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Confirma
+  Parent: SIGREJUR
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say11
+  Parent: SIGREJUR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREJUR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREJUR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREJUR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say12
+  Parent: SIGREJUR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say13
+  Parent: SIGREJUR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say15
+  Parent: SIGREJUR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_SOPER
+  Parent: SIGREJUR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_SGRUPO
+  Parent: SIGREJUR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_SCONTA
+  Parent: SIGREJUR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_SDCONTA
+  Parent: SIGREJUR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_OPER
+  Parent: SIGREJUR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_sdgrupo
+  Parent: SIGREJUR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGREJUR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dgrupo
+  Parent: SIGREJUR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGREJUR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGREJUR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 450
+  Width = 1003
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Lançamento de Juros"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  alteracontas = .F.
+  alterajuros = .F.
+  Name = "SIGREJUR"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1100
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Shape1
+------------------------------------------------------------
+  Top = 10
+  Left = 905
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  Curvature = 0
+  BorderColor = 206,247,251
+  ZOrderSet = 2
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Shape3
+------------------------------------------------------------
+  Top = 345
+  Left = 505
+  Height = 86
+  Width = 438
+  BackStyle = 0
+  Curvature = 0
+  BorderColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Shape3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Shape2
+------------------------------------------------------------
+  Top = 346
+  Left = 59
+  Height = 86
+  Width = 438
+  BackStyle = 0
+  Curvature = 0
+  BorderColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 238
+  Left = 59
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 98
+  Width = 884
+  GridLineColor = 238,238,238
+  ZOrderSet = 4
+  Name = "Grid1"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 80
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 336
+  Column2.InputMask = ""
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.Width = 120
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.Width = 35
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.Width = 120
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.Width = 44
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.Width = 120
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vencimento"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Histórico"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moe"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Taxa Juros"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Dias"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Juros"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Grid1.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Confirma
+------------------------------------------------------------
+  Top = 3
+  Left = 928
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Cancel = .T.
+  Caption = "\<Ok"
+  Name = "Confirma"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Say11
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "[D/C] :"
+  Left = 524
+  Top = 353
+  TabIndex = 39
+  ForeColor = 90,90,90
+  ZOrderSet = 26
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "[D/C] :"
+  Left = 78
+  Top = 355
+  TabIndex = 31
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 75
+  Top = 380
+  TabIndex = 32
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 75
+  Top = 405
+  TabIndex = 33
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Say12
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 521
+  Top = 378
+  TabIndex = 40
+  ForeColor = 90,90,90
+  ZOrderSet = 27
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Say13
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 521
+  Top = 403
+  TabIndex = 41
+  ForeColor = 90,90,90
+  ZOrderSet = 28
+  Name = "Say13"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Say15
+------------------------------------------------------------
+  Caption = "Cotação : "
+  Left = 661
+  Top = 398
+  TabIndex = 42
+  ZOrderSet = 30
+  Name = "Say15"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Get_SOPER
+------------------------------------------------------------
+  Format = "K"
+  InputMask = ""
+  Left = 561
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 350
+  Width = 15
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 32
+  Name = "Get_SOPER"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Get_SGRUPO
+------------------------------------------------------------
+  Height = 23
+  Left = 561
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 375
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 34
+  Name = "Get_SGRUPO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Get_SCONTA
+------------------------------------------------------------
+  Left = 561
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 400
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 35
+  Name = "Get_SCONTA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Get_SDCONTA
+------------------------------------------------------------
+  Left = 644
+  MaxLength = 50
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 400
+  Width = 290
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 36
+  Name = "Get_SDCONTA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Get_OPER
+------------------------------------------------------------
+  Format = "K"
+  InputMask = "!"
+  Left = 115
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 352
+  Width = 15
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 18
+  Name = "Get_OPER"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Get_sdgrupo
+------------------------------------------------------------
+  Left = 644
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 375
+  Width = 290
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 37
+  Name = "Get_sdgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Get_grupo
+------------------------------------------------------------
+  Height = 23
+  Left = 115
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 377
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 20
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Get_dgrupo
+------------------------------------------------------------
+  Left = 198
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 377
+  Width = 290
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 37
+  Name = "Get_dgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Get_conta
+------------------------------------------------------------
+  Left = 115
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 402
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 21
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREJUR.Get_dconta
+------------------------------------------------------------
+  Left = 198
+  MaxLength = 50
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 402
+  Width = 290
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 22
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREJUR
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+=DoDefault()
+
+ThisForm.ParentForm = pForm
+
+Set DataSession to ThisForm.ParentForm.DataSessionId
+
+Select crTmpJuros
+
+ThisForm.AlteraContas = fChecaAcesso(ThisForm.ParentForm.Name, [ALTCONJUR])
+ThisForm.AlteraJuros  = fChecaAcesso(ThisForm.ParentForm.Name, [ALTJUROS])
+
+With ThisForm.Grid1
+	.AllowHeaderSizing = .f.
+	.AllowRowSizing = .f.
+	.ColumnCount = 7
+	.DeleteMark = .f.
+	.RecordMark = .f.
+	.ReadOnly = .f.
+	.ScrollBars = 2
+	.RecordSource = [crTmpJuros]
+	
+	.Column1.ControlSource = [Ttod(crTmpJuros.Datas)]
+	.Column2.ControlSource = [crTmpJuros.Hists]
+	.Column3.ControlSource = [crTmpJuros.Valors]
+	.Column4.ControlSource = [crTmpJuros.Moedas]
+	.Column5.ControlSource = [crTmpJuros.TaxJuros]
+	.Column6.ControlSource = [crTmpJuros.Dias]
+	.Column7.ControlSource = [crTmpJuros.Juros]
+
+	For I = 1 To .ColumnCount 
+		lcCol = Alltrim(Str(I, 10))
+		.Column&lcCol..ReadOnly  = Not InList(.ColumnCount, 2, 7)
+		.Column&lcCol..Movable   = .f.
+		.Column&lcCol..Resizable = .f.
+		.Column&lcCol..FontName  = [Courier New]
+	Next
+EndWith
+
+ThisForm.get_Oper.Value = [C]
+
+ThisForm.get_Grupo.Value = crTmpJuros.Grupos
+ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdGcr], [LocalBus], [Codigos], crTmpJuros.Grupos, [Descrs])
+If Not Used([LocalBus])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalBus 1)])
+	Return 0
+EndIf
+Go Top In LocalBus
+ThisForm.get_DGrupo.Value = LocalBus.Descrs
+
+ThisForm.get_Conta.Value = crTmpJuros.Contas
+ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], crTmpJuros.Contas, [RClis])
+If Not Used([LocalBus])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalBus 2)])
+	Return 0
+EndIf
+Go Top In LocalBus
+ThisForm.get_DConta.Value = LocalBus.RClis
+
+ThisForm.get_SOper.Value = [D]
+
+ThisForm.get_SGrupo.Value = crSigCdPam.GrupoPart
+ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdGcr], [LocalBus], [Codigos], crSigCdPam.GrupoPart, [Descrs])
+If Not Used([LocalBus])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalBus 1)])
+	Return 0
+EndIf
+Go Top In LocalBus
+ThisForm.get_SDGrupo.Value = LocalBus.Descrs
+
+ThisForm.get_SConta.Value = crSigCdPam.ContaPart
+ThisForm.ParentForm.poDataMgr.CursorQuery([SigCdCli], [LocalBus], [IClis], crSigCdPam.ContaPart, [RClis])
+If Not Used([LocalBus])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalBus 2)])
+	Return 0
+EndIf
+Go Top In LocalBus
+ThisForm.get_SDConta.Value = LocalBus.RClis
+
+Go Top In crTmpJuros
+
+ThisForm.Confirma.SetFocus 
+***************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Grid1.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Grid1.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.AlteraJuros
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Grid1.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Grid1.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Grid1.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Grid1.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.AlteraJuros
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Confirma
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Get_SOPER
+* Classe: fwget (Base: textbox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Get_SGRUPO
+* Classe: fwget (Base: textbox)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.AlteraContas
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, [C], This.Value, This, ThisForm.get_SDGrupo, ThisForm.get_SConta.Value, ThisForm.ParentForm.poDataMgr)
+Else
+	ThisForm.get_SDGrupo.Value = []
+	ThisForm.get_SDGrupo.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Get_SCONTA
+* Classe: fwget (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.AlteraContas
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Grupo
+Grupo = ThisForm.Get_SGrupo.Value
+
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, [C], This.Value, This, ThisForm.get_SDConta)
+		=Messagebox([Acesso Não Permitido!!!], 0+48, [Atenção!!!])
+
+		ThisForm.get_Sconta.Value  = []
+		ThisForm.get_Sdconta.Value = []
+		ThisForm.get_Sconta.Refresh 
+		ThisForm.get_Sdconta.Refresh 
+		Return .f.
+	EndIf
+
+	If Not fChecarInativas(This.Value, ThisForm.ParentForm.poDataMgr)
+		=MessageBox([Conta Inativa!!!], 0+48, [Atenção!!!])
+
+		ThisForm.get_Sconta.Value  = []
+		ThisForm.get_Sdconta.Value = []
+		ThisForm.get_Sconta.Refresh 
+		ThisForm.get_Sdconta.Refresh 
+		Return .f.
+	EndIf
+Else
+	ThisForm.get_Sdconta.Value = []
+	ThisForm.get_Sdconta.Refresh 
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Get_SDCONTA
+* Classe: fwget (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.AlteraContas And Empty(ThisForm.Get_SConta.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Grupo
+Grupo = ThisForm.Get_SGrupo.Value
+
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, [D], This.Value, ThisForm.get_SConta, This)
+		=Messagebox([Acesso Não Permitido!!!], 0+48, [Atenção!!!])
+
+		ThisForm.get_SDconta.Value  = []
+		ThisForm.get_Sconta.Value = []
+		ThisForm.get_SDconta.Refresh 
+		ThisForm.get_Sconta.Refresh 
+		Return .f.
+	EndIf
+
+	If Not fChecarInativas(ThisForm.get_SConta.Value, ThisForm.ParentForm.poDataMgr)
+		=MessageBox([Conta Inativa!!!], 0+48, [Atenção!!!])
+
+		ThisForm.get_SDconta.Value  = []
+		ThisForm.get_Sconta.Value = []
+		ThisForm.get_SDconta.Refresh 
+		ThisForm.get_Sconta.Refresh 
+		Return .f.
+	EndIf
+Else
+	ThisForm.get_Sconta.Value = []
+	ThisForm.get_Sconta.Refresh 
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Get_OPER
+* Classe: fwget (Base: textbox)
+* Registro: 37
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Get_sdgrupo
+* Classe: fwget (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.AlteraContas And Empty(ThisForm.Get_SGrupo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, [D], This.Value, ThisForm.get_SGrupo, This, ThisForm.get_SConta.Value, ThisForm.ParentForm.poDataMgr)
+Else
+	ThisForm.get_SGrupo.Value = []
+	ThisForm.get_SGrupo.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Get_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.AlteraContas
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, [C], This.Value, This, ThisForm.get_DGrupo, ThisForm.get_Conta.Value, ThisForm.ParentForm.poDataMgr)
+Else
+	ThisForm.get_DGrupo.Value = []
+	ThisForm.get_DGrupo.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Get_dgrupo
+* Classe: fwget (Base: textbox)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.AlteraContas And Empty(ThisForm.Get_Grupo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, [D], This.Value, ThisForm.get_Grupo, This, ThisForm.get_Conta.Value, ThisForm.ParentForm.poDataMgr)
+Else
+	ThisForm.get_Grupo.Value = []
+	ThisForm.get_Grupo.Refresh
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Get_conta
+* Classe: fwget (Base: textbox)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.AlteraContas
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Grupo
+Grupo = ThisForm.Get_Grupo.Value
+
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, [C], This.Value, This, ThisForm.get_DConta)
+		=Messagebox([Acesso Não Permitido!!!], 0+48, [Atenção!!!])
+
+		ThisForm.get_conta.Value  = []
+		ThisForm.get_dconta.Value = []
+		ThisForm.get_conta.Refresh 
+		ThisForm.get_dconta.Refresh 
+		Return .f.
+	EndIf
+
+	If Not fChecarInativas(This.Value, ThisForm.ParentForm.poDataMgr)
+		=MessageBox([Conta Inativa!!!], 0+48, [Atenção!!!])
+
+		ThisForm.get_conta.Value  = []
+		ThisForm.get_dconta.Value = []
+		ThisForm.get_conta.Refresh 
+		ThisForm.get_dconta.Refresh 
+		Return .f.
+	EndIf
+Else
+	ThisForm.get_dconta.Value = []
+	ThisForm.get_dconta.Refresh 
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREJUR.Get_dconta
+* Classe: fwget (Base: textbox)
+* Registro: 42
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And IsEmpty( This.Parent.Get_Conta.Value )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Grupo
+Grupo = ThisForm.Get_SGrupo.Value
+
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, [D], This.Value, ThisForm.get_Conta, This)
+		=Messagebox([Acesso Não Permitido!!!], 0+48, [Atenção!!!])
+
+		ThisForm.get_Dconta.Value  = []
+		ThisForm.get_conta.Value = []
+		ThisForm.get_Dconta.Refresh 
+		ThisForm.get_conta.Refresh 
+		Return .f.
+	EndIf
+
+	If Not fChecarInativas(ThisForm.get_Conta.Value, ThisForm.ParentForm.poDataMgr)
+		=MessageBox([Conta Inativa!!!], 0+48, [Atenção!!!])
+
+		ThisForm.get_Dconta.Value  = []
+		ThisForm.get_conta.Value = []
+		ThisForm.get_Dconta.Refresh 
+		ThisForm.get_conta.Refresh 
+		Return .f.
+	EndIf
+Else
+	ThisForm.get_conta.Value = []
+	ThisForm.get_conta.Refresh 
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREJUR
+RESERVED3 (ClassInfo): alteracontas
+alterajuros
+parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 26
+================================================================================

@@ -1,0 +1,7 @@
+﻿Fase 4 conclu├¡da. Foram adicionados ao `FormSigReHev.prg`:
+
+- **`ConfigurarCamposFiltro()`** ÔÇö adiciona `lbl_4c_Operacao` ("Envelope  :") e `txt_4c_Op` (TextBox num├®rico) ao Page1, com posi├º├Áes compensadas do layout flat original (Top=159/156 - PageFrame.Top=85 = 74/71)
+- **`LimparCampos()`** ÔÇö zera o campo Envelope no form e no BO
+- **`FormParaRelatorio()`** ÔÇö copia o valor de `txt_4c_Op` para `this_oRelatorio.this_nEnvelope`
+- `InicializarForm()` atualizado para chamar `ConfigurarCamposFiltro()` e `LimparCampos()`
+- `Init()` atualizado para setar `txt_4c_Op.Value = pEnvelope` no modo autom├ítico (equivalente ao `Get_Op.Value = pEnvelope` do legado)

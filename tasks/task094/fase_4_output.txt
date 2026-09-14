@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado ao `FormSigReEvd.prg`:**
+
+1. **`InicializarForm()`** ÔÇö adicionadas chamadas a `ConfigurarPaginaLista()` e `LimparCampos()` ap├│s o setup da estrutura base.
+
+2. **`ConfigurarPaginaLista()`** ÔÇö adiciona todos os controles de filtro ├á Page1:
+   - `lbl_4c_Label2` + `txt_4c_Grupo` (Grupo: c├│digo SigCdGcr)
+   - `lbl_4c_Label3` + `txt_4c_Conta` (Conta: IClis) + `txt_4c_Dconta` (RClis ÔÇö campo de descri├º├úo par)
+   - `lbl_4c_Conta` + `txt_4c_Datai` + `lbl_4c_Label1` + `txt_4c_Dataf` (Per├¡odo)
+   - BINDEVENTs de KeyPress para os tr├¬s campos de lookup
+
+3. **`AlternarPagina()`** ÔÇö stub sem efeito (formul├írio REPORT tem 1 p├ígina).
+
+4. **`LimparCampos()`** / **`AtualizarEstadoCampos()`** ÔÇö zeragem e controle de Enabled/Disabled (replicando os `When` events do legado: Conta e DConta desabilitadas enquanto Grupo estiver vazio).
+
+5. **Handlers de teclado** (`TeclaGrupo`, `TeclaConta`, `TeclaDconta`) + **m├®todos de valida├º├úo e lookup** (`ValidarGrupo`, `AbrirLookupGrupo`, `ValidarConta`, `AbrirLookupConta`, `ValidarDconta`, `AbrirLookupDconta`) ÔÇö todos seguindo o padr├úo de `FormSigReEtl.prg`.

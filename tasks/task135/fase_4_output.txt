@@ -1,0 +1,3 @@
+﻿Fase 4 conclu├¡da. O FormSigPdM10 ├® um form OPERACIONAL com layout plano (sem PageFrame), ent├úo n├úo h├í Page1 CRUD para adicionar ÔÇö os equivalentes j├í existiam: `AjustarLayoutVisibilidade()` faz o papel de `AlternarPagina()`, `cnt_4c_Saida` com `cmd_4c_Encerrar` faz o papel do container de sa├¡da, e os tr├¬s `ConfigurarGrade*` fazem o papel de `ConfigurarPaginaLista()`.
+
+A corre├º├úo efetiva desta fase foi adicionar `.RecordMark = .F.` e `.DeleteMark = .F.` nas tr├¬s grades de n├¡vel raiz (`grd_4c_GradeEnvelopes`, `grd_4c_GradePedidos`, `grd_4c_GradeMateriais`), que estavam sem essas propriedades ao contr├írio das grades internas do `cnt_4c_Ops` que j├í as tinham.

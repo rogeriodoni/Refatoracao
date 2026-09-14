@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. A causa raiz era `.HeaderHeight = 0` atribu├¡do diretamente a `Column1` ÔÇö essa propriedade n├úo existe em colunas VFP9 (existe apenas em `Grid`). A remo├º├úo resolve o erro `Property HEADERHEIGHT is not found` que abortava `ConfigurarGrade()` dentro de `InicializarForm()`, impedindo o `CREATEOBJECT` de retornar um objeto v├ílido.
+
+**O que foi feito:**
+- Removida a linha `.HeaderHeight = 0` da `Column1` em `ConfigurarGrade()` (linha 1365)
+- Apagado o `.FXP` para for├ºar recompila├º├úo no pr├│ximo teste
+
+O cabe├ºalho da coluna de checkbox continua vazio via `Header1.Caption = ""`, que ├® o mecanismo correto em VFP9.

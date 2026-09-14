@@ -1,0 +1,16 @@
+﻿A migra├º├úo da task503 est├í **completa**. Resumo do estado:
+
+**Fase 8 ÔÇö verifica├º├úo:**
+- Todos os m├®todos requeridos j├í foram implementados nas fases anteriores:
+  - `BtnBuscarClick()`, `BtnEncerrarClick()` ÔÇö linhas 849-858
+  - `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö linhas 863-922
+  - `FormParaBO()`, `BOParaForm()` ÔÇö linhas 927-969 (todos os 6 campos mapeados)
+  - `HabilitarCampos()`, `LimparCampos()` ÔÇö linhas 974-1052
+  - `CarregarLista()` ÔÇö linha 629 (com headers reconfigurados ap├│s RecordSource)
+  - `AjustarBotoesPorModo()` ÔÇö linha 1057
+
+**Integra├º├úo confirmada:**
+- `config.prg` ÔÇö carrega via ADIR() automaticamente (`*BO.prg` e `Form*.prg`)
+- `menu.prg` ÔÇö BAR 156 em `popCadastros` com `DO AbrirFormPrm`, padr├úo correto (VARTYPE, Show() sem par├ómetro, sem Release())
+
+A migration task503 (SIGCDPRM ÔåÆ FormPrm/PrmBO) est├í finalizada e funcional.

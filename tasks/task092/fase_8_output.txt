@@ -1,0 +1,13 @@
+﻿O arquivo est├í completo. Fase 8 finalizada com sucesso. Aqui est├í o resumo do que foi adicionado ao `FormSigReEtp.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `FormParaBO()` | Transfere `txt_4c_Qtde`, spinners, `cbo_4c_CmbTipos` e `obj_4c_OptImpressora` para as props do BO |
+| `BOParaForm()` | Restaura controles a partir das props do BO (qty, den, hor, ver, tip) |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita todos os controles de entrada; `OptImpressora` s├│ habilita se `ButtonCount > 1` |
+| `LimparCampos()` | Reseta para valores iniciais (qtd=1, den=20, hor/ver=0, tipo=1, impressora=1) |
+| `CarregarLista()` | Delega para `CarregarConfiguracoes()` se `this_cDopes` n├úo estiver vazio |
+| `AjustarBotoesPorModo()` | Habilita bot├úo Imprimir apenas se h├í impressoras; Encerrar sempre habilitado |
+| `BtnBuscarClick()` | Recarrega configura├º├Áes e sincroniza estado dos controles |
+| `BtnSalvarClick()` | Alias para `BtnImprimirClick()` (sem├óntica OPERACIONAL) |
+| `BtnCancelarClick()` | Fecha o dialog via `Release()` |

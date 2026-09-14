@@ -1,0 +1,20 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo criado em `C:\4c\projeto\app\classes\SigReDpDBO.prg` com:
+
+**Propriedades declaradas (22 no total):**
+- `this_dDtInicial`, `this_dDtFinal` ÔÇö filtros de per├¡odo
+- `this_cDopp`, `this_nNumes` ÔÇö filtro movimenta├º├úo/DopPs
+- `this_cGrupoGcr`, `this_cDGrupoGcr` ÔÇö grupo balancete (SigCdGcr)
+- `this_cCodConta`, `this_cNomeConta` ÔÇö conta balancete (SigCdCli)
+- `this_cCodCli`, `this_cDescCli` ÔÇö cliente produ├º├úo
+- `this_cCGru`, `this_cDGru` ÔÇö grupo mat├®ria prima (SigCdGrp)
+- `this_cGgrp`, `this_cDGgrp` ÔÇö grande grupo (SigCdGpr)
+- `this_cTpOps` ÔÇö tipo opera├º├úo; `this_nEnvelope`, `this_nNop` ÔÇö envelope/OP
+- `this_cTpGOp` ÔÇö tipo gera├º├úo OP (auto-preenchido se apenas 1)
+- 9 flags `this_l*` para todos os checkboxes do form
+
+**Init() completo:**
+- Padr├úo `DO WHILE .T. ... EXIT` para early-exit sem `RETURN` dentro de TRY/CATCH
+- Carrega 6 cursores de refer├¬ncia: `CrSigCdGcr`, `CrSigOpOpt`, `CrSigCdCli`, `CrSigCdPam`, `CrTmpTpGop` (via `FiltrarAcessosTpGop`), `CsSigCdOpd` (via `FiltrarAcessosOperacoes`)
+- Reaplica ordem exata do legado: INDEX ON Dopps **antes** do scan de filtro de acesso
+- `fChecaAcesso` chamado diretamente (framework ainda dispon├¡vel no ambiente)
+- `Destroy()` fecha todos os cursores abertos

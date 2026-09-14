@@ -1,0 +1,14 @@
+﻿Phase 4/8 is complete. The file now has 700 lines and includes:
+
+**ConfigurarGrupoBotoes()** ÔÇö Creates `obj_4c_CmdGok` CommandGroup (986├ù160, scaled 1.25x from original 789├ù160) with 9 buttons:
+- Buttons(1) Documento, (2) Encerrar/Cancel, (3) Imprimir, (4) Procurar, (5) Recibo, (6) Exclui Docto, (7) Cheque, (8) Chq.Matric., (9) Excluir Chq.
+- Each button has Picture via `gc_4c_CaminhoIcones`, PicturePosition=1, Comic Sans MS bold italic, Themes=.F.
+
+**ConfigurarGrid()** ÔÇö Creates `grd_4c_Dados` (Left=30, Width=888, Top=233, Height=291, scaled 1.25x) with 10 columns:
+- clnImprime (Column10, ColumnOrder=1, CheckBox bound to NMarca1s ÔÇö first column in visual order)
+- clnContas through clnDatas columns with proper headers (CHR codes for C├│pia, Situa├º├úo)
+- Column8 ControlSource uses IIF expression computing Cancelado/Emitido status from NCancelas/NEmitidos
+- RecordSource set outside WITH block per established pattern
+- `cmd_4c_Tudo1` and `cmd_4c_Apaga1` at Left=928 (right of grid), bound to geral_marcar_26.jpg and cadastro_excluir_26.jpg
+
+**Next: Phase 5/8** ÔÇö filter controls: txt_4c_CdGrupos, txt_4c_DsGrupos, txt_4c_DtInicial, txt_4c_DtFinal, cmd_4c_Processar, txt_4c_CdContas, txt_4c_DsContas, labels, shapes, txt_4c_Favorecido.

@@ -1,0 +1,15 @@
+﻿An├ílise completa dos 7 problemas reportados. Todos os controles j├í t├¬m as posi├º├Áes corretas no c├│digo atual:
+
+| Problema | Controle | Valor no c├│digo atual | Status |
+|---|---|---|---|
+| GetTipoDat Top | `obj_4c_GetTipoDat` | `.Top = 104` (linha 658) | Ô£ô J├í correto |
+| GetTipoDat Left | `obj_4c_GetTipoDat` | `.Left = 237` (linha 659) | Ô£ô J├í correto |
+| lbl_periodo_a Left | `lbl_4c_Lbl_periodo_a` | `.Left = 323` (linha 791) | Ô£ô Correto (falso positivo) |
+| Opt_nr_opcao Top | `obj_4c_Opt_nr_opcao` | `.Top = 189` (linha 858) | Ô£ô J├í correto |
+| Opt_nr_opcao Left | `obj_4c_Opt_nr_opcao` | `.Left = 428` (linha 859) | Ô£ô J├í correto |
+| Opt_Bons Top | `obj_4c_Opt_Bons` | `.Top = 160` (linha 994) | Ô£ô J├í correto |
+| Opt_Bons Left | `obj_4c_Opt_Bons` | `.Left = 378` (linha 995) | Ô£ô J├í correto |
+
+**Conclus├úo:** Os 7 problemas j├í est├úo corrigidos no c├│digo atual. Nenhuma altera├º├úo ├® necess├íria.
+
+**Sobre o item 3 (`lbl_periodo_a`):** ├ë um falso positivo do validador. O original `lbl_periodo` em Left=188 corresponde ao migrado `lbl_4c_Lbl_periodo` (linha 763, Left=188 Ô£ô). O `lbl_4c_Lbl_periodo_a` em Left=323 ├® um label separador "├á" adicionado entre os dois campos de data (in├¡cio em Left=237+Width=80=317, logo o separador em 323 est├í correto). O validador cruzou nomes errados.

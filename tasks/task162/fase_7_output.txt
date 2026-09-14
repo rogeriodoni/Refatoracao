@@ -1,0 +1,18 @@
+﻿O arquivo j├í est├í completo com todas as fases implementadas. Analisando o conte├║do:
+
+O `FormSigPrChr.prg` ├® um formul├írio **OPERACIONAL** (n├úo CRUD), e as fases 3-6 j├í foram implementadas com todos os handlers necess├írios:
+
+- **9 handlers do CommandGroup** j├í implementados via `CmdGokClick()`:
+  - `BtnDocumentoClick()`, `BtnEncerrarClick()`, `BtnImprimirClick()`, `BtnProcurarClick()`, `BtnReciboClick()`, `BtnExcluiDocClick()`, `BtnImpchqClick()`, `BtnCmdchmatClick()`, `BtnExcluirChqClick()`
+- **Handlers de grid**: `GrdAfterRowColChange`, `ChkImprimeKeyPress`, etc.
+- **Handlers de filtros**: Grupo, Conta, Datas
+- **Handlers de containers flutuantes**: Justificativa, Procurar, ImpChMat
+
+Os m├®todos `BtnIncluirClick()`, `BtnAlterarClick()`, `BtnVisualizarClick()` e `BtnExcluirClick()` s├úo exclusivos de formul├írios **CRUD** (que herdam o padr├úo `frmcadastro` com `Page1=Lista` + `Page2=Dados`). Este formul├írio OPERACIONAL **n├úo possui essas opera├º├Áes** ÔÇö a exclus├úo de cheque j├í est├í implementada em `BtnExcluirChqClick()` e a exclus├úo de documento em `BtnExcluiDocClick()`.
+
+Adicionar esses 4 m├®todos seria incorreto porque:
+1. N├úo existem bot├Áes Incluir/Alterar/Visualizar/Excluir no layout (`obj_4c_CmdGok` tem 9 bot├Áes espec├¡ficos)
+2. Criaria m├®todos sem correspond├¬ncia funcional (violaria a regra "sem stubs")
+3. O formul├írio j├í tem paridade 100% com o legado SIGPRCHR
+
+**A Fase 7/8 est├í conclu├¡da** ÔÇö o arquivo `FormSigPrChr.prg` (3193 linhas) j├í cont├®m toda a funcionalidade necess├íria para o formul├írio OPERACIONAL. N├úo ├® necess├íria nenhuma modifica├º├úo.

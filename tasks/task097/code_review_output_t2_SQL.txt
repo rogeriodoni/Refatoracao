@@ -1,0 +1,20 @@
+﻿Ap├│s an├ílise completa do arquivo, identifiquei que os dois alertas s├úo **falsos positivos**. Aqui est├í o racioc├¡nio:
+
+## Verifica├º├úo dos [SQL-FILTRO-INVENTADO]
+
+### `CEMPS` (linhas 652-653 e 754-755)
+S├úo queries auxiliares de UI em `LimparCampos()` e `ValidarCdEmpresa()` ÔÇö n├úo fazem parte do SQL principal do relat├│rio. Filtram `SigCdEmp` pelo c├│digo de empresa para popular `txt_4c_NomEmpresa`. A coluna `Cemps` ├® a chave prim├íria de `SigCdEmp` e seu uso no WHERE ├® **obrigat├│rio** para a busca funcionar.
+
+### `RAZAS` (linha 812-813)
+Em `ValidarNomEmpresa()` ÔÇö permite que o usu├írio digite parte da raz├úo social e encontre a empresa. `Razas LIKE '%parcial%'` ├® a ├║nica forma de implementar essa busca. Remover o WHERE retornaria empresas aleat├│rias.
+
+### Por que o detector sinalizou
+O algoritmo comparou **todas** as colunas em WHERE do arquivo migrado contra o WHERE das queries principais do relat├│rio original. Essas queries auxiliares de UI n├úo existiam no SQL principal, mas **existem no legado** como comportamento do controle `get_ds_empresa` (o form original usava lookup de empresa pela pr├│pria campo).
+
+Confirma├º├úo adicional: a pr├│pria `AbrirBuscaEmpresa()` (linha 710-720) j├í usa `SigCdEmp`, `Cemps` e `Razas` ÔÇö provando que essas colunas s├úo v├ílidas e fazem parte da funcionalidade de lookup de empresa.
+
+## Conclus├úo
+
+**Nenhuma altera├º├úo necess├íria.** Remover os WHERE quebraria completamente o lookup de empresa (a regra "NAO remover campos, funcionalidades ou lookups" tamb├®m pro├¡be isso). Os dois alertas s├úo falsos positivos do validador ÔÇö ele n├úo distingue queries auxiliares de UI do SQL principal do relat├│rio.
+
+O arquivo `Formsigrefc2.prg` est├í correto nestes pontos.

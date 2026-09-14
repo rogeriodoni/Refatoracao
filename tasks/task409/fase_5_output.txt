@@ -1,0 +1,19 @@
+﻿Phase 6/8 is complete. The file is now 1219 lines. Here's what was added:
+
+**ConfigurarPaginaDados()** ÔÇö CAMPO 5 and 6:
+- `lbl_4c_Conta` + `txt_4c_Conta` (Top=272, Left=365, Width=80, MaxLength=10) with LostFocusÔåÆ`ValidarContaEve` + KeyPressÔåÆ`ContaKeyPress`
+- `txt_4c_DConta` (Top=272, Left=447, Width=290, ReadOnly, gray background) ÔÇö mirrors getDGrupo layout
+- `lbl_4c_Status` + `txt_4c_Status` (Top=298, Left=365, Width=184, MaxLength=50)
+
+**Updated methods:**
+- `LimparCampos()` ÔÇö now clears all 8 fields (added Conta, DConta, Status)
+- `FormParaBO()` ÔÇö now maps Conta and Status to BO properties
+- `BOParaForm()` ÔÇö now populates Conta (from `this_cConta`), DConta (via `ObterDescricaoConta()`), Status
+
+**New methods:**
+- `ValidarContaEve()` ÔÇö LostFocus on txt_4c_Conta: validates against SigCdCli, populates DConta or clears+refocuses
+- `ContaKeyPress()` ÔÇö F4 opens FormBuscaAuxiliar on SigCdCli (Iclis/Rclis columns), populates both Conta and DConta on selection
+
+**Remaining phases:**
+- **Phase 7/8**: `HabilitarCampos()` / `AjustarBotoesPorModo()` ÔÇö make Codigo read-only in ALTERAR, disable all fields in VISUALIZAR
+- **Phase 8/8**: Wire into config.prg + menu.prg

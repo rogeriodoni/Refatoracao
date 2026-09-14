@@ -1,0 +1,13 @@
+﻿The file is 2602 lines, all procedures are properly closed, and every cross-reference is wired correctly. Phase 6 is complete.
+
+Here's what was implemented across the 5 edits:
+
+**Edit A** (`ConfigurarPaginaDados`): Added calls to `THIS.ConfigurarAbaImpostos()` and `THIS.ConfigurarAbaServicos()` before `TornarControlesVisiveis`.
+
+**Edit B** (`ConfigurarBindings`): Wired `BINDEVENT(cmd_4c_Dados, "Click", THIS, "BtnDadosClick")` for the Dados button on the Impostos tab.
+
+**Edit C** (`BOParaForm`): Added population of all 28 inner-page fields ÔÇö 24 Impostos fields (IPI/ICMS values, frete totals, transportadora full address, placa/UF, tipo frete with "0 - Emitente"/"1 - Destinat├írio" display, 6 volumes fields) plus 4 Servi├ºos fields.
+
+**Edit D** (`LimparCampos`): Added clearing of all inner-page fields (numerics ÔåÆ 0, strings ÔåÆ "").
+
+**Edit E** (new methods): Added `ConfigurarAbaImpostos()` (creates ~50 controls: shapes/dividers, labels, and TextBoxes at exact SCX coordinates), `ConfigurarAbaServicos()` (EditBox + 3 TextBoxes + labels), and `BtnDadosClick()` (validates `Dopes` via `SELECT Dopes FROM SigCdOpe`, then `DO FORM SigMvExp WITH Dopes, "C", Numes, Emps, .T.`).

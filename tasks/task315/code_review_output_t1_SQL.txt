@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas com sucesso. Resumo do que foi feito:
+
+**SIGPRNSEBO.prg ÔÇö `Atualizar()` (linha 219-222):**
+- Removidas as condi├º├Áes `AND Dopes = ...` e `AND Numes = ...` do WHERE, que n├úo existem no original
+- Substitu├¡das por `AND EmpDopNums = ...` usando a chave composta `Emps + Dopes + STR(Numes,6)`, que ├® o padr├úo do c├│digo original para identificar registros em SigPcOoL
+
+**FormSIGPRNSE.prg ÔÇö `CmgBotoesClick()` (linha 865-866):**
+- Removida a refer├¬ncia `AND cursor_4c_Seles.Selecionados > 0`
+- A verifica├º├úo `RECCOUNT("cursor_4c_Seles") > 0` ├® suficiente porque o cursor j├í foi criado com `WHERE SelImp`, garantindo que s├│ cont├®m linhas selecionadas

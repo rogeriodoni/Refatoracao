@@ -1,0 +1,19 @@
+﻿Fase 2 conclu├¡da. O `SigPrSlpBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+**M├®todos adicionados:**
+
+| M├®todo | Prop├│sito |
+|--------|-----------|
+| `BuscarListasDisponiveis(par_cLPrecoExcluir)` | SQLEXEC em SigCdLpc excluindo a lista atual ÔåÆ `cursor_4c_Listas` |
+| `BuscarItensDaLista(par_cLPrecos)` | SQLEXEC em SigCdLpi com `0 AS lMarcas` para checkbox ÔåÆ `cursor_4c_Itens` |
+| `AdicionarItensMarcados(lPrecoAtual, cCursorDestino, lArredond)` | Copia itens marcados (lMarcas=1) para o cursor VFP local do form pai (`CrSigCdLpi`), usando `fUniqueIds()` para cidchaves e `fArredondamento()` condicionalmente |
+| `MarcarTodos()` | REPLACE ALL lMarcas WITH 1 em cursor_4c_Itens |
+| `DesmarcarTodos()` | REPLACE ALL lMarcas WITH 0 em cursor_4c_Itens |
+| `LimparCursores()` | Fecha cursor_4c_Listas e cursor_4c_Itens |
+| `Destroy()` | Chama LimparCursores() + DODEFAULT() |
+
+**Pontos cr├¡ticos respeitados:**
+- Nenhum `RETURN` dentro de TRY/CATCH (regra #1 ÔÇö usa flag `loc_lPodeExecutar`)
+- `fUniqueIds()` j├í existe em `utils/functions.prg`
+- `fArredondamento()` chamado com `gnConnHandle` (mesma conven├º├úo do `sigprccpBO.prg`)
+- `cursor_4c_Itens` re-selecionado ap├│s INSERT para o SCAN continuar corretamente

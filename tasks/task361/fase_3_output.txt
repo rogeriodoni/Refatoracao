@@ -1,0 +1,18 @@
+﻿O arquivo foi criado corretamente. Fase 3/8 conclu├¡da.
+
+**O que foi criado em `C:/4c/projeto/app/forms/cadastros/FormCeg.prg`:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `DEFINE CLASS FormCeg AS FormBase` | Propriedades visuais (600x1000, Caption com CHR(231)+CHR(227), DataSession=2) + estado |
+| `Init()` | Apenas `RETURN DODEFAULT()` com TRY/CATCH |
+| `InicializarForm()` | Cria CegBO, chama ConfigurarPageFrame, propaga Caption, guarda gb_4c_ValidandoUI, ativa Page1 |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, Tabs=.F., 2 pages com fundo_cad_1003.jpg |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho (lbl_4c_Sombra + lbl_4c_Titulo) + cnt_4c_Botoes **vazio** (Left=542 can├┤nico) |
+| `ConfigurarPaginaDados()` | cnt_4c_Cabecalho + cnt_4c_BotoesAcao **vazio** (Left=842 can├┤nico) |
+| `CarregarLista()` | Stub funcional que chama `this_oBusinessObject.Buscar("")` |
+| `TornarControlesVisiveis()` | Recursivo, itera Pages e Controls |
+| `FormatarGridLista()` | Verdana 8pt |
+| `Destroy()` | Libera BO + `DODEFAULT()` |
+
+**Pr├│xima fase (4/8):** Grid `grd_4c_Lista` na Page1 + 5 bot├Áes CRUD em `cnt_4c_Botoes` + `cnt_4c_Saida` com Encerrar.

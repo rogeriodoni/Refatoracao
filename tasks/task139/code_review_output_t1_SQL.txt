@@ -1,0 +1,4 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormSigPdM14.prg`:
+
+- **CONTROLCOUNT**: falso positivo ÔÇö ├® propriedade VFP (`.ControlCount`), n├úo cl├íusula SQL WHERE. Nenhuma altera├º├úo necess├íria.
+- **CPros / CGrus (3 ocorr├¬ncias)**: removidos os blocos SQL inventados (`SELECT Cgrus FROM SigCdPro WHERE CPros` e `SELECT TpMovs FROM SigCdGrp WHERE CGrus`) de `GradeCol2ValidHandler`, `GradeCol4ValidHandler` e `GradeCol6ValidHandler`. A l├│gica de cada handler foi simplificada para usar diretamente `LocalUni.Fators`, `LocalUni.QtEqualPs`, `LocalUni2.Fators` e `LocalUni2.QtEqualPs` ÔÇö id├¬ntico ao que o original fazia via `SigCdUni WHERE CUnis`. As vari├íveis `loc_cSQL` ├│rf├ús e os blocos de cleanup `CrTmpPro`/`CrTmpGru` tamb├®m foram removidos.

@@ -1,0 +1,5 @@
+﻿Sem .fxp pendente para apagar. As corre├º├Áes est├úo aplicadas.
+
+**Causa raiz**: `RETURN` dentro de blocos `TRY/CATCH` nos m├®todos `BtnAlterarClick` e `BtnVisualizarClick` causa erro de compila├º├úo VFP9 em m├®todos de classe. Quando o arquivo falha ao compilar (silenciosamente, pois `SYS(2335,0)` suprime di├ílogos), `CREATEOBJECT("Formsigprcpd")` retorna "Class definition not found".
+
+**Corre├º├úo aplicada**: Substitu├¡dos os `RETURN` internos ao TRY pela vari├ível flag `loc_lContinuar = .T./.F.` com a l├│gica condicional correspondente (`IF loc_lContinuar`), conforme Regra #1 do CLAUDE.md. O BO (`sigprcpdBO.prg`) n├úo precisou altera├º├úo.

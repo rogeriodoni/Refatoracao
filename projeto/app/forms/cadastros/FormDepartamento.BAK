@@ -1,0 +1,930 @@
+*==============================================================================
+* FORMDEPARTAMENTO.PRG
+* Formulario de cadastro de departamentos
+*
+* Tabela: SigCdDpt
+* Campos: codigos, descricaos, diretors, nchksubs, nchktipos, autos
+*
+* LOOKUPS IDENTIFICADOS:
+* - Diretor: SigCdUsu (Usuarios/NComps) - Filtro: cAtivos <> 'N'
+*
+* REGRAS APLICADAS:
+* - Nomenclatura: loc_ para locais, par_ para parametros, this_ para classe
+* - Controles: tipo_4c_Nome (txt_4c_, cmd_4c_, grd_4c_, lbl_4c_, cnt_4c_, pgf_4c_)
+* - ShowWindow = 1, WindowType = 1 para forms modais estaveis
+* - PicturePosition = 13 para icone acima do texto em botoes
+* - SEMPRE inicializar TextBox.Value (string="", numeric=0)
+* - Usar cursor_4c_Dados como nome padrao de cursor
+* - TornarControlesVisiveis percorre Pages E Controls
+*==============================================================================
+
+*------------------------------------------------------------------------------
+* PageFrameDuasPaginas - PageFrame customizado com 2 paginas
+*------------------------------------------------------------------------------
+DEFINE CLASS PageFrameDuasPaginas AS PageFrame
+    PageCount = 2
+    BorderWidth = 0
+    TabStyle = 0
+ENDDEFINE
+
+*------------------------------------------------------------------------------
+* FormDepartamento - Formulario de cadastro de departamentos
+*------------------------------------------------------------------------------
+DEFINE CLASS FormDepartamento AS FormBase
+
+    *-- Propriedades obrigatorias para forms modais
+    DataSession = 2
+    Height = 600
+    Width = 1000
+    Caption = "Cadastro de Departamentos"
+    this_cTituloForm = "Cadastro de Departamentos"
+    ShowWindow = 1
+    WindowType = 1
+    AutoCenter = .T.
+
+    *-- Propriedades do frmcadastro (sem barra de titulo)
+    TitleBar = 0
+    ControlBox = .F.
+    Closable = .F.
+    MaxButton = .F.
+    MinButton = .F.
+    ClipControls = .F.
+    Themes = .F.
+    BorderStyle = 2
+
+    *-- Propriedades customizadas
+    this_cModoAtual = "LISTA"
+
+    *-- PageFrame para alternar entre Lista e Dados
+    ADD OBJECT pgf_4c_Principal AS PageFrameDuasPaginas
+
+    *--------------------------------------------------------------------------
+    * InicializarForm - Inicializacao especifica do formulario
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_oException, loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.this_oBusinessObject = CREATEOBJECT("DepartamentoBO")
+
+            IF ISNULL(THIS.this_oBusinessObject)
+                MESSAGEBOX("Erro ao criar Business Object DepartamentoBO!", 16, "Erro")
+                loc_lSucesso = .F.
+            ELSE
+                THIS.ConfigurarPageFrame()
+                THIS.ConfigurarPaginaLista()
+                THIS.ConfigurarPaginaDados()
+
+                IF !THIS.CarregarLista()
+                    * Se falhar ao carregar, nao impede abertura
+                ENDIF
+
+                THIS.pgf_4c_Principal.ActivePage = 1
+                THIS.this_cModoAtual = "LISTA"
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loc_oException
+            MESSAGEBOX("Erro: " + loc_oException.Message, 16, "Erro")
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPageFrame
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        WITH THIS.pgf_4c_Principal
+            .Top = 0
+            .Left = 0
+            .Width = THIS.Width
+            .Height = THIS.Height
+            .Tabs = .F.
+            .Page1.Caption = "Lista"
+            .Page2.Caption = "Dados"
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaLista
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        LOCAL loc_oPagina, loc_cIconPath
+        loc_oPagina = THIS.pgf_4c_Principal.Page1
+        loc_cIconPath = gc_4c_CaminhoIcones
+
+        * Container do cabecalho
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top = 0
+            .Left = 0
+            .Width = THIS.Width
+            .Height = 90
+            .BackColor = RGB(90, 90, 90)
+            .BorderWidth = 0
+        ENDWITH
+
+        * Titulo
+        loc_oPagina.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
+        WITH loc_oPagina.cnt_4c_Cabecalho.lbl_4c_Titulo
+            .Caption = "Departamentos"
+            .FontName = "Tahoma"
+            .FontSize = 16
+            .FontBold = .T.
+            .ForeColor = RGB(255, 255, 255)
+            .BackStyle = 0
+            .Left = 20
+            .Top = 25
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        * Container dos botoes - posicao conforme legado (Left=544)
+        loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
+        WITH loc_oPagina.cnt_4c_Botoes
+            .Top = 5
+            .Left = 544
+            .Width = 456
+            .Height = 85
+            .BackStyle = 0
+            .BorderWidth = 0
+        ENDWITH
+
+        * Botao Incluir - 75x75, sem espacamento (Left = 5, 80, 155, 230, 305, 380)
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir
+            .Caption = "Incluir"
+            .Left = 5
+            .Top = 5
+            .Width = 75
+            .Height = 75
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Picture = loc_cIconPath + "cadastro_inserir_26.jpg"
+            .PicturePosition = 13
+            .Visible = .T.
+        ENDWITH
+
+        * Botao Visualizar
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Visualizar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar
+            .Caption = "Visualizar"
+            .Left = 80
+            .Top = 5
+            .Width = 75
+            .Height = 75
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Picture = loc_cIconPath + "cadastro_vizualizar_60.jpg"
+            .PicturePosition = 13
+            .Visible = .T.
+        ENDWITH
+
+        * Botao Alterar
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar
+            .Caption = "Alterar"
+            .Left = 155
+            .Top = 5
+            .Width = 75
+            .Height = 75
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Picture = loc_cIconPath + "cadastro_alterar_60.jpg"
+            .PicturePosition = 13
+            .Visible = .T.
+        ENDWITH
+
+        * Botao Excluir
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir
+            .Caption = "Excluir"
+            .Left = 230
+            .Top = 5
+            .Width = 75
+            .Height = 75
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Picture = loc_cIconPath + "cadastro_excluir_60.jpg"
+            .PicturePosition = 13
+            .Visible = .T.
+        ENDWITH
+
+        * Botao Buscar
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Buscar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar
+            .Caption = "Buscar"
+            .Left = 305
+            .Top = 5
+            .Width = 75
+            .Height = 75
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Picture = loc_cIconPath + "cadastro_procurar_60.jpg"
+            .PicturePosition = 13
+            .Visible = .T.
+        ENDWITH
+
+        * Botao Encerrar
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Encerrar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Encerrar
+            .Caption = "Encerrar"
+            .Left = 380
+            .Top = 5
+            .Width = 75
+            .Height = 75
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Picture = loc_cIconPath + "cadastro_sair_60.jpg"
+            .PicturePosition = 13
+            .Visible = .T.
+        ENDWITH
+
+        * Imagem de fundo da pagina
+        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        loc_oPagina.BackColor = RGB(53, 53, 53)
+
+        * Grid de departamentos - posicao conforme legado (Top=107, Left=30, Height=470, Width=941)
+        loc_oPagina.AddObject("grd_4c_Lista", "Grid")
+        WITH loc_oPagina.grd_4c_Lista
+            .Top = 107
+            .Left = 30
+            .Width = 941
+            .Height = 470
+            .ColumnCount = 3
+            .Visible = .T.
+        ENDWITH
+
+        * Vincula eventos
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar, "Click", THIS, "BtnAlterarClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir, "Click", THIS, "BtnExcluirClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar, "Click", THIS, "BtnBuscarClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
+        BINDEVENT(loc_oPagina.grd_4c_Lista, "DblClick", THIS, "GridDblClick")
+
+        THIS.TornarControlesVisiveis(loc_oPagina)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaDados
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        LOCAL loc_oPagina, loc_cIconPath, loc_nTop, loc_nEsp
+        loc_oPagina = THIS.pgf_4c_Principal.Page2
+        loc_cIconPath = gc_4c_CaminhoIcones
+
+        * Imagem de fundo da pagina
+        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        loc_oPagina.BackColor = RGB(53, 53, 53)
+
+        loc_nTop = 40
+        loc_nEsp = 30
+
+        * Container dos botoes Confirmar/Cancelar - posicao conforme legado (Left=834)
+        loc_oPagina.AddObject("cnt_4c_BotoesDados", "Container")
+        WITH loc_oPagina.cnt_4c_BotoesDados
+            .Top = 4
+            .Left = 834
+            .Width = 160
+            .Height = 85
+            .BackStyle = 0
+            .BorderWidth = 0
+        ENDWITH
+
+        loc_oPagina.cnt_4c_BotoesDados.AddObject("cmd_4c_Confirmar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Confirmar
+            .Caption = "Confirmar"
+            .Left = 5
+            .Top = 5
+            .Width = 75
+            .Height = 75
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Picture = loc_cIconPath + "cadastro_salvar_60.jpg"
+            .PicturePosition = 13
+            .Visible = .T.
+        ENDWITH
+
+        loc_oPagina.cnt_4c_BotoesDados.AddObject("cmd_4c_Cancelar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Cancelar
+            .Caption = "Cancelar"
+            .Left = 80
+            .Top = 5
+            .Width = 75
+            .Height = 75
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Picture = loc_cIconPath + "cadastro_cancelar_60.jpg"
+            .PicturePosition = 13
+            .Visible = .T.
+        ENDWITH
+
+        * Botao OK (apenas para modo VISUALIZAR)
+        loc_oPagina.cnt_4c_BotoesDados.AddObject("cmd_4c_OK", "CommandButton")
+        WITH loc_oPagina.cnt_4c_BotoesDados.cmd_4c_OK
+            .Caption = "OK"
+            .Left = 45
+            .Top = 5
+            .Width = 75
+            .Height = 75
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Themes = .F.
+            .SpecialEffect = 0
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
+            .Picture = loc_cIconPath + "cadastro_vizualizar_60.jpg"
+            .PicturePosition = 13
+            .Visible = .F.  && Inicialmente invisivel, so aparece no modo VISUALIZAR
+        ENDWITH
+
+        * ===== CAMPOS DO FORMULARIO =====
+        * IMPORTANTE: Sempre inicializar TextBox.Value
+
+        * Codigo
+        THIS.AdicionarLabel(loc_oPagina, "lbl_4c_Codigo", "C" + CHR(243) + "digo:", 20, loc_nTop)
+        THIS.AdicionarTextBox(loc_oPagina, "txt_4c_Codigo", 120, loc_nTop - 3, 80)
+        loc_oPagina.txt_4c_Codigo.MaxLength = 10
+        loc_oPagina.txt_4c_Codigo.Value = ""
+
+        * Descricao
+        THIS.AdicionarLabel(loc_oPagina, "lbl_4c_Descricao", "Descri" + CHR(231) + CHR(227) + "o:", 20, loc_nTop + loc_nEsp)
+        THIS.AdicionarTextBox(loc_oPagina, "txt_4c_Descricao", 120, loc_nTop + loc_nEsp - 3, 300)
+        loc_oPagina.txt_4c_Descricao.MaxLength = 40
+        loc_oPagina.txt_4c_Descricao.Value = ""
+
+        * Diretor
+        THIS.AdicionarLabel(loc_oPagina, "lbl_4c_Diretor", "Diretor:", 20, loc_nTop + (loc_nEsp * 2))
+        THIS.AdicionarTextBox(loc_oPagina, "txt_4c_Diretor", 120, loc_nTop + (loc_nEsp * 2) - 3, 100)
+        loc_oPagina.txt_4c_Diretor.MaxLength = 10
+        loc_oPagina.txt_4c_Diretor.Value = ""
+
+        * Obriga Subclas. Encerramento
+        THIS.AdicionarLabel(loc_oPagina, "lbl_4c_ObrigaSubclas", "Obriga Subclas.:", 20, loc_nTop + (loc_nEsp * 3))
+        THIS.AdicionarOptionGroup(loc_oPagina, "opt_4c_ObrigaSubclas", 120, loc_nTop + (loc_nEsp * 3) - 3)
+
+        * Tipo
+        THIS.AdicionarLabel(loc_oPagina, "lbl_4c_Tipo", "Tipo:", 20, loc_nTop + (loc_nEsp * 4))
+        THIS.AdicionarOptionGroup(loc_oPagina, "opt_4c_Tipo", 120, loc_nTop + (loc_nEsp * 4) - 3)
+
+        * Automatico
+        THIS.AdicionarLabel(loc_oPagina, "lbl_4c_Automatico", "Autom" + CHR(225) + "tico:", 20, loc_nTop + (loc_nEsp * 5))
+        THIS.AdicionarOptionGroup(loc_oPagina, "opt_4c_Automatico", 120, loc_nTop + (loc_nEsp * 5) - 3)
+
+        * Vincula eventos dos botoes
+        BINDEVENT(loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Confirmar, "Click", THIS, "BtnConfirmarClick")
+        BINDEVENT(loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
+        BINDEVENT(loc_oPagina.cnt_4c_BotoesDados.cmd_4c_OK, "Click", THIS, "BtnOKClick")
+
+        * Vincula eventos para lookup do Diretor (tabela SigCdUsu)
+        BINDEVENT(loc_oPagina.txt_4c_Diretor, "DblClick", THIS, "AbrirBuscaDiretor")
+        BINDEVENT(loc_oPagina.txt_4c_Diretor, "KeyPress", THIS, "TeclaLookupDiretor")
+        BINDEVENT(loc_oPagina.txt_4c_Diretor, "LostFocus", THIS, "ValidarDiretor")
+
+        THIS.TornarControlesVisiveis(loc_oPagina)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AdicionarLabel - Metodo auxiliar para criar labels
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AdicionarLabel(par_oContainer, par_cNome, par_cCaption, par_nLeft, par_nTop)
+        par_oContainer.AddObject(par_cNome, "Label")
+        WITH EVALUATE("par_oContainer." + par_cNome)
+            .Caption = par_cCaption
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Left = par_nLeft
+            .Top = par_nTop
+            .AutoSize = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AdicionarTextBox - Metodo auxiliar para criar textbox
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AdicionarTextBox(par_oContainer, par_cNome, par_nLeft, par_nTop, par_nWidth)
+        par_oContainer.AddObject(par_cNome, "TextBox")
+        WITH EVALUATE("par_oContainer." + par_cNome)
+            .Left = par_nLeft
+            .Top = par_nTop
+            .Width = par_nWidth
+            .Height = 24
+            .FontName = "Tahoma"
+            .FontSize = 8
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AdicionarOptionGroup - Metodo auxiliar para criar OptionGroup Sim/Nao
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AdicionarOptionGroup(par_oContainer, par_cNome, par_nLeft, par_nTop)
+        par_oContainer.AddObject(par_cNome, "OptionGroup")
+        WITH EVALUATE("par_oContainer." + par_cNome)
+            .ButtonCount = 2
+            .BackStyle = 0
+            .BorderStyle = 0
+            .Left = par_nLeft
+            .Top = par_nTop
+            .Width = 100
+            .Height = 22
+            .Value = 2
+            * Posicionar cada Option individualmente
+            .Option1.Caption = "Sim"
+            .Option1.FontName = "Tahoma"
+            .Option1.FontSize = 8
+            .Option1.BackStyle = 0
+            .Option1.ForeColor = RGB(90, 90, 90)
+            .Option1.Left = 0
+            .Option1.Top = 0
+            .Option1.Width = 45
+            .Option1.Height = 18
+            .Option1.AutoSize = .F.
+            .Option2.Caption = "N" + CHR(227) + "o"
+            .Option2.FontName = "Tahoma"
+            .Option2.FontSize = 8
+            .Option2.BackStyle = 0
+            .Option2.ForeColor = RGB(90, 90, 90)
+            .Option2.Left = 50
+            .Option2.Top = 0
+            .Option2.Width = 45
+            .Option2.Height = 18
+            .Option2.AutoSize = .F.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TornarControlesVisiveis - CORRIGIDO para PageFrames
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_oObjeto
+
+        * Primeiro trata Pages se for PageFrame
+        IF PEMSTATUS(par_oContainer, "PageCount", 5)
+            FOR loc_nI = 1 TO par_oContainer.PageCount
+                THIS.TornarControlesVisiveis(par_oContainer.Pages(loc_nI))
+            ENDFOR
+        ENDIF
+
+        * Depois trata Controls
+        IF PEMSTATUS(par_oContainer, "ControlCount", 5)
+            FOR loc_nI = 1 TO par_oContainer.ControlCount
+                loc_oObjeto = par_oContainer.Controls(loc_nI)
+
+                IF VARTYPE(loc_oObjeto) = "O"
+                    IF PEMSTATUS(loc_oObjeto, "Visible", 5)
+                        loc_oObjeto.Visible = .T.
+                    ENDIF
+
+                    * Recursao para containers
+                    THIS.TornarControlesVisiveis(loc_oObjeto)
+                ENDIF
+            ENDFOR
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormatarGridLista - Aplica formatacao visual ao grid (chamado apos CarregarLista)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormatarGridLista(par_oGrid)
+        WITH par_oGrid
+            .ReadOnly = .T.
+            .ScrollBars = 2
+            .RecordMark = .F.
+            .DeleteMark = .F.
+            .RowHeight = 16
+            .FontName = "Verdana"
+            .FontSize = 8
+            .GridLineColor = RGB(238, 238, 238)
+            .ForeColor = RGB(90, 90, 90)
+            .BackColor = RGB(255, 255, 255)
+            .HighlightBackColor = RGB(255, 255, 255)
+            .HighlightForeColor = RGB(15, 41, 104)
+            .HighlightStyle = 2
+
+            * Coluna 1 - Codigo (80px)
+            .Column1.Header1.Caption = "C" + CHR(243) + "digo"
+            .Column1.Header1.FontName = "Tahoma"
+            .Column1.Header1.FontSize = 8
+            .Column1.Width = 80
+            .Column1.FontName = "Verdana"
+            .Column1.FontSize = 8
+
+            * Coluna 2 - Departamento (290px conforme legado)
+            .Column2.Header1.Caption = "Departamento"
+            .Column2.Header1.FontName = "Tahoma"
+            .Column2.Header1.FontSize = 8
+            .Column2.Width = 290
+            .Column2.FontName = "Verdana"
+            .Column2.FontSize = 8
+
+            * Coluna 3 - Diretor (80px conforme legado)
+            .Column3.Header1.Caption = "Diretor"
+            .Column3.Header1.FontName = "Tahoma"
+            .Column3.Header1.FontSize = 8
+            .Column3.Width = 80
+            .Column3.FontName = "Verdana"
+            .Column3.FontSize = 8
+
+            .Refresh()
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarLista
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarLista()
+        LOCAL loc_lSucesso, loc_oGrid
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF THIS.this_oBusinessObject.Buscar("", "codigos")
+                IF USED("cursor_4c_Dados")
+                    loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Lista
+
+                    * Vincula cursor diretamente ao grid
+                    loc_oGrid.RecordSource = "cursor_4c_Dados"
+                    loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.codigos"
+                    loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.descricaos"
+                    loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.diretors"
+
+                    * Aplica formatacao visual
+                    THIS.FormatarGridLista(loc_oGrid)
+
+                    SELECT cursor_4c_Dados
+                    GO TOP
+                    loc_oGrid.Refresh()
+                    loc_lSucesso = .T.
+                ENDIF
+            ENDIF
+        CATCH TO loc_oEx
+            loc_lSucesso = .F.
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * IrParaDados / IrParaLista
+    *--------------------------------------------------------------------------
+    PROCEDURE IrParaDados()
+        THIS.pgf_4c_Principal.ActivePage = 2
+        * Modo eh definido em BtnIncluirClick, BtnVisualizarClick ou BtnAlterarClick
+    ENDPROC
+
+    PROCEDURE IrParaLista()
+        THIS.pgf_4c_Principal.ActivePage = 1
+        THIS.this_cModoAtual = "LISTA"
+        THIS.CarregarLista()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaBO - Transfere dados do form para o Business Object
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaBO()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Principal.Page2
+
+        WITH THIS.this_oBusinessObject
+            .this_cCodigo = ALLTRIM(loc_oPagina.txt_4c_Codigo.Value)
+            .this_cDescricao = ALLTRIM(loc_oPagina.txt_4c_Descricao.Value)
+            .this_cDiretor = ALLTRIM(loc_oPagina.txt_4c_Diretor.Value)
+            .this_nObrigaSubclas = loc_oPagina.opt_4c_ObrigaSubclas.Value
+            .this_nTipo = loc_oPagina.opt_4c_Tipo.Value
+            .this_nAutomatico = loc_oPagina.opt_4c_Automatico.Value
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BOParaForm - Transfere dados do Business Object para o form
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Principal.Page2
+
+        WITH THIS.this_oBusinessObject
+            loc_oPagina.txt_4c_Codigo.Value = .this_cCodigo
+            loc_oPagina.txt_4c_Descricao.Value = .this_cDescricao
+            loc_oPagina.txt_4c_Diretor.Value = .this_cDiretor
+            loc_oPagina.opt_4c_ObrigaSubclas.Value = IIF(EMPTY(.this_nObrigaSubclas), 2, .this_nObrigaSubclas)
+            loc_oPagina.opt_4c_Tipo.Value = IIF(EMPTY(.this_nTipo), 2, .this_nTipo)
+            loc_oPagina.opt_4c_Automatico.Value = IIF(EMPTY(.this_nAutomatico), 2, .this_nAutomatico)
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparCampos
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE LimparCampos()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Principal.Page2
+
+        loc_oPagina.txt_4c_Codigo.Value = ""
+        loc_oPagina.txt_4c_Descricao.Value = ""
+        loc_oPagina.txt_4c_Diretor.Value = ""
+        loc_oPagina.opt_4c_ObrigaSubclas.Value = 2
+        loc_oPagina.opt_4c_Tipo.Value = 2
+        loc_oPagina.opt_4c_Automatico.Value = 2
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Eventos dos botoes - PAGINA LISTA
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnIncluirClick()
+        THIS.this_cModoAtual = "INCLUIR"
+        THIS.this_oBusinessObject.Novo()
+        THIS.LimparCampos()
+        THIS.IrParaDados()
+        THIS.this_lNovoRegistro = .T.
+        THIS.HabilitarCampos(.T.)
+        THIS.AjustarBotoesPorModo()
+        THIS.pgf_4c_Principal.Page2.txt_4c_Codigo.SetFocus()
+    ENDPROC
+
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_cCodigo
+        loc_cCodigo = THIS.ObterCodigoSelecionado()
+
+        IF EMPTY(loc_cCodigo)
+            MsgAviso("Selecione um registro")
+            RETURN
+        ENDIF
+
+        THIS.this_cModoAtual = "VISUALIZAR"
+
+        IF THIS.this_oBusinessObject.CarregarPorId(loc_cCodigo)
+            THIS.BOParaForm()
+            THIS.IrParaDados()
+            THIS.this_lNovoRegistro = .F.
+            THIS.HabilitarCampos(.F.)
+            THIS.AjustarBotoesPorModo()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE BtnAlterarClick()
+        LOCAL loc_cCodigo
+        loc_cCodigo = THIS.ObterCodigoSelecionado()
+
+        IF EMPTY(loc_cCodigo)
+            MsgAviso("Selecione um registro")
+            RETURN
+        ENDIF
+
+        THIS.this_cModoAtual = "ALTERAR"
+
+        IF THIS.this_oBusinessObject.CarregarPorId(loc_cCodigo)
+            THIS.BOParaForm()
+            THIS.IrParaDados()
+            THIS.this_lNovoRegistro = .F.
+            THIS.HabilitarCampos(.T.)
+            THIS.AjustarBotoesPorModo()
+            THIS.pgf_4c_Principal.Page2.txt_4c_Codigo.Enabled = .F.
+            THIS.pgf_4c_Principal.Page2.txt_4c_Descricao.SetFocus()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE BtnExcluirClick()
+        LOCAL loc_cCodigo
+        loc_cCodigo = THIS.ObterCodigoSelecionado()
+
+        IF EMPTY(loc_cCodigo)
+            MsgAviso("Selecione um registro")
+            RETURN
+        ENDIF
+
+        IF !MsgConfirma("Deseja excluir o departamento " + loc_cCodigo + "?")
+            RETURN
+        ENDIF
+
+        IF THIS.this_oBusinessObject.CarregarPorId(loc_cCodigo)
+            IF THIS.this_oBusinessObject.Excluir()
+                MsgInfo("Registro exclu" + CHR(237) + "do com sucesso!")
+                THIS.CarregarLista()
+            ELSE
+                MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    PROCEDURE BtnBuscarClick()
+        THIS.CarregarLista()
+    ENDPROC
+
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Eventos dos botoes - PAGINA DADOS
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnConfirmarClick()
+        THIS.FormParaBO()
+
+        IF THIS.this_oBusinessObject.Salvar(THIS.this_lNovoRegistro)
+            MsgInfo("Registro salvo com sucesso!")
+            THIS.IrParaLista()
+        ELSE
+            MsgErro(THIS.this_oBusinessObject.this_cMensagemErro)
+        ENDIF
+    ENDPROC
+
+    PROCEDURE BtnCancelarClick()
+        THIS.IrParaLista()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnOKClick - Fecha a consulta e retorna para a lista (modo VISUALIZAR)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnOKClick()
+        THIS.IrParaLista()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarBotoesPorModo - Alterna visibilidade dos botoes conforme modo
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AjustarBotoesPorModo()
+        LOCAL loc_oPagina, loc_lVisualizar
+        loc_oPagina = THIS.pgf_4c_Principal.Page2
+        loc_lVisualizar = (THIS.this_cModoAtual == "VISUALIZAR")
+
+        * No modo VISUALIZAR: mostra apenas OK
+        * Nos demais modos: mostra Confirmar e Cancelar
+        loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Confirmar.Visible = !loc_lVisualizar
+        loc_oPagina.cnt_4c_BotoesDados.cmd_4c_Cancelar.Visible = !loc_lVisualizar
+        loc_oPagina.cnt_4c_BotoesDados.cmd_4c_OK.Visible = loc_lVisualizar
+    ENDPROC
+
+    PROCEDURE GridDblClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Metodos Auxiliares
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ObterCodigoSelecionado()
+        LOCAL loc_cCodigo
+        loc_cCodigo = ""
+
+        IF USED("cursor_4c_Dados") AND RECCOUNT("cursor_4c_Dados") > 0
+            loc_cCodigo = ALLTRIM(cursor_4c_Dados.codigos)
+        ENDIF
+
+        RETURN loc_cCodigo
+    ENDPROC
+
+    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Principal.Page2
+
+        loc_oPagina.txt_4c_Codigo.Enabled = par_lHabilitar
+        loc_oPagina.txt_4c_Descricao.Enabled = par_lHabilitar
+        loc_oPagina.txt_4c_Diretor.Enabled = par_lHabilitar
+        loc_oPagina.opt_4c_ObrigaSubclas.Enabled = par_lHabilitar
+        loc_oPagina.opt_4c_Tipo.Enabled = par_lHabilitar
+        loc_oPagina.opt_4c_Automatico.Enabled = par_lHabilitar
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TeclaLookupDiretor - Captura F4/F5 para abrir busca
+    *--------------------------------------------------------------------------
+    PROCEDURE TeclaLookupDiretor(par_nKeyCode, par_nShiftAltCtrl)
+        * F4 = 115, F5 = 116
+        IF INLIST(par_nKeyCode, 115, 116)
+            THIS.AbrirBuscaDiretor()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AbrirBuscaDiretor - Abre FormBuscaAuxiliar para selecionar diretor
+    * Tabela: SigCdUsu
+    * Campos: Usuarios (codigo), NComps (nome)
+    * Filtro: Not cAtivos='N' (somente usuarios ativos)
+    *--------------------------------------------------------------------------
+    PROCEDURE AbrirBuscaDiretor()
+        LOCAL loc_oPagina, loc_cValorAtual, loc_oBusca
+MESSAGEBOX("X")
+        loc_oPagina = THIS.pgf_4c_Principal.Page2
+        loc_cValorAtual = ALLTRIM(loc_oPagina.txt_4c_Diretor.Value)
+
+        * FormBuscaAuxiliar(nConnHandle, cTabela, cCursor, cCampoBusca, cValor, cTitulo, lBuscaExata, lMostraGrid, cFiltro)
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", ;
+            gnConnHandle, ;
+            "SigCdUsu", ;
+            "cursor_4c_Busca", ;
+            "Usuarios", ;
+            loc_cValorAtual, ;
+            "Sele" + CHR(231) + CHR(227) + "o de Diretor", ;
+            .T., ;
+            .F., ;
+            "cAtivos <> 'N'")
+
+        IF VARTYPE(loc_oBusca) = "O"
+            IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                * Registro exato encontrado - usa direto
+                IF USED("cursor_4c_Busca") AND RECCOUNT("cursor_4c_Busca") > 0
+                    loc_oPagina.txt_4c_Diretor.Value = ALLTRIM(cursor_4c_Busca.Usuarios)
+                ENDIF
+            ELSEIF !loc_oBusca.this_lAchouRegistro OR EMPTY(loc_cValorAtual)
+                * Mostra grid para selecao
+                loc_oBusca.mAddColuna("Usuarios", "", "Diretor")
+                loc_oBusca.mAddColuna("NComps", "", "Nome")
+                loc_oBusca.Show(1)
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_Busca")
+                    loc_oPagina.txt_4c_Diretor.Value = ALLTRIM(cursor_4c_Busca.Usuarios)
+                ENDIF
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+
+        IF USED("cursor_4c_Busca")
+            USE IN cursor_4c_Busca
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarDiretor - Valida codigo do diretor ao sair do campo
+    *--------------------------------------------------------------------------
+    PROCEDURE ValidarDiretor()
+        LOCAL loc_oPagina, loc_cValor, loc_cSQL, loc_nResultado
+
+        loc_oPagina = THIS.pgf_4c_Principal.Page2
+        loc_cValor = UPPER(ALLTRIM(loc_oPagina.txt_4c_Diretor.Value))
+
+        * Se vazio, permite sair sem validar
+        IF EMPTY(loc_cValor)
+            RETURN
+        ENDIF
+
+        * Busca exata no banco - somente usuarios ativos
+        loc_cSQL = "SELECT Usuarios, NComps FROM SigCdUsu " + ;
+                   "WHERE Usuarios = " + EscaparSQL(loc_cValor) + " AND cAtivos <> 'N'"
+        loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Valida")
+
+        IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_Valida") = 1
+            * Encontrou exato - atualiza com valor correto do banco
+            loc_oPagina.txt_4c_Diretor.Value = ALLTRIM(cursor_4c_Valida.Usuarios)
+        ELSEIF loc_nResultado > 0 AND RECCOUNT("cursor_4c_Valida") > 1
+            * Multiplos registros - abre busca
+            IF USED("cursor_4c_Valida")
+                USE IN cursor_4c_Valida
+            ENDIF
+            THIS.AbrirBuscaDiretor()
+            RETURN
+        ELSE
+            * Nao encontrou - limpa e abre busca
+            IF USED("cursor_4c_Valida")
+                USE IN cursor_4c_Valida
+            ENDIF
+            MsgAviso("Diretor '" + loc_cValor + "' n" + CHR(227) + "o encontrado ou inativo.")
+            loc_oPagina.txt_4c_Diretor.Value = ""
+            THIS.AbrirBuscaDiretor()
+            RETURN
+        ENDIF
+
+        IF USED("cursor_4c_Valida")
+            USE IN cursor_4c_Valida
+        ENDIF
+    ENDPROC
+
+ENDDEFINE

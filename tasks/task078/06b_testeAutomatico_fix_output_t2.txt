@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `FormSIGREDES.prg`:
+
+1. **`AjustarBotoesPorModo`** ÔÇö removido `PROTECTED`, agora ├® PUBLIC. O teste chama o m├®todo externamente na linha 542; `PROTECTED` bloqueia acesso de fora da classe.
+
+2. **`AbrirLookup`** adicionado ÔÇö dispatcher p├║blico que identifica o controle ativo na Page1 e delega ao m├®todo `AbrirBusca*` correspondente. O framework de teste (`TesteAutomatico.prg`) verifica a exist├¬ncia desse m├®todo gen├®rico em formul├írios que possuem campos de lookup.

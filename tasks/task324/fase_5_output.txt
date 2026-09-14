@@ -1,0 +1,15 @@
+﻿A migra├º├úo est├í 100% completa. O config.prg carrega automaticamente:
+- `sigprrcuBO.prg` via `ADIR(*BO.prg)` em `classes/`
+- `Formsigprrcu.prg` via `ADIR(Form*.prg)` em `forms/operacionais/`
+
+**Fase 5/8 ├® um no-op para este formul├írio.** O SIGPRRCU ├® um dialog de processamento batch (580├ù150) com zero campos de dados ÔÇö o `analise.json` confirma `"campos": []`. Toda a estrutura visual foi implementada nas fases anteriores:
+
+| Objeto original | Migrado | Status |
+|---|---|---|
+| `cntSombra` (+ lblSombra/lblTitulo) | `cnt_4c_Sombra` (+ labels) | Ô£ô Fase 3 |
+| `Shape1` | `shp_4c_Shape1` | Ô£ô Fase 4 |
+| `OK` (Processar) | `cmd_4c_Processar` | Ô£ô Fase 4 |
+| `SAIR` (Encerrar) | `cmd_4c_Encerrar` | Ô£ô Fase 4 |
+| `Label1` (status animado) | `lbl_4c_Status` | Ô£ô Fase 4 |
+
+O formul├írio n├úo tem Page2/Dados ÔÇö n├úo h├í `ConfigurarPaginaDados()` a criar. A migra├º├úo est├í completa com l├│gica de processamento (`CmdProcessarClick`), log Fortyus, transa├º├Áes SQL e integra├º├úo em menu.prg.

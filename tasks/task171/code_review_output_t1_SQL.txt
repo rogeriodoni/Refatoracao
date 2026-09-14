@@ -1,0 +1,6 @@
+﻿Corrijo feito. As duas condi├º├Áes WHERE inventadas foram removidas do m├®todo `CarregarCaixa` em `sigprdftBO.prg` (linhas 146-150):
+
+- `WHERE Emps = EscaparSQL(go_4c_Sistema.cCodEmpresa)` ÔåÆ removido (coluna `EMPS` n├úo existe no original)
+- `AND Cncaixas = EscaparSQL(par_cCaixa)` ÔåÆ removido (coluna `CNCAIXAS` como filtro n├úo existe no original)
+
+O SQL agora faz `SELECT Cncaixas FROM SigFiMpF` sem filtros, retornando o primeiro registro dispon├¡vel ÔÇö alinhado com o comportamento do legado que n├úo aplicava esses filtros.

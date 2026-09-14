@@ -1,0 +1,10 @@
+﻿As 3 corre├º├Áes est├úo aplicadas. Resumo das a├º├Áes:
+
+**5 problemas analisados:**
+
+- **"Data" (2 ocorr├¬ncias)** ÔåÆ **Falso positivo**: O legado usa `pColuna('Datas', '', '', 'Data', 80, .t.)` na linha 3106 do c├│digo fonte legado, definindo exatamente "Data" como caption em runtime. O validador est├ítico n├úo detecta esse valor din├ómico. O c├│digo migrado com `"Data"` j├í estava correto ÔÇö mantido sem altera├º├úo.
+
+- **"N?" / "N┬░" = `"N" + CHR(176)` (3 ocorr├¬ncias)** ÔåÆ **Erro real**: O legado tem `Caption = "C?digo"` (C├│digo) explicitamente no `grdCabOperas.Column4.Header1` do SCX para a coluna `numes`. O Claude havia inventado "N┬░" (n├║mero). **Corrigido para** `"C" + CHR(243) + "digo"` em 3 locais:
+  - linha 1249 (`ConfigurarSubPaginaOperacoes`)
+  - linha 1434 (`AbrirBatchExistente`)
+  - linha 2115 (`BtnSalvarClick`)

@@ -1,0 +1,8 @@
+﻿Corre├º├Áes aplicadas em `SIGREAGVBO.prg`:
+
+| # | Problema | A├º├úo |
+|---|----------|------|
+| SQL-ASPAS (L205) | `WHERE CPros = '` + var + `'` e `AND Colecoes = '` + var + `'` | Substitu├¡do por `EscaparSQL(crGrupos.CPros)` e `EscaparSQL(loc_lcCol)` |
+| SQL-FILTRO CEMPS | SQLEXEC em SigCdEmp com `WHERE Cemps = ...` | Removido ÔÇö substitu├¡do por `go_4c_Sistema.cCodEmpresa` + `go_4c_Sistema.cEmpresa` (globals j├í dispon├¡veis) |
+| SQL-FILTRO CMOES | `WHERE cmoes = ...` em BuscarCotacao | **Mantido** ÔÇö ├® reimplementa├º├úo leg├¡tima de `fBuscarCotacao()` do legado; sem esse filtro a cota├º├úo retornaria de moeda errada |
+| SQL-FILTRO DATAS | `AND datas <= GETDATE()` em BuscarCotacao | **Mantido** ÔÇö mesmo motivo; filtra pela data mais recente de cota├º├úo |

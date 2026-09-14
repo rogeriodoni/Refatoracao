@@ -1,0 +1,12 @@
+﻿Tudo integrado corretamente. A migra├º├úo do FormCrt est├í completa:
+
+**O que j├í estava pronto (Fases 1-7):**
+- `CrtBO.prg` ÔÇö completo com todas as propriedades e m├®todos CRUD
+- `FormCrt.prg` ÔÇö completo com todos os m├®todos da Fase 8 j├í implementados
+
+**O que foi adicionado agora (Fase 8 ÔÇö Integra├º├úo ao sistema):**
+- `menu.prg`: DEFINE BAR 66 (separador) + BAR 67 ("Retrabalhos") no popCadastros
+- `menu.prg`: ON SELECTION BAR 67 ligado a `AbrirFormCrt`
+- `menu.prg`: Procedure `AbrirFormCrt()` com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+**config.prg** n├úo precisou de altera├º├úo ÔÇö usa ADIR() para carregar automaticamente `*BO.prg` e `Form*.prg`.

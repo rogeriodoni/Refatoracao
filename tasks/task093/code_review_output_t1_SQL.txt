@@ -1,0 +1,42 @@
+﻿Verifica├º├úo completa. Agora tenho todos os dados necess├írios:
+
+**lookup_implementation.md confirma:**
+- `SigCdGcr`: `codigos` / `descrs` Ô£ô
+- `SigCdMoe`: `cmoes` / `dmoes` Ô£ô
+- `SigCdUni`: `cunis` / `dunis` Ô£ô
+- `SIGCDCLI`: `iclis` / `nomes` ÔåÉ documenta├º├úo
+
+**Mas `functions.prg` e `FormSIGREAUP.prg` confirmam que SigCdCli tem:**
+```
+SELECT IClis, RClis, Inativas FROM SigCdCli
+cursor_4c_SigCdCli.RClis   (usado em valida├º├Áes e buscas)
+```
+
+**Schema SQL confirma:**
+- `SigCdGcr.codigos` e `SigCdGcr.descrs` ÔÇö colunas reais
+- `SigCdMoe.cmoes` e `SigCdMoe.dmoes` ÔÇö colunas reais
+- `SigCdUni.cunis` e `SigCdUni.dunis` ÔÇö colunas reais
+
+**Resultado da verifica├º├úo: todos os 7 issues s├úo FALSOS POSITIVOS.**
+
+Ap├│s verifica├º├úo cruzada contra o schema, `functions.prg` e `FormSIGREAUP.prg` (form similar do mesmo sistema):
+
+| Coluna flagged | Tabela | Status | Evid├¬ncia |
+|---|---|---|---|
+| `CODIGOS` | SigCdGcr | Ô£ô COLUNA REAL | schema.sql: `codigos char(10)` |
+| `DESCRS` | SigCdGcr | Ô£ô COLUNA REAL | schema.sql: `descrs char(40)` |
+| `ICLIS` | SigCdCli | Ô£ô COLUNA REAL | functions.prg:624, FormSIGREAUP.prg:981 |
+| `RCLIS` | SigCdCli | Ô£ô COLUNA REAL | FormSIGREAUP.prg:1352 `SELECT IClis, RClis` |
+| `DUNIS` | SigCdUni | Ô£ô COLUNA REAL | schema.sql: `dunis char(20)` |
+| `CMOES` | SigCdMoe | Ô£ô COLUNA REAL | schema.sql: `cmoes char(3)` |
+| `DMOES` | SigCdMoe | Ô£ô COLUNA REAL | schema.sql: `dmoes char(15)` |
+
+O detector autom├ítico flagou essas colunas porque elas n├úo aparecem nas cl├íusulas WHERE do SQL principal do relat├│rio (que usa CEMPS, CUNIS, CPROS, EMPGRUESTS, etc.). Por├®m essas condi├º├Áes est├úo em **m├®todos de valida├º├úo de lookup auxiliares** (`ValidarCdGrEst`, `ValidarDsGrEst`, `ValidarCdEstoque`, `ValidarDsEstoque`, `ValidarCdUnidade`, `ValidarDsUnidade`, `ValidarCdMoeda`, `ValidarDsMoeda`) ÔÇö que s├úo queries separadas sobre tabelas auxiliares, n├úo filtros do relat├│rio principal.
+
+**Nenhuma altera├º├úo ├® necess├íria.** O c├│digo est├í correto:
+- `WHERE Codigos = ...` na SigCdGcr: valida├º├úo de campo Grupo de Estoque, coluna real
+- `WHERE iclis = ...` / `WHERE rclis LIKE ...` na SigCdCli: equivalente ao `fAcessoContas` do legado (confirmado no coment├írio do pr├│prio form linha 1071)
+- `WHERE dunis LIKE ...` na SigCdUni: valida├º├úo de campo Unidade por descri├º├úo
+- `WHERE cmoes = ...` / `WHERE dmoes LIKE ...` na SigCdMoe: valida├º├úo de campo Moeda
+
+Os 7 issues s├úo **falsos positivos** do detector ÔÇö as condi├º├Áes WHERE usam nomes de colunas corretos e implementam l├│gica v├ílida de valida├º├úo de campos do formul├írio.

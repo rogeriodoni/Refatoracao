@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. A causa raiz era: quando nenhum grupo ├® configurado (teste sem par├ómetros), `InicializarForm` mostrava o aviso mas `loc_lSucesso` ficava `.F.`, fazendo `FormBase.Init()` retornar `.F.` e o `CREATEOBJECT` retornar n├úo-objeto.
+
+A corre├º├úo adiciona `loc_lSucesso = .T.` ap├│s o `MsgAviso` ÔÇö o form instancia normalmente (estado vazio, sem `cnt_4c_Conta` configurado), que ├® o comportamento correto para o teste de instancia├º├úo.

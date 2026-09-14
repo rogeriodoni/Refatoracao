@@ -1,0 +1,8 @@
+﻿Fase 6 conclu├¡da. O `FormSigPrMlu.prg` foi atualizado com as melhorias de UX no `BtnProcessarClick`:
+
+- **GO TOP + Refresh** antes de verificar sele├º├úo (fidelidade ao comportamento original que fazia `Go Top In crSigMlItn` + `.Refresh` antes do processamento)
+- **SetFocus no grid** ap├│s MsgAviso de "nenhuma selecionada" e "apenas uma selecionada" (replicando o `ThisForm.grdSelecoes.SetFocus` do original)
+- **SetFocus no grid** ap├│s unifica├º├úo bem-sucedida (para o usu├írio poder navegar imediatamente)
+- **NVL()** defensivo no COUNT para evitar eventual NULL
+
+A integra├º├úo j├í estava completa: `config.prg` auto-carrega via ADIR todos `*BO.prg` e `Form*.prg`, e `menu.prg` j├í tem a entrada `AbrirFormSigPrMlu` no `popMovimentos`. O form OPERACIONAL n├úo tem lookups nem Page2 adicional (conforme o original), ent├úo n├úo h├í mais campos a adicionar nesta fase.

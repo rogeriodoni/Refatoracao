@@ -1,0 +1,15 @@
+﻿Os 4 handlers foram corrigidos. Resumo do que foi feito e n├úo feito:
+
+**[CARGA-DADOS] - 4 handlers corrigidos:**
+- `SituacaoCopiaChange()` - adicionado `THIS.AjustarBotoesPorModo()`
+- `SituacaoProChange()` - adicionado `THIS.AjustarBotoesPorModo()`
+- `ProdWebChange()` - adicionado `THIS.AjustarBotoesPorModo()`
+- `OpcVarChange()` - adicionado `THIS.AjustarBotoesPorModo()`
+
+O 5┬║ OptionGroup (`opt_4c_Situacao` ÔåÆ `FiltroSituacaoChange`) j├í tinha l├│gica real (`THIS.CarregarLista()`), sem altera├º├úo necess├íria.
+
+**[NULL-CURSOR] - FALSOS POSITIVOS (sem altera├º├úo):**
+Todos os 5 CREATE CURSOR reportados j├í possuem `SET NULL ON/OFF` corretamente. As alertas foram disparadas por correspond├¬ncia incorreta de linha pelo revisor autom├ítico.
+
+**[LAYOUT-POSITION] - FALSOS POSITIVOS (sem altera├º├úo):**
+Os 15 controles reportados s├úo de containers/p├íginas diferentes sendo comparados erroneamente (ex: `lbl_4c_Label1` da p├ígina FaseP vs. `Label1` do `cntMensagem`). N├úo h├í diverg├¬ncia real de posi├º├úo.

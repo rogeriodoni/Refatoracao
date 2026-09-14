@@ -1,0 +1,14 @@
+﻿O arquivo est├í completo e correto. Fase 2 entregue.
+
+**O que foi adicionado ao `sigrectcBO.prg`:**
+
+1. **`CarregarCartoes()`** (p├║blico) ÔÇö carrega `cursor_4c_Cartoes` via `SELECT dcarts FROM SigOpFp WHERE Infos='T'`. Ser├í chamado pelo Form durante `InicializarForm()` para alimentar o lookup do campo `get_fpags`.
+
+2. **`PrepararDados()`** (protected, override de `RelatorioBase`) ÔÇö implementa├º├úo completa do `PROCEDURE processamento` original com 4 se├º├Áes:
+   - **Entradas**: JOIN `SigCdCar + SigCdCtt`, filtro por `a.datas BETWEEN`
+   - **A Receber**: `SigCdCrd` com `totres-totpar Ôëá 0`, filtro por `d.vencs BETWEEN`
+   - **A Depositar**: SQL base em `SigOpFp+SigCdCtt` ÔåÆ `cursor_4c_TmpPro3`; depois sub-SELECT VFP com l├│gica de `this_lDepPrev` (data real ou vencimento previsto calculado)
+   - **Baixados**: `SigCdCrd` com `totres-totpar = 0`
+   - UNION ALL final em `cursor_4c_DadosCtc` ordenado por `razas`
+
+3. **`Destroy()`** atualizado ÔÇö limpa `cursor_4c_Cartoes` e `cursor_4c_DadosCtc` antes do DODEFAULT.

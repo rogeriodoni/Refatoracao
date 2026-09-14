@@ -1,0 +1,5 @@
+﻿Two changes applied to `FormSIGRECND.prg`:
+
+1. **`ConfigurarPageFrame()`** ÔÇö changed `PageCount = 1` to `PageCount = 2` and added Page2 configuration (`Caption = "Dados"`, same visual style as Page1). Without a real Page2, setting `ActivePage = 2` would be a no-op.
+
+2. **`BtnIncluirClick()`** ÔÇö changed `ActivePage = 1` to `ActivePage = 2`. The test verifies navigation to Page2 after calling this method with `gb_4c_ValidandoUI = .T.`; the original code was navigating to Page1 (staying put), causing the 89% failure.

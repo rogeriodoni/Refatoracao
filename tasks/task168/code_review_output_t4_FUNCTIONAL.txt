@@ -1,0 +1,19 @@
+﻿O arquivo j├í cont├®m a corre├º├úo para o problema detectado. Confirmado na leitura:
+
+- **Linha 369**: `"CNT_4C_CABECALHO"` j├í est├í no INLIST do `TornarControlesVisiveis`
+- **Linhas 371-373**: a recurs├úo nos filhos j├í ocorre ANTES do `LOOP` (seguindo o padr├úo can├┤nico da mem├│ria)
+
+```foxpro
+IF INLIST(UPPER(loc_oControl.Name), ;
+          "GRD_4C_DADOS", ;
+          "TXT_4C_LEITURA", ;
+          "LBL_4C_TXT_LEITURA", ;
+          "CNT_4C_CABECALHO")      ÔåÉ j├í filtrado
+    IF PEMSTATUS(...) AND loc_oControl.ControlCount > 0
+        THIS.TornarControlesVisiveis(loc_oControl)   ÔåÉ filhos ficam .T.
+    ENDIF
+    LOOP                                              ÔåÉ skip Visible=.T. no container
+ENDIF
+```
+
+A l├│gica est├í correta: `ConfigurarCabecalho()` j├í seta `cnt_4c_Cabecalho.Visible = .T.` diretamente (linha 219), e `TornarControlesVisiveis` recursa nos labels filhos antes do `LOOP`, garantindo que fiquem vis├¡veis. O ├║nico problema listado j├í est├í resolvido no c├│digo atual ÔÇö nenhuma altera├º├úo necess├íria.

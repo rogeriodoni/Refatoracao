@@ -1,0 +1,12 @@
+﻿**Falso positivo confirmado.** Nenhum `PENVELOPE` existe em cl├íusula SQL do c├│digo migrado.
+
+O scanner detectou a palavra `pEnvelope` que aparece no c├│digo como **par├ómetro VFP** do m├®todo `Init(pEnvelope)` (linha 58 do form), n├úo como coluna SQL. As 5 queries do BO t├¬m exatamente as condi├º├Áes corretas:
+
+| Query | WHERE usa |
+|-------|-----------|
+| `SigCdOpe` | `Servicos`, `Globalizas` Ô£ô |
+| `SigPdMvf` | `Nenvs`, `Dopps`, `Numps` Ô£ô |
+| `SigCdCli` (x2) | `Iclis` Ô£ô |
+| `SigCdCe` (x2) | `Iclis` Ô£ô |
+
+Todas coincidem com as colunas originais listadas (SERVICOS, GLOBALIZAS, DOPPS, NUMPS, ICLIS). **Nenhuma altera├º├úo necess├íria** ÔÇö os arquivos est├úo corretos.

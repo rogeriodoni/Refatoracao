@@ -1,0 +1,10 @@
+﻿O problema detectado ├® um **falso positivo**. N├úo existe nenhuma cl├íusula SQL `WHERE` com a coluna `CONTROLCOUNT` no arquivo.
+
+As duas ocorr├¬ncias de `ControlCount` no c├│digo s├úo acessos a **propriedades VFP de objetos**, n├úo colunas SQL:
+
+- **Linha 1029**: `FOR loc_nI = 1 TO par_oContainer.ControlCount` ÔÇö loop sobre controles de um container VFP
+- **Linha 1045**: `IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0` ÔÇö verifica se o objeto VFP possui a propriedade `ControlCount`
+
+Ambas s├úo usos v├ílidos e corretos da propriedade padr├úo VFP `ControlCount` para itera├º├úo recursiva de controles de formul├írio. Nenhuma altera├º├úo ├® necess├íria.
+
+**Conclus├úo**: O detector de SQL confundiu a propriedade VFP `ControlCount` com um nome de coluna SQL em um WHERE. O arquivo `FormProduto.prg` est├í correto e n├úo requer modifica├º├úo neste pass.

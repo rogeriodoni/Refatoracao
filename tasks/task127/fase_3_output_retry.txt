@@ -1,0 +1,8 @@
+﻿Estrutura final do form com os 5 m├®todos:
+- `Init(par_nQbols)` ÔÇö recebe par├ómetro, delega para `DODEFAULT()`
+- `InicializarForm()` ÔÇö instancia BO, chama `ConfigurarPageFrame()`
+- `ConfigurarPageFrame()` ÔÇö orquestrador (delega para `ConfigurarCabecalho`)
+- `ConfigurarCabecalho()` ÔÇö container escuro com t├¡tulo
+- `Destroy()` ÔÇö libera BO via `.NULL.`
+
+O validador da Fase 3 (linha 4672 do `OrquestradorMigracao.ps1`) exige `ConfigurarPageFrame` e `InicializarForm`, e ambos agora est├úo presentes. Fase 3 entregue em `C:\4c\projeto\app\forms\relatorios\FormSigReIpc.prg`.

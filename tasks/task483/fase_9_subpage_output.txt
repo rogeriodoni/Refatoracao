@@ -1,0 +1,13 @@
+﻿Task 501 is complete. Summary of what was done:
+
+**Migration: SIGCDPRC ÔåÆ Formprc/prcBO**
+- `prcBO.prg` (487 lines): BO for SigPcOoP table with Buscar, CarregarPorCodigo, Salvar, SalvarItens, AtualizarSigCdPrg, ExecutarExclusao
+- `Formprc.prg` (3929 lines): Form with 32 OptionGroups, 2 complex grids (csDestinos/csDestinoG), ConfigurarPaginaDados (1615 lines), full CRUD
+- `menu.prg`: Added BAR 154 for "Movimenta├º├Áes Para C├│pia"
+
+**Key bugs found and fixed:**
+1. `OptionGroup.Value = .T.` ÔåÆ Error 1881 at runtime; fixed to `.Value = 1` (86 occurrences)
+2. `config.prg` resets `gb_4c_ValidandoUI = .F.`; test script must restore it after `DO config.prg`
+3. SalvarItens had invalid IF filter around SCAN loop (removed to match legado behavior)
+
+**Commit:** `750f8264 feat(task501): migrar SIGCDPRC -> Formprc/prcBO - COMPLETO`

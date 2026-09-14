@@ -1,0 +1,10 @@
+﻿**Resumo das corre├º├Áes:**
+
+- **#8 (SQL-FILTRO-INVENTADO)** ÔÇö Removida a condi├º├úo `OR dcargs LIKE ...` do m├®todo `Buscar` em `CargoBO.prg:86`. O legado filtra `SigCrRcc` por `Cargos` e `sigcarct` por `Cargo`; n├úo h├í WHERE por `dcargs` em nenhuma query original.
+
+- **#1ÔÇô#7 (GRID-SQL ÔÇö falsos positivos)** ÔÇö Os campos `categoria`, `descs`, `tipo` (cursor_4c_Categorias) e `grupos`, `contas`, `valors`, `moedas` (cursor_4c_AcessoFinan) **est├úo presentes** no BO:
+  - `InicializarCursoresGrid()` ÔÇö CREATE CURSOR com todos os campos
+  - `CarregarSubTabelaCategorias()` ÔÇö `SELECT a.categoria, ISNULL(b.descs,'') AS descs, a.tipo`
+  - `CarregarSubTabelaAcessoFinan()` ÔÇö `SELECT grupos, contas, valors, moedas`
+  
+  O checker scaneou apenas o Form e n├úo enxergou as defini├º├Áes no BO. Nenhuma altera├º├úo necess├íria.

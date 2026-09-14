@@ -1,0 +1,11 @@
+﻿Tudo correto. Resumo do que foi feito:
+
+**Phase 7 j├í estava completa** ÔÇö os 4 eventos principais (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) j├í estavam implementados nas linhas 800-913 do FormSIGPRINT.prg com l├│gica completa e funcional.
+
+**Phase 8 (integra├º├úo) conclu├¡da agora:**
+- `menu.prg` linha 79-82: adicionado `DEFINE BAR 22` (separador) e `DEFINE BAR 23` ("Instru├º├Áes de Impress├úo") em `popCadastros`
+- `menu.prg` linha 100: adicionado `ON SELECTION BAR 23 OF popCadastros DO AbrirFormSIGPRINT`
+- `menu.prg` linhas 4897-4921: adicionada procedure `AbrirFormSIGPRINT()` com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+- `config.prg`: n├úo precisa de modifica├º├úo pois usa ADIR() para auto-descoberta de arquivos em `cadastros\`
+
+FormSIGPRINT est├í totalmente integrado ao sistema.

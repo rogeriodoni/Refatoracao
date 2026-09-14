@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e correto. Fase 8/8 conclu├¡da.
+
+**Resumo do que foi adicionado ao `FormSIGREEQR.prg`:**
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `BtnBuscarClick()` | Recarrega cursor `Selecao` via `InicializarSelecao()` e atualiza a grade |
+| `BtnEncerrarClick()` | Delega para `CmgEncerrarClick()` ÔåÆ `Release()` |
+| `BtnSalvarClick()` | Delega para `CmgVisualizarClick()` (preview do relat├│rio) |
+| `BtnCancelarClick()` | Delega para `LimparCampos()` |
+| `FormParaBO()` | Delega para `FormParaRelatorio()` |
+| `BOParaForm()` | Restaura todos os 11 campos do form a partir das propriedades do BO |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita todos os controles de filtro; respeita l├│gica de DataSaldo |
+| `CarregarLista()` | Recarrega o cursor `Selecao` e rebinda a grade (PROTECTED) |
+| `AjustarBotoesPorModo()` | No-op (form REPORT n├úo tem modos CRUD) |
+
+**Integra├º├úo j├í estava completa nas fases anteriores:**
+- `config.prg`: carrega `SIGREEQRBO.prg` via padr├úo `*BO.prg` e `FormSIGREEQR.prg` via padr├úo `Form*.prg` do diret├│rio `relatorios\` ÔÇö nenhuma altera├º├úo necess├íria.
+- `menu.prg`: j├í tinha `DEFINE BAR 107 OF popRelatorios`, `ON SELECTION BAR 107`, e `PROCEDURE AbrirFormSIGREEQR()`.

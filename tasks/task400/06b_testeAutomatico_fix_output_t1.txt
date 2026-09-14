@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada: removida a linha `.TabStretch = 1` de `ConfigurarPageFrame()`.
+
+**Causa raiz:** `TabStretch` ├® uma propriedade read-only em runtime no VFP9. Ao tentar atribu├¡-la dentro do `WITH`, o VFP lan├ºava a exce├º├úo que era capturada pelo CATCH ÔÇö abortando toda a sequ├¬ncia antes de `ConfigurarPaginaLista()` ser chamada. Resultado: `cnt_4c_Cabecalho` nunca era criado, causando o erro cascata `Unknown member CNT_4C_CABECALHO` na linha seguinte do `InicializarForm()`.

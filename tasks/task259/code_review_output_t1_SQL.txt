@@ -1,0 +1,49 @@
+﻿Ap├│s verifica├º├úo completa, todos os 4 problemas s├úo **falsos positivos**. Nenhuma corre├º├úo ├® necess├íria:
+
+---
+
+## Resultado da Verifica├º├úo ÔÇö Pass SQL (4 itens)
+
+### 1. `CMoes` ÔÇö FALSO POSITIVO
+
+**Onde aparece**: linha 1828, no m├®todo `AbrirBuscaMoeda()`:
+```foxpro
+"SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + EscaparSQL(loc_cVal)
+```
+**Por qu├¬ ├® v├ílido**: `CMoes` ├® a PK de `SigCdMoe`. Esta ├® uma query de **valida├º├úo de lookup** ÔÇö o usu├írio digita um c├│digo de moeda e o sistema verifica se existe. A query principal do processamento (em `SigPrAprBO.ProcessarReajuste`, linha 305) usa corretamente `MoeVs = EscaparSQL(...)` na `SigCdPro`. Padr├úo leg├¡timo.
+
+---
+
+### 2. `IClis` ÔÇö FALSO POSITIVO
+
+**Onde aparece**: linhas 1664 e 1726, nos m├®todos `TxtContaKeyPress()` / `TxtDContaKeyPress()`:
+```foxpro
+"SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = " + EscaparSQL(loc_cVal)
+```
+**Por qu├¬ ├® v├ílido**: `IClis` ├® a PK de `SigCdCli`. ├ë um lookup de valida├º├úo do campo Fornecedor. A query principal usa corretamente `IFors = EscaparSQL(...)` na `SigCdPro` (linha 300 do BO). Padr├úo leg├¡timo.
+
+---
+
+### 3. `Cods` ÔÇö FALSO POSITIVO
+
+**Onde aparece**: linha 1920, no m├®todo `TxtCFtiosKeyPress()`:
+```foxpro
+"SELECT TOP 1 Cods, Descs FROM SigPrFti WHERE Cods = " + EscaparSQL(loc_cVal)
+```
+**Por qu├¬ ├® v├ílido**: `Cods` ├® a PK de `SigPrFti`. ├ë um lookup de valida├º├úo do campo Feitio. `CFtios` N├âO ├® usado como filtro WHERE na query de sele├º├úo de produtos ÔÇö ├® usado apenas como valor aplicado durante o `UPDATE` (BO linha 561-579). Padr├úo leg├¡timo.
+
+---
+
+### 4. `CONTROLCOUNT` ÔÇö FALSO POSITIVO
+
+**Onde aparece**: linhas 1964ÔÇô1967, no m├®todo `TornarControlesVisiveis()`:
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount
+    ...
+    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+**Por qu├¬ ├® inv├ílido o alerta**: `.ControlCount` ├® uma **propriedade VFP9 de controles/containers** (conta quantos sub-controles existem). O validador confundiu o identificador VFP com um nome de coluna SQL. N├úo h├í SQL aqui.
+
+---
+
+**Nenhuma altera├º├úo nos arquivos ├® necess├íria.** A query principal de sele├º├úo de produtos (em `SigPrAprBO.ProcessarReajuste`) est├í correta e id├¬ntica ao original: filtra por `CGrus`, `Colecoes`, `IFors`, `MoeVs`, `Margems`, `CPros`. Os 4 alertas foram gerados por heur├¡stica de busca textual que n├úo distingue queries de lookup de queries principais, e que confundiu propriedade VFP9 com SQL.

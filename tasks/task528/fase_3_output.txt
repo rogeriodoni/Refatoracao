@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FormTAN.prg (Fase 3/8 ÔÇö Estrutura Base) foi criado em `C:\4c\projeto\app\forms\cadastros\FormTAN.prg`.
+
+**Conte├║do desta fase:**
+- `DEFINE CLASS FormTAN AS FormBase` com propriedades visuais can├┤nicas (Width=1000, Height=600, Caption="Tipos de An├ílises" via `CHR(225)`)
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (evita chamada duplicada de `InicializarForm`, Problema 8/43 das li├º├Áes)
+- `InicializarForm()` ÔÇö cria `TANBO`, chama `ConfigurarPageFrame()`, seta `ActivePage=1` e `this_cModoAtual="LISTA"` (sem chamar `CarregarLista()` ainda ÔÇö Grid s├│ existe na Fase 4)
+- `ConfigurarPageFrame()` ÔÇö PageFrame com `Top=-29`, `Tabs=.F.`, Page1="Lista"/Page2="Dados", `Picture=fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` completo (com `lbl_4c_Sombra`/`lbl_4c_Titulo`) + `cnt_4c_Botoes` **vazio** (posi├º├úo can├┤nica Left=542, bot├Áes CRUD entram na Fase 4)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` **vazio** (posi├º├úo can├┤nica Left=842, bot├Áes Confirmar/Cancelar entram na Fase 4)
+- `TornarControlesVisiveis()` ÔÇö helper recursivo (necess├írio desde j├í para os containers criados)
+- `Destroy()` ÔÇö libera `this_oBusinessObject`
+
+N├úo inclu├¡ grid, bot├Áes CRUD, TextBoxes de campos nem eventos, conforme escopo da Fase 3. Nenhum TODO/stub/placeholder ÔÇö todo m├®todo implementado tem l├│gica funcional completa dentro do escopo desta fase.

@@ -1,0 +1,220 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 6,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaInt", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECTC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "_DepPrev = Iif(ThisForm.OptTpDep.Option2.Enabled And ThisForm.OptTpDep.Value = 2,.T.,.F.)\n\nreport form SigReCtc to printer Prompt noconsole\nuse in listpro",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTpDep,Option2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "=fConfigGeral()\n\nThisform.poDatamgr = CreateObject('fSqlConector')\nDoDefault()\n\nlcsql=[Select dcarts From SigOpFp where Infos = 'T' group by dcarts ]\nIf Used('Crfpagam')\n\tUSE in 'CrfPagam'\nEndIf\nIf thisform.podatamgr.sqlexecute(lcsql,'Crfpagam') <= 0\n\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\treturn(.f.)\nElse\n\tSelect Crfpagam\n\tIndex on DCarts Tag Cartao\nEndIf\n\n* inicialização das variáveis do formulário\n\nthisform.get_dt_inicial.value... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "poDatamgr = CreateObject,sqlexecute,value = date",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cemps,get_razas,get_fpags",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC",
+      "evento": "Procedure",
+      "linhas": 160,
+      "codigoOriginal": "Public dDtInicial, dDtFinal, cEmpresa, cVerEmpresa, cNomeEmpresa,lcCartao\n\ncreate cursor listpro1 (cNomeEmpre C(40),dDtInicial t Null,dDtfinal t Null,CEmps c(3),ncarts n(12),numes N(8),;\n\t\t\t\t\t\tdatas t Null,nlotecs C(10),fpags C(12),dopes C(20),valor N(13,2),ValLiq N(20,9),Taxas N(9,3),;\n\t\t\t\t\t\tnoresumos C(10),iclis C(10),rclis C(50) NULL,razas c(40) NULL,opcao i,cMovimento C(30), Vencs d(8) NULL)\ncreate cursor listpro2 (cNomeEmpre C(40),dDtInicial t Null,dDtfinal t Null,CEmps c(3),ncarts n(12),nu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,sqlexecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cemps,get_fpags",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "_DepPrev = Iif(ThisForm.OptTpDep.Option2.Enabled And ThisForm.OptTpDep.Value = 2,.T.,.F.)\n\t\nreport form SigReCtc preview NoConsole\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTpDep,Option2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC.get_fpags",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local llRetorno, loLista\nIf !IsEmpty(This.Value)\n\tm.llRetorno = (LastKey()==27.Or.Empty(This.Value))\n\tIf .Not.m.llRetorno\n\t\tIf !seek(this.value,'crfpagam','Cartao')\n\t\t\t&&\t\t\t\t\t\tObject\t\t\t  cursor\t campo proc  busca       titulo                     \n\t\t\tm.loLista = CreateObject('fwbuscaint','crfpagam','Dcarts',this.value,'Seleção',.t.)\n\t\t\tm.loLista.mAddColuna('Dcarts','','Cartao')\n\t\t\tm.loLista.Show()\n\t\tEndIf\n\t\tThis.Value = Iif(LastKey()==27,'',crfpagam.Dcarts)\n\t\tThis.Refresh\n\t\tm.llRetorno = (.Not.Em... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC.get_razas",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local llRetorno,loLista\nm.llRetorno = (LastKey()==27.Or.Empty(This.Value))\nIf .Not.m.llRetorno\n\tm.loLista = CreateObject('fwbuscaext',Thisform.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','razas',This.Value,'Seleção',.t.)\n\tIf  Not m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Razas','','Descrição')\n\t\tm.loLista.mAddColuna('Cemps','','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tThis.Value = Iif(LastKey()==27,'',Evaluate('CrSigCdEmp.Razas'))\n\tThis.Refresh\n\tThisForm.Get_Cemps.value = iif(lastkey() <> 27,e... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "value = iif",
+        "controlesReferenciados": "Get_Cemps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC.get_razas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(thisform.get_cemps.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cemps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC.get_cemps",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local llRetorno,loLista\nm.llRetorno = (LastKey()==27.Or.Empty(This.Value))\nIf .Not.m.llRetorno\n\tm.loLista = CreateObject('fwbuscaext',Thisform.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','cemps',This.Value,'Seleção',.t.)\n\tIf  Not m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Cemps','','Código')\n\t\tm.loLista.mAddColuna('Razas','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tThis.Value = Iif(LastKey()==27,'',Evaluate('CrSigCdEmp.cemps'))\n\tThis.Refresh\n\tThisForm.Get_razas.value = iif(lastkey() <> 27,e... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "value = iif",
+        "controlesReferenciados": "Get_razas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC.entrada",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Local llAtiva\n\nllAtiva = This.Value Or ThisForm.Receber.Value Or ThisForm.baixa.Value\n\nIf llAtiva\n\tThisForm.OptTpDep.Option1.Enabled = .F.\n\tThisForm.OptTpDep.Option2.Enabled = .F.\t\nElse\n\tThisForm.OptTpDep.Option1.Enabled = Thisform.Depositar.Value\n\tThisForm.OptTpDep.Option2.Enabled = Thisform.Depositar.Value\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTpDep,Option1,Option2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC.receber",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Local llAtiva\n\nllAtiva = This.Value Or ThisForm.Entrada.Value Or ThisForm.Baixa.Value\n\nIf llAtiva\n\tThisForm.OptTpDep.Option1.Enabled = .F.\n\tThisForm.OptTpDep.Option2.Enabled = .F.\t\nElse\n\tThisForm.OptTpDep.Option1.Enabled = Thisform.Depositar.Value\n\tThisForm.OptTpDep.Option2.Enabled = Thisform.Depositar.Value\t\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTpDep,Option1,Option2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC.depositar",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Local llAtiva\n\nllAtiva = ThisForm.entrada.Value Or ThisForm.receber.Value Or ThisForm.baixa.Value\n\nIf This.Value And !llAtiva\n\tThisForm.OptTpDep.Option1.Enabled = .T.\n\tThisForm.OptTpDep.Option2.Enabled = .T.\t\nElse\n\tThisForm.OptTpDep.Option1.Enabled = .F.\n\tThisForm.OptTpDep.Option2.Enabled = .F.\t\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTpDep,Option1,Option2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECTC.baixa",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Local llAtiva\n\nllAtiva = This.Value Or ThisForm.Entrada.Value Or ThisForm.Receber.Value\n\nIf llAtiva\n\tThisForm.OptTpDep.Option1.Enabled = .F.\n\tThisForm.OptTpDep.Option2.Enabled = .F.\t\nElse\n\tThisForm.OptTpDep.Option1.Enabled = Thisform.Depositar.Value\n\tThisForm.OptTpDep.Option2.Enabled = Thisform.Depositar.Value\t\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptTpDep,Option1,Option2",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECTC.Init",
+      "queryOriginal": "lcsql=[Select dcarts From SigOpFp where Infos = 'T' group by dcarts ]",
+      "tabelas": "SigOpFp",
+      "colunas": "dcarts,Infos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpFp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

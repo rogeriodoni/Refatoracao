@@ -1,0 +1,998 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGRECTP.SCX
+* Data/Hora: 03/06/2026 21:31:11
+* Total de registros: 26
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECTP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGRECTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGRECTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGRECTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDPros
+  Parent: SIGRECTP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGRECTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getAprovador
+  Parent: SIGRECTP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getRClis
+  Parent: SIGRECTP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getComprador
+  Parent: SIGRECTP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCPros
+  Parent: SIGRECTP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getIClis
+  Parent: SIGRECTP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFinal
+  Parent: SIGRECTP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtValidFs
+  Parent: SIGRECTP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtValidIs
+  Parent: SIGRECTP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtInicial
+  Parent: SIGRECTP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGRECTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGRECTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGRECTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGRECTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optPedidos
+  Parent: SIGRECTP
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: optAprovados
+  Parent: SIGRECTP
+  Class: optiongroup
+  BaseClass: optiongroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP
+------------------------------------------------------------
+  DataSession = 2
+  Height = 230
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Cotação de Compras"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 0
+  WindowState = 0
+  Name = "SIGRECTP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.PicturePosition = 7
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 495
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.TabIndex = 23
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 24
+  REGISTRY1.Left = 372
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.Say3
+------------------------------------------------------------
+  Caption = "Produto :"
+  Height = 15
+  Left = 197
+  Top = 147
+  Width = 47
+  TabIndex = 13
+  ZOrderSet = 3
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.Say10
+------------------------------------------------------------
+  Caption = "Aprovação :"
+  Height = 15
+  Left = 416
+  Top = 200
+  Width = 61
+  TabIndex = 21
+  ZOrderSet = 4
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.Say2
+------------------------------------------------------------
+  Caption = "Fornecedor :"
+  Height = 15
+  Left = 180
+  Top = 172
+  Width = 64
+  TabIndex = 16
+  ZOrderSet = 5
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.Say6
+------------------------------------------------------------
+  Caption = "Aprovador :"
+  Height = 15
+  Left = 476
+  Top = 122
+  Width = 60
+  TabIndex = 11
+  ZOrderSet = 6
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.getDPros
+------------------------------------------------------------
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 356
+  MaxLength = 40
+  TabIndex = 15
+  Top = 144
+  Width = 262
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "getDPros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.Say5
+------------------------------------------------------------
+  Caption = "Comprador :"
+  Height = 15
+  Left = 474
+  Top = 97
+  Width = 62
+  TabIndex = 5
+  ZOrderSet = 8
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.getAprovador
+------------------------------------------------------------
+  Format = "K"
+  Height = 23
+  Left = 538
+  MaxLength = 10
+  TabIndex = 12
+  Top = 119
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "getAprovador"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.getRClis
+------------------------------------------------------------
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 328
+  MaxLength = 40
+  TabIndex = 18
+  Top = 169
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "getRClis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.getComprador
+------------------------------------------------------------
+  Format = "K"
+  Height = 23
+  Left = 538
+  MaxLength = 10
+  TabIndex = 6
+  Top = 94
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "getComprador"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.getCPros
+------------------------------------------------------------
+  Format = "K"
+  Height = 23
+  Left = 246
+  MaxLength = 14
+  TabIndex = 14
+  Top = 144
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "getCPros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.getIClis
+------------------------------------------------------------
+  Format = "K"
+  Height = 23
+  Left = 246
+  MaxLength = 10
+  TabIndex = 17
+  Top = 169
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "getIClis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.getDtFinal
+------------------------------------------------------------
+  Left = 343
+  TabIndex = 4
+  Top = 94
+  ForeColor = 0,0,0
+  ZOrderSet = 14
+  Name = "getDtFinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.getDtValidFs
+------------------------------------------------------------
+  Left = 343
+  TabIndex = 10
+  Top = 119
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Name = "getDtValidFs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.getDtValidIs
+------------------------------------------------------------
+  Left = 246
+  TabIndex = 8
+  Top = 119
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "getDtValidIs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.getDtInicial
+------------------------------------------------------------
+  Left = 246
+  TabIndex = 2
+  Top = 94
+  ForeColor = 0,0,0
+  ZOrderSet = 17
+  Name = "getDtInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.Say8
+------------------------------------------------------------
+  Caption = "à"
+  Left = 330
+  Top = 122
+  TabIndex = 9
+  ZOrderSet = 18
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.Say4
+------------------------------------------------------------
+  Caption = "à"
+  Left = 330
+  Top = 97
+  TabIndex = 3
+  ZOrderSet = 19
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.Say7
+------------------------------------------------------------
+  Caption = "Validade :"
+  Left = 195
+  Top = 122
+  TabIndex = 7
+  ZOrderSet = 20
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.Say1
+------------------------------------------------------------
+  Caption = "Cotação :"
+  Left = 195
+  Top = 97
+  TabIndex = 1
+  ZOrderSet = 21
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.Say9
+------------------------------------------------------------
+  Caption = "Pedidos :"
+  Height = 15
+  Left = 198
+  Top = 199
+  Width = 46
+  TabIndex = 19
+  ZOrderSet = 22
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.optPedidos
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  Height = 24
+  Left = 239
+  Top = 195
+  Width = 154
+  TabIndex = 20
+  ZOrderSet = 23
+  Name = "optPedidos"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 4
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 50
+  Option2.Style = 0
+  Option2.Top = 4
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Ambos"
+  Option3.Value = 1
+  Option3.Height = 15
+  Option3.Left = 96
+  Option3.Top = 4
+  Option3.Width = 50
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECTP.optAprovados
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  Height = 24
+  Left = 474
+  Top = 195
+  Width = 145
+  TabIndex = 22
+  ZOrderSet = 24
+  Name = "optAprovados"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 4
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 46
+  Option2.Style = 0
+  Option2.Top = 4
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Ambos"
+  Option3.Value = 1
+  Option3.Height = 15
+  Option3.Left = 89
+  Option3.Top = 4
+  Option3.Width = 50
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECTP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReCtp To Print
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReCtp To Print Prompt NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.loNegocios = CreateObject([cnSigReCtp], .Name)
+
+	If (.loNegocios.poDataMgr.pnIdconn > 0)
+		.getDtInicial.Value = Date()
+		.getDtFinal.Value   = Date()
+		.getDtValidIs.Value = Ctod([])
+		.getDtValidFs.Value = Ctod([])
+		.getComprador.Value = Space(10)
+		.getAProvador.Value = Space(10)
+		.getCPros.Value 	= Space(14)
+		.getDPros.Value 	= Space(40)
+		.getIClis.Value 	= Space(10)
+		.getRClis.Value 	= Space(40)
+
+		.loObj = CreateObject([Relation])
+
+		.loObj.AddProperty([DataInicial],  .getDtInicial.Value)
+		.loObj.AddProperty([DataFinal],    .getDtFinal.Value)
+		.loObj.AddProperty([ValidInicial], .getDtValidIs.Value)
+		.loObj.AddProperty([ValidFinal],   .getDtValidFs.Value)
+		.loObj.AddProperty([Comprador],    .getComprador.Value)
+		.loObj.AddProperty([Aprovador],    .getAProvador.Value)
+		.loObj.AddProperty([Produto],      .getCPros.Value)
+		.loObj.AddProperty([Fornecedor],   .getIClis.Value)
+		.loObj.AddProperty([Pedidos],      .optPedidos.Value)
+		.loObj.AddProperty([Aprovados],    .optAprovados.Value)
+		.loObj.AddProperty([TrataErro],    [])
+
+		=DoDefault()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Set Procedure To SigReCtp.Prg Additive
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+With ThisForm
+	llRet = .loNegocios.Processamento(.loObj)
+
+	If Not llRet
+		NoDefault
+		Return .f.
+	Else
+		=DoDefault()
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Release Procedure SigReCtp
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReCtp Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 3) && Se Não Clicou em Saída
+	With ThisForm
+		.loObj.DataInicial 	= .getDtInicial.Value
+		.loObj.DataFinal 	= .getDtFinal.Value
+		.loObj.ValidInicial = .getDtValidIs.Value
+		.loObj.ValidFinal 	= .getDtValidFs.Value
+		.loObj.Comprador 	= .getComprador.Value
+		.loObj.Aprovador 	= .getAprovador.Value
+		.loObj.Produto 		= .getCPros.Value
+		.loObj.Fornecedor 	= .getIClis.Value
+		.loObj.Pedidos 		= .optPedidos.Value
+		.loObj.Aprovados 	= .optAprovados.Value
+
+		.loNegocios.ValidaBotoes(.loObj)
+		
+		llRet = .loObj.TrataErro
+	EndWith
+
+	Do Case
+		Case llRet = [DataInicial]
+			=Messagebox([Data Inicial de Cotação Inválida!!!], 0+48, [Atenção!!!])
+			ThisForm.getDtInicial.SetFocus
+			Return .f.
+
+		Case llRet = [DataFinal]
+			=Messagebox([Data Final de Cotação Inválida!!!], 0+48, [Atenção!!!])
+			ThisForm.getDtInicial.SetFocus
+			Return .f.
+
+		Case llRet = [Periodo]
+			=Messagebox([Data Final de Cotação Menor Que a Inicial!!!], [Atenção!!!])
+			ThisForm.getDtInicial.SetFocus
+			Return .f.
+
+		Case llRet = [PeriodoV]
+			=Messagebox([Data Final de Validade Menor Que a Inicial!!!], [Atenção!!!])
+			ThisForm.getDtValidIs.SetFocus
+			Return .f.
+	EndCase
+EndIf
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTP.getDPros
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.loNegocios.poDataMgr.pnIdConn, [SigCdPro], ;
+						   [crListaRemota], [DPros], This.Value, [Seleção], 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([DPros], [], [Descrição])
+		loLista.mAddColuna([CPros], [], [Código])
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getCPros.Value = crListaRemota.CPros
+	ThisForm.getDPros.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	ThisForm.getCPros.Value = []
+EndIf
+ThisForm.getCPros.Refresh
+ThisForm.getDPros.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCPros.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTP.getAprovador
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Declare laFil[1,2]
+laFil[1,1] = [CAtivos]
+laFil[1,2] = [S]
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.loNegocios.poDataMgr.pnIdConn, [SigCdUsu], ;
+						   [crListaRemota], [Usuarios], This.Value, [Seleção], .t., [Usuarios], @laFil)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Usuarios], [XXXXXXXXXXX], [Aprovador])
+		loLista.mAddColuna([NComps],   [], [Nome])
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Usuarios
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTP.getRClis
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.loNegocios.poDataMgr.pnIdConn, [SigCdCli], ;
+						   [crListaRemota], [RClis], This.Value, [Seleção], 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([RClis], [], [Nome])
+		loLista.mAddColuna([IClis], [], [Código])
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getIClis.Value = crListaRemota.IClis
+	ThisForm.getRClis.Value = crListaRemota.RClis
+	Use In crListaRemota
+Else
+	ThisForm.getIClis.Value = []
+EndIf
+ThisForm.getIClis.Refresh
+ThisForm.getRClis.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getIClis.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTP.getComprador
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Declare laFil[1,2]
+laFil[1,1] = [CAtivos]
+laFil[1,2] = [S]
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.loNegocios.poDataMgr.pnIdConn, [SigCdUsu], ;
+						   [crListaRemota], [Usuarios], This.Value, [Seleção], .t., [Usuarios], @laFil)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Usuarios], [XXXXXXXXXXX], [Comprador])
+		loLista.mAddColuna([NComps],   [], [Nome])
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Usuarios
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTP.getCPros
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.loNegocios.poDataMgr.pnIdConn, [SigCdPro], ;
+						   [crListaRemota], [CPros], Padr(This.Value, 14), [Seleção], 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([CPros], [], [Código])
+		loLista.mAddColuna([DPros], [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getCPros.Value = crListaRemota.CPros
+	ThisForm.getDPros.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	ThisForm.getDPros.Value = []
+EndIf
+ThisForm.getCPros.Refresh
+ThisForm.getDPros.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECTP.getIClis
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.loNegocios.poDataMgr.pnIdConn, [SigCdCli], ;
+						   [crListaRemota], [IClis], Padr(This.Value, 14), [Seleção], 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([IClis], [], [Código])
+		loLista.mAddColuna([RClis], [], [Nome])
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getIClis.Value = crListaRemota.IClis
+	ThisForm.getRClis.Value = crListaRemota.RClis
+	Use In crListaRemota
+Else
+	ThisForm.getRClis.Value = []
+EndIf
+ThisForm.getIClis.Refresh
+ThisForm.getRClis.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECTP
+RESERVED3 (ClassInfo): lonegocios
+loobj
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 18
+================================================================================

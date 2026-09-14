@@ -1,0 +1,23 @@
+﻿O arquivo est├í correto. Fase 5 implementada com sucesso. Aqui est├í o resumo do que foi adicionado ao `FormOps.prg`:
+
+**ConfigurarPaginaDados() - 11 controles adicionados:**
+- `cmd_4c_Salvar` + `cmd_4c_Cancelar` em `cnt_4c_BotoesAcao` (com BINDEVENT)
+- `obj_4c_Op_ocx` ÔÇö OptionGroup Movimento (Entrada/Sa├¡da ÔåÆ Copers)
+- `lbl_4c_Label23` ÔÇö "Movimento :"
+- `txt_4c_Desc` ÔÇö C├│digo/Dopes (PK, edit├ível s├│ em INCLUIR)
+- `lbl_4c_Label1` ÔÇö "C├│digo :"
+- `chk_4c_Chk_Inativar` ÔÇö CheckBox INATIVA (ÔåÆ OpeInatvs, Value=.F. l├│gico)
+- `txt_4c_1` ÔÇö Descri├º├úo/TitOpes
+- `lbl_4c_Label28` ÔÇö "Descri├º├úo :"
+- `cbo_4c_CmbMenus` ÔÇö ComboBox Menu (ÔåÆ Menus)
+- `lbl_4c_Label3` ÔÇö "Menu :"
+- `txt_4c_SubMenus` ÔÇö Submenu (ÔåÆ SubMenus)
+
+**M├®todos implementados com l├│gica completa:**
+- `HabilitarCampos()` ÔÇö controla ReadOnly/Enabled por modo (INCLUIR/ALTERAR/VISUALIZAR)
+- `LimparCampos()` ÔÇö reseta todos os campos Fase 5
+- `FormParaBO()` ÔÇö transfere Form ÔåÆ BO (com convers├úo CheckBox l├│gicoÔåÆnum├®rico e OptionGroup offset)
+- `BOParaForm()` ÔÇö transfere BO ÔåÆ Form (com convers├Áes inversas)
+- `AjustarBotoesPorModo()` ÔÇö Salvar enabled s├│ em INCLUIR/ALTERAR
+- `BtnSalvarClick()` ÔÇö chama FormParaBO() + BO.Salvar() + navega para lista
+- `BtnCancelarClick()` ÔÇö volta para lista e recarrega

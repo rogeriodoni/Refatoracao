@@ -1,0 +1,15 @@
+﻿The BO Phase 2 is complete. Here's what was added to `sigmvccrBO.prg`:
+
+**Methods added:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT com filtro de per├¡odo (`this_dFiltroInicio`/`this_dFiltroFim`) + emps + datexcs IS NULL, ORDER BY Datas/Nopers |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | SELECT completo por cidchaves (PK), reseta `this_lNovoRegistro = .F.` |
+| `CarregarDoCursor(par_cAlias)` | PUBLIC | Mapeia cursor ÔåÆ propriedades usando `SELECT (par_cAlias)` antes de acessar campos; detecta campos extras via PEMSTATUS |
+| `Inserir()` | PROTECTED | Obt├®m pr├│ximo nopers via `MAX(nopers)+1 WITH UPDLOCK`, gera cidchaves (DTOS+nopers), calcula campos computados (gruconmoes, empdopncs, empdopnums, dopotps), INSERT com 82 colunas sem duplicatas |
+| `Atualizar()` | PROTECTED | UPDATE por cidchaves com campos edit├íveis, recalcula campos computados, seta `Usualts = usu├írio atual` e `Datalts = GETDATE()` |
+| `ExecutarExclusao()` | PROTECTED | Marca exclus├úo l├│gica (Datexcs/Usuexcs) depois DELETE f├¡sico por cidchaves |
+
+**Propriedades adicionadas:**
+- `this_dFiltroInicio` / `this_dFiltroFim` ÔÇö usadas pelo Form para filtrar o grid por per├¡odo

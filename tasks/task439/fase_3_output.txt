@@ -1,0 +1,13 @@
+﻿Estrutura completa e balanceada. Fase 3 entregue: `C:\4c\projeto\app\forms\cadastros\FormGpe.prg` criado com 439 linhas.
+
+**O que foi criado:**
+- `DEFINE CLASS FormGpe AS FormBase` com propriedades visuais completas (Height=600, Width=1000, Caption, etc.)
+- `Init()` ÔåÆ apenas `DODEFAULT()` com TRY/CATCH
+- `InicializarForm()` ÔåÆ cria GpeBO, chama Configure*, CarregarLista com guard `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔåÆ pgf_4c_Paginas com Top=-29, Tabs=.F., 2 pages
+- `ConfigurarPaginaLista()` ÔåÆ cnt_4c_Cabecalho (com lbl_4c_Sombra/Titulo), cnt_4c_Botoes (vazio para Fase 4), cnt_4c_Saida com cmd_4c_Encerrar + BINDEVENT
+- `ConfigurarPaginaDados()` ÔåÆ cnt_4c_BotoesAcao com cmd_4c_Confirmar/Cancelar + BINDEVENTs
+- M├®todos helper: `CarregarLista()`, `AlternarPagina()`, `FormatarGridLista()`, `TornarControlesVisiveis()`, `Destroy()`
+- Stubs expl├¡citos para `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()` (Fases 5-6)
+
+**Pr├│xima fase (4/8):** Adicionar grid grd_4c_Lista na Page1 e bot├Áes CRUD (Incluir, Visualizar, Alterar, Excluir, Buscar) no cnt_4c_Botoes.

@@ -1,0 +1,12 @@
+﻿All changes are in place. Phase 8 is complete:
+
+**FormCNF.prg** ÔÇö 3 methods added before `ENDDEFINE` (lines 2709ÔÇô2753):
+- `BtnBuscarClick()` ÔÇö validates empresa/s├®rie then calls `CarregarLista()`
+- `BtnSalvarClick()` ÔÇö canonical alias that delegates to `BtnConfirmarClick()`
+- `AjustarBotoesPorModo()` ÔÇö enables/disables buttons based on `this_cModoAtual` (INCLUIR/ALTERAR locks action buttons, releases Save/Cancel)
+
+**config.prg** ÔÇö no changes needed; ADIR() loops auto-load `CNFBO.prg` (classes dir) and `FormCNF.prg` (cadastros dir).
+
+**menu.prg** ÔÇö two additions:
+- Bars 106 (separator) + 107 ("Corre├º├úo de Notas Fiscais") in `popMovimentos` with `ON SELECTION` handler (line 474ÔÇô477)
+- `AbrirFormCNF()` procedure at line 6350 with full error handling matching the project pattern

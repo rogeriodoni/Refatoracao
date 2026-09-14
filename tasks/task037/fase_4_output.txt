@@ -1,0 +1,9 @@
+﻿Fase 4 conclu├¡da. Tr├¬s corre├º├Áes aplicadas em `Formsigrebal.prg`:
+
+1. **Removida chamada a `CarregarReferencias()`** do `InicializarForm()` ÔÇö o m├®todo ├® `PROTECTED` no BO e seria "Property not found" em runtime; `PrepararDados()` j├í o chama internamente quando o relat├│rio ├® gerado.
+
+2. **Adicionado `THIS.Visible = .T.`** ap├│s configurar todos os controles, para o form aparecer ap├│s inicializa├º├úo.
+
+3. **Adicionado `Buttons(4).Cancel = .T.`** no bot├úo Encerrar, para ESC fechar o form.
+
+4. **`BtnImprimirClick()` agora chama `ImprimirComPrompt()`** (TO PRINTER PROMPT NOCONSOLE) em vez de `Imprimir()` (TO PRINTER NOCONSOLE) ÔÇö comportamento correto: usu├írio v├¬ o di├ílogo de sele├º├úo de impressora.

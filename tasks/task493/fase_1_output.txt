@@ -1,0 +1,10 @@
+﻿Fase 1 conclu├¡da. Arquivo `C:\4c\projeto\app\classes\pafBO.prg` criado com:
+
+- **Propriedades da tabela SigCdPaf** (Dopes/PK, Inativas, Docs, cMd5s, cnCaixas, TrNfis)
+- **Propriedades de exibi├º├úo** (vers├Áes descriptografadas para a grade: DopePafEcfs, Cx, TrNf)
+- **Propriedades das tabelas relacionadas** (SigCdOpe: CupFis, nFiscals, Agrupas, Docus, TrNfis; SigOpCdc: OpeInatvs, cnCaixas)
+- **Propriedades do formul├írio** (valores do OptionGroup op_doc, checkbox Chk_Inativar, campos Get_ncaixa e Get_cupomnfis)
+- **Init()** configurando `this_cTabela = "SigCdPaf"` e `this_cCampoChave = "Dopes"`
+- **ObterChavePrimaria()** retornando this_cDopes
+
+Este ├® um form especial PAF-ECF: usa criptografia MD5 para integridade, opera s├│ em modo ALTERAR (os registros s├úo sincronizados automaticamente no Init), e mant├®m dados das tabelas SigCdOpe, SigOpCdc e SigOpCdd vinculadas.

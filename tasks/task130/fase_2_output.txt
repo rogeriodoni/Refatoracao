@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O `SIGREIPSBO.prg` est├í completo com todos os m├®todos necess├írios para um BO de relat├│rio:
+
+- **`PrepararDados()`** ÔÇö monta SQL com `WHERE Codigos = EscaparSQL(...)` quando filtro preenchido, executa via `SQLEXEC` para o cursor `cursor_4c_Relacao`, usando as colunas exatas do original (`RClis, IClis, Endes, ...`)
+- **`Imprimir()`** ÔÇö chama `PrepararDados()`, valida se h├í registros, executa `REPORT FORM SigReIp3 TO PRINTER NOCONSOLE`
+- **`Visualizar()`** ÔÇö mesma l├│gica, executa `REPORT FORM SigReIp3 PREVIEW NOCONSOLE`
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro` para o form tratar erros
+- **`ObterChavePrimaria()`** ÔÇö override do hook da base, retorna `cIdChaves` do cursor atual
+
+`Inserir()`, `Atualizar()`, `ExecutarExclusao()` e `Buscar()` n├úo foram implementados ÔÇö correto para BO de relat├│rio.

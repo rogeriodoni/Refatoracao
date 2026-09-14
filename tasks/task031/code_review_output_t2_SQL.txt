@@ -1,0 +1,24 @@
+﻿Verifica├º├úo completa. Os tr├¬s casos s├úo **falsos positivos** confirmados pelo schema:
+
+| Coluna detectada | Tabela | Existe no schema? |
+|---|---|---|
+| `EmpDopNums` | SigMvPar | Ô£à `[empdopnums] char(29)` |
+| `IClis` | SigCdCli | Ô£à `[iclis] char(10)` ÔÇö chave prim├íria |
+| `CMoes` | SigCdMoe | Ô£à `[cmoes] char(3)` ÔÇö chave prim├íria |
+
+## An├ílise por problema
+
+**EMPDOPNUMS** ÔÇö O c├│digo constr├│i `loc_lcEdn = Emps + Dopes + STR(Numes, 6)` e usa como `WHERE EmpDopNums = ?` no SQL Server. A coluna `EmpDopNums char(29)` existe exatamente para isso em SigMvPar. N├úo ├® inven├º├úo: ├® a chave de jun├º├úo denormalizada padr├úo desse sistema.
+
+**ICLIS** ÔÇö `WHERE IClis = TmpCli.Conta` busca o cliente pelo c├│digo armazenado em `Conta`. `IClis char(10)` ├® a chave prim├íria de SigCdCli (`CONSTRAINT sigcdcli_iclis PRIMARY KEY`). Condi├º├úo leg├¡tima.
+
+**CMOES** ÔÇö ├ë uma jun├º├úo VFP9 local (`FROM TmpCli a, crSigCdMoe b WHERE a.Moeda = b.CMoes`), n├úo um SQLEXEC contra o SQL Server. `CMoes` ├® a PK de SigCdMoe. Sem esse WHERE a consulta produziria produto cartesiano ÔÇö a condi├º├úo ├® obrigat├│ria.
+
+## Conclus├úo
+
+**Nenhum arquivo alterado.** Remover qualquer dessas condi├º├Áes quebraria a l├│gica de neg├│cio:
+- Sem `EmpDopNums`: busca retornaria todas as parcelas de todos os movimentos
+- Sem `IClis`: retornaria todos os clientes da tabela
+- Sem `CMoes`: produto cartesiano entre TmpCli e crSigCdMoe
+
+O detector comparou os nomes de colunas do WHERE do migrado contra os do WHERE do legado VFP9 (que usava SEEK em cursores pr├®-carregados, sem SQL WHERE expl├¡cito). As condi├º├Áes SQL s├úo a tradu├º├úo correta dos SEEK originais ÔÇö n├úo foram inventadas pela LLM.

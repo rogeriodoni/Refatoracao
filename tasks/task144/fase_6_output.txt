@@ -1,0 +1,20 @@
+﻿Tudo est├í correto. Resumo das altera├º├Áes feitas na **Fase 6**:
+
+1. **ConfigurarGrade() ÔÇö larguras das colunas corrigidas** para bater com o original:
+   - Column1: 120 ÔåÆ 133
+   - Column2: 100 ÔåÆ 310
+   - Column3: 90 ÔåÆ 150
+   - Column4: 140 ÔåÆ 150
+   - Column5: 50 ÔåÆ 25
+   - Column6: 100 ÔåÆ 146
+   - Column7: 50 ÔåÆ 25
+
+2. **Propriedades Text1 adicionadas** em Column1ÔÇôColumn6 (`BorderStyle=0`, `Margin=0`, `ForeColor/BackColor` exatos do original; `FontName="Arial"` na Column1/Text1)
+
+3. **Check1.Alignment/Centered movidos** para o AddObject de Column5 e Column7 no ConfigurarGrade (em vez de s├│ no ConfigurarPaginaDados)
+
+4. **Imagem do bot├úo Pesagem corrigida**: `cadastro_inserir_26.jpg` ÔåÆ `geral_balanca_60.jpg` (imagem da balan├ºa conforme original)
+
+5. **GradeAfterRowColChange**: adicionadas chamadas `THIS.Refresh()` e `THIS.obj_4c_MmObs.Refresh()` ao final, replicando `ThisForm.Refresh` e `ThisForm.Mm_Obs.Refresh` do legado
+
+6. **Column5.FontSize=8** adicionado em ConfigurarPaginaDados conforme `Column5.FontSize = 8` do original

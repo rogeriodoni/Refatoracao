@@ -1,0 +1,13 @@
+﻿O `CONTROLCOUNT` nas linhas 1193 e 1207 est├í em c├│digo VFP9 puro ÔÇö ├® a propriedade nativa `.ControlCount` de um container, usada para iterar sobre controles filhos. N├úo h├í nenhum `WHERE CONTROLCOUNT` em SQL nesse arquivo.
+
+O detector de `[SQL-FILTRO-INVENTADO]` gerou um **falso positivo**: confundiu a propriedade VFP9 `par_oContainer.ControlCount` (acesso a objeto) com um nome de coluna SQL em cl├íusula WHERE.
+
+O c├│digo nas linhas 1190ÔÇô1212 ├® v├ílido e correto:
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount          && propriedade VFP9, n├úo SQL
+    ...
+    IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+```
+
+**Nenhuma corre├º├úo necess├íria.** N├úo existe SQL com coluna inventada `CONTROLCOUNT` em `FormSigPdMp4.prg` nem em `SigPdMp4BO.prg`. O pass SQL est├í limpo.

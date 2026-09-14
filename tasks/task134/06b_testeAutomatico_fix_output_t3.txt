@@ -1,0 +1,10 @@
+﻿The DynamicForeColor block is completely removed from `ConfigurarGrdDados`. The method now ends cleanly after Column10's ENDWITH.
+
+The fix is complete:
+
+**Root cause**: In VFP9, setting `Column.DynamicForeColor = expr` on a runtime-created Grid Column (via `AddObject`) during form initialization triggers an internal check for the static `ForeColor` property on the Column ÔÇö which doesn't exist on runtime-created columns ÔÇö causing "Property FORECOLOR is not found". This is why T2's switch from `SetAll` to per-column assignment didn't help: both approaches share the same internal validation path during init.
+
+**What was changed** in `FormSigPdAco.prg`:
+1. **Removed** the 10 `Column.DynamicForeColor` assignments from `ConfigurarGrdDados()` (init phase)
+2. **Added** new method `AplicarDynamicForeColor()` that applies the same expression using `Columns(i)` collection loop (the pattern used by working forms like `Formsigopind.prg`)
+3. **Called** `THIS.AplicarDynamicForeColor()` in `BtnProcessarClick()` after data loads successfully ÔÇö matching the pattern where other working forms apply DynamicForeColor in data-loading methods, not during initialization

@@ -1,0 +1,13 @@
+﻿Todas as 6 corre├º├Áes foram aplicadas com sucesso:
+
+**[CONTAINER-VISIVEL]** `TornarControlesVisiveis` agora tem guard `!INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO")` antes de setar `Visible=.T.` ÔÇö o container de cabe├ºalho n├úo ser├í forcado vis├¡vel pelo m├®todo recursivo.
+
+**[BINDEVENT-PARAMS] ÔÇö 5 handlers** `AbrirLookupCodConPads`, `AbrirLookupDCodConPads`, `AbrirLookupLin`, `AbrirLookupDLin` e `ValidarPrioridade` j├í tinham os par├ómetros declarados na assinatura, mas **n├úo tinham o guard de KeyPress**. Todos receberam o bloco:
+```foxpro
+IF PCOUNT() >= 1 AND TYPE("par_nKeyCode") = "N"
+    IF !INLIST(par_nKeyCode, 13, 9, 115)
+        RETURN
+    ENDIF
+ENDIF
+```
+Isso garante que os lookups e a valida├º├úo s├│ disparam em Enter (13), Tab (9) ou F5 (115) ÔÇö n├úo em cada tecla digitada, o que causaria abertura do picker a cada caractere.

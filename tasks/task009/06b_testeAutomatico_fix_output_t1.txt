@@ -1,0 +1,8 @@
+﻿Ambas as corre├º├Áes aplicadas:
+
+- `PROTECTED PROCEDURE AlternarPagina` ÔåÆ `PROCEDURE AlternarPagina` (linha 1592)
+- `PROTECTED PROCEDURE AjustarBotoesPorModo` ÔåÆ `PROCEDURE AjustarBotoesPorModo` (linha 2579)
+
+**Causa raiz**: O TesteAutomatico chama esses m├®todos diretamente no objeto form (`loc_oForm.AlternarPagina(...)` e `loc_oForm.AjustarBotoesPorModo()`). Em VFP9, m├®todos `PROTECTED` s├│ s├úo acess├¡veis de dentro da pr├│pria classe ÔÇö chamadas externas geram "Property X is not found". Removendo `PROTECTED`, os m├®todos ficam p├║blicos e acess├¡veis externamente.
+
+Note que o teste `BtnIncluirNavegacao` j├í passava porque `BtnIncluirClick` ├® p├║blico e chama `AlternarPagina` via `THIS.` internamente ÔÇö isso funcionava. O problema era apenas nas chamadas diretas do TesteAutomatico.

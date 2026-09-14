@@ -1,0 +1,8 @@
+﻿**Bug corrigido:** `.Page1.Caption`, `.Page1.Picture`, `.Page1.BackColor`, `.Page2.Caption`, `.Page2.Picture`, `.Page2.BackColor` movidos para FORA do `WITH THIS.pgf_4c_Paginas` e referenciados com o caminho completo `THIS.pgf_4c_Paginas.Page1.*`.
+
+**Cadeia do erro:**
+1. `.Page1.Caption = "Lista"` dentro do `WITH PageFrame` ÔåÆ VFP9 lan├ºa `"Unknown member PAGE1"`
+2. CATCH em `InicializarForm` captura o erro ÔåÆ chama `MostrarErro(...)` (dialog modal do FormErro.prg)
+3. Dialog bloqueia VFP por 300s ÔåÆ TIMEOUT
+
+Apenas `FormSIGACGCT.prg` foi alterado. O `SIGACGCTBO.prg` n├úo possui erros.

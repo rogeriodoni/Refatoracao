@@ -1,0 +1,5 @@
+﻿As corre├º├Áes est├úo aplicadas corretamente. O arquivo FormSIGPRCNB.prg j├í estava completamente implementado das fases anteriores. A Fase 6 identificou e corrigiu dois bugs:
+
+1. **`AbrirLookupConta()`**: Corrigido de `mAddColuna("Descricao"...)` + `PEMCOUNT()` (inv├ílido em cursor) para `mAddColuna("Rclis"...)` com acesso direto `cursor_4c_BuscaConta.Rclis` ÔÇö a coluna correta de SigCdCli confirmada no BO.
+
+2. **`AbrirLookupTitBan()`**: Removido `mAddColuna("Descrs"...)` que n├úo existe em SigOpFp (original usa s├│ `Fpags`); adicionado `PADR(..., 12)` ao preencher o campo, id├¬ntico ao comportamento original `Padr(LocalFPag.FPags, 12)`.

@@ -1,0 +1,16 @@
+﻿**Fase 8/8 conclu├¡da.** Resumo do que foi adicionado:
+
+**Formsigpres2.prg** ÔÇö 6 m├®todos novos antes do `ENDDEFINE`:
+- `BtnBuscarClick()` ÔÇö recarrega a lista (bot├úo Procurar era oculto no original)
+- `BtnSalvarClick()` ÔÇö alias para `BtnConfirmarClick` (form operacional/consulta)
+- `FormParaBO()` ÔÇö no-op documentado (todos os campos s├úo `ReadOnly=.T.`)
+- `HabilitarCampos(par_lHabilitar)` ÔÇö no-op documentado (form somente leitura)
+- `LimparCampos()` ÔÇö limpa todos os `txt_4c_*`, `img_4c_FigJpg` e `EditBox` da Page2
+- `AjustarBotoesPorModo()` ÔÇö habilita/desabilita bot├Áes conforme modo LISTA/VISUALIZAR
+
+**menu.prg** ÔÇö integra├º├úo completa:
+- `DEFINE BAR 40/41` em `popMovimentos` (separador + "Pressupostos")
+- `ON SELECTION BAR 41 DO AbrirFormsigpres2`
+- Procedure `AbrirFormsigpres2()` no padr├úo can├┤nico (VARTYPE, Show() sem params, sem Release())
+
+**config.prg** ÔÇö nenhuma altera├º├úo necess├íria (ADIR() carrega automaticamente `Form*.prg` de `cadastros\` e `*BO.prg` de `classes\`).

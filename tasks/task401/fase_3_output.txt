@@ -1,0 +1,19 @@
+﻿Arquivo criado corretamente. Fase 3 conclu├¡da com `C:\4c\projeto\app\forms\cadastros\Formema.prg`.
+
+**O que foi criado:**
+
+| M├®todo | Status |
+|--------|--------|
+| `DEFINE CLASS Formema AS FormBase` | Propriedades visuais exatas do SIGCDEMA (W=1000, H=600, DataSession=2) |
+| `Init()` | `RETURN DODEFAULT()` ÔÇö FormBase cuida de SET DATE BRITISH + CENTURY ON |
+| `InicializarForm()` | Cria emaBO, configura PageFrame/p├íginas, propaga Caption, chama CarregarLista |
+| `ConfigurarPageFrame()` | 2 pages, Top=-29, Tabs=.F., background fundo_cad_1003.jpg |
+| `ConfigurarPaginaLista()` | cnt_4c_Sombra (lbl_4c_Sombra/Titulo) + cnt_4c_Botoes vazio + cnt_4c_Saida vazio |
+| `ConfigurarPaginaDados()` | cnt_4c_Sombra (lbl_4c_Sombra/Titulo) + cnt_4c_BotoesAcao vazio |
+| `CarregarLista()` | Guard gb_4c_ValidandoUI + placeholder cursor; Fase 4 completar├í grid |
+| `AlternarPagina()` | Alterna ActivePage, recarrega lista ao voltar para Page1 |
+| `TornarControlesVisiveis()` | Recursivo: percorre Pages de PageFrame e Controls de Container |
+| `FormatarGridLista()` | Tahoma 8pt |
+| `Destroy()` | Libera BO e cursor_4c_Dados |
+
+**Compensa├º├Áes aplicadas:** Top+29 em todos os containers (cntSombra: 1ÔåÆ30, cnt_4c_Botoes: -1ÔåÆ28, cnt_4c_Saida: can├┤nico=29, cnt_4c_BotoesAcao: 24ÔåÆ53).

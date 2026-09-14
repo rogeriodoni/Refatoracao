@@ -1,0 +1,4 @@
+﻿Ambos os problemas corrigidos em `FormNfl.prg`:
+
+- **Linha 690 / 1046**: `ColumnCount = 3` ÔåÆ `ColumnCount = 4` (havia 4 colunas definidas em `ConfigurarPaginaLista`, incluindo Column4 que era referenciada logo abaixo)
+- **Ap├│s cada `RecordSource = "cursor_4c_Dados"`**: adicionado o bloco de 4 `ControlSource` expl├¡citos antes dos captions, garantindo que o VFP9 n├úo fa├ºa auto-bind por ordem de campo do cursor (o que ignoraria o mapeamento original `emps/Razas/series/cidchaves`).

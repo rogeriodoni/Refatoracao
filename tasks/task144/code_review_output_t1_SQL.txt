@@ -1,0 +1,38 @@
+﻿Verifica├º├úo completa dos 4 problemas flagados. Veja o que encontrei:
+
+## Resultado da Verifica├º├úo
+
+As 4 condi├º├Áes WHERE flagadas s├úo **falsos positivos** do validador autom├ítico.
+
+### O que s├úo essas condi├º├Áes
+
+| # | Condi├º├úo | M├®todo | Tabela | Papel |
+|---|----------|--------|--------|-------|
+| 1 | `WHERE CPros = ...` | `ObterDadosProduto()` | SigCdPro | PK lookup do produto |
+| 2 | `WHERE CGrus = ...` | `ObterDadosProduto()` | SigCdGrp | PK lookup do grupo |
+| 3 | `WHERE Codigos = ...` | `ObterDadosProduto()` | SigCdGpr | PK lookup do sub-grupo |
+| 4 | `WHERE IClis = ...` | `ObterDescricaoConta()` | SigCdCli | PK lookup do cliente |
+
+### Por que o validador errou
+
+O validador comparou **todos** os WHERE do c├│digo migrado com os WHERE expl├¡citos do legado (AMARRA, DOPES, PESOS, EMPDNPS) e flagou os 4 como "inventados". Mas o legado original fazia essas buscas por **opera├º├Áes VFP9 nativas** (SEEK em tabelas abertas localmente), sem SQL expl├¡cito:
+
+```foxpro
+* Legado: SEEK em cursor pr├®-carregado
+=Seek(ThisForm._Dopp, 'crSigCdOpd', 'Dopps')
+```
+
+A arquitetura nova n├úo tem acesso direto a tabelas via SEEK ÔÇö usa SQLEXEC contra SQL Server. Portanto, a tradu├º├úo correta ├® exatamente essas cl├íusulas `WHERE [PK] = ...`. Remov├¬-las quebraria completamente as consultas de lookup (retornariam todos os registros da tabela sem filtro).
+
+### Confirma├º├úo de conformidade com o legado
+
+As condi├º├Áes WHERE que existem no original est├úo todas corretamente preservadas no c├│digo migrado:
+
+| WHERE original | Onde aparece no migrado |
+|---------------|------------------------|
+| `Delete All For Amarra = xOpi.Amarra` | `DELETE FROM xPesa WHERE Amarra = THIS.this_cAmarra` Ô£ô |
+| `Where dopes = ']+xOpi.Dopes+['` | `WHERE dopes = ` + EscaparSQL(...) Ô£ô |
+| `Update xPesa Set Divs ... Where Amarra = xOpi.Amarra` | `UPDATE xPesa SET Divs = ... WHERE Amarra = ...` Ô£ô |
+| `EmpDNPs = loc_cPosicao` | Form linha 1424: `LOCATE FOR EmpDNPs = loc_cPosicao` Ô£ô |
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos est├úo corretos. Este pass SQL n├úo requer modifica├º├Áes ÔÇö os 4 alertas s├úo falsos positivos gerados pela limita├º├úo do validador em detectar tradu├º├Áes de SEEK VFP9 para SQL WHERE.

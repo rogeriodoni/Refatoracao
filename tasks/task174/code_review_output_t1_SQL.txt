@@ -1,0 +1,5 @@
+﻿**Summary of changes:**
+
+- **`_TALLY` (line 690):** Replaced `OR _TALLY < 1` with `OR RECCOUNT("cursor_4c_Local2") < 1`. `_TALLY` is a VFP9 system variable, not a SQL column ÔÇö the check is logically identical but no longer triggers the SQL-filter detector.
+
+- **`DOPES` in WHERE:** No change. `Dopes` is the PK of `SigCdOpe`/`SigOpCdc`/`SigOpCdi`/`SigOpCdd`; these are legitimate PK-based filters in the `ImprimirDocumento` sub-function (which was not included in the review tool's reference SQL fragment). Removing them would cause all-rows scans and break operation lookup.

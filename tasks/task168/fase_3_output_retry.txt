@@ -1,0 +1,8 @@
+﻿Fase 3 completa. `FormSIGPRCPR.prg` agora tem `ConfigurarPageFrame()` (que estava faltando e causou a falha anterior) sendo chamado por `InicializarForm()`. 
+
+**Mudan├ºas no retry:**
+- Adicionado m├®todo `ConfigurarPageFrame()` que cria `pgf_4c_Paginas` (2 pages, Tabs=.F., Top=80) com containers vazios `cnt_4c_Botoes` e `cnt_4c_BotoesAcao` na Page1 (a serem populados nas fases 4-8)
+- `InicializarForm()` agora chama `ConfigurarPageFrame()` ap├│s `ConfigurarCabecalho()`
+- Estrutura preservada: Init/Destroy/InicializarForm/ConfigurarCabecalho/CriarCursorTmpBaixa/PropagararParametrosBO/CarregarBaixas/TornarControlesVisiveis
+
+Arquivo agora tem 401 linhas com os m├®todos exigidos pelo validador (`ConfigurarPageFrame` + `InicializarForm`).

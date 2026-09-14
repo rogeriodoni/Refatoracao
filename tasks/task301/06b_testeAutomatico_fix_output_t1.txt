@@ -1,0 +1,3 @@
+﻿O bug foi corrigido. O `InicializarForm()` do `FormSIGPRIFF` chamava `THIS.this_oBusinessObject.ConfigurarDialogo()` sem nunca ter criado o BO ÔÇö `this_oBusinessObject` permanecia `.NULL.` (valor default do FormBase), causando o erro "Unknown member THIS_OBUSINESSOBJECT".
+
+**Corre├º├úo aplicada em `FormSIGPRIFF.prg` linha 63:** adicionado `CREATEOBJECT("SIGPRIFFBO")` com guard `IF VARTYPE(...) = "O"` antes de qualquer uso do BO, seguindo o padr├úo can├┤nico dos outros forms operacionais (ex: `FormSIGPRCIC.prg:77`). Nenhuma l├│gica de neg├│cio foi alterada ÔÇö apenas a cria├º├úo do BO que estava ausente.

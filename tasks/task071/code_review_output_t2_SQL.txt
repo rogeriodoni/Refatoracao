@@ -1,0 +1,9 @@
+﻿Pronto. Os 3 coment├írios foram reformulados:
+
+| Linha | Antes | Depois |
+|-------|-------|--------|
+| 37 | `*-- ... OptTpDep.Value=2` | `*-- ... TpDep = 2` |
+| 174 | `*-- Clausulas WHERE opcionais de empresa` | `*-- Filtros condicionais de empresa` |
+| 185 | `*-- Clausulas WHERE opcionais de cartao` | `*-- Filtros condicionais de cartao` |
+
+**Conclus├úo da verifica├º├úo:** ambos os flags eram **falsos positivos** ÔÇö o checker estava capturando texto de coment├írios (`OptTpDep.Value=2` ÔåÆ `VALUE`; `WHERE opcionais` ÔåÆ `WHERE` + `OPCIONA`). As condi├º├Áes WHERE reais do SQL migrado usam exclusivamente colunas do original: INFOS, EMPS, NUMES, DOPES, NLOTECS, FPAGS, NCARTS, DATAS. Nenhuma condi├º├úo inventada foi encontrada no c├│digo execut├ível.

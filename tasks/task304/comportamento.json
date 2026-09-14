@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 6,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "File"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRIMP",
+      "evento": "Procedure",
+      "linhas": 344,
+      "codigoOriginal": "Lparameters pcArq\n\nLocal lcArq, llOk\n\n*!*\t01\tTPREGS\tC\t005\t-\tTipo do Registro - Conteúdo Fixo \"MVITN\"\n*!*\t02\tEMPS\tC\t003\t--\tCódigo da Empresa \n*!*\t03\tDOPES\tC\t020\t-\tMovimentação a ser gravada no sistema\n*!*\t04\tOPERS\tC\t001\t-\tTipo de Movimento no Estoque: E = entrada; S = saída\n*!*\t05\tCITENS\tC\t004\t-\tCódigo de Sequencia do Item dentro da movimentação\n*!*\t06\tCODBARRAS\tC\t014\t-\tCódigo de Barras do Item\n*!*\t07\tCPROS\tC\t014\t-\tCódigo do Item\n*!*\t08\tDPROS\tC\t040\t-\tDescrição do Item\n*!*\t09\tOBS\tC\t-\t-\tObservação ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Arquivo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRIMP",
+      "evento": "Init",
+      "linhas": 38,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn < 1)\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndif\n\n\tWith ThisForm.podatamgr\n\t\t.AddCursor('SigMvCab', 'CidChaves',  'crSigMvCab', '', '')\n\t\t.Addcursor('SigMvItn', 'CidChaves',  'crSigMvItn', '', '')\n\t\t.Addcursor('Sig... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Additem",
+        "controlesReferenciados": "get_Arquivo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRIMP",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIMP.Cancela",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIMP.Get_Arquivo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRIMP.Imprimir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "If Empty(ThisForm.opEstoque.Get_Datai.Value) Or Empty(ThisForm.opEstoque.get_Dataf.Value)\n\t=MessageBox('Data Inicial e Data Final não podem ser Brancos!!!',0+48,'')\n\tThisForm.opEstoque.Get_Datai.SetFocus\nElse\n\tIf Empty(ThisForm.OpEstoque.Get_Arquivo.Value)\n\t\t=MessageBox('Nome do Arquivo de Erro é Obrigatório!!!',0+48,'')\n\t\tThisForm.OpEstoque.Get_Arquivo.Setfocus\n\tElse\n\t\tThisForm.Processar( 'I' )\n\tEndif\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) Or Empty,Processar",
+        "controlesReferenciados": "Get_Datai,get_Dataf,Get_Arquivo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIMP.btnMovEst",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "Local lcArq, llOk\n\nlcDirImport = Alltrim(crSigCdPam.DirImports)\n\nlnArq = ADir(laArq, lcDirImport + [*.TXT])\nIf lnArq > 0\n\tlnDel = 0\n\tFor lnPrc = 1 To lnArq\n\t\tWait [Processando Arquivo ] + Alltrim(Str(lnPrc)) + [ de ] + Alltrim(Str(lnArq)) Window NoWait NoClear\t\n\n\t\tlcArq = lcDirImport + Alltrim(laArq(lnPrc, 1))\n\t\tllOk = ThisForm.MovEst(lcArq)\n\t\tIf llOk\n\t\t\tlcOK = lcDirImport + [OK\\]\t\n\t\t\tIf Not Directory(lcOK)\n\t\t\t\tMkDir &lcOK.\n\t\t\tEndIf\t\n\t\t\tIf Directory(lcOK)\n\t\t\t\tlcDst = lcOK + Alltrim(laArq(lnPrc, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "MovEst,RemoveItem,Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRIMP.btnMovEst",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return !Empty(thisform.get_Arquivo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Arquivo",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

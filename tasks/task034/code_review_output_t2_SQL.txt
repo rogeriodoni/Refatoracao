@@ -1,0 +1,43 @@
+﻿Verifica├º├úo conclu├¡da. Todos os 5 problemas s├úo **falsos positivos**. Aqui est├í a an├ílise:
+
+---
+
+## Problemas 1 & 2 ÔÇö GRID-SQL (Marca, Descs): FALSO POSITIVO
+
+O validator procurou SQL que cria `cursor_4c_TiposMat` dentro do **FORM**, mas o cursor ├® criado no **BO** (`SigReAtmBO.prg`, linha 128):
+
+```foxpro
+loc_cSQL = "SELECT 0 AS Marca, Cods, Descs FROM SigOpOpt " + ...
+SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TiposMat")
+```
+
+Ambos os campos existem no cursor:
+- `Marca` ÔåÆ criado como `0 AS Marca` Ô£ô  
+- `Descs` ÔåÆ coluna real de SigOpOpt Ô£ô  
+
+ControlSources `cursor_4c_TiposMat.Marca` e `cursor_4c_TiposMat.Descs` est├úo corretos.
+
+---
+
+## Problemas 3, 4, 5 ÔÇö SQL-FILTRO-INVENTADO (TamPs/TamHs/TamLs): FALSO POSITIVO
+
+O validator confundiu **condi├º├Áes de filtro VFP em loop SCAN** com **cl├íusulas SQL WHERE**. O c├│digo nas linhas 502ÔÇô510 do BO ├®:
+
+```foxpro
+IF loc_nTamP <> 0 AND CrSigCdPro.TamPs <> loc_nTamP
+    LOOP
+ENDIF
+```
+
+Isso **n├úo ├® SQL** ÔÇö ├® um filtro de cursor VFP dentro de um `SCAN...ENDSCAN`. Al├®m disso:
+
+- Os campos `TamPs/TamHs/TamLs` s├úo **buscados legitimamente** no SELECT do produto (linha 473: `a.TamPs,a.TamHs,a.TamLs`)
+- O BO tem as propriedades `this_nTamPs/TamHs/TamLs` (linhas 49ÔÇô51)
+- O FORM tem os campos de filtro de dimens├Áes correspondentes
+- O filtro por dimens├Áes **existia no c├│digo original** ÔÇö os campos de dimens├úo s├úo exibidos como filtros no formul├írio
+
+Nenhum WHERE SQL inventado encontrado. Os nomes `TAMPS/TAMHS/TAMLS` n├úo aparecem em nenhuma cl├íusula `WHERE` de SQLEXEC.
+
+---
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto. Fazer mudan├ºas com base nesses alertas quebraria a l├│gica de neg├│cio (removeria filtro de dimens├Áes leg├¡timo) ou a estrutura do cursor (que j├í tem os campos corretos).

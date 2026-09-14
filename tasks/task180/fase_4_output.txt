@@ -1,0 +1,12 @@
+﻿Arquivo corrigido. Fase 4 conclu├¡da com as seguintes corre├º├Áes aplicadas ao `FormSIGPREST.prg`:
+
+| Corre├º├úo | Detalhe |
+|----------|---------|
+| `DataSession = 2` | Adicionado na defini├º├úo da classe (igual ao original) |
+| CheckBoxes `Style = 1` | Modo gr├ífico com ├¡cone `geral_limpa_grade_60.jpg` |
+| CheckBoxes fontes/cores | `Comic Sans MS`, Bold, Italic, Alignment=2, ForeColor, BackColor, Themes=.F. |
+| `lbl_4c_Mensagem` | FontBold=.T., FontSize=11 (era 8), Alignment=2 (centrado), ForeColor |
+| `RETURN .F.` em TRY | Substitu├¡do por bloco IF/ELSE em `InicializarForm()` |
+| `RETURN` em TRY (2x) | Substitu├¡dos por flag `loc_lContinuar` em `CmdOKClick()` |
+
+A fase gen├®rica "Grid + Bot├Áes CRUD" n├úo se aplica a este dialog utilit├írio (600├ù191 sem PageFrame). As corre├º├Áes visuais e os bugs de `RETURN inside TRY/CATCH` eram o trabalho real da Fase 4 para este form.

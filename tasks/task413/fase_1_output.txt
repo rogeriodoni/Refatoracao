@@ -1,0 +1,8 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\FAPPBO.prg` criado com:
+
+- `DEFINE CLASS FAPPBO AS BusinessBase`
+- Propriedades `this_cCods` (PK) e `this_cDescs` (descri├º├úo)
+- `Init()` configurando `this_cTabela = "SigCdFAPP"` e `this_cCampoChave = "cods"`
+- `ObterChavePrimaria()` retornando `this_cCods`
+
+**Observa├º├úo importante:** O SIGCDFAPP.SCX original estava completamente vazio ÔÇö form padr├úo VFP (`Form1`, 375├ù250, sem controles, sem c├│digo). A tabela `SigCdFAPP` e os campos `cods`/`descs` foram inferidos pela conven├º├úo `SIGCD*` e pelo esqueleto gerado pelo pipeline. As fases seguintes (2 em diante) devem confirmar o schema real antes de implementar `Buscar`, `CarregarDoCursor`, `Inserir` e `Atualizar`.

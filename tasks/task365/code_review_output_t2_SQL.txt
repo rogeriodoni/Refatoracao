@@ -1,0 +1,17 @@
+﻿Ap├│s verifica├º├úo cuidadosa de cada problema reportado, todos os 5 s├úo **falsos positivos** do detector autom├ítico. Aqui est├í a an├ílise:
+
+## An├ílise: todos os 5 s├úo falsos positivos
+
+O detector comparou os WHERE do c├│digo migrado contra **apenas o trecho SQL fornecido** na refer├¬ncia (`Select Dgrus from SigCdGrp where Cgrus = ...`), ignorando que o form original tinha m├║ltiplas opera├º├Áes SQL.
+
+| Coluna flagged | Onde aparece no migrado | Veredicto |
+|---|---|---|
+| `CIDCHAVES` | `cursor_4c_Dados.cidchaves` (form:1571/1599/1631) + `WHERE a.cidchaves = ...` em CarregarPorCodigo/Atualizar/ExecutarExclusao | **V├ílido** ÔÇö ├® a PK documentada na linha 5 do BO: *"PK: cidchaves char(20)"* |
+| `GRUPOS` | `WHERE grupos = ...` em VerificarDuplicidade() | **V├ílido** ÔÇö coluna confirmada pelo ControlSource original + coment├írio BO linha 6: *"Regra: unicidade por grupos + ests + clfiscals (ChkRegister original)"* |
+| `ESTS` | `WHERE ests = ...` em VerificarDuplicidade() | **V├ílido** ÔÇö mesma regra ChkRegister acima |
+| `CLFISCALS` | `WHERE clfiscals = ...` em VerificarDuplicidade() | **V├ílido** ÔÇö mesma regra ChkRegister acima |
+| `CODIGOS` | `WHERE Codigos = EscaparSQL(THIS.this_cSittricms)` em lookup SigCdIcm | **V├ílido** ÔÇö FK expl├¡cita documentada no BO linha 21: *"FK SigCdIcm.Codigos"* |
+
+Adicionalmente, as ocorr├¬ncias de `cursor_4c_Dados.cidchaves` nas linhas 1571/1599/1631 do form **n├úo s├úo cl├íusulas WHERE de SQL** ÔÇö s├úo acessos de campo em cursor VFP local (resultado do Buscar()), padr├úo can├┤nico do sistema.
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `Formcfi.prg` e `cfiBO.prg` est├úo corretos. O pass SQL n├úo tem corre├º├Áes a aplicar neste form.

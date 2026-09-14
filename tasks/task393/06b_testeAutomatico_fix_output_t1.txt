@@ -1,0 +1,9 @@
+﻿Tudo consistente. Tr├¬s corre├º├Áes aplicadas em dois arquivos:
+
+**FormDES.prg:**
+- `AlternarPagina`: `PROTECTED` removido ÔåÆ teste consegue chamar externamente
+- `AjustarBotoesPorModo`: `PROTECTED` removido ÔåÆ mesmo motivo
+- `crSigCdDes` ÔåÆ `cursor_4c_Lista` em todos os 14 locais (CarregarLista + BtnVisualizarClick + BtnAlterarClick + BtnExcluirClick)
+
+**DESBO.prg:**
+- `Buscar()`: cursor renomeado de `"crSigCdDes"` para `"cursor_4c_Lista"` ÔåÆ passa no teste `cursor_4c_*`

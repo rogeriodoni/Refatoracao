@@ -1,0 +1,1656 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrehpr.SCX
+* Data/Hora: 06/06/2026 00:48:31
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREHPR
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGREHPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREHPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Ds_GrEstoque
+  Parent: SIGREHPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_Cd_GrEstoque
+  Parent: SIGREHPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_ds_estoque
+  Parent: SIGREHPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_estoque
+  Parent: SIGREHPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: opt_nr_tipo
+  Parent: SIGREHPR
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_codigo
+  Parent: SIGREHPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_codigo
+  Parent: SIGREHPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_codigo
+  Parent: SIGREHPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo
+  Parent: SIGREHPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREHPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREHPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREHPR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optObs
+  Parent: SIGREHPR
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_imp_medio
+  Parent: SIGREHPR
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGREHPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREHPR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREHPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cd_barra
+  Parent: SIGREHPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getEmpresa
+  Parent: SIGREHPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREHPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesEmpresa
+  Parent: SIGREHPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 76
+  Left = 12
+  Width = 792
+  Height = 449
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 320
+  Width = 800
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Histórico de Produtos"
+  ControlBox = .F.
+  ClipControls = .T.
+  WindowState = 0
+  Name = "SIGREHPR"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 531
+  btnReport.Top = 0
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Estoque :"
+  Left = 216
+  Top = 142
+  Width = 48
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo de Estoque :"
+  Left = 169
+  Top = 115
+  Width = 95
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.get_Ds_GrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 25
+  Left = 351
+  MaxLength = 20
+  TabIndex = 3
+  Top = 110
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_Ds_GrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.get_Cd_GrEstoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 25
+  Left = 269
+  MaxLength = 10
+  TabIndex = 2
+  Top = 110
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_Cd_GrEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.get_ds_estoque
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 25
+  Left = 351
+  MaxLength = 40
+  TabIndex = 5
+  Top = 137
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_ds_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.get_cd_estoque
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  Format = "K!"
+  Height = 25
+  Left = 269
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 4
+  ToolTipText = ""
+  Top = 137
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "get_cd_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.opt_nr_tipo
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 22
+  Left = 264
+  SpecialEffect = 0
+  Top = 85
+  Width = 360
+  TabIndex = 1
+  ZOrderSet = 9
+  Name = "opt_nr_tipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Referência"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 70
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<Código de Barras"
+  Option2.Value = 0
+  Option2.Left = 90
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "\<Geral Por Referência"
+  Option3.Height = 17
+  Option3.Left = 216
+  Option3.Top = 5
+  Option3.Width = 136
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.lbl_codigo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 222
+  Top = 169
+  Width = 42
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "lbl_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.get_ds_codigo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 25
+  Left = 379
+  MaxLength = 40
+  TabIndex = 7
+  Top = 164
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "get_ds_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.get_cd_codigo
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K!"
+  Height = 25
+  Left = 269
+  MaxLength = 14
+  SpecialEffect = 0
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 164
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "get_cd_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Período :"
+  Left = 219
+  Top = 196
+  Width = 45
+  TabIndex = 20
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Imprime Observação do \<Histórico :"
+  Left = 157
+  Top = 293
+  Width = 167
+  TabIndex = 24
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Imprime Custo Médio do \<Produto  :"
+  Left = 156
+  Top = 273
+  Width = 168
+  TabIndex = 23
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 25
+  Left = 269
+  MaxLength = 10
+  TabIndex = 8
+  Top = 191
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.optObs
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 25
+  Left = 327
+  SpecialEffect = 0
+  Top = 287
+  Width = 180
+  TabIndex = 14
+  ZOrderSet = 17
+  Name = "optObs"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "C/Documento"
+  Option3.Height = 15
+  Option3.Left = 92
+  Option3.Top = 5
+  Option3.Width = 83
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.Opt_imp_medio
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 23
+  Left = 327
+  SpecialEffect = 0
+  Top = 267
+  Width = 97
+  TabIndex = 13
+  ZOrderSet = 18
+  Name = "Opt_imp_medio"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 354
+  Top = 196
+  Width = 8
+  TabIndex = 21
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 25
+  Left = 366
+  MaxLength = 10
+  TabIndex = 9
+  Top = 191
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 20
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código de Barras :"
+  Left = 173
+  Top = 223
+  Width = 91
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.Get_cd_barra
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 1
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "K"
+  Height = 25
+  InputMask = "9999999999999"
+  Left = 269
+  MaxLength = 14
+  SpecialEffect = 0
+  TabIndex = 10
+  ToolTipText = ""
+  Top = 218
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 22
+  Name = "Get_cd_barra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.getEmpresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 269
+  MaxLength = 3
+  TabIndex = 11
+  Top = 245
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 23
+  Name = "getEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 214
+  Top = 248
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREHPR.getDesEmpresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 302
+  TabIndex = 12
+  Top = 245
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 25
+  Name = "getDesEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREHPR
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Local lcCdCodigo, lcCdBarra, lcOptRel 
+
+With ThisForm
+	lcCdCodigo  = .get_cd_codigo.Value
+	lcCdBarra   = AllTrim(Str(.get_cd_barra.Value))
+	lcOptRel    = .opt_nr_tipo.Value
+EndWith
+
+If Not CsCabecalho.ImpPeso And Not Eof()
+	Report Form SigRehp1 Preview NoConsole
+Else
+	If !Eof()
+		Report Form SigRehp2 Preview NoConsole
+	EndIf
+EndIf
+If Used("CsCabecalho")
+	Use In CsCabecalho
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private ldDtInicial,ldDtFinal,lcEmp,lcGrEst,lcCdEstoque
+Local lcDsestoque, lcCdCodigo, lcDsCodigo
+Local lnCdBarra, lcTalk, lcEscape, lcMacro1, llObs, lcWhere, lcBusca
+
+With ThisForm
+	lcEmp		  = Padr(AllTrim(.getEmpresa.Value), 3)
+	lcGrEst       = Padr(AllTrim(.get_cd_grestoque.Value), 10)
+	lcCdEstoque   = Padr(AllTrim(.get_cd_estoque.Value), 10)
+	lcDsEstoque   = .get_ds_estoque.Value
+	lcCdCodigo    = Padr((.get_cd_codigo.Value), 14)
+	lcDsCodigo    = .get_ds_codigo.Value
+	ldDtInicial   = Evaluate([{^]+TransForm((DtoS(Max(.get_dt_inicial.Value,CtoD('01/01/1900')))+'000000'),'@R 9999-99-99 99:99:99')+[}])
+	ldDtFinal     = Evaluate([{^]+TransForm((DtoS(Max(.get_dt_final.Value,CtoD('01/01/1900')))+'235959'),'@R 9999-99-99 99:99:99')+[}])
+	lnCdBarra     = .get_cd_barra.Value
+	lnImpMedio    = .opt_imp_medio.Value
+	llObs         = InList(.optObs.Value,1,3)
+	lcOptRel      = .opt_nr_tipo.Value
+	
+	lcNmEstoque   = AllTrim(lcCdEstoque) + ' - ' + AllTrim(lcDsEstoque)
+	lcNmCodigo    = AllTrim(lcCdcodigo) + ' - ' + AllTrim(lcDsCodigo)
+	lcCdBarra     = AllTrim(Str(lnCdBarra,8))
+
+	lcTitulo1     = 'Histórico de Produtos'
+	lcTitulo2     = IIf(Empty(lcGrEst),'',AllTrim(.get_cd_grestoque.Value) + ' - ' + AllTrim(.get_ds_grestoque.Value))+;
+					IIf(Empty(lcCdEstoque),'',IIf(Empty(lcGrEst),'',Chr(13)) + AllTrim(.get_cd_estoque.Value) + ' - '+;
+						AllTrim(.get_ds_estoque.Value))+;
+					IIf(Empty(lcEmp),'',' / ' + AllTrim(.getEmpresa.Value) + ' - ' + AllTrim(.getDesEmpresa.Value))
+EndWith
+
+lcNomeEmpresa = IIf(!Empty(CrSigCdEmp.razas),CrSigCdEmp.razas,'')
+lcPeriodo     = 'Período: ' + DtoC(ldDtInicial) + ' à ' + DtoC(ldDtFinal)
+
+lcSql = [Select cunis, cestos from SigCdUni ]
+ThisForm.Podatamgr.sqlexecute(lcsql,'CrTmpUni')
+
+Select CrTmpUni
+Index On cunis tag cunis
+
+*************************************************************************************************
+If lcOptRel = 3  && Geral Por Referencia
+	Create Cursor CsCabecalho (NomeEmpresa c(80), Titulo1 c(80), Titulo2 c(80), Periodo c(80), ;
+							   Opcao N (1), Obs l(1), ImpMedio l(1), ImpPeso l(1), TRACO L)
+	Insert Into CsCabecalho (NomeEmpresa, Titulo1, Titulo2, Periodo, Opcao, Obs, ImpMedio, ImpPeso );
+					 Values (lcNomeEmpresa, lcTitulo1, lcTitulo2, lcPeriodo, lcOptRel, llObs, lnImpMedio=1,.f.)
+
+	Wait Window 'Aguarde! Selecionando Registros...' NoWait
+
+	lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.emps,a.grupos,a.estos,a.cpros,a.codcors,a.codtams,a.spesos,b.cunis,b.cunips ]+;
+			   [From SigMvEst a, SigCdPro b ]+;
+			  [Where a.emps = "]+lcEmp+["And a.grupos = "]+lcGrEst+[" And a.estos = "]+lcCdEstoque+[" and a.cpros = b.cpros ],"TmpEst")
+	If lnQueryOk < 1
+		Return(.F.)
+	EndIf
+	Select TmpEst
+	Index On emps   Tag emps
+	Index On grupos Tag grupos
+	Index On estos  Tag estos
+	Index On cpros  Tag cpros
+
+	Wait Window "Aguarde! Selecionando Registros..." NoWait
+	lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select emps,grupos,estos,dopes,numes,empgruests,empdopnums,cpros,datas,]+;
+				[qtds,sqtds,opers,codbarras,unitmeds,moedmeds,obs,CidChaves,pesos,spesos ]+;
+		   [From SigMvHst ]+;
+		  [Where empgruests = "]+lcEmp+lcGrEst+lcCdEstoque+[" ]+;
+				[And datas Between ?ldDtInicial And ?ldDtFinal ]+;
+	   [Order By emps,grupos,estos,cpros,CidChaves ],"TmpHis")
+	If lnQueryOk < 1
+		Return(.F.)
+	EndIf
+	Select TmpHis
+	Index On empgruests Tag empgruests
+	Index On cpros      Tag cpros
+
+	Wait Window "Aguarde! Selecionando Registros..." NoWait
+	Set Talk On
+	Set Talk Window
+
+	Select a.cpros,b.datas,a.codcors,a.codtams,a.estos,a.grupos,b.emps,b.dopes,b.numes,b.empdopnums,;
+		b.qtds,b.opers,b.sqtds,b.codbarras,b.unitmeds,b.moedmeds,b.obs,Space(40) As dpros,Space(3) As cunis,;
+		Space(10) As grupoos,Space(10) As contaos,Space(10) As grupods,Space(10) As contads, b.CidChaves, b.pesos, b.spesos, a.cunips ;
+	From TmpEst a, TmpHis b ;
+	Where a.emps+a.grupos+a.estos = b.empgruests And a.cpros = b.cpros ;
+		Order By b.emps,a.grupos,a.estos,a.cpros,a.codcors,a.codtams,b.CidChaves ;
+	Into Cursor TmpRelatorio
+
+	Select TmpRelatorio
+	Use Dbf("TmpRelatorio") Alias CsRelatorio In 0 Again
+
+	oProg = CreateObject("fwprogressbar","Processando Produtos...",RecCount("CsRelatorio"))
+	oProg.Top = oProg.Top - Int(oProg.Height / 2)
+	oProg.Show
+
+	Select CsRelatorio
+	Go Top
+	Scan
+		oProg.Update(.T.)
+		
+		lcCodPro     = CsRelatorio.cpros
+		lcEmpDopNums = CsRelatorio.empdopnums
+		lcEmpDnps    = Left(CsRelatorio.empDopNums,23)+Str(Val(Right(CsRelatorio.EmpdopNums,6)),10)
+		lcGrupoos = ""
+		lcCOntaos = ""
+		lcGrupods = ""
+		lcContads = ""
+		lcCunis   = ""
+		lcDpros   = ""
+
+		If Used("TprMvCab")
+			Use In TprMvCab
+		EndIf
+		lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select grupoos,contaos,grupods,contads ]+;
+					   [From SigMvCab ]+;
+					  [Where empdopnums = "]+lcEmpDopNums+[" ],"TprMvCab")
+		If lnQueryOk < 1
+			Return(.F.)
+		EndIf
+		Select TprMvCab
+		Go Top
+		If !Eof()
+			lcGrupoos = TprMvCab.grupoos
+			lcContaos = TprMvCab.contaos
+			lcGrupods = TprMvCab.grupods
+			lcContads = TprMvCab.contads
+			Use In TprMvCab
+		Else
+			If Used("TprMvCab")
+				Use In TprMvCab
+			EndIf
+			lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select grupoos,contaos,grupods,contads ]+;
+						   [From SigCdNec ]+;
+						  [Where empdnps = "]+lcEmpDnps+[" ],"TprMvCab")
+			If lnQueryOk < 1
+				Return(.F.)
+			EndIf
+			Select TprMvCab
+			Go Top
+			If !Eof()
+				lcGrupoos = TprMvCab.grupoos
+				lcContaos = TprMvCab.contaos
+				lcGrupods = TprMvCab.grupods
+				lcContads = TprMvCab.contads
+				Use In TprMvCab
+			Endif
+		EndIf
+		
+		If Used("TmpPro")
+			Use In TmpPro
+		EndIf
+		lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cpros,dpros,cunis ]+;
+					   [From SigCdPro ]+;
+					  [Where cpros = "]+lcCodPro+[" ],"TmpPro")
+		If lnQueryOk < 1
+			Return(.F.)
+		EndIf
+		Select TmpPro
+		Go Top
+		If !Eof()
+			lcCunis = TmpPro.cunis
+			lcDpros = TmpPro.dpros
+			Use In TmpPro
+		EndIf
+		Select CsRelatorio
+		Replace CsRelatorio.grupoos With lcGrupoos
+		Replace CsRelatorio.contaos With lcContaos
+		Replace CsRelatorio.grupods With lcGrupods
+		Replace CsRelatorio.contads With lcContads
+		Replace CsRelatorio.cunis   With lcCunis
+		Replace CsRelatorio.dpros   With lcDpros
+
+		=Seek(CsRelatorio.cunis,'CrTmpUni')
+		
+		If CrTmpUni.cestos = '3'
+			Replace csCabecalho.ImpPeso with .t. In csCabecalho
+		Else
+			Replace CsRelatorio.Pesos  with 0,;
+					CsRelatorio.sPesos With 0 in CsRelatorio
+		EndIf
+
+	EndScan
+
+	oProg.Complete(.T.)
+
+	Select CsRelatorio
+	Go Top
+
+Else
+
+	lcOptRel = This.opt_nr_tipo.Value
+	
+	lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cunis,cgrus,cpros,dpros,cunips From SigCdPro Where cpros = "]+lcCdCodigo+[" ],"CrSigCdPro")
+	If lnQueryOk < 1
+		Return(.F.)
+	EndIf
+	Select CrSigCdPro
+	Go Top
+	lcUnidade = "Unid: " + CrSigCdPro.cunis
+	lcGrupo   = CrSigCdPro.cgrus
+		
+	lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select tipoestos From SigCdGrp Where cgrus = "]+lcGrupo+[" ],"CrSigCdGrp")
+	If lnQueryOk < 1
+		Return(.F.)
+	EndIf
+	
+	Select CrSigCdGrp
+	Go Top
+	Do Case
+		Case This.opt_nr_tipo.Value = 1 && Estoque
+			lcProduto = "Produto: " + lcNmCodigo
+			lcCorIni = Space(4)
+			lcCorFim = Replicate(Chr(254),4)
+			lcTamIni = Space(02)
+			lcTamFim = Replicate(Chr(254),2)
+			lcWhereHis = [empgruests = "]+lcEmp+lcGrEst+lcCdEstoque+[" And cpros = "]+lcCdCodigo+[" ]
+			Do Case
+				Case CrSigCdGrp.tipoestos = 2	&& Código/Cor
+					lcWhereHis = lcWhereHis + [And codcors Between "]+lcCorIni+[" And "]+lcCorFim+[" ]
+					lcWhereHis = lcWhereHis + [And datas Between ?ldDtInicial And ?ldDtFinal ]
+					lcOrderBy = [1,2,3,5,7,12]
+
+				Case CrSigCdGrp.tipoestos = 3	&& Código/Tamanho
+					lcWhereHis = lcWhereHis + [And codtams Between "]+lcTamIni+[" And "]+lcTamFim+[" ]
+					lcWhereHis = lcWhereHis + [And datas Between ?ldDtInicial And ?ldDtFinal ]
+					lcOrderBy = [1,2,3,6,7,12]
+
+				Case CrSigCdGrp.TipoEstos = 4	&& Código/Cor/Tamanho
+					lcWhereHis = lcWhereHis + [And codcors Between "]+lcCorIni+[" And "]+lcCorFim+[" ]
+					lcWhereHis = lcWhereHis + [And codtams Between "]+lcTamIni+[" And "]+lcTamFim+[" ]
+					lcWhereHis = lcWhereHis + [And datas Between ?ldDtInicial And ?ldDtFinal ]
+					lcOrderBy = [1,2,3,5,6,7,12]
+
+				Other						&& Código
+					lcWhereHis = lcWhereHis + [And datas Between ?ldDtInicial And ?ldDtFinal ]
+					lcOrderBy = [1,2,3,7,12]
+			EndCase
+
+		Case This.opt_nr_tipo.Value = 2 && Código de Barra
+			lcProduto = "Produto: (" + lcCdBarra + ") / " + lcNmCodigo
+			lcWhereHis = [emps = "]+lcEmp+[" And codbarras = ]+lcCdBarra+[ And datas Between ?ldDtInicial And ?ldDtFinal ]
+			lcOrderBy  = [1,8,7]
+	EndCase
+
+	=Seek(CrSigCdPro.cunis,'CrTmpUni')
+
+	Create Cursor CsCabecalho (NomeEmpresa c(80),Titulo1 c(80),Titulo2 c(80),Periodo c(80), ;
+							   Produto c(80), Unidade c(20), Opcao N (1), Obs l(1), ImpPeso L, ImpMedio L, TRACO L )
+	Insert Into CsCabecalho (NomeEmpresa, Titulo1, Titulo2, Periodo, Produto, Unidade, Opcao, Obs, ImpPeso, ImpMedio, Traco );
+					 Values (lcNomeEmpresa, lcTitulo1, lcTitulo2, lcPeriodo, lcProduto, ;
+					 		 lcUnidade, lcoptrel, llObs, Iif(CrTmpUni.cestos='3',.t.,.f.), lnImpMedio=1, llObs )
+	
+	lcQuery = [Select emps,grupos,estos,cpros,codcors,codtams,CidChaves,codbarras,dopes,numes,]+;
+			  [qtds,opers,sqtds,unitmeds,moedmeds,obs,empdopnums,empos,datas, "]+Space(10)+[" As grupoos,]+;
+			  ["]+Space(10)+[" As grupods, "]+Space(10)+[" As contaos,"]+Space(10)+[" ]+;
+			  [As contads, pesos, spesos, ']+Space(40)+['as dpros, '   'as cunis, '   'as cunips From SigMvHst ]+;
+			  [ Where ]+lcWhereHis+[ Order By ]+lcOrderBy
+
+	lnQueryOk = ThisForm.poDataMgr.SqlExecute(lcQuery,"CrSigMvHst")
+	
+	If lnQueryOk < 1
+		Return(.F.)
+	EndIf
+	
+	loBarra = CreateObject("fwprogressbar","Finalizando o processo...",RecCount("CrSigMvHst"))
+	loBarra.Show
+
+	Select CrSigMvHst
+	Go Top
+	Scan
+		loBarra.Update(.T.)
+		lcEmpDopNums = CrSigMvHst.Empos + CrSigMvHst.Dopes + Str(CrSigMvHst.Numes,6)
+		lcEmpDnps    = CrSigMvHst.Empos + CrSigMvHst.Dopes + Str(CrSigMvHst.Numes,10)
+		Replace Dpros  with crSigCdPro.dpros,;
+				cunis  With CrSigCdPro.cunis,;
+				cUnips with CrSigCdPro.Cunips
+		If Used("TprMvCab")
+			Use In TprMvCab
+		EndIf
+		lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select grupoos,contaos,grupods,contads,Notas From SigMvCab ]+;
+			  [Where empdopnums = "]+lcEmpDopNums+[" ],"TprMvCab")
+		If lnQueryOk < 1
+			Return(.F.)
+		EndIf
+	
+		Select TprMvCab
+		Go Top
+		lcNota = TprMvCab.Notas
+		If !Eof()
+			Replace CrSigMvHst.grupoos With TprMvCab.grupoos
+			Replace CrSigMvHst.contaos With TprMvCab.contaos
+			Replace CrSigMvHst.grupods With TprMvCab.grupods
+			Replace CrSigMvHst.contads With TprMvCab.contads
+		Else
+			If Used("TprMvCab")
+				Use In TprMvCab
+			EndIf
+			lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select grupoos,contaos,grupods,contads ]+;
+						   [From SigCdNec ]+;
+						  [Where empdnps = "]+lcEmpDnps+[" ],"TprMvCab")
+			If lnQueryOk < 1
+				Return(.F.)
+			EndIf
+			Select TprMvCab
+			Go Top
+			If !Eof()
+				Replace CrSigMvHst.grupoos With TprMvCab.grupoos
+				Replace CrSigMvHst.contaos With TprMvCab.contaos
+				Replace CrSigMvHst.grupods With TprMvCab.grupods
+				Replace CrSigMvHst.contads With TprMvCab.contads
+				Use In TprMvCab
+			Endif
+		EndIf
+		_Primeira = .t.
+		If ThisForm.optobs.Value = 3
+			If Empty(lcNota)
+				If ThisForm.Podatamgr.cursorquery("SigCdOpd","CrOpp","Dopps",CrSigMvHst.Dopes)
+					lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select Nops From SigPdMvf ]+;
+						  [Where Emps="]+CrSigMvHst.Empos+[" And Dopps="]+CrSigMvHst.Dopes+[" And Numps=]+Str(CrSigMvHst.Numes,6),"TmpMfas")
+					If lnQueryOk < 1
+						Return(.F.)
+					EndIf
+
+					Create Cursor TmpOps (Nops c(6))
+					Index On Nops tag Nops
+					
+					Select TmpMfas
+					Scan
+						lcNop = Str(Int( TmpMfas.Nops / 10000 ),6)
+						Select TmpOps
+						If !Seek(lcNop)
+							Append Blank
+							replace Nops with lcNop
+						EndIf
+					EndScan
+					_primeira = .t.
+					Select TmpOps
+					Scan
+						lcNota = lcNota + Iif(_Primeira,"Ref. OP: "," / ")+TmpOps.Nops
+						_Primeira=.f.
+					EndScan
+					If !Empty(lcNota)
+						Replace CrSigMvHst.Obs With lcNota In CrSigMvHst
+					Endif
+
+				Else
+
+					lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select * From SigMvPec ]+;
+						  [Where Emps="]+CrSigMvHst.Empos+[" And Dopes="]+CrSigMvHst.Dopes+[" And Numes=]+Str(CrSigMvHst.Numes,6),"TmpEstPe")
+					If lnQueryOk < 1
+						Return(.F.)
+					EndIf
+					Select TmpEstPe
+					Scan
+						Set decimals to 0
+						ndope = Val( Left( Str( TmpEstPe.Codigos, 10 ), 4 ) )
+						Nume  = Val( Right( Str( TmpEstPe.Codigos, 10 ), 6 ) )
+						Set Decimals to 2
+						=ThisForm.Podatamgr.cursorquery("SigCdOpe","CrOpe","nDopes",ndope)
+						Select CrOpe
+						Dope = CrOpe.Dopes
+						lcEDN = TmpEstPe.Emps + Dope + Str(Nume,6)
+						lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select Notas From SigMvCab ]+;
+							  [Where empdopnums = "]+lcEDN+[" ],"crEest")
+						If lnQueryOk < 1
+							Return(.F.)
+						EndIf
+						Select CrEest
+						lcNota = Notas
+						If !Empty(lcNota)
+							Replace CrSigMvHst.Obs With Iif(_Primeira,"Ref. N.F.: ",CrSigMvHst.Obs + " / ")+lcNota In CrSigMvHst
+							_Primeira = .f.
+						EndIf
+					EndScan
+				Endif
+			Else
+				Replace CrSigMvHst.Obs With "Ref. N.F.: "+lcNota In CrSigMvHst
+			Endif
+		EndIf
+	EndScan
+	loBarra.Complete(.T.)
+
+	Create Cursor TempCab (ImpMedio l)
+	m.ImpMedio = (lnImpMedio = 1)
+	Insert Into TempCab From MemVar
+
+	Create Cursor TmpHist (CPros c(14), CodCors c(4), CodTams c(4), Datas d, Numes n(6), Dopes c(20), Qtds n(12,3), ;
+						   Opers c(1), SQtds n(12,3), UnitMeds n(16,6), MoedMeds c(3), Codbarras n(8))
+	Select CrSigMvHst
+EndIf
+Go Top
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+Set Deci to 6
+
+= DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ =DoDefault()
+
+lcQueryEmp = [Select cemps,razas From SigCdEmp Where cemps = ']+_Empr+[' ]
+
+ThisForm.poDataMgr = CreateObject('fSqlConector','SigRehpr')
+
+With ThisForm.poDataMgr
+	.AddCursor('SigCdEmp'  ,'cemps'     ,'CrSigCdEmp'  ,'','',lcQueryEmp)
+EndWith
+
+ThisForm.poDataMgr.Requery('CrSigCdEmp')
+Select CrSigCdEmp
+Go Top
+
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select tipoestos From SigCdPam ],'CrSigCdPam')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+ThisForm.opt_nr_tipo.Value      = 1
+ThisForm.getEmpresa.Value       = _Empr
+ThisForm.getDesEmpresa.Value    = CrSigCdEmp.Razas
+ThisForm.get_cd_grestoque.Value = Space(10)
+ThisForm.get_cd_estoque.Value   = Space(10)
+ThisForm.get_ds_estoque.Value   = Space(40)
+ThisForm.get_cd_codigo.Value    = Space(10)
+ThisForm.get_ds_codigo.Value    = Space(40)
+ThisForm.get_dt_inicial.Value   = date()
+ThisForm.get_dt_final.Value     = date()
+ThisForm.get_cd_barra.Value     = 0
+ThisForm.opt_imp_medio.Value    = 1
+ThisForm.tipo = 'REFERENCIA'
+ThisForm.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Local lcCdCodigo, lcCdBarra, lcOptRel 
+
+With ThisForm
+	lcCdCodigo  = .get_cd_codigo.Value
+	lcCdBarra   = AllTrim(Str(.get_cd_barra.Value))
+	lcOptRel    = .opt_nr_tipo.Value
+EndWith
+
+If Not CsCabecalho.ImpPeso And Not Eof()
+	Report Form SigRehp1 To Printer Prompt NoConsole
+Else
+	If !Eof()
+		Report Form SigRehp2 To Printer Prompt NoConsole
+	EndIf
+EndIf
+If Used('CsCabecalho')
+	Use In CsCabecalho
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+If !Eof()
+	Report Form SigReHp2 to Printer NoConsole
+EndIf
+DoDefault()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHPR.get_Ds_GrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.Tipo # "CÓDIGO DE BARRA" And Empty(ThisForm.get_cd_grestoque.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	fAcessoContab(Usuar,'D',This.Value,This.Parent.get_cd_grestoque,This.Parent.get_ds_grestoque)
+Else
+	This.Parent.get_cd_grestoque.Value = ''
+	This.Parent.get_cd_grestoque.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHPR.get_Cd_GrEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( ThisForm.tipo # "CÓDIGO DE BARRA" )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	fAcessoContab(Usuar,'C',This.Value,This,This.Parent.get_ds_grestoque)
+Else
+	This.Parent.get_ds_grestoque.Value = ''
+	This.Parent.get_ds_grestoque.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHPR.get_ds_estoque
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.tipo # "CÓDIGO DE BARRA" And Empty(ThisForm.get_cd_estoque.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcGrupo
+lcGrupo = ThisForm.get_cd_grestoque.Value
+
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,lcGrupo,'D',This.Value,This.Parent.get_cd_estoque,This.Parent.get_ds_estoque)
+		MessageBox('Acesso Negado !!',0+48,'')
+		This.Value   = ''
+		This.Refresh
+		This.Parent.get_cd_estoque.Value   = ''
+		This.Parent.get_cd_estoque.Refresh
+		Return 0
+	EndIf
+Else
+	This.Parent.get_cd_estoque.Value   = ''
+	This.Parent.get_cd_estoque.Refresh
+	Return(.T.)
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHPR.get_cd_estoque
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.tipo # "CÓDIGO DE BARRA")
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.get_cd_grestoque.Value
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,grupo,'C',This.Value,This,This.Parent.get_ds_estoque)
+		MessageBox('Acesso Negado !!',0+48,'')
+		This.Value   = ''
+		This.Refresh
+		This.Parent.get_ds_estoque.Value   = ''
+		This.Parent.get_ds_estoque.Refresh
+		Return 0
+	EndIf
+Else
+	This.Parent.get_ds_estoque.Value = ''
+	This.Parent.get_ds_estoque.Refresh
+	Return(.T.)
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHPR.opt_nr_tipo
+* Classe: fwoption (Base: optiongroup)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+With ThisForm
+	Do Case
+		Case .opt_nr_tipo.Value  = 1
+			.tipo = 'REFERENCIA'
+			.get_cd_barra.Value  = 0
+			.getEmpresa.Value    = _Empr
+			.poDataMgr.Requery('CrSigCdEmp')
+			Select CrSigCdEmp
+			Go Top
+			.getDesEmpresa.Value = CrSigCdEmp.Razas
+
+		Case .opt_nr_tipo.Value  = 2
+			.tipo = 'CÓDIGO DE BARRA'
+			.get_ds_grestoque.Value   = ''
+			.get_cd_grestoque.Value   = ''
+			.get_cd_estoque.Value     = ''
+			.get_ds_estoque.Value     = ''
+			.get_cd_codigo.Value      = ''
+			.get_ds_codigo.Value      = ''
+			.get_cd_grestoque.Refresh
+			.get_ds_grestoque.Refresh
+			.get_cd_estoque.Refresh
+			.get_ds_estoque.Refresh
+			.get_cd_codigo.Refresh
+			.get_ds_codigo.Refresh
+			.get_cd_barra.Value       = 0
+			.getEmpresa.Value         = _Empr
+			.poDataMgr.Requery('CrSigCdEmp')
+			Select CrSigCdEmp
+			Go Top
+			.getDesEmpresa.Value      = CrSigCdEmp.Razas
+
+		Case .opt_nr_tipo.Value  = 3
+			.tipo                = 'GERAL'
+			.get_cd_barra.Value  = 0
+			.get_cd_codigo.Value = ''
+			.get_ds_codigo.Value = ''
+	EndCase
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHPR.get_ds_codigo
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_codigo.Value) And ThisForm.tipo = 'REFERENCIA')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Empty(This.Value)
+	ThisForm.get_cd_codigo.Value = ''
+	ThisForm.get_cd_codigo.Refresh
+	Return(.T.)
+EndIf
+
+m.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','TmpPro','dpros',This.Value,'Produtos',1000)
+If .Not.m.loLista.plAchouRegistro
+	m.loLista.mAddColuna('dpros','','Descrição')
+	m.loLista.mAddColuna('cpros','','Código')
+	m.loLista.Show()
+EndIf
+If LastKey() <> 27 And Used('TmpPro')
+	ThisForm.get_cd_codigo.Value = Evaluate('TmpPro.cpros')
+	ThisForm.get_ds_codigo.Value = Evaluate('TmpPro.dpros')
+Else
+	ThisForm.get_cd_codigo.Value = ''
+	ThisForm.get_ds_codigo.Value = ''
+EndIf
+ThisForm.get_cd_codigo.Refresh
+ThisForm.get_ds_codigo.Refresh
+If Used('TmpPro')
+	Use In TmpPro
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHPR.get_cd_codigo
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.tipo = 'REFERENCIA')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Empty(This.Value)
+	ThisForm.get_ds_codigo.Value = ''
+	ThisForm.get_ds_codigo.Refresh
+	Return(.T.)
+EndIf
+m.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','TmpPro','cpros',This.Value,'Produtos',1000)
+If .Not.m.loLista.plAchouRegistro
+	m.loLista.mAddColuna('cpros','','Código')
+	m.loLista.mAddColuna('dpros','','Descrição')
+	m.loLista.Show()
+EndIf
+If LastKey() <> 27 And Used('TmpPro')
+	ThisForm.get_cd_codigo.Value = Evaluate('TmpPro.cpros')
+	ThisForm.get_ds_codigo.Value = Evaluate('TmpPro.dpros')
+Else
+	ThisForm.get_cd_codigo.Value = ''
+	ThisForm.get_ds_codigo.Value = ''
+EndIf
+ThisForm.get_cd_codigo.Refresh
+ThisForm.get_ds_codigo.Refresh
+If Used('TmpPro')
+	Use In TmpPro
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHPR.Get_cd_barra
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.tipo = "CÓDIGO DE BARRA")
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj,lRet
+
+lEmpty = .F.
+
+lcCdBarra = Alltrim(Str(This.Value,14))
+
+If Empty(lcCdBarra) or This.Value = 0
+	ThisForm.get_cd_codigo.Value = ''
+	ThisForm.get_ds_codigo.Value = ''
+	ThisForm.get_cd_codigo.Refresh
+	ThisForm.get_ds_codigo.Refresh
+	lEmpty = .T.
+EndIf
+
+If !lEmpty
+	With ThisForm
+		lnQueryOk = .poDataMgr.SqlExecute([Select cpros From SigOpEtq Where cbars = ]+lcCdBarra+[ ],'TmpEti')
+		If lnQueryOk < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return(.F.)
+		EndIf
+		Select TmpEti
+		Go Top
+		If Eof()
+			lnQueryOk = .poDataMgr.SqlExecute([Select cpros From SigCdPro Where cbars = ]+lcCdBarra+[ ],'TmpPro')
+			If lnQueryOk < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+				Return(.F.)
+			EndIf
+			Select TmpPro
+			Go Top
+			If Eof()
+				MessageBox('Código de Barra não cadastrado !',16,'')
+				If Used('TmpEti')
+					Use In TmpEti
+				EndIf
+				If Used('TmpPro')
+					Use In TmpPro
+				EndIf
+				Return(.F.)
+			Else
+				lnQueryOk = .poDataMgr.SqlExecute([Select cpros,dpros From SigCdPro Where cbars = ]+lcCdBarra+[ ],'TmpPro')
+				If lnQueryOk < 1
+					MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+					Return(.F.)
+				EndIf
+				Select TmpPro
+				Go Top
+				If !Eof()
+					.Get_Cd_Codigo.Value = TmpPro.cpros
+					.Get_Ds_Codigo.Value = TmpPro.dpros
+				EndIf
+			EndIf
+		Else
+			lcCprosEti = TmpEti.cpros
+			lnQueryOk = .poDataMgr.SqlExecute([Select cpros,dpros From SigCdPro Where cpros = ']+lcCprosEti+[' ],'TmpPro')
+			If lnQueryOk < 1
+				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+				Return(.F.)
+			EndIf
+			Select TmpPro
+			Go Top
+			If !Eof()
+				.Get_Cd_Codigo.Value = TmpPro.cpros
+				.Get_Ds_Codigo.Value = TmpPro.dpros
+			EndIf
+		EndIf
+		.Refresh
+		If Used('TmpEti')
+			Use In TmpEti
+		EndIf
+		If Used('TmpPro')
+			Use In TmpPro
+		EndIf
+	EndWith
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHPR.getEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.tipo = 'GERAL')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar,'C',This.value,ThisForm.getEmpresa,ThisForm.getDesEmpresa)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREHPR.getDesEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.getEmpresa.Value) And ThisForm.tipo = 'GERAL')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If ThisForm.tipo = 'GERAL'
+	=fAcessoEmpresa(Usuar,'D',This.value,ThisForm.getEmpresa,ThisForm.getDesEmpresa)
+EndIf
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREHPR
+RESERVED3 (ClassInfo): podatamgr
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 26
+================================================================================

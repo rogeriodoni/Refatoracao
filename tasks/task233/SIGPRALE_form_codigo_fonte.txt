@@ -1,0 +1,195 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRALE.SCX
+* Data/Hora: 07/07/2026 10:45:31
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRALE
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Imagem
+  Parent: SIGPRALE
+  Class: image
+  BaseClass: image
+
+Objeto: mensagem
+  Parent: SIGPRALE
+  Class: label
+  BaseClass: label
+
+Objeto: mensagem2
+  Parent: SIGPRALE
+  Class: label
+  BaseClass: label
+
+Objeto: mensagem3
+  Parent: SIGPRALE
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRALE
+------------------------------------------------------------
+  DataSession = 2
+  Height = 115
+  Width = 419
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = ""
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  AlwaysOnTop = .T.
+  Name = "SIGPRALE"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRALE.Imagem
+------------------------------------------------------------
+  Height = 36
+  Left = 6
+  Top = 5
+  Width = 38
+  Name = "Imagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRALE.mensagem
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  WordWrap = .T.
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Aguarde..."
+  Height = 25
+  Left = 85
+  Top = 4
+  Width = 97
+  ForeColor = 255,0,0
+  Name = "mensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRALE.mensagem2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  WordWrap = .T.
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Finalizando Reducao Z."
+  Height = 25
+  Left = 85
+  Top = 32
+  Width = 221
+  ForeColor = 255,0,0
+  Name = "mensagem2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRALE.mensagem3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 14
+  WordWrap = .T.
+  Alignment = 2
+  BackStyle = 0
+  Caption = "Por Favor. Não Desligue a impressora Fiscal."
+  Height = 48
+  Left = 85
+  Top = 62
+  Width = 248
+  ForeColor = 255,0,0
+  Name = "mensagem3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRALE
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _BitMap, _Msg1, _msg2, _msg3
+
+If Type( "_BitMap" ) = "C"
+	ThisForm.Imagem.Visible   = .T.
+	ThisForm.Imagem.Picture   = Alltrim( _BitMap )
+Endif
+
+If Type('_Msg1') = 'C' Or Type('_msg2')='C' Or Type('_msg3')='C'
+	ThisForm.mensagem.Caption  = Iif(Type('_msg1')='C',_msg1,'')
+	ThisForm.mensagem2.Caption = Iif(Type('_msg2')='C',_msg2,'')
+	ThisForm.mensagem3.Caption = Iif(Type('_msg3')='C',_msg3,'')
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 1
+================================================================================

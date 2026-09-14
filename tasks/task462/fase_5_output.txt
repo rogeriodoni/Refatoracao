@@ -1,0 +1,22 @@
+﻿Phase 5 is now complete. The file has all three handler methods properly placed:
+
+**`ValidarTipos`** ÔÇö validates `txt_4c_Tipos` contains only `"D"` or `"A"`, uppercases the value, clears+focuses if invalid.
+
+**`ValidarGGrus`** ÔÇö exact-match lookup in `SigCdGpr` (column `codigos`/`descs`). If not found, falls back to partial LIKE search then SHOW-ALL, opening `FormBuscaAuxiliar` using Pattern A (canonical: SQL in caller ÔåÆ DefinirCursor ÔåÆ Mostrar ÔåÆ read `.cCodigoSelecionado`).
+
+**`ValidarSGrus`** ÔÇö same structure against `SigCdPsg` (columns `Codigos`/`Descricaos`).
+
+---
+
+**Phase 6/8** adds the second half of Page2 ÔÇö the three grids and their control buttons:
+
+| Control | Details |
+|---|---|
+| `lbl_4c_Label8` + `grd_4c_Opers` | 2-col grid (checkbox `Imps` + text `Dopes`) from `csSigCdOpe` cursor |
+| `Commandgroup1` (Opera├º├Áes) | Marcar/Desmarcar todos, Left=708 |
+| `lbl_4c_Label7` + `grd_4c_Emps` | 3-col grid (checkbox `Imps` + text `Emps` + text `Razas`) from `csSigCdEmp` cursor |
+| `cmdEmps` (Empresas) | Marcar/Desmarcar todos, Left=336 |
+| `lbl_4c_Label13` + `grd_4c_Compo` | 1-col grid (text `Compos`) with `fwBuscaSel` ÔåÆ `CsCompos` lookup |
+| `cmd_4c_CmdInserir` + `cmd_4c_CmdExcluir` | Insert/delete rows in Compos grid |
+
+Ready to proceed with Phase 6?

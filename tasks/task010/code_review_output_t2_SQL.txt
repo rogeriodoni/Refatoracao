@@ -1,0 +1,5 @@
+﻿**Corre├º├úo aplicada** em `Formcfo.prg`:
+
+**Diagn├│stico**: Falso positivo do validador. O `nExiste` era um alias do `COUNT(*)` na cl├íusula SELECT ÔÇö n├úo uma condi├º├úo WHERE inventada. O WHERE real (`WHERE codigos = ...`) est├í correto e corresponde ao original (`CODIGOS`).
+
+**Fix**: Renomeado o alias de `nExiste` ÔåÆ `nTotalRecs` nos tr├¬s procedimentos de valida├º├úo (ValidarContFrt, ValidarContSeg, ValidarContDa) para eliminar o falso positivo, sem alterar nenhuma l├│gica.

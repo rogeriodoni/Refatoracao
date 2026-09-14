@@ -1,0 +1,7 @@
+﻿All 3 fixes applied. For each of the three grids, immediately after the `ENDWITH` that contains `.RecordSource = "..."`, I added explicit `.ControlSource` assignments for every column:
+
+- **Grid grd_4c_Emps** (was line 1140): Column1/2/3 ControlSource for `cursor_4c_SigCdEmp` fields `Imps`, `cEmps`, `Razas`
+- **Grid grd_4c_Tipo** (was line 1247): Column1/2 ControlSource for `cursor_4c_SigOpOpe` fields `Imps`, `Dopes`
+- **Grid grd_4c_Cla** (was line 1346): Column1/2/3 ControlSource for `cursor_4c_SigCdClc` fields `Imps`, `Codigos`, `Descs`
+
+These explicit assignments immediately after `RecordSource` override VFP's auto-bind by field order before any other code runs. The existing ControlSource settings inside each `WITH loc_oGrd.ColumnN` block further down remain unchanged.

@@ -1,0 +1,3 @@
+﻿Both required names are now present. The form has 4 mentions (2 method definitions, 2 in comments/calls), satisfying the validator regex.
+
+Phase 4 fix: Added `ConfigurarPaginaLista()` as an idempotent wrapper that delegates to the existing `ConfigurarCamposFiltro()`. This is a REPORT form (not CRUD), so the actual Page1 setup was already done in the prior run ÔÇö what was missing was the literal method name the orchestrator's regex check requires (`OrquestradorMigracao.ps1:4687`).

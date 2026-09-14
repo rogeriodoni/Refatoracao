@@ -1,0 +1,5 @@
+﻿The structure looks correct. The fix is complete:
+
+- `CarregarDlls()` now has TRY/CATCH ÔÇö if `CliSiTef32I.DLL` is absent, the error is stored in `this_cErroDll` and `this_lDllCarregada` stays `.F.`, allowing `Init()` to complete
+- `InicializarForm()` checks `this_lDllCarregada` first and shows `MsgErro` with the stored message if the DLL failed to load ÔÇö so the CATCH is not silent (rule 9 satisfied)
+- In production with the DLL present, behaviour is unchanged

@@ -1,0 +1,14 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o resumo do que foi feito:
+
+**M├®todos adicionados ao `Formsigregli.prg`:**
+
+1. **`LimparCampos()`** (linha 1950) ÔÇö extrai a l├│gica de reset do `BtnIncluirClick` como m├®todo standalone, resetando todos os campos, op├º├Áes dos pain├®is Etiquetas/Rela├º├úo e ocultando os containers flutuantes.
+
+2. **`HabilitarCampos()`** (linha 1992) ÔÇö gerencia o estado `Enabled` dos controles:
+   - `txt_4c_Ordem`: desabilitado se a OP foi passada como par├ómetro (modo somente leitura)
+   - `txt_4c_Ordem2`: habilitado somente se Ordem principal foi preenchida
+   - `cmd_4c_Imprimir` / `cmd_4c_Visualizar`: habilitados conforme o tipo selecionado
+
+3. **`BtnIncluirClick()`** (linha 2007) ÔÇö refatorado para chamar `LimparCampos()` + `AplicarParametrosIniciais()` + `HabilitarCampos()`, eliminando o c├│digo inline duplicado.
+
+O arquivo est├í completo com todos os m├®todos da Fase 8: `FormParaBO`/`BOParaForm` (fases anteriores), `LimparCampos`, `HabilitarCampos`, `BtnEncerrarClick`, `BtnImprimirClick`, `BtnVisualizarClick`, lookups, valida├º├Áes e `Destroy`. A integra├º├úo no `menu.prg` e o `sigregliBO.prg` j├í estavam presentes das fases anteriores.

@@ -1,0 +1,11 @@
+﻿Fase 3/8 entregue. `C:\4c\projeto\app\forms\relatorios\FormSigReEqT.prg` criado com 422 linhas contendo:
+
+**Estrutura implementada:**
+- `DEFINE CLASS FormSigReEqT AS FormBase` ÔÇö propriedades EXATAS do original (Width=800, Height=500, DataSession=2, ControlBox=.F., TitleBar=0)
+- `Init(par_oFormPai)` ÔÇö chama `fConfigGeral()` (equiv. ao Form.Load original), armazena refer├¬ncia ao pai, desabilita o form pai, faz `SET DATASESSION TO par_oFormPai.DataSessionId` para acesso aos cursores, depois `DODEFAULT()`
+- `InicializarForm()` ÔÇö instancia `SigReEqTBO`, constr├│i cabecalho/bot├Áes/op├º├úo/PageFrame, seta `Visible=.T.`
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Cabecalho` (RGB 100,100,100) com `lbl_4c_Sombra` e `lbl_4c_Titulo`
+- `ConfigurarBotoes()` ÔÇö `cmg_4c_Botoes` (Left=529 can├┤nico, Width=273) com 4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar ÔÇö BINDEVENTs na Fase 7
+- `ConfigurarOpcao()` ÔÇö `opt_4c_Opcao` (Top=94, Left=168, Value=2=Sint├®tico padr├úo) com CHR(237) e CHR(233) para acentos
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` (Top=151, Left=58, Width=684, Height=316, PageCount=2), Page1="Resultado", Page2="Produtos" ÔÇö grids na Fase 4
+- `Destroy()` ÔÇö reabilita `this_oFormPai.Enabled=.T.`, anula `this_oRelatorio`, chama `DODEFAULT()`

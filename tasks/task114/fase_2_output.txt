@@ -1,0 +1,13 @@
+﻿No anti-patterns found. Phase 4 (integration) is complete. Here's a summary of what was done in this session:
+
+**Phase 3 (completed in previous context):** Created `C:\4c\projeto\app\forms\relatorios\Formsigrehpr.prg` ÔÇö 1451-line FLAT layout REPORT form with all filters, lookups (SigCdGcr, SigCdCli, SigCdPro, SigCdEmp), barcode validation chain, and mode-based field enabling.
+
+**Phase 4 (just completed):**
+1. **Fixed recursion bug** in `ConfigurarEventos()` ÔÇö removed all `BINDEVENT(..., "LostFocus", ...)` calls that would cause infinite recursion when SQLEXEC or MsgAviso shifted focus. The KeyPress handlers (ENTER=13, TAB=9) already handle validation correctly.
+2. **Menu integration** in `menu.prg`:
+   - Added BAR 140 (separator) and BAR 141 ("Hist├│rico de Produtos") to `popRelatorios`
+   - Added `ON SELECTION BAR 141 OF popRelatorios DO AbrirFormsigrehpr`
+   - Added `PROCEDURE AbrirFormsigrehpr()` at the end of the file
+3. **Config.prg**: No changes needed ÔÇö ADIR() auto-loads `*BO.prg` from `classes/` and `Form*.prg` from `forms/relatorios/` automatically.
+
+Remaining steps before testing: delete `.fxp` files (`del /s /q C:\4c\projeto\app\*.fxp`) and create the FRX report files `SigRehp1.frx` and `SigRehp2.frx` in `C:\4c\projeto\app\reports\`.

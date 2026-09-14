@@ -1,0 +1,13 @@
+﻿Phase 8 is complete. All methods were already implemented in the previous phases. I found and fixed 3 bugs during the review:
+
+**Bugs fixed:**
+
+1. **`MostrarSubPagina()` ÔÇö critical**: `Controls(loc_nIdx)` used numeric index 1..12, but Page2's first two controls are `cnt_4c_BotoesAcao` and `obj_4c_NavPaginas`. So `Controls(1)` would toggle the action buttons, not the sub-pages. Fixed to `Controls(loc_aNomes[loc_nIdx])` (name-based lookup).
+
+2. **`HabilitarCampos()` ÔÇö critical**: Same bug ÔÇö `Controls(loc_i)` with i=1..12 would access `cnt_4c_BotoesAcao`, `obj_4c_NavPaginas`, then `cnt_4c_Pg1`..`cnt_4c_Pg10` (shifted). Fixed to `Controls(loc_aSubPags[loc_i])`.
+
+3. **`HabilitarCampos()` ÔÇö logic**: `PEMSTATUS(loc_oCtrl, "ReadOnly", 5)` skipped CheckBoxes (no `ReadOnly` property). Fixed to also catch controls with `Value` property, covering CheckBoxes and OptionButtons.
+
+4. **`CarregarLista()` ÔÇö minor**: Removed orphaned `loc_lResultado = .F.` that wasn't declared as LOCAL.
+
+The form is fully functional ÔÇö FormCTA is already registered in `menu.prg:6744` and will auto-load via config.prg's ADIR() scan.

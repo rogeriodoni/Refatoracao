@@ -1,0 +1,813 @@
+{
+  "resumo": {
+    "totalMetodos": 46,
+    "metodosComSQL": 11,
+    "metodosComValidacao": 30,
+    "totalQueries": 8,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["ForaLinha = ] + Str", "fUniqueIds", "fChecaAcesso", "fConfigGeral", "fwBuscaExt", "fwBuscaInt", "File", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCCP",
+      "evento": "Procedure",
+      "linhas": 1013,
+      "codigoOriginal": "Private lnMrki, lnMrkf, pPro, lnEncI, lnEncF\n\nLocal lcGrui, lcGruf, lcSGruI, lcSGruF, lcMercI, lcMercF, lcCunii, lcCUnif, lcLini, lcLinf, lcColi, lcColf, lnConta, ;\n\tlcWhere, lcInicio, lcFinal, lcMoedai, lcMoedaf, lnArred, Custo, Moec, Venda, Moev, Fator, fPeso, Ideal\n\nlcMercI\t   = Thisform.getMercI.Value\nlcMercF\t   = Thisform.getMercF.Value\nlcGrui     = Thisform.GetCGrui.Value\nlcGruf     = Thisform.GetCGruf.Value\nlcSGruI    = Thisform.getSgruI.Value\nlcSGruF    = Thisform.getSgruF.Value\nlcCunii ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "ForaLinha = ] + Str",
+        "metodosFormChamados": "SetFocus,SqlExecute",
+        "controlesReferenciados": "Get_Enci,Get_Encf,Get_Reajuste,Get_Encargo,Get_Feitio,option1",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCCP",
+      "evento": "Procedure",
+      "linhas": 78,
+      "codigoOriginal": "Local lnOldSel\nlnOldSel = Select()\nSelect CrProdutos\nZap In CrProdutos\n\nlcQuery = [Select * From SigCdCcp Where Inativas <> 1]\nIf (Thisform.poDataMgr.SqlExecute(lcQuery, 'crSigCdCcp') < 1)\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCcp)')\n\tReturn .F.\nEndif\n\nSelect crSigCdCcp\nGo Top\nScan\n\n\tSelect CrProdutos\n\tZap In CrProdutos\n\n\tSelect crSigCdCcp\n\n\t*-- Filtros\n\tThisform.getCFornecs.Value = crSigCdCcp.cfornecs\n\tThisform.getMercI.Value = crSigCdCcp.merci\n\tThisfor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Processar,Atualizar,Click",
+        "controlesReferenciados": "option1,Get_Enci,Get_Encf,Get_Variacao,Get_Feitio,Get_Reajuste,Get_Encargo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCCP",
+      "evento": "Procedure",
+      "linhas": 173,
+      "codigoOriginal": "llReturn = .T.\n\nIf Not ThisForm.Automatico\n\tlnOk = MessageBox('Atualiza ???',4+32+256,'Alteração de Preços')\nElse\n\tlnOk = 6\nEndIf \n\nIf lnOk = 6\n\tIf Not ThisForm.Automatico\n\t\tllImpEtiq = Iif(MessageBox('Confirma a Impressão das Etiquetas?',4+32+256,'') = 6,.T.,.F.)\n\tElse\n\t\tllImpEtiq = .F.\n\tEndIf \t\n\n\tSelect * From CrProdutos Where lMarca = 1 Order By CPros Into Cursor CsProdutos ReadWrite\n\tSelect CsProdutos\n\tGo Top\n\tIf Eof()\n\t\tIf Not ThisForm.Automatico\n\t\t\tMessageBox('Nenhum Produto Selecionado !!... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "Sqlexecute,Update,Commit",
+        "controlesReferenciados": "Grd_Produto,ChkSubGrs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCCP",
+      "evento": "Init",
+      "linhas": 85,
+      "codigoOriginal": "Parameters pAuto \n\nThisForm.Automatico = pAuto \n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigPrCpo', 'cIdChaves', 'crSigPrCpo', '', '')\n\t\t\t.AddCursor('SigCdPrc', 'CidChaves', 'crSigCdPrc', '', '')\n\t\t\t.AddCursor('SigPrCp2', 'cIdChaves', 'crSigPrCp2', '', '')\n\t\t\t.AddCursor('SigCdPro', 'CPros', ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "CursorQuery,Sqlexecute,Visible = fChecaAcesso,ProcessaAutomatico",
+        "controlesReferenciados": "CHKSUBGRS',Grd_Produto",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCCP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Grd_Produto",
+      "evento": "Procedure",
+      "linhas": 23,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nlcArquivo9 = Sys(2023)+'\\TempCj.jpg'\n\nSelect CrProdutos\nlcCodPro  = CrProdutos.cpros\nlcSql = [Select FigJpgs From SigCdPro Where Cpros = ']+lcCodPro+[']\nIf ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpPro') < 1\n\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\tReturn(.F.)\nEndIf\nSelect TmpPro\nThisForm.FigJpg.Visible = .F.\nThisForm.FigJpg.Picture = ''\nIf Not IsNull(TmpPro.FigJpgs) And Not IsEmpty(TmpPro.FigJpgs)\n\tClear Resources\n\tlcFoto=Strconv(Strtran(Strtran... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,Picture =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Grd_Produto.Column1.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(CrProdutos.CPros))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Grd_Produto.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Grd_Produto.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Grd_Produto.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Grd_Produto.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Grd_Produto.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getCunii",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUni', ;\n\t\t\t\t\t\t   'crListaRemota', 'CUnis', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CUnis', '', 'Código')\n\t\tloLista.mAddColuna('DUnis', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CUnis\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.GetLini",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'crListaRemota', 'Linhas', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Linhas', '', 'Linhas')\n\t\tloLista.mAddColuna('Descs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Linhas\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***********************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.GetColi",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCol', ;\n\t\t\t\t\t\t   'crListaRemota', 'Colecoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Colecoes', '', 'Código')\n\t\tloLista.mAddColuna('Descs',    '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Colecoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getCgrui",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'CGrus', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CGrus', '', 'Código')\n\t\tloLista.mAddColuna('DGrus', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CGrus\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getCgruf",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'crListaRemota', 'CGrus', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CGrus', '', 'Código')\n\t\tloLista.mAddColuna('DGrus', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CGrus\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getCunif",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUni', ;\n\t\t\t\t\t\t   'crListaRemota', 'CUnis', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CUnis', '', 'Código')\n\t\tloLista.mAddColuna('DUnis', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CUnis\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.GetLinf",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdLin', ;\n\t\t\t\t\t\t   'crListaRemota', 'Linhas', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Linhas', '', 'Linhas')\n\t\tloLista.mAddColuna('Descs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Linhas\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***********************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.GetColf",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCol', ;\n\t\t\t\t\t\t   'crListaRemota', 'Colecoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Colecoes', '', 'Código')\n\t\tloLista.mAddColuna('Descs',    '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Colecoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.GetMoedai",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CMoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.GetMoedaf",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CMoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Get_Reajuste",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If (This.Value > 0)\n\tThisForm.GetnMrk.Value = 0\n\tThisForm.GetnMrk.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Get_Reajuste",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Opc_Recalc.Value <> 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.GetnMrk",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If (This.Value > 0)\n\tThisForm.Get_Reajuste.Value = 0\n\tThisForm.Get_Reajuste.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Reajuste",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.GetnMrk",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Get_Reajuste.Value = 0) And (ThisForm.Opc_Recalc.Value <> 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = 0) And",
+        "controlesReferenciados": "Get_Reajuste",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Get_Variacao",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If (This.Value > 0)\n\tThisForm.Get_Reajuste.Value = 0\n\tThisForm.Get_Reajuste.Refresh\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Reajuste",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Get_Variacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Get_Reajuste.Value = 0) And (ThisForm.Opc_Recalc.Value <> 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = 0) And",
+        "controlesReferenciados": "Get_Reajuste",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Sair",
+      "evento": "Click",
+      "linhas": 41,
+      "codigoOriginal": "If Thisform.Automatico\n\t=ThisForm.ProcessaAutomatico()\nElse\n\n\tSelect CrProdutos\n\tIf Reccount() > 0\n\t\tIf Messagebox('Existem Dados Gerados. Deseja Reprocessar? ',4+32,'') = 7\n\t\t\tReturn .F.\n\t\tEndif\n\tEndif\n\tZap In CrProdutos\n\n\tIf Thisform.Processar()\n\n\t\tSelect CrProdutos\n\t\tlnVaria = Thisform.Get_Variacao.Value\n\t\tIf lnVaria > 0\n\t\t\tDelete For PVarias < lnVaria\n\t\tEndif\n\t\tIf lnVaria < 0\n\t\t\tDelete For PVarias > lnVaria\n\t\tEndif\n\t\tSet Order To CPros\n\t\tGo Top\n\n\t\tThis.Parent.Atualiza.Enabled = .T.\n\t\tThis.Pa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ProcessaAutomatico,Processar",
+        "controlesReferenciados": "Get_Variacao,Grd_Produto",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Sair",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Sair",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "If Not ThisForm.Atualizar()\n\tReturn .F.\nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Atualizar",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Get_Feitio",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tlcSql = [Select Cods, Descs, Moedas, Acrescs From SigPrFti ]\n\tThisForm.Podatamgr.Sqlexecute(lcSql,'TmpFtio')\n\tSelect TmpFtio\n\tIndex On Descs Tag Descs\n\tIndex On cods Tag Cods\n\tIf Not Seek(This.Value,'TmpFtio','Cods')\n\t\tloLista = CreateObject('fwBuscaInt','TmpFtio','Cods',This.Value,'Feitios')\n\t\tloLista.mAddColuna('Cods','','Cod')\n\t\tloLista.mAddColuna('Descs','','Descrição')\n\t\tloLista.Show()\n\t\tThis.Value = TmpFtio.Cods\n\t\tThis.Refresh\n\tEndif\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.FigJpg",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "Local lcArquivo\n\nlcArquivo = Sys(2023) + '\\' + Sys(2015) + '.Jpg'\n\nSelect crprodutos\nlcCodPro  = CrProdutos.cpros\n\nlcSql = [Select a.cpros,a.FigJpgs From SigCdPro a Where a.cpros = ']+lcCodPro+[' ]\nThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpPro')\n\n* Figura no Campo Memo\nIf Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(crTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)\t\n\t=StrToFile(lcFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.get_Encargo",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value < 0\n\tMessageBox('Valor Invalido!!!',0+32,'')\n\tReturn .f.\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.cmdSelemp",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update CrProdutos Set lMarca = 1\nThisForm.Grd_Produto.Refresh\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Grd_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.CmdApgEmp",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Update CrProdutos Set lMarca = 0\nThisForm.Grd_Produto.Refresh\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Grd_Produto",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.Impressão",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "Do Form SigPrCcr\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getSgruI",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim ***********************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getSgruF",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim ***********************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getMercI",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descs',   '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim *****************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getMercF",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descs',   '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim *****************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getCFornecs",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tIf !fAcessoContas( Usuar, [], 'C', This.Value, This, ThisForm.getDFornecs)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tThisForm.getDFornecs.Value = '' \n\t\tReturn(.F.)\n\tEndIf\t\nElse\n\tThis.Value = ''\n\tThisForm.getDFornecs.Value = ''\nEndIf\nThis.Refresh\nThisForm.getDFornecs.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getDFornecs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getNewMkp",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(InList(ThisForm.Opc_Recalc.Value,7,8))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCCP.getNewMkp",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista, lcFiltro\n\nlcFiltro = []\nlcFiltro = Iif(.T.,[Where Tipos = 1],[Where Tipos = 1]) \n\nIf Not Empty(This.Value)\n\tlcSql = [Select Cods, Descs, Moedas, Acrescs From SigPrFti ] + lcFiltro\n\tThisForm.Podatamgr.Sqlexecute(lcSql,'TmpFtio')\n\tSelect TmpFtio\n\tIndex On Descs Tag Descs\n\tIndex On cods Tag Cods\n\tIf Not Seek(This.Value,'TmpFtio','Cods')\n\t\tloLista = CreateObject('fwBuscaInt','TmpFtio','Cods',This.Value,'Feitios')\n\t\tloLista.mAddColuna('Cods','','Cod')\n\t\tloLista.mAddColuna('Descs','','D... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRCCP.Procedure",
+      "queryOriginal": "lcQuery = [Select * From SigCdCcp Where Inativas <> 1]",
+      "tabelas": "SigCdCcp",
+      "colunas": "Inativas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCCP.Procedure",
+      "queryOriginal": "\tSelect * From CrProdutos Where lMarca = 1 Order By CPros Into Cursor CsProdutos ReadWrite",
+      "tabelas": "CrProdutos",
+      "colunas": "lMarca,CPros,CsProdutos,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCCP.Grd_Produto.Procedure",
+      "queryOriginal": "lcSql = [Select FigJpgs From SigCdPro Where Cpros = ']+lcCodPro+['] If ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpPro') < 1",
+      "tabelas": "SigCdPro",
+      "colunas": "FigJpgs,Cpros,SqlexecutelcSql,TmpPro",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCCP.Get_Feitio.Valid",
+      "queryOriginal": "\tlcSql = [Select Cods, Descs, Moedas, Acrescs From SigPrFti ]",
+      "tabelas": "SigPrFti",
+      "colunas": "Cods,Descs,Moedas,Acrescs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCCP.FigJpg.Click",
+      "queryOriginal": "lcSql = [Select a.cpros,a.FigJpgs From SigCdPro a Where a.cpros = ']+lcCodPro+[' ] ThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpPro')",
+      "tabelas": "SigCdPro",
+      "colunas": "cpros,FigJpgs,Sqlexecutelcsql,CrTmpPro",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCCP.cmdSelemp.Click",
+      "queryOriginal": "Update CrProdutos Set lMarca = 1",
+      "tabelas": "CrProdutos",
+      "colunas": "lMarca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCCP.CmdApgEmp.Click",
+      "queryOriginal": "Update CrProdutos Set lMarca = 0",
+      "tabelas": "CrProdutos",
+      "colunas": "lMarca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCCP.getNewMkp.Valid",
+      "queryOriginal": "\tlcSql = [Select Cods, Descs, Moedas, Acrescs From SigPrFti ] + lcFiltro",
+      "tabelas": "SigPrFti",
+      "colunas": "Cods,Descs,Moedas,Acrescs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCcp", "CrProdutos", "SigCdPro", "SigPrFti"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

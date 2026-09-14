@@ -1,0 +1,7 @@
+﻿The structure is correct. Phase 5 changes:
+
+- **Added `ConfigurarPaginaDados()`** at line 151 with the first half of the status/detail controls: `chk_4c_Ck_Marca` (marca-todos), `lbl_4c_Lbl_descricao` ("Opera├º├úo:"), and `txt_4c_Operacao` (read-only display of current row's operation code).
+- **Slimmed `ConfigurarRodape()`** to only the second half (`lbl_4c_Label1` + `txt_4c_Numes`) ÔÇö Phase 6 will migrate these too.
+- **Wired `ConfigurarPaginaLista()`** to call `ConfigurarPaginaDados()` before `ConfigurarRodape()`, so both halves are added in the correct order and no control is duplicated.
+
+For this OPERACIONAL popup (no CRUD Page1/Page2), the "dados" area is the status/detail row below the grid ÔÇö semantically the correct home for these controls. All existing BINDEVENTs (`ChkMarcaClick`, `GrdAfterRowColChange`) continue to work unchanged since the object names and container (`THIS`) are preserved.

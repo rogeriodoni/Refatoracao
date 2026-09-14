@@ -1,0 +1,13 @@
+﻿Encontrei o contexto. O valor `12713983` aparece apenas em um **coment├írio** na linha 726, explicando que esse n├║mero ├® equivalente a `RGB(255,255,193)`:
+
+```foxpro
+* BackColor 12713983 = RGB(255,255,193) pale-yellow do legado
+```
+
+N├úo existe nenhuma condi├º├úo WHERE com esse valor no c├│digo. O validador produziu um **falso positivo** ÔÇö ele detectou o n├║mero `12713983` como poss├¡vel coluna em cl├íusula WHERE, mas trata-se apenas de uma nota de documenta├º├úo no coment├írio.
+
+Os WHEREs reais no c├│digo est├úo corretos:
+- `InicializarResumo()` (linha 175 do BO): `WHERE xNensi.Visivel` ÔÇö id├¬ntico ao original
+- `SalvarAlteracoes()` (linha 209 do BO): `LOCATE FOR nTrans = cursor_4c_Distrib.nTrans` ÔÇö usa NTRANS conforme esperado pelo validador
+
+**Nenhuma corre├º├úo necess├íria.** O c├│digo est├í correto e o alerta [SQL-FILTRO-INVENTADO] ├® um falso positivo causado pela detec├º├úo do n├║mero BackColor no coment├írio.

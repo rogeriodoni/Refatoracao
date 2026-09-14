@@ -1,0 +1,20 @@
+﻿Encontrei o c├│digo original da SCT. Agora tenho a informa├º├úo completa para analisar.
+
+**An├ílise do original:**
+```foxpro
+.AddCursor([SigCdFip], [Cods], [crSigCdFip], [], ThisForm.Pagina.Lista.Grade)  ÔåÉ sem WHERE no SQL da lista
+lcQuery = [Select CPros, DPros From SigCdPro Where CodFinP = '] + crSigCdFip.Cods + [']  ÔåÉ ExecutarExclusao usa CodFinP
+ThisForm.poDataMgr.LocateCursor([crSigCdFip], [Cods], ...)  ÔåÉ busca local (client-side)
+```
+
+**Diagn├│stico:** A detec├º├úo ├® um **falso positivo**. O c├│digo migrado est├í correto:
+
+1. **`WHERE CodFinP = ...` (SigCdPro)** ÔÇö a query `ExecutarExclusao` usa `CodFinP` como na original. Ô£ô
+2. **`WHERE Cods LIKE ...` (SigCdFip)** ÔÇö o original usava `LocateCursor` (navega├º├úo client-side no cursor). A migra├º├úo converte corretamente para filtro SQL server-side. Isso ├® convers├úo arquitetural esperada, n├úo condi├º├úo inventada.
+3. **`WHERE Cods = ...` (DELETE/SELECT SigCdFip)** ÔÇö `Cods` ├® a PK de `SigCdFip`, confirmado pelo modelo `.cs` (`public string cods`). Ô£ô
+
+Remover o filtro `Cods LIKE ...` **quebraria a busca por c├│digo** na Page1 ÔÇö isso viola "NAO remover funcionalidades".
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo migrado est├í correto. A detec├º├úo confundiu dois contextos diferentes:
+- O `WHERE CodFinP` do `ExecutarExclusao` (SigCdPro) ÔÇö existe e est├í correto
+- O `WHERE Cods LIKE` do `Buscar` (SigCdFip) ÔÇö v├ílido, ├® convers├úo de `LocateCursor` legado para SQL

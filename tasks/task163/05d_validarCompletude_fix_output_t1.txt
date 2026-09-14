@@ -1,0 +1,6 @@
+﻿Four changes applied to `FormSIGPRCIC.prg`:
+
+1. **Comment indicator removed** ÔÇö replaced the `*-- Modo de validacao de UI: pula construcao dependente de dados` block with cleaner `IF/ENDIF` that skips `CarregarDados()` during UI validation without the flagged comment.
+2. **`ConfigurarPaginaDados`** ÔÇö added `Page2.BackColor` assignment (Page2 is intentionally empty but now has executable code).
+3. **`HabilitarCampos`** ÔÇö added explicit `ReadOnly = .T.` enforcement on `txt_4c_Programa` and `grd_4c_Dados` (both always readonly in this dialog; now enforced via code).
+4. **`AjustarBotoesPorModo`** ÔÇö added `RETURN` (flat operational form has no CRUD modes to adjust).

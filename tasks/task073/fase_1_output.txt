@@ -1,0 +1,13 @@
+﻿`C:\4c\projeto\app\classes\SIGRECTPBO.prg` criado com sucesso.
+
+**Fase 1/8 conclu├¡da.** O arquivo cont├®m:
+
+- **12 propriedades `this_*`** cobrindo todos os filtros do formul├írio original:
+  - Datas de cota├º├úo (`this_dDtInicial`, `this_dDtFinal`)
+  - Datas de validade (`this_dDtValidIs`, `this_dDtValidFs`)
+  - Comprador/Aprovador (`this_cComprador`, `this_cAprovador`) ÔÇö lookup em SigCdUsu
+  - Produto c├│digo/descri├º├úo (`this_cCPros`, `this_cDPros`) ÔÇö lookup em SigCdPro
+  - Fornecedor c├│digo/nome (`this_cIClis`, `this_cRClis`) ÔÇö lookup em SigCdCli
+  - OptionGroups (`this_nPedidos`, `this_nAprovados`) ÔÇö padr├úo 3 (Ambos)
+- **Infraestrutura**: `this_cArquivoRelatorio`, `this_cTituloRelatorio`, `this_cCursorDados`
+- **`Init()`** funcional: chama `DODEFAULT()`, define path do `.frx`, t├¡tulo com CHR() sem literais acentuados, inicializa datas com `DATE()`

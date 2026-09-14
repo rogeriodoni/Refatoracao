@@ -1,0 +1,16 @@
+﻿Arquivo criado: `C:\4c\projeto\app\classes\sigrecntBO.prg`
+
+**Fase 1/8 conclu├¡da.** O BO cont├®m:
+
+- **Heran├ºa**: `RelatorioBase` (n├úo BusinessBase)
+- **Propriedades declaradas**:
+  - `this_cArquivoRelatorio` / `this_cTituloRelatorio` ÔÇö identidade do relat├│rio
+  - `this_dData`, `this_cConta`, `this_cDConta` ÔÇö filtro de data e vendedor
+  - `this_cBase`, `this_cNvl2`, `this_cNvl3`, `this_cNvl4` ÔÇö n├¡veis de localiza├º├úo
+  - `this_cCods`, `this_nOptLocal`, `this_nOptOrdem` ÔÇö demais filtros e op├º├Áes
+  - `this_lVisualizaCtg` ÔÇö flag de permiss├úo (fChecaAcesso SIGRECNT/CONTAGEM)
+  - `this_cGrPadVens` ÔÇö grupo padr├úo de vendedores (de SigCdPam)
+  - `this_cCursorDados = "crRel"` ÔÇö cursor principal do relat├│rio
+- **Init()**: configura `this_cTabela`/`this_cCampoChave` (vazios para relat├│rio) e t├¡tulo com CHR() (sem literais acentuados), chama `DODEFAULT()`
+
+A Fase 2 adicionar├í `PrepararDados()`, `Imprimir()`, `Visualizar()`, `ObterMensagemErro()` e o m├®todo `ReverterXML()`.

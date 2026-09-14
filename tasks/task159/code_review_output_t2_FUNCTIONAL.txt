@@ -1,0 +1,41 @@
+﻿An├ílise completa. Tenho todos os dados necess├írios.
+
+**Resultado da verifica├º├úo dos 3 problemas:**
+
+---
+
+### [CONTAINER-VISIVEL] ÔÇö J├í corrigido
+
+O arquivo **pr├®-review** (`Formsigprccp.prg.pre_review`) tinha:
+```foxpro
+IF UPPER(loc_oCtrl.Name) != "IMG_4C_FIGJPG"
+```
+S├│ exclu├¡a `IMG_4C_FIGJPG`. `CNT_4C_SOMBRA` e `CNT_4C_SAIDA` seriam for├ºados a `Visible=.T.`.
+
+O arquivo **atual** (linha 1555) j├í tem a corre├º├úo:
+```foxpro
+IF !INLIST(UPPER(loc_oCtrl.Name), "IMG_4C_FIGJPG", "CNT_4C_SOMBRA", "CNT_4C_SAIDA")
+```
+Ô£à **J├í corrigido.**
+
+---
+
+### [MADDCOLUNA-PARAMS] ÔÇö Falso positivo
+
+Grep sobre o arquivo completo encontrou 6 chamadas a `mAddColuna`, **todas com 3 par├ómetros corretos** (campo, m├íscara_ou_vazio, t├¡tulo). Nenhuma chamada com 1 par├ómetro existe no arquivo atual nem no pr├®-review.
+Ô£à **Problema n├úo existe no arquivo atual.**
+
+---
+
+### [METODO-INEXISTENTE] ÔÇö Falso positivo
+
+`THIS.Controls(loc_i)` (linha 1553) **n├úo ├® um m├®todo inventado** ÔÇö ├® a propriedade array nativa do VFP9, acessada via subscript. O mesmo padr├úo est├í presente em **12+ forms do projeto**:
+- `FormSIGBLCTA.prg:433` ÔÇö `THIS.Controls(loc_i)`
+- `FormSigPdMp1.prg`, `FormSigPdM11.prg`, `Formsigopdiv.prg`, `Formsigopcgp.prg`, etc.
+
+O revisor autom├ítico classifica `Controls(n)` como chamada de m├®todo por causa dos par├¬nteses, mas ├® acesso a array VFP9 nativo via `ControlCount`/`Controls(n)`.
+Ô£à **C├│digo correto. Sem altera├º├úo necess├íria.**
+
+---
+
+**Conclus├úo:** Os 3 problemas listados est├úo resolvidos no arquivo atual. O [CONTAINER-VISIVEL] foi corrigido entre o estado pr├®-review e o atual (INLIST j├í est├í na linha 1555). Os outros dois s├úo falsos positivos do revisor autom├ítico. Nenhuma altera├º├úo necess├íria ÔÇö modificar o arquivo agora introduziria risco sem benef├¡cio.

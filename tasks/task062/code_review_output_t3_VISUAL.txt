@@ -1,0 +1,31 @@
+﻿Analisando o c├│digo atual vs. os valores reportados:
+
+**Resultado da an├ílise: todos os 9 problemas s├úo falsos positivos.** O c├│digo atual est├í correto.
+
+### Explica├º├úo detalhada
+
+**Problema raiz #1 ÔÇö OptionGroups (6 problemas: optSNA, optTipo, optQuebras - Top=0 e Left=0)**
+
+O review tool leu a posi├º├úo de `Buttons(1).Top=0` e `Buttons(1).Left=0` (posi├º├úo do primeiro bot├úo *dentro* do OptionGroup ÔÇö relativa ao container, sempre 0,0 para o Button(1)) e comparou com a posi├º├úo absoluta do OptionGroup no SCX original. Isso ├® uma compara├º├úo inv├ílida.
+
+Os OptionGroups no c├│digo atual t├¬m posi├º├Áes corretas:
+
+| Controle | Original (form-abs) | Offset pgf | Migrado (page-rel) | C├│digo atual |
+|---|---|---|---|---|
+| obj_4c_OptSNA | Top=201, Left=235 | ÔêÆ85 | **Top=116, Left=235** | Ô£ô Linha 561-562 |
+| obj_4c_OptTipo | Top=226, Left=235 | ÔêÆ85 | **Top=141, Left=235** | Ô£ô Linha 627-628 |
+| obj_4c_OptQuebras | Top=249, Left=235 | ÔêÆ85 | **Top=164, Left=235** | Ô£ô Linha 693-694 |
+
+**Problema raiz #2 ÔÇö Labels e CheckBox (3 problemas: lbl_estoque, lbl_moeda, chk_4c_OptPenPag ÔÇö diff=85px)**
+
+O review tool comparou posi├º├Áes absolutas do SCX original com posi├º├Áes relativas ├á Page, sem descontar o offset do PageFrame (`Top=85`). A diferen├ºa de exatamente **85px** em todos os tr├¬s casos confirma isso.
+
+| Controle | Original (form-abs) | Offset pgf | Correto (page-rel) | C├│digo atual |
+|---|---|---|---|---|
+| lbl_4c_Lbl_estoque | Top=152 | ÔêÆ85 | **Top=67** | Ô£ô Linha 440 |
+| lbl_4c_Lbl_moeda | Top=179 | ÔêÆ85 | **Top=94** | Ô£ô Linha 485 |
+| chk_4c_OptPenPag | Top=179 | ÔêÆ85 | **Top=94** | Ô£ô Linha 530 |
+
+### Conclus├úo
+
+**Nenhuma altera├º├úo necess├íria.** Corrigir esses valores para os originais do SCX quebraria o layout ÔÇö os controles ficariam 85px abaixo do esperado dentro da Page. O c├│digo migrado est├í matematicamente correto. Os 9 problemas s├úo artefatos do review tool que n├úo desconta o offset do PageFrame e confunde `Buttons(1).Top` com a posi├º├úo do pr├│prio OptionGroup.

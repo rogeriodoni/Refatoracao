@@ -1,0 +1,17 @@
+﻿O arquivo foi criado com sucesso. `C:\4c\projeto\app\forms\relatorios\FormSIGREADS.prg` (286 linhas) ÔÇö Fase 3/8 completa.
+
+**O que foi criado:**
+
+| Elemento | Detalhe |
+|---|---|
+| `DEFINE CLASS FormSIGREADS AS FormBase` | Width=800, Height=500 (exatos do original), TitleBar=0, WindowType=1, DataSession=2 |
+| `Init()` | `RETURN DODEFAULT()` ÔÇö delega para FormBase que chama InicializarForm() |
+| `InicializarForm()` | Cria SIGREADSBO, chama CarregarParametrosPadrao() + CarregarTiposOperacao() (ambos pulados em modo UI), monta cabecalho + bot├Áes |
+| `ConfigurarCabecalho()` | cnt_4c_Cabecalho (RGB 100,100,100, Height=80, Width=THIS.Width) com lbl_4c_Sombra + lbl_4c_Titulo |
+| `ConfigurarBotoes()` | cmg_4c_Botoes (Left=527, Width=273, 4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar) ÔÇö BINDEVENTs reservados para Fase 7/8 |
+| `Destroy()` | Libera this_oRelatorio + DODEFAULT() |
+
+**Pr├│ximas fases:**
+- **Fase 4**: Campos de filtro (Labels, TextBoxes Empresa/Vendedor/Opera├º├úo/Per├¡odo/Moeda/Margem, Grid GrdTipo com checkbox)
+- **Fases 5-6**: OptionGroups (Opt_TipoVars, optTipoRel, Opt_obs) + bot├Áes SelTudo/Apaga + LimparCampos()
+- **Fases 7-8**: BINDEVENTs + handlers (BtnVisualizarClick, BtnImprimirClick, FormParaRelatorio, lookups Empresa/Vendedor/Moeda)

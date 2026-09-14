@@ -1,0 +1,12 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\SigReEqTBO.prg` criado com:
+
+- Heran├ºa de `RelatorioBase`
+- 7 propriedades declaradas:
+  - `this_nOpcao = 2` ÔÇö padr├úo Sint├®tico (igual ao original `Opt_Key.Value = 2`)
+  - `this_cCursorGrupos` / `this_cCursorProdutos` ÔÇö nomes dos cursores recebidos do form pai
+  - `this_cFrxAnalitico = "SigReEq1"` / `this_cFrxSintetico = "SigReEq2"` ÔÇö FRX conforme o `Opt_Key`
+  - `this_cTitulo` / `this_cMensagemErro`
+- `Init()` com TRY/CATCH, `DODEFAULT()` e configura├º├úo de `this_cTabela`/`this_cCampoChave`
+- `ObterMensagemErro()` e `Destroy()` completos
+
+**Nota arquitetural para fases seguintes**: este form ├® filho ÔÇö recebe `poForm` no Init e usa `Set DataSession to poForm.DataSessionId`. Na Fase 2 (PrepararDados/Imprimir/Visualizar) e Fase 3 (Form), o Form precisar├í de `this_oParentForm` e l├│gica para herdar o DataSession do pai antes de acessar os cursores.

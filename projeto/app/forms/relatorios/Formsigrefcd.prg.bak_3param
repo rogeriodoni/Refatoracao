@@ -1,0 +1,1005 @@
+*==============================================================================
+* FORMSIGREFCD.PRG
+* Informativo de Vendas Diarias
+* Tipo: REPORT (herda FormBase, BO herda RelatorioBase)
+* Migrado de: SIGREFCD.SCX (frmrelatorio)
+*
+* Filtros:
+*   - Empresa   (codigo + descricao - SigCdEmp.cemps / razas)
+*   - Periodo   (data inicial / data final)
+*
+* Acoes: Visualizar (preview) / Imprimir (com dialogo) / Documento (direto)
+*==============================================================================
+
+DEFINE CLASS Formsigrefcd AS FormBase
+
+    *-- Dimensoes e aparencia (EXATAS do original: Width=800, Height=300)
+    Height      = 300
+    Width       = 800
+    DataSession = 2
+    ShowWindow  = 1
+    WindowType  = 1
+    AutoCenter  = .T.
+    BorderStyle = 2
+    ControlBox  = .F.
+    MaxButton   = .F.
+    MinButton   = .F.
+    TitleBar    = 0
+    Themes      = .F.
+    ShowTips    = .T.
+
+    *-- Referencia ao BO de relatorio (instanciado em InicializarForm)
+    this_oRelatorio    = .NULL.
+    this_cMensagemErro = ""
+
+    *--------------------------------------------------------------------------
+    * Init - Delega para FormBase.Init() que chama THIS.InicializarForm()
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarForm - Cria estrutura completa do formulario de relatorio
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso, loc_lContinuar
+        loc_lSucesso   = .F.
+        loc_lContinuar = .T.
+        TRY
+            THIS.Caption = "Informativo de Vendas Diarias"
+
+            IF TYPE("gc_4c_CaminhoIcones") = "U"
+                gc_4c_CaminhoIcones = ""
+            ENDIF
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+            *-- Instanciar BO de relatorio (pula se em modo validacao de UI sem conexao SQL)
+            IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+                THIS.this_oRelatorio = CREATEOBJECT("sigrefcdBO")
+                IF VARTYPE(THIS.this_oRelatorio) != "O"
+                    MsgErro("Erro ao criar sigrefcdBO" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(THIS.this_oRelatorio), "Erro")
+                    loc_lContinuar = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lContinuar
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarBotoes()
+                THIS.ConfigurarPageFrame()
+
+                THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+
+                THIS.ConfigurarPaginaFiltros()
+
+                BINDEVENT(THIS.cmg_4c_Botoes.Buttons(1), "Click", THIS, "BtnVisualizarClick")
+                BINDEVENT(THIS.cmg_4c_Botoes.Buttons(2), "Click", THIS, "BtnImprimirClick")
+                BINDEVENT(THIS.cmg_4c_Botoes.Buttons(3), "Click", THIS, "BtnDocumentoClick")
+                BINDEVENT(THIS.cmg_4c_Botoes.Buttons(4), "Click", THIS, "BtnSairClick")
+
+                *-- Valores iniciais (pulado em modo de validacao de UI sem conexao SQL)
+                IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+                    THIS.LimparCampos()
+                ENDIF
+
+                THIS.Visible = .T.
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCabecalho - Container escuro superior com titulo do relatorio
+    *   Equivalente ao cntSombra do frmrelatorio legado.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        THIS.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH THIS.cnt_4c_Cabecalho
+            .Top         = 0
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BackStyle   = 1
+            .BackColor   = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible     = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Top       = 22
+                .Left      = 22
+                .Width     = THIS.Width
+                .Height    = 30
+                .Caption   = "Informativo de Vendas Diarias"
+                .FontName  = "Tahoma"
+                .FontSize  = 14
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Top       = 20
+                .Left      = 20
+                .Width     = THIS.Width
+                .Height    = 30
+                .Caption   = "Informativo de Vendas Diarias"
+                .FontName  = "Tahoma"
+                .FontSize  = 14
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarBotoes - CommandGroup btnReport (framework.vcx frmrelatorio)
+    *   Original: btnReport.Left=526 -> padrao canonico Left=529
+    *   Botoes: Visualizar(5), Imprimir(71), Documento(137), Encerrar(203)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarBotoes()
+        THIS.AddObject("cmg_4c_Botoes", "CommandGroup")
+        WITH THIS.cmg_4c_Botoes
+            .Top           = 0
+            .Left          = 529
+            .Width         = 273
+            .Height        = 80
+            .ButtonCount   = 4
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .BorderColor   = RGB(136, 189, 188)
+            .SpecialEffect = 1
+            .Themes        = .F.
+            .Visible       = .T.
+
+            WITH .Buttons(1)
+                .Top             = 5
+                .Left            = 5
+                .Width           = 65
+                .Height          = 70
+                .Caption         = "Visualizar"
+                .FontName        = "Comic Sans MS"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "Gerar o Relat" + CHR(243) + "rio no V" + CHR(237) + "deo"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+
+            WITH .Buttons(2)
+                .Top             = 5
+                .Left            = 71
+                .Width           = 65
+                .Height          = 70
+                .Caption         = "Imprimir"
+                .FontName        = "Comic Sans MS"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "Enviar o Relat" + CHR(243) + "rio Para Impressora"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+
+            WITH .Buttons(3)
+                .Top             = 5
+                .Left            = 137
+                .Width           = 65
+                .Height          = 70
+                .Caption         = "Documento"
+                .WordWrap        = .T.
+                .FontName        = "Comic Sans MS"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "Gerar Documento do Relat" + CHR(243) + "rio"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+
+            WITH .Buttons(4)
+                .Top             = 5
+                .Left            = 203
+                .Width           = 65
+                .Height          = 70
+                .Caption         = "Encerrar"
+                .WordWrap        = .T.
+                .Cancel          = .T.
+                .FontName        = "Comic Sans MS"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .Picture         = gc_4c_CaminhoIcones + "relatorio_sair_60.jpg"
+                .PicturePosition = 13
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .ToolTipText     = "[Esc] Encerrar"
+                .Themes          = .F.
+                .Visible         = .T.
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPageFrame - PageFrame unico com filtros (form FLAT convertido)
+    *   Posicionado abaixo do cabecalho (85px).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        LOCAL loc_oPgf
+
+        THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+        loc_oPgf = THIS.pgf_4c_Paginas
+
+        loc_oPgf.PageCount = 1
+
+        loc_oPgf.Top    = 85
+        loc_oPgf.Left   = -1
+        loc_oPgf.Width  = THIS.Width + 2
+        loc_oPgf.Height = THIS.Height - 85
+        loc_oPgf.Tabs   = .F.
+
+        loc_oPgf.Page1.Caption   = "Filtros"
+        loc_oPgf.Page1.FontName  = "Tahoma"
+        loc_oPgf.Page1.FontSize  = 8
+        loc_oPgf.Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        loc_oPgf.Page1.BackColor = RGB(255, 255, 255)
+        loc_oPgf.Page1.ForeColor = RGB(90, 90, 90)
+
+        loc_oPgf.Visible    = .T.
+        loc_oPgf.ActivePage = 1
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaFiltros - Filtros na Page1 (Empresa + Periodo)
+    *   Posicoes convertidas: OriginalTop - PageFrame.Top(85)
+    *   get_cd_empresa: Top=144 -> Page1.Top=59
+    *   get_dt_inicial: Top=169 -> Page1.Top=84
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaFiltros()
+        LOCAL loc_oPg
+        loc_oPg = THIS.pgf_4c_Paginas.Page1
+
+        *-- Label "Empresa :" (original: lbl_empresa, Top=147, Left=224)
+        loc_oPg.AddObject("lbl_4c_LblEmpresa", "Label")
+        WITH loc_oPg.lbl_4c_LblEmpresa
+            .Top       = 62
+            .Left      = 224
+            .Width     = 50
+            .Height    = 15
+            .Caption   = "Empresa :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .Alignment = 0
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Codigo da empresa (get_cd_empresa: Width=31, Left=279, MaxLength=3)
+        loc_oPg.AddObject("txt_4c_CdEmpresa", "TextBox")
+        WITH loc_oPg.txt_4c_CdEmpresa
+            .Top           = 59
+            .Left          = 279
+            .Width         = 31
+            .Height        = 23
+            .Value         = ""
+            .MaxLength     = 3
+            .Format        = "K!"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BackColor     = RGB(255, 255, 255)
+            .ForeColor     = RGB(0, 0, 0)
+            .BackStyle     = 1
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Descricao da empresa (get_ds_empresa: Width=289, Left=312, MaxLength=40)
+        *   ReadOnly quando codigo da empresa esta preenchido (When original)
+        loc_oPg.AddObject("txt_4c_DsEmpresa", "TextBox")
+        WITH loc_oPg.txt_4c_DsEmpresa
+            .Top           = 59
+            .Left          = 312
+            .Width         = 289
+            .Height        = 23
+            .Value         = ""
+            .MaxLength     = 40
+            .Format        = "K!"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BackColor     = RGB(255, 255, 255)
+            .ForeColor     = RGB(0, 0, 0)
+            .BackStyle     = 1
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Label "Periodo :" (original: lbl_periodo, Top=172, Left=229)
+        loc_oPg.AddObject("lbl_4c_LblPeriodo", "Label")
+        WITH loc_oPg.lbl_4c_LblPeriodo
+            .Top       = 87
+            .Left      = 229
+            .Width     = 45
+            .Height    = 15
+            .Caption   = "Per" + CHR(237) + "odo :"
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .Alignment = 0
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Data inicial (get_dt_inicial: Width=80, Left=279, Top=169)
+        loc_oPg.AddObject("txt_4c_DtInicial", "TextBox")
+        WITH loc_oPg.txt_4c_DtInicial
+            .Top           = 84
+            .Left          = 279
+            .Width         = 80
+            .Height        = 23
+            .Value         = {}
+            .Format        = "D"
+            .MaxLength     = 10
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BackColor     = RGB(255, 255, 255)
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Separador entre datas (Say1: Caption="a" grave, Top=172, Left=363)
+        loc_oPg.AddObject("lbl_4c_Sep", "Label")
+        WITH loc_oPg.lbl_4c_Sep
+            .Top       = 87
+            .Left      = 363
+            .Width     = 10
+            .Height    = 15
+            .Caption   = CHR(224)
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Data final (get_dt_final: Width=80, Left=376, Top=169)
+        loc_oPg.AddObject("txt_4c_DtFinal", "TextBox")
+        WITH loc_oPg.txt_4c_DtFinal
+            .Top           = 84
+            .Left          = 376
+            .Width         = 80
+            .Height        = 23
+            .Value         = {}
+            .Format        = "D"
+            .MaxLength     = 10
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BackColor     = RGB(255, 255, 255)
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Handlers de teclado para campos de filtro
+        BINDEVENT(loc_oPg.txt_4c_CdEmpresa, "KeyPress", THIS, "TeclaCdEmpresa")
+        BINDEVENT(loc_oPg.txt_4c_DsEmpresa, "KeyPress", THIS, "TeclaDsEmpresa")
+        BINDEVENT(loc_oPg.txt_4c_DtInicial, "KeyPress", THIS, "TeclaDataInicial")
+        BINDEVENT(loc_oPg.txt_4c_DtFinal,   "KeyPress", THIS, "TeclaDataFinal")
+
+        *-- DblClick tambem abre lookup (equivalente ao F4)
+        BINDEVENT(loc_oPg.txt_4c_CdEmpresa, "DblClick", THIS, "AbrirBuscaEmpresa")
+        BINDEVENT(loc_oPg.txt_4c_DsEmpresa, "DblClick", THIS, "AbrirBuscaDsEmpresa")
+
+        *-- Estado inicial do campo de descricao (ReadOnly quando codigo preenchido)
+        THIS.AtualizarEstadoDsEmpresa()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparCampos - Restaura filtros para valores padrao.
+    *   Empresa = empresa corrente do sistema; Datas = hoje.
+    *   Equivalente ao Init() legado que preenchia _empr e carregava razao.
+    *--------------------------------------------------------------------------
+    PROCEDURE LimparCampos()
+        LOCAL loc_oPg, loc_cEmp, loc_nResult
+        TRY
+            loc_oPg  = THIS.pgf_4c_Paginas.Page1
+            loc_cEmp = ""
+
+            IF TYPE("go_4c_Sistema") = "O" AND !ISNULL(go_4c_Sistema)
+                loc_cEmp = ALLTRIM(go_4c_Sistema.cCodEmpresa)
+            ENDIF
+
+            loc_oPg.txt_4c_CdEmpresa.Value = loc_cEmp
+            loc_oPg.txt_4c_DsEmpresa.Value = ""
+            loc_oPg.txt_4c_DtInicial.Value = DATE()
+            loc_oPg.txt_4c_DtFinal.Value   = DATE()
+
+            *-- Carrega descricao da empresa corrente (equivalente ao Init legado)
+            IF !EMPTY(loc_cEmp)
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT cemps, razas FROM SigCdEmp WHERE cemps = " + ;
+                    EscaparSQL(loc_cEmp), ;
+                    "cursor_4c_EmpInit")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_EmpInit
+                    IF !EOF()
+                        loc_oPg.txt_4c_DsEmpresa.Value = ALLTRIM(cursor_4c_EmpInit.razas)
+                    ENDIF
+                ENDIF
+                IF USED("cursor_4c_EmpInit")
+                    USE IN cursor_4c_EmpInit
+                ENDIF
+            ENDIF
+
+            THIS.AtualizarEstadoDsEmpresa()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaRelatorio - Copia valores dos controles para propriedades do BO.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaRelatorio()
+        LOCAL loc_oPg
+        loc_oPg = THIS.pgf_4c_Paginas.Page1
+        WITH THIS.this_oRelatorio
+            .this_cCodEmpresa  = ALLTRIM(loc_oPg.txt_4c_CdEmpresa.Value)
+            .this_cRazaEmpresa = ALLTRIM(loc_oPg.txt_4c_DsEmpresa.Value)
+            .this_dDtInicial   = loc_oPg.txt_4c_DtInicial.Value
+            .this_dDtFinal     = loc_oPg.txt_4c_DtFinal.Value
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarPeriodo - Verifica data final >= data inicial.
+    *   Replica validacao de get_dt_inicial.Valid e get_dt_final.Valid do legado.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ValidarPeriodo()
+        LOCAL loc_oPg, loc_dIni, loc_dFim
+        loc_oPg  = THIS.pgf_4c_Paginas.Page1
+        loc_dIni = loc_oPg.txt_4c_DtInicial.Value
+        loc_dFim = loc_oPg.txt_4c_DtFinal.Value
+        IF !EMPTY(loc_dIni) AND !EMPTY(loc_dFim) AND loc_dIni > loc_dFim
+            MsgAviso("Data Final n" + CHR(227) + "o pode ser menor que a Data Inicial.", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            loc_oPg.txt_4c_DtFinal.SetFocus()
+            RETURN .F.
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarFiltros - Verifica preenchimento dos campos obrigatorios.
+    *   Empresa e Periodo sao obrigatorios para gerar o relatorio.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ValidarFiltros()
+        LOCAL loc_oPg
+        loc_oPg = THIS.pgf_4c_Paginas.Page1
+        IF EMPTY(ALLTRIM(loc_oPg.txt_4c_CdEmpresa.Value))
+            MsgAviso("Informe o c" + CHR(243) + "digo da empresa.", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            loc_oPg.txt_4c_CdEmpresa.SetFocus()
+            RETURN .F.
+        ENDIF
+        IF EMPTY(loc_oPg.txt_4c_DtInicial.Value)
+            MsgAviso("Informe a data inicial do per" + CHR(237) + "odo.", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            loc_oPg.txt_4c_DtInicial.SetFocus()
+            RETURN .F.
+        ENDIF
+        IF EMPTY(loc_oPg.txt_4c_DtFinal.Value)
+            MsgAviso("Informe a data final do per" + CHR(237) + "odo.", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            loc_oPg.txt_4c_DtFinal.SetFocus()
+            RETURN .F.
+        ENDIF
+        IF !THIS.ValidarPeriodo()
+            RETURN .F.
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnVisualizarClick - Visualiza relatorio em preview na tela
+    *   Equivalente ao PROCEDURE visualizacao do legado.
+    *--------------------------------------------------------------------------
+    *-- ============================================================
+    *-- PROCEDURE ExecutarReportForm (Pattern #117)
+    *-- Executa REPORT FORM apenas se o FRX existir; caso contrario,
+    *-- exibe MostrarErro descritivo com o path faltante.
+    *-- Isola SET POINT/SEPARATOR/REPORTBEHAVIOR durante o REPORT FORM
+    *-- porque FRXs legados Fortyus (VFP6/7/8) foram desenhados com
+    *-- POINT="." + REPORTBEHAVIOR 80. Sem isolamento o modo 90 remede
+    *-- fontes em runtime e mostra asteriscos em campos numericos.
+    *-- par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *-- ============================================================
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        *-- Isolamento de locale + modo de renderizacao (Pattern #117 / Erro28)
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        RETURN .T.
+    ENDPROC
+
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_cFrxPath
+        TRY
+            IF THIS.ValidarFiltros()
+                THIS.FormParaRelatorio()
+                IF THIS.this_oRelatorio.PrepararDados()
+                    THIS.ExecutarReportForm("SigReFcD", "PREVIEW")
+                ELSE
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnImprimirClick - Imprime relatorio com dialogo de selecao de impressora
+    *   Equivalente ao PROCEDURE impressao do legado.
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnImprimirClick()
+        LOCAL loc_cFrxPath
+        TRY
+            IF THIS.ValidarFiltros()
+                THIS.FormParaRelatorio()
+                IF THIS.this_oRelatorio.PrepararDados()
+                    THIS.ExecutarReportForm("SigReFcD", "PRINTER_PROMPT")
+                ELSE
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnDocumentoClick - Envia relatorio direto para impressora sem dialogo
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnDocumentoClick()
+        LOCAL loc_cFrxPath
+        TRY
+            IF THIS.ValidarFiltros()
+                THIS.FormParaRelatorio()
+                IF THIS.this_oRelatorio.PrepararDados()
+                    THIS.ExecutarReportForm("SigReFcD", "PRINTER")
+                ELSE
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnSairClick - Fecha o formulario
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnSairClick()
+        THIS.Release()
+    ENDPROC
+
+    *==========================================================================
+    * MAPEAMENTO CRUD -> REPORT (aliases de compatibilidade com pipeline)
+    *==========================================================================
+
+    PROCEDURE BtnIncluirClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    PROCEDURE BtnAlterarClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    PROCEDURE BtnExcluirClick()
+        MsgAviso("Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
+            "o dispon" + CHR(237) + "vel em relat" + CHR(243) + "rios.", ;
+            "Aten" + CHR(231) + CHR(227) + "o")
+    ENDPROC
+
+    PROCEDURE BtnEncerrarClick()
+        THIS.BtnSairClick()
+    ENDPROC
+
+    PROCEDURE BtnSalvarClick()
+        THIS.BtnImprimirClick()
+    ENDPROC
+
+    PROCEDURE BtnCancelarClick()
+        LOCAL loc_oPg
+        TRY
+            THIS.LimparCampos()
+            loc_oPg = THIS.pgf_4c_Paginas.Page1
+            IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_CdEmpresa", 5)
+                loc_oPg.txt_4c_CdEmpresa.SetFocus()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    PROCEDURE BtnBuscarClick()
+        THIS.BtnVisualizarClick()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaLista - Compatibilidade com pipeline CRUD
+    *   Forms REPORT (frmrelatorio) tem layout FLAT, sem pagina de Lista.
+    *   A unica pagina existente (Filtros) ja eh configurada por
+    *   ConfigurarPaginaFiltros(). Este metodo apenas redireciona para
+    *   manter compatibilidade com o orquestrador da migracao.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        THIS.ConfigurarPaginaFiltros()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaDados - Compatibilidade com pipeline CRUD
+    *   Forms REPORT (frmrelatorio) tem layout FLAT: todos os campos de filtro
+    *   ficam na unica Page1 (Filtros), configurada por ConfigurarPaginaFiltros().
+    *   Nao existe Page2 de edicao de dados neste tipo de form. Mantido apenas
+    *   para satisfazer contratos do pipeline de migracao.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        THIS.ConfigurarPaginaFiltros()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AlternarPagina - Compatibilidade com pipeline CRUD
+    *   Forms REPORT possuem somente uma pagina (Filtros). Nao ha alternancia
+    *   entre Lista/Dados. Mantido apenas para satisfazer contratos do
+    *   pipeline de migracao e qualquer chamada herdada que possa ocorrer.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+        IF VARTYPE(THIS.pgf_4c_Paginas) = "O"
+            THIS.pgf_4c_Paginas.Visible = .T.
+            THIS.pgf_4c_Paginas.ActivePage = 1
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * HANDLERS DE TECLADO - BINDEVENT KeyPress
+    * F4=115, ENTER=13, TAB=9
+    *==========================================================================
+
+    PROCEDURE TeclaCdEmpresa(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaEmpresa()
+        ENDIF
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarCdEmpresa()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE TeclaDsEmpresa(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaDsEmpresa()
+        ENDIF
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            THIS.ValidarDsEmpresa()
+        ENDIF
+    ENDPROC
+
+    PROCEDURE TeclaDataInicial(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            LOCAL loc_oPg, loc_dIni, loc_dFim
+            loc_oPg  = THIS.pgf_4c_Paginas.Page1
+            loc_dIni = loc_oPg.txt_4c_DtInicial.Value
+            loc_dFim = loc_oPg.txt_4c_DtFinal.Value
+            IF !EMPTY(loc_dIni) AND !EMPTY(loc_dFim) AND loc_dIni > loc_dFim
+                loc_oPg.txt_4c_DtFinal.Value = loc_dIni
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    PROCEDURE TeclaDataFinal(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9
+            LOCAL loc_oPg, loc_dIni, loc_dFim
+            loc_oPg  = THIS.pgf_4c_Paginas.Page1
+            loc_dIni = loc_oPg.txt_4c_DtInicial.Value
+            loc_dFim = loc_oPg.txt_4c_DtFinal.Value
+            IF !EMPTY(loc_dFim) AND !EMPTY(loc_dIni) AND loc_dFim < loc_dIni
+                MsgAviso("Data Final n" + CHR(227) + "o pode ser menor que a Data Inicial.", ;
+                    "Aviso")
+                loc_oPg.txt_4c_DtFinal.SetFocus()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AtualizarEstadoDsEmpresa - Simula get_ds_empresa.When do legado.
+    *   get_ds_empresa.When: Return Empty(ThisForm.get_cd_empresa.Value)
+    *   Campo de descricao so e editavel quando codigo da empresa esta vazio.
+    *--------------------------------------------------------------------------
+    PROCEDURE AtualizarEstadoDsEmpresa()
+        LOCAL loc_oPg
+        TRY
+            loc_oPg = THIS.pgf_4c_Paginas.Page1
+            loc_oPg.txt_4c_DsEmpresa.ReadOnly = ;
+                !EMPTY(ALLTRIM(loc_oPg.txt_4c_CdEmpresa.Value))
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * LOOKUP - EMPRESA pelo codigo (SigCdEmp.cemps)
+    * Equivalente ao get_cd_empresa.Valid: fAcessoEmpresa(Usuar,'C'...)
+    *==========================================================================
+
+    PROCEDURE AbrirBuscaEmpresa()
+        LOCAL loc_oBusca, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdEmp", ;
+            "cursor_4c_BuscaEmp", ;
+            "cemps", ;
+            ALLTRIM(loc_oPg.txt_4c_CdEmpresa.Value), ;
+            "Sele" + CHR(231) + CHR(227) + "o de Empresa")
+        IF VARTYPE(loc_oBusca) = "O"
+            loc_oBusca.mAddColuna("cemps", "", "C" + CHR(243) + "digo")
+            loc_oBusca.mAddColuna("razas", "", "Raz" + CHR(227) + "o Social")
+            loc_oBusca.Show()
+            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
+                loc_oPg.txt_4c_CdEmpresa.Value = ALLTRIM(cursor_4c_BuscaEmp.cemps)
+                loc_oPg.txt_4c_DsEmpresa.Value = ALLTRIM(cursor_4c_BuscaEmp.razas)
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+        IF USED("cursor_4c_BuscaEmp")
+            USE IN cursor_4c_BuscaEmp
+        ENDIF
+        THIS.AtualizarEstadoDsEmpresa()
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarCdEmpresa()
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_CdEmpresa.Value)
+        IF EMPTY(loc_cValor)
+            loc_oPg.txt_4c_DsEmpresa.Value = ""
+            THIS.AtualizarEstadoDsEmpresa()
+            RETURN
+        ENDIF
+        loc_cSQL = "SELECT cemps, razas FROM SigCdEmp WHERE cemps = " + EscaparSQL(loc_cValor)
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpVal")
+        IF loc_nResult > 0
+            SELECT cursor_4c_EmpVal
+            IF !EOF()
+                loc_oPg.txt_4c_DsEmpresa.Value = ALLTRIM(cursor_4c_EmpVal.razas)
+            ELSE
+                loc_oPg.txt_4c_CdEmpresa.Value = ""
+                loc_oPg.txt_4c_DsEmpresa.Value = ""
+                THIS.AbrirBuscaEmpresa()
+            ENDIF
+        ELSE
+            loc_oPg.txt_4c_CdEmpresa.Value = ""
+            loc_oPg.txt_4c_DsEmpresa.Value = ""
+            THIS.AbrirBuscaEmpresa()
+        ENDIF
+        IF USED("cursor_4c_EmpVal")
+            USE IN cursor_4c_EmpVal
+        ENDIF
+        THIS.AtualizarEstadoDsEmpresa()
+    ENDPROC
+
+    *==========================================================================
+    * LOOKUP - EMPRESA pela descricao (SigCdEmp.razas - busca reversa)
+    * Equivalente ao get_ds_empresa.Valid: fAcessoEmpresa(Usuar,'D'...)
+    *==========================================================================
+
+    PROCEDURE AbrirBuscaDsEmpresa()
+        LOCAL loc_oBusca, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+            "SigCdEmp", ;
+            "cursor_4c_BuscaEmpDs", ;
+            "razas", ;
+            ALLTRIM(loc_oPg.txt_4c_DsEmpresa.Value), ;
+            "Sele" + CHR(231) + CHR(227) + "o de Empresa")
+        IF VARTYPE(loc_oBusca) = "O"
+            loc_oBusca.mAddColuna("cemps", "", "C" + CHR(243) + "digo")
+            loc_oBusca.mAddColuna("razas", "", "Raz" + CHR(227) + "o Social")
+            loc_oBusca.Show()
+            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmpDs")
+                loc_oPg.txt_4c_CdEmpresa.Value = ALLTRIM(cursor_4c_BuscaEmpDs.cemps)
+                loc_oPg.txt_4c_DsEmpresa.Value = ALLTRIM(cursor_4c_BuscaEmpDs.razas)
+            ENDIF
+            loc_oBusca.Release()
+        ENDIF
+        IF USED("cursor_4c_BuscaEmpDs")
+            USE IN cursor_4c_BuscaEmpDs
+        ENDIF
+        THIS.AtualizarEstadoDsEmpresa()
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarDsEmpresa()
+        LOCAL loc_cValor, loc_oPg
+        loc_oPg    = THIS.pgf_4c_Paginas.Page1
+        loc_cValor = ALLTRIM(loc_oPg.txt_4c_DsEmpresa.Value)
+        IF EMPTY(loc_cValor)
+            RETURN
+        ENDIF
+        THIS.AbrirBuscaDsEmpresa()
+        THIS.AtualizarEstadoDsEmpresa()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * HabilitarCampos - Habilita ou desabilita os campos de filtro.
+    *   Forms REPORT nao tem modos INCLUIR/ALTERAR como CRUD, mas este metodo
+    *   garante que todos os campos de filtro estejam sempre editaveis.
+    *--------------------------------------------------------------------------
+    PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_oPg
+        TRY
+            loc_oPg = THIS.pgf_4c_Paginas.Page1
+            loc_oPg.txt_4c_CdEmpresa.Enabled = par_lHabilitar
+            loc_oPg.txt_4c_DtInicial.Enabled  = par_lHabilitar
+            loc_oPg.txt_4c_DtFinal.Enabled    = par_lHabilitar
+            *-- Descricao da empresa: habilitada apenas quando codigo esta vazio
+            IF par_lHabilitar
+                THIS.AtualizarEstadoDsEmpresa()
+            ELSE
+                loc_oPg.txt_4c_DsEmpresa.Enabled = .F.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarLista - Compatibilidade com pipeline CRUD.
+    *   Forms REPORT nao tem grade de lista. Metodo retorna .T. sem acao.
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarLista()
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarBotoesPorModo - Compatibilidade com pipeline CRUD.
+    *   Forms REPORT nao tem modos de edicao. Botoes do CommandGroup permanecem
+    *   sempre no mesmo estado (habilitados). Metodo sem acao.
+    *--------------------------------------------------------------------------
+    PROCEDURE AjustarBotoesPorModo()
+        TRY
+            IF VARTYPE(THIS.cmg_4c_Botoes) = "O"
+                THIS.cmg_4c_Botoes.Buttons(1).Enabled = .T.
+                THIS.cmg_4c_Botoes.Buttons(2).Enabled = .T.
+                THIS.cmg_4c_Botoes.Buttons(3).Enabled = .T.
+                THIS.cmg_4c_Botoes.Buttons(4).Enabled = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaBO - Alias de FormParaRelatorio() para compatibilidade com pipeline.
+    *   Em forms REPORT o BO e o this_oRelatorio; os dados fluem via
+    *   FormParaRelatorio() antes de PrepararDados().
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaBO()
+        THIS.FormParaRelatorio()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BOParaForm - Compatibilidade com pipeline CRUD.
+    *   Em forms REPORT os dados fluem somente no sentido Form->BO->FRX.
+    *   Nao ha retorno de dados do BO para os campos de filtro do form.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oPg
+        TRY
+            IF VARTYPE(THIS.this_oRelatorio) = "O"
+                loc_oPg = THIS.pgf_4c_Paginas.Page1
+                IF !EMPTY(THIS.this_oRelatorio.this_cCodEmpresa)
+                    loc_oPg.txt_4c_CdEmpresa.Value = THIS.this_oRelatorio.this_cCodEmpresa
+                ENDIF
+                IF !EMPTY(THIS.this_oRelatorio.this_cRazaEmpresa)
+                    loc_oPg.txt_4c_DsEmpresa.Value = THIS.this_oRelatorio.this_cRazaEmpresa
+                ENDIF
+                IF !EMPTY(THIS.this_oRelatorio.this_dDtInicial)
+                    loc_oPg.txt_4c_DtInicial.Value = THIS.this_oRelatorio.this_dDtInicial
+                ENDIF
+                IF !EMPTY(THIS.this_oRelatorio.this_dDtFinal)
+                    loc_oPg.txt_4c_DtFinal.Value = THIS.this_oRelatorio.this_dDtFinal
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera recursos ao fechar o formulario
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF VARTYPE(THIS.this_oRelatorio) = "O"
+            THIS.this_oRelatorio = .NULL.
+        ENDIF
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE

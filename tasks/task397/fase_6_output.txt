@@ -1,0 +1,18 @@
+﻿A Fase 6 j├í estava completa no arquivo. Corrigi apenas a declara├º├úo `LPARAMETERS par_nColIndex` redundante dentro de `GruposGGAfterRowColChange` (o par├ómetro j├í estava declarado na assinatura do `PROCEDURE`).
+
+**Invent├írio completo da Fase 6 ÔÇö tudo implementado:**
+
+| Item | Status |
+|------|--------|
+| `cnt_4c_BotoesAcao` (Confirmar/Cancelar) | Ô£à linhas 361ÔÇô417 |
+| `txt_4c_Diretores` + BINDEVENT F4 | Ô£à linhas 507ÔÇô524 |
+| `opt_4c_SubclaEnc`, `opt_4c_Tipo`, `opt_4c_Autos`, `opt_4c_UtiLacto` | Ô£à linhas 543ÔÇô735 |
+| `grd_4c_GruposGG` (2 colunas, Column2.ReadOnly) | Ô£à linhas 756ÔÇô786 |
+| `cmd_4c_AdicionarGrupo` / `cmd_4c_RemoverGrupo` (icone-only, Themes=.T.) | Ô£à linhas 792ÔÇô836 |
+| `AbrirBuscaDiretor()` ÔÇö lookup SigCdUsu (Usuarios, NComps) | Ô£à linha 1262 |
+| `ValidarCodigoGrupo()` ÔÇö lookup SigCdGpr (Codigos, Descs) | Ô£à linha 1354 |
+| `GruposGGAfterRowColChange(par_nColIndex)` ÔÇö dispara lookup na col2 | Ô£à linha 1302 |
+| `FormParaBO` / `BOParaForm` / `HabilitarCampos` / `LimparCampos` com OptionGroups e grid | Ô£à |
+| `TornarControlesVisiveis` chamado ao final das duas p├íginas | Ô£à |
+
+Pr├│ximo passo: **Fase 7/8** ÔÇö integra├º├úo com `config.prg` e `menu.prg`.

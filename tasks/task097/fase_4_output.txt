@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. A Fase 4 foi implementada com sucesso.
+
+**O que foi adicionado em `Formsigrefc2.prg`:**
+
+1. **`ConfigurarPaginaFiltros()`** ÔÇö cria todos os controles de filtro em Page1 com posi├º├Áes calculadas (`top_original - 85` para compensar o PageFrame em y=85):
+   - `lbl_4c_LblEmpresa` + `txt_4c_CdEmpresa` + `txt_4c_NomEmpresa` (empresa)
+   - `lbl_4c_LblPeriodo` + `txt_4c_DtInicial` + `lbl_4c_LblSep` + `txt_4c_DtFinal` (per├¡odo)
+   - `lbl_4c_LblTipo` + `opt_4c_TpRel` com 2 bot├Áes (Vis├úo Detalhada / Mapa de Fechamento)
+   - BINDEVENT de KeyPress para `TeclaCdEmpresa`
+
+2. **Handlers dos 4 bot├Áes** ÔÇö `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnSairClick`, todos registrados via BINDEVENT no `InicializarForm()`
+
+3. **`FormParaRelatorio()`** ÔÇö mapeia os 5 controles para as propriedades do BO (`this_dDtInicial`, `this_dDtFinal`, `this_cCodEmpresa`, `this_cNomEmpresa`, `this_nTipoRelatorio`)
+
+4. **`LimparCampos()`** ÔÇö inicializa campos com valores do BO; se empresa tem c├│digo mas sem nome, faz SQLEXEC em `SigCdEmp` para buscar a raz├úo social
+
+5. **`TeclaCdEmpresa()`** / **`AbrirBuscaEmpresa()`** / **`ValidarCdEmpresa()`** ÔÇö lookup via F4 ou valida├º├úo via ENTER/TAB; abre `FormBuscaAuxiliar` para `SigCdEmp` (campos `Cemps`/`Razas`)
+
+6. **`AlternarPagina()`** ÔÇö alterna o `ActivePage` do PageFrame

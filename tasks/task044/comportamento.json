@@ -1,0 +1,300 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 14,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "Ordena", "fAcessoContab", "fAcessoEmpresa", "fAcessoContas", "fGerUniqueKey"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECCA",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Report form SigReCca to printer prompt noconsole\nuse in CsCabecalho\nuse in CsRelatorio",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA",
+      "evento": "Init",
+      "linhas": 39,
+      "codigoOriginal": "=fConfigGeral()\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.F.)\n\tEndIf\n\n\tWith .poDataMgr\n\t\t.AddCursor('SigCqRel','cIdChaves','crSigCqRel','NumRels',.f.)\n\tEndWith\n\nEndwith\t\n\n=DoDefault()\n\nlcSql = [Select TitOpcS, TitOpcN, TitOpcA From SigCdPac]\nIf ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalParac') < 1\n\t=MessageBox('Favor Rein... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fConfigGeral",
+        "metodosFormChamados": "Sqlexecute,Value   = space,plAcesso = fChecaAcesso",
+        "controlesReferenciados": "opt_nr_opcao,option1,option2,option3,get_cd_empresa,get_ds_empresa",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECCA",
+      "evento": "Procedure",
+      "linhas": 198,
+      "codigoOriginal": "Private lcCdEmpresa, lcDsEmpresa, lnNrOpcao, lnTipRel, lcCdCarGrupo, lcDsCarGrupo\nPrivate lcCdCarConta, lcDsCarConta, LcTipCarte, llOrdemEmp, lnSubOrdem, lcVerEmpresa\nPrivate lcVerOpcao, lcVerCarGrupo, lcVerCarConta, lcTitulo, lcOrdenaPor, lcQuebra\nPrivate lcNomeEmpresa, lcCarteira, lcOrdem, LcGroup, LcGrupo, LcConta, llInserir\n\nlcCdEmpresa   = ThisForm.get_cd_empresa.Value\nlcDsEmpresa   = ThisForm.get_ds_empresa.Value\nlnNrOpcao     = ThisForm.opt_nr_opcao.Value\nlnTipRel      = ThisForm.opt_TipR... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Ordena",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "get_cd_empresa,get_ds_empresa,opt_nr_opcao,opt_TipRel,get_cd_Car_grupo,get_ds_Car_grupo,get_cd_Car_conta,get_ds_Car_conta,option1,optOrdem,OptSubOrdem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Report form SigReCca preview NoConsole\nuse in CsCabecalho\nuse in CsRelatorio",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.get_cd_car_grupo",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "= fAcessoContab(Usuar,'C',This.Value,ThisForm.get_Cd_Car_Grupo,ThisForm.get_Ds_Car_Grupo)\nIf IsEmpty(This.Value)\n\tThisForm.get_cd_Car_conta.Value = ''\n\tThisForm.get_ds_Car_conta.Value = ''\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Car_Grupo,get_Ds_Car_Grupo,get_cd_Car_conta,get_ds_Car_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\t= fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)\nEndIf\t\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.get_ds_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.get_cd_empresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\t= fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.get_ds_car_conta",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loBrowse,llRetorno,lcGrupo\n\nLocal llRetorno\n\nm.lcGrupo = PadR(ThisForm.get_Cd_Car_Grupo.Value,10)\n\nm.llRetorno = (fAcessoContas(Usuar,m.lcGrupo,'D',This.Value,ThisForm.get_Cd_Car_Conta,ThisForm.get_Ds_Car_Conta))\n\nIf .Not.m.llRetorno\n\n\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\n\tThisForm.get_Cd_Car_Conta.Value = ''\n\tThisForm.get_Ds_Car_Conta.Value = ''\n\tThisForm.get_Cd_Car_Conta.Refresh\n\tThisForm.get_Ds_Car_Conta.Refresh\n\t\nEndIf\n\nReturn(m.llRetorno)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Car_Grupo,get_Cd_Car_Conta,get_Ds_Car_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.get_ds_car_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.get_cd_Car_conta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_Car_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.Opt_TipRel",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Commandgroup1.Visible = (Thisform.plAcesso And This.Value = 1)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Visible =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.get_cd_car_conta",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loBrowse,llRetorno,lcGrupo\n\nLocal llRetorno\n\nm.lcGrupo = PadR(ThisForm.get_Cd_Car_Grupo.Value,10)\n\nm.llRetorno = (fAcessoContas(Usuar,m.lcGrupo,'C',This.Value,ThisForm.get_Cd_Car_Conta,ThisForm.get_Ds_Car_Conta))\n\nIf .Not.m.llRetorno\n\n\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\n\tThisForm.get_Cd_Car_Conta.Value = ''\n\tThisForm.get_Ds_Car_Conta.Value = ''\n\tThisForm.get_Cd_Car_Conta.Refresh\n\tThisForm.get_Ds_Car_Conta.Refresh\n\t\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Car_Grupo,get_Cd_Car_Conta,get_Ds_Car_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.get_ds_car_grupo",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "= fAcessoContab(Usuar,'D',This.Value,ThisForm.get_Cd_Car_Grupo,ThisForm.get_Ds_Car_Grupo)\nIf IsEmpty(This.Value)\n\tThisForm.get_cd_Car_conta.Value = ''\n\tThisForm.get_ds_Car_conta.Value = ''\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Car_Grupo,get_Ds_Car_Grupo,get_cd_Car_conta,get_ds_Car_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.get_ds_car_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.get_cd_Car_grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_Car_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.fwoption1",
+      "evento": "Init",
+      "linhas": 5,
+      "codigoOriginal": "If IsEmpty( ThisForm.get_cd_car_conta.Value ) and IsEmpty( ThisForm.get_cd_car_grupo.Value )\n\tThis.Enabled = .T.\nElse\n\tThis.Enabled = .F.\nEndIf\t\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value ) and IsEmpty",
+        "controlesReferenciados": "get_cd_car_conta,get_cd_car_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.fwoption1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return IsEmpty( ThisForm.get_cd_car_conta.Value ) and IsEmpty( ThisForm.get_cd_car_grupo.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value ) and IsEmpty",
+        "controlesReferenciados": "get_cd_car_conta,get_cd_car_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCA.Commandgroup1",
+      "evento": "Click",
+      "linhas": 33,
+      "codigoOriginal": "ThisForm.Processamento()\n\nIF USED('csRelatorio')\n\tSelect crSigCqRel\n\tZap\n\tAppend Blank\n\tScatter Memvar Blank\n\tZap\n\n\tSelect csRelatorio\n\tSet Order To Ordem\n\tGo Top\n\n\tm.Usuarios = Usuar\n\tm.rDatas   = Datetime()\n\tm.NumRels  = fGerUniqueKey(ThisForm.Name)\n\n\tScan \n\n\t\tScatter MemVar\n\t\tm.cIdChaves = Sys(2015)+Sys(2015)\n\t\tm.Rclis = Iif(isempty(m.Rclis),'',m.Rclis)\n\n\t\tSelect crSigCqRel\n\t\tAppend Blank\n\t\tGather MemVar\n\t\t\n\tEndScan\n\n\tThisForm.poDatamgr.UpDate('crSigCqRel')\n\tThisform.poDatamgr.Commit()\nENDIF\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "Processamento,UpDate,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECCA.Init",
+      "queryOriginal": "lcSql = [Select TitOpcS, TitOpcN, TitOpcA From SigCdPac]",
+      "tabelas": "SigCdPac",
+      "colunas": "TitOpcS,TitOpcN,TitOpcA",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPac"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

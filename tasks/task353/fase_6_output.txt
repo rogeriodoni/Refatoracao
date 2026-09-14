@@ -1,0 +1,22 @@
+﻿A migra├º├úo task353 (FormCAF/SIGCDCAF) est├í **completamente finalizada**. Toda a Fase 6 j├í estava implementada no arquivo, resultado das fases anteriores. Aqui est├í o resumo do estado atual:
+
+---
+
+## Status: task353 SIGCDCAF ÔåÆ FormCAF
+
+**Todos os arquivos est├úo completos e integrados:**
+
+| Arquivo | Status | Detalhe |
+|---------|--------|---------|
+| `CAFBO.prg` | Ô£à Completo | 711 linhas ÔÇö Init, Buscar, CarregarPorCodigo, ValidarOP, Inserir, Atualizar, ExecutarExclusao + helpers de SigOpPic |
+| `FormCAF.prg` | Ô£à Completo | 1493 linhas ÔÇö Page1 com CRUD, Page2 com todos os campos, BINDEVENTs, ValidarNop, ConfirmarQtd, ApagaItemClick |
+| `menu.prg` | Ô£à Integrado | BAR 36 em `popCadastros` + `AbrirFormCAF()` padr├úo correto (VARTYPE, Show() sem par├ómetro) |
+| `config.prg` | Ô£à Auto-carga | ADIR() carrega todos `*BO.prg` e `Form*.prg` automaticamente ÔÇö nenhuma entrada manual necess├íria |
+
+**Phase 6 ÔÇö conte├║do verificado como j├í presente:**
+- `cnt_4c_BotoesAcao` (Confirmar + Cancelar) ÔÇö linhas 384ÔÇô443
+- Todos os campos de Page2: txt_4c_Codigos, txt_4c_Datas, txt_4c_Usuarios, txt_4c_Nop, txt_4c_Qtd, txt_4c_QtTb, txt_4c_Pecas, grd_4c_Dados (4 colunas), cmd_4c_ApagaItem, obj_4c_Obs
+- BINDEVENTs: KeyPress em txt_4c_Nop ÔåÆ `ValidarNop`, KeyPress em txt_4c_QtTb ÔåÆ `ConfirmarQtd`, Click em cmd_4c_ApagaItem ÔåÆ `ApagaItemClick`
+- Nenhum TODO ou stub ÔÇö todos os m├®todos t├¬m l├│gica completa
+
+O pr├│ximo passo ├® o **teste manual** conforme `SolicitacaoTesteManual/task353_SIGCDCAF.md`, que detalha os cen├írios de inclus├úo (com valida├º├úo de OP + atualiza├º├úo de SigOpPic), altera├º├úo, exclus├úo e visualiza├º├úo.

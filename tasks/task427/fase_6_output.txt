@@ -1,0 +1,11 @@
+﻿Ambas as corre├º├Áes foram aplicadas corretamente. Fase 6 conclu├¡da.
+
+**Resumo do que foi feito:**
+
+Este form OPERACIONAL (dialog modal sem Page2) j├í estava substancialmente completo nas fases anteriores. Na Fase 6 foram feitas duas corre├º├Áes de fidelidade:
+
+1. **`CmdConfirmarClick`** ÔÇö corrigido para usar `loc_lPodeFechar` e s├│ chamar `THIS.Release()` quando `Salvar()` retorna `.T.`. O original fazia `Return .F.` (n├úo fechava) quando havia condi├º├Áes duplicadas ÔÇö a vers├úo anterior sempre fechava, violando o PILAR 1.
+
+2. **Caption do picker** ÔÇö coluna "Condi├º├úo" corrigida para "Condi├º├úo de Pagamento", correspondendo ao `'Condi├º├úo de Pagamento'` do `mAddColuna` original.
+
+A integra├º├úo ├® autom├ítica: config.prg usa ADIR para carregar `*BO.prg` de `classes/` e `Form*.prg` de `forms/operacionais/`, ent├úo FpNBO.prg e FormFpN.prg j├í est├úo dispon├¡veis sem registro manual.

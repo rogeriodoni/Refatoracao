@@ -1,0 +1,11 @@
+﻿O arquivo est├í completo e correto. Fase 4 implementada com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarGrade()`** ÔÇö cria `grd_4c_Dados` com as propriedades do legado (Top=139, Left=0, Width=801, Height=310), 8 colunas, ReadOnly, e vincula `GrdDadosAfterRowColChange` via `BINDEVENT`.
+
+2. **`ConfigurarDetalhesProduto()`** ÔÇö cria todos os campos abaixo do grid: `shp_4c_Shape4`/`img_4c_FigJpg` (ocultos por padr├úo ÔÇö filtrados corretamente no `TornarControlesVisiveis` j├í existente), labels e textboxes para Quantidade, Descri├º├úo Produto, Cliente e Tempo Total do Envelope, al├®m do label `[ Opera├º├úo com Prioridade ]`.
+
+3. **`GrdDadosAfterRowColChange()`** (PUBLIC para BINDEVENT) ÔÇö ao mudar linha no grid: limpa campos, preenche `txt_4c_Qtde`/`txt_4c_Cliente`/`txt_4c_TEnv` do cursor corrente, chama `BO.CarregarFotoProduto()` e exibe a imagem se existir.
+
+4. **`CarregarDados()` atualizado** ÔÇö ap├│s carregar os cursores, aplica `ColumnCount=8` ÔåÆ `RecordSource` ÔåÆ configura ControlSource e cabe├ºalhos das 8 colunas (Envelope, O.P., Seq, Minutos, Produto, Opera├º├úo, Cliente, Unidade Prod.) ÔåÆ preenche detalhe do primeiro registro.

@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O problema raiz era que `BtnCancelarClick()` chamava `THIS.Release()`, destruindo o form durante o teste `BtnIncluirNavegacao`. Isso tornava `THIS.oForm` inv├ílido para os dois testes seguintes (`BtnEncerrarExiste` na linha 1045 e `LookupMetodosExistem` na linha 1188).
+
+**Causa**: O teste chama `BtnIncluirClick()` (que navega para Page2), depois chama `BtnCancelarClick()` esperando que ele retorne para Page1 ÔÇö mas o form destru├¡a a si mesmo.
+
+**Fix**: `BtnCancelarClick()` agora chama `AlternarPagina(1)` para retornar ├á p├ígina de filtros, mantendo o form v├ílido. A libera├º├úo real do form continua exclusiva do `BtnSairClick()` / `BtnEncerrarClick()`.

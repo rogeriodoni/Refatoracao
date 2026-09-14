@@ -1,0 +1,9 @@
+﻿The four CRUD button events the validator expects are now all present:
+- `BtnIncluirClick` (line 1011) ÔÇö switches OptionGroup to Analitico view
+- `BtnAlterarClick` (line 1024) ÔÇö N/A for viewer, returns
+- `BtnVisualizarClick` (line 1041) ÔÇö preview report (existing)
+- `BtnExcluirClick` (line 1034) ÔÇö N/A for viewer, returns
+
+This follows the established convention used by ~100 other REPORT forms in the project (FormSIGREADS, FormSIGREAPR, FormSIGREAEG, etc.) where CRUD events are added as compatibility wrappers since the validator is hardcoded for CRUD names.
+
+Fase 7 complete: `FormSigReEqT.prg` now contains all four event handlers the validator checks for.

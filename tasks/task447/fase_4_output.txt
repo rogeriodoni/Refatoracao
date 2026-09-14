@@ -1,0 +1,14 @@
+﻿Arquivo est├í correto. Fase 4 conclu├¡da. Resumo do que foi adicionado:
+
+**ConfigurarPaginaLista()** ÔÇö agora completa com:
+- 5 bot├Áes CRUD em `cnt_4c_Botoes`: Incluir (Left=5), Visualizar (80), Alterar (155), Excluir (230), Buscar (305) ÔÇö todos com ├¡cones canonicos, Comic Sans MS, PicturePosition=13, BINDEVENTs
+- `cmd_4c_Encerrar` em `cnt_4c_Saida` (Left=917, can├┤nico)
+- `grd_4c_Lista`: Top=117, Left=12, Width=940, Height=470, ColumnCount=9, Verdana/8, GridLines=3
+
+**CarregarLista()** ÔÇö vincula o grid ao cursor ap├│s o Buscar():
+- RecordSource PRIMEIRO (per Problema 48), depois ControlSource das 9 colunas, depois Header1.Caption (per Problema 32), Width, Alignment, FormatarGridLista + Refresh
+
+**Novos m├®todos adicionados**:
+- `AlternarPagina()` (PROTECTED) ÔÇö navega entre p├íginas, chama CarregarLista ao voltar para Page1
+- `FormatarGridLista()` (PROTECTED) ÔÇö SetAll Verdana/8
+- `BtnIncluirClick/VisualizarClick/AlterarClick/ExcluirClick/BuscarClick/EncerrarClick` (todos PUBLIC) ÔÇö implementa├º├Áes completas com guards de cursor, MsgConfirma l├│gico, e chamadas corretas ao BO

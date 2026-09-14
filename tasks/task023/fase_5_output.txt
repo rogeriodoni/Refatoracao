@@ -1,0 +1,9 @@
+﻿Tudo correto. A Fase 5 adicionou os seguintes comportamentos ao `FormSIGREVIS.prg`:
+
+1. **`TeclaDataInicial`** ÔÇö handler KeyPress para `txt_4c_Datai` que sincroniza `txt_4c_Dataf` quando data inicial fica maior que data final (equivalente ao `getDatai.Valid` do original).
+
+2. **`AtualizarEstadoCamposDescricao`** ÔÇö simula o evento `When` do VFP9 original: `txt_4c_DsRepr` fica `ReadOnly = .T.` quando `txt_4c_CdRepr` tem valor, e `txt_4c_DsConta` fica `ReadOnly = .T.` quando `txt_4c_CdConta` tem valor.
+
+3. **BINDEVENT** para `txt_4c_Datai.KeyPress` adicionado em `ConfigurarPaginaLista`.
+
+4. **Chamadas a `AtualizarEstadoCamposDescricao`** inseridas em: `LimparCampos`, todos os `ValidarXxx` (CdRepr, DsRepr, CdConta, DsConta) e todos os `AbrirBuscaXxx` (CdRepr, DsRepr, CdConta, DsConta) ÔÇö garantindo que o estado ReadOnly ├® sempre recalculado ap├│s qualquer altera├º├úo nos campos de c├│digo.

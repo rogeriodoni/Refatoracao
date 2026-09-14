@@ -1,0 +1,11 @@
+﻿O arquivo `FormPMC.prg` foi criado com 536 linhas. A estrutura est├í correta:
+
+- **10 m├®todos** implementados: `Init`, `InicializarForm`, `ConfigurarPageFrame`, `ConfigurarPaginaLista`, `ConfigurarPaginaDados`, `CarregarLista`, `AlternarPagina`, `Destroy`, `TornarControlesVisiveis`, `FormatarGridLista`
+- **PageFrame** com `Top=-29`, `Tabs=.F.`, 2 pages com fundo `fundo_cad_1003.jpg`
+- **Page1**: `cnt_4c_Cabecalho` (labels de t├¡tulo), `cnt_4c_Botoes` (5 bot├Áes CRUD com ├¡cones/posi├º├Áes do legado), `cnt_4c_Saida` (btn Encerrar ÔÇö can├┤nico `Left=917, Width=90`)
+- **Page2**: `cnt_4c_BotoesAcao` (Confirmar + Cancelar ÔÇö legado `Grupo_Salva.Top=9+29=38`)
+- `CarregarLista()` com PEMSTATUS guard para o grid (adicionado na Fase 4), com todos os 8 ControlSources e Headers prontos
+- `DataSession=2` declarado; `DODEFAULT()` no `Init()` aciona o fix de `SET DATE/CENTURY` do `FormBase`
+- Sem acentos em literais de string no `DEFINE CLASS`; caption com `CHR()` no `InicializarForm()`
+
+**Pr├│xima Fase 4**: adicionar `grd_4c_Lista` em `ConfigurarPaginaLista()` com as 8 colunas e dimens├Áes do legado (Top=121+29=150, Left=12, Width=940, Height=470).

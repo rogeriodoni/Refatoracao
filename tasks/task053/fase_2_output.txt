@@ -1,0 +1,18 @@
+﻿Fase 2 conclu├¡da. O `SigReCmgBO.prg` est├í completo com 268 linhas.
+
+**O que foi adicionado:**
+
+**CRUD stubs** (N/A ÔÇö form sem tabela direta):
+- `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()` ÔÇö todos retornam `.T.`
+
+**M├®todos de neg├│cio reais** (extra├¡dos de `mGeraGrafico` do original):
+- `InicializarCursorGrafico()` ÔÇö cria `CrGrafico1` com estrutura id├¬ntica ao original (7 campos + INDEX pkchave1)
+- `ZerarCursorGrafico()` ÔÇö limpa `CrGrafico1` para regerar (usado pelo bot├úo Imprimir em lote)
+- `FecharCursores()` ÔÇö fecha `CrGrafico1` no Destroy
+- `BuscarClientesTmpResult(par_aClientes)` ÔÇö `SELECT DISTINCT Ordem, Crclis FROM TmpResult` para popular o combo
+- `ObterTitulosGrafico(par_cChave1)` ÔÇö l├¬ `cTitulo1s..4s` e `cEmpresas` de `TmpResult` pela ordem
+- `PrepararDadosGrafico(par_cChave2, par_nContaGrafico, par_nQtVal, par_cStrgeixoY)` ÔÇö l├│gica central de gera├º├úo: monta strings de dados, insere em `CrGrafico1`, faz `APPEND GENERAL` com `MSGraph.Chart`
+- `NavGraficoAnterior()` / `NavGraficoProximo()` ÔÇö gerenciam `this_nNumGrafico` (1-3)
+- `ObterChaveGrafico()` ÔÇö monta chave composta para lookup em `CrGrafico1`
+
+O Form (Fase 3) chamar├í esses m├®todos do BO e cuidar├í apenas da parte visual OLE (configura├º├úo de `ChartArea`, `Axes`, `SeriesCollection`, etc.).

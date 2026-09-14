@@ -1,0 +1,17 @@
+﻿O arquivo est├í completo e correto. Fase 4 implementada com sucesso.
+
+**O que foi adicionado ao `Formsigregnf.prg`:**
+
+- **2 propriedades novas**: `this_cSerieAnterior` e `this_cUsuarsAnterior` (para detec├º├úo de mudan├ºa nos filtros)
+- **`ConfigurarPageFrame()`**: atualizado para chamar `ConfigurarPaginaLista()` ao final
+- **`ConfigurarPaginaLista()`**: cria todos os controles operacionais dentro de `cnt_4c_Corpo`:
+  - `cmd_4c_Processar` (top=11, left=696, desabilitado inicialmente)
+  - `lbl_4c_Serie` / `txt_4c_Serie` (filtro de s├®rie)
+  - `lbl_4c_Usuars` / `txt_4c_Usuars` (filtro de usu├írio)
+  - Grid via `ConfigurarGridNF()`
+  - `cmd_4c_SelTudo` / `cmd_4c_Apaga` (bot├Áes de sele├º├úo)
+- **`ConfigurarGridNF()`**: grid de 9 colunas com CheckBox em Column1 (ordem obrigat├│ria: AddObject ÔåÆ Caption ÔåÆ CurrentControl ÔåÆ ControlSource), usando `cursor_4c_TmpNFis` do BO
+- **`AlternarPagina()`**: refresh do grid (form plano sem page-switching real)
+- **`FormParaBO()`**: copia filtros do form para o BO antes de `SelecionarDados()`
+- **`VincularEventos()`**: 11 BINDEVENTs (F4/ENTER/TAB nos filtros, todos os bot├Áes)
+- **20 m├®todos de evento**: handlers completos para filtros (GotFocus, KeyPress, lookup, valida├º├úo) e bot├Áes (Processar, SelTudo, Apaga, Visualizar, Imprimir, Excel, Sair)

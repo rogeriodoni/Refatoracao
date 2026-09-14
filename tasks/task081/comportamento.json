@@ -1,0 +1,417 @@
+{
+  "resumo": {
+    "totalMetodos": 23,
+    "metodosComSQL": 11,
+    "metodosComValidacao": 9,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["final+Padl", "final+space", "final+TRANSFORM", "Final + Space", "fBuscarCotacao", "final+CHR", "fAcesEmp", "MontaGrade", "fConfigGeral", "fChecaAcesso", "fAcessoMovmto"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 159,
+      "codigoOriginal": "lParameters pMaxCols\n\nSELECT TmpRel\ngoto top\t\nCabecN = ''\nCabec  = ''\nIf CrTmpDcOpe.DckTit = 1\n\ttitul=alltrim(CrTmpDcOpe.DocTit)+' : ' + TRANSFORM(numes,\"@L 999999\") + chr(13) + chr(10)\nEndif\n\t\nIf CrTmpDcOpe.DckDig = 1\n\tCabecN = CabecN + Padl(Alltrim(CrTmpDcOpe.DocDig),13) + ' : ' + chr(13) + chr(10)\n\tCabec = cabec + AllTrim( Usuars ) + Chr(13) + Chr(10)\nEndif\n\nIf !IsEmpty(TmpRel.GrVends + TmpRel.Vends) And CrTmpOpe.Vendes <> 3 and CrTmpDcOpe.DckVend = 1\n\tcabecn = cabecn + PADL( Alltrim( CrTmpDc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 101,
+      "codigoOriginal": "lParameters pDev, pMaxCols, pTotQtds\nIF not BOF()\n\tSKIP -1\nENDIF\n\nIf CrTmpDcOpe.DckSubt = 1\n\tfinal=final+Padl(Alltrim(CrTmpDcOpe.DocSubt),13)+' : '\n\tfinal=final+space(11)+TRANSFORM(iif(isnull(xvlr),TmpRel.ValInis,xvlr),\"999,999.99\")+ chr(13) + chr(10)\nEndif\nIf CrTmpDcOpe.DckDevo = 1\t\n\tIF pDev<>0\n\t\tfinal=final+Padl(Alltrim(CrTmpDcOpe.DocDevo),13)+' : '\n\t\tfinal=final+space(11)+TRANSFORM(iif(isnull(pDev),0,pDev),\"999,999.99\")+ chr(13) + chr(10)\n\tENDIF\nEndif\nIf CrTmpDcOpe.DckEnca = 1\n\tIF TmpRel.ValE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "final+Padl,final+space,final+TRANSFORM,Final + Space,fBuscarCotacao,final+CHR",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "LParameters pcTexto, pnTam\n\nIf nTamLinha + pnTam > pMaxCols\n\tnTamLinha = 0\n\tCabGrade = CabGrade + PadC(CabGradeP, pMaxCols) + Chr(13) + Chr(10)\n\tIf tnDeslObsi = -1\n\t\ttnDeslObsI = Int( ( pMaxCols - Len( CabGradeP ) ) / 2 )\n\tEndIf\n\tIf tnTamCabGradeP = 0\n\t\ttnTamCabGradeP = Len( CabGradeP )\n\tEndIf\n\tStore '' to CabGradeP\nEndIf\n\nnTamLinha = nTamLinha + pnTam\nCabGradeP  = CabGradeP + PadC( AllTrim( pcTexto ), pnTam - 1 ) + ' '\nReturn .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 24,
+      "codigoOriginal": "LParameters pcTexto, pnTam, pTpAlign\n\nIf nTamLinha + pnTam > pMaxCols\n\tnTamLinha = 0\n\tDetalhe = Detalhe + PadC(DetalheP, pMaxCols) + Chr(13) + Chr(10)\n\tStore '' to DetalheP\nEndIf\n\nnTamLinha = nTamLinha + pnTam\nDo Case\n\tCase Type('pTpAlign') = 'C' And pTpAlign = 'R'\n\t\tDetalheP = DetalheP + PadL( AllTrim( pcTexto ), pnTam - 1 ) + ' '\n\n\tCase Type('pTpAlign') = 'C' And pTpAlign = 'L'\n\t\tDetalheP = DetalheP + PadR( AllTrim( pcTexto ), pnTam - 1 ) + ' '\n\n\tCase Type('pTpAlign') = 'C' And pTpAlign = 'N'\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 29,
+      "codigoOriginal": "ThisForm.GrdEmp.RecordSource = ''\n\nlcQuery = [ Select 0 as Marca, cEmps, Razas From SigCdEmp ]\n\t\t\t\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crEmpsT') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Init - crEmps)')\n\tReturn .f.\nEndIf\t\t\t\t\n\nSelect * from CrEmpsT where 1 = 0 Into Cursor crEmps ReadWrite\n\nSelect crEmpsT\nScan\n\tScatter Memo Memvar\n\t*If fAcesEmp(Usuar, 'C', crEmpsT.cEmps)\n\t\tInsert into crEmps From Memvar\n\t*EndIf \nEndScan \n\nThisForm.GrdEmp.RecordSource = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fAcesEmp",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Select TmpRelat\nGo Top\nReport form SigReDoc To Printer NoConsole\nDoDefault()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Select TmpRelat\nGo Top\nRepo form SigReDoc to printer Prompt noconsole \n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Init",
+      "linhas": 18,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr  = CreateObject('fSqlConector')\n\t.poDataMgr2 = CreateObject('fSqlConector')\n\tIf (.poDataMgr.pnIdconn > 0) And (.poDataMgr2.pnIdconn > 0)\n\t\t.get_dopes.Value       = ''\n\t\t.get_dt_inicial.Value  = {}\n\t\t.get_dt_final.Value    = {}\n\t\t.get_Operaçãoi.Value   = 0\n\t\t.get_operaçãof.Value   = 0\n\t\t.MontaGrade()\n\t\t.Refresh\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dopes,get_dt_inicial,get_dt_final,get_Operaçãoi,get_operaçãof",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Select TmpRel\nGoto Top\nSelect TmpRelat\nGo Top\nReport form SigReDoc To Printer NoConsole\nDoDefault()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 1015,
+      "codigoOriginal": "With ThisForm\n\tlcDp  = .Get_dopes.Value\n\tldDtI = .Get_dt_inicial.Value\n\tldDtF = .Get_Dt_Final.Value\n\tlnNu1 = .Get_operaçãoi.Value\n\tlnNu2 = .Get_operaçãof.Value\n\tlcRimp= .ChkReimp.Value\nEndWith\n\npAgrupa     = ( ThisForm.OptAgrupa.Value = 1 )\npImagem     = ( ThisForm.ChkImagem.Value = 1 )\npItPendente = ( ThisForm.ChkItensP.Value = 1 )\npDev        = 0\n\nCreate Cursor TmpRelat (Numes n(6), Tipo n(1), Titulo m Null, Linha m Null, LinhaNeg m Null, CDetalhe m Null, ;\n\t\t\t\t\t\tIDetalhe m Null, IDetalheD m N... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Cursorquery",
+        "controlesReferenciados": "Get_dopes,Get_dt_inicial,Get_Dt_Final,Get_operaçãoi,Get_operaçãof,ChkReimp,OptAgrupa,ChkImagem,ChkItensP,OpTdz",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\n\nThisForm.poDataMgr.Release\nThisForm.poDataMgr2.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Select TmpRelat\nGo Top\nReport form SigReDoc preview  NoConsole\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC.get_dt_final",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Get_operaçãoi.Value = 0 And ThisForm.Get_operaçãof.Value = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_operaçãoi,Get_operaçãof",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC.get_dt_inicial",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.Get_operaçãoi.Value = 0 And ThisForm.Get_Operaçãof.Value = 0)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_operaçãoi,Get_Operaçãof",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC.get_dopes",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "=fAcessoMovmto(Usuar, This.Value, This)\n\nWith ThisForm\n\tIf Not IsEmpty(This.Value)\n\t\tlcQuery = [ Select a.Ndopes, b.chkImpDoc ] + ;\n\t\t\t\t    [ From SigCdOpe a, SigOpCdc b ]+ ;\n\t\t\t\t    [ Where a.Dopes = ']+This.Value +[' and b.Dopes = a.Dopes ]\n\t\tIf (ThisForm.PODatamgr.SqlExecute(lcQuery, [crSigCdOpeD]) < 1)\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdOpeD)])\n\t\t\tReturn 0\n\t\tEndIf\n\t\t\n\t\tIf  crSigCdOpeD.chkImpDoc = 1\t\t\n\t\t\t.Chkreimp.Enabled = fChecaAcesso(padl(crSi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fAcessoMovmto",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "chkImpDoc,Chkreimp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC.Get_Operaçãoi",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not Empty(This.Value) And Empty(ThisForm.Get_Operaçãof.Value)\n\tThisForm.Get_Operaçãof.Value = This.Value\n\tThisForm.Get_Operaçãof.Refresh\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Operaçãof",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC.Get_Operaçãoi",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return IsEmpty(Thisform.Get_dt_inicial.Value) And Isempty(ThisForm.Get_dt_final.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Isempty",
+        "controlesReferenciados": "Get_dt_inicial,Get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC.GrdEmp.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC.GrdEmp.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC.Get_Operaçãof",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return IsEmpty(Thisform.Get_dt_inicial.Value) And Isempty(ThisForm.Get_dt_final.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Isempty",
+        "controlesReferenciados": "Get_dt_inicial,Get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC.CmdApgEmp",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select crEmps\nReplace All Marca With 0\nGo Top \nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDOC.cmdSelemp",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select crEmps\nReplace All Marca With 1\nGo Top \nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREDOC.Procedure",
+      "queryOriginal": "lcQuery = [ Select 0 as Marca, cEmps, Razas From SigCdEmp ]",
+      "tabelas": "SigCdEmp",
+      "colunas": "cEmps,Razas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREDOC.Procedure",
+      "queryOriginal": "Select * from CrEmpsT where 1 = 0 Into Cursor crEmps ReadWrite",
+      "tabelas": "CrEmpsT",
+      "colunas": "crEmps,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREDOC.Procedure",
+      "queryOriginal": "\t\tInsert into crEmps From Memvar",
+      "tabelas": "crEmps",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREDOC.get_dopes.Valid",
+      "queryOriginal": "\t\tlcQuery = [ Select a.Ndopes, b.chkImpDoc ] + ; \t\t\t\t    [ From SigCdOpe a, SigOpCdc b ]+ ; \t\t\t\t    [ Where a.Dopes = ']+This.Value +[' and b.Dopes = a.Dopes ] \t\tIf (ThisForm.PODatamgr.SqlExecute(lcQuery, [crSigCdOpeD]) < 1)",
+      "tabelas": "SigCdOpe",
+      "colunas": "Ndopes,Value,SqlExecutelcQuery",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmp", "CrEmpsT", "SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

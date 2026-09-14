@@ -1,0 +1,11 @@
+﻿Arquivo criado em `C:\4c\projeto\app\classes\sigredocBO.prg`.
+
+**Fase 1/8 conclu├¡da.** O BO cont├®m:
+
+- **Heran├ºa**: `RelatorioBase` (conforme especificado para forms REPORT)
+- **9 filtros do form**: `this_cDopes`, `this_dDtInicial`, `this_dDtFinal`, `this_nOperacaoI`, `this_nOperacaoF`, `this_nReimp`, `this_nAgrupa`, `this_lImagem`, `this_lItensPendentes`
+- **2 propriedades de estado interno**: `this_nNdopes` e `this_nChkImpDoc` (preenchidos ao validar `get_dopes` contra SigCdOpe/SigOpCdc)
+- **Configura├º├úo do relat├│rio**: `this_cCursorDados` e `this_cArquivoFRX`
+- **Init()**: configura `this_cTabela = "SigMvCab"`, `this_cCampoChave = "Numes"`, caminho do FRX original (`Framework\SigReDoc.frx`), e chama `DODEFAULT()`
+
+A pr├│xima fase (2/8) adicionar├í `PrepararDados()` com toda a l├│gica de SQL do m├®todo `processamento` do legado (1015 linhas).

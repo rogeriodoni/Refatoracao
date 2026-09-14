@@ -1,0 +1,276 @@
+﻿{
+    "taskId":  "task147",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-06-19T04:30:14",
+    "atualizadoEm":  "2026-06-19T06:55:56",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-06-19T04:30:14",
+                                            "fim":  "2026-06-19T04:30:14",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task147\\sigpdmp6.sct",
+                                            "baseName":  "sigpdmp6",
+                                            "scxFile":  "C:\\4c\\tasks\\task147\\sigpdmp6.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-06-19T04:30:14",
+                                          "fim":  "2026-06-19T04:30:14",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigpdmp6",
+                                          "txtFile":  "C:\\4c\\tasks\\task147\\sigpdmp6_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-19T04:30:15",
+                                              "fim":  "2026-06-19T04:30:15",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task147\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-19T04:30:16",
+                                              "fim":  "2026-06-19T04:30:24",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task147\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task147\\meta_prompt.md",
+                                              "boClass":  "sigpdmp6BO",
+                                              "formClass":  "Formsigpdmp6",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task147\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-19T04:30:24",
+                                              "fim":  "2026-06-19T04:30:25",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task147\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-06-19T04:30:25",
+                                               "fim":  "2026-06-19T04:30:25",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task147\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigpdmp6_esqueleto.prg",
+                                                                "sigpdmp6BO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-06-19T04:30:25",
+                                       "fim":  "2026-06-19T06:01:42",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigpdmp6BO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  497.41,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formsigpdmp6.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  13945
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-06-19T06:01:42",
+                                                  "fim":  "2026-06-19T06:02:05",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formsigpdmp6.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigpdmp6BO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-06-19T06:02:05",
+                                                 "fim":  "2026-06-19T06:02:06",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-06-19T06:42:24",
+                                       "fim":  "2026-06-19T06:42:40",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-06-19T06:42:40",
+                                               "fim":  "2026-06-19T06:55:53",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  5,
+                                               "resultFile":  "C:\\4c\\tasks\\task147\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-06-19T06:55:55",
+                                        "fim":  "2026-06-19T06:55:56",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_Formsigpdmp6_20260619065556.html",
+                                        "diferencas":  0,
+                                        "erros":  4,
+                                        "totalProblemas":  555,
+                                        "avisos":  551
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-19T06:55:56",
+                                              "fim":  "2026-06-19T06:55:56",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task147_sigpdmp6.md"
+                                          },
+                   "02a_reduzirArquivo":  {
+                                              "inicio":  "2026-06-19T04:30:14",
+                                              "status":  "COMPLETED",
+                                              "tentativas":  1,
+                                              "erro":  null,
+                                              "fim":  "2026-06-19T04:30:15",
+                                              "arquivoOriginal":  "C:\\4c\\tasks\\task147\\sigpdmp6_form_codigo_fonte.txt",
+                                              "reducaoPercent":  90.4,
+                                              "tamanhoOriginalKB":  497.41,
+                                              "arquivoSlim":  "C:\\4c\\tasks\\task147\\sigpdmp6_form_codigo_fonte_slim.txt",
+                                              "tamanhoSlimKB":  47.62
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-06-19T04:30:15",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-06-19T04:30:16",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task147\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-06-19T04:30:16",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-06-19T04:30:16"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-06-19T06:02:05",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-06-19T06:02:05",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigpdmp6_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formsigpdmp6.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task147\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-06-19T06:02:06",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-06-19T06:04:35",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-06-19T06:04:35",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-06-19T06:41:52",
+                                          "passes":  10,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO, CNT_4C_ORIGEM. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [GRID-HEADER] Header Caption \u0027N.Mov.\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Ordem Produção, Temp/Min. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Dt.Mvto\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Ordem Produção, Temp/Min. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Peso Tot.\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Ordem Produção, Temp/Min. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027N.Lote\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Ordem Produção, Temp/Min. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Gr.Orig.\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Ordem Produção, Temp/Min. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Ct.Orig.\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Ordem Produção, Temp/Min. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Gr.Dest.\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Ordem Produção, Temp/Min. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Ct.Dest.\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Ordem Produção, Temp/Min. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027LNBOT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: NENVS, DOPPS, EMPS, EMPDNPS, CIDCHAVES, EMPDOPNUMS, CIDQUERYS, _QTBAIXAR, 0, 1, XNENS, ORIDOPNUMS, COPERS, NUMLOTES, NCHEQUES, NUMS, IMPRESS, _BXAUTO, _BXPARC, _QTBAIXADO, NOPS, RNOPS, EMPDS, DOPES, NUMES, EMPOS, EMPDNCRDS, CBARS, CODBARRAS, BARRAS, OPERS, EMPDOPNCS, NCARTS, NLOTECS, QTDS, CDOPES, LNVALOBXS, EMPDOPNUMB, CBXPAGOS, PGSUBNNS, DTAGENDS, NUMPS, CSSUBNIVE, CPROS, LPRECOS, IFORS, PVENS, CMOES, GRUPOS, CODS, GERBALS, IF, NLOTES, ETIQUETA, ETIQS, PCESCOLHA, INIBEPA, RATEIO, TPOPS, CMATS, SEPPEDRAS, _PESOCONSERTO, FATORS, _COMPAGRU, _QTDE, _DIFERENCAPESO, CGRUS, CODIGOS, PESOS, PESO2S, REINOPS, ESTORNO, SEMIACABS, COEFS, ICLIS, PRODUTOS, CUNIS, CESTOQS, BXDESTS, CITENS, CITEM2, MATS, LNQTRAT, LNSOMAETQ, LCUPDATE, LNCONT, CPRO2S, DOCUS, ANAESGRPS, PO, CHKSENEXC, EDNMVCAB, CRETRABS, CONTADS, GRCOMPS, TIPOSUBNIVEL, CHKTEMSUBN, VISIVEL, _TRFPESAG, LNTOTQTD, CTRLOTES, EMPGRUESTS, CHKSUBN, LLLOTED, CLAGRUPOS, CLACONTAS, FASES, GRODNS, _NVEZES, ENCPESMS, CHKDESTS, MOVOPEVS, CHKDEVS, CODTGOPS, NIVELS, EMPCPROS, CHKCTDES, CODPDS, CRAVCERS, CONTAOS, CONTAS, PESOFIXS, LCEMPDNPS, LCBUSCAN, SERVICOS, ORDEMS, MEDTMPS, CHKQTDPS, QTDCOMPO, PESOCOMPO, XDIFP, XDIFP2, PAGSERVS, GRUPODS, APONTAS, ENVOBRIGS, DTALTS, AQTDS, DATAS, DTMOVS, VALOBXS, DTAUDITS, ULTGRVS, NACEITES, QTBXPRODS, JO, NTIPOJOALS, TUBOS; [LAYOUT-POSITION] Controle \u0027Botoes\u0027 (parent: SIGPDMP6.Pagina.Lista): Top original=124 vs migrado \u0027cnt_4c_BotoesAcao\u0027 Top=51 (diff=73px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Botoes\u0027 (parent: SIGPDMP6.Pagina.Lista): Left original=669 vs migrado \u0027cnt_4c_BotoesAcao\u0027 Left=843 (diff=174px, tolerancia=30px)",
+                                          "tentativas":  4,
+                                          "problemasRestantes":  12
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-06-19T06:41:52",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-06-19T06:42:24",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigpdmp6BO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formsigpdmp6.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-06-19T06:55:53",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-06-19T06:55:55",
+                                             "thresholdPx":  5,
+                                             "unmatched":  31,
+                                             "errors":  31,
+                                             "matched":  51,
+                                             "warnings":  32,
+                                             "reportFile":  "C:\\4c\\tasks\\task147\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

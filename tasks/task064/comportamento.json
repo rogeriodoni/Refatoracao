@@ -1,0 +1,374 @@
+{
+  "resumo": {
+    "totalMetodos": 22,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 17,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fAcessoContas", "fAcessoMovInd", "fAcessoEmpresa", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECPM",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "If ThisForm.Opt_Tipo.Value = 1\n\tReport form SigReCPM Preview NoConsole\nElse\n\tReport form SigReC2P Preview NoConsole\nEndIf \n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM",
+      "evento": "Procedure",
+      "linhas": 138,
+      "codigoOriginal": "Local lcEmps, ldDtIni, ldDtFim, lcOpera, lcContaO, lcContaD, lnNumesI, lnNumesF, lnNops, lcGrOr, lcGrDs, lnPesos, lnPeso2s, lnQtd\nPrivate pDtI, pDtF\n\nlcEmps    = Thisform.getEmpresa.Value\nlcEmpDesc = ThisForm.getDEmpresa.Value\nldDtIni   = Thisform.getDtInicial.Value\nldDtFim   = Thisform.getDtFinal.Value\nlcOpera   = Thisform.getOperacao.Value\nlcContaO  = Thisform.getContaO.Value\nlcContaD  = Thisform.getContaD.Value\nlnNumesI  = Thisform.GetOperaçãoI.Value\nlnNumesF  = Thisform.GetOperaçãoF.Value\nln... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "llOpe =,CursorQuery",
+        "controlesReferenciados": "Opt_Tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM",
+      "evento": "Init",
+      "linhas": 18,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n\nWith ThisForm\n\t.cntAguarde.Visible = .F.\n\t.GetDtInicial.Value = Date()\n\t.GetDtFinal.Value   = Date()\n\t.Refresh\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECPM",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "If ThisForm.Opt_Tipo.Value = 1\n\tReport form SigReCPM To Printer Prompt NoConsole\t\t\nElse\n\tReport form SigReC2P To Printer Prompt NoConsole\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getDContaO",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty(ThisForm.getContaO.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getDContaO",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, [D], This.Value, ThisForm.getContaO, ThisForm.getDContaO)\n\t\t=Messagebox([Acesso Negado!!!], 0+48, [Checagem de Acesso])\n\t\tThisForm.getContaO.Value  = []\n\t\tThisForm.getDContaO.Value = []\n\tEndIf\nElse\n\tThisForm.getContaO.Value  = []\n\tThisForm.getDContaO.Value = []\nEndIf\nThisForm.getContaO.Refresh\nThisForm.getDContaO.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getOperacao",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoMovInd(Usuar, This.Value, This)\nEndIf\n* Fim **************************************************************************************\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoMovInd",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getDEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getEmpresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getDEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [D], This.Value, ThisForm.getEmpresa, ThisForm.getDEmpresa)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getEmpresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.getEmpresa, ThisForm.getDEmpresa)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getContaO",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, [C], This.Value, ThisForm.getContaO, ThisForm.getDContaO)\n\t\t=Messagebox([Acesso Negado!!!], 0+48, [Checagem de Acesso])\n\t\tThisForm.getContaO.Value  = []\n\t\tThisForm.getDContaO.Value = []\n\tEndIf\nElse\n\tThisForm.getContaO.Value  = []\n\tThisForm.getDContaO.Value = []\nEndIf\nThisForm.getContaO.Refresh\nThisForm.getDContaO.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getDContaD",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty(ThisForm.getContaD.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getDContaD",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, [D], This.Value, ThisForm.getContaD, ThisForm.getDContaD)\n\t\t=Messagebox([Acesso Negado!!!], 0+48, [Checagem de Acesso])\n\t\tThisForm.getContaD.Value  = []\n\t\tThisForm.getDContaD.Value = []\n\tEndIf\nElse\n\tThisForm.getContaD.Value  = []\n\tThisForm.getDContaD.Value = []\nEndIf\nThisForm.getContaD.Refresh\nThisForm.getDContaD.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getContaD",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, [C], This.Value, ThisForm.getContaD, ThisForm.getDContaD)\n\t\t=Messagebox([Acesso Negado!!!], 0+48, [Checagem de Acesso])\n\t\tThisForm.getContaD.Value  = []\n\t\tThisForm.getDContaD.Value = []\n\tEndIf\nElse\n\tThisForm.getContaD.Value  = []\n\tThisForm.getDContaD.Value = []\nEndIf\nThisForm.getContaD.Refresh\nThisForm.getDContaD.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getDsGrOrigem",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getGrOrigem.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getDsGrOrigem",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If Not Empty(this.Value)\n\t=fAcessoContab(Usuar, 'D', This.Value, ThisForm.getGrOrigem, ThisForm.getDsGrOrigem)\nElse\n\tThisForm.getGrOrigem.Value = ''\n\tThisForm.getGrOrigem.refresh\nEndIf\n\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getGrOrigem",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If Not Empty(this.Value)\n\t=fAcessoContab(Usuar, 'C', This.Value, ThisForm.getGrOrigem, ThisForm.getDsGrOrigem)\nElse\n\tThisForm.getDsGrOrigem.Value = ''\n\tThisForm.getDsGrOrigem.refresh\nEndIf\n\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getDsGrDestino",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getGrDestino.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getDsGrDestino",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If Not Empty(this.Value)\n\t=fAcessoContab(Usuar, 'D', This.Value, ThisForm.getGrDestino, ThisForm.getDsGrDestino)\nElse\n\tThisForm.getGrDestino.Value = ''\n\tThisForm.getGrDestino.refresh\nEndIf\n\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.getGrDestino",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If Not Empty(this.Value)\n\t=fAcessoContab(Usuar, 'C', This.Value, ThisForm.getGrDestino, ThisForm.getDsGrDestino)\nElse\n\tThisForm.getDsGrDestino.Value = ''\n\tThisForm.getDsGrDestino.refresh\nEndIf\n\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECPM.GetOperaçãoi",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If !IsEmpty( This.Value ) And IsEmpty( ThisForm.GetOperaçãof.Value )\n\tThisForm.GetOperaçãof.Value = This.Value\n\tThisForm.GetOperaçãof.Refresh\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

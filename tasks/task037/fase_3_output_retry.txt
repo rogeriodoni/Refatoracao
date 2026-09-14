@@ -1,0 +1,7 @@
+﻿Refactoring applied. The form now follows the canonical FormBase pattern (Phase 3 base structure):
+
+- `Init()` ÔåÆ simply delegates with `RETURN DODEFAULT()` (line 33-35)
+- `InicializarForm()` ÔåÆ PROTECTED hook called by FormBase.Init() that creates the BO, configures the header/buttons/fields, sets up BINDEVENTs, and loads reference data (line 41-88)
+- All downstream methods (`ConfigurarCabecalho`, `ConfigurarBotoes`, `ConfigurarCampos`, `ConfigurarBINDEVENTs`, lookups, `FormParaRelatorio`, `ValidarFiltros`, `BtnVisualizarClick/BtnImprimirClick/BtnExcelClick/BtnSairClick`, `Destroy`) remain intact
+
+The form is for a **REPORT** type (FLAT layout, no Page1/Page2 CRUD structure) ÔÇö Caption, dimensions, BO reference, cabecalho gray with title, and CommandGroup with 4 buttons (Visualizar/Imprimir/Excel/Encerrar) are all in place. Stale FXP removed so VFP recompiles on next test.

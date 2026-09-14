@@ -1,0 +1,9 @@
+﻿A corre├º├úo est├í correta. Fase 6 entregue.
+
+**O que foi feito:**
+
+O FormSigPdMen ├® um dialog modal simples de exibi├º├úo de mensagem ÔÇö sem campos edit├íveis, sem lookups (F4/F5), sem Salvar/Cancelar. Todos os controles do original foram implementados nas fases anteriores (header, shape, label2, container com memo/label, bot├úo OK).
+
+**Bug corrigido nesta fase:** O BO usa `ALLTRIM()` ao carregar do cursor, convertendo `"I "` ÔåÆ `"I"` e `"B "` ÔåÆ `"B"`. O `CarregarMensagem()` ainda comparava via `INLIST(..., "I ", "BI")` com espa├ºo, fazendo a formata├º├úo it├ílico/negrito nunca ser aplicada. Agora usa `INLIST(loc_cEstilos, "I", "BI")` e `INLIST(loc_cEstilos, "B", "BI")` sem espa├ºos, corrigindo o comportamento visual.
+
+**Integra├º├úo:** Autom├ítica via `ADIR()` no `config.prg` (carrega todos os `Form*.prg` da pasta `operacionais\` e todos os `*BO.prg` da pasta `classes\`). Sem item de menu necess├írio ÔÇö este form ├® chamado programaticamente por outros forms passando o `pCidChave`.

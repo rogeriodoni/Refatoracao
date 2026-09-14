@@ -1,0 +1,9 @@
+﻿Phase 3 complete. `Formsigprico.prg` (203 lines, 7.4KB) now includes both required methods for validation:
+
+- **`ConfigurarPageFrame()`** ÔÇö creates `pgf_4c_Paginas` with Page1 (Lista) + Page2 (Dados), Top=-29, Tabs=.F., framework background
+- **`ConfigurarContainersPrincipais()`** ÔÇö creates empty base containers: `cnt_4c_Cabecalho` (header dark bar), `cnt_4c_Botoes` (right-side CRUD button slot Left=542), `cnt_4c_Saida` (canonical Encerrar slot Left=917 W=90), `cnt_4c_BotoesAcao` (Salvar/Cancelar on Page2)
+- **`InicializarForm()`** ÔÇö instantiates `sigpricoBO`, calls `ConfigurarPageFrame` + `ConfigurarContainersPrincipais`, sets `pgf_4c_Paginas.Visible=.T.` before `ActivePage=1`, uses `TRY/CATCH` without RETURN inside
+- **`TornarControlesVisiveis()`** ÔÇö recursive, walks both Pages and Controls
+- Form dims 1000x600 (standard OPERACIONAL), original had no width/height defined
+
+Grid/CRUD buttons/data fields/events left for Fases 4-8 as specified.

@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada em dois lugares no `ICMBO.prg`:
+
+- **`Buscar()`** linha do JOIN: `a.cemps` ÔåÆ `a.emps`
+- **`CarregarPorCodigo()`** linha do JOIN: `a.cemps` ÔåÆ `a.emps`
+
+**Causa raiz:** A coluna da FK na tabela `SigCdCmi` ├® `emps` (char 3), mas o SQL referenciava `a.cemps` (campo inexistente). O `SQLEXEC` retornava erro ÔåÆ `MsgErro()` exibia dialog modal ÔåÆ VFP9 travava 300s em modo n├úo-supervisionado.

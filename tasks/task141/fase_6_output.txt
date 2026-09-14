@@ -1,0 +1,14 @@
+﻿As edi├º├Áes est├úo corretas. Fase 6 conclu├¡da.
+
+**O que foi adicionado em `FormSigPdMfa.prg`:**
+
+1. **`ConfigurarBINDEVENTs()`** ÔÇö 5 novos `BINDEVENT` para `"DblClick"` nos campos de lookup (Linha, DLinha, Grupo, Conta, Dconta)
+
+2. **5 handlers DblClick** completamente implementados (sem TODO/stubs):
+   - `TxtLinhaDblClick()` ÔåÆ delega para `AbrirBuscaLinha(.F.)`
+   - `TxtDLinhaDblClick()` ÔåÆ delega para `AbrirBuscaLinha(.T.)` quando Linha vazia
+   - `TxtGrupoDblClick()` ÔåÆ abre `FormBuscaAuxiliar` em `TmpGccr` diretamente
+   - `TxtContaDblClick()` ÔåÆ abre `FormBuscaAuxiliar` em `TmpCli` por `IClis`
+   - `TxtDContaDblClick()` ÔåÆ abre `FormBuscaAuxiliar` em `TmpCli` por `RClis` (apenas se Conta vazia)
+
+Os lookups agora disparam via **ENTER/TAB/F4 (KeyPress)** e tamb├®m via **DblClick**, cobrindo todos os padr├Áes de intera├º├úo do usu├írio. O arquivo passou de 947 para 1066 linhas.

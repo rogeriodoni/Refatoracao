@@ -1,0 +1,10 @@
+﻿All 4 invented WHERE conditions removed from `sigrecgpBO.prg`:
+
+| Localiza├º├úo | Coluna removida | M├®todo |
+|---|---|---|
+| Linha ~62 | `WHERE Cemps = ...` | `PrepararDados()` ÔÇö lookup empresa |
+| Linha ~97 | `WHERE carqicones = 'brjpg.jpg'` | `PrepararDados()` ÔÇö lookup ├¡cone branco |
+| Linha ~550 | `WHERE Cemps = ...` | `PrepararDadosCompEsp1()` ÔÇö lookup empresa |
+| Linha ~587 | `WHERE carqicones = 'brjpg.jpg'` | `PrepararDadosCompEsp1()` ÔÇö lookup ├¡cone branco |
+
+Ambas as queries j├í usavam `SELECT TOP 1`, ent├úo sem o WHERE continuam retornando exatamente 1 registro. O form n├úo toca nenhum desses campos ÔÇö apenas o `sigrecgpBO.prg` foi alterado.

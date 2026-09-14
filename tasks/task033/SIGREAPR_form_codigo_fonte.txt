@@ -1,0 +1,1044 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREAPR.SCX
+* Data/Hora: 16/05/26 07:27:01
+* Total de registros: 26
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREAPR
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape1
+  Parent: SIGREAPR
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say2
+  Parent: SIGREAPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say16
+  Parent: SIGREAPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREAPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDPros
+  Parent: SIGREAPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCPros
+  Parent: SIGREAPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDLin
+  Parent: SIGREAPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetLin
+  Parent: SIGREAPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGREAPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_fornecedor
+  Parent: SIGREAPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getFornecedor
+  Parent: SIGREAPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDFornecedor
+  Parent: SIGREAPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDtInicial
+  Parent: SIGREAPR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getGrupo
+  Parent: SIGREAPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDGrupo
+  Parent: SIGREAPR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGREAPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREAPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREAPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGREAPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGREAPR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getMinVendas
+  Parent: SIGREAPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getMinCustos
+  Parent: SIGREAPR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Alterações de Produtos"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 0
+  Name = "SIGREAPR"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = -1
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 526
+  btnReport.Top = 3
+  btnReport.TabIndex = 22
+  btnReport.ZOrderSet = 3
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 12
+  REGISTRY1.Left = 522
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.Shape1
+------------------------------------------------------------
+  Top = 242
+  Left = 177
+  Height = 2
+  Width = 450
+  BorderStyle = 6
+  BorderWidth = 2
+  FillStyle = 1
+  SpecialEffect = 0
+  ColorScheme = 1
+  ZOrderSet = 1
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Left = 213
+  Top = 123
+  Width = 38
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.Say16
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Linha :"
+  Height = 15
+  Left = 217
+  Top = 173
+  Width = 34
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say16"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Produto :"
+  Height = 15
+  Left = 204
+  Top = 148
+  Width = 47
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.getDPros
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 365
+  MaxLength = 40
+  TabIndex = 8
+  Top = 145
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "getDPros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.getCPros
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  Left = 255
+  MaxLength = 14
+  TabIndex = 7
+  Top = 145
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "getCPros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.GetDLin
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 337
+  MaxLength = 40
+  TabIndex = 11
+  Top = 170
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 8
+  Name = "GetDLin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.GetLin
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  Left = 255
+  MaxLength = 10
+  TabIndex = 10
+  Top = 170
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "GetLin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.Say8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "%"
+  Height = 15
+  Left = 446
+  Top = 253
+  Width = 13
+  TabIndex = 21
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.lbl_fornecedor
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Fornecedor :"
+  Height = 15
+  Left = 187
+  Top = 198
+  Width = 64
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "lbl_fornecedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.getFornecedor
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 9
+  Format = "K!"
+  Height = 23
+  Left = 255
+  MaxLength = 10
+  TabIndex = 13
+  Top = 195
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "getFornecedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.getDFornecedor
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K!"
+  Height = 23
+  Left = 337
+  MaxLength = 40
+  TabIndex = 14
+  Top = 195
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "getDFornecedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.getDtInicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 255
+  TabIndex = 2
+  Top = 95
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "getDtInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.getGrupo
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Format = "!K"
+  Height = 23
+  Left = 255
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 4
+  ToolTipText = ""
+  Top = 120
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 14
+  Name = "getGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.getDGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "!K"
+  Height = 23
+  Left = 288
+  MaxLength = 20
+  TabIndex = 5
+  Top = 120
+  Width = 181
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Name = "getDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Data Inicial :"
+  Left = 189
+  Top = 98
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Venda :"
+  Height = 15
+  Left = 212
+  Top = 252
+  Width = 39
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = " Diferença Mínima "
+  Height = 15
+  Left = 187
+  Top = 226
+  Width = 106
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "%"
+  Height = 15
+  Left = 310
+  Top = 253
+  Width = 13
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Custo :"
+  Height = 15
+  Left = 351
+  Top = 252
+  Width = 37
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.getMinVendas
+------------------------------------------------------------
+  InputMask = "999.99"
+  Left = 255
+  TabIndex = 17
+  Top = 249
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "getMinVendas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAPR.getMinCustos
+------------------------------------------------------------
+  InputMask = "999.99"
+  Left = 391
+  TabIndex = 20
+  Top = 249
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "getMinCustos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREAPR
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReApr To Print
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReApr To Print Prompt NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.loNegocios = CreateObject('cnSigReApr', .Name)
+
+	If (.loNegocios.poDataMgr.pnIdconn > 0)
+		.getDtInicial.Value = Date()
+		.getMinVendas.Value = 0
+		.getMinCustos.Value = 0
+
+		.loObj = CreateObject('Relation')
+
+		.loObj.AddProperty('DataInicial', .getDtInicial.Value)
+		.loObj.AddProperty('Grupo',       [])
+		.loObj.AddProperty('Produto',     [])
+		.loObj.AddProperty('Linha',       [])
+		.loObj.AddProperty('Fornecedor',  [])
+		.loObj.AddProperty('MinVenda',    0)
+		.loObj.AddProperty('MinCusto',    0)
+		.loObj.AddProperty('TrataErro',   [])
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .F.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Set Procedure To SigReApr.Prg Additive
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+With ThisForm
+	.loObj.DataInicial = .getDtInicial.Value
+	.loObj.Grupo       = .getGrupo.Value
+	.loObj.Produto 	   = .getCPros.Value
+	.loObj.Linha 	   = .getLin.Value
+	.loObj.Fornecedor  = .getFornecedor.Value
+	.loObj.MinVenda    = .getMinVendas.Value
+	.loObj.MinCusto    = .getMinCustos.Value
+
+	llRet = .loNegocios.Processamento(.loObj)
+
+	If Not llRet
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Release Procedure SigReApr
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReApr Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4) && Se Não Clicou em Saída
+	With ThisForm
+		.loObj.DataInicial = .getDtInicial.Value
+		.loObj.Grupo       = .getGrupo.Value
+		.loObj.Produto     = .getCPros.Value
+		.loObj.Linha 	   = .getLin.Value
+		.loObj.Fornecedor  = .getFornecedor.Value
+		.loObj.MinVenda    = .getMinVendas.Value
+		.loObj.MinCusto    = .getMinCustos.Value
+
+		.loNegocios.ValidaBotoes(ThisForm.loObj)	
+		
+		llRet = .loObj.TrataErro
+	EndWith
+
+	Do Case
+		Case llRet = [DataInicial]
+			=Messagebox('Data Inicial Inválida!!!', 0+48, '')
+			ThisForm.getDtInicial.SetFocus
+			Return .f.
+	EndCase
+EndIf
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPR.getDPros
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'DPros', Padr(This.Value, 40), 'Seleção', 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getCPros.Value = crListaRemota.CPros
+	ThisForm.getDPros.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	ThisForm.getCPros.Value = ''
+	ThisForm.getDPros.Value = ''
+EndIf
+ThisForm.getCPros.Refresh
+ThisForm.getDPros.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCPros.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPR.getCPros
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'CPros', Padr(This.Value, 14), 'Seleção', 500)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getCPros.Value = crListaRemota.CPros
+	ThisForm.getDPros.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	ThisForm.getCPros.Value = ''
+	ThisForm.getDPros.Value = ''
+EndIf
+ThisForm.getCPros.Refresh
+ThisForm.getDPros.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPR.GetDLin
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdLin', ;
+						   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descs',  '', 'Descrição')
+		loLista.mAddColuna('Linhas', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getLin.Value  = crListaRemota.Linhas
+	ThisForm.getDLin.Value = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.getLin.Value  = ''
+	ThisForm.getDLin.Value = ''
+EndIf
+ThisForm.getLin.Refresh
+ThisForm.getDLin.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getLin.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPR.GetLin
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdLin', ;
+						   'crListaRemota', 'Linhas', Padr(This.Value, 10), 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Linhas', '', 'Código')
+		loLista.mAddColuna('Descs',  '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getLin.Value  = crListaRemota.Linhas
+	ThisForm.getDLin.Value = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.getLin.Value  = ''
+	ThisForm.getDLin.Value = ''
+EndIf
+ThisForm.getLin.Refresh
+ThisForm.getDLin.Refresh
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPR.getFornecedor
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	If !fAcessoContas( Usuar, [], 'C', This.Value, This, ThisForm.getDFornecedor)
+		MessageBox( 'Acesso Negado...', 48, '' )
+		This.Value = ' '
+		ThisForm.getDFornecedor.Value = ''  
+		Return(.F.)
+	EndIf	
+Else
+	ThisForm.getFornecedor.Value  = ''
+	ThisForm.getDFornecedor.Value = ''
+EndIf
+ThisForm.getFornecedor.Refresh
+ThisForm.getDFornecedor.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPR.getDFornecedor
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	If !fAcessoContas( Usuar, [], 'D', This.Value, ThisForm.getFornecedor, This)
+		MessageBox( 'Acesso Negado...', 48, '' )
+		This.Value = ' '
+		ThisForm.getFornecedor.Value = ''  
+		Return(.F.)
+	EndIf	
+Else
+	ThisForm.getFornecedor.Value  = ''
+	ThisForm.getDFornecedor.Value = ''
+EndIf
+ThisForm.getFornecedor.Refresh
+ThisForm.getDFornecedor.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getFornecedor.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPR.getGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdGrp', ;
+						   'crListaRemota', 'CGrus', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CGrus', '', 'Cod')
+		loLista.mAddColuna('DGrus', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getGrupo.Value  = Iif(Lastkey()=27, '', crListaRemota.CGrus)
+	ThisForm.getDGrupo.Value = Iif(Lastkey()=27, '', crListaRemota.DGrus)
+	Use In crListaRemota
+Else
+	ThisForm.getGrupo.Value  = ''
+	ThisForm.getDGrupo.Value = ''
+EndIf
+ThisForm.getGrupo.Refresh
+ThisForm.getDGrupo.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAPR.getDGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.loNegocios.poDataMgr.pnIdConn, 'SigCdGrp', ;
+						   'crListaRemota', 'DGrus', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DGrus', '', 'Descrição')
+		loLista.mAddColuna('CGrus', '', 'Cod')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getGrupo.Value  = Iif(Lastkey()=27, '', crListaRemota.CGrus)
+	ThisForm.getDGrupo.Value = Iif(Lastkey()=27, '', crListaRemota.DGrus)
+	Use In crListaRemota
+Else
+	ThisForm.getGrupo.Value  = ''
+	ThisForm.getDGrupo.Value = ''
+EndIf
+ThisForm.getGrupo.Refresh
+ThisForm.getDGrupo.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getGrupo.Value)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREAPR
+RESERVED3 (ClassInfo): lonegocios
+loobj
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 22
+================================================================================

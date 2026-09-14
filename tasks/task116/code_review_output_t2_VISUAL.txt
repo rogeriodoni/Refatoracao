@@ -1,0 +1,19 @@
+﻿Antes de fazer qualquer edi├º├úo, preciso analisar esse problema cuidadosamente.
+
+O diff de 85px entre os valores (201 - 116 = 85) ├® exatamente igual ao `PageFrame.Top = 85` (linha 294 do form). Isso indica um problema de sistemas de coordenadas, n├úo um erro real de posicionamento:
+
+- **Forma original (SCX legado)**: Labels eram filhos diretos do form ÔåÆ coordenadas absolutas: Top=201
+- **Forma migrada**: Labels s├úo filhos de `pgf_4c_Paginas.Page1` ÔåÆ coordenadas relativas ├á Page: Top=201-85=**116**
+
+O Top=116 dentro da Page corresponde exatamente a Top=201 no form original. A posi├º├úo visual ├® **id├¬ntica**.
+
+Adicionalmente, as textboxes associadas est├úo em Top=110 (mesmo "row"):
+- `txt_4c_Linha.Top = 110` (correspondente ao `lbl_4c_Label5`)
+- `txt_4c_Coluna.Top = 110` (correspondente ao `lbl_4c_Label4`)
+- `chk_4c_OptLogo.Top = 117` (mesmo row)
+
+Se eu alterar apenas os labels para Top=201, eles ficariam 91px abaixo das suas textboxes, quebrando o layout visual. A PageFrame tem Height=215 (300-85), ent├úo Top=201 deixaria os labels a 3px da borda inferior da page ÔÇö fora da ├írea ├║til.
+
+**Conclus├úo**: Este ├® um falso positivo do validador. Ele compara coordenadas absolutas do form original com coordenadas relativas ├á Page da migra├º├úo, sem descontar o offset do PageFrame (85px). O c├│digo atual (`Top=116`) est├í **visualmente correto** e equivale a `Top=201` no sistema de coordenadas original.
+
+Nenhuma altera├º├úo ├® necess├íria. Alterar `Top` para 201 dentro da Page produziria um form visualmente quebrado (labels no rodap├®, desalinhados 91px abaixo das suas textboxes associadas).

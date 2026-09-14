@@ -1,0 +1,10 @@
+﻿A Fase 6 est├í completa. O arquivo `FormSigPrCfn.prg` foi atualizado com:
+
+- **`txt_4c_Venc6`** (Left=271, Top=98) ÔÇö coluna 3, linha 2
+- **`txt_4c_Venc7`** (Left=358, Top=71) ÔÇö coluna 4, linha 1
+- **`txt_4c_Venc8`** (Left=358, Top=98) ÔÇö coluna 4, linha 2
+- **`txt_4c_Venc9`** (Left=445, Top=71) ÔÇö coluna 5, linha 1
+- **`txt_4c_Venc10`** (Left=445, Top=98) ÔÇö coluna 5, linha 2
+- **BINDEVENT** de KeyPress para todos os 10 campos (venc1ÔÇôvenc10) apontando para `TxtVencKeyPress`
+
+Posi├º├Áes id├¬nticas ├ás do original (getvenc6ÔÇôgetvenc10 no `layout.json`). N├úo h├í lookups neste form (confirmado pelo `comportamento.json`). A `Calculos()` j├í percorre venc1ÔÇô10 via PEMSTATUS/EVALUATE, ent├úo passa a encontrar todos os 10 campos corretamente.

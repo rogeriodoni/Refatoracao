@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. A Fase 2 est├í completa.
+
+**Resumo do que foi implementado em `SigPdMpfBO.prg`:**
+
+| M├®todo | Visibilidade | Descri├º├úo |
+|--------|-------------|-----------|
+| `ObterChavePrimaria()` | PROTECTED | Retorna `cidchaves` (chave de `SigCdNec`) |
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | Mapeia `datas`, `dopps`, `grupoos`, `contaos` para propriedades do BO |
+| `ValidarFiltros()` | PROTECTED | Valida datas n├úo vazias e data final ÔëÑ inicial |
+| `ConstruirSQL()` | PROTECTED | Monta o `SELECT a.* FROM SigCdNec a, SigCdOpd o` com filtros de per├¡odo, empresa, opera├º├úo e conta/grupo (3 modos: Origem/Destino/Todos) |
+| `ExecutarConsulta()` | PUBLIC | Valida ÔåÆ monta SQL ÔåÆ executa ÔåÆ retorna a string SQL se houver registros, ou `""` se erro/sem resultados |
+
+**Decis├Áes de design:**
+- Sem `Inserir()`/`Atualizar()`/`Excluir()` pois ├® form **OPERACIONAL puro** (apenas consulta)
+- `ExecutarConsulta()` retorna a SQL string (n├úo o cursor) ÔÇö igual ao original que passava `lcQuery` para `SigPdMp7`
+- Data final com `23:59:59` constru├¡da manualmente (equivalente ao `fDtoSQL(date, '23:59:59')` do legado)
+- Sem RETURN dentro de TRY/CATCH (regra cr├¡tica #1 do CLAUDE.md)

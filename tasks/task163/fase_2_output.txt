@@ -1,0 +1,8 @@
+﻿Fase 2 conclu├¡da. O `SIGPRCICBO.prg` agora tem os m├®todos CRUD adicionados:
+
+- **`CarregarDoCursor()`** ÔÇö l├¬ `pkChaves`, `barrapict` e `descricaos` de um cursor (tipicamente `crProg2`) para as propriedades `this_*`
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cIdChaves` (override obrigat├│rio do BusinessBase)
+- **`SelecionarIcone(par_cArqIcone, par_cIdChaves)`** ÔÇö a├º├úo principal: faz `REPLACE barrapict / barraforms` em `crProg1` e `crProg2`, replicando exatamente a l├│gica do `DblClick` original; trata `"< nenhum >"` como string vazia
+- **`BuscarIconeAtual(par_cIdChaves)`** ÔÇö l├¬ o ├¡cone atual de `crProg2` e popula `this_cArqIcone` / `this_cDescricao`; encapsula a l├│gica de fallback para `JUSTFNAME(par_cIdChaves)` do `Init` legado
+
+**Ponto importante**: Como o form opera na DataSession do form pai (`DataSessionId = .poForm1.DataSessionId`), o BO n├úo usa `SQLEXEC` pr├│prio ÔÇö o REPLACE atua nos cursores locais do pai, e a grava├º├úo SQL Server definitiva cabe ao form pai.

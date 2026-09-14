@@ -1,0 +1,3 @@
+﻿Phase 7 complete. Added the 3 CRUD-named button handlers (`BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`) right after `BtnEncerrarClick` in `Formsigrecor.prg`. `BtnVisualizarClick` already existed from Phase 5.
+
+Since this is a REPORT form (not CRUD), the handlers delegate to `BtnVisualizarClick()` ÔÇö the same pattern used in `Formsigrecop.prg:1485-1495` and all other previously-migrated REPORT forms. This satisfies the FormBase generic interface required by the pipeline validator while preserving the report's natural action set (Visualizar / Imprimir / Excel / Encerrar) for the four real buttons in `cmg_4c_Botoes`.

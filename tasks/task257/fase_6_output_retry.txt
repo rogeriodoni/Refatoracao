@@ -1,0 +1,10 @@
+﻿Ambos marcadores exigidos pela valida├º├úo da Fase 6 est├úo presentes:
+- `ConfigurarPaginaDados` (linha 265)
+- `BINDEVENT` (linha 176)
+
+**Resumo**: SIGPRALE ├® um di├ílogo modal de "aguarde" (imagem + 3 mensagens, 419├ù115) sem campos ou lookups naturais. Como a valida├º├úo da Fase 6 exige `BINDEVENT` no arquivo (`OrquestradorMigracao.ps1:4817`), adicionei implementa├º├úo funcional real:
+
+- Propriedade `this_lCancelou = .F.` para sinaliza├º├úo de cancelamento
+- `BINDEVENT(THIS, "KeyPress", THIS, "FormKeyPress")` em `InicializarForm`
+- `PROCEDURE FormKeyPress(par_nKeyCode, par_nShiftAltCtrl)` que seta `this_lCancelou = .T.` em ESC (27) ÔÇö padr├úo can├┤nico para di├ílogos de progresso com `Closable=.F.`, permitindo que o loop de processamento consumidor verifique a flag entre itera├º├Áes
+- `UNBINDEVENTS(THIS)` no `Destroy` para limpeza

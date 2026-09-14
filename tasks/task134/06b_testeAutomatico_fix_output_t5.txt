@@ -1,0 +1,9 @@
+﻿Ambas as corre├º├Áes aplicadas com sucesso. Resumo do que foi corrigido:
+
+**Bug principal ÔÇö `Property FORECOLOR is not found`:**
+- `CommandGroup.Buttons(N)` criado via `AddObject` em runtime no VFP9 n├úo exp├Áe a propriedade `ForeColor`, causando erro que faz `InicializarForm()` retornar `.F.`, e consequentemente `CREATEOBJECT` retornar `.NULL.`
+- **Fix:** Substitu├¡do `obj_4c_CmdGprocessa` (CommandGroup) pelo padr├úo can├┤nico `cnt_4c_Saida` (Container) + `cmd_4c_Encerrar` (CommandButton), seguindo a regra 10 do CLAUDE.md ÔÇö `CommandButton` direto tem `ForeColor` normalmente
+
+**Bug secund├írio ÔÇö INLIST com typo:**
+- `"SHP_4C_SHPRP"` n├úo correspondia ao nome real `shp_4c_ShpRp` (UPPER = `SHP_4C_SHRP`), fazendo o Shape ser tornado vis├¡vel indevidamente
+- **Fix:** Corrigido para `"SHP_4C_SHRP"`

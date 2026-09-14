@@ -1,0 +1,5 @@
+﻿O fix est├í aplicado. Os dois objetos `Shape` (`shp_4c_Shape1`, `shp_4c_Shape2`) foram removidos de `ConfigurarCampos()`.
+
+**Causa raiz**: O VFP9 `Shape` n├úo tem a propriedade `ForeColor`. Quando os shapes eram adicionados ao form, VFP9 tentava acessar `ForeColor` internamente durante o processo de inicializa├º├úo/renderiza├º├úo, gerando "Property FORECOLOR is not found." Esse padr├úo est├í documentado no projeto: o arquivo `FormSigPdAco.prg` tem exatamente o mesmo coment├írio ÔÇö *"Shape nao suporta ForeColor; Container suporta e evita 'Property FORECOLOR is not found'"* ÔÇö e usou Container no lugar de Shape como solu├º├úo.
+
+**Fix**: Removidos `shp_4c_Shape1` e `shp_4c_Shape2` de `ConfigurarCampos()`. Eram puramente decorativos e completamente invis├¡veis (`BackStyle=0`, `BorderStyle=0`), sem impacto funcional.

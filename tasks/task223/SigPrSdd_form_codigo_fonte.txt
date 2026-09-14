@@ -1,0 +1,921 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrSdd.SCX
+* Data/Hora: 03/07/2026 18:12:08
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRSDD
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Label1
+  Parent: SIGPRSDD
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGPRSDD
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGPRSDD
+  Class: label
+  BaseClass: label
+
+Objeto: Label4
+  Parent: SIGPRSDD
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Operação
+  Parent: SIGPRSDD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label6
+  Parent: SIGPRSDD
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Valor
+  Parent: SIGPRSDD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Solic
+  Parent: SIGPRSDD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Doc
+  Parent: SIGPRSDD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Data
+  Parent: SIGPRSDD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Motivo
+  Parent: SIGPRSDD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label5
+  Parent: SIGPRSDD
+  Class: label
+  BaseClass: label
+
+Objeto: Get_fpg
+  Parent: SIGPRSDD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say12
+  Parent: SIGPRSDD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntSombra
+  Parent: SIGPRSDD
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRSDD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRSDD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Fwbtng1
+  Parent: SIGPRSDD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GeraSenha
+  Parent: SIGPRSDD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGPRSDD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Ds_Empresa
+  Parent: SIGPRSDD
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Saida
+  Parent: SIGPRSDD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Cd_Empresa
+  Parent: SIGPRSDD
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 288
+  Width = 799
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Senha do dia"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowState = 0
+  Name = "SIGPRSDD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Solicitante : "
+  Height = 15
+  Left = 81
+  Top = 86
+  Width = 61
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Operação : "
+  Height = 15
+  Left = 83
+  Top = 140
+  Width = 59
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Documento : "
+  Height = 15
+  Left = 76
+  Top = 165
+  Width = 66
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Data : "
+  Height = 15
+  Left = 107
+  Top = 215
+  Width = 35
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Get_Operação
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = "crSigPrSnd.operas"
+  Format = "K"
+  Height = 25
+  Left = 144
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = ""
+  Top = 135
+  Width = 150
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Themes = .F.
+  Name = "Get_Operação"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Motivo : "
+  Height = 15
+  Left = 98
+  Top = 265
+  Width = 44
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Get_Valor
+------------------------------------------------------------
+  Comment = "K"
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigPrSnd.Valors"
+  Format = "K"
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 144
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 237
+  Width = 100
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_Valor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Get_Solic
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigPrSnd.Solicits"
+  Format = "K!"
+  Height = 23
+  Left = 144
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 83
+  Width = 80
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_Solic"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Get_Doc
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigPrSnd.Docs"
+  Format = "K"
+  Height = 23
+  InputMask = "9999999999"
+  Left = 144
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 162
+  Width = 80
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_Doc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Get_Data
+------------------------------------------------------------
+  Comment = "K"
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigPrSnd.Datas"
+  Format = "K"
+  Height = 23
+  Left = 144
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 212
+  Width = 75
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_Data"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Get_Motivo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigPrSnd.Motivos"
+  Format = "K!"
+  Height = 23
+  Left = 144
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 262
+  Width = 360
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_Motivo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Valor : "
+  Height = 15
+  Left = 106
+  Top = 240
+  Width = 36
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Get_fpg
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigPrSnd.Fpags"
+  Left = 144
+  MaxLength = 12
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = "Digite a forma de pagamento"
+  Top = 187
+  Width = 94
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Get_fpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Say12
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cond. Pagto : "
+  Left = 70
+  Top = 192
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Fwbtng1
+------------------------------------------------------------
+  Top = 4
+  Left = 574
+  FontBold = .T.
+  Picture = ..\framework\imagens\geral_boleto_60.jpg
+  Caption = "Boleto"
+  TabIndex = 20
+  Name = "Fwbtng1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.GeraSenha
+------------------------------------------------------------
+  Top = 4
+  Left = 649
+  FontBold = .T.
+  Picture = ..\framework\imagens\geral_chaves_60.jpg
+  Caption = "Gerar Senha"
+  TabIndex = 19
+  Name = "GeraSenha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa : "
+  Left = 89
+  Top = 112
+  Width = 53
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 18
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Get_Ds_Empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 25
+  Left = 178
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 108
+  Width = 290
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  ZOrderSet = 19
+  Themes = .F.
+  Name = "Get_Ds_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Saida
+------------------------------------------------------------
+  Top = 4
+  Left = 724
+  FontBold = .T.
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 18
+  Name = "Saida"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRSDD.Get_Cd_Empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Value = 
+  ControlSource = "crSigPrSnd.Emps"
+  Format = "K"
+  Height = 25
+  Left = 144
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 108
+  Width = 32
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  ZOrderSet = 20
+  Themes = .F.
+  Name = "Get_Cd_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRSDD
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters _Producao,lcNomeFrm1
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Thisform.Producao = _producao
+
+Private pIds
+
+pIds = Replicate(Chr(254), 20)
+
+lcQrySend = [Select * From SigPrSnd Where cIdChaves = '] + pIds + [']
+
+With ThisForm
+	lcNomeFrm1 = Iif(Type('lcNomeFrm1')=='C' And Not Empty(lcNomeFrm1),lcNomeFrm1,.Name)
+	.Name = lcNomeFrm1
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigPrSnd', 'cIdChaves', 'crSigPrSnd', '', '', lcQrySend)
+		EndWith
+
+		Insert Into crSigPrSnd (Usuars, Datas, Tipos) Values (Usuar, Datetime(),Iif(ThisForm.Producao,1,0))
+		
+		lcSql = [Select SenhDEmps From SigCdPac ]
+		ThisForm.Podatamgr.Sqlexecute(lcSql,'CrParac')
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSDD.Get_Operação
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	If ThisForm.Producao
+		loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpd', ;
+							   'crListaRemota', 'Dopps', This.Value, 'Seleção', .t.)
+		If Not loLista.plAchouRegistro
+			loLista.mAddColuna('Dopps', '', 'Operação')
+			loLista.Show()
+		EndIf
+		This.Value = crListaRemota.Dopps
+
+	Else
+	
+		loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpe', ;
+							   'crListaRemota', 'Dopes', This.Value, 'Seleção', .t.)
+		If Not loLista.plAchouRegistro
+			loLista.mAddColuna('Dopes', '', 'Operação')
+			loLista.Show()
+		EndIf
+		This.Value = crListaRemota.Dopes
+	Endif
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSDD.Get_Valor
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Not Thisform.Producao)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSDD.Get_Data
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSDD.Get_fpg
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigOpFp', ;
+						   'crListaRemota', 'Fpags', This.Value, 'Seleção', .t.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna( 'FPags', '', 'Código')
+		loLista.mAddColuna( 'Descrs', '', 'Descrição' )
+		loLista.mAddColuna( 'MoeFPgs', 'XXXXX', 'Moeda' )
+		loLista.mAddColuna( 'FParcs', '99', ' #' )
+		loLista.Show()
+	EndIf
+	This.Value = crListaRemota.Fpags
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSDD.Fwbtng1
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Do Form SigOpBol With ThisForm,15
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSDD.GeraSenha
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Empty(crSigPrSnd.Solicits) 
+	=Messagebox('Informe o Nome do Solicitante...', 32)
+	ThisForm.Get_Solic.SetFocus
+	Return 0
+EndIf
+
+If Empty(crSigPrSnd.Emps)
+	=Messagebox('Informe a Empresa...', 32)
+	ThisForm.Get_cd_empresa.SetFocus
+	Return 0
+EndIf
+
+If Empty(crSigPrSnd.Operas)
+	=Messagebox('Informe a Operação...', 32)
+	ThisForm.Get_Operação.SetFocus
+	Return 0
+EndIf
+
+If Empty(crSigPrSnd.Docs)
+	=Messagebox('Informe o Número do Documento...', 32)
+	ThisForm.Get_Doc.SetFocus
+	Return 0
+EndIf
+
+If Not Thisform.Producao And Empty(crSigPrSnd.Valors) 
+	=Messagebox('Informe o Valor...', 32)
+	ThisForm.Get_Valor.SetFocus
+	Return 0
+EndIf
+
+If Empty(crSigPrSnd.Motivos)
+	=Messagebox('Informe o Motivo...', 32)
+	ThisForm.Get_Motivo.SetFocus
+	Return 0
+EndIf
+lnNum = 0
+If CrParac.SenhDEmps
+	lcSql = [Select nemps From SigCdEmp Where cEmps = ']+CrSigPrSnd.Emps+[']
+	ThisForm.Podatamgr.Sqlexecute(lcSql,'CrEmp')
+	lnNum = CrEmp.nEmps
+
+	lcSql = [Select nfpags From SigOpFp Where Fpags = ']+CrSigPrSnd.Fpags+[']
+	ThisForm.Podatamgr.Sqlexecute(lcSql,'CrfPagto')
+	lnNum = lnNum + CrFPagto.NfPags + (CrSigPrSnd.Valors * 100)
+Endif
+
+lcSenha = fGerPswDiario(crSigPrSnd.Docs, crSigPrSnd.Datas, lnNum)
+Replace Senhads   With lcSenha, ;
+		Horas     With Time(), ;
+		cIdChaves With fUniqueIds() In crSigPrSnd
+
+ThisForm.poDataMgr.Update('crSigPrSnd')
+ThisForm.poDataMgr.Commit()
+
+=Messagebox('Favor Anotar a Senha : ' + Chr(13) + Chr(13) + lcSenha + Chr(13) + Chr(13), 32, 'Senha do Dia')
+
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSDD.Get_Ds_Empresa
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.Get_Cd_Empresa,ThisForm.Get_Ds_Empresa))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.Get_Cd_Empresa.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSDD.Saida
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRSDD.Get_Cd_Empresa
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.Get_Cd_Empresa,ThisForm.Get_Ds_Empresa))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRSDD
+RESERVED3 (ClassInfo): podatamgr
+producao
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

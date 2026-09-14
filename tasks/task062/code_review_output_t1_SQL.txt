@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. Apenas o problema real foi corrigido:
+
+- **GRUFALS removido** (Formsigrecor.prg, ex-linhas 1086-1088): o bloco `IF !EMPTY(loc_cGrupo) / loc_cSQL = loc_cSQL + " AND grufals = " + EscaparSQL(loc_cGrupo) / ENDIF` foi removido do m├®todo `ValidarCdEstoque`. A coluna `grufals` n├úo existe no WHERE original da query de `SigCdGcr`.
+
+- **CALCFECS**: falso positivo ÔÇö `calcfecs` est├í no SELECT, n├úo no WHERE.
+- **CODIGOS**: falso positivo ÔÇö `LEFT(a.Codigos, 3) = o.NDopes` ├® condi├º├úo de JOIN necess├íria para ligar `SigMvPec` a `SigCdOpe`, presente implicitamente no original.

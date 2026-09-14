@@ -1,0 +1,29 @@
+﻿Ap├│s verifica├º├úo completa, este ├® um **falso positivo**. N├úo ├® necess├íria nenhuma altera├º├úo.
+
+## An├ílise da detec├º├úo [SQL-FILTRO-INVENTADO] com CEMPS
+
+**O WHERE `cemps` ├® LEG├ìTIMO, n├úo inventado.** Eis a evid├¬ncia:
+
+### 1. Original usa `fAcessoEmpresa` ÔÇö que internamente consulta sigcdemp
+```foxpro
+* Original (sigrecrt_form_codigo_fonte.txt, linha 1379):
+PROCEDURE Valid
+= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)
+```
+A fun├º├úo `fAcessoEmpresa` valida o c├│digo digitado. O migrado implementa isso como `ValidarCdEmpresa()` com SQL expl├¡cito.
+
+### 2. `cemps` ├® a PK real de `sigcdemp` no schema
+```sql
+-- schema.sql, linha 3218:
+PRIMARY KEY CLUSTERED ([cemps] ASC)
+```
+├ë `CHAR(3)` e ├® a chave prim├íria de `SigCdEmp`. Usar `WHERE cemps = ...` ├® a query correta.
+
+### 3. S├úo queries diferentes contra tabelas diferentes
+- **Query principal** (relat├│rio): `SigCcChm a, SigChe b, ...` usa coluna `b.emps` ÔÇö est├í no "WHERE original"
+- **Query de valida├º├úo** (formul├írio): `sigcdemp WHERE cemps = ...` ÔÇö tabela diferente, PK diferente
+
+A ferramenta de code review extraiu os nomes de colunas do WHERE da query **principal** do relat├│rio e os comparou com **todas** as queries do form, gerando esse falso positivo.
+
+### Resultado
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `Formsigrecrt.prg` e `sigrecrtBO.prg` est├úo corretos. Remover o `WHERE cemps = ...` quebraria a valida├º├úo do campo empresa (alteraria l├│gica de neg├│cio), o que ├® proibido pelas regras deste pass.

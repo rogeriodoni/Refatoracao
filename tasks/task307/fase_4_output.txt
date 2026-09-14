@@ -1,0 +1,21 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi conclu├¡da com sucesso.
+
+**O que foi adicionado em FormSigPrItb.prg:**
+
+1. **`ConfigurarPaginaLista()`** ÔÇö orquestra a configura├º├úo dos bot├Áes de a├º├úo (equivalente OPERACIONAL do fase-4 CRUD)
+
+2. **`ConfigurarBotoesRelatorio()`** ÔÇö adiciona `cmd_4c_Visualizar` (V├¡deo) e `cmd_4c_Imprimir` (Impressora) ao `cnt_4c_Botoes`, ambos iniciando desabilitados com `Themes=.T.` + `DisabledPicture` para renderizar ├¡cone mesmo com `Enabled=.F.`
+
+3. **`ConfigurarBotaoProcessar()`** ÔÇö `cmd_4c_Processar` standalone em Left=811, Top=4 (proporcional ao original 649/3 em 800px)
+
+4. **`ConfigurarBotaoEncerrar()`** ÔÇö `cmd_4c_Encerrar` em `cnt_4c_Saida` com padr├úo can├┤nico (Left=5, Top=5, Width=75, Height=75)
+
+5. **`ConfigurarEventos()`** ÔÇö BINDEVENT para os 4 bot├Áes
+
+6. **`AlternarPagina(par_cEstado)`** ÔÇö 3 estados: `PROCESSANDO` (mostra Aguarde, bloqueia inputs), `RESULTADO` (habilita relat├│rio, desabilita inputs), `INICIAL` (restaura tudo)
+
+7. **Handlers**: `BtnProcessarClick`, `BtnGravarClick`, `BtnVisualizarClick`, `BtnImprimirClick`, `BtnEncerrarClick`
+
+8. **`ExecutarReportForm()`** ÔÇö helper can├┤nico Pattern #117 com triple guard (FILE + cursor vazio + isolamento SET POINT/SEPARATOR/REPORTBEHAVIOR 80)
+
+9. **`Destroy()` atualizado** ÔÇö fecha SemConta e Cabecalho al├®m do MovAux j├í existente

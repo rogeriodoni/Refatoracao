@@ -1,0 +1,419 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDDIC.SCX
+* Data/Hora: 01/08/2026 01:43:27
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDDIC
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetIdioma
+  Parent: SIGCDDIC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDDIC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetExpressao
+  Parent: SIGCDDIC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetTraducao
+  Parent: SIGCDDIC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDDIC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDDIC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 161
+  Left = 198
+  Width = 1016
+  Height = 622
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDIC
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Cadastro de Idioma"
+  Name = "SIGCDDIC"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 36
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 111
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 186
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 261
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 336
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 313
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 413
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 88
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 4
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDIC.Pagina.Dados.GetIdioma
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigCdDic.Idioma"
+  Format = "!"
+  Height = 24
+  Left = 116
+  MaxLength = 10
+  TabIndex = 1
+  Top = 139
+  Width = 87
+  ZOrderSet = 2
+  plprocurar = .T.
+  Name = "GetIdioma"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDIC.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Idioma :"
+  Height = 15
+  Left = 63
+  Top = 144
+  Width = 51
+  TabIndex = 5
+  ForeColor = 36,84,155
+  ZOrderSet = 4
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDIC.Pagina.Dados.GetExpressao
+------------------------------------------------------------
+  ControlSource = "crSigCdDic.Expressao"
+  Format = "!"
+  Height = 24
+  Left = 116
+  MaxLength = 60
+  ReadOnly = .F.
+  TabIndex = 2
+  Top = 179
+  Width = 525
+  ZOrderSet = 5
+  plprocurar = .T.
+  Name = "GetExpressao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDIC.Pagina.Dados.GetTraducao
+------------------------------------------------------------
+  ControlSource = "crSigCdDic.Traducao"
+  Format = "!"
+  Height = 24
+  Left = 117
+  MaxLength = 60
+  ReadOnly = .F.
+  TabIndex = 3
+  Top = 222
+  Width = 525
+  ZOrderSet = 5
+  plprocurar = .T.
+  Name = "GetTraducao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDIC.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Expressão :"
+  Height = 15
+  Left = 42
+  Top = 183
+  Width = 70
+  TabIndex = 6
+  ForeColor = 36,84,155
+  ZOrderSet = 6
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDIC.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Tradução :"
+  Height = 15
+  Left = 49
+  Top = 226
+  Width = 64
+  TabIndex = 7
+  ForeColor = 36,84,155
+  ZOrderSet = 6
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDDIC
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.GetExpressao.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdDic','Expressao',ThisForm.Pagina.Dados.GetExpressao.Value)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdDic','cIdChaves','crSigCdDic','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('Idioma','','','Idioma',70,.t.)
+		.pfSqlTabela(1).pColuna('Expressao','','','Expressão',280,.t.)
+		.pfSqlTabela(1).pColuna('Traducao','','','Tradução',280,.t.)
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+parameters lcOpcao
+
+If !dodefault( lcopcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+do case
+case Thisform.pcEscolha='INSERIR' or ;
+	Thisform.pcEscolha='PROCURAR'
+	Thisform.Pagina.Dados.GetExpressao.setfocus
+case Thisform.pcEscolha='ALTERAR'
+	Thisform.pagina.dados.GetTraducao.setfocus
+case Thisform.pcEscolha='CONSULTAR' or ;
+	Thisform.pcEscolha='EXCLUIR'
+	Thisform.pagina.dados.grupo_salva.salva.setfocus
+endcase
+	
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+if inlist(thisform.pcEscolha,'INSERIR','ALTERAR')
+    if IsEmpty(thisform.Pagina.Dados.GetExpressao.value)
+		Messagebox('Expressão Inválida !!',0+48,'')
+		Thisform.Pagina.Dados.GetExpressao.setfocus
+		Return 	
+	endif	
+    if IsEmpty(thisform.Pagina.Dados.GetIdioma.value)
+		Messagebox('Idioma Inválido !!',0+48,'')
+		Thisform.Pagina.Dados.getiDescs.setfocus
+		Return 	
+	endif	
+    if IsEmpty(thisform.Pagina.Dados.GetTraducao.value)
+		Messagebox('Tradução Inválida !!',0+48,'')
+		Thisform.Pagina.Dados.GetTraducao.setfocus
+		Return 	
+	endif	
+endif
+
+If inlist(thisform.pcEscolha,'INSERIR')
+	lcQuery = [Select * From SigCdDic Where Expressao = '] + ThisForm.Pagina.Dados.GetExpressao.Value + [' ] + ;
+	                                 [And Idioma    = '] + ThisForm.Pagina.Dados.GetIdioma.Value + [']
+    ThisForm.poDataMgr.SqlExecute(lcQuery, 'csSigCdDic')
+    If ! Eof()
+		Messagebox('Código já Cadastrado !!',0+48,'')
+		Thisform.Pagina.Dados.GetExpressao.setfocus
+		Return
+	Endif
+	Select crSigCdDic
+	Replace cIdChaves With fUniqueIds()
+endif			
+
+DoDefault()
+Thisform.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+DoDefault()
+if thisform.plCancelar
+	thisform.mAtivapagina1
+endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDIC.Pagina.Dados.GetIdioma
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(InList(thisform.pcEscolha,'INSERIR'))
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDIC.Pagina.Dados.GetExpressao
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','PROCURAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDIC.Pagina.Dados.GetTraducao
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDDIC
+RESERVED3 (ClassInfo): nrecno
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================

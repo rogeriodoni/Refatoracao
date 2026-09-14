@@ -1,0 +1,211 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 5,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fDtoSQL", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREFCD",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFcD To Printer Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCD",
+      "evento": "Init",
+      "linhas": 43,
+      "codigoOriginal": "Public m.reslanca, m.resforma, m.rescheque, m.rescartao, m.resvende, m.resconta, m.reslanfor, m.resqtdes, m.ResvDets\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tlnQueryOk = ThisForm.podataMgr.SqlExecute([Select * From SigCdPam ],'CrSigCdPam')\n\t\tIf lnQueryOk < 1\n\t\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\t\t\tReturn(.F.)\n\t\tEndIf\n\t\n\t\tlnQueryOk = ThisForm.poDataMgr.SqlExecute([Select * From SigOpFp ],'CrSigOpFp'... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cd_empresa,get_ds_empresa",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFCD",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor csSigCdTom (Marca n(1), Descri c(40), Codigos n(2))\nIndex On Codigos Tag Codigos\n\n\nCreate Cursor crMovimento( Datas t, Valor N(13,2))\nIndex On Datas Tag Datas\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCD",
+      "evento": "Procedure",
+      "linhas": 190,
+      "codigoOriginal": "Private pDtI, pDtF, lnOpt\nLocal lcCbEmp, lcTitulo, lcPeriodo, lcGru, lcVendedor, lcOperacao, ldInicial, ldFinal, lcModa, lnAgru, lnAgru2, lnAgru3, lcFPubl\nLocal cheVen, cheTop, cheFP, cheProd, cheCole, cheCate, cheLstOp, cheLstOp1, lcLstOp, lcHInicial, lcHFinal, lcDataIni, lcDataFin, lcEmpAnt\n\nldInicial   = Thisform.get_dt_inicial.Value\nldFinal     = Thisform.get_dt_Final.Value\nlcEmp\t\t= Thisform.get_cd_empresa.Value\nlcEmpAnt\t= [   ]\n\nThisform.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_Final,get_cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCD",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCD",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFcD Preview\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCD.get_dt_inicial",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Empty(This.Value) And Not Empty(ThisForm.get_dt_final.Value)\n\tIf This.Value > ThisForm.get_dt_final.Value\n\t\tMessageBox([Data Inicial não pode ser Maior que a Data Final.],0+48,[Aviso])\n\t\tReturn .F.\n\tEndIf \nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_final",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFCD.get_dt_final",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Empty(This.Value) And Not Empty(ThisForm.get_dt_inicial.Value)\n\tIf This.Value < ThisForm.get_dt_inicial.Value\n\t\tMessageBox([Data Final não pode ser menor que a Data Inicial.],0+48,[Aviso])\n\t\tReturn .F.\n\tEndIf \nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_inicial",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFCD.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa,get_ds_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCD.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa,get_ds_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFCD.get_ds_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Empty(ThisForm.get_cd_empresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREFCD.Init",
+      "queryOriginal": "\t\tlnQueryOk = ThisForm.podataMgr.SqlExecute([Select * From SigCdPam ],'CrSigCdPam')",
+      "tabelas": "SigCdPam",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFCD.Init",
+      "queryOriginal": "\t\tlnQueryOk = ThisForm.poDataMgr.SqlExecute([Select * From SigOpFp ],'CrSigOpFp'... [TRUNCADO]",
+      "tabelas": "SigOpFp",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPam", "SigOpFp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,18 @@
+﻿Arquivo criado e verificado. Resumo da Fase 3:
+
+**`C:\4c\projeto\app\forms\cadastros\FormDIC.prg`** criado com:
+
+| M├®todo | Status |
+|--------|--------|
+| `Init()` | `RETURN DODEFAULT()` ÔÇö sem dupla chamada a InicializarForm |
+| `InicializarForm()` | Cria DICBO, chama ConfigurarPageFrame, verifica `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, Tabs=.F., 2 pages com Picture |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (vazio, Left=542), `cnt_4c_Saida` (can├┤nico: Left=917) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (vazio, Left=842) |
+| `CarregarLista()` | Chama `Buscar("")` ÔÇö grid configurado na Fase 4 |
+| `TornarControlesVisiveis()` | Recurs├úo em Controls + Pages de PageFrames |
+| `Destroy()` | Libera BO, chama DODEFAULT() |
+
+**Regras cr├¡ticas respeitadas:** sem RETURN dentro de TRY/CATCH, CATCH com MostrarErro, cnt_4c_Saida can├┤nico (Left=917/Width=90), lbl_4c_Sombra/Titulo com AutoSize=.F., PageFrame sem .BackColor, Init() sem dupla InicializarForm.
+
+**Pr├│xima fase (4/8):** adicionar Grid + bot├Áes CRUD em `cnt_4c_Botoes` e `cmd_4c_Encerrar` em `cnt_4c_Saida`.

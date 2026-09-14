@@ -1,0 +1,16 @@
+﻿O c├│digo foi inserido corretamente. A implementa├º├úo de `GravarDados()` est├í completa e correta.
+
+**O que foi feito:**
+
+Implementei o m├®todo `PROTECTED FUNCTION GravarDados()` que estava sendo chamado em `BtnSalvarClick` (linha 1555) e `FormParaBO` (linha 1727) mas n├úo existia no form.
+
+**L├│gica implementada:**
+- Guard fora do TRY: retorna imediatamente se `this_lMontouObjetos = .F.`
+- Reinicializa `crGrvCadRs` via `InicializarCursores()` (slate limpo antes de gravar)
+- Para cada campo din├ómico em `laControles`: l├¬ o tipo de `crSigSyCit`, converte o valor do controle para string (DÔåÆDTOC, NÔåÆSTR, outrosÔåÆALLTRIM) e insere em `crGrvCadRs`
+- Campos fixos de header (`Emps`, `Dopes`, `Numes`): lidos da UI
+- `ChkSubn = .T.` somente quando os 3 campos de baixa est├úo todos preenchidos
+- `Aprova`/`Datas`: preservados do BO (readonly no UI, setados pelo sistema)
+- `Baixa`: registra `gc_4c_UsuarioLogado` se ChkSubn virou `.T.` pela primeira vez; preserva valor existente se j├í estava preenchido
+- Propaga `ChkSubn` ao BO caso tenha mudado de `.F.` para `.T.`
+- RETURN fora do TRY/CATCH (regra #1 do CLAUDE.md)

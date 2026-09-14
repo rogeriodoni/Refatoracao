@@ -1,0 +1,17 @@
+﻿Li o arquivo completo. O `Formsigtosen.prg` ├® um formul├írio de **login/autentica├º├úo** (OPERACIONAL), n├úo um CRUD. Ele j├í est├í completo com todos os handlers necess├írios:
+
+- `BtnSaidaClick()` ÔÇö ├║nico bot├úo (encerrar sistema)
+- `TxtUsuarioKeyPress()`, `TxtUsuarioLostFocus()`
+- `TxtSenhaKeyPress()`
+- `TxtEmpKeyPress()`, `TxtDempKeyPress()`
+- `ValidarUsuario()`, `ValidarSenha()`, `ValidarEmpresa()`, `ValidarDescEmpresa()`
+- `Confirmar()`, `AjustarEmpresas()`, `ConstruirBarraAtalhos()`
+- `Destroy()`
+
+**Os eventos `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick` e `BtnExcluirClick` N├âO se aplicam a este formul├írio.** O `SIGTOSEN` ├® uma tela de acesso ao sistema ÔÇö n├úo tem opera├º├Áes CRUD. O `layout.json` confirma: o ├║nico CommandGroup ├® `SAIDA` (1 bot├úo), sem nenhum bot├úo de Incluir/Alterar/Visualizar/Excluir.
+
+Adicionar esses m├®todos seria:
+1. **C├│digo morto** ÔÇö nenhum controle os chama
+2. **Viola├º├úo das regras** ÔÇö proibido criar stubs/m├®todos vazios sem l├│gica real
+
+**Fase 7 para este formul├írio est├í conclu├¡da**: o arquivo j├í cont├®m todos os eventos principais do formul├írio de login. Nenhuma modifica├º├úo ├® necess├íria.

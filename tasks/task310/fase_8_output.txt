@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSigPrMdc.prg` est├í completo com todos os m├®todos de consolida├º├úo adicionados:
+
+**M├®todos adicionados (linhas 1017ÔÇô1180):**
+- `BtnEncerrarClick()` ÔåÆ alias para `CmdSairClick()`
+- `BtnBuscarClick()` ÔåÆ foca o grid na coluna 1 para edi├º├úo inline
+- `BtnSalvarClick()` ÔåÆ aciona `CmdProcessarClick()` (semantica CRUD Salvar)
+- `BtnCancelarClick()` ÔåÆ chama `LimparCampos()`
+- `FormParaBO()` ÔåÆ transfere flags dos checkboxes (`this_lCheckCadPro`, `this_lTrocarReps`, `this_lApagarContaAntiga`) para o BO
+- `BOParaForm()` ÔåÆ reflete os flags do BO nos checkboxes da UI
+- `HabilitarCampos(par_lHabilitar)` ÔåÆ habilita/desabilita os 4 bot├Áes de a├º├úo
+- `LimparCampos()` ÔåÆ reinicia `cursor_4c_Contas` com um blank + limpa checkboxes
+- `CarregarLista()` ÔåÆ atualiza `grd_4c_Dados.Refresh()`, retorna `.T.`
+- `AjustarBotoesPorModo()` ÔåÆ desabilita Excluir/Processar quando cursor est├í vazio
+- `FormatarGridLista(par_oGrid)` ÔåÆ aplica `Verdana 8` nas colunas do grid
+
+O form OPERACIONAL `FormSigPrMdc` est├í agora completo em 8 fases, com menu.prg e config.prg j├í registrados das fases anteriores.

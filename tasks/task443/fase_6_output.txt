@@ -1,0 +1,11 @@
+﻿As altera├º├Áes est├úo corretas. A Fase 6/8 est├í conclu├¡da.
+
+**O que foi adicionado ao `FormGrupo.prg`:**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö dois itens novos adicionados ap├│s o TextBox do Grande Grupo:
+   - `BINDEVENT(txt_4c_GdeGrps, "DblClick", ...)` ÔåÆ abre picker via duplo clique
+   - Bot├úo `cmd_4c_Carregar` (Top=118, Left=507, 52├ù52) com ├¡cone `importar_48.png`, habilitado/desabilitado conforme modo do form pai, + `BINDEVENT Click ÔåÆ BtnCarregarClick`
+
+2. **`TxtGdeGrpsDblClick()`** ÔÇö delega para `AbrirBuscaGdeGrps()` (picker de SigCdGpr)
+
+3. **`BtnCarregarClick()`** ÔÇö valida que Grande Grupo est├í preenchido, delega para `GrupoBO.CarregarGrandeGrupo(loc_cGde)` (que j├í implementa toda a l├│gica: query `SigCdGrp WHERE Mercs = ?`, remo├º├úo de linhas vazias, inser├º├úo de grupos novos, linha em branco ao final) e atualiza o grid ao concluir.

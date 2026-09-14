@@ -1,0 +1,9 @@
+﻿3 corre├º├Áes aplicadas em `Formsigrecmc.prg`:
+
+| Controle | Antes | Depois |
+|---|---|---|
+| `chk_4c_Comparativo` | Top=295 | Top=**380** |
+| `cmd_4c_SelTudo` | Top=119 | Top=**204** |
+| `cmd_4c_Apaga` | Top=163 | Top=**248** |
+
+Os valores foram restaurados para as coordenadas originais do SCX (`SIGRECMC`). A migration havia aplicado erroneamente um offset de -85 (igual ao `PageFrame.Top`) assumindo que os controles eram form-absolute, quando na verdade eram page-relative no original ÔÇö ou seja, as coordenadas originais j├í eram relativas ├á p├ígina e devem ser mantidas como est├úo.

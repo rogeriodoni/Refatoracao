@@ -1,0 +1,9 @@
+﻿All 4 fixes applied:
+
+**ProdutoBO.prg:**
+- `Atualizar()`: `WHERE pkchaves = ...` ÔåÆ `WHERE cpros = <<EscaparSQL(THIS.this_cCpros)>>`
+- `ExecutarExclusao()`: `WHERE pkchaves = ...` ÔåÆ `WHERE cpros = ...`
+- `Buscar()` + `CarregarPorCodigo()`: `dtalts` in SELECT ÔåÆ `DataAlts AS dtalts` (column alias so cursor field `dtalts` still receives the data correctly via APPEND FROM DBF)
+
+**FormProduto.prg:**
+- WHERE filter: `dtalts >= ...` and `dtalts <= ...` ÔåÆ `DataAlts >= ...` and `DataAlts <= ...`

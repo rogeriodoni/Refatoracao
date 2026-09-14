@@ -1,0 +1,52 @@
+﻿A an├ílise est├í completa. Aqui est├í o diagn├│stico definitivo:
+
+---
+
+## Diagn├│stico: Todos os 12 erros s├úo falsos positivos
+
+### Causa raiz: offset do PageFrame ignorado pelo validator
+
+O `pgf_4c_Paginas` est├í em `Top = 85` (linha 275). Todos os controles flagados est├úo **dentro de `par_oPag` (Page1)** ÔÇö portanto usam coordenadas relativas ├á p├ígina, n├úo ao form.
+
+A f├│rmula correta de migra├º├úo ├®:
+```
+Top_p├ígina = Top_SCX_original - PageFrame.Top (85)
+```
+
+**Verifica├º├úo de todos os 12 casos:**
+
+| Controle | Top SCX original | Top migrado (c├│digo) | original ÔêÆ 85 | Diff real |
+|---|---|---|---|---|
+| chk_4c_Conciliado | 271 | 186 | 271ÔêÆ85 = **186** | 0 Ô£ô |
+| obj_4c_Opt_opcao | 285 | 200 | 285ÔêÆ85 = **200** | 0 Ô£ô |
+| obj_4c_Opt_tipo | 307 | 222 | 307ÔêÆ85 = **222** | 0 Ô£ô |
+| obj_4c_Opt_lista_atra | 337 | 252 | 337ÔêÆ85 = **252** | 0 Ô£ô |
+| obj_4c_Opt_consid_atra | 357 | 272 | 357ÔêÆ85 = **272** | 0 Ô£ô |
+| obj_4c_Opt_situa | 374 | 289 | 374ÔêÆ85 = **289** | 0 Ô£ô |
+| cmd_4c_MarcarEmp | 239 | 154 | 239ÔêÆ85 = **154** | 0 Ô£ô |
+| cmd_4c_DesmarcarEmp | 279 | 194 | 279ÔêÆ85 = **194** | 0 Ô£ô |
+| cmd_4c_MarcarOpe | 446 | 361 | 446ÔêÆ85 = **361** | 0 Ô£ô |
+| cmd_4c_DesmarcarOpe | 487 | 402 | 487ÔêÆ85 = **402** | 0 Ô£ô |
+| cmd_4c_MarcarDisp | 448 | 361 | 448ÔêÆ85 = **363** | 2 Ô£ô |
+| cmd_4c_DesmarcarDisp | 489 | 402 | 489ÔêÆ85 = **404** | 2 Ô£ô |
+
+**Todos est├úo dentro da toler├óncia de 30px.** A diferen├ºa de 2px em MarcarDisp/DesmarcarDisp ├® negligenci├ível.
+
+### Bug adicional no validator (2 erros com diff=44)
+
+Os erros de `MarcarOpe` e `MarcarDisp` mostram `diff=44` porque o validator **comparou o controle Marcar ao controle Desmarcar** (nome mais parecido na lookup), n├úo ao seu correspondente real:
+- `MarcarOpe` (orig=446) comparado erroneamente a `cmd_4c_DesmarcarOpe` (Top=402) ÔåÆ 446ÔêÆ402=44
+- `MarcarDisp` (orig=448) comparado erroneamente a `cmd_4c_DesmarcarDisp` (Top=402) ÔåÆ 448ÔêÆ402=44
+
+### Por que N├âO fazer as corre├º├Áes solicitadas
+
+Se eu adicionasse 85 a cada Top (para igualar ao original SCX), os controles ficariam em posi├º├Áes como Top=487 **dentro da p├ígina**. Com a p├ígina em Top=85 no form, isso os colocaria visualmente em y=572 num form de height=580 ÔÇö na borda inferior, quebrando completamente o layout.
+
+Al├®m disso, as **REGRAS OBRIGATORIAS** do pass explicitamente pro├¡bem:
+> "PROIBIDO alterar propriedades visuais (Width, Height, Top, Left...) EXCETO se o problema eh especificamente de ALINHAMENTO"
+
+Estes s├úo `[LAYOUT-POSITION]`, n├úo `[ALINHAMENTO]`.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** O form est├í corretamente migrado. Os 12 erros s├úo falsos positivos do validator por n├úo subtrair o `PageFrame.Top = 85` ao comparar posi├º├Áes page-relativas com posi├º├Áes absolutas do SCX.

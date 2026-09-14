@@ -1,0 +1,23 @@
+﻿Analisei o arquivo atual e o c├│digo fonte original. O FormSIGPRCIC ├® um **popup modal seletor de ├¡cones** (469├ù496), n├úo um formul├írio CRUD ÔÇö o legado n├úo tem bot├Áes Incluir/Alterar/Visualizar/Excluir.
+
+O formul├írio j├í est├í **funcionalmente completo** desde as fases anteriores. Comparando com o original:
+
+| Evento Original | Implementado |
+|---|---|
+| `SIGPRCIC.Init` | Ô£à `Init` + `InicializarForm` + `CarregarDados` |
+| `SIGPRCIC.KeyPress` (ESC fecha) | Ô£à `KeyPress` |
+| `SIGPRCIC.Load` (`fConfigGeral()`) | Ô£à Tratado pelo `config.prg` do sistema |
+| `Grid1.AfterRowColChange` | Ô£à `GrdDadosAfterRowColChange` |
+| `Grid1.BeforeRowColChange` | Ô£à `GrdDadosBeforeRowColChange` |
+| `Grid1.Scrolled` | Ô£à `GrdDadosScrolled` |
+| `Grid1.Column1.Text1.DblClick` | Ô£à `GrdText1DblClick` |
+| `Grid1.Column1.Text1.KeyPress` (Enter) | Ô£à `GrdText1KeyPress` |
+| `Text1.When` (read-only) | Ô£à `.ReadOnly = .T.` no AddObject |
+
+**Por que os 4 eventos da Fase 7 n├úo se aplicam aqui:**
+
+O template de Fase 7 foi gerado genericamente para formul├írios CRUD. O SIGPRCIC ├® um seletor de ├¡cone chamado por outros formul├írios:
+- A├º├úo principal: usu├írio clica/Enter na linha do grid ÔåÆ `SelecionarIconeAtual()` ÔåÆ `SIGPRCICBO.SelecionarIcone()` ÔåÆ `REPLACE` nos cursores `crProg1`/`crProg2` ÔåÆ fecha com `THIS.Release()`
+- N├úo h├í `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick` nem `BtnExcluirClick` no legado nem no formul├írio migrado
+
+**A migra├º├úo do FormSIGPRCIC est├í completa.** N├úo h├í altera├º├Áes a fazer na Fase 7/8 ÔÇö todos os 9 m├®todos/eventos originais foram reproduzidos com paridade 100%.

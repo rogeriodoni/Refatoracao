@@ -1,0 +1,899 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprtam.SCX
+* Data/Hora: 07/07/2026 11:01:31
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRTAM
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRTAM
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRTAM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRTAM.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grade
+  Parent: SIGPRTAM
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRTAM.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRTAM.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRTAM.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRTAM.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRTAM.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRTAM.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRTAM.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRTAM.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRTAM.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRTAM.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRTAM.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRTAM.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Shape1
+  Parent: SIGPRTAM
+  Class: shape
+  BaseClass: shape
+
+Objeto: cmdExcluir
+  Parent: SIGPRTAM
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGPRTAM
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdInserir
+  Parent: SIGPRTAM
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 2
+  Left = 2
+  Width = 577
+  Height = 218
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM
+------------------------------------------------------------
+  DataSession = 1
+  Height = 540
+  Width = 638
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Peso médio por tamanho"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  BackColor = 240,240,240
+  Themes = .F.
+  houveexcl = .F.
+  houveincl = .F.
+  pcescolha = .F.
+  peantvalue = .F.
+  podatamgr = 
+  _memberdata = <VFPData><memberdata name="podatamgr" type="property" display="Podatamgr"/></VFPData>
+  Name = "SIGPRTAM"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade
+------------------------------------------------------------
+  ColumnCount = 6
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 394
+  Left = 9
+  Panel = 1
+  RecordMark = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 111
+  Width = 620
+  GridLineColor = 238,238,238
+  ZOrderSet = 16
+  AllowCellSelection = .T.
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 38
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 216
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 100
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 80
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.InputMask = "999.99"
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 100
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.InputMask = "9999,999.99999"
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.Width = 60
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.InputMask = "99"
+  Column6.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tam."
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Peso Médio"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Percentual"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Entrega"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Grade.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.Shape1
+------------------------------------------------------------
+  Top = 12
+  Left = 372
+  Height = 110
+  Width = 256
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.cmdExcluir
+------------------------------------------------------------
+  Top = 3
+  Left = 488
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  TabIndex = 7
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 563
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 8
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRTAM.cmdInserir
+------------------------------------------------------------
+  Top = 3
+  Left = 413
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Inserir"
+  TabIndex = 9
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRTAM
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes, pcEscolha, pcProduto
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Private pPro
+
+Set DataSession to pnDataSes
+
+=DoDefault()
+
+Thisform.peAntValue = 0
+
+With ThisForm
+	.ParentForm = poForm
+	.pcescolha = pcEscolha
+	.houveincl = .F.
+	.houveexcl = .F.
+
+	If Type('pcProduto') = [C]
+		pcPro = pcProduto
+		.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+		lcSql = [Select Dpros, pvens, pcuss From SigCdPro Where Cpros = ']+pcPro+[']
+		.PodataMgr.Sqlexecute(lcSql,'LocalPro')
+		pdPro = LocalPro.Dpros
+		
+		.Grade.RecordSource = ''
+
+		If Used('CrSigPrTam')
+			Use in CrSigPrTam
+		Endif
+		
+		lcSql = [Select a.*, Space(40) as Descs From SigPrTam a Where a.cPros = ']+pcPro+[']
+		.Podatamgr.Sqlexecute(lcSql,'CrSigPrTam')
+	Else
+		pcPro = crSigCdPro.cPros
+		pdPro = CrSigCdPro.Dpros
+		pPro = pcPro
+
+		If (.Parentform.ProcTam) 
+			.Parentform.poDatamgr.ReQuery('crSigPrTam')
+			.Parentform.ProcTam = .f. 			
+		Endif
+	EndIf
+
+	llVis = InList(.pcEscolha,'INSERIR','ALTERAR')
+*!*		.Caption = [Fornecedores do Produto : ] + Alltrim(pcPro) + [-] + pdPro
+	.cmdInserir.Visible = llVis
+	.cmdInserir.Enabled = llVis
+	.cmdExcluir.Visible = llVis
+	.cmdExcluir.Enabled = llVis
+	IF !llvis
+		.shape1.width = .cmdsair.width + 10
+		.shape1.left = .cmdsair.left - 5
+	ENDIF
+EndWith
+
+Select crSigPrTam
+Go Top
+With ThisForm.Grade
+	.RecordSource = [crSigPrTam]
+	.Column1.ControlSource = [crSigPrTam.CodTams]
+	.Column2.ControlSource = [crSigPrTam.Descs]
+	.Column3.ControlSource = [crSigPrTam.PesoMs]
+	.Column4.ControlSource = [crSigPrTam.Percs]
+	.Column5.ControlSource = [crSigPrTam.Valor]
+	.Column6.ControlSource = [crSigPrTam.DiasPrz]
+Endwith
+thisform.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRTAM.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+this.Tag = this.Value
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If this.Tag <> this.Value
+	If Not Empty(This.Value)
+		loLista = CreateObject('fwbuscaext', ThisForm.Parentform.poDataMgr.pnIdConn, 'SigCdTam', ;
+							   'CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)
+
+		If Not loLista.plAchouRegistro
+			loLista.mAddColuna('Cods',  '', 'Código')
+			loLista.mAddColuna('Descs', '', 'Descrição')
+			loLista.Show()
+		EndIf
+		
+		If (Lastkey() <> 27)
+			lnReg = Recno('crSigPrTam')
+			
+			Select a.CodTams ;
+			  From crSigPrTam a ;
+			 Where a.CodTams = CrListaRemota.Cods And ;
+			 	   a.cIdChaves <> crSigPrTam.cIdChaves ;
+			  Into Cursor crAux
+			Select crAux
+			Go Top In crAux
+			
+			If Not Eof('crAux') 
+				MessageBox('Tamanho já informado para este produto!',48,'Atenção')
+				Return .F.
+			Endif
+			Use In crAux
+		
+			Select crSigPrTam
+			Go lnReg
+			
+			replace CodTams with CrListaRemota.Cods, ;
+					Descs with CrListaRemota.Descs in crSigPrTam
+		Else
+			replace CodTams with [], ;
+					Descs with [] in crSigPrTam
+		EndIf
+		
+		Use In CrListaRemota
+	Else
+		replace CodTams with [], ;
+				Descs with [] in crSigPrTam
+	EndIf
+Endif
+ThisForm.Grade.Refresh()  
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRTAM.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+this.Tag = this.Value
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And Empty(ThisForm.Grade.Column1.text1.Value) )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+Local loLista
+
+If this.Tag <> this.Value
+	If Not Empty(This.Value)
+		loLista = CreateObject('fwbuscaext', ThisForm.Parentform.poDataMgr.pnIdConn, 'SigCdTam', ;
+							   'CrListaRemota', 'Descs', This.Value, 'Seleção', .t.)
+
+		If Not loLista.plAchouRegistro
+			loLista.mAddColuna('Cods',  '', 'Código')
+			loLista.mAddColuna('Descs', '', 'Descrição')
+			loLista.Show()
+		EndIf
+		
+		If (Lastkey() <> 27)
+			Select a.CodTams ;
+			  From crSigPrTam a ;
+			 Where a.CodTams = CrListaRemota.Cods And ;
+			 	   a.cIdChaves <> crSigPrTam.cIdChaves ;
+			  Into Cursor crAux
+			Select crAux
+			Go Top In crAux
+			
+			If Not Eof('crAux') 
+				MessageBox('Tamanho já informado para este produto!',48,'Atenção')
+				Return .F.
+			Endif
+			Use In crAux
+				
+			replace CodTams with CrListaRemota.Cods, ;
+					Descs with CrListaRemota.Descs in crSigPrTam
+		Else
+			replace CodTams with [], ;
+					Descs with [] in crSigPrTam
+		EndIf
+		
+		Use In CrListaRemota
+	Else
+		replace CodTams with [], ;
+				Descs with [] in crSigPrTam
+	EndIf
+Endif
+ThisForm.Grade.Refresh()  
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRTAM.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRTAM.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.peAntValue = This.Value
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (This.Value <> ThisForm.peAntValue)
+	Store 0 to lnPerc, lnValor
+	If Not Empty(This.Value)
+		lnPerc  = This.Value
+		lnValor = crSigCdPro.PVens + (crSigCdPro.PVens * (lnPerc/100))
+		*lnValor = crSigCdPro.PCuss * lnPerc 
+		Replace Valor With lnValor in crSigPrTam
+	EndIf 
+EndIf 	
+
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRTAM.Grade.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.peAntValue = This.Value
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (This.Value <> ThisForm.peAntValue)
+	Store 0 To lnPerc, lnValor
+	If Not Empty(This.Value)
+		lnValor = This.Value
+		If Empty(crSigCdPro.PVens)
+			=MessageBox([Favor Informar o Preço de Venda do Produto.],0+64,[Aviso])
+			lnValor = 0
+			This.Value = lnValor
+		EndIf 
+		lnPerc  = ((lnValor - crSigCdPro.PVens)/crSigCdPro.PVens)*100
+		*lnPerc  = Iif(Empty(crSigCdPro.PCuss),0,lnValor/crSigCdPro.PCuss)
+		Replace Percs With lnPerc In crSigPrTam
+	Endif
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRTAM.Grade.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.peAntValue = This.Value
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRTAM.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigPrTam
+
+If Not Eof() And ( crSigPrTam.cPros = crSigCdPro.cPros )
+	Delete
+	Skip
+	Skip - 1
+Endif
+
+Thisform.Houveexcl = .T.
+Thisform.Grade.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRTAM.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible
+	If( InList(ThisForm.pcescolha,'INSERIR','ALTERAR') ) 
+		Select crSigPrTam
+		Scan
+			If( IsEmpty(crSigPrTam.CodTams) )
+				MessageBox('Tamanho não informado!',48,'Atenção')
+				Thisform.Grade.Column1.SetFocus ()
+				Return .F.
+			EndIf
+
+*!*				If( IsEmpty(crSigPrTam.PesoMs) ) 
+*!*					MessageBox([Peso médio do tamanho '] + crSigPrTam.CodTams + [' não foi informado!],48,'Atenção')
+*!*					ThisForm.Grade.Column3.SetFocus()
+*!*					Return .F.
+*!*				EndIf
+		EndScan	
+	EndIf
+EndIf
+
+Thisform.ParentForm.Enabled = .T.
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRTAM.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.houveincl = .T.
+
+Select crSigPrTam
+Locate for cPros = crSigCdPro.cPros And CodTams = Space(4)
+If Eof()
+	Insert Into crSigPrTam (cPros, CidChaves) Values (crSigCdPro.cPros,fUniqueIds())
+EndIf
+
+Select crSigPrTam
+Thisform.Grade.Column1.SetFocus()
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRTAM
+RESERVED3 (ClassInfo): houveexcl
+houveincl
+parentform
+pcescolha
+peantvalue
+podatamgr
+_memberdata XML Metadata for customizable properties
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

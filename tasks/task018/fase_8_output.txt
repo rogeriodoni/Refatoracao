@@ -1,0 +1,22 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**FormUfs.prg** ÔÇö m├®todo adicionado:
+- `AjustarBotoesPorModo()` (linha ~1905): habilita/desabilita os bot├Áes Visualizar, Alterar e Excluir da Page1 conforme a exist├¬ncia de registros no cursor. Incluir, Buscar e Encerrar ficam sempre habilitados.
+
+**Verifica├º├úo dos m├®todos da Fase 8** ÔÇö todos j├í estavam implementados nas fases anteriores:
+- `BtnBuscarClick()` Ô£ô ÔÇö FormBuscaAuxiliar com mAddColuna + filtro
+- `BtnEncerrarClick()` Ô£ô ÔÇö THIS.Release()
+- `BtnSalvarClick()` Ô£ô ÔÇö valida├º├úo fora do TRY, FormParaBO(), Salvar()
+- `BtnCancelarClick()` Ô£ô ÔÇö AlternarPagina(1) + CarregarLista()
+- `FormParaBO()` Ô£ô ÔÇö todos os 20+ campos mapeados incluindo checkboxes Sintegra
+- `BOParaForm()` Ô£ô ÔÇö todos os campos, IPI via PADR, flags num├®ricoÔåÆl├│gico
+- `HabilitarCampos()` Ô£ô ÔÇö regras PB/MS, depend├¬ncias Ger50ÔåÆGer54 e Ger60ÔåÆI/D/R/P
+- `LimparCampos()` Ô£ô ÔÇö todos os campos zerados
+- `CarregarLista()` Ô£ô ÔÇö 5 colunas com ControlSource e Headers redefinidos ap├│s RecordSource
+
+**menu.prg** ÔÇö adicionado:
+- `DEFINE BAR 19` (separador) e `DEFINE BAR 20` ("Estados (UFs)") em `popCadastros`
+- `ON SELECTION BAR 20 OF popCadastros DO AbrirFormUfs`
+- `PROCEDURE AbrirFormUfs()` com padr├úo correto (VARTYPE, Show() sem par├ómetro, sem Release())
+
+**config.prg** ÔÇö nenhuma altera├º├úo necess├íria: o ADIR() j├í carrega automaticamente todos os `*BO.prg` de `app/classes/` e `Form*.prg` de `app/forms/cadastros/`.

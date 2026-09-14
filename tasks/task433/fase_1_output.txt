@@ -1,0 +1,10 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\FTFBO.prg` criado com 216 linhas contendo:
+
+- **Propriedades**: `this_nOrdem` (nordems, numeric 2,0 ÔÇö PK) e `this_cDescricao` (cdescrs, char 20)
+- **Init()**: configura `this_cTabela = "SigFiNz"` e `this_cCampoChave = "nordems"`
+- **ObterChavePrimaria()**: retorna `TRANSFORM(this_nOrdem)` para auditoria
+- **CarregarDoCursor()**: usa `SELECT (par_cAliasCursor)` antes de acessar campos
+- **Buscar()**: SELECT com ORDER BY nordems, suporte a filtro opcional, cursor `crSigFiNz` (nome do legado)
+- **CarregarPorCodigo()**: carrega por nordems, reseta `this_lNovoRegistro = .F.`
+- **Inserir() / Atualizar() / ExecutarExclusao()**: m├®todos PROTECTED completos com auditoria
+- **VerificarOrdemExistente()**: equivalente ao `ChkRegister('SigFiNz','nordems',valor)` do legado ÔÇö valida unicidade antes de INSERT

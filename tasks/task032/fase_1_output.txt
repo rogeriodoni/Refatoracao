@@ -1,0 +1,13 @@
+﻿**Fase 1/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\classes\sigreappBO.prg` foi criado com:
+
+- `DEFINE CLASS sigreappBO AS RelatorioBase` (heran├ºa correta para REPORT)
+- **24 propriedades** `this_*` cobrindo todos os filtros do formul├írio original:
+  - Filtros de data (`this_dDtInicial`, `this_dDtFinal`)
+  - 5 OptionGroups (`this_nOptAnaSi`, `this_nOptDatas`, `this_nOptSaldos`, `this_nOptAutorizados`, `this_nOptJuros`)
+  - Par grupo/conta/job com c├│digo + descri├º├úo cada
+  - Checkboxes pagamentos/recebimentos como num├®rico (0/1, conforme regra VFP9)
+  - Propriedades de runtime (`this_nVlCotacao`, `this_cSaldos1`, `this_cSaldos2`)
+- `Init()` com TRY/CATCH, sem RETURN dentro do TRY, defaults id├¬nticos ao `SIGREAPP.Init()` original (`DATE()` para datas, `this_nVlCotacao=1`, `this_nOptJuros=2` para "N├úo")
+- `Destroy()` chamando `DODEFAULT()`
+
+Nenhum stub ou TODO gerado. Pr├│xima fase: Fase 2 criar├í `PrepararDados()` com os SQLs de processamento.

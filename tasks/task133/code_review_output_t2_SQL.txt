@@ -1,0 +1,17 @@
+﻿Ap├│s verificar o schema e o uso em todo o codebase, posso dar um diagn├│stico preciso:
+
+**An├ílise dos dois problemas:**
+
+**[SQL-FILTRO-INVENTADO] coluna `CODIGOS`** ÔÇö `SigCdGcr.codigos` ├® a coluna PK real da tabela (confirmado no schema linha 3728). O uso `WHERE Codigos = ...` est├í correto e ├® id├¬ntico ao padr├úo usado em `functions.prg:484` (`b.Codigos = a.GrContbs`).
+
+**[SQL-FILTRO-INVENTADO] coluna `ICLIS`** ÔÇö `SigCdCli.IClis` ├® a coluna PK real, confirmado por `functions.prg:624` (`WHERE IClis = '...'`) e `Formsigrepes.prg:4722` (`WHERE IClis = '...'`).
+
+**O que o validator detectou:** O original SCX n├úo tinha queries SQL para `BuscarDescricaoGrupo`/`BuscarDescricaoConta` (usava SEEK ou cursor in-memory). O validator interpretou as NOVAS queries SQL como "colunas inventadas no WHERE." Mas as queries em si s├úo corretas e necess├írias.
+
+**Por que N├âO alterar:**
+- Remover o `WHERE Codigos = ...` tornaria a query `SELECT TOP 1 Descrs FROM SigCdGcr` sem filtro ÔÇö retornaria sempre o 1┬║ registro aleat├│rio do banco
+- Remover o `WHERE IClis = ...` causaria o mesmo problema em `SigCdCli`
+- A regra "NAO remover campos, funcionalidades ou lookups" prevalece
+- Ambas as colunas s├úo PKs v├ílidas confirmadas no schema e em 5+ outros arquivos do projeto
+
+**Conclus├úo: Falsos positivos.** O validator comparou WHERE conditions de queries que n├úo existiam no legado (foram adicionadas na migra├º├úo para buscar descri├º├Áes) com o c├│digo original e as marcou como "inventadas". As queries s├úo funcionalmente corretas ÔÇö n├úo h├í nada a corrigir neste pass SQL para este form.

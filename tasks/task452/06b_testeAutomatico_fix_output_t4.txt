@@ -1,0 +1,5 @@
+﻿O grid agora segue o padr├úo correto: ColumnCount=2 ÔåÆ WITH block (ControlSources) ÔåÆ RecordSource="cursor_4c_Emps" ÔåÆ ColumnCount=2. Sem ColumnCount=3 esp├║rio.
+
+A corre├º├úo resolve o TIMEOUT: o `ColumnCount = 3` antes do `RecordSource = "cursor_4c_Emps"` for├ºava o VFP9 a tentar criar uma Column3 sem ControlSource e depois vincul├í-la ao cursor de apenas 2 campos ÔÇö ao definir o RecordSource, o VFP9 tentava auto-vincular Column3 ao 3┬║ campo inexistente, gerando um crash interno (n├úo-catchable) que produzia um dialog de sistema bloqueante, travando o processo por exatamente 300 segundos.
+
+**Fix aplicado:** removida a linha `loc_oPagina.grd_4c_Dados.ColumnCount = 3` de `ConfigurarPaginaDados()`. O RecordSource agora ├® definido diretamente ap├│s o WITH block, com ColumnCount j├í em 2, seguindo o padr├úo can├┤nico Problema36.

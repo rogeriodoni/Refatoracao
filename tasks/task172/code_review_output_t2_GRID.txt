@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `Formsigprdis.prg`:
+
+- **Linha 761** (`CarregarEstoque` / `grd_4c_Estoque`): adicionado `Column1-4.ControlSource` imediatamente ap├│s `RecordSource = "cursor_4c_Estoque"`, antes dos child control ControlSources.
+- **Linha 2543** (`CarregarCabOperas` / `grd_4c_CabOperas`): adicionado `Column1-8.ControlSource` ap├│s `RecordSource = "cursor_4c_CabOperas"`.
+- **Linha 2602** (`CarregarItnOperas` / `grd_4c_ItnOperas`): adicionado `Column1-9.ControlSource` ap├│s `RecordSource = "cursor_4c_ItnOperas"`.
+
+Em todos os 3 casos, o VFP9 agora tem o `ControlSource` expl├¡cito no n├¡vel da coluna antes do auto-bind ocorrer, impedindo que a ordem dos campos do cursor sobrescreva o binding pretendido.

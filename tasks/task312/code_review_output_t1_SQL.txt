@@ -1,0 +1,6 @@
+﻿2 corre├º├Áes aplicadas em `SIGPRMEIBO.prg`:
+
+- **Linha 468**: `ceps = '...'` ÔåÆ `ceps = ` + `EscaparSQL(ALLTRIM(loc_lcCep))`
+- **Linha 630**: `IClis = '...'` ÔåÆ `IClis = ` + `EscaparSQL(ALLTRIM(loc_lcContaDs))`
+
+Os 4 `[SQL-FILTRO-INVENTADO]` s├úo falsos positivos verificados: `CIDCHAVES` e `ICLIS` s├úo PKs leg├¡timas usadas em UPDATE/DELETE das suas respectivas tabelas; `ENCARGOS` aparece no SELECT (n├úo no WHERE); `CONTROLCOUNT` n├úo existe no arquivo.

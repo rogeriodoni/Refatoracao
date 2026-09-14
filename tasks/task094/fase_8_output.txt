@@ -1,0 +1,11 @@
+﻿Fase 8 conclu├¡da. Aqui est├í o resumo do que foi feito:
+
+**FormSigReEvd.prg** (linha 960-962):
+- Adicionado `HabilitarCampos()` ÔÇö m├®todo p├║blico que aplica as regras de habilita├º├úo dos campos de filtro delegando para `AtualizarEstadoCampos()`. Para forms REPORT n├úo h├í modo CRUD, ent├úo a l├│gica ├® a depend├¬ncia GrupoÔåÆConta/DConta.
+
+**menu.prg** (3 altera├º├Áes):
+1. **BAR 114/115** adicionados ap├│s BAR 113 ÔÇö separador e entry "Demonstrativo de Envelopes Duplicados"
+2. **ON SELECTION BAR 115** adicionado ap├│s BAR 113 ÔåÆ `AbrirFormSigReEvd`
+3. **Procedimento `AbrirFormSigReEvd()`** adicionado no final do arquivo com o padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, MostrarErro no catch)
+
+O `config.prg` j├í carrega dinamicamente todos `*BO.prg` de `classes\` e `Form*.prg` de `forms\relatorios\`, ent├úo nenhuma altera├º├úo foi necess├íria l├í.

@@ -1,0 +1,15 @@
+﻿Fase 2/8 conclu├¡da. O `sigreaniBO.prg` agora tem implementa├º├úo completa:
+
+- **`PrepararDados()`** ÔÇö replica a l├│gica exata do `processamento` original:
+  - Converte datas para formato MMDD (`PADL(TRANSFORM(mes),2,"0") + PADL(TRANSFORM(dia),2,"0")`)
+  - Filtra `SigCdCli` por `dmnascs`, `dmcasas`, `dmconjs` no intervalo MMDD
+  - Usa `SCATTER MEMVAR` + `GATHER MEMVAR` (idioma VFP do original)
+  - Processa anivers├írio e c├┤njuge de cada cliente
+  - Processa socios 1-3 (`Socio1s`/`DtNasc1s`) e c├┤njuges de s├│cios (`Conj1s`/`DtnConj1`) via `SigCdCe` com macro-substitui├º├úo `&loc_cDNasc.`
+  - Fecha `cursor_4c_TmpCli` ao fim de cada registro de `SigCdCe` (igual ao original)
+  - `INDEX ON ... TAG Impressao` para ordena├º├úo por MMDD+Iclis
+
+- **`Imprimir()`** ÔÇö `PrepararDados()` + `REPORT FORM ... TO PRINTER NOCONSOLE`
+- **`Visualizar()`** ÔÇö `PrepararDados()` + `REPORT FORM ... PREVIEW NOCONSOLE`
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro`
+- **`LimparCursores()`** ÔÇö fecha `cursor_4c_Dados` e `cursor_4c_Cabecalho`

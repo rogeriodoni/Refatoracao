@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto e completo. A Fase 2 est├í conclu├¡da.
+
+**`SigReIprBO.prg` agora cont├®m:**
+
+- **`PrepararDados()`** ÔÇö l├│gica completa do `processamento()` original: monta `CsCabecalho`, executa SQLEXEC em `SigMlCab JOIN SigCdCli`, constr├│i cursor `Relacao READWRITE` com flags de checkbox como colunas, preenche `CodReps` via SCAN se `ImpRepres=1`, chama ordena├º├úo. Nenhum `RETURN` dentro de TRY/CATCH (regra VFP9 #1 respeitada).
+
+- **`AplicarOrdenacao()`** ÔÇö replica os 6 casos de ordena├º├úo do `DO CASE` original (Alfab├®tica, CEP, DtNascimento, DtCasamento, NascConjuge, DtComemorativa) com suporte a Ascendente/Descendente.
+
+- **`Visualizar()`** / **`Imprimir()`** / **`Documento()`** ÔÇö equivalentes dos m├®todos `visualizacao`, `impressao`, `documento` do legado, chamam `PrepararDados()` + `REPORT FORM SigMlda.frx`.
+
+- **`ObterChavePrimaria()`**, **`ObterMensagemErro()`**, **`Destroy()`** ÔÇö suporte completo com limpeza dos cursores.

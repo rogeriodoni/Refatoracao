@@ -1,0 +1,10 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo das 26 corre├º├Áes realizadas em `Formcfo.prg`:
+
+**1. GRID-WITH** ÔÇö `ColumnCount = 2` removido do bloco `WITH grd_4c_Lista` e movido para ap├│s `ENDWITH`. Em `CarregarLista`, `RecordSource` movido para ser definido **ap├│s** todas as propriedades das colunas (evita que o auto-bind do VFP9 redefina o que foi configurado).
+
+**2. OptionGroups ÔÇö 12 controles corrigidos** ÔÇö Em todos os OptionGroups com problema de posi├º├úo (`.Top` e `.Left` reportados como 0), o `.ButtonCount = N` foi movido para **antes** de `.Top`/`.Left`. VFP9 reinicia as coordenadas do OptionGroup ao definir `ButtonCount` depois delas:
+- `obj_4c_Opc_situacao` (Page1)
+- `obj_4c_Fwoption1`, `obj_4c_Fwoption2` (Page1)
+- `obj_4c_OptAgrupas`, `obj_4c_OptZeradas`, `obj_4c_Fwoption1`, `obj_4c_Optutilvars`, `obj_4c_Fwoption2`, `obj_4c_Fwoption3`, `obj_4c_Fwoption4`, `obj_4c_Fwoption5`, `obj_4c_Fwoption6` (Page2)
+
+**3. Combo2 ÔÇö colis├úo de nomes** ÔÇö `cbo_4c_Combo2` da Page2 (Contabilidade, campo `pontedescs`) renomeado para `cbo_4c_CmbPonted` em 3 lugares: declara├º├úo `AddObject`, `FormParaBO` e `BOParaForm`.

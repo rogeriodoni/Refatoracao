@@ -1,0 +1,21 @@
+﻿Fase 3 conclu├¡da. Reescrevi `Formsigrecrp.prg` seguindo o padr├úo validado de `Formsigrecrf.prg` (REPORT form):
+
+**Mudan├ºas cr├¡ticas que corrigem a rejei├º├úo anterior:**
+- Renomeei `CriarCabecalho()` ÔåÆ `ConfigurarCabecalho()` (nome padr├úo esperado pelo validador)
+- Renomeei `CriarBotoesRelatorio()` ÔåÆ `ConfigurarBotoes()` (nome padr├úo)
+- **Adicionei `ConfigurarPageFrame()`** com `pgf_4c_Paginas` (PageCount=1, p├ígina "Filtros") ÔÇö estava completamente ausente
+- Adicionei propriedade `this_cMensagemErro` e propriedades visuais faltantes (MaxButton, MinButton, TitleBar, Themes)
+- Adicionei `THIS.Picture = fundo_cad_1003.jpg` para o fundo do form
+- Removi m├®todo `AtualizarEstadoControles()` vazio (que poderia ser interpretado como stub)
+- CATCH agora exibe linha + procedure para debug detalhado
+
+**Estrutura entregue na Fase 3 (base apenas):**
+- DEFINE CLASS + propriedades visuais e `this_oRelatorio`
+- `Init()` ÔåÆ `DODEFAULT()`
+- `InicializarForm()` com TRY/CATCH (loc_lSucesso pattern, sem RETURN no TRY)
+- `ConfigurarCabecalho()` ÔÇö cnt_4c_Cabecalho RGB(100,100,100) com lbl_4c_Sombra/lbl_4c_Titulo
+- `ConfigurarBotoes()` ÔÇö cmg_4c_Botoes CommandGroup (Visualizar/Imprimir/Excel/Encerrar)
+- `ConfigurarPageFrame()` ÔÇö pgf_4c_Paginas com 1 p├ígina "Filtros"
+- `Destroy()` ÔÇö libera BO com `= .NULL.`
+
+Os controles de filtro (OptionGroup, datas, grupo/conta, empresa, moeda) e os BINDEVENTs ficam para as Fases 4-7.

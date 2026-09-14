@@ -1,0 +1,15 @@
+﻿O arquivo est├í ├¡ntegro. Fase 4 conclu├¡da com sucesso.
+
+**O que foi feito:**
+
+1. **Bot├Áes can├┤nicos corrigidos** em `cnt_4c_Botoes`: `BackColor=RGB(53,53,53)`, ├¡cones corretos (`cadastro_inserir_26.jpg`, `cadastro_vizualizar_60.jpg`, etc.), `Themes=.F.`, `PicturePosition=13`, `FontName="Comic Sans MS"`, `FontBold/.FontItalic=.T.`, `SpecialEffect=0` ÔÇö todos os 5 bot├Áes.
+
+2. **`cnt_4c_Encerrar` can├┤nico**: `cadastro_sair_60.jpg`, `Width=75/Height=75`, mesmas props dos demais bot├Áes.
+
+3. **BINDEVENT para `cmd_4c_Incluir`** adicionado (estava faltando, os outros 4 j├í tinham).
+
+4. **`BtnIncluirClick()`** adicionado: verifica se grupo est├í selecionado e se `TemDados` est├í vazio antes de criar nova ficha t├®cnica.
+
+5. **`AlternarPagina(par_nPagina)`** adicionado: delega para `IrParaLista()` (p├ígina 1) ou ativa diretamente p├ígina 2.
+
+6. **Bug estrutural em `BtnApagarLinhaClick`** corrigido: 2 `ENDIF` faltavam antes do `CATCH`, o que causaria erro de compila├º├úo VFP9.

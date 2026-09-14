@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e bem formado. **Fase 2/8 conclu├¡da.**
+
+`sigrefc2BO.prg` agora tem 1317 linhas com implementa├º├úo completa:
+
+**O que foi adicionado (al├®m das propriedades da Fase 1):**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Atualizado: carrega `SigCdPam` e `SigOpFp` do SQL Server (igual ao padr├úo sigrefc1BO) |
+| `Destroy()` | Libera cursores `CrSigCdPam`, `CrSigOpFp`, `csSigCdTom`, `csRelatorio`, `csCabecalho` |
+| `PrepararDados()` | Orquestra o processamento completo ÔÇö define `PRIVATE pDtI/pDtF/pDtH` para queries parametrizadas, cria `csRelatorio`, delega por tipo (1=Vis├úo Detalhada, 2=Mapa de Fechamento) |
+| `PrepararMapaFechamento()` | Bloco `lnTpRel=2` do legado ÔÇö mapa por data/loja/vendedor |
+| `PrepararVisaoDetalhada()` | Bloco `lnTpRel=1` ÔÇö 7 queries SQL (vendas, pagamento efetuado, devolu├º├Áes, e-commerce, recebimentos, consertos, cart├Áes por adquirente) |
+| `PrepararFechamentoConserto()` | Procedimento `preparafechamentoconserto` do legado ÔÇö detalhamento OS pagas |
+| `Imprimir()` / `Visualizar()` / `GerarExcel()` | Chamam `PrepararDados()` e executam o FRX |
+| `CarregarDoCursor()` | Carrega filtros de cursor externo |
+| `ObterChavePrimaria()` | Retorna chave composta empresa+datas+tipo |
+| `ObterMensagemErro()` | Retorna `this_cMensagemErro` |
+| `Inserir()` / `Atualizar()` | Stubs que retornam `.F.` (n├úo aplic├ível a relat├│rios) |

@@ -1,0 +1,8 @@
+﻿Todos os `RETURN .F.` restantes est├úo fora do TRY/CATCH (s├úo early exits antes do TRY). O arquivo est├í correto.
+
+**Fase 2/8 conclu├¡da.** O LinBO.prg j├í existia com todos os m├®todos CRUD da Fase 1 e foi corrigido com:
+
+1. **`CarregarPorCodigo`**: valida├º├úo `EMPTY(par_cLinhas)` movida para antes do TRY
+2. **`SalvarFases`**: substitu├¡dos 2├ù `RETURN .F.` dentro do TRY por flag `loc_lErroLoop` + `EXIT`; adicionada coluna `etiquetas` no INSERT (estava ausente mas existe na tabela como NOT NULL)
+3. **`SalvarComposicao`**: mesma corre├º├úo; adicionadas colunas `cgrus`, `grupos`, `ordcompos` no INSERT (existem na tabela SigCdLni)
+4. **`SalvarComposicaoObrigatoria`**: mesma corre├º├úo de RETURN dentro do TRY

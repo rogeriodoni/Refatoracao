@@ -1,0 +1,657 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDDCC.SCX
+* Data/Hora: 31/07/2026 23:43:27
+* Total de registros: 20
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDDCC
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDDCC
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDDCC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDDCC.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GradeFPagto
+  Parent: SIGCDDCC
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDDCC.GradeFPagto.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDDCC.GradeFPagto.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDDCC.GradeFPagto.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDDCC.GradeFPagto.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDDCC.GradeFPagto.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDDCC.GradeFPagto.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDDCC.GradeFPagto.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDDCC.GradeFPagto.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_total
+  Parent: SIGCDDCC
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdSair
+  Parent: SIGCDDCC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdInserir
+  Parent: SIGCDDCC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdExcluir
+  Parent: SIGCDDCC
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 1
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Descontos Concedido no Caixa"
+  ControlBox = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  pcescolha = .F.
+  pemps = .F.
+  podatamgr = .F.
+  Name = "SIGCDDCC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.cntSombra
+------------------------------------------------------------
+  Top = -1
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.GradeFPagto
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Verdana"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 259
+  Left = 32
+  RowHeight = 16
+  ScrollBars = 2
+  ToolTipText = "Grade de Motivos de Descontos"
+  Top = 214
+  Width = 734
+  GridLineColor = 238,238,238
+  Name = "GradeFPagto"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.Width = 270
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Verdana"
+  Column3.FontSize = 8
+  Column3.Width = 90
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.InputMask = "999,999,999.99"
+  Column3.Name = "Column3"
+  Column4.FontName = "Verdana"
+  Column4.FontSize = 8
+  Column4.Width = 260
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.GradeFPagto.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Motivo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.GradeFPagto.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.GradeFPagto.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.GradeFPagto.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.GradeFPagto.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.GradeFPagto.Column3.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999,999,999.99"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.GradeFPagto.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Observação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.GradeFPagto.Column4.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.Get_total
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "999,999,999.99"
+  Left = 673
+  MaxLength = 14
+  ToolTipText = "Total"
+  Top = 478
+  Width = 92
+  ForeColor = 90,90,90
+  BackColor = 224,253,254
+  Name = "Get_total"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.cmdSair
+------------------------------------------------------------
+  Top = 2
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.cmdInserir
+------------------------------------------------------------
+  Top = 2
+  Left = 573
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "\<Inserir"
+  ToolTipText = "Inserir Item"
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDCC.cmdExcluir
+------------------------------------------------------------
+  Top = 2
+  Left = 649
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "\<Excluir"
+  ToolTipText = "Excluir Item"
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDDCC
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes, pEmpresa
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm          = poForm
+Thisform.ParentForm.Enabled  = .F.
+ThisForm.pcescolha = ThisForm.parentform.pcEscolha
+ThisForm.Podatamgr = ThisForm.ParentForm.Podatamgr
+ThisForm.pEmps     = Iif(Type('pEmpresa') = [C],pEmpresa,_Empr)
+
+With Thisform
+	.cmdInserir.Visible = fChecaAcesso('SigMvEtd','INSERIR')
+	.cmdInserir.Enabled = fChecaAcesso('SigMvEtd','INSERIR') And InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+	.cmdExcluir.Visible = fChecaAcesso('SigMvEtd','EXCLUIR')
+	.cmdExcluir.Enabled = fChecaAcesso('SigMvEtd','EXCLUIR') And InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+EndWith
+
+Select [] as agrupar,Sum(Valos) as valos From xEestDsc group by 1 Into cursor selecao
+ThisForm.Get_total.Value = Selecao.Valos
+ThisForm.Get_total.Refresh
+
+Select xEestDsc
+Go Top
+With Thisform.GradeFPagto
+	.RecordSource          = 'XEestDsc'
+	.Column1.ControlSource = 'xEestDsc.MotDscs'
+	.Column2.ControlSource = 'xEestDsc.Descs'
+	.Column3.ControlSource = 'xEestDsc.Valos'
+	.Column4.ControlSource = 'xEestDsc.Obs'
+	.Readonly = Not InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+	.Refresh
+EndWith
+
+THisForm.GradeFPagto.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDCC.GradeFPagto.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not IsEmpty(This.Value)
+	lcSql = [Select Nascs, DtnCons From SigCdCli Where Iclis = ']+TprMvCab.ContaDs+[']
+	If (ThisForm.poDataMgr.SqlExecute(lcSql, [LocalCli]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCli)])
+		Return 0
+	EndIf
+	lcQuery = [Select a.*, b.Emps, c.Dopes ] + ;
+				[From SigCdFs a Left Join SigCdFsI b On a.Codigos = b.Codigos ] + ;
+				[Left Join SigCdFsO c On a.Codigos = c.Codigos ] + ;
+			   [Where a.Tipos = 'D' And a.TpDescs <> 2 ] + ;
+			   [Order By a.Codigos]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalMdsc2]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalMdsc2)])
+		Return 0
+	EndIf
+
+	Select 1 as Flag,* From LocalMdsc2 Where (IsEmpty(PerFins) Or PerFins >= TprMvCab.Datas) And ;
+	(IsEmpty(PerInis) Or PerInis >= TprMvCab.Datas) Into Cursor LocalMdSc1 ReadWrite
+	Select LocalMdSc1
+	Scan
+		If LocalMdSc1.ChkDtAnivs = 1
+			If NOt ( ( Not IsEmpty(LocalCli.Nascs) And month(TprMvCab.Datas) = month(LocalCli.Nascs)) Or ;
+				( NOt IsEmpty(LocalCli.DtnCons) And month(TprMvCab.Datas) = month(LocalCli.DtnCons) ) )
+				Replace Flag With 0 In LocalMdSc1
+			Endif
+		Endif
+	EndScan
+
+	Select Distinct Codigos, Descrs From LocalMdsc1 Where Nvl(Emps,ThisForm.pEmps) = ThisForm.pEmps ;
+	And Nvl(Dopes,TprMvCab.Dopes) = TprMvCab.Dopes Into Cursor TmpMdsc ReadWrite
+	Select TmpMdsc
+	Index on Codigos Tag Codigos
+
+	If !Seek( This.Value, 'TmpMdsc', 'Codigos' )
+		loBrowse = CreateObject( 'fwBuscaSel', 'TmpMdsc', 'codigos', This.Value, 'Cadastro de Motivos' )
+		loBrowse.AddColuna( 'Codigos', '', 'Código', .t., 'Codigos' )
+		loBrowse.AddColuna( 'Descrs', '', 'Descricao' )
+		loBrowse.Show
+		This.Value = TmpMdsc.Codigos
+	Endif
+	Replace Descs With TmpMdsc.Descrs in xEestDsc
+Else
+	Replace Descs With ' ' in xEestDsc
+EndIf
+ThisForm.GradeFPagto.Column2.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDCC.GradeFPagto.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDCC.GradeFPagto.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Select [] as agrupar,Sum(Valos) as valos From xEestDsc group by 1 Into cursor selecao
+ThisForm.Get_total.Value = Selecao.Valos
+ThisForm.Get_total.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Not Empty(ThisForm.GradeFPagto.Column1.Text1.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDCC.GradeFPagto.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Not Empty(ThisForm.GradeFPagto.Column1.Text1.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDCC.Get_total
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDCC.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select xEestDsc
+Scan
+	If Valos <> 0 And (Empty(MotDscs) )
+		MessageBox('Favor informar os dados corretamente. Todos os campos deverão estar preenchidos',0+16,'')
+		Return .f.
+	Endif
+EndScan
+Thisform.ParentForm.Enabled = .T.
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDCC.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Insert Into XEestDsc (Cidchaves) Values ( '  ' )
+Select xEestDsc
+Thisform.GradeFPagto.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDCC.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select xEestDsc
+If Not Eof()
+	Delete
+	Skip
+	Skip -1
+EndIf
+Thisform.GradeFPagto.Refresh
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDDCC
+RESERVED3 (ClassInfo): antvalue
+parentform
+pcescolha
+pemps
+podatamgr
+*mctrlbotoes 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

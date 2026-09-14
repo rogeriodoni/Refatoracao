@@ -1,0 +1,8 @@
+﻿Corre├º├Áes aplicadas. Resumo das 4 ocorr├¬ncias:
+
+| # | Issue | Arquivo | A├º├úo |
+|---|-------|---------|------|
+| 1 | SQL-ASPAS linha 310 | `SigPrEmlBO.prg` | **Corrigido**: `EscaparSQL(par_cPrDopes)` |
+| 2 | SQL-ASPAS linha 328 | `SigPrEmlBO.prg` | **Corrigido**: `EscaparSQL(loc_cDopes) + " AND "` |
+| 3 | SQL-FILTRO-INVENTADO PKCHAVES | `SigPrEmlBO.prg` | **Verificado OK**: `WHERE PkChaves = ...` s├│ aparece em `UPDATE`/`DELETE` dos m├®todos padr├úo do BO ÔÇö n├úo ├® filtro inventado em SELECT |
+| 4 | SQL-FILTRO-INVENTADO CONTROLCOUNT | `FormSigPrEml.prg` | **Verificado OK**: ├® propriedade VFP9 `par_oContainer.ControlCount` para iterar controles ÔÇö n├úo ├® coluna SQL |

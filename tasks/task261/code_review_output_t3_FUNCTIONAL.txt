@@ -1,0 +1,21 @@
+﻿Verifica├º├úo conclu├¡da. Todos os valores est├úo corretos no arquivo atual:
+
+| Container | Top atual | Top original | Left atual | Left original |
+|-----------|-----------|--------------|------------|---------------|
+| `cnt_4c_OpConta` | **114** | 114 Ô£ô | **139** | 139 Ô£ô |
+| `cnt_4c_OpEstoque` | **200** | 200 Ô£ô | **139** | 139 Ô£ô |
+| `cnt_4c_OpCusto` | **349** | 349 Ô£ô | **139** | ÔÇö Ô£ô |
+| `cnt_4c_OpCompra` | **447** | 447 Ô£ô | **139** | ÔÇö Ô£ô |
+
+E o `TornarControlesVisiveis` (linhas 1010-1016) j├í possui o filtro INLIST correto, com a recurs├úo **antes** do LOOP (padr├úo correto per feedback `feedback_tcv_skip_recursao.md`):
+
+```vfp
+IF INLIST(loc_cNome, "CNT_4C_SOMBRA", ;
+                     "CNT_4C_OPCONTA", "CNT_4C_OPESTOQUE", ;
+                     "CNT_4C_OPCUSTO", "CNT_4C_OPCOMPRA")
+    THIS.TornarControlesVisiveis(loc_oControl)   ÔåÉ recurs├úo antes do LOOP Ô£ô
+    LOOP
+ENDIF
+```
+
+**Todos os 9 problemas reportados j├í est├úo corrigidos no c├│digo atual.** O review foi gerado sobre uma vers├úo anterior do arquivo ÔÇö o c├│digo migrado foi atualizado antes deste pass. Nenhuma altera├º├úo ├® necess├íria no `FormSigPrCcc.prg` nem no `SigPrCccBO.prg`.

@@ -1,0 +1,262 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 8,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fwBuscaSel", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIFP",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "Local lnTpRel\nlnTpRel = ThisForm.NivImprs.Value\n\nDo Case\n\tCase LnTpRel = 1\n\t\tReport Form SigReIfA to Print Noconsole\n\tCase LnTpRel = 2\n\t\tReport Form SigReIfB to Print Noconsole\n\tCase LnTpRel = 3 Or LnTpRel = 4\n\t\tReport Form SigReIfC to Print Noconsole\n\tCase LnTpRel = 5\n\t\tReport Form SigReIfD to Print Noconsole\n\tCase LnTpRel = 6\n\t\tReport Form SigReIfE to Print Noconsole\n\tCase LnTpRel = 7\n\t\tReport Form SigReIfF to Print Noconsole\nEndCase\n* Fim ******************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Local lnTpRel\nlnTpRel = ThisForm.NivImprs.Value\nDo Case\n\tCase LnTpRel = 1\n\t\tReport Form SigReIfA to Print Prompt Noconsole\n\tCase LnTpRel = 2\n\t\tReport Form SigReIfB to Print Prompt Noconsole\n\tCase LnTpRel = 3 Or LnTpRel = 4\n\t\tReport Form SigReIfC to Print Prompt Noconsole\n\tCase LnTpRel = 5\n\t\tReport Form SigReIfD to Print Prompt Noconsole\n\tCase LnTpRel = 6\n\t\tReport Form SigReIfE to Print Prompt Noconsole\n\tCase LnTpRel = 7\n\t\tReport Form SigReIfF to Print Prompt Noconsole\nEndCase\n* Fim *************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP",
+      "evento": "Init",
+      "linhas": 36,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tlcQuery = [Select * ] + ;\n\t\t\t\t    [From SigCdGcr ] + ;\n\t\t\t\t   [Where BalFalPers = 1]\n\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpGccr') < 1)\n\t\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpGccr)')\n\t\t\tReturn 0\n\t\tEndIf\n\t\tSelect TmpGccr\n\t\tIndex On Codigos Tag Grupos\n\n\t\tlcQuery = [Select a.* ] + ;\n\t\t\t\t    [From SigCdCli a, SigCdGcr b ] + ;\n\t\t\t\t   [Where a.Grupo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIFP",
+      "evento": "Procedure",
+      "linhas": 399,
+      "codigoOriginal": "Private pDtI, pDtF, pTru\nLocal ldDti, ldDtf, lnNiv\n\nldDtI = ThisForm.get_dt_inicial.Value\nldDtf = ThisForm.get_dt_Final.Value\nlnNiv = ThisForm.NivImprs.Value\nlcNiv = Str(lnNiv,1)\nlcTpM = ThisForm.get_tpmat.Value\nlcFor = ThisForm.get_ifor.Value\nlcGrp = ThisForm.getCdGrupo.Value\n\nCreate Cursor TmpRelat (Operacs c(30), Totas n(12,2), Grupos c(10), Dgrupos c(30), Contas c(10), Rclis c(30), ;\n\t\t\t\t\t\tfalhags n(12,2), Recupgs n(12,2), Perdags n(12,2), Falhaps n(7,2), Recupps n(7,2), ;\n\t\t\t\t\t\tPerdaps n(7,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_Final,get_tpmat,get_ifor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Local lnTpRel\nlnTpRel = ThisForm.NivImprs.Value\nDo Case\n\tCase LnTpRel = 1 \n\t\tReport Form SigReIfA Preview Noconsole\n\tCase LnTpRel = 2\n\t\tReport Form SigReIfB Preview Noconsole\n\tCase LnTpRel = 3 or LntpRel = 4\n\t\tReport Form SigReIfC Preview Noconsole\n\tCase LnTpRel = 5\n\t\tReport Form SigReIfD Preview Noconsole\n\tCase LnTpRel = 6\n\t\tReport Form SigReIfE Preview Noconsole\n\tCase LnTpRel = 7\n\t\tReport Form SigReIfF Preview Noconsole\nEndCase\n* Fim ************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP.getDsGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIFP.getCdGrupo",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n\tIf Not Seek(This.Value, 'TmpGccr','Grupos')\n\t\tloBrowse = CreateObject('fwBuscaSel', 'TmpGccr', 'Grupos', This.Value, 'Cadastro de Setores')\n\t\tloBrowse.AddColuna('Codigos', '', 'Grupo', .t., 'Grupos')\n\t\tloBrowse.AddColuna('Descrs', '', 'Descrição')\n\t\tloBrowse.Show\n\tEndIf\n\t\n\tThisForm.getCdGrupo.Value = Iif(LastKey()==27,'',Evaluate('TmpGccr.Codigos'))\n\tThisForm.getDsGrupo.Value = Iif(LastKey()==27,'',Evaluate('TmpGccr.Descrs'))\n\tThisForm.getCdGrupo.Refresh... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Value = Iif,Value = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP.getCdGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.NivImprs.Value = 7)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP.get_ifor",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tIf !fAcessoContas( Usuar, [], 'C', This.Value, This, ThisForm.get_dfor)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tThisForm.get_dFor.Value = ''\n\t\tReturn(.F.)\n\tEndIf\t\nElse\n\tThisForm.get_ifor.Value = ''\n\tThisForm.get_dfor.Value = ''\nEndIf\nThisForm.get_ifor.Refresh\nThisForm.get_dfor.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dfor,get_ifor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP.get_ifor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.NivImprs.Value = 7)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP.get_tpmat",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tlcQuery = [Select Cods, Descs ] + ;\n\t\t\t\t[From SigOpOpt ] + ;\n\t\t\t   [Where Situas = 3]\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpOpt') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpOpt)')\n\t\tReturn 0\n\tEndIf\n\tSelect TmpOpt\n\tIndex On Cods Tag Cods\n\t\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'TmpOpt', 'Cods', This.Value, 'Cadastro de Tipos de Operação')\n\t\tloBrowse.AddColuna('Cods',  '', 'Código', .t., 'Cods')\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP.get_tpmat",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.NivImprs.Value = 7)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP.get_dfor",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tIf !fAcessoContas( Usuar, [], 'D', This.Value, ThisForm.get_Ifor, This)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tThisForm.get_iFor.Value = ''\n\t\tReturn(.F.)\n\tEndIf\t\nElse\n\tThisForm.get_ifor.Value = ''\n\tThisForm.get_dfor.Value = ''\nEndIf\nThisForm.get_ifor.Refresh\nThisForm.get_dfor.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Ifor,get_dfor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFP.get_dfor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_ifor.Value) And (ThisForm.NivImprs.Value = 7)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And",
+        "controlesReferenciados": "get_ifor",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

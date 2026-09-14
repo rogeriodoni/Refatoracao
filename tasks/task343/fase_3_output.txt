@@ -1,0 +1,11 @@
+﻿Fase 3/8 conclu├¡da. `C:\4c\projeto\app\forms\cadastros\FormACJ.prg` criado com 278 linhas contendo:
+
+- **DEFINE CLASS FormACJ AS FormBase** ÔÇö propriedades visuais completas (600├ù1000, Caption, WindowType, etc.)
+- **Init()** ÔÇö `RETURN DODEFAULT()` sem duplicar InicializarForm
+- **InicializarForm()** ÔÇö cria ACJBO, chama m├®todos de configura├º├úo, guarda `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()** ÔÇö PageFrame Top=-29, Tabs=.F., Page1/Page2 com Picture de fundo
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (com lbl_4c_Sombra/lbl_4c_Titulo), `cnt_4c_Botoes` (vazio, lado direito Left=542), `cnt_4c_Saida` (can├┤nico Left=917)
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` (Top=33 compensado +29), `cnt_4c_Saida` (can├┤nico)
+- **CarregarLista()** ÔÇö chama `ACJBO.Buscar("")`; grid ser├í vinculado na Fase 4
+- **TornarControlesVisiveis()** + **FormatarGridLista()** ÔÇö m├®todos auxiliares completos
+- **Destroy()** ÔÇö libera BO e chama DODEFAULT()

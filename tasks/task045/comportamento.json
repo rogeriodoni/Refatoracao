@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECCH",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Do SigRecch With ThisForm.pcTitulo2,ThisForm.pcTitulo1,'PRINT',0,ThisForm.pcEmpresa,AllTrim(Str(ThisForm.cmbTpRel1.ListIndex,20,0))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCH",
+      "evento": "Init",
+      "linhas": 34,
+      "codigoOriginal": "=DoDefault()\n\nWITH Thisform\n\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\nEndwith\t\n\nWith ThisForm\n\t.LockScreen = .t.\n\t.pcTitulo1 = ''\n\t.pcTitulo2 = ''\n\t.pcEmpresa = ''\n\t.cmbTpRel1.Clear\n\t.cmbTpRel1.Alignment = 0\n\t.cmbTpRel1.ColumnCount = 0\n\t.cmbTpRel1.ColumnLines = .f.\n\t.cmbTpRel1.IncrementalSearch = .t.\n\t.cmbTpRel1.SpecialEffe... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCH",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCH",
+      "evento": "Procedure",
+      "linhas": 46,
+      "codigoOriginal": "Local lnDecimals,lcFixed,lcEmpresa,lcTitulo1,lnTpRel1\n      \nm.lnDecimals = Set('Decimals',1)\nm.lcFixed = Set('Fixed',1)\n\nSet Decimals To 2\nSet Fixed On\n\nThisForm.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _Empr)\n\nm.lnTpRel1 = ThisForm.cmbTpRel1.ListIndex\nm.lcEmpresa = crSigCdEmp.razas\nm.lcTitulo1 = 'Acompanhamento da Carteira de Clientes'\nm.lcTitulo2 = 'Vendedor'\nIf m.lnTpRel1==1\n\tm.lcMcrSql1 = ([select b.contavens as cvendedors,]+;\n\t               [a.descrs as csituacaos,count(*) ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECCH",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Do SigRecch With ThisForm.pcTitulo2,ThisForm.pcTitulo1,'PREVIEW',0,ThisForm.pcEmpresa,AllTrim(Str(ThisForm.cmbTpRel1.ListIndex,20,0))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

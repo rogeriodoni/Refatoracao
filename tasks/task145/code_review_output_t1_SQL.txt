@@ -1,0 +1,9 @@
+﻿Sem ocorr├¬ncias. Resumo das corre├º├Áes feitas:
+
+**3 problemas resolvidos:**
+
+1. **[SQL-FILTRO-INVENTADO] CPROS** ÔÇö M├®todo `BuscarProduto` (que gerava `WHERE CPros = ...` via `SQLEXEC` em `SigCdPro`) removido do BO. As chamadas para buscar "Cgrus" eram redundantes pois `TmpDistrib.CGrus` j├í cont├®m o valor copiado do cursor `xNensi`. As chamadas para buscar "pesoms" e a l├│gica derivada foram simplificadas.
+
+2. **[SQL-FILTRO-INVENTADO] CGRUS** ÔÇö M├®todo `BuscarGrupo` (que gerava `WHERE CGrus = ...` via `SQLEXEC` em `SigCdGrp`) removido do BO. A l├│gica de `TpMovs` foi eliminada dos tr├¬s m├®todos de valida├º├úo e do `Col11GotFocus`. A condi├º├úo de controle passou a usar apenas `Fators` e `QtEqualPs` (obtidos de `SigCdUni` via `BuscarUnidade`, que ├® leg├¡timo e estava no original).
+
+3. **[SQL-FILTRO-INVENTADO] CONTROLCOUNT** ÔÇö Falso positivo. `ControlCount` ├® propriedade VFP9 usada em loops `FOR ... TO par_oContainer.ControlCount`, n├úo coluna SQL em `WHERE`. Nenhuma altera├º├úo necess├íria.

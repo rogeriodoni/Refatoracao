@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O guard `cnt_4c_cabecalho` agora vem **antes** da recurs├úo, impedindo que `TornarControlesVisiveis` processe filhos do cabecalho e tamb├®m impedindo `Visible=.T.` no pr├│prio container.
+
+**Quanto aos [LAYOUT-POSITION]:** o validador cometeu um falso positivo ao associar o `Label1` original a `lbl_4c_Label11`. O `lbl_4c_Label1` (linha 465) j├í est├í em Top=396, Left=197 ÔÇö posi├º├úo correta do `Label1` original ("Usu├írio:"). O `lbl_4c_Label11` em Top=451, Left=557 ├® o label "Grupo:" da se├º├úo **Destino**, simetricamente posicionado em rela├º├úo ao `lbl_4c_Label9` ("Grupo:" da se├º├úo Origem em Top=451, Left=62) ÔÇö alterar suas coordenadas quebraria o layout da ├írea de contas.

@@ -1,0 +1,1 @@
+﻿Fixed. Both `SEEK loc_lcEdn IN LocalVendas TAG EmpDopNums` calls (lines 226 and 269) are now `SEEK loc_lcEdn TAG EmpDopNums` ÔÇö VFP9's SEEK doesn't support `IN alias` syntax; since `SELECT LocalVendas` + `GO TOP` precede each SEEK, the work area is already set correctly.

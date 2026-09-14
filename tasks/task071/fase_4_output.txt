@@ -1,0 +1,22 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado em `Formsigrectc.prg`:**
+
+- **`InicializarForm()`** ÔÇö atualizado para chamar `ConfigurarPaginaFiltros()`, `VincularBotoes()` e `LimparCampos()` ap├│s `ConfigurarPageFrame()`
+
+- **`ConfigurarPaginaFiltros()`** ÔÇö adiciona todos os controles de filtro em `Page1` com posi├º├Áes exatas do original (Top = posi├º├úo_original ÔêÆ 85):
+  - 4 checkboxes de tipo de movimento (Entradas / ├Ç Receber / ├Ç Depositar / Baixados)
+  - Labels de per├¡odo, empresa e cart├úo
+  - 2 TextBox de data (DtInicial/DtFinal) + OptionGroup de tipo dep├│sito (Entrada/Vencimento, inicialmente desabilitado)
+  - TextBox de empresa (c├│digo + raz├úo social) e cart├úo
+  - BINDEVENTs para todos os checkboxes e campos de lookup
+
+- **`VincularBotoes()`** ÔÇö BINDEVENT nos 4 bot├Áes do `cmg_4c_Botoes` (Visualizar/Imprimir/Excel/Encerrar)
+
+- **`LimparCampos()`** ÔÇö inicializa campos: data inicial = ontem, data final = hoje, demais em branco
+
+- **`FormParaRelatorio()`** ÔÇö transfere todos os filtros do form para o BO antes de imprimir/visualizar
+
+- **`AjustarOptTpDep()`** ÔÇö habilita o OptionGroup somente quando apenas "Depositar" estiver marcado
+
+- **4 handlers de checkbox** + **3 handlers KeyPress** (TeclaFpags/TeclaCemps/TeclaRazas) + **3 m├®todos AbrirBusca*** + **4 handlers de bot├úo** (Visualizar/Imprimir/Excel/Encerrar)

@@ -1,0 +1,9 @@
+﻿Corre├º├úo aplicada. Ap├│s o `ENDWITH` do bloco principal do grid (linha 325), foram adicionadas 5 linhas que re-atribuem explicitamente o `ControlSource` de cada coluna:
+
+- `Column1` ÔåÆ `Checks` (checkbox de sele├º├úo)
+- `Column2` ÔåÆ `Contas` (campo 3 no cursor ÔÇö sem o re-bind, VFP ligaria `grupos` aqui)
+- `Column3` ÔåÆ `Rclis` (campo 4 no cursor)
+- `Column4` ÔåÆ `emails` (campo 5 no cursor)
+- `Column5` ÔåÆ `EmpDopNums` (campo 7 no cursor)
+
+O cursor tem 8 campos (`Checks, grupos, Contas, Rclis, emails, mensagems, EmpDopNums, prioridade`) e apenas 5 colunas no grid, ent├úo o auto-bind por posi├º├úo mapearia errado da Column2 em diante. As re-atribui├º├Áes expl├¡citas fora do `WITH` garantem o binding correto independentemente do timing interno do VFP9.

@@ -1,0 +1,20 @@
+﻿Both files are already complete from previous sessions. Here's the current state:
+
+**`C:\4c\projeto\app\classes\lchBO.prg`** ÔÇö 530 lines, complete:
+- Init, ObterChavePrimaria, Buscar, CarregarPorCodigo, BuscarCheques
+- Inserir, Atualizar, ExecutarExclusao (all PROTECTED, called via BusinessBase.Salvar/Excluir)
+- ObterProximoLote (MAX(numlotes)+1 per empresa)
+
+**`C:\4c\projeto\app\forms\cadastros\Formlch.prg`** ÔÇö 2886 lines, all 8 phases done:
+- Phase 3: `DEFINE CLASS Formlch AS FormBase`, Init, InicializarForm, ConfigurarPageFrame, Destroy
+- Phase 4: `grd_4c_Dados` (6 cols) + 5 CRUD buttons + Encerrar + filter controls on Page1
+- Phases 5-6: All containers on Page2 fully populated (Infos, Origem, Destino, Carteira, Emissor, Despesa, CCusto, Processa, Grade, Cheque, Conta, Empresa, Responsavel, Filtro, FollowUp)
+- Phases 7-8: Full BINDEVENT wiring, FormParaBO/BOParaForm, CarregarLista, CarregarGrade, all validators, BuscarDescGrupo/BuscarDescConta helpers
+
+**No critical bugs found.** Cursor cleanup in Destroy covers all 4 cursors created at runtime. SQL column references are correct (SigCdGcr.descrs, SigCdCli.iclis).
+
+**Two stubs to note:**
+- `BtnConciliacaoClick()` ÔÇö empty (conciliation is a complex operation)
+- `BtnCmdProcessaClick()` ÔÇö empty (batch processing placeholder)
+
+Both files are **untracked** (not yet committed). Ready to test or commit whenever you want.

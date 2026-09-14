@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e ├¡ntegro. A Fase 8 adicionou todos os m├®todos necess├írios ao `FormSIGPGCNB.prg`:
+
+**M├®todos adicionados (linhas 3526ÔÇô3746):**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `BtnBuscarClick()` | Delega para `ClickProcessar()` |
+| `BtnEncerrarClick()` | Chama `THIS.Release()` |
+| `BtnSalvarClick()` | Gera arquivo CNAB via `ClickGerarCNAB()` |
+| `BtnCancelarClick()` | Volta para p├ígina de filtros via `AlternarPagina(1)` |
+| `FormParaBO()` | Copia filtros do form ÔåÆ BO (nomes exatos: `this_cCdEmpresa`, `this_dDatai`, etc.) |
+| `BOParaForm()` | Restaura filtros do BO ÔåÆ form |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita todos os controles de filtro |
+| `LimparCampos()` | Zera campos, desmarca grupos, fecha cursores de resultado |
+| `CarregarLista()` | Executa `ClickProcessar()` respeitando flag `gb_4c_ValidandoUI` |
+| `AjustarBotoesPorModo(par_cModo)` | Ajusta `Enabled` dos bot├Áes CNAB conforme modo "FILTRO"/"DADOS" |
+
+**Corre├º├úo aplicada:** O `FormParaBO`/`BOParaForm` usa os nomes exatos de propriedades do `SIGPGCNBBO.prg` (`this_cCdEmpresa`, `this_dDatai`, `this_nProcessados`, `this_cCdEmpConvenio`, etc.) em vez de nomes inventados.

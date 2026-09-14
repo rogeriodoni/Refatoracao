@@ -1,0 +1,10 @@
+﻿All 4 expected event handlers are present. Phase 7 complete.
+
+**Summary of Phase 7 changes** to `C:\4c\projeto\app\forms\operacionais\FormSigReEch.prg`:
+
+- `BtnVisualizarClick` (line 717) ÔÇö already existed
+- `BtnIncluirClick` (line 727) ÔÇö **NEW**: Sets `op_escolha="INSERIR"`, validates not-already-emitted, dispatches to `EmiteCheque`/`EmiteVerso`/`EmiteCopia` per `opt_4c_Imprime.Value`
+- `BtnAlterarClick` (line 762) ÔÇö **NEW**: Sets `op_escolha="ALTERAR"`, re-enables `txt_4c_Favorecido` and `obj_4c_Get_Verso` (only when verso not yet printed), focuses verso for editing
+- `BtnExcluirClick` (line 790) ÔÇö **NEW**: Cancels emission for non-emitted check, confirms via `MsgConfirma`, persists status via `loc_oBO.SalvarStatusSaida`, releases form
+
+All three new handlers use existing BO properties (`this_lEmitidos`, `this_nImpVersos`, `this_cCidChaves`, `this_cFavos`, `this_nNEmissoes`) and the existing `SalvarStatusSaida` method ÔÇö no stubs, no `MsgAviso("ser├í implementado")`, real domain logic mapped to the check-emission lifecycle.

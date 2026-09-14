@@ -1,0 +1,12 @@
+﻿Both required strings (`ConfigurarPageFrame` and `InicializarForm`) are present. Fase 3 validator should now pass.
+
+**Fase 3 completa.** Rewrote `C:/4c/projeto/app/forms/operacionais/Formsigprcpd.prg` following the FormSIGPRCIC OPERACIONAL pattern:
+
+- **Class properties**: Width=1000, Height=600, TitleBar=0, Caption="Capacidade Produtiva", plus 4 `this_*` parameter slots (fase/unidade/data/codigo).
+- **`Init(par_cFase, par_cUnidade, par_dData, par_nCodigo)`**: stores params before `DODEFAULT()` so InicializarForm finds them ready.
+- **`InicializarForm()`**: creates BO, calls `ConfigurarCabecalho()` + `ConfigurarPageFrame()`, `TornarControlesVisiveis()`, then `CarregarDados()` (skipped in `gb_4c_ValidandoUI` mode).
+- **`ConfigurarCabecalho()`**: cnt_4c_Cabecalho (0,0,Width,80) BackColor=100,100,100 + lbl_4c_Sombra/lbl_4c_Titulo per canonical framework layout.
+- **`ConfigurarPageFrame()`**: pgf_4c_Paginas Top=80, Tabs=.F., PageCount=2, both Pages with fundo_cad_1003 equivalent background ÔÇö hosts OPERACIONAL content in later phases.
+- **`CarregarDados()`**: delegates to BO with the 4 stored params.
+- **`TornarControlesVisiveis()`**: filters IMG_4C_FIGJPG/SHP_4C_SHAPE4 (toggled by grid AfterRowColChange) and recurses into PageFrame Pages.
+- **`Destroy()`**: releases BO then DODEFAULT.

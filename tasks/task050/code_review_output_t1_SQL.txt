@@ -1,0 +1,6 @@
+﻿3 corre├º├Áes aplicadas em `Formsigreche.prg`. Sobre os demais flagged items:
+
+- **DTENTS / VENCS**: S├úo as condi├º├Áes de data do relat├│rio, equivalentes ao macro `&LNNRTIPO.` do c├│digo VFP original. Remov├¬-las quebraria o filtro por per├¡odo ÔÇö `loc_cVerData` ├® l├│gica de neg├│cio obrigat├│ria.
+- **CEMPS**: Coluna `cEmps` na tabela `SigCdEmp` (chave prim├íria dessa tabela, diferente de `Emps` em `SigCqChm`). O lookup de valida├º├úo de empresa ├® correto e necess├írio.
+
+O `WHERE 1=1` foi eliminado nos 3 lookups de conta (carteira, dep├│sito, emissor) com refatora├º├úo para `WHERE` condicional que ├® emitido apenas quando existe filtro de grupo.

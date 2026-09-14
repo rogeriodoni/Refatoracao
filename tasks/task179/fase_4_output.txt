@@ -1,0 +1,21 @@
+﻿Arquivo atualizado corretamente. A Fase 4 est├í completa.
+
+**O que foi adicionado em `Formsigpres2.prg`:**
+
+1. **`ConfigurarPaginaLista()`** ÔÇö agora inclui:
+   - `cmd_4c_Consultar` em `cnt_4c_Botoes` (├║nico bot├úo vis├¡vel, espelhando o original que ocultava Inserir/Alterar/Excluir/Procurar)
+   - `cmd_4c_Encerrar` em `cnt_4c_Saida` (padr├úo can├┤nico)
+   - `grd_4c_Lista` com 11 colunas (`ColumnCount = 11` definido FORA do `WITH`, conforme Problema 36)
+   - `BINDEVENT` para ambos os bot├Áes em m├®todos `PUBLIC`
+
+2. **`CarregarLista()`** ÔÇö atualizado para:
+   - Vincular `RecordSource` ao `cursor_4c_Dados` FORA do `WITH`
+   - Redefinir `ControlSource` ap├│s `RecordSource` (auto-bind ├® sobrescrito)
+   - Redefinir `Header1.Caption` ap├│s `RecordSource` (evita Problema 2 ÔÇö perda de cabe├ºalhos)
+   - Configurar larguras das 11 colunas
+
+3. **`AlternarPagina(par_nPagina)`** ÔÇö navega entre pages, recarregando lista ao voltar para Page1
+
+4. **`BtnConsultarClick()`** ÔÇö l├¬ `EmpDopNums` da linha selecionada, chama `CarregarPorCodigo` + `CarregarItens` + `CarregarOperacao`, e navega para Page2
+
+5. **`BtnEncerrarClick()`** ÔÇö fecha o formul├írio via `THIS.Release()`

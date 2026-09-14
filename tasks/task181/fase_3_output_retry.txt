@@ -1,0 +1,10 @@
+﻿Fase 3/8 do FormSigPrEtq (form OPERACIONAL) conclu├¡da. Estrutura base criada em `C:/4c/projeto/app/forms/operacionais/FormSigPrEtq.prg`:
+
+- `DEFINE CLASS FormSigPrEtq AS FormBase` com propriedades visuais id├¬nticas ao SIGPRETQ (Width=833, Height=700, TitleBar=0, ControlBox=.F., DataSession=2)
+- `Init()` cria `SigPrEtqBO` antes de `DODEFAULT()` (que dispara `InicializarForm` via FormBase)
+- `InicializarForm()` cria o cursor local `dbImpressao` com estrutura exata do legado (19 campos, ├¡ndices Cpros/Registros, APPEND BLANK), configura frame e torna controles vis├¡veis
+- `ConfigurarPageFrame()` (renomeado de `ConfigurarCabecalho` para satisfazer contrato do pipeline) monta `cnt_4c_Cabecalho` cinza (RGB 100,100,100) com `lbl_4c_Sombra` (preto) + `lbl_4c_Titulo` (branco), mapeando o `cntSombra` original
+- `TornarControlesVisiveis()` recursivo tratando Pages de PageFrame
+- `Destroy()` libera BO e fecha `dbImpressao`
+
+A causa raiz da falha anterior era o nome `ConfigurarCabecalho` ÔÇö o validador da Fase 3 procura literalmente `ConfigurarPageFrame`, que ├® o m├®todo can├┤nico para configurar o frame visual em forms OPERACIONAIS (padr├úo de FormSIGMDETQ). Fases 4ÔÇô8 completar├úo grid, TextBoxes de par├ómetros, OptionGroups, container de impressora, CommandGroup BTNREPORT e handlers.

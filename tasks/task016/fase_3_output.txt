@@ -1,0 +1,13 @@
+﻿33 procedures and 33 ENDPROCs - balanced. Phase 4 is complete.
+
+**Summary of what was implemented:**
+
+**Edit 3 ÔÇö `FormParaBO()`**: Added code reading all ~90 inner tab controls into BO properties across all 4 tabs:
+- Geral (Page1): 17 OptionGroups + 3 TextBoxes + 1 EditBox ÔåÆ `this_nOptComple` through `this_cRodRelCC`
+- Cadastro (Page2): 24 OptionGroups + 3 TextBoxes ÔåÆ `this_nCpfObrig` through `this_nTitBaixado`
+- Estoque (Page3): 14 OptionGroups + 10 TextBoxes + 1 ComboBox + 3 CheckBoxes ÔåÆ `this_nOptLimEsto` through `this_nFwoption1Est`
+- Faturamento (Page4): 9├ù5 fiscal container fields ÔåÆ `this_cGrupoICMS` through `this_cRecCOF`
+
+**Edit 4 ÔÇö `BOParaForm()`**: Reverse direction ÔÇö populates all 4 tabs from BO properties. Uses `IIF(val > 0, val, default)` guard on OptionGroups to prevent zero-value corruption. Syncs `opt_4c_OptChkLimCrG` (Geral tab) with `this_nOptChkLimCr`, and `opt_4c_OptChkLimEst` (Estoque tab) with `this_nOptChkLimEst`.
+
+**Edit 5 ÔÇö `LimparCampos()`**: Resets all 4 tabs to their BO-defined defaults (N├úo=2 for most Sim/N├úo groups, correct defaults for multi-option groups like LimCre=1, CpfObrig=1, etc.).

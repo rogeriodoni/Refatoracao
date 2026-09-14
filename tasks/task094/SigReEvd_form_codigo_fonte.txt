@@ -1,0 +1,617 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReEvd.SCX
+* Data/Hora: 05/06/2026 01:29:30
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREEVD
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Datai
+  Parent: SIGREEVD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say_Conta
+  Parent: SIGREEVD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dataf
+  Parent: SIGREEVD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREEVD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGREEVD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGREEVD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGREEVD
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREEVD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREEVD
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 53
+  Left = 39
+  Width = 317
+  Height = 80
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVD
+------------------------------------------------------------
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Demonstrativo de Envelopes Duplicados"
+  Name = "SIGREEVD"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 525
+  btnReport.Top = 3
+  btnReport.ZOrderSet = 11
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVD.Get_Datai
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  ControlSource = ""
+  Height = 23
+  Left = 276
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 181
+  Width = 82
+  ForeColor = 0,0,0
+  ZOrderSet = 2
+  Name = "Get_Datai"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVD.Say_Conta
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = "Período : "
+  Left = 225
+  Top = 186
+  Width = 48
+  TabIndex = 2
+  ZOrderSet = 3
+  Name = "Say_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVD.Get_Dataf
+------------------------------------------------------------
+  Alignment = 3
+  Value = {}
+  ControlSource = ""
+  Height = 23
+  Left = 384
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 181
+  Width = 82
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "Get_Dataf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVD.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = " até "
+  Left = 360
+  Top = 186
+  Width = 24
+  TabIndex = 4
+  ZOrderSet = 5
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVD.Get_grupo
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 276
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 132
+  Width = 82
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVD.Get_conta
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 276
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 157
+  Width = 82
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVD.Get_dconta
+------------------------------------------------------------
+  Height = 23
+  Left = 360
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 157
+  Width = 216
+  ForeColor = 0,0,0
+  ZOrderSet = 8
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVD.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = "Grupo : "
+  Left = 232
+  Top = 134
+  Width = 41
+  TabIndex = 1
+  ZOrderSet = 9
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEVD.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Caption = "Conta : "
+  Left = 232
+  Top = 160
+  Width = 41
+  TabIndex = 3
+  ZOrderSet = 10
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREEVD
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReEvd Preview Noconsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+If Used('crSigCdCli')
+	Use In crSigCdCli
+EndIf
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF
+Local lcGrupo, lcConta, lcDConta, ldDatai, ldDataf, lcGruMat, lnTotal, lcCab, lcSub, lcEmp
+
+lcGrupo  = ThisForm.Get_Grupo.Value
+lcConta  = ThisForm.Get_Conta.Value
+lcDConta = ThisForm.Get_DConta.Value
+ldDatai  = ThisForm.Get_Datai.Value
+ldDataf  = ThisForm.Get_Dataf.Value
+
+Create Cursor Envelope (Nenvs n(10), GrupoDs c(10), Qt n(5))
+Index On Str(Nenvs,10) + GrupoDs Tag Nenvs
+
+Create Cursor TmpRelat (Nenvs n(10), GrupoOs c(10), ContaOs c(10), RCliOs c(50), Datas d, GrupoDs c(10),;
+						contaDs c(10), RCliDs c(50), EmpDnPs c(33), Retrabs l)
+
+pDtI = fDtoSQL(ldDataI) 
+pDtF = fDtoSQL(ldDataF, '23:59:59')
+
+lcQuery = [Select distinct b.Nenvs ] + ;
+		    [From SigCdNec a, SigCdNei b ] + ;
+		   [Where a.Datas BetWeen ?pDtI And ?pDtF And ] + ;
+		   		  Iif(Empty(lcGrupo), [], [a.GrupoDs = '] + lcGrupo + [' And ]) + ;
+		   		  Iif(Empty(lcConta), [], [a.ContaDs = '] + lcConta + [' And ]) + ;
+		   		 [a.EmpDNps = b.EmpDNps ] + ;
+		   [Order By b.Nenvs ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdNec') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdNec)')
+	Return 0
+EndIf
+
+Select crSigCdNec
+lnTotal = Reccount('crSigCdNec')
+If (lnTotal <> 0)
+	loBarra = CreateObject('fwprogressbar', 'Processando Movimentações', lnTotal)
+	loBarra.Titulo.FontBold = .t.
+	loBarra.Show
+	Scan
+		loBarra.Update(.t.)
+		
+		If CrSigCdNec.Nenvs = 0
+			Loop
+		EndIf
+		
+		lcQuery = [Select Distinct Nenvs, EmpDnPs, Dopps From SigCdNei Where Nenvs = ]+Str(CrSigCdNec.Nenvs)
+		If Thisform.PodataMgr.SqlExecute(lcQuery,'LocNensi') < 1
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocNensi)')
+			Return 0
+		EndIf
+
+		Select LocNensI
+		Scan
+		
+			lcQuery = [Select Dopps,Subns,GrComps,SepPedras From SigCdOpd where Dopps = ']+LocNensI.Dopps+[']
+			If Thisform.PodataMgr.SqlExecute(lcQuery,'TmpOpp') < 1
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpOpp)')
+				Return 0
+			EndIf
+			
+			If InList(TmpOpp.SepPedras,1,3) Or TmpOpp.Subns <> 1 Or TmpOpp.GrComps <> 1
+				Loop
+			Endif
+
+			lcQuery = [Select * From SigCdNec Where EmpDnPs = ']+LocNensI.EmpDnPs+[']
+			If Thisform.PodataMgr.SqlExecute(lcQuery,'LocNens') < 1
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocNens)')
+				Return 0
+			EndIf
+			
+			Select LocNens
+			If Reccount() = 0 OR GrupoDs = 'TRMOVESTQ'
+				Loop
+			Endif
+			
+			lcQuery = [Select Rclis From SigCdCli Where Iclis = ']+LocNens.ContaOs+[']
+			If Thisform.PodataMgr.SqlExecute(lcQuery,'TmpCli') < 1
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpCli)')
+				Return 0
+			EndIf
+			lcCliOs = TmpCli.Rclis
+			
+			lcQuery = [Select Rclis From SigCdCli Where Iclis = ']+LocNens.ContaDs+[']
+			If Thisform.PodataMgr.SqlExecute(lcQuery,'TmpCli') < 1
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpCli)')
+				Return 0
+			EndIf
+			lcCliDs = TmpCli.Rclis
+
+			Select TmpRelat
+			Append Blank
+			Replace Nenvs   With LocNensi.Nenvs,;
+					GrupoOs With LocNens.GrupoOs,;
+					ContaOs With LocNens.ContaOs,;
+					RcliOs  With lcCliOs,;
+					Datas   with LocNens.Datas,;
+					GrupoDs With LocNens.GrupoDs,;
+					ContaDs With LocNens.ContaDs,;
+					RcliDs  With lcCliDs,;
+					EmpDnPs With LocNens.EmpDnPs,;
+					Retrabs With LocNens.Retrabs
+
+			Select Envelope
+			If Not Seek(Str(LocNensI.Nenvs,10)+LocNens.GrupoDS)
+				Append Blank
+				Replace Nenvs   With LocNensi.Nenvs,;
+						GrupoDs With LocNens.GrupoDs
+			EndIf
+			Replace Qt With Qt + 1
+		EndScan	
+	EndScan
+	loBarra.Complete(.t.)
+EndIf
+
+lcCab = 'Auditoria de Envelopes'
+lcSub = 'Período : ' + Alltrim(Dtoc(ldDatai)) + ' até ' + Alltrim(Dtoc(ldDataf))
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcEmp = _Empr + ' - ' + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+
+Create Cursor dbCabecalho (Titulo c(100), SubTitulo c(100), NomeEmpresa c(100))
+Insert Into dbCabecalho (Titulo, SubTitulo, NomeEmpresa) Values (lcCab, lcSub, lcEmp)
+
+Select A.* From TmpRelat A, Envelope B Where a.Nenvs = b.Nenvs And a.GrupoDs = b.grupoDs And b.Qt > 1 ;
+Into Cursor CsSelecao Order By a.Nenvs, a.Datas
+
+Select CsSelecao
+Go Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		lcQuery = [Select Codigos, Descrs ] + ;
+				    [From SigCdGcr ] + ;
+				   [Where GerBals = 1]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdGcr') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdGcr)')
+			Return 0
+		EndIf
+		Select crSigCdGcr
+		Index On Codigos Tag BalCodigo
+		Index On Descrs  Tag BalDescrs
+
+		lcQuery = [Select IClis, RClis, Inativas ] + ;
+				    [From SigCdCli ] + ;
+				   [Where GerBals = 1]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCli)')
+			Return 0
+		EndIf
+		Select crSigCdCli
+		Index On IClis Tag BalCodigo
+		Index On RClis Tag BalNome
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReEvd to Print Prompt Noconsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReEvd to Print Noconsole
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEVD.Get_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Select crSigCdGcr
+	Set Order to BalCodigo
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'crSigCdGcr', 'BalCodigo', This.Value, 'Cadastro de Grupos')
+		loBrowse.AddColuna('Codigos', '', 'Código',    .t., 'BalCodigo' )
+		loBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'BalDescrs' )
+		loBrowse.Show
+		If Lastkey() <> 27
+			This.Value = crSigCdGcr.Codigos 
+		EndIf
+	EndIf
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEVD.Get_conta
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(ThisForm.Get_Grupo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	Select crSigCdCli
+	Set Order to BalCodigo
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'crSigCdCli', 'BalCodigo', This.Value, 'Cadastro de Contas')
+		loBrowse.AddColuna('IClis', '', 'Código',    .t., 'BalCodigo')
+		loBrowse.AddColuna('RClis', '', 'Descrição', .t., 'BalNome')
+		loBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loBrowse.Show
+		If Lastkey() = 27
+			ThisForm.Get_Conta.Value  = ''
+			ThisForm.Get_DConta.Value = ''
+		EndIf
+	EndIf
+	ThisForm.Get_Conta.Value  = crSigCdCli.IClis
+	ThisForm.Get_DConta.Value = crSigCdCli.RClis
+Else
+	ThisForm.Get_DConta.Value = ''
+EndIf
+ThisForm.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEVD.Get_dconta
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(ThisForm.Get_Grupo.Value) And Empty(ThisForm.Get_Conta.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty( This.Value )
+	Select crSigCdCli
+	Set Order to BalNome
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'crSigCdCli', 'BalNome', This.Value, 'Cadastro de Contas')
+		loBrowse.AddColuna('RClis', '', 'Descrição', .t., 'BalNome')
+		loBrowse.AddColuna('IClis', '', 'Código',    .t., 'BalCodigo')
+		loBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		loBrowse.Show
+		If Lastkey() = 27
+			ThisForm.Get_Conta.Value  = ''
+			ThisForm.Get_DConta.Value = ''
+		EndIf
+	EndIf
+	ThisForm.Get_Conta.Value  = crSigCdCli.IClis
+	ThisForm.Get_DConta.Value = crSigCdCli.RClis
+Else
+	ThisForm.Get_Conta.Value = ''
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREEVD
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

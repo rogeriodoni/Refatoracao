@@ -1,0 +1,261 @@
+﻿{
+    "taskId":  "task435",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-08-06T18:00:52",
+    "atualizadoEm":  "2026-08-06T21:25:11",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-08-06T18:00:52",
+                                            "fim":  "2026-08-06T18:00:52",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task435\\SIGCDFUN.sct",
+                                            "baseName":  "SIGCDFUN",
+                                            "scxFile":  "C:\\4c\\tasks\\task435\\SIGCDFUN.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-08-06T18:00:52",
+                                          "fim":  "2026-08-06T18:00:52",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGCDFUN",
+                                          "txtFile":  "C:\\4c\\tasks\\task435\\SIGCDFUN_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-06T18:00:52",
+                                              "fim":  "2026-08-06T18:00:53",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task435\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-06T18:00:54",
+                                              "fim":  "2026-08-06T18:01:02",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task435\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task435\\meta_prompt.md",
+                                              "boClass":  "FUNBO",
+                                              "formClass":  "FormFUN",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task435\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-06T18:01:02",
+                                              "fim":  "2026-08-06T18:01:03",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task435\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-06T18:01:03",
+                                               "fim":  "2026-08-06T18:01:03",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task435\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormFUN_esqueleto.prg",
+                                                                "FUNBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-06T18:01:03",
+                                       "fim":  "2026-08-06T20:15:43",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\FUNBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  147.23,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormFUN.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  5400
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-08-06T20:15:43",
+                                                  "fim":  "2026-08-06T20:16:05",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormFUN.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\FUNBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-08-06T20:16:06",
+                                                 "fim":  "2026-08-06T20:18:02",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-06T20:58:06",
+                                       "fim":  "2026-08-06T20:59:13",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-06T20:59:13",
+                                               "fim":  "2026-08-06T21:20:06",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  4,
+                                               "resultFile":  "C:\\4c\\tasks\\task435\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-08-06T21:20:08",
+                                        "fim":  "2026-08-06T21:25:10",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-06T21:25:10",
+                                              "fim":  "2026-08-06T21:25:11",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task435_SIGCDFUN.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-08-06T18:00:53",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-08-06T18:00:54",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task435\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-08-06T18:00:54",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-06T18:00:54"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-08-06T20:16:05",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-08-06T20:16:06",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormFUN_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormFUN.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task435\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-08-06T20:18:02",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-08-06T20:18:59",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-08-06T20:18:59",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-08-06T20:57:49",
+                                          "passes":  7,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO, CNT_4C_SALVA. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [GRID-HEADER] Header Caption \u0027Código\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde, Pedido, Data Entrega, Operação, Numes, Tipo Árvore, Metal Real, Metal Novo, Metal Ligado. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Data\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde, Pedido, Data Entrega, Operação, Numes, Tipo Árvore, Metal Real, Metal Novo, Metal Ligado. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Usuário\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde, Pedido, Data Entrega, Operação, Numes, Tipo Árvore, Metal Real, Metal Novo, Metal Ligado. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Máquina\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde, Pedido, Data Entrega, Operação, Numes, Tipo Árvore, Metal Real, Metal Novo, Metal Ligado. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Observação\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde, Pedido, Data Entrega, Operação, Numes, Tipo Árvore, Metal Real, Metal Novo, Metal Ligado. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [MADDCOLUNA-PARAMS] Chamada mAddColuna com 2 parametros (esperado: 3). Assinatura correta: mAddColuna(campo, mascara_ou_vazio, titulo). NAO passar largura ou tabela como parametro. Exemplo: loc_oBusca.mAddColuna(\u0027Codigos\u0027, \u0027\u0027, \u0027Codigo\u0027); [MADDCOLUNA-PARAMS] Chamada mAddColuna com 2 parametros (esperado: 3). Assinatura correta: mAddColuna(campo, mascara_ou_vazio, titulo). NAO passar largura ou tabela como parametro. Exemplo: loc_oBusca.mAddColuna(\u0027Codigos\u0027, \u0027\u0027, \u0027Codigo\u0027); [MADDCOLUNA-PARAMS] Chamada mAddColuna com 2 parametros (esperado: 3). Assinatura correta: mAddColuna(campo, mascara_ou_vazio, titulo). NAO passar largura ou tabela como parametro. Exemplo: loc_oBusca.mAddColuna(\u0027Codigos\u0027, \u0027\u0027, \u0027Codigo\u0027); [MADDCOLUNA-PARAMS] Chamada mAddColuna com 2 parametros (esperado: 3). Assinatura correta: mAddColuna(campo, mascara_ou_vazio, titulo). NAO passar largura ou tabela como parametro. Exemplo: loc_oBusca.mAddColuna(\u0027Codigos\u0027, \u0027\u0027, \u0027Codigo\u0027); [MADDCOLUNA-PARAMS] Chamada mAddColuna com 2 parametros (esperado: 3). Assinatura correta: mAddColuna(campo, mascara_ou_vazio, titulo). NAO passar largura ou tabela como parametro. Exemplo: loc_oBusca.mAddColuna(\u0027Codigos\u0027, \u0027\u0027, \u0027Codigo\u0027); [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027NNUMES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: X, CODIGOS, EMPS, DOPES, CIDCHAVES, NOPS, DESCS, TUBOS, EMPDOPNUMS, NDOPES, NSTATUS, DATAS, CTRLLOTES; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CODS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: X, CODIGOS, EMPS, DOPES, CIDCHAVES, NOPS, DESCS, TUBOS, EMPDOPNUMS, NDOPES, NSTATUS, DATAS, CTRLLOTES; [GRID-RECORDSOURCE-AUTOBIND] Linha 608: RecordSource reatribuido mas ControlSource NAO redefinido nas proximas linhas. VFP faz auto-bind pela ordem dos campos do cursor, ignorando ControlSource anterior. CORRIGIR: Re-definir .ControlSource de TODAS as colunas APOS .RecordSource = ...",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  14
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-08-06T20:57:49",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-08-06T20:58:06",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\FUNBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormFUN.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-08-06T21:20:06",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-06T21:20:08",
+                                             "thresholdPx":  5,
+                                             "unmatched":  74,
+                                             "errors":  75,
+                                             "matched":  32,
+                                             "warnings":  16,
+                                             "reportFile":  "C:\\4c\\tasks\\task435\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

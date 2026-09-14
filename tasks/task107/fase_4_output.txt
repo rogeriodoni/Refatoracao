@@ -1,0 +1,17 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormSigReGla.prg` foi atualizado com:
+
+**Altera├º├Áes realizadas:**
+- `Width=1000, Height=600` + propriedades completas do form (ControlBox, Closable, MaxButton, etc.)
+- `ConfigurarPageFrame()` simplificado: s├│ cria o PageFrame com `Page1.Picture` / `Page2.Picture`
+- `ConfigurarPaginaLista()` completo:
+  - `cnt_4c_Cabecalho` (BackColor cinza m├®dio, lbl_4c_Sombra + lbl_4c_Titulo)
+  - `cnt_4c_Botoes` (Left=542, Width=390) com 5 bot├Áes CRUD na posi├º├úo can├┤nica
+  - `cnt_4c_Saida` (Left=917, Width=90) com `cmd_4c_Encerrar` Caption="Encerrar"
+  - `grd_4c_Lista` (Verdana, DeleteMark=.F., RecordMark=.F., sem RecordSource ainda)
+  - BINDEVENTs para todos os bot├Áes e DblClick do grid
+- `AlternarPagina()` ÔÇö navega entre pages, chama AjustarBotoesPorModo + CarregarLista ao voltar para Page1
+- `CarregarLista()` ÔÇö gerencia cursor com TABLEREVERT + CREATE CURSOR + sets RecordSource/ColumnCount/Headers
+- `FormatarGridLista()` ÔÇö SetAll Verdana/8
+- `AjustarBotoesPorModo()` ÔÇö habilita bot├Áes baseado na presen├ºa de registros
+- Handlers completos: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `GrdListaDblClick`
+- Corrigido: RETURN dentro de TRY (regra #1) e CHR(227) duplicado em BtnExcluirClick

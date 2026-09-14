@@ -1,0 +1,19 @@
+﻿Good - 52 CHR() usages (all accented characters are properly encoded). The file has no `FASE 5: Implementar` stubs remaining.
+
+FASE 5 is now complete. Here's a summary of what was implemented:
+
+**`BOParaForm()`** ÔÇö maps all 10 rows of BO properties to form fields, then calls `CarregarDescricoesForm()` when a DB connection is available to populate the read-only description fields.
+
+**`FormParaBO()`** ÔÇö reads all editable form fields back into BO properties, including OptionGroup value conversions (`obj_4c_ProdWeb.Value - 1` ÔåÆ `this_nWebpros`, `obj_4c_Variacao.Value = 2` ÔåÆ `this_nVarias = 1`).
+
+**`HabilitarCampos(par_lHabilitar, par_lHabilitarCodigo)`** ÔÇö enables/disables all editable fields; `par_lHabilitarCodigo` controls whether `txt_4c_Cpro` (the PK) is editable (only in INCLUIR mode).
+
+**10 KeyPress handlers** ÔÇö `DadosCproKeyPress`, `DadosCgruKeyPress`, `DadosLinKeyPress`, `DadosColKeyPress`, `DadosIforKeyPress`, `DadosCorKeyPress`, `DadosTamKeyPress`, `DadosCodFinPKeyPress`, `DadosCodacbKeyPress`, `DadosCProEqKeyPress` ÔÇö each routes ENTER/TAB to validate and F4 to open lookup.
+
+**9 ValidarDadosXxx() methods** ÔÇö validate the typed code against the DB and populate (or clear) the description field.
+
+**9 AbrirLookupDadosXxx() methods** ÔÇö open `FormBuscaAuxiliar` with the correct columns for each lookup table (SigCdGrp, SigCdLin, SIGCDCOL, SIGCDCLI, SigCdCor, SigCdTam, sigcdmod, SigCdAca, SigCdPro).
+
+**`CarregarDescricoesForm(par_oPg1)`** ÔÇö batch-loads all lookup descriptions when a record is opened (group, line, collection, supplier, model, finishing).
+
+Also fixed **`ProdutoBO.prg`** to load `webpros` in `CarregarDoCursor()`.

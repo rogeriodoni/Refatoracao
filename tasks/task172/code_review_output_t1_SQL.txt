@@ -1,0 +1,33 @@
+﻿Todas as altera├º├Áes est├úo corretas. Resumo do que foi corrigido:
+
+---
+
+## Corre├º├Áes aplicadas
+
+### `Formsigprdis.prg`
+
+**1. `CarregarEstoque` ÔÇö `cursor_4c_Estoque` (4 erros GRID-SQL)**
+- SQL: `Cemps, CGrus, CCons` ÔåÆ `Emps, Grupos, Contas` (nomes reais em `SigCdCeg`) + `ORDER BY Emps`
+- ControlSources: `.Cemps/.CGrus/.CCons` ÔåÆ `.Emps/.Grupos/.Contas`
+
+**2. `CarregarCabOperas` ÔÇö `cursor_4c_CabOperas` (8 erros GRID-SQL)**
+- SQL: removido `c.opers AS opers` (coluna inexistente em `SigMvCab`); adicionado `c.numes AS numes` (que constava no original)
+- ControlSources: Column2 `opers` ÔåÆ `dopes`; Column3 `dopes` ÔåÆ `numes`
+
+**3. `CarregarItnOperas` ÔÇö `cursor_4c_ItnOperas` (9 erros GRID-SQL)**
+- SQL: substitu├¡da consulta incorreta em `SigMvHst` (que n├úo tem `seqs/unitmeds/units/totas/codcors/codtams`) pela query original `SigMvItn` + `SigMvIts`, com aliases corretos: `Citens, CPros, Dpros, CUnis, Qtds, Units, totas, CodCors, CodTams`
+- ControlSources: atualizados para os novos aliases
+
+### `sigprdisBO.prg`
+
+**4. `ProcessarDistribuicao` ÔÇö filtro `tipoestos = 3` inventado (2 erros SQL-FILTRO-INVENTADO)**
+- Removido `WHERE m.tipoestos = 3 AND` de ambos os SQLs (`cursor_4c_Disponivel` e `cursor_4c_Distribui`)
+
+**5. `ProcessarDistribuicao` ÔÇö SCAN l├¬ colunas corrigidas**
+- Loop SCAN: `ALLTRIM(Cemps)/CGrus/CCons` ÔåÆ `ALLTRIM(Emps)/Grupos/Contas` (consistente com o fix #1)
+
+---
+
+**Sobre os 13 erros GRID-SQL restantes** (`cursor_4c_Distribui` e `cursor_4c_Disponivel`): s├úo falsos positivos ÔÇö os campos `Cemps/QtdSaldo/QtdDistr/CidChaves` e `Cpros/Dpros/CodCors/CodTams/Sqtds/QtdSaida/QtdSaldo` **existem nos SELECTs** do BO (`RTRIM(m.emps) AS Cemps`, `SUM(m.sqtds) AS QtdSaldo`, etc.). O detector n├úo consegue rastrear cursores criados no BO e referenciados no form.
+
+**Sobre `CIDCHAVES` (SQL-FILTRO-INVENTADO):** O ├║nico `WHERE cidchaves = ...` no c├│digo ├® no `UPDATE` do m├®todo `Atualizar()` do BO ÔÇö uso correto da PK para atualizar registro espec├¡fico, n├úo um filtro inventado em SELECT.

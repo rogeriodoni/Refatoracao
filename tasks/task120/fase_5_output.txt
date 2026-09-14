@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto e completo. Aqui est├í o resumo do que foi feito na Fase 5:
+
+**Fase 5 conclu├¡da ÔÇö `Formsigreifx.prg` atualizado.**
+
+Como este ├® um form REPORT (n├úo CRUD), n├úo existe Page2/Dados com campos de edi├º├úo. A adapta├º├úo correta para o padr├úo de fases foi:
+
+- **Adicionado** `ConfigurarPaginaDados(par_nDocus)` ÔÇö cont├®m `chk_4c_ChkObs` (1┬¬ metade dos campos, o ├║nico campo de filtro nessa fase). Para forms REPORT, a "p├ígina de dados" equivale ├á p├ígina de filtros de impress├úo (Page1).
+- **Atualizado** `ConfigurarCheckBoxes(par_nDocus)` ÔÇö agora cont├®m apenas `chk_4c_ChkImagem` (2┬¬ metade, para a Fase 6).
+- **Atualizado** `InicializarForm()` ÔÇö chama `ConfigurarPaginaDados()` antes de `ConfigurarCheckBoxes()`.
+
+Toda a funcionalidade existente est├í preservada (ambos os checkboxes continuam sendo adicionados em Page1 com a visibilidade correta por `Docus`). A Fase 6 completar├í os campos da 2┬¬ metade (`chk_4c_ChkImagem` j├í est├í em `ConfigurarCheckBoxes()`).

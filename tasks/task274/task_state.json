@@ -1,0 +1,262 @@
+﻿{
+    "taskId":  "task274",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-15T16:21:57",
+    "atualizadoEm":  "2026-07-15T17:41:13",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-15T16:21:57",
+                                            "fim":  "2026-07-15T16:21:58",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task274\\sigprdft.sct",
+                                            "baseName":  "sigprdft",
+                                            "scxFile":  "C:\\4c\\tasks\\task274\\sigprdft.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-15T16:21:58",
+                                          "fim":  "2026-07-15T16:21:58",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigprdft",
+                                          "txtFile":  "C:\\4c\\tasks\\task274\\sigprdft_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-15T16:21:58",
+                                              "fim":  "2026-07-15T16:21:58",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task274\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-15T16:21:59",
+                                              "fim":  "2026-07-15T16:21:59",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task274\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task274\\meta_prompt.md",
+                                              "boClass":  "sigprdftBO",
+                                              "formClass":  "Formsigprdft",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task274\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-15T16:21:59",
+                                              "fim":  "2026-07-15T16:22:00",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task274\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-15T16:22:00",
+                                               "fim":  "2026-07-15T16:22:00",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task274\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formsigprdft_esqueleto.prg",
+                                                                "sigprdftBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-15T16:22:00",
+                                       "fim":  "2026-07-15T17:19:54",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprdftBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  50.66,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprdft.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  1880
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-15T17:19:54",
+                                                  "fim":  "2026-07-15T17:20:03",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprdft.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprdftBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-15T17:20:03",
+                                                 "fim":  "2026-07-15T17:20:37",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-15T17:35:25",
+                                       "fim":  "2026-07-15T17:35:50",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-15T17:35:50",
+                                               "fim":  "2026-07-15T17:36:10",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task274\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-15T17:36:10",
+                                        "fim":  "2026-07-15T17:41:13",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-15T17:41:13",
+                                              "fim":  "2026-07-15T17:41:13",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task274_sigprdft.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-15T16:21:58",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-15T16:21:59",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task274\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-15T16:21:59",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-15T16:21:59"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-15T17:20:03",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-15T17:20:03",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formsigprdft_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprdft.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task274\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-15T17:20:37",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-15T17:22:42",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-15T17:22:42",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-15T17:34:40",
+                                          "passes":  5,
+                                          "problemas":  "[OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027LCARTAO\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNRETORNO, NSHIFTALTCTRL, LLONERRO1, FPAGS, CEMPS, TIPOCAMPO, PROXIMOCOMANDO; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027TCDC\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNRETORNO, NSHIFTALTCTRL, LLONERRO1, FPAGS, CEMPS, TIPOCAMPO, PROXIMOCOMANDO; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027GARANTIAS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNRETORNO, NSHIFTALTCTRL, LLONERRO1, FPAGS, CEMPS, TIPOCAMPO, PROXIMOCOMANDO; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CONTROLCOUNT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: LNRETORNO, NSHIFTALTCTRL, LLONERRO1, FPAGS, CEMPS, TIPOCAMPO, PROXIMOCOMANDO; [LAYOUT-POSITION] Controle \u0027Container1\u0027 (parent: SIGPRDFT): Top original=298 vs migrado \u0027cnt_4c_Container1\u0027 Top=14 (diff=284px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Container1\u0027 (parent: SIGPRDFT): Left original=54 vs migrado \u0027cnt_4c_Container1\u0027 Left=18 (diff=36px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGPRDFT.Container1): Top original=14 vs migrado \u0027lbl_4c_Label11\u0027 Top=268 (diff=254px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGPRDFT.Container1): Left original=18 vs migrado \u0027lbl_4c_Label11\u0027 Left=98 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGPRDFT): Top original=200 vs migrado \u0027obj_4c_Optiongroup1\u0027 Top=4 (diff=196px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGPRDFT): Left original=222 vs migrado \u0027obj_4c_Optiongroup1\u0027 Left=5 (diff=217px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  11
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-15T17:34:40",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-15T17:35:25",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\sigprdftBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\Formsigprdft.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-15T17:36:10",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-15T17:36:10",
+                                             "thresholdPx":  5,
+                                             "unmatched":  3,
+                                             "errors":  3,
+                                             "matched":  16,
+                                             "warnings":  18,
+                                             "reportFile":  "C:\\4c\\tasks\\task274\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

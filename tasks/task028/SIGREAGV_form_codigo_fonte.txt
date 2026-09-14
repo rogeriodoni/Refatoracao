@@ -1,0 +1,832 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREAGV.SCX
+* Data/Hora: 16/05/26 01:42:24
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREAGV
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntMensagem
+  Parent: SIGREAGV
+  Class: container
+  BaseClass: container
+
+Objeto: lblMensagem
+  Parent: SIGREAGV.cntMensagem
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntLocal
+  Parent: SIGREAGV
+  Class: container
+  BaseClass: container
+
+Objeto: Say3
+  Parent: SIGREAGV.cntLocal
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getColecao
+  Parent: SIGREAGV.cntLocal
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDColecao
+  Parent: SIGREAGV.cntLocal
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getMoeda
+  Parent: SIGREAGV.cntLocal
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREAGV.cntLocal
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDMoeda
+  Parent: SIGREAGV.cntLocal
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAGV
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Acompanhamento Por Grupo de Venda"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 0
+  Name = "SIGREAGV"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 71
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 137
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 203
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 80
+  btnReport.Left = 528
+  btnReport.Top = 0
+  btnReport.Width = 273
+  btnReport.TabIndex = 3
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAGV.cntMensagem
+------------------------------------------------------------
+  Top = 516
+  Left = 175
+  Width = 473
+  Height = 56
+  SpecialEffect = 0
+  TabIndex = 2
+  ZOrderSet = 3
+  Name = "cntMensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAGV.cntMensagem.lblMensagem
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontSize = 12
+  Alignment = 2
+  Caption = "Aguarde!!!"
+  Height = 22
+  Left = 20
+  Top = 18
+  Width = 445
+  ForeColor = 0,0,128
+  Name = "lblMensagem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAGV.cntLocal
+------------------------------------------------------------
+  Top = 144
+  Left = 204
+  Width = 451
+  Height = 61
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 1
+  ZOrderSet = 4
+  Name = "cntLocal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAGV.cntLocal.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo de Venda :"
+  Left = 16
+  Top = 7
+  Width = 86
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAGV.cntLocal.getColecao
+------------------------------------------------------------
+  Format = "K"
+  Height = 23
+  Left = 108
+  MaxLength = 0
+  TabIndex = 2
+  Top = 4
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "getColecao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAGV.cntLocal.getDColecao
+------------------------------------------------------------
+  Format = "K"
+  Height = 23
+  Left = 190
+  MaxLength = 0
+  TabIndex = 3
+  Top = 4
+  Width = 255
+  ForeColor = 0,0,0
+  Name = "getDColecao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAGV.cntLocal.getMoeda
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Left = 108
+  MaxLength = 3
+  TabIndex = 5
+  Top = 29
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "getMoeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAGV.cntLocal.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda de Venda :"
+  Left = 13
+  Top = 32
+  Width = 89
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAGV.cntLocal.getDMoeda
+------------------------------------------------------------
+  Format = "K!"
+  Left = 141
+  MaxLength = 15
+  TabIndex = 6
+  Top = 29
+  Width = 115
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "getDMoeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREAGV
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReAgv To Printer
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReAgv To Print Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtR, pDtI, pDtF
+
+lcCol = Padr(ThisForm.cntLocal.getColecao.Value,  10)
+lcDol = Padr(ThisForm.cntLocal.getDColecao.Value, 40)
+lcMoe = Padr(ThisForm.cntLocal.getMoeda.Value,    03)
+
+lcTit = ThisForm.Caption
+lcSub = 'Grupo de Venda : ' + Iif(Empty(lcCol), 'Geral', Alltrim(lcCol) + ' - ' + Alltrim(lcDol))
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcCep = Alltrim(_Empr) + Iif(Eof('crSigCdEmp'), '', ' - ' + Alltrim(crSigCdEmp.Razas))
+
+Create Cursor crCabecalho (Empresa c(80), Titulo c(80), SubTitulo c(80))
+Insert Into crCabecalho (Empresa, Titulo, SubTitulo) Values (lcCep, lcTit, lcSub)
+
+Create Cursor crOrdenados (Colecoes c(10), CPros c(14), PrecoMedio n(16, 2), DtIncs d(8), ;
+						   Moevs c(3), Promos c(25), Ordem c(10), QtdMedia n(16, 2))
+
+lcQuery = [Select a.Dopes, a.TipoOps, t.GerGdmis ] + ;
+			[From SigCdOpe a, SigCdTom t ] + ;
+		   [Where a.TipoOps = t.Codigos And ] + ;
+				 [t.GerGdmis In(1, 2) ] + ;
+		   [Order By a.Dopes, a.TipoOps]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdOpe') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdOpe)')
+	Return 0
+EndIf
+
+* Apanha Os Grupos de Produtos Que Não São Considerados Para o Cálculo de Média de Preço de Coleções
+lcQuery = [Select a.Promos, a.CPros, Min(a.Datas) as Datas ] + ;
+		    [From SigPrPmi a, SigPrPmc b ] + ;
+		   [Where a.Promos = b.Promos And ] + ;
+		   		 [Not b.Cods = '   ' ] + ;
+		   [Group By a.Promos, a.CPros]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigPrPmi') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPrPmi)')
+	Return 0
+EndIf
+Select crSigPrPmi
+Index On CPros Tag CPros
+
+* Apanha Os Produtos Que São Considerados Para o Cálculo de Média de Preço de Coleções
+lcQuery = [Select a.Colecoes, a.CPros, a.CGrus, a.PVens, a.Moevs, a.DtIncs, a.PVens as QtdMedia ] + ;
+			[From SigCdPro a ] + ;
+		   [Where Not a.Colecoes = '          ' And ] + ;
+		   		 [Not a.PVens = 0 ] + ;
+		   [Order By a.Colecoes, a.CPros, a.CGrus, a.PVens, a.Moevs, a.DtIncs]
+
+*		   [Where ] + Iif(Empty(lcCol), [Not ], []) + [a.Colecoes = '] + lcCol + [' And ] 
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPro') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPro)')
+	Return 0
+EndIf
+
+* Apanha a Quantidade de Produtos Dentro de Cada Grupo de Venda
+Select Colecoes, Sum(1) as QtdMedia ;
+  From crSigCdPro ;
+ Group By Colecoes ;
+  Into Cursor crQtdMedia
+Select crQtdMedia
+Index On Colecoes Tag Colecoes
+
+* Apanha a Menor Data De Cadastro dos Produtos Dentro de Cada Grupo de Venda
+Select Colecoes, Min(Ttod(Nvl(DtIncs, Ctot('')))) as DtIncs ;
+  From crSigCdPro ;
+ Group By Colecoes ;
+  Into Cursor crDtIncs
+Select crDtIncs
+Index On Colecoes Tag Colecoes
+
+* Convertendo o Preço de Venda das Peças Para "R" (Real) e Atualizando a Data de Cadastro
+Select crSigCdPro
+oProg = CreateObject('fwprogressbar', 'Processando Preço de Venda dos Produtos...', Reccount())
+oProg.Show
+Scan
+	oProg.Update(.t.)
+
+	Replace PVens With PVens * fBuscarCotacao(crSigCdPro.Moevs, Datetime(), ThisForm.poDataMgr) In crSigCdPro
+
+	If Seek(crSigCdPro.Colecoes, 'crQtdMedia', 'Colecoes')
+		Replace QtdMedia With crQtdMedia.QtdMedia In crSigCdPro
+	Else
+		Replace QtdMedia With 0 In crSigCdPro
+	EndIf
+
+	If Seek(crSigCdPro.Colecoes, 'crDtIncs', 'Colecoes')
+		Replace DtIncs With crDtIncs.DtIncs In crSigCdPro
+	EndIf
+EndScan
+oProg.Complete
+
+* Calculando o Preço Médio das Peças de Cada Grupo de Venda
+Select Colecoes, Avg(PVens) as PVens ;
+  From crSigCdPro ;
+ Group By Colecoes ;
+  Into Cursor crMedias
+Select crMedias
+Index On Colecoes Tag Colecoes
+
+* Atualizando o Preço Médio das Peças de Cada Grupo de Venda
+Select Distinct a.Colecoes, a.CPros, b.PVens as PrecoMedio, a.DtIncs, a.Moevs, a.QtdMedia ;
+  From crSigCdPro a, crMedias b ;
+ Where a.Colecoes = b.Colecoes ;
+ Order By a.Colecoes, a.CPros, b.PVens, a.DtIncs, a.Moevs ;
+  Into Cursor crGrupos
+
+Select crGrupos
+oProg = CreateObject('fwprogressbar', 'Processando Histórico dos Produtos...', Reccount())
+oProg.Show
+Scan
+	oProg.Update(.t.)
+
+	lcCol = Padr(Strtran(crGrupos.Colecoes, ['], []), 10)
+	
+	lcQuery = [Select Moevs, Min(DataAlts) as DataAlts ] + ;
+			    [From SigCdPrc ] + ;
+			   [Where CPros = '] + crGrupos.CPros + [' And ] + ;
+			   		 [Colecoes = '] + lcCol + [' ] + ;
+			   [Group By Moevs ] + ;
+			   [Order By DataAlts, Moevs]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdPrc') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdPrc)')
+		Return 0
+	EndIf
+
+	Select crSigCdPrc
+	Go Top
+	If Not Eof('crSigCdPrc')
+		lnCnt = 0
+		Scan
+			lnCnt = lnCnt + 1
+
+			Insert Into crOrdenados (Colecoes, CPros, PrecoMedio, QtdMedia, DtIncs, Moevs, Ordem) ;
+							 Values (lcCol, crGrupos.CPros, crGrupos.PrecoMedio, crGrupos.QtdMedia, ;
+									 Nvl(crSigCdPrc.DataAlts, {}), crSigCdPrc.Moevs, Alltrim(Str(lnCnt, 6)))
+		EndScan
+	Else
+		Insert Into crOrdenados (Colecoes, CPros, PrecoMedio, QtdMedia, DtIncs, Moevs, Ordem) ;
+						 Values (lcCol, crGrupos.CPros, crGrupos.PrecoMedio, crGrupos.QtdMedia, ;
+								 Nvl(crGrupos.DtIncs, {}), crGrupos.Moevs, '1')
+	EndIf
+
+	Select Promos, Min(Datas) as Datas ;
+	  From crSigPrPmi ;
+	 Where CPros = crGrupos.CPros ;
+	 Group By Promos ;
+	 Order By 2, 1 ;
+	  Into Cursor crPromos
+
+	Select crPromos
+	Go Top
+	If Not Eof('crPromos')
+		lnCnt = 0
+		Scan
+			lnCnt = lnCnt + 1
+
+			Insert Into crOrdenados (Colecoes, CPros, PrecoMedio, QtdMedia, DtIncs, Promos, Ordem) ;
+							 Values (lcCol, crGrupos.CPros, crGrupos.PrecoMedio, crGrupos.QtdMedia, ;
+									 Nvl(crPromos.Datas, {}), crPromos.Promos, Alltrim(Str(lnCnt, 6)) + 'A')
+		EndScan
+	EndIf
+EndScan
+oProg.Complete
+
+Select Colecoes, PrecoMedio, Max(QtdMedia) as QtdMedia, Max(Iif(Moevs = lcMoe, Moevs, '   ')) as Moevs, ;
+	   Promos, Max(Ordem) as Ordem, Min(DtIncs) as DtIncs ;
+  From crOrdenados ;
+ Group By Colecoes, PrecoMedio, Moevs, Promos ;
+  Into Cursor crGroupImp1
+
+Select Colecoes, PrecoMedio, Max(QtdMedia) as QtdMedia, Moevs, Promos, Max(Ordem) as Ordem, Min(DtIncs) as DtIncs ;
+  From crGroupImp1 ;
+ Group By Colecoes, PrecoMedio, Moevs, Promos ;
+  Into Cursor crGroupImp2
+
+lnZer = 000000000.00
+Select Colecoes, PrecoMedio, Max(QtdMedia) as QtdMedia, Max(Moevs) as Moevs, Promos, Max(Ordem) as Ordem, ;
+	   Max(DtIncs) as DtIncs, Max(DtIncs) as DtInicial, Max(DtIncs) as DtFinal, lnZer as SaldoIni, ;
+	   lnZer as Compras, lnZer as Vendas, lnZer as SaldoFin, lnZer as Percentual ;
+  From crGroupImp2 ;
+ Group By Colecoes, PrecoMedio, Promos, DtIncs ;
+  Into Cursor crImprimir ReadWrite
+
+Select crImprimir
+Index On Colecoes + Dtos(DtIncs)+ Ordem Tag Colecoes
+
+lcGrv = Space(10)
+Select crImprimir
+Scan
+	If (lcGrv <> crImprimir.Colecoes)
+		lcGrv = crImprimir.Colecoes
+		Replace DtInicial With Ctod('01/01/1900') In crImprimir
+		Replace DtFinal With Date() In crImprimir
+		ldDat = crImprimir.DtFinal
+	Else
+		Skip - 1
+		Replace DtFinal With Iif(Empty(DtIncs), Ctod('01/01/1900'), DtIncs) In crImprimir
+		ldDat = crImprimir.DtFinal
+		Skip + 1
+		Replace DtInicial With ldDat In crImprimir
+		Replace DtFinal With Date() In crImprimir
+		ldDat = crImprimir.DtFinal
+	EndIf
+EndScan
+
+Wait Window 'Aguarde!!! Selecionando Todas as Movimentações de Produtos...' NoWait
+
+lcQuery = [Select a.TipoOps, b.Datas, c.CPros, c.Qtds, c.Opers, t.GerGdmis ] + ;
+		    [From SigCdOpe a, SigMvCab b, SigMvItn c, SigCdTom t ] + ;
+		   [Where a.Dopes = b.Dopes And ] + ;
+		   		 [b.EmpDopNums = c.EmpDopNums And ] + ;
+		   		 [a.TipoOps = t.Codigos And ] + ;
+				 [t.GerGdmis In(1, 2)]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crMovGeral') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crMovGeral)')
+	Return 0
+EndIf
+
+Select Distinct Ttod(Datas) as Datas, CPros, ;
+	   Val(Str(Iif(GerGdmis=2, Iif(Opers = [E], Qtds, Qtds * -1), 0), 16, 2)) as Compras, ;
+	   Val(Str(Iif(GerGdmis=1, Iif(Opers = [S], Qtds, Qtds * -1), 0), 16, 2)) as Vendas ;
+  From crMovGeral ;
+  Into Cursor crMovimento ReadWrite
+
+Select crMovimento
+Index On CPros + Dtos(Datas) Tag ProDat
+
+Wait Clear
+
+Select crImprimir
+oProg = CreateObject('fwprogressbar', 'Processando Movimentação dos Produtos...', Reccount())
+oProg.Show
+Scan
+	oProg.SubTitulo.Caption = 'Grupo de Venda : ' + crImprimir.Colecoes
+	oProg.Update(.t.)
+
+	lcDtI = Dtos(crImprimir.DtInicial)
+	lcDtF = Dtos(crImprimir.DtFinal)
+
+	Select CPros ;
+	  From crSigCdPro ;
+	 Where Colecoes = crImprimir.Colecoes ;
+	 Order By CPros ;
+	  Into Cursor crProdutos
+
+	Select crProdutos
+	Scan
+		Select [] as Agrupar, Sum(Compras) as Compras, Sum(Vendas) as Vendas ;
+		  From crMovimento ;
+		 Where CPros + Dtos(Datas) BetWeen crProdutos.CPros + lcDtI And crProdutos.CPros + lcDtF ;
+		 Group By 1 ;
+		  Into Cursor crValores
+		
+		Go Top In crValores
+		If Not Eof('crValores')
+			Replace Compras With Compras + crValores.Compras, ;
+					Vendas  With Vendas  + crValores.Vendas In crImprimir
+		EndIf
+	EndScan
+EndScan
+oProg.Complete
+
+lcGrv = Space(10)
+Select crImprimir
+Scan
+	If (lcGrv <> crImprimir.Colecoes)
+		lcGrv = crImprimir.Colecoes
+		Replace SaldoFin With Compras - Vendas In crImprimir
+		Replace Percentual With Iif(Vendas = 0, 0, Iif(SaldoIni + Compras = 0, 100, (Vendas / (SaldoIni + Compras)) * 100)) In crImprimir
+	Else
+		Skip - 1
+		lnSal = crImprimir.SaldoFin
+		Skip + 1
+		Replace SaldoIni With lnSal, ;
+				SaldoFin With lnSal + (Compras - Vendas) In crImprimir
+		Replace Percentual With Iif(Vendas = 0, 0, Iif(SaldoIni + Compras = 0, 100, (Vendas / (SaldoIni + Compras)) * 100)) In crImprimir
+	EndIf
+EndScan
+
+Select crImprimir
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReAgv Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 4) && Se Não Clicou em Saída
+*!*		If Empty(ThisForm.cntLocal.getMoeda.Value)
+*!*			=Messagebox('Moeda Inválida!!!', 0+48, '')
+*!*			ThisForm.cntLocal.getMoeda.SetFocus
+*!*			Return 0
+*!*		EndIf
+EndIf 
+
+frmrelatorio::btnReport.Click
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAGV.cntLocal.getColecao
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCol', ;
+						   'crListaRemota', 'Colecoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Colecoes', '', 'Código')
+		loLista.mAddColuna('Descs',    '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.cntLocal.getColecao.Value  = crListaRemota.Colecoes
+	ThisForm.cntLocal.getDColecao.Value = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.cntLocal.getColecao.Value  = ''
+	ThisForm.cntLocal.getDColecao.Value = ''
+EndIf
+ThisForm.cntLocal.getColecao.Refresh
+ThisForm.cntLocal.getDColecao.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAGV.cntLocal.getDColecao
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCol', ;
+						   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descs',    '', 'Descrição')
+		loLista.mAddColuna('Colecoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.cntLocal.getColecao.Value  = crListaRemota.Colecoes
+	ThisForm.cntLocal.getDColecao.Value = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.cntLocal.getColecao.Value  = ''
+	ThisForm.cntLocal.getDColecao.Value = ''
+EndIf
+ThisForm.cntLocal.getColecao.Refresh
+ThisForm.cntLocal.getDColecao.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.cntLocal.getColecao.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAGV.cntLocal.getMoeda
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.cntLocal.getMoeda.Value  = crListaRemota.CMoes
+	ThisForm.cntLocal.getDMoeda.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	ThisForm.cntLocal.getMoeda.Value  = ''
+	ThisForm.cntLocal.getDMoeda.Value = ''
+EndIf
+ThisForm.cntLocal.getMoeda.Refresh
+ThisForm.cntLocal.getDMoeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAGV.cntLocal.getDMoeda
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.cntLocal.getMoeda.Value  = crListaRemota.CMoes
+	ThisForm.cntLocal.getDMoeda.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	ThisForm.cntLocal.getMoeda.Value  = ''
+	ThisForm.cntLocal.getDMoeda.Value = ''
+EndIf
+ThisForm.cntLocal.getMoeda.Refresh
+ThisForm.cntLocal.getDMoeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.cntLocal.getMoeda.Value)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREAGV
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

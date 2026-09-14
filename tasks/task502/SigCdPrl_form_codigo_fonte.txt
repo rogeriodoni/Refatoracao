@@ -1,0 +1,1362 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdPrl.SCX
+* Data/Hora: 22/08/2026 23:44:40
+* Total de registros: 33
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDPRL
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdEtiquetas
+  Parent: SIGCDPRL.Pagina.Lista
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cntEtiquetas
+  Parent: SIGCDPRL.Pagina.Lista
+  Class: container
+  BaseClass: container
+
+Objeto: getCodigos
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say19
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optTipo
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: spnDensidade
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: spnHorizontal
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: spnVertical
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: CmdOk
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: CmdCancel
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label8
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: label
+  BaseClass: label
+
+Objeto: getQtde
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optImpressora
+  Parent: SIGCDPRL.Pagina.Lista.cntEtiquetas
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: get_descricaos
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDivisaos
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get1
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_codigos
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fwoption1
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkEtiqueta
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say22
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDPRL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Localização"
+  Name = "SIGCDPRL"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 939
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Height = 75
+  Pagina.Lista.Grupo_op.Inserir.Width = 77
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 82
+  Pagina.Lista.Grupo_op.Consultar.Height = 75
+  Pagina.Lista.Grupo_op.Consultar.Width = 77
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 159
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 234
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 309
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 539
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 389
+  Pagina.Lista.Grupo_op.TabIndex = 2
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.TabIndex = 3
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .F.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 819
+  Pagina.Dados.Grupo_Salva.Top = 9
+  Pagina.Dados.Grupo_Salva.TabIndex = 7
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cmdEtiquetas
+------------------------------------------------------------
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 90
+  Left = 464
+  Top = -1
+  Width = 90
+  TabIndex = 5
+  Themes = .F.
+  Name = "cmdEtiquetas"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontName = "Tahoma"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_etiqueta_60.jpg
+  Command1.Caption = "Etiquetas"
+  Command1.ToolTipText = "Etiquetas"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnEtiquetas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas
+------------------------------------------------------------
+  Top = 173
+  Left = 289
+  Width = 420
+  Height = 259
+  BorderWidth = 2
+  SpecialEffect = 0
+  Visible = .F.
+  TabIndex = 4
+  BackColor = 255,255,255
+  ZOrderSet = 9
+  Name = "cntEtiquetas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.getCodigos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = ""
+  Left = 58
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 33
+  Width = 31
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Name = "getCodigos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Height = 15
+  Left = 7
+  Top = 36
+  Width = 42
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.Say19
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo :"
+  Left = 23
+  Top = 65
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Say19"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.optTipo
+------------------------------------------------------------
+  AutoSize = .T.
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 25
+  Left = 52
+  Top = 61
+  Width = 136
+  TabIndex = 7
+  Name = "optTipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Pequena"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 60
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Grande"
+  Option2.Height = 15
+  Option2.Left = 78
+  Option2.Top = 5
+  Option2.Width = 53
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.spnDensidade
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 26
+  KeyboardHighValue = 20
+  KeyboardLowValue = 10
+  Left = 234
+  SpecialEffect = 1
+  SpinnerHighValue =  20.00
+  SpinnerLowValue =   0.00
+  TabIndex = 9
+  Top = 53
+  Width = 55
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Value = 20
+  Name = "spnDensidade"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.spnHorizontal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 26
+  KeyboardHighValue = 20
+  KeyboardLowValue = 0
+  Left = 292
+  SpecialEffect = 1
+  SpinnerHighValue =  20.00
+  SpinnerLowValue =   0.00
+  TabIndex = 11
+  Top = 53
+  Width = 55
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Value = 0
+  Name = "spnHorizontal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.spnVertical
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 26
+  KeyboardHighValue = 20
+  KeyboardLowValue = 0
+  Left = 350
+  SpecialEffect = 1
+  SpinnerHighValue =  20.00
+  SpinnerLowValue =   0.00
+  TabIndex = 13
+  Top = 53
+  Width = 55
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Value = 0
+  Name = "spnVertical"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.CmdOk
+------------------------------------------------------------
+  Top = 206
+  Left = 321
+  Height = 45
+  Width = 45
+  FontName = "Small Fonts"
+  FontSize = 7
+  Picture = ..\framework\imagens\geral_escudo_ok_32.jpg
+  Caption = ""
+  TabIndex = 16
+  ToolTipText = "Confirmar"
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CmdOk"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.CmdCancel
+------------------------------------------------------------
+  Top = 206
+  Left = 367
+  Height = 45
+  Width = 45
+  FontName = "Small Fonts"
+  FontSize = 7
+  Picture = ..\framework\imagens\cadastro_sair_32.jpg
+  Cancel = .T.
+  Caption = ""
+  TabIndex = 17
+  ToolTipText = "[ESC] Sair"
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CmdCancel"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.Label8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 12
+  BackStyle = 0
+  Caption = "Impressão de Etiquetas"
+  Height = 21
+  Left = 113
+  Top = 5
+  Width = 194
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.getQtde
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  InputMask = "999"
+  Left = 173
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 34
+  Width = 31
+  ForeColor = 90,90,90
+  BorderColor = 100,100,100
+  Name = "getQtde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Quantidade :"
+  Height = 15
+  Left = 99
+  Top = 37
+  Width = 65
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Densidade"
+  Left = 234
+  Top = 37
+  Width = 45
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Horizontal"
+  Left = 292
+  Top = 37
+  Width = 43
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 7
+  Caption = "Vertical"
+  Height = 13
+  Left = 350
+  Top = 37
+  Width = 33
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Lista.cntEtiquetas.optImpressora
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 156
+  Left = 12
+  Top = 94
+  Width = 193
+  TabIndex = 15
+  Name = "optImpressora"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<1. Genérico/Somente Texto"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 4
+  Option1.Style = 0
+  Option1.TabIndex = 1
+  Option1.Top = 10
+  Option1.Width = 186
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.get_descricaos
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  ControlSource = "crSigPrLcl.descricaos"
+  Format = "!"
+  Left = 366
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 178
+  Width = 150
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "get_descricaos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.getDivisaos
+------------------------------------------------------------
+  FontName = "Courier New"
+  ControlSource = "crSigPrLcl.Divisaos"
+  Height = 23
+  InputMask = "99"
+  Left = 377
+  MaxLength = 2
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 517
+  Visible = .F.
+  Width = 24
+  BorderColor = 36,84,155
+  ZOrderSet = 2
+  Name = "getDivisaos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.Get1
+------------------------------------------------------------
+  FontName = "Courier New"
+  ControlSource = "crSigPrLcl.Bloqueios"
+  Height = 23
+  InputMask = "99"
+  Left = 377
+  MaxLength = 2
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 541
+  Visible = .F.
+  Width = 24
+  BorderColor = 36,84,155
+  ZOrderSet = 2
+  Name = "Get1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.get_codigos
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  ControlSource = "crSigPrLcl.codigos"
+  Height = 23
+  Left = 366
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 152
+  Width = 80
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  plprocurar = .T.
+  Name = "get_codigos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Localização :"
+  Left = 298
+  Top = 182
+  Visible = .T.
+  Width = 63
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.Say8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 319
+  Top = 155
+  Visible = .T.
+  Width = 42
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "sem uso :"
+  Left = 315
+  Top = 498
+  Visible = .F.
+  Width = 59
+  TabIndex = 10
+  ForeColor = 255,0,0
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.fwoption1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  ControlSource = "crSigPrLcl.Tipos"
+  Height = 27
+  Left = 377
+  Top = 493
+  Width = 257
+  TabIndex = 4
+  Visible = .F.
+  Name = "fwoption1"
+  Option1.FontName = "Verdana"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Produto"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 63
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 36,84,155
+  Option1.Name = "Option1"
+  Option2.FontName = "Verdana"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Agendamento"
+  Option2.Height = 15
+  Option2.Left = 81
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 98
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 36,84,155
+  Option2.Name = "Option2"
+  Option3.FontName = "Verdana"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Depósito"
+  Option3.Height = 15
+  Option3.Left = 183
+  Option3.Top = 7
+  Option3.Width = 69
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 36,84,155
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.chkEtiqueta
+------------------------------------------------------------
+  Top = 155
+  Left = 455
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprime Etiqueta"
+  ControlSource = "crSigPrLcl.etiquetas"
+  TabIndex = 2
+  Name = "chkEtiqueta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.Say22
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "sem uso :"
+  Height = 15
+  Left = 315
+  Top = 544
+  Visible = .F.
+  Width = 59
+  TabIndex = 11
+  ForeColor = 255,0,0
+  ZOrderSet = 44
+  Name = "Say22"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPRL.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "sem uso :"
+  Height = 15
+  Left = 315
+  Top = 521
+  Visible = .F.
+  Width = 59
+  TabIndex = 12
+  ForeColor = 255,0,0
+  ZOrderSet = 44
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 8, 7, 14, 11, 8, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDPRL
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE impetiqueta
+------------------------------------------------------------
+PROCEDURE impetiqueta
+lnPrinters = APrinters(laPrinters)
+If (lnPrinters <> 0)
+	For lnI = 1 to lnPrinters
+		laPrinters(lnI, 1) = Upper(laPrinters(lnI, 1))
+	EndFor
+	=ASort(laPrinters)
+	lnTam = Len(laPrinters(1, 1))
+Else
+	=MessageBox('Não Foi Encontrada Nenhuma Impressora!!!', 48, '')
+	Return 0
+EndIf
+
+lcCpo = 'OcoEtiqs, Ouros, nMaxTpEtis, TpEtiPads, nMaxImpEti, ImpEtis, AjVerts, AjHorzs, LibObss, TpInstalas'
+ThisForm.poDataMgr.CursorQuery('SigCdPam', 'LocalParam', .F., .F., lcCpo)
+
+ThisForm.poDataMgr.CursorQuery('SigCdmp', 'LocalCImp')
+Select LocalCImp
+Index On Impres Tag skImpres
+
+lnImpres = 1
+If (lnPrinters <> 0)
+	Select LocalCImp
+	Set Order To skImpres
+	Scan For LocalCImp.nTpImpres = 2
+		Dimension laImpOk(lnImpres)
+		lnOk = AScan(laPrinters, Alltrim(Upper(LocalCImp.Impres)))
+		If (lnOk <> 0)
+			laImpOk(lnImpres) = laPrinters(lnOk)
+			lnImpres = lnImpres + 1
+		EndIf
+	EndScan
+EndIf
+lnImpres = lnImpres - 1
+
+With ThisForm.Pagina.Lista.cntEtiquetas.optImpressora
+	lnTop 	 = .Top
+	lnHeight = 15
+	If (lnImpres <> 0)
+		.ButtonCount = Min(lnImpres, Max(LocalParam.nMaxImpEti, 3))
+		For lnI = 1 To lnImpres
+			lcI = Alltrim(Str(lnI))
+			With .Option&lcI.
+				.AutoSize = .F.
+				.Caption  = ' \<' + lcI + '. ' + laImpOk(lnI)
+				.FontSize = 8
+				.Tag      = Upper(laImpOk(lnI))
+				.Top      = lnTop
+				.Width    = 180
+			EndWith
+			lnTop 	 = lnTop + 20
+			lnHeight = lnHeight + 20
+		EndFor
+	Else
+		.ButtonCount = 1
+		lnOk = AScan(laPrinters, 'GENÉRICO/SOMENTE TEXTO')
+		With .Option1
+			.AutoSize = .F.
+			.Caption  = ' \<0. Genérico/Somente Texto'
+			.Enabled  = (lnOk <> 0)
+			.FontSize = 8
+			.Tag      = 'GENÉRICO/SOMENTE TEXTO'
+			.Width    = 180
+			lnImpres  = Iif(.Enabled, 1, 0)
+		EndWith
+		lnHeight = lnHeight + 20
+	EndIf
+	.Enabled = (lnImpres > 1)
+	.Height  = lnHeight
+EndWith
+
+ThisForm.Pagina.Lista.cntEtiquetas.spnVertical.Value   = LocalParam.AjVerts
+ThisForm.Pagina.Lista.cntEtiquetas.spnHorizontal.Value = LocalParam.AjHorzs
+
+ThisForm.Pagina.Lista.cntEtiquetas.Visible 	= .t.
+ThisForm.Pagina.Lista.cntEtiquetas.Enabled 	= .t.
+ThisForm.Pagina.Lista.Grade.Enabled 		= .f.
+ThisForm.Pagina.Lista.Grupo_op.Enabled 		= .f.
+ThisForm.Pagina.Lista.Grupo_saida.Enabled 	= .f.
+ThisForm.Pagina.Lista.cmdEtiquetas.Enabled 	= .f.
+
+ThisForm.Pagina.Lista.cntEtiquetas.getCodigos.SetFocus
+ThisForm.Pagina.Lista.cntEtiquetas.getQtde.Value = 1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If Not Empty(ThisForm.Pagina.Dados.Get_codigos.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigPrLcl','codigos',ThisForm.Pagina.Dados.Get_codigos.Value)
+EndIf
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigPrLcl], [Codigos], [crSigPrLcl], [], ThisForm.Pagina.Lista.Grade)
+			.pfSqlTabela(1).pColuna([Codigos],    [], [], [Código],    100, .t.)
+			.pfSqlTabela(1).pColuna([Descricaos], [], [], [Descrição], 290, .t.)
+		EndWith
+
+		=DoDefault()
+
+		.Pagina.Lista.cntEtiquetas.Visible = .f.
+		.Pagina.Lista.cntEtiquetas.Enabled = .f.
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Do Case
+	Case ThisForm.pcEscolha = 'INSERIR' or ThisForm.pcEscolha = 'PROCURAR'
+		ThisForm.Pagina.Dados.Get_Codigos.SetFocus
+	Case Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Get_Descricaos.SetFocus
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	If Empty(CrSigPrLcl.Descricaos)
+		=Messagebox('Localização Inválida!!!', 48, '')
+		ThisForm.Pagina.Dados.Get_Descricaos.SetFocus
+		Return 0
+	EndIf
+
+	If (crSigPrLcl.Etiquetas = 1) And (Len(Alltrim(crSigPrLcl.Codigos)) > 3)
+		=Messagebox('Para Impressão de Etiquetas o Código Deve Ter no Máximo 3 Caracteres!!!', 48, '')
+		ThisForm.Pagina.Dados.get_codigos.SetFocus
+		Return 0
+	EndIf
+EndIf
+
+=DoDefault()
+
+ThisForm.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPRL.Pagina.Lista.cmdEtiquetas
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnEtiquetas.Valid
+------------------------------------------------------------
+PROCEDURE btnEtiquetas.Valid
+ThisForm.ImpEtiqueta
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPRL.Pagina.Lista.cntEtiquetas.getCodigos
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+lcQuery = [Select Codigos, Descricaos ] + ;
+		    [From SigPrLcl ] + ;
+		   [Where Etiquetas = 1]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crBusca') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crBusca)')
+	Return 0
+EndIf
+Select crBusca
+Index On Codigos Tag Codigos
+Index On Descricaos + Codigos Tag Descrs
+
+If Not Empty(This.Value)
+	Set Near On
+	If Not Seek(This.Value, 'crBusca', 'Codigos')
+		m.loBrowse = CreateObject('fwbuscasel', 'crBusca', 'Codigos', This.Value, 'Localizações')
+		m.loBrowse.AddColuna('Codigos',    '', 'Código',    .t., 'Codigos')
+		m.loBrowse.AddColuna('Descricaos', '', 'Descrição', .t., 'Descricaos')
+		m.loBrowse.Show
+	Endif
+	Set Near Off
+
+	This.Value = IIf(LastKey()=27, '', crBusca.Codigos)
+EndIf
+This.Refresh
+Use In crBusca
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPRL.Pagina.Lista.cntEtiquetas.optTipo
+* Classe: fwoption (Base: optiongroup)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Option1.When
+------------------------------------------------------------
+PROCEDURE Option1.When
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Option2.When
+------------------------------------------------------------
+PROCEDURE Option2.When
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPRL.Pagina.Lista.cntEtiquetas.CmdOk
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+* Impressão das Etiquetas
+lcCod = ThisForm.Pagina.Lista.cntEtiquetas.getCodigos.Value
+lnQtd = ThisForm.Pagina.Lista.cntEtiquetas.getQtde.Value
+lnTip = ThisForm.Pagina.Lista.cntEtiquetas.optTipo.Value
+lnDen = Int(ThisForm.Pagina.Lista.cntEtiquetas.spnDensidade.Value)
+lnHor = Int(ThisForm.Pagina.Lista.cntEtiquetas.spnHorizontal.Value)
+lnVer = Int(ThisForm.Pagina.Lista.cntEtiquetas.spnVertical.Value)
+lnImp = ThisForm.Pagina.Lista.cntEtiquetas.optImpressora.Value
+lcImp = ThisForm.Pagina.Lista.cntEtiquetas.optImpressora.Buttons(lnImp).Tag
+
+If Empty(lcCod)
+	ThisForm.poDataMgr.CursorQuery('SigPrLcl', 'LocalPrLoc', 'Etiquetas', 1, 'Codigos')
+	If (Reccount('LocalPrLoc') < 1)
+		=MessageBox('Não Existem Localizações a Serem Impressas!!!', 0+48 , 'Atenção!!!')
+		Return 0
+	EndIf
+Else
+	ThisForm.poDataMgr.CursorQuery('SigPrLcl', 'LocalPrLoc', 'Codigos', Padr(lcCod, 6), 'Codigos')
+	If (Reccount('LocalPrLoc') < 1)
+		=MessageBox('Não Existem Localizações a Serem Impressas!!!', 0+48 , 'Atenção!!!')
+		Return 0
+	EndIf
+	Zap In LocalPrLoc
+	For I = 1 To lnQtd
+		Insert Into LocalPrLoc (Codigos) Values (lcCod)
+	Next
+	lnQtd = 1
+EndIf
+
+Insert Into LocalPrLoc (Codigos) Values ('*FIM*')
+
+Set Printer To Name (lcImp)
+Set Device To Printer
+
+For lnVezes = 1 To lnQtd
+	lnCnt = 1
+	Select LocalPrLoc
+	Scan
+		If (lnCnt = 1)
+			??? Chr(02) + 'L' + Chr(13)
+			??? 'H' + Alltrim(Str(lnDen)) + Chr(13)
+			??? 'D11' + Chr(13)
+		EndIf
+		
+		Do Case
+			Case (lnTip = 1) && Pequena
+				lnInc = ((85 * lnCnt) - 85)
+
+				If (LocalPrLoc.Codigos <> [*FIM* ])
+					lcLin = 015 + lnHor
+					lcCol = 010 + lnVer + lnInc
+					??? '1e42034' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'B' + Padr(LocalPrLoc.Codigos, 3) + Chr(13)
+
+					lcLin = 005 + lnHor
+					lcCol = 036 + lnVer + lnInc
+					??? '1911001' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + Padr(LocalPrLoc.Codigos, 3) + Chr(13)
+				Else
+					lcLin = 005 + lnHor
+					lcCol = 036 + lnVer + lnInc
+					??? '1911001' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + Padr(LocalPrLoc.Codigos, 5) + Chr(13)
+				EndIf
+
+			Case (lnTip = 2) && Grande
+				lnInc = ((89 * lnCnt) - 89)
+
+				If (LocalPrLoc.Codigos <> [*FIM* ])
+					lcLin = 022 + lnHor
+					lcCol = 050 + lnVer + lnInc
+					??? '4e42034' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + 'B' + Padr(LocalPrLoc.Codigos, 3) + Chr(13)
+
+					lcLin = 045 + lnHor
+					lcCol = 065 + lnVer + lnInc
+					??? '4911002' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + Padr(LocalPrLoc.Codigos, 3) + Chr(13)
+				Else
+					lcLin = 045 + lnHor
+					lcCol = 065 + lnVer + lnInc
+					??? '1911001' + Padl(lcLin, 4, '0') + Padl(lcCol, 4, '0') + Padr(LocalPrLoc.Codigos, 5) + Chr(13)
+				EndIf
+		EndCase
+		lnCnt = lnCnt + 1
+		If (lnCnt > 4) Or (LocalPrLoc.Codigos = [*FIM* ])
+			lnCnt = 1
+			??? 'Q0001' + Chr(13)
+			??? 'E' + Chr(13)
+		EndIf
+	EndScan
+Next
+
+Set Printer To Default
+Set Device To Screen
+
+* Retornando Para a Grade
+ThisForm.Pagina.Lista.cntEtiquetas.Visible 	= .f.
+ThisForm.Pagina.Lista.cntEtiquetas.Enabled 	= .f.
+ThisForm.Pagina.Lista.Grade.Enabled 		= .t.
+ThisForm.Pagina.Lista.Grupo_op.Enabled 		= .t.
+ThisForm.Pagina.Lista.Grupo_saida.Enabled 	= .t.
+ThisForm.Pagina.Lista.cmdEtiquetas.Enabled 	= .t.
+ThisForm.Refresh
+ThisForm.Pagina.Lista.Grade.SetFocus
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPRL.Pagina.Lista.cntEtiquetas.CmdCancel
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+* Retornando Para a Grade
+ThisForm.Pagina.Lista.cntEtiquetas.Visible 	= .f.
+ThisForm.Pagina.Lista.cntEtiquetas.Enabled 	= .f.
+ThisForm.Pagina.Lista.Grade.Enabled 		= .t.
+ThisForm.Pagina.Lista.Grupo_op.Enabled 		= .t.
+ThisForm.Pagina.Lista.Grupo_saida.Enabled 	= .t.
+ThisForm.Pagina.Lista.cmdEtiquetas.Enabled 	= .t.
+ThisForm.Refresh
+ThisForm.Pagina.Lista.Grade.SetFocus
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPRL.Pagina.Lista.cntEtiquetas.getQtde
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPRL.Pagina.Dados.get_codigos
+* Classe: fwget (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( Inlist(thisform.pcEscolha,'INSERIR', 'PROCURAR' ) )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If IsEmpty(This.Value) And Thisform.pcEscolha = 'INSERIR'
+	ThisForm.Pagina.Dados.Get_Codigos.Value = Padl(fGerUniqueKey([SigPrLcl]), 10, [0])
+	Thisform.pagina.dados.get_codigos.refresh
+Else
+	If ThisForm.poDataMgr.ChkRegister('SigPrLcl','codigos',ThisForm.Pagina.Dados.Get_Codigos.Value) and Thisform.pcEscolha = 'INSERIR'
+		=MessageBox('Código Já Cadastrado!!!', 48, '')
+		This.Value = ''
+		Return 0
+	Endif
+Endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDPRL
+RESERVED3 (ClassInfo): *impetiqueta 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O arquivo `SIGREDIRBO.prg` foi completado com os seguintes m├®todos:
+
+- **`Init()` corrigido**: agora cria cursor READWRITE via c├│pia de cursor tempor├írio, permitindo que o usu├írio marque/desmarque empresas no grid.
+- **`MontarEmpresas()`**: l├¬ o cursor de empresas, filtra `Imps = 1`, e monta a cl├íusula SQL (`AND a.Emps = '...'` ou `AND a.Emps IN (...)`).
+- **`PrepararDados()`** (PROTECTED): valida ano base e sele├º├úo de empresas, monta UNION ALL das 3 queries (PIS / COFINS / CSLL) com filtros de per├¡odo e fornecedor, executa SQLEXEC.
+- **`Imprimir()`**: chama `PrepararDados()` + `REPORT FORM ... TO PRINT NOCONSOLE`.
+- **`ImprimirComPrompt()`**: chama `PrepararDados()` + `REPORT FORM ... TO PRINT PROMPT NOCONSOLE`.
+- **`Visualizar()`**: chama `PrepararDados()` + `REPORT FORM ... PREVIEW NOCONSOLE`.
+- **`AtualizarSelecaoEmpresas(par_lMarcar)`**: executa `REPLACE ALL Imps WITH 1/0` no cursor local para os bot├Áes marca-tudo/desmarca-tudo do form.

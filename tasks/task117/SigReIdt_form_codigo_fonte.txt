@@ -1,0 +1,752 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReIdt.SCX
+* Data/Hora: 06/06/2026 04:24:22
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIDT
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptAgrupa
+  Parent: SIGREIDT
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: SayAgrupa
+  Parent: SIGREIDT
+  Class: label
+  BaseClass: label
+
+Objeto: optTipo
+  Parent: SIGREIDT
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label1
+  Parent: SIGREIDT
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 71
+  Left = 83
+  Width = 582
+  Height = 274
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDT
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 180
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Impressão de Documento de Título"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Arial"
+  FontSize = 9
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 1
+  ForeColor = 0,0,0
+  contatran = .F.
+  grupotran = .F.
+  pcdiretorio = .F.
+  cdirfiscais = .F.
+  Name = "SIGREIDT"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 495
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 36
+  REGISTRY1.Left = 456
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDT.OptAgrupa
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  Height = 25
+  Left = 346
+  Top = 129
+  Width = 211
+  TabIndex = 4
+  Name = "OptAgrupa"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 6
+  Option1.Top = 4
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Agrupada"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 60
+  Option2.Top = 4
+  Option2.Width = 65
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Nenhum"
+  Option3.Value = 1
+  Option3.Height = 15
+  Option3.Left = 143
+  Option3.Top = 4
+  Option3.Width = 57
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDT.SayAgrupa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Imprimir Recorrência : "
+  Height = 15
+  Left = 243
+  Top = 132
+  Width = 110
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "SayAgrupa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDT.optTipo
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 25
+  Left = 346
+  Top = 102
+  Width = 203
+  TabIndex = 4
+  Name = "optTipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Título"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 6
+  Option1.Top = 4
+  Option1.Width = 44
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Autorização de Gasto"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 60
+  Option2.Top = 4
+  Option2.Width = 121
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIDT.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo de Impressão :"
+  Height = 15
+  Left = 253
+  Top = 105
+  Width = 97
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIDT
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+goSistema.DirFiscais = ThisForm.cDirFiscais
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+If ThisForm.optTipo.Value = 1
+	If ThisForm.optAgrupa.Value = 2
+		Report Form SigReIdA Preview NoConsole
+	Else
+		Report Form SigReIdt Preview NoConsole
+	Endif
+else
+	Report Form SigReIag Preview NoConsole
+endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Local lcArq
+
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Set Step On 
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'LocalEmp', 'Cemps', _Empr, 'RazSocs')
+
+Create Cursor csCabecalho (Empresa c(80),Titulo c(80))
+Select csCabecalho
+Append Blank
+Replace Empresa With ThisForm.pcEmps+' - ' +LocalEmp.RazSocs
+Replace Titulo  With Padr(ThisForm.pcDopes, 20)
+
+Create Cursor crDBImp (Emps c(3), RazSocs c(50), Titulo c(10), Nfs c(10), DtMovs d, ;
+					   Txt01 c(20), GrupEm c(10), Contem c(10), dContem c(50), ;
+					   Txt02 c(20), Grupo c(10), Conta c(10), dConta c(50), cpfs c(20), ;
+					   Txt03 c(20), sGrupos c(10), sContas c(10), sdConta c(50), Obsc c(50), Valorc n(12,2),;
+					   Txt04 c(20), Gruage c(10), contag c(10), dContag c(50), ;
+					   DtEmis d, Titban c(10),dtVencs d, bContas c(20), ;
+					   bGrupos c(20), DopCs c(20), ;
+					   Obs c(50), Usuars c(10), ;
+					   Valor n(12,2), Moeda c(3), Cotacao n(12,2), ;
+					   Obss m, Recors m, Hists m, ;
+					   ValPrev n(13,2), ValOrig n(13,2), ValOco n(13,2), ;
+					   ValLiq n(13,2), EspecieNfs c(6), TpDocNf c(2), Compet c(7))
+
+lcSql = [Select Dopes, Opers, NDopes, RealPrevs, Txt01, Txt02, Txt03, Txt04 From SigOpOpe ]
+If ThisForm.PodataMgr.Sqlexecute(lcSql,'LocalOpe') < 1
+	MessageBox('Falha na conexão. ',0+16,'LocalOpe')
+	Return .f.
+EndIf
+Select LocalOpe
+Index on Dopes Tag dopes
+If Not Seek(Padr(ThisForm.pcDopes, 20))
+	Return .f.
+Endif
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'LocalEmp', 'Cemps', Padr(ThisForm.pcEmps, 3), 'RazSocs, Cgcs, Ies, Tel1s, Tel2s')
+Go Top In LocalEmp
+If Eof('LocalEmp')
+	Return .f.
+EndIf
+
+lcQuery = [Select empdopncs,Titulos,nfs,datas,grupems,contems,grupos,contas,sgrupos,scontas,hist2s,grupages,UsuAlts,]+;
+			[contages,dtemis,titbans,vencs,valprev,valors,moedas,cotacaos,bgrupos,bcontas,dopcs,tipos,emps,opers, ]+;
+			[valocurs,ValPags, EspecieNfs, TpDocNf, Compet ] +;
+			[ From ]+Iif(LocalOpe.RealPrevs = 2,'SigMvCpv','SigMvCcr')+[ Where Titulos = ']+ThisForm.pcNumes+[' ]+;
+                    [And Emps = ']+ThisForm.pcEmps+[' ]+;
+                    [And Opers = ']+Iif(LocalOpe.Opers='CR','C','D')+[' ]+;
+                    [And Dopcs = ']+Padr(ThisForm.pcDopes, 20)+[' ]+;
+                    [And Numcs = ]+Str(ThisForm.Numef)+[ ]+;
+                    [And Tipos = ' ' ]
+            
+ThisForm.poDataMgr.SqlExecute(lcQuery,'crLocMccr')
+Go Top In crLocMccr
+If Eof('crLocMccr')
+	Return .f.
+Endif
+
+lcQuery = [Select empdopncs,Titulos,nfs,datas,grupems,contems,grupos,contas,sgrupos,scontas,hist2s,grupages,UsuAlts,]+;
+			[contages,dtemis,titbans,vencs,valprev,valors,moedas,cotacaos,bgrupos,bcontas,dopcs,tipos,emps,opers,]+;
+			[valocurs,ValPags, EspecieNfs, TpDocNf, Compet ] +;
+			[ From ]+Iif(LocalOpe.RealPrevs = 2,'SigMvCpv','SigMvCcr')+[ Where Titulos = ']+ThisForm.pcNumes+[' ]+;
+                    [And Emps = ']+ThisForm.pcEmps+[' ]+;
+                    [And Opers = ']+Iif(LocalOpe.Opers='CR','C','D')+[' ]+;
+                    [And Dopcs = ']+Padr(ThisForm.pcDopes, 20)+[' ]+;
+                    [And Numcs = ]+Str(ThisForm.Numef)+[ ]+;
+                    Iif(ThisForm.optTipo.Value = 1,[And Tipos = 'C' ],[])
+                     
+ThisForm.poDataMgr.SqlExecute(lcQuery,'crTmpMccr')
+Go Top In crTmpMccr
+If Eof('crTmpMccr')
+	Append from Dbf('CrLocMccr')
+EndIf
+
+If InList(ThisForm.OptAgrupa.Value,1,2)
+	lcEDNE = CrTmpMccr.EmpDopncs
+	lcSql = [Select * From SigTtRec Where EmpdopNcs = ']+lcEDNe+[']
+
+	If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalRecor') < 1
+		MessageBox('Falha na conexao',0+32,'LocalReCor')
+		Return .f.
+	Endif
+	Go Top in LocalRecor
+	lnRecor = LocalRecor.nRecors
+
+	lcSql = [Select a.empdopncs,a.Titulos,a.nfs,a.datas,a.grupems,a.contems,a.grupos,a.contas,a.sgrupos,]+;
+			[a.scontas,a.hist2s,a.grupages,a.contages,a.dtemis,a.titbans,a.vencs,a.valprev,a.valors,]+;
+			[a.moedas,a.cotacaos,a.bgrupos,a.bcontas,a.dopcs,a.tipos,a.emps,a.opers,Usualts, a.EspecieNfs, a.TpDocNf, a.Compet ]+;
+			[From SigTtRec b, SigMvCcr a Where b.nRecors = ]+Str(lnRecor)+[ And b.EmpDopNcs = a.EmpdopNcs ]+;
+			[Union all ]+;
+			[Select a.empdopncs,a.Titulos,a.nfs,a.datas,a.grupems,a.contems,a.grupos,a.contas,a.sgrupos,]+;
+			[a.scontas,a.hist2s,a.grupages,a.contages,a.dtemis,a.titbans,a.vencs,a.valprev,a.valors,]+;
+			[a.moedas,a.cotacaos,a.bgrupos,a.bcontas,a.dopcs,a.tipos,a.emps,a.opers,Usualts, a.EspecieNfs, a.TpDocNf, a.Compet ]+;
+			[From SigTtRec b, SigMvCpv a Where b.nRecors = ]+Str(lnRecor)+[ And b.EmpDopNcs = a.EmpdopNcs ]
+
+	If Thisform.Podatamgr.Sqlexecute(lcSql,'LocalMccr') < 1
+		MessageBox('Falha na conexao',0+32,'LocalMccr')
+		Return .f.
+	EndIf
+	
+	Select a.* From LocalMccr a, LocalOpe b Where a.Dopcs = b.dopes ;
+	And a.Opers = Iif(b.Opers='CR','C','D') ; &&And a.Tipos = 'C'
+	and a.EmpdopNcs <> lcEDNE ;
+	Into Cursor LocalMccr1 Order by a.vencs
+	If Reccount('LocalMccr1') = 0
+		Select a.* From LocalMccr a, LocalOpe b Where a.Dopcs = b.dopes ;
+		And a.Opers = Iif(b.Opers='CR','C','D') And a.Tipos = ' ' ;
+		And a.EmpdopNcs <> lcEDNE ;
+		Into Cursor LocalMccr1 order by a.vencs
+	Endif
+
+EndIf
+
+Select CrLocMccr
+Go Top
+Select CrTmpMccr
+If Thisform.OptAgrupa.Value = 1
+	Append From Dbf('LocalMccr1')
+EndIf
+
+Scan
+
+	=Seek(CrTmpMccr.Dopcs,'LocalOpe','Dopes')
+	If LocalOpe.Opers = [CR]
+		ThisForm.GrupoTran = LocalParam.GrupoPags
+		ThisForm.ContaTran = LocalParam.ContaPags
+	Else
+		ThisForm.GrupoTran = LocalParam.GrupoRecs
+		ThisForm.ContaTran = LocalParam.ContaRecs
+	Endif
+
+	ThisForm.poDataMgr.SqlExecute([Select * From SigTtCcd Where EmpDopNcs = ']+crTmpMccr.EmpDopNcs+['],'crTmpMccrd')
+	Go Top In crTmpMccrd
+
+	lcSql = [Select Rclis From SigCdCli where Iclis = ']+crTmpMccr.contems+[']
+	=ThisForm.Podatamgr.Sqlexecute(lcSql,'CrTmpCli1')
+
+	lcSql = [Select Rclis, Cpfs From SigCdCli where Iclis = ']+Iif(CrTmpMccr.Contas=ThisForm.ContaTran,CrTmpMccr.Contems,crTmpMccr.contas)+[']
+	=ThisForm.Podatamgr.Sqlexecute(lcSql,'CrTmpCli2')
+
+	lcSql = [Select Rclis From SigCdCli where Iclis = ']+crTmpMccr.scontas+[']
+	=ThisForm.Podatamgr.Sqlexecute(lcSql,'CrTmpCli3')
+
+	lcSql = [Select Rclis From SigCdCli where Iclis = ']+crTmpMccr.contages+[']
+	=ThisForm.Podatamgr.Sqlexecute(lcSql,'CrTmpCli4')
+
+	Select crDbImp
+	Append Blank
+	
+	Replace Emps 	With CrTmpMccr.Emps,;
+	        RazSocs With LocalEmp.RazSocs,;
+	        Titulo With crTmpMccr.Titulos,;
+	        Nfs 	With crTmpMccr.Nfs,;
+	        DtMovs 	With crTmpMccr.datas,;
+			Txt01  	With Iif(!IsEmpty(LocalOpe.Txt01), Alltrim(LocalOpe.Txt01) + ' :', 'Emitente :'),;
+			GrupEm 	With crTmpMccr.grupems,;
+			Contem 	With crTmpMccr.contems,;
+			dContem With crTmpCli1.rClis, ;
+			Txt02 	With Iif(!IsEmpty(LocalOpe.Txt02), Alltrim(LocalOpe.Txt02) + ' :', 'Portador :'),;
+			Grupo 	With Iif(crTmpMccr.grupos=ThisForm.GrupoTran,CrTmpMccr.Grupems,CrTmpMccr.Grupos),;
+			Conta 	With Iif(CrTmpMccr.Contas=ThisForm.ContaTran,CrTmpMccr.ContEms,crTmpMccr.contas),;
+			dConta 	With crTmpCli2.rClis, ;
+			cpfs    With crTmpCli2.cpfs, ;
+			Txt03 	With Iif(!IsEmpty(LocalOpe.Txt03), Alltrim(LocalOpe.Txt03) + ' :', 'Centro de Custo :'),;
+			sGrupos With crTmpMccr.sgrupos, ;
+			sContas With crTmpMccr.sContas, ;
+			sdConta With Alltrim(crTmpCli3.rClis), ;
+			Obsc   	With Nvl(crTmpMccr.hist2s,' '), ;
+			Txt04 	With Iif(!IsEmpty(LocalOpe.Txt04), Alltrim(LocalOpe.Txt04) + ' :', 'Agente Cobrador :'),;
+			Gruage 	With crTmpMccr.grupages,;
+			contag 	With crTmpMccr.contages,;
+			dContag With Alltrim(crTmpCli4.rClis), ;
+			DtEmis 	With Nvl(crTmpMccr.dtemis,Date()),;
+			Titban 	With crTmpMccr.titbans,;
+			dtVencs With crTmpMccr.vencs, ;
+			Obs 	With Nvl(crTmpMccr.hist2s,' '), ;
+			Valor 	With crTmpMccr.valors,;
+			Moeda 	With crTmpMccr.moedas,;
+			Cotacao With crTmpMccr.cotacaos,;
+			bgrupos With CrTmpMccr.bgrupos,;
+			bContas With CrTmpMccr.bContas,;
+			Obss 	With Nvl(CrTmpMccrD.obsd,' '),;
+			Hists   With Nvl(CrTmpMccrD.Hists,' '),;
+			DopCs   With CrTmpMccr.Dopcs,;
+			Usuars  With CrTmpMccr.UsuAlts,;
+		  	ValPrev With CrLocMccr.valprev,;
+		  	ValOrig With CrLocMccr.valors,;
+		  	ValOco  with CrLocMccr.valocurs,;
+		  	EspecieNfs With CrLocMccr.EspecieNfs ,;
+		  	TpDocNf With CrLocMccr.TpDocNf,;
+		  	Compet With CrLocMccr.Compet,;		  	
+		  	ValLiq  With CrTmpMccr.valors+CrLocMccr.valocurs-(CrTmpMccr.ValPags + CrLocMccr.ValOcurs)
+EndScan
+
+If ThisForm.OptAgrupa.Value = 2
+	Select a.* From LocalMccr a, LocalOpe b Where a.Dopcs = b.dopes ;
+	And a.Opers = Iif(b.Opers='CR','C','D') And a.Tipos = ' ' ;
+	And a.EmpdopNcs <> lcEDNE ;
+	Into Cursor LocalMccr1 order by a.vencs
+
+	lcObs = ''
+	Select LocalMccr1
+	Scan
+		lcObs = lcObs + LocalMccr1.Emps+'  '+Dtoc(LocalMccr1.Datas)+'   '+Dtoc(LocalMccr1.Vencs)+'  '+;
+				LocalMccr1.Titulos+'   '+;
+				Transform(Iif(LocalMccr1.valprev=0,LocalMccr1.valors,LocalMccr1.valprev),"@Z 999,999,999.99")+'  '+;
+				LocalMccr1.bGrupos+'  '+LocalMccr1.DopCs+Chr(13)+Chr(10)
+	EndScan
+
+	Update CrDbImp Set Recors = lcObs
+
+Endif
+
+Select crDBImp
+
+Select Titulo,Sum(1) As Qtdes From crDBIMp Group By Titulo Order BY Titulo Into Cursor crTmpCC
+
+Select crDbImp
+Go Top
+laTitulo = Titulo
+lnTotVal = 0
+Scan 
+	If laTitulo <> Titulo
+		lnReg = Recno()
+		Replace All Valor With lnTotVal for Titulo = laTitulo
+		Go lnReg
+		lnTotVal = 0
+		laTitulo = Titulo
+	Endif
+	Select crTmpCC
+	Locate For Titulo = crDbImp.Titulo
+	If Qtdes = 1
+		Select crDbImp
+		Replace Obsc With ''
+		lnTotVal = Valor
+	ELse
+		Select crDbImp
+		Replace Obs With ''
+		lnTotVal = lnTotVal + Valor
+		Replace Valorc With Valor
+		Replace Valor With 0
+	Endif
+EndScan
+Replace All Valor With lnTotVal for Titulo = laTitulo
+Go Top
+
+If Not Empty(ThisForm.pcDiretorio)
+	goSistema.DirFiscais = ThisForm.pcDiretorio
+EndIf 
+
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE memail
+------------------------------------------------------------
+PROCEDURE memail
+Dodefault()
+
+*!*	Local lcArq1,lcArq2,lcStrArqMail
+
+*!*	#define FileNameOption_JPegLevelLow 3                  && Low JPeg compression 
+*!*	#define FileNameOption_JPegLevelMedium 7               && Medium JPeg compression 
+*!*	#define FileNameOption_JPegLevelHigh 9                 && High JPeg compression 
+*!*	#define FileNameOption_NoPrompte 1                     && 0x01
+*!*	#define FileNameOption_UseFileName 2                   && 0x02
+*!*	#define FileNameOption_Embed_Fonts 16                  && 0x10
+*!*	#define FileNameOption_Multilingual_Support 128        && 0x80
+*!*	#define FileNameOption_Full_Embed 512                  && 0x200
+*!*	#define FileNameOption_Embed_Standard_Fonts 2097152    && 0x200000
+*!*	#define FileNameOption_Embed_Simulated_Fonts  16777216 && 0x1000000 
+*!*	#define FileNameOption_AutoCompression -2147483648     && activate automatic image compression 
+
+*!*	Select CrDados
+*!*	Go Top
+
+*!*	If Type('ThisForm.oPDF')='O'
+*!*		m.lcArq1 = (Addbs(Sys(2023))+'RepSis.Pdf')
+*!*		m.lcArq2 = ''
+
+*!*		With ThisForm.oPDF
+*!*			.PDFDriverInit("PDF Compatible Printer Driver")
+
+*!*			If Not Empty(ThisForm.pcPdfLic) And Not Empty(ThisForm.pcPdfCode)
+*!*				.EnablePrinter(ThisForm.pcPdfLic,ThisForm.pcPdfCode)
+*!*			EndIf 
+
+*!*			.DefaultFilename = m.lcArq1
+*!*			.FileNameOptions = FileNameOption_NoPrompte + ;
+*!*								FileNameOption_UseFileName + ;
+*!*								FileNameOption_Embed_Fonts  + ;
+*!*								FileNameOption_Multilingual_Support
+*!*			.PageContentCompression = .t.
+*!*			.JPEGCompression = .t.
+*!*			.JPegLevel = FileNameOption_JPegLevelMedium
+*!*			.Resolution = 300
+*!*			.SetDefaultConfig()
+*!*		EndWith 
+
+*!*		Set Printer To Name "PDF Compatible Printer Driver"
+
+*!*		If (LocalOpe.Docus = 3) && 3 - Documento Fixo
+*!*			Report Form SigReIfx To Printer NoConsole
+*!*		Else 					&& 4 - Fixo c/ Imagem
+*!*			Report Form SigReIfi To Printer NoConsole
+*!*		EndIf
+
+*!*		If (LocalDCOpe.dckTermos = 1)
+*!*			m.lcArq2 =(Addbs(Sys(2023))+'RepSis1.Pdf')
+*!*			ThisForm.oPDF.DefaultFilename = m.lcArq2
+
+*!*			Select crCabecalho
+*!*			Go Top
+*!*			Report Form SigReIft To Printer NoConsole
+*!*		EndIf
+*!*		
+*!*		Set Printer To Default
+*!*		m.lcStrArqMail = (m.lcArq1+Chr(13)+m.lcArq2)
+
+*!*	EndIf
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pForm, pEmp, pDop, pNum, pNumF, pDir
+
+ThisForm.pcEmps  	 = pEmp
+ThisForm.pcDopes 	 = pDop
+ThisForm.pcNumes 	 = pNum
+ThisForm.Numef   	 = pNumF
+ThisForm.pcDiretorio = Iif(Type([pDir])=[C],pDir,[])
+ThisForm.cDirFiscais = goSistema.DirFiscais
+
+ThisForm.Caption = 'Impressão de Documento de Titulo (' + Alltrim(pDop) + '/' + Alltrim(pNum) + ')'
+ThisForm.Contaemail = ' '
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		ThisForm.Podatamgr.cursorquery('SigCdPam','LocalParam',.f.,.f.,[GrupoRecs, grupopags, contarecs, contapags ])
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+If ThisForm.optTipo.Value = 1
+	If ThisForm.optAgrupa.Value = 2
+		Report Form SigReIdA To Printer Prompt NoConsole
+	Else
+		Report Form SigReIdt To Printer Prompt NoConsole
+	Endif
+else
+	Report Form SigReIag To Printer Prompt NoConsole
+endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+If ThisForm.optTipo.Value = 1
+	If ThisForm.optAgrupa.Value = 2
+		Report Form SigReIdA To Printer NoConsole
+	Else
+		Report Form SigReIdt To Printer NoConsole
+	Endif
+else
+	Report Form SigReIag To Printer NoConsole
+endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIDT.OptAgrupa
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+*Return Not ThisForm.optTipo.Value = 2
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIDT.optTipo
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.optAgrupa.Value = 3
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIDT
+RESERVED3 (ClassInfo): contatran
+grupotran
+imgbranco
+numef
+pcdopes
+pcemps
+pcnumes
+podatamgr
+tpimpressao
+pcdiretorio
+cdirfiscais
+*selecionadados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

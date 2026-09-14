@@ -1,0 +1,14 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 m├®todos exigidos ao final de `C:\4c\projeto\app\forms\operacionais\FormSigPrCcc.prg` (antes de `Destroy/ENDDEFINE`), com l├│gica real adaptada ao contexto OPERACIONAL (Rec├ílculo de Saldos):
+
+- **`BtnIncluirClick()`** (linha 1538) ÔÇö valida que ao menos uma op├º├úo (Conta/Estoque/Custo/├Ült.Compra) esteja marcada e delega para `CmdProcessarClick()` para iniciar novo processamento.
+- **`BtnAlterarClick()`** (linha 1560) ÔÇö reexecuta o processamento com as op├º├Áes atuais ap├│s confirma├º├úo (`MsgConfirma`).
+- **`BtnVisualizarClick()`** (linha 1584) ÔÇö mostra `MsgInfo` com o resumo do ├║ltimo processamento (contagem de registros + op├º├Áes ativas), sem reprocessar.
+- **`BtnExcluirClick()`** (linha 1613) ÔÇö em OPERACIONAL n├úo h├í delete de dados; reseta checkboxes, esconde os containers flutuantes `cnt_4c_Op*`, zera contador e chama `AtualizarBotaoProcessar()`.
+
+Conformidade com as regras cr├¡ticas do projeto:
+- CheckBox `.Value` comparado como NUM├ëRICO (`= 0` / `= 1`) ÔÇö evita mismatch (regra CheckBox NUMERIC). Corrigi o bug inicial onde `!chk.Value = 1` teria preced├¬ncia amb├¡gua.
+- Usa `MsgAviso` para valida├º├úo de UI, `MsgConfirma` para confirma├º├úo, `MsgInfo` para feedback, `MsgErro` s├│ em `CATCH` ÔÇö sem `MESSAGEBOX`.
+- Acentos via `CHR(225/227/231/237/245/250)`.
+- Sem `RETURN` dentro do bloco de recupera├º├úo; `TRY/CATCH` cobre cada m├®todo.
+- Sem TODO/FIXME/stubs (`grep` confirmou 0 ocorr├¬ncias).
+- Arquivo termina com `ENDDEFINE` limpo (1659 linhas, +112 vs. estado anterior).

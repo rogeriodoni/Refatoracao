@@ -1,0 +1,11 @@
+﻿All 4 CRUD handlers are now correct ÔÇö no RETURN inside TRY. The fixes applied:
+
+**FASE 7 complete.** Summary of changes made to `FormProduto.prg`:
+
+1. **`BtnIncluirClick()`** ÔÇö already correct, no RETURN inside TRY
+2. **`BtnVisualizarClick()`** ÔÇö fixed: replaced `RETURN` guard clauses with `loc_lContinuar = .F.` flag pattern
+3. **`BtnAlterarClick()`** ÔÇö fixed: same flag pattern
+4. **`BtnExcluirClick()`** ÔÇö fixed: same flag pattern
+5. **`CarregarLista()`** ÔÇö fixed: moved `gb_4c_ValidandoUI` and `gnConnHandle` guards BEFORE TRY block, converted SQLEXEC failure RETURN to `loc_lContinuar = .F.`
+6. **`InicializarForm()`** ÔÇö fixed: converted early `RETURN .F.` paths to flag pattern
+7. **`FiltroGrupoKeyPress()`** ÔÇö fixed: replaced `RETURN` after F4 lookup with `IF/ELSE` structure

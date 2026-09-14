@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. 
+
+**Causa raiz**: Em VFP9, par├ómetros n├úo passados recebem `.F.` (l├│gico). `NVL(.F., "")` retorna `.F.` porque `.F.` n├úo ├® NULL, e `ALLTRIM(.F.)` lan├ºa "Function argument value, type, or count is invalid" na linha 53.
+
+**Fix**: Substituiu `ALLTRIM(NVL(...))` por `IIF(VARTYPE(...) = "C", ALLTRIM(...), "")` ÔÇö padr├úo VFP9 correto para par├ómetros opcionais de string.

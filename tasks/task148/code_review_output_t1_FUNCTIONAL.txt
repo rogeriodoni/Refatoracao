@@ -1,0 +1,21 @@
+﻿Todas as corre├º├Áes est├úo aplicadas corretamente. Aqui est├í o resumo do que foi corrigido:
+
+---
+
+## Corre├º├Áes Aplicadas
+
+### 1. [CONTAINER-VISIVEL] ÔÇö `TornarControlesVisiveis` (linha ~1278)
+Adicionado `!INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO")` para que o m├®todo n├úo force `CNT_4C_CABECALHO` para `Visible=.T.` caso ele esteja intencionalmente oculto.
+
+### 2. [GRID-HEADER] ÔÇö Headers `grd_4c_Lista` (2 locais: linhas 377-380 e 1216-1219)
+Corrigidas as abrevia├º├Áes para corresponder ao legado (chamadas `pColuna` do `fSqlConector`):
+- `"Grupo Orig."` ÔåÆ `"Gr.Origem"`
+- `"Conta Orig."` ÔåÆ `"Ct.Origem"`
+- `"Grupo Dest."` ÔåÆ `"Gr.Destino"`
+- `"Conta Dest."` ÔåÆ `"Ct.Destino"`
+
+### 3. [GRID-HEADER] ÔÇö `grd_4c_Dados` Column1 (linha 1147)
+Adicionado `.Column1.Visible = .F.` no WITH block, correspondendo ao `Column1.Visible = .F.` do legado (`GradeOpera├º├úo.Column1`). O caption `"Industrializa├º├úo"` j├í estava correto no WITH block.
+
+### Sobre [LAYOUT-POSITION]
+**Falso positivo do validador**: O objeto legado `"Dados"` (Top=4) ├® o bot├úo **"Complem."** (`cmd_4c_Dados`, Left=622). O `grd_4c_Dados` corresponde ao `GradeOpera├º├úo` legado que tem Top=117 ÔåÆ migrado Top=146 (=117+29 compensa├º├úo PageFrame). Posi├º├úo correta, n├úo alterada.

@@ -1,0 +1,27 @@
+﻿Tudo limpo. Nenhuma refer├¬ncia antiga sobrou.
+
+---
+
+## Resumo das corre├º├Áes aplicadas
+
+**Problemas 9-12 (cntAguarde ÔÇö mapeamento de nomes incorreto): CORRIGIDOS**
+
+O validador associava `Label1` do `cntAguarde` ao controle `lbl_4c_Label1b` da Page1 (o label "de :", Top=67/Left=475) em vez do controle real do container Aguarde. Renomea├º├Áes feitas:
+
+| Antes | Depois | Localiza├º├úo | Prop├│sito |
+|-------|--------|-------------|-----------|
+| `lbl_4c_Label1b` | `lbl_4c_LblDe` | Page1, linha 433 | Label "de :" da faixa de opera├º├úo |
+| `lbl_4c_Label2b` | `lbl_4c_LblTipo` | Page1, linha 709 | Label "Tipo :" do OptionGroup |
+| `lbl_4c_Aguarde1` | `lbl_4c_Label1b` | cnt_4c_Aguarde, linha 766 | Label "Aguarde..." (Top=7, Left=69 Ô£ô) |
+| `lbl_4c_Aguarde2` | `lbl_4c_Label2b` | cnt_4c_Aguarde, linha 781 | Label "Processando..." (Top=24, Left=24 Ô£ô) |
+
+---
+
+**Problemas 1-8 e 6-7 ([LAYOUT-POSITION]): N├âO alterados ÔÇö regra pro├¡be**
+
+Esses 10 problemas s├úo **falsos positivos do validador**, n├úo erros reais:
+
+- **Diff de 85px (problemas 1-5, 8)**: O validador compara coordenadas absolutas do SCX com coordenadas relativas ├á Page. `pgf_4c_Paginas.Top=85` ÔåÆ controle em Page com Top=39 = posi├º├úo visual absoluta 85+39=**124** (exatamente o original). C├│digo correto.
+- **Opt_Tipo Top=0/Left=0 (problemas 6-7)**: Bug do parser do validador ÔÇö l├¬ `.Top=0` e `.Left=0` do `WITH .Buttons(1)` aninhado em vez do `.Top=223/.Left=262` do OptionGroup pai. `223 = 308 - 85` (offset do PageFrame). C├│digo correto.
+
+A regra expl├¡cita "PROIBIDO alterar propriedades visuais (Top, Left) EXCETO se o problema ├® especificamente de ALINHAMENTO" impede qualquer ajuste, e alter├í-los quebraria o layout (ex.: Top=308 em Page com PageFrame.Top=85 colocaria o controle a 393px em um form de 350px).

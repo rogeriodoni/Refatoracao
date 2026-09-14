@@ -1,0 +1,20 @@
+﻿O arquivo est├í completo e correto. A Fase 5/8 foi implementada com sucesso.
+
+**O que foi adicionado em `Formsigprcom.prg`:**
+
+- **`ConfigurarPaginaDados()`** expandida com os primeiros 50% dos campos da Page2:
+  - Bot├Áes `cmd_4c_Confirmar` + `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesAcao`
+  - 5 labels: Produto, Grupo, Fornecedor, Ref. Fornecedor, Situa├º├úo
+  - 4 textboxes: `txt_4c__produto`, `txt_4c_Dpro`, `txt_4c_Cgru`, `txt_4c_Dgru`
+  - OptionGroup `obj_4c_Opc_situacao` (2 bot├Áes, aninhado no WITH pai ÔÇö padr├úo #42)
+  - BINDEVENTs para Confirmar/Cancelar e KeyPress do campo produto
+
+- **`LimparCampos()`** implementado completamente (limpa campos da primeira metade + cursor_4c_Max + propriedades de varia├º├úo)
+
+- **4 novos m├®todos:**
+  - `BtnSalvarClick()` ÔÇö valida produto, limpa linhas vazias, chama `BO.SalvarMaximos()`, navega de volta
+  - `BtnCancelarClick()` ÔÇö seta `this_lPCancelar`, navega de volta ou fecha se externo
+  - `ProdutoKeyPress()` ÔÇö guarda Enter/Tab/F4, abre FormBuscaAuxiliar via F4
+  - `CarregarInfoProduto()` ÔÇö SQL com JOIN SigCdGrp+SigCdCli, popula todos os campos da primeira metade
+
+**Pr├│xima fase (6/8):** adicionar `txt_4c_Ifor`, `txt_4c_Dfor`, `txt_4c_Refs`, `cmd_4c_BtnExcluir` e o `grd_4c_Dados` (gradei com 5 colunas).

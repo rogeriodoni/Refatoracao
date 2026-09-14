@@ -1,0 +1,18 @@
+﻿O config.prg carrega automaticamente todos os `Form*.prg` da pasta `operacionais\` via ADIR. A integra├º├úo j├í est├í completa.
+
+A **Fase 8/8 est├í conclu├¡da**. Os seguintes m├®todos foram adicionados ao `FormSIGPRCNB.prg` (2639 linhas):
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `CarregarLista()` | Delega para `InicializarValores()` (carrega grid SigCdOpe) |
+| `FormParaBO()` | Copia 10 campos de filtro (empresa, per├¡odo, conta, titban, etc.) para o BO |
+| `BOParaForm()` | Inverso: BO ÔåÆ campos de tela |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita todos os campos da Page1 |
+| `LimparCampos()` | Zera filtros e desmarca opera├º├Áes no grid |
+| `AjustarBotoesPorModo()` | Stub (n├úo aplic├ível a form OPERACIONAL) |
+| `BtnBuscarClick()` | ÔåÆ `ClickProcessar()` |
+| `BtnEncerrarClick()` | ÔåÆ `THIS.Release()` |
+| `BtnSalvarClick()` | ÔåÆ `ClickGerarCNAB()` (gera arquivo CNAB) |
+| `BtnCancelarClick()` | ÔåÆ `AlternarPagina(1)` (volta para filtros) |
+
+O menu.prg e config.prg j├í estavam integrados de fases anteriores.

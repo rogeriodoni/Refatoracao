@@ -1,0 +1,14 @@
+﻿O arquivo est├í completo e correto. Fase 4/8 implementada com sucesso.
+
+**O que foi adicionado:**
+
+- **`InicializarForm()`** atualizado: inclui `LockScreen`, sequ├¬ncia completa de configura├º├úo (cabecalho ÔåÆ filtros ÔåÆ grade ÔåÆ bot├Áes ÔåÆ visibilidade ÔåÆ dados ÔåÆ refresh)
+- **`ConfigurarFiltros()`**: OptionGroup com 5 bot├Áes de r├ídio (Movimenta├º├úo Estoque, Grupo de Contas, Movimenta├º├úo de Produ├º├úo, Grupo de Produtos, Movimenta├º├úo Financeira) com posi├º├Áes, fontes e captions com CHR() exatos do legado. BINDEVENT ÔåÆ `OptTabelaInteractiveChange`
+- **`ConfigurarGrade()`**: Grid de 7 colunas ÔÇö Col1 (TextBox ReadOnly), Cols 2-5 (CheckBox com `Sparse=.F.`), Col6 (ComboBox URGENTE/IMPORTANTE/NORMAL), Col7 (EditBox mensagem). ControlSource definido **depois** do CurrentControl (regra Error 1767). BINDEVENT Combo ÔåÆ `CboGradeComboChange`
+- **`ConfigurarBotoes()`**: `cmd_4c_Confirmar` (Left=850) e `cmd_4c_Cancelar` (Left=925) com `Themes=.T.` para renderizar ├¡cones. BINDEVENT para os handlers
+- **`CarregarAlertas()`**: Chama `BO.CarregarAlertas()`, define ColumnCount antes do RecordSource, seta todos os ControlSources e reconfigura headers ap├│s RecordSource
+- **`TornarControlesVisiveis()`**: Itera controles do form e um n├¡vel de containers filhos
+- **`BtnConfirmarClick()`**: Remove filtro do optTabela, chama `BO.SalvarAlertas()` e fecha
+- **`BtnCancelarClick()`**: Fecha sem salvar
+- **`OptTabelaInteractiveChange()`**: Chama `BO.FiltrarPorTabela(nOpcao)` e faz Refresh do grid
+- **`CboGradeComboChange()`**: Faz `REPLACE priors WITH ListItemId IN crSigCdAle` para manter o campo num├®rico sincronizado com a sele├º├úo textual

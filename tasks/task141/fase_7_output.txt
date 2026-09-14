@@ -1,0 +1,19 @@
+﻿Ap├│s ler todo o c├│digo, tenho uma vis├úo completa da situa├º├úo.
+
+## An├ílise da Fase 7
+
+**O arquivo j├í est├í completo.** Esta ├® uma form **OPERACIONAL** (n├úo CRUD), e os "eventos principais" para ela j├í foram implementados nas fases anteriores:
+
+| Evento Original | Implementado em | Status |
+|----------------|-----------------|--------|
+| `SIGPDMFA.Processa.Click` | `BtnProcessaClick()` (linha 976) | Ô£à Completo |
+| `SIGPDMFA.Cancela.Click` | `BtnCancelaClick()` (linha 1056) | Ô£à Completo |
+
+Os 4 m├®todos listados (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) s├úo exclusivos de forms CRUD com PageFrame Lista/Dados. Este form (`SIGPDMFA`) herda de `form` gen├®rico (n├úo `frmcadastro`), tem layout plano sem grid de registros e sem bot├Áes CRUD ÔÇö portanto esses 4 m├®todos n├úo existem no legado e **n├úo devem ser criados** (a regra pro├¡be stubs sem l├│gica real).
+
+## O que foi implementado e est├í correto
+
+- **`BtnProcessaClick()`** (linhas 976-1051): valida campos obrigat├│rios, exibe `cnt_4c_Aguarde`, delega para `SigPdMfaBO.ProcessarMudancaFase()`, limpa campos ap├│s sucesso
+- **`SigPdMfaBO.ProcessarMudancaFase()`** (linhas 231-617 do BO): tradu├º├úo fiel e completa do `Processa.Click` original com 241 linhas ÔÇö inclui SCAN por grupos de Nops, verifica├º├úo de `ChkSubn` em SigCdNec (que ├® **campo da tabela**, n├úo controle do form), c├ílculo de Qtds/Pesos via SigOpPic, e INSERT em SigCdNec + SigPdMvf com transa├º├úo
+
+**A Fase 7 est├í completa.** Nenhuma modifica├º├úo ├® necess├íria no arquivo `FormSigPdMfa.prg`. A pr├│xima etapa (Fase 8) ser├í a integra├º├úo: adicionar entrada no `menu.prg` (popup `popMovimentos`) e verificar `config.prg`.

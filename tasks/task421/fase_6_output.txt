@@ -1,0 +1,7 @@
+﻿O FormFop.prg j├í estava completo das fases anteriores. A Fase 6 s├│ precisava desta corre├º├úo: `CmdEncerrarClick` agora re-habilita o form pai (`this_oParentForm.Enabled = .T.`) antes de `Release()`, replicando exatamente o comportamento do original (`Thisform.ParentForm.Enabled = .T.`).
+
+**Resumo do estado da migra├º├úo:**
+- Todos os 6 lookups do grid (iFors, rClis, MoeVs, Colecoes, CodCors, CodTams) est├úo implementados com BINDEVENT + GrdCol*KeyPress + AbrirBusca*
+- Todos os bot├Áes (Inserir, Excluir, Repetir, Encerrar) t├¬m handlers completos
+- A ├írea de repeti├º├úo (shpQtde/lblQtde/txt_4c_Qtde) est├í funcional com TxtQtdeKeyPress + TxtQtdeLostFocus
+- FopBO tem: BuscarPorProduto, InserirLinha, ExcluirLinha, RepetirLinha, ValidarCursor, SalvarAlteracoes

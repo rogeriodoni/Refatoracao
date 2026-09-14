@@ -1,0 +1,22 @@
+﻿O arquivo `Formsigprccp.prg` j├í est├í **completamente implementado** com 2257 linhas. Todas as fases 1-8 foram conclu├¡das em itera├º├Áes anteriores.
+
+Verifica├º├úo do estado atual:
+
+**Formsigprccp.prg (2257 linhas) - COMPLETO:**
+- `ConfigurarCabecalho()` - container sombra/t├¡tulo Ô£ô
+- `ConfigurarFiltros()` - Fornecedor, Grande Grupo, Grupo, Subgrupo, Unidade, Moeda, Linha, Cole├º├úo, Markup, Encargo, Varia├º├úo, Feitio Ô£ô
+- `ConfigurarOpcoes()` - OptionGroups Ideal/Venda, Situa├º├úo (3), Compra (3) Ô£ô
+- `ConfigurarSecaoDados()` - Recalcula (8 op├º├Áes), Reajuste, NMrk, Encargo, PVen, NewMkp Ô£ô
+- `ConfigurarGrid()` - 9 colunas com CheckBox na Column1 Ô£ô
+- `ConfigurarImagem()` - img_4c_FigJpg Ô£ô
+- `ConfigurarBotoes()` - Imprimir, Processar, Atualizar, Encerrar, SelTudo, Desmarcar Ô£ô
+- `ConfigurarBINDEVENTs()` - todos os lookups e validadores Ô£ô
+- Todos os handlers: BtnProcessarClick, BtnAtualizarClick, BtnEncerrarClick, BtnImprimirClick, BtnSelTudoClick, BtnDesmarcarClick Ô£ô
+- GrdAfterRowColChange (carrega foto do produto via SQL) Ô£ô
+- ImgFigJpgDblClick (zoom da foto) Ô£ô
+- Validadores: ValidarReajuste, ValidarNMrk, ValidarVariacao, ValidarEncargo, ValidarFornecedor Ô£ô
+- 14 pares de lookup handlers (AbrirBusca*/Tecla*) Ô£ô
+
+**sigprccpBO.prg (1936 linhas) - COMPLETO** com todas as propriedades e m├®todos de processamento.
+
+A Fase 5 (ConfigurarPaginaDados) j├í foi incorporada nas fases anteriores ÔÇö em um form OPERACIONAL flat (sem PageFrame/Page2), os campos de dados foram distribu├¡dos entre `ConfigurarFiltros()`, `ConfigurarOpcoes()` e `ConfigurarSecaoDados()`. N├úo h├í nada a adicionar.

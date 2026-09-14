@@ -1,0 +1,21 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\SigPrCtrBO.prg` foi criado com:
+
+**Propriedades declaradas (todas as colunas de `SigPrCtr` do schema):**
+- `this_cPkChave` ÔÇö PK real da tabela (char 20)
+- `this_cCodigos` ÔÇö chave de lote usada nas opera├º├Áes DELETE/INSERT por batch
+- `this_cCodCors`, `this_cCodTams`, `this_cCpros` ÔÇö dados do produto
+- `this_nQtds`, `this_nQtdOs` ÔÇö quantidades
+- `this_cOriDopNums`, `this_cFkChaves` ÔÇö refer├¬ncias de origem
+- `this_cContas`, `this_cMoedas`, `this_cArquivo`, `this_nPrecific` ÔÇö dados operacionais
+- `this_dDatas`, `this_dDtAlts`, `this_cUsuars`, `this_cUsualts` ÔÇö auditoria
+- `this_cGrupo`, `this_cDconta`, `this_cCpf` ÔÇö estado operacional do formul├írio
+- `this_dDataInicial`, `this_dDataFinal` ÔÇö filtro de data da lista
+
+**Init():** configura `this_cTabela = "SigPrCtr"` e `this_cCampoChave = "PkChave"`.
+
+**M├®todos inclu├¡dos al├®m do escopo m├¡nimo da Fase 1** (antecipados por completude):
+- `Buscar()` ÔÇö SELECT DISTINCT de lotes por per├¡odo
+- `CarregarPorCodigo()` / `CarregarDoCursor()` ÔÇö carga de registro
+- `BuscarMovimentosDistribuiveis()` / `BuscarMovimentosPendentes()` ÔÇö queries do grdEstoque e grdDisponivel
+- `SalvarLote()` ÔÇö INSERT/DELETE por Codigos (lote) com gera├º├úo de novo c├│digo
+- `ExecutarExclusao()` ÔÇö PROTECTED, restaura `QtReservas` em `SigMvItn` e exclui lote

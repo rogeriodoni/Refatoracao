@@ -1,0 +1,21 @@
+[2026-08-10 05:34:54] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-10 05:34:54] [INFO] Prompt File: C:\4c\tasks\task452\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-08-10 05:34:54] [INFO] Output File: C:\4c\tasks\task452\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-10 05:34:54] [INFO] Model: sonnet
+[2026-08-10 05:34:54] [INFO] Timeout: 3600 segundos
+[2026-08-10 05:34:54] [INFO] Max Output Tokens: 128000
+[2026-08-10 05:34:54] [INFO] Context Files: 0 arquivo(s)
+[2026-08-10 05:34:55] [INFO] Invocando Claude CLI...
+[2026-08-10 05:34:55] [INFO] Prompt carregado: 72810 caracteres
+[2026-08-10 05:34:55] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-10 05:34:55] [INFO] Tamanho total do prompt: 72810 caracteres
+[2026-08-10 05:34:55] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-10 05:46:48] [INFO] Claude CLI finalizado em 713.4777081 segundos
+[2026-08-10 05:46:48] [INFO] Exit Code: 0
+[2026-08-10 05:46:48] [INFO] Output salvo em: C:\4c\tasks\task452\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-10 05:46:48] [INFO] Output size: 561 bytes
+[2026-08-10 05:46:48] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-10 05:46:48] [INFO] Preview do output:
+[2026-08-10 05:46:48] [INFO] **Bug:** `ColumnCount = 3` com cursor de 2 campos. Quando `RecordSource = "cursor_4c_Emps"` era definido, o VFP9 tentava auto-vincular a Column3 ao 3-¦ campo do cursor (inexistente) ÔåÆ erro de runtime ÔåÆ CATCH em `InicializarForm` ÔåÆ `MostrarErro` (FormErro modal bloqueante) ÔåÆ timeout 300s.
+
+**Fix:** Troquei a ordem (RecordSource primeiro, ColumnCount depois, com valor correto = 2). Isso elimina a Column3 esp+¦ria e segue o mesmo padr+úo do `CarregarLista` (`RecordSource` ÔåÆ `ColumnCount

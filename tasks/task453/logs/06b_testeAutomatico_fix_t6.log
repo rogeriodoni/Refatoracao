@@ -1,0 +1,23 @@
+[2026-08-10 14:20:25] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-10 14:20:25] [INFO] Prompt File: C:\4c\tasks\task453\runtime_fix_prompt_06b_testeAutomatico_t6.md
+[2026-08-10 14:20:25] [INFO] Output File: C:\4c\tasks\task453\06b_testeAutomatico_fix_output_t6.txt
+[2026-08-10 14:20:25] [INFO] Model: sonnet
+[2026-08-10 14:20:25] [INFO] Timeout: 3600 segundos
+[2026-08-10 14:20:25] [INFO] Max Output Tokens: 128000
+[2026-08-10 14:20:25] [INFO] Context Files: 0 arquivo(s)
+[2026-08-10 14:20:26] [INFO] Invocando Claude CLI...
+[2026-08-10 14:20:26] [INFO] Prompt carregado: 220873 caracteres
+[2026-08-10 14:20:26] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-10 14:20:26] [INFO] Tamanho total do prompt: 220873 caracteres
+[2026-08-10 14:20:26] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-10 14:25:20] [INFO] Claude CLI finalizado em 294.4455177 segundos
+[2026-08-10 14:25:20] [INFO] Exit Code: 0
+[2026-08-10 14:25:20] [INFO] Output salvo em: C:\4c\tasks\task453\06b_testeAutomatico_fix_output_t6.txt
+[2026-08-10 14:25:20] [INFO] Output size: 693 bytes
+[2026-08-10 14:25:20] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-10 14:25:20] [INFO] Preview do output:
+[2026-08-10 14:25:20] [INFO] Corre+º+Áes aplicadas:
+
+**Bug 1 (cr+¡tico ÔÇö causa do timeout):** `ShowWindow = 1` estava na linha 17 sobrescrevendo `ShowWindow = 0` da linha 15. Em modo headless (`VFP9.EXE -T`), `ShowWindow = 1` faz o VFP tentar ancorar o form como filho do MDI desktop ÔÇö que n+úo existe em modo headless ÔÇö travando indefinidamente at+® o timeout de 300s. Fix: linha `ShowWindow = 1` removida.
+
+**Bug 2 (preventivo):** `CarregarLista()` com `gb_4c_ValidandoUI = .T.` retornava `.T.` sem criar nenhum curso

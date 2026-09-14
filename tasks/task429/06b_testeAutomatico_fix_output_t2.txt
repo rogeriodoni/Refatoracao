@@ -1,0 +1,4 @@
+﻿Corre├º├úo aplicada. O problema era a ordem de inicializa├º├úo em `InicializarForm`:
+
+- **Causa raiz:** `ConfigurarGrade` atribu├¡a `RecordSource = "xFPagi"` com `RecordSourceType = 1` (alias), mas o cursor `xFPagi` s├│ era criado por `CarregarDados`, chamado depois.
+- **Fix:** `CarregarDados` agora ├® chamado antes de `ConfigurarGrade` e `ConfigurarLabels`. O cursor existe quando o grid tenta us├í-lo como `RecordSource`.

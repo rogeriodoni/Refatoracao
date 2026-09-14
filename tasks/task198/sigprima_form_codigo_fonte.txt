@@ -1,0 +1,934 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprima.SCX
+* Data/Hora: 03/07/2026 17:54:49
+* Total de registros: 15
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRIMA
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRIMA
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRIMA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRIMA.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Commandgroup3
+  Parent: SIGPRIMA
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Say1
+  Parent: SIGPRIMA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnArquivo
+  Parent: SIGPRIMA
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: btnProcessar
+  Parent: SIGPRIMA
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnSair
+  Parent: SIGPRIMA
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptTipo
+  Parent: SIGPRIMA
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say2
+  Parent: SIGPRIMA
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getArquivo
+  Parent: SIGPRIMA
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 67
+  Left = 70
+  Width = 562
+  Height = 301
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 200
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Importação de Imagens de Produtos"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  pctipo1 = .F.
+  pntimermsg1 = .F.
+  Name = "SIGPRIMA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.Commandgroup3
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 0
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 110
+  Left = 612
+  SpecialEffect = 1
+  Top = 7
+  Width = 173
+  TabIndex = 7
+  BorderColor = 136,189,188
+  ZOrderSet = 1
+  Name = "Commandgroup3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  Caption = "Diretório :"
+  Height = 15
+  Left = 156
+  Top = 113
+  Width = 58
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.btnArquivo
+------------------------------------------------------------
+  Top = 110
+  Left = 622
+  Height = 21
+  Width = 21
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .T.
+  Caption = "..."
+  TabIndex = 3
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnArquivo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.btnProcessar
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "\<Processar"
+  Name = "btnProcessar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.btnSair
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.OptTipo
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 63
+  Left = 216
+  Top = 129
+  Width = 92
+  Name = "OptTipo"
+  Option1.FontBold = .T.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.FontUnderline = .F.
+  Option1.BackStyle = 0
+  Option1.Caption = "Produtos"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 69
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .T.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.FontUnderline = .F.
+  Option2.BackStyle = 0
+  Option2.Caption = "Auxiliar"
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Top = 24
+  Option2.Width = 61
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontBold = .T.
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Exportar"
+  Option3.Height = 15
+  Option3.Left = 5
+  Option3.Top = 44
+  Option3.Width = 67
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontSize = 8
+  Caption = "Tipo :"
+  Height = 15
+  Left = 182
+  Top = 135
+  Width = 32
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIMA.getArquivo
+------------------------------------------------------------
+  FontSize = 8
+  Value = 
+  Height = 21
+  Left = 216
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 110
+  Width = 402
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "getArquivo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRIMA
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcDir, lnArq, lcImg, lcPro, lcDpro2, lcDpro3, lcReff, lcFig, llOks
+Local Array laArq(1)
+
+llOks = .t.
+
+lcDir = Alltrim(ThisForm.getArquivo.Value)
+lnTip = ThisForm.OptTipo.Value 
+
+If IsEmpty(lcDir)
+	=MessageBox([O Diretório Não Foi Informado!!!], 0+64, [Diretório Inválido!!!], ThisForm.pnTimerMsg1)
+	Return .f.	
+EndIf
+
+lnArq = ADir(laArq, lcDir + [*.JPG])
+
+If (lnArq < 1)
+	=MessageBox([O Diretório Não Contém Nenhuma Imagem do Tipo .JPG!!!], 0+64, [Arquivos Inválidos!!!], ThisForm.pnTimerMsg1)
+	Return .f.	
+
+EndIf
+
+oProg = CreateObject([fwprogressbar], [Processando Imagens...], lnArq)
+oProg.Show
+
+Set Step On 
+
+For lnImg = 1 To lnArq
+	If llOks
+		lcImg = Alltrim(laArq(lnImg, 1))
+		llArq = Not (Left(laArq(lnImg, 5), 1) = [R])
+		lcPro = Padr(Substr(lcImg, 1, At([.JPG], Upper(lcImg)) - 1), 14)
+		lcDpro2 = Substr(lcImg, 1, At([.JPG], Upper(lcImg)) - 1)
+		lcDpro3 = Substr(lcImg, 1, At([.JPG], Upper(lcImg)) - 1)
+		lcReff = Substr(lcImg, 1, At([.JPG], Upper(lcImg)) - 1)
+			
+		oProg.SubTitulo.Caption = [Arquivo : ] + Alltrim(lcImg)
+		oProg.Update(.t.)
+		
+		If llArq
+			lcFig = lcDir + lcImg
+			
+			If fTamanhoImagem(lcFig, ThisForm.poDataMgr, .t.)
+			
+				If lnTip = 2
+					lcQuery = [Select * ] + ;
+								[From sigscjim ] + ;
+							   [Where idimagem = ] + lcPro + ;
+							   [Order By CPros]
+
+					If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+						=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)], ThisForm.pnTimerMsg1)
+						llOks = .f.
+					EndIf
+
+				Else
+					lcQuery = [Select * ] + ;
+								[From SigCdPro ] + ;
+							   [Where CPros = '] + lcPro + [' ] + ;
+							   [Order By CPros]
+
+					If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+						=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)], ThisForm.pnTimerMsg1)
+						llOks = .f.
+					EndIf
+
+					If Used([LocalPro]) And Reccount([LocalPro]) == 0
+						lcQuery = [Select * ] + ;
+									[From SigCdPro ] + ;
+								   [Where dPro2s = '] + Alltrim(lcDpro2) + [' ] + ;
+								   [Order By CPros]
+
+						If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+							=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)], ThisForm.pnTimerMsg1)
+							llOks = .f.
+						EndIf
+					EndIf 
+
+					If Used([LocalPro]) And Reccount([LocalPro]) == 0
+						lcQuery = [Select * ] + ;
+									[From SigCdPro ] + ;
+								   [Where dPro2s = '] + Alltrim(Strtran(lcDpro2, '.', '')) + [' ] + ;
+								   [Order By CPros]
+
+						If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+							=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)], ThisForm.pnTimerMsg1)
+							llOks = .f.
+						EndIf
+					EndIf 
+
+					**** Mena - 20/03/2013 - incluido para pegar imagem também pela referencia do fornecedor ****
+					If Used([LocalPro]) And Reccount([LocalPro]) == 0
+						lcQuery = [Select * ] + ;
+									[From SigCdPro ] + ;
+								   [Where reffs = '] + Alltrim(lcReff) + [' ] + ;
+								   [Order By CPros]
+
+						If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+							=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)], ThisForm.pnTimerMsg1)
+							llOks = .f.
+						EndIf
+					EndIf 
+					
+					**** Mena - 08/07/2016 - incluido para pegar imagem também pela Descrição Completa ****
+					If Used([LocalPro]) And Reccount([LocalPro]) == 0
+						lcQuery = [Select * ] + ;
+									[From SigCdPro ] + ;
+								   [Where convert(varchar(50),dPro3s) = '] + Alltrim(Strtran(lcDpro3, '.', '')) + [' ] + ;
+								   [Order By CPros]
+
+						If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+							=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)], ThisForm.pnTimerMsg1)
+							llOks = .f.
+						EndIf
+					EndIf
+				EndIf 
+				
+				If llOks
+					Select LocalPro
+					Go Top In LocalPro
+					Scan 
+						If llOks
+							lcPro = LocalPro.CPros
+
+							Zap In crSigCdPro
+							Zap In crSigCdPrc
+							Zap In crSigScjIm			
+							
+							Scatter Memvar Memo
+							
+							If lnTip = 2
+								Insert Into crSigScjIm From Memvar
+								Replace Imagem  With FileToStr(lcFig) In crSigScjIm
+								
+								If llOks
+									If Not ThisForm.poDataMgr.Update([crSigScjIm])
+										lcMsg = [Não Foi Possível Atualizar o Arquivo SigScjIm!!!]
+										=MessageBox(lcMsg, 0+64, [Processamento Cancelado!!!], 10000)
+										llOks = .f.
+									EndIf
+								EndIf
+								
+							Else
+								Insert Into crSigCdPro From Memvar
+								Replace FigJpgs   With FileToStr(lcFig), ;
+										DtFilms   With Datetime(), ;
+										Datas 	  With DateTime(), ;
+										Flagctabs With .t., ;
+										Transps   With .f. In crSigCdPro
+
+								Insert Into crSigCdPrc From Memvar
+								Replace DataAlts  With DateTime(), ;
+										HoraAlts  With Time(), ;
+										UsuaAlts  With Usuar, ;
+										cIdChaves With fUniqueIds(), ;
+										Origem    With Ttoc(Datetime()) + [ SIGPRIMA] In crSigCdPrc
+
+								lcQuery = [Delete From SigPrPrt Where CPros = '] + lcPro + [']
+								If (ThisForm.poDataMgr.SqlExecute(lcQuery, [Lixo]) < 1)
+									=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)], ThisForm.pnTimerMsg1)
+									llOks = .f.
+								EndIf
+								
+	*!*								lcQuery = [Delete From SigPrWeb Where CPros = '] + lcPro + [']
+	*!*								If llOks And (ThisForm.poDataMgr.SqlExecute(lcQuery, [Lixo]) < 1)
+	*!*									=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)], ThisForm.pnTimerMsg1)
+	*!*									llOks = .f.
+	*!*								EndIf
+								
+								If llOks
+									If Not ThisForm.poDataMgr.Update([crSigCdPro])
+										lcMsg = [Não Foi Possível Atualizar o Arquivo SigCdPro!!!]
+										=MessageBox(lcMsg, 0+64, [Processamento Cancelado!!!], 10000)
+										llOks = .f.
+									EndIf
+								EndIf
+
+								If llOks
+									If Not ThisForm.poDataMgr.Update([crSigCdPrc])
+										lcMsg = [Não Foi Possível Atualizar o Arquivo SigCdPrc!!!]
+										=MessageBox(lcMsg, 0+64, [Processamento Cancelado!!!], 10000)
+										llOks = .f.
+									EndIf
+								EndIf
+							EndIf 
+							
+							
+
+							If llOks
+								If (ThisForm.poDataMgr.Commit() < 1)
+									lcMsg = [Não Foi Possível Atualizar os Arquivos Fisicamente (commit)!!!]
+									=MessageBox(lcMsg, 0+64, [Processamento Cancelado!!!], ThisForm.pnTimerMsg1)
+									llOks = .f.
+								EndIf
+							EndIf
+
+							If Not llOks
+								ThisForm.poDataMgr.Rollback()
+							EndIf
+						EndIf
+					EndScan
+
+					If llOks
+						lcDok = lcDir + [\OK\]
+						If Not Directory(lcDok)
+							Md (lcDok)
+						EndIf
+
+						If Not Directory(lcDok)
+							=MessageBox([O Diretório "] + lcDok + [" Não Pode Ser Criado!!!], 0+64, [Diretório Inválido!!!], ThisForm.pnTimerMsg1)
+							llOks = .f.
+						Else
+							lcNom = Alltrim(laArq(lnImg, 1))
+							llArq = Not (Left(laArq(lnImg, 5), 1) = [R])
+							If llArq
+								lcArq = lcDir + lcNom
+								lcAok = ["] + Alltrim(lcDok) + [\] + Alltrim(lcNom) + ["]
+
+								lnCnt = 0
+								llVer = .t.
+								Do While llVer
+									If Not File(lcAok)
+										llVer = .f.
+										Copy File (lcArq) To (lcAok)
+										If File(lcAok)
+											Delete File (lcArq)
+										EndIf
+									Else
+										lnCnt = lnCnt + 1
+										lcAok = lcDok + [\] + lcNom + [.] + Padl(lnCnt, 4, [0])
+									EndIf
+								EndDo
+							EndIf
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+		EndIf
+	EndIf
+Next
+oProg.Complete
+
+If Not llOks
+	ThisForm.poDataMgr.Rollback()
+	lcMsg = [Os Arquivos Não Foram Importados!!!]
+
+Else
+	lcMsg = [Os Arquivos Foram Importados!!!]
+
+EndIf
+
+= MessageBox(lcMsg, 0+64, [Processamento Concluído!!!], ThisForm.pnTimerMsg1)
+
+If ThisForm.pcTipo1 == 'A'
+
+Else
+	ThisForm.btnSair.SetFocus
+
+EndIf 
+
+Return (.t.)
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE exportar
+------------------------------------------------------------
+PROCEDURE exportar
+*** Mena - 30/01/2020 Exporta a imagem atual para arquivo e converte para base64
+Local lcDir, lnArq, lcImg, lcPro, lcDpro2, lcDpro3, lcReff, lcFig, llOks
+Local Array laArq(1)
+
+llOks = .T.
+
+lcDir = Alltrim(Thisform.getArquivo.Value)
+
+If IsEmpty(lcDir)
+	=Messagebox([O Diretório Não Foi Informado!!!], 0+64, [Diretório Inválido!!!], Thisform.pnTimerMsg1)
+	Return .F.
+Endif
+
+*!*	oProg = Createobject([fwprogressbar], [Processando Imagens...])
+*!*	oProg.Show
+
+lcFiltro = []
+
+*lcFiltro = [ AND CPROS IN(select cpros from bkp_pro2 )]
+
+lcQuery = [select cgrus, count(1) as qtd from sigcdpro where 0=0 ]+lcFiltro+[ group by cgrus order by 2]
+If (Thisform.poDataMgr.SqlExecute(lcQuery, [LocalGru]) < 1)
+	=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalGru)], Thisform.pnTimerMsg1)
+	llOks = .F.
+Endif
+
+Select LocalGru
+Go Top
+Scan
+
+	Wait Window 'Atualizando o Grupo ' + LocalGru.cgrus Nowait
+
+	*lcQuery = [select * from sigcdpro where not figjpgs is null and figjpgs64 is null order by 1]
+	*lcQuery = [select * from sigcdpro where not figjpgs is null]
+
+	lcQuery = [select * from sigcdpro where cgrus = ']+LocalGru.cgrus+[' ] + lcFiltro
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+		=Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)], Thisform.pnTimerMsg1)
+		llOks = .F.
+	Endif
+
+	Select LocalPro
+	Go Top
+
+	Scan
+		If IsEmpty(LocalPro.FigJpgs)
+			Select LocalPro
+			Loop
+		Endif
+		
+		If Not IsEmpty(LocalPro.FigJpgs64)
+			Select LocalPro
+			Loop
+		Endif
+		
+		Zap In crSigCdPro
+
+		Scatter Memvar Memo
+		
+*!*			lcPro = Alltrim(Strtran(Strtran(Strtran(Strtran(Strtran(Alltrim(LocalPro.cpros), [*], [_]), [/], [-]), [\], [-]), [.], [_]), [ ], [_]))
+*!*			lcFoto=Strconv(Strtran(Strtran(Strtran(LocalPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+*!*			=StrToFile(lcFoto, lcDir + lcPro + [.jpg])
+		
+		lcPro = Alltrim(Strtran(Strtran(Strtran(LocalPro.cpros, [*], [_]), [/], [-]), [\], [-]))
+		=Strtofile(LocalPro.FigJpgs, lcDir + lcPro + [.jpg], .T.)
+		Insert Into crSigCdPro From Memvar
+
+		lcImag = Strconv(LocalPro.FigJpgs,13,1046)
+		Replace figjpgs64 With [data:image/jpeg;base64,]+lcImag, ;
+			DtFilms   With Datetime(), ;
+			Datas 	  With Datetime(), ;
+			Flagctabs With .T., ;
+			Transps   With .F. In crSigCdPro
+
+		If Not Thisform.poDataMgr.Update([crSigCdPro])
+			lcMsg = [Não Foi Possível Atualizar o Arquivo SigCdPro!!!]
+			=Messagebox(lcMsg, 0+64, [Processamento Cancelado!!!], 10000)
+			llOks = .F.
+		Endif
+
+		If llOks
+			If (Thisform.poDataMgr.Commit() < 1)
+				lcMsg = [Não Foi Possível Atualizar os Arquivos Fisicamente (commit)!!!]
+				=Messagebox(lcMsg, 0+64, [Processamento Cancelado!!!], Thisform.pnTimerMsg1)
+				llOks = .F.
+			Endif
+		Endif
+
+		If Not llOks
+			Thisform.poDataMgr.Rollback()
+		Endif
+
+		Select LocalPro
+	Endscan
+
+	Select LocalGru
+Endscan
+
+*!*	oProg.Complete
+
+If Not llOks
+	Thisform.poDataMgr.Rollback()
+	lcMsg = [Não houve exportacao!!!]
+
+Else
+	lcMsg = [Exportacao executada com sucesso!!!]
+
+Endif
+
+= Messagebox(lcMsg, 0+64, [Processamento Concluído!!!], Thisform.pnTimerMsg1)
+
+If Thisform.pcTipo1 == 'A'
+
+Else
+	Thisform.btnSair.SetFocus
+
+Endif
+
+Return (.T.)
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+
+If ThisForm.pcTipo1 == 'A'
+	Clear Events
+	Cancel
+
+EndIf 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+
+ThisForm.poDataMgr.Release
+
+= DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+parameters lcTipo1, lcPath1
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+m.lcTipo1 = Upper(Alltrim(Iif(Type('m.lcTipo1') == 'C', m.lcTipo1, '')))
+m.lcPath1 = Addbs(Alltrim(Iif(Type('m.lcPath1') == 'C', m.lcPath1, '')))
+
+ThisForm.pnTimerMsg1 = Iif(m.lcTipo1 == 'A', 10000, 0)
+
+If Not m.lcTipo1 == 'A' Or fVerificaPasta(m.lcPath1, 1) && checar se diretorio existe e se tem direito de gravacao...
+	With ThisForm
+		.pcTipo1 = m.lcTipo1
+		.poDataMgr = CreateObject([fSqlConector], .Name)
+
+		If (.poDataMgr.pnIdconn > 0)
+			With .poDataMgr
+				.AddCursor([SigCdPro],  [CPros], 	   [crSigCdPro])
+				.AddCursor([SigCdPrc], [cIdChaves], [crSigCdPrc])
+				.AddCursor([SigScjIm], [cIdChaves], [crSigScjIm])
+			EndWith
+
+			= DoDefault()
+
+			.getArquivo.Value = m.lcPath1
+			.getArquivo.SetFocus 
+
+			If m.lcTipo1 == 'A'
+				.Processamento()
+				Return (.f.)
+
+			EndIf 
+
+		Else
+			= Messagebox([Impossivel Efetuar Conexão com Servidor de Banco de Dados...], 0+48, [CreateObject], ThisForm.pnTimerMsg1)
+			Return .f.
+
+		EndIf
+
+	EndWith
+
+Else
+	= Messagebox([Diretorio de Importação de Imagens Inválido], 0+48, [Pasta], ThisForm.pnTimerMsg1)
+	Return .f.
+
+EndIf 
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIMA.btnArquivo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcDir
+
+ThisForm.getArquivo.Value = []
+
+lcDir = GetDir([C:\], [Selecione o Diretório Abaixo :], [Seleção de Diretório de Imagens])
+
+If Not IsEmpty(lcDir)
+	ThisForm.getArquivo.Value = lcDir
+EndIf
+ThisForm.getArquivo.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIMA.btnProcessar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Thisform.OptTipo.Value = 3
+	Thisform.Exportar
+Else
+	Thisform.Processamento
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIMA.btnSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIMA.getArquivo
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcDir
+
+lcDir = Alltrim(This.Value)
+
+If Not Empty(lcDir) And Not Directory(lcDir)
+	lcDir = GetDir([C:\], [Selecione o Diretório Abaixo :], [Seleção de Diretório de Imagens])
+EndIf
+This.Value = lcDir
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRIMA
+RESERVED3 (ClassInfo): pctipo1
+pntimermsg1
+podatamgr
+*processamento 
+*exportar 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

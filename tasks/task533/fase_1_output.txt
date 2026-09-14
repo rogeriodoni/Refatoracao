@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 1/8 conclu├¡da.**
+
+Criei `C:\4c\projeto\app\classes\TCLBO.prg` com propriedades e `Init()`.
+
+Achado importante: o `analise.json`/`TCLBO_esqueleto.prg` auto-gerados apontavam a tabela errada (`SigCdGcr`, PK `cods`). Conferindo o c├│digo-fonte original (`SIGCDTCL_form_codigo_fonte.txt`) e o `schema.sql`, a tabela real do form ├® **`SigCdCss`** (PK `classes`) ÔÇö `SigCdGcr` ├® s├│ um cursor auxiliar (`AddCursor('SigCdGcr','codigos','crSigCdGcr','','')`) sem nenhum controle vinculado no layout, ent├úo n├úo faz parte da entidade. Segui a regra do CLAUDE.md #14 (nunca confiar em snapshot congelado, validar contra schema.sql) e usei a tabela correta.
+
+Propriedades mapeadas (todas as colunas de `SigCdCss`, inclusive `ff` que ├® `NOT NULL` mas n├úo tem controle no form ÔÇö ser├í gravada como `SPACE(10)` na fase de Inserir/Atualizar):
+
+| Coluna SQL | Propriedade BO | Tipo/Origem |
+|---|---|---|
+| `classes` (PK) | `this_cClasse` | char(10) ÔÇö Get_classe |
+| `descrs` | `this_cDescricao` | char(30) ÔÇö Get_descr |
+| `ff` | `this_cFf` | char(10) NOT NULL ÔÇö sem controle no form |
+| `nivels` | `this_nNivel` | numeric(1,0) ÔÇö Get_nivel |
+| `opbalancos` | `this_nOpBalanco` | numeric(1,0) ÔÇö optGreps ("Incluir em Invent├írio") |
+| `invemisccs` | `this_nInvEmisCc` | numeric(1,0) ÔÇö Fwoption1 ("Trocar CC por Emissor") |
+
+`Init()` segue o padr├úo can├┤nico (`CorBO.prg`): `DODEFAULT()` + `this_cTabela = "SigCdCss"` + `this_cCampoChave = "classes"`, TRY/CATCH com `MostrarErro`, sem `RETURN` dentro do TRY.
+
+Pr├│xima fase (2/8) vai completar `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`, `Buscar()`, `CarregarPorCodigo()` e `ObterChavePrimaria()` ÔÇö vou reproduzir as valida├º├Áes do legado (n├¡vel em `[1,2,3]`, classe com tamanho conforme n├¡vel, `ChkRegister` de duplicidade, bloqueio de exclus├úo se a classe estiver em uso em `SigCdGcr`).

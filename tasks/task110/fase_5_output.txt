@@ -1,0 +1,28 @@
+﻿Terminei de ler o arquivo completo (2761 linhas). O arquivo j├í est├í **completo** ÔÇö a Fase 5 foi efetivamente antecipada pela Fase 4.
+
+Para este formul├írio REPORT, n├úo existe `ConfigurarPaginaDados()` ÔÇö a arquitetura ├® flat com uma ├║nica p├ígina de filtros (`ConfigurarPaginaLista()`). Todo o conte├║do que seria "Page2" num CRUD j├í est├í implementado na ├║nica p├ígina de filtros.
+
+**Verifica├º├úo completa dos campos do `layout.json`:**
+
+| Campo original | Controle migrado | Presente |
+|---|---|---|
+| get_dt_inicial / get_dt_final | txt_4c_DtInicial / txt_4c_DtFinal | Ô£ô |
+| get_Cd/Ds_GrEstoque | txt_4c_CdGrEstoque / txt_4c_DsGrEstoque | Ô£ô |
+| get_cd/ds_estoque | txt_4c_CdEstoque / txt_4c_DsEstoque | Ô£ô |
+| getIFors / getDFors | txt_4c_IFors / txt_4c_DFors | Ô£ô |
+| get_cd/ds_empresa | txt_4c_CdEmpresa / txt_4c_DsEmpresa | Ô£ô |
+| getCGgps / getDGgps | txt_4c_CGgps / txt_4c_DGgps | Ô£ô |
+| Get_Cd/Ds_GPro | txt_4c_CdGPro / txt_4c_DsGPro | Ô£ô |
+| get_cd/ds_sgrupo | txt_4c_CdSgrupo / txt_4c_DsSgrupo | Ô£ô |
+| get_cd/ds_codigo | txt_4c_CdCodigo / txt_4c_DsCodigo | Ô£ô |
+| getCBars | txt_4c_CBars | Ô£ô |
+| getReduzs | txt_4c_Reduzs | Ô£ô |
+| Check1-5 | chk_4c_Check1-5 | Ô£ô |
+
+**Todos os m├®todos necess├írios j├í implementados:**
+- `ConfigurarCabecalho`, `ConfigurarBotoes`, `ConfigurarPageFrame`, `ConfigurarPaginaLista` Ô£ô
+- `LimparCampos`, `FormParaRelatorio`, `BOParaForm`, `ValidarFiltros` Ô£ô
+- 8 pares de `AbrirBusca*` + `Validar*` para cada lookup Ô£ô
+- Todos os handlers `Tecla*`, `ChkCheck5Click`, `Destroy` Ô£ô
+
+A Fase 5/8 est├í conclu├¡da ÔÇö o arquivo `Formsigrehbr.prg` j├í cont├®m a implementa├º├úo completa. As fases anteriores anteciparam todo o trabalho desta fase porque formul├írios REPORT t├¬m layout flat (sem Page2 de CRUD), ent├úo todos os campos foram adicionados em `ConfigurarPaginaLista()` na Fase 4.

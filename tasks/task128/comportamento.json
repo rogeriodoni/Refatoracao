@@ -1,0 +1,474 @@
+{
+  "resumo": {
+    "totalMetodos": 27,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 17,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fGravarLog", "fEndEntrega", "from TmpOper n] + Alltrim", "fwBuscaExt", "fAcessoMovmto"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIPE",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "thisform.processamento()\n\nSelect *, '1' as cpros, 1 as qtds, 0 as cbars from Relacao into cursor DbImpressao Readwrite\nGo top\nreplace all Obs with Iclis\n\nlnTpImp = Iif(crSigCdPam.ImpEtis <> 0, crSigCdPam.ImpEtis, 1)\nlnAjVerts = crSigCdPam.AjVerts\nlnAjHorzs = crSigCdPam.AjHorzs\nlnAjDenss = Iif(crSigCdPac.AjDens<10,10,CrSigCdPac.AjDens)\nlnAjVelos = Iif(crSigCdPac.AjVelos<1, 1, crSigCdPac.AjVelos)\n\nWith Thisform.Opt_Impressora\n\tlnImpres = .Value\n\tlcNomeImp = .Buttons( lnImpres ).Tag\nEndWith\n\n=SigOp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "processamento",
+        "controlesReferenciados": "Opt_Impressora",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "thisform.processamento()\n\nSelect *, '1' as cpros, 1 as qtds, 0 as cbars, SPACE(10) as Obs from Relacao into cursor DbImpressao Readwrite\nGo top\nreplace all Obs with Iclis\n\nlnTpImp = Iif(crSigCdPam.ImpEtis <> 0, crSigCdPam.ImpEtis, 1)\nlnAjVerts = crSigCdPam.AjVerts\nlnAjHorzs = crSigCdPam.AjHorzs\nlnAjDenss = Iif(crSigCdPac.AjDens<10,10,CrSigCdPac.AjDens)\nlnAjVelos = Iif(crSigCdPac.AjVelos<1, 1, crSigCdPac.AjVelos)\n\nWith Thisform.Opt_Impressora\n\tlnImpres = .Value\n\tlcNomeImp = .Buttons( lnImpres ).T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "processamento",
+        "controlesReferenciados": "Opt_Impressora",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "DO Case \n\tCase ThisForm.opColunas.Value = 1\n\t\tLabel Form SigMldDn  To Printer NoConsole\n\tCase ThisForm.opColunas.Value = 2\n\t\tLabel Form SigMld2 To Printer NoConsole\n\tCase ThisForm.opColunas.Value = 3\n\t\tLabel Form SigMld3 To Printer NoConsole\n\tCase ThisForm.opColunas.Value = 4\n\t\tLabel Form SigMld4 To Printer NoConsole\t\n\tCase ThisForm.opColunas.Value = 5\n\t\tLabel Form SigMld5 To Printer NoConsole\t\n\tCase ThisForm.opColunas.Value = 6\n\t\tLabel Form SigMld2C  To Printer NoConsole\t\n\tCase ThisForm.opColun... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "DO Case \n\tCase ThisForm.opColunas.Value = 1\n\t\tLabel Form SigMldDn  To Printer Prompt NoConsole\n\tCase ThisForm.opColunas.Value = 2\n\t\tLabel Form SigMld2 To Printer Prompt NoConsole\n\tCase ThisForm.opColunas.Value = 3\n\t\tLabel Form SigMld3 To Printer Prompt NoConsole\n\tCase ThisForm.opColunas.Value = 4\n\t\tLabel Form SigMld4 To Printer Prompt NoConsole\t\t\n\tCase ThisForm.opColunas.Value = 5\n\t\tLabel Form SigMld5 To Printer Prompt NoConsole\n\tCase ThisForm.opColunas.Value = 6\n\t\tLabel Form SigMld2C  To Printe... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE",
+      "evento": "Init",
+      "linhas": 183,
+      "codigoOriginal": "Lparameters pCodigos\n\nPrivate pCod\n\n=fConfigGeral()\n\n=DoDefault()\n\npCod = Iif(Type('pCodigos')='C', pCodigos, Space(10))\n\nlcQryMala = [Select a.IClis, a.RClis, a.Endes, a.Nums, a.Compls, a.Bairs, a.Cidas, a.Ceps, a.Estas, ] + ;\n\t\t\t\t   [a.Tel1s, a.Tel2s, a.Faxs, a.Nascs, a.cIdChaves, a.Codigos, b.paises, b.Contato ] + ;\n\t\t\t  [From SigMlCab a, SigCdCli b ] + ;\n\t\t\t [Where a.Codigos = ?pCod And ] + ;\n\t\t\t \t   [a.Iclis = b.Iclis ] + ;\n\t\t  \t [Order By a.IClis, a.RClis, a.Endes, a.Nums, a.Compls, a.Bair... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral,fGravarLog",
+        "metodosFormChamados": "SqlExecute,Cursorquery,Value = Evaluate",
+        "controlesReferenciados": "Get_codigo,Get_desc",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIPE",
+      "evento": "Procedure",
+      "linhas": 81,
+      "codigoOriginal": "Private pCod\n\npCod = Thisform.Get_Codigo.Value\n\nCreate Cursor CsCabecalho (llImpPais l, llImpCodigos l)\nAppend Blank\nReplace llImpPais    With ( ThisForm.optpais.Value = 1 )\nReplace llImpCodigos With ( ThisForm.optCodigo.Value = 1 ) \n\nIf Empty(thisform.get_nm_operacao.Value)\n\tThisForm.poDataMgr.Requery('Relacao')\nElse\n\tSelect TmpOper\n\tScan\n\t\tIf TmpOper.Marcas = 1 and !Empty(TmpOper.ContaEs) and TmpOper.LocalEnts <> 0\n\t\t\t*** Tiago - 03/06/2011 - Busca endereço de entrega se estiver preenchido\n\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fEndEntrega,from TmpOper n] + Alltrim",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "Get_Codigo,optpais,optCodigo,get_nm_operacao,optContatos,optProper,Option",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "DO Case \n\tCase ThisForm.opColunas.Value = 1\n\t\tLabel Form SigMldDn  Preview NoConsole\n\tCase ThisForm.opColunas.Value = 2\n\t\tLabel Form SigMld2  Preview NoConsole\n\tCase ThisForm.opColunas.Value = 3\n\t\tLabel Form SigMld3 Preview NoConsole\n\tCase ThisForm.opColunas.Value = 4\n\t\tLabel Form SigMld4 Preview NoConsole\t\t\n\tCase ThisForm.opColunas.Value = 5\n\t\tLabel Form SigMld5 Preview NoConsole\t\t\n\tCase ThisForm.opColunas.Value = 6\n\t\tLabel Form SigMld2C  Preview NoConsole\t\t\n\tCase ThisForm.opColunas.Value = 8\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.grdOper.Column1.Check1",
+      "evento": "InteractiveChange",
+      "linhas": 4,
+      "codigoOriginal": "Select TmpOper\nreplace marcas with this.Value\n&&Locate for .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.Get_codigo",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigMlItn', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descs',   '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_codigo.Value = crListaRemota.Codigos\n\tThisForm.get_desc.Value   = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.get_codigo.Value = ''\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_codigo,get_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.Get_codigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(thisform.get_nm_operacao.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_nm_operacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.Get_desc",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigMlItn', ;\n\t\t\t\t\t\t   'crListaRemota', 'Descs', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descs',   '', 'Descrição')\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_codigo.Value = crListaRemota.Codigos\n\tThisForm.get_desc.Value   = crListaRemota.Descs\n\tUse In crListaRemota\nElse\n\tThisForm.get_codigo.Value = ''\n\tTh... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_codigo,get_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.Get_desc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Get_codigo.Value) and Empty(thisform.get_nm_operacao.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) and Empty",
+        "controlesReferenciados": "Get_codigo,get_nm_operacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.spn_qtdetiq",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return !Empty(thisform.get_nm_operacao.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_nm_operacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.get_nm_operacao",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "If Empty(this.Value)\n\tthisform.get_dt_inicial.Value = {}\n\tthisform.get_dt_final.Value = {}\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.get_nm_operacao",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoMovmto(Usuar, This.Value, This)\nEndIf\n* Fim **************************************************************************************\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoMovmto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.get_nm_operacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(thisform.get_codigo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.OptPais",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "LPARAMETERS cName, cClass\n'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.opt_conta",
+      "evento": "InteractiveChange",
+      "linhas": 3,
+      "codigoOriginal": "If !Empty(thisform.get_dt_inicial.Value) and !Empty(thisform.get_dt_final.Value)\n\tthisform.get_dt_final.Valid()\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) and !Empty,Valid",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.opt_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return !Empty(thisform.get_nm_operacao.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_nm_operacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.get_dt_inicial",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return !Empty(thisform.get_nm_operacao.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_nm_operacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.get_dt_final",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tlcDopes = thisform.get_nm_operacao.Value\n\tldDataIni = thisform.get_dt_inicial.Value\n\tldDataFin = thisform.get_dt_final.value\n\tlnConta = thisform.opt_conta.Value\n\tIf Not Empty(This.Value)\n\t\tthisform.grdOper.RecordSource = []\n\t\t\n\t\tlcQuery = [Select 0 as Marcas, a.Emps, a.Dopes, a.Numes, b.rclis as DescOrigs, c.Rclis as DescDests, a.ContaEs, a.LocalEnts, ] +;\n\t\t\t\t\tIif(lnConta=1,[b.* ],[c.* ]) +;\n\t\t\t\t\t[from SigMvCab a inner join SigCdCli b on a.ContaOs = b.Iclis ] +;\n\t\t\t\t\t[... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Refresh",
+        "controlesReferenciados": "get_nm_operacao,get_dt_inicial,get_dt_final,opt_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.get_dt_final",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return !Empty(thisform.get_nm_operacao.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_nm_operacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.apaga",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select TmpOper\nReplace All TmpOper.marcas with 0\nGo Top\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.apaga",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Used('TmpOper')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.SelTudo",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select tmpOper\nReplace All tmpOper.marcas with 1\nGo Top\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPE.SelTudo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Used('TmpOper')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREIPE.Procedure",
+      "queryOriginal": "Select *, '1' as cpros, 1 as qtds, 0 as cbars from Relacao into cursor DbImpressao Readwrite",
+      "tabelas": "Relacao",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREIPE.Procedure",
+      "queryOriginal": "Select *, '1' as cpros, 1 as qtds, 0 as cbars, SPACE(10) as Obs from Relacao into cursor DbImpressao Readwrite",
+      "tabelas": "Relacao",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREIPE.get_dt_final.Valid",
+      "queryOriginal": "\t\tlcQuery = [Select 0 as Marcas, a.Emps, a.Dopes, a.Numes, b.rclis as DescOrigs, c.Rclis as DescDests, a.ContaEs, a.LocalEnts, ] +; \t\t\t\t\tIif(lnConta=1,[b.* ],[c.* ]) +; \t\t\t\t\t[from SigMvCab a inner join SigCdCli b on a.ContaOs = b.Iclis ] +; \t\t\t\t\t[... [TRUNCADO]",
+      "tabelas": "SigCdCli",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["Relacao", "SigCdCli"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

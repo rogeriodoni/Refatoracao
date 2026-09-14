@@ -1,0 +1,8 @@
+﻿Todas as 4 corre├º├Áes aplicadas:
+
+| Problema | Arquivo | Corre├º├úo |
+|---|---|---|
+| **CONTADS** | `SigReEvdBO.prg` | Removido bloco `IF !EMPTY(loc_lcConta)` que acrescentava `AND a.ContaDs = ...` ao WHERE |
+| **CEMPS** | `SigReEvdBO.prg` | Removida query `SELECT Razas FROM SigCdEmp WHERE Cemps = ...` ÔÇö o original n├úo consultava SigCdEmp; `loc_lcEmp` j├í tinha `go_4c_Sistema.cCodEmpresa` |
+| **CODIGOS** | `FormSigReEvd.prg` (`ValidarGrupo`) | Substitu├¡da query individual `WHERE Codigos = ...` por `LOCATE FOR ALLTRIM(Codigos) = loc_cCodigo` no cursor pr├®-carregado `cursor_4c_Grupos` |
+| **RCLIS** (├ù2) | `FormSigReEvd.prg` (`ValidarConta` / `ValidarDconta`) | Substitu├¡das queries individuais `WHERE IClis/RClis = ...` por `LOCATE` no cursor pr├®-carregado `cursor_4c_Clientes` |

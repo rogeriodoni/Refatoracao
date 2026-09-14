@@ -1,0 +1,12 @@
+﻿A migra├º├úo da task160 (SIGPRCCR) est├í **100% completa**. N├úo h├í nada a fazer na Fase 5/8 porque:
+
+- O `SIGPRCCR.SCX` original ├® um relat├│rio **sem campos de filtro** ÔÇö ├® apenas um form de 130px com cabe├ºalho cinza + 4 bot├Áes
+- N├úo existe `Page2`, `ConfigurarPaginaDados()`, `TextBoxes` nem `Labels` de entrada de dados
+- Toda a l├│gica est├í no `PrepararDados()` do BO: busca a empresa, cria cursor de cabe├ºalho, seleciona `SigCdPro WHERE lMarca=1 ORDER BY Cpros`
+
+**Status atual dos arquivos:**
+- `C:\4c\projeto\app\classes\SIGPRCCRBO.prg` ÔÇö completo (Init, PrepararDados, Imprimir, Visualizar, ArquivosEmail, Destroy)
+- `C:\4c\projeto\app\forms\relatorios\FormSIGPRCCR.prg` ÔÇö completo (InicializarForm, ConfigurarCabecalho, ConfigurarBotoes, 4 handlers de bot├úo, Destroy)
+- `menu.prg` ÔÇö j├í integrado (BAR 171 em popRelatorios + `AbrirFormSIGPRCCR`)
+
+A Fase 5 do pipeline est├í marcando este form como necessitando "campos da Page2", mas o original simplesmente n├úo os tem ÔÇö o pipeline completou este form nas fases 1-4.

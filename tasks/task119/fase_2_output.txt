@@ -1,0 +1,16 @@
+﻿770 linhas, termina com `ENDDEFINE` correto. Fase 2 conclu├¡da.
+
+**O que foi feito em SigReIfvBO.prg:**
+
+| M├®todo | Visibilidade | Descri├º├úo |
+|--------|--------------|-----------|
+| `CarregarDadosAuxiliares()` | PUBLIC | Carrega CrSigCdEmp, CrSigCdMoe, CrSigCdCot, CrSigBaOco, CsBases, CsSigCdEmp via SQLEXEC |
+| `PrepararDados()` | PUBLIC | Override do hook de RelatorioBase ÔÇö monta CsCabecalho e despacha para os 3 processadores |
+| `Visualizar()` | PUBLIC | Chama PrepararDados + REPORT FORM ... PREVIEW |
+| `Imprimir()` | PUBLIC | Chama PrepararDados + REPORT FORM ... TO PRINTER PROMPT |
+| `ObterFrxAtual()` | PUBLIC | Retorna SigReIf1/SigReIf0/SigReIf9 conforme `this_nTipo` |
+| `ObterMensagemErro()` | PUBLIC | Retorna `this_cMensagemErro` |
+| `CarregarCambio(moeda, data)` | PROTECTED | Substituto de `fCarregarCambio()` ÔÇö busca taxa `Valos` em CrSigCdCot |
+| `ProcessarAnalitico()` | PROTECTED | Tipo 1: scan por empresa ├║nica com convers├úo de moeda e INSERT FROM MEMVAR |
+| `ProcessarSintetico()` | PROTECTED | Tipo 2: multi-empresa via join CsSigCdEmp, SCATTER+REPLACE com macro `&loc_cCusto.` |
+| `ProcessarConsultaBarra()` | PROTECTED | Tipo 3: filtro por `a.Barras = par_nBarra` |

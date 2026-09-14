@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything is correctly placed and structurally balanced. Summary of Phase 7 changes to `C:\4c\projeto\app\forms\cadastros\FormSre.prg`:
+
+**Novos m├®todos adicionados:**
+- `BOParaForm()` ÔÇö transfere dados do `SreBO` para os campos da Page2 (incluindo busca reversa da raz├úo social via `BuscarDescricaoEmpresa`), com defaults seguros para OptionGroups fora de faixa e reset dos guards de lookup (Problema 45).
+- `LimparCampos()` ÔÇö limpa todos os campos de Page2, restaurando os defaults can├┤nicos dos OptionGroups usados em `ConfigurarPaginaDados`.
+- `HabilitarCampos(par_lHabilitar)` ÔÇö reproduz as regras `When` do legado extra├¡das do `comportamento.json`: C├│digo/Empresa/Descri├º├úo-Empresa edit├íveis somente em INCLUIR; demais campos edit├íveis em INCLUIR/ALTERAR; OptionGroups habilitados em INCLUIR/ALTERAR; bot├úo Confirmar habilitado tamb├®m em EXCLUIR (Erro140).
+- `AjustarChkBlqInss()` ÔÇö mant├®m `chk_4c_Ck_BlqInss.Enabled` sincronizado com o modo atual e o valor de "Imprime NF", tanto na abertura quanto via `InteractiveChange` (Problema 31).
+- `BtnIncluirClick()`, `BtnVisualizarClick()`, `BtnAlterarClick()`, `BtnExcluirClick()` ÔÇö implementados com l├│gica completa (sem stubs), seguindo o padr├úo `NovoRegistro/EditarRegistro` + `CarregarPorCodigo` + `AlternarPagina`, com foco replicando o `do case` do legado (foco em `getEmps` ao incluir).
+
+**Wiring adicional:**
+- `BINDEVENT` dos 4 bot├Áes CRUD (`cmd_4c_Incluir/Visualizar/Alterar/Excluir`) para seus respectivos handlers ÔÇö esses bot├Áes existiam desde a Fase 4 mas ainda n├úo disparavam nada.
+- `BINDEVENT` do `InteractiveChange` de `obj_4c_Op_AlteraPeso` para `AjustarChkBlqInss`.
+
+Validei balanceamento de `PROCEDURE/ENDPROC` (25/25) e `WITH/ENDWITH` (61/61), e o `ENDDEFINE` final est├í presente. Os bot├Áes Buscar/Encerrar e os m├®todos `BtnSalvarClick`/`BtnCancelarClick`/`FormParaBO` ficam para a Fase 8, conforme o escopo definido.

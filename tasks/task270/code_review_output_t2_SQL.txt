@@ -1,0 +1,9 @@
+﻿Confirmo: o problema detectado ├® um **falso positivo** do code review automatizado.
+
+As ocorr├¬ncias de `ControlCount` nos dois arquivos s├úo exclusivamente propriedade VFP9 (`loc_oContainer.ControlCount`) usada em loop de controles no m├®todo `TornarControlesVisiveis` ÔÇö c├│digo completamente leg├¡timo, sem nenhuma rela├º├úo com SQL.
+
+**Verifica├º├úo:**
+- `sigprcpdBO.prg` ÔåÆ **zero ocorr├¬ncias** de `ControlCount`
+- `Formsigprcpd.prg` ÔåÆ 2 ocorr├¬ncias nas linhas 471 e 475, ambas dentro de `FOR loc_i = 1 TO loc_oContainer.ControlCount` ÔÇö propriedade nativa VFP9, n├úo coluna SQL
+
+N├úo h├í nenhum filtro `WHERE CONTROLCOUNT = ...` inventado nos arquivos. O detector confundiu a propriedade VFP9 `ControlCount` com o nome de coluna SQL. **Nenhuma corre├º├úo necess├íria** neste pass.

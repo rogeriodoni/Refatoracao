@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `PubBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCodigo` para auditoria
+- **`ValidarDados()`** ÔÇö valida c├│digo e descri├º├úo n├úo vazios (l├│gica do legado: "C├│digo Inv├ílido!" se vazio)
+- **`CarregarDoCursor()`** ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo can├┤nico)
+- **`Buscar()`** ÔÇö `SELECT cods, descs FROM SigCdFpb ORDER BY cods` ÔåÆ `cursor_4c_Dados`
+- **`CarregarPorCodigo()`** ÔÇö SELECT por PK + reset `this_lNovoRegistro = .F.`
+- **`Inserir()`** ÔÇö INSERT com auditoria `"INSERT"` (PROTECTED)
+- **`Atualizar()`** ÔÇö UPDATE s├│ em `descs` (c├│digo ├® PK imut├ível, campo bloqueado no ALTER) com auditoria `"UPDATE"` (PROTECTED)
+- **`ExecutarExclusao()`** ÔÇö DELETE por `cods` com auditoria `"DELETE"` (PROTECTED)

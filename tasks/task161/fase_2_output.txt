@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. A Fase 2/8 foi conclu├¡da com sucesso.
+
+**Fase 2 entregue**: `C:\4c\projeto\app\classes\SigPrCfnBO.prg` completo com 7 m├®todos adicionados:
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `InicializarComParametros()` | PUBLIC | Recebe os 6 par├ómetros do Init original (pVal, pTip, pJMe, pJDi, pDtB, pDtF) |
+| `CalcularJuros()` | PUBLIC | L├│gica exata do `Calculos()` original, incluindo rec├ílculo por vencimentos |
+| `ConverterJurosMesParaDia()` | PUBLIC | Converte i_mes ÔåÆ i_dia (Simples: /30; Composto: ^1/30) |
+| `ConverterJurosDiaParaMes()` | PUBLIC | Converte i_dia ÔåÆ i_mes (Simples: ├ù30; Composto: ^30) |
+| `CalcularDias()` | PUBLIC | Dias corridos ou ├║teis com loop de desconto de n├úo-├║teis |
+| `VerificarDiaUtil()` | PROTECTED | Checa DOW (S├íb=7/Dom=1) + query `SigCdFer` para feriados |
+| `ObterChavePrimaria()` | PROTECTED | Override retornando "" (sem tabela) |
+
+**Destaques da implementa├º├úo**:
+- `CalcularJuros()` replica fielmente a l├│gica de vencimentos: quando algum `getvenc[N]` est├í preenchido, zera o c├ílculo base e recalcula por parcela individualmente
+- `VerificarDiaUtil()` absorve a fun├º├úo `fChkFeriado(poDataMgr, data, llSab, llDom)` do legado; CATCH silencia se tabela `SigCdFer` n├úo existir
+- Nenhum RETURN dentro de TRY/CATCH (regra #1 do CLAUDE.md)

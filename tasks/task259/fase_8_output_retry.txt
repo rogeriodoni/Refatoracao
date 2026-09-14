@@ -1,0 +1,3 @@
+﻿All 5 required methods now exist. Phase 8 validation should now pass.
+
+**Summary:** The pipeline's Phase 8 validator (OrquestradorMigracao.ps1:4849) requires 5 specific methods: `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`. The generated OPERACIONAL form had 3 of them, but was missing `BtnSalvarClick` and `BtnCancelarClick` because those are CRUD-style methods (this form uses `BtnProcessarClick`/`BtnAtualizarClick`/`BtnEncerrarClick` instead). Added both as thin wrappers: `BtnSalvarClick` delegates to `BtnAtualizarClick` (persist prices) and `BtnCancelarClick` delegates to `LimparCampos` (reset filters and grid).

@@ -1,0 +1,4012 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigcdacu.SCX
+* Data/Hora: 21/07/2026 14:12:25
+* Total de registros: 71
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDACU
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdGLimSenha
+  Parent: SIGCDACU.Pagina.Lista
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cmdCopia
+  Parent: SIGCDACU.Pagina.Lista
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cntCopiarAcesso
+  Parent: SIGCDACU.Pagina.Lista
+  Class: container
+  BaseClass: container
+
+Objeto: btnCopiarAcessos
+  Parent: SIGCDACU.Pagina.Lista.cntCopiarAcesso
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say8
+  Parent: SIGCDACU.Pagina.Lista.cntCopiarAcesso
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCopiarAcessos
+  Parent: SIGCDACU.Pagina.Lista.cntCopiarAcesso
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnCancelar
+  Parent: SIGCDACU.Pagina.Lista.cntCopiarAcesso
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Pagina
+  Parent: SIGCDACU.Pagina.Dados
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: Label2
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso
+  Class: label
+  BaseClass: label
+
+Objeto: getfiltro
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdAcesso
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column3
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grade
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Descrição
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Descrição
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.BarraTipText
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.BarraTipText
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Figura
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Figura
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Seleciona
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Seleciona
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Shape2
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: shape
+  BaseClass: shape
+
+Objeto: Label1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: label
+  BaseClass: label
+
+Objeto: Usuario
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: NomeCompleto
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cargo
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Departamento
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getSetores
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optativo
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Optsenhadia
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Optlibpesag
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Optlibprod
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: olegru
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: olecontrol
+  BaseClass: olecontrol
+
+Objeto: Say8
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getIClis
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getRClis
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Optiongroup1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say10
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Optiongroup2
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Cadastro
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Grade
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Empresa
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Empresa.Grade.column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Empresa.Grade.column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Empresa.Grade.column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Empresa.Grade.column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Grade
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Page1
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: cmbStatus
+  Parent: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.Column4
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 43
+  Left = 10
+  Width = 632
+  Height = 351
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Usuários"
+  dragthreshold = 8
+  mousex = 0
+  mousey = 0
+  cmarca = 
+  nodeindex = 0
+  Name = "SIGCDACU"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = 0
+  Pagina.Lista.cntSombra.Width = 996
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 458
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.Top = 133
+  Pagina.Lista.Grade.Width = 935
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.ZOrderSet = 1
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.inserir.Top = 5
+  Pagina.Lista.Grupo_op.inserir.Left = 5
+  Pagina.Lista.Grupo_op.inserir.Name = "inserir"
+  Pagina.Lista.Grupo_op.consultar.Top = 5
+  Pagina.Lista.Grupo_op.consultar.Left = 80
+  Pagina.Lista.Grupo_op.consultar.Name = "consultar"
+  Pagina.Lista.Grupo_op.alterar.Top = 5
+  Pagina.Lista.Grupo_op.alterar.Left = 155
+  Pagina.Lista.Grupo_op.alterar.Name = "alterar"
+  Pagina.Lista.Grupo_op.excluir.Top = 5
+  Pagina.Lista.Grupo_op.excluir.Left = 230
+  Pagina.Lista.Grupo_op.excluir.Name = "excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 541
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.ZOrderSet = 3
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.AutoSize = .T.
+  Pagina.Lista.Grupo_Saida.sair.Top = 5
+  Pagina.Lista.Grupo_Saida.sair.Left = 5
+  Pagina.Lista.Grupo_Saida.sair.Name = "sair"
+  Pagina.Lista.Grupo_Saida.Left = 916
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.ZOrderSet = 7
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 13
+  Pagina.Lista.cntFiltros.Left = 678
+  Pagina.Lista.cntFiltros.ZOrderSet = 0
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.salva.Top = 5
+  Pagina.Dados.Grupo_Salva.salva.Left = 5
+  Pagina.Dados.Grupo_Salva.salva.Name = "salva"
+  Pagina.Dados.Grupo_Salva.cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.cancelar.Name = "cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 817
+  Pagina.Dados.Grupo_Salva.Top = 7
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.ActivePage = 1
+  Pagina.Width = 1000
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Lista.cmdGLimSenha
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 466
+  Top = -1
+  Width = 85
+  TabIndex = 6
+  ZOrderSet = 9
+  Name = "cmdGLimSenha"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_cores_60.jpg
+  Command1.Caption = "Limpa Senha"
+  Command1.ToolTipText = "Limpar Senha"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdLimSenha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Lista.cmdCopia
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 85
+  Left = 391
+  Top = -1
+  Width = 85
+  TabIndex = 29
+  ZOrderSet = 6
+  Name = "cmdCopia"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\geral_copiar_acesso_60.jpg
+  Command1.Caption = "Copiar"
+  Command1.ToolTipText = "Copiar Acesso de Usuários"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnCopia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Lista.cntCopiarAcesso
+------------------------------------------------------------
+  Top = 246
+  Left = 351
+  Width = 294
+  Height = 91
+  BorderWidth = 2
+  SpecialEffect = 0
+  TabIndex = 8
+  BackColor = 255,255,255
+  ZOrderSet = 8
+  Name = "cntCopiarAcesso"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Lista.cntCopiarAcesso.btnCopiarAcessos
+------------------------------------------------------------
+  Top = 7
+  Left = 138
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_copiar_acesso_60.jpg
+  Caption = "Copiar"
+  TabIndex = 3
+  ToolTipText = "Copiar Acesso"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnCopiarAcessos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Lista.cntCopiarAcesso.Say8
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = " Copiar do Usuário "
+  Left = 2
+  Top = 22
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Lista.cntCopiarAcesso.getCopiarAcessos
+------------------------------------------------------------
+  Height = 23
+  Left = 22
+  MaxLength = 10
+  TabIndex = 2
+  Top = 39
+  Width = 81
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 42
+  Name = "getCopiarAcessos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Lista.cntCopiarAcesso.btnCancelar
+------------------------------------------------------------
+  Top = 7
+  Left = 213
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Cancel = .T.
+  Caption = "Cancelar"
+  TabIndex = 4
+  ToolTipText = "Cancelar"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnCancelar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 5
+  Top = 121
+  Left = 0
+  Width = 1000
+  Height = 475
+  TabIndex = 1
+  ZOrderSet = 0
+  Name = "Pagina"
+  Page1.FontName = "Tahoma"
+  Page1.FontSize = 8
+  Page1.Caption = "Acesso"
+  Page1.Picture = ..\framework\imagens\new_background.jpg
+  Page1.PageOrder = 2
+  Page1.BackColor = 255,255,255
+  Page1.ForeColor = 90,90,90
+  Page1.Name = "Acesso"
+  Page2.FontName = "Tahoma"
+  Page2.FontSize = 8
+  Page2.Caption = "Atalhos"
+  Page2.Picture = ..\framework\imagens\new_background.jpg
+  Page2.PageOrder = 3
+  Page2.BackColor = 255,255,255
+  Page2.ForeColor = 90,90,90
+  Page2.Name = "Cabeçalho"
+  Page3.FontName = "Tahoma"
+  Page3.FontSize = 8
+  Page3.Caption = "Cadastro"
+  Page3.Picture = ..\framework\imagens\new_background.jpg
+  Page3.PageOrder = 1
+  Page3.BackColor = 255,255,255
+  Page3.ForeColor = 90,90,90
+  Page3.Name = "Cadastro"
+  Page4.FontName = "Tahoma"
+  Page4.FontSize = 8
+  Page4.Caption = "Empresas"
+  Page4.Picture = ..\framework\imagens\new_background.jpg
+  Page4.PageOrder = 4
+  Page4.BackColor = 255,255,255
+  Page4.ForeColor = 90,90,90
+  Page4.Name = "Empresa"
+  Page5.FontName = "Tahoma"
+  Page5.FontSize = 8
+  Page5.Caption = "Acesso Tela"
+  Page5.Picture = ..\framework\imagens\new_background.jpg
+  Page5.PageOrder = 5
+  Page5.BackColor = 255,255,255
+  Page5.ForeColor = 90,90,90
+  Page5.Name = "Page1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Acesso :"
+  Height = 15
+  Left = 17
+  Top = 15
+  Width = 43
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.getfiltro
+------------------------------------------------------------
+  Format = "K!"
+  Height = 25
+  Left = 70
+  TabIndex = 16
+  Top = 11
+  Width = 902
+  Name = "getfiltro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 387
+  Left = 70
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 47
+  Width = 872
+  GridLineColor = 238,238,238
+  Name = "grdAcesso"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.Width = 650
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.ControlSource = ""
+  Column2.Width = 90
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 1
+  Column3.Width = 17
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Sparse = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 90
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Programa"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column3.Check1
+------------------------------------------------------------
+  Top = 22
+  Left = 22
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Parametro"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 417
+  Left = 147
+  Panel = 1
+  RecordSource = "TmpBarra"
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 18
+  Width = 701
+  ForeColor = 0,0,0
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.ControlSource = "TmpBarra.Descricaos"
+  Column1.Width = 650
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.ForeColor = 0,0,0
+  Column1.Name = "Descrição"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.ControlSource = ""
+  Column2.Width = 8
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Visible = .F.
+  Column2.ForeColor = 0,0,0
+  Column2.Name = "BarraTipText"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 4
+  Column3.ControlSource = ""
+  Column3.Width = 9
+  Column3.Movable = .F.
+  Column3.Resizable = .T.
+  Column3.Visible = .F.
+  Column3.ForeColor = 0,0,0
+  Column3.Name = "Figura"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 1
+  Column4.ControlSource = "TmpBarra.SelBarras"
+  Column4.Width = 18
+  Column4.Resizable = .F.
+  Column4.Sparse = .F.
+  Column4.ForeColor = 0,0,0
+  Column4.Name = "Seleciona"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Descrição.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Descrição.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "TmpBarra.Descricaos"
+  Margin = 0
+  MaxLength = 73
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.BarraTipText.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tool Tip Text"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.BarraTipText.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  MaxLength = 50
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Figura.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Figura"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Figura.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = ""
+  Margin = 0
+  MaxLength = 30
+  Visible = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Seleciona.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Seleciona.Check1
+------------------------------------------------------------
+  Top = 50
+  Left = 6
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  ControlSource = "TmpBarra.SelBarras"
+  ForeColor = 0,0,0
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Shape2
+------------------------------------------------------------
+  Top = 15
+  Left = 564
+  Height = 430
+  Width = 424
+  BackStyle = 0
+  BorderWidth = 2
+  Curvature = 0
+  SpecialEffect = 0
+  ZOrderSet = 1
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Usuário :"
+  Height = 15
+  Left = 104
+  Top = 22
+  Width = 45
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Nome :"
+  Height = 15
+  Left = 113
+  Top = 49
+  Width = 36
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Usuario
+------------------------------------------------------------
+  ControlSource = "crsigcdusu.usuarios"
+  Format = "K!"
+  Height = 25
+  Left = 152
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 18
+  Width = 81
+  Name = "Usuario"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.NomeCompleto
+------------------------------------------------------------
+  ControlSource = "crsigcdusu.ncomps"
+  Format = "K!"
+  Height = 25
+  Left = 152
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 45
+  Width = 220
+  Name = "NomeCompleto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Senha do dia  :"
+  Height = 15
+  Left = 75
+  Top = 214
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cargo :"
+  Left = 111
+  Top = 76
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Cargo
+------------------------------------------------------------
+  ControlSource = "crsigcdusu.CCargs"
+  Format = "K!"
+  Height = 25
+  Left = 152
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 72
+  Width = 80
+  Name = "Cargo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Departamento :"
+  Left = 71
+  Top = 103
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Departamento
+------------------------------------------------------------
+  ControlSource = "crsigcdusu.Deptos"
+  Format = "K!"
+  Height = 25
+  Left = 152
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 99
+  Width = 80
+  Name = "Departamento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Setor :"
+  Left = 114
+  Top = 130
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.getSetores
+------------------------------------------------------------
+  ControlSource = "crsigcdusu.Setores"
+  Format = "K!"
+  Height = 25
+  Left = 152
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 126
+  Width = 80
+  Name = "getSetores"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Libera Produção :"
+  Left = 63
+  Top = 267
+  TabIndex = 20
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Libera Pesagem :"
+  Left = 65
+  Top = 241
+  TabIndex = 18
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ativo :"
+  Left = 115
+  Top = 186
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.optativo
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 17
+  Left = 148
+  Top = 185
+  Width = 102
+  TabIndex = 15
+  Name = "optativo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.FontUnderline = .F.
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 1
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.FontUnderline = .F.
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Style = 0
+  Option2.Top = 1
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Optsenhadia
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 17
+  Left = 148
+  Top = 213
+  Width = 102
+  TabIndex = 17
+  Name = "Optsenhadia"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 1
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Style = 0
+  Option2.Top = 1
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Optlibpesag
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 17
+  Left = 148
+  Top = 240
+  Width = 102
+  TabIndex = 19
+  Name = "Optlibpesag"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 1
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Style = 0
+  Option2.Top = 1
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Optlibprod
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 17
+  Left = 148
+  Top = 266
+  Width = 102
+  TabIndex = 21
+  Name = "Optlibprod"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 1
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Style = 0
+  Option2.Top = 1
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.olegru
+------------------------------------------------------------
+  Top = 20
+  Left = 570
+  Height = 421
+  Width = 413
+  TabIndex = 24
+  Name = "olegru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Say8
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Contas :"
+  Left = 106
+  Top = 157
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.getIClis
+------------------------------------------------------------
+  ControlSource = "crSigCdUsu.IClis"
+  Format = "K!"
+  Height = 23
+  Left = 152
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 154
+  Width = 80
+  Name = "getIClis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.getRClis
+------------------------------------------------------------
+  Format = "K!"
+  Height = 23
+  Left = 235
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 154
+  Width = 267
+  Name = "getRClis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Say9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cadastrar Senha :"
+  Left = 59
+  Top = 290
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ToolTipText = "Obrigar a informar uma senha"
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Optiongroup1
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdUsu.ObrigSenhas"
+  Height = 17
+  Left = 148
+  Top = 289
+  Width = 102
+  TabIndex = 15
+  Name = "Optiongroup1"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.ToolTipText = "NÃO permite senhas em branco"
+  Option1.Top = 1
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Style = 0
+  Option2.ToolTipText = "Permite senhas em branco"
+  Option2.Top = 1
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Say10
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Libera Movimentação :"
+  Left = 39
+  Top = 314
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ToolTipText = "Obrigar a informar uma senha"
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Optiongroup2
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdUsu.LiberaMov"
+  Height = 17
+  Left = 148
+  Top = 313
+  Width = 102
+  TabIndex = 15
+  Name = "Optiongroup2"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.ToolTipText = "NÃO permite senhas em branco"
+  Option1.Top = 1
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 56
+  Option2.Style = 0
+  Option2.ToolTipText = "Permite senhas em branco"
+  Option2.Top = 1
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Empresa.Grade
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 414
+  Left = 147
+  Panel = 1
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 18
+  Width = 701
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontShadow = .F.
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.ControlSource = ""
+  Column1.Width = 650
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "column2"
+  Column2.FontName = "Tahoma"
+  Column2.FontShadow = .F.
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 1
+  Column2.ControlSource = ""
+  Column2.Width = 18
+  Column2.Resizable = .F.
+  Column2.Sparse = .F.
+  Column2.Name = "column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Empresa.Grade.column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontShadow = .F.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Empresa"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Empresa.Grade.column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontShadow = .F.
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "TmpBarra.Descricaos"
+  Margin = 0
+  MaxLength = 73
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Empresa.Grade.column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontShadow = .F.
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Empresa.Grade.column1.Check1
+------------------------------------------------------------
+  Top = 50
+  Left = 6
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontShadow = .F.
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  ControlSource = "TmpBarra.SelBarras"
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  ChildOrder = ""
+  DeleteMark = .F.
+  Height = 421
+  Left = 6
+  Panel = 1
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 18
+  Width = 969
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 360
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "column2"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 360
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column3"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 168
+  Column3.Resizable = .F.
+  Column3.Sparse = .F.
+  Column3.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tela"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "TmpBarra.Descricaos"
+  Margin = 0
+  MaxLength = 73
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Campo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Status"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDACU.Pagina.Dados.Pagina.Page1.Grade.Column4.cmbStatus
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 25
+  Top = 29
+  Name = "cmbStatus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDACU
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE atualizatmp
+------------------------------------------------------------
+PROCEDURE atualizatmp
+
+Lparameters lnTodos
+
+Wait Window 'Atualizando Arquivos...' NoWait
+
+Local lnPos 
+lnPos = 0
+
+Select crOrigem
+Locate For .f.
+
+Select crDestino
+Locate For .f.
+
+If lnTodos==1
+	Zap In TmpBarra
+
+Else
+	Select crDestino
+	Locate For .f.
+	
+	Delete From TmpBarra Where Programas + Parametros Not In (Select b.Programas + b.Parametros From crDestino b Where Not Empty(b.Usuarios))
+	
+EndIf 
+
+Select crDestino
+
+Scan
+
+	lnPos = lnPos + 1 
+
+	Scatter MemVar	
+	m.BarraOrdem = lnPos
+	m.SelBarras  = .f.
+
+	If Not Empty(m.BarraForms) And Not Seek(m.Programas + m.Parametros, 'TmpBarra', 'ProPar')
+		Insert Into TmpBarra From Memvar
+
+	EndIf
+	
+EndScan
+
+Select TmpBarra
+Set Order to BarraOrdem
+Locate For .f.
+Go Top
+
+Wait Clear
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE selectall
+------------------------------------------------------------
+PROCEDURE selectall
+Lparameters oList
+
+Local lnCnt
+
+For lnCnt = 1 to oList.ListCount
+	oList.Selected(lnCnt) = .t.
+EndFor
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE ativacopia
+------------------------------------------------------------
+PROCEDURE ativacopia
+Lparameters pStatus
+
+ThisForm.KeyPreview 		  = Not pStatus
+ThisForm.Pagina.Dados.Enabled = Not pStatus
+
+With ThisForm.Pagina.Lista
+	.cntCopiarAcesso.Enabled = pStatus
+	.cntCopiarAcesso.Visible = pStatus
+
+	.Grade.Enabled    	 = Not pStatus
+	.Grupo_Op.Enabled 	 = Not pStatus
+
+	.cmdCopia.Enabled 	 = Not pStatus
+	.grupo_saida.Enabled = Not pStatus
+
+	.cmdCopia.Visible    = (.cmdCopia.Enabled And Not pStatus)
+	.cmdGLimSenha.Visible = (.cmdGLimSenha.Enabled And Not pStatus)
+	.grupo_saida.Visible = Not pStatus
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE carregafiltro
+------------------------------------------------------------
+PROCEDURE carregafiltro
+Lparameters pFil
+
+With ThisForm.Pagina.Dados.Pagina.Acesso
+	.Origem.Clear
+
+	Wait Window 'Aguarde!!! Filtrando Acesso...' NoWait
+
+	Select crTodossigcdprg
+	Scan
+		lcTxt = crTodossigcdprg.Descricaos + Space(180 - Len(crTodossigcdprg.Descricaos)) + ;
+				crTodossigcdprg.Programas + crTodossigcdprg.Parametros + crTodossigcdprg.BarraForms
+
+		llTem = .f.
+		If Empty(pFil) Or (At(Upper(Alltrim(pFil)), Upper(Padr(lcTxt, 100))) > 0)
+			For lnCnt = 1 To .Destino.ListCount
+				If (.Destino.List(lnCnt) = lcTxt)
+					llTem = .t.
+					lnCnt = .Destino.ListCount
+				EndIf
+			Next
+			If Not llTem
+				.Origem.AddItem(lcTxt)
+			EndIf
+		EndIf
+	EndScan
+
+	Wait Clear
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE carregafiltro1
+------------------------------------------------------------
+PROCEDURE carregafiltro1
+Lparameters pFil
+
+Wait Window 'Aguarde!!! Filtrando Acesso...' NoWait
+
+Create Cursor TmpOri (Texto c(250))
+Select TmpOri
+For lnCnt = 1 To ThisForm.Pagina.Dados.Pagina.Acesso.Origem.ListCount
+	Append Blank
+	Replace Texto With ThisForm.Pagina.Dados.Pagina.Acesso.Origem.List(lnCnt)
+Next
+
+With ThisForm.Pagina.Dados.Pagina.Acesso
+	.Destino.Clear
+	Select crTodossigcdprg
+	Scan
+		lcTxt = crTodossigcdprg.Descricaos + Space(180 - Len(crTodossigcdprg.Descricaos)) + ;
+				crTodossigcdprg.Programas + crTodossigcdprg.Parametros + crTodossigcdprg.BarraForms
+
+		llTem = .f.
+		If Empty(pFil) Or (At(Upper(Alltrim(pFil)), Upper(Padr(lcTxt, 100))) > 0)
+			Select TmpOri
+			Locate For Texto = Padr(lcTxt,250)
+			If Eof()
+				.Destino.AddItem(lcTxt)
+			EndIf
+		EndIf
+	EndScan
+
+EndWith
+
+Wait Clear
+
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montaacesso
+------------------------------------------------------------
+PROCEDURE montaacesso
+Parameters latualiza
+
+*!*	Select *, 0 As inseriu From crorigem Into Cursor crmenuace Readwrite
+
+*!*	With Thisform.pagina.dados.pagina.aceSSO.oleTree
+*!*		cleft = .Left
+*!*		ctop = .Top
+*!*		.Left = 2000
+*!*		.Top = 2000
+
+*!*		Thisform.LockScreen = .T.
+
+*!*		Select crmenuace
+*!*		Scan
+*!*			If !latualiza
+*!*				nreg = Recno()
+*!*				cmenu = Alltrim(Substr(crmenuace.descricaos,1,Rat('-',crmenuace.descricaos,1)-1))
+*!*				Locate For Alltrim(descricaos) == cmenu
+*!*				If !Eof()
+*!*					nreg2 = Recno()
+*!*					Go nreg
+*!*					If crmenuace.inseriu = 0
+*!*						cmenu = Alltrim(Substr(crmenuace.descricaos,Rat('-',crmenuace.descricaos,1)+1))
+*!*						onode = .Nodes.Add(Alltrim(Str(nreg2) + "_"),4,Alltrim(Str(nreg) + "_"),cmenu,0)
+*!*						onode.Tag = crmenuace.descricaos
+*!*						Replace inseriu With 1
+*!*					Endif
+*!*				Else
+*!*					Go nreg
+*!*					If crmenuace.inseriu = 0
+*!*						cmenu = Alltrim(Substr(crmenuace.descricaos,At('-',crmenuace.descricaos,1)+1)) && crmenuace.descricaos
+*!*						onode = .Nodes.Add(,1,Alltrim(Str(Recno()) + "_"),cmenu,0)
+*!*						onode.Tag = crmenuace.descricaos
+*!*						Replace inseriu With 1
+*!*					Endif
+*!*				Endif
+*!*			Else
+*!*				nindex = crmenuace.npos && RECNO() &&.Nodes.Count
+*!*				If ! Empty(crmenuace.Usuarios) Or crmenuace.expandi = 1
+*!*					.Nodes.Item(nindex).Checked = Iif(!Empty(crmenuace.Usuarios),.T.,.F.)
+*!*					.Nodes.Item(nindex).Expanded = Iif(Thisform.pcescolha = 'CONSULTAR' Or crmenuace.expandi=1,.T.,.F.)
+*!*					.Nodes.Item(nindex).BackColor = Iif(crmenuace.expandi = 1,Rgb(0,185,255),Rgb(255,255,255))
+
+*!*					For i = crmenuace.npos To 1 Step -1 &&RECNO() .Nodes.Count
+*!*						If Isnull(.Nodes.Item(i).Parent)
+*!*							nindex = 0 && Root
+*!*						Else
+*!*							nindex = .Nodes.Item(i).Parent.Index
+*!*							.Nodes.Item(nindex).Expanded = Iif(Thisform.pcescolha = 'CONSULTAR' Or crmenuace.expandi=1,.T.,.F.)
+*!*						Endif
+*!*						i = nindex + Iif(nindex=1,0,1)
+*!*					Endfor
+*!*				Else
+*!*					.Nodes.Item(nindex).Checked = .F.
+*!*					.Nodes.Item(nindex).Expanded = Iif(Thisform.pcescolha = 'CONSULTAR',.T.,.F.)
+*!*					.Nodes.Item(nindex).BackColor = Rgb(255,255,255)
+*!*				Endif
+*!*			Endif
+*!*		Endscan
+*!*		.Left = cleft
+*!*		.Top = ctop
+*!*		.Refresh()
+*!*		Thisform.LockScreen = .F.
+*!*	Endwith
+
+Select crAcCamp
+Go Top
+
+With Thisform.pagina.dados.pagina.page1.grade
+	.RecordSource = []
+
+	Select a.cCodigos, a.cDescTelas, a.cCampos, a.cObjetos, a.cDescCamps, Nvl(b.nStatus,1) As nStatus, Nvl(b.Grupos,'') As Grupos, Nvl(b.Usuarios,'') As Usuarios, ;
+		Nvl(b.PkChaves,'') As PkChaves ;
+		from crAcCamp a Left Join crTmpAcTel b On a.cCodigos = b.cCodigos And a.cCampos = b.cCampos ;
+		into Cursor crSigAcTel Readwrite
+
+	.RecordSource = [crSigAcTel]
+	.column2.ControlSource = [crSigAcTel.cDescTelas]
+	.column3.ControlSource = [crSigAcTel.cDescCamps]
+	.column4.ControlSource = [crSigAcTel.nStatus]
+	.column4.cmbStatus.RowSource = [Padrão,Invisível,Não Editável,Obrigatório]
+	.column4.cmbStatus.RowSourceType = 1
+Endwith
+
+Select crsigcdusu
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montagrupo
+------------------------------------------------------------
+PROCEDURE montagrupo
+parameters latualiza
+
+WITH thisform.pagina.dados.pagina.CADASTRO.olegru
+	cleft = .Left
+	ctop = .top
+	.left = 2000
+	.top = 2000
+	thisform.LockScreen = .T. 
+
+	IF !latualiza
+		.nodes.clear
+	ENDIF
+	SELECT crGruAce
+	SCAN
+		nreg = RECNO()
+		IF !latualiza
+			.nodes.Add(,1,ALLTRIM(STR(nreg) + "_"),crGruAce.grupos,0)	
+		ENDIF
+		.nodes.item(ALLTRIM(STR(nreg) + "_")).Checked = IIF(crGruAce.marca=1,.t.,.f.)		
+	ENDSCAN
+	
+	.left = cleft
+	.top = ctop
+	.Refresh()
+	thisform.LockScreen = .F.
+ENDWITH
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+
+If Type('This.poDataMgr')=='O'
+	This.poDataMgr.Release
+EndIf
+If Type('This.poDataMgr2')=='O'
+	This.poDataMgr2.Release
+EndIf
+
+= DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+
+Local lnErro1,lcQuery
+Private pUsu
+
+m.lnErro1 = ThisForm.poDataMgr2.pnIdConn
+pUsu = ThisForm.Usuarios
+
+&& efetua gravacao dos dados da 1a. conexao...
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDataMgr.Update('crsigcdusu'),1,-1)
+EndIf
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDataMgr.Commit()
+EndIf 
+If Not m.lnErro1>0 
+	ThisForm.poDataMgr.RollBack()
+EndIf 
+
+&& efetua gravacao dos dados da 2a. conexao...
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDatamgr2.SQLExecute([Delete From SigCdAcG Where Usuarios = ?pUsu])
+ENDIF
+
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDatamgr2.SQLExecute([Delete From sigcdace Where Usuarios = ?pUsu])
+EndIf
+
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDatamgr2.SQLExecute([Delete From SigAcTel Where Usuarios = ?pUsu])
+EndIf
+
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDatamgr2.SQLExecute([Delete From sigcdacu Where Usuarios = ?pUsu])
+EndIf
+
+*!*	Select crCadLog
+*!*	Locate For cTipos=='E'
+
+*!*	Scan While crCadLog.cTipos=='E' And m.lnErro1 > 0 
+
+*!*		If m.lnErro1>0 
+*!*			m.lnErro1 = ThisForm.poDatamgr2.SQLExecute([Delete From sigcdacu Where pkChaves = '] + crCadLog.pkChaves + ['])
+
+*!*		EndIf
+
+*!*	EndScan
+
+Select crCadBarra
+Locate For cTipos=='E'
+
+Scan While crCadBarra.cTipos=='E' And m.lnErro1 > 0 
+	If m.lnErro1>0 
+		m.lnErro1 = ThisForm.poDatamgr2.SQLExecute([Delete From SigCdAcB Where pkChaves = '] + crCadBarra.pkChaves + ['])
+
+	EndIf
+
+EndScan 
+
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDatamgr2.Update('crSigCdAcG'),1,-1)
+EndIf 
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDatamgr2.Update('crsigcdace'),1,-1)
+EndIf 
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDatamgr2.Update('crsigcdacu'),1,-1)
+EndIf
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDatamgr2.Update('crSigCdAcB'),1,-1)
+Endif
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDatamgr2.Update('crSigAcTel'),1,-1)
+Endif
+
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDatamgr2.Commit()
+EndIf 
+If Not m.lnErro1>0 
+	ThisForm.poDatamgr2.RollBack()
+	= MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (1)')
+Else
+	= fGravarLog('C',ThisForm.Name,ThisForm.pcEscolha,;
+					('Tabela('+.poDataMgr.pfSqlTabela(1).pcTabela+;
+					 ') C.P.('+.poDataMgr.pfSqlTabela(1).pcChaveprimaria+')='+;
+					 Alltrim(Transform(Evaluate(.poDataMgr.pfSqlTabela(1).pcNomecursor+'.'+.poDataMgr.pfSqlTabela(1).pcChaveprimaria)))),;
+					 Iif(Type('m.usuar')=='C',m.usuar,''))
+EndIf 
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+
+Local lnErro1,lcQuery
+Private pUsu
+
+m.lnErro1 = ThisForm.poDataMgr.pnIdConn
+pUsu = ThisForm.Usuarios
+
+Select ('crsigcdusu')
+Delete 
+
+&& efetua gravacao dos dados da 1a. conexao...
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDataMgr.Update('crsigcdusu'),1,-1)
+EndIf
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDataMgr.Commit()
+EndIf 
+If Not m.lnErro1>0 
+	ThisForm.poDataMgr.RollBack()
+EndIf 
+
+Select crSigCdAcG
+Delete All
+
+SELECT crsigcdace
+DELETE All
+
+&& efetua gravacao dos dados da 2a. conexao...
+
+lcQuery = [Delete From sigcdacu Where Usuarios = '] + pUsu + [']
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDatamgr2.SQLExecute(lcQuery)
+EndIf
+
+lcQuery = [Delete From SigCdAcB Where Usuarios = '] + pUsu + [']
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDatamgr2.SQLExecute(lcQuery)
+EndIf
+
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDatamgr2.Update('crSigCdAcG'),1,-1)
+EndIf 
+IF m.lnErro1>0
+	m.lnErro1 = Iif(ThisForm.poDatamgr2.Update('crsigcdace'),1,-1)
+Endif
+
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDatamgr2.Commit()
+EndIf 
+
+If Not m.lnErro1>0 
+	ThisForm.poDatamgr2.RollBack()
+	= MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (1)')
+Else
+	= fGravarLog('C',ThisForm.Name,'EXCLUIR',;
+					('Tabela('+.poDataMgr.pfSqlTabela(1).pcTabela+;
+					 ') C.P.('+.poDataMgr.pfSqlTabela(1).pcChaveprimaria+')='+;
+					 Alltrim(Transform(Evaluate(.poDataMgr.pfSqlTabela(1).pcNomecursor+'.'+.poDataMgr.pfSqlTabela(1).pcChaveprimaria)))),;
+					 Iif(Type('m.usuar')=='C',m.usuar,''))
+EndIf 
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+
+ThisForm.msv_inserir()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+Private pUsu
+
+pUsu = ThisForm.Usuarios
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcUsu
+
+lcUsu = Alltrim(ThisForm.Pagina.Dados.Pagina.Cadastro.usuario.Value)
+
+Select crsigcdusu
+Set Near On
+Locate For Usuarios = lcUsu
+Set Near Off
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+
+=fConfigGeral()
+
+Create Cursor TmpBarra (BarraOrdem n(4), Descricaos c(100), BarraForms c(50), ;
+						BarraTip c(50), BarraPict c(30), Programas c(15), ;
+						Parametros c(10), SelBarras l, Usuarios c(10))
+Index On Descricaos Tag Descricaos
+Index On BarraOrdem Tag BarraOrdem
+Index On Programas + Parametros Tag ProPar
+
+
+Create Cursor crAcCamp (cCodigos c(10), cDescTelas c(50), cCampos c(30), cObjetos c(100), cDescCamps c(50), nStatus n(1))
+Index On cCodigos Tag cCodigos
+
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.endes], [This.pgframeDados.pgframeDados1.getendereço], [Endereço],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.fpubls], [This.pgframeDados.pgframeDados1.getcodfun], [Forma de publicidade],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.nacionals], [This.pgframeDados.pgframeDados1.getnacionals], [Nacionalidade],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.estcivils], [This.pgframeDados.pgframeDados1.cmbestcivils], [Estado civil],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.conjuges], [This.pgframeDados.pgframeDados1.getconjuges], [Cônjuge],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.ultcomps], [This.pgframeDados.pgframeDados1.getultcom], [Última compra],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.codsegs], [This.pgframeDados.pgframeDados1.get_seg], [Segmento],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.profiss], [This.pgframeDados.pgframeDados1.getpro], [Profissão],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.DtVals], [This.pgframeDados.pgframeDados1.getdtvals], [Validade],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.tel1s], [This.pgframeDados.pgframeDados1.gettel1], [Telefone],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.emails], [This.pgframeDados.pgframeDados1.getemail], [E-mail],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.contato], [This.pgframeDados.pgframeDados1.get_contato], [Contato],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.CTELEMS], [This.pgframeDados.pgframeDados1.gettelem], [Telemarketing],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.codigos], [This.pgframeDados.pgframeDados1.getclacod], [Classificação],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.sexos], [This.pgframeDados.pgframeDados1.getsexo], [Sexo],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.obs], [This.pgframeDados.pgframeDados1.memofun], [Observação],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.pastas], [This.pgframeDados.pgframeDados1.getpastas], [Pasta],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.nascs], [This.pgframeDados.pgframeDados1.getdatnas], [Nascimento],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.idcontas], [This.pgframeDados.pgframeDados1.get_idconta], [ID],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.CCargs], [This.pgframeDados.pgframeDados5.get_cargo], [Cargo],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.grupovens], [This.pgframeDados.pgframeDados5.get_grupoven], [C/C - Centro de Custo],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.vinculas], [This.pgframeDados.pgframeDados5.op_vincula], [Conta Vinculada ],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.patrietqs], [This.pgframeDados.pgframeDados5.opt_patrim], [Patrimonial por Etiqueta],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCDCLI.Concilias], [This.pgframeDados.pgframeDados5.op_concilia], [Conta Conciliável],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCLCRC.Caracteris], [This.pgframeDados.pgframeDados11.getComples], [Característica Conta],0)
+Insert into crAcCamp(cCodigos, cDescTelas, cCampos, cObjetos, cDescCamps, nStatus) values ([SIGCDCLI], [Cadastro Contas], [CRSIGCLJOB.JOBS], [This.pgframeDados.pgframeDados11.grdAceMovs], [Acesso Jobs],0)
+
+= DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lcAcesso
+Private pUsu
+
+pUsu = Replicate(Chr(255),10)
+
+lcQryUsuar = 'Select * From sigcdusu'
+lcQryGrupo = 'Select * From sigcdgra Order By Grupos'
+lcQryProgr = 'Select * From sigcdprg Order By Descricaos, Programas, Parametros'
+lcQryBarra = 'Select * From SigCdAcB Where Usuarios = ?pUsu'
+lcQryAcess = 'Select * From sigcdacu Where Usuarios = ?pUsu'
+lcQryGrupU = 'Select * From SigCdAcG Where Usuarios = ?pUsu'
+lcQryEmpUs = 'Select * From sigcdace Where Usuarios = ?pUsu'
+lcQryAcTel = [Select * From SigAcTel Where Usuarios = ?pUsu] && #Programador - 16/05/2014 - SRCOM - Acesso campo nas telas
+
+With ThisForm
+	.LockScreen = .t.
+	.poDataMgr = CreateObject('fSqlConector','acesso')
+	.poDataMgr2 = CreateObject('fSqlConector','acesso2')
+	
+	If (.poDataMgr.pnIdConn>0 And .poDataMgr2.pnIdConn>0)
+		With .poDatamgr
+			* Cursor Principal Para Montagem da Lista (Tabela Grande)
+			.AddCursor('sigcdusu', 'Usuarios', 'crsigcdusu', '', ThisForm.Pagina.Lista.Grade, lcQryUsuar)
+			.pfSqlTabela(1).pColuna('Usuarios', '', '', 'Usuário',80, .t.)
+			.pfSqlTabela(1).pColuna('NComps',   '', '', 'Nome',300, .t.)
+			.pfSqlTabela(1).pColuna('Deptos',   '', '', 'Departamento',80, .t.)
+			.pfSqlTabela(1).pColuna('CCargs',   '', '', 'Cargos',80, .t.)
+			.pfSqlTabela(1).pColuna('setores', '', '', 'Setor',80, .f.)
+
+			* Cursores Carregados Totalmente (Tabela Pequena)
+			.AddCursor('sigcdgra',    'Grupos',    'crsigcdgra',    '', '', lcQryGrupo)
+
+			* Trazendo os Dados Das Tabelas
+			.Requery('crsigcdgra')
+		EndWith
+		With .poDatamgr2
+			* Cursores Carregados Totalmente (Tabela Pequena)
+			.AddCursor('sigcdprg', 'pkChaves', 'crsigcdprg', '', '', lcQryProgr)
+			.AddCursor('SigCdAcB', 'pkChaves', 'crSigCdAcB', '', '', lcQryBarra)
+			.AddCursor('sigcdacu', 'pkchaves', 'crsigcdacu',   '', '', lcQryAcess)
+			.AddCursor('SigCdAcG', 'pkChaves', 'crSigCdAcG', '', '', lcQryGrupU)
+			.AddCursor('sigcdace',  'pkChaves', 'crsigcdace',  '', '', lcQryEmpUs)
+			.AddCursor('SigAcTel',  'pkChaves', 'crSigAcTel',  '', '', lcQryAcTel)						
+
+			* Trazendo os Dados Das Tabelas
+			.Requery('crsigcdprg')
+			.Requery('crSigCdAcB')
+			.Requery('crsigcdacu')
+			.Requery('crSigCdAcG')
+			.Requery('crsigcdace')
+			.Requery('crSigAcTel')
+		EndWith
+
+		With .Pagina.Lista
+			With .cmdGLimSenha
+				.Enabled = (fChecaAcesso(ThisForm.Name, 'LIBSENHA'))
+				.Visible = (fChecaAcesso(ThisForm.Name, 'LIBSENHA'))
+				.cmdLimSenha.Enabled = (fChecaAcesso(ThisForm.Name, 'LIBSENHA'))
+				.cmdLimSenha.Visible = (fChecaAcesso(ThisForm.Name, 'LIBSENHA'))
+			EndWith 
+		EndWith
+
+		.AtivaCopia(.f.)
+
+		lcSQLCmd = [Select Distinct Descricaos, Programas, Parametros, BarraForms ] + ;
+					 [From sigcdprg ] + ;
+				    [Order By Descricaos, Programas, Parametros, BarraForms]
+		
+		If (ThisForm.poDataMgr2.SQLExecute(lcSQLCmd, 'crTodossigcdprg') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTodossigcdprg)')
+			Return .f.
+		EndIf
+
+		= DoDefault()
+
+		SELECT *, 0 as expandi from crTodossigcdprg into cursor crorigem
+		Select * from crSigAcTel into cursor crTmpAcTel
+		thisform.montaacesso(.f.)
+		
+		SELECT *, 0 as marca from crSigCdGrA into cursor crGruAce
+		thisform.montagrupo(.f.)
+	
+		Select crsigcdusu
+		Locate For Usuarios = Usuar
+
+		.Supervisor = Iif(Usuar = [4CONTROL], [I], [N])
+		.Pagina.Lista.cmdCopia.Visible = InList(ThisForm.Supervisor, 'S', 'I')
+		.Pagina.Lista.Grade.SetAll('DynamicForeColor',;
+			        [Iif(crsigcdusu.cAtivos=='N', Rgb(255,0,0), Rgb(0,0,255))],'Column')
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		= Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+	.LockScreen = .f.
+EndWith 
+
+Create Cursor crLogData (cIdChaves c(20), cOcors c(100), cTipos c(1))
+Index On cIdChaves Tag cIdChaves
+
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Parameters opcao
+
+ThisForm.Usuarios = crsigcdusu.Usuarios
+
+If (Type('Opcao') = 'N')
+	This.Value = Opcao
+EndIf
+
+Select crsigcdusu
+
+ThisForm.LockScreen = .t.
+
+If Not DoDefault(Opcao)
+	ThisForm.LockScreen = .f.
+	ThisForm.mAtivapagina1
+	Return 0
+EndIf
+
+If (ThisForm.pcEscolha = 'INSERIR')
+	ThisForm.Usuarios = crsigcdusu.Usuarios
+EndIf
+
+If (ThisForm.pcEscolha <> 'PROCURAR')
+	With ThisForm.Pagina.Dados.Pagina
+		Wait Window 'Carregando Grupos...' NoWait
+		With .Cadastro
+			lcQuery = [Select Distinct a.Grupos ] + ;
+						[From SigCdAcG a ] + ;
+						[inner join sigcdgra b on a.grupos = b.grupos ] + ;
+						Iif(ThisForm.pcEscolha=='INSERIR' Or Empty(ThisForm.Usuarios), ;
+					   		[Where 0=1 ], ;
+							[Where a.Usuarios = '] + Padr(ThisForm.Usuarios, 10) + [' ]) + ;
+						[Order by a.Grupos]
+						
+			If (ThisForm.poDataMgr2.SQLExecute(lcQuery, 'crTmp') < 1)
+				ThisForm.LockScreen = .f.
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (13)')
+				Return 0
+			EndIf
+			
+			lcQuery = [Select Distinct a.Grupos From sigcdgra a Where not a.Grupos in ] + ;
+						[(Select Distinct b.Grupos ] + ;
+						[From SigCdAcG b ] + ;
+						[inner join sigcdgra c on b.grupos = c.grupos ] + ;
+						[Where b.Usuarios = '] + Padr(ThisForm.Usuarios, 10) + [') ] + ;
+						[Order by a.Grupos]
+
+			If (ThisForm.poDataMgr2.SQLExecute(lcQuery, 'crTmp2') < 1)
+				ThisForm.LockScreen = .f.
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (13)')
+				Return 0
+			EndIf
+					
+			SELECT *, 1 as marca  from crtmp ;
+			union ;
+			SELECT *, 0 as marca from crtmp2 ;
+			into cursor crGruAce order by grupos readwrite
+			
+			thisform.montagrupo(.t.)		
+		EndWith
+		
+		With .Empresa
+			lcQuery = [Select Distinct a.Emps, b.razas ] + ;
+						[From sigcdace a inner join SigCdEmp b on a.emps=b.cemps ] + ;
+						Iif(ThisForm.pcEscolha=='INSERIR' Or Empty(ThisForm.Usuarios), ;
+					   		[Where 0=1 ], ;
+							[Where a.Usuarios = '] + Padr(ThisForm.Usuarios, 10) + [' ]) + ;
+						[Order by a.Emps]
+						
+			If (ThisForm.poDataMgr2.SQLExecute(lcQuery, 'crTmp') < 1)
+				ThisForm.LockScreen = .f.
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (13)')
+				Return 0
+			EndIf
+			
+			lcQuery = [Select Distinct a.cEmps, a.Razas From SigCdEmp a Where not a.cEmps in ] + ;
+						[(Select Distinct b.Emps ] + ;
+						[From sigcdace b ] + ;
+						[Where b.Usuarios = '] + Padr(ThisForm.Usuarios, 10) + [') ] + ;
+						[Order by a.cEmps]
+
+			If (ThisForm.poDataMgr2.SQLExecute(lcQuery, 'crTmp2') < 1)
+				ThisForm.LockScreen = .f.
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (13)')
+				Return 0
+			EndIf
+			
+			thisform.pagina.dados.pagina.empresa.grade.RecordSource = []
+			
+			SELECT *, 1 as marca from crtmp ;
+			union ;
+			SELECT *, 0 as marca from crtmp2 ;
+			into cursor crEmpAce order by cemps readwrite
+			
+			thisform.pagina.dados.pagina.empresa.grade.RecordSource = [crEmpAce]
+			thisform.pagina.dados.pagina.empresa.grade.column1.ControlSource = [crEmpAce.marca]
+			thisform.pagina.dados.pagina.empresa.grade.column2.ControlSource = [crEmpAce.razas]
+			
+*!*	*!*	case when b.usuarios is null then 0 else 1 end as marca
+*!*				lcquery = [select distinct a.cEmps, a.Razas, 0 as marca, b.usuarios ] +;
+*!*							[from sigcdemp a left join sigcdace b on a.cemps=b.emps ] +;
+*!*							Iif(ThisForm.pcEscolha=='INSERIR' Or Empty(ThisForm.Usuarios), ;
+*!*						   		[Where 0=1 ], ;
+*!*								[Where b.Usuarios = '] + Padr(ThisForm.Usuarios, 10) + [' or b.usuarios is null ]) + ;
+*!*							[Order by a.cEmps]
+*!*							
+*!*				If (ThisForm.podatamgr.SQLExecute(lcQuery, 'crTmp2') < 1)
+*!*					ThisForm.LockScreen = .f.
+*!*					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (13)')
+*!*					Return 0
+*!*				ENDIF
+*!*				replace all marca with 1 for !ISNULL(usuarios) in crtmp2
+			
+		EndWith
+		
+		With .Acesso
+
+			Zap In TmpBarra
+
+			If Used('crOrigem')
+				Use In crOrigem
+			EndIf
+
+			If Used('crDestino')
+				Use In crDestino
+			EndIf
+						
+			Wait Window 'Carregando Acessos De Origem...' NoWait
+
+			lcSQLCmd = [Select Distinct a.Descricaos, a.Programas, a.Parametros, a.BarraForms, ] + ;
+					   [c.Usuarios, c.pkChaves, ' ' As cStatus, a.pkChaves as fkChaves ] + ;
+					   [From sigcdprg a ] + ;
+					   [Inner Join sigcdacu c On a.Programas + a.Parametros = c.Programas + c.Parametros ] + ;
+						Iif(ThisForm.pcEscolha=='INSERIR' Or Empty(ThisForm.Usuarios), ;
+					   		[Where 0=1 ], ;
+							[Where c.Usuarios = '] + Padr(ThisForm.Usuarios, 10) + [' ]) + ;
+					   [Order By 1]
+
+			If (ThisForm.poDataMgr2.SQLExecute(lcSQLCmd, 'crListAce') < 1)
+				ThisForm.LockScreen = .f.
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (14)')
+				Return 0
+			EndIf
+			
+			Select crListAce
+			Index On Programas Tag Programas
+			Index On Parametros Tag Parametros
+			Set Order To ('') In crListAce
+			
+			lcSQLCmd = [Select Distinct a.Descricaos, a.Programas, a.Parametros, a.BarraForms, ] + ;
+					   ['] + Space(10) + [' As Usuarios,'] + Space(45) + [' As pkChaves, ' ' As cStatus ] + ;
+					   [From sigcdprg a ] + ;
+					   Iif(ThisForm.pcEscolha = [INSERIR], [], [Where Not Exists (Select b.pkChaves From sigcdacu b ] + ;
+					   [Where b.Usuarios = '] + Padr(ThisForm.Usuarios, 10) + [' And b.Programas = a.Programas And b.Parametros = a.Parametros) ]) + ;
+					   [Union All ] + ;
+					   [Select Distinct a.Descricaos, a.Programas, a.Parametros, a.BarraForms, ] + ;
+					   [c.Usuarios, a.pkChaves, ' ' As cStatus ] + ;
+					   [From sigcdprg a ] + ;
+					   [Inner Join sigcdacu c On a.Programas + a.Parametros = c.Programas + c.Parametros ] + ;
+						Iif(ThisForm.pcEscolha=='INSERIR' Or Empty(ThisForm.Usuarios), ;
+					   		[Where 0=1 ], ;
+							[Where c.Usuarios = '] + Padr(ThisForm.Usuarios, 10) + [' ]) + ;
+					   [Order By 1]
+
+			If (ThisForm.poDataMgr2.SQLExecute(lcSQLCmd, 'crOrigem') < 1)
+				ThisForm.LockScreen = .f.
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (14)')
+				Return 0
+			EndIf
+			
+			SELECT *, 0 as expandi, RECNO() as npos from crorigem into cursor crorigem readwrite
+			
+			Use Dbf('crOrigem') In 0 Again Alias crDestino
+
+			Select crDestino
+			Index On Programas Tag Programas
+			Index On Parametros Tag Parametros
+			Index On Usuarios Tag Usuarios
+			Set Order To ('') In crDestino
+		
+			Select crOrigem
+			Set Filter To Empty(Usuarios)
+			Locate 
+
+			Select crDestino
+			Set Filter To Not Empty(Usuarios)
+			Goto top In crDestino
+
+			ThisForm.Pagina.Dados.Pagina.Acesso.grdAcesso.RecordSource = []
+
+			lcQuery = [Select 0 as Marcas, 0 as Filtro, barraforms,barrapict,descricaos,parametros,programas,max(pkchaves) as pkchaves from SigCdPrg group by barraforms,barrapict,descricaos,parametros,programas ]
+			Thisform.poDatamgr.SqlExecute(lcQuery,[crSigCdPrg])
+
+			ThisForm.Pagina.Dados.Pagina.Acesso.grdAcesso.RecordSource = [crSigCdPrg]
+			ThisForm.Pagina.Dados.Pagina.Acesso.grdAcesso.column1.ControlSource = [crSigCdPrg.Descricaos]
+			ThisForm.Pagina.Dados.Pagina.Acesso.grdAcesso.column2.ControlSource = [crSigCdPrg.Programas]
+			ThisForm.Pagina.Dados.Pagina.Acesso.grdAcesso.column3.ControlSource = [crSigCdPrg.Marcas]
+			ThisForm.Pagina.Dados.Pagina.Acesso.grdAcesso.column4.ControlSource = [crSigCdPrg.Parametros]
+			ThisForm.Pagina.Dados.Pagina.Acesso.grdAcesso.Refresh()
+
+			Select crSigCdPrg
+			Index on pkchaves Tag pkchaves
+			Index on descricaos Tag Descricao
+			Index on descricaos + programas + parametros Tag DescProPar
+			Set Order To DescProPar
+			Go top 
+
+			Select crListAce
+			Scan 
+				If Seek(crListAce.fkChaves,[crSigCdPrg],[pkchaves])
+					Replace Marcas With 1 in crSigCdPrg
+				EndIf 
+			EndScan 
+
+			Select crSigCdPrg
+			Go Top 
+
+			ThisForm.Pagina.Dados.Pagina.Acesso.grdAcesso.SetAll('DynamicBackColor','IIf(crSigCdPrg.Filtro = 1,RGB(255,255,0),Rgb(255,255,255))','Column')
+
+			ThisForm.Pagina.Dados.Pagina.Acesso.grdAcesso.Refresh
+			*-- Rafael 
+
+
+			*** #Programador - 16/05/2014 - SRCOM - Acesso campo nas telas
+			lcQuery = [Select * From SigAcTel a Where ] + Iif(ThisForm.pcEscolha=='INSERIR' Or Empty(ThisForm.Usuarios), [0=1],[a.Usuarios = '] + Padr(ThisForm.Usuarios, 10) + [' Order By cCodigos])
+			If (ThisForm.poDataMgr2.SQLExecute(lcQuery, 'crTmpAcTel') < 1)
+				ThisForm.LockScreen = .f.
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpAcTel)')
+				Return 0
+			Endif
+			
+			thisform.montaacesso(.t.)					
+			
+			Wait Window 'Carregando Acessos De Ícones...' NoWait
+
+	 		* Apanhando os Acessos a Ícones Que o Usuário Possui
+			lcSQLCmd = [Select b.* ] + ;
+						 [From sigcdacu a, SigCdAcB b ] + ;
+						 Iif(ThisForm.pcEscolha=='INSERIR' Or Empty(ThisForm.Usuarios), ;
+							 [Where 0=1 ], ;
+							 [Where a.Usuarios = '] + Padr(ThisForm.Usuarios, 10) + [' And ] + ;
+									[a.Usuarios = b.Usuarios And ] + ;
+									[a.Programas = b.Programas And ] + ;
+									[a.Parametros = b.Parametros])
+
+			If (ThisForm.poDataMgr2.SQLExecute(lcSQLCmd, 'crListBarra') < 1)
+				ThisForm.LockScreen = .f.
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (16)')
+				Return 0
+			EndIf
+			
+			If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+				ThisForm.atualizatmp( 1 ) 
+			EndIf 
+
+			Select crListBarra
+			Index On Programas + Parametros Tag skgroup1
+			Set Order To ('') In crListBarra
+			
+			Scan
+				Select crListBarra
+				Scatter Memo Memvar
+
+				If Not Seek(m.Programas+m.Parametros,'TmpBarra','ProPar')
+					Insert Into TmpBarra From Memvar
+				
+				Else
+					Replace selbarras With crListBarra.selbarras In TmpBarra
+
+				EndIf 
+				
+			EndScan
+
+		EndWith
+
+		Select crOrigem
+		Goto Top In crOrigem
+
+		Select crDestino
+		Goto Top In crDestino
+			
+*!*			thisform.pagina.dados.pagina.aCESSO.oletree.oBJECT.Enabled = INLIST(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+	EndWith
+EndIf
+ThisForm.LockScreen = .f.
+Wait Clear
+
+If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+	With ThisForm.Pagina.Dados.Pagina.Cadastro
+*!*			If IsEmpty(crsigcdusu.Supervis)
+*!*				.optsuperv.Value = 2 &&'N'
+*!*			EndIf 
+		If IsEmpty(crsigcdusu.cAtivos)
+			.optAtivo.Value = 1 &&'S'
+		EndIf 
+	EndWith
+EndIf
+
+Do Case
+	Case ThisForm.pcEscolha = 'INSERIR'
+		ThisForm.Pagina.Dados.Pagina.Cadastro.Usuario.SetFocus
+
+	Case ThisForm.pcEscolha = 'PROCURAR'
+		ThisForm.Pagina.Dados.Pagina.Cadastro.Usuario.SetFocus
+
+	Case Inlist(ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR')
+		thisform.pagina.dados.pagina.cadastro.optativo.Value = IIF(crsigcdusu.cativos = 'S',1,2)
+*!*			thisform.pagina.dados.pagina.cadastro.optsuperv.Value = IIF(crsigcdusu.supervis = 'S',1,2)
+		thisform.pagina.dados.pagina.cadastro.optsenhadia.Value = IIF(crsigcdusu.limdescs = 'S',1,2)		
+		thisform.pagina.dados.pagina.cadastro.optlibpesag.Value = IIF(crsigcdusu.libpess = 'S',1,2)
+		thisform.pagina.dados.pagina.cadastro.optlibprod.Value = IIF(crsigcdusu.libprods = 'S',1,2)		
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+
+	Case Inlist(ThisForm.pcEscolha, 'ALTERAR')
+		ThisForm.Pagina.Dados.Pagina.Cadastro.NomeCompleto.SetFocus
+EndCase
+
+ThisForm.Pagina.Dados.Pagina.Cadastro.getRClis.Value = []
+If Not Empty(crSigCdUsu.IClis) And InList(ThisForm.pcEscolha, [ALTERAR], [EXCLUIR], [CONSULTAR])
+	lcQuery = [Select RClis ] + ;
+			    [From SigCdCli ] + ;
+			   [Where IClis = '] + crSigCdUsu.IClis + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus)])
+		Return .f.
+	EndIf
+	Go Top In LocalBus
+	If Not Eof([LocalBus]) And Not Empty(LocalBus.RClis)
+		ThisForm.Pagina.Dados.Pagina.Cadastro.getRClis.Value = LocalBus.RClis
+	EndIf
+EndIf
+ThisForm.Pagina.Dados.Pagina.Cadastro.getRClis.Refresh 
+
+Select crLogData
+Zap
+
+Select crsigcdusu
+
+ThisForm.Pagina.Dados.Pagina.ActivePage = 1
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.salva.Click
+
+Private pUsu
+
+pUsu = ThisForm.Usuarios
+
+If InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')
+
+	If (Thisform.pcEscolha = 'INSERIR')
+		If Empty(crsigcdusu.Usuarios)
+			=MessageBox('Usuário Inválido!!!', 0+48, '')
+			This.Parent.Parent.Pagina.Cadastro.Usuario.SetFocus	
+			Return 0
+		EndIf
+		
+		If ThisForm.poDataMgr.CursorQuery('sigcdusu', 'crTmp', 'Usuarios', crsigcdusu.Usuarios)
+			=MessageBox('Usuário Já Cadastrado!!!', 0+48, '')
+			This.Parent.Parent.Pagina.Cadastro.Usuario.SetFocus	
+			Use In crTmp
+			Return 0
+		EndIf
+		Use In crTmp
+	EndIf
+
+	Zap In crSigCdAcG
+	ZAP IN crsigcdace
+	Zap In crsigcdacu
+	Zap In crSigCdAcB
+
+	m.Usuarios = ThisForm.Usuarios
+
+	SELECT crGruAce
+	SCAN
+		IF crGruAce.marca = 1
+			m.grupos = crGruAce.grupos
+			m.pkChaves = fUniqueIds()
+			Insert Into crSigcdAcG From Memvar
+		ENDIF
+	ENDSCAN
+
+
+	SELECT crEmpAce
+	SCAN
+		IF crEmpAce.marca = 1
+			m.Emps = crEmpAce.emps
+			m.pkChaves = fUniqueIds()
+			Insert Into crSigCdAcE From Memvar
+		ENDIF
+	ENDSCAN
+	
+	Select crListAce
+	Locate For .F. && incluido apenas p/ executar tableupdate, pois este cursor e' BUFFERMODE=3...
+	
+	Select crListBarra
+	Locate For .F. && incluido apenas p/ executar tableupdate, pois este cursor e' BUFFERMODE=3...
+
+	Select crOrigem
+	Locate For .F. && incluido apenas p/ executar tableupdate, pois este cursor e' BUFFERMODE=3...
+
+	Select crDestino	
+	Locate For .F. && incluido apenas p/ executar tableupdate, pois este cursor e' BUFFERMODE=3...
+	
+	Select TmpBarra
+	Locate For .F. && incluido apenas p/ executar tableupdate, pois este cursor e' BUFFERMODE=3...
+
+*!*		Select 'E' As cTipos, a.Descricaos, a.pkChaves, a.Programas, a.Parametros from crListAce a ;
+*!*			Where Not Exists (Select b.Programas From crDestino b Where ! Empty(b.Usuarios) And b.Programas = a.Programas And b.Parametros= a.Parametros) ;
+*!*		Union All ;
+*!*		Select 'I' As cTipos, a.Descricaos, Space(45) As pkChaves, a.Programas, a.Parametros from crDestino a ;
+*!*			Where ! Empty(a.Usuarios) And Not Exists (Select b.Programas From crListAce b Where b.Programas = a.Programas And b.Parametros = a.Parametros) ; 
+*!*		Order By 1 Into Cursor crCadLog
+
+*!*		Scan
+*!*			m.cOcors = 'Usuario : ' + Alltrim(ThisForm.Pagina.Dados.Pagina.Cadastro.Usuario.Value) + ' Programa : ' + Alltrim(crCadLog.Descricaos)
+*!*			= fGravarLog(cTipos, 'SIGCDACU', ThisForm.pcEscolha, m.cOcors, m.Usuar, ThisForm.poDataMgr2)
+*!*		EndScan
+
+*!*		Select crCadLog
+*!*		Locate For cTipos=='I'
+
+*!*		Scan While crCadLog.cTipos=='I'
+*!*			Scatter Memo MemVar
+
+*!*			m.pkChaves  = Sys(20015) + Sys(2015)
+*!*			m.Grupos     = ''
+*!*			Insert Into crsigcdacu From Memvar
+*!*			
+*!*		EndScan
+
+	Select crSigCdPrg
+	Go top
+	
+	Select * from crSigCdPrg Where Marcas = 1 Into Cursor csTmpCdPrg ReadWrite 
+	
+	Select csTmpCdPrg 
+	Go Top 
+	Scan 
+		Scatter Memo MemVar
+		m.pkChaves  = Sys(20015) + Sys(2015)
+		m.Grupos     = ''
+		Insert Into crsigcdacu From Memvar
+	EndScan
+
+	Select 'E' As cTipos, a.pkChaves, a.Programas, a.Parametros From crListBarra a ;
+		Left Join TmpBarra b On b.Programas = a.Programas And b.Parametros = a.Parametros;
+		Where (b.SelBarras Is Null Or Not b.SelBarras);
+	Union All ;
+	Select 'I' As cTipos, Space(20) As pkChaves, a.Programas, a.Parametros from TmpBarra a ;
+		Where a.SelBarras And Not Exists (Select b.Programas From crListBarra b Where b.SelBarras And b.Programas = a.Programas And b.Parametros = a.Parametros) ; 
+	Order By 1 Into Cursor crCadBarra
+	
+	Select crCadBarra
+	Locate For cTipos=='I'
+	
+	Scan While crCadBarra.cTipos=='I'
+		If Seek(crCadBarra.Programas + crCadBarra.Parametros, 'TmpBarra', 'ProPar')
+			Select TmpBarra
+			Scatter Memo Memvar 
+
+			m.Usuarios  = ThisForm.Usuarios
+			m.Grupos    = ''
+			m.pkChaves = fUniqueIds()
+
+			Insert Into crSigCdAcB From Memvar
+		EndIf 
+		
+	EndScan 
+
+	Select crSigAcTel
+	Delete For nStatus = 1
+	Scan
+		replace Usuarios With ThisForm.Usuarios
+		replace Grupos With ''	
+		If Empty(crSigAcTel.pkChaves)
+			replace pkChaves With fUniqueIds()
+		Endif
+	Endscan
+EndIf
+
+= DoDefault()
+
+Select crsigcdusu
+Locate For Usuarios = ThisForm.Usuarios
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.cancelar.Click
+Select crsigcdusu
+Locate For Usuarios = ThisForm.Usuarios
+
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Lista.cmdGLimSenha
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdLimSenha.Click
+------------------------------------------------------------
+PROCEDURE cmdLimSenha.Click
+
+Local loDataMgr1,lnErro1,lcMcrSql1
+
+If Not Eof('crsigcdusu')
+
+	If (Usuar = [4CONTROL])
+		MessageBox([Senha do Usuario não pode ser Limpa !!!], 16, [])
+		Return
+	EndIf 
+
+	If Messagebox('Deseja Limpar a Senha do Usuario ' + Alltrim(crsigcdusu.Usuarios) +;
+		 Iif(Not Empty(crsigcdusu.Ncomps), ' - ' + Proper(Alltrim(crsigcdusu.Ncomps)), '') + '?',4+32+256,'')==6
+
+		m.loDataMgr1 = Createobject('fSqlConector','acesso')
+		m.lnErro1 = m.loDataMgr1.pnIdConn
+		m.lcMcrSql1 = [update sigcdusu set senhas='] + Space(10) + [' where usuarios='] + crsigcdusu.Usuarios + [']
+
+		If m.lnErro1>0 
+			m.lnErro1 = m.loDataMgr1.SQLExecute(m.lcMcrSql1)
+		EndIf 
+		If m.lnErro1>0 
+			m.lnErro1 = m.loDataMgr1.Commit()
+		EndIf 
+		If Not m.lnErro1>0
+			m.oDataMgr1.RollBack()
+		EndIf 
+		If Not m.lnErro1>0 
+			= MessageBox('Erro na Gravação dos Dados.',48,'')
+		EndIf 
+		If m.lnErro1>0 
+			=fGravarLog('A', 'SIGCDACU', [LIMPA SENHA], crsigcdusu.Usuarios ,Usuar)		
+		Endif
+		If Type('m.loDataMgr1')=='O' 
+			m.loDataMgr1.Release
+			Release m.loDataMgr1
+		EndIf 
+	EndIf 
+EndIf 
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Lista.cmdCopia
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnCopia.Click
+------------------------------------------------------------
+PROCEDURE btnCopia.Click
+ThisForm.AtivaCopia(.t.)
+
+Thisform.Pagina.Lista.cntCopiarAcesso.getCopiarAcessos.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Lista.cntCopiarAcesso.btnCopiarAcessos
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+
+Private pUsu
+
+Local lcUsuOri, lcUsuDes
+
+lcUsuDes = Padr(crsigcdusu.Usuarios, 10)
+lcUsuOri = Padr(ThisForm.Pagina.Lista.cntCopiarAcesso.getCopiarAcessos.Value, 10)
+
+Zap In crLogData
+Zap In crsigcdacu
+Zap In crSigCdAcB
+Zap in crSigAcTel
+
+If Empty(lcUsuOri) Or (lcUsuDes = lcUsuOri)
+	=MessageBox('Usuário Inválido!!!', 0+48, '')
+	ThisForm.Pagina.Lista.cntCopiarAcesso.getCopiarAcessos.SetFocus
+	Return 0
+EndIf
+
+* Apanhando os Acessos Que o Usuário de Origem Possui e o de Destino Não
+lcSQLCmd = [Select a.Grupos, a.Parametros, a.Programas ] + ;
+			 [From sigcdacu a ] + ;
+			[Where a.Usuarios = '] + lcUsuOri + [' And ] + ;
+				  [a.Programas + a.Parametros Not In ] + ;
+		  [(Select b.Programas + b.Parametros ] + ;
+		     [From sigcdacu b ] + ;
+		    [Where b.Usuarios = '] + lcUsuDes + [') ] + ;
+		    [Order By a.Grupos, a.Programas, a.Parametros]
+
+If (ThisForm.poDataMgr2.SQLExecute(lcSQLCmd, 'Tmpsigcdacus') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (17)')
+	Return 0
+EndIf
+
+* Apanhando os Grupos de Usuário Que o Usuário de Origem Possui e o de Destino Não
+lcSQLCmd = [Select a.Grupos ] + ;
+			 [From SigCdAcG a ] + ;
+			[Where a.Usuarios = '] + lcUsuOri + [' And ] + ;
+				  [a.Grupos Not In ] + ;
+		  [(Select b.Grupos ] + ;
+		     [From SigCdAcG b ] + ;
+		    [Where b.Usuarios = '] + lcUsuDes + [') ] + ;
+		    [Order By a.Grupos]
+
+If (ThisForm.poDataMgr2.SQLExecute(lcSQLCmd, 'TmpSigCdAcG') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (18)')
+	Return 0
+EndIf
+
+* Apanhando as Empresas do Usuário Que o Usuário de Origem Possui e o de Destino Não
+lcSQLCmd = [Select a.Emps ] + ;
+			 [From sigcdace a ] + ;
+			[Where a.Usuarios = '] + lcUsuOri + [' And ] + ;
+				  [a.Emps Not In ] + ;
+		  [(Select b.Emps ] + ;
+		     [From sigcdace b ] + ;
+		    [Where b.Usuarios = '] + lcUsuDes + [') ] + ;
+		    [Order By a.Emps]
+
+If (ThisForm.poDataMgr2.SQLExecute(lcSQLCmd, 'Tmpsigcdace') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (18)')
+	Return 0
+EndIf
+
+* Apanhando os Ícones de Acesso Que o Usuário de Origem Possui e o de Destino Não
+lcSQLCmd = [Select a.* ] + ;
+			 [From SigCdAcB a ] + ;
+			[Where a.Usuarios = '] + lcUsuOri + [' And ] + ;
+				  [a.Programas + a.Parametros Not In ] + ;
+		  [(Select b.Programas + b.Parametros ] + ;
+		  	 [From SigCdAcB b ] + ;
+		    [Where b.Usuarios = '] + lcUsuDes + [') ] + ;
+		    [Order By a.Programas]
+
+If (ThisForm.poDataMgr2.SQLExecute(lcSQLCmd, 'TmpSigCdAcB') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (19)')
+	Return 0
+EndIf
+
+pUsu = lcUsuDes
+
+lcMen = 'Serão Incluidos : ' + Chr(13) + 'GRUPOS : ' + Chr(13)
+lnCnt = 0
+Select TmpSigCdAcG
+Scan
+	lcMen = lcMen + TmpSigCdAcG.Grupos + '; '
+	lnCnt = lnCnt + 1
+	If (lnCnt > 6)
+		lcMen = lcMen + Chr(13)
+		lnCnt = 0
+	EndIf
+
+	Insert Into crSigCdAcG (Grupos, Usuarios, pkChaves) ;
+				    Values (TmpSigCdAcG.Grupos, pUsu, fUniqueIds())
+
+	lcIdChaves = 'GRUPO'+TmpSigCdAcG.Grupos
+	Select crLogData
+	Seek lcIdChaves
+	If ! Found()
+		Insert Into crLogData (cIdChaves, cOcors, cTipos) ;
+			Values(lcIdChaves, 'Usuario : ' + pUsu + ' Grupo : ' + TmpSigCdAcG.Grupos + ' - COPIA ACESSO', 'I')
+	Endif
+
+EndScan
+
+lcMen = CHR(13) + Chr(13) + 'EMPRESAS : ' + Chr(13)
+lnCnt = 0
+Select Tmpsigcdace
+Scan
+	lcMen = lcMen + Tmpsigcdace.Emps + '; '
+	lnCnt = lnCnt + 1
+	If (lnCnt > 6)
+		lcMen = lcMen + Chr(13)
+		lnCnt = 0
+	EndIf
+
+	Insert Into crsigcdace (Emps, Usuarios, pkChaves) ;
+				    Values (Tmpsigcdace.Emps, pUsu, fUniqueIds())
+
+	lcIdChaves = 'EMPRESA'+Tmpsigcdace.Emps
+	Select crLogData
+	Seek lcIdChaves
+	If ! Found()
+		Insert Into crLogData (cIdChaves, cOcors, cTipos) ;
+			Values(lcIdChaves, 'Usuario : ' + pUsu + ' Empresa : ' + Tmpsigcdace.Emps + ' - COPIA ACESSO', 'I')
+	Endif
+
+EndScan
+
+lcMen = lcMen + Chr(13) + Chr(13) + 'ACESSOS : ' + Chr(13)
+Select Tmpsigcdacus
+Scan
+	lcMen = lcMen + Alltrim(Tmpsigcdacus.Programas) + ' - [' + Alltrim(Tmpsigcdacus.Parametros) + ']' &&+ Chr(13)
+	
+	Insert Into crsigcdacu (Grupos, Parametros, Programas, Usuarios, pkChaves) ;
+				  Values (Tmpsigcdacus.Grupos, Tmpsigcdacus.Parametros, Tmpsigcdacus.Programas, ;
+				  		  pUsu, fUniqueIds())
+
+	If Empty(Tmpsigcdacus.Grupos)
+		lcQuery = [Select descricaos From sigcdprg Where programas = ']+Tmpsigcdacus.Programas+[' ]+;
+		          [ And Parametros = ']+Tmpsigcdacus.Parametros+[']
+		Thisform.poDatamgr.SqlExecute(lcQuery,'cssigcdprgs')
+		Select cssigcdprgs
+		Go Top
+		If ! Eof()
+			lcIdChaves = 'PROGRAMA'+cssigcdprgs.Descricaos
+			Select crLogData
+			Seek lcIdChaves
+			If ! Found()
+				Insert Into crLogData (cIdChaves, cOcors, cTipos) ;
+					Values(lcIdChaves, 'Usuario : ' + pUsu + ' Programa : ' + cssigcdprgs.Descricaos + ' - COPIA ACESSO', 'I')
+			Endif
+		Else
+		    lcIdChaves = 'PROGRAMA'+Tmpsigcdacus.Programas+Tmpsigcdacus.Parametros
+			Select crLogData
+			Seek lcIdChaves
+			If ! Found()
+				Insert Into crLogData (cIdChaves, cOcors, cTipos) ;
+					Values(lcIdChaves, 'Usuario : ' + pUsu + ' Programa : ' + Tmpsigcdacus.Programas + '/' + Tmpsigcdacus.Parametros + ' - COPIA ACESSO', 'I')
+			Endif
+		EndIf
+	EndIf
+	
+EndScan
+
+Select TmpSigCdAcB
+Scan
+	Insert Into crSigCdAcB (Grupos, Parametros, Programas, Usuarios, Descricaos, ;
+						    BarraForms, BarraOrdem, SelBarras, pkChaves) ;
+				    Values (TmpSigCdAcB.Grupos, TmpSigCdAcB.Parametros, TmpSigCdAcB.Programas, ;
+				  		    pUsu, TmpSigCdAcB.Descricaos, TmpSigCdAcB.BarraForms, ;
+				  		    TmpSigCdAcB.BarraOrdem, TmpSigCdAcB.SelBarras, fUniqueIds())
+EndScan
+
+lcQuery = [Select * From SigAcTel Where Usuarios = '] + lcUsuOri + [' ]
+Thisform.poDatamgr.SqlExecute(lcQuery,'TmpCopAcTel')
+Select TmpCopAcTel
+Scan
+	Scatter Memo Memvar
+	m.Usuarios = pUsu
+	m.PkChaves = fUniqueIds()
+
+	Insert into crSigAcTel from Memvar	
+Endscan
+
+If Messagebox('Confirma a Cópia dos Acessos?', 4+32+256, 'Atenção!!!') = 6
+	If Not ThisForm.poDataMgr2.Update('crsigcdacu')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (20)')
+		Return 0
+	EndIf
+	If Not ThisForm.poDataMgr2.Update('crSigCdAcG')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (21)')
+		Return 0
+	ENDIF
+	If Not ThisForm.poDataMgr2.Update('crsigcdace')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (21)')
+		Return 0
+	ENDIF
+	If Not ThisForm.poDataMgr2.Update('crSigCdAcB')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (22)')
+		Return 0
+	EndIf
+	If Not ThisForm.poDataMgr2.Update('crSigAcTel')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (23)')
+		Return 0
+	Endif
+	
+	Select crLogData
+	Scan
+		=fGravarLog('I', 'SIGCDACU', 'ALTERAR', cOcors, Usuar, ThisForm.poDataMgr2)
+	EndScan
+
+	If (ThisForm.poDataMgr2.Commit() < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (23)')
+		Return 0
+	Else
+		Wait Window 'Cópia de Acessos Efetuada com Sucesso!!!' NoWait
+	EndIf
+EndIf
+
+ThisForm.AtivaCopia(.f.)
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Lista.cntCopiarAcesso.getCopiarAcessos
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'sigcdusu', ;
+						   'crListaRemota', 'Usuarios', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Usuarios', '', 'Usuário')
+		loLista.mAddColuna('NComps',   '', 'Nome')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Usuarios
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Lista.cntCopiarAcesso.btnCancelar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.AtivaCopia(.f.)
+Thisform.Pagina.Lista.Grade.Column1.SetFocus
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina
+* Classe: pageframe (Base: pageframe)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Cabeçalho.Activate
+------------------------------------------------------------
+PROCEDURE Cabeçalho.Activate
+Select TmpBarra
+Set Order to BarraOrdem
+Go Top
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Acesso.getfiltro
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Thisform.LockScreen = .T.
+lcFiltro = This.Value 
+Select crSigCdPrg
+If ! Empty(lcFiltro)
+
+	Select crSigCdPrg
+	Select pkchaves From crSigCdPrg Where Alltrim(lcFiltro) $ Upper(descricaos) Into Cursor csFiltra ReadWrite 
+
+	Select csFiltra
+	Scan 
+		Replace Filtro With 1 For pkchaves = csFiltra.pkchaves In crSigCdPrg
+	EndScan 
+Else
+	Replace All Filtro With 0 In crSigCdPrg
+Endif
+Go Top
+Thisform.montaacesso(.T.)
+
+Thisform.LockScreen = .F.
+
+
+
+
+*!*	Thisform.LockScreen = .T.
+
+*!*	Select crOrigem
+*!*	replace all expandi with 0 in crOrigem
+*!*	If ! Empty(This.Value)
+*!*		replace all expandi with 1 for Upper(Alltrim(This.Value)) $ Upper(Descricaos) in crOrigem
+*!*	*!*		ExecScript([Set Filter to '] + Upper(Alltrim(This.Value)) + ['$Upper(Descricaos) in crOrigem])
+*!*	Else
+*!*	*!*		replace all expandi with 0 in crOrigem
+*!*	*!*		ExecScript([Set Filter to Empty(Usuarios) in crOrigem])
+*!*	Endif
+
+*!*	Go top
+*!*	thisform.montaacesso(.t.)
+
+*!*	Thisform.LockScreen = .F.
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Acesso.grdAcesso.Column3.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+This.KeyPress(13,0)
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If InList(m.nKeyCode,13,32)
+	Replace crSigCdPrg.Marcas With IIf(crSigCdPrg.Marcas == 0,1,0)	
+	This.parent.parent.Refresh 
+	NoDefault
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.BarraTipText.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Figura.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value) And Not File(This.Value)
+	This.Value = GetFile('bmp', 'Selecionar a figura', 'Selecionar')
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cabeçalho.Grade.Seleciona.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Usuario
+* Classe: fwget (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+This.Value = Alltrim(Strtran(Strtran(This.Value, ['], [ ]), ["], [ ]))
+ThisForm.Usuarios = This.Value
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.NomeCompleto
+* Classe: fwget (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Cargo
+* Classe: fwget (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCrg', ;
+						   'crListaRemota', 'CCargs', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CCargs', '', 'Código')
+		loLista.mAddColuna('DCargs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.CCargs
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Departamento
+* Classe: fwget (Base: textbox)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdDpt','crSigCdDpt','codigos',This.Value,'Seleção',.T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('codigos','xxxxxxxxxx','Código',.T.)
+		loLista.mAddColuna('Descricaos','xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx','Descrição',.T.)
+		loLista.Show()
+	EndIf
+	This.value = Iif(LastKey()==27,'',crSigCdDpt.codigos)
+EndIf
+This.Refresh
+
+Return(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.getSetores
+* Classe: fwget (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdSet', ;
+						   'crListaRemota', 'Setores', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Setores', '', 'Setor')
+		loLista.mAddColuna('Descrs',  '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Setores
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.optativo
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+replace cativos with IIF(this.Value = 1,'S','N') in crsigcdusu
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'ALTERAR', 'INSERIR')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Optsenhadia
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+replace limdescs with IIF(this.Value = 1,'S','N') in crsigcdusu
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'ALTERAR', 'INSERIR')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Optlibpesag
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 49
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'ALTERAR', 'INSERIR')
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+replace libpess with IIF(this.Value = 1,'S','N') in crsigcdusu
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Optlibprod
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+replace libprods with IIF(this.Value = 1,'S','N') in crsigcdusu
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'ALTERAR', 'INSERIR')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.olegru
+* Classe: olecontrol (Base: olecontrol)
+* Registro: 51
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE NodeCheck
+------------------------------------------------------------
+PROCEDURE NodeCheck
+*** ActiveX Control Event ***
+LPARAMETERS node
+
+IF Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	SELECT crGruAce
+	GO node.index
+
+	IF this.nodes.Item(node.Index).Checked
+		Replace marca With 1
+
+		lcIdChaves = 'GRUPO' + crGruAce.grupos
+		Select crLogData
+		Seek lcIdChaves
+		If ! Found()
+			Insert Into crLogData (cIdChaves, cOcors, cTipos) ;
+				Values(lcIdChaves, 'Usuario : ' + This.Parent.Usuario.Value + ' Grupo : ' + crGruAce.grupos, 'I')
+		Else
+			If cTipos = 'E'
+				Delete 
+			EndIf
+		Endif		
+	ELSE
+		Replace marca With 0
+
+		lcIdChaves = 'GRUPO' + crGruAce.grupos
+		Select crLogData
+		Seek lcIdChaves
+		If ! Found()
+			Insert Into crLogData (cIdChaves, cOcors, cTipos) ;
+				Values(lcIdChaves, 'Usuario : ' + This.Parent.Usuario.Value + ' Grupo : ' + crGruAce.grupos, 'E')
+		Else
+			If cTipos = 'I'
+				Delete 
+			EndIf
+		Endif		
+	ENDIF
+ENDIF
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.getIClis
+* Classe: fwget (Base: textbox)
+* Registro: 53
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;
+						   [crListaRemota], [IClis], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([IClis], [], [Código])
+		loLista.mAddColuna([RClis], [], [Descrição])
+		loLista.Show()
+	EndIf
+	If (Lastkey()<>27)
+		This.Parent.getIClis.Value = crListaRemota.IClis
+		This.Parent.getRClis.Value = crListaRemota.RClis
+	Else
+		This.Parent.getIClis.Value = []
+		This.Parent.getRClis.Value = []
+	EndIf
+	Use In crListaRemota
+Else
+	This.Parent.getIClis.Value = []
+	This.Parent.getRClis.Value = []
+EndIf
+This.Parent.getIClis.Refresh
+This.Parent.getRClis.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.getRClis
+* Classe: fwget (Base: textbox)
+* Registro: 54
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]) And Empty(This.Parent.getIClis.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;
+						   [crListaRemota], [RClis], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([RClis], [], [Descrição])
+		loLista.mAddColuna([IClis], [], [Código])
+		loLista.Show()
+	EndIf
+	If (Lastkey()<>27)
+		This.Parent.getIClis.Value = crListaRemota.IClis
+		This.Parent.getRClis.Value = crListaRemota.RClis
+	Else
+		This.Parent.getIClis.Value = []
+		This.Parent.getRClis.Value = []
+	EndIf
+	Use In crListaRemota
+Else
+	This.Parent.getIClis.Value = []
+	This.Parent.getRClis.Value = []
+EndIf
+This.Parent.getIClis.Refresh
+This.Parent.getRClis.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Optiongroup1
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 56
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'ALTERAR', 'INSERIR')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Cadastro.Optiongroup2
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 58
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'ALTERAR', 'INSERIR')
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDACU.Pagina.Dados.Pagina.Empresa.Grade.column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 63
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDACU
+RESERVED3 (ClassInfo): candropicon
+nodropicon
+dragthreshold
+mousex
+mousey
+usuarios
+supervisor
+statustela
+podatamgr2
+cmarca
+nodeindex
+*atualizatmp 
+*selectall 
+*ativacopia 
+*carregafiltro 
+*carregafiltro1 
+*montaacesso 
+*montagrupo 
+
+
+* Objeto: olegru
+OLE (ActiveX): ÐÏà¡±á>þÿ	þÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿýÿÿÿþÿÿÿþÿÿÿþÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 62
+================================================================================

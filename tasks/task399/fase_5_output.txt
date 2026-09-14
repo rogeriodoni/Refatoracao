@@ -1,0 +1,26 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado/modificado em `FormDsp.prg`:**
+
+**`ConfigurarPaginaDados()` expandida:**
+- `cmd_4c_Salvar` e `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesAcao` (com todos os 12 atributos can├┤nicos: ├¡cone, PicturePosition=13, Comic Sans MS, Themes=.F., etc.)
+- `BINDEVENTs` dos bot├Áes ÔåÆ `BtnSalvarClick` / `BtnCancelarClick`
+- `lbl_4c_lbl_grupo` ÔÇö Label "Grupo :" (Top=201, Left=148, compensa├º├úo +29 aplicada)
+- `txt_4c_cd_grupo` ÔÇö C├│digo do grupo (Top=197, Left=197, Width=79, MaxLength=10, Format="!")
+- `txt_4c_ds_grupo` ÔÇö Descri├º├úo do grupo (Top=197, Left=278, Width=150, MaxLength=20, ReadOnly=.T.)
+- `BINDEVENTs`: `LostFocusÔåÆValidarGrupoForm`, `KeyPressÔåÆTeclaGrupoKeyPress`
+
+**M├®todos atualizados:**
+- `BtnIncluirClick` ÔÇö agora chama `LimparCampos()`, `HabilitarCampos(.T.)`, `AjustarBotoesPorModo()`
+- `BtnVisualizarClick` ÔÇö agora chama `HabilitarCampos(.F.)`, `AjustarBotoesPorModo()`
+- `BtnAlterarClick` ÔÇö agora chama `HabilitarCampos(.T.)`, `AjustarBotoesPorModo()`
+
+**Novos m├®todos adicionados:**
+- `BtnSalvarClick` ÔÇö valida Grupo e Conta (fora do TRY), chama `FormParaBO()` + `Salvar()`
+- `BtnCancelarClick` ÔÇö volta para Page1 + recarrega lista
+- `LimparCampos` ÔÇö limpa campos existentes com PEMSTATUS guard para campos da Fase 6
+- `HabilitarCampos` ÔÇö cd_grupo editable s├│ em INCLUIR; cd_conta editable em INCLUIR/ALTERAR; com PEMSTATUS guard para Fase 6
+- `AjustarBotoesPorModo` ÔÇö habilita Salvar apenas em INCLUIR/ALTERAR
+- `ValidarGrupoForm` ÔÇö handler LostFocus: valida no SigCdGcr, preenche ds_grupo
+- `TeclaGrupoKeyPress` ÔÇö F4 (keycode=115) abre lookup
+- `AbrirBuscaGrupo` ÔÇö FormBuscaAuxiliar para SigCdGcr com padr├úo MODO 1 (exact match + grid picker)

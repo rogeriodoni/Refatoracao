@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O arquivo `SIGRECMVBO.prg` est├í completo com todos os m├®todos implementados:
+
+**M├®todos adicionados:**
+- `CarregarDadosIniciais()` ÔÇö carrega `crSigCdOpe`/`crSigCdPac`, preenche `this_cMes`, `this_cAno`, `this_cNmOperacao`, `this_cGrupoMov`, `this_cCdEstoque` com defaults do PAC e descri├º├Áes via SQL
+- `ValidarFiltros()` ÔÇö valida obrigatoriedade de m├¬s, ano, opera├º├úo, grupo, conta e moeda
+- `BuscarCotacao()` ÔÇö substitui `fBuscarCotacao()` do legado; consulta `SigCdCot.valos` pela data
+- `PrepararDados()` ÔÇö reproduz fielmente toda a l├│gica de `PROCEDURE processamento`: c├ílculo de saldo CMV por moeda/conta, custo por grama, montagem de `crVenda` com itens por opera├º├úo (lookup hist├│rico em `SigCdCmv` para per├¡odos diferentes), `crCabec`
+- `RegistrarCMV()` ÔÇö persiste resultado em `SigCdCmv` com INSERT/UPDATE por produto
+- `Imprimir()`, `ImprimirComDialogo()`, `Visualizar()` ÔÇö chamam `PrepararDados()` + `REPORT FORM`
+- `ObterChavePrimaria()`, `ObterMensagemErro()`, `RegistrarAuditoria()`, `Destroy()`
+
+**Regras cr├¡ticas respeitadas:** nenhum `RETURN` dentro de `TRY/CATCH` (padr├úo `DO WHILE .T. / EXIT`), CHR() para acentos, `FormatarDataSQL`/`EscaparSQL`/`FormatarNumeroSQL` nas queries, `SELECT cursor` antes de `APPEND FROM`.

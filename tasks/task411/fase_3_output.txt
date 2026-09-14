@@ -1,0 +1,17 @@
+﻿Arquivo criado com sucesso. **Fase 3 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\cadastros\FormFap.prg` (348 linhas).
+
+**O que foi criado:**
+
+| M├®todo | Responsabilidade |
+|--------|-----------------|
+| `Init(par_cTipo)` | Captura par├ómetro `_Tipo` do legado, delega para `DODEFAULT()` |
+| `InicializarForm()` | Cria FapBO, propaga tipo, monta estrutura, chama `CarregarLista()` |
+| `ConfigurarPageFrame()` | PageFrame `Top=-29`, `Tabs=.F.`, 2 pages com `BackColor` |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (lbl_Sombra/Titulo), `cnt_4c_Botoes`, `cnt_4c_Saida` ÔÇö posi├º├Áes can├┤nicas |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao`, `cnt_4c_Saida` ÔÇö estrutura vazia para Fases 5-6 |
+| `CarregarLista()` | Guard `gb_4c_ValidandoUI`, chama `FapBO.Buscar("")` com tipo propagado |
+| `TornarControlesVisiveis()` | Recurs├úo em Pages + Containers, exatamente conforme FormCor.prg |
+| `FormatarGridLista()` | `SetAll FontName=Tahoma / FontSize=8` |
+| `Destroy()` | Limpa BO + cursor, chama `DODEFAULT()` |
+
+**Pr├│xima fase (4/8):** Grid + bot├Áes CRUD na Page1.

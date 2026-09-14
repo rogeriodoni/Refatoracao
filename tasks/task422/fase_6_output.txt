@@ -1,0 +1,15 @@
+﻿Arquivo completo e correto. Fase 6 entregue com todas as implementa├º├Áes:
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+- `lbl_4c_InfComplementar` ÔÇö label "Inf. Complementar : " (Say7 original, Top=226, Left=208, com compensa├º├úo +29)
+- `txt_4c_Infos` ÔÇö TextBox C(1), FK para SigPrInf.Infos (Top=223, Left=311, Width=24, MaxLength=1, ToolTipText com CHR() codes)
+- `BINDEVENT` para `LostFocus` ÔåÆ `txt_4c_InfosLostFocus` e `KeyPress` ÔåÆ `txt_4c_InfosKeyPress`
+
+**Novos m├®todos de lookup (totalmente implementados):**
+- `txt_4c_InfosLostFocus()` ÔÇö dispara AbrirLookupInfos() se campo n├úo vazio
+- `txt_4c_InfosKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö abre lookup ao pressionar F4 (c├│digo 28)
+- `AbrirLookupInfos()` ÔÇö replica fiel do `Get_INFO.Valid` legado: busca match exato em SigPrInf; se n├úo achar, mostra picker com colunas Infos/descrs; se ESC, limpa campo
+
+**`BtnSalvarClick()` atualizado:** ap├│s falha no `Salvar()`, foca em `txt_4c_Formas` (replica comportamento do `SetFocus` do legado ap├│s valida├º├úo falhar)
+
+**`Destroy()` atualizado:** limpa `cursor_4c_BuscaInf` como seguran├ºa adicional

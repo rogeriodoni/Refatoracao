@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. A Fase 4 est├í completa. Resumo do que foi adicionado ao `FormPMC.prg`:
+
+**Grid `grd_4c_Lista`** (em `ConfigurarPaginaLista`):
+- 8 colunas: C├│digo (80px), Produto (150px), Tipo (80px), Valor M├¡nimo (100px), Dt In├¡cio (90px), Dt final (90px), Usu├írio (80px), Altera├º├úo (90px)
+- `RecordSource` e `ColumnCount` definidos explicitamente antes do `WITH` (regra anti-Problema 36)
+- ReadOnly, GridLines=3, FontName Verdana
+
+**BINDEVENTs** (Page1 + Page2):
+- Incluir, Visualizar, Alterar, Excluir, Buscar ÔåÆ handlers em `THIS`
+- Encerrar (cnt_4c_Saida) ÔåÆ `BtnEncerrarClick`
+- Confirmar/Cancelar ÔåÆ `BtnSalvarClick`/`BtnCancelarClick`
+
+**Handlers CRUD e auxiliares** (todos `PROCEDURE` sem `PROTECTED`, como exige BINDEVENT):
+- `BtnIncluirClick` / `BtnVisualizarClick` / `BtnAlterarClick` / `BtnExcluirClick` / `BtnBuscarClick` / `BtnEncerrarClick`
+- `BtnSalvarClick`: valida fora do TRY, chama `ValidarPeriodo()` + `GerarCodigo()` no INSERIR
+- `BtnCancelarClick`
+- `FormParaBO` / `BOParaForm` / `LimparCampos` / `HabilitarCampos` / `AjustarBotoesPorModo` (todos `PROTECTED`)

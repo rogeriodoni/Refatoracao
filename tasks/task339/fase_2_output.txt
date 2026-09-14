@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `SIGPRTRFBO.prg` foi expandido com todos os m├®todos relevantes para este form OPERACIONAL de sele├º├úo de produtos:
+
+- **`CarregarConfiguracao()`** ÔÇö carrega `ClockEcfs` de `SigCdPac` via SQLEXEC (substitui o `Sqlexecute` do legado)
+- **`BuscarProduto(par_cCodigo, par_cCursorDestino)`** ÔÇö busca produtos em `SigCdPro` com LIKE prefix (substitui `fwBuscaExt`)
+- **`ValidarProduto(par_cCodigo)`** ÔÇö valida c├│digo exato em `SigCdPro`, popula `this_cCpros`/`this_cDpros`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia `cpros`/`dpros` do cursor para props do BO
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCpros`
+- **`ValidarDados()`** ÔÇö valida├º├úo antes de confirmar (sem `RETURN` dentro de TRY/CATCH, usando CHR() para acentos)
+
+`Inserir()`/`Atualizar()` n├úo foram implementados pois este form ├® um dialog de sele├º├úo ÔÇö n├úo escreve na base. Todos os cursores usam o padr├úo `TABLEREVERT + USE IN` antes do SQLEXEC.

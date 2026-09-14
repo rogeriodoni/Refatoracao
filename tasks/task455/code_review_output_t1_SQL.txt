@@ -1,0 +1,10 @@
+﻿Corre├º├Áes aplicadas:
+
+**JUSBO.prg** ÔÇö `CarregarPorCodigo` agora usa `WHERE cods =` (igual ao legado `Where Cods = ']+lcCod+[' ]`), par├ómetro renomeado de `par_cCidChaves` para `par_cCods`.
+
+**FormJUS.prg** ÔÇö Tr├¬s handlers corrigidos:
+- `BtnVisualizarClick`: `loc_cCidChaves` ÔåÆ `loc_cCods`, l├¬ `cursor_4c_Dados.Cods`
+- `BtnAlterarClick`: idem
+- `BtnExcluirClick`: removida vari├ível `loc_cCidChaves` redundante, usa s├│ `loc_cCods`
+
+O `cidchaves` continua sendo usado internamente pelo BO para UPDATE/DELETE (via `this_cCidChaves` populado em `CarregarDoCursor`) ÔÇö isso est├í correto. S├│ a navega├º├úo do form mudou para usar `Cods`, alinhado com o legado.

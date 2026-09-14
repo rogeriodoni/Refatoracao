@@ -1,0 +1,15 @@
+﻿Ap├│s an├ílise completa do arquivo, o c├│digo atual **j├í tem os valores corretos**:
+
+- `cnt_4c_Container1`: `Top = 97` (linha 70) ÔÇö corresponde ao original
+- `cnt_4c_Origem`: `Top = 170` (linha 81) ÔÇö corresponde ao original
+- `cnt_4c_Destino`: `Top = 244` (linha 87) ÔÇö corresponde ao original
+
+Os `Top = 1` encontrados nas linhas 235, 340 e 457 s├úo de **labels dentro dos containers** (posi├º├úo relativa ao container pai), n├úo dos containers em si:
+
+- Linha 235: `lbl_4c_LblMovimentacao.Top = 1` dentro de `cnt_4c_Container1` ÔÇö correto
+- Linha 340: `lbl_4c_LblOrigem.Top = 1` dentro de `cnt_4c_Origem` ÔÇö correto
+- Linha 457: `lbl_4c_LblDestino.Top = 1` dentro de `cnt_4c_Destino` ÔÇö correto
+
+O validator gerou **falsos positivos**: ao analisar o bloco `WITH THIS.cnt_4c_Container1`, ele leu o primeiro `.Top = 1` encontrado (do label filho) e atribuiu erroneamente ao container. Na pr├ítica, os tr├¬s containers est├úo nas posi├º├Áes absolutas corretas (97, 170, 244) e n├úo h├í nenhum reposicionamento din├ómico em runtime.
+
+**Nenhuma altera├º├úo ├® necess├íria.** O arquivo `FormSigPdMp3.prg` est├í correto para os 3 problemas listados.

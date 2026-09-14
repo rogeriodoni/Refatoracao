@@ -1,0 +1,14 @@
+﻿Corre├º├Áes aplicadas. Resumo das decis├Áes:
+
+**Corrigido - CIDCHAVES (real):**
+- `sigmvccrBO.prg` - Atualizar(): `WHERE Cidchaves = ...` ÔåÆ `WHERE Emps = ... AND Nopers = ...`
+- `sigmvccrBO.prg` - ExecutarExclusao() UPDATE: mesma corre├º├úo
+- `sigmvccrBO.prg` - ExecutarExclusao() DELETE: mesma corre├º├úo
+
+O original usa `Where Emps = ... And Nopers = ...` em todas as opera├º├Áes UPDATE/DELETE em SigMvCcr.
+
+**Falsos positivos (sem altera├º├úo):**
+
+- **CODIGOS** - `WHERE codigos = ` ├® lookup na tabela **SigCdGcr**, n├úo SigMvCcr. Equivalente ao `SEEK(..., [crSigCdGcr], [Codigos])` do original.
+- **CMOES** - `WHERE cmoes = ` ├® lookup na tabela **SigCdMoe**. Equivalente ao `SEEK(..., [crSigCdMoe], [CMoes])` do original.
+- **CONTROLCOUNT** - ├ë `par_oContainer.ControlCount` (propriedade VFP9 de container), n├úo coluna SQL. Linha 2941/2956 do Form.

@@ -1,0 +1,417 @@
+{
+  "resumo": {
+    "totalMetodos": 23,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 13,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDM11",
+      "evento": "Procedure",
+      "linhas": 51,
+      "codigoOriginal": "Lparameters llChkCoef\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nLocal llRet\n\nllRet = .t.\nIf Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tSelect xNensiS\n\tx_Recno = Recno()\n\tScan\n\t\tIf Not Empty(xNensis.Cats)\n\t\t\tSelect crSigCdSvc\n\t\t\tSet Order to CaGruCo\n\t\t\tDo Case\n\t\t\t\tCase Seek(xNensiS.Cats + xNensiS.GrupoFs + xNensiS.ContaFs )\n\t\t\t\tCase Seek(xNensiS.Cats + xNensiS.GrupoFs + Space(10))\n\t\t\t\tCase Seek(xNensiS.Cats + Space(20)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "ChkCoef",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11",
+      "evento": "Init",
+      "linhas": 53,
+      "codigoOriginal": "Lparameters pForm, DatSes\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThis.LockScreen = .t.\n\nSet Datasession To DatSes\nThisForm.pcEscolha  = pForm.pcEscolha\nThisForm.ParentForm = pForm\nThisForm.poDataMgr  = pForm.poDataMgr\nThisForm.AntValue   = Space(10)\n\n=Seek(pForm._Dopp, 'crSigCdOpd', 'Dopps')\n\nSelect Sum(1) as Qtd, Grupos, Contas ;\n  From CsContas ;\n Group by Grupos, Contas ;\n  Into Cursor CsTotal\n\nSelect CsTotal\nIf Reccou... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AntValue   = Space,Gravacat",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "LPARAMETERS nColIndex\nThisForm.DescCat.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column6.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Thisform.Opt_mov.Value = 2\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_mov",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column6.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not Empty(This.Value) And Not Seek(This.Value, 'TmpGccr', 'BalCodigo')\n\t\tloBrowse = CreateObject('fwBuscaSel', 'TmpGccr', 'BalCodigo', This.Value, 'Cadastro de Grupos')\n\t\tloBrowse.AddColuna('Codigos', '', 'Código',    .t., 'BalCodigo')\n\t\tloBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'BalDescrs')\n\t\tloBrowse.Show\n\tEndIf\n\tReplace xNensis.Grupofs With TmpGccr.Codigos\n\t=Thisform.Gravacat()\nEndif\nSelect xNensiS",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Gravacat",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column5.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 39,
+      "codigoOriginal": "Local lCod, lFan, xObj\n\n_Nenv = xNensi.Nenvs\n\nIf ThisForm.Opt_mov.Value = 1\n\n\tSelect * From CsContas Where Nenvs = _Nenv Into Cursor Selecao ReadWrite\n\n\tSelect Selecao\n\tIndex On Contas Tag Contas\n\n\tIf Not Seek(This.Value) \n\t\tloBrowse = CreateObject('fwBuscaSel', 'Selecao', 'Contas', This.Value, 'Cadastro de Contas')\n\t\tloBrowse.AddColuna('contas', '', 'Conta', .t., 'Contas')\n\t\tloBrowse.AddColuna('Grupos', '', 'Grupo')\n\t\tloBrowse.Show\n\t\tThis.Value = Selecao.Contas\n\tEndIf\n\tReplace xNensis.Grupofs W... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Gravacat",
+        "controlesReferenciados": "Opt_mov",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ( .F. )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column7.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column7.Text1",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tlcSql = [Select * From SigPrCrt Where Emps = ']+_Empr+[' Or Emps = ' ' ]\n\tIf Thisform.Podatamgr.Sqlexecute(lcSql,'CsSelecao') < 1\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigPrCrt)')\n\t\tReturn .f.\n\tEndIf\n\tSelect CsSelecao\n\tIndex On Cods Tag Cods\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'CsSelecao', 'Cods', This.Value, 'Retrabalhos')\n\t\tloBrowse.AddColuna('Cods', \t  '', 'Código', .t., 'Cods')\n\t\tloBrows... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 34,
+      "codigoOriginal": "If !Empty( This.Value ) \n\tSelect crSigCdSvc\n\tSet Order to CaGruCo\n\tDo Case\n\t\tCase Seek(This.Value + xNensiS.GrupoFs + xNensiS.ContaFs )\n\t\tCase Seek(This.Value + xNensiS.GrupoFs + Space(10))\n\t\tCase Seek(This.Value + Space(20))\n\tOtherwise\n\t\tSelect * From CrSigCdSvc Where ;\n\t\t\t( Grupos + Contas = xNensiS.GrupoFs + xnensiS.ContaFs ) Or ;\n\t\t\t( Grupos + Contas = xNensiS.GrupoFs + Space(10) ) Or ;\n\t\t\t( Grupos + Contas = Space(20) ) ;\n\t\tInto Cursor Selecao\n\n\t\tSelect Selecao\n\t\tIndex On CCats Tag cCats\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "CursorQuery,Gravacat",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Grade.Column9.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Operação.GetCodigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Operação.GetEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Operação.GetOperação",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Botao1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Botao1",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "Select xNensiR\nIf Not Eof()\n\tDo Form SigPdM12 With ThisForm\n\tThisForm.Enabled = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM11.Botao2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDM11.ok",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "llOk = ThisForm.Gravacat(.t.)\nIf Not llOk\n\tMessageBox('Serviço não cadastrado para este Grupo/conta!!!',0+48,'')\n\tReturn .f.\nEndif\nThisForm.ParentForm.Enabled = .t.\nThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Gravacat",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPDM11.Init",
+      "queryOriginal": "Select Sum(1) as Qtd, Grupos, Contas ; From CsContas ; Group by Grupos, Contas ; Into Cursor CsTotal",
+      "tabelas": "CsContas",
+      "colunas": "Grupos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPDM11.Grade.Column5.Text1.Valid",
+      "queryOriginal": "\tSelect * From CsContas Where Nenvs = _Nenv Into Cursor Selecao ReadWrite",
+      "tabelas": "CsContas",
+      "colunas": "Nenvs,Selecao,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPDM11.Grade.Column7.Text1.Valid",
+      "queryOriginal": "\tlcSql = [Select * From SigPrCrt Where Emps = ']+_Empr+[' Or Emps = ' ' ] \tIf Thisform.Podatamgr.Sqlexecute(lcSql,'CsSelecao') < 1",
+      "tabelas": "SigPrCrt",
+      "colunas": "Emps,SqlexecutelcSql,CsSelecao",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPDM11.Grade.Column2.Text1.Valid",
+      "queryOriginal": "\t\tSelect * From CrSigCdSvc Where ; \t\t\t( Grupos + Contas = xNensiS.GrupoFs + xnensiS.ContaFs ) Or ; \t\t\t( Grupos + Contas = xNensiS.GrupoFs + Space(10) ) Or ; \t\t\t( Grupos + Contas = Space(20) ) ; \t\tInto Cursor Selecao",
+      "tabelas": "CrSigCdSvc",
+      "colunas": "Grupos,Contas,GrupoFs,ContaFs,Space10,Space20,Selecao",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["CsContas", "SigPrCrt", "CrSigCdSvc"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

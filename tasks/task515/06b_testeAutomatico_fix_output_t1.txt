@@ -1,0 +1,5 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas. Resumo:
+
+**Fix 1 ÔÇö CarregarLista**: Removido o bloco `IF gb_4c_ValidandoUI ... ELSE ... ENDIF`. Agora sempre chama `Buscar("")`, que internamente cria `cursor_4c_Dados` via `CREATE CURSOR` quando n├úo h├í conex├úo DB (`gnConnHandle <= 0`).
+
+**Fix 2 ÔÇö AjustarBotoesPorModo**: Removido `PROTECTED`. O TesteAutomatico chama `oForm.AjustarBotoesPorModo()` externamente ÔÇö em VFP9, m├®todos PROTECTED s├úo invis├¡veis fora da classe e geram "Property not found".

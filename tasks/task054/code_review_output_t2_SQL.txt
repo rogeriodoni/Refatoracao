@@ -1,0 +1,5 @@
+﻿Dois problemas corrigidos em `sigrecmmBO.prg`:
+
+1. **SALBASES + VALCOMISS (linhas 661-665)**: Removido o bloco `SELECT LocalCmVen / GO TOP / IF SalBases > 0 AND ValComiss < SalBases / REPLACE / ENDIF` - era l├│gica inventada pela LLM; o REPLACE anterior (linha 660) j├í cobria a atribui├º├úo corretamente.
+
+2. **BONUS + VALCOMISS (linha 691)**: Simplificado `IF !EOF() AND crVends.ValComiss > 0 AND LocalCmFxa.Bonus > 0` para `IF !EOF()` - os guards `ValComiss > 0` e `Bonus > 0` n├úo existem no original; o c├ílculo `(ValComiss * Bonus) / 100` resulta em 0 naturalmente quando qualquer um for zero.

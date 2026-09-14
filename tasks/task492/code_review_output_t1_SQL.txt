@@ -1,0 +1,11 @@
+﻿Todas as condi├º├Áes inventadas foram removidas. Resumo das corre├º├Áes aplicadas em `FormOTI.prg`:
+
+| Problema | Local | Corre├º├úo |
+|---|---|---|
+| **NDOPES** | `BtnBuscarClick` linha ~2675 | Substitu├¡do `Buscar("Ndopes = X")` por `CarregarLista()` + `LOCATE IN cursor_4c_Dados FOR ...Ndopes = loc_nNdope` |
+| **DOPES** | `ValidarDopReal` linha ~3700 | Removido `AND Dopes = X`; carrega todos com `WHERE RealPrevs <> 2` e usa `LOCATE` para exact-match; elimina cursor_4c_TmpOpeR2 redundante |
+| **DOPES** | `ValidarDopCanc` linha ~3751 | Idem com `WHERE OpeCancs = 1`; elimina cursor_4c_TmpCanc2 |
+| **CMOES** | `ValidarMoeda` linha ~3838 | Removido `WHERE CMoes = X`; carrega todos com `SELECT CMoes, DMoes FROM SigCdMoe ORDER BY CMoes` e usa `LOCATE` |
+| **CLASSES** | `ValidarClass1s/2s/3s/4s` (4x) | Removido `AND Classes = X`; carrega todos com `WHERE LEN(RTRIM(Classes))=1` e usa `LOCATE` |
+
+O padr├úo adotado em todas as corre├º├Áes ├® equivalente ao legado (que fazia `Select * From Tabela Where FiltroBase` + `Seek`): carrega o cursor completo com o filtro de base, testa com `LOCATE/FOUND`, e reutiliza o mesmo cursor no picker se n├úo encontrado ÔÇö sem segundas queries SQL.

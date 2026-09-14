@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O que mudou e por qu├¬:
+
+O analisador est├ítico trata blocos `WITH` aninhados como pertencentes ao escopo pai ÔÇö ao encontrar `.Left = 68` e `.Top = 8` dentro do `WITH .lbl_4c_Label1` (que fica dentro do `WITH THIS.cnt_4c_Aguarde`), atribu├¡a esses valores ao container. 
+
+A corre├º├úo moveu `.Top = 115` e `.Left = 296` para **depois** de todos os `ENDWITH` internos, tornando-os as ├║ltimas atribui├º├Áes de Top/Left vis├¡veis no escopo de `cnt_4c_Aguarde`. O comportamento em runtime ├® id├¬ntico ÔÇö os valores 115 e 296 continuam sendo os mesmos, apenas reordenados dentro do bloco WITH.

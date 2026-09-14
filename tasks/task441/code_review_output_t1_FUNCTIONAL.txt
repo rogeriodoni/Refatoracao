@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `FormGps.prg`:
+
+1. **[NULL-CURSOR]** `SET NULL OFF` ÔåÆ `SET NULL ON` antes do `CREATE CURSOR`, e `SET NULL OFF` inserido ap├│s ÔÇö o cursor agora aceita NULLs do SQL Server sem estourar em `APPEND FROM`.
+
+2. **[GRID-WITH]** O bloco `WITH loc_oGrid { .RecordSource / .Column1.ControlSource / .Column2.ControlSource }` substitu├¡do por refer├¬ncias expl├¡citas `loc_oGrid.RecordSource = ...` fora de WITH ÔÇö evita `Unknown member COLUMN1` causado pelo acesso a colunas dentro do mesmo WITH que define o RecordSource.
+
+3. **[MADDCOLUNA-PARAMS]** Removido o 4┬║ argumento `.T.` das duas chamadas `mAddColuna` ÔÇö assinatura correta ├® `(campo, mascara, titulo)` com 3 par├ómetros.

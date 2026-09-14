@@ -1,0 +1,10 @@
+﻿Todas as refer├¬ncias a `cgrus`/`dgrus` foram eliminadas. As ocorr├¬ncias restantes de `grupos` (linhas 73, 155, 932) s├úo atribui├º├Áes de propriedades e leituras de cursor ÔÇö n├úo s├úo WHERE SQL.
+
+Confirmando o resultado final das 5 corre├º├Áes:
+
+**SigPrChrBO.prg:**
+- **GRUPOS** (ex-linhas 600-602 e 616-618): blocos `IF !EMPTY(loc_cCdGrupo) / AND a.Grupos = ...` removidos de ambos os branches do SELECT principal em SigCqChi
+- **CGRUS** (ex-linha 830, 834): `SELECT TOP 1 dgrus FROM SigCdGcr WHERE cgrus = ...` ÔåÆ corrigido para `SELECT TOP 1 descrs FROM SigCdGcr WHERE codigos = ...` + `ALLTRIM(dgrus)` ÔåÆ `ALLTRIM(descrs)`
+- **DGRUS** (ex-linha 860, 864): `SELECT TOP 1 cgrus FROM SigCdGcr WHERE dgrus = ...` ÔåÆ corrigido para `SELECT TOP 1 codigos FROM SigCdGcr WHERE descrs = ...` + `ALLTRIM(cgrus)` ÔåÆ `ALLTRIM(codigos)`
+
+**FormSigPrChr.prg:** sem altera├º├Áes ÔÇö as queries `WHERE Codigos = ?pGrupoVal` e `WHERE Descrs LIKE ?pGrupoDesc + '%'` usam colunas que existem no schema de SigCdGcr (`[codigos] char(10)`, `[descrs] char(40)`) e s├úo necess├írias para o funcionamento do campo de filtro de grupo.

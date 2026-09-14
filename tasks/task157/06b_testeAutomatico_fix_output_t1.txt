@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada: `PROTECTED PROCEDURE CarregarDados()` ÔåÆ `PROCEDURE CarregarDados()`.
+
+O m├®todo `CarregarDados` precisava ser p├║blico porque o teste `testecarregardadosreais` o chama externamente no objeto do form. Com `PROTECTED`, VFP9 o torna invis├¡vel fora da classe, resultando em "Property CARREGARDADOS is not found". O m├®todo `BOParaForm` que chama `CarregarDados` internamente via `THIS.CarregarDados()` continua funcionando normalmente.

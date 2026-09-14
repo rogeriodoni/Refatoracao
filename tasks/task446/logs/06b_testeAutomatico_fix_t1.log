@@ -1,0 +1,23 @@
+[2026-08-09 02:13:51] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-09 02:13:51] [INFO] Prompt File: C:\4c\tasks\task446\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-08-09 02:13:51] [INFO] Output File: C:\4c\tasks\task446\06b_testeAutomatico_fix_output_t1.txt
+[2026-08-09 02:13:51] [INFO] Model: sonnet
+[2026-08-09 02:13:51] [INFO] Timeout: 3600 segundos
+[2026-08-09 02:13:51] [INFO] Max Output Tokens: 128000
+[2026-08-09 02:13:51] [INFO] Context Files: 0 arquivo(s)
+[2026-08-09 02:13:51] [INFO] Invocando Claude CLI...
+[2026-08-09 02:13:51] [INFO] Prompt carregado: 51185 caracteres
+[2026-08-09 02:13:51] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-09 02:13:51] [INFO] Tamanho total do prompt: 51185 caracteres
+[2026-08-09 02:13:51] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-09 02:47:51] [INFO] Claude CLI finalizado em 2039.5147702 segundos
+[2026-08-09 02:47:51] [INFO] Exit Code: 0
+[2026-08-09 02:47:51] [INFO] Output salvo em: C:\4c\tasks\task446\06b_testeAutomatico_fix_output_t1.txt
+[2026-08-09 02:47:51] [INFO] Output size: 670 bytes
+[2026-08-09 02:47:51] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-09 02:47:51] [INFO] Preview do output:
+[2026-08-09 02:47:51] [INFO] Two fixes applied:
+
+**FormICD.prg `Init()`** ÔÇö added guard to set `WindowType = 0` and `ShowWindow = 0` when `gb_4c_ModoTeste = .T.`. The combination of `WindowType = 1` (modal) + `ShowWindow = 1` (top-level window) causes VFP9 -T headless mode to block trying to create/display a GUI window that has no desktop to attach to, producing the exact 300-second OS-level timeout.
+
+**ICDBO.prg `DuplicarTipo()`** ÔÇö restructured flat `IF ... loc_lSucesso = .F. / IF ... loc_lSucesso = .F.` chain int

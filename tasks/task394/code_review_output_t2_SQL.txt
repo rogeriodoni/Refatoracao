@@ -1,0 +1,15 @@
+﻿Corre├º├úo conclu├¡da. Resumo das mudan├ºas:
+
+**DICBO.prg** (9 altera├º├Áes):
+- Removida property `this_cIdChaves` e gera├º├úo via `fUniqueIds()` ÔÇö inexistente no original
+- `this_cCampoChave` alterado de `"cidchaves"` ÔåÆ `"Expressao"`
+- `ObterChavePrimaria()` retorna `Expressao|Idioma` (chave composta real)
+- `Buscar()`: removido `cidchaves` do SELECT
+- `CarregarPorCodigo()`: assinatura `(par_cExpressao, par_cIdioma)`, SELECT sem `cidchaves`, WHERE usa `Expressao = ... AND Idioma = ...`
+- `CarregarDoCursor()`: removido mapeamento de `cidchaves`
+- `Inserir()`: removido `cidchaves` do INSERT
+- `Atualizar()`: WHERE trocado de `cidchaves` ÔåÆ `Expressao + Idioma`
+- `ExecutarExclusao()`: WHERE trocado de `cidchaves` ÔåÆ `Expressao + Idioma`
+
+**FormDIC.prg** (3 handlers):
+- `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`: substitu├¡do `cursor_4c_Dados.cidchaves` por `cursor_4c_Dados.Expressao` + `cursor_4c_Dados.Idioma`, passando dois par├ómetros para `CarregarPorCodigo`.

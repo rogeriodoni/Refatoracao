@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["ForceExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRPDF",
+      "evento": "Init",
+      "linhas": 40,
+      "codigoOriginal": "Lparameters poformParent, pcAssunto\n\nthisform.oParentForm = poformParent\nSet datasession to thisform.oParentForm.DatasessionId\n\nThisForm.Diretorio = goSistema.DirFiscais\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t\t\t\n\t\tThisform.LockScreen = .T. \n\t\tThisform.Height = This.Height - This.CtnSaida_Email.Height\n\t\tThisform.CtnSaid... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Iif,Refresh,SqlExecute",
+        "controlesReferenciados": "optArquivo,option1",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRPDF.cmdGetFile",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "lcTpArq = Iif(thisform.optArquivo.Value = 1,[PDF],[XLS])\n\nlcArqSaida = GetFile( lcTpArq , [Arquivo:],[Selecionar],0,[Selecione o arquivo])\n\nIf isEmpty( lcArqSaida )\n\tReturn\nEndIf\n\nIf JUSTEXT(lcArqSaida) $ lcTpArq\n\t** Ok, Selecionou uma extensão válida\nElse\n\tlcArqSaida = ForceExt(lcArqSaida, Left( lcTpArq , 3 ))\nEndIf\n\nThisForm.TxtNomeArqSaida.Value = Alltrim( lcArqSaida )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "ForceExt",
+        "metodosFormChamados": "Value = Alltrim",
+        "controlesReferenciados": "optArquivo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPDF.Cmd_SAIR",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "thisform.oparentform.pcArqEmail = []\nthisform.oparentform.oEmail = Null\nThisForm.Release()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPDF.CtnSaida_Email",
+      "evento": "Init",
+      "linhas": 3,
+      "codigoOriginal": "**\nThis.BorderWidth = 0\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPDF.Chk_EMAIL",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "ThisForm.LockScreen = .T. \nIf This.Value = 1\n\tThisForm.Cmd_GerarPDF.Caption = \"Enviar Email\"\n\tThisForm.Height = ThisForm.Height + ThisForm.CtnSaida_Email.Height \n\tThisForm.CtnSaida_Email.Visible = .T.\nElse\n\tThisForm.Cmd_GerarPDF.Caption = [\\<Gravar] &&ThisForm.Cmd_OK.Tag\n\tThisForm.Height = ThisForm.Height - ThisForm.CtnSaida_Email.Height \n\tThisForm.CtnSaida_Email.Visible = .F.\nEndIf\nThisForm.Refresh()\nThisForm.LockScreen = .F. ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "Cmd_GerarPDF,Cmd_OK",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPDF.Cmd_GerarPDF",
+      "evento": "Init",
+      "linhas": 2,
+      "codigoOriginal": "This.Tag = This.Caption\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPDF.Cmd_GerarPDF",
+      "evento": "Click",
+      "linhas": 57,
+      "codigoOriginal": "ThisForm.oParentForm.pcArqEmail = Alltrim( Nvl( This.Parent.TxtNomeArqSaida.Value, \"\" ) )\n\nIf Empty( ThisForm.oParentForm.pcArqEmail)\n\tMessageBox([Selecione um nome para o arquivo!], 48, [Atenção])\n\tThis.Parent.CmdGetFile.SetFocus()\n\tReturn\nEndIf\n\n*!*\tThisForm.oParentForm.lPrintPDFCreator = .T.\n*!*\tThisForm.oParentForm.PrintOnExit \t  = .F.\n\nIf ThisForm.Chk_EMAIL.Value = 1\n\t** Anexar o Arquivo no Email. Enviar o Email\n\n\tIf Used( \"TmpEmpMail\" ) And RecCount( \"TmpEmpMail\" ) > 0\n\n\t\tLocal lcTO As Str... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcArqEmail = Alltrim,oEMAIL = CreateObject,AddProperty,Release",
+        "controlesReferenciados": "Chk_EMAIL",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPDF.optArquivo",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If this.Value = 1\n\tthisform.txtNomeArqSaida.Value = ThisForm.Diretorio + [FORTYUSPDF.PDF]\nElse\n\tthisform.txtNomeArqSaida.Value = ThisForm.Diretorio + [FORTYUSEXCEL.XLS]\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRPDF.btnPastasA",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "lcDir = ThisForm.Diretorio\nIf Not Empty(lcDir)\n\tIf Not Directory(lcDir)\n\t\t=MessageBox([Diretório não Localizado],0+64,[Atenção])\n\tElse\n\t\tloApp = CreateObject([Shell.Application])\n\t\tloApp.Open(lcDir)\n\tEndIf \nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

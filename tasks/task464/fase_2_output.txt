@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. Fase 2 conclu├¡da com sucesso.
+
+**MoeBO.prg** agora cont├®m os m├®todos CRUD completos:
+
+| M├®todo | Acesso | Responsabilidade |
+|---|---|---|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT cmoes/dmoes/nordrels/cotas para o Grid |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | SELECT todos os campos por PK; reseta `this_lNovoRegistro=.F.` |
+| `CarregarDoCursor(par_cAlias)` | PROTECTED | Mapeia cursor ÔåÆ propriedades `this_*` usando `TratarNulo`/`NVL` |
+| `ValidarDados()` | PROTECTED | Valida c├│digo/descri├º├úo obrigat├│rios, nordrels 0-5, duplicidade no INSERT |
+| `Inserir()` | PROTECTED | INSERT com `disfpres` defaultando para `'S'` + `RegistrarAuditoria("INSERT")` |
+| `Atualizar()` | PROTECTED | UPDATE + `disfpres` default + `RegistrarAuditoria("UPDATE")` |
+| `ExecutarExclusao()` | PROTECTED | Verifica SigCdCot antes de deletar + `RegistrarAuditoria("DELETE")` |
+
+Pontos cr├¡ticos implementados: nenhum `RETURN` dentro de `TRY/CATCH`, bit columns como `1`/`0`, CHR() para acentos, `loc_lPodeExcluir` como guard para a exclus├úo em dois passos.

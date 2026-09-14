@@ -1,0 +1,22 @@
+﻿An├ílise completa confirmada. Aqui est├í o resultado da investiga├º├úo:
+
+## An├ílise: Todos os 8 problemas s├úo falsos positivos
+
+**O que o validador encontrou:**
+- Grid legado `GradeCheque` em `SIGCDLCH.Pagina.Dados` (Page2) ÔåÆ 12 colunas: Bco, Agen, N┬░ Conta, N┬░ Chq, Valor, Vencimento, Al├¡nea, Emp, C├│digo Cliente, Protocolo, Dt. Emiss├úo, Sel
+
+**O que a investiga├º├úo do SCX revela:**
+- A `Pagina.Lista` (Page1 equivalente) do legado cont├®m APENAS: bot├úo `Concilia├º├úo`, bot├úo `LimpaDT`, `Label1`, `Cmb_Concilia` e `Cnt_periodo` (datas)
+- **NENHUM grid de listagem est├í definido no SCX legado**
+- O grid de listagem de lotes era provido pela classe `frmcadastro` do framework VCX (`ClassLoc: ..\framework\framework.vcx`) ÔÇö invis├¡vel ao validador que analisa apenas o SCX
+
+**Por que o validador errou:**
+O validador comparou TODOS os headers do form migrado contra os headers do ├ÜNICO grid encontrado no SCX legado (o `GradeCheque` de cheques individuais na Page2). O `grd_4c_Dados` da Page1 ├® um grid NOVO que substitui o grid de listagem do framework ÔÇö seus headers 'Lote', 'Dt. Entrada', 'Opera├º├úo', 'Situa├º├úo' n├úo t├¬m equivalente no SCX porque o framework os gerenciava dinamicamente.
+
+**Conclus├úo:** Nenhuma altera├º├úo necess├íria. Os headers atuais s├úo semanticamente corretos para os dados exibidos:
+- Column1 ÔåÆ `numlotes` ÔåÆ "Lote" Ô£ô
+- Column3 ÔåÆ `dtents` ÔåÆ "Dt. Entrada" Ô£ô
+- Column4 ÔåÆ `codigos` ÔåÆ "Opera├º├úo" Ô£ô
+- Column6 ÔåÆ `concs` (IIF Conciliado/Pendente) ÔåÆ "Situa├º├úo" Ô£ô
+
+O `Formlch.prg` e `lchBO.prg` est├úo corretos ÔÇö nenhuma edi├º├úo necess├íria para este pass visual.

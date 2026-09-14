@@ -1,0 +1,22 @@
+﻿Arquivo criado com 308 linhas. A estrutura da Fase 3 est├í completa:
+
+**O que foi criado em `FormCco.prg`:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Corrige Caption com CHR() + `RETURN DODEFAULT()` |
+| `InicializarForm()` | Cria CcoBO, configura PageFrame, carrega lista inicial |
+| `ConfigurarPageFrame()` | PageFrame Top=-28, 2 pages com imagem de fundo |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho (com labels), cnt_4c_Botoes (Left=542), cnt_4c_Saida (Left=917 can├┤nico) |
+| `ConfigurarPaginaDados()` | cnt_4c_Salva (Left=841, bot├Áes Salvar/Cancelar vir├úo na Fase 4) |
+| `CarregarLista()` | Chama `Buscar("")` no BO (v├¡nculo com Grid na Fase 4) |
+| `AlternarPagina()` | Alterna entre Page1/Page2 + recarrega lista ao voltar |
+| `TornarControlesVisiveis()` | Recursivo, trata PageFrame e Containers |
+| `Destroy()` | Libera BO + cursores (cursor_4c_Dados, crMotivos, crSigCdGcr) |
+
+**Destaques de conformidade:**
+- Compensa├º├úo PageFrame +28 aplicada em todos os containers
+- cnt_4c_Saida.Left = **917** (can├┤nico, ignora Left=919 do SCX)
+- lbl_4c_Sombra/lbl_4c_Titulo com `AutoSize=.F.` (evita Problema de mem├│ria #cnt_4c_Cabecalho)
+- Sem RETURN dentro de TRY/CATCH
+- `BuscarParametros()` chamado antes de `CarregarLista()` (carrega grupo padr├úo do SigCdPam)

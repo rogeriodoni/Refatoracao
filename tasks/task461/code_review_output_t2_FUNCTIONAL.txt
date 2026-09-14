@@ -1,0 +1,11 @@
+﻿Todas as 4 corre├º├Áes aplicadas corretamente. Resumo do que foi corrigido:
+
+1. **GRID-WITH `grd_4c_GradeC`** ÔÇö `ColumnCount` e `RecordSource` movidos para fora do `WITH`, garantindo que as 7 colunas existam antes de serem acessadas dentro do bloco.
+
+2. **GRID-WITH `grd_4c_Grade`** ÔÇö Mesmo fix para o grid de venda com 9 colunas.
+
+3. **BINDEVENT duplicado** (linhas 1674-1679) ÔÇö Removidos os 3 bindings redundantes de `ValidarTabd`, `ValidarGetConta` e `ValidarGetDconta` ao KeyPress. Esses handlers executavam SQL a cada tecla pressionada; eles s├úo chamados corretamente pelos respectivos `TeclaXxx` no ENTER/TAB.
+
+4. **BtnImprimirListaClick** ÔÇö Removida a linha `.Visible = .T.` que sobrescrevia imediatamente o toggle, impedindo que o painel de impress├úo fosse fechado.
+
+Os demais alertas do review (CONTAINER-VISIVEL, METODO-INEXISTENTE, GRID-HEADER, LAYOUT-POSITION, Say1ÔåÆlbl_4c_Say12) s├úo **falsos positivos**: o `TornarControlesVisiveis` j├í filtra corretamente os containers ocultos, `MontarRelatorio` est├í implementado, os headers do `grd_4c_Lista` s├úo corretos para os dados de SigCdLpc (o review comparou com headers do grid de itens), e as posi├º├Áes dos controles j├í t├¬m o offset correto (+29 do PageFrame).

@@ -1,0 +1,14 @@
+﻿Fase 8 conclu├¡da. Os seguintes m├®todos foram adicionados ao `FormSigPrGlp.prg` (linhas 2739ÔÇô2978):
+
+| M├®todo | Comportamento para este form OPERACIONAL |
+|--------|------------------------------------------|
+| `BtnBuscarClick()` | Retorna ├á vis├úo principal via `AlternarPagina(1)` |
+| `BtnEncerrarClick()` | Delega para `CmdCancelarClick()` |
+| `BtnSalvarClick()` | Delega para `CmdProcessarClick()` (equivalente ao Processar) |
+| `BtnCancelarClick()` | Delega para `CmdCancelarClick()` |
+| `FormParaBO()` | Atualiza flags de controle no BO (`this_lReserva`, `this_lAutomatico`, `this_nNumerodaop`) |
+| `BOParaForm()` | Recalcula totais de `TmpFinal` e atualiza totalizadores + grids |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita grade e bot├Áes principais; chama `AjustarBotaoPedras()` |
+| `LimparCampos()` | Zera totalizadores, limpa label/EditBox/imagem e campos do `cnt_4c_Info` |
+| `CarregarLista()` | Recalcula totais e d├í Refresh nos grids (sem SQL pr├│prio ÔÇö dados v├¬m do form pai) |
+| `AjustarBotoesPorModo()` | Detecta se algum container flutuante est├í vis├¡vel e chama `HabilitarCampos()` adequadamente |

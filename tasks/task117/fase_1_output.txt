@@ -1,0 +1,10 @@
+﻿`C:\4c\projeto\app\classes\SigReIdtBO.prg` criado com sucesso. A Fase 1 est├í completa:
+
+- Herda de `RelatorioBase` (n├úo BusinessBase)
+- **10 propriedades** declaradas, extra├¡das do c├│digo fonte original:
+  - `this_cEmps`, `this_cDopes`, `this_cNumes`, `this_nNumef` ÔÇö par├ómetros recebidos do form (`pcEmps`, `pcDopes`, `pcNumes`, `Numef`)
+  - `this_cDiretorio`, `this_cDirFiscais` ÔÇö controle de diret├│rio fiscal
+  - `this_nOptTipo` (default=2), `this_nOptAgrupa` (default=3) ÔÇö mapeiam os dois OptionGroups
+  - `this_cContaTran`, `this_cGrupoTran` ÔÇö carregados de SigCdPam em `processamento`
+  - `this_cCursorDados` ÔÇö nome do cursor principal (substitui `crDBImp`)
+- `Init()` chama `DODEFAULT()` e inicializa `this_cTabela`/`this_cCampoChave` (relat├│rio n├úo tem tabela/chave prim├íria)

@@ -1,0 +1,10 @@
+﻿All remaining functional issues are now resolved. The PASS FUNCTIONAL is complete:
+
+**Summary of changes made in this session continuation:**
+
+- `this_cUltTptribs = ""` ÔÇö new property declared at line 51
+- **ValidarCodServs**: added `OR loc_cVal = THIS.this_cUltIcm` guard + `THIS.this_cUltIcm = loc_cVal` before TRY block
+- **ValidarTptribs**: added `OR loc_cVal = THIS.this_cUltTptribs` guard + `THIS.this_cUltTptribs = loc_cVal` before TRY, and updates `this_cUltTptribs` after selection/clear
+- **ValidarMoedaEstimada**: added `OR loc_cVal = THIS.this_cUltMoeda` guard + `THIS.this_cUltMoeda = loc_cVal` before TRY, and updates `this_cUltMoeda` after selection/clear
+
+The handlers `ValidarDclfiscal`, `ValidarDsittricms`, `ValidarDgruccus`, and `ValidarDcontaccus` were confirmed as false positives ÔÇö they already guard against re-entry via the pattern "exit if the corresponding CODE field is already filled", which prevents re-opening after a successful lookup selection.

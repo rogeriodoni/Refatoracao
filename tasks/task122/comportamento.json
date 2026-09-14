@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIMC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReImc Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMC",
+      "evento": "Procedure",
+      "linhas": 38,
+      "codigoOriginal": "Local lnVia\n\nCreate Cursor XCorNf (cemps C(3),cseries C(3),cnfis C(6),noccors N(3),mretifs M(4) NULL,;\n\t\t\t\t\tclifors C(10),emis D(8),correcs L(1),rclis C(50),razaos C(50),endes C(60),;\n\t\t\t\t\tcidas C(30),estas C(2),nums C(10),compls C(25),cdescrs C(30),numvias N(8))\nIndex On cemps+cseries+cnfis+Str(numvias,8) Tag XCorNf\n\nNumVia = ThisForm.GetCopias.Value\n\npcEmps    = ThisForm.Emp\npcSeries  = ThisForm.Serie\npcEDNs    = ThisForm.EDNs\npEmisDe   = Evaluate([{^]+TransForm((DtoS(Max(ThisForm.EmisDe,CtoD(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "EmisDe,CtoD,EmisAte,CtoD,Requery",
+        "controlesReferenciados": "Get_NotaIni,Get_NotaFim",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMC",
+      "evento": "Init",
+      "linhas": 54,
+      "codigoOriginal": "LParameters Emp,Serie,EmisDe,EmisAte,EDNs,NotaIni,NotaFim\nPrivate pcEmps,pcSeries,pcNFisDe,pcNFisAte,pcEDNs,pEmisDe,pEmisAte,pEmpEdns\n\n=DoDefault()\n\nThisForm.poDataMgr = CreateObject('fSqlConector','SigNfCor')\n\npcEmps    = ''\npcSeries  = ''\npcNFisDe  = ''\npcNFisAte = Replicate(Chr(254),6)\npcEDNs    = Null\npEmisDe   = Null\npEmisAte  = Null\n\nIf Type('EDNs') = 'C'\n\tIf IsEmpty(EDNs)\n\t\tpEmpEdns = .f.\n\tElse\n\t\tpEmpEdns = .t.\n\tEndIf \nElse\n\tpEmpEdns  = EDNs\nEndIf \n\nlcQryCorNf = [Select f.*,n.clifors,n.em... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr = CreateObject,Requery",
+        "controlesReferenciados": "Get_NotaIni,Get_NotaFim",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReImc To Printer Prompt NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMC.Get_NotaIni",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "If !IsEmpty(ThisForm.NotaIni) and !IsEmpty(ThisForm.EDNs)\n\tReturn(.F.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NotaIni) and !IsEmpty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIMC.Get_NotaFim",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "If !IsEmpty(ThisForm.NotaFim)  and !IsEmpty(ThisForm.EDNs)\n\tReturn(.F.)\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NotaFim)  and !IsEmpty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

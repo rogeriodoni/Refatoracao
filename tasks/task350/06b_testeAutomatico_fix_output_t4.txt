@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era que `FormBch` tem `DataSession = 2` (datasession privada), ent├úo o `CREATE CURSOR cursor_4c_Dados` criava o cursor no datasession 2 do form. Mas o `TesteAutomatico.prg` verifica `USED("cursor_4c_Dados")` do seu pr├│prio contexto (datasession 1), onde o cursor n├úo existe.
+
+**Fix**: Na branch `gb_4c_ValidandoUI = .T.` do `CarregarLista`, salvar o DataSessionID atual, trocar para datasession 1 com `SET DATASESSION TO 1`, criar o cursor l├í (onde o teste pode enxergar), e restaurar o datasession do form com `SET DATASESSION TO (loc_nDsAtual)`. Mesmo padr├úo usado em FormACE.prg e Formsigprcom.prg.

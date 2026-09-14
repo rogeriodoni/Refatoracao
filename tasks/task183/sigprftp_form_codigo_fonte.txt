@@ -1,0 +1,3659 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprftp.SCX
+* Data/Hora: 03/07/2026 04:50:47
+* Total de registros: 45
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRFTP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: SIGPRFTP
+  Class: shape
+  BaseClass: shape
+
+Objeto: GrdProc
+  Parent: SIGPRFTP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRFTP.GrdProc.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRFTP.GrdProc.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRFTP.GrdProc.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRFTP.GrdProc.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRFTP.GrdProc.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRFTP.GrdProc.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRFTP.GrdProc.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRFTP.GrdProc.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRFTP.GrdProc.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRFTP.GrdProc.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Container1
+  Parent: SIGPRFTP
+  Class: container
+  BaseClass: container
+
+Objeto: pgfloc
+  Parent: SIGPRFTP.Container1
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: lstenvftp
+  Parent: SIGPRFTP.Container1.pgfloc.Page1
+  Class: listbox
+  BaseClass: listbox
+
+Objeto: direnvftp
+  Parent: SIGPRFTP.Container1.pgfloc.Page1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdbrowloc
+  Parent: SIGPRFTP.Container1.pgfloc.Page1
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: lstrecftp
+  Parent: SIGPRFTP.Container1.pgfloc.Page2
+  Class: listbox
+  BaseClass: listbox
+
+Objeto: dirrecftp
+  Parent: SIGPRFTP.Container1.pgfloc.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdbrowloc
+  Parent: SIGPRFTP.Container1.pgfloc.Page2
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: pgfftp
+  Parent: SIGPRFTP.Container1
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: lstrecloc
+  Parent: SIGPRFTP.Container1.pgfftp.Page1
+  Class: listbox
+  BaseClass: listbox
+
+Objeto: dirrecloc
+  Parent: SIGPRFTP.Container1.pgfftp.Page1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdbrowftp
+  Parent: SIGPRFTP.Container1.pgfftp.Page1
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: lstenvloc
+  Parent: SIGPRFTP.Container1.pgfftp.Page2
+  Class: listbox
+  BaseClass: listbox
+
+Objeto: direnvloc
+  Parent: SIGPRFTP.Container1.pgfftp.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdbrowftp
+  Parent: SIGPRFTP.Container1.pgfftp.Page2
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdtransfere
+  Parent: SIGPRFTP.Container1
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdrecebe
+  Parent: SIGPRFTP.Container1
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdtran
+  Parent: SIGPRFTP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdsair
+  Parent: SIGPRFTP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: GrdInf
+  Parent: SIGPRFTP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRFTP.GrdInf.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRFTP.GrdInf.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblprog
+  Parent: SIGPRFTP
+  Class: label
+  BaseClass: label
+
+Objeto: cmdrec
+  Parent: SIGPRFTP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdconect
+  Parent: SIGPRFTP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: CboProvedor
+  Parent: SIGPRFTP
+  Class: combobox
+  BaseClass: combobox
+
+Objeto: cmdload
+  Parent: SIGPRFTP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say8
+  Parent: SIGPRFTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGPRFTP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 384
+  Left = 302
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP
+------------------------------------------------------------
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Transferência e Recebimento de arquivos via FTP"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  LockScreen = .F.
+  Themes = .F.
+  _delhost = .F.
+  _dellocal = .F.
+  _direnvftp = ''
+  _direnvloc = ''
+  _dirrecftp = ''
+  _dirrecloc = ''
+  _ftpadd = ''
+  _ftppass = ''
+  _ftpuser = '' 
+  _tpconnect = '' 
+  Name = "SIGPRFTP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 696
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 0,0,0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc
+------------------------------------------------------------
+  ColumnCount = 5
+  FontSize = 8
+  DeleteMark = .F.
+  GridLines = 0
+  HeaderHeight = 15
+  Height = 114
+  Left = 89
+  Panel = 1
+  ReadOnly = .T.
+  RecordMark = .F.
+  RecordSource = "tmpprog"
+  RecordSourceType = 1
+  RowHeight = 15
+  TabIndex = 3
+  TabStop = .F.
+  ToolTipText = "Progresso das Operações de Envio e Recebimento"
+  Top = 376
+  Width = 622
+  Name = "GrdProc"
+  Column1.FontSize = 8
+  Column1.ControlSource = "tmpprog.file"
+  Column1.Width = 81
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontSize = 8
+  Column2.ControlSource = "tmpprog.size"
+  Column2.Width = 63
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontSize = 8
+  Column3.ControlSource = "tmpprog.local"
+  Column3.Width = 107
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontSize = 8
+  Column4.ControlSource = "tmpprog.host"
+  Column4.Width = 136
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontSize = 8
+  Column5.ControlSource = "tmpprog.status"
+  Column5.Width = 207
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc.Column1.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Caption = " Arquivo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc.Column1.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc.Column2.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Caption = " Tamanho"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc.Column3.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Caption = " Pasta Local "
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc.Column4.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Caption = " Pasta Host"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc.Column4.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc.Column5.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Caption = " Status"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdProc.Column5.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1
+------------------------------------------------------------
+  Top = 128
+  Left = 88
+  Width = 620
+  Height = 194
+  BackStyle = 0
+  BorderWidth = 0
+  Enabled = .T.
+  TabIndex = 1
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfloc
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  TabStretch = 1
+  TabStyle = 1
+  Enabled = .T.
+  Top = 4
+  Left = 3
+  Width = 294
+  Height = 186
+  Name = "pgfloc"
+  Page1.FontBold = .T.
+  Page1.FontName = "Verdana"
+  Page1.FontSize = 8
+  Page1.Caption = "A Enviar"
+  Page1.BackColor = 255,255,255
+  Page1.ForeColor = 0,0,255
+  Page1.Name = "Page1"
+  Page2.FontBold = .T.
+  Page2.FontName = "Verdana"
+  Page2.FontSize = 8
+  Page2.Caption = "Recebidos"
+  Page2.BackColor = 255,255,255
+  Page2.ForeColor = 255,0,0
+  Page2.Name = "Page2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfloc.Page1.lstenvftp
+------------------------------------------------------------
+  ColumnCount = 3
+  ColumnWidths = "130,62,83"
+  Height = 130
+  ColumnLines = .T.
+  Left = 2
+  MultiSelect = .T.
+  Top = 26
+  Width = 286
+  Name = "lstenvftp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfloc.Page1.direnvftp
+------------------------------------------------------------
+  Height = 23
+  Left = 2
+  Top = 2
+  Width = 217
+  Name = "direnvftp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfloc.Page1.cmdbrowloc
+------------------------------------------------------------
+  Top = 2
+  Left = 222
+  Height = 22
+  Width = 22
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "..."
+  Enabled = .F.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdbrowloc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfloc.Page2.lstrecftp
+------------------------------------------------------------
+  ColumnCount = 3
+  ColumnWidths = "135,58,82"
+  Height = 130
+  ColumnLines = .T.
+  Left = 2
+  MultiSelect = .T.
+  Top = 26
+  Width = 286
+  Name = "lstrecftp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfloc.Page2.dirrecftp
+------------------------------------------------------------
+  Height = 23
+  Left = 2
+  Top = 2
+  Width = 217
+  Name = "dirrecftp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfloc.Page2.cmdbrowloc
+------------------------------------------------------------
+  Top = 2
+  Left = 222
+  Height = 22
+  Width = 22
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "..."
+  Enabled = .F.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdbrowloc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfftp
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  TabStyle = 1
+  ActivePage = 1
+  Top = 4
+  Left = 326
+  Width = 294
+  Height = 186
+  Name = "pgfftp"
+  Page1.FontBold = .T.
+  Page1.FontName = "Verdana"
+  Page1.FontSize = 8
+  Page1.Caption = "Enviados"
+  Page1.Picture = transp\
+  Page1.BackColor = 255,255,255
+  Page1.ForeColor = 0,0,255
+  Page1.Name = "Page1"
+  Page2.FontBold = .T.
+  Page2.FontName = "Verdana"
+  Page2.FontSize = 8
+  Page2.Caption = "A Receber"
+  Page2.Enabled = .T.
+  Page2.BackColor = 255,255,255
+  Page2.ForeColor = 255,0,0
+  Page2.Name = "Page2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfftp.Page1.lstrecloc
+------------------------------------------------------------
+  ColumnCount = 3
+  ColumnWidths = "135,58,82"
+  Height = 130
+  ColumnLines = .T.
+  Left = 2
+  MultiSelect = .T.
+  Top = 26
+  Width = 286
+  Name = "lstrecloc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfftp.Page1.dirrecloc
+------------------------------------------------------------
+  Height = 23
+  Left = 2
+  Top = 2
+  Width = 217
+  Name = "dirrecloc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfftp.Page1.cmdbrowftp
+------------------------------------------------------------
+  Top = 2
+  Left = 223
+  Height = 22
+  Width = 22
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "..."
+  Enabled = .F.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdbrowftp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfftp.Page2.lstenvloc
+------------------------------------------------------------
+  ColumnCount = 3
+  ColumnWidths = "130,62,83"
+  Height = 130
+  ColumnLines = .T.
+  Left = 2
+  MultiSelect = .T.
+  Top = 26
+  Width = 286
+  Name = "lstenvloc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfftp.Page2.direnvloc
+------------------------------------------------------------
+  Height = 23
+  Left = 2
+  Top = 2
+  Width = 217
+  Name = "direnvloc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.pgfftp.Page2.cmdbrowftp
+------------------------------------------------------------
+  Top = 2
+  Left = 223
+  Height = 22
+  Width = 22
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "..."
+  Enabled = .F.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdbrowftp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.cmdtransfere
+------------------------------------------------------------
+  Top = 83
+  Left = 299
+  Height = 24
+  Width = 25
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\b_arrow2.bmp
+  Caption = ""
+  ToolTipText = "Transfere para FTP"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Name = "cmdtransfere"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Container1.cmdrecebe
+------------------------------------------------------------
+  Top = 116
+  Left = 299
+  Height = 24
+  Width = 25
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\b_arrow1.bmp
+  Caption = ""
+  ToolTipText = "Recebe do FTP"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Name = "cmdrecebe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.cmdtran
+------------------------------------------------------------
+  Top = 12
+  Left = 99
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\vbmp\baix_aut.bmp
+  Caption = "\<Transfere"
+  TabIndex = 6
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdtran"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.cmdsair
+------------------------------------------------------------
+  Top = 12
+  Left = 701
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 9
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdsair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdInf
+------------------------------------------------------------
+  ColumnCount = 1
+  FontBold = .T.
+  FontSize = 8
+  DeleteMark = .F.
+  GridLines = 0
+  GridLineWidth = 1
+  HeaderHeight = 0
+  Height = 52
+  Left = 89
+  Panel = 1
+  ReadOnly = .T.
+  RecordMark = .F.
+  RecordSource = "logftp"
+  RowHeight = 14
+  ScrollBars = 2
+  TabIndex = 2
+  TabStop = .F.
+  Top = 323
+  Width = 622
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  GridLineColor = 192,192,192
+  Name = "GrdInf"
+  Column1.FontBold = .T.
+  Column1.FontName = "Arial"
+  Column1.FontSize = 8
+  Column1.Alignment = 0
+  Column1.ControlSource = "logftp.memo"
+  Column1.Width = 599
+  Column1.ReadOnly = .T.
+  Column1.DynamicBackColor = ""
+  Column1.ForeColor = 0,0,0
+  Column1.BackColor = 255,255,255
+  Column1.Name = "Column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdInf.Column1.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Memo"
+  ForeColor = 0,0,0
+  BackColor = 192,192,192
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.GrdInf.Column1.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 0
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.lblprog
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 10
+  BackStyle = 0
+  Caption = ""
+  Height = 16
+  Left = 245
+  Top = 512
+  Width = 437
+  TabIndex = 5
+  TabStop = .F.
+  ForeColor = 36,84,155
+  Name = "lblprog"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.cmdrec
+------------------------------------------------------------
+  Top = 12
+  Left = 174
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\vbmp\d_disk1.bmp
+  Caption = "\<Recebe"
+  TabIndex = 8
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdrec"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.cmdconect
+------------------------------------------------------------
+  Top = 534
+  Left = 332
+  Height = 54
+  Width = 76
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 7
+  Picture = ..\vbmp\c_comm1.bmp
+  Caption = "Rede \<Dial-Up"
+  TabIndex = 10
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdconect"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.CboProvedor
+------------------------------------------------------------
+  ColumnCount = (ALEN(aProvedor,2))
+  RowSourceType = 5
+  RowSource = "aProvedor"
+  Value = 1
+  ControlSource = "nProvedor"
+  FirstElement = 1
+  Height = 24
+  Left = 90
+  NumberOfElements = (ALEN(aProvedor))
+  Style = 2
+  TabIndex = 11
+  Top = 550
+  Width = 235
+  Name = "CboProvedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.cmdload
+------------------------------------------------------------
+  Top = 12
+  Left = 23
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\vbmp\a_arrow1.bmp
+  Caption = "\<Conecta"
+  TabIndex = 7
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "cmdload"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Say8
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "MASTER"
+  Left = 644
+  Top = 138
+  Visible = .F.
+  TabIndex = 37
+  ForeColor = 0,255,0
+  ZOrderSet = 40
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRFTP.Say9
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "MASTER"
+  Left = 643
+  Top = 137
+  Visible = .F.
+  TabIndex = 41
+  ForeColor = 255,0,0
+  ZOrderSet = 40
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Arial, 1, 8, 5, 14, 11, 29, 3, 0
+  Comic Sans MS, 3, 7, 6, 14, 11, 30, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRFTP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE crackattributes
+------------------------------------------------------------
+PROCEDURE crackattributes
+
+		  LPARAMETERS lcBuffer
+	    
+	      LOCAL lcAttributes, lnValue
+    
+    #define BYTE_1											 1
+	#define BYTE_2                                           256
+	#define BYTE_3                                           65536
+	#define BYTE_4                                           16777216
+	#define MAXDWORD										 4294967295
+
+	#define BIT_ATTRIBUTE_READONLY         				 	 0
+	#define BIT_ATTRIBUTE_HIDDEN           				 	 1
+	#define BIT_ATTRIBUTE_SYSTEM              				 2
+	#define BIT_ATTRIBUTE_DIRECTORY        				 	 4  
+	#define BIT_ATTRIBUTE_ARCHIVE          	   			 	 5
+	#define BIT_ATTRIBUTE_ENCRYPTED							 6  
+	#define BIT_ATTRIBUTE_NORMAL           				 	 7  
+	#define BIT_ATTRIBUTE_TEMPORARY        				 	 8
+	#define BIT_ATTRIBUTE_SPARSE_FILE						 9
+	#define BIT_ATTRIBUTE_REPARSE_POINT                      10  
+	#define BIT_ATTRIBUTE_COMPRESSED       				 	 11  
+	#define BIT_ATTRIBUTE_OFFLINE          				 	 12  
+
+	
+	 		lcAttributes = ''
+	 		 		
+			lnValue = (ASC(SUBSTR(lcBuffer, 1, 1)) * BYTE_1) + ;
+					  (ASC(SUBSTR(lcBuffer, 2, 1)) * BYTE_2) + ;
+					  (ASC(SUBSTR(lcBuffer, 3, 1)) * BYTE_3) + ;
+					  (ASC(SUBSTR(lcBuffer, 4, 1)) * BYTE_4) 
+					  
+			DO CASE
+				CASE BITTEST(lnValue, BIT_ATTRIBUTE_READONLY) 
+					lcAttributes = lcAttributes + 'R'
+				CASE BITTEST(lnValue, BIT_ATTRIBUTE_HIDDEN) 
+					lcAttributes = lcAttributes + 'H'
+				CASE BITTEST(lnValue, BIT_ATTRIBUTE_SYSTEM) 
+					lcAttributes = lcAttributes + 'S'
+				CASE BITTEST(lnValue, BIT_ATTRIBUTE_DIRECTORY) 
+					lcAttributes = lcAttributes + 'D'
+				CASE BITTEST(lnValue, BIT_ATTRIBUTE_ARCHIVE) 
+					lcAttributes = lcAttributes + 'A'
+				CASE BITTEST(lnValue, BIT_ATTRIBUTE_NORMAL) 
+					lcAttributes = lcAttributes + 'N'
+				CASE BITTEST(lnValue, BIT_ATTRIBUTE_TEMPORARY) 
+					lcAttributes = lcAttributes + 'T'
+				CASE BITTEST(lnValue, BIT_ATTRIBUTE_COMPRESSED) 
+					lcAttributes = lcAttributes + 'C'
+				CASE BITTEST(lnValue, BIT_ATTRIBUTE_OFFLINE) 
+					lcAttributes = lcAttributes + 'O'
+			ENDCASE
+						
+	 	  RETURN lcAttributes
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE crackdate
+------------------------------------------------------------
+PROCEDURE crackdate
+		  LPARAMETERS lcOutBuffer
+		  
+		  LOCAL lcInBuffer, ldDateTime, fResult, lcBuild, ;
+		  		lnDay, lnMonth, lnYear, lnHour, lnMinute, lnSecond
+    #define BYTE_1											 1
+	#define BYTE_2                                           256
+	#define BYTE_3                                           65536
+	#define BYTE_4                                           16777216
+	#define MAXDWORD										 4294967295
+
+          DECLARE Integer FileTimeToSystemTime IN Kernel32 ;
+		   			String @lpcBuffer, String @lpcBuffer
+		
+			lcInBuffer = SPACE(16)
+		
+			fResult = FileTimeToSystemTime(@lcOutBuffer, @lcInBuffer)
+			*THIS.GetExtendedError()
+			
+			IF fResult = 0   && Failed
+				ldDateTime = "1901/01/01"   && Default Time
+*				ldDateTime = "1901/01/01 00:00:01"   && Default Time				
+				RETURN ldDateTime
+			ENDIF
+			
+			lnYear = ASC(SUBSTR(lcInBuffer, 1, 1)) + (ASC(SUBSTR(lcInBuffer, 2, 1)) * BYTE_2)
+			lnMonth = ASC(SUBSTR(lcInBuffer, 3, 1)) + (ASC(SUBSTR(lcInBuffer, 4, 1)) * BYTE_2)
+			lnDay = ASC(SUBSTR(lcInBuffer, 7, 1)) + (ASC(SUBSTR(lcInBuffer, 8, 1)) * BYTE_2)
+*			lnHour = ASC(SUBSTR(lcInBuffer, 9, 1)) + (ASC(SUBSTR(lcInBuffer, 10, 1)) * BYTE_2)
+*			lnMinute = ASC(SUBSTR(lcInBuffer, 11, 1)) + (ASC(SUBSTR(lcInBuffer, 12, 1)) * BYTE_2)
+*			lnSecond = ASC(SUBSTR(lcInBuffer, 13, 1)) + (ASC(SUBSTR(lcInBuffer, 13, 1)) * BYTE_2)
+
+			
+			lcBuild = padl(ALLTRIM(STR(lnDay)),2,"0")+ '/' +padl(ALLTRIM(STR(lnMonth)),2,"0")+ '/' +ALLTRIM(STR(lnYear))    
+*			+ ' ' + ;
+*					  ALLTRIM(STR(lnHour)) + ':' + ALLTRIM(STR(lnMinute)) + ':' + ALLTRIM(STR(lnSecond))
+				      
+			ldDateTime = lcBuild
+						  
+		  RETURN ldDateTime
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE crackfile
+------------------------------------------------------------
+PROCEDURE crackfile
+	      LPARAMETERS lcString
+	      	
+	      LOCAL lcFileName, lcAlterName, lnSizeHigh, lnSizeLow, lnFileSize, ;
+	      		lcAttributes, lnArrayLen, lcTimeBuff, ;
+	      		ldCreateDate, ldAccessDate, ldWriteDate, laNewArray, lnResult
+
+	#define BYTE_1											 1
+	#define BYTE_2                                           256
+	#define BYTE_3                                           65536
+	#define BYTE_4                                           16777216
+	#define MAXDWORD										 4294967295
+
+         		       	      
+	      	lcFileName = SUBSTR(lcString, 45, MAX_PATH)
+	      	lcAlterName = RIGHT(lcString, 14)
+	      	
+	      	lcFileName = LEFT(lcFileName, AT(cNull, lcFileName) - 1)  && Copy out just the File Name Text
+	      	lcAlterName = LEFT(lcAlterName, AT(cNull, lcAlterName) - 1)
+	      	
+	       * Convert File Size DWORDs
+	      	lnSizeHigh = (ASC(SUBSTR(lcString, 29, 1)) * BYTE_1) + ;
+	      				 (ASC(SUBSTR(lcString, 30, 1)) * BYTE_2) + ;
+	      				 (ASC(SUBSTR(lcString, 31, 1)) * BYTE_3) + ;
+	      				 (ASC(SUBSTR(lcString, 32, 1)) * BYTE_4) 
+	      				 
+	      	lnSizeLow =  (ASC(SUBSTR(lcString, 33, 1)) * BYTE_1) + ;
+	      				 (ASC(SUBSTR(lcString, 34, 1)) * BYTE_2) + ;
+	      				 (ASC(SUBSTR(lcString, 35, 1)) * BYTE_3) + ;
+	      				 (ASC(SUBSTR(lcString, 36, 1)) * BYTE_4) 
+	      				 
+	       * Build File Size
+	      	lnFileSize = (lnSizeHigh * MAXDWORD) + lnSizeLow
+	      	
+	       * Get Tipo
+	        IF Thisform.CToWord( SUBSTR( lcString, 1, 4 ) )= FILE_ATTRIBUTE_DIRECTORY
+				lcTipo = "Diretório"
+        	ELSE
+				lcTipo = "Arquivo"
+			ENDIF
+	       
+	       
+       
+	       * Get File Create DateTime
+	        lcTimeBuff = SUBSTR(lcString, 5, 8)
+	        ldCreateDate = THIS.CrackDate(lcTimeBuff)
+	        
+	       * Get File Create DateTime
+	        lcTimeBuff = SUBSTR(lcString, 13, 8)
+	        ldAccessDate = THIS.CrackDate(lcTimeBuff)
+	        
+	       * Get File Create DateTime
+	        lcTimeBuff = SUBSTR(lcString, 21, 8)
+	        ldWriteDate = THIS.CrackDate(lcTimeBuff)
+	        
+	       * Get File Attributes
+	        lcAttributes = THIS.CrackAttributes(LEFT(lcString, 4))
+
+            sele FtpServer	        
+
+	        INSERT INTO FtpServer VALUES ( ALLTRIM(lcFileName), ;
+	                     ALLTRIM(lcTipo), ;
+	                     transform(lnFileSize,"9999999999"), ;
+	                     ldWriteDate, lcAttributes  )
+
+ 	 
+	      RETURN 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE ctoword
+------------------------------------------------------------
+PROCEDURE ctoword
+*** CTOWORD
+*** Combierte un buffer en un número
+LPARAMETER cBuffer
+RETURN ASC(SUBSTR(cBuffer,1,1)) + ASC(SUBSTR(cBuffer,2,1))*256 + ASC(SUBSTR(cBuffer,3,1))*65536 + ASC(SUBSTR(cBuffer,4,1))*16777216 
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE deleteftpfile
+------------------------------------------------------------
+PROCEDURE deleteftpfile
+LPARAMETERS lcRemoteFile
+Local lnSegIni,lnSegFim,llContinua
+
+#DEFINE FILE_ATTRIBUTE_NORMAL          128
+#DEFINE FILE_ATTRIBUTE_DIRECTORY        16
+#DEFINE INTERNET_FLAG_RAW_DATA   1073741824
+
+#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0
+#define INTERNET_OPEN_TYPE_DIRECT        1
+#define INTERNET_OPEN_TYPE_PROXY         3
+#DEFINE INTERNET_DEFAULT_FTP_PORT       21
+#DEFINE INTERNET_SERVICE_FTP             1
+#DEFINE INTERNET_FLAG_PASSIVE     14217728
+#DEFINE FILE_ATTRIBUTE_NORMAL         128
+
+
+#define cNULL	   CHR(0)
+DECLARE LONG InternetOpen ;
+	IN "wininet.dll" ;
+	STRING   lpszAgent, ;
+	LONG     dwAccessType, ;
+	STRING   lpszProxyName, ;
+	STRING   lpszProxyBypass, ;
+	LONG     dwFlags
+DECLARE LONG InternetConnect ;
+	IN "wininet.dll" ;
+	LONG     hInternetSession, ;
+	STRING   lpszServerName, ;
+	LONG     nServerPort, ;
+	STRING   lpszUsername, ;
+	STRING   lpszPassword, ;
+	LONG     dwService, ;
+	LONG     dwFlags, ;
+	LONG     dwContext
+DECLARE INTEGER InternetCloseHandle ;
+	IN "wininet.dll" ;
+	LONG     hInet
+DECLARE LONG GetLastError ;
+	IN WIN32API
+DECLARE Integer FtpDeleteFile IN WinInet ;
+	Integer nConnect_Handle, String @lpcFileName
+	      
+
+LOCAL fResult
+
+nInternet = InternetOpen( "vfp", INTERNET_OPEN_TYPE_DIRECT, "", "", 0 )
+IF nInternet = 0
+	=ThisForm.Inf("Erro na conexão com o servidor. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	InternetCloseHandle( nFtp )
+	RETURN .F.
+ENDIF
+
+*** Conexión con el servicio FTP
+nFtp = InternetConnect( nInternet, cFtpLoc, INTERNET_DEFAULT_FTP_PORT, cFtpUsu, cFtpSen, INTERNET_SERVICE_FTP, INTERNET_FLAG_PASSIVE, 0 )
+IF nFtp = 0
+	=ThisForm.Inf("Erro na conexão com o servidor FTP. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	RETURN .F.
+ENDIF
+
+lcRemoteFile = lcRemoteFile + cNULL
+fResult = 0
+llContinua = .t.
+lnSegIni = Datetime()
+
+DO While llContinua
+	fResult = FtpDeleteFile(nftp, @lcRemoteFile)
+	lnSegFim = Datetime()
+	llContinua = (Not fResult==1 And (lnSegFim-lnSegIni)<60)
+	If Not llContinua
+	   =Chrsaw(1)
+	EndIf 
+EndDo 
+
+InternetCloseHandle( nFtp )
+InternetCloseHandle( nInternet )
+
+IF fResult = 1
+   RETURN .T.
+ELSE
+   RETURN .F.
+ENDIF
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE filectrlup
+------------------------------------------------------------
+PROCEDURE filectrlup
+Lparameters pStep, pTotal, pMessage
+
+With ThisForm.FileControl
+
+	If Type('pMessage') = 'C'
+		.StatusText = pMessage
+	EndIf
+
+	Do Case
+		Case Type('pStep') = 'N'
+			If .StatusPercent < Int( (pStep / pTotal) * 100 )
+				.StatusPercent = Int( (pStep / pTotal) * 100 )
+			EndIf
+			Return (pStep + 1)
+		
+		Case Type('pStep') = 'L'
+			.StatusPercent = 0
+			.Visible       = pStep
+	EndCase
+
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE getftpdirectory
+------------------------------------------------------------
+PROCEDURE getftpdirectory
+LPARAMETERS lcDirloc, lcMask
+	      
+LOCAL cStruct, llResult, lnCount, fResult, lffHandle, lcTempDir, lManual, nInternet, nFtp
+lManual = .f.
+nInternet=0
+nFtp=0
+
+#define ERROR_SUCCESS					0
+#define ERROR_FILE_NOT_FOUND            2
+#define ERROR_PATH_NOT_FOUND            3
+#define ERROR_ACCESS_DENIED             5
+#define ERROR_INVALID_HANDLE            6
+#define ERROR_NO_MORE_FILES				18
+#define ERROR_FILE_EXISTS               80
+#define ERROR_INVALID_PARAMETER         87
+
+
+#DEFINE FILE_ATTRIBUTE_NORMAL          128
+#DEFINE FILE_ATTRIBUTE_DIRECTORY        16
+#DEFINE INTERNET_FLAG_RAW_DATA   1073741824
+
+#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0
+#define INTERNET_OPEN_TYPE_DIRECT        1
+#define INTERNET_OPEN_TYPE_PROXY         3
+#DEFINE INTERNET_DEFAULT_FTP_PORT       21
+#DEFINE INTERNET_SERVICE_FTP             1
+#DEFINE INTERNET_FLAG_PASSIVE     14217728
+#DEFINE FILE_ATTRIBUTE_NORMAL         128
+
+*!*	#define cNULL      CHR(0)		   			      		            	
+#define MAX_PATH 	  260
+
+DECLARE Integer FtpFindFirstFile ;
+    IN WinInet ;
+	Integer nConnect_Handle, ;
+	String @lpcSearchStr, ;
+	String @lpcWIN32_FIND_DATA, ;
+	Integer nFlags, ;
+	Integer nContext
+
+DECLARE Integer InternetFindNextFile ;
+    IN WinInet ;
+	Integer nConnect_Handle, ;
+	String @lpcWIN32_FIND_DATA
+	
+DECLARE LONG InternetOpen ;
+	IN "wininet.dll" ;
+	STRING   lpszAgent, ;
+	LONG     dwAccessType, ;
+	STRING   lpszProxyName, ;
+	STRING   lpszProxyBypass, ;
+	LONG     dwFlags
+DECLARE LONG InternetConnect ;
+	IN "wininet.dll" ;
+	LONG     hInternetSession, ;
+	STRING   lpszServerName, ;
+	LONG     nServerPort, ;
+	STRING   lpszUsername, ;
+	STRING   lpszPassword, ;
+	LONG     dwService, ;
+	LONG     dwFlags, ;
+	LONG     dwContext
+DECLARE INTEGER InternetCloseHandle ;
+	IN "wininet.dll" ;
+	LONG     hInet
+DECLARE LONG GetLastError ;
+	IN WIN32API
+DECLARE Integer FtpGetCurrentDirectory ;
+    IN WinInet ;
+	Integer nConnect_Handle, ;
+	String @lpcDirectory, ;
+	Integer @nMax_Path
+Declare Integer FtpSetCurrentDirectory ;
+	IN "wininet.dll" ;
+	Long     hFtpSession, ;
+	String   lpszDirectory
+
+nInternet = InternetOpen( "vfp", INTERNET_OPEN_TYPE_DIRECT, "", "", 0 )
+IF nInternet = 0
+    =ThisForm.Inf("Erro na conexão com o servidor. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	MessageBox( "Erro na conexão com o servidor."+Chr(13)+ Thisform.InErrorCase(GetLastError())  , 16 )
+	RETURN .F.
+ENDIF
+
+*** Conexión con el servicio FTP
+nFtp = InternetConnect( nInternet, ThisForm._ftpadd, INTERNET_DEFAULT_FTP_PORT, ThisForm._ftpuser, ThisForm._ftppass, INTERNET_SERVICE_FTP, INTERNET_FLAG_PASSIVE, 0 )
+IF nFtp = 0
+	=ThisForm.Inf("Erro na conexão com o servidor FTP. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	MessageBox( "Erro na conexão com o servidor FTP."+Chr(13)+ Thisform.InErrorCase(GetLastError())  , 16 )
+	InternetCloseHandle( nInternet )
+	RETURN .F.
+ENDIF
+
+lcTempDir = SPACE(MAX_PATH)
+
+FtpSetCurrentDirectory( nFtp, lcDirloc )		  	  	
+fResult = FtpGetCurrentDirectory(nFtp, @lcTempDir, MAX_PATH)
+nResult_Code = GETLASTERROR()
+
+		  	  	
+lcDirectory = LEFT(lcTempDir, AT(cNULL, lcTempDir) - 1)
+IF fResult <> 1
+	InternetCloseHandle( nFtp )
+	InternetCloseHandle( nInternet )
+	RETURN .F.
+ENDIF
+
+lcMask = lcMask + cNULL
+  
+lcStruct = SPACE(319)
+
+lffHandle = FtpFindFirstFile(nftp, @lcMask, @lcStruct, 0, 0)
+nResult_Code = GETLASTERROR()
+
+IF lffHandle = 0 OR nResult_Code = ERROR_NO_MORE_FILES
+	If lffHandle = 0 and nResult_Code = ERROR_NO_MORE_FILES and nFtp > 0
+		lManual = .t.
+	else	
+		InternetCloseHandle( nFtp )
+		InternetCloseHandle( nInternet )
+	    =ThisForm.Inf("Conexão terminada - "+allt(Thisform.InErrorCase(GetLastError()))+" Handle = "+allt(str(lffHandle)),"R" )
+		RETURN .F.
+	endif	
+ENDIF
+ 
+CREATE CURSOR ftpserver (;
+	nome C(240), ;
+	Tipo C(10) , ;
+	Tama C(10) , ;
+	data C(16) , ;
+	ATRI C(10) )
+index on nome tag nome
+set order to nome
+
+if lManual
+	Insert into ftpServer (nome, Tipo, Tama, Data, Atri) Values (".","Diretório",str(0),DTOC(date()),"D")
+else	
+	THISFORM.CrackFile(lcStruct)
+
+	llResult = 1
+  				    	    	
+	DO WHILE nResult_Code != ERROR_NO_MORE_FILES AND llResult != 0
+		
+		lcStruct = SPACE(319)
+	   	llResult = InternetFindNextFile(lffHandle, @lcStruct)
+	    nResult_Code = GETLASTERROR()
+			
+		IF nResult_Code != ERROR_NO_MORE_FILES AND llResult != 0
+			THIS.CrackFile(lcStruct)
+	   	ENDIF
+			
+	ENDDO
+endif
+ 
+InternetCloseHandle( nFtp )
+InternetCloseHandle( nInternet )
+	    
+RETURN .T.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE inerrorcase
+------------------------------------------------------------
+PROCEDURE inerrorcase
+Parameters lnError
+LOCAL cMessage
+
+#define ERROR_SUCCESS							  0
+#define ERROR_FILE_NOT_FOUND             		  2
+#define ERROR_PATH_NOT_FOUND             		  3
+#define ERROR_ACCESS_DENIED              		  5
+#define ERROR_INVALID_HANDLE             		  6
+#define ERROR_NO_MORE_FILES						  18
+#define ERROR_FILE_EXISTS                		  80
+#define ERROR_INVALID_PARAMETER          		  87
+
+#define ERROR_INTERNET_BASE 					  12000
+#define ERROR_INTERNET_OUT_OF_HANDLES             (ERROR_INTERNET_BASE + 1)
+#define ERROR_INTERNET_TIMEOUT                    (ERROR_INTERNET_BASE + 2)
+#define ERROR_INTERNET_EXTENDED_ERROR             (ERROR_INTERNET_BASE + 3)
+#define ERROR_INTERNET_INTERNAL_ERROR             (ERROR_INTERNET_BASE + 4)
+#define ERROR_INTERNET_INVALID_URL                (ERROR_INTERNET_BASE + 5)
+#define ERROR_INTERNET_UNRECOGNIZED_SCHEME        (ERROR_INTERNET_BASE + 6)
+#define ERROR_INTERNET_NAME_NOT_RESOLVED          (ERROR_INTERNET_BASE + 7)
+#define ERROR_INTERNET_PROTOCOL_NOT_FOUND         (ERROR_INTERNET_BASE + 8)
+#define ERROR_INTERNET_INVALID_OPTION             (ERROR_INTERNET_BASE + 9)
+#define ERROR_INTERNET_BAD_OPTION_LENGTH          (ERROR_INTERNET_BASE + 10)
+#define ERROR_INTERNET_OPTION_NOT_SETTABLE        (ERROR_INTERNET_BASE + 11)
+#define ERROR_INTERNET_SHUTDOWN                   (ERROR_INTERNET_BASE + 12)
+#define ERROR_INTERNET_INCORRECT_USER_NAME        (ERROR_INTERNET_BASE + 13)
+#define ERROR_INTERNET_INCORRECT_PASSWORD         (ERROR_INTERNET_BASE + 14)
+#define ERROR_INTERNET_LOGIN_FAILURE              (ERROR_INTERNET_BASE + 15)
+#define ERROR_INTERNET_INVALID_OPERATION          (ERROR_INTERNET_BASE + 16)
+#define ERROR_INTERNET_OPERATION_CANCELLED        (ERROR_INTERNET_BASE + 17)
+#define ERROR_INTERNET_INCORRECT_HANDLE_TYPE      (ERROR_INTERNET_BASE + 18)
+#define ERROR_INTERNET_INCORRECT_HANDLE_STATE     (ERROR_INTERNET_BASE + 19)
+#define ERROR_INTERNET_NOT_PROXY_REQUEST          (ERROR_INTERNET_BASE + 20)
+#define ERROR_INTERNET_REGISTRY_VALUE_NOT_FOUND   (ERROR_INTERNET_BASE + 21)
+#define ERROR_INTERNET_BAD_REGISTRY_PARAMETER     (ERROR_INTERNET_BASE + 22)
+#define ERROR_INTERNET_NO_DIRECT_ACCESS           (ERROR_INTERNET_BASE + 23)
+#define ERROR_INTERNET_NO_CONTEXT                 (ERROR_INTERNET_BASE + 24)
+#define ERROR_INTERNET_NO_CALLBACK                (ERROR_INTERNET_BASE + 25)
+#define ERROR_INTERNET_REQUEST_PENDING            (ERROR_INTERNET_BASE + 26)
+#define ERROR_INTERNET_INCORRECT_FORMAT           (ERROR_INTERNET_BASE + 27)
+#define ERROR_INTERNET_ITEM_NOT_FOUND             (ERROR_INTERNET_BASE + 28)
+#define ERROR_INTERNET_CANNOT_CONNECT             (ERROR_INTERNET_BASE + 29)
+#define ERROR_INTERNET_CONNECTION_ABORTED         (ERROR_INTERNET_BASE + 30)
+#define ERROR_INTERNET_CONNECTION_RESET           (ERROR_INTERNET_BASE + 31)
+#define ERROR_INTERNET_FORCE_RETRY                (ERROR_INTERNET_BASE + 32)
+#define ERROR_INTERNET_INVALID_PROXY_REQUEST      (ERROR_INTERNET_BASE + 33)
+#define ERROR_INTERNET_NEED_UI                    (ERROR_INTERNET_BASE + 34)
+
+#define ERROR_INTERNET_HANDLE_EXISTS              (ERROR_INTERNET_BASE + 36)
+#define ERROR_INTERNET_SEC_CERT_DATE_INVALID      (ERROR_INTERNET_BASE + 37)
+#define ERROR_INTERNET_SEC_CERT_CN_INVALID        (ERROR_INTERNET_BASE + 38)
+#define ERROR_INTERNET_HTTP_TO_HTTPS_ON_REDIR     (ERROR_INTERNET_BASE + 39)
+#define ERROR_INTERNET_HTTPS_TO_HTTP_ON_REDIR     (ERROR_INTERNET_BASE + 40)
+#define ERROR_INTERNET_MIXED_SECURITY             (ERROR_INTERNET_BASE + 41)
+#define ERROR_INTERNET_CHG_POST_IS_NON_SECURE     (ERROR_INTERNET_BASE + 42)
+#define ERROR_INTERNET_POST_IS_NON_SECURE         (ERROR_INTERNET_BASE + 43)
+#define ERROR_INTERNET_CLIENT_AUTH_CERT_NEEDED    (ERROR_INTERNET_BASE + 44)
+#define ERROR_INTERNET_INVALID_CA                 (ERROR_INTERNET_BASE + 45)
+#define ERROR_INTERNET_CLIENT_AUTH_NOT_SETUP      (ERROR_INTERNET_BASE + 46)
+#define ERROR_INTERNET_ASYNC_THREAD_FAILED        (ERROR_INTERNET_BASE + 47)
+#define ERROR_INTERNET_REDIRECT_SCHEME_CHANGE     (ERROR_INTERNET_BASE + 48)
+#define ERROR_INTERNET_DIALOG_PENDING             (ERROR_INTERNET_BASE + 49)
+#define ERROR_INTERNET_RETRY_DIALOG               (ERROR_INTERNET_BASE + 50)
+#define ERROR_INTERNET_HTTPS_HTTP_SUBMIT_REDIR    (ERROR_INTERNET_BASE + 52)
+#define ERROR_INTERNET_INSERT_CDROM               (ERROR_INTERNET_BASE + 53)
+
+#define FTP_TRANSFER_IN_PROGRESS            	  (ERROR_INTERNET_BASE + 110)
+#define FTP_DROPPED                         	  (ERROR_INTERNET_BASE + 111)
+#define FTP_NO_PASSIVE_MODE                       (ERROR_INTERNET_BASE + 112)
+
+#define ERROR_INTERNET_SECURITY_CHANNEL_ERROR     (ERROR_INTERNET_BASE + 157)
+#define ERROR_INTERNET_UNABLE_TO_CACHE_FILE       (ERROR_INTERNET_BASE + 158)
+#define ERROR_INTERNET_TCPIP_NOT_INSTALLED        (ERROR_INTERNET_BASE + 159)
+#define ERROR_INTERNET_DISCONNECTED               (ERROR_INTERNET_BASE + 163)
+#define ERROR_INTERNET_SERVER_UNREACHABLE         (ERROR_INTERNET_BASE + 164)
+#define ERROR_INTERNET_PROXY_SERVER_UNREACHABLE   (ERROR_INTERNET_BASE + 165)
+
+#define ERROR_INTERNET_BAD_AUTO_PROXY_SCRIPT      (ERROR_INTERNET_BASE + 166)
+#define ERROR_INTERNET_UNABLE_TO_DOWNLOAD_SCRIPT  (ERROR_INTERNET_BASE + 167)
+#define ERROR_INTERNET_SEC_INVALID_CERT    		  (ERROR_INTERNET_BASE + 169)
+#define ERROR_INTERNET_SEC_CERT_REVOKED    		  (ERROR_INTERNET_BASE + 170)
+	
+DO CASE
+   CASE lnError =  ERROR_INTERNET_OUT_OF_HANDLES                
+    		lcMessage = "ERROR_INTERNET_OUT_OF_HANDLES"
+   CASE lnError =  ERROR_INTERNET_TIMEOUT                       
+    		lcMessage = "ERROR_INTERNET_TIMEOUT"
+   CASE lnError =  ERROR_INTERNET_EXTENDED_ERROR                
+    		lcMessage = "ERROR_INTERNET_EXTENDED_ERROR"
+   CASE lnError =  ERROR_INTERNET_INTERNAL_ERROR                
+    		lcMessage = "ERROR_INTERNET_INTERNAL_ERROR"
+   CASE lnError =  ERROR_INTERNET_INVALID_URL                   
+    		lcMessage = "ERROR_INTERNET_INVALID_URL"
+   CASE lnError =  ERROR_INTERNET_UNRECOGNIZED_SCHEME           
+    	    lcMessage = "ERROR_INTERNET_UNRECOGNIZED_SCHEME"
+   CASE lnError =  ERROR_INTERNET_NAME_NOT_RESOLVED             
+            lcMessage = "ERROR_INTERNET_NAME_NOT_RESOLVED"
+   CASE lnError =  ERROR_INTERNET_PROTOCOL_NOT_FOUND            
+    	    lcMessage = "ERROR_INTERNET_PROTOCOL_NOT_FOUND"
+   CASE lnError =  ERROR_INTERNET_INVALID_OPTION                
+    	    lcMessage = "ERROR_INTERNET_INVALID_OPTION"
+   CASE lnError =  ERROR_INTERNET_BAD_OPTION_LENGTH             
+            lcMessage = "ERROR_INTERNET_BAD_OPTION_LENGTH"    
+   CASE lnError =  ERROR_INTERNET_OPTION_NOT_SETTABLE           
+            lcMessage = "ERROR_INTERNET_OPTION_NOT_SETTABLE"
+   CASE lnError =  ERROR_INTERNET_SHUTDOWN                      
+    	    lcMessage = "ERROR_INTERNET_SHUTDOWN"
+   CASE lnError =  ERROR_INTERNET_INCORRECT_USER_NAME           
+    	    lcMessage = "ERROR_INTERNET_INCORRECT_USER_NAME"
+   CASE lnError =  ERROR_INTERNET_INCORRECT_PASSWORD            
+    	    lcMessage = "ERROR_INTERNET_INCORRECT_PASSWORD"
+   CASE lnError =  ERROR_INTERNET_LOGIN_FAILURE                 
+    	    lcMessage = "ERROR_INTERNET_LOGIN_FAILURE"
+   CASE lnError =  ERROR_INTERNET_INVALID_OPERATION             
+    	    lcMessage = "ERROR_INTERNET_INVALID_OPERATION"
+   CASE lnError =  ERROR_INTERNET_OPERATION_CANCELLED           
+    	    lcMessage = "ERROR_INTERNET_OPERATION_CANCELLED"
+   CASE lnError =  ERROR_INTERNET_INCORRECT_HANDLE_TYPE         
+    	    lcMessage = "ERROR_INTERNET_INCORRECT_HANDLE_TYPE"
+   CASE lnError =  ERROR_INTERNET_INCORRECT_HANDLE_STATE        
+   	        lcMessage = "ERROR_INTERNET_INCORRECT_HANDLE_STATE"
+   CASE lnError =  ERROR_INTERNET_NOT_PROXY_REQUEST             
+            lcMessage = "ERROR_INTERNET_NOT_PROXY_REQUEST"
+   CASE lnError =  ERROR_INTERNET_REGISTRY_VALUE_NOT_FOUND      
+    	    lcMessage = "ERROR_INTERNET_REGISTRY_VALUE_NOT_FOUND"
+   CASE lnError =  ERROR_INTERNET_BAD_REGISTRY_PARAMETER        
+            lcMessage = "ERROR_INTERNET_BAD_REGISTRY_PARAMETER"
+   CASE lnError =  ERROR_INTERNET_NO_DIRECT_ACCESS              
+            lcMessage = "ERROR_INTERNET_NO_DIRECT_ACCESS"
+   CASE lnError =  ERROR_INTERNET_NO_CONTEXT                    
+     	    lcMessage = "ERROR_INTERNET_NO_CONTEXT"
+   CASE lnError =  ERROR_INTERNET_NO_CALLBACK                   
+            lcMessage = "ERROR_INTERNET_NO_CALLBACK"
+   CASE lnError =  ERROR_INTERNET_REQUEST_PENDING               
+            lcMessage = "ERROR_INTERNET_REQUEST_PENDING"
+   CASE lnError =  ERROR_INTERNET_INCORRECT_FORMAT              
+            lcMessage = "ERROR_INTERNET_INCORRECT_FORMAT"
+   CASE lnError =  ERROR_INTERNET_ITEM_NOT_FOUND                
+            lcMessage = "ERROR_INTERNET_ITEM_NOT_FOUND"
+   CASE lnError =  ERROR_INTERNET_CANNOT_CONNECT                
+            lcMessage = "ERROR_INTERNET_CANNOT_CONNECT"
+   CASE lnError =  ERROR_INTERNET_CONNECTION_ABORTED            
+            lcMessage = "ERROR_INTERNET_CONNECTION_ABORTED"
+   CASE lnError =  ERROR_INTERNET_CONNECTION_RESET              
+            lcMessage = "ERROR_INTERNET_CONNECTION_RESET"
+   CASE lnError =  ERROR_INTERNET_FORCE_RETRY                   
+            lcMessage = "ERROR_INTERNET_FORCE_RETRY"
+   CASE lnError =  ERROR_INTERNET_INVALID_PROXY_REQUEST         
+            lcMessage = "ERROR_INTERNET_INVALID_PROXY_REQUEST"
+   CASE lnError =  ERROR_INTERNET_NEED_UI                       
+     	    lcMessage = "ERROR_INTERNET_NEED_UI"
+   CASE lnError =  ERROR_INTERNET_HANDLE_EXISTS                 
+            lcMessage = "ERROR_INTERNET_HANDLE_EXISTS"
+   CASE lnError =  ERROR_INTERNET_SEC_CERT_DATE_INVALID         
+            lcMessage = "ERROR_INTERNET_SEC_CERT_DATE_INVALID"
+   CASE lnError =  ERROR_INTERNET_SEC_CERT_CN_INVALID           
+            lcMessage = "ERROR_INTERNET_SEC_CERT_CN_INVALID"
+   CASE lnError =  ERROR_INTERNET_HTTP_TO_HTTPS_ON_REDIR        
+     	    lcMessage = "ERROR_INTERNET_HTTP_TO_HTTPS_ON_REDIR"
+   CASE lnError =  ERROR_INTERNET_HTTPS_TO_HTTP_ON_REDIR        
+            lcMessage = "ERROR_INTERNET_HTTPS_TO_HTTP_ON_REDIR"
+   CASE lnError =  ERROR_INTERNET_MIXED_SECURITY                
+            lcMessage = "ERROR_INTERNET_MIXED_SECURITY"
+   CASE lnError =  ERROR_INTERNET_CHG_POST_IS_NON_SECURE        
+            lcMessage = "ERROR_INTERNET_CHG_POST_IS_NON_SECURE"
+   CASE lnError =  ERROR_INTERNET_POST_IS_NON_SECURE            
+            lcMessage = "ERROR_INTERNET_POST_IS_NON_SECURE"
+   CASE lnError =  ERROR_INTERNET_CLIENT_AUTH_CERT_NEEDED       
+            lcMessage = "ERROR_INTERNET_CLIENT_AUTH_CERT_NEEDED"
+   CASE lnError =  ERROR_INTERNET_INVALID_CA                    
+            lcMessage = "ERROR_INTERNET_INVALID_CA"
+   CASE lnError =  ERROR_INTERNET_CLIENT_AUTH_NOT_SETUP         
+            lcMessage = "ERROR_INTERNET_CLIENT_AUTH_NOT_SETUP"
+   CASE lnError =  ERROR_INTERNET_ASYNC_THREAD_FAILED           
+            lcMessage = "ERROR_INTERNET_ASYNC_THREAD_FAILED"
+   CASE lnError =  ERROR_INTERNET_REDIRECT_SCHEME_CHANGE        
+            lcMessage = "ERROR_INTERNET_REDIRECT_SCHEME_CHANGE"
+   CASE lnError =  ERROR_INTERNET_DIALOG_PENDING                
+            lcMessage = "ERROR_INTERNET_DIALOG_PENDING"
+   CASE lnError =  ERROR_INTERNET_RETRY_DIALOG                  
+            lcMessage = "ERROR_INTERNET_RETRY_DIALOG"
+   CASE lnError =  ERROR_INTERNET_HTTPS_HTTP_SUBMIT_REDIR       
+            lcMessage = "ERROR_INTERNET_HTTPS_HTTP_SUBMIT_REDIR"
+   CASE lnError =  ERROR_INTERNET_INSERT_CDROM                  
+            lcMessage = "ERROR_INTERNET_INSERT_CDROM"
+   CASE lnError =  FTP_TRANSFER_IN_PROGRESS            	     
+            lcMessage = "FTP_TRANSFER_IN_PROGRESS"
+   CASE lnError =  FTP_DROPPED                         	     
+            lcMessage = "FTP_DROPPED"
+   CASE lnError =  FTP_NO_PASSIVE_MODE                          
+            lcMessage = "FTP_NO_PASSIVE_MODE"
+   CASE lnError =  ERROR_INTERNET_SECURITY_CHANNEL_ERROR        
+            lcMessage = "ERROR_INTERNET_SECURITY_CHANNEL_ERROR"
+   CASE lnError =  ERROR_INTERNET_UNABLE_TO_CACHE_FILE          
+            lcMessage = "ERROR_INTERNET_UNABLE_TO_CACHE_FILE"
+   CASE lnError =  ERROR_INTERNET_TCPIP_NOT_INSTALLED           
+            lcMessage = "ERROR_INTERNET_TCPIP_NOT_INSTALLED"
+   CASE lnError =  ERROR_INTERNET_DISCONNECTED                  
+            lcMessage = "ERROR_INTERNET_DISCONNECTED"
+   CASE lnError =  ERROR_INTERNET_SERVER_UNREACHABLE            
+            lcMessage = "ERROR_INTERNET_SERVER_UNREACHABLE"
+   CASE lnError =  ERROR_INTERNET_PROXY_SERVER_UNREACHABLE      
+            lcMessage = "ERROR_INTERNET_PROXY_SERVER_UNREACHABLE"
+   CASE lnError =  ERROR_INTERNET_BAD_AUTO_PROXY_SCRIPT         
+            lcMessage = "ERROR_INTERNET_BAD_AUTO_PROXY_SCRIPT"
+   CASE lnError =  ERROR_INTERNET_UNABLE_TO_DOWNLOAD_SCRIPT     
+     		lcMessage = "ERROR_INTERNET_UNABLE_TO_DOWNLOAD_SCRIPT"
+   CASE lnError =  ERROR_INTERNET_SEC_INVALID_CERT    		     
+    		lcMessage = "ERROR_INTERNET_SEC_INVALID_CERT"
+   CASE lnError =  ERROR_INTERNET_SEC_CERT_REVOKED    		     
+    		lcMessage = "ERROR_INTERNET_SEC_CERT_REVOKED"
+   CASE lnError =  ERROR_NO_MORE_FILES
+   			lcMessage = "ERROR_NO_MORE_FILES"
+   CASE lnError =  ERROR_INVALID_HANDLE
+   			lcMessage = "ERROR_INVALID_HANDLE"
+   CASE lnError =  ERROR_FILE_NOT_FOUND
+   			lcMessage = "ERROR_FILE_NOT_FOUND"
+   CASE lnError =  ERROR_PATH_NOT_FOUND
+   		    lcMessage = "ERROR_PATH_NOT_FOUND"
+   CASE lnError =  ERROR_ACCESS_DENIED
+   			lcMessage = "ERROR_ACCESS_DENIED"
+   CASE lnError =  ERROR_FILE_EXISTS
+   			lcMessage = "ERROR_FILE_EXISTS"
+   CASE lnError =  ERROR_INVALID_PARAMETER
+   			lcMessage = "ERROR_INVALID_PARAMETER"
+   OTHERWISE	
+   		lcMessage = "Unknown Error Message"
+  ENDCASE
+  
+  lcMessage = "[ "+allt(Str(lnError))+" : "+allt(lcMessage)+" ]"
+  RETURN lcMessage
+	
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE inf
+------------------------------------------------------------
+PROCEDURE inf
+Parameters lText, lCor, alias_old
+alias_old = alias()
+
+sele logftp
+append blank
+replace memo with lText
+replace cor with lCor
+With ThisForm.GrdInf
+	.SetAll('DynamicForeColor','iif(logftp.cor="R", RGB(255,255,255),iif(logftp.cor="G",RGB(0,128,0),	iif(logftp.cor="B",RGB(0,0,255),RGB(0,255,255) )))','Column')
+	.SetAll('DynamicBackColor','iif(logftp.cor="R", RGB(255,0,0), RGB(255,255,255) )','Column') 
+EndWith
+go bott
+ThisForm.GrdInf.refresh
+if !empt(alias_old)
+	sele(alias_old)
+endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montacontainer
+------------------------------------------------------------
+PROCEDURE montacontainer
+local cDir, oObj, tmpdirloc, newfileloc, newdefa, nconta 
+Defa_old = sys(5)+sys(2003)
+nconta = 0
+=ThisForm.Inf("Carregando os paramêtros da tela... Aguarde","B")
+*-[ A Receber do Host ]-*
+if !Empt(Thisform._direnvloc)
+   =ThisForm.Inf("Estabelecendo uma conexão com o servidor FTP no endereço "+Thisform._ftpadd,"B")
+   ThisForm.GetFtpDirectory(Thisform._direnvloc, "*.*")
+
+   if used("FtpServer")
+
+      oObj = ThisForm.Container1.pgfftp.Page2.lstenvloc
+      for i=1 to oObj.listcount
+         oObj.removeitem(i)   
+      Next
+
+      i = 0
+      sele FtpServer 
+      go top
+      *-[ Cria um diretorio ficticio para poder usar o Adir para selecao de arquivos ]-*
+      set defa to (sys(2023))
+      tmpdirloc = sys(3)
+      mkdir (tmpdirloc)
+      newdefa = "set defa to "+sys(2023)+"\"+tmpdirloc
+      &newdefa
+      Scan
+          newfileloc = strtofile("1",FtpServer.nome) 
+      EndScan
+      cDir = adir(xDir,Thisform._tpRec)
+      sele FtpServer
+      for i=1 to cDir
+          locate for allt(upper(nome))=allt(upper(xDir(i,1)))
+          if Found()
+	         if substr(FtpServer.tipo,1,1)=="A" && Arquivo
+				nconta = nconta + 1
+	            oObj.AddItem(allt(FtpServer.nome),nconta,1)
+	            oObj.AddListItem(FtpServer.tama,nconta,2)
+	            oObj.AddListItem(FtpServer.data,nconta,3)       
+	         endif   
+          endif
+      Next
+      *-[ Apaga tudo ]-*
+      for i=1 to adir(xDir)
+         newfileloc= " erase "+xDir(i,1) 
+         &newfileloc
+      next
+      if adir(xDir) = 0
+         newdefa = "set defa to "+sys(2023)
+         &newdefa
+         rmDir (tmpdirloc)
+      Endif
+      
+      =ThisForm.Inf("Lista de arquivos do servidor já recebida do "+Thisform._ftpadd,"B")
+      =ThisForm.Inf("Pronto para a Transferência... Clique no botão (Transfere/Recebe)","G")
+      oObj.refresh
+  else   
+      =ThisForm.Inf("Lista de arquivos do servidor NÃO foi recebida do "+Thisform._ftpadd,"R")
+      =ThisForm.Inf("Problema na Transferência...","R")
+       return .f. 
+   endif   
+Endif
+
+
+*-[ Local -> Host ]-* (A Enviar para o Host)
+if !Empt(Thisform._direnvftp)
+   oObj = ThisForm.Container1.pgfloc.Page1.lstenvftp
+   for i=1 to oObj.listcount
+      oObj.removeitem(i)   
+   Next   
+   set defa to (Thisform._direnvftp)
+   cDir = adir(xDir,ThisForm._tpEnv)
+   If cDir # 0
+		=asort(xDir)
+	   for i=1 to cDir
+    	   oObj.AddItem(xDir(i,1),i,1)
+	       oObj.AddListItem(str(xDir(i,2),10,0),i,2)
+    	   oObj.AddListItem(Dtoc(xDir(i,3)),i,3)       
+*		oObj.AddListItem(Dtoc(xDir(i,3))+"-"+xDir(i,4),i,3)
+	   Next
+   Endif
+	oObj.refresh
+	=ThisForm.Inf("Lista de arquivos Locais ja carregada do "+Thisform._direnvftp,"B")
+	=ThisForm.Inf("Pronto para a Transferência... Clique no botão (Transfere)","G")
+Endif
+
+set defa to (Defa_old)
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processa
+------------------------------------------------------------
+PROCEDURE processa
+Parameters plcfile, plnsize, plclocal, plchost, plntransf, plnbuffer, plnsecini, plnsec, plcstatus
+if plnsec = 0
+   plnsec=0.001 && Valor minimo de tempo de transferencia
+endif   
+
+if plcstatus == "I"  && Iniciando
+   ThisForm.FileCtrlUp(.T., .T., 'Iniciando a transferência...')
+   sele tmpprog
+   append blank
+   replace file   with plcfile
+   replace size   with plnsize
+   replace local  with plclocal
+   replace host   with plchost
+   replace status with "0 bytes copiados, 0% completado"
+endif    
+if plcstatus == "A" && em Andamento
+	sele tmpprog
+   locate for TmpProg.file = plcfile
+   if !found()
+      return
+   endif
+   replace status with str(plntransf)+" bytes copiados, "+str(plntransf*100/plnsize,3,2)+"% completado"
+*   ti_est = ThisForm.sectohour((plnsize-plntransf)/plntransf/plnsec)
+   ti_est = ThisForm.sectohour(int(((plnsize-plntransf)*plnsec)/plntransf))
+   ti_ela = ThisForm.sectohour(seconds()-plnsecini)
+   = ThisForm.FileCtrlUp(plntransf*100/plnsize,100,str(plntransf/plnsec/1024,4,2)+" Kbps" )		    
+   Thisform.Lblprog.caption = "Tempo decorrido: "+ti_ela+"   Tempo Estimado : "+ti_est
+endif   
+
+if plcstatus == "C"  && Concluindo
+	sele tmpprog
+   locate for TmpProg.file = plcfile
+   if !found()
+      return
+   endif
+   replace status with str(plntransf)+" bytes copiados, "+str(plntransf*100/plnsize,3,2)+"% completado em "+ThisForm.sectohour(plnsec)
+   = ThisForm.FileCtrlUp(str(plntransf*100/plnsize,3,2),100,str(plnbuffer/plnsec/1000,3,2)+" Kbps" )		    
+   Thisform.Lblprog.caption = " Transferência do arquivo [ "+plcfile+" ] Concluída. OK"
+   =ThisForm.inf("Arquivo Transferido...","B")
+   =Chrsaw(1)
+   ThisForm.FileCtrlUp(.F.)
+   *-[ Atualiza os listbox dos arquivos ]-* 
+   if plclocal == Thisform._direnvftp && Enviando arquivos para FTP 
+      tIndex = ThisForm.Container1.pgfftp.Page1.lstrecloc.listcount+1
+      ThisForm.Container1.pgfftp.Page1.lstrecloc.Additem(plcfile,tIndex,1)
+      ThisForm.Container1.pgfftp.Page1.lstrecloc.AddListitem(str(plnSize),tIndex,2)
+      ThisForm.Container1.pgfftp.Page1.lstrecloc.AddListitem(str(plntransf),tIndex,3)            
+      ThisForm.Container1.pgfftp.Page1.lstrecloc.refresh
+
+      if ThisForm._DelLocal && Apagar os arquivos de Origem (local)
+         =ThisForm.inf("Excluíndo o arquivo local "+Thisform._direnvftp+plcfile,"B")
+         CStringErase = "ERASE "+Thisform._direnvftp+plcfile
+         &CStringErase
+         IF FILE(Thisform._direnvftp+plcfile)
+            =ThisForm.inf("Falha na exclusão do arquivo local "+Thisform._direnvftp+plcfile,"R")
+         Else
+            =ThisForm.inf("Arquivo Local "+Thisform._direnvftp+plcfile+" foi excluído com sucesso" ,"B")         
+         Endif
+         *-[ Apagar o arquivo da list ]-*
+         for i=1 to ThisForm.Container1.pgfloc.Page1.lstenvftp.listcount
+            if upper(alltrim(ThisForm.Container1.pgfloc.Page1.lstenvftp.list(i,1)))=upper(plcfile)
+               ThisForm.Container1.pgfloc.Page1.lstenvftp.removeitem(i)
+               exit
+            Endif
+         Next
+      Endif 
+
+   endif
+
+   if PlcHost == Thisform._direnvloc && recebendo do FTP
+      tIndex = ThisForm.Container1.pgfloc.Page2.lstrecftp.listcount+1
+      ThisForm.Container1.pgfloc.Page2.lstrecftp.AddListitem(plcfile,tIndex,1)
+      ThisForm.Container1.pgfloc.Page2.lstrecftp.AddListitem(str(plnSize),tIndex,2)
+      ThisForm.Container1.pgfloc.Page2.lstrecftp.AddListitem(str(plntransf),tIndex,3)            
+      ThisForm.Container1.pgfloc.Page2.lstrecftp.refresh
+
+      if ThisForm._DelHost && Apagar os arquivos de Origem
+         =ThisForm.inf("Excluindo o arquivo FTP "+Thisform._direnvloc+plcfile,"B")
+		 =Chrsaw(4)
+         lEraseRes = ThisForm.DeleteFtpFile(Thisform._direnvloc+plcfile)
+         if lEraseRes 
+            =ThisForm.inf("Arquivo FTP "+Thisform._direnvloc+plcfile+" foi excluído com sucesso" ,"B")         
+         Else
+            =ThisForm.inf("Falha na exclusão do arquivo FTP "+Thisform._direnvloc+plcfile,"R")
+         Endif
+         *-[ Apagar o arquivo da list ]-*
+         for i=1 to ThisForm.Container1.pgfftp.Page2.lstenvloc.listcount
+            if upper(alltrim(ThisForm.Container1.pgfftp.Page2.lstenvloc.list(i,1)))=upper(plcfile)
+               ThisForm.Container1.pgfftp.Page2.lstenvloc.removeitem(i)
+               exit
+            Endif
+         Next
+      Endif 
+   endif
+endif   
+ThisForm.GrdProc.refresh
+      
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE rasativas
+------------------------------------------------------------
+PROCEDURE rasativas
+LPARAMETER cArrayReturn
+
+DECLARE INTEGER RasEnumConnections ;
+	IN RASAPI32.DLL ;
+	STRING  @ RasConnectionsBuffer, ;
+	INTEGER @ dwSize, ;
+	INTEGER @ nCount
+
+DECLARE INTEGER RasGetErrorString ;
+	IN RASAPI32.DLL;
+	INTEGER   ErrorValue, ;
+	STRING  @ MessageBuffer, ;
+	INTEGER   BufferLen
+
+cConexion = ThisForm.WordToC(412) ;
++ REPLICATE( CHR(0), 408 )
+
+cConexiones = REPLICATE( cConexion, 16 )
+
+
+nSize = LEN( cConexiones )
+nCount = 0
+
+nResult = RasEnumConnections( ;
+@cConexiones, ;
+@nSize, ;
+@nCount )
+
+
+IF nCount > 0
+	PUBLIC ARRAY &cArrayReturn.[nCount,4]
+
+	FOR nPos = 0 TO nCount - 1
+		cConexion = SUBSTR( ;
+			cConexiones, ;
+		( nPos * 412 ) + 1, ;
+			412 )
+
+		&cArrayReturn.[nPos+1,1] = ThisForm.ctoword( ;
+SUBSTR(cConexion,5,4))
+		&cArrayReturn.[nPos+1,2] = STRTRAN( ;
+SUBSTR(cConexion,9,257), CHR(0))
+		&cArrayReturn.[nPos+1,3] = STRTRAN( ;
+SUBSTR(cConexion,266,17),CHR(0))
+		&cArrayReturn.[nPos+1,4] = STRTRAN( ;
+SUBSTR(cConexion,283,129),CHR(0))
+
+	NEXT
+
+ENDIF
+
+RETURN(nCount)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE rasconecta
+------------------------------------------------------------
+PROCEDURE rasconecta
+LPARAMETER cConexion
+
+DECLARE Integer RasDial ;
+	IN RASAPI32.DLL  ;
+	Integer   RasDialExtensions, ;
+	Integer   Phonebook, ;
+	String  @ RasDialParams, ;
+	Integer   NotifierType, ;
+	Integer   Notifier, ;
+	Integer @ hRasConn 
+
+DECLARE Integer RasHangUp ;
+	IN RASAPI32.DLL ;
+	Integer   hRasConn
+
+DECLARE Integer RasGetEntryDialParams ;
+	IN RASAPI32.DLL ;
+	String  @ PhoneDirectory, ;
+	String  @ RasDialParams, ;
+	Integer @ IsPassword 
+
+DECLARE Integer RasGetErrorString ;
+   IN RASAPI32.DLL ;
+   Integer   ErrorValue, ;
+   String  @ MessageBuffer, ;
+   Integer   BufferLen
+
+LOCAL cPhonebook, cRasDialParams, nResult
+LOCAL nRasConn
+
+*** Elminar blancos en el parámetro pasado
+cConexion = ALLTRIM( cConexion )
+
+*** Preparar la estructura para los
+*** parametros de conexión
+cRasDialParams = ThisForm.WordToC(1052) + cConexion + REPLICATE( CHR(0), 1045 - LEN( cConexion ) )
+cPhonebook = chr(0)
+nPasswords = 0
+
+*** Obtener los parametros de conexión
+nResult = RasGetEntryDialParams( ;
+@cPhonebook, ;
+@cRasDialParams, ;
+@nPasswords )
+
+*** Preparar variable para el retorno 
+*** del manejador
+nRasConn = 0
+
+*** Realizar la conexión
+nResult = RasDial( 0, 0, ;
+@cRasDialParams, 0, 0, @nRasConn )
+
+*** Comprobar si hubo error y mostrar 
+*** mensaje si lo hubo
+=ThisForm.Inf("Estabelecendo uma Conexão com o servidor","G") 
+IF nResult # 0
+
+	PRIVATE cMensaje
+	cMensaje = SPACE(256)
+
+	IF RasGetErrorString( nResult, @cMensaje, LEN(cMensaje) ) # 0
+		=ThisForm.Inf("Erro na conexão: (" + LTRIM( STR( nResult ) ) + ")","R")
+	ELSE
+		=ThisForm.Inf("Erro na conexão: ("+ LTRIM( STR( nResult ) ) + ") " + ALLTRIM( cMensaje ),"R")
+	ENDIF
+	
+	*** Colgar por si quedó inestable 
+*** la conexión
+  	=ThisForm.Inf("Desconectando ...","R")
+	RasHangUp( nRasConn )
+	
+	*** Retorno con error -2
+	RETURN -2
+
+ENDIF
+
+*** Retorno del manejador de la conexión
+RETURN nRasConn
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE rasconexao
+------------------------------------------------------------
+PROCEDURE rasconexao
+LPARAMETER cArrayReturn
+
+LOCAL cStructRasEntryName
+LOCAL cStructRasEntryNames, nSize
+LOCAL nEntries, nResult, cRasEntryName
+
+#DEFINE RAS_MAXENTRYNAME 256
+
+DECLARE INTEGER RasEnumEntries ;
+	IN RASAPI32.DLL ;
+	INTEGER   reserved,;
+	STRING    PhoneBox,;
+	STRING  @ RasEntryName,;
+	INTEGER @ SizeOfRasEntryName,;
+	INTEGER @ Entries
+
+cStructRasEntryName = ThisForm.WordToC(264) ;
++ REPLICATE( CHR(0), RAS_MAXENTRYNAME )
+
+cArrayRasEntryNames = REPLICATE( ;
+cStructRasEntryName, 255 )
+
+
+nSize = LEN( cArrayRasEntryNames )
+
+nEntries = 0
+
+nResult = RasEnumEntries( 0, "", ;
+@cArrayRasEntryNames, ;
+@nSize, ;
+@nEntries )
+
+IF nEntries = 0
+   RETURN 0
+ENDIF
+
+RELEASE &cArrayReturn.
+PUBLIC ARRAY &cArrayReturn.[nEntries]
+
+FOR nCont = 0 TO nEntries - 1
+
+cRasEntryName = SUBSTR( ;
+cArrayRasEntryNames, ;
+264*nCont + 1, 264 )
+
+	&cArrayReturn.[nCont+1] = SUBSTR( ;
+cRasEntryName, 5, ;
+		AT(CHR(0),SUBSTR(cRasEntryName,5))-1)
+
+NEXT
+
+RETURN nEntries
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE rasdescon
+------------------------------------------------------------
+PROCEDURE rasdescon
+LPARAMETER nRasConn
+
+
+DECLARE Integer RasHangUp ;
+	IN RASAPI32.DLL ;
+	Integer   hRasConn
+
+DECLARE Integer Sleep ;
+	IN Win32API ;
+	Integer   Milliseconds
+
+LOCAL nResult
+
+=ThisForm.Inf("Desconectando... ","R")
+nResult = RasHangUp( nRasConn )
+
+=Sleep(3000)
+RETURN nResult
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE rasfile
+------------------------------------------------------------
+PROCEDURE rasfile
+PARAMETERS cFtpLoc, cFtpUsu, cFtpSen, cFtpRemArq
+Local lOk
+lok = .t.
+
+#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0
+#define INTERNET_OPEN_TYPE_DIRECT        1
+#define INTERNET_OPEN_TYPE_PROXY         3
+#DEFINE INTERNET_DEFAULT_FTP_PORT       21
+#DEFINE INTERNET_SERVICE_FTP             1
+#DEFINE INTERNET_FLAG_PASSIVE     14217728
+#DEFINE FTP_TRANSFER_TYPE_ASCII         1
+#DEFINE FTP_TRANSFER_TYPE_BINARY        2
+#DEFINE GENERIC_READ            2147483648
+#DEFINE GENERIC_WRITE           1073741824
+
+DECLARE LONG InternetOpen ;
+	IN "wininet.dll" ;
+	STRING   lpszAgent, ;
+	LONG     dwAccessType, ;
+	STRING   lpszProxyName, ;
+	STRING   lpszProxyBypass, ;
+	LONG     dwFlags
+DECLARE LONG InternetConnect ;
+	IN "wininet.dll" ;
+	LONG     hInternetSession, ;
+	STRING   lpszServerName, ;
+	LONG     nServerPort, ;
+	STRING   lpszUsername, ;
+	STRING   lpszPassword, ;
+	LONG     dwService, ;
+	LONG     dwFlags, ;
+	LONG     dwContext
+
+DECLARE INTEGER InternetCloseHandle ;
+	IN "wininet.dll" ;
+	LONG     hInet
+
+DECLARE LONG GetLastError ;
+	IN WIN32API
+
+DECLARE LONG FtpOpenFile ;
+	IN "wininet.dll" ;
+	LONG     hFtpSession, ;
+	STRING   lpszFileName, ;
+	INTEGER  fdwAccess, ;
+	INTEGER  dwFlags, ;
+	INTEGER  dwContext
+
+=ThisForm.Inf("Estabelecendo uma conexão com a Internet","G")
+nInternet = InternetOpen( "vfp", INTERNET_OPEN_TYPE_DIRECT, "", "", 0 )
+IF nInternet = 0
+	=ThisForm.Inf("Erro na conexão com o servidor. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	InternetCloseHandle( nFtp )
+	RETURN .F.
+Else
+    =ThisForm.Inf("Conexão com a Internet aberta com o número: "+Str(nInternet),"G")  
+EndIf
+
+nFtp = InternetConnect( nInternet, cFtpLoc, INTERNET_DEFAULT_FTP_PORT, cFtpUsu, cFtpSen, INTERNET_SERVICE_FTP, INTERNET_FLAG_PASSIVE, 0 )
+IF nFtp = 0
+    =ThisForm.Inf("Erro na conexão com o servidor. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	RETURN .F.
+Else
+	=ThisForm.Inf("Abrindo uma sessão FTP com o ID: "+str(nftp),"G")
+EndIf
+
+=ThisForm.Inf("Verificando a existência do arquivo "+alltrim(cFtpRemArq)+" da sessão FTP "+STR(nFtp)+" em "+Thisform._ftpadd,"G") 
+nFichFTP = FtpOpenFile( nFtp, cFtpRemArq, GENERIC_READ, FTP_TRANSFER_TYPE_BINARY,0 )
+*nFichFTP = FtpOpenFile( nFtp, cFtpRemArq, GENERIC_WRITE, FTP_TRANSFER_TYPE_BINARY,0 )
+IF nFichFTP = 0
+   =ThisForm.Inf("Arquivo "+alltrim(cFtpRemArq)+" da sessão FTP "+STR(nFtp)+" em "+Thisform._ftpadd +" não pude ser aberto... Erro","R") 
+   lOk = .F.
+ELSE
+   =ThisForm.Inf("Arquivo "+alltrim(cFtpRemArq)+" em "+Thisform._ftpadd +" verificado com sucesso...","G") 
+   lOk = .T.
+   InternetCloseHandle( nFichFTP )
+ENDIF
+=ThisForm.Inf("Fechando a sessão deste arquivo... Aguarde...","B") 
+InternetCloseHandle( nFtp )
+
+InternetCloseHandle( nInternet )
+
+RETURN lOk
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE rasftpget
+------------------------------------------------------------
+PROCEDURE rasftpget
+PARAMETERS cFtpLoc, cFtpUsu, cFtpSen, cFtpRemArq, cFtpLocArq
+Local lOk, nInternet, nFtp
+lOk = .f.
+nInternet=0
+nFtp=0
+
+#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0
+#define INTERNET_OPEN_TYPE_DIRECT        1
+#define INTERNET_OPEN_TYPE_PROXY         3
+#DEFINE INTERNET_DEFAULT_FTP_PORT       21
+#DEFINE INTERNET_SERVICE_FTP             1
+#DEFINE INTERNET_FLAG_PASSIVE     14217728
+#DEFINE FILE_ATTRIBUTE_NORMAL         128
+#DEFINE FTP_TRANSFER_TYPE_ASCII         1
+#DEFINE FTP_TRANSFER_TYPE_BINARY        2
+#DEFINE GENERIC_READ            2147483648
+#DEFINE GENERIC_WRITE           1073741824
+
+DECLARE LONG InternetReadFile ;
+	IN "wininet.dll" ;
+	LONG     hFtpSession, ;
+	STRING  @lpBuffer, ;
+	LONG     dwNumberOfBytesToRead, ;
+	LONG    @lpNumberOfBytesRead
+DECLARE LONG InternetOpen ;
+	IN "wininet.dll" ;
+	STRING   lpszAgent, ;
+	LONG     dwAccessType, ;
+	STRING   lpszProxyName, ;
+	STRING   lpszProxyBypass, ;
+	LONG     dwFlags
+DECLARE LONG InternetConnect ;
+	IN "wininet.dll" ;
+	LONG     hInternetSession, ;
+	STRING   lpszServerName, ;
+	LONG     nServerPort, ;
+	STRING   lpszUsername, ;
+	STRING   lpszPassword, ;
+	LONG     dwService, ;
+	LONG     dwFlags, ;
+	LONG     dwContext
+DECLARE INTEGER InternetCloseHandle ;
+	IN "wininet.dll" ;
+	LONG     hInet
+DECLARE LONG GetLastError ;
+	IN WIN32API
+DECLARE INTEGER FtpGetFile ;
+	IN "wininet.dll" ;
+	LONG    hFtpSession, ;
+	STRING  lpszRemoteFile, ;
+	STRING  lpszNewFile, ;
+	LONG    fFailIfExist, ;
+	LONG    dwFlagsAndAttributes, ;
+	LONG    dwFlags,;
+	LONG    dwContext
+DECLARE LONG FtpOpenFile ;
+	IN "wininet.dll" ;
+	LONG     hFtpSession, ;
+	STRING   lpszFileName, ;
+	INTEGER  fdwAccess, ;
+	INTEGER  dwFlags, ;
+	INTEGER  dwContext
+
+nInternet = InternetOpen( "vfp", INTERNET_OPEN_TYPE_DIRECT, "", "", 0 )
+IF nInternet = 0
+	=ThisForm.Inf("Erro na conexão com o servidor. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	RETURN .F.
+Else
+    =ThisForm.Inf("Conexão com a Internet aberta com o número: "+Str(nInternet),"G")  
+ENDIF
+
+*** Conexión con el servicio FTP
+nFtp = InternetConnect( nInternet, cFtpLoc, INTERNET_DEFAULT_FTP_PORT, cFtpUsu, cFtpSen, INTERNET_SERVICE_FTP, INTERNET_FLAG_PASSIVE, 0 )
+IF nFtp = 0
+	=ThisForm.Inf("Erro na conexão com o servidor FTP. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	InternetCloseHandle( nInternet )
+	RETURN .F.
+ELSE
+	=ThisForm.Inf("Abrindo uma sessão FTP com o ID: "+str(nftp),"G")
+EndIf
+
+*** Mena - 30/10/2013 - copia arquivo diretamente do FTP para diretorio local ***
+cNewArqLoc = left(cFtpLocArq,len(cFtpLocArq)-3)+"ftp" && renomea o arquivo para temporario ate completar a transferencia
+if file(cFtpLocArq)
+	delete file &cFtpLocArq
+endif
+
+at_ini = seconds()
+=ThisForm.processa(allt(justfname(cFtpremArq)),99999,ThisForm._dirRecFtp,ThisForm._dirEnvLoc,0,0,0,0,"I")	 
+lOk = FtpGetFile( nFtp, cFtpRemArq, cNewArqLoc, .F., FILE_ATTRIBUTE_NORMAL, FTP_TRANSFER_TYPE_BINARY, 0 )	&& copia arquivo do FTP
+lOk = IIF(lOk = 1, .T., .F.)
+at_fin = seconds()
+nFileSize = LEN(FILETOSTR(cNewArqLoc)) 
+nTama = nFileSize
+=ThisForm.processa(allt(justfname(cFtpremArq)),nfileSize,ThisForm._dirRecFtp,ThisForm._dirEnvLoc,nTama,0,at_ini,at_fin-at_ini,"A")	 
+*********************************************************************************
+
+*!*		*** Abre o arquivo no servidor
+*!*		=thisform.Inf("Abrindo o arquivo "+allt(cFtpremArq)+" na sessão FTP "+ str(nFtp)+" em "+ThisForm._ftpadd,"G")  
+*!*		nFichFTP = FtpOpenFile( nFtp, cFtpRemArq, GENERIC_READ, FTP_TRANSFER_TYPE_BINARY,0 )
+*!*		IF nFichFTP = 0
+*!*			=thisform.Inf( "Erro na busca do arquivo "+allt(cFtpRemArq)+". "+allt(Thisform.InErrorCase(GetLastError())), "R" )
+*!*			InternetCloseHandle( nFtp )
+*!*			InternetCloseHandle( nInternet )
+*!*			RETURN .F.
+*!*		else
+*!*		   =thisform.Inf("Arquivo "+allt(cFtpremArq)+" aberto com sucesso.","G")
+*!*		ENDIF
+
+*!*		*-[ Calcula o Tamanho ]-*
+*!*		=thisform.Inf("Calculando o Tamanho do arquivo "+allt(cFtpremArq)+" a ser recebido" ,"G")
+*!*		ThisForm.GetFtpDirectory(Thisform._direnvloc, "*.*")
+*!*		*=ThisForm.raslisarq(ThisForm._ftpadd, ThisForm._ftpuser , ThisForm._ftppass , Thisform._direnvloc)
+*!*		sele FtpServer
+*!*		go top
+
+*!*		Scan
+*!*		   if upper(allt(ftpserver.nome))=upper(allt(justfname(cFtpremArq)))
+*!*		      nfileSize = val(strtran(tama,',',''))
+*!*		      exit
+*!*		   else
+*!*		      nFileSize = 0
+*!*		   endif
+*!*		EndScan
+
+*!*		if nFileSize = 0
+*!*			=Thisform.Inf("Arquivo [ "+allt(cFtpremArq)+" ] com tamanho ZERO não pode ser recebido... Erro.","R")
+*!*			InternetCloseHandle( nFtp )
+*!*			InternetCloseHandle( nInternet )
+*!*			Return .f.
+*!*		endif
+
+*!*		*** Cria o arquivo no local
+*!*		cNewArqLoc = left(cFtpLocArq,len(cFtpLocArq)-3)+"ftp" && renomea o arquivo para temporario ate completar a transferencia
+
+*!*		if file(cFtpLocArq)
+*!*			delete file &cFtpLocArq
+*!*		endif
+
+*!*		nFich = FCREATE( cNewArqLoc )
+
+*!*		if nFich < 0 && Erro 
+*!*			=thisform.Inf("Arquivo não pude ser criado e recebido na pasta [ "+substr(cFtpLocArq,1,len(cFtpLocArq)-len(justfname(cFtpLocArq)))+" ]","R")
+*!*		    =thisform.Inf("Recebimento do arquivo [ "+cFtpLocArq+" ] foi Cancelado ")
+*!*		    lOk = .f.
+*!*			InternetCloseHandle( nFtp )
+*!*			InternetCloseHandle( nInternet )
+*!*		    Return .f.
+*!*		Endif
+
+*!*		nTama = 0
+*!*		nLen = 1
+
+*!*		=Thisform.Inf("Recebendo o arquivo "+allt(cFtpremArq)+" de "+ThisForm._ftpadd+" Tamanho "+iif(nfilesize>0,str(nfilesize)+" Bytes","Desconhecido") ,"G")
+*!*		=ThisForm.processa(allt(justfname(cFtpremArq)),nfileSize,ThisForm._dirRecFtp,ThisForm._dirEnvLoc,0,0,0,0,"I")	 
+*!*		at_ini = Seconds()
+*!*		DO WHILE nLen # 0
+*!*			cBuffer = REPLICATE( CHR(0), 2048 )
+*!*			InternetReadFile( nFichFTP, @cBuffer, LEN( cBuffer ), @nLen ) 
+*!*			bt_fin = seconds()
+*!*			FWRITE( nFich, SUBSTR( cBuffer, 1, nLen ) )
+*!*			nTama = nTama + nLen
+*!*		    =ThisForm.processa(allt(justfname(cFtpremArq)),nfileSize,ThisForm._dirRecFtp,ThisForm._dirEnvLoc,nTama,2048,at_ini,bt_fin-at_ini,"A")	 
+*!*		ENDDO
+*!*		at_fin = seconds()
+*!*		* fecha o arquivo local
+*!*		FCLOSE( nFich )
+
+*!*		if nTama <= 0 && Arquivo Tamanho Zero - Invalido
+*!*			=Thisform.Inf("Arquivo [ "+cFtpLocArq+" ] foi recebido com tamanho ZERO... Erro.","R")
+*!*		    lOk = .f.
+*!*		else
+*!*			lOk = .t.
+*!*		endif
+
+if lOk
+	* Renomea o arquivo baixado
+	=Thisform.Inf("Renomeando o arquivo [ "+cNewArqLoc+" ] para [ "+cFtpLocArq+" ]","B")
+	
+	Rename &cNewArqLoc TO &cFtpLocArq
+	if file(cFtpLocArq)
+		=thisform.Inf("Arquivo renomeado para [ "+cFtpLocArq+" ] com sucesso","B")
+	    lOk = .t.
+	else
+		=thisform.Inf("Falha na renomeação do arquivo [ "+cNewArqLoc+" ] para [ "+cFtpLocArq+" ]. Erro.","R")
+	    lOk = .f.
+	Endif
+endif
+
+*!*	InternetCloseHandle( nFichFTP )
+InternetCloseHandle( nFtp )
+InternetCloseHandle( nInternet )
+
+=ThisForm.processa(allt(justfname(cFtpremArq)),nfileSize,ThisForm._dirRecFtp,ThisForm._dirEnvLoc,nTama,2048,at_ini,at_fin-at_ini,"C")	 
+RETURN lOk
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE rasftpput
+------------------------------------------------------------
+PROCEDURE rasftpput
+PARAMETERS cFtpLoc, cFtpUsu, cFtpSen, cFtpLocArq, cFtpRemArq
+Local gnFile,nSize,cBuffer, cFtpNewRem, lOk, nInternet, nFtp
+lOk = .f.
+
+#DEFINE GENERIC_WRITE           1073741824
+#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0
+#define INTERNET_OPEN_TYPE_DIRECT        1
+#define INTERNET_OPEN_TYPE_PROXY         3
+#DEFINE INTERNET_DEFAULT_FTP_PORT       21
+#DEFINE INTERNET_SERVICE_FTP             1
+#DEFINE INTERNET_FLAG_PASSIVE     14217728
+#DEFINE FTP_TRANSFER_TYPE_ASCII         1
+#DEFINE FTP_TRANSFER_TYPE_BINARY        2
+
+
+DECLARE LONG InternetWriteFile ;
+	IN "wininet.dll" ;
+	LONG     hFtpSession, ;
+	STRING   lpBuffer, ;
+	LONG     dwNumberOfBytesToWrite, ;
+	LONG    @lpNumberOfBytesWrite
+
+DECLARE INTEGER FtpPutFile ;
+	IN "wininet.dll" ;
+	LONG     hFtpSession, ;
+	STRING   lpszLocalFile, ;
+	STRING   lpszNewRemoteFile, ;
+	LONG     dwFlags,;
+	LONG     dwContext
+
+DECLARE LONG InternetOpen ;
+	IN "wininet.dll" ;
+	STRING   lpszAgent, ;
+	LONG     dwAccessType, ;
+	STRING   lpszProxyName, ;
+	STRING   lpszProxyBypass, ;
+	LONG     dwFlags
+
+DECLARE LONG InternetConnect ;
+	IN "wininet.dll" ;
+	LONG     hInternetSession, ;
+	STRING   lpszServerName, ;
+	LONG     nServerPort, ;
+	STRING   lpszUsername, ;
+	STRING   lpszPassword, ;
+	LONG     dwService, ;
+	LONG     dwFlags, ;
+	LONG     dwContext
+
+DECLARE LONG FtpOpenFile ;
+	IN "wininet.dll" ;
+	LONG     hFtpSession, ;
+	STRING   lpszFileName, ;
+	INTEGER  fdwAccess, ;
+	INTEGER  dwFlags, ;
+	INTEGER  dwContext
+
+DECLARE LONG GetLastError ;
+	IN WIN32API
+
+DECLARE INTEGER InternetCloseHandle ;
+	IN "wininet.dll" ;
+	LONG     hInet
+
+DECLARE INTEGER FtpGetFile ;
+	IN "wininet.dll" ;
+	LONG    hFtpSession, ;
+	STRING  lpszRemoteFile, ;
+	STRING  lpszNewFile, ;
+	LONG    fFailIfExist, ;
+	LONG    dwFlagsAndAttributes, ;
+	LONG    dwFlags,;
+	LONG    dwContext
+
+nInternet = InternetOpen( "vfp", INTERNET_OPEN_TYPE_DIRECT, "", "", 0 )
+IF nInternet = 0
+	=ThisForm.Inf("Erro na conexão com o servidor. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	RETURN .F.
+Else
+    =ThisForm.Inf("Conexão com a Internet aberta com o número: "+Str(nInternet),"G")  
+ENDIF
+
+*** Conexión con el servicio FTP
+nFtp = InternetConnect( nInternet, cFtpLoc, INTERNET_DEFAULT_FTP_PORT, cFtpUsu, cFtpSen, INTERNET_SERVICE_FTP, INTERNET_FLAG_PASSIVE, 0 )
+IF nFtp = 0
+	=ThisForm.Inf("Erro na conexão com o servidor. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	InternetCloseHandle( nInternet )
+	RETURN .F.
+ELSE
+	=ThisForm.Inf("Abrindo uma sessão FTP com o ID: "+str(nftp),"G")
+ENDIF
+
+*************************************
+* Rotina FTP para envio de arquivos com monitoracao
+*************************************
+if !file(cFtpLocArq)
+   =thisform.Inf("O arquivo local "+allt(cFtpLocArq)+" em "+ThisForm._direnvftp+" não existe. Por favor verifique.","R")  
+   =thisform.Inf("Transferência cancelada!","R")  
+   return .f.
+endif
+
+=thisform.Inf("Iniciando sessão para o arquivo "+allt(cFtpremArq)+" na sessão FTP "+ str(nFtp)+" em "+ThisForm._ftpadd,"G")  
+
+cFtpNewRem = left(cFtpRemArq,len(cFtpRemArq)-3)+"ftp" && renomea o arquivo para temporario ate completar a transferencia
+=thisform.Inf("Criando arquivo temporário na sessão FTP. Arquivo : "+cFtpNewRem,"B")
+
+*******************************************************************************************
+*** Mena - 30/10/2013 - mudada a forma de subir para FTP de leitura/gravaçao para copia ***
+*******************************************************************************************
+nSize = LEN(FILETOSTR(cFtpLocArq))
+at_ini = seconds()
+=ThisForm.processa(allt(justfname(cFtpLocArq)),nSize,ThisForm._direnvFtp,ThisForm._dirrecloc,0,0,0,0,"I")	 
+lOk = FtpPutFile( nFtp, cFtpLocArq, cFtpNewRem, FTP_TRANSFER_TYPE_BINARY, 0 )	&& copia arquivo para FTP
+lOk = IIF(lOk = 1, .T., .F.)
+IF lOk
+	at_fin = seconds()
+	=ThisForm.processa(allt(justfname(cFtpLocArq)),nSize,ThisForm._dirEnvftp,ThisForm._dirrecloc,nSize,nSize,at_ini,at_fin,"A")	 
+ELSE
+	=thisform.Inf("Arquivo não pode ser gravado na área FTP especificada. Transferência cancelada!","R")  
+	=Chrsaw(4)
+ENDIF
+**************************************************************************************************************************
+
+*!*		nFichFTP = FtpOpenFile( nFtp, cFtpNewRem, GENERIC_WRITE, FTP_TRANSFER_TYPE_BINARY,0 )
+
+*!*		if nFichFTP <= 0
+*!*		   =thisform.Inf("Arquivo não pode ser gravado na área FTP especificada. Transferência cancelada!","R")  
+*!*		   =thisform.Inf("Erro : "+allt(Thisform.InErrorCase(GetLastError())),"R")  
+*!*		   lOk = .f.
+*!*		   return .f.
+*!*		endif
+
+*!*		=thisform.Inf("Lendo o arquivo local "+allt(cFtpLocArq)+" em "+ThisForm._direnvftp,"G")  
+*!*		gnFile = FOPEN(cFtpLocArq)
+*!*		if gnfile >0 
+*!*			nSize =  FSEEK(gnFile, 0, 2)     && Move pointer to EOF
+*!*			IF nSize <= 0
+*!*			   =thisform.Inf("Arquivo "+allt(cFtpLocArq)+" de "+ThisForm._direnvftp+" Tamanho "+iif(nSize>0,str(nSize)+" Bytes","Desconhecido. Arquivo Vazio") ,"R")
+*!*				lOk = .f.
+*!*			ELSE
+*!*			   = FSEEK(gnFile, 0, 0)    
+*!*			   nEnv  = 0
+*!*			   nEnvt = 0
+*!*		       
+*!*		       =thisform.Inf("Enviando o arquivo "+allt(cFtpLocArq)+" de "+ThisForm._direnvftp+" Tamanho "+iif(nSize>0,str(nSize)+" Bytes","Desconhecido") ,"G")
+*!*		       =ThisForm.processa(allt(justfname(cFtpLocArq)),nSize,ThisForm._direnvFtp,ThisForm._dirrecloc,0,0,0,0,"I")	 
+*!*		       at_ini = Seconds()
+*!*		 	   Do while nEnvt < nSize
+*!*		*!*		      cBuffer = FREAD(gnFile, 2048)		&& Mena - 24/10/2013 - retirado para enviar o tamanho total
+*!*			      cBuffer = FREAD(gnFile, nSize)
+*!*			      InternetWriteFile( nFichFTP, cBuffer, LEN( cBuffer ), @nEnv ) 
+*!*		          bt_fin = seconds()
+*!*				  nEnvt = nEnvt + nEnv
+*!*		          =ThisForm.processa(allt(justfname(cFtpLocArq)),nSize,ThisForm._dirEnvftp,ThisForm._dirrecloc,nEnvt,2048,at_ini,bt_fin-at_ini,"A")	 
+*!*			   Enddo   
+*!*			   lOk = .t.
+*!*			ENDIF
+*!*		    at_fin = seconds()
+*!*		    = FCLOSE(gnFile)
+*!*		else
+*!*		   lOk = .f.
+*!*		   =thisform.Inf("O arquivo local "+allt(cFtpLocArq)+" em "+ThisForm._direnvftp+" está em uso e não pode ser aberto","R")  
+*!*		   =thisform.Inf("Transferência cancelada!","R")  
+*!*		endif
+*!*		= FCLOSE(gnFile)
+
+InternetCloseHandle( nFtp )
+InternetCloseHandle( nInternet )
+
+if lOk
+    && Restaurar o nome original
+    =thisform.Inf("Renomeando arquivo temporário [ "+cFtpNewRem+" ] para [ "+cFtpRemArq,"B")
+    if ThisForm.RenameFtpFile(cFtpNewRem,Upper(cFtpRemArq))
+       =thisform.Inf("Arquivo renomeado para [ "+cFtpRemArq+" ] com sucesso","B")    
+    else
+       =thisform.Inf("Falha na renomeação do arquivo para [ "+cFtpRemArq+" ]. Erro","R")    
+    endif 
+	
+	IF !ThisForm.rasfile(ThisForm._ftpadd, Thisform._ftpuser , ThisForm._ftppass , cFtpRemArq )
+		lOk = .F.   
+	ELSE
+		if ThisForm.raslisarq(ThisForm._ftpadd, Thisform._ftpuser , ThisForm._ftppass , allt(ThisForm._dirrecftp))
+			lOk = .t.
+		else
+			lOk = .F.
+		endif   
+	ENDIF
+
+	if lOk
+	    =ThisForm.processa(allt(justfname(cFtpLocArq)),nSize,ThisForm._dirEnvFtp,ThisForm._dirRecLoc,nSize,0,at_ini,at_fin-at_ini,"C")
+	endif    
+Endif
+
+RETURN lOk
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE raslisarq
+------------------------------------------------------------
+PROCEDURE raslisarq
+PARAMETERS cFtpLoc, cFtpUsu, cFtpSen, cFtpLocIni
+
+#DEFINE FILE_ATTRIBUTE_NORMAL          128
+#DEFINE FILE_ATTRIBUTE_DIRECTORY        16
+#DEFINE INTERNET_FLAG_RAW_DATA   1073741824
+
+#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0
+#define INTERNET_OPEN_TYPE_DIRECT        1
+#define INTERNET_OPEN_TYPE_PROXY         3
+#DEFINE INTERNET_DEFAULT_FTP_PORT       21
+#DEFINE INTERNET_SERVICE_FTP             1
+#DEFINE INTERNET_FLAG_PASSIVE     14217728
+#DEFINE FILE_ATTRIBUTE_NORMAL         128
+
+*** Declaración de Funciones
+DECLARE Integer InternetFindNextFile ;
+	IN "wininet.dll" ;
+	Long     hFind, ;
+	String  @lpFindFileData
+DECLARE Integer FtpFindFirstFile ;
+	IN "wininet.dll" ;
+	Long     hFtpSession, ;
+	String   lpszSearchFile, ;
+	String  @lpFindFileData, ;
+	Long     dwFlags, ;
+	Long     dwContext
+Declare Integer FtpSetCurrentDirectory ;
+	IN "wininet.dll" ;
+	Long     hFtpSession, ;
+	String   lpszDirectory
+DECLARE LONG FileTimeToSystemTime ;
+	IN WIN32API ;
+	STRING    lpFileTime, ;
+	STRING   @lpSystemTime
+
+DECLARE LONG InternetOpen ;
+	IN "wininet.dll" ;
+	STRING   lpszAgent, ;
+	LONG     dwAccessType, ;
+	STRING   lpszProxyName, ;
+	STRING   lpszProxyBypass, ;
+	LONG     dwFlags
+DECLARE LONG InternetConnect ;
+	IN "wininet.dll" ;
+	LONG     hInternetSession, ;
+	STRING   lpszServerName, ;
+	LONG     nServerPort, ;
+	STRING   lpszUsername, ;
+	STRING   lpszPassword, ;
+	LONG     dwService, ;
+	LONG     dwFlags, ;
+	LONG     dwContext
+DECLARE INTEGER InternetCloseHandle ;
+	IN "wininet.dll" ;
+	LONG     hInet
+DECLARE LONG GetLastError ;
+	IN WIN32API
+
+nInternet = InternetOpen( "vfp", INTERNET_OPEN_TYPE_DIRECT, "", "", 0 )
+IF nInternet = 0
+	=ThisForm.Inf("Erro na conexão com o servidor. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	InternetCloseHandle( nFtp )
+	RETURN .F.
+ENDIF
+
+nFtp = InternetConnect( nInternet, cFtpLoc, INTERNET_DEFAULT_FTP_PORT, cFtpUsu, cFtpSen, INTERNET_SERVICE_FTP, INTERNET_FLAG_PASSIVE, 0 )
+IF nFtp = 0
+	=ThisForm.Inf("Erro na conexão com o servidor FTP. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	RETURN .F.
+ENDIF
+
+
+CREATE CURSOR ftpserver (;
+	nome C(240), ;
+	Tipo C(10) , ;
+	Tama C(12) , ;
+	data C(16))
+index on nome tag nome
+set order to nome
+
+cOldDate = SET("DATE")
+SET DATE TO DMY
+*** Ir al directorio de la KB de FoxPro
+FtpSetCurrentDirectory( nFtp, cFtpLocIni )
+*** Empezar el recorrido de busqueda
+cFindData = REPLICATE( CHR(0), 320  )
+nFind = FtpFindFirstFile( ;
+	nFtp, ;
+	NULL, ;
+	@cFindData, ;
+	INTERNET_FLAG_RAW_DATA, ;
+	0 )
+nSeguir = 1
+DO WHILE nSeguir # 0
+	*** Obtener el nombre de la matriz
+	cNome = SUBSTR( cFindData, 45, AT(CHR(0), SUBSTR(cFindData,45)) -1 )
+	*** Directorio o Fichero
+	IF Thisform.CToWord( SUBSTR( cFindData, 1, 4 ) )= FILE_ATTRIBUTE_DIRECTORY
+		cTipo = "Diretório"
+        nTama = 0
+	ELSE
+		cTipo = "Arquivo"
+		*** Tamaño del fichero
+		nTama = ThisForm.CToWord( SUBSTR( cFindData, 33, 4 ) )
+	ENDIF
+	*** Cambiar el formato de Fecha y Hora
+	cSystemTime = REPLICATE( CHR(0), 16 )
+	FileTimeToSystemTime( ;
+		SUBSTR( cFindData, 21, 8 ), ;
+		@cSystemTime )
+	*** Obtener cada uno de los elementos
+	cDia = PADL( ThisForm.CToWord( SUBSTR( ;
+		cSystemTime, 7, 2 ) ), 2, "0" )
+	cMes = PADL( ThisForm.CToWord( SUBSTR( ;
+		cSystemTime, 3, 2 ) ), 2, "0" )
+	cAno = STR( ThisForm.CToWord( SUBSTR( ;
+		cSystemTime, 1, 2 ) ), 4 )
+	cHora = PADL( ThisForm.CToWord( SUBSTR( ;
+		cSystemTime, 9, 2 ) ), 2, "0" )
+	cMinuto = PADL( ThisForm.CToWord( SUBSTR( ;
+		cSystemTime, 4, 2 ) ), 2, "0" )
+	tFechaHora = cDia+"/"+cMes+"/"+cAno+" "+cHora+":"+cMinuto
+	*** Insertar el dato en el cursor
+	INSERT INTO ftpserver ;
+		VALUES ( cNome, ;
+			cTipo, ;
+			transform(nTama,"9999,999,999"),;
+			tFechaHora )
+	*** Continuar con la búsqueda
+	cFindData = REPLICATE( CHR(0), 320 )
+	nSeguir = InternetFindNextFile( ;
+		nFind, ;
+		@cFindData )
+ENDDO
+
+InternetCloseHandle( nFtp )
+InternetCloseHandle( nInternet )
+
+
+SET DATE TO (cOldDate)
+sele FtpServer
+GO TOP
+RETURN .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE recebe
+------------------------------------------------------------
+PROCEDURE recebe
+Parameters ptptrans
+Local zct, arqproc, lOk, arqproc, cArquivo_local, cArquivo_FTP, ARRECEB, ntrans, oObj, nselected, lnQtdArq
+lOk = .t.
+ntrans = 0
+nselected = 0
+
+*-[ RECEBE os arquivos do FTP para Local (Remote to Host) ]-*
+*=ThisForm.Inf("2ª FASE: Iniciando a Fase de Recebimento de Arquivos do FTP.","B")
+ThisForm.Container1.pgfftp.Page2.zorder
+oObj = ThisForm.Container1.pgfftp.Page2.lstenvloc
+if oObj.ListCount <=0
+   lOk = .f.
+   =ThisForm.Inf("NÃO existe nenhum arquivo a ser recebido do FTP.","B")
+Endif
+
+lnQtdArq = oObj.ListCount
+if lOk
+    DIMENSION ARRECEB(oObj.ListCount)
+    For i=1 to lnQtdArq		&&oObj.ListCount
+       DO CASE
+          CASE ptptrans == "I" && Individual File Transfer
+              ntrans = ntrans + 1 
+              if oObj.Selected(i)
+                 nselected = nselected + 1
+                 STORE oObj.list(i,1) TO ARRECEB(ntrans)
+              else
+                 STORE "" TO ARRECEB(ntrans)
+              endif
+          CASE ptptrans = "A" && Transfer ALL
+              STORE oObj.list(i,1) TO ARRECEB(i)
+       EndCase      
+    Next
+    if ptptrans == "I"
+       if nselected <= 0 
+          =ThisForm.Inf("Nenhum arquivo da lista foi selecionado.","R")
+          MESSAGEBOX('Nenhum Arquivo está selecionado na lista',32,'Aviso...') 
+          return .t.
+       endif   
+    endif   
+
+    ThisForm.Container1.enabled = .t.
+    ThisForm.cmdtran.enabled    = .f.
+    ThisForm.cmdrec.enabled     = .f.
+    ThisForm.cmdsair.enabled    = .f.
+ 
+    For zct=1 to lnQtdArq		&&oObj.ListCount
+	    if empt(allt(ARRECEB(zct)))
+	       loop
+	    endif
+	    arqproc = allt(ThisForm._dirEnvLoc+allt(ARRECEB(zct)) )
+	       
+	    =ThisForm.Inf("Processando o arquivo "+arqproc+" para receber do FTP","G")
+	    cArquivo_Local = allt(Thisform._dirRecFtp)+allt(ARRECEB(zct))
+	    cArquivo_FTP   = arqproc
+
+		fGravarLog('X',Thisform.Name,'REC FTP',substr('INICIANDO RECEPCAO DE '+justfname(arqproc),1,70),m.usuar)
+	    IF ThisForm.rasfile(ThisForm._ftpadd, Thisform._ftpuser , ThisForm._ftppass , cArquivo_FTP )   
+	       IF ThisForm.rasftpget(ThisForm._ftpadd, Thisform._ftpuser , ThisForm._ftppass , cArquivo_FTP , cArquivo_Local )
+			  fGravarLog('X',Thisform.Name,'REC FTP',substr('RECEPCAO OK DE '+justfname(arqproc),1,70),m.usuar)
+	          m.lOk = .T.
+	       ELSE
+			  fGravarLog('X',Thisform.Name,'REC FTP',substr('FALHA NA RECEPCAO DE '+justfname(arqproc),1,70),m.usuar)
+	          lOk = .F.
+	       ENDIF       
+	    ELSE
+	       m.lOk = .F.      
+	    ENDIF   
+	    if lOk
+	       =ThisForm.Inf("Arquivo "+arqproc+" Recebido do FTP","G")
+	    else
+	       =ThisForm.Inf("Problema: Arquivo "+arqproc+" NÃO foi Recebido do FTP.","R")
+	    endif   
+	Next
+	if lOk
+	   =ThisForm.Inf("Operação de Recebimento Concluída","B")
+	else
+	   =ThisForm.Inf("Operação de Recebimento Não foi Concluída com exito","R")
+	Endif   
+    ThisForm.Container1.enabled = .t.
+    ThisForm.cmdtran.enabled    = .t.
+    ThisForm.cmdrec.enabled     = .t.
+    ThisForm.cmdsair.enabled    = .t.
+
+Endif
+return lOk
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE renameftpfile
+------------------------------------------------------------
+PROCEDURE renameftpfile
+LPARAMETERS lcOldFile, lcNewFile 
+
+#DEFINE FILE_ATTRIBUTE_NORMAL          128
+#DEFINE FILE_ATTRIBUTE_DIRECTORY        16
+#DEFINE INTERNET_FLAG_RAW_DATA  1073741824
+
+#DEFINE INTERNET_OPEN_TYPE_PRECONFIG     0
+#define INTERNET_OPEN_TYPE_DIRECT        1
+#define INTERNET_OPEN_TYPE_PROXY         3
+#DEFINE INTERNET_DEFAULT_FTP_PORT       21
+#DEFINE INTERNET_SERVICE_FTP             1
+#DEFINE INTERNET_FLAG_PASSIVE     14217728
+#DEFINE FILE_ATTRIBUTE_NORMAL          128
+
+#define cNULL	   CHR(0)
+
+DECLARE LONG InternetOpen ;
+	IN "wininet.dll" ;
+	STRING   lpszAgent, ;
+	LONG     dwAccessType, ;
+	STRING   lpszProxyName, ;
+	STRING   lpszProxyBypass, ;
+	LONG     dwFlags
+DECLARE LONG InternetConnect ;
+	IN "wininet.dll" ;
+	LONG     hInternetSession, ;
+	STRING   lpszServerName, ;
+	LONG     nServerPort, ;
+	STRING   lpszUsername, ;
+	STRING   lpszPassword, ;
+	LONG     dwService, ;
+	LONG     dwFlags, ;
+	LONG     dwContext
+DECLARE INTEGER InternetCloseHandle ;
+	IN "wininet.dll" ;
+	LONG     hInet
+DECLARE LONG GetLastError ;
+	IN WIN32API
+DECLARE Integer FtpRenameFile IN WinInet ;
+		Integer nConnect_Handle, ;
+		String @lpcRemoteFile, ;
+		String @lpcNewFile
+	      
+
+LOCAL fResult
+nInternet = InternetOpen( "vfp", INTERNET_OPEN_TYPE_DIRECT, "", "", 0 )
+IF nInternet = 0
+	=ThisForm.Inf("Erro na conexão com o servidor. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	InternetCloseHandle( nFtp )
+	RETURN .F.
+ENDIF
+
+*** Conexión con el servicio FTP
+nFtp = InternetConnect( nInternet, cFtpLoc, INTERNET_DEFAULT_FTP_PORT, cFtpUsu, cFtpSen, INTERNET_SERVICE_FTP, INTERNET_FLAG_PASSIVE, 0 )
+IF nFtp = 0
+	=ThisForm.Inf("Erro na conexão com o servidor FTP. "+allt(Thisform.InErrorCase(GetLastError())),"R" )
+	RETURN .F.
+ENDIF
+
+lcOldFile = lower(allt(lcOldFile)) + cNULL
+lcNewFile = lower(allt(lcNewFile)) + cNULL
+
+fResult = FtpRenameFile(nftp, @lcOldFile, @lcNewFile)
+
+InternetCloseHandle( nFtp )
+InternetCloseHandle( nInternet )
+
+IF fResult = 1
+   RETURN .T.
+ELSE
+   RETURN .F.
+ENDIF
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE sectohour
+------------------------------------------------------------
+PROCEDURE sectohour
+Parameters nSecto
+
+zhora = int(nSecto/3600)
+zMinu = mod(int(nSecto/60),60)
+zSeco = mod(nSecto,60)
+
+Return(iif(zhora>0,allt(str(zhora))+ " h, ","")+iif(zMinu>0,allt(str(zMinu))+ " m, ","")+allt(str(zSeco))+" s")
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE statctrlup
+------------------------------------------------------------
+PROCEDURE statctrlup
+Lparameters pStep, pTotal, pMessage
+
+With ThisForm.StatControl
+	
+	If Type('pMessage') = 'C'
+		.StatusText = pMessage
+	EndIf
+
+	Do Case
+		Case Type('pStep') = 'N'
+			If .StatusPercent < Int( (pStep / pTotal) * 100 )
+				.StatusPercent = Int( (pStep / pTotal) * 100 )
+			EndIf
+		
+			Return(pStep + 1)
+			
+		Case Type('pStep') = 'L'
+			.StatusPercent = 0
+			.Visible       = pStep
+	EndCase
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE transfere
+------------------------------------------------------------
+PROCEDURE transfere
+Parameters ptptrans
+Local zct, arqproc, lOk, cArquivo_local, cArquivo_FTP, ARENV, oObj, ntrans, nselected, nEmpFail, lcEmps,;
+		lcArq1
+lOk = .t.
+ntrans    = 0
+nselected = 0
+nEmpFail  = 0
+
+*-[ Transfere os arquivos do Local para o FTP (Host to Remote) ]-*
+ThisForm.Container1.pgfloc.Page1.zorder
+oObj = ThisForm.Container1.pgfloc.Page1.lstEnvftp
+if oObj.listcount <=0
+   =ThisForm.Inf("NÃO existe nenhum arquivo a ser Transferido para o FTP.","B")
+   lOk = .f. 
+Endif
+
+lnQtdArq = oObj.ListCount
+if lOk
+    DIMENSION ARENV(oObj.listcount)
+*!*	For i=1 to oObj.listcount
+	For i=1 to lnQtdArq
+	   lcEmps = alltrim(strtran(substr(oObj.list(i,1),1,3),"_",""))
+       DO CASE
+          CASE ptptrans = "I" && Individual File Transfer
+              ntrans = ntrans + 1
+              if oObj.Selected(i)
+                 nselected = nselected + 1
+				 * Verifica se a empresa desse arquivo possui conf. de FTP
+                 sele crftpemp
+                 *if seek(lcEmps,"SigCdEmp","CEMPS") and !Empty(SigCdEmp.ftpEnd)
+					STORE oObj.list(i,1) TO ARENV(ntrans)
+                 *else
+					*nEmpFail = nEmpFail + 1
+					*STORE "" TO ARENV(ntrans)
+                 *endif
+              else
+				 STORE "" TO ARENV(ntrans)
+              endif
+          CASE ptptrans = "A" && Transfer ALL
+              sele crftpemp
+              *if seek(lcEmps,"SigCdEmp","CEMPS") and !Empty(SigCdEmp.ftpEnd)
+	              STORE oObj.list(i,1) TO ARENV(i)
+              *else
+				  *nEmpFail = nEmpFail + 1
+				  *STORE "" TO ARENV(i)
+              *endif
+       EndCase      
+    Next
+    if ptptrans == "I"
+	    if nSelected <= 0
+          =ThisForm.Inf("Nenhum arquivo da lista foi selecionado.","R")
+          MESSAGEBOX('Nenhum Arquivo está selecionado na lista',32,'Aviso...') 
+          lOk = .f.
+          return .f.
+        Endif
+    endif   
+
+    ThisForm.Container1.enabled = .t.
+    ThisForm.cmdtran.enabled    = .f.
+    ThisForm.cmdrec.enabled     = .f.
+    ThisForm.cmdsair.enabled    = .f.
+
+*!*	For zct=1 to oObj.ListCount
+    For zct=1 to lnQtdArq
+    	lcArq1 = ARENV(zct)
+
+	    If (Not Type('lcArq1')=='C' Or Empty(alltrim(lcArq1)))
+	       loop
+	    endif
+	    arqproc = allt(ThisForm._dirEnvFtp+alltrim(lcArq1))
+	    =ThisForm.Inf("Processando o arquivo Local "+arqproc+" para enviar ao FTP","G")
+	    cArquivo_Local = arqproc
+		
+	    cArquivo_FTP   = Lower(allt(Thisform._dirRecloc)+alltrim(lcArq1))
+		*** Grava Log - Enviando Arquivo
+		fGravarLog('X',Thisform.Name,'ENVIO FTP',substr('INICIANDO ENVIO DE '+justfname(cArquivo_Local),1,70),m.usuar)
+	    if ThisForm.rasftpPUT(ThisForm._ftpadd, Thisform._ftpuser , ThisForm._ftppass , cArquivo_Local, cArquivo_FTP )
+			lOk = .T.
+			=ThisForm.Inf("Arquivo Local "+arqproc+" transferido para FTP.","G")
+			fGravarLog('X',Thisform.Name,'ENVIO FTP',substr('ENVIO OK DE '+justfname(cArquivo_Local),1,70),m.usuar)			
+	    else
+			lOk = .F.
+	        =ThisForm.Inf("Problema: Arquivo Local "+arqproc+" NÃO foi transferido para o FTP.","R")
+			fGravarLog('X',Thisform.Name,'ENVIO FTP',substr('FALHA NO ENVIO DE '+justfname(cArquivo_Local),1,70),m.usuar)
+	       exit 
+	    endif   
+	Next
+
+	if lOk
+	   if nEmpFail > 0
+		  =ThisForm.Inf(allt(str(nEmpFail))+" Arq. não pode(m) ser transferido(s) por falta de Conf. de FTP nas respectivas Empresas","R")
+	   endif
+	   =ThisForm.Inf("Operação de transferência Concluída","B")
+	else
+	   =ThisForm.Inf("Operação de transferência Não foi Concluída com exito","R")
+	Endif   
+
+    ThisForm.Container1.enabled = .t.
+    ThisForm.cmdtran.enabled    = .t.
+    ThisForm.cmdrec.enabled     = .t.
+    ThisForm.cmdsair.enabled    = .t.
+
+Endif
+Return(lOk)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE wordtoc
+------------------------------------------------------------
+PROCEDURE wordtoc
+LPARAMETER nNumber
+RETURN CHR(BITAND(255,nNumber)) ;
+	+ CHR(BITAND(65280,nNumber)%255) ; 
+	+ CHR(BITAND(16711680,nNumber)%255) ;
+	+ CHR(BITAND(4278190080,nNumber)%255)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters cTpEnv, cTpRec, cTpConnect, cFtpAdd, cFtpUser, cFtpPass, ;
+           cDirEnvFtp, cDirRecFtp, cDirEnvLoc, cDirRecLoc, ;
+           lDelLocal, lDelHost, nTpConect, lCaseSensitive
+
+PUBLIC ARRAY aProvedor(1)
+PUBLIC cProvedor
+Local lOk, cemptoseek
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn < 1)
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+
+	= DoDefault()
+EndWith
+
+ThisForm.poDataMgr.CursorQuery('SigCdPam', 'crftpParam', .f., .f., 'TpTrans, EmpMasters, GruMccrs, ConMccrs, VendNts')
+
+cemptoseek = ""
+lOk = .t.
+
+With ThisForm
+
+	.Container1.pgfloc.Page1.zorder
+	
+	*-[ Carrega as Variaveis ]-*
+	._TpConnect = iif(type("cTpConnect")=="L","",UPPER(allt(cTpConnect)))
+	._FtpAdd    = iif(type("cFtpAdd")   =="L","",lower(allt(cFtpAdd   )))
+	._FtpUser   = iif(type("cFtpUser")  =="L","",lower(allt(cFtpUser  )))
+	._FtpPass   = iif(type("cFtpPass")  =="L","",Iif(lCaseSensitive,cFtpPass,lower(Alltrim(cFtpPass))))
+	._DirEnvFtp = iif(type("cDirEnvFtp")=="L","",lower(allt(cDirEnvFtp)))
+	._DirRecFtp = iif(type("cDirRecFtp")=="L","",lower(allt(cDirRecFtp)))
+	._DirRecLoc = iif(type("cDirRecLoc")=="L","",lower(allt(cDirRecLoc)))
+	._DirEnvLoc = iif(type("cDirEnvLoc")=="L","",lower(allt(cDirEnvLoc)))
+	._DelLocal  = lDelLocal
+	._DelHost   = lDelHost
+	._TpEnv     = iif(type("cTpEnv")    =="L","*.*",allt(cTpEnv    ))
+	._TpRec     = iif(type("cTpRec")    =="L","*.*",allt(cTpRec    ))
+	.nTpConect  = iif(type("nTpConect")<>"N",0,nTpConect)
+EndWith
+
+lcBusEmp = Iif(Not Empty(crftpparam.EmpMasters),CrftpParam.EmpMasters,_Empr)
+=ThisForm.PodataMgr.Cursorquery('SigCdEmp','crftpemp','Cemps',lcBusEmp)
+
+If TYPE("_Empr") <> "U" And IsEmpty(ThisForm._DirRecLoc) And IsEmpty(ThisForm._DirEnvLoc)
+
+   If !empt(crftpParam.Empmasters)
+      ThisForm.Say8.visible = .t.
+      ThisForm.Say9.visible = .t.
+   EndIf
+   lcBusEmp = Iif(Not Empty(CrftpParam.EmpMasters),crFtpParam.EmpMasters,_Empr)
+   If ThisForm.PodataMgr.Cursorquery('SigCdEmp','crftpemp','Cemps',lcBusEmp)
+		With ThisForm	
+			._TpConnect = UPPER(allt(crftpemp.TpConexao ))
+		    ._FtpAdd    = lower(allt(crftpemp.Ftpend    ))
+		    ._FtpUser   = lower(allt(crftpemp.FtpUsuario))
+		    ._FtpPass   = lower(allt(fCriptografar(crftpemp.FtpSenha)))
+		    ._DirEnvFtp = lower(allt(crftpemp.Drivets   ))
+		    ._DirRecFtp = lower(allt(crftpemp.Drivels   ))
+		    ._DirRecLoc = lower(allt(crftpemp.Dirftpts  ))
+		    ._DirEnvLoc = lower(allt(crftpemp.Dirftpls  ))
+		    ._DelLocal  = crftpemp.LocDel
+	    	._DelHost   = crftpemp.FtpDel
+    	EndWith
+      lOk = .t.
+   else
+	   =ThisForm.Inf("Empresa não cadastrada ... Operação Cancelada","R")
+      MESSAGEBOX("Empresa não cadastrada ... Operação Cancelada",0+16,"Atenção")   
+      lOk = .f.
+   endif 
+
+Endif
+
+With ThisForm
+	._DirEnvFtp = addbs(ThisForm._DirEnvFtp)
+	._DirRecFtp = addbs(ThisForm._DirRecFtp)
+	._DirRecLoc = iif(right(ThisForm._DirRecLoc,1)=="/" or empt(ThisForm._DirRecLoc),ThisForm._DirRecLoc,ThisForm._DirRecloc+"/")
+	._DirEnvLoc = iif(right(ThisForm._DirEnvLoc,1)=="/" or empt(ThisForm._DirEnvLoc),ThisForm._DirEnvLoc,ThisForm._DirEnvLoc+"/")
+EndWith
+
+With ThisForm.Container1
+	.pgfloc.Page1.direnvftp.Value=ThisForm._DirEnvFtp
+	.pgfloc.Page2.dirrecftp.Value=ThisForm._DirRecFtp
+	.pgfftp.Page1.dirrecloc.Value=ThisForm._DirRecLoc
+	.pgfftp.Page2.direnvloc.Value=ThisForm._DirEnvLoc
+
+	.pgfloc.Page1.direnvftp.ToolTipText=ThisForm._DirEnvFtp
+	.pgfloc.Page2.dirrecftp.ToolTipText=ThisForm._DirRecFtp
+	.pgfftp.Page1.dirrecloc.ToolTipText=ThisForm._DirRecLoc
+	.pgfftp.Page2.direnvloc.ToolTipText=ThisForm._DirEnvLoc
+EndWith
+*-[ Valida os parametros para carregamento ]-*
+Do Case
+   Case !Inlist(ThisForm._TpConnect,"D","B")
+        =ThisForm.inf("Esta Empresa não possui uma configuração correta de acesso à FTP... Operação Cancelada","R")
+        lOk = .f.
+
+   Case Empt(ThisForm._FtpAdd)
+        =ThisForm.inf("Endereço FTP Inválido... Operação Cancelada","R")
+        lOk = .f.
+
+   Case Empt(ThisForm._FtpUser)
+        =ThisForm.inf("Nome de Usuário (UserName) não definido... Operação Cancelada","R")
+        lOk = .f.
+   
+   Case Empt(ThisForm._FtpPass)
+        =ThisForm.inf("Senha de FTP (Password) não definida... Operação Cancelada","R")
+        lOk = .f.
+EndCase
+
+if Empt(ThisForm._DirEnvFtp) .or. empt(ThisForm._DirRecLoc)
+	With ThisForm
+		With .Container1
+			.pgfloc.Page1.enabled = .f.
+			.pgfloc.Page2.zOrder
+			.pgfftp.Page1.enabled = .f.
+			.pgfftp.Page2.zOrder
+			.cmdtransfere.enabled = .f.
+		EndWith	
+		.cmdtran.enabled = .f.
+		=.inf("Sistema Configurado somente para Recebimento. Envio Desativado","G")
+	EndWith
+endif   
+if Empt(ThisForm._DirRecFtp) .or. empt(ThisForm._DirEnvLoc)
+	With ThisForm
+		With .Container1
+			.pgfloc.Page2.enabled = .f.
+			.pgfloc.Page1.zOrder
+			.pgfftp.Page2.enabled = .f.
+			.pgfftp.Page1.zOrder
+			.cmdrecebe.enabled = .f.
+		EndWith	
+		.cmdrec.enabled = .f.
+		=.inf("Sistema Configurado somente para Envio. Recebimento Desativado.","G")
+	EndWith
+endif   
+
+
+*-[ Checa a existencia dos diretórios locais ]-*
+if !empt(ThisForm._DirEnvFtp) and !DIRECTORY(ThisForm._DirEnvFtp)
+   =ThisForm.inf("Diretório Local de Envio para FTP não existe. Verifique o cadastro de empresas","R")
+   lOk = .f.
+endif
+if !empt(ThisForm._DirRecFtp) and !DIRECTORY(ThisForm._DirRecFtp)
+   =ThisForm.inf("Diretório Local de Recebimento do FTP não existe. Verifique o cadastro de empresas","R")
+   lOk = .f.
+endif
+
+With ThisForm
+	if ._tpconnect == "D"  && Dial UP
+	    .cmdconect.visible = .t.
+	    .CboProvedor.visible = .t.
+		cProvedor = ""
+		IF .RasConexao("aProvedor") = 0
+	       release aProvedor
+		   PUBLIC ARRAY aProvedor(1)
+		   aProvedor(1) = ""
+		   =.Inf("Não existem conexões DIAL-UP disponíveis...","R")
+		   MESSAGEBOX("Não existem conexões disponíveis...",0+16,"Atenção")
+		   lOk = .f.
+		Else
+		   .CboProvedor.numberOfElements = ALEN(aProvedor)
+		ENDIF
+	Else
+	    .cmdconect.visible = .f.
+	    .CboProvedor.visible = .f.
+	EndIf
+
+	If !lOk
+		MESSAGEBOX("Erro na parametrização ou na configuração da conexão. Verifique... Operação Cancelada",0+16,"Atenção")
+		.cmdload.enabled     = .f.
+		.Container1.enabled  = .f.
+		.cmdtran.enabled     = .f.
+		.cmdrec.enabled      = .f.
+		.cmdsair.enabled     = .t.
+		if ._tpconnect == "D"
+			.cmdconect.visible   = .t.
+			.CboProvedor.visible = .t.
+			.CmdConect.Enabled   = .t.
+			.CboProvedor.enabled = .t.
+		else
+			.cmdconect.visible   = .f.
+			.CboProvedor.visible = .f.
+			.CmdConect.Enabled   = .f.
+			.CboProvedor.enabled = .f.
+		endif   
+	else
+		.cmdload.enabled    = .t. 
+		.Container1.enabled = .f.
+		.cmdtran.enabled    = .f.
+		.cmdrec.enabled     = .f.
+		.cmdsair.enabled    = .t.
+		if thisform._tpconnect == "D"
+			.cmdconect.visible   = .t.
+			.CboProvedor.visible = .t.
+			.CmdConect.Enabled   = .t.
+			.CboProvedor.enabled = .t.
+		else
+			.cmdconect.visible   = .f.
+			.CboProvedor.visible = .f.
+			.CmdConect.Enabled   = .f.
+			.CboProvedor.enabled = .f.
+		endif
+	Endif
+EndWith
+
+If ThisForm._Tpconnect == "B" And ThisForm.nTpconect > 0
+	ThisForm.CmdLoad.Click()
+	If ThisForm.nTpconect = 1
+		ThisForm.Transfere("A")
+	Else
+		Thisform.Recebe("A")
+	EndIf
+	This.Enabled = .t.
+	ThisForm.Cmdsair.Enabled = .t.
+	ThisForm.CmdSair.SetFocus
+	Keyboard Chr(13)
+*	ThisForm.CmdSair.Click()
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+*-[ Cursor do Log ]-*
+sele 0
+Create cursor Logftp (memo C(254), cor C(1))
+*-[ Cursor do progresso ]-*
+sele 0
+Create cursor tmpprog (file C(254), Size N(12), Local C(254), Host C(254), Status C(50) )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+if ThisForm._TpConnect = "D" && Dial-UP
+   PUBLIC ARRAY aAtivas(1)
+ 
+   nAtivas = ThisForm.RasAtivas("aAtivas")
+   IF nAtivas > 0
+      =MessageBox("A conexão à internet ainda está ativa...",0+64,"Atenção") 
+      IF !IsEmpty(cProvedor)
+         cRun = "RUN /N Rundll Rnaui.dll,RnaDial " + ALLTRIM(cProvedor)
+        &cRun.
+      ENDIF   
+   ENDIF
+   Release aAtivas
+Endif   
+Release aAtivas, cProvedor, aProvedor
+if used("logftp") 
+   sele logftp
+   use
+endif   
+if used("tmpprog") 
+   sele tmpprog
+   use
+endif   
+if used("ftpserver") 
+   sele ftpserver
+   use
+endif   
+ThisForm.PodataMgr.Release
+DoDefault()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRFTP.Container1.pgfloc
+* Classe: pageframe (Base: pageframe)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Page1.Activate
+------------------------------------------------------------
+PROCEDURE Page1.Activate
+This.Parent.Parent.pgfftp.Page1.zorder
+This.Parent.Parent.cmdtransfere.enabled = .t.
+This.Parent.Parent.cmdrecebe.enabled = .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Page2.Activate
+------------------------------------------------------------
+PROCEDURE Page2.Activate
+This.Parent.Parent.pgfftp.Page2.zorder
+This.Parent.Parent.cmdtransfere.enabled = .f.
+This.Parent.Parent.cmdrecebe.enabled = .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRFTP.Container1.pgfftp
+* Classe: pageframe (Base: pageframe)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Page1.Activate
+------------------------------------------------------------
+PROCEDURE Page1.Activate
+This.Parent.Parent.pgfloc.Page1.zorder
+This.Parent.Parent.cmdtransfere.enabled = .t.
+This.Parent.Parent.cmdrecebe.enabled = .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Page2.Activate
+------------------------------------------------------------
+PROCEDURE Page2.Activate
+This.Parent.Parent.pgfloc.Page2.zorder
+This.Parent.Parent.cmdtransfere.enabled = .f.
+This.Parent.Parent.cmdrecebe.enabled = .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRFTP.Container1.cmdtransfere
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+=Thisform.transfere("I")
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRFTP.Container1.cmdrecebe
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+=Thisform.recebe("I")
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRFTP.cmdtran
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+=Thisform.transfere("A")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRFTP.cmdsair
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRFTP.cmdrec
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+=thisform.recebe("A")
+
+
+
+    
+   
+   
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRFTP.cmdconect
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+*-[ Conecta se for Dial-Up ]-*
+Do Case
+   Case ThisForm._TpConnect = "D" && Dial Up
+
+    IF ThisForm.RasAtivas("aAtivas") > 0
+       =ThisForm.inf("Este computador já está conectado à INTERNET","B")
+    ELSE
+       =ThisForm.inf("Esperando por uma Conexão à Internet via Dial-UP","B")
+       IF !IsEmpty(nprovedor)
+          cProvedor = aProvedor(nProvedor)
+          cRun = "RUN /N Rundll Rnaui.dll,RnaDial " + ALLTRIM(cProvedor)
+          &cRun.
+        ELSE
+          =ThisForm.inf("Nome de Provedor inválido.. Selecione um provedor","R")
+          =MessageBox("Selecione o provedor.",16,"Atenção")         
+       ENDIF
+    ENDIF   
+ 
+    OtherWise
+         =ThisForm.inf("Não há tipo definido de conexão... Operação Cancelada","R")
+EndCase
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRFTP.cmdload
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 42
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lOk 
+lOk = .t.
+
+This.enabled = .f.
+*-[ Valida o Tipo da Conexao e conecta se for Dial-Up ]-*
+Do Case
+   Case ThisForm._TpConnect = "D" && Dial Up
+
+    IF ThisForm.RasAtivas("aAtivas") > 0
+       =ThisForm.inf("Este computador já está conectado à INTERNET","B")
+       =ThisForm.MontaContainer() && Monta os pageframes com todos os arquivos a enviar e receber
+       lOk = .t.
+    ELSE
+       =ThisForm.inf("Conexão à Internet Não detectada","R")
+       =ThisForm.inf("Esperando por uma Conexão à Internet via Dial-UP","B")
+       ThisForm.cmdconect.visible = .t.
+       lOk = .f.
+    ENDIF   
+ 
+    Case ThisForm._TpConnect = "B" && Banda Larga
+         =ThisForm.inf("Aguarde a inicialização das rotinas...","B")
+         =ThisForm.inf("Checando diretórios locais e conexões de rede...","B")
+         lOk = .T.
+         =ThisForm.MontaContainer() && Monta os pageframes com todos os arquivos a enviar e receber
+
+    OtherWise
+         =ThisForm.inf("Não há tipo definido de conexão... Operação Cancelada","R")
+         lOk = .F.
+EndCase
+
+if lOk
+    ThisForm.Container1.enabled = .t.
+    ThisForm.cmdtran.enabled    = .t.
+    ThisForm.cmdrec.enabled     = .t.
+    ThisForm.Container1.cmdtransfere.enabled     = .t.
+    ThisForm.Container1.cmdrecebe.enabled     = .t.
+    ThisForm.cmdsair.enabled    = .t.
+    This.enabled = .f.
+else
+   =ThisForm.inf("Não foi detectada nenhuma conexão... Operação Cancelada","R")
+    ThisForm.Container1.enabled = .f.
+    ThisForm.cmdtran.enabled    = .f.
+    ThisForm.cmdrec.enabled     = .f.
+    ThisForm.Container1.cmdtransfere.enabled     = .f.
+    ThisForm.Container1.cmdrecebe.enabled     = .f.
+    ThisForm.cmdsair.enabled    = .t.
+    This.enabled = .t.
+endif
+Thisform.refresh
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRFTP
+RESERVED3 (ClassInfo): lfechaempfile
+lfechaparfile
+ntpconect
+podatamgr
+_delhost
+_dellocal
+_direnvftp
+_direnvloc
+_dirrecftp
+_dirrecloc
+_ftpadd
+_ftppass
+_ftpuser
+_tpconnect
+_tpenv
+_tprec
+*crackattributes 
+*crackdate 
+*crackfile 
+*ctoword 
+*deleteftpfile 
+*filectrlup 
+*getftpdirectory 
+*inerrorcase 
+*inf 
+*montacontainer 
+*processa 
+*rasativas 
+*rasconecta 
+*rasconexao 
+*rasdescon 
+*rasfile 
+*rasftpget 
+*rasftpput 
+*raslisarq 
+*recebe 
+*renameftpfile 
+*sectohour 
+*statctrlup 
+*transfere 
+*wordtoc 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 39
+================================================================================

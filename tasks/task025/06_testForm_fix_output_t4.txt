@@ -1,0 +1,5 @@
+﻿**Fix aplicado.** Resumo:
+
+**Causa:** `InicializarForm()` chamava `THIS.Visible = .T.` no final. Como o form tem `WindowType = 1` (modal), essa linha fazia VFP exibir o form e bloquear aguardando intera├º├úo do usu├írio. O TestFormWrapper (que usa `CREATEOBJECT()` internamente) ficava travado para sempre ÔÇö at├® o PowerShell matar o processo ap├│s 300s. A ├║ltima mensagem vis├¡vel no log era "[ETAPA 1B] Conectando ao banco de dados..." porque o "OK" da etapa seguinte nunca foi gravado antes do hang.
+
+**Fix:** Removida a linha `THIS.Visible = .T.` de `InicializarForm()`. O padr├úo correto do sistema (confirmado no `FormBase.prg` e em `FormRelPlanoContas.prg`) ├® que a visibilidade ├® controlada externamente ÔÇö pelo `DO FORM` da aplica├º├úo ou pelo pr├│prio FormBase ap├│s Init(). O form continua funcionando normalmente em uso real, mas o TestFormWrapper agora consegue criar e inspecionar o objeto sem travar.

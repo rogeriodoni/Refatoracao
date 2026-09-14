@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `SIGPRCCRBO.prg` foi completado com todos os m├®todos necess├írios:
+
+- **`PrepararDados()`** ÔÇö replica a l├│gica original do `processamento`: busca nome da empresa em `SigCdEmp`, cria cursor `cursor_4c_Cabecalho` com empresa/t├¡tulo/subt├¡tulo, e busca produtos com `lMarca = 1` em `SigCdPro ORDER BY Cpros` via SQLEXEC
+- **`Imprimir()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... TO PRINTER`
+- **`ImprimirComPrompt()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... TO PRINT PROMPT`
+- **`Visualizar()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... PREVIEW`
+- **`ArquivosEmail()`** ÔÇö equivalente ao `memail` original
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro` para o Form exibir erros
+- **`ObterChavePrimaria()`** ÔÇö override vazio (relat├│rio n├úo tem PK)
+- **`Destroy()`** ÔÇö libera os dois cursores antes de chamar `DODEFAULT()`

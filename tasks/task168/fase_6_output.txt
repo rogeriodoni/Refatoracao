@@ -1,0 +1,9 @@
+﻿Ambas as edi├º├Áes est├úo corretas. Fase 6 conclu├¡da.
+
+**Duas corre├º├Áes aplicadas:**
+
+1. **`SIGPRCPRBO.prg` (bug cr├¡tico)** ÔÇö `PACK` em cursor VFP9 causa "This operation is not supported for this type of table". Substitu├¡do por `SCAN FOR !EMPTY(Dopps) AND !EMPTY(Numps)` que filtra diretamente, sem necessidade de DELETE/PACK e independente do estado de `SET DELETED`.
+
+2. **`FormSIGPRCPR.prg`** ÔÇö `TxtLeituraKeyPress` n├úo restaurava o foco ao campo de leitura ap├│s processar o c├│digo de barras. Sem `SetFocus()`, ao pressionar ENTER o foco avan├ºava para outro controle, impedindo a leitura cont├¡nua de etiquetas. Adicionado `loc_oTxt.SetFocus()` (equivalente ao `Return 0` do `Valid` legado que impedia mudan├ºa de foco).
+
+O form OPERACIONAL estava estruturalmente completo desde as fases anteriores ÔÇö sem campos em Page2, sem lookups, sem BINDEVENT adicionais necess├írios.

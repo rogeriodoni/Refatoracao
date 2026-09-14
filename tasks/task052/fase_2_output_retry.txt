@@ -1,0 +1,16 @@
+﻿Phase 2 complete. The BO `sigrecmcBO.prg` now has 1589 lines with all REPORT-appropriate methods:
+
+**J├í existentes (geradas em fases anteriores):**
+- `Init()`, `ObterMensagemErro()`, `ValidarFiltros()`
+- `CarregarDadosIniciais()` (SigCdPam + SigCdEmp + moeda padr├úo)
+- `CarregarTiposOperacao()` (cursor CrSigCdTom)
+- `checaIBGE()`, `BuscarCotacao()`
+- `PrepararDados()` (~1000 linhas ÔÇö processamento completo por VALOR e por QUANTIDADE com agrega├º├úo em TmpResult, ├¡ndices, junc├úo com SigCdCli)
+- `Imprimir()` e `Visualizar()` (REPORT FORM com sele├º├úo de FRX: SigReCm1/2/3 baseado em Comparativo + ChkDadosCli)
+
+**Adicionadas nesta fase (Edit ao final, antes de ENDDEFINE):**
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö mapeia 22 campos do cursor para `this_*` (empresa, datas, moeda, conta, vendedor, produto, ordem, op├º├Áes e checkboxes) com `TratarNulo` + tipos corretos
+- `ObterChavePrimaria()` ÔÇö chave composta `SIGRECMC|empresa|dtIni|dtFim|ordem|optSelRel|moeda`
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö INSERT em LogAuditoria com usu├írio/opera├º├úo/chave/detalhes (per├¡odo)
+
+Esta ├® uma migra├º├úo de REPORT (frmrelatorio), portanto **n├úo** foram adicionados `Inserir()`/`Atualizar()`/`ExecutarExclusao()` ÔÇö opera├º├Áes CRUD n├úo se aplicam a relat├│rios. A l├│gica equivalente est├í em `PrepararDados`/`Imprimir`/`Visualizar`, conforme o padr├úo `RelatorioBase` documentado no contexto da tarefa.

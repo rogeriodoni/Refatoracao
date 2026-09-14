@@ -1,0 +1,1413 @@
+{
+  "resumo": {
+    "totalMetodos": 87,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 15,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCFO",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "Local lcBusca\n\nm.lcCodigo    = Thisform.Pagina.Dados.PagDados.Page1.getCodigo.value\nm.lcDescricao = Thisform.Pagina.Dados.PagDados.Page1.getDescricao.value\n\nIf .Not.IsEmpty(m.lcCodigo)\n\tThisForm.poDataMgr.LocateCursor('crSigCdCfo','codigos',m.lcCodigo)\nElse\n\tIf .Not.IsEmpty(m.lcDescricao)\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdCfo','descricaos',m.lcDescricao)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO",
+      "evento": "Init",
+      "linhas": 21,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tWith .poDatamgr\n\t\tWith .AddCursor('SigCdCfo','codigos','crSigCdCfo','',ThisForm.pagina.lista.grade)\n\t\t\t.pColuna('codigos','','','Código',80,.t.)\n\t\t\t.pColuna('descricaos','','','Descrição',400,.t.)\n\t\tEndWith \n\n\t\t.AddCursor('SigCdIcm','codigos','crSigCdIcm','','')\n\n\tEndWith\n\n\t= DoDefault()\n\t.LockScreen = .f.\n\t\n\tThisform.Pagina.Lista.Grade.SetAll('DynamicForeColor','Iif(crSigCdCfo.Situas=1,RGB(0,0,0),RGB... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetAll",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO",
+      "evento": "Click",
+      "linhas": 126,
+      "codigoOriginal": "Lparameters lnOpcao\n\nThisForm.LockScreen = .t.\n\nIf !dodefault( lnOpcao )\n\tThisForm.LockScreen = .f.\n\tThisForm.mAtivapagina1\n\n\tReturn\n\nEndIf \n\ndo case\n\tcase thisform.pcEscolha$'INSERIR PROCURAR'\n\t\tThisform.Pagina.Dados.PagDados.Page1.getcodigo.setfocus\n\n\tcase thisform.pcEscolha='ALTERAR'\n\t\tThisform.Pagina.Dados.PagDados.Page1.getdescricao.setfocus\n\n\tcase thisform.pcEscolha$'CONSULTAR EXCLUIR'\n\t\tThisform.pagina.dados.grupo_salva.salva.setfocus\n\nendcase\n\nWith Thisform.Pagina.Dados.PagDados.Page1 \n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO",
+      "evento": "Click",
+      "linhas": 100,
+      "codigoOriginal": "local lnRecno,lcRetorno,Operacaos,Icms,Ipis,Contribs\n\nm.lcRetorno = .t.\n\nif thisform.pcEscolha $ 'INSERIR ALTERAR'\n\n\tWith Thisform.Pagina.Dados.PagDados.Page1\n   \n\t\tif IsEmpty(strtran(.getCodigo.value,'.',''))\n\t\t\t=messagebox('Código em branco !!!',0+64,goSistema.NomeSistema)\n\t\t\t.getCodigo.setfocus\n\t\t\treturn\n\t\tendif\n  \n\t\tIf ThisForm.poDataMgr.ChkRegister('SigCdCfo','codigos',.GetCodigo.Value) and thisform.pcEscolha $ 'INSERIR'\n\t\t\tMessagebox( 'Código Já Cadastrado.', 48, '' )\n\t\t\t.GetCodigo.SetFocu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdCfo'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nif thisform.plCancelar\n\tThisForm.mAtivapagina1\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Lista.btnExpXML",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(crSigCdCfo.Codigos)\n\tThisForm.LockScreen = .t.\n\n\tDo Form SigOpXml With ThisForm, crSigCdCfo.Codigos, [E], [CFOP], 10\n\n\tlcCfo = crSigCdCfo.Codigos\n\n\tThisForm.mAtivaPagina1()\n\n\tSelect crSigCdCfo\n\tLocate For Codigos = lcCfo\n\n\tThisForm.LockScreen = .f.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mAtivaPagina1",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Lista.btnImpXML",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\n\nDo Form SigOpXml With ThisForm, [], [I], [CFOP], 10\n\nlcCfo = crSigCdCfo.Codigos\n\nThisForm.mAtivaPagina1()\n\nSelect crSigCdCfo\nLocate For Codigos = lcCfo\n\nThisForm.LockScreen = .f.\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mAtivaPagina1",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getCodigo",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "local saida\nsaida = .t.\nif inlist(thisform.Pagina.Lista.Grupo_op.value,2,3)\n\tsaida = .f.\nendif\nreturn saida",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Ndigito",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getDescricao",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR') or ;\n       (thisform.pcEscolha=='PROCURAR' and IsEmpty(strtran(Thisform.Pagina.Dados.PagDados.Page1.getCodigo.value,'.',''))))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha=='PROCURAR' and IsEmpty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getDesc2s",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR') or ;\n       (thisform.pcEscolha=='PROCURAR' and IsEmpty(strtran(Thisform.Pagina.Dados.PagDados.Page1.getCodigo.value,'.',''))))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha=='PROCURAR' and IsEmpty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Combo7",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.cmbtipo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getAliqII",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.GetAliqISSQN",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Combo10",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Combo3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Combo1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Combo8",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Combo2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Combo5",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.cmbIpi",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.CmbBIPI",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If Not InList(padr(upper(alltrim(Thisform.Pagina.Dados.PagDados.Page1.CmbBIPI.value)),1),'F','P')\n\tThis.Parent.Get_bcIPI.Value = 0\n\tThis.Parent.Get_bcIPI.Refresh\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_bcIPI",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.CmbBIPI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Getaliqs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Combo6",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Get_CfoST60",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(StrTran(This.Value, '.', '')))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdCfo','ctSigCdCfo','Codigos',This.Value,'CFO',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.mAddColuna('Descricaos','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Value = Iif(LastKey()==27,'',Evaluate('CtSigCdCfo.Codigos'))\n\tThis.Refresh\n\t\n\tm.llRetorno =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Get_CfoST60",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Get_bcIPI",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return( ( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') And ;\n\t\tInList(padr(upper(alltrim(Thisform.Pagina.Dados.PagDados.Page1.CmbBIPI.value)),1),'F','P') ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.cmbIpiI",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If padr(upper(alltrim(This.value)),1) = 'S'\n\tThis.parent.Combo8.Enabled = .t.\nElse\n\tThis.parent.Combo8.Enabled = .F.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.cmbIpiI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Combo4",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getGergia1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.cmbOperacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getISSQNL",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getCOFCST",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getCOFCST",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "*** mena - 31/10/2017 - incluido codigo 49 ***\n*** mena - 26/07/2018 - incluidos codigos 50 e 70 ***\nIf Not Empty(This.Value) And Not InList(This.Value, [01], [02], [03], [04], [06], [07], [08], [09], [49], [50], [70], [99])\n\t=MessageBox([Conteúdo Válido Para Este Campo:] + Chr(13) + ;\n\t\t\t\t[01-Operação Tributável (alíquota normal)] + Chr(13) + ;\n\t\t\t\t[02-Operação Tributável (alíquota diferenciada)] + Chr(13) + ;\n\t\t\t\t[03-Operação Tributável (qtdde x alíquota)] + Chr(13) + ;\n\t\t\t\t[04-Operação Tribut... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getPISCST",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getPISCST",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "*** mena - 31/10/2017 - incluido codigo 49 ***\n*** mena - 26/07/2018 - incluidos codigos 50 e 70 ***\nIf Not Empty(This.Value) And Not InList(This.Value, [01], [02], [03], [04], [06], [07], [08], [09], [49], [50], [70], [99])\n\t=MessageBox([Conteúdo Válido Para Este Campo:] + Chr(13) + ;\n\t\t\t\t[01-Operação Tributável (alíquota normal)] + Chr(13) + ;\n\t\t\t\t[02-Operação Tributável (alíquota diferenciada)] + Chr(13) + ;\n\t\t\t\t[03-Operação Tributável (qtdde x alíquota)] + Chr(13) + ;\n\t\t\t\t[04-Operação Tribut... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getIPICST",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value) And Not InList(This.Value, [00], [01], [02], [03], [04], [05], [49], [50], [51], [52], [53], [54], [55], [99])\n\t=MessageBox([Conteúdo Válido Para Este Campo:] + Chr(13) + ;\n\t\t\t\t[00-Entrada com recuperação de crédito] + Chr(13) + ;\n\t\t\t\t[01-Entrada tributada com alíquota zero] + Chr(13) + ;\n\t\t\t\t[02-Entrada isenta] + Chr(13) + ;\n\t\t\t\t[03-Entrada não-tributada] + Chr(13) + ;\n\t\t\t\t[04-Entrada imune] + Chr(13) + ;\n\t\t\t\t[05-Entrada com suspensão] + Chr(13) + ;\n\t\t\t\t[49-Outras entra... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getIPICST",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Get_AliqIVCs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.cmbIcms",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Combo9",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.CmbSTRIB",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.cmbContribuinte",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Get_bcst",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "return( ( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') And ;\n\t\tpadr(upper(alltrim(Thisform.Pagina.Dados.PagDados.Page1.CmbsTRIB.value)),1)=[S]) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Getcfdest",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(StrTran(This.Value, '.', '')))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdCfo','ctSigCdCfo','Codigos',This.Value,'CFO',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.mAddColuna('Descricaos','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Value = Iif(LastKey()==27,'',Evaluate('CtSigCdCfo.Codigos'))\n\tThis.Refresh\n\t\n\tm.llRetorno =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Getcfdest",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Get_CfoST",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Get_CfoST",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(StrTran(This.Value, '.', '')))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdCfo','ctSigCdCfo','Codigos',This.Value,'CFO',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.mAddColuna('Descricaos','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Value = Iif(LastKey()==27,'',Evaluate('CtSigCdCfo.Codigos'))\n\tThis.Refresh\n\t\n\tm.llRetorno =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getSittricm",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdIcm','crSigCdIcm','Codigos',This.Value,'Tributação ICM',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.mAddColuna('Descricaos','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n    This.Parent.getSittricm.Value = Iif(LastKey()==27,'',Evaluate('CrSigCdIcm.Codigos'))\n  \tThis.Refresh... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getAliqPIS",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getAliqCofins",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getIPIEnq",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.ObjFreteICM",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.ObjSegIcm",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.ObjDespIcm",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.ObjFreteIPI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.ObjSegIPI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.ObjDespIPI",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.fwcheckbox1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.Fwcheckbox2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page1.getMotDeson",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Getipics",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Getipids",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.CmbFixa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Combo2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.optAgrupas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.optZeradas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.fwoption1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.optutilvars",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Getvrcds",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Getvrccs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Geticmds",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.getContFrt",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.getContFrt",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If not Empty(This.Value)\n\tThisForm.poDataMgr.CursorQuery([SigCdCli],[crTmpCli],[iClis],This.Value,[iClis])\n\tIf not Used([crTmpCli]) or Eof([crTmpCli])\n\t\tMessageBox('Conta não cadastrada, verifique!',0+48,'')\n\t\tReturn(.F.)\n\tEndIf\nEndif\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.getContSeg",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.getContSeg",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If not Empty(This.Value)\n\tThisForm.poDataMgr.CursorQuery([SigCdCli],[crTmpCli],[iClis],This.Value,[iClis])\n\tIf not Used([crTmpCli]) or Eof([crTmpCli])\n\t\tMessageBox('Conta não cadastrada, verifique!',0+48,'')\n\t\tReturn(.F.)\n\tEndIf\nEndif\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.getContDa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.getContDa",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If not Empty(This.Value)\n\tThisForm.poDataMgr.CursorQuery([SigCdCli],[crTmpCli],[iClis],This.Value,[iClis])\n\tIf not Used([crTmpCli]) or Eof([crTmpCli])\n\t\tMessageBox('Conta não cadastrada, verifique!',0+48,'')\n\t\tReturn(.F.)\n\tEndIf\nEndif\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Geticmcs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Fwoption2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Fwoption3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Fwoption4",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Fwoption5",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCFO.Pagina.Dados.PagDados.Page2.Fwoption6",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( inlist(thisform.pcEscolha,'INSERIR','ALTERAR') )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  }
+}

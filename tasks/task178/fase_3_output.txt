@@ -1,0 +1,11 @@
+﻿`C:\4c\projeto\app\forms\operacionais\FormSigPrEs1.prg` criado com 264 linhas ÔÇö Fase 3/8 conclu├¡da.
+
+**O que foi criado:**
+- `DEFINE CLASS FormSigPrEs1 AS FormBase` com propriedades visuais escaladas de 823├ù400 ÔåÆ 1000├ù600 (ScaleX=1.215, ScaleY=1.5)
+- `Init()` delegando para `DODEFAULT()` (FormBase.Init() seta SET DATE BRITISH + SET CENTURY ON para DataSession=2)
+- `InicializarForm()` com: cria├º├úo do BO, carregamento de par├ómetros (GrPadVens via SigCdPam), defaults iniciais, e sequ├¬ncia `ConfigurarCabecalho()` ÔåÆ `ConfigurarContainerFiltros()` ÔåÆ `ConfigurarBotoes()` ÔåÆ `TornarControlesVisiveis()`
+- `ConfigurarCabecalho()` ÔÇö implementa├º├úo completa: `cnt_4c_Sombra` (RGB 100,100,100, Width=1000) + `lbl_4c_Sombra`/`lbl_4c_Titulo` com AutoSize=.F. e caption "Posi├º├úo Por Movimenta├º├úo"
+- `ConfigurarContainerFiltros()` ÔÇö cria `cnt_4c_Container1` vazio (Top=85, Width=820, Height=490); TextBoxes/OptionGroups entram nas Fases 5-6
+- `ConfigurarBotoes()` ÔÇö cria `cmg_4c_Sair` vazio (Left=820, Width=180, ButtonCount=2); Buttons(Consultar/Encerrar) entram na Fase 4
+- `TornarControlesVisiveis()` ÔÇö recurs├úo completa sem filtros (form n├úo tem containers flutuantes)
+- `Destroy()` ÔÇö NULLifica BO e fecha todos os cursores do form (`cursor_4c_MovTemp`, `cursor_4c_BuscaGrupo`, etc.)

@@ -1,0 +1,651 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigreanr.SCX
+* Data/Hora: 16/05/26 04:05:57
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREANR
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGREANR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_empresa_desc
+  Parent: SIGREANR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_empresa
+  Parent: SIGREANR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo
+  Parent: SIGREANR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGREANR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGREANR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREANR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dt_Cotacao
+  Parent: SIGREANR
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREANR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 80
+  Left = 109
+  Width = 632
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREANR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório de Resultados"
+  Name = "SIGREANR"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 530
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREANR.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 247
+  Top = 187
+  Width = 50
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREANR.get_empresa_desc
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "!"
+  Height = 23
+  Left = 333
+  MaxLength = 40
+  TabIndex = 9
+  Top = 182
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_empresa_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREANR.get_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 300
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 8
+  ToolTipText = ""
+  Top = 182
+  Width = 31
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 5
+  Name = "get_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREANR.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Período :"
+  Left = 252
+  Top = 137
+  Width = 45
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREANR.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 300
+  TabIndex = 2
+  Top = 132
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREANR.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 384
+  Top = 136
+  Width = 8
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREANR.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 396
+  TabIndex = 4
+  Top = 132
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREANR.Get_Dt_Cotacao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Left = 300
+  TabIndex = 6
+  Top = 157
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "Get_Dt_Cotacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREANR.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data Cotação :"
+  Left = 222
+  Top = 160
+  Width = 75
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREANR
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReAnr Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF
+Local cNomeEmpresa, cTitulo, cPeriodo, cCabecalho, dInicial, dFinal, cEmpresa, ldDtCotacao
+Local cVerEmpresa, nContador, cCampoArquivo, lnNOrdRels
+
+dInicial    = ThisForm.get_dt_inicial.Value
+dFinal      = ThisForm.get_dt_final.Value
+cEmpresa    = ThisForm.get_empresa.Value
+ldDtCotacao = ThisForm.Get_Dt_Cotacao.Value
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr)
+cNomeEmpresa = Iif(Eof('crSigCdEmp'), '', Alltrim(crSigCdEmp.Razas))
+cTitulo      = 'Relatório de Resultados - Empresa : ' + Iif(Empty(cEmpresa), 'Todas', cEmpresa)
+cPeriodo     = 'Período : ' + Dtoc(dInicial) + ' à ' + Dtoc(dFinal)
+
+Create Cursor dbCabecalho (NomeEmpresa c(080), Titulo c(080), Periodo c(080), Cabecalho c(200), Campo1 c(20), ;
+						   Campo2 c(20), Campo3 c(20), Campo4 c(20), Campo5 c(20), TotalGeral m(4))
+Insert Into dbCabecalho (NomeEmpresa, Titulo, Periodo) Values (cNomeEmpresa, cTitulo, cPeriodo)
+
+Create Cursor TmpCli (Grupo c(10), Conta c(10), TipoOper c(1), Emps c(3), Valor n(12,2), Moeda c(3))
+
+lcQuery = [Select Dopes, COpers ] + ;
+		    [From SigCdOpe ] + ;
+		   [Where RelFechas = 1 ] + ;
+		   [Order By Dopes]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdOpe') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdOpe)')
+	Return 0
+EndIf
+
+lcQuery = [Select Cemps, Razas ] + ;
+		    [From SigCdEmp ] + ;
+		   Iif(Empty(cEmpresa), [], [Where CEmps = '] + cEmpresa + ['])
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdEmp') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdEmp)')
+	Return 0
+EndIf
+Select crSigCdEmp
+Index On Cemps Tag Cemps
+
+pDtI = fDtoSQL(dInicial)
+pDtF = fDtoSQL(dFinal, '23:59:59')
+
+Select crSigCdOpe
+oSuper = CreateObject('fwprogressbar', 'Processando Operações...', Reccount())
+oSuper.Top = oSuper.Top - Int(oSuper.Height/2)
+oSuper.Show
+Scan
+	lcDop = crSigCdOpe.Dopes
+
+	oSuper.SubTitulo.Caption = lcDop
+	oSuper.Update(.t.)
+
+	Select crSigCdEmp
+	oInfer = CreateObject('fwprogressbar', 'Processando Empresas...', Reccount())
+	oInfer.Top = oInfer.Top + Int(oInfer.Height/2)
+	oInfer.Show
+	Scan
+		lcEmp = crSigCdEmp.Cemps
+		
+		oInfer.SubTitulo.Caption = lcEmp
+		oInfer.Update(.t.)
+
+		lcQuery = [Select Emps, Dopes, Numes, GrupoDs, ContaDs, GrupoOs, ContaOs ] + ;
+				    [From SigMvCab ] + ;
+				   [Where Datas BetWeen ?pDtI And ?pDtF And ] + ;
+				   		 [Emps = ']  + lcEmp + [' And ] + ;
+				   		 [Dopes = '] + lcDop + [' ]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvCab') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvCab)')
+			Return 0
+		EndIf
+
+		Select crSigMvCab
+		Scan
+			If (crSigCdOpe.COpers = 1)
+				_Grupo = crSigMvCab.GrupoDs
+				_Conta = crSigMvCab.ContaDs
+				_TipoOper = '1'
+			Else
+				_Grupo = crSigMvCab.GrupoOs
+				_Conta = crSigMvCab.ContaOs
+				_TipoOper = '2'
+			EndIf
+
+			lcEdn = crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes, 6)
+			ThisForm.poDataMgr.CursorQuery('SigMvPar', 'crSigMvPar', 'EmpDopNums', lcEdn)
+			
+			Select crSigMvPar
+			Scan
+				_Moeda = crSigMvPar.MoeFpgs
+				_Valor = crSigMvPar.Valos * Iif(crSigCdOpe.COpers = 1, 1, -1)
+				Insert Into TmpCli (Grupo, Conta, TipoOper, Emps, Valor, Moeda) ;
+							Values (_Grupo, _Conta, _TipoOper, crSigMvCab.Emps, _Valor, _Moeda)
+			EndScan
+		EndScan
+	EndScan
+	oInfer.Complete
+EndScan
+oSuper.Complete
+
+Select TmpCli
+Index On Emps + Grupo + Conta + TipoOper Tag EmpDopCon
+
+Create Cursor TmpCabec (Emps c(3), Op11 c(3), Op12 c(3), Op13 c(3), Op21 c(3), Op22 c(3), Op23 c(3))
+Index On Emps Tag Emps
+
+lcQuery = [Select CMoes, NOrdRels, Cotas ] + ;
+		    [From SigCdMoe]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdMoe') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdMoe)')
+	Return 0
+EndIf
+Select crSigCdMoe
+Index On CMoes Tag CMoes
+
+Select Distinct a.Emps, a.TipoOper, Iif(Empty(b.NOrdRels), 9, b.NOrdRels), a.Moeda ;
+  From TmpCli a, crSigCdMoe b ;
+ Where a.Moeda = b.CMoes ;
+  Into Cursor Operas
+
+Select Operas
+Scan 
+	If Not Seek(Operas.Emps, 'TmpCabec', 'Emps')
+		Insert Into TmpCabec (Emps) Values (Operas.Emps)
+		_Conta1 = 0
+		_Conta2 = 0
+	EndIf
+	_Conta = '_Conta' + Operas.TipoOper
+	&_Conta = &_Conta + 1
+	If &_Conta <= 3
+		_Oper = 'TmpCabec.Op' + Operas.TipoOper + Str(&_Conta., 1)
+		Replace &_Oper with Operas.Moeda
+	EndIf
+EndScan
+
+Create Cursor TmpTotal (Moeda c(3), Valor n(12,2), NOrdRels n(1))
+Index On Moeda Tag Moeda
+
+Create Cursor TmpFinal (Emps c(3), Grupo c(10), Conta c(10), Datas d, NomeCli c(40), Razas c(40), ;
+						Valor1 n(12,2), Moeda1 c(3), Valor2 n(12,2), Moeda2 c(3), ;
+						Valor3 n(12,2), Moeda3 c(3), Valor4 n(12,2), Moeda4 c(3), ;
+						Valor5 n(12,2), Moeda5 c(3), Valor6 n(12,2), Moeda6 c(3))
+Index On Emps + Grupo + Conta + Dtos(Datas) Tag EmpConDat
+
+Select TmpCli
+oProg = CreateObject('fwprogressbar', 'Processando Clientes...', Reccount())
+oProg.Show
+Scan
+	oProg.Update(.t.)
+
+	=Seek(Emps, 'TmpCabec', 'Emps')
+	=Seek(Emps, 'crSigCdEmp', 'CEmps')
+	_Razas = crSigCdEmp.Razas
+
+	ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', Conta)
+	_NomeCli = crSigCdCli.RClis
+
+	If Not Seek(Emps + Grupo + Conta, 'TmpFinal', 'EmpConDat')
+		Insert Into TmpFinal (Emps, Grupo, Conta, NomeCli, Razas) ; 
+					  Values (TmpCli.Emps, TmpCli.Grupo, TmpCli.Conta, _NomeCli, _Razas)
+	EndIf
+	_Ok = .f.
+	Do Case
+		Case (TmpCli.Moeda = TmpCabec.Op11) And (TmpCli.TipoOper = '1')
+			Replace Valor1 With TmpFinal.Valor1 + TmpCli.Valor, ;
+					Moeda1 With TmpCli.Moeda In TmpFinal
+			_Ok = .t.
+
+		Case (TmpCli.Moeda = TmpCabec.Op12) And (TmpCli.TipoOper = '1')
+			Replace Valor2 With TmpFinal.Valor2 + TmpCli.Valor, ;
+					Moeda2 With TmpCli.Moeda In TmpFinal
+			_Ok = .t.
+
+		Case (TmpCli.Moeda = TmpCabec.Op13) And (TmpCli.TipoOper = '1')
+			Replace Valor3 With TmpFinal.Valor3 + TmpCli.Valor, ;
+					Moeda3 With TmpCli.Moeda In TmpFinal
+			_Ok = .t.
+
+		Case (TmpCli.Moeda = TmpCabec.Op21) And (TmpCli.TipoOper = '2')
+			Replace Valor4 With TmpFinal.Valor4 + TmpCli.Valor, ;
+					Moeda4 With TmpCli.Moeda In TmpFinal
+			_Ok = .t.
+
+		Case (TmpCli.Moeda = TmpCabec.Op22) And (TmpCli.TipoOper = '2')
+			Replace Valor5 With TmpFinal.Valor5 + TmpCli.Valor, ;
+					Moeda5 With TmpCli.Moeda In TmpFinal
+			_Ok = .t.
+
+		Case (TmpCli.Moeda = TmpCabec.Op23) And (TmpCli.TipoOper = '2')
+			Replace Valor6 With TmpFinal.Valor6 + TmpCli.Valor, ;
+					Moeda6 With TmpCli.Moeda In TmpFinal
+			_Ok = .t.
+	EndCase
+
+	If Not Seek(TmpCli.Moeda, 'TmpTotal', 'Moeda')
+		=Seek(TmpCli.Moeda, 'crSigCdMoe', 'CMoes')
+		lnNOrdRels = crSigCdMoe.NOrdRels
+		Insert Into TmpTotal (Moeda, NOrdRels) Values (TmpCli.Moeda, lnNOrdRels)
+	EndIf
+	Replace Valor With TmpTotal.Valor + TmpCli.Valor In TmpTotal
+EndScan
+oProg.Complete
+
+Select crSigCdMoe
+Scan For Not crSigCdMoe.Cotas 
+	If Not Seek(crSigCdMoe.Cmoes, 'TmpTotal', 'Moeda')
+		lnNOrdRels = crSigCdMoe.NOrdRels
+		Insert Into TmpTotal (Moeda, NOrdRels) Values (crSigCdMoe.Cmoes, lnNOrdRels)
+	EndIf
+EndScan
+
+Public _TotalTit, _TotalVal, _TotalGTit, _TotalGVal, _TotalGCot
+Store '' to _TotalTit, _TotalVal, _TotalGTit, _TotalGVal, _TotalGCot
+_TotalGeral = 0
+
+Select TmpTotal
+Scan
+	_TotalTit 	= _TotalTit + 'Total em ' + TmpTotal.Moeda + ' : ' + Chr(13) + Chr(10)
+	_TotalVal 	= _TotalVal + Transform(TmpTotal.Valor, '999,999,999.99') + Chr(13) + Chr(10)
+	_Cot1 		= fBuscarCotacao(TmpTotal.Moeda, ldDtCotacao, ThisForm.poDataMgr)
+	_TotalGeral = _TotalGeral + Round(TmpTotal.Valor * _Cot1, 2)
+EndScan
+
+Select TmpTotal
+Scan
+	_Cot1 	   = fBuscarCotacao(TmpTotal.Moeda, ldDtCotacao, ThisForm.poDataMgr)
+	_TotalGTit = _TotalGTit + 'Total Geral ' + TmpTotal.Moeda + ' : ' + Chr(13) + Chr(10) 
+	_TotalGVal = _TotalGVal + Transf(Round(_TotalGeral / _Cot1, 2), '999,999,999.99') + Chr(13) + Chr(10)
+	_TotalGCot = _TotalGCot + Transf(_Cot1, '99,999.999999') + Chr(13) + Chr(10)
+EndScan
+
+Select TmpFinal
+Set Relation to Emps Into TmpCabec
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.get_dt_inicial.Value 	= Date()
+		.get_dt_final.Value   	= Date() 
+		.Get_Dt_Cotacao.Value 	= Date()
+		.get_empresa.Value 		= ''
+		.get_empresa_desc.Value = ''
+		.Refresh
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReAnr To Printer Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReAnr To Printer NoConsole
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREANR.get_empresa_desc
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_empresa.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.get_Empresa, ThisForm.get_Empresa_Desc)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREANR.get_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.get_Empresa, ThisForm.get_Empresa_Desc)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREANR
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

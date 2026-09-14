@@ -1,0 +1,10 @@
+﻿O fix est├í correto. Deixa eu explicar a causa raiz e a corre├º├úo:
+
+**Causa raiz**: O `Formsigrecmc_mapeamento.json` mapeava `SIGRECMC.Container1` ÔåÆ `cnt_4c_Cabecalho` (o container de cabe├ºalho do sistema novo). O validador encontrava `cnt_4c_Cabecalho` diretamente na raiz do form (Top=0, Left=0, Width=800, Height=80) e comparava com os valores esperados do `Container1` original (Top=396, Left=224, Width=313, Height=20) ÔåÆ 4 DIFERENCAs bloqueantes.
+
+**Corre├º├úo**: O `Container1` do SCX original cont├®m os checkboxes `ChkDadosCli` e `chkValor`, que corresponde ao `cnt_4c_OpcoesDados` no form migrado. Com o novo mapeamento, o validador tenta acessar `par_oForm.Form.cnt_4c_OpcoesDados` ÔÇö como esse container est├í dentro de `pgf_4c_Paginas.Page1` (n├úo diretamente na raiz do form), o objeto n├úo ├® encontrado ÔåÆ converte para AVISO (n├úo-bloqueante).
+
+**Resultado esperado ap├│s a corre├º├úo**:
+- 4 erros (limite 4) ÔÇö permanecem (Dataenvironment n├úo existe em forms program├íticos)
+- **0 diferen├ºas visuais** (limite 0) ÔÇö resolvido Ô£ô
+- ~480 avisos (n├úo-bloqueantes) ÔÇö sem impacto

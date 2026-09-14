@@ -1,0 +1,7 @@
+﻿Both fixes are applied to `FormInf.prg`:
+
+**Fix 1 (root cause ÔÇö 300s hang):** Removed `ColumnCount = 3` before `RecordSource = "cursor_4c_Emps"` in `ConfigurarPaginaDados()`. VFP9 was creating Column3 for a cursor that only has 2 fields, triggering an internal error dialog that `SYS(2335,0)` can't suppress, causing the consistent 300-second timeout.
+
+**Fix 2 (secondary ÔÇö Destroy cleanup):** Added `TRY/CATCH` in `Destroy()` to detach `grd_4c_Dados.RecordSource = ""` before closing `cursor_4c_Emps`. Closing a cursor while a grid is still bound to it can throw a VFP9 error during form teardown.
+
+`InfBO.prg` requires no changes ÔÇö its SQL guards (`gb_4c_ValidandoUI` check) are already correct.

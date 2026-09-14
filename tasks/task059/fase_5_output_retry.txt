@@ -1,0 +1,5 @@
+﻿Phase 5 complete. Split the existing filter configuration into two methods:
+- `ConfigurarPaginaDados()` (new): First half ÔÇö Periodo (dt_inicial/dt_final) + Empresa (codigo/desc) with their BINDEVENTs
+- `ConfigurarPaginaFiltros()` (existing, trimmed): Second half ÔÇö Vendedor + Moeda
+
+`InicializarForm()` now calls both methods in order, preserving identical behavior. All field properties, positions, masks, and validation handlers from the previous phases are intact.

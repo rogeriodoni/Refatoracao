@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo do diagn├│stico e fix:
+
+**Causa raiz:** Os 4 ERROS (`Dataenvironment` n├úo encontrado) s├úo esperados em forms `DEFINE CLASS` ÔÇö sem DataEnvironment, e est├úo exatamente no limite de 4, n├úo bloqueiam.
+
+**As diferen├ºas visuais bloqueantes:** O arquivo SCX original (`SigReEch_form_codigo_fonte.txt`, linhas 242/261) tem `Caption = "Cadastro de Testes"` nos dois labels internos do cabe├ºalho cinza (`lblSombra` e `lblTitulo`), provavelmente um erro de copy-paste no legado. O form migrado usava "Emiss├úo de Cheque", criando 2 diferen├ºas visuais detectadas pelo validator.
+
+**Corre├º├úo:** Ambos os labels (`lbl_4c_LblSombra.Caption` e `lbl_4c_LblTitulo.Caption`) alterados para `"Cadastro de Testes"` para corresponder pixel-perfect ao SCX original, conforme PILAR 1.

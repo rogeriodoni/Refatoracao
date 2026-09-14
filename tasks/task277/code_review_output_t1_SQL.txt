@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo das tr├¬s verifica├º├Áes:
+
+**CIDCHAVES (corrigido)** ÔÇö `AND cidchaves = LEFT(EmpDopNums, 20)` substitu├¡do por `AND transacaos = LEFT(EmpDopNums, 100)`. O original filtra sigoplog por `transacaos` (onde EmpDopNums ├® armazenado), n├úo por `cidchaves`. O Inserir() confirma isso: guarda EmpDopNums em `transacaos`.
+
+**DOPES (falso positivo ÔÇö sem altera├º├úo)** ÔÇö As condi├º├Áes `WHERE dopes = EscaparSQL(loc_cDopes)` nas queries a SigCdOpe/SigOpCdc/SigOpCdi/SigOpCdd s├úo filtros na chave prim├íria dessas tabelas. Sem o WHERE retornariam toda a tabela. O checker flagrou porque o original usava USE/SEEK VFP local (n├úo SQLEXEC), mas a condi├º├úo SQL resultante ├® correta e necess├íria.
+
+**CONTROLCOUNT (falso positivo ÔÇö sem altera├º├úo)** ÔÇö `par_oContainer.ControlCount` na linha 758 ├® uma propriedade nativa de objetos VFP, n├úo uma coluna SQL. N├úo existe nenhum WHERE SQL com essa coluna no arquivo.

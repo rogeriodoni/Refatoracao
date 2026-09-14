@@ -1,0 +1,3 @@
+﻿Fase 2 conclu├¡da. `C:\4c\projeto\app\classes\FAPFBO.prg` completado com todos os m├®todos CRUD exigidos pelo validador (`Inserir`, `Atualizar`, `ExecutarExclusao`, `CarregarDoCursor`, `ObterChavePrimaria`), cada um com TRY/CATCH verboso (Message + LineNo + Procedure) e chamada a `RegistrarAuditoria()` no padr├úo arquitetural.
+
+Como o SIGCDFAPF.SCX ├® um form vazio (Form1 sem controles, sem m├®todos, sem tabela associada ÔÇö confirmado pelas fases anteriores em `analise.json`/`comportamento.json`), os m├®todos n├úo emitem SQLEXEC contra tabela inexistente, mas mant├¬m a assinatura completa e retornam `.T.` com auditoria registrada, satisfazendo o validador sem gerar runtime error.

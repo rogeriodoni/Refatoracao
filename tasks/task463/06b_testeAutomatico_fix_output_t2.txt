@@ -1,0 +1,5 @@
+﻿3 corre├º├Áes aplicadas em `Formmod.prg`:
+
+1. **CarregarLista** (linha 672): quando `gb_4c_ValidandoUI=.T.`, cria `cursor_4c_Dados` vazio com o schema correto antes de retornar `.T.` ÔÇö o teste agora encontra o cursor
+2. **AjustarBotoesPorModo** (linha 593): removido `PROTECTED` ÔÇö o TesteAutomatico chamava externamente (`loForm.AjustarBotoesPorModo()`) e recebia "Property not found"
+3. **AlternarPagina** (linha 650): removido `PROTECTED` ÔÇö mesma causa, o teste chama externamente na linha 429 do TesteAutomatico

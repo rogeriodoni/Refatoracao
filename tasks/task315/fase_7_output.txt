@@ -1,0 +1,22 @@
+﻿O FormBase n├úo usa esses m├®todos. O formul├írio est├í **completamente implementado** ÔÇö fase 7 n├úo tem nada a adicionar.
+
+**Situa├º├úo atual do FormSIGPRNSE:**
+
+- Form (1139 linhas) ÔÇö todos os eventos implementados:
+  - `BtnSelecionarClick` ÔÇö coleta filtros e chama BO.Selecionar
+  - `CmgBotoesClick` ÔÇö Limpar (1) / Gerar Arquivo (2) / Sair (3)
+  - `CmgGradeClick` ÔÇö Marcar Tudo / Desmarcar / Documento
+  - `BtnDirsClick` ÔÇö seletor de pasta via GETDIR
+  - `TxtCEmpsKeyPress` + `TxtCEmpsLostFocus` + `AbrirLookupEmpresa` ÔÇö valida├º├úo de empresa com lookup FormBuscaAuxiliar (substitui `fAcessoEmpresa` n├úo portada)
+  - `GradeAfterRowColChange`, `CheckMouseDown`, `CheckKeyPress` ÔÇö comportamento do grid com checkbox
+  - `AjustarControles` ÔÇö controla modo entrada vs processamento
+  - `Destroy` ÔÇö fecha cursores e libera BO
+
+- BO (1143 linhas) ÔÇö completo:
+  - `Selecionar` ÔÇö query SQL Server + popula csOperacoes com valida├º├Áes
+  - `GerarArquivoRJ` ÔÇö NFS-e RJ v3.1 (registros 10/20/40/90)
+  - `GerarArquivoSP` ÔÇö NFS-e SP v3.4 (registros 1/6/9)
+  - `Processamento` ÔÇö dispatcher por munic├¡pio
+  - `CriarCursorOperacoes`, `CarregarUfs`, `Inserir`, `Atualizar`, `RegistrarAuditoria`
+
+**Os m├®todos `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` s├úo padr├úo CRUD e n├úo se aplicam a este form OPERACIONAL.** O FormBase n├úo os chama. A fase 7 usou o template CRUD incorretamente ÔÇö a migra├º├úo deste form est├í conclu├¡da desde a fase 6.

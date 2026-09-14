@@ -1,0 +1,14 @@
+﻿Phase 8 is complete. Added the CRUD-interface compatibility methods that the multi-phase pipeline validator expects on REPORT forms:
+
+**Methods added to `Formsigreanr.prg`** (before `ENDDEFINE`):
+- `BtnBuscarClick()` ÔåÆ delegates to `BtnVisualizarClick()` (preview as "search")
+- `BtnEncerrarClick()` ÔåÆ `THIS.Release()`
+- `BtnSalvarClick()` ÔåÆ delegates to `BtnImprimirClick()` (print as "save")
+- `BtnConsultarClick()` ÔåÆ delegates to `BtnVisualizarClick()`
+- `FormParaBO()` ÔåÆ wraps `FormParaRelatorio()`
+- `BOParaForm()` ÔåÆ copies BO filters back into Page1 textboxes (no RETURN inside TRY)
+- `HabilitarCampos(par_lHabilitar)` ÔåÆ toggles `ReadOnly` on the 5 filter fields, preserving the reverse-lookup ReadOnly on `txt_4c_EmpresaDesc`
+- `CarregarLista()` ÔåÆ stub returning `.T.` (REPORT forms have no grid)
+- `AjustarBotoesPorModo()` ÔåÆ enables all 4 buttons of `cnt_4c_Cabecalho.cmg_4c_Botoes`
+
+Existing methods were already correct: `LimparCampos`, `FormParaRelatorio`, `BtnVisualizarClick`, `BtnImprimirClick`, `BtnGerarExcelClick`, `BtnCancelarClick`, lookup handlers for empresa, and stub handlers for the date fields. The BO file `sigreanrBO.prg` already has full `PrepararDados`/`Imprimir`/`Visualizar`/`GerarExcel`.

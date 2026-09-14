@@ -1,0 +1,10 @@
+﻿Arquivo correto e completo. A Fase 2/8 est├í conclu├¡da com os seguintes m├®todos adicionados ao `SigPrCarBO.prg`:
+
+**M├®todos adicionados:**
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö l├¬ as colunas `codigos`, `cpros`, `pkchaves` e (se dispon├¡vel) `descrs` de qualquer cursor VFP via `SELECT (alias)` + acesso direto ao campo
+- **`Buscar(par_cCPros)`** ÔÇö faz SQLEXEC com JOIN em `SIGCRRAP` para carregar caracter├¡sticas do produto com descri├º├úo; usa padr├úo cursor tempor├írio ÔåÆ ZAP/APPEND em `cursor_4c_Dados`
+- **`ValidarCaracteristicaDuplicada(codigos, cpros, pkchavesAtual)`** ÔÇö consulta SQL `COUNT(*)` para checar duplicidade antes de inserir/atualizar (implementa a l├│gica do `Valid` original)
+- **`ValidarDados()`** ÔÇö valida `this_cCodigos` e `this_cCPros` n├úo vazios
+- **`Inserir()`** ÔÇö INSERT em `sigprcar (codigos, cpros, pkchaves)` com gera├º├úo de PK via `LEFT(SYS(2015)+SYS(2015), 20)` + auditoria
+- **`Atualizar()`** ÔÇö UPDATE `codigos` by `pkchaves` (descri├º├úo n├úo ├® persistida, vem do JOIN com SIGCRRAP) + auditoria
+- **`ExecutarExclusao()`** ÔÇö DELETE by `pkchaves` + auditoria

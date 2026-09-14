@@ -1,0 +1,41 @@
+﻿The `RETURN` at line 5426 is outside the TRY block (it's before `TRY` starts at 5428), so it's fine.
+
+The implementation is complete. Let me provide a summary of what was done:
+
+---
+
+**FASE 9 completa.** A sub-p├ígina `pgComposicao` foi migrada para `FormProduto.prg`.
+
+## O que foi adicionado (~2100 linhas novas)
+
+### M├®todo `ConfigurarPgpgComposicao(par_oPage)` (linha 1854)
+Chamado de `ConfigurarPaginaDados()` ANTES de `TornarControlesVisiveis`.
+
+**Cursors placeholder criados:**
+- `cursor_4c_Compo` - campos de SIGPRCPO (14 campos)
+- `cursor_4c_SubCp` - campos de sigsubcp (15 campos)
+- `cursor_4c_TotGrupo` - totais por grupo (3 campos)
+
+**Grids configurados:**
+- `grd_4c_Compo` (top=148, left=6, w=943, h=147) ÔÇö 14 colunas, RecordSource + ControlSource + Headers + larguras re-aplicadas p├│s-RecordSource
+- `grd_4c_SubCp` (top=348, left=6, w=943, h=83) ÔÇö 15 colunas (inclui `matsubs`, `codtams`)
+- `grd_4c_TotGrupo` (top=34, left=582, w=229, h=107) ÔÇö 3 colunas ReadOnly (Grupo, ValGrupo, Moeda)
+
+**Container `cnt_4c_MtPrima`** (top=511, left=752) com 10 controles filhos: labels + TextBoxes (compos, digimaxs, ordcompos, casas) + ComboBox montadescs
+
+**~30 TextBoxes standalone** de pre├ºo/custo/venda com posi├º├Áes exatas do layout.json
+
+**5 CheckBoxes:** chk_4c_LiberaCusto, chk_4c_LiberaVenda, chk_4c_PlanCus, chk_4c_PlanVen, chk_4c_Pvenda
+
+**2 Shapes, CommandGroups:** `obj_4c_CmdgCompo` (5 bot├Áes) e `obj_4c_CmdgSubCp` (2 bot├Áes), `cmd_4c_CalcVals`, `cmd_4c_PesoM`
+
+### Handlers PUBLIC adicionados (linha 5213+)
+- `GrdCompoAfterRowColChange`, `GrdSubCpAfterRowColChange`
+- `ChkLiberaCustoClick`, `ChkLiberaVendaClick`
+- `TxtPcusValid`, `TxtFcustoValid`, `TxtMargemValid`, `TxtMarkupAValid`, `TxtCotaCalcPValid`
+- `TxtMoecKeyPress`, `TxtMoepcKeyPress`, `TxtMoedaKeyPress`, `TxtMoepvKeyPress`
+- `CmdCalcValsClick`, `CmdPesoMClick`, `CmdgCompoClick`, `CmdgSubCpClick`
+- PROTECTED: `ValidarMoeCompo`, `AbrirLookupMoeCompo`, `CalcPrecoComposicao`
+
+### `Destroy()` atualizado
+Array expandido de 30ÔåÆ35 para incluir os novos cursors da Fase 9.

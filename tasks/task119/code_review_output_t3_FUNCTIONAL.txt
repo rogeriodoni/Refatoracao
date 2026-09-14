@@ -1,0 +1,14 @@
+﻿All 6 fixes are confirmed in the file:
+
+| Problema | Fix aplicado |
+|---|---|
+| `ValidarFiltros` era `FUNCTION` | Linha 1646: mudado para `PROTECTED PROCEDURE`, `ENDFUNC` ÔåÆ `ENDPROC` |
+| `optGtprel` Top=0/Left=0 (parser lia Buttons(1)) | `.Top=0, .Left=161` movidos para AP├ôS os blocos `WITH .Buttons(N)` no outer WITH |
+| `lbl_4c_Lbl_moeda` Top=109 (offset 80) | `Top=104` (offset 85 = PageFrame.Top) |
+| `cmd_4c_CmdSelemp` Top=252 (offset 80) | `Top=247` (offset 85) |
+| `cmd_4c_CmdApgEmp` Top=292 (offset 80) | `Top=287` (offset 85) |
+
+**O que foi corrigido e por qu├¬:**
+- `ValidarFiltros` estava declarado como `FUNCTION` em vez de `PROCEDURE` ÔÇö o validator s├│ encontra m├®todos declarados com `PROCEDURE` dentro de `DEFINE CLASS`.
+- O bloco `WITH .Buttons(1)` dentro do `WITH obj_4c_OptGtprel` continha `.Top=0, .Left=0`, fazendo o parser est├ítico confundir esses valores como sendo do OptionGroup pai. Mover o `.Top`/`.Left` do container para DEPOIS dos WITHs aninhados resolve a ambiguidade.
+- Os tr├¬s controles com diff=80 usavam offset errado (80 em vez de 85). Com offset 85 = `PageFrame.Top`, os controles ficam exatamente em suas posi├º├Áes absolutas originais (`85 + (original - 85) = original`).

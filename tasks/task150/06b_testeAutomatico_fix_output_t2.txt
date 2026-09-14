@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O erro `Alias 'XPESA' is not found` ocorria porque `ConfigurarGrid()` define `RecordSource = "xPesa"` sem verificar se o cursor existe ÔÇö no contexto normal o cursor vem do form pai via datasession compartilhada, mas no teste automatizado n├úo h├í form pai.
+
+A corre├º├úo cria um cursor `xPesa` vazio (com todos os campos referenciados no form) logo ap├│s `CriarCursoresLocais()`, apenas quando o cursor n├úo existe. O `INDEX ON ... TAG Amarra` tamb├®m ├® criado para satisfazer o `SET ORDER TO Amarra` no final de `InicializarForm`.

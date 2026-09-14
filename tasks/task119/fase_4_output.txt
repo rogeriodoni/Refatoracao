@@ -1,0 +1,17 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormSigReIfv.prg` foi atualizado com:
+
+**Adicionado em `InicializarForm()`:** chamada a `THIS.ConfigurarPaginaLista()` ap├│s `ConfigurarPageFrame()`.
+
+**Novos m├®todos:**
+
+1. **`ConfigurarPaginaLista()`** ÔÇö adiciona todos os controles de filtro na Page1:
+   - `obj_4c_OptGtprel` (OptionGroup: Anal├¡tico/Sint├®tico/Consulta Barra)
+   - Labels e TextBoxes para: Tipo, Barra, Empresa (c├│digo+descri├º├úo), Data Base, Data Base Anterior, Moeda (c├│digo+descri├º├úo), Grupo de Estoque (c├│digo+descri├º├úo), Conta de Estoque (c├│digo+descri├º├úo)
+   - `grd_4c_Dados` (grid com 3 colunas: CheckBox lMarca, CEmps, DEmps) ÔÇö vis├¡vel apenas no Tipo=2
+   - `cmd_4c_CmdSelemp` e `cmd_4c_CmdApgEmp` ÔÇö vis├¡veis apenas no Tipo=2
+   - Visibilidade inicial correta para Tipo=1 (padr├úo)
+   - RecordSource/ControlSource do grid vinculados apenas se `cursor_4c_Empresas` existir (seguro no modo UI)
+
+2. **`AjustarVisibilidadePorTipo()`** ÔÇö exibe/oculta controles conforme o tipo selecionado; pronto para ser chamado via BINDEVENT na Fase 7.
+
+3. **`AlternarPagina(par_nPagina)`** ÔÇö navega├º├úo no PageFrame.

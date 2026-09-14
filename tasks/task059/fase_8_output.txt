@@ -1,0 +1,17 @@
+﻿Todos os 7 m├®todos da Fase 8 foram adicionados. Resumo do que foi feito:
+
+**Formsigrecog.prg** ÔÇö 7 m├®todos adicionados antes do `ENDDEFINE`:
+- `BtnBuscarClick()` ÔåÆ equivale a Visualizar (relatorio n├úo tem grade de busca)
+- `BtnSalvarClick()` ÔåÆ equivale a Imprimir
+- `BtnCancelarClick()` ÔåÆ chama LimparCampos + recarrega moedas
+- `BOParaForm()` (PROTECTED) ÔåÆ inverso de FormParaRelatorio; preenche campos do form a partir das propriedades do BO
+- `HabilitarCampos(par_lHabilitar)` (PROTECTED) ÔåÆ habilita/desabilita todos os TextBox de filtro via ReadOnly
+- `CarregarLista()` (PROTECTED) ÔåÆ recarrega cursor_4c_Moedas via BO
+- `AjustarBotoesPorModo()` (PROTECTED) ÔåÆ garante todos os 4 bot├Áes do CommandGroup habilitados
+
+**menu.prg** ÔÇö integra├º├úo completa:
+- `DEFINE BAR 60/61` em `popRelatorios` (separador + item "Comiss├úo por Grupo de Produto")
+- `ON SELECTION BAR 61 OF popRelatorios DO AbrirFormsigrecog`
+- Procedure `AbrirFormsigrecog()` no padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, `MostrarErro`)
+
+**config.prg** ÔÇö sem altera├º├Áes necess├írias; ADIR() carrega automaticamente ambos os arquivos.

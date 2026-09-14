@@ -1,0 +1,20 @@
+﻿**An├ílise completa:** O CMOES em WHERE aparece **exclusivamente** em `ValidarCdMoeda` (form, linha 1369) ÔÇö uma query de valida├º├úo de lookup, n├úo um filtro de dados principal. O BO n├úo tem nenhuma refer├¬ncia a CMOES.
+
+**Diagn├│stico: FALSO POSITIVO**
+
+O padr├úo `WHERE cmoes = EscaparSQL(loc_cCod)` em `ValidarCdMoeda` ├® estruturalmente id├¬ntico a:
+- `ValidarCdEmpresa` ÔåÆ `WHERE cemps = ...` (CEMPS est├í na lista original Ô£ô)
+- `ValidarCdGrupo` ÔåÆ `WHERE cgrus = ...` (CGRUS est├í na lista original Ô£ô)
+- `ValidarCdMoeda` ÔåÆ `WHERE cmoes = ...` (CMOES n├úo estava na lista original ÔÇö mas ├® a PK de SigCdMoe)
+
+A lista de WHERE original (CEMPS, ESTOQUES, CGRUS, etc.) reflete apenas as **queries de processamento de dados**. O original n├úo tinha SQL de valida├º├úo para moeda (provavelmente usava DataMgr/cache), mas o campo moeda existia no form original (evidenciado por `moevenda`/`moecusto` no c├│digo legado e pelas propriedades `this_cCdMoeda`/`this_cDsMoeda` no BO).
+
+**Nenhuma altera├º├úo ├® necess├íria.** A condi├º├úo `WHERE cmoes = ...` ├®:
+1. A chave prim├íria correta da tabela SigCdMoe
+2. Um lookup de valida├º├úo de UI, n├úo um filtro de dados inventado
+3. Consistente com o padr├úo arquitetural de todos os outros campos lookup no mesmo form
+4. Protegida pela regra "NAO remover campos, funcionalidades ou lookups"
+
+Remover o WHERE quebraria a valida├º├úo da moeda (o SELECT sem WHERE retornaria todas as moedas, impossibilitando validar o c├│digo espec├¡fico digitado pelo usu├írio).
+
+O arquivo est├í correto. Nenhuma edi├º├úo necess├íria.

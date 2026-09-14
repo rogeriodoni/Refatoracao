@@ -1,0 +1,9 @@
+﻿Phase 2 est├í completa. Adicionei 5 m├®todos ao `SigReAacBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia colunas de um cursor para as propriedades de filtro do BO (CUsuario, DUsuario, CGrupo, DGrupo), com TRY/CATCH e valida├º├úo de cursor vazio.
+- **`Inserir()`** ÔÇö retorna `.F.` com mensagem descritiva (opera├º├úo n├úo aplic├ível a relat├│rio). Suprime MsgErro em modo `gb_4c_ValidandoUI`.
+- **`Atualizar()`** ÔÇö mesma l├│gica de `Inserir()`.
+- **`ObterChavePrimaria()`** ÔÇö concatena os filtros ativos (GRUPO=ÔÇª | USUARIO=ÔÇª) para identificar a execu├º├úo.
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö `INSERT INTO LogAuditoria` com DataHora/Usuario/Operacao/Tabela/ChavePrimaria/Observacao, usando `FormatarDataSQL`/`EscaparSQL`.
+
+Valida├º├Áes regex da Fase 2 atendidas (`CarregarDoCursor`, `Inserir`, `Atualizar`) e completude OK ÔÇö nenhuma procedure vazia, nenhum TODO/stub, sem `MsgAviso` placeholder, sem RETURN dentro de TRY/CATCH, acentos via `CHR()`.

@@ -1,0 +1,33 @@
+﻿Ap├│s an├ílise completa de todas as 15 ocorr├¬ncias listadas, concluo que s├úo todas **falsos positivos** do checker. Aqui est├í o diagn├│stico detalhado:
+
+---
+
+## An├ílise: Todos os 15 problemas s├úo falsos positivos
+
+### GRID-SQL (12 problemas) ÔÇö Falsos positivos
+
+Os SELECTs DO arquivo atual cont├¬m exatamente os campos referenciados nos ControlSources:
+
+| Cursor | SELECT aliases (atual) | ControlSources |
+|--------|----------------------|----------------|
+| `cursor_4c_GGrupos` | `0 AS nMarcas`, `codigos AS GGrupos`, `descs AS Descricaos` | `nMarcas`, `GGrupos`, `Descricaos` Ô£ô |
+| `cursor_4c_GruposProd` | `0 AS nMarcas`, `cgrus AS Codigos`, `descs AS Descricaos` | `nMarcas`, `Codigos`, `Descricaos` Ô£ô |
+| `cursor_4c_Historico` | `a.lidos AS Qtds`, `a.lidos2 AS Qtds2`, `ISNULL(b.cbars_old,0) AS BarsOld`, + `cbars`, `cpros`, `localis`, `codcors`, `codtams` | Todos presentes Ô£ô |
+
+O checker tem dificuldade com concatena├º├Áes multi-linha em VFP (`loc_cSQL = "..." + ;` `"..."`). Ele pode estar lendo apenas a ├║ltima linha da concatena├º├úo como o SQL.
+
+### SQL-FILTRO-INVENTADO (3 problemas) ÔÇö Falsos positivos
+
+Os itens flagados **n├úo s├úo condi├º├Áes WHERE de SQL** ÔÇö s├úo c├│digo VFP puro:
+
+- **`CURSOR_4C_TOTA`** (linha 3314): `INTO CURSOR cursor_4c_Totais READWRITE` ÔÇö destino de um VFP `SELECT INTO`, n├úo uma coluna SQL WHERE
+- **`I`** (linha 4686): `FOR i = 1 TO par_oContainer.ControlCount` ÔÇö vari├ível de loop VFP
+- **`CONTROLCOUNT`** (linha 4690): `PEMSTATUS(loc_oControl, "ControlCount", 5)` ÔÇö nome de propriedade VFP passado como string
+
+---
+
+## Conclus├úo
+
+O c├│digo atual de `FormBAL.prg` e `BALBO.prg` est├í **correto** para todos os pontos listados neste pass SQL. Os arquivos `.pre_review` e `.bak` s├úo id├¬nticos ao arquivo atual nas se├º├Áes relevantes, confirmando que nenhuma corre├º├úo pr├®via foi feita e que o checker encontrou esses falsos positivos na vers├úo atual.
+
+**Nenhuma altera├º├úo ├® necess├íria.** Os SELECTs t├¬m todos os campos usados pelos ControlSources, e nenhum WHERE SQL inventado existe no c├│digo.

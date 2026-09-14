@@ -1,0 +1,23 @@
+﻿O arquivo est├í correto e completo. A Fase 6 foi conclu├¡da com sucesso.
+
+**Resumo do que foi implementado:**
+
+1. **ConfigurarPaginaDados()** ÔÇö adicionados os controles restantes:
+   - `txt_4c__ds_grupo` (TextBox descri├º├úo, Top=209, Left=335, Width=150)
+   - `lbl_4c_Label11` (Label "Tipo :", Top=239)
+   - `opt_4c_Op_con` (OptionGroup "Real/Previsto", Top=234, com Buttons[1]="Real" Left=5, Buttons[2]="Previsto" Left=51)
+   - BINDEVENTs: KeyPress(F4/Enter)+DblClick+LostFocus em `txt_4c__cd_grupo`, LostFocus em `txt_4c__ds_grupo`
+
+2. **HabilitarCampos()** ÔÇö `txt_4c__ds_grupo` (ReadOnly em VISUALIZAR) e `opt_4c_Op_con` (Enabled=.F. em VISUALIZAR)
+
+3. **LimparCampos()** ÔÇö zera `txt_4c__ds_grupo` e reseta `opt_4c_Op_con.Value = 1`
+
+4. **FormParaBO()** ÔÇö transfere `this_cDescrs` e `this_nRelprevs` do form para o BO
+
+5. **BOParaForm()** ÔÇö preenche `txt_4c__ds_grupo` e `opt_4c_Op_con.Value` a partir do BO
+
+6. **Novos m├®todos de lookup** (substitutos do `fAcessoContab` legado):
+   - `CdGrupoKeyPress` / `CdGrupoDblClick` ÔÇö disparam `AbrirLookupGrupoGcr()`
+   - `ValidarCdGrupo()` ÔÇö LostFocus: busca SigCdGcr por c├│digo, preenche descri├º├úo
+   - `ValidarDsGrupo()` ÔÇö LostFocus: busca SigCdGcr por descri├º├úo, preenche c├│digo (ou abre picker se m├║ltiplos)
+   - `AbrirLookupGrupoGcr()` ÔÇö FormBuscaAuxiliar para SigCdGcr (Codigos, Descrs)

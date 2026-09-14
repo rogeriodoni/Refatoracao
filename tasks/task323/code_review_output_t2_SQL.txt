@@ -1,0 +1,31 @@
+﻿Ap├│s ler os dois arquivos completos, vou analisar os dois problemas reportados:
+
+**[SQL-FILTRO-INVENTADO] CIDCHAVES**
+
+Encontrado em:
+- `Atualizar()` linha 231: `WHERE cidchaves = ...` ÔåÆ UPDATE pelo PK da tabela SigPrCrr
+- `ExecutarExclusao()` linha 260: `WHERE cidchaves = ...` ÔåÆ DELETE pelo PK da tabela SigPrCrr
+
+`cidchaves` **├® a chave prim├íria de SigPrCrr** (declarada no `Init()` como `this_cCampoChave = "cidchaves"`). Usar o PK no WHERE de UPDATE/DELETE ├® obrigat├│rio ÔÇö o original usava o framework `CursorQuery`/`TableUpdate` que faz exatamente isso internamente. Nas SELECTs (`BuscarDadosProduto` e `BuscarCaracteristicas`), o filtro ├® `WHERE cpros = ...`, id├¬ntico ao original. **Falso positivo.**
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT**
+
+Busquei em todo o Form e BO ÔÇö `CONTROLCOUNT` como condi├º├úo SQL n├úo existe. O que aparece ├® `ControlCount` (linha 199 do Form), que ├® uma **propriedade VFP9 de container** usada em loop:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount
+```
+
+O verificador automatizado confundiu o nome da propriedade VFP9 com um nome de coluna SQL. **Falso positivo.**
+
+---
+
+**Ambos os problemas s├úo falsos positivos.** Nenhuma altera├º├úo ├® necess├íria:
+
+| Ocorr├¬ncia | Tipo | Status |
+|---|---|---|
+| `WHERE cidchaves = ...` em Atualizar/ExecutarExclusao | UPDATE/DELETE pelo PK correto | Ô£ô Correto |
+| `WHERE cpros = ...` em BuscarDadosProduto/BuscarCaracteristicas | SELECT igual ao original | Ô£ô Correto |
+| `ControlCount` em TornarControlesVisiveis:199 | Propriedade VFP9, n├úo SQL | Ô£ô Correto |
+
+Os arquivos `FormSIGPRPRO.prg` e `SIGPRPROBO.prg` est├úo corretos e n├úo precisam de modifica├º├úo.

@@ -1,0 +1,20 @@
+﻿As 4 edi├º├Áes foram aplicadas corretamente. Veja o resumo:
+
+---
+
+**O que foi corrigido (OPTIONGROUP-LEFT ÔÇö 2 problemas reais):**
+
+Nos OptionGroups `obj_4c_Op_Emitido` e `obj_4c_Op_Cancelado` (ButtonCount=3), `Buttons(1)` estava incompleto vs. seus irm├úos:
+
+| Bot├úo | Antes | Depois |
+|-------|-------|--------|
+| `Op_Emitido.Buttons(1)` | sem `.FontName`, `.FontSize`, `.Style` | adicionados |
+| `Op_Emitido.Buttons(3)` | sem `.Style = 0` | adicionado |
+| `Op_Cancelado.Buttons(1)` | sem `.FontName`, `.FontSize`, `.Style` | adicionados |
+| `Op_Cancelado.Buttons(3)` | sem `.Style = 0` | adicionado |
+
+**O que N├âO foi alterado (falsos positivos):**
+
+- **[METODO-INEXISTENTE] `THIS.Width()`**: O c├│digo usa `THIS.Width` como propriedade (correto). Nenhuma chamada `THIS.Width()` com par├¬nteses existe no arquivo.
+
+- **[LAYOUT-POSITION] (10 erros)**: Os OptionGroups j├í est├úo nas posi├º├Áes originais exatas (`obj_4c_Op_Emitido.Top=197/.Left=248`, `obj_4c_OptDatas.Top=149/.Left=430` etc.). O validador confundiu as posi├º├Áes internas dos `Buttons` (Top=5, Left=5 ÔÇö relativas ao container do OptionGroup) com a posi├º├úo do OptionGroup no form.

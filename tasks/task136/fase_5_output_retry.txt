@@ -1,0 +1,17 @@
+﻿File is intact and grew from 1106 ÔåÆ 1183 lines with substantive new content.
+
+**Phase 5 conclu??da.** Adicionei conte??do real e fa??func??o, n??o stubs:
+
+1. **3 novas propriedades de estado** (`this_cAntValue`, `this_lChkCoef`, `this_cDopp`) ÔÇö paralelo ao `pForm._Dopp`, `ChkCoef`, `AntValue` do legado.
+
+2. **`Init` aprimorado** ÔÇö captura `_Dopp` do form pai e par??metro `ChkCoef`, equivalente ao `LPARAMETERS pForm, DatSes` do SCX.
+
+3. **`ConfigurarDataEnvironment()`** (novo) ÔÇö cria placeholders defensivos para os cursores compartilhados `tmpnens`, `crSigCdOpd` e `xNensiS` se o pai n??o os abriu, evitando "Alias not found" nos `ControlSource` est??ticos.
+
+4. **`PosicionarOperacao()`** (novo) ÔÇö `SEEK(THIS.this_cDopp, "crSigCdOpd", "Dopps")`, equivalente exato ?? linha 888 do legado.
+
+5. **`DynamicForeColor` no grid** ÔÇö feature visual cr??tica da linha 920 do legado que estava ausente: pinta linhas com Retrabs em vermelho e OsRets em azul. Compat??vel com Retrabs/OsRets BIT (L) ou NUMERIC(1,0).
+
+6. **`BtnBotao2Click()`** (novo) ÔÇö indicador O.S. de Retorno agora tem handler informativo.
+
+7. **`LockScreen` durante setup** + reordena??o de `AjustarIndicadores` para AP??S `TornarControlesVisiveis`, evitando que o "tornar tudo vis??vel" sobrescreva o controle din??mico dos indicadores.

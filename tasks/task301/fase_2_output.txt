@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `SIGPRIFFBO.prg` foi completado com os seguintes m├®todos adicionados:
+
+- **`ValidarDados()`** (PROTECTED) ÔÇö valida a resposta capturada conforme o tipo de dado: num├®rico verifica intervalo min/max, texto verifica tamanho m├¡nimo, data/combo passam sem restri├º├úo de tamanho.
+- **`CarregarDoCursor()`** (PROTECTED) ÔÇö retorna `.F.` pois este ├® um di├ílogo utilit├írio sem tabela de banco de dados.
+- **`Inserir()`** ÔÇö chama `ValidarDados()` e retorna `.T.` se v├ílido; sem persist├¬ncia SQL (n├úo h├í tabela).
+- **`Atualizar()`** ÔÇö id├¬ntico ao `Inserir()` para esta classe.
+- **`CapturarRespostaTexto()`** ÔÇö helper para o Form capturar a resposta do TextBox, suportando tipos C/N/D.
+- **`CapturarRespostaCombo()`** ÔÇö helper para o Form capturar a resposta do ComboBox (extrai primeiro caractere).
+
+> **Nota**: O SIGPRIFF ├® um InputBox utilit├írio gen├®rico sem tabela no SQL Server (`this_cTabela = ""`), portanto `Inserir`/`Atualizar` n├úo geram SQL. O `RegistrarAuditoria` n├úo foi chamado por n├úo haver entidade persistida.

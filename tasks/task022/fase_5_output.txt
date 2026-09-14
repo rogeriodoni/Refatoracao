@@ -1,0 +1,22 @@
+﻿Fase 5 conclu├¡da. O arquivo `FormSIGACGCT.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- `shp_4c_Shape1` ÔÇö separador horizontal da se├º├úo Usu├írio (top=151)
+- `lbl_4c_Label2` ÔÇö t├¡tulo "Usu├írio" (top=134, bold)
+- `lbl_4c_Label1` ÔÇö label "Grupo :" (top=158)
+- `txt_4c_Grupo` ÔÇö campo de c├│digo do grupo de acesso (top=155, width=80) + BINDEVENT LostFocus
+- `lbl_4c_Label3` ÔÇö label "Nome :" (top=183)
+- `txt_4c_Usuario` ÔÇö campo de c├│digo do usu├írio (top=179, width=80) + BINDEVENT LostFocus
+- `shp_4c_Shape3` ÔÇö separador horizontal da se├º├úo Grupo Cont├íbil (top=241)
+- `lbl_4c_Label7` ÔÇö t├¡tulo "Grupo Cont├íbil" (top=224, bold)
+- `lbl_4c_Label8` ÔÇö label "Grupo :" para Cont├íbil (top=248)
+- `txt_4c_GrContab` ÔÇö c├│digo do grupo cont├íbil (top=245, width=79) + BINDEVENT LostFocus
+- `txt_4c_DGrContab` ÔÇö descri├º├úo do grupo cont├íbil (top=245, width=150) + BINDEVENT LostFocus
+
+**4 m├®todos handlers adicionados:**
+- `ValidarGrupoAcess()` ÔÇö busca em `SigCdAcG`, exclus├úo m├║tua com Usuario
+- `ValidarUsuarioAcess()` ÔÇö busca em `SigCdUsu` com colunas Usuarios/CCargs, exclus├úo m├║tua com Grupo
+- `ValidarGrContab()` ÔÇö busca em `SigCdGcr` por Codigos, preenche DGrContab com Descrs
+- `ValidarDGrContab()` ÔÇö busca em `SigCdGcr` por Descrs, preenche GrContab com Codigos
+
+**`HabilitarCampos()` atualizado** com l├│gica de exclus├úo m├║tua e controles condicionais do `When` original.

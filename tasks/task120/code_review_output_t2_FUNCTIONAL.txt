@@ -1,0 +1,11 @@
+﻿Analisando o arquivo completo: a ├║nica ocorr├¬ncia de `THIS.Height` est├í na linha 379:
+
+```foxpro
+loc_oPgf.Height = THIS.Height
+```
+
+**Diagn├│stico: Falso positivo.** N├úo h├í `THIS.Height()` com par├¬nteses (chamada de m├®todo) em nenhum ponto do arquivo. O que existe ├® `THIS.Height` sem par├¬nteses ÔÇö acesso ├á **propriedade nativa** `Height` do objeto Form, declarada como `Height = 130` na linha 25 da classe.
+
+Em VFP9, `THIS.Height` l├¬ a propriedade de dimens├úo do form (herdada de `Form`/`FormBase`). ├ë c├│digo correto e n├úo requer nenhuma altera├º├úo.
+
+O detector do pass confundiu o acesso ├á propriedade `THIS.Height` com uma chamada de m├®todo `THIS.Height()`. Como o arquivo n├úo cont├®m nenhuma chamada de m├®todo inexistente, **nenhuma corre├º├úo ├® necess├íria** ÔÇö o arquivo `Formsigreifx.prg` est├í correto.

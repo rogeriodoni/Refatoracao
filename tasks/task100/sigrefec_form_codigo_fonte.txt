@@ -1,0 +1,1483 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrefec.SCX
+* Data/Hora: 05/06/2026 08:06:43
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREFEC
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGREFEC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtIni
+  Parent: SIGREFEC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFim
+  Parent: SIGREFEC
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmps
+  Parent: SIGREFEC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGREFEC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getUsuars
+  Parent: SIGREFEC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGREFEC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDEmps
+  Parent: SIGREFEC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkDetOpe
+  Parent: SIGREFEC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkOpePag
+  Parent: SIGREFEC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkResFpg
+  Parent: SIGREFEC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Line1
+  Parent: SIGREFEC
+  Class: line
+  BaseClass: line
+
+Objeto: lbl_periodo
+  Parent: SIGREFEC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREFEC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkVends
+  Parent: SIGREFEC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: getVends
+  Parent: SIGREFEC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkAnaPag
+  Parent: SIGREFEC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkVendRes
+  Parent: SIGREFEC
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: getFPags
+  Parent: SIGREFEC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREFEC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = -7
+  Left = 26
+  Width = 792
+  Height = 479
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC
+------------------------------------------------------------
+  DataSession = 2
+  Height = 350
+  Width = 800
+  DoCreate = .T.
+  Caption = "Fechamento de Caixa"
+  Name = "SIGREFEC"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 530
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.lbl_periodo_a
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "à"
+  Left = 340
+  Top = 133
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.getDtIni
+------------------------------------------------------------
+  Left = 254
+  TabIndex = 5
+  Top = 130
+  Width = 82
+  ZOrderSet = 4
+  Name = "getDtIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.getDtFim
+------------------------------------------------------------
+  Left = 352
+  TabIndex = 7
+  Top = 130
+  Width = 82
+  ZOrderSet = 5
+  Name = "getDtFim"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.getEmps
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  Left = 254
+  MaxLength = 3
+  TabIndex = 2
+  Top = 105
+  Width = 31
+  ZOrderSet = 6
+  Name = "getEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.lbl_empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Left = 200
+  Top = 108
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.getUsuars
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  Left = 254
+  MaxLength = 10
+  TabIndex = 9
+  Top = 155
+  Width = 82
+  ZOrderSet = 25
+  Name = "getUsuars"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.Say9
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Usuário :"
+  Left = 205
+  Top = 158
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 26
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.getDEmps
+------------------------------------------------------------
+  Format = "K!"
+  Height = 23
+  Left = 288
+  MaxLength = 40
+  TabIndex = 3
+  Top = 105
+  Width = 289
+  ZOrderSet = 10
+  Name = "getDEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.chkDetOpe
+------------------------------------------------------------
+  Top = 236
+  Left = 176
+  Height = 15
+  Width = 136
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Detalhado Por Operação"
+  Value = .F.
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "chkDetOpe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.chkOpePag
+------------------------------------------------------------
+  Top = 289
+  Left = 176
+  Height = 15
+  Width = 141
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Operações X Pagamentos"
+  Value = .T.
+  TabIndex = 18
+  ForeColor = 90,90,90
+  Name = "chkOpePag"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.chkResFpg
+------------------------------------------------------------
+  Top = 271
+  Left = 176
+  Height = 15
+  Width = 185
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Resumo Por Formas de Pagamento"
+  Value = .T.
+  TabIndex = 17
+  ForeColor = 90,90,90
+  Name = "chkResFpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.Line1
+------------------------------------------------------------
+  BorderWidth = 2
+  Height = 1
+  Left = 176
+  Top = 229
+  Width = 435
+  Name = "Line1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.lbl_periodo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Periodo :"
+  Left = 205
+  Top = 133
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipos de Impressão"
+  Left = 176
+  Top = 214
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 26
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.chkVends
+------------------------------------------------------------
+  Top = 236
+  Left = 400
+  Height = 15
+  Width = 105
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Imprime Vendedor"
+  Value = .F.
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "chkVends"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.getVends
+------------------------------------------------------------
+  Century = 2
+  Alignment = 3
+  InputMask = "!!!!!!!!!!"
+  Left = 532
+  TabIndex = 15
+  Top = 233
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "getVends"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.chkAnaPag
+------------------------------------------------------------
+  Top = 307
+  Left = 176
+  Height = 15
+  Width = 142
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Analítico  Por Pagamentos"
+  Value = .F.
+  TabIndex = 19
+  ForeColor = 90,90,90
+  Name = "chkAnaPag"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.chkVendRes
+------------------------------------------------------------
+  Top = 253
+  Left = 176
+  Height = 15
+  Width = 124
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Resumo Por Vendedor"
+  Value = .F.
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "chkVendRes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.getFPags
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  Left = 254
+  MaxLength = 10
+  TabIndex = 11
+  Top = 180
+  Width = 94
+  ZOrderSet = 25
+  Name = "getFPags"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREFEC.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cond. Pagto.:"
+  Left = 180
+  Top = 183
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 26
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREFEC
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE anafpags
+------------------------------------------------------------
+PROCEDURE anafpags
+Local lcVal, lnTot
+
+Insert Into crImpressao (Detalhe) Values ([======= ANALITICO POR PAGAMENTOS =======])
+
+Select Distinct FPags ;
+  From crDetalhe ;
+ Order By FPags ;
+  Into Cursor TmpFPags
+
+lnTot = 0
+
+Select TmpFPags
+Scan
+	Select Iif(RelFechas=4, Padr([VALE], 12), FPags) as FPags, RPags, RChqs, ;
+		   RelFechas, Vends, Notas, Parcs, ValPagos, Contas, Numeros, Vencs ;
+	  From crDetalhe ;
+	 Where FPags = TmpFPags.FPags ;
+	 Order By FPags, Vends, Notas, Parcs ;
+	  Into Cursor TmpOpePags
+
+	lnSub = 0
+
+	Select TmpOpePags
+	Scan
+
+		*** Mena - 03/04/2014 - inclui Vale na soma dos totais ***
+*!*		lnTot = lnTot + Iif(RelFechas=4, 0, TmpOpePags.ValPagos)
+*!*		lnSub = lnSub + Iif(RelFechas=4, 0, TmpOpePags.ValPagos)
+
+		lnTot = lnTot + TmpOpePags.ValPagos
+		lnSub = lnSub + TmpOpePags.ValPagos
+		
+		lcVal = Transform(TmpOpePags.ValPagos, [999,999.99])
+
+		If (TmpOpePags.Parcs = 1) && Se For a Primeira Parcela
+			*DINHEIRO   V10      999999/01 999,999.99
+			Insert Into crImpressao (Detalhe) Values (Padr(TmpOpePags.FPags, 10) + [ ] + Padr(TmpOpePags.Vends, 9) + ;
+					TmpOpePags.Notas + [/] + Padl(TmpOpePags.Parcs, 2, [0]) + [ ] + lcVal)
+		Else
+			*                    999999/01 999,999.99
+			Insert Into crImpressao (Detalhe) Values ([                    ] + TmpOpePags.Notas + [/] + ;
+					Padl(TmpOpePags.Parcs, 2, [0]) + [ ] + lcVal)
+		EndIf
+
+		If Not Empty(TmpOpePags.Numeros) 
+			* Insere Dados do Cheque
+			*         9999999999 / 999999  99/99/9999
+			Insert Into crImpressao (Detalhe) Values ([         ] + ;
+					TmpOpePags.Contas + [ / ] + TmpOpePags.Numeros + [  ] + Dtoc(TmpOpePags.Vencs))
+		EndIf
+
+		If Not Empty(TmpOpePags.RPags) 
+			* Insere Dados da Forma de Pagamento do Subnível
+			*                    999999/01 999,999.99
+			Insert Into crImpressao (Detalhe) Values ([        ] + TmpOpePags.RPags)
+
+			If Not Empty(TmpOpePags.RChqs) 
+				* Insere Dados do Cheque de Pagamento do Subnível
+				*         9999999999 / 999999  99/99/9999
+				Insert Into crImpressao (Detalhe) Values ([         ] + TmpOpePags.RChqs)
+			EndIf
+		EndIf
+	EndScan
+
+	lcVal = Transform(lnSub, [999,999,999.99])
+	Insert Into crImpressao (Detalhe) Values ([----------------------------------------])
+	Insert Into crImpressao (Detalhe) Values ([=              SUBTOTAL : ] + lcVal)
+	Insert Into crImpressao (Detalhe) Values ([])
+EndScan
+
+lcVal = Transform(lnTot, [999,999,999.99])
+Insert Into crImpressao (Detalhe) Values ([----------------------------------------])
+Insert Into crImpressao (Detalhe) Values ([=           TOTAL GERAL : ] + lcVal)
+Insert Into crImpressao (Detalhe) Values ([----------------------------------------])
+Insert Into crImpressao (Detalhe) Values ([])
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cabecalho
+------------------------------------------------------------
+PROCEDURE cabecalho
+Local lcDEp, ldDtI, ldDtF, lcUsu
+
+lcDEp = Alltrim(ThisForm.getDEmps.Value)
+ldDtI = ThisForm.getDtIni.Value 
+ldDtF = ThisForm.getDtFim.Value
+lcUsu = ThisForm.getUsuars.Value
+
+Insert Into crImpressao (Detalhe) Values ([========================================])
+Insert Into crImpressao (Detalhe) Values (Padc(lcDEp, 40))
+Insert Into crImpressao (Detalhe) Values ([   Caixas de: ] + Dtoc(ldDtI) + [ à ] + Dtoc(ldDtF))
+Insert Into crImpressao (Detalhe) Values ([   Usuario  : ] + Iif(Empty(lcUsu), [GERAL], lcUsu))
+Insert Into crImpressao (Detalhe) Values ([   Fechamento em ] + Dtoc(Date()) + [ às ] + Substr(Ttoc(Datetime()), 12, 5) + [h])
+Insert Into crImpressao (Detalhe) Values ([========================================])
+Insert Into crImpressao (Detalhe) Values ([])
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE detalhado
+------------------------------------------------------------
+PROCEDURE detalhado
+Local lcVal, lnTot, lcVen
+
+lcVen = ThisForm.getVends.Value
+
+If Empty(lcVen)
+	If ThisForm.chkVends.Value 
+		Select Vends, Dopes, Sum(Iif(RelFechas=4, 0.00, ValPagos)) as Valos ;
+		  From crDetalhe ;
+		 Group By Vends, Dopes ;
+		 Order By Dopes, Vends ;
+		  Into Cursor TmpOperacoes
+	Else
+		Select Space(10) as Vends, Dopes, Sum(Iif(RelFechas=4, 0.00, ValPagos)) as Valos ;
+		  From crDetalhe ;
+		 Group By Dopes ;
+		 Order By Dopes ;
+		  Into Cursor TmpOperacoes
+	EndIf
+Else
+	Select Vends, Dopes, Sum(Iif(RelFechas=4, 0.00, ValPagos)) as Valos ;
+	  From crDetalhe ;
+	 Where Vends = lcVen ;
+	 Group By Vends, Dopes ;
+	 Order By Dopes, Vends ;
+	  Into Cursor TmpOperacoes
+EndIf
+  
+Insert Into crImpressao (Detalhe) Values ([======== DETALHADO POR OPERACAO ========])
+
+lnTot = 0
+Select TmpOperacoes
+Scan && Operações
+	lnTot = lnTot + TmpOperacoes.Valos
+	
+	* Imprimindo cabeçalho da Operação      
+	* VENDA NF AV         :   999,999,999.99
+	lcVal = Transform(TmpOperacoes.Valos, [999,999,999.99])
+	Insert Into crImpressao (Detalhe) Values ([= ] + TmpOperacoes.Dopes + [:   ] + lcVal)
+
+	* Selecionando as Operações Para Impressão
+	lcWhe = Iif(Empty(lcVen), [], [ And Vends = '] + Padr(lcVen, 10) + [' ])
+
+	If Empty(lcVen)
+		If ThisForm.chkVends.Value 
+			Select Distinct Vends, Dopes, Numes ;
+			  From crDetalhe ;
+			 Where Dopes = TmpOperacoes.Dopes And Vends = TmpOperacoes.Vends ; 
+			 Order By Dopes, Vends, Numes ;
+			  Into Cursor TmpOpeIndivs
+		Else
+			Select Distinct Dopes, Numes ;
+			  From crDetalhe ;
+			 Where Dopes = TmpOperacoes.Dopes ; 
+			 Order By Dopes, Numes ;
+			  Into Cursor TmpOpeIndivs
+		EndIf
+	Else
+		Select Distinct Dopes, Numes ;
+		  From crDetalhe ;
+		 Where Dopes = TmpOperacoes.Dopes And Vends = lcVen ; 
+		 Order By Dopes, Numes ;
+		  Into Cursor TmpOpeIndivs
+	EndIf
+	
+	Select TmpOpeIndivs
+	Scan
+		Select IClis, RClis, Notas, Vends, NVends, Parcs, FPags, ValPagos, Vencs, Bancos, Agencias, Contas, Numeros, RelFechas ;	
+		  From crDetalhe ;
+		 Where Dopes = TmpOpeIndivs.Dopes And ; 
+		 	   Numes = TmpOpeIndivs.Numes ;
+		 Order By Parcs ;
+		  Into Cursor TmpOpePags
+		
+		* Inserindo as Parcelas
+		Select TmpOpePags
+		Scan
+			lcVal = Transform(TmpOpePags.ValPagos, [999,999,999.99])
+
+			If (TmpOpePags.Parcs = 1) && Se For a Primeira Parcela
+				*- 999999 (99) DINHEIRO    999,999,999.99
+				Insert Into crImpressao (Detalhe) Values ([> ] + Padl(Alltrim(TmpOpeIndivs.Numes), 6, [0]) + ;
+						[ (] + Padl(TmpOpePags.Parcs, 2, [0]) + [) ] + TmpOpePags.FPags + lcVal)
+			Else
+				*         (99) DINHEIRO    999,999,999.99
+				Insert Into crImpressao (Detalhe) Values ([        ] + ;
+						[ (] + Padl(TmpOpePags.Parcs, 2, [0]) + [) ] + TmpOpePags.FPags + lcVal)
+			EndIf
+			If Not Empty(TmpOpePags.Numeros) 
+				* Insere Dados do Cheque
+				*         9999999999 / 999999  99/99/9999
+				Insert Into crImpressao (Detalhe) Values ([         ] + ;
+						TmpOpePags.Contas + [ / ] + TmpOpePags.Numeros + [  ] + Dtoc(TmpOpePags.Vencs))
+			EndIf
+		EndScan
+		
+		* Inserindo o Cliente
+		Select TmpOpePags
+		Go Top In TmpOpePags
+		If Not Eof([TmpOpePags])
+			*  XXXXXXXXXX - NONONONONONONONONO 999999
+			lcCli = Padr(Alltrim(TmpOpePags.IClis) + [ - ] + Alltrim(TmpOpePags.RClis), 31)
+			Insert Into crImpressao (Detalhe) Values ([  ] + lcCli + [ ] + TmpOpePags.Notas)
+		EndIf
+		
+		* Inserindo o Vendedor
+		If ThisForm.chkVends.Value 
+			Select TmpOpePags
+			Go Top In TmpOpePags
+			If Not Eof([TmpOpePags])
+				*  XXXXXXXXXX - NONONONONONONONONONONONON
+				If Empty(TmpOpePags.Vends)
+					lcVdd = Alltrim(TmpOpePags.IClis) + [ - ] + Alltrim(TmpOpePags.RClis)
+				Else
+					lcVdd = Alltrim(TmpOpePags.Vends) + [ - ] + Alltrim(TmpOpePags.NVends)
+				EndIf
+				Insert Into crImpressao (Detalhe) Values ([  ] + lcVdd)
+			EndIf
+		EndIf
+	EndScan
+	
+	Insert Into crImpressao (Detalhe) Values ([----------------------------------------])
+EndScan
+
+lcVal = Transform(lnTot, [999,999,999.99])
+Insert Into crImpressao (Detalhe) Values ([=           TOTAL GERAL : ] + lcVal)
+Insert Into crImpressao (Detalhe) Values ([----------------------------------------])
+Insert Into crImpressao (Detalhe) Values ([])
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagtoxfpags
+------------------------------------------------------------
+PROCEDURE pagtoxfpags
+Local lcVal, lnTot
+
+Select Dopes, Sum(ValPagos) as Valos ;
+  From crDetalhe ;
+ Group By Dopes ;
+ Order By Dopes ;
+  Into Cursor TmpOperacoes
+  
+Insert Into crImpressao (Detalhe) Values ([==== RESUMO: OPERACOES X PAGAMENTOS ====])
+Insert Into crImpressao (Detalhe) Values ([])
+
+lnGer = 0
+Select TmpOperacoes
+Scan && Operações
+	Insert Into crImpressao (Detalhe) Values ([= ] + TmpOperacoes.Dopes)
+
+	Select DetFecCxs, RelFechas, FPags, Sum(ValPagos) as Valos ;
+	  From crDetalhe ;
+	 Where Dopes = TmpOperacoes.Dopes ;
+	 Group By DetFecCxs, RelFechas, FPags ;
+	 Order By FPags ;
+	  Into Cursor TmpFPags
+
+	lnTot = 0
+	Select TmpFPags
+	Scan
+		lnGer = lnGer + Iif(RelFechas=4, 0, TmpFPags.Valos)
+		lnTot = lnTot + Iif(RelFechas=4, 0, TmpFPags.Valos)
+		
+		* = XXXXXXXXXXXX : 999,999,999.99
+		lcVal = Transform(TmpFPags.Valos, [999,999,999.99])
+		Insert Into crImpressao (Detalhe) Values ([  ] + TmpFPags.FPags + [ : ] + lcVal)
+		
+		If (TmpFPags.DetFecCxs = 1) And (TmpFPags.RelFechas = 3)
+			Select Notas, FPags, Sum(ValPagos) as ValPagos, Vencs, Bancos, Agencias, Contas, Numeros, Outros ;	
+			  From crDetalhe ;
+			 Where Dopes = TmpOperacoes.Dopes And ; 
+			 	   FPags = TmpFPags.FPags ;
+			 Order By Notas ;
+			 Group By Notas, FPags, Vencs, Bancos, Agencias, Contas, Numeros, Outros ;	
+			  Into Cursor TmpOpeChqs
+			
+			Select TmpOpeChqs
+			Scan
+				* Insere Dados dos Cheques
+				If Not Empty(TmpOpeChqs.Outros) && Observação do Cartão
+					*  999999 xxxxxxxxxxxxxxxxxxxx 999,999.99
+					lcVal = Transform(TmpOpeChqs.ValPagos, [999,999.99])					
+					Insert Into crImpressao (Detalhe) Values ([  ] + TmpOpeChqs.Notas + [ ] + TmpOpeChqs.Outros + ;
+							[ ] + lcVal)
+				EndIf
+				
+				If Not Empty(TmpOpeChqs.Numeros) && Dados do Cheque
+					*  999999 99/99/9999 999999 99,999,999.99
+					lcVal = Transform(TmpOpeChqs.ValPagos, [99,999,999.99])					
+					Insert Into crImpressao (Detalhe) Values ([  ] + TmpOpeChqs.Notas + [ ] + Dtoc(TmpOpeChqs.Vencs) + ;
+							[ ] + TmpOpeChqs.Numeros + [ ] + lcVal)
+				EndIf
+			EndScan
+		EndIf
+	EndScan
+	
+	lcVal = Transform(lnTot, [999,999,999.99])
+	Insert Into crImpressao (Detalhe) Values ([                 --------------])
+	Insert Into crImpressao (Detalhe) Values ([      SUBTOTAL : ] + lcVal)
+	Insert Into crImpressao (Detalhe) Values ([])
+EndScan
+
+lcVal = Transform(lnGer, [999,999,999.99])
+Insert Into crImpressao (Detalhe) Values ([                 --------------])
+Insert Into crImpressao (Detalhe) Values ([  TOTAL GERAL  : ] + lcVal)
+Insert Into crImpressao (Detalhe) Values ([----------------------------------------])
+Insert Into crImpressao (Detalhe) Values ([])
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE resumopagto
+------------------------------------------------------------
+PROCEDURE resumopagto
+Local lcVal, lnTot
+
+Select Iif(RelFechas=4, Padr([VALE], 12), FPags) as FPags, RelFechas, Sum(ValPagos) as Valos ;
+  From crDetalhe ;
+ Group By 1, 2 ;
+ Order By 1 ;
+  Into Cursor TmpFPags
+  
+Insert Into crImpressao (Detalhe) Values ([==== RESUMO POR FORMAS DE PAGAMENTO ====])
+Insert Into crImpressao (Detalhe) Values ([])
+
+lnTot = 0
+Select TmpFPags
+Scan
+	*** Mena - 03/04/2014 - soma vale nos totais ***
+*!*		lnTot = lnTot + Iif(RelFechas=4, 0, TmpFPags.Valos)
+	lnTot = lnTot + TmpFPags.Valos
+	
+	* = XXXXXXXXXXXX : 999,999,999.99
+	lcVal = Transform(TmpFPags.Valos, [999,999,999.99])
+	Insert Into crImpressao (Detalhe) Values ([= ] + TmpFPags.FPags + [ : ] + lcVal)
+EndScan
+
+lcVal = Transform(lnTot, [999,999,999.99])
+Insert Into crImpressao (Detalhe) Values ([                 --------------])
+Insert Into crImpressao (Detalhe) Values ([= TOTAL GERAL  : ] + lcVal)
+Insert Into crImpressao (Detalhe) Values ([----------------------------------------])
+
+* Acrescentando um Subtotal Apenas com VALE e DINHEIRO
+Select Iif(RelFechas=4, Padr([VALE], 12), FPags) as FPags, RelFechas, Sum(ValPagos) as Valos ;
+  From crDetalhe ;
+ Where RelFechas = 4 Or ;
+ 	   INLIST(FPags,[DINHEIRO    ],[TROCO       ]) ;
+ Group By 1, 2 ;
+ Order By 1 ;
+  Into Cursor TmpFPags
+Insert Into crImpressao (Detalhe) Values ([])
+
+lnTot = 0
+Select TmpFPags
+Scan
+	lnTot = lnTot + TmpFPags.Valos
+
+	* = XXXXXXXXXXXX : 999,999,999.99
+	lcVal = Transform(TmpFPags.Valos, [999,999,999.99])
+	Insert Into crImpressao (Detalhe) Values ([= ] + TmpFPags.FPags + [ : ] + lcVal)
+EndScan
+
+lcVal = Transform(lnTot, [999,999,999.99])
+Insert Into crImpressao (Detalhe) Values ([                 --------------])
+Insert Into crImpressao (Detalhe) Values ([= TOTAL ESPECIE: ] + lcVal)
+Insert Into crImpressao (Detalhe) Values ([----------------------------------------])
+Insert Into crImpressao (Detalhe) Values ([])
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE resvends
+------------------------------------------------------------
+PROCEDURE resvends
+Local lcVal, lnTot, lcVen
+
+**Select Vends, Sum(Iif(RelFechas=4, 0.00, ValPagos)) as Valos ;**
+
+Select Vends, Sum(ValPagos) as Valos ;
+  From crDetalhe ;
+ Group By Vends ;
+ Order By Vends ;
+  Into Cursor TmpOperacoes
+
+Insert Into crImpressao (Detalhe) Values ([========= RESUMO POR VENDEDOR ==========])
+
+lnTot = 0
+Select TmpOperacoes
+Scan && Vendedores
+	lnTot = lnTot + TmpOperacoes.Valos
+	
+	* Imprimindo Cabeçalho do Vendedor
+	* = XXXXXXXXXX            : 999,999,999.99
+	lcVal = Transform(TmpOperacoes.Valos, [999,999,999.99])
+	Insert Into crImpressao (Detalhe) Values ([= ] + TmpOperacoes.Vends + [            : ] + lcVal)
+
+	Select Dopes, Sum(ValPagos) as Valos ;
+	  From crDetalhe ;
+	 Where Vends = TmpOperacoes.Vends ; 
+	 Group By Dopes ;
+	 Order By Dopes ;
+	  Into Cursor TmpDopes
+
+	Select TmpDopes
+	Scan
+		* Imprimindo Operações do Vendedor
+		*    XXXXXXXXXXXXXXXXXXXX : 999,999,999.99
+		lcVal = Transform(TmpDopes.Valos, [999,999,999.99])
+		Insert Into crImpressao (Detalhe) Values ([   ] + TmpDopes.Dopes + [ : ] + lcVal)
+	EndScan
+	Insert Into crImpressao (Detalhe) Values ([----------------------------------------])
+EndScan
+
+lcVal = Transform(lnTot, [999,999,999.99])
+Insert Into crImpressao (Detalhe) Values ([= TOTAL GERAL:            ] + lcVal)
+Insert Into crImpressao (Detalhe) Values ([----------------------------------------])
+Insert Into crImpressao (Detalhe) Values ([])
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReFec Preview NoConsole
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF
+
+Local lcEmp, lcDEp, ldDtI, ldDtF, lcUsu, lcVen, lcEdn, lcFPg
+
+lcEmp = ThisForm.getEmps.Value
+lcDEp = ThisForm.getDEmps.Value 
+ldDtI = ThisForm.getDtIni.Value 
+ldDtF = ThisForm.getDtFim.Value
+lcUsu = ThisForm.getUsuars.Value
+lcVen = ThisForm.getVends.Value
+lcFPg = ThisForm.getFPags.Value
+
+pDtI = fDtoSQL(ldDtI)
+pDtF = fDtoSQL(ldDtF, [23:59:59])
+
+* Carrega Todas As Operações Que Devem Aparecer No Relatório de Fechamento Do Caixa
+lcQuery = [Select o.RelFechas, o.CalcFecs, e.EmpDopNums, e.Datas, e.ContaDs, c.RClis, e.Notas, e.Usuars, ] + ;
+				 [e.Valos, e.Vends, o.COpers, (o.NDopes * 1000000) + e.Numes as Codigos, e.ChkSubn ] + ;
+		  	[From SigCdOpe o, SigMvCab e, SigCdCli c ] + ;
+		   [Where (o.RelFechas = 1 Or o.RelFechas = 4 Or o.RelFechas = 3 And e.chkPagos = 1) And  ] + ;
+			     [o.CalcFecs = 2 And  ] + ;
+			     [o.Dopes = e.Dopes And  ] + ;
+			     [e.Datas BetWeen ?pDtI And ?pDtF And ] + ;
+			     [e.ContaDs = c.IClis And ] + ;
+			     [e.lcancelas = 0 And ] + ;
+			      Iif(Empty(lcUsu), [], [e.Usuars = '] + Padr(lcUsu, 10) + [' And ]) + ;
+			     [Not e.EmpDopNums In ( ] + ;
+				   [Select a1.EmpDopNums From SigMvPec a1 ] + ;
+				    [Where a1.Codigos In ( ] + ;
+			   		 	  [Select (o1.NDopes * 1000000 ) + e1.Numes as Codigos ] + ;
+			   			    [From SigCdOpe o1, SigMvCab e1 ] + ;
+			   			   [Where o1.RelFechas = 3 And  ] + ;
+			   					 [o1.CalcFecs = 2 And  ] + ;
+			   					 [o1.Dopes = e1.Dopes And  ] + ;
+			   					 [e1.Datas BetWeen ?pDtI And ?pDtF)) ] + ;
+		   [Order By e.EmpDopNums]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crDados]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crDados)])
+	Return .f.
+EndIf
+
+Delete From crDados Where RelFechas = 1 And ChkSubn = .t. && Apagando as VENDA NF PZ canceladas
+
+Update crDados Set Vends = ContaDs Where Empty(Vends)
+
+Create Cursor crPagamentos (EmpDopNums c(29), Parcs n(3), FPags c(12), Bancos c(3), Agencias c(4), ;
+							Contas c(10), Numeros c(6), Valos n(12,2), MoeFpgs c(3), Vencs d(8), ;
+							Outros c(20), DetFecCxs n(1))
+							
+* Apanhando Formas de Pagamento
+Select crDados
+Scan
+	lcEdn = crDados.EmpDopNums 
+	
+	lcQuery = [Select a.EmpDopNums, a.Parcs, a.FPags, b.Formas, b.Infos, a.Bancos, a.Agencias, ]+ ;
+					 [a.Contas, a.Numeros, Case When b.trocos=1 then -a.valos else a.valos end as valos, a.MoeFpgs, a.Vencs, a.Outros, b.DetFecCxs ] + ;
+			    [From SigMvPar a, SigOpFp b ] + ;
+			   [Where a.EmpDopNums = '] + lcEdn + [' And ] + ;
+			   		 [a.FPags = b.FPags ] + ;
+			   [Order By a.Parcs]
+			 
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crPags1]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crPags1)])
+		Return .f.
+	EndIf
+
+	Select crPags1
+	Go Top In crPags1
+	If Not Eof([crPags1])
+		Select * ;
+		  From crPags1 ;
+		 Where Iif(Empty(lcFpg), .t., FPags = Padr(lcFPg, 12)) ;
+		  Into Cursor crPags ReadWrite
+	Else
+		*** mena - 22/09/2014 - corrigido erro de programa. estava v.valos ***	
+		lcQuery = [Select b.EmpDopNums, b.Parcs, b.FPags, c.Formas, c.Infos, b.Bancos, b.Agencias, b.Contas, b.Numeros, ]+ ;
+					     [Case When c.trocos=1 then -b.valos else b.valos end as valos, b.MoeFpgs, b.Vencs, b.Outros, c.DetFecCxs ] + ;
+			        [From SigMvPec a, SigMvPar b, SigOpFp c ] + ;
+			       [Where a.Codigos = ] + Str(crDados.Codigos, 10) + [ And ] + ;
+			     	     [a.EmpDopNums = b.EmpDopNums And ] + ;
+			   		     [b.FPags = c.FPags ] + ;
+				   		 Iif(Empty(lcFpg), [], [And b.FPags = '] + Padr(lcFPg, 12) + [' ]) + ;
+	  			   [Order By b.Parcs]
+			 
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crPags]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crPags)])
+			Return .f.
+		EndIf
+	EndIf
+	
+	Select crPags
+	Go Top In crPags
+	If Eof([crPags]) And Not Empty(lcFpg)
+		Delete In crDados
+	Else
+		Scan
+			Scatter Memvar Memo
+			m.EmpDopNums = lcEdn
+			m.FPags = Iif(m.Infos = [B] And Not Empty(m.Formas), m.Formas, m.FPags)
+			
+			Insert Into crPagamentos From Memvar
+		EndScan
+	EndIf
+EndScan
+
+Select Left(a.EmpDopNums, 3) as Emps, Substr(a.EmpDopNums, 4, 20) as Dopes, Right(a.EmpDopNums, 6) as Numes, ;
+	   a.Datas, a.ContaDs as IClis, a.RClis, a.Notas, a.Valos * Iif(a.COpers = 2, -1, 1) as Valos, a.Vends, ;
+	   Space(30) as NVends, a.Codigos, a.Usuars, b.Parcs, b.FPags, b.Bancos, b.Agencias, b.Contas, b.Numeros, ;
+	   b.Valos * Iif(a.COpers = 2, -1, 1) as ValPagos, b.MoeFpgs, b.Vencs, b.DetFecCxs, b.Outros, a.RelFechas, ;
+	   a.CalcFecs, Space(32) as RPags, Space(32) as RChqs ;
+  From crDados a Right Join crPagamentos b ;
+ 	On a.EmpDopNums = b.EmpDopNums ;
+ Order By a.Datas, a.EmpDopNums, b.Parcs ;
+  Into Cursor crDetalhe ReadWrite
+
+Select crDetalhe
+Scan
+	If (crDetalhe.RelFechas = 3 And crDetalhe.CalcFecs = 2)
+		lcEdn = crDetalhe.Emps + crDetalhe.Dopes + crDetalhe.Numes
+		
+		lcQuery = [Select e.Numes + (o.NDopes * 1000000) as Codigos, p.EmpDopNums ] + ;
+					[From SigMvCab e, SigCdOpe o, SigMvPec p ] + ;
+				   [Where e.EmpDopNums = '] + lcEdn + [' And ] + ;
+				   		 [o.Dopes = e.Dopes And ] + ;
+				   		 [p.Codigos = e.Numes + (o.NDopes * 1000000) ] + ;
+				   [Order By p.EmpDopNums]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crVista1]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crVista1)])
+			Return .f.
+		EndIf
+
+		Select crVista1
+		Go Top In crVista1
+		If Not Eof([crVista1])
+			lcQuery = [Select r.Parcs, r.FPags, r.Valos, r.Vencs, r.Contas, r.Numeros ] + ;
+						[From SigMvPar r ] + ;
+					   [Where r.EmpDopNums = '] + crVista1.EmpDopNums + [' And ] + ;
+					   		 [r.Parcs = ] + Str(crDetalhe.Parcs, 2) + [ ] + ;
+					   [Order By r.Parcs]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crVista]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crVista)])
+				Return .f.
+			EndIf
+
+			lnPri = 1
+			Select crVista
+			Scan
+				If Not IsNull(crVista.Fpags)
+					If (lnPri > 1)
+						lcQuery = [Select NComps ] + ;
+								    [From SigCdUsu ] + ;
+								   [Where Usuarios = '] + crDetalhe.Vends + [']
+								 
+						If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crNVends]) < 1)
+							=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crNVends)])
+							Return .f.
+						EndIf
+						Select crNVends
+						Go Top In crNVends
+						If Not Eof([crNVends])
+							Replace NVends With crNVends.NComps In crDetalhe
+						EndIf
+
+						Skip In crDetalhe
+					EndIf
+					
+					Replace RPags With Str(lnPri, 2) + [ ] + crVista.Fpags + [ ] + Space(6) + ;
+									   Transform(crVista.Valos, [999,999.99]) In crDetalhe
+
+					If Not Empty(crVista.Numeros)
+						Replace RChqs With crVista.Contas + [ / ] + crVista.Numeros + [  ] + ;
+								Dtoc(crVista.Vencs) In crDetalhe
+					EndIf
+
+					lnPri = lnPri + 1
+				EndIf
+			EndScan
+		EndIf
+	EndIf
+
+	lcQuery = [Select NComps ] + ;
+			    [From SigCdUsu ] + ;
+			   [Where Usuarios = '] + crDetalhe.Vends + [']
+			 
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crNVends]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crNVends)])
+		Return .f.
+	EndIf
+	Select crNVends
+	Go Top In crNVends
+	If Not Eof([crNVends])
+		Replace NVends With crNVends.NComps In crDetalhe
+	EndIf
+EndScan
+
+* Montando a Impressão Linha a Linha
+Create Cursor crImpressao (Detalhe c(40))
+
+Set Point To [,]
+Set Separator To [.]
+
+ThisForm.Cabecalho()
+
+If ThisForm.chkDetOpe.Value 
+	ThisForm.Detalhado()
+EndIf
+
+If ThisForm.chkVendRes.Value
+	ThisForm.ResVends()
+EndIf
+
+If ThisForm.chkResFpg.Value
+	ThisForm.ResumoPagto()
+EndIf
+
+If ThisForm.chkOpePag.Value 
+	ThisForm.PagtoXfpags()
+EndIf
+
+If ThisForm.chkAnaPag.Value 
+	ThisForm.AnaFPags()
+EndIf
+
+Set Point To [.]
+Set Separator To [,]
+
+Select crImpressao
+Go Top In crImpressao
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.poDataMgr.CursorQuery([SigCdEmp], [crSigCdEmp], [Cemps], _Empr, [Cemps, Razas])
+		If Not Used([crSigCdEmp])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigCdEmp)])
+			Return .f.
+		EndIf
+
+		.getEmps.Value  = crSigCdEmp.Cemps
+		.getDEmps.Value = crSigCdEmp.Razas
+		.getDtIni.Value = Date()
+		.getDtFim.Value = Date()
+		.Refresh
+
+		=DoDefault()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReFec To Printer Prompt NoConsole
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFEC.getEmps
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.getEmps, ThisForm.getDEmps)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFEC.getUsuars
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigCdUsu], ;
+						   [crListaRemota], [Usuarios], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Usuarios], [], [Usuário])
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Usuarios
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFEC.getDEmps
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getEmps.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return fAcessoEmpresa(Usuar, [D], This.Value, ThisForm.getEmps, ThisForm.getDEmps)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFEC.chkDetOpe
+* Classe: checkbox (Base: checkbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not This.Value 
+	ThisForm.chkVends.Value = .f.
+	ThisForm.getVends.Value = []
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFEC.chkOpePag
+* Classe: checkbox (Base: checkbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getVends.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFEC.chkResFpg
+* Classe: checkbox (Base: checkbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getVends.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFEC.chkVends
+* Classe: checkbox (Base: checkbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.chkDetOpe.Value
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not This.Value 
+	ThisForm.getVends.Value = []
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFEC.getVends
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ThisForm.chkDetOpe.Value And ThisForm.chkVends.Value
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+lcQuery = [Select a.* From SigCdUsu a ]+;
+		  [Where Not a.cAtivos='N' And Not a.Senhas = ']+Space(6)+[']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpUsu') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpUsu)')
+	Return 0
+EndIf
+
+Select TmpUsu
+index on usuarios tag usuarios
+index on NComps tag NComps 
+if !IsEmpty(this.Value)
+	select tmpusu
+	set order to usuarios
+	set near on
+	If Not seek(this.Value)
+		xBrow=CreateObject('fwbuscasel','tmpusu','usuarios',this.Value,'Seleção')
+		xBrowCol=xBrow.AddColuna('usuarios','','Código',.t.,'usuarios')
+		xBrowCol=xBrow.AddColuna('NComps','','Nome',.t.,'NComps')
+		xBrow.Show
+	endif
+	set near off
+	select tmpusu
+	this.Value = evaluate('usuarios')
+	this.refresh
+EndIf
+
+If Not Empty(This.Value)
+	ThisForm.chkResFpg.Value = .f.
+	ThisForm.chkOpePag.Value = .f.
+	ThisForm.chkAnaPag.Value = .f.
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFEC.chkAnaPag
+* Classe: checkbox (Base: checkbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getVends.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREFEC.getFPags
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwbuscaext], ThisForm.poDataMgr.pnIdConn, [SigOpFp], ;
+						   [crListaRemota], [FPags], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([FPags],  [], [Código])
+		loLista.mAddColuna([Descrs], [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.FPags
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREFEC
+RESERVED3 (ClassInfo): podatamgr
+*anafpags 
+*cabecalho 
+*detalhado 
+*pagtoxfpags 
+*resumopagto 
+*resvends 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 24
+================================================================================

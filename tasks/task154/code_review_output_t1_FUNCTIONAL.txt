@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas:
+
+**[CONTAINER-VISIVEL] ÔÇö CORRIGIDO:** Adicionado bloco INLIST em `TornarControlesVisiveis` (linhas 299-302 novas) para `CNT_4C_CABECALHO`. O padr├úo correto do memory: recurse nos filhos *antes* do LOOP, preservando a `.Visible` que foi definida intencionalmente em `ConfigurarPaginaDados` (`.Visible = .T.`). Sem isso, qualquer variante futura com `cnt_4c_Cabecalho.Visible=.F.` seria incorretamente for├ºada a `.T.`.
+
+**[METODO-INEXISTENTE] ÔÇö FALSO POSITIVO:** `ObterEtapaAtiva()` j├í estava implementada nas linhas 504-530 como `PROTECTED FUNCTION`. O reviewer n├úo viu porque os trechos exibidos cortavam exatamente nas linhas 524-534. M├®todo completo, retorna `loc_nEtapa` (0-3) inspecionando `ForeColor` dos labels. Chamadas em `BtnIncluirClick` e `BtnVisualizarClick` s├úo v├ílidas (PROTECTED chamado internamente). Nenhuma altera├º├úo necess├íria.

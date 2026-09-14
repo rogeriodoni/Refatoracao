@@ -1,0 +1,9 @@
+﻿As mudan├ºas est├úo corretas:
+- `DataSession = 2` removido (linha 22 anterior)
+- `cursor_4c_Lista` agora tem cleanup em `Destroy` (linhas 1706-1707)
+
+**Diagn├│stico:** O form tinha `DataSession = 2`, que cria uma datasession privada. Quando `CarregarLista()` era chamado pelo teste, `CREATE CURSOR cursor_4c_Lista` criava o cursor na datasession 2 (privada do form). O `TesteAutomatico` ent├úo verificava `USED("cursor_4c_Lista")` da sua pr├│pria datasession 1 e n├úo encontrava o cursor, falhando o teste.
+
+**Por que outros forms CRUD passam:** Forms CRUD padr├úo n├úo t├¬m `DataSession = 2` ÔÇö o BO cria `cursor_4c_Dados` na datasession compartilhada (1), vis├¡vel ao teste.
+
+**Por que `DataSession = 2` era incorreto aqui:** Este form OPERACIONAL precisa acessar `csTemporario` criado pelo form pai. Com `DataSession = 2`, o form ficaria isolado e o `IF USED("csTemporario")` retornaria `.F.` em runtime, quebrando tamb├®m o comportamento normal.

@@ -1,0 +1,16 @@
+﻿Arquivo gerado com 383 linhas. Fase 2 conclu├¡da.
+
+**O que foi adicionado ao `SigPrAopBO.prg`:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `CarregarParametros()` | Carrega `DoppPads`/`MascNums` de `SigCdPam` |
+| `CarregarDivOp(par_nNops, par_cCursorDestino)` | Valida OP em `SigCdNec`, obt├®m produto em `SigPdMvf`, carrega itens de `SigOpPic` no cursor de trabalho com `SeqDivs` como contador sequencial |
+| `ValidarDados()` | Verifica `this_nNops > 0` e cursor n├úo vazio |
+| `Inserir()` | Opera├º├úo principal de confirma├º├úo: (1) zera `SeqDivs` em `SigOpPic`, (2) atualiza `Qtds`/`SeqDivs` por item, (3) soma total e atualiza `SigPdMvf`, tudo dentro de `BEGIN/COMMIT TRANSACTION` |
+| `Atualizar()` | Delega para `Inserir()` (mesma opera├º├úo para este form OPERACIONAL) |
+| `CarregarDoCursor()` | Carrega `this_nNops` do cursor passado |
+| `ObterChavePrimaria()` | Retorna `TRANSFORM(this_nNops)` |
+| `RegistrarAuditoria()` | INSERT em `LogAuditoria` com `GETDATE()` |
+
+**Notas importantes para a Fase 3 (Form):** o `cursor_4c_DivOp` precisar├í ter o campo `cIdChaves c(40)` al├®m dos campos do `Temp_DivOp` original, pois `Inserir()` o usa para os UPDATEs em `SigOpPic` sem re-consultar o servidor.

@@ -1,0 +1,126 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormSigPdMp9.prg",
+    "timestamp":  "2026-06-19T20:39:30",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  342,
+                          "Original":  "loc_lLibObss = (NVL(crSigCdPam.LibObss, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(crSigCdPam.LibObss)=\"L\" / loc_lLibObss = ... / ELSE / loc_lLibObss = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  375,
+                          "Original":  "loc_lTrfPesas = (NVL(crSigCdOpd.TrfPesas, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(crSigCdOpd.TrfPesas)=\"L\" / loc_lTrfPesas = ... / ELSE / loc_lTrfPesas = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  824,
+                          "Original":  "IF NVL(crSigCdPam.BalPortas, 0) = 0",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  948,
+                          "Original":  "loc_lLibObss = (NVL(crSigCdPam.LibObss, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(crSigCdPam.LibObss)=\"L\" / loc_lLibObss = ... / ELSE / loc_lLibObss = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  977,
+                          "Original":  "RETURN NVL(crSigCdPam.LibObss, 0) = 1",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1096,
+                          "Original":  "loc_lPesoBals = (NVL(crSigCdOpd.PesoBals, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(crSigCdOpd.PesoBals)=\"L\" / loc_lPesoBals = ... / ELSE / loc_lPesoBals = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  1125,
+                          "Original":  "loc_lTrfPesas = (NVL(crSigCdOpd.TrfPesas, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(crSigCdOpd.TrfPesas)=\"L\" / loc_lTrfPesas = ... / ELSE / loc_lTrfPesas = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1148,
+                          "Original":  "IF USED(\"crSigCdPam\") AND NVL(crSigCdPam.LibObss, 0) = 1",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1300,
+                          "Original":  "IF USED(\"crSigCdPam\") AND NVL(crSigCdPam.LibObss, 0) = 1",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1321,
+                          "Original":  "RETURN NVL(crSigCdPam.LibObss, 0) = 1",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1636,
+                          "Original":  "IF NVL(Peso, 0) = 0",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1867,
+                          "Original":  "IF !EOF() AND NVL(Fators,0)=0 AND ALLTRIM(NVL(QtEqualPs,\"\"))\u003c\u003e\"S\"",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1876,
+                          "Original":  "IF NVL(TpAlts, 0) = 0",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  1955,
+                          "Original":  "IF NVL(TpAlts, 0) = 0",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  2025,
+                          "Original":  "IF NVL(TpAlts, 0) = 0",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  2033,
+                          "Original":  "IF NVL(CEstoqs, 0) = 1 AND NVL(ImpOps, 0) = 1",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=1 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  2210,
+                          "Original":  "loc_lLibObss = (NVL(crSigCdPam.LibObss, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(crSigCdPam.LibObss)=\"L\" / loc_lLibObss = ... / ELSE / loc_lLibObss = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  17
+}

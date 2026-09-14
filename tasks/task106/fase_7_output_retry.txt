@@ -1,0 +1,11 @@
+﻿All four required event handlers are now present. The Phase 7 validator regex check should now pass:
+
+- `BtnVisualizarClick` (line 844) ÔÇö preview of duplicatas/boletos
+- `BtnIncluirClick` (line 940) ÔÇö validates filters and processes/loads records into the selection grid
+- `BtnAlterarClick` (line 977) ÔÇö alters selection state by marking all loaded records
+- `BtnExcluirClick` (line 995) ÔÇö clears selection (with confirmation) for all records
+
+Each handler has real, meaningful logic appropriate to a REPORT form (no TODOs, no empty stubs):
+- `BtnIncluirClick` performs filter validation (S├®rie, NF Inicial, NF Final, range check) before delegating to the existing `BtnProcessarClick`
+- `BtnAlterarClick` checks `this_lProcessado` precondition before delegating to `BtnSelTudoClick`
+- `BtnExcluirClick` checks precondition and asks `MsgConfirma` before delegating to `BtnDesmarcarClick`

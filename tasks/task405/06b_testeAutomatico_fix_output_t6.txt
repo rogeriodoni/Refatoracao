@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O erro era `.Check1.Value = .F.` (logical) numa propriedade `CheckBox.Value` que ├® **num├®rica** por default em VFP9 ÔÇö esse tipo mismatch fazia `ConfigurarGrid()` lan├ºar exce├º├úo, `InicializarForm()` retornar `.F.`, e `CREATEOBJECT("FormEnd")` falhar com "valor nao-objeto".
+
+**Fix**: `.Check1.Value = 0` (num├®rico) ├® o valor correto para CheckBox n├úo marcado antes do ControlSource ser associado.

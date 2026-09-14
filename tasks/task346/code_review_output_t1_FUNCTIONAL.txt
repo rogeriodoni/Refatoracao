@@ -1,0 +1,7 @@
+﻿All 6 detected problems resolved:
+
+- **[BINDEVENT-PARAMS] x3** ÔÇö Added `LPARAMETERS par_nKeyCode, par_nShiftAltCtrl` as the first statement in `ValidarOpAutos`, `ValidarOpSaidas`, and `ValidarFPagSAutos`, plus an `INLIST(par_nKeyCode, 13, 9, 115)` guard so the lookup picker only opens on Enter/Tab/F4 (not on every keypress).
+
+- **[GRID-WITH]** ÔÇö Already resolved in current code: `RecordSource = ""` and `ColumnCount = 4` are set on explicit references at lines 337ÔÇô338, before the `WITH` block that accesses `.Column1`ÔÇô`.Column4`.
+
+- **[LAYOUT-POSITION] x2** ÔÇö Already correct in current code: `opt_4c_OptPefins.Top = 320` (= original 291 + 29 PageFrame offset) and `.Left = 335`, matching the SCX original. The review had detected an earlier version.

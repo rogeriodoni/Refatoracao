@@ -1,0 +1,14 @@
+﻿Both files are correct. Phase 5/8 is complete.
+
+**Summary of changes:**
+
+**`FormCVE.prg`** ÔÇö Phase 4 ÔåÆ Phase 5:
+- `ConfigurarPaginaDados()`: fully implemented with all 8 field controls (10 labels + 8 TextBoxes) at correct positions (layout.json + 29 compensation), BINDEVENTs for lookups on `txt_4c_Usuars` and `txt_4c_Setors`
+- `LimparCampos()`: clears all 8 Page2 fields + calls `NovoRegistro()`
+- `HabilitarCampos()`: enables/disables all 8 fields + Confirmar button
+- `BOParaForm()`: transfers all BO properties ÔåÆ Page2 fields with proper type conversions
+- `FormParaBO()`: validates required fields (Usuars/Mess/Anos), validates Indivs Ôêê {S,N}, checks duplicates via `ValidarDuplicidadeEmSigCcCmI()` and `ValidarDuplicidadeEmSigCcCmV()`, then populates BO
+- New methods: `AbrirBuscaUsuars()`, `TeclaLookupUsuars()`, `ValidarUsuars()`, `PreencherPeriodoDoUsuario()`, `AbrirBuscaSetors()`, `TeclaLookupSetors()`, `ValidarSetors()`
+- `Destroy()`: adds 5 more cursor cleanup entries
+
+**`CVEBO.prg`**: `Inserir()` now generates UUID via `SELECT NEWID()` instead of calling the unported `fUniqueIds()`.

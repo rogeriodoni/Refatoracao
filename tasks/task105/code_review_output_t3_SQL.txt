@@ -1,0 +1,48 @@
+﻿Analisei as tr├¬s ocorr├¬ncias reportadas em ambos os arquivos. Aqui est├í o resultado da verifica├º├úo:
+
+---
+
+## Verifica├º├úo dos 3 Problemas SQL-FILTRO-INVENTADO
+
+### Problema 1: Coluna `'1'` em WHERE
+
+**Localiza├º├úo**: `SIGREFXVBO.prg:152`
+```vfp
+"WHERE a.ngrupos = 1 AND a.cidchaves = b.fkchaves"
+```
+
+**Diagn├│stico: FALSO POSITIVO.** O `1` ├® um **valor literal**, n├úo um nome de coluna. A condi├º├úo ├® `ngrupos = 1` (filtro por n├║mero de grupo), onde `NGRUPOS` est├í explicitamente na lista de colunas v├ílidas do original. O checker confundiu o valor literal `1` com um nome de coluna.
+
+---
+
+### Problema 2: Coluna `'2'` em WHERE
+
+**Diagn├│stico: FALSO POSITIVO.** Ap├│s busca em ambos os arquivos, **n├úo existe nenhuma cl├íusula WHERE com coluna ou literal `2`** em SQL. O `2` que o checker detectou provavelmente veio de `STR(1, 2)` (segundo argumento da fun├º├úo STR, n├úo um WHERE) ou da l├│gica VFP `IF THIS.this_nNrPeriodo = 1` (c├│digo VFP, n├úo SQL).
+
+---
+
+### Problema 3: Coluna `'CGRUS'` em WHERE
+
+**Localiza├º├Áes:**
+- `SIGREFXVBO.prg:184,198`: `AND a.Grupos = c.CGrus`
+- `FormSIGREFXV.prg:1392`: `WHERE CGrus = ` + EscaparSQL(loc_cValor)
+
+**Diagn├│stico: FALSO POSITIVO ÔÇö JOIN obrigat├│rio + lookup v├ílido.**
+
+Para o BO (linhas 184/198): o FROM original inclui `SigCdGrp c` explicitamente. Sem `a.Grupos = c.CGrus`, o SQL produziria um produto cartesiano entre SigMvEst e SigCdGrp, corrompendo os resultados. Esta ├® a condi├º├úo de JOIN, n├úo um filtro inventado.
+
+Para o Form (linha 1392): `WHERE CGrus = valor` ├® exatamente como se valida entrada do usu├írio no grid ÔÇö a chave prim├íria de SigCdGrp ├® `CGrus`. O original (`fAcessoContab`) fazia o mesmo lookup.
+
+---
+
+## Conclus├úo
+
+Os tr├¬s problemas reportados s├úo **falsos positivos** do checker autom├ítico:
+
+| Problema | Linha | Tipo real | A├º├úo |
+|---------|-------|-----------|------|
+| `'1'` | BO:152 | Valor literal em `ngrupos = 1` | Nenhuma ÔÇö c├│digo correto |
+| `'2'` | ÔÇö | N├úo existe cl├íusula WHERE com `2` | Nenhuma ÔÇö falsa detec├º├úo |
+| `'CGRUS'` | BO:184,198 / Form:1392 | JOIN obrigat├│rio / lookup de PK | Nenhuma ÔÇö c├│digo correto |
+
+**Nenhuma altera├º├úo ser├í feita.** Remover `ngrupos = 1` quebraria o filtro de faixas de pre├ºo; remover `a.Grupos = c.CGrus` criaria produto cartesiano; remover `WHERE CGrus = valor` quebraria a valida├º├úo do grid.

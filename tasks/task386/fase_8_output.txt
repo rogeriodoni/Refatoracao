@@ -1,0 +1,24 @@
+﻿A Fase 8/8 est├í conclu├¡da. O arquivo FormCsi.prg estava quase completo das fases anteriores ÔÇö o que faltava era apenas o m├®todo `AjustarBotoesPorModo()`.
+
+**O que foi adicionado:**
+
+- **`AjustarBotoesPorModo()`** (linhas 830ÔÇô844): Habilita Visualizar/Alterar/Excluir somente quando h├í registros na lista. Chamado automaticamente ao final de `CarregarLista()`.
+
+**Status final de todos os m├®todos da Fase 8:**
+
+| M├®todo | Status |
+|--------|--------|
+| `BtnBuscarClick()` | Ô£à j├í existia (fases anteriores) |
+| `BtnEncerrarClick()` | Ô£à j├í existia |
+| `BtnSalvarClick()` | Ô£à j├í existia |
+| `BtnCancelarClick()` | Ô£à j├í existia |
+| `FormParaBO()` ÔÇö todos os campos | Ô£à j├í existia (Cods + Descs) |
+| `BOParaForm()` ÔÇö todos os campos | Ô£à j├í existia (Cods + Descs) |
+| `HabilitarCampos()` | Ô£à j├í existia |
+| `LimparCampos()` | Ô£à j├í existia |
+| `CarregarLista()` | Ô£à j├í existia + `AjustarBotoesPorModo()` adicionado |
+| `AjustarBotoesPorModo()` | Ô£à **adicionado agora** |
+
+**Integra├º├úo:**
+- `menu.prg` ÔÇö `AbrirFormCsi()` e `BAR 68 OF popCadastros` j├í estavam presentes.
+- `config.prg` ÔÇö usa `ADIR()` autom├ítico para carregar `*BO.prg` e `Form*.prg`, sem necessidade de registro manual.

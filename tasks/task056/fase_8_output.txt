@@ -1,0 +1,15 @@
+﻿A migra├º├úo SIGRECMV est├í **100% completa**. Todos os artefatos j├í existem e est├úo implementados:
+
+**FormSIGRECMV.prg** (1434 linhas) ÔÇö todos os m├®todos da Fase 8 j├í presentes:
+- `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick` Ô£à
+- `FormParaBO`, `BOParaForm` (aliasam para `FormParaRelatorio`/`LimparCampos`) Ô£à
+- `HabilitarCampos`, `LimparCampos` com todos os campos Ô£à
+- `CarregarLista` (stub de compatibilidade), `AjustarBotoesPorModo` Ô£à
+
+**SIGRECMVBO.prg** (816 linhas) ÔÇö completo com toda l├│gica de c├ílculo CMV Ô£à
+
+**Integra├º├úo**:
+- `config.prg` carrega automaticamente via ADIR (`*BO.prg` + `forms\relatorios\Form*.prg`) Ô£à
+- `menu.prg` tem `DEFINE BAR 55`, `ON SELECTION BAR 55` e `PROCEDURE AbrirFormSIGRECMV` Ô£à
+
+A migra├º├úo da task056 (SIGRECMV) est├í finalizada em todas as 8 fases.

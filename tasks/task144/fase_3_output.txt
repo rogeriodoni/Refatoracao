@@ -1,0 +1,22 @@
+﻿**Fase 3/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\forms\operacionais\FormSigPdMp3.prg` criado com 649 linhas.
+
+**O que foi implementado:**
+
+| Elemento | Status |
+|----------|--------|
+| `DEFINE CLASS FormSigPdMp3 AS FormBase` | Ô£à Propriedades visuais exatas do original (Width=1000, Height=600, TitleBar=0, ControlBox=.F., DataSession=2) |
+| `ADD OBJECT` top-level | Ô£à cnt_4c_Sombra, shp_4c_Shape2/Shape1/Shape4, img_4c_FigJpg, cnt_4c_Container1, cnt_4c_Operacao, cnt_4c_Origem, cnt_4c_Destino |
+| `Init(par_oFormPai)` | Ô£à Compartilha DataSessionId, captura pcEscolha e _Dopp do form pai |
+| `InicializarForm()` | Ô£à Cria BO, configura fundo/caption, chama todos os ConfigurarXxx |
+| `ConfigurarPageFrame()` | Ô£à Dimens├Áes e fundo do form operacional |
+| `ConfigurarCabecalho()` | Ô£à lblSombra (preto) + lblTitulo (branco) no cnt_4c_Sombra |
+| `ConfigurarContainerMovimentacao()` | Ô£à Label "Movimenta├º├úo" + linha decorativa |
+| `ConfigurarContainerOperacao()` | Ô£à txt_4c_Empresa/Operacao/Codigo (ReadOnly, ControlSource=tmpnens) |
+| `ConfigurarContainerOrigem()` | Ô£à Labels + txt_4c_Grupo/Conta/Dconta (ReadOnly) |
+| `ConfigurarContainerDestino()` | Ô£à Labels + txt_4c_Grupo/Conta/Dconta (ReadOnly) |
+| `PopularDescricoesConta()` | Ô£à Lookup SigCdCli via BO para preencher Dconta |
+| `AjustarVisibilidadeContainers()` | Ô£à Visibilidade de Origem/Destino via crSigCdOpd |
+| `TornarControlesVisiveis()` | Ô£à Recursivo, preserva img_4c_FigJpg e shp_4c_Shape4 ocultos |
+| `Destroy()` | Ô£à Limpa this_oFormPai e this_oBusinessObject |
+
+**Pr├│ximas fases:** Fase 4 (grid grd_4c_Dados com 7 colunas + bot├Áes cmd_4c_Ok e cmd_4c_Pesagem).

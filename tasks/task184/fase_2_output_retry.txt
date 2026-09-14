@@ -1,0 +1,10 @@
+﻿Estrutura ├¡ntegra: 8 m├®todos, 8 terminadores, 1 ENDDEFINE. Fase 2 completa.
+
+**M├®todos adicionados ao `SigPrGf1BO.prg`:**
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö carrega par├ómetros (datas, empresa) de cursor externo, com detec├º├úo defensiva de campos via `TYPE()`
+- `Inserir()` ÔÇö wrapper de `ProcessarDados` com `ValidarParametros` + auditoria "GERAR"
+- `Atualizar()` ÔÇö reprocessa fechando cursor `crRel1` anterior + auditoria "REPROCESSAR"
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö grava em `LogAuditoria` com chave composta empresa|datas, com CATCH silencioso para n├úo bloquear opera├º├úo
+
+**M├®todos atualizados:**
+- `ObterChavePrimaria()` ÔÇö convertido de `FUNCTION` retornando `""` para `PROTECTED PROCEDURE` retornando chave composta (empresa|dtInicial-dtFinal) para auditoria significativa

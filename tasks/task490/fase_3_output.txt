@@ -1,0 +1,17 @@
+﻿**Fase 3/8 conclu├¡da.** `FormOrg.prg` criado em `C:\4c\projeto\app\forms\cadastros\FormOrg.prg` com 282 linhas.
+
+**O que foi implementado:**
+
+| M├®todo | Status | Detalhes |
+|--------|--------|---------|
+| `Init()` | Ô£à | `RETURN DODEFAULT()` ÔÇö sem chamada duplicada ao InicializarForm |
+| `InicializarForm()` | Ô£à | Cria OrgBO, chama ConfigurarPageFrame, propaga Caption nos labels, guard `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | Ô£à | PageFrame com Top=-29, Tabs=.F., Page1+Page2, fundo `fundo_cad_1003.jpg` |
+| `ConfigurarPaginaLista()` | Ô£à | 3 containers vazios: `cnt_4c_Cabecalho` (com lbl_4c_Sombra + lbl_4c_Titulo), `cnt_4c_Botoes`, `cnt_4c_Saida` (can├┤nico Left=917) |
+| `ConfigurarPaginaDados()` | Ô£à | 1 container vazio: `cnt_4c_BotoesAcao` (Top=40 = 11+29) |
+| `CarregarLista()` | Ô£à | Executa `OrgBO.Buscar("")` com guard `gb_4c_ValidandoUI` |
+| `TornarControlesVisiveis()` | Ô£à | Recursivo, itera Pages de PageFrames e Controls de Containers |
+| `FormatarGridLista()` | Ô£à | SetAll Tahoma 8 nas colunas |
+| `Destroy()` | Ô£à | Libera BO, chama DODEFAULT() |
+
+**Pr├│ximas fases:** Fase 4 adiciona grid + bot├Áes CRUD em `cnt_4c_Botoes` e `cnt_4c_Saida`; Fases 5-6 adicionam campos em `cnt_4c_BotoesAcao` + campos C├│digo/Descri├º├úo; Fases 7-8 adicionam eventos BINDEVENT.

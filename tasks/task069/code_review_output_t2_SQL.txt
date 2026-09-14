@@ -1,0 +1,34 @@
+﻿Confirmado. Agora posso dar o veredicto t├®cnico fundamentado.
+
+---
+
+## An├ílise: Todos os 6 [SQL-FILTRO-INVENTADO] s├úo **falsos positivos**
+
+Ap├│s verifica├º├úo, todas as 6 condi├º├Áes WHERE flagadas est├úo em **m├®todos de valida├º├úo de campo de formul├írio** ÔÇö sub-queries auxiliares completamente separadas da query principal do relat├│rio:
+
+| Coluna flagada | M├®todo | Prop├│sito |
+|---|---|---|
+| `RAZAS` | `ValidarEmpresaDesc()` | Busca empresa por descri├º├úo |
+| `DCARGS` | `ValidarGrupoDesc()` | Busca cargo/grupo por descri├º├úo |
+| `ICLIS` | `ValidarContaCod()` | Valida conta/cliente por c├│digo |
+| `RCLIS` | `ValidarContaDesc()` | Busca conta/cliente por descri├º├úo |
+| `CMOES` | `ValidarMoedaCod()` | Valida moeda por c├│digo |
+| `DMOES` | `ValidarMoedaDesc()` | Busca moeda por descri├º├úo |
+
+**Por que s├úo falsos positivos:**
+
+O validator comparou TODAS as colunas em cl├íusulas WHERE do arquivo contra as colunas WHERE da query principal do relat├│rio (`lcQuery`). As 6 colunas flagadas est├úo em queries de lookup de campo, n├úo no SQL principal.
+
+**Correspond├¬ncia com o original:**
+- `CMOES` / `DMOES` ÔåÆ original usa `Seek(This.Value,'crSigCdMoe','Cmoes')` e `Seek(This.Value,'crSigCdMoe','Dmoes')` ÔÇö as mesmas colunas, via SEEK em cursor pr├®-carregado
+- `ICLIS` / `RCLIS` ÔåÆ original usa SigCdCli via JOIN e SEEK ÔÇö colunas legitimamente usadas
+- `RAZAS` ÔåÆ original carrega `razas` de SigCdEmp para exibi├º├úo ÔÇö o form migrado permite busca por descri├º├úo (extens├úo v├ílida)
+- `DCARGS` ÔåÆ original faria SEEK em crSigCdCrg ÔÇö equivalente funcional
+
+**Aplicar a corre├º├úo quebraria o neg├│cio:**
+
+Remover `WHERE Razas LIKE ...` tornaria a query `SELECT Cemps, Razas FROM SigCdEmp` retornando *todas* as empresas sem filtro. Idem para as demais. Isso violaria a regra **"NAO alterar logica de negocio"**.
+
+---
+
+**Resultado do PASS SQL**: Nenhuma altera├º├úo necess├íria. A query principal do BO (`PrepararDados`) usa corretamente `DATAS`, `EMPS`, `GRVENDS`, `GRRESPS`, `VENDS`, `RESPS` ÔÇö todas presentes no original. As 6 condi├º├Áes flagadas s├úo lookups de valida├º├úo de campo do formul├írio, funcionalmente equivalentes ├ás opera├º├Áes SEEK do sistema legado.

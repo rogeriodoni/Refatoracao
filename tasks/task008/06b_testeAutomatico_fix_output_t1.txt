@@ -1,0 +1,7 @@
+﻿Three fixes applied to `FormProduto.prg`:
+
+1. **Line 1133**: `PROTECTED PROCEDURE AjustarBotoesPorModo()` ÔåÆ `PROCEDURE AjustarBotoesPorModo()` ÔÇö fixes "Property AJUSTARBOTOESPORMODO is not found" (primary test failure)
+
+2. **Line 358**: Removed `.BorderStyle = 1` from `cnt_4c_Filtros` container ÔÇö Container has no BorderStyle in VFP9
+
+3. **Line 964**: Removed `.BorderStyle = 0` from `cnt_4c_BotoesAcao` container ÔÇö same issue; fixes cascade failure that caused "Property CMD_4C_CONFIRMAR is not found" in ConfigurarEventos

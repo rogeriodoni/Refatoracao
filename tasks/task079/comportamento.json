@@ -1,0 +1,124 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 0,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREDIF",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReDif Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIF",
+      "evento": "Init",
+      "linhas": 46,
+      "codigoOriginal": "LParameters _Acesso\n\n=DoDefault()\n\nThisForm.DataSessionId = _Acesso\nThisForm.lacpdf = .t.\n\n&&Cursor com od mesmos Dados do Cursor Direfenca.\nSELECT *, 99999999.99 as Deb1s, 99,999999.99 as Cred1s from movaux WHERE transacaos in ( select transacaos FROM dif2 ) INTO CURSOR crGrid readwrite\n\nReplace All crGrid.Debs  With Transform(Val(Debs)/100 ,'@z 9,999,999.99') in crGrid\nReplace All crGrid.Creds With Transform(Val(Creds)/100,'@z 9,999,999.99') in crGrid\n\nReplace All crGrid.Valor With Transform(V... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ControlSource = 'Substr",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIF",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Report Form SigReDif To Printer Prompt NoConsole\n\t\n\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIF",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReDif To Printer NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIF.Grid1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisForm.text1.Value = crGrid.Hists\nThisForm.text1.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDIF.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREDIF.Init",
+      "queryOriginal": "SELECT *, 99999999.99 as Deb1s, 99,999999.99 as Cred1s from movaux WHERE transacaos in ( select transacaos FROM dif2 ) INTO CURSOR crGrid readwrite",
+      "tabelas": "movaux,dif2",
+      "colunas": "99,transacaos,select,FROM,dif2,crGrid,readwrite",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["movaux", "dif2"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O `CsiBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+**M├®todos adicionados:**
+- `ObterChavePrimaria()` ÔÇö retorna `this_cCodigo` para auditoria
+- `CarregarDoCursor()` ÔÇö mapeia `pkChaves`, `Cods`, `Descs` do cursor para propriedades
+- `ValidarDados()` ÔÇö valida c├│digo e descri├º├úo obrigat├│rios + duplicidade no INSERT (replica l├│gica do `Salva.Click` original)
+- `VerificarCodigoExistente()` ÔÇö `COUNT(*)` na tabela para verificar duplicidade
+- `Inserir()` ÔÇö gera `pkChaves` via `SYS(2015)+SYS(2015)` (substituto do `fUniqueIds()` legado) e faz INSERT
+- `Atualizar()` ÔÇö UPDATE apenas de `Descs` (j├í que `Cods` ├® readonly em ALTERAR conforme `getCods.When` do original)
+- `ExecutarExclusao()` ÔÇö DELETE por `pkChaves`
+- `Buscar()` ÔÇö SELECT com padr├úo ZAP+APPEND quando cursor j├í existe
+- `CarregarPorCodigo()` ÔÇö SELECT por `Cods` com reset do `this_lNovoRegistro`

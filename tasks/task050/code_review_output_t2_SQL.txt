@@ -1,0 +1,9 @@
+﻿Todas as 3 issues corrigidas:
+
+**[SQL-FILTRO-INVENTADO] DTENTS e VENCS** (`sigrecheBO.prg`):
+- `loc_cVerData` deixou de montar condi├º├Áes SQL com `a.dtents BETWEEN` / `b.vencs BETWEEN`
+- Passou a montar express├Áes VFP locais: `a.Dtents >= THIS.this_dDtInicial AND a.Dtents <= THIS.this_dDtFinal` / `a.Vencs >= ...`
+- Removido do `WHERE` do SQLEXEC; adicionado via `&loc_cVerData.` nos dois SELECTs locais (ramo `this_lUltima` e ramo `ELSE`)
+
+**[SQL-FILTRO-INVENTADO] CEMPS** (`sigrecheBO.prg` PrepararDados + `Formsigreche.prg` ValidarCdEmpresa):
+- `cEmps` ÔåÆ `Emps` nas duas queries contra `SigCdEmp`, alinhando com o `EMPS` do original

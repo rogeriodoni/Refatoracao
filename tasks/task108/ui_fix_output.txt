@@ -1,0 +1,8 @@
+﻿**1 fix aplicado** (`cnt_4c_Sombra.Width: THIS.Width ÔåÆ 800`).
+
+**As outras 3 "diferen├ºas" s├úo falsos positivos do validador:**
+
+| # | Objeto | Motivo falso positivo |
+|---|--------|----------------------|
+| 2 & 3 | `lblSombra/lblTitulo.Caption` | SCX armazena `"Cadastro de Testes"` como valor **design-time** (placeholder), mas o pr├│prio c├│digo do SCX nas linhas 4489-4490 sobrescreve com `ThisForm.Caption` em runtime. O .prg migrado j├í faz isso corretamente na cria├º├úo do objeto. Mudar para `"Cadastro de Testes"` quebraria a UI. |
+| 4 | `cmd_4c_Visualizar.DisabledBackColor` | `RGB(255,255,255) = 16777215` ÔÇö mesma cor branca, representa├º├Áes diferentes. |

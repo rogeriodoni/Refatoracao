@@ -1,0 +1,529 @@
+{
+  "resumo": {
+    "totalMetodos": 30,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 16,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fAcessoEmpresa", "fwBuscaInt", "fwBuscaExt", "fAcessoContab", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIFV",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "If ThisForm.OptGTpRel.Value = 1\n\tReport Form SigReIf1 Preview NoConsole\nElse\n\tIf ThisForm.OptGTpRel.Value = 2\n\t\tReport Form SigReIf0 Preview NoConsole\n\tElse\n\t\tReport Form SigReIf9 Preview NoConsole\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptGTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV",
+      "evento": "Procedure",
+      "linhas": 366,
+      "codigoOriginal": "ldBase  = Right(ThisForm.Get_DtBase.Value,4)  + Left(ThisForm.Get_DtBase.Value,2)\nldBaseA = Right(ThisForm.Get_DtBaseA.Value,4) + Left(ThisForm.Get_DtBaseA.Value,2)\nlnTipo  = ThisForm.OptGTpRel.Value\nlcEmp   = ThisForm.Get_Empresa.Value\nlcMoe   = ThisForm.Get_Cd_Moeda.Value\nlcGrupo = ThisForm.Get_Cd_GrEstoque.Value\nlcConta = ThisForm.Get_Cd_Estoque.Value\nlnBarra = ThisForm.GetIBarra.Value\n\n******************************************************************************************\n=Seek(_Empr,'CrS... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value,4)  + Left,Value,4) + Left,Value,Iif,SqlExecute",
+        "controlesReferenciados": "Get_DtBase,Get_DtBaseA,OptGTpRel,Get_Empresa,Get_Cd_Moeda,Get_Cd_GrEstoque,Get_Cd_Estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV",
+      "evento": "Init",
+      "linhas": 86,
+      "codigoOriginal": "LParameters _Acesso\n\nThisForm.poDataMgr = CreateObject('fSqlConector',ThisForm.Name)\nIf ThisForm.poDataMgr.pnIdconn < 1\n\tMessageBox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\tReturn(.F.)\nEndIf\n\n=DoDefault(_Acesso)\n\nIf ThisForm.poDataMgr.SqlExecute([Select * From SigCdEmp ],'CrSigCdEmp') < 1\n\tMessageBox('Favor reinicializar o processo !!!', 16, 'Falha na Conexão (CrSigCdEmp)')\n\tReturn(.F.)\nEndIf\nSelect CrSigCdEmp\nIndex On CEmps Tag CEmps\nGo Top\n\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr = CreateObject,SqlExecute",
+        "controlesReferenciados": "OptGTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "If ThisForm.OptGTpRel.Value = 1\n\tReport Form SigReIf1 To Printer Prompt NoConsole\nElse\n\tIf ThisForm.OptGTpRel.Value = 2\n\t\tReport Form SigReIf0 To Printer Prompt NoConsole\n\tElse\n\t\tReport Form SigReIf9 To Printer Prompt NoConsole\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptGTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "If This.Value <> 4\n\tIf Empty(ThisForm.Get_DtBase.Value)\n\t\tMessageBox('Data Base Inválida !!!',16,'Campo Obrigatório')\n\t\tThisForm.Get_DtBase.SetFocus\n\t\tReturn(.F.)\n\tEndIf\n\tIf Empty(ThisForm.Get_Cd_Moeda.Value) And InList(ThisForm.OptGTpRel.Value,1,2)\n\t\tMessageBox('Moeda Inválida !!!',16,'')\n\t\tThisForm.Get_Cd_Moeda.SetFocus\n\t\tReturn(.F.)\n\tEndIf\n\n\tDo Case\n\n\t\tCase ThisForm.OptGTpRel.Value = 1\n\t\t\tIf Empty(ThisForm.Get_Empresa.Value) And ThisForm.OptGTpRel.Value = 1\n\t\t\t\tMessageBox('Empresa Inválida !!... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And InList",
+        "controlesReferenciados": "Get_DtBase,Get_Cd_Moeda,OptGTpRel,Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.optGtprel",
+      "evento": "InteractiveChange",
+      "linhas": 21,
+      "codigoOriginal": "If This.Value = 2\n\tThisForm.GrdEmp.Visible       = .T.\n\tThisForm.CmdApgEmp.Visible    = .T.\n\tThisForm.CmdSelEmp.Visible    = .T.\n\tThisForm.Say3.Visible         = .F.\n\tThisForm.Get_Empresa.Visible  = .F.\n\tThisForm.Get_Dempresa.Visible = .F.\n*!*\t\tThisForm.btnReport.Top   = 342\n*!*\t\tThisForm.Height               = 400\n\tThisForm.Refresh\nElse\n\tThisForm.GrdEmp.Visible       = .F.\n\tThisForm.CmdApgEmp.Visible    = .F.\n\tThisForm.CmdSelEmp.Visible    = .F.\n\tThisForm.Say3.Visible         = .T.\n\tThisForm.Ge... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa,Get_Dempresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.Get_Empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.OptGTpRel.Value,1,3))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptGTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.Get_Empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.Get_Empresa,ThisForm.Get_DEmpresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa,Get_DEmpresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.Get_DtBase",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "If !Empty(This.Value)\n\tIf Seek(This.Value,'CsBases','Bases')\n\t\tThis.Value = Evaluate('CsBases.Bases')\n\tElse\t\n\t\tm.loLista = CreateObject('fwBuscaInt','CsBases','Bases',This.Value,'Data Base',.T.)\n\t\tm.loLista.mAddColuna('Bases','XXXXXXXXXX','Data Base')\n\t\tm.loLista.Show()\n\t\tIf LastKey() <> 27\n\t\t\tThis.Value = Evaluate('CsBases.Bases')\n\t\tElse\n\t\t\tThis.Value = ''\n\t\tEndIf\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Cd_Moeda.Value) And InList(ThisForm.OptGTpRel.Value,1,2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And InList",
+        "controlesReferenciados": "Get_Cd_Moeda,OptGTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','DMoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('DMoes','','Descrição')\n\t\tm.loLista.mAddColuna('CMoes','XXXXXX','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value                  = Evaluate('CrMoedas.DMoes')\n\t\tThisForm.Get_Cd_Moeda.Value = Evaluate('CrMoedas.CMoes')\n\tElse\n\t\tThis.Value                  = ''\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "Get_Cd_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.Get_Dempresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Empresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.Get_Dempresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.Get_Empresa,ThisForm.Get_DEmpresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa,Get_DEmpresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.get_cd_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.OptGTpRel.Value,1,2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptGTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','CMoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CMoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DMoes','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value                  = Evaluate('CrMoedas.CMoes')\n\t\tThisForm.Get_Ds_Moeda.Value = Evaluate('CrMoedas.DMoes')\n\tElse\n\t\tThis.Value                  = ''\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Evaluate",
+        "controlesReferenciados": "Get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.Get_dtBasea",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.OptGTpRel.Value = 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptGTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.Get_dtBasea",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "If !Empty(This.Value)\n\tIf Seek(This.Value,'CsBases','Bases')\n\t\tThis.Value = Evaluate('CsBases.Bases')\n\tElse\t\n\t\tm.loLista = CreateObject('fwBuscaInt','CsBases','Bases',This.Value,'Data Base',.T.)\n\t\tm.loLista.mAddColuna('Bases','XXXXXXXXXX','Data Base')\n\t\tm.loLista.Show()\n\t\tIf LastKey() <> 27\n\t\t\tThis.Value = Evaluate('CsBases.Bases')\n\t\tElse\n\t\t\tThis.Value = ''\n\t\tEndIf\n\tEndIf\nEndIf\nThis.Refresh\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.get_Ds_GrEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Cd_GrEstoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_GrEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.get_Ds_GrEstoque",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "llRet = .T.\nIf !Empty(This.Value)\n\tllRet = fAcessoContab(Usuar,'D',This.Value,ThisForm.Get_Cd_GrEstoque,ThisForm.Get_Ds_GrEstoque)\nElse\n\tThisForm.Get_Cd_GrEstoque.Value = ''\n\tThisForm.Get_Cd_GrEstoque.Refresh\nEndIf\nReturn(llRet)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_GrEstoque,Get_Ds_GrEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.get_Cd_GrEstoque",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "llRet = .T.\nIf !Empty(This.Value)\n\tllRet = fAcessoContab(Usuar,'C',This.Value,ThisForm.Get_Cd_GrEstoque,ThisForm.Get_Ds_GrEstoque)\nElse\n\tThisForm.Get_Cd_GrEstoque.Value = ''\n\tThisForm.Get_Cd_GrEstoque.Refresh\nEndIf\nReturn(llRet)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_GrEstoque,Get_Ds_GrEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.Get_Ds_Estoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Cd_Estoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.Get_Ds_Estoque",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.Get_Cd_GrEstoque.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.Get_Cd_Estoque,ThisForm.Get_Ds_Estoque)\n\t\tMessageBox('Acesso Negado !!!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Get_Cd_Estoque.Value = ''\n\t\tThisForm.Get_Cd_Estoque.Refresh\n\t\tReturn(.F.)\n\tEndIf\nElse\n\tThisForm.Get_Cd_Estoque.Value = ''\n\tThisForm.Get_Cd_Estoque.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_GrEstoque,Get_Cd_Estoque,Get_Ds_Estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.Get_Cd_Estoque",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.Get_Cd_GrEstoque.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'C',This.Value,ThisForm.Get_Cd_Estoque,ThisForm.Get_Ds_Estoque)\n\t\tMessageBox('Acesso Negado !!!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Get_Ds_Estoque.Value = ''\n\t\tThisForm.Get_Ds_Estoque.Refresh\n\t\tReturn(.F.)\n\tEndIf\nElse\n\tThisForm.Get_Ds_Estoque.Value = ''\n\tThisForm.Get_Ds_Estoque.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_GrEstoque,Get_Cd_Estoque,Get_Ds_Estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.GetiBarra",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.OptGTpRel.Value = 3)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptGTpRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.GetiBarra",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "lnProd = This.Value\n\nIf !Empty(lnProd)\n\tIf Used('TmpEti')\n\t\tUse In TmpEti\n\tEndIf\n\tlStrQuery = [Select CBars From SigOpEtq Where CBars = ]+Alltrim(Str(lnProd,8))+[ ]\n\tIf ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpEti') < 1\n\t\tMessageBox('Favor reinicializar o processo !!!', 16, 'Falha na Conexão (TmpEti)')\n\t\tReturn(.F.)\n\tEndIf\n\tSelect TmpEti\n\tGo Top\n\tIf Eof()\n\t\tMessageBox('Etiqueta não Encontrada !!!',0+48,'')\n\t\tThis.Value = 0\n\t\tReturn(.F.)\n\tEndIf\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.GrdEmp.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.GrdEmp.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.CmdApgEmp",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsSigCdEmp\nUpdate CsSigCdEmp Set lMarca = 0\nGo Top\nThisForm.GrdEmp.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFV.cmdSelemp",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Select CsSigCdEmp\nUpdate CsSigCdEmp Set lMarca = 1\nGo Top\nThisForm.GrdEmp.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREIFV.Init",
+      "queryOriginal": "If ThisForm.poDataMgr.SqlExecute([Select * From SigCdEmp ],'CrSigCdEmp') < 1",
+      "tabelas": "SigCdEmp",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREIFV.GetiBarra.Valid",
+      "queryOriginal": "\tlStrQuery = [Select CBars From SigOpEtq Where CBars = ]+Alltrim(Str(lnProd,8))+[ ] \tIf ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpEti') < 1",
+      "tabelas": "SigOpEtq",
+      "colunas": "CBars,SqlExecutelStrQuery,TmpEti",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREIFV.CmdApgEmp.Click",
+      "queryOriginal": "Update CsSigCdEmp Set lMarca = 0",
+      "tabelas": "CsSigCdEmp",
+      "colunas": "lMarca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREIFV.cmdSelemp.Click",
+      "queryOriginal": "Update CsSigCdEmp Set lMarca = 1",
+      "tabelas": "CsSigCdEmp",
+      "colunas": "lMarca",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmp", "SigOpEtq", "CsSigCdEmp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

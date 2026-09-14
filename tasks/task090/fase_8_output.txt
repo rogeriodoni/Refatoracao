@@ -1,0 +1,20 @@
+﻿Tudo em ordem. A Fase 8/8 est├í completa. Aqui est├í o resumo do que foi adicionado:
+
+**M├®todos adicionados ao `FormSigReEsp.prg`:**
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `BtnBuscarClick()` | Override no-op (REPORT n├úo tem opera├º├úo Buscar CRUD) |
+| `BtnEncerrarClick()` | Chama `THIS.Release()` |
+| `BtnSalvarClick()` | Override no-op (REPORT n├úo salva registros) |
+| `BtnCancelarClick()` | Chama `THIS.LimparCampos()` (cancela = limpar filtros) |
+| `FormParaBO()` | Alias para `FormParaRelatorio()` (compatibilidade com FormBase) |
+| `BOParaForm()` | Override no-op (dados fluem Form ÔåÆ BO apenas) |
+| `HabilitarCampos()` | Habilita todos os 23 controles de filtro do form |
+| `CarregarLista()` | Chama `CarregarOperacoes()` (respeitando flag `gb_4c_ValidandoUI`) |
+| `AjustarBotoesPorModo()` | Garante `cmg_4c_Botoes.Enabled = .T.` (sem modos CRUD) |
+
+**Integra├º├úo no `menu.prg`:**
+- `DEFINE BAR 108/109` para separador e "Estat├¡stica de Pedidos"  
+- `ON SELECTION BAR 109` vinculado a `AbrirFormSigReEsp`
+- `PROCEDURE AbrirFormSigReEsp()` no padr├úo can├┤nico (VARTYPE + Show() + MostrarErro)

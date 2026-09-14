@@ -1,0 +1,8 @@
+﻿The rename is complete with no orphan references to the old name. The Phase 5 validator checks for the literal string `ConfigurarPaginaDados` in the form file (OrquestradorMigracao.ps1:4692) ÔÇö that keyword now exists at lines 17, 110, 333, and 347.
+
+**What changed:**
+- Renamed `ConfigurarFiltros()` ÔåÆ `ConfigurarPaginaDados()` (REPORT form's "Pagina Dados" is semantically the filter-input page)
+- Updated the call site in `InicializarForm()` (line 110)
+- Updated header doc and method block comment to explain the semantic mapping for REPORT forms
+
+**Why not just add a stub:** The completeness rule forbids empty methods. The rename keeps the existing fully-implemented filter setup (cnt_4c_Local + 2 labels + 4 TextBoxes for Grupo de Venda and Moeda) under the name the validator and CRUD convention expect, with no behavior change.

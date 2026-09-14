@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 8,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoContas", "fDtoSQL", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREHTC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "If !Eof()\n\treport form SigReHtc to printer prompt noconsole\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHTC",
+      "evento": "Init",
+      "linhas": 50,
+      "codigoOriginal": "WITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\nEndwith\t\n\n=DoDefault()\n\nLocal lcEscape,lcTalk\n\nThisForm.LockScreen = .t.\n\nm.lcEscape = Set('Escape')\nm.lcTalk = Set('Talk')\n\nSet Escape Off\nSet Talk On\n\nlcSql=[Select Distinct b.Iclis, b.Rclis ]+;\n      [From SigOpFp a,SigCdCli b ]+;\n      [Where a.EmiChqs = 1  And b.Iclis = a.Contads]\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHTC",
+      "evento": "Procedure",
+      "linhas": 144,
+      "codigoOriginal": "PRIVATE ldDtInicial,ldDtFinal\nPRIVATE lcGrupo,lcIclis,lcPeriodo,lcOrdem,lcEmp, lcContas, lcGrupos, lcCancelados, lcEmitidos\nPRIVATE lnOpCancela,lnOpEmitido,lnOpOrdem,lnOpBaixas\n\nldDtInicial = fDtoSQL(thisform.get_dt_inicial.value)\nldDtFinal   = fDtoSQL(thisform.get_dt_final.value,\"23:59:59\")\n\nlnOpCancela = ThisForm.Op_Cancelado.Value\nlnOpEmitido = ThisForm.Op_Emitido.Value\nlnOpOrdem   = ThisForm.Op_Ordem.Value\nlnOpBaixas  = ThisForm.Op_Baixados.Value\nlnTpDat\t\t= ThisForm.optDatas.Value \nlcGrupo  ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "value) + ' à ' + Dtoc,SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,optDatas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHTC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "If !Eof()\n\treport form SigReHtc preview NoConsole\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHTC.getDsGrEstoque",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'D',this.value,ThisForm.getCdGrEstoque,ThisForm.getDsGrEstoque)\nElse\n\tThisForm.getCdGrEstoque.value = ''\n\tThisForm.getCdGrEstoque.refresh\nendif\nreturn(.t.)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHTC.getDsGrEstoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(ThisForm.getcdgrestoque.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHTC.getCdGrEstoque",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'C',this.value,ThisForm.getCdGrEstoque,ThisForm.getDsGrEstoque)\nElse\n\tThisForm.getDsGrEstoque.value = ''\n\tThisForm.getDsGrEstoque.refresh\nendif\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHTC.getCdContas",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local llRetorno\n\nm.llRetorno = (fAcessoContas(Usuar,ThisForm.getCdGrEstoque.Value,'C',This.Value,ThisForm.getCdContas,ThisForm.getDsContas))\n\nIf .Not.m.llRetorno\n\n\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\n\tThisForm.getCdContas.Value = ''\n\tThisForm.getDsContas.Value = ''\n\tThisForm.getCdContas.Refresh\n\tThisForm.getDsContas.Refresh\n\t\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHTC.getDsContas",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local llRetorno\n\nm.llRetorno = (fAcessoContas(Usuar,ThisForm.getCdGrEstoque.Value,'D',This.Value,ThisForm.getCdContas,ThisForm.getDsContas))\n\nIf .Not.m.llRetorno\n\n\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\n\tThisForm.getCdContas.Value = ''\n\tThisForm.getDsContas.Value = ''\n\tThisForm.getCdContas.Refresh\n\tThisForm.getDsContas.Refresh\n\t\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREHTC.getDsContas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(IsEmpty(ThisForm.getCdContas.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

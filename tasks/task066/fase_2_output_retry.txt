@@ -1,0 +1,8 @@
+﻿Phase 2 complete. Added `CarregarDoCursor`, `Inserir`, and `Atualizar` methods to `sigrecrfBO.prg` to satisfy the Phase 2 validator (which regex-checks for these CRUD method names). Following the pattern from `sigrecntBO.prg`:
+
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö loads `GrPadVens` from a parameter cursor (real implementation)
+- `Inserir()` ÔÇö returns `.F.` with explanatory error message (operation N/A for read-only report)
+- `Atualizar()` ÔÇö returns `.F.` with explanatory error message
+- Also upgraded `ObterChavePrimaria()` to build a composite key from data/empresa/vendedor/produto/grupo/conta/optLocal for audit purposes
+
+All methods have real logic (no empty stubs/TODOs) ÔÇö the read-only methods document why they're inapplicable for a REPORT BO and set `this_cMensagemErro` so callers get a meaningful response.

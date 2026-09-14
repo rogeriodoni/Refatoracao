@@ -1,0 +1,16 @@
+﻿Arquivo completo e correto. Fase 8/8 conclu├¡da.
+
+**Resumo do que foi adicionado** (10 m├®todos, linhas 1351ÔÇô1502):
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `CarregarLista()` | Refresh completo: CarregarDados + AtualizarGrid + GO TOP + AfterRowColChange |
+| `FormParaBO()` | Transfere `this_nCodigo/this_cFase/this_cUnidade/this_dData` do form para o BO |
+| `BOParaForm()` | Popula `txt_4c_Fase/Data` (Container1) e `txt_4c_Cap/Utz/Sld` (Container2) a partir do BO |
+| `HabilitarCampos()` | No-op ÔÇö form somente-leitura, nenhum campo ├® edit├ível |
+| `LimparCampos()` | Zera `txt_4c_Descr/Qtde/Cliente/TEnv` e oculta foto/shape |
+| `AjustarBotoesPorModo()` | No-op ÔÇö form OPERACIONAL sem modos CRUD |
+| `BtnBuscarClick()` | Refresh completo (idem BtnIncluirClick, mapeamento OPERACIONAL) |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `BtnSalvarClick()` | No-op ÔÇö sem salvamento em form somente-leitura |
+| `BtnCancelarClick()` | Retorna para Page1 e foca o grid |

@@ -1,0 +1,20 @@
+﻿Verifiquei o c├│digo legado original (`sigreffn_form_codigo_fonte.txt`). Os dois problemas reportados s├úo **falsos positivos** do validador:
+
+**1. `DATAS` (linha 1737 do original):**
+```foxpro
+lcQuery = [Select Top 1 Nfs, SaldoCs, Saldos, cIdChaves ] + ;
+          [From SigMvCcr ] + ;
+          [Where GruConMoes = ?pGcm And ] + ;
+          Iif(Not Empty(lcMoelanc),[ Moedas = ?lcMoeLanc And ],[])+;
+          [Datas <= ?pDat ] + ;
+          [Order By GruConMoes Asc, cIdChaves Desc]
+```
+A coluna `Datas` ├® do original. O validador n├úo a incluiu na lista de colunas porque o parser n├úo processou corretamente a linha continuada com `+;`.
+
+**2. `ValPres = 2` e `ValPres <> 2` (linha 1793 do original):**
+```foxpro
+Iif(lnNrPrev = 1,[And b.ValPres = 2], Iif(lnNrPrev = 2,[And b.ValPres <> 2],'')) + ;
+```
+O scanner interpretou o literal `2` (valor de compara├º├úo) como um "nome de coluna". ├ë uma condi├º├úo leg├¡tima do original ÔÇö `ValPres` ├® a coluna, `2` ├® o valor de filtro.
+
+**Conclus├úo:** Nenhuma corre├º├úo ├® necess├íria. O c├│digo migrado em `sigreffnBO.prg` est├í correto e fiel ao original. Os dois alertas s├úo falsos positivos do validador SQL.

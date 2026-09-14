@@ -1,0 +1,11 @@
+﻿`CtgBO.prg` corrigido. As mudan├ºas foram:
+
+- **Removida** propriedade `this_cCidchaves` (coluna inexistente)
+- **`Init()`**: `this_cCampoChave = "cods"` (era `"cidchaves"`)
+- **`ObterChavePrimaria()`**: retorna `this_cCods` (era `this_cCidchaves`)
+- **`CarregarDoCursor()`**: removida linha `this_cCidchaves = TratarNulo(cidchaves...)`
+- **`Inserir()`**: removido bloco NEWID()/UUID inteiro; INSERT usa apenas `(cods, descs)`
+- **`Atualizar()`**: `WHERE cods = EscaparSQL(THIS.this_cCods)` (era `WHERE cidchaves = ...`)
+- **`ExecutarExclusao()`**: `WHERE cods = EscaparSQL(THIS.this_cCods)` (era `WHERE cidchaves = ...`)
+- **`Buscar()`**: SELECT e CREATE CURSOR sem `cidchaves`
+- **`CarregarPorCodigo()`**: SELECT sem `cidchaves`

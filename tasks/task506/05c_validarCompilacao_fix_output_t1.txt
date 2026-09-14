@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. A causa raiz foi o uso da sintaxe inline `IF ... : USE IN alias : ENDIF` com separador `:` no `Destroy` ÔÇö o compilador VFP9 rejeita esse padr├úo nesse contexto, perdendo o rastreamento dos IFs e cascateando erros de nesting no TRY/CATCH. A solu├º├úo foi expandir todas as 12 linhas para a forma multi-linha can├┤nica `IF / USE IN / ENDIF`.

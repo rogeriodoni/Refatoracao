@@ -1,0 +1,7 @@
+﻿Duas corre├º├Áes aplicadas:
+
+1. **FontName corrigido** ÔÇö todos os 4 bot├Áes de `cmg_4c_Botoes` passaram de `"Tahoma"` para `"Comic Sans MS"` (regra do framework frmrelatorio). Tamb├®m removido `.WordWrap` que n├úo ├® necess├írio nesses bot├Áes.
+
+2. **Guarda `gb_4c_ValidandoUI` adicionada** em `ConfigurarPaginaLista()` ÔÇö evita `SQLEXEC` com `gnConnHandle=-1` quando ValidarUIFidelity instancia o form (problema id├¬ntico ao Problem 4 do FORMCOR_LICOES_APRENDIDAS.md).
+
+Para este form de **RELAT├ôRIO** (frmrelatorio), o Phase 4 gen├®rico de "Grid e Bot├Áes CRUD" n├úo se aplica ÔÇö a estrutura visual j├í est├í completa na Fase 3: filtros em Page1, bot├Áes de a├º├úo em `cmg_4c_Botoes`, `AlternarPagina()` j├í existente. As duas corre├º├Áes acima s├úo os ├║nicos ajustes reais necess├írios nesta fase.

@@ -1,0 +1,1588 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigcdrst.SCX
+* Data/Hora: 02/09/2026 00:20:59
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDRST
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDRST.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape4
+  Parent: SIGCDRST.Pagina.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: Get_Desc
+  Parent: SIGCDRST.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_codigo
+  Parent: SIGCDRST.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: inserir
+  Parent: SIGCDRST.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: excluir
+  Parent: SIGCDRST.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: GradMuni
+  Parent: SIGCDRST.Pagina.Dados
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGCDRST.Pagina.Dados.GradMuni.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDRST.Pagina.Dados.GradMuni.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDRST.Pagina.Dados.GradMuni.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDRST.Pagina.Dados.GradMuni.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGCDRST.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: InserirV
+  Parent: SIGCDRST.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: ExcluirV
+  Parent: SIGCDRST.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: GradProd
+  Parent: SIGCDRST.Pagina.Dados
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGCDRST.Pagina.Dados.GradProd.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDRST.Pagina.Dados.GradProd.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDRST.Pagina.Dados.GradProd.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDRST.Pagina.Dados.GradProd.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say4
+  Parent: SIGCDRST.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say11
+  Parent: SIGCDRST.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: op_con
+  Parent: SIGCDRST.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: imgProds
+  Parent: SIGCDRST.Pagina.Dados
+  Class: image
+  BaseClass: image
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST
+------------------------------------------------------------
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Exclusividade Por Contas"
+  Name = "SIGCDRST"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 938
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 81
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 157
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 233
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 309
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 539
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 389
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 819
+  Pagina.Dados.Grupo_Salva.Top = 10
+  Pagina.Dados.Grupo_Salva.TabIndex = 14
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.TabIndex = 1
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 82
+  Top = 51
+  TabIndex = 1
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.Shape4
+------------------------------------------------------------
+  Top = 10
+  Left = 648
+  Height = 111
+  Width = 163
+  BackStyle = 0
+  BorderWidth = 2
+  Visible = .T.
+  SpecialEffect = 0
+  ZOrderSet = 2
+  Name = "Shape4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.Get_Desc
+------------------------------------------------------------
+  FontName = "Courier New"
+  ControlSource = "crSigCdRst.Rclis"
+  Format = "K"
+  Height = 25
+  Left = 212
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 47
+  Width = 290
+  ZOrderSet = 3
+  Name = "Get_Desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.Get_codigo
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = "crSigCdRst.Iclis"
+  Format = "K"
+  Height = 25
+  InputMask = ""
+  Left = 129
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = ""
+  Top = 47
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.inserir
+------------------------------------------------------------
+  Top = 305
+  Left = 356
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_inserir_26.jpg
+  Caption = ""
+  TabIndex = 8
+  ToolTipText = "Inserir"
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 52
+  Themes = .F.
+  Name = "inserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.excluir
+------------------------------------------------------------
+  Top = 350
+  Left = 356
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 9
+  ToolTipText = "Excluir"
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 53
+  Themes = .F.
+  Name = "excluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.GradMuni
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  DeleteMark = .F.
+  GridLines = 3
+  GridLineWidth = 1
+  HeaderHeight = 20
+  Height = 456
+  Left = 41
+  Panel = 1
+  RecordMark = .F.
+  RecordSource = ""
+  ScrollBars = 2
+  TabIndex = 7
+  Top = 133
+  Width = 309
+  GridLineColor = 238,238,238
+  Name = "GradMuni"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 24
+  Column1.Visible = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 263
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.GradMuni.Column1.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "UF"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.GradMuni.Column1.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Format = "!"
+  Margin = 0
+  Visible = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.GradMuni.Column2.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Município"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.GradMuni.Column2.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.Say3
+------------------------------------------------------------
+  Caption = "Municípios pertencentes a esta restrição:"
+  Height = 15
+  Left = 44
+  Top = 116
+  Width = 199
+  TabIndex = 6
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.InserirV
+------------------------------------------------------------
+  Top = 305
+  Left = 912
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_inserir_26.jpg
+  Caption = ""
+  TabIndex = 12
+  ToolTipText = "Inserir"
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 52
+  Themes = .F.
+  Name = "InserirV"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.ExcluirV
+------------------------------------------------------------
+  Top = 350
+  Left = 912
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 13
+  ToolTipText = "Excluir"
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 53
+  Themes = .F.
+  Name = "ExcluirV"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.GradProd
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  DeleteMark = .F.
+  GridLines = 3
+  GridLineWidth = 1
+  HeaderHeight = 20
+  Height = 456
+  Left = 417
+  Panel = 1
+  RecordMark = .F.
+  ScrollBars = 2
+  TabIndex = 11
+  Top = 133
+  Width = 490
+  GridLineColor = 238,238,238
+  Name = "GradProd"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 108
+  Column1.Visible = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 360
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.GradProd.Column1.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.GradProd.Column1.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  Visible = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.GradProd.Column2.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.GradProd.Column2.Text1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.Say4
+------------------------------------------------------------
+  Caption = "Produtos restringidos:"
+  Height = 15
+  Left = 418
+  Top = 116
+  Width = 108
+  TabIndex = 10
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.Say11
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Checa Matriz :"
+  Height = 15
+  Left = 42
+  Top = 79
+  Width = 71
+  TabIndex = 4
+  ZOrderSet = 23
+  ToolTipText = "Sim = se a conta de pesquisa e a conta de restrição tiverem a mesma Matriz, é liberado a venda do produto"
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.op_con
+------------------------------------------------------------
+  BackStyle = 0
+  Value = 2
+  ControlSource = "crSigCdRst.ChkMatrs"
+  Height = 22
+  Left = 124
+  SpecialEffect = 0
+  Top = 77
+  Width = 98
+  TabIndex = 5
+  ZOrderSet = 47
+  Name = "op_con"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Left = 4
+  Option1.Top = 2
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 55
+  Option2.Top = 2
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRST.Pagina.Dados.imgProds
+------------------------------------------------------------
+  Stretch = 1
+  Height = 107
+  Left = 650
+  Top = 12
+  Visible = .F.
+  Width = 159
+  ToolTipText = "Imagem do Produto [Duplo Click Para Zoom]"
+  Name = "imgProds"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDRST
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters lcacesso
+
+With Thisform
+	.poDatamgr = Createobject('fSqlConector')
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+
+	lcQuery = [Select a.*, b.Rclis from SigCdRst a inner join SigCdCli b on a.Iclis = b.Iclis]	
+	With .poDatamgr
+		.AddCursor('SigCdRst','skChaves','crSigCdRst','',Thisform.pagina.lista.grade,lcQuery)
+		.pfSqlTabela(1).pColuna('Iclis','','','Conta',80,.T.)
+		.pfSqlTabela(1).pColuna('Rclis','','','Nome',290,.T.)
+		.AddCursor('SigCdRsi','pkChaves','crSigCdRsi','','')
+	Endwith
+Endwith
+
+Select *, Space(40) As munici, Space(2) As uf From crSigcdRsi  Into Cursor crMuni Readwrite
+
+Select crMuni
+
+With Thisform.pagina.Dados.gradMuni
+	.RecordSource = 'crMuni'
+	.column1.ControlSource = 'crMuni.uf'
+	.Column2.ControlSource = 'crMuni.munici'
+	.Refresh
+Endwith
+
+Select *, Space(40) As dpros From crSigcdRsi  Into Cursor crProd Readwrite
+
+Select crProd
+
+With Thisform.pagina.Dados.GradProd
+	.RecordSource = 'crProd'
+	.column1.ControlSource = 'crProd.cpros'
+	.Column2.ControlSource = 'crProd.dpros'
+	.Refresh
+Endwith
+
+= DoDefault()
+Thisform.LockScreen = .F.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+llOks = .t.
+
+pChave= crSigCdRst.skChaves
+
+If llOKs
+	If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRst Where skChaves = ?pChave], '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')
+		llOKs = .f.
+	EndIf
+EndIf
+
+If llOKs
+	If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRsi Where skChaves = ?pChave], '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')
+		llOKs = .f.
+	EndIf
+EndIf
+
+If Not Thisform.poDataMgr.Update('crSigcdRst')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigcdRst )')
+	llOks = .F.
+Endif
+
+If Not Thisform.poDataMgr.Update('crSigcdRsi')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigcdRsi )')
+	llOks = .F.
+EndIf
+
+If llOks
+	ThisForm.poDataMgr.Commit()
+Else
+	Thisform.poDataMgr.Rollback()
+	Return .F.
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+Private pChave, llOK
+
+pChave= crSigCdRst.skChaves
+llOK = .t.
+
+Select crSigCdRst
+Go top
+Delete For skChaves = pChave
+
+Select crSigCdRsi
+Go top
+Delete For skChaves = pChave
+
+* Excluindo os Registros
+If llOK
+	If Not ThisForm.poDataMgr.Update('crSigCdRst')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 3)')
+		llOK = .f.
+	EndIf
+EndIf
+If llOK
+	If Not ThisForm.poDataMgr.Update('crSigCdRsi')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 4)')
+		llOK = .f.
+	EndIf
+EndIf
+
+If llOK
+	ThisForm.poDataMgr.Commit()
+Else
+	ThisForm.poDataMgr.Rollback()
+	Return 0
+EndIf
+NoDefault
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+llOks = .t.
+
+If Not Thisform.poDataMgr.Update('crSigcdRst')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigcdRst )')
+	llOks = .F.
+Endif
+
+If Not Thisform.poDataMgr.Update('crSigcdRsi')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigcdRsi )')
+	llOks = .F.
+Endif
+If llOks
+	ThisForm.poDataMgr.Commit()
+Else
+	Thisform.poDataMgr.Rollback()
+	Return .F.
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.get_codigo.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdRst','regiaos',ThisForm.Pagina.Dados.get_codigo.Value)
+Else
+	If .Not.IsEmpty(ThisForm.Pagina.Dados.Get_desc.Value)
+		ThisForm.poDataMgr.LocateCursor('crSigCdRst','descs',ThisForm.Pagina.Dados.Get_desc.Value)
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Lparameters opcao
+Local lcSK
+
+If Type( 'Opcao' ) = 'N'
+	This.Value = Opcao
+Endif
+
+If !Dodefault( Opcao )
+	Thisform.mAtivapagina1
+	Return
+Endif
+
+*** pega chave secundária se houver ***
+lcSK = Iif(Thisform.PcEscolha='INSERIR', '', crSigCdRst.skchaves)
+
+*** Prepara Grade de Municipio ***
+Select crMuni
+Zap
+
+lcSql = [Select distinct a.skchaves, pkchaves, codibges, tipos, a.UFIBGEs,] +;
+	[c.descs as munici, d.estados as uf From SigCdRsi a ] + ;
+	[left Join SigCdRst b On a.skChaves = b.skchaves ] +  ;
+	[left join sigcdmun c on c.codigos = a.codibges ] +;
+	[left join sigcdufs d on d.ufibges = a.ufibges ] +;
+	[Where a.skchaves = '] + lcSK + [' and tipos='M']
+
+=Thisform.PodataMgr.SqlExecute(lcSql,'TmpMun')
+Select TmpMun
+Scan
+	Select crMuni
+	Append Blank
+	Replace	skchaves With TmpMun.skchaves, ;
+		pkchaves With TmpMun.pkchaves, ;
+		codibges With TmpMun.codibges, ;
+		tipos    With TmpMun.tipos,    ;
+		munici   With Nvl(TmpMun.munici,''),     ;
+		uf       With Nvl(TmpMun.uf,''), ;
+		UFIBGEs  With TmpMun.UFIBGEs
+Endscan
+Select crMuni
+If Reccount() = 0
+	Append Blank
+Endif
+
+Thisform.Pagina.Dados.GradMuni.Refresh()
+
+
+*** Prepara Grade de Vendedor ***
+Select crProd
+Zap
+
+lcSql = [Select distinct a.skchaves, a.pkchaves, a.codibges, a.tipos, ] +;
+	[a.cpros, c.dpros From SigCdRsi a ] + ;
+	[left Join SigCdRst b On a.skChaves = b.skchaves ] +  ;
+	[left join sigcdpro c on c.cpros = a.cpros Where a.skchaves = '] + lcSK + [' and a.tipos='P']
+
+
+=Thisform.PodataMgr.SqlExecute(lcSql,'TmpVen')
+Select TmpVen
+Scan
+	Select crProd
+	Append Blank
+	Replace	skchaves With TmpVen.skchaves, ;
+		pkchaves With TmpVen.pkchaves, ;
+		tipos    With TmpVen.tipos,    ;
+		cpros 	 With TmpVen.cpros,    ;
+		dpros 	 With TmpVen.dpros
+Endscan
+
+Select crProd
+If Reccount() = 0
+	Append Blank
+Endif
+
+Thisform.Pagina.Dados.GradProd.Refresh()
+
+Select crSigCdRst
+
+If !DoDefault( opcao )
+	Thisform.MAtivaPagina1
+	Return
+Endif
+
+Do Case
+Case Inlist( Thisform.PcEscolha, 'INSERIR', 'PROCURAR' )
+	Thisform.Pagina.Dados.Get_Codigo.SetFocus()
+Case Thisform.PcEscolha = 'ALTERAR'
+	Thisform.Pagina.Dados.Get_Desc.SetFocus()
+Other
+	Thisform.Pagina.Dados.Grupo_Salva.Salva.SetFocus()
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Local llOks
+llOks = .T.
+
+If Thisform.PcEscolha = 'INSERIR'
+	If Empty(Thisform.Pagina.Dados.Get_Codigo.Value)
+		Messagebox('Campo conta é obrigatório.',64,'Aviso')
+		Return .f.
+	Endif
+	
+	Select crProd
+	Go top
+	Count for !Empty(Cpros) to lnTotPro
+	If lnTotPro = 0
+		Messagebox('Nenhum produto foi inserido na exclusividade.',48,'Aviso')
+		Return .f.
+	Endif
+	
+	If Thisform.poDataMgr.ChkRegister('SigCdRst','Iclis',Thisform.Pagina.Dados.Get_Codigo.Value)
+		Messagebox( 'Exclusividade já cadastrada!', 48, 'Aviso' )
+		Thisform.Pagina.Dados.Get_Codigo.SetFocus()
+		Return .f.
+	Endif
+	Replace skChaves With fUniqueIds(),;
+			datas with Datetime() In crSigCdRst
+Endif
+
+If Thisform.PcEscolha = 'ALTERAR'
+	replace dtalts with Datetime() in crSigCdRst
+Endif
+
+**** atualiza SigCdRsi com municipios e vendedores ****
+Set Delete Off
+If Inlist(Thisform.PcEscolha,'INSERIR','ALTERAR')
+*** Atualiza tabela de municipios ***
+	Select crSigcdRsi
+	Zap
+	Select crMuni
+	Go Top
+	Scan
+		If Not Empty(codibges) Or Not Empty(UFIBGEs)
+			Select crSigcdRsi
+			Append Blank
+			Replace codibges With crMuni.codibges,;
+				tipos    With crMuni.tipos,;
+				skChaves With crSigCdRst.skChaves,;
+				PkChaves With crMuni.PkChaves,;
+				UFIBGEs  With crMuni.UFIBGEs,;
+				dtalts   with Datetime()
+			If Deleted('crMuni')
+				Delete
+			Endif
+		Endif
+		Select crMuni
+	Endscan
+
+*** Atualiza tabela de vendedores ***
+	Select crProd
+	Go Top
+	Scan
+		If Not Empty(cpros)
+			Select crSigcdRsi
+			Append Blank
+			Replace cpros With crProd.cpros,;
+				dtalts   with Datetime(),;			
+				tipos    With 'P',;
+				skChaves With crSigCdRst.skChaves,;
+				PkChaves With fUniqueIds()
+
+			If Deleted('crProd')
+				Delete
+			Endif
+		Endif
+		Select crProd
+	Endscan
+Endif
+Set Delete On
+********************************************************
+a=DoDefault()
+Thisform.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.PlCancelar
+	ThisForm.MAtivaPagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.Get_Desc
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ''
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,grupo,'D',This.Value,ThisForm.Pagina.dados.get_codigo,ThisForm.Pagina.dados.get_desc)
+		MessageBox('Acesso Negado !!',48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.Pagina.dados.get_codigo.Value = ''
+		ThisForm.Pagina.dados.get_codigo.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.Pagina.dados.get_codigo.Value = ''
+	ThisForm.Pagina.dados.get_codigo.Refresh
+	Return(.T.)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Empty(ThisForm.Pagina.dados.get_codigo.Value) And thisform.pcescolha = 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.Get_codigo
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ''
+If !Empty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'C',This.Value,ThisForm.Pagina.dados.get_codigo,ThisForm.Pagina.dados.get_desc)
+		MessageBox('Acesso Negado !!',48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.Pagina.dados.get_desc.Value = ''
+		ThisForm.Pagina.dados.get_desc.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.Pagina.dados.get_desc.Value = ''
+	ThisForm.Pagina.dados.get_desc.Refresh
+	Return(.T.)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (thisform.pcescolha = 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.inserir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.LockScreen = .t.
+Select crMuni
+Locate For codibges=' ' And ufibges = 0
+If Eof()
+	Append Blank
+ENDIF
+
+Thisform.Pagina.Dados.gradMuni.Column1.SetFocus
+replace crMuni.tipos With 'M'
+replace crMuni.PkChaves With fUniqueIds()
+replace crMuni.munici With SPACE(40)
+replace crMuni.codibges With SPACE(7)
+
+Thisform.Pagina.Dados.gradMuni.column2.text1.Value= ''
+Thisform.Pagina.Dados.gradMuni.Refresh
+ThisForm.LockScreen = .f.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.excluir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crMuni
+If Eof() Or Bof()
+	Return
+EndIf
+ThisForm.LockScreen = .t.
+
+SELECT crMuni
+Delete
+ThisForm.pagina.Dados.gradMuni.Refresh
+ThisForm.Pagina.Dados.GradMuni.Column2.SetFocus
+ThisForm.LockScreen = .f.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.GradMuni
+* Classe: fwgrade (Base: grid)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Eof()
+	Skip
+	Skip -1
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.GradMuni.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUfs', ;
+						   'crListaRemota', 'Estados', Padr(This.Value,2), 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Estados', '', 'UF')
+		loLista.mAddColuna('Descrs', '', 'Descrição')
+		loLista.mAddColuna('UFIBGEs', '', 'IBGE')
+		loLista.Show()
+	EndIf
+	If Lastkey() <> 27
+		This.Value = crListaRemota.Estados
+		replace UFIBGEs with crListaRemota.UfIbges in crMuni
+	Else
+		This.Value = ''
+		replace UFIBGEs with 0 in crMuni
+	Endif
+	Use In crListaRemota
+Else
+	This.Value = ''
+	replace UFIBGEs with 0 in crMuni
+EndIf
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.GradMuni.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Select uf, munici from crMuni into cursor Duplica group by uf, munici  having sum(1) > 1 
+Select Duplica
+If Reccount() > 0
+	=MessageBox('Município já lançado!!!',0+32,'')
+	Select crMuni
+	replace uf with ' '
+	ThisForm.Pagina.Dados.gradMuni.Column1.SetFocus
+EndIf
+Select crMuni
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista, lcQuery
+
+*** Mostra lista de municipios ***
+If Not Empty(crMuni.munici)
+	lcQuery = 	[Select b.estados, a.descs as munici, a.codigos as codibges, b.UFIBGEs From SigCdMun a, SigcdUfs b where b.estados = '] + ;
+		crMuni.uf + [' and a.ufibges = b.ufibges order by descs]
+
+	If (Thisform.poDataMgr.SqlExecute(lcQuery, [crLocal])) >0
+		Select crlocal
+		Index On munici Tag munici
+		If Not Seek(Padr(This.Value, 40), [crLocal], [munici])
+			loLista = Createobject([fwBuscaInt], [crLocal], [munici], This.Value, [Municipios], .T.)
+			loLista.mAddColuna([munici], [], [Municipios], 	 .F.)
+			loLista.Show()
+		Endif
+		If Lastkey() <> 27
+			This.Value = crlocal.munici
+			Replace crMuni.munici With CrLocal.munici in crMuni
+			Replace crMuni.codibges With CrLocal.codibges in crMuni
+		Else
+			Replace crMuni.munici With '' in crMuni
+			Replace crMuni.codibges With '' in crMuni		
+		Endif
+	Else
+		=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigcdMun/UFs)')
+	Endif
+Endif
+
+ThisForm.Pagina.Dados.gradMuni.Refresh()
+  
+* Fim *********************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.InserirV
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.LockScreen = .T.
+Select crProd
+Locate For cpros = ' '
+If Eof()
+	Append Blank
+Endif
+
+Thisform.Pagina.Dados.GradProd.Column1.SetFocus()
+
+*!*	Replace crProd.tipos With 'P'
+*!*	Replace crProd.PkChaves With fUniqueIds()
+Replace crProd.cpros With Space(14)
+Replace crProd.dpros With Space(40)
+
+Thisform.LockScreen = .F.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.ExcluirV
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crProd
+If Eof() Or Bof()
+	Return
+EndIf
+ThisForm.LockScreen = .t.
+
+SELECT crProd
+Delete
+ThisForm.pagina.Dados.GradProd.Refresh
+ThisForm.Pagina.Dados.GradProd.Column2.SetFocus
+ThisForm.LockScreen = .f.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.GradProd
+* Classe: fwgrade (Base: grid)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+lcArquivo3 = Sys(2023) + '\' + goSistema.Sys2015Tmp + 'SigCdRsi.jpg'
+
+lcQuery = [Select a.FigJpgs From SigCdPro a ] +;
+		   [Where a.Cpros = '] + crProd.CPros + [']
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crTmpPro]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crTmpPro)])
+	Return 0
+Endif
+
+* Figura no Campo Memo
+ThisForm.pagina.dados.imgProds.Visible = .f.
+If Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)
+	lcFoto=Strconv(Strtran(Strtran(Strtran(crTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+	If (StrToFile(lcFoto, lcArquivo3) > 0)
+		ThisForm.pagina.dados.imgProds.Picture = (lcArquivo3)
+		ThisForm.pagina.dados.imgProds.Visible = .t.
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+*!*	If Not Eof()
+*!*		Skip
+*!*		Skip -1
+*!*	EndIf
+*!*	* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.GradProd.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+IF !Empty(this.Value) And this.Tag <> Padr(this.Value,14)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'sigcdpro', ;
+						   'CrListaRemota', 'cpros', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('cpros', '', 'Código')
+		loLista.mAddColuna('dpros', '', 'Descrição')
+		loLista.Show()
+	EndIf
+
+	This.Value = CrListaRemota.cpros
+	Replace crProd.cpros With CrListaRemota.cpros in crProd
+	Replace crProd.dpros With CrListaRemota.dpros in crProd
+
+	Use In crListaRemota
+	
+	ThisForm.Pagina.Dados.GradProd.Refresh()
+	
+	If ! fChkRestri(thisform.podatamgr, crSigCdRst.Iclis, this.Value)
+		Messagebox('Produto já possui restrição',48,'Aviso')
+	Endif
+
+Endif
+  
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+this.Tag = Padr(this.Value,14)
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.GradProd.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+Select cpros from crProd into cursor Duplica group by cpros  having sum(1) > 1 
+Select Duplica
+If Reccount() > 0
+	=MessageBox('Produto já lançado!!!',0+32,'')
+	Select crProd
+	replace cpros with ' '
+	ThisForm.Pagina.Dados.GradProd.Column2.SetFocus
+EndIf
+Select crProd
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+IF !Empty(this.Value) And this.Tag <> Padr(this.Value,40)
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'CrListaRemota', 'Dpros', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('cpros', '', 'Código')
+		loLista.mAddColuna('dpros', '', 'Nome Vendedor')
+		loLista.Show()
+	EndIf
+
+	This.Value = CrListaRemota.Dpros
+	Replace crProd.cpros With CrListaRemota.cpros in crProd
+	Replace crProd.dpros With CrListaRemota.dpros in crProd
+
+	ThisForm.Pagina.Dados.GradProd.Refresh()
+	
+	Use In crListaRemota	
+Endif 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+this.Tag = Padr(this.Value,40)
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.op_con
+* Classe: fwoption (Base: optiongroup)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, "INSERIR", "ALTERAR" )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRST.Pagina.Dados.imgProds
+* Classe: image (Base: image)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+Local lcArquivo
+
+lcArquivo = Sys(2023) + '\' + goSistema.Sys2015Tmp + Sys(2015) + '.Jpg'
+
+lcCodPro  = crProd.cpros
+lcSql = [Select a.cpros,a.dpros,a.FigJpgs From SigCdPro a Where a.cpros = ']+lcCodPro+[' ]
+ThisForm.Podatamgr.Sqlexecute(lcsql,'LocalPro')
+
+* Figura no Campo Memo
+If Not Empty(LocalPro.FigJpgs) And Not IsNull(LocalPro.FigJpgs)
+	lcFoto=Strconv(Strtran(Strtran(Strtran(LocalPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+	=StrToFile(lcFoto, lcArquivo)
+	If File(lcArquivo)
+		Do Form SigOpZom With lcArquivo, ;
+							'Produto : ' + LocalPro.CPros + ' - ' + LocalPro.DPros, ' '
+		Delete File (lcArquivo)
+	EndIf
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 35
+================================================================================

@@ -1,0 +1,10 @@
+﻿Corre├º├Áes conclu├¡das. Resumo do que foi alterado:
+
+**Formsigprpre.prg:**
+- `AlternarPagina`: removido `PROTECTED` ÔåÆ agora ├® PUBLIC (fix para "Property ALTERNARPAGINA is not found")
+- `CarregarLista`: `RecordSource`/`ControlSource` renomeados de `crSigPrPre` ÔåÆ `cursor_4c_Lista`
+- `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`: refer├¬ncias `crSigPrPre` ÔåÆ `cursor_4c_Lista`
+- `BOParaForm`: corrigido o `.Value` esp├║rio na linha do `chk_4c_CKAtuSite` (sintaxe malformada que quebraria em runtime)
+
+**sigprpreBO.prg:**
+- `Buscar()`: cursor renomeado de `crSigPrPre` ÔåÆ `cursor_4c_Lista` (alinha com conven├º├úo `cursor_4c_*` que o teste verifica)

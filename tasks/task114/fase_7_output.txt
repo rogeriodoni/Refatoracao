@@ -1,0 +1,21 @@
+﻿O arquivo `Formsigrehpr.prg` j├í est├í **completo**. Verificando o que a Fase 7 pede versus o que j├í existe:
+
+**Fase 7 pede** (template gen├®rico CRUD):
+- BtnIncluirClick(), BtnAlterarClick(), BtnVisualizarClick(), BtnExcluirClick()
+
+**J├í implementado** (eventos equivalentes para form REPORT):
+- `BtnVisualizarClick()` ÔÇö linha 892 (preview na tela)
+- `BtnImprimirClick()` ÔÇö linha 904 (imprime)
+- `BtnExcelClick()` ÔÇö linha 916 (informa que n├úo dispon├¡vel)
+- `BtnEncerrarClick()` ÔÇö linha 922 (fecha o form)
+
+Este ├® um form `frmrelatorio` (layout FLAT, sem PageFrame CRUD). Os eventos BtnIncluirClick/BtnAlterarClick/BtnExcluirClick **n├úo existem nem fazem sentido** nesse tipo de form ÔÇö os bot├Áes do CommandGroup s├úo Visualizar/Imprimir/Excel/Encerrar, todos j├í ligados via `BINDEVENT` (linhas 187, 208, 229, 251).
+
+O arquivo tem 1487 linhas com implementa├º├úo completa:
+- Todos os filtros configurados (GrEstoque, Estoque, C├│digo, Per├¡odo, CdBarra, Empresa, Op├º├Áes)
+- Todos os lookups com F4/ENTER/TAB
+- Valida├º├Áes equivalentes aos `Valid` events do original (`fAcessoContab`, `fAcessoContas`, `fwBuscaExt`, `fAcessoEmpresa`)
+- `FormParaRelatorio()` transferindo todos os filtros para o BO
+- `Destroy()` liberando o BO corretamente
+
+**A Fase 7 j├í est├í conclu├¡da** ÔÇö os eventos principais do form REPORT foram adicionados nas fases anteriores. Nenhuma modifica├º├úo ├® necess├íria.

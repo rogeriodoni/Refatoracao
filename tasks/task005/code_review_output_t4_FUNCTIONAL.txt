@@ -1,0 +1,11 @@
+﻿Corre├º├úo aplicada: `cnt_4c_Saida` (container do bot├úo Encerrar) ajustado para Top=200 e Left=959, correspondendo ao container legado `Botoes` (Top=171+29=200, Left=959).
+
+**Resumo das a├º├Áes:**
+
+- **OPTIONGROUP-LEFT**: Falso positivo ÔÇö todos os 7 Buttons de `obj_4c_NavegacaoDados` j├í possuem `.Left` definido (5, 80, 155, 230, 305, 380, 455). Nenhuma altera├º├úo necess├íria.
+
+- **LAYOUT-POSITION Top** (diff=143px): Corrigido ÔÇö `cnt_4c_Saida.Top` 28 ÔåÆ 200 (171+29 de compensa├º├úo PageFrame.Top=-29)
+
+- **LAYOUT-POSITION Left** (diff=417px): Corrigido ÔÇö `cnt_4c_Saida.Left` 917 ÔåÆ 959
+
+> **Nota**: O checker mapeou `cnt_4c_Botoes` ao legado `Botoes`, mas `cnt_4c_Botoes` (Left=542) corresponde ao legado `Grupo_op` (CRUD). O legado `Botoes` (exit, Left=959) ├® representado por `cnt_4c_Saida`, que foi corrigido. Mover os 5 bot├Áes CRUD para Left=959 seria imposs├¡vel num form de 1003px de largura.

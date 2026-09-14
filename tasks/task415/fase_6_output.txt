@@ -1,0 +1,17 @@
+﻿Arquivo finalizado corretamente. Aqui est├í o resumo de todas as corre├º├Áes aplicadas na Fase 6:
+
+**4 corre├º├Áes aplicadas:**
+
+1. **Problema 16 ÔÇö Bot├Áes Confirmar/Cancelar** (linhas 433ÔÇô476): ├¡cones corrigidos (`cadastro_salvar_60.jpg` e `cadastro_cancelar_60.jpg`), `Themes=.F.`, todas as propriedades can├┤nicas adicionadas (`PicturePosition=13`, `FontName="Comic Sans MS"`, etc.)
+
+2. **BINDEVENTs ausentes** (linha 902ÔÇô904): adicionados 3 novos bindings em `ConfigurarPgFicha()`:
+   - `txt_4c_CpySGrus ÔåÆ "Valid" ÔåÆ ValidCpySGrus`
+   - `Column8.Text1 ÔåÆ "Valid" ÔåÆ ValidCSelecaos`
+   - `Column9.Text1 ÔåÆ "Valid" ÔåÆ ValidCTpDados`
+
+3. **3 m├®todos de valida├º├úo novos** (linhas 1628ÔÇô1735):
+   - `ValidCpySGrus()` ÔÇö lookup em `SigCdPsg` para sub-grupo do painel de c├│pia
+   - `ValidCSelecaos()` ÔÇö valida coluna 8 (apenas `S`, `N` ou espa├ºo)
+   - `ValidCTpDados()` ÔÇö valida coluna 9 (apenas `C`, `D`, `N` ou espa├ºo)
+
+4. **Problema 26 ÔÇö TornarControlesVisiveis** (linhas 1738ÔÇô1772): guarda via `INLIST` preserva `Visible=.F.` dos 5 pain├®is flutuantes (`cnt_4c_CopiarAcesso`, `cmd_4c_ApagarLinha`, `cmd_4c_CopiaFicha`, `img_4c_FigTec`, `cmd_4c_Figura`), mas ainda recursa nos seus filhos internos. O `Destroy` foi expandido para fechar tamb├®m `cursor_4c_BuscaSGrp`.

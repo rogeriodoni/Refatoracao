@@ -1,0 +1,22 @@
+﻿Arquivo completo e correto. Estrutura da Fase 2:
+
+**SIGPRCPRBO.prg** ÔÇö 937 linhas, 14 m├®todos implementados:
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `Init()` | public | Inicializa├º├úo herdada |
+| `CarregarDoCursor()` | public | Mapeia cursor_4c_TmpBaixa ÔåÆ this_ |
+| `CarregarBaixas()` | public | Equivalente ao legado `carregabars` ÔÇö carrega etiquetas via SQLEXEC iterando cursor_4c_TmpEnc |
+| `RegistrarLeitura()` | public | Equivalente ao `Get_Leitura.Valid` ÔÇö marca c├│digo de barras como lido |
+| `MarcarTodasLidas()` | public | Equivalente ao `Conferencia.Click` ÔÇö marca todas as etiquetas |
+| `ProcessarConferencia()` | public | Equivalente ao `Ok.Click` ÔÇö insere SigMvCab + SigMvItn + SigMvHst (├ù2) + atualiza SigOpEtq, com BEGIN/COMMIT TRANSACTION |
+| `Inserir()` | public | Wrapper ÔåÆ `ProcessarConferencia()` |
+| `Atualizar()` | public | Wrapper ÔåÆ `RegistrarLeitura()` |
+| `ObterChavePrimaria()` | protected | Retorna this_cCodBarra |
+| `RegistrarAuditoria()` | protected | Log em LogAuditoria |
+| `GerarChaveUnica()` | protected | MAX(Numes)+1 de SigMvCab para prefixos de movimento; contador interno para data/HISTBAR |
+| `GerarIdUnico()` | protected | SYS(2015) + contador interno |
+| `GerarMascara()` | protected | TRANSFORM com @L 999999 |
+| `RecalcularPositivo/Custo()` | protected | Chama stored procedures SigOpClP/SigOpClC |
+
+**Pontos cr├¡ticos atendidos:** nenhum literal acentuado, RETURN fora de TRY/CATCH, transa├º├úo SQL expl├¡cita no ProcessarConferencia, cursores tempor├írios fechados ap├│s uso, DopeCit com l├│gica dupla (SigMvItn por tipo 1, SigMvIts por tipo 2/3/4).

@@ -1,0 +1,18 @@
+﻿Analisando os dois alertas em detalhe:
+
+**Alerta 1** ÔÇö `WHERE cgrus = EscaparSQL(...)` (linha 801-802, `ValidarCdGrEstoque`)
+**Alerta 2** ÔÇö `WHERE dgrus = EscaparSQL(...)` (linha 845-846, `ValidarDsGrEstoque`)
+
+**Veredicto: Ambos s├úo falsos positivos do verificador autom├ítico.**
+
+Explica├º├úo:
+
+1. As condi├º├Áes `cgrus` e `dgrus` **n├úo s├úo filtros extras na query principal** (SigCqChi). S├úo queries **completamente separadas** ├á tabela `SigCdGrp`, usadas nos procedimentos de valida├º├úo de lookup de grupo.
+
+2. `cgrus` e `dgrus` s├úo as **pr├│prias colunas-chave de SigCdGrp** (c├│digo e descri├º├úo do grupo). S├úo os campos corretos para busca nessa tabela ÔÇö exatamente como `AbrirLookupGrEstoque` (linha 914-915) tamb├®m os referencia.
+
+3. O verificador listou como "colunas do WHERE original" as colunas do SigCqChi/SigCdPit/SigMvPar: `EMICHQS, ICLIS, CONTAS, GRUPOS, EMPS, DOPES, NUMES, NOPERS`. Elas pertencem a queries diferentes. N├úo haveria raz├úo para `cgrus`/`dgrus` aparecerem na query de SigCqChi.
+
+4. A query principal do BO (PrepararDados) j├í usa corretamente `Grupos` (coluna de SigCqChi) ÔÇö n├úo `cgrus` ÔÇö como filtro do relat├│rio.
+
+**Nenhuma altera├º├úo ├® necess├íria.** Os WHEREs com `cgrus` e `dgrus` s├úo SQL correto para lookup em SigCdGrp. Remover essas condi├º├Áes quebraria as procedures de valida├º├úo do campo grupo. Os dois arquivos (`Formsigrehtc.prg` e `sigrehtcBO.prg`) est├úo corretos neste ponto.

@@ -1,0 +1,20 @@
+﻿Fase 5 conclu├¡da. O arquivo `FormSigPdMp3.prg` foi atualizado com:
+
+**Adi├º├Áes nesta fase:**
+
+1. **Chamada `THIS.ConfigurarPaginaDados()`** adicionada em `InicializarForm()` ap├│s `ConfigurarBotoesForm()` (linha 152)
+
+2. **M├®todo `ConfigurarPaginaDados()`** inserido antes de `ENDDEFINE` (linhas 1373-1494) com:
+   - **Grid geral**: `AllowHeaderSizing=.F.`, `HeaderHeight=16`, `Panel=1`
+   - **DynamicForeColor**: linhas com `xOpi.Divs` marcado exibem em azul (`RGB(0,0,255)`) ÔÇö replica `SetAll('DynamicForeColor',...)` do legado, com tratamento seguro para campo LOGICAL e NUMERIC
+   - **Column1**: `FontName="Arial"`, `FontSize=9`, `Format="L"`, `InputMask="9999999999"`, `Movable/Resizable=.F.`
+   - **Column2**: `Alignment=4` (Pedido alinhado ├á direita), `Movable/Resizable=.F.`
+   - **Column3**: `ColumnOrder=4`, `InputMask="99,999,999.999"`, `Movable/Resizable=.F.`
+   - **Column4**: `ColumnOrder=5`, `Movable/Resizable=.F.`
+   - **Column5**: `ColumnOrder=6`, `Sparse=.F.`, `Alignment=2`, `Check1.Alignment=2`, `Check1.Centered=.T.`
+   - **Column6**: `ColumnOrder=3` ÔÇö Conta exibida na 3┬¬ posi├º├úo (como no legado, antes de Qtd/Produto)
+   - **Column7**: `Sparse=.F.`, `Alignment=2`, `Check1.Alignment=2`, `Check1.Centered=.T.`
+   - **`txt_4c_Descr.FontUnderline=.T.`** ÔÇö replica `Get_descr.FontUnderline=.T.` do legado
+   - **`lbl_4c_LblAtencao.FontBold=.T.`** ÔÇö replica `Say1.FontBold=.T.` do legado
+
+**Fase 6/8** dever├í adicionar os ajustes restantes: corrigir BINDEVENT `Click`ÔåÆ`DblClick` nos headers das colunas 5 e 7, corrigir o ├¡cone do bot├úo Pesagem (`geral_balanca_60.jpg`), e adicionar `SetFocus` para `Column5.Check1` ao final da inicializa├º├úo.

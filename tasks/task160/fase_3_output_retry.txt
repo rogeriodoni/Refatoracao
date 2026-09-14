@@ -1,0 +1,13 @@
+﻿FASE 3 completa. Arquivo `FormSIGPRCCR.prg` (322 linhas) reescrito com:
+
+- **Fix cr├¡tico**: Removido `RETURN .F.` de dentro de `TRY/CATCH` (Regra VFP9 #1). Uso de flags `loc_lSucesso`/`loc_lBOOk`, RETURN ├║nico no fim do m├®todo.
+- **Estrutura REPORT completa** (form Height=130, sem PageFrame CRUD ÔÇö layout FLAT correto para frmrelatorio):
+  - `cnt_4c_Cabecalho` cinza RGB(100,100,100) cobrindo todo o form + labels `lbl_4c_Sombra`/`lbl_4c_Titulo` com `AutoSize=.F.` (regra #98)
+  - `cmg_4c_Botoes` CommandGroup 4 bot├Áes (Visualizar/Imprimir/Arquivos Email/Encerrar) com geometria exata do SCX (Left=495, Width=310, Lefts=5/80/155/230)
+  - ├ìcones can├┤nicos: `relatorio_video_26.jpg`, `relatorio_impressora_26.jpg`, `geral_envelope_32.jpg` (Buttons(3)=Email, regra #100), `relatorio_sair_60.jpg`
+  - `.DisabledPicture` em todos os 4 bot├Áes
+  - `FontName="Comic Sans MS"` + `WordWrap=.T.` em Buttons(3)/(4) (regras #101/#102)
+  - Captions com hotkey `\<`
+- **BINDEVENTs Click** para 4 handlers delegando ao BO (`Visualizar`/`Imprimir`/`ArquivosEmail`)
+- `Destroy()` seta `this_oRelatorio = .NULL.` (nunca `.Release()` em Custom)
+- Sem TODOs, sem stubs, sem m├®todos vazios.

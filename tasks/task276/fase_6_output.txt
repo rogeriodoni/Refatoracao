@@ -1,0 +1,5 @@
+﻿As edi├º├Áes est├úo corretas. Fase 6/8 conclu├¡da com duas mudan├ºas:
+
+1. **SigPrDscBO.prg** ÔÇö Corrigido o bug onde `MontaGrDs` era capturado mas ignorado. Agora: `MontaGrDs=1` ÔåÆ descri├º├úo = DGrus + Descs (grupo + cor); `MontaGrDs=0` ÔåÆ descri├º├úo = apenas Descs (cor). `loc_cIni` removida (era redundante).
+
+2. **FormSigPrDsc.prg** ÔÇö Adicionado m├®todo `AtualizarEstadoCampos()` que implementa o comportamento `When` do legado: os filtros `CProsI`/`CProsF` ficam desabilitados quando `CGrus` est├í preenchido, e `CGrus` fica desabilitado quando qualquer campo de intervalo de produto est├í preenchido. Chamado nos 3 handlers KeyPress + `BtnSelecionarClick`.

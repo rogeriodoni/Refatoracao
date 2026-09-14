@@ -1,0 +1,17 @@
+﻿Vou analisar o problema reportado antes de fazer qualquer altera├º├úo.
+
+O problema reportado ├®:
+- `lbl_4c_LblEmpresa` (label "M├¬s :") com `Top=9` dentro de `pgf_4c_Paginas.Page1`
+- Original SCX: `lblEmpresa.Top=94` (posi├º├úo absoluta no form)
+
+Verificando o c├│digo do form:
+
+- `pgf_4c_Paginas` est├í em `Top=85` (linha 313)
+- `lbl_4c_LblEmpresa` est├í em `Top=9` dentro de `Page1`
+- Posi├º├úo absoluta no form = **85 + 9 = 94** Ô£ô
+
+**Este ├® um falso positivo.** O checker automatizado comparou a coordenada absoluta do SCX (`Top=94`, relativa ao form) com a coordenada relativa da label dentro da Page1 (`Top=9`), sem considerar o offset do PageFrame.
+
+A posi├º├úo est├í correta: `PageFrame.Top(85) + Label.Top(9) = 94`, que coincide exatamente com o valor original do SCX. Alterar `Top` para `94` dentro da page faria a label aparecer na posi├º├úo absoluta `85 + 94 = 179` no form ÔÇö completamente errado visualmente.
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo `FormSIGRECTL.prg` est├í correto. O ├║nico problema listado neste pass ├® um falso positivo causado por compara├º├úo de coordenadas em sistemas de refer├¬ncia diferentes (absoluto SCX vs relativo ao container PageFrame).

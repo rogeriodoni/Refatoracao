@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. Fase 2 conclu├¡da.
+
+**SIGRECTLBO.prg ÔÇö Fase 2 completa.** Adicionados ao BO:
+
+- **`fMtoH_Seg()`** ÔÇö fun├º├úo standalone antes da classe; converte segundos para `HH:MM` (substitui `fMtoH` do legado, que n├úo existe no novo sistema)
+- **`PrepararDados()`** ÔÇö porta o m├®todo `processamento` original com 4 queries SQL (`SigSyCtl`, `SigCdUsu`/`SigCdCrg`, `SigCdEmp`, `SigCdPam`); clamp de datas via `CTOT()`; agrega├º├úo por usu├írio; cursor final `crDados` READWRITE com se├º├Áes de utiliza├º├úo, usu├írios ativos, empresas ativas e licen├ºas
+- **`Imprimir()`** ÔÇö `REPORT FORM ... TO PRINTER PROMPT NOCONSOLE`
+- **`Visualizar()`** ÔÇö `REPORT FORM ... PREVIEW NOCONSOLE`
+- **`ObterMensagemErro()`**, **`ObterChavePrimaria()`**, **`RegistrarAuditoria()`**, **`Destroy()``**
+
+Decis├Áes t├®cnicas: padr├úo `DO WHILE .T. / EXIT` dentro de TRY (sem RETURN dentro do bloco); `fMtoH_Seg` como UDF standalone acess├¡vel nos SELECT UNION ALL; `fCriptografar` substitu├¡do por `TRANSFORM()` direto (fun├º├úo n├úo existe no novo sistema).

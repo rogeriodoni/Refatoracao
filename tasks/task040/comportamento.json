@@ -1,0 +1,140 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAltBar2de5", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREBOL",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReBol Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBOL",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBOL",
+      "evento": "Procedure",
+      "linhas": 70,
+      "codigoOriginal": "Local pEmp, pDop, pNum \n\npEmp = ThisForm.pcEmps\npDop = ThisForm.pcDopes\npNum = ThisForm.pcNumes\n\nlStrQuery = [Select FPags, Bancos, Agencias, Contas, Numeros, Cartaos, Datas, Valos, Vencs ]+;\n\t\t\t  [From SigMvPar ]+;\n\t\t\t [Where EmpDopNums = '] + Padr(pEmp,3) + Padr(pDop,20) + Str(pNum,6) +[' ]\n\nIf ThisForm.PodataMgr.SqlExecute(lStrQuery,'TmpPag') < 1\n\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpPag)')\n\tReturn(.F.)\nEndIf\n\nlStrQuery = [Select c.Emps, c.Dopes, c.Numes, c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAltBar2de5",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBOL",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBOL",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "Lparameters pEmp, pDop, pNum\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.pcEmps  = pEmp\n\t\t.pcDopes = pDop\n\t\t.pcNumes = pNum\n\n\t\t.Caption = [Impressão de Boleto (] + Alltrim(pDop) + [/] + Alltrim(Str(pNum)) + [)]\n\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim ****************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREBOL",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReBol To Printer NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREBOL",
+      "evento": "Click",
+      "linhas": 54,
+      "codigoOriginal": "If This.Value <> 3\n\tlcWher = [Select * From SigCdmp Where ntpimpres = 3 ]\n\tIf Thisform.Podatamgr.Sqlexecute(lcWher,'CrSigCdmp') < 1\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\t\tReturn (.f.)\n\tEndIf\n\tSelect crSigCdmp\n\tIndex On Impres Tag Impres\n\n\tlnImpressoras = Aprinters(gaprinters)\n\tllOkImp = .F.\n\tpImp    = 'default'\n\n\tIf lnImpressoras > 0\n\t\tFor lnI = 1 to lnImpressoras\n\t\t\tgaPrinters(lnI,1) = Padr(Upper(gaPrinters(lnI,1)),30)\n\t\tEndFor\n\t\t=ASort( gaPrinters )\n\n\t\tSelect c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREBOL.Click",
+      "queryOriginal": "\tlcWher = [Select * From SigCdmp Where ntpimpres = 3 ]",
+      "tabelas": "SigCdmp",
+      "colunas": "ntpimpres",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdmp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

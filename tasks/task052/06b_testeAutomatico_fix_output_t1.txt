@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era que `CarregarDadosIniciais()` e `CarregarTiposOperacao()` executavam `SQLEXEC(gnConnHandle, ...)` sem verificar se est├ívamos em modo de teste UI, onde `gnConnHandle` n├úo existe.
+
+A corre├º├úo envolve ambas as chamadas com `!(TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)` ÔÇö o mesmo padr├úo j├í usado mais abaixo no `InicializarForm()` para `LimparCampos()`. Em modo de teste, o BO ├® criado mas as queries ao banco s├úo puladas, permitindo que `CREATEOBJECT("Formsigrecmc")` retorne o objeto corretamente.

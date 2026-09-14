@@ -1,0 +1,9 @@
+﻿3 corre├º├Áes aplicadas em `FormProduto.prg`:
+
+| Grid | Cursor | Colunas corrigidas |
+|---|---|---|
+| `grd_4c_Cmv` (linha ~10881) | `cursor_4c_Cmv` | 3 (Datas, ValCuss, Moedas) |
+| `grd_4c_Designer` (linha ~11777) | `cursor_4c_SigPrTar` | 4 (DtInis, DtFims, Usuars, Tarefas) |
+| `grd_4c_Arquivos` (linha ~11906) | `cursor_4c_SigPrArq` | 1 (Arquivos) |
+
+**Padr├úo aplicado**: `.ControlSource` movido para ser a **primeira propriedade** dentro de cada `WITH .ColumnN`, antes de Header/Width/ReadOnly. Isso garante que o auto-bind do VFP9 (que ocorre ao setar `RecordSource`) seja imediatamente sobrescrito com o campo correto antes de qualquer outra configura├º├úo da coluna.

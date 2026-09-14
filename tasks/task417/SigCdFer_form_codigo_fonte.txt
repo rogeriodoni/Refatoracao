@@ -1,0 +1,1031 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFer.SCX
+* Data/Hora: 02/08/2026 06:38:20
+* Total de registros: 25
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFER
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDFER.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDFER.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescrs
+  Parent: SIGCDFER.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDatas
+  Parent: SIGCDFER.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_empresa
+  Parent: SIGCDFER.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGCDFER.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Check1
+  Parent: SIGCDFER.Pagina.Dados
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: CntCopia
+  Parent: SIGCDFER.Pagina.Dados
+  Class: container
+  BaseClass: container
+
+Objeto: CmdOk
+  Parent: SIGCDFER.Pagina.Dados.CntCopia
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: CmdCancel
+  Parent: SIGCDFER.Pagina.Dados.CntCopia
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: grdEmpresa
+  Parent: SIGCDFER.Pagina.Dados.CntCopia
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column3
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: apaga
+  Parent: SIGCDFER.Pagina.Dados.CntCopia
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGCDFER.Pagina.Dados.CntCopia
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdCopia
+  Parent: SIGCDFER.Pagina.Dados
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGCDFER.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Cadastro de Feriados"
+  Name = "SIGCDFER"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.TabIndex = 2
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.TabIndex = 3
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 5
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data :"
+  Left = 179
+  Top = 147
+  Width = 32
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 156
+  Top = 172
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.getDescrs
+------------------------------------------------------------
+  ControlSource = "crSigCdFer.descrs"
+  Left = 215
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 169
+  Width = 290
+  ZOrderSet = 5
+  Name = "getDescrs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.getDatas
+------------------------------------------------------------
+  ControlSource = "crSigCdFer.datas"
+  Format = "E"
+  Height = 23
+  InputMask = "99/99/9999"
+  Left = 215
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 144
+  Width = 80
+  ZOrderSet = 5
+  plprocurar = .T.
+  Name = "getDatas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.get_cd_empresa
+------------------------------------------------------------
+  ControlSource = "crSigCdFer.emps"
+  Format = "K!"
+  Height = 23
+  Left = 215
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 194
+  Width = 31
+  ZOrderSet = 6
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.lbl_empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Left = 161
+  Top = 197
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.Check1
+------------------------------------------------------------
+  Top = 222
+  Left = 215
+  Height = 15
+  Width = 144
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Não se Aplica ao Escritório"
+  ControlSource = "crSigCdFer.ChkTrbEsc"
+  ForeColor = 90,90,90
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia
+------------------------------------------------------------
+  Top = 249
+  Left = 128
+  Width = 543
+  Height = 345
+  BackStyle = 1
+  SpecialEffect = 0
+  Visible = .F.
+  TabIndex = 15
+  BackColor = 255,255,255
+  BorderColor = 36,84,155
+  ZOrderSet = 11
+  Name = "CntCopia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.CmdOk
+------------------------------------------------------------
+  Top = 12
+  Left = 369
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "Confirmar"
+  Style = 0
+  TabIndex = 18
+  ToolTipText = "Confirmar a Cópia"
+  SpecialEffect = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CmdOk"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.CmdCancel
+------------------------------------------------------------
+  Top = 12
+  Left = 444
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Cancelar"
+  Style = 0
+  TabIndex = 19
+  ToolTipText = "Cancelar a Cópia"
+  SpecialEffect = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "CmdCancel"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 323
+  Left = 32
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 11
+  Width = 271
+  GridLineColor = 238,238,238
+  Name = "grdEmpresa"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.Width = 31
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.ControlSource = ""
+  Column2.Width = 200
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 1
+  Column3.Width = 17
+  Column3.Sparse = .F.
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column3.Check1
+------------------------------------------------------------
+  Top = 22
+  Left = 22
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Check1"
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.apaga
+------------------------------------------------------------
+  Top = 174
+  Left = 304
+  Height = 40
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 26
+  TabStop = .F.
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 84
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.CntCopia.SelTudo
+------------------------------------------------------------
+  Top = 133
+  Left = 304
+  Height = 40
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 24
+  TabStop = .F.
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 85
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.cmdCopia
+------------------------------------------------------------
+  Top = 13
+  Left = 549
+  Picture = ..\framework\imagens\geral_duplicar_60.jpg
+  Caption = "Copiar o Feriado"
+  Visible = .F.
+  ZOrderSet = 9
+  Name = "cmdCopia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFER.Pagina.Dados.get_ds_empresa
+------------------------------------------------------------
+  Format = "K!"
+  Height = 23
+  Left = 248
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 194
+  Width = 257
+  ZOrderSet = 10
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Verdana, 3, 8, 6, 13, 11, 25, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFER
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If !IsEmpty(ThisForm.Pagina.Dados.getdatas.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdFer','datas',ThisForm.Pagina.Dados.getdatas.Value)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdFer','cIdChaves','crSigCdFer','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('Datas','','','Datas',80,.t.)
+		.pfSqlTabela(1).pColuna('Emps','','','Empresa',80,.t.)
+		.pfSqlTabela(1).pColuna('Descrs','','','Descrição',220,.t.)
+	ENDWITH
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+= DoDefault()
+
+create cursor csEmpresa (Marcas N(1,0), Empresa c(3), Nome c(40))
+select csEmpresa
+Index on Empresa Tag Empresa
+
+create cursor csCopiaEmp (Empresa c(3), Nome c(40))
+select csCopiaEmp
+Index on Empresa Tag Empresa
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !DoDefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Select csEmpresa
+Zap
+
+Select CrSigCdFer
+
+*** Mena - 13/09/2017 - foi incluido campo empresa para ser possivel incluir feriados por cidades ***
+lcSql = [Select * From SigCdEmp Where Cemps = ']+CrSigCdFer.Emps+[']
+ThisForm.poDataMgr.Sqlexecute(lcSql,'CrSigCdEmp')
+thisform.pagina.dados.get_ds_empresa.Value = CrSigCdEmp.razas   
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )
+		ThisForm.Pagina.Dados.getDatas.Setfocus	
+
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.getDescrs.Setfocus	
+
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus
+Endcase
+
+This.parent.parent.Dados.cmdCopia.Visible = .F.
+This.parent.parent.Dados.CntCopia.Visible = .F.
+
+If ThisForm.pcEscolha = 'ALTERAR' 
+	This.parent.parent.Dados.cmdCopia.Visible = .T.
+EndIf 
+
+Select CrSigCdFer
+ThisForm.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If INLIST(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+   If IsEmpty(ThisForm.Pagina.Dados.getDatas.Value)
+	  MessageBox( 'Obrigatório Informar a Data!!!', 48, '' )
+	  ThisForm.Pagina.Dados.getDatas.SetFocus
+	  Return
+   Endif
+   If Year(ThisForm.Pagina.Dados.getDatas.Value) < 1900
+	  MessageBox( 'Data Invalida!!!', 48, '' )
+	  ThisForm.Pagina.Dados.getDatas.SetFocus
+	  Return
+   Endif
+
+	*** mena - 22/09/2017 - checa se data+empresa já estão cadastradas ***
+	lcDat=SUBSTR(DTOS(TTOd(thisform.Pagina.Dados.getDatas.Value)),1,10)
+	lcDat=SUBSTR(lcDat,1,4)+'-'+SUBSTR(lcDat,5,2)+'-'+SUBSTR(lcDat,7,2)
+	lcSql = [Select * From SigCdFer Where emps = ']+CrSigCdFer.Emps+[' and LEFT(CONVERT(VARCHAR, datas, 120), 10) = ']+lcDat+;
+			[' and cidchaves <> ']+CrSigCdFer.cidchaves+[']
+	ThisForm.poDataMgr.Sqlexecute(lcSql,'CrAux')
+	IF RECCOUNT('crAux')>0
+		Messagebox( 'Data e Empresa já cadastradas.', 48,'Aviso' )
+		ThisForm.Pagina.Dados.Getdatas.SetFocus
+		Return
+	ENDIF
+ENDIF
+
+Select CrSigCdFer
+If Empty(cidchaves)
+	replace cidchaves with fUniqueIds()
+EndIf
+
+*-- Rafael - 02/05/2018 - Replica o Feriado para as empresas Selecionadas na Grade
+If ThisForm.pcEscolha = 'ALTERAR'
+
+	ldDataFer = CrSigCdFer.Datas 
+	lcDescFer = CrSigCdFer.Descrs
+	lnChkFer  = CrSigCdFer.chktrbesc
+	
+	Select csEmpresa
+	Go Top
+	Scan For Marcas = 1
+	
+		Select CrSigCdFer
+		Append Blank
+		Replace Datas With ldDataFer, ;
+				Emps  With csEmpresa.Empresa, ;
+				Descrs With lcDescFer, ;
+				chktrbesc With lnChkFer, ;
+				cidchaves With fUniqueIds() in CrSigCdFer
+				
+		Select csEmpresa
+	EndScan 
+EndIf 
+
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.getDescrs
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.getDatas
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR")
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.get_cd_empresa
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.pagina.dados.get_cd_empresa,ThisForm.pagina.dados.get_ds_empresa))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.CntCopia.CmdOk
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local llOK
+llOK = .T.
+
+Select csEmpresa
+Go Top
+Select * from csEmpresa Where Marcas = 1 Into Cursor csTotEmp ReadWrite
+
+Select csTotEmp
+Go Top
+
+If Reccount([csTotEmp])=0
+	Select csEmpresa
+	Zap
+EndIf 
+
+This.parent.Visible = .F.
+This.parent.parent.cmdCopia.Enabled = .T.
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.CntCopia.CmdCancel
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If MessageBox([Deseja cancelar a Cópia do Feriado?],4+32+256,[Atenção]) = 6
+	Select csEmpresa 
+	Zap
+
+	This.parent.Visible = .F.
+	This.parent.parent.cmdCopia.Enabled = .T.
+EndIf 
+
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column3.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+This.KeyPress(13,0)
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If InList(m.nKeyCode,13,32)
+	Replace csEmpresa.Marcas With IIf(csEmpresa.Marcas == 0,1,0)
+	This.parent.parent.Refresh
+	NoDefault
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.CntCopia.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csEmpresa
+Replace All csEmpresa.Marcas with 0
+Go Top
+This.parent.grdEmpresa.Refresh
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.CntCopia.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csEmpresa
+Replace All csEmpresa.Marcas with 1
+Go Top
+This.parent.grdEmpresa.Refresh
+ThisForm.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.cmdCopia
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csEmpresa
+Zap 
+
+Private pDt
+pDt = fDtoSql(CrSigCdFer.DataS)
+
+lcSql = [select 0 as Marcas, cemps as Empresa, razas as Nome ] + ;
+		[from sigcdemp ] + ;
+		[where cemps Not in( Select emps From SigCdFer Where datas = ?pDt And Emps <> space(3) ) ] + ;
+		[Order By cemps ]
+If Thisform.poDataMgr.Sqlexecute(lcSql,'CrAux') < 1
+	Messagebox( 'Favor Reiniciar o Processo.', 0+16,'Falha de Conexão (CrAux)' )
+	Return .F.
+EndIf 
+
+Select CrAux
+Go top 
+Scan 
+	Scatter Memvar 
+	
+	Select csEmpresa
+	Append Blank 
+	Gather Memvar
+	
+	Select CrAux
+EndScan 
+
+Select csEmpresa
+Go Top
+
+If Reccount('csEmpresa')>0
+
+	ThisForm.pagina.dados.cntCopia.grdEmpresa.RecordSource = [csEmpresa]
+	ThisForm.pagina.dados.cntCopia.grdEmpresa.column1.ControlSource = [csEmpresa.Empresa]
+	ThisForm.pagina.dados.cntCopia.grdEmpresa.column2.ControlSource = [csEmpresa.Nome]
+	ThisForm.pagina.dados.cntCopia.grdEmpresa.column3.ControlSource = [csEmpresa.Marcas]
+	ThisForm.pagina.dados.cntCopia.grdEmpresa.Refresh()
+	
+	This.parent.CntCopia.Visible = .T.
+	This.Enabled = .F.
+	*This.parent.CntCopia.grdEmpresa.
+Else
+	MessageBox([As Empresas Cadastradas Já Possuem Esse Feriado Cadastrado.],0+64,[Atenção])
+	Return .F.
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFER.Pagina.Dados.get_ds_empresa
+* Classe: fwget (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.pagina.dados.get_cd_empresa,ThisForm.pagina.dados.get_ds_empresa))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 20
+================================================================================

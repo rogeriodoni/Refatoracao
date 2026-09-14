@@ -1,0 +1,10 @@
+﻿Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\relatorios\FormSIGREVIS.prg` criado com estrutura base completa:
+
+- `DEFINE CLASS FormSIGREVIS AS FormBase` com propriedades do form original (Width=800, Height=300, TitleBar=0, sem CRUD)
+- `Init()` ÔåÆ `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö cria `SIGREVISBO`, chama `InicializarFiltros()` (guardado por `gb_4c_ValidandoUI`), monta cabe├ºalho; sem `RETURN` dentro de `TRY/CATCH` (flag `loc_lContinuar`)
+- `ConfigurarCabecalho()` ÔÇö container escuro com `lbl_4c_Sombra` + `lbl_4c_Titulo` (efeito 3D branco sobre preto)
+- `AtualizarEstadoControles()` ÔÇö override que bloqueia CRUD do FormBase
+- `Destroy()` ÔÇö `this_oRelatorio = .NULL.` + `DODEFAULT()`
+
+Pr├│xima fase (4/8): adicionar bot├Áes de relat├│rio (Visualizar, Imprimir, DocExcel, Encerrar) e campos de filtro.

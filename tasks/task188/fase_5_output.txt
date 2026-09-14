@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. A Fase 5 foi conclu├¡da com sucesso.
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+
+1. **`cnt_4c_Cabecalho`** ÔÇö container cinza opaco com `lbl_4c_Sombra` + `lbl_4c_Titulo` (mesmo padr├úo da Page1, `AutoSize=.F.`, `Width=THISFORM.Width-20`)
+2. **`cnt_4c_BotoesAcao`** ÔÇö agora preenchido com `cmd_4c_Confirmar` + `cmd_4c_Cancelar` (├¡cones `cadastro_salvar_60.jpg` / `cadastro_cancelar_60.jpg`, Comic Sans MS, padr├úo can├┤nico) + BINDEVENTs
+3. **`cnt_4c_Saida`** ÔÇö Encerrar can├┤nico (Left=917, Width=90, cmd Width=75, Caption="Encerrar") + BINDEVENT
+4. **Primeiro campo (50%)**: `lbl_4c_Tipo` + `txt_4c_Tipos` (Top=142, MaxLength=10, Value="")
+
+**Novos m├®todos adicionados:**
+- `BtnConfirmarClick()` ÔÇö chama `FormParaBO()` ÔåÆ `BO.Salvar()` ÔåÆ `AlternarPagina(1)`
+- `BtnCancelarClick()` ÔÇö retorna direto para Page1
+
+**Fase 6** adicionar├í o segundo campo (`Descrs`) + `FormParaBO()` + `BOParaForm()` + `HabilitarCampos()`.

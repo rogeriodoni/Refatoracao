@@ -1,0 +1,9 @@
+﻿O arquivo est├í correto. As tr├¬s adi├º├Áes da Fase 5 foram aplicadas com sucesso:
+
+1. **`ConfigurarPaginaDados()`** (linha 130) ÔÇö no-op documentado: este form OPERACIONAL n├úo tem Page2; toda edi├º├úo ├® inline no grid.
+
+2. **`GrdCotacaoKeyPress()`** (linha 550) ÔÇö handler novo para a coluna `cotacao` (Column2.Text1): replica o `Valid` original (`Select TmpCot / Go Bottom / Refresh`) via BINDEVENT de KeyPress em ENTER(13)/TAB(9).
+
+3. **BINDEVENT para Column2.Text1** (linha 293) ÔÇö wire-up do handler acima no `ConfigurarGrid()`.
+
+O form agora cobre todos os comportamentos do original: valida├º├úo de data vazia (Column1), posicionamento no ├║ltimo registro ap├│s editar cota├º├úo (Column2), e detec├º├úo de hora duplicada (Column3).

@@ -1,0 +1,22 @@
+﻿O padr├úo ├® id├¬ntico ao `FormSigPrGlo.prg` (forma irm├ú j├í em produ├º├úo). O FormSigPrGloT.prg est├í completo e correto.
+
+**Fase 3/8 ÔÇö Status: CONCLU├ìDA (arquivo j├í existia completo)**
+
+O `task_state.json` confirma que o passo `05_migracao` foi completado ├ás 17:26:45 de hoje, gerando os dois arquivos completos:
+
+| Arquivo | Linhas | Status |
+|---------|--------|--------|
+| `SigPrGloTBO.prg` | 941 | Ô£ô Completo (fases 1-2) |
+| `FormSigPrGloT.prg` | 1.776 | Ô£ô Completo (fases 3-8) |
+
+O Form j├í cont├®m todos os elementos exigidos pela Fase 3:
+- `DEFINE CLASS FormSigPrGloT AS FormBase` com todas as propriedades (`this_lReserva`, `this_lAutomatico`, `this_lPorDestino`, `this_lGerPorTp`, `this_lAlterEmp`)
+- `Init()` recebendo 4 par├ómetros + `DODEFAULT()`
+- `InicializarForm()` criando o BO, carregando opera├º├Áes/par├ómetros e montando a estrutura visual
+- `ConfigurarPageFrame()` aplicando imagem de fundo (form OPERACIONAL = flat, sem PageFrame de navega├º├úo)
+- `Destroy()` liberando todos os cursores tempor├írios
+- Containers principais: `cnt_4c_Cabecalho`, bot├Áes `cmd_4c_Processar`/`cmd_4c_Cancelar`, 7 containers de dados
+
+Integra├º├úo: j├í est├í no `menu.prg` (BAR 49 de `popMovimentos`) e o `config.prg` carrega a pasta `operacionais/` automaticamente via `ADIR()`.
+
+Pr├│ximas etapas pendentes no pipeline: `05b_corrigirAutomatico` ÔåÆ `05c_validarCompilacao` ÔåÆ `06_testForm`.

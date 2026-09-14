@@ -1,0 +1,21 @@
+﻿Fase 4 conclu├¡da. Arquivo atualizado com 491 linhas.
+
+**O que foi adicionado:**
+
+- `ConfigurarPaginaLista()` ÔÇö cria todos os controles visuais fi├®is ao SCX legado (800├ù500 ÔåÆ 1000├ù600, fator 1.25├ù1.2):
+  - 3 shapes decorativos (`shp_4c_Shape`, `shp_4c_ShpCodigo`, `shp_4c_Shape1`)
+  - Label "Produto :", `txt_4c_CPros` (c├│digo, disabled), `txt_4c_DPros` (descri├º├úo, disabled)
+  - `grd_4c_Dados` ÔÇö 1 coluna "Caracter├¡sticas", ReadOnly=.T., FontName="Courier New"
+  - `txt_4c_Comples` (complemento, ReadOnly) + `edt_4c_Infos` (EditBox memo, ReadOnly)
+  - `cmd_4c_Ok` ÔÇö bot├úo OK com Themes=.T. + DisabledPicture (standalone button rule)
+  - BINDEVENT: AfterRowColChange ÔåÆ `GrdDadosAfterRowColChange`, Click ÔåÆ `CmdOkClick`
+
+- `CarregarDados()` ÔÇö popula `txt_4c_DPros` do BO, chama `BuscarCaracteristicas`, configura RecordSource/ControlSource/Header (padr├úo: ColumnCount antes de RecordSource), carrega Compls/Infos da primeira linha
+
+- `GrdDadosAfterRowColChange(par_nColIndex)` ÔÇö PUBLIC, atualiza `txt_4c_Comples` e `edt_4c_Infos` ao navegar no grid
+
+- `CmdOkClick()` ÔÇö PUBLIC, chama `THIS.Release()`
+
+- `AlternarPagina(par_nPagina)` ÔÇö stub vazio (form plano sem PageFrame)
+
+- `InicializarForm()` ÔÇö atualizado para chamar `ConfigurarPaginaLista()` ap├│s o cabe├ºalho e `CarregarDados()` ap├│s `TornarControlesVisiveis()`

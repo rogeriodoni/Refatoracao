@@ -1,0 +1,12 @@
+﻿`C:\4c\projeto\app\forms\operacionais\Formale.prg` criado com sucesso. Fase 3/8 entregue.
+
+**O que foi implementado:**
+- `DEFINE CLASS Formale AS FormBase` com todas as propriedades visuais do legado (Width=1000, Height=600, TitleBar=0, ControlBox=.F., etc.)
+- Propriedades `this_cContas`, `this_cPcEscolha`, `this_oParentForm`
+- `Init()` ÔÇö aceita os 4 par├ómetros do legado (pform, lpiclis, lpgrupos, lcacesso), armazena `this_cContas` e l├¬ `pcescolha` do form pai **antes** do DODEFAULT
+- `ConfigurarPageFrame()` ÔÇö define fundo `new_background.jpg` (layout plano, sem PageFrame)
+- `InicializarForm()` ÔÇö cria `aleBO` + chama `ConfigurarCabecalho()`; o coment├írio no corpo indica o que a Fase 4 adicionar├í (ConfigurarFiltros, ConfigurarGrade, ConfigurarBotoes, CarregarAlertas)
+- `ConfigurarCabecalho()` ÔÇö cria `cnt_4c_Sombra` com `lbl_4c_Sombra` (sombra preta), `lbl_4c_Titulo` (branco), e `shp_4c_Shape1` (decorativo), todos com propriedades exatas do legado
+- `Destroy()` ÔÇö fecha cursor `crSigCdAle` e anula refer├¬ncia ao form pai antes do DODEFAULT
+
+**Fase 4** adicionar├í via `Read + Edit`: `ConfigurarFiltros()` (optTabela OptionGroup), `ConfigurarGrade()` (grd_4c_Dados com 7 colunas), `ConfigurarBotoes()` (Confirmar/Cancelar), e atualizar├í `InicializarForm()` com `LockScreen` + `CarregarAlertas`.

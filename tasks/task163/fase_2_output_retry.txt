@@ -1,0 +1,9 @@
+﻿Fase 2 completada. Adicionei ao `SIGPRCICBO.prg`:
+
+- **`Inserir()`** ÔÇö atribui ├¡cone ao programa via REPLACE em crProg1/crProg2 + audita (INSERT)
+- **`Atualizar()`** ÔÇö troca ├¡cone atribu├¡do + audita (UPDATE)
+- **`ExecutarExclusao()`** ÔÇö zera barrapict/barraforms + audita (DELETE)
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö override que grava em LogAuditoria com Tabela="SIGPRCIC" (o form original n├úo persiste em tabela real; os REPLACEs atuam nos cursores do form pai)
+- **`Init()`** ajustado com `this_cTabela = "SIGPRCIC"` + `this_cCampoChave = "pkChaves"` (necess├írio para RegistrarAuditoria funcionar)
+
+Os m├®todos CRUD reutilizam `SelecionarIcone()` que j├í reproduz fielmente a l├│gica do `DblClick` do form legado (REPLACE em crProg1 e crProg2 com barrapict/barraforms). `CarregarDoCursor()` e `ObterChavePrimaria()` j├í existiam da Fase 1.

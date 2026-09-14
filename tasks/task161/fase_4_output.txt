@@ -1,0 +1,10 @@
+﻿O arquivo est├í completo e correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+- `ConfigurarPaginaCalculo()` ÔÇö popula Page1 com todos os campos de c├ílculo do original: Valor Base, Juros/M├¬s, Juros/Dia, Data Base, Data Final, Dias, dois OptionGroups (tipo de c├ílculo e tipo de contagem de dias), separador visual, campos de resultado somente-leitura (Juros, Total, Parcela) e bot├úo de navega├º├úo para Page2
+- `AlternarPagina(par_nPagina)` ÔÇö alterna entre Page1 e Page2
+- `Calculos()` ÔÇö motor de c├ílculo: Juros Simples (`J = PV * i * n`) e Compostos (`J = PV * ((1+i)^n - 1)`)
+- `CalcularDiasUteis()` ÔÇö desconta finais de semana quando `optDias=2` (equivale ao `fChkFeriado` do legado)
+- Todos os handlers de KeyPress/InteractiveChange: `TxtValorBaseKeyPress`, `TxtJurosMesKeyPress`, `TxtJurosDiaKeyPress`, `TxtDataBaseKeyPress`, `TxtDataFinalKeyPress`, `TxtDiasKeyPress`, `OptCalculoInteractiveChange`, `OptDiasInteractiveChange`
+- `PreencherParametrosIniciais()` e `HabilitarCamposEntrada()` ÔÇö inicializa├º├úo com par├ómetros do chamador e habilita├º├úo condicional de campos

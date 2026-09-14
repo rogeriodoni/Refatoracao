@@ -1,0 +1,18 @@
+﻿Todos os 10 problemas **GRID-RECORDSOURCE-AUTOBIND** corrigidos em `Formsigprdis.prg`.
+
+**Resumo das corre├º├Áes aplicadas:**
+
+| # | Linha orig. | M├®todo | Grid | Cursor | Colunas |
+|---|-------------|--------|------|--------|---------|
+| 1 | 1104 | `CarregarLista` | `grd_4c_Grade` | `cursor_4c_Dados` | 2 (Codigos, Datas) |
+| 2 | 1119 | `AbrirNovoBatch` | `grd_4c_Estoques` | `cursor_4c_Estoques` | 4 (nMarca, emps, grupos, contas) |
+| 3 | 1142 | `AbrirBatchExistente` | `grd_4c_Estoques` | `cursor_4c_Estoques` | 4 (idem) |
+| 4 | 1169 | `AbrirBatchExistente` | `grd_4c_CabOperas` | `cursor_4c_CabOpera` | 6 (emps, dopes, numes, datas, grupos, empdopnums) |
+| 5 | 1300 | `BtnProcessarPage1Click` | `grd_4c_Disponivel` | `cursor_4c_Disponivel` | 7 (cpros, dpros, codcors, codtams, QtdEstoque, QtdSaida, QtdSaldo) |
+| 6 | 1306 | `BtnProcessarPage1Click` | `grd_4c_Distribui` | `cursor_4c_Distribui` | 4 (emps, QtdSaldo, QtdDistr, locals) |
+| 7 | 1515 | `BtnFiltrarClick` (sem filtro) | `grd_4c_Disponivel` | `cursor_4c_Disponivel` | 7 (idem #5) |
+| 8 | 1538 | `BtnFiltrarClick` (com filtro) | `grd_4c_Disponivel` | `cursor_4c_DispFiltro` | 7 (mesmos campos) |
+| 9 | 1604 | `BtnSalvarClick` | `grd_4c_CabOperas` | `cursor_4c_CabOpera` | 6 (idem #4) |
+| 10 | 1636 | `GrdCabOperasAfterRowColChange` | `grd_4c_ItnOperas` | `cursor_4c_ItensOper` | 5 (cpros, codcors, codtams, qtds, locals) |
+
+Cada `RecordSource =` agora ├® imediatamente seguido de redefini├º├úo expl├¡cita de `.ControlSource` e `.Header1.Caption` para todas as colunas, evitando o auto-bind por ordem de campo do VFP9.

@@ -1,0 +1,22 @@
+﻿**Falso positivo confirmado.** O `Top=64` de `lbl_4c_Say4` est├í **correto**. O pr├│prio coment├írio no c├│digo na linha 332 documenta a convers├úo:
+
+```
+*   Posicoes relativas ao PageFrame top=85:
+*     Say4 (Tipo): Top=149 original -> 64 na Page
+```
+
+O checker comparou coordenada absoluta do form original (Top=149, parent=SIGREDDP) com coordenada **relativa ├á Page** (Top=64), diferen├ºa exatamente igual ao offset do PageFrame (85px). N├úo ├® diverg├¬ncia ÔÇö ├® a convers├úo correta:
+
+```
+form_absolute = PageFrame.Top + page_relative
+149 = 85 + 64  Ô£ô
+```
+
+Todos os outros controles na mesma page seguem o mesmo padr├úo:
+- `lbl_4c_LblData`: original 174 ÔåÆ 174ÔêÆ85=89, atual 91 (delta 2px, dentro da toler├óncia)
+- `txt_4c_DtFinal`: original 171 ÔåÆ 171ÔêÆ85=86, atual 86 Ô£ô
+- `txt_4c_Demonstrativo`: alinhado com `lbl_4c_Say4` (Top=59 vs 64, diferen├ºa t├¡pica label/textbox)
+
+Se o Top fosse alterado para 149 dentro da Page, o label ficaria em posi├º├úo absoluta no form de **85+149=234px** ÔÇö fora da ├írea vis├¡vel ÔÇö e desalinhado 90px abaixo do seu textbox correspondente.
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto; o pass visual gerou um falso positivo ao n├úo contabilizar o offset do PageFrame na convers├úo de coordenadas.

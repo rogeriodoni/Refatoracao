@@ -1,0 +1,1379 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrPcp.SCX
+* Data/Hora: 18/07/2026 04:02:54
+* Total de registros: 39
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRPCP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRPCP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRPCP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRPCP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Sair
+  Parent: SIGPRPCP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Shape4
+  Parent: SIGPRPCP
+  Class: shape
+  BaseClass: shape
+
+Objeto: FigJpg
+  Parent: SIGPRPCP
+  Class: image
+  BaseClass: image
+
+Objeto: Grade
+  Parent: SIGPRPCP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRPCP.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPCP.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPCP.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPCP.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPCP.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPCP.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPCP.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPCP.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPCP.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPCP.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPCP.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPCP.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GradeItem
+  Parent: SIGPRPCP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRPCP.GradeItem.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPCP.GradeItem.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPCP.GradeItem.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPCP.GradeItem.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPCP.GradeItem.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPCP.GradeItem.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRPCP.GradeItem.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPCP.GradeItem.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_lancamentos
+  Parent: SIGPRPCP
+  Class: label
+  BaseClass: label
+
+Objeto: Cmb_Concilia
+  Parent: SIGPRPCP
+  Class: combobox
+  BaseClass: combobox
+
+Objeto: Get_Cliente
+  Parent: SIGPRPCP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGPRPCP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Salva
+  Parent: SIGPRPCP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Text1
+  Parent: SIGPRPCP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGPRPCP
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Priorização de Operações para Planejamento de Produção"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGPRPCP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Sair
+------------------------------------------------------------
+  Top = 3
+  Left = 725
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .F.
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Cancel = .T.
+  Caption = "Cancelar"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Shape4
+------------------------------------------------------------
+  Top = 461
+  Left = 480
+  Height = 109
+  Width = 148
+  BackStyle = 0
+  Visible = .F.
+  BorderColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Shape4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.FigJpg
+------------------------------------------------------------
+  Stretch = 1
+  Height = 105
+  Left = 483
+  Top = 463
+  Visible = .F.
+  Width = 143
+  Name = "FigJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade
+------------------------------------------------------------
+  ColumnCount = 6
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 398
+  Left = 0
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 110
+  Width = 469
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.Width = 50
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.Width = 31
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.Width = 150
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.Width = 52
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 5
+  Column5.Width = 80
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 6
+  Column6.Width = 80
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Prioridade"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999999"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Codigo"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cliente"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Prazo.Entrega"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Grade.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.GradeItem
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 325
+  Left = 470
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 131
+  Width = 329
+  GridLineColor = 238,238,238
+  Name = "GradeItem"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.Width = 80
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.Width = 108
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.Width = 52
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.InputMask = "9999.99"
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.GradeItem.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Envelope"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.GradeItem.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.GradeItem.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "O.P."
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.GradeItem.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.GradeItem.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Produto"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.GradeItem.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.GradeItem.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Qtde"
+  ForeColor = 0,0,0
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.GradeItem.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.lbl_lancamentos
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Ordenação :"
+  Height = 15
+  Left = 16
+  Top = 545
+  Width = 62
+  TabIndex = 27
+  ForeColor = 90,90,90
+  Name = "lbl_lancamentos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Cmb_Concilia
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  RowSourceType = 1
+  Height = 24
+  Left = 80
+  NumberOfElements = 3
+  Style = 2
+  TabIndex = 6
+  Top = 540
+  Width = 140
+  Name = "Cmb_Concilia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Get_Cliente
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 60
+  TabIndex = 13
+  Top = 512
+  Width = 411
+  ForeColor = 0,0,0
+  BackColor = 255,255,221
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 192,192,192
+  Name = "Get_Cliente"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Say3
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cliente"
+  Left = 23
+  Top = 515
+  TabIndex = 38
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Salva
+------------------------------------------------------------
+  Top = 3
+  Left = 650
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .F.
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "Confirmar"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Salva"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Height = 21
+  Left = 470
+  Top = 110
+  Width = 329
+  ForeColor = 0,0,0
+  BackColor = 0,128,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPCP.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "[ < TAB > para mudar de Grade ] "
+  Height = 15
+  Left = 306
+  Top = 545
+  Width = 165
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRPCP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE processa
+------------------------------------------------------------
+PROCEDURE processa
+lcSql = [Select DoppPads, DoppServs From SigCdPam ]
+ThisForm.Podatamgr.Sqlexecute(lcsql,'zTmpparam')
+lcOperacao = zTmpParam.DoppPads
+lcServico  = zTmpParam.DoppServs
+
+pFlg = .f.
+
+lcQuery = [Select Numps, Dopps, cIdChaves ] + ;
+			[From SigCdNec ] + ;
+		   [Where EmpDNps BetWeen ']+ _Empr + lcOperacao + Str(0,10) + [' And '] + _Empr + lcOperacao + [9999999999' And ] + ;
+		   		 [ChkSubn = ?pFlg ] + ;
+   		   [Order By Numps, Dopps, cIdChaves]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'OpPendente1') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (OpPendente1)')
+	Return .F.
+EndIf
+
+lcQuery = [Select Numps, Dopps, cIdChaves ] + ;
+		    [From SigCdNec ] + ;
+		   [Where EmpDNps BetWeen '] + _Empr + lcServico + Str(0,10) + [' And '] + _Empr + lcServico + [9999999999' And ] + ;
+		   		 [ChkSubn = ?pFlg And 0=1 ] + ;
+   		   [Order By Numps, Dopps, cIdChaves]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'OpPendente2') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (OpPendente2)')
+	Return .F.
+EndIf
+
+Select 000000 as Priors, Numps, Dopps From OpPendente1 ;
+Union All ;
+Select 000000 as Priors, Numps, Dopps From OpPendente2 ;
+Into Cursor OpPendente Readwrite
+
+Select OpPendente
+
+oProg = CreateObject('fwprogressbar', 'Processando Ops ...', Reccount())
+oProg.Show
+
+Scan
+
+	oProg.Update(.t.)
+
+	lcSql = [Select * From SigPdMvf Where Nops = ]+Str(opPendente.Numps)+[ Order by Nops, CidChaves desc]
+	ThisForm.Podatamgr.Sqlexecute(lcSql,'CrTmpMfas')
+		
+	Select CrTmpMfas
+	Go Top
+	If Empty(GrupoDs)
+		Loop
+	Endif
+	ThisForm.poDataMgr.CursorQuery('SigCdOpd', 'crSigCdOpd', 'Dopps', CrtmpMfas.dopps)
+	If CrSigCdOpd.ChkDests = 3
+		Loop
+	EndIf
+
+	lnOp        = crTmpMfas.NOps
+	pNop        = crTmpMfas.NOps
+	lcOpCompara = Iif(OpPendente.Dopps = lcOperacao, lcOperacao, lcServico)
+
+	Select crSigCdOpd
+	llEnvelope = (crSigCdOpd.Nivels <> lcOpCompara Or CrSigCdOpd.ChkDests = 1)
+	
+	lcQuery = [Select a.Nops, Sum(a.Qtds) as Qtds, b.ContaOs, b.ContaDs, b.prazoents, b.empdopNums, b.priors, ]+;
+				[b.Emps, b.Dopes, b.Numes, c.Globalizas, c.Servicos, a.cpros ] + ;
+			    [From SigOpPic a, SigMvCab b, SigCdOpe c ] + ;
+			   [Where a.Nops = ?pNop And ] + ;
+			   		 [a.EmpDopNums = b.EmpDopNums And b.Dopes = c.Dopes ] + ;
+			   [Group by a.Nops, b.ContaOs, b.ContaDs, b.prazoents, b.empdopnums, b.priors, b.emps, b.dopes, ]+;
+			   [b.numes, c.globalizas, c.Servicos, a.cpros ]
+		   		  
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpOpi') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpOpi)')
+		Return .f.
+	EndIf
+
+	Select crTmpOpi
+	Scan
+		_Qtde = Qtds
+
+		If (_Qtde <> 0)
+
+			Select crTmpMFas
+			lcOp  = Transform(Val(Left(Str(crTmpMFas.Nops, 10), 6)), '@L 999999')
+			lcSeq = Transform(Val(Right(Str(crTmpMFas.Nops, 10), 4)), '@L 9999')
+
+			If llEnvelope
+				lnEnv = crtmpMFas.Nenvs
+				If (crtmpMFas.Nenvs = crtmpMFas.Nops)
+					lnEnv = crtmpMFas.Numps
+				EndIf
+			Else
+				lnEnv = 0
+			EndIf
+			
+			lnEnv = Iif(lnEnv = 0,CrTmpMfas.Nops,lnEnv)
+			
+			lcCliente = Iif(CrTmpOpi.Globalizas=1 Or CrTmpOpi.Servicos=1, CrTmpOpi.ContaOs, CrTmpOpi.ContaDs)
+			
+			lcSql = [Select rclis From SigCdCli Where Iclis = ']+lcCliente+[']
+			ThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpcli')
+			
+			Select zTmppPcp
+			Append Blank
+			Replace Priors   With CrTmpOpi.Priors,;
+					Nenvs    With lnEnv,;
+					Nops     with CrTmpMfas.Nops,;
+					Emps     With CrTmpOpi.Emps,;
+					Dopes    With CrTmpOpi.Dopes,;
+					Numes    with CrTmpOpi.Numes,;
+					Contas   with lcCliente,;
+					Rclis    With CrTmpCli.Rclis,;
+					prazoEnts with CrTmpOpi.PrazoEnts,;
+					Cpros     With CrTmpOpi.Cpros,;
+					Qtds      With crTmpOpi.Qtds,;
+					aPriors   With CrTmpOpi.Priors
+		EndIf
+
+	EndScan
+
+EndScan
+oProg.Complete()
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+Dodefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor zTmppPcp (Priors n(6), nenvs n(10), Nops n(10), Emps c(3), Dopes c(20), Numes n(6),;
+						Contas c(10), Rclis c(40), PrazoEnts T, Cpros c(14), Qtds n(9,3), aPriors n(6))
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		ThisForm.Refresh
+		ThisForm.Draw
+		ThisForm.Show
+
+		If Not ThisForm.Processa()
+			MessageBox('Erro no Processamento dos Dados...',0+48,'')
+			Return .f.
+		Endif
+
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+
+EndWith
+
+With ThisForm.cmb_Concilia 
+	.clear
+	.additem('Operacao     ')
+	.additem('Cliente      ')
+	.additem('Prazo Entrega')
+	.additem('Prioridade   ')
+	.value = 'prazo Entrega'
+Endwith
+
+*!*	Select Emps, dopes, Numes, Contas, Rclis, PrazoEnts, Priors, aPriors From zTmpPpcp ;
+*!*	Into Cursor zTmpSelecao Group by 1,2,3 ReadWrite
+
+Select Distinct Emps, Dopes, Numes, Contas, Rclis, PrazoEnts, Priors, aPriors ;
+  From zTmpPpcp ;
+  Into Cursor zTmpSelecao ReadWrite
+
+Select zTmpSelecao
+Index On Emps + dopes + Str(numes,6) Tag EmpdopNum
+Index On Dtos(PrazoEnts) + Emps + dopes + Str(numes,6) Tag Entrega
+Index On Contas Tag Cliente
+Index On Str(Priors,6) + emps + dopes + Str(numes,6) Tag Prioridade
+Set Order To Entrega
+
+Select zTmppPcp
+Index On Emps + dopes + Str(Numes,6) tag EmpdopNum
+Go Top
+
+Select zTmpSelecao
+Go top
+Set Relation To Emps + Dopes + Str(Numes,6) Into zTmppPcp
+
+With ThisForm.grade
+	.RecordSource = 'zTmpSelecao'
+	.Column1.ControlSource = 'zTmpSelecao.Priors'
+	.Column2.Controlsource = 'zTmpSelecao.Emps'
+	.Column3.Controlsource = 'zTmpSelecao.dopes'
+	.Column4.Controlsource = 'zTmpSelecao.numes'
+	.Column5.Controlsource = 'zTmpSelecao.Contas'
+	.Column6.Controlsource = 'zTmpSelecao.PrazoEnts'
+	.Refresh
+EndWith
+
+With ThisForm.gradeItem
+	.RecordSource = 'zTmpPPcp'
+	.Column1.ControlSource = 'zTmppPcp.nenvs'
+	.Column2.Controlsource = 'zTmpPpcp.Nops'
+	.Column3.Controlsource = 'zTmpPpcp.cpros'
+	.Column4.Controlsource = 'zTmpppcp.Qtds'
+	.Refresh
+EndWith
+
+Go Top in zTmppPcp
+ThisForm.Grade.SetFocus
+ThisForm.Grade.AfterRowColChange()
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Sair
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If MessageBox('Deseja Realmente abandonar Priorização',4+32+256,'') = 6
+	ThisForm.Release
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Grade
+* Classe: grid (Base: grid)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+Thisform.LockScreen = .T.
+
+ThisForm.Get_Cliente.Value = zTmpSelecao.Rclis
+ThisForm.Get_Cliente.Refresh
+
+Select zTmppPcp
+Go Top
+ThisForm.GradeItem.Refresh
+
+lcArquivo4 = Sys(2023)+'\SigPrPcp.jpg'
+
+ThisForm.FigJpg.Visible = .F.
+ThisForm.FigJpg.Picture = ''
+
+Select zTmpSelecao
+ThisForm.Text1.Value = zTmpSelecao.Emps + ' ' + Alltrim(zTmpSelecao.Dopes) + ' '+Str(zTmpselecao.Numes,6)
+
+Thisform.LockScreen = .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Lastkey() = 9
+	ThisForm.GradeItem.SetFocus
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Grade.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Grade.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.GradeItem
+* Classe: grid (Base: grid)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+Thisform.LockScreen = .T.
+lcArquivo4 = Sys(2023)+'\SigPrPcp.jpg'
+
+ThisForm.FigJpg.Visible = .F.
+ThisForm.FigJpg.Picture = ''
+
+lcQuery = [Select FigJpgs From SigCdPro Where Cpros= ']+zTmppPcp.Cpros+[']
+=ThisForm.PodataMgr.SqlExecute(lcQuery,'CrTmpPro')
+
+If Not IsEmpty(CrTmpPro.FigJpgs)
+	lcFoto=Strconv(Strtran(Strtran(Strtran(CrTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)	
+	If (StrToFile(lcFoto, lcArquivo4) > 0)
+		ThisForm.FigJpg.Picture = (lcArquivo4)
+		ThisForm.FigJpg.Visible = .t.
+	EndIf
+EndIf
+
+Select zTmppPcp
+
+Thisform.LockScreen = .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.GradeItem.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Lastkey() = 9
+	ThisForm.Grade.SetFocus
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Cmb_Concilia
+* Classe: combobox (Base: combobox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+Select zTmpSelecao
+Set Relation To 
+Set Order To 
+Do Case
+	Case Alltrim(This.Value) = "Prazo Entrega"
+		Set Order to Entrega
+
+	Case Alltrim(This.Value) = "Cliente"
+		Set Order to Cliente
+
+	Case Alltrim(This.Value) = 'Operacao'
+		Set Order To EmpDopNum
+
+	Case Alltrim(This.Value) = 'Prioridade'
+		Set Order To Prioridade
+EndCase
+
+Select zTmpSelecao
+Set Relation To Emps + dopes + Str(numes,6) Into zTmppPcp
+
+ThisForm.Grade.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Get_Cliente
+* Classe: fwget (Base: textbox)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPCP.Salva
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If MessageBox('Confirma Gravação dos Dados!!!',4+32+256) = 7
+	Return .f.
+EndIf
+
+Select zTmpSelecao
+Scan
+	Scatter Memvar
+	Wait Window 'Executando Gravação de Prioridades ' Nowait
+	If m.Priors = 0 And m.aPriors = 0
+		Loop
+	Endif
+
+	lcEdn = m.Emps + m.Dopes + Str(m.Numes,6)
+	
+	lcSql = [Update SigMvCab Set Priors = ]+Str(zTmpSelecao.Priors)+[ Where EmpDopNums = ']+lcEdn+[']
+	ThisForm.Podatamgr.Sqlexecute(lcsql,'')
+	
+EndScan
+
+Wait Window 'Executando Gravação Fisica dos arquivos ' Nowait
+If ThisForm.Podatamgr.Commit() > 0
+Else
+	Wait clear
+	ThisForm.Podatamgr.RollBack()
+	MessageBox('Nao foi possivel completar o Processamento (commit). Tente novamente!!',16,'Falha na Conexão')
+	Return 0
+EndIf
+Wait clear
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRPCP
+RESERVED3 (ClassInfo): codigo
+data
+podatamgr
+setor
+unidade
+*processa 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

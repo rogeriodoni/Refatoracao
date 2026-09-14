@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado em ConfigurarPaginaDados():**
+- `cmd_4c_Confirmar` e `cmd_4c_Cancelar` no `cnt_4c_Salva` com todos os atributos visuais can├┤nicos (├¡cones corretos: `cadastro_salvar_60.jpg` / `cadastro_cancelar_60.jpg`)
+- BINDEVENTs para `BtnSalvarClick` e `BtnCancelarClick`
+- `lbl_4c_Codigo` (Say1 original top=124+29=153, left=215)
+- `txt_4c_Codigo` (Get_codigo original top=121+29=150, left=263, width=72, MaxLength=10)
+
+**M├®todos adicionados:**
+- `BtnSalvarClick()`: valida campo c├│digo vazio fora do TRY, chama FormParaBO() + Salvar() (o BO j├í trata duplicidade no Inserir()), navega para lista no sucesso
+- `BtnCancelarClick()`: delega para AlternarPagina(1) que j├í seta modo LISTA e recarrega lista
+
+**Pr├│xima fase (6/8):** Adicionar `lbl_4c_Desc` + `txt_4c_Desc` (segundo 50% dos campos) completando a Page2.

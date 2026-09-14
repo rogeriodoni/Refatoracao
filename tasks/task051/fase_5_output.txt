@@ -1,0 +1,28 @@
+﻿O arquivo `Formsigrechp.prg` j├í est├í **100% completo** com 1724 linhas. Lendo as fases anteriores, o agente que executou as fases 3 e 4 implementou o form por completo, incluindo:
+
+- Todos os controles de filtro em `ConfigurarPaginaFiltros()` (equivalente ao `ConfigurarPaginaDados()` para forms REPORT)
+- Todos os campos do original: `opt_nr_tipo`, per├¡odo, `ImpFollow`, `GradeOpera`, ordem, op├º├úo, empresa, grupo/conta destino, grupo/conta emissor
+- Todos os handlers `TeclaXxx` e m├®todos `ValidarXxx`  
+- `BtnExcelClick()` completo com SQL real
+- `SelecionarTodosClick()` / `DeselecionarTodosClick()`
+
+**Por que n├úo existe `ConfigurarPaginaDados()`:** este ├® um form REPORT (frmrelatorio) com layout FLAT ÔÇö todos os filtros ficam em uma ├║nica p├ígina (`Page1 = "Filtros"`). N├úo h├í Page2 com dados CRUD. O pipeline de 8 fases ├® projetado para forms CRUD onde Page2 tem campos de edi├º├úo; para forms REPORT, toda a l├│gica de filtros ├® equivalente e j├í foi consolidada nas fases 3-4.
+
+**Verifica├º├úo de completude contra `layout.json` (36 objetos originais):**
+
+| Original | Migrado | Status |
+|---|---|---|
+| opt_nr_tipo | opt_4c_NrTipo | Ô£ô |
+| get_dt_inicial/final | txt_4c_DtInicial/Final | Ô£ô |
+| ImpFollow | chk_4c_ImpFollow | Ô£ô |
+| GradeOpera | grd_4c_Opera | Ô£ô |
+| Command3/4 | cmd_4c_SelecionarTodos/DeselecionarTodos | Ô£ô |
+| get_ordem | cbo_4c_Ordem | Ô£ô |
+| opt_nr_opcao | opt_4c_NrOpcao | Ô£ô |
+| get_cd/ds_empresa | txt_4c_CdEmpresa/DsEmpresa | Ô£ô |
+| get_cd/ds_dep_grupo | txt_4c_CdDesGrupo/DsDesGrupo | Ô£ô |
+| get_cd/ds_dep_conta | txt_4c_CdDesConta/DsDesConta | Ô£ô |
+| get_cd/ds_emi_grupo | txt_4c_CdEmiGrupo/DsEmiGrupo | Ô£ô |
+| get_cd/ds_emi_conta | txt_4c_CdEmiConta/DsEmiConta | Ô£ô |
+
+**Fase 5 est├í conclu├¡da** ÔÇö nenhuma modifica├º├úo necess├íria. O arquivo j├í ├® funcional e completo.

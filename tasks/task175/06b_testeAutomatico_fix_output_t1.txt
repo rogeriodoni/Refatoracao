@@ -1,0 +1,7 @@
+﻿All changes look correct. The fixes applied:
+
+1. **`ConfigurarGrade()` (lines 449, 463, 477, 504, 524)** ÔÇö Removed all 5 `.ControlSource` assignments that referenced `cursor_4c_Dados.*` before the cursor exists. VFP9 throws "Alias not found" when a ControlSource references a non-existent cursor, which was crashing `InicializarForm()` inside the TRY block and causing `CREATEOBJECT` to return non-object.
+
+2. **`CarregarDados()`** ÔÇö Removed the duplicate `Column5.AddObject("Check1", "CheckBox")` and `Column5.Check1.Caption = ""` lines. `Check1` was already added in `ConfigurarGrade()`; a second `AddObject` would have thrown "member already exists".
+
+The `ControlSource` assignments remain in `CarregarDados()` where they belong ÔÇö set after `cursor_4c_Dados` is created by `BO.CarregarAlertasEmail()`.

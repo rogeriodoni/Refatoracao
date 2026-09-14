@@ -1,0 +1,17 @@
+﻿Todas as corre├º├Áes est├úo aplicadas. Resumo do que foi feito:
+
+**CecBO.prg ÔÇö 8 pontos corrigidos:**
+
+| Problema | Corre├º├úo |
+|---|---|
+| JOIN `ON a.Cemps = b.cEmps` (2x) | `ON a.Emps = b.cEmps` |
+| `SELECT a.cIdChaves, ...` (2x) | Removido `a.cIdChaves` do SELECT |
+| `WHERE a.cIdChaves = EscaparSQL(par_cIdChaves)` | `WHERE a.Emps = ... AND a.Tipos = ...` |
+| `SELECT cIdChaves FROM SigFiChc` (VerificarDuplicidade) | `SELECT Emps FROM SigFiChc` |
+| `THIS.this_cIdChaves = TratarNulo(cIdChaves, "C")` | Removido |
+| `fUniqueIds()` + `cIdChaves` no INSERT | Removidos |
+| `WHERE cIdChaves = ...` no UPDATE | `WHERE Emps = ... AND Tipos = ...` |
+| `WHERE cIdChaves = ...` no DELETE | `WHERE Emps = ... AND Tipos = ...` |
+
+**FormCec.prg ÔÇö 3 chamadas corrigidas:**
+- `CarregarPorCodigo(cursor_4c_Dados.cIdChaves)` ÔåÆ `CarregarPorCodigo(cursor_4c_Dados.Emps, cursor_4c_Dados.Tipos)` em BtnVisualizarClick, BtnAlterarClick e BtnExcluirClick.

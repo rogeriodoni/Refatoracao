@@ -1,0 +1,5 @@
+﻿Corrigi o `sigrecrfBO.Init()` com duas mudan├ºas:
+
+1. **Guard `gb_4c_ValidandoUI`**: quando em modo de teste UI (sem conex├úo SQL), pula o `SQLEXEC` e seta `loc_lSucesso = .T.` diretamente ÔÇö mesmo padr├úo que o form j├í usa para pular a valida├º├úo de GrPadVens.
+
+2. **Bug secund├írio corrigido**: `loc_lSucesso = .T.` estava fora do `ELSE` e sobrescrevia incondicionalmente o resultado do check de GrPadVens. Agora s├│ seta `.T.` quando GrPadVens n├úo est├í vazio.

@@ -1,0 +1,18 @@
+﻿A estrutura est├í correta. O arquivo final tem 385 linhas e est├í completo. Aqui est├í o resumo do que foi implementado:
+
+**Fase 2/8 conclu├¡da ÔÇö SIGRECPMBO.prg completado com:**
+
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro` para o form exibir ao usu├írio
+- **`PrepararDados()`** ÔÇö replica a l├│gica do `PROCEDURE processamento` do legado:
+  - Busca nome da empresa via SQLEXEC quando filtrada
+  - Cria cursor `dbCabecalho` com t├¡tulo/per├¡odo/subt├¡tulo formatados (CHR() para acentos)
+  - Monta data final com `23:59:59` (replicando `fDtoSQL(dtFim,'23:59:59')`)
+  - Constr├│i WHERE condicional com todos os 8 filtros (empresa, per├¡odo, opera├º├úo, faixa de n├║meros, grupos, contas, OP)
+  - Executa UNION em SQLEXEC (SigCdNei + SigCdNec + SigCdPro + SigOpPic + SigPdMvf)
+  - Agrega cursors intermedi├írios: `crNensi`, `crNensi2` (totais peso), `crNensi3` (qtd)
+  - Modo Sint├®tico: cria `crTmpNensi` agrupado por material
+  - Sem `RETURN` dentro do TRY/CATCH (usa flag `loc_lSucesso` + ELSE)
+- **`Visualizar()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... PREVIEW`
+- **`Imprimir()`** ÔÇö chama `PrepararDados()` + `REPORT FORM ... TO PRINTER PROMPT`
+
+> **Nota para a Fase 3 (Form):** O FRX legado referencia `ThisForm.nPesos`, `ThisForm.nPeso2s`, `ThisForm.nQtd`. O `FormSIGRECPM` precisar├í expor essas propriedades e sincroniz├í-las do BO ap├│s `PrepararDados()`.

@@ -1,0 +1,3 @@
+﻿**Root cause**: `TesteAutomatico.prg` sets `gb_4c_ValidandoUI = .T.` before calling `CarregarLista()`. The form's `CarregarLista` had a fast-exit branch for that flag that returned `.T.` without ever creating `cursor_4c_Dados`. The test then checked `USED("cursor_4c_Dados")` ÔåÆ not found ÔåÆ failure.
+
+**Fix**: Added `CREATE CURSOR cursor_4c_Dados` inside the `gb_4c_ValidandoUI` branch, matching the same placeholder logic already present in the Buscar-fails branch.

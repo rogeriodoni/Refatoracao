@@ -1,0 +1,17 @@
+﻿Arquivo est├í correto. Fase 4 conclu├¡da.
+
+**O que foi adicionado:**
+
+- `ConfigurarPaginaFiltros()` ÔÇö cria todos os controles de filtro na Page1 do PageFrame:
+  - `shp_4c_ShpImprimir` ÔÇö shape decorativo ao redor do per├¡odo (mapeado de `shpImprimir`)
+  - `lbl_4c_Label1` ÔÇö label "Per├¡odo :" (Say1)
+  - `txt_4c_DtIni` ÔÇö TextBox data inicial com `Format="D"` e `InputMask="99/99/9999"`
+  - `lbl_4c_Label4` ÔÇö separador "-" (Say4)
+  - `txt_4c_DtFin` ÔÇö TextBox data final
+  - `obj_4c_OptDatas` ÔÇö OptionGroup com 2 bot├Áes: "Emiss├úo" (Value=1) / "Vencimento" (Value=2)
+
+- `LimparCampos()` ÔÇö inicializa datas com `DATE()` e OptionGroup em Value=1
+
+- `AlternarPagina()` ÔÇö stub vazio (form REPORT tem apenas 1 p├ígina)
+
+- `InicializarForm()` atualizado ÔÇö agora chama `ConfigurarPaginaFiltros()` e `LimparCampos()` ap├│s montar o PageFrame.

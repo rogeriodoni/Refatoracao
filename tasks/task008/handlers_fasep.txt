@@ -1,0 +1,226 @@
+=== Item 393: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP.GradFase.Procedure ===
+Lparameters nColIndex
+
+Local lcArquivo
+
+lcArquivo = Sys(2023) + [\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]
+
+With ThisForm.Pagina.Dados.pgFrameDados.pgDadosFaseP
+	Clear Resources
+	.ImgFigJpg.Picture = ''
+	.ImgFigJpg.Visible = .f.
+
+	* Figura no Campo Memo
+	If Not Empty(crSigCdPrf.FigProcs) And Not IsNull(crSigCdPrf.FigProcs)
+		If (StrToFile(crSigCdPrf.FigProcs, lcArquivo) > 0)
+			.ImgFigJpg.Visible = .t.
+			.ImgFigJpg.Picture = (lcArquivo)
+		EndIf
+	EndIf
+EndWith
+
+=Seek(CrSigCdPrf.Grupos,'CrSi... [TRUNCADO]
+---END---
+
+=== Item 396: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP.GradFase.Column1.Text1.LostFocus ===
+Local lnCont
+
+ThisForm.LockScreen = .t.
+If (This.Value > 0) And (This.Value <> ThisForm.AntOrd)
+	Ponteiro = Recno('crSigCdPrf')
+	
+	Select crSigCdPrf
+	Set Order To '' In crSigCdPrf && desativa o set key ...
+	Set Relation Off Into crSigCdGcr
+	Scan
+ 		If (Recno() <> Ponteiro)
+	 		Replace Ordem2 With crSigCdPrf.Ordems * 10 In crSigCdPrf
+	 	Else
+			If (This.Value < ThisForm.AntOrd)
+				Replace Ordem2 With (This.Value * 10 - 1) In crSigCdPrf
+			Else
+				Replace Ordem2 With (This.Value * 10 + 1) In crS... [TRUNCADO]
+---END---
+
+=== Item 400: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP.GradFase.Column4.Text1.Valid ===
+If !Empty(This.Value)
+	lcSql = [Select UniPrdts From SigCdUpd Where Codigos = ']+crSigCdPrf.Grupos+[']
+	=ThisForm.Podatamgr.Sqlexecute(lcsql,'CrSigCdUpd')
+	Select CrSigCdUpd
+	Index On UniPrdts tag UniPrdts
+	If Seek(This.Value,'crSigCdUpd','UniPrdts')
+		This.Value = CrSigCdUpd.UniPrdts
+	Else
+		m.loLista = CreateObject('fwBuscaInt','crSigCdUpd','UniPrdts',This.Value,'Unidades Produtivas',.t.)
+		m.loLista.mAddColuna('UniPrdts','','Uni. Produtiva')
+		m.loLista.Show()
+		This.Value = Evaluate('crSigCd... [TRUNCADO]
+---END---
+
+=== Item 402: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP.inserir.Click ===
+ThisForm.LockScreen = .t.
+
+ProdutoAux = ThisForm.Pagina.Dados.PgFrameDados.PgDados.getCPro.Value
+
+Select crSigCdPrf
+Set Order To Linhas In crSigCdPrf
+
+Select crSigCdPrf
+If Not Eof('crSigCdPrf')
+	If Empty(crSigCdPrf.Grupos)
+		ThisForm.LockScreen = .f.
+		ThisForm.Pagina.Dados.PgFrameDados.PgDadosFAseP.GradFase.SetFocus
+		Return 0
+	EndIf
+	OrdemAux = crSigCdPrf.Ordems
+Else
+	OrdemAux = 0
+EndIf
+lcGrupo = CrSigCdPrf.Grupos
+
+Set Order To
+Go Top
+Scan For Ordems > OrdemAux
+	Select CrSigCdPrf
+	lnOrdem = Or... [TRUNCADO]
+---END---
+
+=== Item 403: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP.excluir.Click ===
+If Eof() Or Bof()
+	Return
+EndIf
+
+ThisForm.LockScreen = .t.
+
+Select crSigCdPrf
+Set Order To Linhas In crSigCdPrf
+
+With ThisForm.Pagina.Dados.PgFrameDados.PgDadosFaseP
+	.SetFocus
+	.GradFase.Column2.SetFocus
+EndWith	
+
+Delete
+If Not Eof() And Not Bof()
+	Skip
+Endif
+If Eof()
+	Go Bott
+Endif
+Ponteiro = Recno()
+Go top
+Locate For Recno() = Ponteiro
+llInicio = .f.
+If ! Bof()
+	Skip -1
+	If Bof()
+		llInicio = .t.
+	EndIf
+EndIf 
+If Bof()
+	Go Top
+Endif
+
+If Not Eof('crSigCdPrf')
+
+	If Not llInicio
+		ContAux  = Ord... [TRUNCADO]
+---END---
+
+=== Item 404: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP.Alternativa.Click ===
+ThisForm.LockScreen = .t.
+
+ProdutoAux = ThisForm.Pagina.Dados.PgFrameDados.PgDados.getCPro.Value
+
+Select crSigCdPrf
+Set Order To Linhas In crSigCdPrf
+
+Select crSigCdPrf
+If Not Eof('crSigCdPrf')
+	If Empty(crSigCdPrf.Grupos)
+		ThisForm.LockScreen = .f.
+		ThisForm.Pagina.Dados.PgFrameDados.PgDadosFAseP.GradFase.SetFocus
+		Return 0
+	EndIf
+	OrdemAux = crSigCdPrf.Ordems
+Else
+	ThisForm.LockScreen = .f.
+	ThisForm.Pagina.Dados.PgFrameDados.PgDadosFAseP.GradFase.SetFocus
+	Return 0
+EndIf
+
+Count to OrdemAux... [TRUNCADO]
+---END---
+
+=== Item 405: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP.CmdFicha.Click ===
+Local lcOldOrd
+
+Create Cursor CsCabecalho ( _NmEmp C(80), _NmTit C(99), _cPros C(14), _dPros C(65), _cGrus C(03), _dGrus C(20), ;
+							_sGrus C(06), _sDesc C(20), _cLinh C(10), _dLinh C(40), _cGVen C(10), _dGVen C(40), ; 
+							_nPeso N(9,2), _DtIni D(08), _DtFin D(08), _TExec C(15), _cMode C(10), _dMode C(50))
+
+_NmEmp = ''
+If ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crTmp', 'Cemps', _Empr)
+	Go Top In crTmp
+	_NmEmp = crTmp.Razas
+EndIf
+Use In crTmp
+
+_NmTit = 'Ficha Técnica de Produto'
+With ... [TRUNCADO]
+---END---
+
+=== Item 411: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP.getConquilha.Valid ===
+Local loLista, lcQuery
+*** Mostra lista de conquilhas ***
+lcQuery = [Select conquilhas From SigCdCnq group by conquilhas]
+IF (ThisForm.poDataMgr.SqlExecute(lcQuery, [crLocal])) >0
+
+	If Not Empty(This.Value)
+		Select crLocal
+		Index On conquilhas tag CON
+		If Not Seek(Padr(This.Value, 10), [crLocal], [con])
+			loLista = CreateObject([fwBuscaInt], [crLocal], [conquilhas], This.Value, [Conquilhas], .t.)
+			loLista.mAddColuna([conquilhas], [], [Conquilhas], 	 .t.)
+			loLista.Show()
+		EndIf
+		This.Va... [TRUNCADO]
+---END---
+
+=== Item 414: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP.grdMatrizes.Procedure ===
+Lparameters nColIndex
+
+Local lcArquivo
+
+lcArquivo = Sys(2023) + [\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]
+
+With ThisForm.Pagina.Dados.pgFrameDados.pgDadosFaseP
+	Clear Resources
+	.ImgBorracha.Picture = []
+	.ImgBorracha.Visible = .f.
+
+	lcQuery = [Select * ] + ;
+			    [From SigCdPro ] + ;
+			   [Where CPros = '] + crSigPrMtz.CMats + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalImgPro]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalImgPro)])
+		R... [TRUNCADO]
+---END---
+
+=== Item 416: SIGCDPRO.Pagina.Dados.pgframeDados.PgDadosFaseP.grdMatrizes.Column1.Text1.Valid ===
+Local loLista
+
+If Not Empty(This.Value) And Padr(this.Value,14) <> this.Tag
+	Select crMatrizes
+	If Not Seek(Padr(This.Value, 14), [crMatrizes], [CPros])
+		loLista = CreateObject([fwBuscaInt], [crMatrizes], [CPros], This.Value, [Matriz], .t.)
+		loLista.mAddColuna([CPros],  [], [Matriz], 	  .t.)
+		loLista.mAddColuna([DPros],  [], [Descrição], .t.)
+		loLista.mAddColuna([Locals], [], [Local],     .t.)
+		loLista.Show()
+	EndIf
+	If (Lastkey() <> 27)
+		ThisForm.Pagina.Dados.pgframeDados.pgDadosFaseP.grd... [TRUNCADO]
+---END---
+

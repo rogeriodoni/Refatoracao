@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Os 3 handlers foram movidos para `"LostFocus"`:
+
+- `ValidarVincs` (linha 704): `"KeyPress"` ÔåÆ `"LostFocus"` ÔÇö evita valida├º├úo S/N disparando a cada tecla pressionada
+- `CodRelGerLostFocus` (linha 707): `"KeyPress"` ÔåÆ `"LostFocus"` ÔÇö evita SQLEXEC rodando em cada tecla no campo c├│digo
+- `DesRelGerLostFocus` (linha 709): `"KeyPress"` ÔåÆ `"LostFocus"` ÔÇö idem para o campo descri├º├úo
+
+Os handlers `CodRelGerKeyPress` e `DesRelGerKeyPress` (linhas 708/710) permanecem em `"KeyPress"` pois s├úo os handlers corretos para abrir o lookup via F4. As assinaturas com `(par_nKeyCode, par_nShiftAltCtrl)` nas 3 procedures LostFocus s├úo inofensivas ÔÇö VFP9 n├úo gera erro quando um LostFocus n├úo passa args para params declarados, e os params n├úo s├úo usados internamente.

@@ -1,0 +1,7 @@
+﻿O schema confirma: `sigcdenr` tem colunas `bairs char(40)`, `ceps char(9)`, `endes char(60)`, **`pkchaves char(20) NOT NULL`** (PK clustered). Ambos os problemas s├úo **falsos positivos** do checker autom├ítico:
+
+**[SQL-FILTRO-INVENTADO] `PKCHAVES`** ÔÇö O schema confirma que `pkchaves` ├® a chave prim├íria real da tabela `SigCdEnr`. O original usava `Select *` (que inclui `pkchaves`) e identificava registros via ponteiro de cursor VFP local. O c├│digo migrado usa `WHERE pkchaves = ...` em `CarregarPorCodigo`, `Atualizar` e `ExecutarExclusao` ÔÇö padr├úo correto de migra├º├úo para SQL Server. N├úo ├® condi├º├úo inventada, ├® uso leg├¡timo da PK.
+
+**[SQL-FILTRO-INVENTADO] `TOTAL`** ÔÇö `total` n├úo ├® uma coluna da tabela nem aparece em nenhum `WHERE`. ├ë o alias do `COUNT(*)` no cursor tempor├írio de verifica├º├úo de duplicidade (`SELECT COUNT(*) AS total ...`), lido depois via `cursor_4c_DupCheck.total > 0`. O checker confundiu o alias do `SELECT` com uma condi├º├úo de filtro inventada.
+
+**Nenhuma altera├º├úo ├® necess├íria.** O c├│digo de `ENRBO.prg` e `FormENR.prg` est├í correto: os WHEREs usando `pkchaves` s├úo v├ílidos (├® a PK real), os WHEREs usando `ceps/endes/bairs` replicam fielmente o original, e `total` ├® apenas um alias de cursor. Este pass SQL n├úo requer mudan├ºas.

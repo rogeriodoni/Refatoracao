@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 m├®todos CRUD ao `Formale.prg` (711 ÔåÆ 833 linhas), adaptando a sem├óntica CRUD ao contexto operacional deste form de configura├º├úo de alertas:
+
+- **BtnIncluirClick** (linha 704) ÔÇö ativa todos os flags I/A/E/B do registro corrente via `REPLACE ... IN crSigCdAle`
+- **BtnAlterarClick** (linha 728) ÔÇö recarrega alertas do BD descartando edi├º├Áes em mem├│ria
+- **BtnVisualizarClick** (linha 752) ÔÇö exibe dialog `MsgInfo` com descri├º├úo do evento, flags, prioridade e mensagem
+- **BtnExcluirClick** (linha 798) ÔÇö zera flags com confirma├º├úo `MsgConfirma`
+
+Todos com `TRY/CATCH` + `MsgErro` verboso, `CHR()` para acentos, `MsgAviso`/`MsgInfo`/`MsgConfirma` conforme regras do CLAUDE.md ÔÇö sem stubs, sem `MESSAGEBOX`, sem TODO.

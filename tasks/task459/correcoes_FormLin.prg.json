@@ -1,0 +1,133 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormLin.prg",
+    "timestamp":  "2026-08-18T21:20:18",
+    "correcoes":  [
+                      {
+                          "Tipo":  "GRID_CHECK1_SEM_ADDOBJECT",
+                          "Linha":  1666,
+                          "Original":  ".CurrentControl = \"Check1\"",
+                          "Corrigido":  "Adicionado AddObject(\u0027Check1\u0027,\u0027CheckBox\u0027) + Check1.Caption antes",
+                          "Descricao":  "CurrentControl=\u0027Check1\u0027 requer AddObject previo (Unknown member CHECK1 cascateia)"
+                      },
+                      {
+                          "Tipo":  "ENCERRAR-CANONICO",
+                          "Linha":  303,
+                          "Original":  "(auto-fix)",
+                          "Corrigido":  "(auto-fix)",
+                          "Descricao":  "cmd_4c_Encerrar.Width=90 -\u003e 75 (padrao FormCor)"
+                      },
+                      {
+                          "Tipo":  "GRID-CHECKBOX-PROPS-EXPLICITAS",
+                          "Linha":  1668,
+                          "Original":  ".Check1 sem props explicitas ReadOnly/Visible/Alignment/Top/Left/Height/Width",
+                          "Corrigido":  "Injetadas props explicitas apos .Check1.Caption",
+                          "Descricao":  "Pattern 146: CheckBox em Grid Column sem props explicitas nao responde a cliques em runtime. Sem ReadOnly=.F. o VFP9 pode assumir readonly em contexto Grid; sem Top/Left/Height/Width a area clicavel eh menor que o retangulo visual. Injetadas as 7 props canonicas do legado. Origem Erro59 2026-07-21 Formsigreato."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  693,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  1443,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2198,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2237,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2276,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2321,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2359,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2397,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2544,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2589,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2627,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2759,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2797,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2835,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  2873,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      }
+                  ],
+    "totalCorrecoes":  18
+}

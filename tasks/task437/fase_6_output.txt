@@ -1,0 +1,21 @@
+﻿O arquivo est├í correto. A Fase 6 est├í completa. Aqui est├í o resumo do que foi feito:
+
+**Fase 6 conclu├¡da ÔÇö `Formgem.prg` atualizado:**
+
+1. **`ConfigurarPaginaDados()` completada** com os controles restantes:
+   - `txt_4c_Class` (Get_Class: Top=228, Left=470, Width=115, InputMask="!!!")
+   - `lbl_4c_Tipo` (Say3: Top=258, Left=439, Height=15)
+   - `opt_4c_Tipo` (fwoption1: Top=254, Left=464, Width=136, 2 bot├Áes: "Industrial"/"Diversos" com Left=5/85 respectivos)
+
+2. **`HabilitarCampos(par_lHabilitar)`** adicionado:
+   - `txt_4c_Grupo` e `txt_4c_Class`: edit├íveis apenas em INCLUIR (s├úo a PK composta grupo+class)
+   - `opt_4c_Tipo`: edit├ível em INCLUIR e ALTERAR (n├úo ├® PK)
+
+3. **`LimparCampos()`** adicionado ÔÇö reseta Grupo/Class para "" e Tipo para 1 (Industrial)
+
+4. **M├®todos CRUD atualizados**:
+   - `BtnIncluirClick`: chama `LimparCampos()` + seta modo antes de `HabilitarCampos(.T.)` + `SetFocus` no Grupo
+   - `BtnVisualizarClick`: seta modo VISUALIZAR antes de `HabilitarCampos(.F.)` + foco no Salvar
+   - `BtnAlterarClick`: seta modo ALTERAR antes de `HabilitarCampos(.T.)`
+
+N├úo h├í lookups neste form ÔÇö o original n├úo tem F4/fwBuscaExt/sigacess em nenhum campo.

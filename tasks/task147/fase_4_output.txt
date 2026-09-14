@@ -1,0 +1,17 @@
+﻿The file is complete and correct. Phase 4 is done. Here's a summary of all changes applied:
+
+**Phase 4/8 ÔÇö Complete:**
+
+| What | Detail |
+|------|--------|
+| `PicturePosition = 13` | Added to all 7 CommandButtons (replace_all) |
+| BINDEVENTs Page1 | 7 button + 3 filtro LostFocus events wired to PUBLIC handlers |
+| `ConfigurarPaginaDados()` | Added `cmd_4c_Confirmar` (Salvar) + `cmd_4c_Cancelar` buttons with BINDEVENTs |
+| `CarregarLista()` | Full rewrite: `gb_4c_ValidandoUI` guard, TRY/CATCH, `FormatarGridLista()` after RecordSource |
+| `AjustarBotoesPorModo()` | Real implementation: enables/disables all buttons per LISTA/INCLUIR/ALTERAR/VISUALIZAR mode |
+| Handler methods (PUBLIC) | `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `CmdFechaLoteClick` |
+| Filtro handlers (PUBLIC) | `FiltroEmpresaLostFocus`, `FiltroDtInicialLostFocus`, `FiltroDtFinalLostFocus` |
+| PROTECTED methods | `FormParaBO()`, `BOParaForm()`, `LimparCamposDados()`, `HabilitarCampos()`, `ValidarCamposDados()` ÔÇö all use PEMSTATUS guards since Page2 fields are added in Phases 5-6 |
+| `CmdFechaLoteClick` | Full SQL logic: SELECT SigPdNlt.Chksubn ÔåÆ toggle lote open/closed with confirmation |
+
+The file grew from 868 to 1322 lines. Phase 5 can now add Page2 data fields (cnt_4c_Dados with empresa/data/lote/peso) ÔÇö the PEMSTATUS guards in FormParaBO/BOParaForm/LimparCamposDados/HabilitarCampos/ValidarCamposDados will activate automatically when those controls exist.

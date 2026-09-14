@@ -1,0 +1,9 @@
+﻿O problema reportado ├® um **falso positivo**. `LNBOT` aparece exclusivamente em um coment├írio de documenta├º├úo na linha 2845 do form:
+
+```
+*   and lnBot=0 and xNensi vazio -> Do Form SigOpMpn With ThisForm, DataSessionId
+```
+
+Esse coment├írio descreve a l├│gica do c├│digo legado original (onde `lnBot` era uma vari├ível local VFP9, n├úo uma coluna SQL). **N├úo existe nenhuma cl├íusula WHERE com `LNBOT` em SQL execut├ível** ÔÇö nem no form nem no BO.
+
+Nenhuma corre├º├úo necess├íria. O c├│digo migrado est├í correto para este ponto.

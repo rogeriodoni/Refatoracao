@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo:
+
+- **Problema 1 & 2 (`AbrirLookupTamanho` / `AbrirLookupCor`)**: Falsos positivos ÔÇö ambas as fun├º├Áes existem no arquivo (linhas 956 e 1284) e s├úo chamadas corretamente pelos handlers de KeyPress e DblClick das colunas 4 e 7. Nenhuma altera├º├úo necess├íria.
+
+- **Problema 3 (GRID-WITH)**: Corrigido ÔÇö `.ColumnCount = 9` movido para FORA do bloco `WITH THIS.grd_4c_Itens` (via refer├¬ncia expl├¡cita `THIS.grd_4c_Itens.ColumnCount = 9`), logo ap├│s `RecordSource` que j├í estava fora. Isso evita o erro "Unknown member COLUMN1" que ocorre quando VFP9 tenta resolver `.Column1` dentro de um WITH cujo ColumnCount ainda n├úo havia criado as colunas.

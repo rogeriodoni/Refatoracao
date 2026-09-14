@@ -1,0 +1,37 @@
+﻿Ap├│s verificar os dois flags nos arquivos completos, eis o resultado da an├ílise:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### Flag 1: `ICLIS` em WHERE (CCJBO.prg:253)
+
+```foxpro
+loc_cSQL = "SELECT iclis, rclis" + ;
+           " FROM sigcdcli" + ;
+           " WHERE iclis = " + EscaparSQL(par_cConta)
+```
+
+**Veredicto: FALSO POSITIVO ÔÇö n├úo alterar.**
+
+- A condi├º├úo est├í no m├®todo `BuscarContaPorCodigo`, que faz lookup em `SigCdCli` pela PK `iclis`.
+- `iclis` ├® a chave prim├íria real de `sigcdcli` (confirmado pelo c├│digo original: `join sigcdcli b on a.contas = b.iclis`).
+- O m├®todo ├® chamado legitimamente pelo form (linhas 1355 e 1459) para popular `txt_4c_DContas` com a descri├º├úo da conta.
+- A detec├º├úo do scanner confundiu o contexto: a lista `LNLIQ, CONTAS, CIDCHAVES, CODIGO` refere-se ao WHERE das queries sobre `SigCdCcj/SigDtCcj`, n├úo ao lookup em `SigCdCli`.
+
+### Flag 2: `CONTROLCOUNT` em WHERE (FormCCJ.prg)
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount
+IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+```
+
+**Veredicto: FALSO POSITIVO ÔÇö n├úo alterar.**
+
+- `ControlCount` ├® uma **propriedade VFP9** de containers, n├úo uma coluna SQL.
+- Aparece no m├®todo `TornarControlesVisiveis`, que itera controles visuais ÔÇö sem nenhuma rela├º├úo com SQL ou WHERE.
+- O scanner detectou a string "ControlCount" em contexto de c├│digo VFP e a classificou incorretamente como cl├íusula SQL.
+
+---
+
+Ambos os problemas listados s├úo falsos positivos do scanner autom├ítico. Nenhum arquivo precisa ser alterado neste pass SQL ÔÇö as queries est├úo corretas e fi├®is ao original.

@@ -1,0 +1,195 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 5,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDTBV",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "LParameters plHabilita\n\nLocal lnI\n\nIf Type('plHabilita') # 'L'\n\tplHabilita = .F.\nEndif\n\nWith Thisform.ParentForm.Pagina.Lista\n\tFor lnI=1 to .Grupo_Op.ButtonCount\n\t\tIf .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible\n\t\t\t.Grupo_Op.Buttons(lnI).Enabled = plHabilita\n\t\tEndIf\n\tEndFor\n\t.cmdFPOper.Enabled = plHabilita\n\t.Grupo_Saida.Sair.Enabled = plHabilita\nEndWith\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBV",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBV",
+      "evento": "Init",
+      "linhas": 52,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pcEscolha\n\nLocal lcOperacao\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.PcEscolha  = pcEscolha\nThisform.ParentForm.Enabled  = .F.\nlcOperacao = crSigCdOpe.Dopes\n\nWith Thisform\n\t.Caption = 'Tabelas de Desconto da Operações ' + AllTrim( Proper( crSigCdOpe.Dopes ) )\n\t.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50\n\t.Left    = Thisform.ParentForm.Left + ;\n\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Columns,mCtrlBotoes,Sqlexecute",
+        "controlesReferenciados": "OPTDO',OpTdz",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBV.GradeSubN.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( Empty( LocalTabdO.Tabds ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBV.GradeSubN.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lcOperacao, lnRecNo, loBrowse\n\nlcDopes = crSigCdOpe.Dopes\n\nIf Not IsEmpty(This.Value)\n\txBrox = CreateObject('fwBuscaExt',ThisForm.ParentForm.poDatamgr.pnIdconn,'SigOpTdz','CrListaRemota','Codigos',This.Value,'Tabelas de Desconto',.t.,'Codigos')\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('codigos', '', 'Código', .t.)\t\n\t\txBrox.mAddColuna('Descrs', '', 'Descrição',.t.)\n\t\txBrox.Show()\n\tEndIf \n\tThis.Value = CrListaRemota.Codigos\n\tReplace Descrs With CrListaRemota.Descrs in LocalTabdO\n\tTh... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OpTdz'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBV.GradeSubN.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBV.GradeSubN.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTBV.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Thisform.lHouveIns = .T.\n\nSelect LocalTabdO\nLocate for Dopes = crSigCdOpe.Dopes And TabDs = ' '\nIf Eof()\n\tInsert Into LocalTabdO (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())\nEndIf\n\nSelect LocalTabdO\nThisform.GradeSubN.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBV.cmdSair",
+      "evento": "Click",
+      "linhas": 53,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\tIf ( Thisform.lHouveExcl Or Thisform.lHouveIns )\n\t\tSelect LocalTabdO\n\t\tGo Bottom\n\t\tGo Top\n\t\t\n\t\tSelect Tabds,sum(1) as TT From LocalTabdO GROUP by 1 Into cursor Totais\n\t\tSelect Totais\n\t\tScan\n\t\t\tIf TT > 1\n\t\t\t\tMessageBox('Tabela de Desconto '+Alltrim(Totais.Tabds)+' Digitada em Duplicidade!!!!',0+16,'Atenção')\n\t\t\t\tReturn .f.\n\t\t\tEndIf\n\t\tEndScan\n\t\t\n\t\tSelect CrSigOpTdo\n\t\tZap\n\t\tSelect LocalTabdO\n\t\tScan\n\t\t\tScatter Memvar\n\t\t\tIf Empty(m.Tabds)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mCtrlBotoes",
+        "controlesReferenciados": "OpTdo,OpTdo'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTBV.cmdExcluir",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Select LocalTabdO\nIf Not Eof()\n\tThisform.lHouveExcl = .T.\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\nThisform.GradeSubN.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDTBV.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into LocalTabdO (Dopes, CidChaves) Values (crSigCdOpe.Dopes,fUniqueIds())",
+      "tabelas": "LocalTabdO",
+      "colunas": "Dopes,CidChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDTBV.cmdSair.Click",
+      "queryOriginal": "\t\tSelect Tabds,sum(1) as TT From LocalTabdO GROUP by 1 Into cursor Totais",
+      "tabelas": "LocalTabdO",
+      "colunas": "Tabds",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["LocalTabdO"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

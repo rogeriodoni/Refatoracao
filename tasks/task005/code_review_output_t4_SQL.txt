@@ -1,0 +1,11 @@
+﻿Ap├│s pesquisa extensiva em ambos os arquivos (FormProduto.prg com 5784 linhas e ProdutoBO.prg), n├úo encontrei nenhuma condi├º├úo WHERE com a coluna 'TOP' em nenhuma query SQL.
+
+As ├║nicas ocorr├¬ncias de `TOP` nos arquivos s├úo:
+- `.Top = NN` ÔÇö propriedades de layout VFP (posi├º├úo vertical de controles)  
+- `GO TOP IN cursor_4c_Lista` (linha 3302) ÔÇö comando de navega├º├úo VFP, n├úo SQL
+
+**Este ├® um falso positivo do code review.**
+
+O c├│digo original legado cont├®m `[Select Top 1 CPros, Datars From SigMvHst ...]` ÔÇö aqui `TOP 1` ├® a cl├íusula SQL Server para limitar linhas, n├úo um nome de coluna. O code review provavelmente confundiu a palavra-chave `TOP` do SELECT com um nome de coluna no WHERE.
+
+O c├│digo migrado n├úo tem nenhuma query usando `SigMvHst` nem nenhum `WHERE TOP = ...`. N├úo h├í nada para corrigir neste pass SQL.

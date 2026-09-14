@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Tudo integrado corretamente. Resumo do que foi feito na **Fase 8/8** de `FormTBI.prg`:
+
+## M├®todos adicionados/completados (`FormTBI.prg`)
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö extra├¡da de `AlternarPagina`, aplica o bloqueio dos campos + regra `When` original (descri├º├úo s├│ edit├ível com c├│digo vazio).
+- **`AjustarBotoesPorModo()`** ÔÇö delega para `HabilitarCampos`, documentando por que n├úo h├í bot├Áes CRUD aqui (dialogo sem Grid).
+- **`FormParaBO()` / `BOParaForm()`** ÔÇö centralizam a transfer├¬ncia moeda/descri├º├úo/c├│pias Ôåö BO, eliminando a duplica├º├úo que existia manualmente em `BtnConfirmarClick`/`BtnVisualizarClick`.
+- **`LimparCampos()`** ÔÇö restaura BO+form ao estado inicial (espelha o `Init` legado: moeda/descri├º├úo vazias, 1 c├│pia); chamada em `InicializarForm()`.
+- **`CarregarLista()`** ÔÇö stub documentado (n├úo h├í lista neste dialogo).
+- **`BtnBuscarClick()`** ÔÇö bloqueio (mesmo padr├úo de `BtnIncluir/Alterar/ExcluirClick`) explicando que a consulta pertence ao Cadastro de Moedas.
+- **`BtnSalvarClick()` / `BtnCancelarClick()`** ÔÇö aliases que delegam para `BtnConfirmarClick`/`BtnEncerrarClick` (que j├í implementam a l├│gica real), cumprindo o contrato de nomenclatura sem duplicar c├│digo.
+- `AlternarPagina` refatorada para delegar a `AjustarBotoesPorModo`.
+
+Validado: 28 PROCEDURE/28 ENDPROC, 8 TRY/8 ENDTRY, 12 WITH/12 ENDWITH, 26 IF/26 ENDIF ÔÇö tudo balanceado, sem stubs com `MsgAviso("...ser├í implementado")`.
+
+## Integra├º├úo (`menu.prg`)
+Adicionei a entrada faltante no `popMovimentos` (bar 122/123 "Tabelas de Refer├¬ncia") com `ON SELECTION BAR 123 ... DO AbrirFormTBI` e criei `PROCEDURE AbrirFormTBI()` seguindo exatamente o padr├úo can├┤nico (`VARTYPE(loForm)="O"`, `Show()` sem par├ómetro, sem `Release()` manual, `MostrarErro` com linha/procedure). `TBIBO.prg`/`FormTBI.prg` j├í s├úo carregados automaticamente via `ADIR` em `config.prg` (nenhuma altera├º├úo necess├íria ali).
+
+Removi os 24 `.fxp` compilados em `projeto\app` para for├ºar recompila├º├úo no pr├│ximo teste.

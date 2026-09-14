@@ -1,0 +1,1 @@
+﻿6 ocorr├¬ncias corrigidas. O problema era que VFP9 n├úo aceita `CREATE CURSOR` e `INSERT INTO VALUES` com defini├º├Áes em m├║ltiplas linhas sem o caractere de continua├º├úo `;` ÔÇö cada quebra de linha era interpretada como um novo comando, gerando "Syntax error" e "Unrecognized command verb". Todas as defini├º├Áes foram convertidas para linhas l├│gicas ├║nicas usando `;`.

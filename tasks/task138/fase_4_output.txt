@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. Aqui est├í o resumo do que foi implementado na Fase 4:
+
+**M├®todos adicionados a `FormSigPdM13.prg`:**
+
+| M├®todo | Origem no legado | Fun├º├úo |
+|---|---|---|
+| `ConfigurarContainerOperacao()` | `SIGPDM13.Opera├º├úo` | Container com label "Movimenta├º├úo :" + 3 textboxes read-only (empresa, opera├º├úo, n┬║ envelope) |
+| `ConfigurarBotaoOK()` | `SIGPDM13.Ok` | Bot├úo OK (Left=906) com BINDEVENT para BtnOKClick |
+| `ConfigurarGrid()` | `SIGPDM13.Grade` | Grid 4 colunas (EmpDnPsÔåÆMovimenta├º├úo, CmatsÔåÆComponente, TpOpsÔåÆTipo de Material, QtdsÔåÆQuantidade) |
+| `ConfigurarTotalizador()` | `SIGPDM13.Qtd_os` | TextBox txt_4c_TotalQtds mostrando SUM(Qtds) |
+| `CarregarDados()` | Init legado | Chama BO.CarregarOperacao + BO.CarregarDados, faz bind do grid e redefine headers ap├│s RecordSource (Li├º├úo #2 FORMCOR) |
+| `BtnOKClick()` | `Ok.Click` | `THIS.Release()` |
+
+**Decis├Áes de projeto:**
+- Form ├® **OPERACIONAL flat** (n├úo CRUD), ent├úo sem `AlternarPagina()` ou bot├Áes CRUD
+- `ColumnCount = 4` setado **antes** de acessar `Column1..Column4` (evita erro de refer├¬ncia)
+- Headers reconfigurados **ap├│s** `RecordSource` (obrigat├│rio - Li├º├úo #2 FORMCOR)
+- Shape1 omitido: era `BorderStyle=0 + BackStyle=0` (completamente invis├¡vel no original)
+- Posi├º├Áes escaladas de 800pxÔåÆ1000px (fator 1.25)

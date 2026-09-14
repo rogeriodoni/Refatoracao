@@ -1,0 +1,16 @@
+﻿All four edits are complete and correct. Here's a summary of what FASE 6 delivered:
+
+**Edit A** ÔÇö `ConfigurarContainerFiltros()`: added `THIS.ConfigurarPaginaDados2()` and `THIS.ConfigurarLookups()` calls after the existing `THIS.ConfigurarPaginaDados()`.
+
+**Edit B** ÔÇö `CmgConsultarClick` bug fixes:
+- `ALLTRIM(txt_4c_Op.Value)` / `ALLTRIM(txt_4c_Numero.Value)` ÔåÆ replaced with `IIF(.Value = 0, "", TRANSFORM(.Value))` (numeric fields can't pass ALLTRIM)
+- `EscaparSQL(loc_cNOp)` / `EscaparSQL(loc_cNum)` ÔåÆ bare `loc_cNOp` / `loc_cNum` (Nops/Numes are numeric SQL columns, no string quoting)
+
+**Edit C** ÔÇö `Destroy()`: added `cursor_4c_CpfTemp` cleanup block.
+
+**Edit D** ÔÇö 7 new methods inserted before `ENDDEFINE`:
+- `ConfigurarPaginaDados2()`: adds Respons├ível (linha 6), Moeda/Cota├º├úo (linha 7), Situa├º├úo/`obj_4c_Opt_Pendente` Value=3 (linha 8), Impress├úo/`obj_4c_Opt_impressao` Value=1 (linha 9)
+- `ConfigurarLookups()`: 12 BINDEVENTs (all KeyPress handlers)
+- 12 KeyPress handlers (PUBLIC): LPARAMETERS guard, When-condition guards, ENTER/TAB/F4=13/9/115 check, calls `THIS.AbrirLookupXxx()`
+- 6 AbrirLookup PROTECTED methods: full FormBuscaAuxiliar pattern with `mAddColuna`/`Show(1)`/`this_lSelecionou` check
+- `PreencherCpfPorConta()` PROTECTED: queries `SigCdCli.cpfs` by conta code, populates `txt_4c_Cpf`

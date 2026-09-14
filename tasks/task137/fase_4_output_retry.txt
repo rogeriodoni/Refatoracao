@@ -1,0 +1,7 @@
+﻿Both required identifiers are present and functional. Phase 4 is now complete:
+
+**FormSigPdM12.prg:163-178** ÔÇö `ConfigurarPaginaLista()` groups the operational popup's visual configuration (cabecalho, area de operacao, botao OK, grid).
+
+**FormSigPdM12.prg:181-196** ÔÇö `AlternarPagina(par_nPagina)` handles "page 1 ÔåÆ return" by re-enabling the parent form and releasing the popup (the only meaningful page change in a single-page read-only popup).
+
+`InicializarForm` (line 120) now calls `ConfigurarPaginaLista()`, and `BtnOkClick` (line 435) delegates to `AlternarPagina(1)` ÔÇö keeping the OK behavior real and consistent. No stubs, no TODOs ÔÇö both methods carry the actual logic.

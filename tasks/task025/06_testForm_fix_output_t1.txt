@@ -1,0 +1,11 @@
+﻿**Diagn├│stico:** O timeout em ETAPA 1B ├® causado por um dialog modal bloqueando o VFP9 durante a inicializa├º├úo. A sequ├¬ncia:
+
+1. `CREATEOBJECT("SigReAacBO")` ├® chamado dentro de `InicializarForm()`
+2. Em `SigReAacBO.Init()`, `gc_4c_CaminhoReports` n├úo est├í definida ÔåÆ erro VFP9 "Variable not found"
+3. O CATCH captura e chama `MsgErro()` ÔåÆ dialog modal (n├úo suprimido por SYS(2335,0) se for FormErro)
+4. O VARTYPE check no form detecta BO = .F. ÔåÆ segundo `MsgErro()` ÔåÆ segundo dialog
+5. VFP9 fica bloqueado aguardando intera├º├úo do usu├írio ÔåÆ timeout 300s
+
+**Corre├º├úo aplicada:**
+- **FormSigReAac.prg**: Guard para `gc_4c_CaminhoReports` adicionado em `InicializarForm()` antes de `CREATEOBJECT("SigReAacBO")`, seguindo o padr├úo j├í existente para `gc_4c_CaminhoIcones`
+- **SigReAacBO.prg**: Guard defensivo em `Init()` antes do acesso ├á vari├ível

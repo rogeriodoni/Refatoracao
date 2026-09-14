@@ -1,0 +1,8 @@
+﻿Fase 3 conclu├¡da. O arquivo `FormSigReInv.prg` j├í existia com implementa├º├úo completa (todas as 8 fases). Corrigido o bug de `FontName`: bot├Áes 1 (Visualizar), 2 (Imprimir) e 4 (Encerrar) usavam `"Tahoma"` em vez de `"Comic Sans MS"` conforme a regra can├┤nica para CommandGroup de formul├írios de relat├│rio.
+
+**Estado atual do arquivo:**
+- Estrutura base completa: `DEFINE CLASS FormSigReInv AS FormBase`, `Init()`, `InicializarForm()`, `ConfigurarCabecalho()`, `Destroy()`
+- `cmg_4c_Botoes` com 4 bot├Áes (Visualizar/Imprimir/Gera TXT/Encerrar) ÔÇö todos com `FontName="Comic Sans MS"` agora
+- `ConfigurarFiltros()` completo com todos os controles do SCX legado
+- `FormParaRelatorio()`, `ValidacaoEntrada()` e todos os handlers de evento implementados
+- Stubs de compatibilidade com `FormBase` para m├®todos CRUD (form ├® REPORT, n├úo CRUD)

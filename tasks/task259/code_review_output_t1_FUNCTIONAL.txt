@@ -1,0 +1,4 @@
+﻿3 corre├º├Áes aplicadas (as 2 ocorr├¬ncias de `[NULL-CURSOR]` eram para o mesmo cursor `cursor_4c_Produtos` ÔÇö uma em `CarregarLista` j├í tinha `SET NULL ON/OFF`, a outra em `BtnIncluirClick` n├úo tinha):
+
+- **`TornarControlesVisiveis`** (linha ~1970): moveu a recurs├úo para ANTES do `INLIST`+`LOOP`, garantindo que os filhos de `cnt_4c_Cabecalho` ficam vis├¡veis mesmo sem for├ºar `Visible=.T.` no container pai.
+- **`BtnIncluirClick`** (linha ~1056): adicionou `SET NULL ON` antes e `SET NULL OFF` ap├│s o `CREATE CURSOR cursor_4c_Produtos`, alinhando com o mesmo padr├úo j├í correto em `CarregarLista`.

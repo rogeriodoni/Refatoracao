@@ -1,0 +1,3 @@
+﻿**Diagn├│stico:** `InicializarCursores()` retornava `.F.` quando `gnConnHandle <= 0` (sem conex├úo em modo teste), o que fazia `InicializarForm()` ÔåÆ `Init()` ÔåÆ `CREATEOBJECT` retornar `.NULL.`.
+
+**Fix aplicado em `sigprccpBO.prg:211-214`:** No branch sem conex├úo, agora cria `cursor_4c_Produtos` vazio (necess├írio como `RecordSource` do grid) e retorna `.T.`, permitindo a instancia├º├úo completa do form. O `MsgErro` de "sem conex├úo" ├® mantido para alertar em produ├º├úo.

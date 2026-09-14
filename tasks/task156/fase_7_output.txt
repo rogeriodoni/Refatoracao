@@ -1,0 +1,11 @@
+﻿Fase 7 conclu├¡da. Aqui est├í o que foi feito:
+
+**Comportamento real adicionado ao `GrdAfterRowColChange`**: quando o usu├írio sai da Column5 (ValAtu) ap├│s alterar o valor em modo `LibValAtu`, a nova linha vazia ├® inserida automaticamente no final do grid ÔÇö replicando o comportamento do `Column5.Text1.Valid` original (`Insert Into CrProdutos From MemVar` + `Keyboard '{DNARROW}'`).
+
+**4 eventos adicionados** com l├│gica real adequada ao contexto operacional:
+- `BtnIncluirClick` (linha 2289): reset completo via `AlternarPagina(1)` ÔÇö equivale a "nova consulta"
+- `BtnAlterarClick` (linha 2305): reprocessa com os par├ómetros atuais sem limpar filtros
+- `BtnVisualizarClick` (linha 2349): navega para o topo do grid e atualiza a exibi├º├úo
+- `BtnExcluirClick` (linha 2370): limpa apenas o grid (modo 2) com confirma├º├úo, preservando filtros
+
+> **Nota**: este ├® um form OPERACIONAL ÔÇö os nomes CRUD (`BtnIncluirClick` etc.) foram adaptados para a├º├Áes operacionais equivalentes, conforme o padr├úo de outros forms operacionais do sistema (ex: `FormSIGMDETQ.prg`).

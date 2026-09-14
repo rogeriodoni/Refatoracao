@@ -1,0 +1,820 @@
+{
+  "resumo": {
+    "totalMetodos": 46,
+    "metodosComSQL": 15,
+    "metodosComValidacao": 17,
+    "totalQueries": 9,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChkFeriado", "For Contas = Alltrim", "fGravarLog", "fConfigGeral", "fGerUniqueKey", "For !Empty", "From crDetalhe where Empty", "fAcessoContas", "For Empty"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "Parameters pTipo\n\nIf Used([csRel])\n\tuse in csRel\nEndIf \nSelect crSigCdCcj \n\nSelect a.Codigo, a.Data_Base, a.Fator, a.Contas, a.Total, a.TotLiq, Space(40) as DesConta, b.Datas, b.Valor, b.liquido, b.Dias ;\nFrom crSigCdCcj a ;\nJoin crDetalhe b on a.Codigo = b.Codigo ;\ninto Cursor CsRel ReadWrite \n\nSelect CsRel\nScan\n\tThisForm.poDataMgr.CursorQuery([SigCdCli],[crCli],[Iclis],CsRel.Contas,[rClis])\n\t\n\tReplace DesConta With crCli.rClis\nEndScan\t \n\nSelect CsRel\nIndex on Datas Tag Datas\nGo Top \n\nIf Reccou... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Procedure",
+      "linhas": 91,
+      "codigoOriginal": "Parameters pMsg\n\nLocal nOldSele\nnOldSele = Select()\n\nIf Used([CsQtdDt])\n\tUse In CsQtdDt\nEndif\n\nIf Empty(Thisform.Pagina.Dados.Get_DataBase.Value)\n\tIf pMsg\n\t\tMessagebox([Data Base não informada.],0+48,[Aviso])\n\t\tThisform.Pagina.Dados.Get_DataBase.SetFocus\n\tEndif\n\tReturn .F.\nEndif\n\nldDBase = Thisform.Pagina.Dados.Get_DataBase.Value\nlnFator = Thisform.Pagina.Dados.Get_Fator.Value\n\nIf pMsg\n\tIf Messagebox([Deseja Recalcular os Valores?],4+32,[Atenção]) <> 6\n\t\tReturn .F.\n\tEndif\nEndif\n\nSelect crDetalhe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChkFeriado",
+        "metodosFormChamados": "Value = Nvl",
+        "controlesReferenciados": "Get_DataBase,Get_Fator,optDias,ChkFeriado(Thisform,Get_Qtde,Get_Media,Get_TotLiq,Get_Total",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Procedure",
+      "linhas": 62,
+      "codigoOriginal": "ldDBase = ThisForm.Pagina.Dados.Get_DataBase.Value\nlnFator = ThisForm.Pagina.Dados.Get_Fator.Value\n\nIf Used([CsQtdDt])\n\tUse In CsQtdDt\nEndif\n\nIf Empty(ldDBase)\n\tReplace Dias \tWith 0 in crDetalhe\n\tReplace Liquido With 0 in crDetalhe\nElse\n\tlnDias  = Ttod(crDetalhe.Datas) - Ttod(ldDBase)\n\tIf (lnDias > 0) And Thisform.Pagina.Dados.optDias.Value = 2\n\t\tllSab = .T.\n\t\tllDom = .T.\n\t\tllFer = .T.\n\n\t\tldDI1 = Ttod(ldDBase)\n\t\tldDI2 = Ttod(crDetalhe.DataS)\n\t\tDo While (ldDI1 <= ldDI2)\n\t\t\tIf fChkFeriado(Thisform... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkFeriado",
+        "metodosFormChamados": "Value = Nvl",
+        "controlesReferenciados": "Get_DataBase,Get_Fator,optDias,ChkFeriado(Thisform,Get_Qtde,Get_Media,Get_TotLiq,Get_Total",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\nThis.poDataMgr.Release\nIf Used([crDetalhe])\n\tuse in crDetalhe \nEndIf \n\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Select crSigCdCcj\nIf Not Empty(ThisForm.Pagina.Dados.get_Contas.Value)\n\tLocate For Contas = Alltrim(ThisForm.Pagina.Dados.get_Contas.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Contas = Alltrim",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Procedure",
+      "linhas": 36,
+      "codigoOriginal": "llOks = .T.\n\nIf Not Thisform.poDataMgr.Update('crSigCdCcj')\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Insert - crSigCdCcj )')\n\tllOks = .F.\nEndif\n\nIf Not Thisform.poDataMgr.Update('crSigDtCcj')\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Insert - crSigDtCcj )')\n\tllOks = .F.\nEndif\n\nPrivate pDt\npDt = Ctod('')\nSelect crSigDtCcj\nScan\n\tpDt = crSigDtCcj.Datas\n\tlcUpdate = [Update SigDtCcj Set Datas = ?pDt where cidchaves = ']+crSigDtCcj.cidchav... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "Update,SQLExecute,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Procedure",
+      "linhas": 53,
+      "codigoOriginal": "Private pChave, llOK\n\nSelect crSigCdCcj\npChave= crSigCdCcj.Codigo\n\nllOK = .t.\n\nSelect crSigCdCcj\nGo top\nDelete For Codigo = pChave\n\nSelect crSigDtCcj\nGo top\nDelete For Codigo = pChave\n\n* Excluindo os Registros\nIf llOK\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdCcj Where Codigo = ?pChave], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')\n\t\tllOK = .f.\n\tEndIf\nEndIf\nIf llOK\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigDtCcj Where C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "SQLExecute,Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Procedure",
+      "linhas": 59,
+      "codigoOriginal": "llOks = .T.\nSelect crSigCdCcj\npChave= crSigCdCcj.Codigo\n\nIf llOks\n\tIf (Thisform.poDataMgr.SQLExecute([Delete From SigCdCcj Where Codigo = ?pChave], '') < 1)\n\t\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 1)')\n\t\tllOks = .F.\n\tEndif\nEndif\n\nIf llOks\n\tIf (Thisform.poDataMgr.SQLExecute([Delete From SigDtCcj Where Codigo = ?pChave], '') < 1)\n\t\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 2)')\n\t\tllOks = .F.\n\tEndif\nEndif\n\nI... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "SQLExecute,Commit,Rollback,Update",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Init",
+      "linhas": 47,
+      "codigoOriginal": "LParameters lcAcesso\n\nIf Used([crDetalhe])\n\tuse in crDetalhe\nEndIf \nThisForm.Pagina.Dados.GradeDetalhe.RecordSource = ''\n\nlcQuery = [Select a.*, b.rclis as desconta from sigcdccj a join sigcdcli b on a.contas = b.iclis]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector',ThisForm.Name)\n\t\n\tIf !(.poDataMgr.pnIdconn > 0)\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\n\t\n\tWith .poDataMgr\n\t\t.AddCursor('SigCdCcj', 'Codigo', '... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Click",
+      "linhas": 92,
+      "codigoOriginal": "Lparameters Opcao\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndif\n\nIf !DoDefault( Opcao )\n\tThisform.mAtivapagina1\n\tReturn\nEndif\n\nThisForm.AntValue = []\n\nlcCod = Iif(Thisform.PcEscolha='INSERIR', '', crSigCdCcj.Codigo)\n\n*** Prepara Grade de Detalhe ***\nSelect crDetalhe\nZap\n\nlcSql = [Select * From SIgDtCcj Where codigo = ']+lcCod+[' ]\n=Thisform.PodataMgr.SqlExecute(lcSql,'TmpDet')\nSelect TmpDet\nScan\n\tSelect crDetalhe\n\tAppend Blank\n\tReplace\tValor With TmpDet.Valor, ;\n\t\tDias    With TmpDet.Dias,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "SqlExecute,Value = Nvl,CursorQuery",
+        "controlesReferenciados": "Get_Qtde,Get_Media,Get_DContas,optDias,get_Contas,get_DataBase",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Click",
+      "linhas": 66,
+      "codigoOriginal": "If Thisform.PcEscolha = 'INSERIR'\n\tSelect crDetalhe\n\tGo Top\n\tCount For !Empty(DataS) To lnTotDet\n\tIf lnTotDet = 0\n\t\tMessagebox('Nenhuma Data foi inserida no Calculo.',48,'Aviso')\n\t\tReturn .F.\n\tEndif\nEndif\n\nIf Inlist( Thisform.PcEscolha, 'INSERIR', 'ALTERAR')\n\n\tIf IsEmpty(This.Parent.Parent.Get_Contas.Value)\n\t\tMessagebox([Conta não Informada.],0+48,[Aviso])\n\t\tThis.Parent.Parent.Get_Contas.SetFocus\n\t\tReturn .F.\n\tEndif\n\n\tIf IsEmpty(This.Parent.Parent.Get_DataBase.Value)\n\t\tMessagebox([Data Base não ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For !Empty,From crDetalhe where Empty",
+        "metodosFormChamados": "Impressao",
+        "controlesReferenciados": "Get_Contas,Get_DataBase",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_Contas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_Contas",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "Local lcGrupo\n\nlcGrupo = []\n\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,lcGrupo,'C',this.value,This,Thisform.Pagina.Dados.Get_DContas)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisform.Pagina.Dados.Get_DContas.Value = ''\n\t\tThisform.Pagina.Dados.Get_DContaS.Refresh\n\t\tselect crSigCdCcj\n\t\treturn 0 \n\tEndif\nElse\n\tThisform.Pagina.Dados.Get_DContas.Value = ''\n\tThisform.Pagina.Dados.Get_DContas.Refresh\n\tselect crSigCdCcj\n\treturn(.t.)\nEndIf\n\nIf Not Empty(This.Value)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_DContas,Get_Fator",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_DContas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR') And Empty(This.parent.Get_Contas.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha,'INSERIR') And Empty",
+        "controlesReferenciados": "Get_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_DContas",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "Local lcGrupo, lcConta\n\nlcGrupo = []\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,lcGrupo,'D',this.value,Thisform.Pagina.Dados.Get_Contas,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThisform.Pagina.Dados.Get_Contas.Value = ''\n\t\tThisform.Pagina.Dados.Get_Contas.Refresh\n\t\tselect crSigCdCcj\n\t\treturn 0 \n\tEndif\nElse\n\tThisform.Pagina.Dados.Get_Contas.Value = ''\n\tThisform.Pagina.Dados.Get_Contas.Refresh\n\tselect crSigCdCcj\n\treturn(.t.)\nendif\n\nIf Not Empty(This.par... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Contas,Get_Fator",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.AntValue = This.Value\nReturn(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "ldDia = Ttod(This.Value)\nDo While .T.\n\tIf fChkFeriado(Thisform.poDataMgr, ldDia, .T., .T.)\n\t\tldDia=ldDia+1\n\tElse\n\t\tThis.Value = ldDia\n\t\tExit\n\tEndif\nEnddo\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkFeriado",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkFeriado(Thisform",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "=ThisForm.RecalculoItem()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RecalculoItem",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 15,
+      "codigoOriginal": "=ThisForm.RecalculoItem()\n\nSelect crSigCdCcj\nlcCod = crSigCdCcj.Codigo\n\nSelect crDetalhe\nLocate For Empty(Datas)\nIf Eof()\n\tInsert into crDetalhe(codigo) values (lcCod)\nEndIf\n\nKeyboard '{DNARROW}'\nThis.parent.parent.Column1.SetFocus()\nThisform.LockScreen = .F.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty",
+        "metodosFormChamados": "RecalculoItem",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column2.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "=ThisForm.RecalculoItem()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RecalculoItem",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column3.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "=ThisForm.RecalculoItem()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RecalculoItem",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column4.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "=ThisForm.RecalculoItem()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RecalculoItem",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.InserirV",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.InserirV",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Thisform.LockScreen = .T.\n\nSelect crSigCdCcj\nlcCod = crSigCdCcj.Codigo\n\nSelect crDetalhe\nLocate For Empty(Datas)\nIf Eof()\n\tAppend Blank\nEndif\nThis.parent.GradeDetalhe.Column1.SetFocus()\nReplace crDetalhe.Codigo With lcCod\nThisform.LockScreen = .F.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_DataBase",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.AntValue = This.Value\nReturn(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_DataBase",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "*If This.Value <> Thisform.AntValue\n\t=ThisForm.Recalcular(.F.)\n*EndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Recalcular",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_Fator",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.AntValue = This.Value\nReturn(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_Fator",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "*If This.Value <> Thisform.AntValue\n\t=ThisForm.Recalcular(.F.)\n*EndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Recalcular",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.BtnVideo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( Not InList(Thisform.pcEscolha,'INSERIR','ALTERAR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.BtnVideo",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "=ThisForm.Impressao([F])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Impressao",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.BtnRec",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.BtnRec",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "=ThisForm.Recalcular(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Recalcular",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_Qtde",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_Total",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_TotLiq",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.Get_Media",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.ExcluirV",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.ExcluirV",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "Select crDetalhe\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\n\nSELECT crDetalhe\nDelete\nThis.parent.GradeDetalhe.Refresh\nThis.parent.GradeDetalhe.Column1.SetFocus\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.optDias",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCCJ.Pagina.Dados.optDias",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "=ThisForm.Recalcular(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Recalcular",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCCJ.Procedure",
+      "queryOriginal": "Select a.Codigo, a.Data_Base, a.Fator, a.Contas, a.Total, a.TotLiq, Space(40) as DesConta, b.Datas, b.Valor, b.liquido, b.Dias ; From crSigCdCcj a ; Join crDetalhe b on a.Codigo = b.Codigo ; into Cursor CsRel ReadWrite",
+      "tabelas": "crSigCdCcj,crDetalhe",
+      "colunas": "Codigo,Data_Base,Fator,Contas,Total,TotLiq,Datas,Valor,liquido",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCCJ.Procedure",
+      "queryOriginal": "\tlcUpdate = [Update SigDtCcj Set Datas = ?pDt where cidchaves = ']+crSigDtCcj.cidchav... [TRUNCADO]",
+      "tabelas": "SigDtCcj",
+      "colunas": "Datas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCCJ.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdCcj Where Codigo = ?pChave], '') < 1)",
+      "tabelas": "SigCdCcj",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCCJ.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigDtCcj Where C... [TRUNCADO]",
+      "tabelas": "SigDtCcj",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCCJ.Procedure",
+      "queryOriginal": "\tIf (Thisform.poDataMgr.SQLExecute([Delete From SigCdCcj Where Codigo = ?pChave], '') < 1)",
+      "tabelas": "SigCdCcj",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCCJ.Procedure",
+      "queryOriginal": "\tIf (Thisform.poDataMgr.SQLExecute([Delete From SigDtCcj Where Codigo = ?pChave], '') < 1)",
+      "tabelas": "SigDtCcj",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCCJ.Init",
+      "queryOriginal": "lcQuery = [Select a.*, b.rclis as desconta from sigcdccj a join sigcdcli b on a.contas = b.iclis]",
+      "tabelas": "sigcdccj,sigcdcli",
+      "colunas": "rclis",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCCJ.Click",
+      "queryOriginal": "lcSql = [Select * From SIgDtCcj Where codigo = ']+lcCod+[' ] =Thisform.PodataMgr.SqlExecute(lcSql,'TmpDet')",
+      "tabelas": "SIgDtCcj",
+      "colunas": "codigo,SqlExecutelcSql,TmpDet",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCCJ.Pagina.Dados.GradeDetalhe.Column2.Text1.LostFocus",
+      "queryOriginal": "\tInsert into crDetalhe(codigo) values (lcCod)",
+      "tabelas": "crDetalhe",
+      "colunas": "codigo",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigCdCcj", "crDetalhe", "SigDtCcj", "SigCdCcj", "sigcdcli"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

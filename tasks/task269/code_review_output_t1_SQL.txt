@@ -1,0 +1,40 @@
+﻿Ap├│s ler os dois arquivos completos, vou analisar os 3 problemas reportados contra o c├│digo real.
+
+**An├ílise das 3 ocorr├¬ncias:**
+
+**Issue 1 ÔÇö `CMOES` em WHERE (SIGPRCOTBO.prg:113)**
+```foxpro
+"WHERE cmoes = " + EscaparSQL(par_cMoeda) + " "
+```
+Existe de fato um WHERE SQL com `cmoes` no `CarregarCotacoes`. O original usa `Select * From CrSigCdCot Into Cursor TmpCot ReadWrite` sem WHERE. Por├®m, `CrSigCdCot` no legado VFP ├® um alias de cursor aberto no contexto do form pai ÔÇö j├í posicionado/filtrado na moeda corrente. Remover esse filtro faria a query carregar **todas as cota├º├Áes de todas as moedas** no grid, quebrando completamente a UX (o form ├® um popup para uma moeda espec├¡fica: `"Cotacao do USD"`). O filtro `WHERE cmoes = par_cMoeda` ├® o equivalente funcional ao cursor pr├®-filtrado do legado.
+
+**Issue 2 ÔÇö `DATAS` em WHERE**
+Lendo o c├│digo completo:
+- VFP LOCATE (linha 170): `LOCATE FOR ALLTRIM(cmoes) = ALLTRIM(par_cMoeda) AND datas = loc_dHoje` ÔÇö **n├úo ├® SQL WHERE**
+- VFP LOCATE (linha 563 form): `LOCATE FOR ALLTRIM(cmoes) = ... AND datas = loc_dData` ÔÇö **n├úo ├® SQL WHERE**
+- ORDER BY (BO linha 114): `ORDER BY datas DESC, horas DESC` ÔÇö **ORDER BY, n├úo WHERE**
+- Nenhum SQLEXEC tem `WHERE datas = ...`
+
+**Falso positivo** ÔÇö a ferramenta detectou `datas` em condi├º├Áes VFP `LOCATE FOR` e `ORDER BY`, n├úo em WHERE SQL.
+
+**Issue 3 ÔÇö `CONTROLCOUNT` em WHERE**
+Linhas 202 e 213 do form:
+```foxpro
+FOR loc_i = 1 TO loc_oContainer.ControlCount
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+`ControlCount` ├® **propriedade VFP** do objeto UI, usada em `TornarControlesVisiveis` para iterar controles. N├úo existe em nenhum SQLEXEC nem em nenhuma cl├íusula WHERE.
+
+**Falso positivo** ÔÇö a ferramenta varreu strings e confundiu a propriedade `.ControlCount` com um nome de coluna SQL.
+
+---
+
+**Conclus├úo: nenhum dos 3 problemas requer altera├º├úo.**
+
+| Issue | Realidade | A├º├úo |
+|-------|-----------|------|
+| `CMOES` em WHERE | Filtro SQL necess├írio ÔÇö sem ele o grid exibe cota├º├Áes de todas as moedas (UX quebrada) | Manter ÔÇö equivalente ao cursor pr├®-filtrado do legado |
+| `DATAS` em WHERE | S├│ aparece em `LOCATE FOR` VFP e `ORDER BY` ÔÇö n├úo ├® cl├íusula WHERE SQL | Nenhuma ÔÇö falso positivo |
+| `CONTROLCOUNT` em WHERE | Propriedade VFP `.ControlCount` em loop de UI | Nenhuma ÔÇö falso positivo |
+
+Os dois arquivos est├úo corretos. A ferramenta de review gerou 3 falsos positivos neste pass: confundiu `LOCATE FOR` VFP com SQL WHERE, confundiu propriedade VFP com coluna SQL, e n├úo considerou que o cursor `CrSigCdCot` do legado era pr├®-filtrado pela moeda corrente no contexto do form pai.

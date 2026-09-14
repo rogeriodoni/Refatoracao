@@ -1,0 +1,24 @@
+﻿The structure is correct. FASE 11 method ends at line 7479 (ENDPROC), handlers follow at 7482-7654, and FASE 10 (ConfigurarPgpgCusto) resumes at line 7663 - all intact and properly ordered.
+
+The implementation is complete. Here's a summary of what was added:
+
+**Edit 1** ÔÇö `ConfigurarPaginaDados()` (line 685): Added call to `THIS.ConfigurarPgPgDadosConsP()` before `TornarControlesVisiveis`.
+
+**Edit 2** ÔÇö New `PROTECTED PROCEDURE ConfigurarPgPgDadosConsP()` (line 7205) building **Page5** of `pgf_4c_Dados`:
+
+| Control | Type | Layout | Behavior |
+|---|---|---|---|
+| `cursor_4c_GrdCons` | Cursor | ÔÇö | 10 fields: mats, qtds, unicompos, Grupos, Descrs, Ordems, consumo, Cods, dcats, Dopes |
+| `cursor_4c_GrDTEMP` | Cursor | ÔÇö | 2 fields: agrup, tempo |
+| `grd_4c_GrdCons` | Grid 9 cols | T:155 L:6 W:987 H:362 | Cols 1,2,3,6 ReadOnly=.T.; Cols 4,5,7,8,9 editable |
+| `lbl_4c_Label7` | Label | T:523 L:25 W:105 | "Qtde Componentes : " |
+| `txt_4c_Qtcpnt` | TextBox | T:519 L:131 W:31 H:23 | Enabled=.F. (habilitar em modo edi├º├úo) |
+| `chk_4c_ChkFund` | CheckBox | T:544 L:10 W:182 H:15 | "N├úo Checar Cadastro de Fundi├º├úo" |
+| `lbl_4c_Label1` | Label | T:521 L:642 W:176 | "Tempo Produ├º├úo por Agrupamento :" |
+| `grd_4c_GrDTEMP` | Grid 2 cols | T:519 L:821 W:172 H:107 | ReadOnly=.T. |
+
+**4 PUBLIC handlers** added:
+- `GrdConsAfterRowColChange` ÔÇö silent refresh on navigation
+- `GrdConsCol4KeyPress` ÔÇö F4 opens `FormBuscaAuxiliar` on `SigCdPrf` by `Grupos`; sets Grupos + Descrs
+- `GrdConsCol5KeyPress` ÔÇö F4 opens `FormBuscaAuxiliar` on `SigCdPrf` by `Descrs`; sets Descrs, Grupos, Ordems, Dopes (only when Column4 empty)
+- `GrdConsCol8KeyPress` ÔÇö F4 opens `FormBuscaAuxiliar` on `SigCdCat` by `Cods`; sets Cods + dcats

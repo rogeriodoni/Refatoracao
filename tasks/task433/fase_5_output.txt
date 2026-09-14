@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. A Fase 5 est├í completa. Resumo do que foi adicionado/modificado em `FormFTF.prg`:
+
+**ConfigurarPaginaDados()** agora cont├®m:
+- `cmd_4c_Confirmar` (icone `cadastro_salvar_60.jpg`) e `cmd_4c_Cancelar` em `cnt_4c_BotoesAcao` com BINDEVENTs para `BtnSalvarClick`/`BtnCancelarClick`
+- `lbl_4c_Label1` ("Ordem : ") + `txt_4c_Ordem` (Value=0, width=24, desabilitado por padr├úo)
+- `lbl_4c_Label2` ("Descri├º├úo : ") + `txt_4c_Descr` (Value="", MaxLength=20, desabilitado por padr├úo)
+- Compensa├º├úo +29px em todos os Tops (PageFrame.Top=-29)
+
+**HabilitarCampos()** agora tamb├®m desabilita `cmd_4c_Confirmar` em modo VISUALIZAR.
+
+**BtnSalvarClick()** ÔÇö valida├º├Áes fora do TRY (RETURN livre): checa ordem > 0, chama `BO.VerificarOrdemExistente()`, checa descri├º├úo n├úo vazia; depois `FormParaBO()` + `Salvar()` dentro do TRY.
+
+**BtnCancelarClick()** ÔÇö seta modo LISTA e volta ├á lista com recarga.

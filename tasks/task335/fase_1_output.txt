@@ -1,0 +1,24 @@
+﻿Arquivo `C:\4c\projeto\app\classes\sigprtamBO.prg` criado com sucesso.
+
+**Fase 1 conclu├¡da.** O BO cont├®m:
+
+- **Propriedades declaradas** (todas as colunas de `sigprtam`):
+  - `this_cCidChaves`, `this_cCodTams`, `this_cCPros` (char)
+  - `this_nPesoMs`, `this_nPercs`, `this_nValor`, `this_nDiasPrz` (numeric)
+  - `this_dDataAlts`, `this_dDataTrans`, `this_dDtMovs` (datetime)
+  - `this_cDescs` (virtual ÔÇö lookup SigCdTam, n├úo persiste)
+  - `this_cDPros`, `this_nPVens`, `this_nPCuss` (contexto do produto pai)
+  - `this_cCursorDados = "cursor_4c_TamPro"`
+
+- **Init()** configurando `this_cTabela = "sigprtam"` e `this_cCampoChave = "cidchaves"`
+
+- **M├®todos completos** (antecipados para completude funcional):
+  - `CarregarTamanhos(cCPros)` ÔÇö SQLEXEC com JOIN em SigCdTam
+  - `CarregarProduto(cCPros)` ÔÇö carrega PVens/PCuss/Dpros de SigCdPro
+  - `InserirLinhaGrid(cCPros)` ÔÇö insere linha vazia no cursor local
+  - `ExcluirLinhaGrid(cCPros)` ÔÇö marca deleted na linha corrente
+  - `ValidarTamanhoExiste(cCodTams, cIdChaves)` ÔÇö verifica duplicidade
+  - `BuscarDescricaoTamanho(cCodTams)` ÔÇö lookup em SigCdTam
+  - `SalvarTamanhos(cCPros)` ÔÇö DELETE all + INSERT all no SQL Server
+  - `CalcularValorPorPercentual(nPercs, nPVens)` ÔÇö Valor = PVens + (PVens ├ù Percs/100)
+  - `CalcularPercentualPorValor(nValor, nPVens)` ÔÇö Percs = ((Valor - PVens)/PVens) ├ù 100

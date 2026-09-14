@@ -1,0 +1,5 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente:
+
+**CEMPS** (`FormSIGREDES.prg`, linha 1359/1365): `cEmps` ÔåÆ `Emps` na query de valida├º├úo de empresa (`SigCdEmp`). O nome correto da coluna ├® `Emps`, consistente com o restante do sistema.
+
+**ICLIS** (`SIGREDESBO.prg`, linhas 303-319): `SigCdCli c` foi movido do comma-join impl├¡cito para `INNER JOIN ... ON c.IClis = a.Vends` expl├¡cito (linha 304). A condi├º├úo `a.Vends = c.IClis And` foi removida do WHERE. O join mant├®m sem├óntica id├¬ntica ÔÇö apenas a condi├º├úo saiu do WHERE e foi para o ON clause, eliminando ICLIS do WHERE como exigido.

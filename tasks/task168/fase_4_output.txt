@@ -1,0 +1,21 @@
+﻿Arquivo completo e correto. Fase 4 conclu├¡da.
+
+**O que foi implementado:**
+
+1. **`InicializarForm()`** ÔÇö adicionada chamada a `ConfigurarPaginaLista()` ap├│s `ConfigurarPageFrame()` (linha 130)
+
+2. **`CarregarBaixas()`** ÔÇö adicionada chamada a `AtualizarGrade()` ap├│s o BO popular os dados (linha 334)
+
+3. **`ConfigurarPaginaLista()`** ÔÇö popula Page1 com:
+   - `cnt_4c_Botoes` (Left=720, 165px) ÔåÆ `cmd_4c_Conferencia` + `cmd_4c_Ok` (ambos Visible=.F. inicialmente, bot├Áes 75├ù75)
+   - `cnt_4c_BotoesAcao` (Left=895, 90px) ÔåÆ `cmd_4c_Sair` "Encerrar" (sempre vis├¡vel)
+   - `lbl_4c_Label2` "Data :" + `txt_4c_Data` (ReadOnly, value=this_dData)
+   - `grd_4c_Dados` 5 colunas (Visible=.F., DynamicForeColor azul para lidos)
+   - `txt_4c_Leitura` + `lbl_4c_Txt_Leitura` (Visible=.F. inicialmente)
+   - BINDEVENTs para Click dos bot├Áes e KeyPress da leitura
+
+4. **`AlternarPagina(par_nPagina)`** ÔÇö navega entre p├íginas do PageFrame
+
+5. **`AtualizarGrade()`** ÔÇö ap├│s CarregarBaixas, torna grid/leitura/bot├Áes Ok+Conf.Auto vis├¡veis s├│ se cursor tem registros (equivalente ao bloco final do `carregabars` legado)
+
+6. **`CmdConferenciaClick()`**, **`CmdOkClick()`**, **`CmdSairClick()`**, **`TxtLeituraKeyPress()`** ÔÇö handlers funcionais delegando ao BO

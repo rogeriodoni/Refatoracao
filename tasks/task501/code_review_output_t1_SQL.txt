@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada corretamente. O arquivo est├í limpo.
+
+**O que foi feito:** Removido o `IF !EMPTY(ALLTRIM(csDestinos.Drives)) AND csDestinos.TpProdutos <> 0 ... ENDIF` que envolvia o bloco de INSERT no SCAN de `prcBO.SalvarItens`. O `SCAN` agora processa **todas as linhas** do csDestinos incondicionalmente, alinhado com o comportamento do original (`poDataMgr.Update('crSigPcOoI')` que salva todas as linhas sem filtro).
+
+**Por que eram filtros inventados:**
+- `TPPRODUTOS <> 0` ÔÇö n├úo existe no original; a LLM adicionou uma regra de neg├│cio inexistente
+- `!EMPTY(csDestinos.Drives)` ÔÇö idem; o original persiste todas as linhas editadas pelo usu├írio, incluindo linhas com Drive vazio

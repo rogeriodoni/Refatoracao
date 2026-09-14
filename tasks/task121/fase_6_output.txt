@@ -1,0 +1,11 @@
+﻿Fase 6 conclu├¡da. Resumo do que foi verificado e feito:
+
+**An├ílise da Fase 6 para FormSigReIiv:**
+
+- `FormSigReIiv.prg` ÔÇö **j├í completo** desde fases anteriores: ├║nico controle do original (`chk_4c_Listagem`), todos os bot├Áes, `FormParaRelatorio()`, `BtnVisualizarClick()`, `BtnImprimirClick()`, `Destroy()`. N├úo h├í campos adicionais nem lookups no original (form ├® Height=125, parametrizado via Init).
+
+- `SigReIivBO.prg` ÔÇö **j├í completo**: `SelecionarDados()`, `PrepararDados()` (monta cursor `crInvoices` com ~80 campos, loop de produtos, composi├º├úo, fotos), `Imprimir()`, `Visualizar()`, `Destroy()`.
+
+- `config.prg` ÔÇö **j├í carrega automaticamente** via ADIR ambos os arquivos (classes/`*BO.prg` e forms/relatorios/`Form*.prg`).
+
+- **Adicionado**: procedimento `AbrirFormSigReIiv(par_pEmp, par_pDop, par_nNum, par_nTpImp)` no final de `menu.prg` para chamada program├ítica de formul├írios de movimento. N├úo foi adicionada barra no `popRelatorios` pois o form ├® parametrizado e invocado por outros formul├írios, n├úo diretamente pelo usu├írio.

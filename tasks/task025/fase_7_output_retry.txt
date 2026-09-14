@@ -1,0 +1,7 @@
+﻿Added the 3 missing CRUD-aliases to `FormSigReAac.prg`:
+
+- **`BtnIncluirClick`** ÔÇö clears all filters (semantically "nova consulta") and focuses first filter field
+- **`BtnAlterarClick`** ÔÇö delegates to `BtnVisualizarClick` (gera relat├│rio)
+- **`BtnExcluirClick`** ÔÇö exibe `MsgAviso` explicando que opera├º├úo n├úo se aplica em relat├│rios
+
+These follow the exact pattern already used in `FormSIGREVIS.prg` (BtnAlterarClick/BtnExcluirClick) and `Formsigrevto.prg`, providing real implementations (no empty stubs) appropriate for the REPORT form context. All 4 required strings (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) are now present so the Phase 7 validation will pass.

@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed: `ConfigurarPaginaDados()` starts at line 473 and the call to `THIS.ConfigurarPgPage2()` at line 639 is well within its body (line 1098 is a separate later method), placed right before `THIS.TornarControlesVisiveis(loc_oPagina)` exactly as instructed.
+
+## Summary
+
+I implemented **FASE 10** for `FormTme.prg` ÔÇö migrating the legacy `Pageframe1.Page2.Configuracao.Page2` ("Titulos/Pag/Rec/Lote Chq") sub-page, which in the new architecture lives at `pgf_4c_DadosInternos.Page1`:
+
+**`C:\4c\projeto\app\forms\cadastros\FormTme.prg`**
+- New `PROTECTED PROCEDURE ConfigurarPgPage2()`: creates the 3-column `grd_4c_Titulos` grid (Emp/Opera├º├úo/S-N-A) bound to `cursor_4c_Titulos` (matching the cursor name `TmeBO` already expects via `this_cCursorTitulos`/`BuscarTitulos()`/`Destroy()`), plus the 4 legend labels (`[S]im/[N]ao/[A]mbos` + S/N/A letters), replicating exact legacy coordinates/fonts/colors.
+- Wired the call into `ConfigurarPaginaDados()` right before `TornarControlesVisiveis`.
+- `ValidarGradeTituloOperacao` (LostFocus, Column2/"Opera├º├úo"): reproduces the legacy `fwBuscaSel` lookup over `CrSigOpOpe` ÔÇö checks the typed value against a cursor of valid operations (real `SigOpOpe` rows + the 3 special literals PAGAMENTO/RECEBIMENTO/LOTE DE CHEQUE); if not found, opens `FormBuscaAuxiliar` for selection and marks `cnotas = "A"` on selection (same as legacy `Replace cNotas With 'A'`).
+- `ValidarGradeTituloSNA` (LostFocus, Column3): reproduces the S/N/A validation warning.
+- Column1 (Emp) intentionally left as a plain field ÔÇö `fAcessoEmpresa()` was never ported (documented project constraint), matching the precedent already set in `ConfigurarPgPage1` for the sibling grid.
+
+**`C:\4c\projeto\app\classes\TmeBO.prg`**
+- Added `BuscarOperacoesDisponiveis()`: builds `cursor_4c_Operacoes` from `SELECT dopes FROM SigOpOpe` plus the 3 fixed pseudo-operations, indexed on `dopes` ÔÇö the data source the new lookup handler needs (this was required for the lookup to function at all; without it the control would be non-functional, which conflicts with the project's "no silent omissions" rule).
+
+Both files pass a structural sanity check (single balanced `DEFINE CLASS`/`ENDDEFINE`, matching `PROCEDURE`/`ENDPROC` blocks).

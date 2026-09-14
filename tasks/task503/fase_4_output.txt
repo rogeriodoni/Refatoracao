@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto e completo. Fase 4/8 conclu├¡da com sucesso.
+
+**O que foi implementado:**
+
+- **`ConfigurarPaginaLista()`** completamente reescrita:
+  - Top corrigidos com compensa├º├úo PageFrame.Top=-29: `cnt_4c_Cabecalho.Top=31`, `cnt_4c_Botoes.Top=29`
+  - 5 bot├Áes CRUD dentro de `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones can├┤nicos, Comic Sans MS, PicturePosition=13
+  - Bot├úo `cmd_4c_Encerrar` dentro de `cnt_4c_Saida` (Left=917, padr├úo can├┤nico)
+  - BINDEVENT ligando todos os bot├Áes aos handlers PUBLIC
+  - Grid `grd_4c_Lista` (Top=117, Width=910, 5 colunas: Promo├º├úo, C├│d., Comiss%, e-Com., Lista Pre├ºos)
+
+- **`CarregarLista()`** ÔÇö implementa├º├úo real com Buscar(), RecordSource, ControlSource, Headers redefinidos ap├│s RecordSource, formata├º├úo via FormatarGridLista()
+
+- **`AlternarPagina(par_nPagina)`** ÔÇö navega├º├úo entre Page1/Page2, chama CarregarLista() ao voltar para lista
+
+- **`FormatarGridLista()`** ÔÇö formata fonte Tahoma 8 no grid
+
+- **Handlers CRUD** (BtnIncluirClick, BtnVisualizarClick, BtnAlterarClick, BtnExcluirClick, BtnBuscarClick, BtnEncerrarClick) ÔÇö todos PUBLIC, funcionais com l├│gica real

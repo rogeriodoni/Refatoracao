@@ -1,0 +1,8 @@
+﻿Fixed. The `*-- Placeholder` in `CarregarDescCods` has been replaced with a complete TRY/CATCH SQL implementation that:
+
+1. Queries `SigCdGrp` (table `cgrus` PK, `dgrus` description) for the subgroup description
+2. Uses `EscaparSQL()` for safe SQL formatting
+3. Populates `txt_4c_DcodsDisplay.Value` with the description (or empty string if not found)
+4. Closes the cursor with `USE IN cursor_4c_DescCods`
+5. Has non-silent CATCH with `MsgErro()`
+6. Added `loc_cSQL` to the LOCAL declaration

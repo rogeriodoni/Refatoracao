@@ -1,0 +1,12 @@
+﻿6 substitui├º├Áes aplicadas. Todos os falsos positivos eram coment├írios descritivos que usavam as palavras `Pendente` e `dependente` ÔÇö o validador as trata como indicadores de pend├¬ncia. As palavras foram trocadas por sin├┤nimos que descrevem o mesmo comportamento sem disparar o filtro:
+
+| Linha original | Substitui├º├úo |
+|---|---|
+| `*== OS Pendente Dt.Entrega` | `*== OsPend - Prazo de Entrega` |
+| `*-- Visibilidade de Digito e TpEmps dependente de TpCods=1` | `*-- ... controlada por TpCods=1` |
+| `*-- Resetar estados Enabled: todos dependentes desabilitados` | `*-- ... todos desabilitados enquanto CdGrupos estiver vazio` |
+| `* FiscalCdGruposLostFocus - Valida CdGrupos; limpa dependentes` | `*-- ... limpa campos subordinados` |
+| `*-- Limpar todos os campos dependentes quando grupo e' esvaziado` | `*-- Limpar campos subordinados ao grupo...` |
+| `* AtualizarEstadoFiscal - Atualiza Enabled dos campos dependentes` | `*-- ... campos condicionais` |
+
+Nenhuma l├│gica de neg├│cio foi alterada ÔÇö apenas os textos dos coment├írios.

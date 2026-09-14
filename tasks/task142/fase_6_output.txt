@@ -1,0 +1,20 @@
+﻿Todas as corre├º├Áes foram aplicadas com sucesso. O arquivo est├í completo.
+
+**Fase 6 conclu├¡da ÔÇö resumo das corre├º├Áes:**
+
+1. **Column1.ControlSource**: `TpOps` ÔåÆ `Nops` (cr├¡tico: TpOps nunca era populado no INSERT, coluna ficava em branco)
+
+2. **ColumnOrder adicionado** a todas as 11 colunas do `grd_4c_Dados`, replicando a ordem visual do SCX original:
+   - Visual: Industrializa├º├úo | Componente | Descri├º├úo | Cor | Tam. | Unid. | Qtde(1) | Unid.(2) | Qtde(2) | Peso Fabr. | Lote
+
+3. **Larguras corrigidas** no `grd_4c_Dados` para bater com o original (ex: Column2/CMats de 75ÔåÆ100, Column4/CUnis de 45ÔåÆ31, Column6/CDescs de 100ÔåÆ50)
+
+4. **Column1 properties**: `FontName="Courier New"`, `InputMask="9999999999"`, `Alignment=3` (num├®rico, como no original)
+
+5. **Header properties**: `FontName="Tahoma"`, `FontSize` e `Alignment=2` (centralizado) em todas as colunas de ambos os grids
+
+6. **`txt_4c_TotPeso.Alignment = 3`** adicionado (alinhamento ├á direita, como o original `getTotPeso.Alignment=3`)
+
+7. **`grd_4c_Resumo` corrigido**: larguras (108/80/31/80/31/80), `AllowHeaderSizing=.F.`, `AllowRowSizing=.F.`, `HeaderHeight=16` ÔÇö todos do SCX original
+
+Os BINDEVENTs e handlers de Column3/5/8 (Pesos/Qtds/Peso2s) permanecem corretos pois os ControlSources desses tr├¬s s├úo os mesmos.

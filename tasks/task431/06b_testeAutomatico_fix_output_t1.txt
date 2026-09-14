@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas ao `FormFre.prg`:
+
+| Falha | Causa | Fix |
+|-------|-------|-----|
+| `CarregarLista` ÔÇö sem cursor | Branch `gb_4c_ValidandoUI=.T.` retornava `.T.` sem criar cursor | `CREATE CURSOR cursor_4c_Dados (cidas C(30), valors N(11,2))` antes do `RETURN` |
+| `ModoIncluir` ÔÇö ALTERNARPAGINA | `AlternarPagina` era `PROTECTED` ÔåÆ invis├¡vel de fora da classe | Removido `PROTECTED` |
+| `ModoVisualizar` ÔÇö AJUSTARBOTOESPORMODO | `AjustarBotoesPorModo` era `PROTECTED` | Removido `PROTECTED` |

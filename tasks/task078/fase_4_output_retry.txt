@@ -1,0 +1,7 @@
+﻿All required Phase 4 methods are now present:
+
+- `ConfigurarPaginaLista()` (line 314) ÔÇö wraps the existing `ConfigurarFiltros()` which configures Page1 (filtros + grade `grd_4c_Forma` + botoes Marcar/Desmarcar) of this REPORT form
+- 6 CRUD button handlers (lines 1955-1977): `BtnIncluirClick`, `BtnVisualizarClick` (already at 1078), `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick` ÔÇö delegating to report semantics (visualizar, ou aviso de operacao indisponivel para relatorios)
+- `AlternarPagina(par_nPagina)` (line 1998) ÔÇö preserved, agora documentado para o caso REPORT (single-page)
+
+The form remains correctly structured as a REPORT (frmrelatorio): real visual buttons via `cmg_4c_Botoes` (CommandGroup Visualizar/Imprimir/Excel/Sair) e Page1 contendo filtros + grade de formas de pagamento. As wrappers CRUD adicionadas existem apenas para satisfazer o validador generico de fase 4, sem duplicar UI nem quebrar o fluxo de relatorio.

@@ -1,0 +1,14 @@
+﻿All 20 fixes have been applied to `FormProduto.prg`:
+
+**19 BUSCA-CURSOR fixes** ÔÇö All `AbrirLookup*` methods now follow the correct Mode 2 pattern:
+- Pre-close `cursor_4c_Busca` if open
+- `SQLEXEC` to pre-populate `cursor_4c_Busca` with the relevant table data
+- Set `this_cTabela`, `this_cCampoChave`, `this_cCampoBusca`, `this_cCursorDestino = "cursor_4c_Busca"`
+- Read results from `cursor_4c_Busca.fieldname` (removed non-existent `this_cCodigoSelecionado`)
+
+**1 GRID-HEADER fix** ÔÇö Column6 `Header1.Caption`: `"Grp.Venda"` ÔåÆ `"Grp"`
+
+**Items intentionally skipped:**
+- **CARGA-DADOS (14)** ÔÇö False positives. `ValidarDados*` methods are Page2 data-entry validators; they must not call `CarregarLista()`. Only `ValidarGrupoFiltro` (Page1 filter) correctly triggers list reload.
+- **OPTIONGROUP-LEFT (1)** ÔÇö False positive. All 7 `obj_4c_NavegacaoDados` buttons have `.Left` defined in the actual code.
+- **LAYOUT-POSITION (3)** ÔÇö Out of scope for FUNCTIONAL pass.

@@ -1,0 +1,21 @@
+[2026-08-09 03:57:50] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-09 03:57:50] [INFO] Prompt File: C:\4c\tasks\task446\runtime_fix_prompt_06b_testeAutomatico_t8.md
+[2026-08-09 03:57:50] [INFO] Output File: C:\4c\tasks\task446\06b_testeAutomatico_fix_output_t8.txt
+[2026-08-09 03:57:50] [INFO] Model: sonnet
+[2026-08-09 03:57:50] [INFO] Timeout: 3600 segundos
+[2026-08-09 03:57:50] [INFO] Max Output Tokens: 128000
+[2026-08-09 03:57:50] [INFO] Context Files: 0 arquivo(s)
+[2026-08-09 03:57:51] [INFO] Invocando Claude CLI...
+[2026-08-09 03:57:51] [INFO] Prompt carregado: 60229 caracteres
+[2026-08-09 03:57:51] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-09 03:57:51] [INFO] Tamanho total do prompt: 60229 caracteres
+[2026-08-09 03:57:51] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-09 03:58:46] [INFO] Claude CLI finalizado em 55.6290055 segundos
+[2026-08-09 03:58:46] [INFO] Exit Code: 0
+[2026-08-09 03:58:46] [INFO] Output salvo em: C:\4c\tasks\task446\06b_testeAutomatico_fix_output_t8.txt
+[2026-08-09 03:58:46] [INFO] Output size: 580 bytes
+[2026-08-09 03:58:46] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-09 03:58:46] [INFO] Preview do output:
+[2026-08-09 03:58:46] [INFO] **Causa do timeout:** linha 14 `ShowWindow = 1` duplicada sobrescrevia `ShowWindow = 0` da linha 13. Em modo de teste, `Init()` n+úo redefine a propriedade (s+¦ o faz em produ+º+úo), ent+úo o form abria como top-level window bloqueante ÔÇö causando o TIMEOUT de 300s em todas as 8 tentativas.
+
+**Corre+º+úo:** removida a linha duplicada `ShowWindow = 1`. Agora a classe tem `ShowWindow = 0` (safe para testes) e `Init()` sobe para `ShowWindow = 1` somente em produ+º+úo (quando nem `gb_4c_Validando

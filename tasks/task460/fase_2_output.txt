@@ -1,0 +1,12 @@
+﻿Fase 2/8 conclu├¡da. O `LOCBO.prg` est├í completo com todos os m├®todos CRUD:
+
+- **`LimparDados()`** ÔÇö limpa as 3 propriedades (cods, cidconns, drives)
+- **`CarregarDoCursor()`** ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo can├┤nico)
+- **`ValidarDados()`** ÔÇö valida C├│digo obrigat├│rio, duplicidade em INSERT, Conex├úo obrigat├│ria, e verifica exist├¬ncia do arquivo `SigCdLoc.DBF` no caminho informado (l├│gica id├¬ntica ao legado)
+- **`VerificarCodigoExistente()`** ÔÇö COUNT(*) no banco antes de INSERT
+- **`Inserir()`** ÔÇö INSERT com TEXT/TEXTMERGE + RegistrarAuditoria("INSERT")
+- **`Atualizar()`** ÔÇö UPDATE de cidconns e drives WHERE cods + RegistrarAuditoria("UPDATE")
+- **`ExecutarExclusao()`** ÔÇö DELETE WHERE cods + RegistrarAuditoria("DELETE")
+- **`Buscar()`** ÔÇö SELECT com cursor ZAP/APPEND pattern quando cursor j├í existe; fallback CREATE CURSOR para ValidandoUI
+- **`CarregarPorCodigo()`** ÔÇö SELECT completo com reset de `this_lNovoRegistro = .F.`
+- **`ObterChavePrimaria()`** ÔÇö retorna `ALLTRIM(this_cCodigo)` para auditoria

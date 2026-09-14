@@ -1,0 +1,1209 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigregnf.SCX
+* Data/Hora: 05/06/2026 20:01:58
+* Total de registros: 30
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREGNF
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grade
+  Parent: SIGREGNF
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGREGNF.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGREGNF.Grade.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGREGNF.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGNF.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGNF.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGNF.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGNF.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGNF.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGNF.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGNF.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGNF.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGNF.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGNF.Grade.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGNF.Grade.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGNF.Grade.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGNF.Grade.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGREGNF.Grade.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREGNF.Grade.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGREGNF
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREGNF
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Série
+  Parent: SIGREGNF
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getUsuars
+  Parent: SIGREGNF
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: apaga
+  Parent: SIGREGNF
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: btnProcessar
+  Parent: SIGREGNF
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGREGNF
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 103
+  Left = 151
+  Width = 269
+  Height = 76
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF
+------------------------------------------------------------
+  Height = 700
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Emissão Global de Nota Fiscal"
+  notasant = .F.
+  lacemail = .F.
+  lacexcel = .F.
+  lacpdf = .F.
+  Name = "SIGREGNF"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 526
+  btnReport.Top = 3
+  btnReport.TabIndex = 9
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade
+------------------------------------------------------------
+  ColumnCount = 9
+  FontName = "Tahoma"
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 364
+  Left = 30
+  Panel = 1
+  RecordSource = "TmpNFis"
+  ScrollBars = 2
+  TabIndex = 6
+  Top = 195
+  Width = 739
+  GridLineColor = 238,238,238
+  ZOrderSet = 5
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = "TmpNFis.Flag"
+  Column1.Width = 15
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontBold = .T.
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = "TmpNFis.NFis"
+  Column2.Width = 45
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = "TmpNFis.Series"
+  Column3.Width = 28
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 5
+  Column4.ControlSource = "TmpNFis.Emis"
+  Column4.Width = 62
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 4
+  Column5.ControlSource = "TmpNFis.Operas"
+  Column5.Width = 18
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ControlSource = "TmpNFis.CFis"
+  Column6.Width = 60
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.ControlSource = "TmpNFis.TotNotas"
+  Column7.Width = 75
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.InputMask = "999,999,999.99"
+  Column7.Name = "Column7"
+  Column8.FontName = "Tahoma"
+  Column8.FontSize = 8
+  Column8.ControlSource = "TmpNFis.Operacao"
+  Column8.Width = 150
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Name = "Column8"
+  Column9.FontName = "Tahoma"
+  Column9.FontSize = 8
+  Column9.ControlSource = "TmpNFis.Conta"
+  Column9.Width = 246
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.ReadOnly = .T.
+  Column9.Name = "Column9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column1.Check1
+------------------------------------------------------------
+  Top = 66
+  Left = 10
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = ""
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Número"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column2.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Série"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emissão"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Op"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "CFOP"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor Total"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Operação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column8.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emitente / Detinatário"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Grade.Column9.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Série : "
+  Left = 48
+  Top = 173
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Usuário :"
+  Left = 138
+  Top = 173
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.Get_Série
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Height = 23
+  InputMask = ""
+  Left = 93
+  MaxLength = 3
+  TabIndex = 2
+  Top = 169
+  Width = 34
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 7
+  Name = "Get_Série"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.getUsuars
+------------------------------------------------------------
+  Alignment = 3
+  Height = 23
+  Left = 198
+  MaxLength = 10
+  TabIndex = 4
+  Top = 169
+  Width = 80
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 7
+  Name = "getUsuars"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.apaga
+------------------------------------------------------------
+  Top = 561
+  Left = 75
+  Height = 45
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\cancelab.bmp
+  Caption = ""
+  TabIndex = 8
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 8
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.btnProcessar
+------------------------------------------------------------
+  Top = 96
+  Left = 696
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "P\<rocessar"
+  TabIndex = 5
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnProcessar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREGNF.SelTudo
+------------------------------------------------------------
+  Top = 561
+  Left = 30
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\a_save1.bmp
+  Caption = ""
+  TabIndex = 7
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 9
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREGNF
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE selecionardados
+------------------------------------------------------------
+PROCEDURE selecionardados
+Private pNot
+
+Local lcIdTab1
+
+Zap In TmpNFis
+
+Wait Window 'Aguarde!!! Selecionando Notas Fiscais...' NoWait
+
+pNot = .f.
+
+If ThisForm.poDataMgr.pcDriver=='sql'
+	pNot = 0
+EndIf 
+
+If Empty(ThisForm.getUsuars.Value)
+	Text To lcQuery NoShow TextMerge PreText 1 + 2 + 4 + 8
+
+		Select a.*, b.Rclis
+			From SigMvNfi a
+			Left Join SigCdCli b On b.Iclis = a.CliFors
+			Where a.Emps = '<<_Empr>>' And
+					a.Series = '<<Padr(ThisForm.get_Série.Value, 3)>>' And
+					a.Cancelas = <<pNot>> And
+					a.Impress = 0
+		Order By a.NFis
+
+	EndText 
+
+Else 	
+	Text To lcQuery NoShow TextMerge PreText 1 + 2 + 4 + 8
+
+		Select a.EmpDopNums
+			From SigMvCab a 
+				Inner Join SigMvNfi b On b.EmpDopNums = a.EmpDopNums
+			Where a.Emps = '<<_Empr>>' And a.Usuars = '<<Padr(ThisForm.getUsuars.Value, 10)>>' And 
+					b.Series = '<<Padr(ThisForm.get_Série.Value, 3)>>' And
+					b.Cancelas = <<pNot>> And
+					b.Impress = 0
+
+	EndText 
+
+	If (ThisForm.poDataMgr.fSqlTemporario(lcQuery, @lcIdTab1, ThisForm.poDataMgr) < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Tab.Temp.)')
+		Return .f.
+
+	EndIf 
+
+	Text To lcQuery NoShow TextMerge PreText 1 + 2 + 4 + 8
+
+		Select a.*, c.Rclis
+			From SigMvNfi a
+				Inner Join <<lcIdTab1>> b On b.EmpDopNums = a.EmpDopNums
+				Left Join SigCdCli c On c.Iclis = a.CliFors
+		Order By a.NFis
+
+	EndText 
+
+EndIf 
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigMvNfi') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvNfi)')
+	Return .f.
+EndIf
+
+ThisForm.poDataMgr.CursorQuery([SigCdOpe], [crSigCdOpe], .f., .f., [Dopes, TipoNfs])
+If Not Used([crSigCdOpe])
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigCdOpe)])
+	Return .f.
+EndIf
+Select crSigCdOpe
+Index On Dopes Tag Dopes
+
+Select crSigMvNfi
+oProg = CreateObject('fwprogressbar', 'Processando Dados do Cursor...', Reccount('crSigMvNfi'))
+oProg.Show
+Scan
+	oProg.Update(.t.)
+
+	lcCli = Nvl(crSigMvNfi.RClis, '')
+		
+	=Seek(crSigMvNfi.Dopes, 'crSigCdOpe', 'Dopes')
+
+	If Not Seek(_Empr + crSigMvNfi.Series, 'crSigCdSer', 'EmpCods')
+		=Seek(Space(3)+ crSigMvNfi.Series, 'crSigCdSer', 'EmpCods')
+	EndIf
+
+	If (crSigCdOpe.Tiponfs = 4) && 4 = Pelo Cadastro de Série
+		If Eof('crSigCdSer') Or (crSigCdSer.TipoNfs = 2) && 2 = Manual
+			Loop
+		EndIf
+	Else
+		If (crSigCdOpe.Tiponfs = 2) && 2 = Manual
+			Loop
+		EndIf
+		If Eof('crSigCdSer') Or (crSigCdSer.TipoNfs = 2) && 2 = Manual
+			Loop
+		EndIf
+	EndIf
+	
+	Insert Into TmpNFis (Flag, Emis, Series, Operas, CFis, NFis, TotNotas, Conta, Operacao, Emps, Dopes, Numes) ;
+			     Values (.t., Nvl(crSigMvNfi.Emis, Ctod([])), crSigMvNfi.Series, crSigMvNfi.Operas, crSigMvNfi.CFis, ;
+			     		 crSigMvNfi.NFis, crSigMvNfi.TotNotas, crSigMvNfi.CliFors + ' ' + lcCli, ;
+			     		 crSigMvNfi.Emps + Alltrim(crSigMvNfi.Dopes ) + ' ' + Alltrim(fGerMascara(crSigMvNfi.Numes)), ;
+			     		 crSigMvNfi.Emps, crSigMvNfi.Dopes, crSigMvNfi.Numes)
+EndScan
+oProg.Complete
+Wait Clear
+
+If Used([crSigCdOpe])
+	Use In crSigCdOpe
+EndIf
+
+If (Reccount([TmpNFis]) < 0)
+	Return .f.
+EndIf
+ThisForm.Grade.Refresh
+
+Return .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE verificanf
+------------------------------------------------------------
+PROCEDURE verificanf
+Private llFalse 
+llFalse = .f.
+
+Select * From TmpNFis Where Flag Into Cursor TmpVNFis
+Select TmpVNFis
+Scan 
+	lcEdn = TmpVNFis.Emps + TmpVNFis.Dopes + Str(TmpVNFis.Numes,6)
+	lcSql = [Select Distinct c.Nfis,c.EmpdopNums From SigMvNfi c, SigCdOpe a ]+;
+			[Where c.emps = ']+TmpVNFis.Emps+[' And c.series = ']+TmpVNFis.SerieS+[' ]+;
+			[And c.Impress = ?llFalse and c.cancelas = ?llFalse And c.dopes = a.dopes and ]+;
+			[a.nfiscals in (1,2) and a.tiponfs <> 4 and a.agrupas = 1 ]+;
+			[Union all ]+;
+			[Select Distinct c.Nfis,c.EmpDopNums From SigMvNfi c, SigCdOpe a, SigCdSer b ]+;
+			[Where c.emps = ']+TmpVNFis.Emps+[' And c.series = ']+TmpVNFis.SerieS+[' ]+;
+			[And c.Impress = ?llFalse And c.cancelas = ?llFalse and c.series = b.cods And ]+;
+			[c.dopes=a.dopes and a.nfiscals in (1,2) and a.tiponfs = 4 and b.impnfs = 1 ]
+			
+	If Thisform.PodataMgr.SqlExecute(lcSql,'TmpFiscal') < 0
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Select TmpFical)')
+		Return .f.
+	Else
+		Select TmpFiscal
+		If Reccount() > 0
+			Locate For EmpDopNums = lcEdn
+			lcNota = TmpNFis.nFis
+			Select * From tmpFiscal Where Nfis < lcNota Into cursor selecao
+			Select selecao
+			If Reccount() > 0
+				lcTxt = []
+				Scan
+					lcTxt = lcTxt + Chr(13) + [Nota : ] + Selecao.NFis + [ - Operação : ] + ;
+							Alltrim(Substr(Selecao.EmpDopNums, 01, 03)) + [ / ] + ;
+							Alltrim(Substr(Selecao.EmpDopNums, 04, 20)) + [ / ] + ;
+							Alltrim(Substr(Selecao.EmpDopNums, 24, 06)) + Space(10)
+				EndScan
+				
+				=MessageBox([Existem Notas Anteriores Desta Série Ainda Não Impressas!!!] + lcTxt, 0+48, [Atenção!!!])
+				Return .f.
+			Endif
+		Endif
+	EndIf
+EndScan 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+If thisform.notasant
+	Return .f.
+EndIf 
+Select TmpNFis
+If TmpNFis.Flag
+	Create Cursor TprMvCab (Emps c(3), Dopes c(20), Numes n(6), ContaOs c(10), ContaDs c(10), ;
+						   TpFats c(3), Obses m Null, ValVars n(12,2))
+
+	pEdn = TmpNFis.Emps + TmpNFis.Dopes + Str(TmpNFis.Numes, 6)
+
+	lcQuery = [Select Emps, Dopes, Numes, ContaOs, ContaDs, TpFats, Obses, ValVars ] + ;
+			    [From SigMvCab ] + ;
+			   [Where EmpDopNums = '] + pEdn + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigMvCab]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvCab)])
+		Return .f.
+	EndIf
+	Go Top In crSigMvCab
+
+	Insert Into TprMvCab (Emps, Dopes, Numes, ContaOs, ContaDs, TpFats, Obses, ValVars) ;
+				 Values (crSigMvCab.Emps, crSigMvCab.Dopes, crSigMvCab.Numes, crSigMvCab.ContaOs, ;
+						 crSigMvCab.ContaDs, crSigMvCab.TpFats, crSigMvCab.Obses, crSigMvCab.ValVars )
+
+	lcQuery = [Select * ] + ;
+			    [From SigMvNfi ] + ;
+			   [Where EmpDopNums = '] + pEdn + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigMvNfi]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvNfi)])
+		Return .f.
+	EndIf
+	Go Top In crSigMvNfi
+
+	Do SigPrNfs With ThisForm.poDataMgr, "V", TmpNFis.Emps, TmpNFis.Dopes, TmpNFis.Numes
+EndIf
+Select TmpNFis
+
+Thisform.Grade.Refresh
+Thisform.Grade.Column1.Check1.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Select TmpNFis
+
+thisform.notasant = .f. 
+
+
+lcQuery = [Select Series,Emps,VSeqNota ] + ;
+		    [ From SigCnFn2 ]  + ;
+		    [ Where Series = '] + TmpNFis.Series +  [' And Emps = '] + TmpNFis.Emps + [' And VSeqNota = 1 ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigCnFnfT]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCnFnfT)])
+	Return 0
+EndIf
+
+If !Eof('crSigCnFnfT')
+	If !ThisForm.Verificanf()
+		thisform.notasant = .t. 
+	EndIf 
+EndIf 
+
+Select TmpNFis
+Go top 
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor TmpNFis (Flag l, Emis d, Series c(3), Operas c(1), CFis c(10), NFis c(6), TotNotas n(12,2), ;
+					   Conta c(40), Operacao c(30), Emps c(3), Dopes c(20), Numes n(6))
+Index On Nfis Tag Nfis
+
+Create Cursor crClientes (Iclis c(10), RClis c(50))
+Index On IClis Tag IClis
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.poDataMgr.CursorQuery([SigCdPam], [crSigCdPam], .f., .f., [MascNums])
+		If Not Used([crSigCdPam])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigCdPam)])
+			Return .f.
+		EndIf
+
+		.poDataMgr.CursorQuery([SigCdSer], [crSigCdSer], .f., .f., [EmpCods, TipoNfs])
+		If Not Used([crSigCdSer])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - crSigCdSer)])
+			Return .f.
+		EndIf
+		Select crSigCdSer
+		Index On EmpCods Tag EmpCods
+
+		.btnProcessar.Enabled = .f.
+
+		=DoDefault()
+	Else
+		=Messagebox([Impossivel Efetuar Conexão com Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+If thisform.notasant
+	Return .f.
+EndIf 
+Create Cursor TprMvCab (Emps c(3), Dopes c(20), Numes n(6), ContaOs c(10), ContaDs c(10), ;
+					   TpFats c(3), Obses m Null, ValVars n(12,2))
+Select TmpNFis
+Go Bottom In TmpNFis
+ThisForm.grade.Refresh
+Go Top In TmpNFis
+
+Select TmpNFis
+Scan
+	If TmpNFis.Flag
+		Wait Window 'Imprimindo Nota Fiscal nº ' + TmpNFis.NFis NoWait
+
+		Zap In TprMvCab
+
+		pEdn = TmpNFis.Emps + TmpNFis.Dopes + Str(TmpNFis.Numes, 6)
+
+		lcQuery = [Select Emps, Dopes, Numes, ContaOs, ContaDs, TpFats, Obses, ValVars ] + ;
+				    [From SigMvCab ] + ;
+				   [Where EmpDopNums = '] + pEdn + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigMvCab]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvCab)])
+			Return .f.
+		EndIf
+		Go Top In crSigMvCab
+
+		Insert Into TprMvCab (Emps, Dopes, Numes, ContaOs, ContaDs, TpFats, Obses, ValVars) ;
+					 Values (crSigMvCab.Emps, crSigMvCab.Dopes, crSigMvCab.Numes, crSigMvCab.ContaOs, ;
+							 crSigMvCab.ContaDs, crSigMvCab.TpFats, crSigMvCab.Obses, crSigMvCab.ValVars )
+
+		lcQuery = [Select * ] + ;
+				    [From SigMvNfi ] + ;
+				   [Where EmpDopNums = '] + pEdn + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigMvNfi]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigMvNfi)])
+			Return .f.
+		EndIf
+		Go Top In crSigMvNfi
+
+		Do SigPrNfs With ThisForm.poDataMgr,"I",TmpNFis.Emps,TmpNFis.Dopes,TmpNFis.Numes
+
+		Delete In TmpNFis
+	EndIf
+EndScan
+Select TmpNFis
+
+ThisForm.SelecionarDados()
+
+Thisform.Grade.Refresh
+Thisform.Grade.Column1.Check1.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREGNF.Get_Série
+* Classe: fwget (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcSerie, lnNota, loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCnFNf', ;
+						   'crListaRemota', 'Series', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Series', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Series
+	Use In crListaRemota
+EndIf
+This.Refresh
+
+If (Padr(This.Tag, 3) <> Padr(This.Value, 3))
+	ThisForm.btnProcessar.Enabled = .t.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Padr(This.Value, 3)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREGNF.getUsuars
+* Classe: fwget (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdUsu], ;
+						   [crListaRemota], [Usuarios], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Usuarios], [], [Usuário])
+		loLista.Show()
+	EndIf
+	
+	This.Value = Iif(Lastkey()=27, [], crListaRemota.Usuarios)
+	Use In crListaRemota
+EndIf
+This.Refresh
+
+If (Padr(This.Tag, 10) <> Padr(This.Value, 10))
+	ThisForm.btnProcessar.Enabled = .t.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Padr(This.Value, 10)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREGNF.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Update TmpNFis Set Flag = .f.
+ThisForm.Grade.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREGNF.btnProcessar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If ThisForm.SelecionarDados()
+	ThisForm.btnProcessar.Enabled = .f.
+EndIf
+ThisForm.Grade.Refresh
+ThisForm.Grade.Column1.Check1.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREGNF.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Update TmpNFis Set Flag = .t.
+ThisForm.Grade.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREGNF
+RESERVED3 (ClassInfo): notasant
+podatamgr
+*selecionardados 
+*verificanf 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

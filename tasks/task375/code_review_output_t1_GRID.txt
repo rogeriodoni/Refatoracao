@@ -1,0 +1,7 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente.
+
+**Resumo das corre├º├Áes em `FormCNF.prg`:**
+
+1. **Linha 364 (ConfigurarPaginaLista)** ÔÇö `.RecordSource = "cursor_4c_Dados"` removido de dentro do WITH block e movido para **ap├│s** todas as defini├º├Áes de ControlSource das 4 colunas (agora linha 395). Isso garante que VFP9 n├úo faz auto-bind antes dos ControlSources serem definidos.
+
+2. **Linha 837 (CarregarLista)** ÔÇö Ap├│s `RecordSource = "cursor_4c_Dados"` ser re-atribu├¡do, adicionadas 3 linhas redefinindo explicitamente o ControlSource de cada coluna ativa (`nfis`, `emis`, `totnotas`), evitando que o auto-bind do VFP9 mapeie as colunas para os primeiros campos do cursor em ordem de declara├º├úo (`cidchaves`, `empdopnums`, `emps`).

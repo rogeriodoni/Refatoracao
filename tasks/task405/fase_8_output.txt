@@ -1,0 +1,13 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**Corre├º├úo de bug (BINDEVENT "Valid"):**
+- Removido `BINDEVENT(Column2.Text1, "Valid", ...)` ÔÇö essa liga├º├úo silenciosamente n├úo funciona em TextBox
+- A l├│gica do `Valid` original (`HabilitarCampos(.T.)`) foi incorporada diretamente em `GrdDescrsLostFocus()`, que j├í tratava a navega├º├úo para o campo Paises. Agora os dois comportamentos est├úo unidos num ├║nico handler que efetivamente dispara
+
+**M├®todos adicionados:**
+- `LimparCampos()` ÔÇö limpa todos os campos de endere├ºo do registro corrente em `crCursorCliEE` via REPLACE + Refresh
+- `CarregarLista()` ÔÇö wrapper de `AtualizaTela(.T.)` para compatibilidade com a interface do FormBase
+
+**Integra├º├úo (nenhuma a├º├úo necess├íria):**
+- `config.prg` j├í carrega automaticamente `classes/*BO.prg` (EndBO) e `forms/operacionais/Form*.prg` (FormEnd) via ADIR
+- FormEnd ├® um form modal auxiliar chamado com par├ómetros por outros forms (ex: FormCliente), sem entrada no menu

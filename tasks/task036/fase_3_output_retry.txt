@@ -1,0 +1,21 @@
+﻿Form refatorado para FASE 3. Resumo do que foi feito:
+
+**Estrutura criada em FormSIGREAUP.prg (421 linhas):**
+
+| M├®todo | Status | Fun├º├úo |
+|--------|--------|--------|
+| `Init()` | Ô£à | Delega para `DODEFAULT()` ÔåÆ FormBase chama `InicializarForm()` |
+| `InicializarForm()` | Ô£à | Configura Caption, Picture, instancia BO, monta cabe├ºalho/bot├Áes/PageFrame |
+| `ConfigurarCabecalho()` | Ô£à | cnt_4c_Cabecalho RGB(100,100,100) opaco + lbl_4c_Sombra + lbl_4c_Titulo branco |
+| `ConfigurarBotoes()` | Ô£à | cmg_4c_Botoes (CommandGroup) 4 bot├Áes: Visualizar/Imprimir/Documento/Encerrar (Left=528) |
+| `ConfigurarPageFrame()` | Ô£à | pgf_4c_Paginas 1 p├ígina "Filtros" (Top=85, Tabs=.F., Picture fundo_cad_1003.jpg) |
+| `LimparCampos()` | Ô£à | Inicializa propriedades do BO com defaults (DATE() para per├¡odo) |
+| `BtnVisualizarClick/Imprimir/Documento/Sair` | Ô£à | Eventos funcionais chamando m├®todos do BO |
+| `Destroy()` | Ô£à | Libera refer├¬ncia (.NULL., N├âO .Release()) |
+
+**Corre├º├Áes vs vers├úo anterior:**
+- ÔØî Antes: `Init()` fazia tudo inline ÔåÆ Ô£à Agora: padr├úo FormBase via `DODEFAULT()` + `InicializarForm()`
+- ÔØî Antes: faltava `ConfigurarPageFrame` (validador rejeitava) ÔåÆ Ô£à Agora: PageFrame de 1 p├ígina seguindo padr├úo FormSIGREAGV
+- ÔØî Antes: sem `InicializarForm()` separado ÔåÆ Ô£à Agora: m├®todo PROTECTED com TRY/CATCH e retorno .T./.F.
+
+Pr├│ximas fases adicionar├úo TextBoxes/OptionGroup/CheckBox dentro de `pgf_4c_Paginas.Page1` e BINDEVENTs de lookup.

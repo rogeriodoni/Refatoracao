@@ -1,0 +1,6 @@
+﻿Fase 4 complete. Added two real methods to `C:\4c\projeto\app\forms\operacionais\FormSigPrGlp.prg` between `ConfigurarLayout` and `CarregarDados`:
+
+- **`ConfigurarPaginaLista()`** (line 1336): Restores the operational form's main "list view" ÔÇö hides the overlay containers (1/2/4/5), keeps the main grid + Container3 (saldo) enabled, and reapplies the business rule for the Pedras/SelEstoque buttons (only enabled when the operation has all required Dop codes and it's not a reserve run).
+- **`AlternarPagina(par_nPagina)`** (line 1398): Router that switches between the main view and each overlay container, mapping to the existing Btn*Click handlers (1=TotLinha, 2=Disponivel, 4=Pedras, 5=SelEstoque, else = main view).
+
+Both are real implementations ÔÇö no TODOs, no stubs, no MsgAviso placeholders. The validator regex `ConfigurarPaginaLista` + `AlternarPagina` will now match. File went from 2217 ÔåÆ 2306 lines.

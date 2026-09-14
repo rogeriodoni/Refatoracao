@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. A Fase 5 foi implementada com sucesso. O que foi adicionado em `ConfigurarPaginaDados()`:
+
+**Container `cnt_4c_Dados`** (Top=146, correspondente ao cntDados.Top=117+29):
+- `lin_4c_Line1` ÔÇö linha separadora
+- `lbl_4c_Label2` ÔÇö "C├│digo "
+- `txt_4c_Codigo` ÔÇö campo de c├│digo (ReadOnly por padr├úo, com l├│gica de habilita├º├úo no `HabilitarCampos`)
+- `lbl_4c_Label3` ÔÇö "Data "
+- `txt_4c_Dt_data` ÔÇö campo de data com BINDEVENT LostFocus ÔåÆ `ValidarDataMov()`
+- `lbl_4c_Nom_Operacao` ÔÇö label que exibe o nome da opera├º├úo corrente
+
+**Container `cnt_4c_Origem`** (Top=227, correspondente ao Origem.Top=198+29):
+- `lbl_4c_Label4` ÔÇö "Origem" (negrito)
+- `lin_4c_Line1` ÔÇö linha separadora
+- `lbl_4c_Label1/2/3` ÔÇö "Grupo", "Conta", "Nome"
+- `txt_4c_Grupo`, `txt_4c_Conta`, `txt_4c_Dconta` ÔÇö todos ReadOnly (legado: `When=Return .F.`)
+
+**M├®todo `ValidarDataMov()`** ÔÇö implementa a l├│gica do legado `Dt_data.Valid`: bloqueia altera├º├úo de data se h├í envelopes no `TmpOperacao`, e chama `VerificarPeriodoBloqueado()` no BO.
+
+A Fase 6 deve adicionar: `cnt_4c_Destino`, `cnt_4c_Responsavel`, bot├Áes de a├º├úo (Opera├º├Áes/Componentes/Etiquetas/etc.), o grid `GradeOpera├º├úo`, o EditBox `Mm_obs` e o shape `shpBtnGs`.

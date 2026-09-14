@@ -1,0 +1,16 @@
+﻿Fase 5 conclu├¡da. O que foi feito:
+
+**Situa├º├úo**: Este form REPORT tem apenas 1 p├ígina (Filtros) com 4 campos de filtro ÔÇö todo o c├│digo foi implementado nas fases 1-4. N├úo existe `ConfigurarPaginaDados()` em forms REPORT.
+
+**Melhoria adicionada na Fase 5**: M├®todo `ValidarFiltros()` + atualiza├º├úo de `BtnVisualizarClick`, `BtnImprimirClick` e `BtnExcelClick`.
+
+**Por que**: O form original validava explicitamente antes de qualquer processamento:
+```vfp
+If Empty(GetCGrupo.Value) And Empty(GetCUsuario.Value)
+    MessageBox('Sele├º├úo n├úo Realizada !!!', 16,'')
+    Return
+EndIf
+```
+A implementa├º├úo anterior delegava essa valida├º├úo ao BO (PrepararDados), o que funcionava mas adicionava lat├¬ncia desnecess├íria. Agora a valida├º├úo ├® feita no form antes da chamada ao BO ÔÇö feedback imediato para o usu├írio.
+
+**Pr├│ximas fases restantes**: Fases 6-8 podem tratar corretor autom├ítico, compila├º├úo/testes e o arquivo FRX (`RelSigReAac.frx`) que ainda n├úo existe.

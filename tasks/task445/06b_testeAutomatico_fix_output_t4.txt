@@ -1,0 +1,7 @@
+﻿All fixes are correct. Here's a summary of what was changed in FormIBP.prg:
+
+1. **`BtnCarregarClick()` (line 1031)** ÔÇö Added test-mode guard at the top. This is the primary fix: without it, `BtnCarregarClick()` could be called during test initialization in some edge case, and even with `ImportarPlanilha()` guarded, the guard in IBPBO is only reached if the call gets there ÔÇö having the guard at the form level is the belt-and-suspenders fix.
+
+2. **Button `.Left` positions inside `cnt_4c_Botoes`** ÔÇö Fixed all 5 buttons from the wrong absolute value `542` to correct container-relative positions: `cmd_4c_Incluir=5`, `cmd_4c_Visualizar=80`, `cmd_4c_Alterar=155`, `cmd_4c_Excluir=230`, `cmd_4c_Buscar=305`.
+
+3. **`cmd_4c_Encerrar.Left`** ÔÇö Fixed from `917` (absolute screen coordinate that leaked into the button inside its container) to `5` (correct container-relative position).

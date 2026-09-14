@@ -1,0 +1,22 @@
+﻿O form `FormSigPrApr.prg` e o BO `SigPrAprBO.prg` j├í est├úo **completamente implementados**. A Fase 6 n├úo tem nada a adicionar.
+
+Aqui est├í o invent├írio completo do que j├í foi implementado nas fases anteriores:
+
+**FormSigPrApr.prg (2322 linhas):**
+- Todos os 45+ controles do original (labels, textboxes, checkboxes, optiongroup, grid, shape, image)
+- `ConfigurarPaginaLista()`: todos os controles em uma ├║nica p├ígina (form operacional, sem Page2)
+- `ConfigurarPaginaDados()`: vazio intencionalmente (correto para form operacional)
+- 14 lookups completos via `FormBuscaAuxiliar` (SigCdGrp, SigCdCol, SigCdMoe├ù6, SigPrFti, SigPrPmc, SigCdPro, fAcessoContas├ù2)
+- Handler `BuscarMoedaHelper()` gen├®rico compartilhado por todos os lookups de moeda
+- `GrdAfterRowColChange()`: rastreia Coluna5 (ValAtu manual) + foto do produto via SQLEXEC
+- `CarregarProdutoAuditado()`: modo auditado com c├ílculo de pre├ºo por tipo (1/2/3)
+- `ChkAuditadoClick()`: alterna modo auditado/normal completo
+- `AtualizarVisibilidade()`: mostra/oculta controles conforme tipo de reajuste
+- `BtnProcessarClick()`, `BtnAtualizarClick()`, `BtnEncerrarClick()`
+- `AlternarPagina()`: reset completo do estado do form
+
+**SigPrAprBO.prg:** `CarregarParametros()`, `VerificarAcessoEdicaoManual()`, `CalcPreco()`, `ProcessarReajuste()`, `AtualizarPrecos()` ÔÇö todos presentes.
+
+**Integra├º├úo:** `FormSigPrApr` registrado no `menu.prg` (BAR 22 de popMovimentos + `AbrirFormSigPrApr`). Auto-carregado via ADIR() no config.prg.
+
+A migra├º├úo do task156 est├í **100% completa**. N├úo h├í mais nada a fazer na Fase 6.

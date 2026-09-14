@@ -1,0 +1,16 @@
+﻿Analisando o arquivo, o `FormSigPrGf1.prg` j├í est├í **completo**. Como este ├® um form **OPERACIONAL** (n├úo CRUD), os eventos de bot├úo n├úo s├úo `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` ÔÇö o template da Fase 7/8 ├® gen├®rico para forms CRUD.
+
+Para este form, os eventos principais j├í foram implementados nas fases anteriores:
+
+| Evento | Linha | Status |
+|--------|-------|--------|
+| `BtnProcessarClick()` | 407 | Ô£à Implementado |
+| `BtnEncerrarClick()` | 467 | Ô£à Implementado |
+| `TxtDtFinalKeyPress()` | 500 | Ô£à Implementado |
+| `Destroy()` | 523 | Ô£à Implementado |
+
+O `BtnProcessarClick` (linha 407) equivale ao `cmdGprocessa.Buttons(1).Click` do legado: valida o per├¡odo via `ValidarPeriodo()`, exibe `cnt_4c_Aguarde`, chama `ProcessarDados()` no BO e abre `FormSigPrGf2` passando `THIS` como refer├¬ncia.
+
+O `BtnEncerrarClick` (linha 467) equivale ao `cmdGprocessa.Buttons(2).Click`: fecha cursor `crLstMatLote` se aberto, reativa o form pai via `poForm1.mAtivaPgMovto1()` e chama `THIS.Release()`.
+
+**O arquivo FormSigPrGf1.prg est├í completo para a Fase 7/8.** N├úo h├í nada a adicionar ÔÇö o template da fase menciona eventos CRUD que n├úo existem neste form OPERACIONAL de filtro por per├¡odo.

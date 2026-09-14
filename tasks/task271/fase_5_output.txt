@@ -1,0 +1,21 @@
+﻿Analisei o arquivo existente e o c├│digo fonte original. O FormSIGPRCPR.prg (623 linhas) j├í est├í **completo** desde as Fases 3-4.
+
+Este ├® um formul├írio OPERACIONAL **flat** (popup modal sem PageFrame), e todos os objetos do SCX original j├í foram migrados:
+
+| Objeto Original | Migrado para | M├®todo |
+|---|---|---|
+| cntSombra + labels | cnt_4c_Cabecalho | ConfigurarCabecalho() |
+| Label2 + Get_Data | lbl_4c_Data + txt_4c_Data | ConfigurarCampos() |
+| Txt_Leitura + Get_Leitura | lbl_4c_Leitura + txt_4c_Leitura | ConfigurarCampos() |
+| Conferencia + Ok + Sair | cmd_4c_ConferirAuto, cmd_4c_Ok, cmd_4c_Encerrar | ConfigurarBotoes() |
+| Grade (5 cols) | grd_4c_Dados | ConfigurarGrade() |
+
+O template da Fase 5 ("ConfigurarPaginaDados com primeiros 50% dos campos") foi projetado para formul├írios CRUD com Page2. Este formul├írio OPERACIONAL flat **n├úo tem Page2** ÔÇö todos os seus campos est├úo no layout flat do form.
+
+Adicionar um `ConfigurarPaginaDados()` neste caso geraria:
+- C├│digo morto (n├úo seria chamado), ou
+- Duplica├º├úo do ConfigurarCampos() j├í implementado
+
+O formul├írio est├í correto e completo. Handlers implementados: `TxtLeituraKeyPress`, `CmdConferirAutoClick`, `CmdOkClick`, `CmdEncerrarClick`, `FormActivate`, `AlternarPagina`, `TornarControlesVisiveis` com filtro correto para controles hidden-por-default.
+
+**Fase 5 est├í conclu├¡da** ÔÇö o trabalho esperado j├í foi executado nas Fases 3-4 porque a estrutura do formul├írio OPERACIONAL ├® mais simples do que o template CRUD prev├¬. Pode prosseguir para a Fase 6.

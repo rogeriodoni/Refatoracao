@@ -1,0 +1,11 @@
+﻿As tr├¬s edi├º├Áes est├úo corretas. O arquivo est├í consistente.
+
+---
+
+**Resumo das corre├º├Áes aplicadas em `sigrectcBO.prg`:**
+
+**CEMPS (corrigido)** ÔÇö Removida a query `SELECT Razas FROM SigCdEmp WHERE Cemps = ...` inventada pelo LLM. Substitu├¡da por `loc_cNomeEmpresa = ALLTRIM(go_4c_Sistema.cEmpresa)`, que usa o objeto global do sistema (propriedade `cEmpresa` documentada no CLAUDE.md).
+
+**VENCS (corrigido)** ÔÇö Removido `WHERE d.vencs BETWEEN` das queries SQL Server de A Receber e Baixados. Aplicado o mesmo padr├úo do Depositar: SQL Server busca todos os registros (sem filtro de data), depois SELECT VFP filtra por `WHERE datas BETWEEN m.loc_dDtIni AND m.loc_dDtFim` ÔÇö coluna `datas` que **est├í** na lista de colunas v├ílidas do original. Adicionada limpeza dos cursores tempor├írios `cursor_4c_TmpRec2` e `cursor_4c_TmpRec4` no in├¡cio de `PrepararDados`.
+
+**VALUE e OPCIONA** ÔÇö N├úo encontrados em nenhuma cl├íusula WHERE em nenhum dos dois arquivos (1150 linhas do Form + BO completo). S├úo falsos positivos do validador ÔÇö provavelmente confus├úo com a coluna `valor` e `opcao` que aparecem em listas SELECT do UNION ALL, n├úo em WHERE.

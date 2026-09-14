@@ -1,0 +1,38 @@
+﻿## FASE 6/8 ÔÇö SIGCDACG ÔÇö STATUS
+
+**FASE 6 J├ü CONCLU├ìDA** em execu├º├úo anterior do pipeline.
+
+### Verifica├º├úo dos Itens Requeridos
+
+| Item | Status | Local |
+|------|--------|-------|
+| ├Ültimos 50% TextBoxes/Labels | Ô£à Presente | Formacg.prg:405-414 |
+| Lookup Grupo Origem (F4/F5) | Ô£à Presente | TxtGrupoOrigemValid + BINDEVENT |
+| cnt_4c_BotoesDados (Salvar/Cancelar) | Ô£à Presente | Formacg.prg:415-460 |
+| pgf_4c_Abas (4 abas) | Ô£à Presente | Formacg.prg:461-740 |
+| Todos os handlers de aba | Ô£à Presente | 1703 linhas total |
+| acgBO.prg completo | Ô£à Presente | 739 linhas |
+
+### Integra├º├úo Confirmada
+
+- **config.prg**: ADIR() carrega `acgBO.prg` e `Formacg.prg` automaticamente
+- **menu.prg**: `AbrirFormacg` ÔåÆ `CREATEOBJECT("FormAcg")` na barra 14 de popCadastros
+- **schema.sql**: sigcdgra, sigcdacg, sigcdacu, sigcdacb, sigactel ÔÇö todos verificados
+
+### Resumo do Arquivo
+
+**Formacg.prg** (1703 linhas):
+- ConfigurarPageFrame, ConfigurarPaginaLista, ConfigurarPaginaDados
+- 4 abas: ConfigurarAbaUsuarios, ConfigurarAbaProgramas, ConfigurarAbaBarra, ConfigurarAbaTelas
+- CarregarDadosGrupo + 4 m├®todos CarregarXxxAba
+- SalvarDadosRelacionados + todos Btn*Click handlers
+- TornarControlesVisiveis com recurs├úo-antes-do-LOOP (padr├úo can├┤nico)
+
+**acgBO.prg** (739 linhas):
+- CRUD: Buscar, CarregarPorCodigo, Inserir, Atualizar, ExecutarExclusao (cascade)
+- Relacionados: SalvarUsuarios, SalvarProgramas, SalvarBarra, SalvarAcessoTelas
+- CopiarAcessos (INSERT...SELECT para 4 tabelas)
+
+---
+
+**FASE 6: COMPLETA. Prosseguir para FASE 7/8.**

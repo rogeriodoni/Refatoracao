@@ -1,0 +1,5 @@
+﻿All three handlers are now fully implemented. Phase 4 for SIGPRNFE is complete:
+
+- **`BtnCopiarClick`**: Populates all BO properties from form controls (Acao, Ambiente, Tipos, Impressao, Contin, Arquivos, HVerao, Venc, OptSub, OptArq), validates selection count for actions 1/2/3/5/6, calls `loc_oBO.Processamento()` with empresa/series params, refreshes grid.
+- **`BtnDocumentosClick`**: Reads Dopes/Numes/Emps from current `csOperacoes` record, opens `Formsigmvexp` with proper params, validates VARTYPE.
+- **`BtnImpDSimplClick`**: Guards on empty cursor, delegates to `loc_oBO.ImprimirSimplificado("csOperacoes")` with TRY/CATCH.

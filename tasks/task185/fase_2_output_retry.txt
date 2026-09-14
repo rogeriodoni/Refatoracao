@@ -1,0 +1,10 @@
+﻿Phase 2 completed. The BO now has all required CRUD methods with real, functional implementations (no TODOs/stubs):
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö maps all columns from source cursor (`crRel1`: cEmps, cTitulo1s, cTitulo2s, cEmpresas, cStranomes, nFalhas, nPesoccbs) into properties, iterating all months for the current key
+- **`Inserir()`** ÔÇö creates/inserts into local `crGrafico1` cache cursor (mirrors source line 510 `Insert Into crGrafico1 Values (...)`) + calls `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö updates `ctitulo1s`/`cempresas` in existing `crGrafico1` row + calls `RegistrarAuditoria("UPDATE")`
+- **`ObterChavePrimaria()`** ÔÇö returns `ALLTRIM(this_cChave1)` (updated from stub to real key)
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö logs to `LogAuditoria` using `"SigPrGf2"` as tabela identifier and `cChave1` as chave (guards `gnConnHandle`, silent CATCH so audit failure doesn't break graph flow)
+- **`LimparDados()`** ÔÇö override to reset all properties consistently
+
+Custom Phase 1 methods `CarregarChaves` and `ObterDadosPorChave` preserved. All 336 lines have real logic ÔÇö no TODOs, no MsgAviso stubs.

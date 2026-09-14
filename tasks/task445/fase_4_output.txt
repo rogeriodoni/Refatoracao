@@ -1,0 +1,22 @@
+﻿`FormParaBO()` existe no FormBase como PROTECTED ÔÇö chamada via `THIS.` dentro da classe ├® v├ílida.
+
+O arquivo est├í correto e completo. Resumo do que foi feito na Fase 4:
+
+**Adicionado a `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) ÔÇö mantidos `Visible=.F. / Enabled=.F.` conforme comportamento original do SIGCDIBP
+- `cmd_4c_Encerrar` em `cnt_4c_Saida` ÔÇö padr├úo can├┤nico (Left=917, Width=75, Caption="Encerrar")
+- `cmd_4c_BtnCarregar` em Page1 (Top=39, Left=475 ÔÇö Top original=10 no form + compensa├º├úo +29)
+- `grd_4c_Lista` com 9 colunas (ufsÔåÆEstado, codigoÔåÆCodigo, datiniÔåÆData Ini, datfinÔåÆData Fim, nacfederalÔåÆAliq Nac Fed, impfederalÔåÆAliq Imp Fed, estadualÔåÆAliq Estadual, municipalÔåÆAliq Municipal, versaoÔåÆVersao) ÔÇö ColumnCount setado fora do WITH (Problema 36)
+- BINDEVENTs para Encerrar e BtnCarregar
+
+**Adicionado a `ConfigurarPaginaDados()`:**
+- `cmd_4c_Confirmar` e `cmd_4c_Cancelar` em `cnt_4c_Salva`
+- BINDEVENTs para Confirmar e Cancelar
+
+**`CarregarLista()` atualizado** com binding completo: RecordSource/ColumnCount fora do WITH (P36), ControlSource + Headers ap├│s RecordSource (P48/P32), FormatarGridLista.
+
+**Novos m├®todos:**
+- `AlternarPagina(par_nPagina)` ÔÇö valida e alterna, recarrega lista ao voltar ├á Page1
+- `BtnEncerrarClick()` ÔÇö Release
+- `BtnCarregarClick()` ÔÇö chama `IBPBO.ImportarPlanilha()` e recarrega grid
+- `BtnSalvarClick()` / `BtnCancelarClick()` ÔÇö prontos para Fase 5 (Page2 + campos)

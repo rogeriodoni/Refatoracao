@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas:
+
+- **[METODO-INEXISTENTE] `THIS.Controls()`** ÔÇö `Controls(N)` ├® uma propriedade-cole├º├úo built-in do VFP9 (Form/Container base class), acess├¡vel em qualquer subclasse sem declara├º├úo PROCEDURE. O c├│digo em `TornarControlesVisiveis` e `TornarSubControlesVisiveis` est├í correto; nenhuma altera├º├úo necess├íria.
+
+- **[GRID-WITH] `RecordSource` dentro do WITH** ÔÇö `loc_oGrd.RecordSource = "cursor_4c_Itn"` foi movido para **fora** do `WITH loc_oGrd`, usando refer├¬ncia expl├¡cita. O `WITH` agora cont├®m apenas as atribui├º├Áes de `.ColumnN.ControlSource`, eliminando o risco de "Unknown member COLUMN1" que ocorre quando RecordSource e acessos de coluna compartilham o mesmo bloco WITH.

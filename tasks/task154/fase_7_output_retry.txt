@@ -1,0 +1,10 @@
+﻿Fase 7 completa. Adicionei os 4 m├®todos exigidos (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) mais o helper `ObterEtapaAtiva()` ao `FormSIGPRALE.prg`.
+
+Como SIGPRALE ├® um splash/dialog de progresso sem CRUD no legado, implementei os 4 m├®todos como **API program├ítica real** para controle do splash pelas rotinas que o consomem (Redu├º├úo Z, backup, etc.):
+
+- **BtnIncluirClick()**: avan├ºa o indicador de etapa ativa (1ÔåÆ2ÔåÆ3) via `AlternarPagina`.
+- **BtnAlterarClick()**: materializa as `this_cMensagemN` nos labels + refresh de bitmap.
+- **BtnVisualizarClick()**: for├ºa dialog em topo (Z-order), re-sincroniza captions, `Show()`.
+- **BtnExcluirClick()**: limpa a ├║ltima mensagem preenchida (3ÔåÆ2ÔåÆ1) e retrocede etapa.
+
+Cada m├®todo tem l├│gica funcional real ÔÇö sem `MsgAviso` stub, sem TODO, sem "ser├í implementado".

@@ -1,0 +1,20 @@
+﻿Estrutura correta: 11 procedures, todos com ENDPROC correspondente, e ENDDEFINE no final. Fase 2 conclu├¡da.
+
+**Resumo do que foi implementado em `sigreanrBO.prg`:**
+
+**Fase 2/8 ÔÇö BO M├®todos CRUD (adaptados para REPORT):**
+
+- **`PrepararDados()`** ÔÇö Replica fiel da `PROCEDURE processamento` do original:
+  - Busca nome da empresa corrente para cabe├ºalho
+  - Cria cursores `dbCabecalho`, `TmpCli`, `TmpCabec`, `TmpFinal`, `TmpTotal` (nomes preservados para compatibilidade com `SigReAnr.frx`)
+  - Loop duplo: para cada opera├º├úo (`SigCdOpe WHERE RelFechas=1`) ├ù empresa (`SigCdEmp`) ÔåÆ movimentos (`SigMvCab`) ÔåÆ parcelas (`SigMvPar`) ÔåÆ acumula em `TmpCli`
+  - Atribui moedas ├ás colunas `Op11..Op13`/`Op21..Op23` de `TmpCabec`
+  - Popula `TmpFinal` por cliente/grupo/conta com valores por moeda
+  - Calcula PUBLIC `_TotalTit`, `_TotalVal`, `_TotalGTit`, `_TotalGVal`, `_TotalGCot` (referenciados pelo `.FRX`)
+  - Define `SET RELATION` TmpFinalÔåÆTmpCabec
+
+- **`BuscarCotacao(par_cMoeda, par_dData)`** ÔÇö Substitui `fBuscarCotacao()`, busca em `SigCdCot` com filtro por data de cota├º├úo
+
+- **`Imprimir()`**, **`Visualizar()`**, **`GerarExcel()`** ÔÇö Padr├úo id├¬ntico ao `SIGREAGVBO`
+
+- **`ObterChavePrimaria()`**, **`RegistrarAuditoria()`**, **`Destroy()`** ÔÇö Limpeza completa de todos os cursores tempor├írios

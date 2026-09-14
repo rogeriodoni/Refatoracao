@@ -1,0 +1,214 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 7,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREEVD",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReEvd Preview Noconsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVD",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "If Used('crSigCdCli')\n\tUse In crSigCdCli\nEndIf\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVD",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVD",
+      "evento": "Procedure",
+      "linhas": 127,
+      "codigoOriginal": "Private pDtI, pDtF\nLocal lcGrupo, lcConta, lcDConta, ldDatai, ldDataf, lcGruMat, lnTotal, lcCab, lcSub, lcEmp\n\nlcGrupo  = ThisForm.Get_Grupo.Value\nlcConta  = ThisForm.Get_Conta.Value\nlcDConta = ThisForm.Get_DConta.Value\nldDatai  = ThisForm.Get_Datai.Value\nldDataf  = ThisForm.Get_Dataf.Value\n\nCreate Cursor Envelope (Nenvs n(10), GrupoDs c(10), Qt n(5))\nIndex On Str(Nenvs,10) + GrupoDs Tag Nenvs\n\nCreate Cursor TmpRelat (Nenvs n(10), GrupoOs c(10), ContaOs c(10), RCliOs c(50), Datas d, GrupoDs c(10... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_DConta,Get_Datai,Get_Dataf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVD",
+      "evento": "Init",
+      "linhas": 35,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tlcQuery = [Select Codigos, Descrs ] + ;\n\t\t\t\t    [From SigCdGcr ] + ;\n\t\t\t\t   [Where GerBals = 1]\n\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdGcr') < 1)\n\t\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdGcr)')\n\t\t\tReturn 0\n\t\tEndIf\n\t\tSelect crSigCdGcr\n\t\tIndex On Codigos Tag BalCodigo\n\t\tIndex On Descrs  Tag BalDescrs\n\n\t\tlcQuery = [Select IClis, RClis, Inat... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREEVD",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReEvd to Print Prompt Noconsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVD",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReEvd to Print Noconsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVD.Get_grupo",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect crSigCdGcr\n\tSet Order to BalCodigo\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'crSigCdGcr', 'BalCodigo', This.Value, 'Cadastro de Grupos')\n\t\tloBrowse.AddColuna('Codigos', '', 'Código',    .t., 'BalCodigo' )\n\t\tloBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'BalDescrs' )\n\t\tloBrowse.Show\n\t\tIf Lastkey() <> 27\n\t\t\tThis.Value = crSigCdGcr.Codigos \n\t\tEndIf\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVD.Get_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.Get_Grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVD.Get_conta",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tSelect crSigCdCli\n\tSet Order to BalCodigo\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'crSigCdCli', 'BalCodigo', This.Value, 'Cadastro de Contas')\n\t\tloBrowse.AddColuna('IClis', '', 'Código',    .t., 'BalCodigo')\n\t\tloBrowse.AddColuna('RClis', '', 'Descrição', .t., 'BalNome')\n\t\tloBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')\n\t\tloBrowse.Show\n\t\tIf Lastkey() = 27\n\t\t\tThisForm.Get_Conta.Va... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_DConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVD.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.Get_Grupo.Value) And Empty(ThisForm.Get_Conta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And Empty",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEVD.Get_dconta",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If Not Empty( This.Value )\n\tSelect crSigCdCli\n\tSet Order to BalNome\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'crSigCdCli', 'BalNome', This.Value, 'Cadastro de Contas')\n\t\tloBrowse.AddColuna('RClis', '', 'Descrição', .t., 'BalNome')\n\t\tloBrowse.AddColuna('IClis', '', 'Código',    .t., 'BalCodigo')\n\t\tloBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')\n\t\tloBrowse.Show\n\t\tIf Lastkey() = 27\n\t\t\tThisForm.Get_Conta.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta,Get_DConta",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

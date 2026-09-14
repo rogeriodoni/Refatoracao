@@ -1,0 +1,11 @@
+﻿Arquivo `C:\4c\projeto\app\classes\ICDBO.prg` criado com sucesso.
+
+**Fase 1/8 conclu├¡da.** O ICDBO.prg cont├®m:
+
+- **Propriedades do tipo de origem** (`this_cTipos`, `this_cDescs`) ÔÇö mapeadas dos campos GetTipo/GetDesc do form
+- **Propriedades do novo tipo** (`this_cNovoTipos`, `this_cNovaDescs`) ÔÇö mapeadas de fwget1/fwget2
+- **Todos os demais campos da SigPrTri** (`this_nAliquotas`, `this_nBases`, `this_cCfops`, `this_cDestinos`, `this_cMovs`, `this_cOrigems`, `this_nReduzidas`) ÔÇö necess├írios para o INSERT de duplica├º├úo que copia o registro inteiro
+- **`this_cCursorDados = "cnSigPrTri"`** ÔÇö cursor principal
+- **`Init()`** configurando `this_cTabela = "SigPrTri"` e `this_cCampoChave = "cIdChaves"`
+
+Pr├│xima fase (2/8): completar o BO com os m├®todos `CarregarTipoExistente()`, `ValidarNovoTipo()`, `Duplicar()` e `BuscarPorTipos()`/`BuscarPorDescs()`.

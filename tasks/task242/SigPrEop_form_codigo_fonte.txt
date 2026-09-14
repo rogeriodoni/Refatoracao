@@ -1,0 +1,821 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrEop.SCX
+* Data/Hora: 07/07/2026 10:52:00
+* Total de registros: 29
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPREOP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: SIGPREOP
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGPREOP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPREOP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPREOP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: grdOperacoes
+  Parent: SIGPREOP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPREOP.grdOperacoes.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGPREOP.grdOperacoes.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGPREOP.grdOperacoes.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREOP.grdOperacoes.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREOP.grdOperacoes.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREOP.grdOperacoes.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREOP.grdOperacoes.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREOP.grdOperacoes.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREOP.grdOperacoes.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREOP.grdOperacoes.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREOP.grdOperacoes.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREOP.grdOperacoes.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPREOP.grdOperacoes.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPREOP.grdOperacoes.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: ck_Marca
+  Parent: SIGPREOP
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: lbl_descricao
+  Parent: SIGPREOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Operacao
+  Parent: SIGPREOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGPREOP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Numes
+  Parent: SIGPREOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdSair
+  Parent: SIGPREOP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 431
+  Width = 740
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Operações"
+  ControlBox = .F.
+  MaxButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  AlwaysOnTop = .T.
+  Themes = .F.
+  Name = "SIGPREOP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.Shape1
+------------------------------------------------------------
+  Top = 7
+  Left = 634
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Tahoma"
+  DeleteMark = .F.
+  Height = 275
+  Left = 3
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 121
+  Width = 732
+  GridLineColor = 238,238,238
+  Name = "grdOperacoes"
+  Column1.FontName = "Tahoma"
+  Column1.ControlSource = ""
+  Column1.Width = 15
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.ColumnOrder = 3
+  Column2.Width = 35
+  Column2.Name = "Column3"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 9
+  Column3.ColumnOrder = 7
+  Column3.Width = 205
+  Column3.Name = "Column7"
+  Column4.FontName = "Tahoma"
+  Column4.ColumnOrder = 4
+  Column4.Width = 80
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.ColumnOrder = 2
+  Column5.Width = 80
+  Column5.Name = "Column2"
+  Column6.FontName = "Tahoma"
+  Column6.ColumnOrder = 5
+  Column6.Width = 80
+  Column6.Name = "Column5"
+  Column7.FontName = "Tahoma"
+  Column7.ColumnOrder = 6
+  Column7.Width = 200
+  Column7.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column1.Check1
+------------------------------------------------------------
+  Top = 36
+  Left = 3
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  Alignment = 0
+  Caption = "Check1"
+  Value = 0
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conjugê"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column7.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 9
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Prev. Entrega"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cliente"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nome do Cliente"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.grdOperacoes.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.ck_Marca
+------------------------------------------------------------
+  Top = 123
+  Left = 15
+  Height = 17
+  Width = 13
+  Alignment = 0
+  Caption = ""
+  Value = 1
+  Name = "ck_Marca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.lbl_descricao
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Alignment = 0
+  Caption = "Operação :"
+  Height = 15
+  Left = 19
+  Top = 402
+  Width = 56
+  TabIndex = 7
+  Name = "lbl_descricao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.get_Operacao
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 25
+  InputMask = ""
+  Left = 87
+  MaxLength = 40
+  SpecialEffect = 0
+  TabIndex = 8
+  ToolTipText = ""
+  Top = 398
+  Width = 150
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "get_Operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontSize = 8
+  Alignment = 0
+  Caption = "Nº :"
+  Height = 15
+  Left = 249
+  Top = 402
+  Width = 21
+  TabIndex = 7
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.get_Numes
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 25
+  InputMask = ""
+  Left = 276
+  MaxLength = 40
+  SpecialEffect = 0
+  TabIndex = 8
+  ToolTipText = ""
+  Top = 398
+  Width = 50
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "get_Numes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPREOP.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 663
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "OK"
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPREOP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pFrm, lcCabData
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.ParentForm = pFrm
+
+ThisForm.ParentForm.Enabled = .f.
+
+Select 1 as Selecionada, * from crTprMvCab into cursor crOperacoes readwrite
+
+ThisForm.get_Operacao.ControlSource = [crOperacoes.Dopes] 
+ThisForm.get_Numes.ControlSource = [crOperacoes.Numes] 
+
+With ThisForm.grdOperacoes
+	.ColumnCount  	   = 7
+	.RecordSource      = [crOperacoes]
+	.HeaderHeight 	   = 19
+	.DeleteMark   	   = .f.
+*	.RecordMark   	   = .f.
+	.ReadOnly     	   = .f.
+	.Scrollbars   	   =  2
+	.AllowHeaderSizing = .f.
+	.AllowRowSizing    = .f.
+
+	.Column1.ControlSource 	 = [crOperacoes.Selecionada]
+	.Column1.Movable   		 = .f.
+	.Column1.Resizable 		 = .f.
+	.Column1.ReadOnly  		 = .f.
+	.Column1.Sparse    		 = .f.
+	.Column1.Check1.AutoSize = .t.
+	.Column4.Header1.Caption = lcCabData
+	.Column2.ControlSource   = [crOperacoes.Datas]
+	.Column3.ControlSource   = [crOperacoes.Emps]
+	.Column4.ControlSource   = [crOperacoes.PrazoEnts]
+	.Column5.ControlSource   = [crOperacoes.Contas]
+	.Column6.ControlSource   = [crOperacoes.RClis]
+	.Column7.ControlSource   = [crOperacoes.Conjuges]
+
+	For I=2 To .ColumnCount
+		lcCol = Alltrim(Str(I))
+		.Column&lcCol..FontName  = [Courier New]
+		.Column&lcCol..Movable   = .f.
+		.Column&lcCol..Resizable = .f.
+		.Column&lcCol..ReadOnly  = .t.
+	Next
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREOP.grdOperacoes
+* Classe: grid (Base: grid)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+ThisForm.get_Operacao.Refresh() 
+ThisForm.get_Numes.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREOP.grdOperacoes.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Local Selecionada
+
+If InList(nKeyCode, 13, 32)
+	m.Selecionada = Iif(Selecionada = 0, 1, 0)
+
+	Select crOperacoes
+	Gather Memvar Fields Selecionada
+	ThisForm.grdOperacoes.Refresh
+
+	NoDefault
+EndIf
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Local Selecionada
+
+m.Selecionada = Iif(crOperacoes.Selecionada = 0, 1, 0)
+
+Select crOperacoes
+Gather Memvar Fields Selecionada
+ThisForm.grdOperacoes.Refresh
+
+NoDefault
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim ********************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREOP.ck_Marca
+* Classe: checkbox (Base: checkbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Replace All Selecionada with This.Value in crOperacoes
+ThisForm.grdOperacoes.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREOP.get_Operacao
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREOP.get_Numes
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPREOP.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Zap in crFilOper
+
+Select crOperacoes
+Locate for .F.
+Go Top in crOperacoes
+
+Scan
+	If crOperacoes.Selecionada == 1
+		Insert into crFilOper Values(Padr(crOperacoes.Emps,3)+Padr(crOperacoes.Dopes,20)+Padl(Str(crOperacoes.Numes,6),6))
+	Endif		
+EndScan
+
+
+ThisForm.ParentForm.Enabled = .t.
+ThisForm.Release
+* Fim ********************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPREOP
+RESERVED3 (ClassInfo): parentform
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

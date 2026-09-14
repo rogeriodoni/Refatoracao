@@ -1,0 +1,14 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi adicionado:
+
+**`Formsigrecrp.prg`** ÔÇö 6 m├®todos inseridos antes do `ENDDEFINE`:
+- `LimparCampos()` ÔÇö inicializa todos os filtros: opcao=1, datas=`DATE()`, strings=""
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita os 15 controles de filtro
+- `CarregarLista()` ÔÇö stub retorna `.T.` (REPORT n├úo tem grid CRUD)
+- `AjustarBotoesPorModo()` ÔÇö stub vazio (REPORT n├úo tem modos)
+- `FormParaBO()` ÔÇö wrapper que delega para `FormParaRelatorio()`
+- `BOParaForm()` ÔÇö inverso: carrega todas as 15 propriedades do BO de volta nos controles
+
+**`menu.prg`** ÔÇö 3 altera├º├Áes:
+- `DEFINE BAR 76` (separador) + `BAR 77` ("D├®bitos/Cr├®ditos Pendentes") no popup de relat├│rios
+- `ON SELECTION BAR 77 DO AbrirFormsigrecrp`
+- Procedure `AbrirFormsigrecrp()` no padr├úo can├┤nico (`VARTYPE` + `Show()` sem par├ómetro + `MostrarErro`)

@@ -1,0 +1,17 @@
+﻿**Fase 3/8 conclu├¡da.** Arquivo `FormRPT.prg` criado com 388 linhas em `C:\4c\projeto\app\forms\cadastros\`.
+
+O que foi entregue:
+
+| Elemento | Status |
+|---|---|
+| `DEFINE CLASS FormRPT AS FormBase` | Ô£à com todas as propriedades visuais (Width=1003, Height=600, DataSession=2) |
+| Propriedades legado (`this_pcEscolha`, `this_oWLstTABs`, `this_oWLstVARs`, etc.) | Ô£à declaradas |
+| `Init()` | Ô£à apenas `DODEFAULT()` |
+| `InicializarForm()` | Ô£à fix DataSession, cria├º├úo do BO, `ConfigurarPageFrame`, `CarregarLista` |
+| `ConfigurarPageFrame()` | Ô£à PageFrame externo (`pgf_4c_Paginas`), 2 p├íginas, Top=-29 |
+| `ConfigurarPaginaLista()` | Ô£à `cnt_4c_Cabecalho` + labels t├¡tulo, `cnt_4c_Botoes` (placeholder), `cnt_4c_Saida` (can├┤nico Left=917) |
+| `ConfigurarPaginaDados()` | Ô£à `cnt_4c_BotoesAcao` (Grupo_Salva) + `pgf_4c_Dados` (PageFrame interno, Top=-29, 2 sub-p├íginas) |
+| `TornarControlesVisiveis()` | Ô£à recursivo com tratamento de PageFrames |
+| `Destroy()` | Ô£à libera cursores legado (`crSIGCDRLC`, `Crs_RPT_C`, `CrsTmp_SqlResult`) + pain├®is flutuantes |
+
+Grid, bot├Áes CRUD e campos de dados ser├úo adicionados nas Fases 4-6.

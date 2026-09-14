@@ -1,0 +1,21 @@
+﻿O arquivo est├í completo e correto. A Fase 3/8 foi executada com o form **completo** (n├úo apenas a estrutura base) pois este ├® um form de relat├│rio simples com apenas 2 campos de filtro ÔÇö implementar tudo de uma vez atende melhor a regra de completude do pipeline.
+
+**Resumo do que foi criado em `FormSIGREIPS.prg`:**
+
+| Se├º├úo | Implementa├º├úo |
+|---|---|
+| Dimens├Áes | Width=596, Height=205 (exatas do original) |
+| Layout | FLAT ÔÇö sem PageFrame CRUD |
+| `cnt_4c_Cabecalho` | Container cinza cobrindo todo o form (substituindo `cntSombra`) |
+| `cmg_4c_Botoes` | CommandGroup 4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar (Left=286) |
+| `lbl_4c_Selecao` | Label "Sele├º├úo : " (Top=139, Left=61 ÔÇö exato do original) |
+| `txt_4c_Codigo` | TextBox c├│digo (Top=136, Left=124, W=66) + F4/DblClick/ENTER/TAB |
+| `txt_4c_Desc` | TextBox descri├º├úo (Top=136, Left=192, W=220) + ReadOnly quando c├│digo preenchido |
+| Lookups | `AbrirBuscaCodigo` e `AbrirBuscaDesc` via `FormBuscaAuxiliar` em `SigMlItn` |
+| Valida├º├úo | `ValidarCodigo`/`ValidarDesc` com SQLEXEC de confirma├º├úo |
+| `AtualizarEstadoDesc` | Implementa `Get_desc.When` do legado |
+| `FormParaRelatorio` | Transfere `this_cCodigos`/`this_cDescs` para `SIGREIPSBO` |
+| Bot├Áes a├º├úo | `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick`, `BtnSairClick` |
+| `Destroy` | Usa `= .NULL.` (n├úo `.Release()`) no BO Custom |
+
+**Pr├│ximas fases:** 4/8 e seguintes continuar├úo com `Read + Edit` neste arquivo, mas como o form j├í est├í 100% funcional, as fases seguintes podem focar em integra├º├úo (menu.prg) e testes.

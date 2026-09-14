@@ -1,0 +1,14 @@
+﻿Arquivo criado em `C:\4c\projeto\app\classes\rstBO.prg`.
+
+**Fase 1 conclu├¡da.** O BO cont├®m:
+
+| Propriedade | Coluna DB | Tipo | Origem |
+|---|---|---|---|
+| `this_cSkChaves` | skchaves | C(20) | PK SigCdRst |
+| `this_cIclis` | iclis | C(10) | FK SigCdCli |
+| `this_nChkMatrs` | chkmatrs | N(1,0) | op_con Checa Matriz |
+| `this_dDatas` | datas | D | SigCdRst |
+| `this_dDtAlts` | dtalts | D | auditoria |
+| `this_cRclis` | Rclis (join) | C | derivado de SigCdCli |
+
+`Init()` configura `this_cTabela = "SigCdRst"` e `this_cCampoChave = "skChaves"`. As propriedades de SigCdRsi (pkchaves, codibges, cpros, tipos, ufibges) n├úo entram no BO pois s├úo gerenciadas como cursores filhos nas Fases seguintes.

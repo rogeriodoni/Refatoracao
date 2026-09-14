@@ -1,0 +1,12 @@
+﻿Ambas as corre├º├Áes foram aplicadas corretamente:
+
+1. **`InicializarForm`** - Os tr├¬s `RETURN .F.` dentro do TRY substitu├¡dos pelo padr├úo `IF/ELSE` aninhado com flag `loc_lSucesso` Ô£ô
+2. **`ConfigurarGrade`** - TRY/CATCH vazio removido; os guards `PEMSTATUS` j├í garantem seguran├ºa de acesso Ô£ô
+
+**Resumo da Fase 6:**
+
+Esta form OPERACIONAL (`FormSigPdM14`) estava funcionalmente completa desde a Fase 5 ÔÇö todos os campos, containers, grid com 10 colunas e handlers de eventos j├í estavam implementados. N├úo h├í campos com lookup (todos os TextBoxes t├¬m `When=Return .F.`) ent├úo n├úo havia BINDEVENTs de F4/F5 a adicionar.
+
+Os dois bugs corrigidos:
+- `InicializarForm`: 3x `RETURN .F.` dentro do bloco TRY violavam a regra VFP9 "NEVER RETURN inside TRY/CATCH"
+- `ConfigurarGrade`: CATCH vazio violava a regra "CATCH nunca silencioso" ÔÇö removido j├í que os guards `PEMSTATUS` tornam o TRY desnecess├írio

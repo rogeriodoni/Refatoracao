@@ -1,0 +1,19 @@
+﻿**Diagn├│stico: Falso Positivo do Validador**
+
+As colunas `matsubs` e `codtams` s├úo da tabela **`sigsubcp`**, n├úo de SIGPRCPO. A query na linha 9312 ├® claramente `FROM sigsubcp c`. O validador confundiu o alias `c` entre as duas queries sequenciais (a anterior usa `FROM SIGPRCPO c`).
+
+**Evid├¬ncias que confirmam falso positivo:**
+
+1. **Legado confirma `codtams` em sigsubcp**: `.Column15.ControlSource = 'crSigSubCp.CodTams'`
+2. **Legado confirma `matsubs` em sigsubcp**: `Insert Into crSigSubCp (..., matsubs) Values (...)`
+3. **INSERT n├úo foi flagado**: linha 11871 usa `INSERT INTO sigsubcp (..., matsubs)` sem erro
+4. **Cursor correto**: `cursor_4c_SubCompo` tem ambos os campos definidos na linha 4078
+5. **Fixar quebraria o c├│digo**: substituir `matsubs` por `mats` selecionaria coluna duplicada (Column1 j├í ├® `mats`)
+
+**Conclus├úo**: Nenhuma corre├º├úo necess├íria. O validador incorretamente associou `c.matsubs` e `c.codtams` a SIGPRCPO porque ambas as queries adjacentes usam o mesmo alias `c`, mas a query problem├ítica ├® `FROM sigsubcp c`, onde essas colunas existem conforme confirmado pelo legado e pelo INSERT que tamb├®m usa `matsubs` (linha 11871) sem receber flag.
+
+Alterar o c├│digo conforme sugerido pelo validador violaria as regras:
+- **"NAO remover campos"** ÔÇö `codtams` (Column15) seria perdido
+- **"NAO alterar logica de negocio"** ÔÇö `matsubs ÔåÆ mats` selecionaria campo errado (duplicaria Column1)
+
+**Nenhuma altera├º├úo no arquivo ├® necess├íria.** Os problemas listados s├úo falsos positivos causados por limita├º├úo do algoritmo de detec├º├úo de tabela do validador.

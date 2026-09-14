@@ -1,0 +1,13 @@
+﻿Arquivo completo e correto. Fase 2 conclu├¡da.
+
+**O que foi adicionado ao `SigReEvdBO.prg`:**
+
+- **`PrepararDados()`** ÔÇö tradu├º├úo fiel do `processamento` legado: cria os cursores `cursor_4c_Envelope` e `cursor_4c_TmpRelat`, executa SQLEXEC em loop aninhado (SigCdNei ÔåÆ SigCdOpd ÔåÆ SigCdNec ÔåÆ SigCdCli para origem e destino), acumula resultados, monta `cursor_4c_Cabecalho` com empresa do `SigCdEmp`, e produz `cursor_4c_Dados` com apenas os envelopes duplicados (`Qt > 1`). A data final usa `23:59:59` para cobrir o dia inteiro (campo DATETIME).
+
+- **`ObterMensagemErro()`** ÔÇö retorna `this_cMensagemErro` para o form exibir erros.
+
+- **`Inserir()` / `Atualizar()`** ÔÇö bloqueados (relat├│rio n├úo persiste dados), padr├úo SIGREVISBO.
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` (sem chave prim├íria em relat├│rio).
+
+- **`Destroy()`** ÔÇö fecha todos os cursores: `cursor_4c_Grupos`, `cursor_4c_Clientes` (do Init), `cursor_4c_Cabecalho`, `cursor_4c_TmpRelat`, `cursor_4c_Envelope`, e `cursor_4c_Dados`.

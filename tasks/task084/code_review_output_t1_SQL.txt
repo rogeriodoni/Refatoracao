@@ -1,0 +1,27 @@
+﻿Verifica├º├úo conclu├¡da. Aqui est├í a an├ílise dos tr├¬s alertas:
+
+---
+
+**[SQL-FILTRO-INVENTADO] ICLIS** ÔÇö **FALSO POSITIVO**
+
+`Iclis` ├® a **chave prim├íria** de `SigCdCli` (`CONSTRAINT [sigcdcli_iclis] PRIMARY KEY CLUSTERED`). O original VFP usava `SEEK` por Iclis para localizar o nome do cliente ÔÇö o `WHERE Iclis = ...` nas linhas 1140 e 1153 do form ├® a tradu├º├úo SQL correta e equivalente desse SEEK. O Framework legado tamb├®m usa `Select IClis, RClis From SigCdCli where ...` com esse campo. Nenhuma mudan├ºa necess├íria.
+
+---
+
+**[SQL-FILTRO-INVENTADO] CEMPS** ÔÇö **FALSO POSITIVO**
+
+Em `SigReEchBO.prg` linha 198: `WHERE cemps = EscaparSQL(par_cEmps)`. O original fazia `Select Cemps,Cidas From SigCdEmp` (sem WHERE) + `=Seek( _Empr, 'CrSigCdEmp','Cemps' )`. O SEEK filtra pelo campo `cemps` ÔÇö a tradu├º├úo SQL com WHERE ├® funcionalmente id├¬ntica e mais eficiente. Nenhuma mudan├ºa necess├íria.
+
+---
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT** ÔÇö **FALSO POSITIVO**
+
+`ControlCount` aparece nas linhas 496 e 507 do form como `par_oContainer.ControlCount` e `loc_oControl.ControlCount` ÔÇö propriedade VFP de container para iterar controles. N├úo ├® uma cl├íusula SQL WHERE. O validador fez matching de texto err├┤neo. Nenhuma mudan├ºa necess├íria.
+
+---
+
+**Conclus├úo: Nenhuma corre├º├úo ├® necess├íria.** Os tr├¬s alertas s├úo falsos positivos:
+- `Iclis` e `Cemps` s├úo tradu├º├Áes corretas de opera├º├Áes VFP SEEK para SQL WHERE
+- `ControlCount` ├® propriedade VFP, n├úo SQL
+
+O c├│digo est├í correto e funcional como est├í.

@@ -1,0 +1,26 @@
+﻿Ap├│s leitura completa de ambos os arquivos, a an├ílise ├®:
+
+## Resultado da Verifica├º├úo: Todos os 5 problemas s├úo FALSOS POSITIVOS
+
+### [GRID-SQL] grupoos e grupods
+
+O validador escaneou o **form** e n├úo encontrou o SELECT ÔÇö porque ele est├í no **BO**. Ambas as colunas existem em dois lugares:
+
+- `RssBO.Buscar()` linha 277: `"SELECT grupoos, grupods, cidchaves FROM SigCdRps"`
+- `RssBO.Buscar()` linha 268-272 (fallback): `CREATE CURSOR cursor_4c_Dados (grupoos C(10), grupods C(10), cidchaves C(20))`
+
+ControlSources `cursor_4c_Dados.grupoos` e `cursor_4c_Dados.grupods` est├úo corretos.
+
+### [SQL-FILTRO-INVENTADO] GRUPOOS e GRUPODS
+
+O validador comparou o WHERE de `VerificarDuplicidade` (`WHERE grupoos = X AND grupods = X`) contra "WHERE original usa: CODIGOS" ÔÇö mas aquele `CODIGOS` ├® de uma query **completamente diferente**: o lookup `SELECT Descrs FROM SigCdGcr WHERE Codigos = ...`. S├úo queries em m├®todos distintos.
+
+O WHERE `grupoos + grupods` em `VerificarDuplicidade` ├® l├│gica de neg├│cio v├ílida: verifica duplicidade do par (origem, destino). As colunas existem em `SigCdRps`.
+
+### [SQL-FILTRO-INVENTADO] CIDCHAVES
+
+Aparece em `CarregarPorCodigo` (`WHERE cidchaves = EscaparSQL(par_cChave)`). `cidchaves` ├® a **chave prim├íria** de `SigCdRps` ÔÇö padr├úo can├┤nico de lookup por PK.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto. Os 5 alertas foram gerados por limita├º├úo do validador est├ítico (n├úo cruza arquivos Form/BO, e compara WHEREs de queries distintas).

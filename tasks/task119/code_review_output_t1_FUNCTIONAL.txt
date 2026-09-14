@@ -1,0 +1,10 @@
+﻿Corre├º├Áes aplicadas:
+
+**SigReIfvBO.prg** ÔÇö `SET NULL ON` antes de `CREATE CURSOR cursor_4c_IfvTmpBase` e `SET NULL OFF` ap├│s o `INTO CURSOR CsBases READWRITE` indexado, garantindo que o UNION ALL com dados vindos do SQL Server n├úo falhe com "Field does not accept null values".
+
+**FormSigReIfv.prg** ÔÇö `obj_4c_OptGtprel.Top` corrigido de 5 para 4, alinhando com a f├│rmula documentada `Original_Top(84) - 80 = 4`.
+
+Itens descartados como falsos positivos:
+- `ValidarFiltros` est├í definido (linha 1643) como `PROTECTED FUNCTION` ÔÇö v├ílido em VFP9
+- `optGtprel.Left=161` j├í estava correto no c├│digo
+- `lbl_moeda/CmdApgEmp/cmdSelemp` Top s├úo exatamente `Original_Top - 80` (offset documentado do PageFrame) ÔÇö corretos

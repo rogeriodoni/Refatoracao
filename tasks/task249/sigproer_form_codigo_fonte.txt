@@ -1,0 +1,761 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigproer.SCX
+* Data/Hora: 07/07/2026 10:57:08
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPROER
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Shape1
+  Parent: SIGPROER
+  Class: shape
+  BaseClass: shape
+
+Objeto: GetSenha
+  Parent: SIGPROER
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SIGPROER
+  Class: label
+  BaseClass: label
+
+Objeto: SENHA
+  Parent: SIGPROER
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Container1
+  Parent: SIGPROER
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPROER.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: cntSombra
+  Parent: SIGPROER
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPROER.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPROER.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: SAIDA
+  Parent: SIGPROER
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER
+------------------------------------------------------------
+  Height = 200
+  Width = 400
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Reimpressao do SiTef"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGPROER"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER.Shape1
+------------------------------------------------------------
+  Top = 94
+  Left = 76
+  Height = 42
+  Width = 247
+  SpecialEffect = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER.GetSenha
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Enabled = .F.
+  Height = 23
+  InputMask = ""
+  Left = 214
+  TabIndex = 2
+  Top = 103
+  Width = 100
+  ForeColor = 90,90,90
+  Name = "GetSenha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Senha do Supervisor :"
+  Height = 15
+  Left = 90
+  Top = 108
+  Width = 108
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER.SENHA
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 1
+  Format = ""
+  Height = 23
+  Left = 214
+  MaxLength = 0
+  TabIndex = 1
+  Top = 103
+  Width = 100
+  PasswordChar = "*"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "SENHA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER.Container1
+------------------------------------------------------------
+  Top = 141
+  Left = 114
+  Width = 171
+  Height = 56
+  SpecialEffect = 0
+  Visible = .T.
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER.Container1.Label1
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 10
+  Alignment = 2
+  Caption = "Insira ou Passe o Cartao"
+  Height = 25
+  Left = 9
+  Top = 17
+  Width = 157
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER.cntSombra
+------------------------------------------------------------
+  Top = 1
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPROER.SAIDA
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  ControlSource = "OPSENHA"
+  Height = 85
+  Left = 320
+  Top = -1
+  Width = 85
+  TabIndex = 4
+  Name = "SAIDA"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "\<Cancelar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "CANCELA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPROER
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE montaretorno
+------------------------------------------------------------
+PROCEDURE montaretorno
+PARAMETERS lsCupom
+
+CREATE CURSOR crSiTef (tef c(100))
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("002-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("003-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("004-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("009-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("010-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("011-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("012-000 = "+lsNSU)
+INSERT INTO crSiTef (Tef) VALUES ("013-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("015-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("017-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("018-000 = 1")
+INSERT INTO crSiTef (Tef) VALUES ("017-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("019-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("020-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("021-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("022-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("023-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("023-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("027-000 = ")
+lsPos=1
+lnLinha=1
+DO WHILE lsPos <> 0
+	lsPos=AT(CHR(10),lsCupom)
+	INSERT INTO crSiTef (Tef) VALUES ("029-"+TRANSFORM(lnLinha,"@L 999")+" = "+IIF(lsPos<>0,SUBSTR(lsCupom,1,lsPos-1),lsCupom))
+	lsCupom=SUBSTR(lscupom,lsPos+1)
+	lnLinha=lnLinha+1
+Enddo
+INSERT INTO crSiTef (Tef) VALUES ("028-000 = "+ALLTRIM(STR(lnLinha-2)))
+INSERT INTO crSiTef (Tef) VALUES ("030-000 = Transacao OK")
+INSERT INTO crSiTef (Tef) VALUES ("150-000 = 00000000")
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+SELECT crSitef 
+COPY TO C:\client\Resp\IntPos.001 SDF
+ZAP
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+COPY TO C:\client\Resp\IntPos.STS SDF
+	
+USE
+	
+Return
+
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE retornofalha
+------------------------------------------------------------
+PROCEDURE retornofalha
+PARAMETERS lcMensagem
+
+CREATE CURSOR crSiTef (tef c(100))
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("002-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("003-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("004-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("009-000 = FF")
+INSERT INTO crSiTef (Tef) VALUES ("010-000 = 05")
+INSERT INTO crSiTef (Tef) VALUES ("028-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("030-000 = "+lcMensagem)
+INSERT INTO crSiTef (Tef) VALUES ("150-000 = 00000000")
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+SELECT crSitef 
+COPY TO C:\client\Resp\IntPos.001 SDF
+ZAP
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+COPY TO C:\client\Resp\IntPos.STS SDF
+
+USE
+	
+Return
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters EndSitef, pcCaixa, pcNSU, pcData, pcValor, pcdata, pcHora, pcCodEstabs
+
+LOCAL lsEndSitef, lsIdTerminal
+Public ProximoComando, TipoCampo, TamanhoMinimo, TamanhoMaximo, Buffer, lnContinua, ltIdent, lsNSU, lsData
+
+ThisForm.pcValor = pcValor
+
+WITH Thisform
+
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigCdEmp','cEmps','crSigCdEmp','cEmps',.f.,[Select * From SigCdEmp Where cEmps = ?_Empr])
+		.Requery('crSigCdEmp')
+	EndWith
+
+Endwith	
+
+lsEndSitef=EndSitef
+lcEmp=fConverteStr(CrSigCdEmp.nEmps)
+If Empty(pcCodEstabs)
+	lsIdTerminal="00000"+_Empr
+Else
+	lsIdTerminal=pcCodEstabs
+Endif
+lcIdTerminal=fConverteStr(CrSigCdEmp.nEmps)+TRANSFORM(VAL(crSigFiMpF.Cncaixas),"@L 999999")
+lsNSU=pcNSU
+lsData=pcData
+
+IF ConfiguraIntSiTefInterativo(lsEndSitef,lsIdTerminal,lcIdTerminal,0) <> 0
+	Thisform.RetornoFalha("Sem comunicacao com SiTef")
+	RELEASE WINDOWS
+Endif
+
+IF ! EMPTY(pcValor)
+	lcValores=StrTran(ALLTRIM(TRANSFORM(pcValor,"999999999999.99")),".",",")
+Else
+	lcValores=""
+Endif
+
+IF IniciaFuncaoSiTefInterativo(IIF(EMPTY(lsData),114,113), lcValores, "1", "", "", "", "") <> 10000
+	Thisform.RetornoFalha("Sem comunicacao com SiTef")
+	RELEASE WINDOWS
+ENDIF
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+DECLARE Integer ConfiguraIntSiTefInterativo IN "CliSiTef32I.DLL" string lsEndereco, String lsLoja, String lsTerminal, Integer lnReservado 
+DECLARE Integer IniciaFuncaoSiTefInterativo IN "CliSiTef32I.DLL" Integer lnModalidade, String lsValor, String lsCupom, String lsData, String lsHorario, String lsOperador, String lsRestricao 
+DECLARE Integer ContinuaFuncaoSiTefInterativo IN "CliSiTef32I.DLL" Integer @lnComando, Integer @lnTipo, Integer @lnMinimo, Integer @lnMaximo, String @lsBuffer, Integer lnTamanho, Integer lnResultado 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+*CLEAR DLLS "ConfiguraIntSiTefInterativo"
+*CLEAR DLLS "IniciaFuncaoSiTefInterativo"
+*CLEAR DLLS "ContinuaFuncaoSiTefInterativo"
+*CHRSAW(3)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPROER.GetSenha
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ProximoComando=0 
+TipoCampo=0 
+TamanhoMinimo=0 
+TamanhoMaximo=0 
+Buffer=Replicate(Chr(0),2000)
+lnContinua=0 
+Mensagem=""
+lnTipo=1
+
+DO WHILE TipoCampo <> 500
+	lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+	IF lnRetorno < 0
+		Thisform.RetornoFalha(mensagem)
+		Exit
+	ENDIF
+	IF ProximoComando = 30 .and. !EMPTY(lsNSU)
+		IF lnTipo = 1
+			Buffer=TRANSFORM(VAL(lsNSU),"@L 999999999")
+			Buffer = Buffer + Replicate(Chr(0),2000-Len(Buffer))
+			lnContinua=1000
+			lnTipo=2
+			LOOP
+		Endif
+		IF lnTipo = 2
+			Buffer=lsData + Replicate(Chr(0),2000-Len(lsData))
+			lnContinua=1000
+			lnTipo=3
+			LOOP
+		ENDIF
+	Endif
+	IF Proximocomando <> 30
+		mensagem=Buffer
+		Buffer=Replicate(Chr(0),2000)
+		lnContinua=0
+    ENDIF 
+Enddo 
+IF lnRetorno < 0
+	RELEASE WINDOWS
+ENDIF
+WAIT Clear
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+IF EMPTY(This.Value)
+	RETURN
+Endif
+
+lsCupom=""
+Mensagem=""
+Buffer=ALLTRIM(This.Value)
+Buffer = Buffer + Replicate(Chr(0),2000-Len(Buffer))
+lnContinua=1000
+lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+lnContinua=0
+DO WHILE lnRetorno = 10000
+	lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+	IF lnRetorno < 0
+		Thisform.RetornoFalha(mensagem)
+		Exit
+	ENDIF
+	IF UPPER(ALLTRIM(Buffer)) = 'DOC INEXISTENTE'
+		Thisform.RetornoFalha('DOC INEXISTENTE')
+		EXIT
+	Endif
+    IF TipoCampo = 121 .and. EMPTY(lsCupom)
+    	lsCupom=Buffer+Buffer
+    Endif
+    IF TipoCampo = 122 
+    	lsCupom = lsCupom + Buffer
+    Endif
+	IF ProximoComando = 20
+		Buffer="0"+Replicate(Chr(0),1999)
+		lnContinua=1000
+		loop
+	Else
+		mensagem=Buffer
+		Buffer=Replicate(Chr(0),2000)
+		lnContinua=0
+    ENDIF 
+Enddo 
+IF lnRetorno = 0
+	ThisForm.MontaRetorno(lsCupom)
+Endif
+RELEASE WINDOWS
+WAIT Clear
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+	
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(EMPTY(This.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPROER.SENHA
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Container1.Label1.Caption="Digite a Senha"+CHR(13)+"do Supervisor"
+ProximoComando=0 
+TipoCampo=0 
+TamanhoMinimo=0 
+TamanhoMaximo=0 
+Buffer=Replicate(Chr(0),2000)
+lnContinua=0 
+Mensagem=""
+lnTipo=1
+
+DO WHILE TipoCampo <> 500
+	lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+	IF lnRetorno < 0
+		Thisform.RetornoFalha(mensagem)
+		Exit
+	ENDIF
+	IF ProximoComando = 30 .and. !EMPTY(lsNSU)
+		IF lnTipo = 1
+			Buffer=TRANSFORM(VAL(lsNSU),"@L 999999999")
+			Buffer = Buffer + Replicate(Chr(0),2000-Len(buffer))
+			lnContinua=1000
+			lnTipo=2
+			LOOP
+		Endif
+		IF lnTipo = 2
+			Buffer=lsData + Replicate(Chr(0),2000-Len(lsData))
+			lnContinua=1000
+			lnTipo=3
+			LOOP
+		ENDIF
+	Endif
+	IF Proximocomando <> 30
+		mensagem=Buffer
+		Buffer=Replicate(Chr(0),2000)
+		lnContinua=0
+    ENDIF 
+Enddo 
+IF lnRetorno < 0
+	RELEASE WINDOWS
+ENDIF
+WAIT Clear
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+IF EMPTY(This.Value)
+	RETURN
+Endif
+
+lsCupom=""
+Mensagem=""
+Buffer=ALLTRIM(This.Value)
+Buffer = Buffer + Replicate(Chr(0),2000-Len(Buffer))
+lnContinua=1000
+lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+lnContinua=0
+llVias = .f.
+DO WHILE lnRetorno = 10000
+	lnRetorno=ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(Buffer), lnContinua)
+	IF lnRetorno < 0
+		Thisform.RetornoFalha(mensagem)
+		Exit
+	ENDIF
+	IF UPPER(ALLTRIM(Buffer)) = 'DOC INEXISTENTE'
+		Thisform.RetornoFalha('DOC INEXISTENTE')
+		EXIT
+	EndIf
+	If ProximoComando = 30 And TipoCampo = 515
+		Buffer=lsData+Replicate(Chr(0),2000-Len(lsData))
+		Loop
+	Endif
+	If ProximoComando = 30 And TipoCampo = 516
+		If ! Empty(ThisForm.pcValor)
+			Buffer=TRANSFORM(VAL(lsNSU),"@L 999999")
+		Else
+			Buffer=TRANSFORM(VAL(lsNSU),"@L 999999999")
+		Endif
+		Buffer = Buffer + Replicate(Chr(0),2000-Len(Buffer))
+		Loop
+	Endif
+    IF TipoCampo = 121 .and. EMPTY(lsCupom)
+    	lsCupom=Buffer+Buffer
+    EndIf
+    IF TipoCampo = 122 
+    	lsCupom=lsCupom+Buffer
+    Endif
+    If llVias 
+		Buffer="3"+Replicate(Chr(0),1999)
+		llVias = .f.
+		Loop
+	Endif    	
+	If Upper(Buffer) = 'VIA A SER REIMPRESSA'
+		llVias = .t.
+	EndIf 
+	IF ProximoComando = 20
+		Buffer="0"+Replicate(Chr(0),1999)
+		lnContinua=1000
+		loop
+	Else
+		mensagem=Buffer
+		Buffer=Replicate(Chr(0),2000)
+		lnContinua=0
+    ENDIF 
+Enddo 
+IF lnRetorno = 0
+	ThisForm.MontaRetorno(lsCupom)
+Endif
+RELEASE WINDOWS
+WAIT Clear
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(EMPTY(This.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPROER.SAIDA
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE CANCELA.Click
+------------------------------------------------------------
+PROCEDURE CANCELA.Click
+ThisForm.RetornoFalha("Operacao Cancelada pelo Usuario")
+RELEASE WINDOWS
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPROER
+RESERVED3 (ClassInfo): pcvalor
+podatamgr
+*montaretorno 
+*retornofalha 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

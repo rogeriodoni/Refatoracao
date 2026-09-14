@@ -1,0 +1,264 @@
+﻿{
+    "taskId":  "task353",
+    "arquivoOriginal":  "SIGCDCAF",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-22T01:38:08",
+    "atualizadoEm":  "2026-07-22T02:52:26",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-22T01:38:08",
+                                            "fim":  "2026-07-22T01:38:08",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task353\\SIGCDCAF.sct",
+                                            "baseName":  "SIGCDCAF",
+                                            "scxFile":  "C:\\4c\\tasks\\task353\\SIGCDCAF.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-22T01:38:08",
+                                          "fim":  "2026-07-22T01:38:08",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCAF_form_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGCDCAF",
+                                          "txtFile":  "C:\\4c\\tasks\\task353\\SIGCDCAF_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-22T01:38:08",
+                                              "fim":  "2026-07-22T01:38:09",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task353\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-22T01:38:10",
+                                              "fim":  "2026-07-22T01:38:18",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task353\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task353\\meta_prompt.md",
+                                              "boClass":  "CAFBO",
+                                              "formClass":  "FormCAF",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task353\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-22T01:38:18",
+                                              "fim":  "2026-07-22T01:38:18",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task353\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-22T01:38:18",
+                                               "fim":  "2026-07-22T01:38:19",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+                                                                       "CAFBO_esqueleto.prg",
+                                                                       "FormCAF_esqueleto.prg"
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task353\\esqueletos",
+                                               "arquivos":  [
+                                                                "CAFBO_esqueleto.prg",
+                                                                "FormCAF_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-22T01:38:19",
+                                       "fim":  "2026-07-22T02:34:36",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+                                                               "C:\\4c\\projeto\\app\\classes\\CAFBO.prg",
+                                                               "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCAF.prg"
+                                                           ],
+                                       "comentario":  "FormCAF.prg (1492 linhas), CAFBO.prg (711 linhas)",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\CAFBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  32.44,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCAF.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  1247
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-22T02:34:36",
+                                                  "fim":  "2026-07-22T02:34:42",
+                                                  "tentativas":  2,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "Codigo gerado ja segue todos os padroes canonicos",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCAF.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\CAFBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-22T02:34:42",
+                                                 "fim":  "2026-07-22T02:34:43",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "Aguarda execucao manual no VFP9",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-22T02:51:07",
+                                       "fim":  "2026-07-22T02:51:49",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-22T02:51:49",
+                                               "fim":  "2026-07-22T02:52:25",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "Aguarda teste manual",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task353\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-22T02:52:25",
+                                        "fim":  "2026-07-22T02:52:26",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormCAF_20260722025226.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  180,
+                                        "avisos":  180
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-22T02:52:26",
+                                              "fim":  "2026-07-22T02:52:26",
+                                              "tentativas":  2,
+                                              "arquivoGerado":  "C:\\4c\\SolicitacaoTesteManual\\task353_SIGCDCAF.md",
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task353_SIGCDCAF.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-22T01:38:09",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-22T01:38:09",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task353\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-22T01:38:09",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-22T01:38:10"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-22T02:34:42",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-22T02:34:42",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormCAF_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCAF.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task353\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-22T02:34:43",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-22T02:34:44",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-22T02:34:44",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-22T02:50:50",
+                                          "passes":  5,
+                                          "problemas":  "[GRID-HEADER] Header Caption \u0027Códigos\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde Tubo, Qtde Canc.. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Datas\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde Tubo, Qtde Canc.. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027usuars\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde Tubo, Qtde Canc.. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Observações\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde Tubo, Qtde Canc.. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Códigos\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde Tubo, Qtde Canc.. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Datas\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde Tubo, Qtde Canc.. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027usuars\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde Tubo, Qtde Canc.. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Observações\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: O.P., Produto, Qtde Tubo, Qtde Canc.. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.",
+                                          "tentativas":  4,
+                                          "problemasRestantes":  8
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-22T02:50:50",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-22T02:51:07",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\CAFBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCAF.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-22T02:52:25",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-22T02:52:25",
+                                             "thresholdPx":  5,
+                                             "unmatched":  9,
+                                             "errors":  9,
+                                             "matched":  9,
+                                             "warnings":  14,
+                                             "reportFile":  "C:\\4c\\tasks\\task353\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  2152,
+                     "tempoExtracao":  1,
+                     "tempoAnalise":  1,
+                     "tempoEsqueletos":  1,
+                     "tempoMigracao":  2090,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  1248,
+                     "linhasCodigoGerado":  2203,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

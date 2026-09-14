@@ -1,0 +1,19 @@
+﻿O c├│digo atual j├í est├í correto. O `TornarControlesVisiveis` no arquivo real j├í cont├®m `CNT_4C_CABECALHO` no `INLIST` (linha 369) com o padr├úo de recurs├úo-antes-do-LOOP (linhas 371-374), exatamente como a regra de mem├│ria exige.
+
+A revis├úo foi gerada a partir de uma vers├úo anterior do arquivo. O fix j├í foi aplicado ÔÇö o estado atual ├®:
+
+```foxpro
+IF INLIST(UPPER(loc_oControl.Name), ;
+          "GRD_4C_DADOS", ;
+          "TXT_4C_LEITURA", ;
+          "LBL_4C_TXT_LEITURA", ;
+          "CNT_4C_CABECALHO")          ÔåÉ j├í presente
+    *-- Recursao nos filhos mesmo com LOOP (filhos ficam .T.)
+    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+        THIS.TornarControlesVisiveis(loc_oControl)   ÔåÉ recurs├úo antes do LOOP
+    ENDIF
+    LOOP
+ENDIF
+```
+
+O ├║nico problema detectado (1) j├í est├í corrigido no arquivo. Nenhuma altera├º├úo necess├íria.

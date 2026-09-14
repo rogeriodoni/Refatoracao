@@ -1,0 +1,18 @@
+﻿The file looks correct. Phase 5 is complete. Here's a summary of what was added:
+
+**ConfigurarPaginaDados()** now includes:
+- `cnt_4c_Cabecalho` ÔÇö dark header with title label (matching Page1 style)
+- `lbl_4c_Codigo` + `txt_4c_Codigos` ÔÇö C├│digo field (Top=181/187, Width=80, MaxLength=10)
+- `lbl_4c_Descricao` + `txt_4c_Descricaos` ÔÇö Descri├º├úo field (Top=206/210, Width=290, MaxLength=40)
+- `lbl_4c_Diretor` + `txt_4c_Diretores` ÔÇö Diretor field (Top=231/235, Width=80) with F4 lookup BINDEVENT
+
+**Methods now functional (partial ÔÇö Phase 6 will add OptionGroups):**
+- `FormParaBO()` ÔÇö transfers Codigos, Descricaos, Diretors to BO
+- `BOParaForm()` ÔÇö loads those 3 fields from BO into form
+- `LimparCampos()` ÔÇö clears those 3 fields
+- `HabilitarCampos()` ÔÇö C├│digo editable only in INCLUIR mode; Descri├º├úo/Diretor editable in INCLUIR+ALTERAR (matching legacy `When` events)
+- `ValidarCampos()` ÔÇö validates C├│digo and Descri├º├úo as required (matching legacy validation messages)
+
+**New methods:**
+- `DiretoresKeyPress()` ÔÇö handles F4 key (code 63) to open lookup
+- `AbrirLookupDiretor()` ÔÇö FormBuscaAuxiliar on SigCdUsu, fields Usuarios/NComps, filter `Not cAtivos='N'`

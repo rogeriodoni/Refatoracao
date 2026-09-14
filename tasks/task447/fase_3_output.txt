@@ -1,0 +1,16 @@
+﻿Todos os blocos fechados corretamente. Fase 3 conclu├¡da.
+
+**Resumo do que foi criado** ÔÇö `C:\4c\projeto\app\forms\cadastros\FormICM.prg` (249 linhas):
+
+| M├®todo | Status |
+|--------|--------|
+| `Init()` | Seta Caption com CHR(205)/CHR(227), chama `DODEFAULT()` |
+| `InicializarForm()` | Cria ICMBO, chama `ConfigurarPageFrame()`, guarda `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, Tabs=.F., 2 pages com `fundo_cad_1003.jpg` |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` vazio, `cnt_4c_Saida` vazio (can├┤nico Left=917) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` vazio |
+| `CarregarLista()` | Chama `BO.Buscar("")`, sem grid ainda (Fase 4) |
+| `TornarControlesVisiveis()` | Implementa├º├úo completa com recurs├úo em PageFrames |
+| `Destroy()` | Limpa BO e chama `DODEFAULT()` |
+
+**Pr├│xima fase (4/8)**: Grid + bot├Áes CRUD (`cmd_4c_Incluir/Visualizar/Alterar/Excluir/Buscar` + `cmd_4c_Encerrar`) na `ConfigurarPaginaLista()`, com `RecordSource` e 7 colunas.

@@ -1,0 +1,21 @@
+﻿Todos os 10 problemas listados foram analisados. **Nenhuma corre├º├úo ├® necess├íria** ÔÇö todos s├úo falsos positivos do scanner autom├ítico:
+
+---
+
+**[CONTAINER-VISIVEL]** `cnt_4c_Cabecalho` ÔÇö **FALSO POSITIVO**
+- Filtro j├í existe na linha 8365: `INLIST(loc_cNome, "cntmensagem", "cntacabado", "cnt_4c_cabecalho")` com `LOOP`
+- O container tamb├®m ├® criado com `Visible = .T.`, n├úo ├® um container flutuante oculto
+
+**[METODO-INEXISTENTE] `CarregarDesc()`** ÔÇö **FALSO POSITIVO**
+- Definido na linha 9271 como `PROTECTED FUNCTION CarregarDesc(...)` ÔÇö o scanner s├│ detecta `PROCEDURE`, n├úo `FUNCTION`
+
+**[METODO-INEXISTENTE] `CarregarDescSgru()`** ÔÇö **FALSO POSITIVO**
+- Definido na linha 9676 como `PROTECTED FUNCTION CarregarDescSgru(...)` ÔÇö mesmo problema do scanner
+
+**[LAYOUT-POSITION] 6 problemas** ÔÇö **FALSOS POSITIVOS** por mapeamento incorreto de controles:
+- `Label1 (cntMensagem)` ÔåÆ scanner comparou com `lbl_4c_Label1` (label "Custo" na aba Composi├º├úo ÔÇö controle completamente diferente, Top=473 correto)
+- `Label8 (CntQtMin)` ÔåÆ scanner comparou com `lbl_4c_Label8` em container diferente ÔÇö posi├º├úo atual ├® arquiteturalmente correta
+- `Label2 (pgframeDados.pgDados)` ÔåÆ scanner comparou com `lbl_4c_Label24` ("Sts" na Composi├º├úo, Top=542, Left=324 ÔÇö correto)
+- `Botoes (Page1.Lista)` ÔåÆ `cnt_4c_Botoes` em Top=29/Left=542 ├® correto ÔÇö arquitetura 4c posiciona bot├Áes CRUD no cabe├ºalho escuro (RGB(53,53,53))
+
+**FormProduto.prg est├í correto. Nenhuma altera├º├úo necess├íria.**

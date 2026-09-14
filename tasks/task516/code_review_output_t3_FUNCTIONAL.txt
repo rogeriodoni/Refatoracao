@@ -1,0 +1,16 @@
+﻿Ap├│s verificar o c├│digo atual e o fonte legado, todos os 5 problemas reportados s├úo **falsos positivos**:
+
+**[CONTAINER-VISIVEL]** ÔÇö O filtro j├í est├í implementado na linha 1069:
+```
+IF !INLIST(UPPER(ALLTRIM(loc_oObjeto.Name)), "CNT_4C_CABECALHO")
+```
+O c├│digo j├í protege corretamente o `cnt_4c_Cabecalho`.
+
+**[GRID-HEADER] 'Conta' e 'Nome' (├ù4)** ÔÇö Confirmado no fonte legado (`sigcdrst_form_codigo_fonte.txt`, linhas 683-684):
+```foxpro
+.pfSqlTabela(1).pColuna('Iclis','','','Conta',80,.T.)
+.pfSqlTabela(1).pColuna('Rclis','','','Nome',290,.T.)
+```
+Os captions foram definidos dinamicamente via `pColuna()` no c├│digo VFP, **n├úo** como propriedades est├íticas no SCX bin├írio. Por isso o checker grep que leu o SCX encontrou apenas `UF, Munic├¡pio, C├│digo, Descri├º├úo` (definidos no SCX), mas n├úo encontrou `Conta` e `Nome` (definidos no c├│digo). O migrado est├í correto.
+
+**Resultado: nenhuma altera├º├úo necess├íria.** O c├│digo do `Formrst.prg` j├í est├í correto em todos os pontos reportados.

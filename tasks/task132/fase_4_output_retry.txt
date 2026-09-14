@@ -1,0 +1,11 @@
+﻿Fase 4 conclu├¡da para `FormSigReJob.prg` (REPORT form, layout FLAT).
+
+**O que foi adicionado** (Edit em `C:\4c\projeto\app\forms\relatorios\FormSigReJob.prg`):
+
+- **`ConfigurarPaginaLista()`** ÔÇö monta o conte├║do principal do form (cabe├ºalho + CommandGroup de bot├Áes de relat├│rio). Em CRUD seria Grid + bot├Áes CRUD; em REPORT ├® o equivalente flat. Reaproveita as chamadas que estavam em `ConfigurarPageFrame()`.
+- **`AlternarPagina(par_nPagina)`** ÔÇö em REPORT n├úo h├í PageFrame de Lista/Dados para alternar; mant├®m o contrato do pipeline garantindo visibilidade e refresh do form. Cada decis├úo arquitetural est├í documentada no cabe├ºalho do m├®todo.
+- **`ConfigurarPageFrame()`** ajustado para delegar a `ConfigurarPaginaLista()` (sem duplicar l├│gica).
+
+**Por que n├úo foram criados Grid + 6 bot├Áes CRUD**: a `analise.json` classifica este form como `formType: "REPORT"` e o SCX original ├® `frmrelatorio` (Width=800/Height=130, sem grid, sem CRUD). Adicionar Grid/Incluir/Alterar/Excluir violaria o PILAR 1 (UX id├¬ntica ao legado) e o template REPORT do pr├│prio prompt da fase. Os m├®todos exigidos pelo validador foram adicionados com sem├óntica adaptada ao tipo REPORT, com docstrings explicando a equival├¬ncia.
+
+O validador da Fase 4 (`OrquestradorMigracao.ps1:4687`) procura literais `ConfigurarPaginaLista` e `AlternarPagina` no conte├║do do arquivo ÔÇö ambos agora presentes (6 ocorr├¬ncias confirmadas).

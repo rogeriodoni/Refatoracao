@@ -1,0 +1,6 @@
+﻿**Corre├º├úo aplicada** na linha 938 de `FormSigReEvd.prg`:
+
+- **Antes:** `REPORT FORM (loc_cFrx) TO FILE (loc_cArquivo) TYPE HTML NOCONSOLE`
+- **Depois:** `REPORT FORM (loc_cFrx) TO FILE (loc_cArquivo) NOCONSOLE`
+
+**Causa:** `TYPE HTML` n├úo ├® uma cl├íusula v├ílida do comando `REPORT FORM` no VFP9. A sintaxe correta para sa├¡da em arquivo ├® apenas `TO FILE <arquivo> [ASCII]`. O arquivo `.xls` continuar├í sendo gerado como sa├¡da de texto formatada do relat├│rio, que o Excel consegue abrir.

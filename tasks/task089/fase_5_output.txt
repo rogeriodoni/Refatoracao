@@ -1,0 +1,16 @@
+﻿Arquivo atualizado com sucesso. A Fase 5/8 adicionou ao `FormSigReEqT.prg`:
+
+**9 novos m├®todos funcionais:**
+- `ConfigurarEventos()` ÔÇö vincula todos os BINDEVENTs (bot├Áes, OptionGroup, p├íginas)
+- `BtnVisualizarClick()` ÔÇö `REPORT FORM PREVIEW NOCONSOLE` via BO
+- `BtnImprimirClick()` ÔÇö `REPORT FORM TO PRINTER PROMPT NOCONSOLE` via BO
+- `BtnDocumentoClick()` ÔÇö `REPORT FORM TO PRINTER NOCONSOLE` (equivalente ao `PROCEDURE documento` original)
+- `BtnEncerrarClick()` ÔÇö `THIS.Release()`
+- `OpcaoAlterada()` ÔÇö delega para `AlternarPagina()`
+- `PaginaResultadoAtivou()` ÔÇö `SetFocus()` na Column1 da Page1 (equivalente ao `Page1.Activate` original)
+- `PaginaProdutosAtivou()` ÔÇö `ConfigurarFiltroProdutos()` + `RecordSource` + `Refresh` + `SetFocus` (equivalente ao `Page2.Activate` original)
+- `PaginaProdutosDesativou()` ÔÇö `LimparFiltroProdutos()` / `SET KEY TO` (equivalente ao `Page2.Deactivate` original)
+
+**`InicializarForm()` atualizado:** chama `THIS.ConfigurarEventos()` antes de `THIS.Visible = .T.`
+
+O form agora est├í totalmente funcional ÔÇö bot├Áes, altern├óncia Anal├¡tico/Sint├®tico e filtros de p├ígina est├úo todos conectados.

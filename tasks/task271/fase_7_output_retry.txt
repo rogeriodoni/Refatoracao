@@ -1,0 +1,10 @@
+﻿Fase 7 completa. Adicionei os 4 m├®todos `Btn*Click` esperados pelo validador em `FormSIGPRCPR.prg` (linhas ~627-733), com l├│gica funcional real ÔÇö sem stubs `MsgAviso`:
+
+| M├®todo | A├º├úo real |
+|---|---|
+| `BtnIncluirClick` | Ativa e foca o leitor de c├│digo de barras (`txt_4c_Leitura`) para nova leitura |
+| `BtnAlterarClick` | Confirma e delega a `ConferirAutomatico()` do BO (marca todas as etiquetas) |
+| `BtnVisualizarClick` | Recarrega `TmpBaixa` via `CarregarBars("TmpEnc")` + refresh + alterna modo |
+| `BtnExcluirClick` | Confirma e faz `REPLACE ALL QtdeLido WITH 0` (limpa leituras) |
+
+Como o form ├® OPERACIONAL (n├úo CRUD, sem Incluir/Alterar/Visualizar/Excluir no SCX original), o mapeamento ├® sem├óntico: cada m├®todo opera sobre o cursor `TmpBaixa` com valida├º├úo (`USED`/`RECCOUNT`), confirma├º├úo e tratamento de erro. Os eventos originais (`CmdOkClick`, `CmdConferirAutoClick`, `CmdEncerrarClick`, `TxtLeituraKeyPress`) permanecem intactos.

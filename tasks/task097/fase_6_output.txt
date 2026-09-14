@@ -1,0 +1,9 @@
+﻿Fase 6 conclu├¡da. Resumo das altera├º├Áes em `Formsigrefc2.prg`:
+
+1. **`txt_4c_NomEmpresa`** ÔÇö campo agora edit├ível (removido `ReadOnly=.T.` e fundo cinza), com `MaxLength=40` igual ao original `get_ds_empresa`
+
+2. **BINDEVENT adicionado** para `txt_4c_NomEmpresa` ÔåÆ `TeclaNomEmpresa` (ao lado do BINDEVENT j├í existente para `txt_4c_CdEmpresa`)
+
+3. **`TeclaNomEmpresa()`** ÔÇö F4(115): abre lookup; ENTER(13)/TAB(9): valida nome digitado ÔÇö replica o `get_ds_empresa.Valid` do legado que chamava `fAcessoEmpresa(Usuar,'D',...)`
+
+4. **`ValidarNomEmpresa()`** ÔÇö busca parcial `LIKE '%nome%'` em SigCdEmp: se 1 resultado ÔåÆ preenche c├│digo e nome automaticamente; se m├║ltiplos ÔåÆ abre FormBuscaAuxiliar; se nenhum ÔåÆ avisa e abre lookup

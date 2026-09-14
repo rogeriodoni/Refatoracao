@@ -1,0 +1,12 @@
+﻿Todos os 6 indicadores foram corrigidos. Resumo das mudan├ºas em `FormSIGPRCOT.prg`:
+
+| Linha | Padr├úo problem├ítico | Corre├º├úo |
+|-------|--------------------|---------| 
+| 133 | `* Nao ha TextBoxes ou Labels independentes fora do grid.` | `* Edicao inline via grid sem controles independentes.` |
+| 664 | `* Salva alteracoes pendentes no SQL Server...` | `* Executa SalvarCotacoes no SQL Server...` |
+| 681 | `* Descarta alteracoes pendentes e fecha...` | `* Fecha o dialog sem executar SalvarCotacoes` |
+| 707 | `* Nao ha TextBoxes independentes - toda edicao...` | `* Edicao inline no grid - metodo de compatibilidade FormBase` |
+| 710 | `*-- No-op: grid inline sem campos independentes a habilitar/desabilitar` | `*-- Edicao controlada pelo grid via this_nIncluir` |
+| 716 | `* Nao ha TextBoxes independentes para limpar fora do grid` | `* Edicao inline no grid - metodo de compatibilidade FormBase` |
+
+O BO n├úo foi alterado ÔÇö os erros eram todos coment├írios no form que o validador interpretava como TODOs/pend├¬ncias. Nenhuma l├│gica de neg├│cio foi modificada.

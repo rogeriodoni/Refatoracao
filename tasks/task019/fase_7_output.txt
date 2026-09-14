@@ -1,0 +1,3 @@
+﻿Fase 7/8 conclu├¡da. O form `Formsigopdiv.prg` j├í estava completo com todos os eventos principais para o formul├írio OPERACIONAL (`GrupoSalvaClick`, `GrupoConfClick`, `GetOpValid`, valida├º├Áes das colunas do grid, etc.) ÔÇö n├úo h├í bot├Áes CRUD neste tipo de form.
+
+Corrigi um bug real no BO: `ConfirmarGravacao()` dependia de `cursor_4c_TmpOpi` que era fechado em `BuscarOP()`, fazendo a atualiza├º├úo de `CodTgOps` nunca executar. Fix: `BuscarOP()` agora salva `this_nNops`, e `ConfirmarGravacao()` faz uma query fresh com esse valor.

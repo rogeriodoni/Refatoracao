@@ -1,0 +1,21 @@
+﻿O arquivo est├í completo e correto. Vou fazer uma checagem final das linhas cr├¡ticas:
+
+**Valida├º├úo do que foi gerado:**
+
+1. Ô£à `DEFINE CLASS FormSigPrCcc AS FormBase` ÔÇö heran├ºa correta
+2. Ô£à `TitleBar = 0, ControlBox = .F., Closable = .F., Movable = .F.` ÔÇö id├¬ntico ao legado
+3. Ô£à `DataSession = 2` ÔÇö sess├úo privada (+ FormBase.Init() aplica SET DATE BRITISH/CENTURY ON via DODEFAULT)
+4. Ô£à `Init()` ÔåÆ `RETURN DODEFAULT()` ÔÇö padr├úo can├┤nico
+5. Ô£à `InicializarForm()` ÔÇö verifica `gb_4c_ValidandoUI`, cria BO, configura Picture, chama Configurar*, TornarControlesVisiveis
+6. Ô£à `cnt_4c_Cabecalho` ÔÇö Width=1000, BackColor=RGB(100,100,100), lbl Sombra/Titulo AutoSize=.F. (regra cr├¡tica)
+7. Ô£à Checkboxes ÔÇö Value=0 (num├®rico, n├úo .F.), Style=1 (gr├ífico), escala 1.25├ù (437/531/625/718)
+8. Ô£à `cmd_4c_Processar` ÔÇö Enabled=.F. com **Themes=.T. + DisabledPicture** (regra #99)
+9. Ô£à `cmd_4c_Encerrar` ÔÇö Cancel=.T., Caption="Encerrar", Themes=.F. (padr├úo can├┤nico)
+10. Ô£à 4 containers de op├º├Áes ÔÇö Visible=.F. (toggled pelos checkboxes nas fases 7-8)
+11. Ô£à `TornarControlesVisiveis` ÔÇö exclui os 4 containers + lbl_4c_LblEnd, recurs├úo nos filhos dos exclu├¡dos (regra #109)
+12. Ô£à Sem acentos literais em c├│digo ÔÇö tudo via CHR(225)=├í, CHR(227)=├ú, CHR(237)=├¡, CHR(243)=├│, CHR(218)=├Ü
+13. Ô£à `Destroy()` ÔÇö null no BO, chama DODEFAULT()
+
+**Arquivo criado:** `C:\4c\projeto\app\forms\operacionais\FormSigPrCcc.prg` (494 linhas)
+
+**Fase 3 conclu├¡da.** A estrutura base do form est├í pronta com cabe├ºalho cinza, 4 checkboxes + bot├Áes Processar/Encerrar, 4 containers de op├º├Áes vazios (ocultos), rodap├® com contador de registros. As fases 4-6 adicionar├úo os controles internos dos containers; fases 7-8 adicionar├úo os BINDEVENTs e handlers de click.

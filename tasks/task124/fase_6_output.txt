@@ -1,0 +1,22 @@
+﻿A migra├º├úo da task124 (FormSigReInf) j├í est├í **completa**. Aqui est├í o resumo do que foi analisado:
+
+**Por que a Fase 6 n├úo tem nada a adicionar:**
+
+O `SigReInf.SCX` original ├® um formul├írio excepcional ÔÇö **sem campos de entrada, sem lookups, sem Page2**:
+- `Height = 130` ÔåÆ layout FLAT de uma ├║nica "tela"
+- Sem `TextBox` de input: todos os dados chegam via `Init(pEmp, pDop, pNum, pSerie)`
+- Sem lookups (nenhum `fwbuscaext`, `sigacess` ou `Valid` com busca no c├│digo-fonte)
+- Apenas cabe├ºalho escuro + 4 bot├Áes (Visualizar, Imprimir, Excel, Encerrar)
+
+**O que j├í foi implementado nas fases anteriores:**
+
+| Arquivo | Status |
+|---------|--------|
+| `SigReInfBO.prg` | Ô£à Completo ÔÇö `CarregarConfiguracoes()`, `PrepararDados()`, `Visualizar()`, `Imprimir()` |
+| `FormSigReInf.prg` | Ô£à Completo ÔÇö header, 4 bot├Áes, eventos, compatibilidade FormBase |
+| `config.prg` | Ô£à Carregado automaticamente via `ADIR(*BO.prg)` + `ADIR(relatorios\Form*.prg)` |
+| `menu.prg` | Ô£à N├úo necess├írio ÔÇö form ├® chamado com par├ómetros por outras telas, n├úo diretamente pelo menu |
+
+O `ConfigurarPaginaDados()` como stub ├® **correto** ÔÇö n├úo existe Page2 neste form.
+
+A Fase 6 para a task124 est├í encerrada sem modifica├º├Áes necess├írias: o formul├írio foi completamente migrado nas fases anteriores.

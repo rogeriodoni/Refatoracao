@@ -1,0 +1,204 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 7,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["FOR EMPTY", "File", "ForCompls c", "ForContato c", "ForeMails c", "fConfigGeral", "fChecaAcesso"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Lparameters pPro\n\nlcQuery = [Select b.Descricaos ] + ;\n\t\t\t[From SigCdPro a, SigCdPsg b ] + ;\n\t\t   [Where a.Cpros = '] + pPro + [' And ] + ;\n\t\t   \t\t [a.CGrus = b.CGrus And ] + ;\n\t\t   \t\t [a.SGrus = b.Codigos]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalSgru]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalSgru)])\n\tReturn .f.\nEndIf\nGo Top In LocalSgru\nIf Not Eof([LocalSgru])\n\tReplace DescSgrus With LocalSgru.Descricaos In crDados\nEndIf\n* Fim... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Procedure",
+      "linhas": 265,
+      "codigoOriginal": "Lparameters pArq\n\nDeclare Integer Sleep In Win32API Integer nMilliseconds\n\nlPrintPDFCreator = .t.\nlcDefaultPrinter = SET( \"PRINTER\", 2 )\n\nIf thisform.Registry1.IsKey([PDFCreator.clsPDFCreator])\n\tthisform.oPdf = CreateObject(\"PDFCreator.clsPDFCreator\", \"PDFCreator_\")\n\n\tIf thisform.oPdf.cErrorDetail(\"Number\") <> 0\n\t\tlPrintPDFCreator = .F.\n\t\tMessageBox( \"Problemas para gerar o obj PDFCretor\" +Chr(13) +;\n\t\t\t\t\t\"ErrorNr: \" + Str( thisform.oPdf.cErrorDetail(\"Number\"), 3 ) +Chr(13) +;\n\t\t\t\t\t\"Descr: \" \t+ ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "IsKey,oPdf = CreateObject,cErrorDetail,pcArqEmail + Chr,cClearCache,cClose,WaitForJob,NextJob",
+        "controlesReferenciados": "Option(\"UpdateInterval\",Option(\"DisableUpdateCheck\",Option(\"UseAutosaveDirectory\",Option(\"UseAutosave\",Option(\"UseStandardAuthor\",Option(\"StandardAuthor\",Option(\"StandardTitle\",Option(\"AutosaveFormat\",Option(\"AutosaveDirectory\",Option(\"AutosaveFilename\"",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Procedure",
+      "linhas": 451,
+      "codigoOriginal": "Local lcEdn, loCnx\n\nlcEdn = Padr(ThisForm.pcEmps, 3) + Padr(ThisForm.pcDopes, 20) + Str(ThisForm.pcNumes, 6)\nloCnx = ThisForm.poDataMgr\n\n* Campos Usados Do SigOpCdd\n* DckLogos\t = Logotipo\n* DckAcess\t = Imprime Despesas Acessórias = 1-Sim; 2-Não\n* DocAcess\t = Descritivo do Label de Despesas Acessórias\n* ChkImpDp   = Imprime a Descricao Das Parcelas\n* ChkImpRot  = Ordem de Impressão (1-Itens; 2-Referência; 3-Fator)\n* ChkImpMon  = Imprimir Dados da Empresa no Cabeçalho\n* DckDPro3s  = Imprimir Descr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEmps, 3) + Padr",
+        "controlesReferenciados": "ChkImpDp,ChkImpRot,ChkImpMon",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Procedure",
+      "linhas": 105,
+      "codigoOriginal": "Do Case\n\tCase InList(LocalOpe.Docus,3,11) && Fixo Horizontal\n\t\tIf Inlist(LocalOpe.CupFis, 2) And Val(fCriptografar(CrSigCdPaf.Docs)) = 4\n\t\t\tReport Form SigReIf2 Preview NoConsole\n\t\tElse \n\t\t\tIF LocalDcOpe.DckIcmIpi<>6\n\t\t\t\tReport Form SigReIfx Preview NoConsole\n\t\t\tELSE\n\t\t\t\tDELETE FOR EMPTY(cpros)\n\t\t\t\tReport Form SigReHfi Preview NoConsole\t\t&& para en primeur\n\t\t\tENDIF\n\t\t\t\n\t\tEndIf \n\n\tCase (LocalOpe.Docus = 6) && Fixo Vertical\n\t\tIf ThisForm.chkImagem.Value\n\t\t\tIf (LocalDcOpe.dckpeso = 1)\n\t\t\t\t* Com Pes... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FOR EMPTY",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "chkImagem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "Local lcArq\n\nThisForm.poDataMgr.Release\nThisForm.poDataMgr2.Release\n\nSet Point To '.'\nSet Separator To ','\n\nlcArq = Sys(2023) + [\\] + ThisForm.ImgBranco\nIf File(lcArq)\n\tDelete File &lcArq.\nEndIf\n\nlcArq = Sys(2023) + [\\] + ThisForm.ImgLogotipo\nIf File(lcArq)\n\tDelete File &lcArq.\nEndIf\n\nlcArq = Sys(2023) + [\\] + ThisForm.ImgTecnicas\nIf File(lcArq)\n\tDelete File &lcArq.\nEndIf\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Procedure",
+      "linhas": 1160,
+      "codigoOriginal": "Local lnMax, loCnx, lcFig, lcArq, lcFor, lcRef, lcEnt, lcVen, llBar, lcBar, lcReffs, lcQtd, lcUnits, lnStr, ;\n\t  lnTQt, lnNum, lcSep, lcPnt, llQP\n\nloCnx = ThisForm.poDataMgr\n*** mena 06/05/2015 - criado campo opers no cab para ser testado no horizontal com imazem ***\n*--Rafael - 01/08/2016 - Criado campo para visualizar o saldo da conta (dcksaldo, docsaldo, SaldoCta)\nCreate Cursor crCabecalho (Dopes c(20), Numes n(6), Datas d(8), Razas c(40), RazSocs c(50), Cgcs c(20), RespFretes c(16), ;\n\t\t\t\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "ForCompls c,ForContato c,ForeMails c",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkImpMon",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Init",
+      "linhas": 98,
+      "codigoOriginal": "Lparameters pEmp, pDop, pNum, pImp, pChkImpDoc \n\nThisForm.pcEmps  = pEmp\nThisForm.pcDopes = pDop\nThisForm.pcNumes = pNum\nThisForm.pChkImpDoc = pChkImpDoc \nThisForm.Caption = 'Impressão de Documento (' + Alltrim(pDop) + '/' + Alltrim(Str(pNum)) + ')'\nThisForm.TpImpressao = Iif(Type('pImp')='N', pImp, 0)\nThisForm.Contaemail = ' '\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\t.poDataMgr2 = CreateObject('fSqlConector', ThisForm.Name)\n\t\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tSet ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Caption = 'Impressão de Documento,TpImpressao = Iif,SqlExecute,pcEmps, 3) + Padr,Value   =",
+        "controlesReferenciados": "ChkImpDoc,ChkImpDocAcess,chkObs,chkImagem",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Procedure",
+      "linhas": 109,
+      "codigoOriginal": "Local lcPrn, lcPmt, lnVia\n\n_Prompt = Iif(InList(ThisForm.Tpimpressao, 2, 4), [], [Prompt])\n\nDo Case\n\tCase Inlist(LocalOpe.Docus,3,11) && Fixo Horizontal\n\t\tIf Inlist(LocalOpe.CupFis, 2) And Val(fCriptografar(CrSigCdPaf.Docs)) = 4\n\t\t\tReport Form SigReIf2 Preview NoConsole\n\t\tElse \n\t\t\tIF LocalDcOpe.DckIcmIpi<>6\n\t\t\t\tReport Form SigReIfx Preview NoConsole\n\t\t\tELSE\n\t\t\t\tDELETE FOR EMPTY(cpros)\n\t\t\t\tReport Form SigReHfi Preview NoConsole\t\t&& para en primeur\n\t\t\tENDIF\n\t\t\t\n\t\tEndIf \n\n\tCase (LocalOpe.Docus = 6)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FOR EMPTY",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "chkImagem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "Select CItens as Itens, CPros as Produtos, Reffs as Referencia, ;\n\t   Padr(DPros, 254) as Descricao, CUnis as Uni, Qtds, ;\n\t   Units as Unitario, Moedas as Moeda, Totas as Total, Aliqs as Aliquota, ;\n\t   ValIpis as Ipis, Obs ;\n  From crDados ;\n Where Not Empty(CPros) ;\n  Into Cursor crExcel\n  \nSelect crExcel\nGo Top In crExcel\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIFX",
+      "evento": "Procedure",
+      "linhas": 121,
+      "codigoOriginal": "Local lcPrn, lcPmt, lnVia\n\nlcTabela = Alias()\nThisform.pcArqEmail = []\nDo form SigPrPdf With thisform\nSelect (lcTabela)\n\nIf !Empty(Thisform.pcArqEmail)\n\tIf File(Thisform.pcArqEmail) And Messagebox([Já existe o arquivo ] + Thisform.pcArqEmail + [. Deseja continuar?],4+32+256,[Geração Arquivo]) = 7\n\t\tReturn .f.\n\tEndif\n\t\n\tIf Inlist(Lower(Alltrim(JustExt(Thisform.pcArqEmail))),[xls],[txt])\n\t\tThisForm.DocumentoExcel()\n\t\tlPrintPDFCreator = .t.\n\tElse\t\n\t\tDo Case\n\t\t\tCase inlist(LocalOpe.Docus,3,11) && Fi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "pcArqEmail) And Messagebox,DocumentoExcel,memail2,CursorQuery",
+        "controlesReferenciados": "chkImagem",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREIFX.Procedure",
+      "queryOriginal": "Select CItens as Itens, CPros as Produtos, Reffs as Referencia, ; \t   Padr(DPros, 254) as Descricao, CUnis as Uni, Qtds, ; \t   Units as Unitario, Moedas as Moeda, Totas as Total, Aliqs as Aliquota, ; \t   ValIpis as Ipis, Obs ; From crDados ; Where Not Empty(CPros) ; Into Cursor crExcel",
+      "tabelas": "crDados",
+      "colunas": "CItens,CPros,Reffs,254),CUnis,Qtds,Moedas,Totas,Aliqs,crExcel",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crDados"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

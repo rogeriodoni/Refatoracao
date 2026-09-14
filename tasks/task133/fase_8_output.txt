@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. A Fase 8 foi conclu├¡da com sucesso. Todos os 10 m├®todos foram adicionados antes do `Destroy`, o arquivo agora tem 1669 linhas e termina corretamente com `ENDDEFINE`.
+
+**M├®todos adicionados (Fase 8/8):**
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `CarregarLista()` | Faz `GO TOP` em `crTmpJuros` e refresca `grd_4c_Dados` |
+| `AjustarBotoesPorModo()` | Vazio ÔÇö form OPERACIONAL sem modos |
+| `HabilitarCampos(par_lEditar)` | Controla `Enabled` dos 8 TextBoxes de conta (baseado em `this_lAlteraContas`) e `ReadOnly` das colunas 2/7 do grid (baseado em `this_lAlteraJuros`) |
+| `LimparCampos()` | Zera `Value` dos 10 TextBoxes do form |
+| `FormParaBO()` | Propaga `Grupos`/`Contas` do lado d├®bito para todas as linhas de `crTmpJuros` quando `this_lAlteraContas = .T.` |
+| `BOParaForm()` | Delega para `InicializarValores()` (recarrega dos cursores do pai) |
+| `BtnBuscarClick()` | Chama `CarregarLista()` + `Refresh` |
+| `BtnEncerrarClick()` | `Release()` ÔÇö id├¬ntico ao comportamento original do bot├úo Ok |
+| `BtnSalvarClick()` | `FormParaBO()` + `Release()` ÔÇö confirma altera├º├Áes de conta antes de fechar |
+| `BtnCancelarClick()` | `Release()` ÔÇö fecha sem propagar altera├º├Áes de conta (edi├º├Áes diretas no grid j├í est├úo em `crTmpJuros`) |

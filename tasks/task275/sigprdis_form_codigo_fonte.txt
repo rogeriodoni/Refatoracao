@@ -1,0 +1,5556 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigprdis.SCX
+* Data/Hora: 15/07/2026 17:41:13
+* Total de registros: 123
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRDIS
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGPRDIS.Pagina.Lista
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGPRDIS.Pagina.Lista
+  Class: label
+  BaseClass: label
+
+Objeto: Dt_inicial
+  Parent: SIGPRDIS.Pagina.Lista
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Dt_final
+  Parent: SIGPRDIS.Pagina.Lista
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Pageframe1
+  Parent: SIGPRDIS.Pagina.Dados
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: cmdMarcaDesmarca
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: grdEstoque
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say5
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: processar
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page1
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape5
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: shape
+  BaseClass: shape
+
+Objeto: grdDisponivel
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col02_Descricao
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col02_Descricao
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col03_COR
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col03_COR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col04_Tamanho
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col04_Tamanho
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col05_QtdEstoque
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col05_QtdEstoque
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col06_QtdSaida
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col06_QtdSaida
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col07_QtdSaldo
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col07_QtdSaldo
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grdDistribui
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col01_Empresa
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col01_Empresa
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col02_Saldo
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col02_Saldo
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col03_Distribuido
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col03_Distribuido
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: FigJpg
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: image
+  BaseClass: image
+
+Objeto: get_dgrupo
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cgrupo
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say9
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Filtrar
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_produto
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_produto_inicial
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_pr_venda
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_ds_fornecedor
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_fornecedor
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_fornecedor
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_ref_fornecedor
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ref_fornecedor
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_pr_venda
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_peso_medio
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say2
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_sgrupo
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_sgrupo
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_grupo
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_ds_grupo
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_grupo
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_GrVenda
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_GrDvenda
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_CdLinha
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_DsLinha
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say5
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodFinP
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say14
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesFinP
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_pr_venda_moeda
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say11
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dsgrupo
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_csgrupo
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: pgOperacoes
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: grdCabOperas
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grdItnOperas
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdProcessar
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cntOperacao
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3
+  Class: container
+  BaseClass: container
+
+Objeto: Say_Obs
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cntOperacao
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getObs
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cntOperacao
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodObs
+  Parent: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cntOperacao
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 621
+  Width = 996
+  DoCreate = .T.
+  Caption = "Distribuição de Produtos"
+  KeyPreview = .T.
+  podatamgr2 = .F.
+  poobjext1 = .F.
+  sigkey = .F.
+  _memberdata = <VFPData><memberdata name="calcula_saldo" type="method" display="Calcula_Saldo"/></VFPData>
+  Name = "SIGPRDIS"
+  Pagina.ErasePage = .T.
+  Pagina.PageCount = 2
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = -1
+  Pagina.Lista.cntSombra.Left = 0
+  Pagina.Lista.cntSombra.Width = 1044
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 24
+  Pagina.Lista.Grade.TabIndex = 6
+  Pagina.Lista.Grade.Top = 144
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ForeColor = 0,0,0
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Left = 426
+  Pagina.Lista.Grupo_op.Top = -2
+  Pagina.Lista.Grupo_op.TabIndex = 5
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 893
+  Pagina.Lista.Grupo_Saida.Top = -2
+  Pagina.Lista.Grupo_Saida.TabIndex = 9
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 48
+  Pagina.Lista.cntFiltros.Left = 84
+  Pagina.Lista.cntFiltros.TabIndex = 10
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.FontName = "Verdana"
+  Pagina.Lista.FontSize = 8
+  Pagina.Lista.Caption = "Lista"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 6
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 818
+  Pagina.Dados.Grupo_Salva.Top = 35
+  Pagina.Dados.Grupo_Salva.TabIndex = 10
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.FontName = "Tahoma"
+  Pagina.Dados.FontSize = 8
+  Pagina.Dados.Caption = "Dados"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.ForeColor = 90,90,90
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -23
+  Pagina.Left = -2
+  Pagina.Width = 1003
+  Pagina.Height = 648
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Lista.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 190
+  Top = 112
+  TabIndex = 3
+  ForeColor = 0,0,0
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Lista.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "\<Período :"
+  Height = 15
+  Left = 35
+  Top = 89
+  Width = 45
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Lista.Dt_inicial
+------------------------------------------------------------
+  Format = "K"
+  Left = 103
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Filtro de Data Inicial de Lançamentos"
+  Top = 108
+  BorderColor = 0,0,0
+  Name = "Dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Lista.Dt_final
+------------------------------------------------------------
+  Format = "K"
+  Left = 206
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Filtro de Data Final de Lançamentos"
+  Top = 108
+  BorderColor = 0,0,0
+  Name = "Dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 3
+  Top = 6
+  Left = 0
+  Width = 1001
+  Height = 600
+  ZOrderSet = 0
+  Name = "Pageframe1"
+  Page1.FontBold = .T.
+  Page1.FontName = "Tahoma"
+  Page1.FontSize = 8
+  Page1.Caption = "Filtrar"
+  Page1.Picture = ..\framework\imagens\new_background.jpg
+  Page1.BackColor = 255,255,255
+  Page1.ForeColor = 0,0,0
+  Page1.Name = "Page1"
+  Page2.FontBold = .T.
+  Page2.FontName = "Tahoma"
+  Page2.FontSize = 8
+  Page2.Caption = "Distribuição"
+  Page2.Picture = ..\framework\imagens\new_background.jpg
+  Page2.BackColor = 255,255,255
+  Page2.ForeColor = 0,0,0
+  Page2.Name = "Page2"
+  Page3.FontBold = .T.
+  Page3.FontName = "Tahoma"
+  Page3.FontSize = 8
+  Page3.Caption = "Movimentações"
+  Page3.Picture = ..\framework\imagens\new_background.jpg
+  Page3.BackColor = 255,255,255
+  Page3.ForeColor = 90,90,90
+  Page3.Name = "Page3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.cmdMarcaDesmarca
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 100
+  Left = 617
+  SpecialEffect = 1
+  Top = 351
+  Width = 160
+  TabIndex = 3
+  Name = "cmdMarcaDesmarca"
+  Command1.Top = 0
+  Command1.Left = 0
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_selecionar_60.jpg
+  Command1.Caption = "Marcar Todas"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Marcar Todas as Operações"
+  Command1.SpecialEffect = 0
+  Command1.PicturePosition = 7
+  Command1.ForeColor = 0,0,0
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnMarcar"
+  Command2.Top = 0
+  Command2.Left = 75
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\geral_limpa_grade_60.jpg
+  Command2.Caption = "Desmarcar Todas "
+  Command2.MousePointer = 15
+  Command2.TabIndex = 2
+  Command2.ToolTipText = "Desmarcar Todas as Operações"
+  Command2.SpecialEffect = 0
+  Command2.PicturePosition = 7
+  Command2.ForeColor = 0,0,0
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnDesmarcar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque
+------------------------------------------------------------
+  ColumnCount = 4
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 244
+  Left = 335
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 207
+  Width = 271
+  GridLineColor = 128,128,128
+  ZOrderSet = 16
+  Name = "grdEstoque"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 17
+  Column1.Sparse = .F.
+  Column1.Name = "Column1"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 70
+  Column2.Name = "Column2"
+  Column3.FontSize = 8
+  Column3.ControlSource = ""
+  Column3.Width = 80
+  Column3.Name = "Column3"
+  Column4.FontSize = 8
+  Column4.ControlSource = ""
+  Column4.Width = 80
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column1.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column1.Check1
+------------------------------------------------------------
+  Top = 9
+  Left = 2
+  Height = 17
+  Width = 22
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Visible = .T.
+  ReadOnly = .F.
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Empresa"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 1
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4.Header1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.Say5
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Estoques para distribuir"
+  Left = 338
+  Top = 189
+  TabIndex = 1
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.processar
+------------------------------------------------------------
+  Top = 10
+  Left = 733
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "Processar"
+  TabIndex = 16
+  Name = "processar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Shape5
+------------------------------------------------------------
+  Top = 5
+  Left = 4
+  Height = 93
+  Width = 163
+  BackStyle = 0
+  BorderStyle = 1
+  BorderWidth = 2
+  SpecialEffect = 0
+  BorderColor = 36,84,155
+  ZOrderSet = 0
+  Name = "Shape5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Courier New"
+  FontSize = 8
+  Height = 327
+  Left = 1
+  Panel = 1
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 17
+  TabIndex = 3
+  Top = 141
+  Width = 663
+  BackColor = 237,242,243
+  GridLineColor = 136,189,188
+  HighlightForeColor = 15,41,104
+  HighlightStyle = 2
+  Name = "grdDisponivel"
+  Column1.FontBold = .T.
+  Column1.FontName = "Courier New"
+  Column1.FontSize = 8
+  Column1.FontUnderline = .T.
+  Column1.Width = 105
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.ForeColor = 0,0,255
+  Column1.BackColor = 237,242,243
+  Column1.MousePointer = 99
+  Column1.MouseIcon = ..\vbmp\h_point.cur
+  Column1.Name = "Col01_Codigo"
+  Column2.FontName = "Courier New"
+  Column2.FontSize = 8
+  Column2.Width = 250
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.ForeColor = 0,0,0
+  Column2.BackColor = 237,242,243
+  Column2.Name = "Col02_Descricao"
+  Column3.FontName = "Courier New"
+  Column3.FontSize = 8
+  Column3.Width = 35
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.ForeColor = 0,0,0
+  Column3.BackColor = 237,242,243
+  Column3.Name = "Col03_COR"
+  Column4.FontName = "Courier New"
+  Column4.FontSize = 8
+  Column4.Width = 35
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.ForeColor = 0,0,0
+  Column4.BackColor = 237,242,243
+  Column4.Name = "Col04_Tamanho"
+  Column5.FontBold = .T.
+  Column5.FontName = "Courier New"
+  Column5.FontSize = 8
+  Column5.Width = 70
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Format = "9"
+  Column5.ForeColor = 0,0,0
+  Column5.BackColor = 237,242,243
+  Column5.Name = "Col05_QtdEstoque"
+  Column6.FontBold = .T.
+  Column6.FontName = "Courier New"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 7
+  Column6.Width = 70
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Format = "9"
+  Column6.ForeColor = 0,0,0
+  Column6.BackColor = 237,242,243
+  Column6.Name = "Col06_QtdSaida"
+  Column7.FontBold = .T.
+  Column7.FontName = "Courier New"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 6
+  Column7.Width = 70
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Format = "9"
+  Column7.ForeColor = 0,0,0
+  Column7.BackColor = 237,242,243
+  Column7.Name = "Col07_QtdSaldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Courier New"
+  FontSize = 8
+  FontUnderline = .T.
+  BorderStyle = 0
+  Margin = 0
+  MousePointer = 15
+  ReadOnly = .T.
+  ForeColor = 0,0,255
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col02_Descricao.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col02_Descricao.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col03_COR.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col03_COR.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col04_Tamanho.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tam"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col04_Tamanho.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col05_QtdEstoque.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Estoque"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col05_QtdEstoque.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col06_QtdSaida.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Saldo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col06_QtdSaida.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col07_QtdSaldo.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Distribuido"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col07_QtdSaldo.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Courier New"
+  FontSize = 8
+  Height = 327
+  Left = 664
+  Panel = 1
+  RecordMark = .F.
+  RowHeight = 17
+  TabIndex = 4
+  Top = 141
+  Width = 334
+  BackColor = 237,242,243
+  GridLineColor = 136,189,188
+  HighlightBackColor = 168,177,202
+  HighlightForeColor = 15,41,104
+  HighlightStyle = 2
+  Name = "grdDistribui"
+  Column1.FontName = "Courier New"
+  Column1.FontSize = 8
+  Column1.Alignment = 2
+  Column1.Enabled = .F.
+  Column1.Width = 70
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.ForeColor = 0,0,0
+  Column1.BackColor = 237,242,243
+  Column1.Name = "Col01_Empresa"
+  Column2.FontBold = .T.
+  Column2.FontName = "Courier New"
+  Column2.FontSize = 8
+  Column2.Alignment = 1
+  Column2.Enabled = .F.
+  Column2.Width = 80
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.ForeColor = 0,0,0
+  Column2.BackColor = 237,242,243
+  Column2.Name = "Col02_Saldo"
+  Column3.FontName = "Courier New"
+  Column3.FontSize = 8
+  Column3.Width = 80
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ForeColor = 0,0,0
+  Column3.BackColor = 237,242,243
+  Column3.Name = "Col03_Distribuido"
+  Column4.FontName = "Courier New"
+  Column4.FontSize = 8
+  Column4.Width = 80
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.BackColor = 237,242,243
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col01_Empresa.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Empresa"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col01_Empresa.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Enabled = .F.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col02_Saldo.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Saldo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col02_Saldo.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Courier New"
+  FontSize = 8
+  Alignment = 1
+  BorderStyle = 0
+  Enabled = .F.
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col03_Distribuido.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Distribuido"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col03_Distribuido.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Column4.Header1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Local"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 237,242,243
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.FigJpg
+------------------------------------------------------------
+  Stretch = 1
+  Height = 89
+  Left = 6
+  Top = 7
+  Width = 159
+  Name = "FigJpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_dgrupo
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  Left = 211
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 74
+  Width = 208
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_dgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cgrupo
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 175
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 74
+  Width = 35
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_cgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Say9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "\<Grupo :"
+  Height = 15
+  Left = 174
+  Top = 59
+  Width = 38
+  TabIndex = 5
+  ForeColor = 0,0,0
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Filtrar
+------------------------------------------------------------
+  Top = 73
+  Left = 424
+  Height = 40
+  Width = 40
+  Picture = ..\framework\imagens\geral_circulo_16.jpg
+  Caption = ""
+  TabIndex = 11
+  ToolTipText = "Filtrar"
+  Name = "Filtrar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.lbl_produto
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "\<Procurar"
+  Height = 15
+  Left = 4
+  Top = 100
+  Width = 43
+  TabIndex = 1
+  ForeColor = 0,0,0
+  Name = "lbl_produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_produto_inicial
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 22
+  InputMask = ""
+  Left = 2
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = ""
+  Top = 116
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_produto_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_pr_venda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Height = 22
+  InputMask = "99,999.99999"
+  Left = 593
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 29
+  ToolTipText = ""
+  Top = 536
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_pr_venda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ds_fornecedor
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 674
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 25
+  Top = 492
+  Width = 255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_ds_fornecedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.lbl_fornecedor
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Fornecedor :"
+  Height = 15
+  Left = 519
+  Top = 495
+  Width = 64
+  TabIndex = 26
+  ForeColor = 90,90,90
+  Name = "lbl_fornecedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cd_fornecedor
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 593
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 24
+  ToolTipText = ""
+  Top = 492
+  Width = 80
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_cd_fornecedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.lbl_ref_fornecedor
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Ref. Fornecedor :"
+  Height = 15
+  Left = 495
+  Top = 517
+  Width = 88
+  TabIndex = 28
+  ForeColor = 90,90,90
+  Name = "lbl_ref_fornecedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ref_fornecedor
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 1
+  Format = "K!"
+  Height = 21
+  Left = 593
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 27
+  Top = 514
+  Width = 190
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_ref_fornecedor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.lbl_pr_venda
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Alignment = 0
+  Caption = "Preço Venda :"
+  Height = 15
+  Left = 514
+  Top = 540
+  Width = 69
+  TabIndex = 32
+  ForeColor = 90,90,90
+  Name = "lbl_pr_venda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .F.
+  Alignment = 0
+  Caption = "Peso :"
+  Height = 15
+  Left = 775
+  Top = 540
+  Width = 38
+  TabIndex = 36
+  ForeColor = 36,84,155
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_peso_medio
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Height = 21
+  InputMask = "99,999.999"
+  Left = 816
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 31
+  ToolTipText = ""
+  Top = 537
+  Width = 75
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_peso_medio"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Subgrupo :"
+  Height = 15
+  Left = 50
+  Top = 497
+  Width = 55
+  TabIndex = 23
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ds_sgrupo
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 182
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 492
+  Width = 270
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_ds_sgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cd_sgrupo
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 116
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 12
+  ToolTipText = ""
+  Top = 492
+  Width = 65
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_cd_sgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cd_grupo
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 116
+  SpecialEffect = 1
+  TabIndex = 14
+  ToolTipText = ""
+  Top = 470
+  Width = 65
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_cd_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ds_grupo
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 182
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 19
+  Top = 470
+  Width = 270
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_ds_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.lbl_grupo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Grupo :"
+  Height = 15
+  Left = 67
+  Top = 474
+  Width = 38
+  TabIndex = 22
+  ForeColor = 90,90,90
+  Name = "lbl_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Grupo de Venda :"
+  Height = 15
+  Left = 19
+  Top = 540
+  Width = 86
+  TabIndex = 21
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_GrVenda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 116
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 37
+  ToolTipText = ""
+  Top = 537
+  Width = 80
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "Get_GrVenda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_GrDvenda
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 197
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 38
+  Top = 537
+  Width = 255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "Get_GrDvenda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_CdLinha
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 593
+  SpecialEffect = 1
+  TabIndex = 13
+  ToolTipText = ""
+  Top = 470
+  Width = 80
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "Get_CdLinha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_DsLinha
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Verdana"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 674
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 18
+  Top = 470
+  Width = 255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "Get_DsLinha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .F.
+  Caption = "Linha :"
+  Height = 15
+  Left = 549
+  Top = 473
+  Width = 34
+  TabIndex = 20
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.getCodFinP
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Format = "K"
+  Height = 21
+  InputMask = ""
+  Left = 116
+  SpecialEffect = 1
+  TabIndex = 34
+  Top = 514
+  Width = 65
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "getCodFinP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Say14
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Modelo :"
+  Height = 15
+  Left = 62
+  Top = 517
+  Width = 43
+  TabIndex = 33
+  ForeColor = 90,90,90
+  Name = "Say14"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.getDesFinP
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Format = "K"
+  Height = 21
+  InputMask = ""
+  Left = 182
+  SpecialEffect = 1
+  TabIndex = 35
+  Top = 514
+  Width = 270
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "getDesFinP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_pr_venda_moeda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 22
+  InputMask = ""
+  Left = 703
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 30
+  ToolTipText = ""
+  Top = 536
+  Width = 31
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_pr_venda_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Say11
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Subgrupo :"
+  Height = 15
+  Left = 174
+  Top = 100
+  Width = 55
+  TabIndex = 8
+  ForeColor = 0,0,0
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_dsgrupo
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  Left = 228
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 115
+  Width = 236
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_dsgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_csgrupo
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 175
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 9
+  ToolTipText = ""
+  Top = 115
+  Width = 52
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 83,168,172
+  Themes = .F.
+  Name = "get_csgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  Top = 191
+  Left = 1
+  Width = 997
+  Height = 377
+  TabIndex = 2
+  Name = "pgOperacoes"
+  Page1.FontBold = .T.
+  Page1.FontName = "Tahoma"
+  Page1.FontSize = 8
+  Page1.Caption = "Movimentações"
+  Page1.BackColor = 255,255,255
+  Page1.ForeColor = 90,90,90
+  Page1.Name = "pgOperacoes"
+  Page2.FontBold = .T.
+  Page2.FontName = "Tahoma"
+  Page2.FontSize = 8
+  Page2.Caption = "Itens"
+  Page2.BackColor = 255,255,255
+  Page2.ForeColor = 90,90,90
+  Page2.Name = "pgItens"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas
+------------------------------------------------------------
+  ColumnCount = 8
+  FontSize = 8
+  Height = 339
+  Left = 9
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 19
+  Top = 6
+  Width = 975
+  GridLineColor = 128,128,128
+  Name = "grdCabOperas"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 45
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column2"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.ControlSource = ""
+  Column2.Width = 325
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column3"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.ControlSource = ""
+  Column3.Width = 111
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column4"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.ControlSource = ""
+  Column4.Width = 45
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column5"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 5
+  Column5.ControlSource = ""
+  Column5.Width = 80
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column6"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 6
+  Column6.ControlSource = ""
+  Column6.Width = 80
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column7"
+  Column7.FontSize = 8
+  Column7.Alignment = 2
+  Column7.ColumnOrder = 7
+  Column7.ControlSource = ""
+  Column7.Width = 80
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column8"
+  Column8.FontSize = 8
+  Column8.ColumnOrder = 8
+  Column8.ControlSource = ""
+  Column8.Width = 80
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Name = "Column9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column2.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp O"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column3.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column4.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column4.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column5.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp D"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column5.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column6.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo Orig"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column6.Text1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column7.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta Orig"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column7.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column8.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo Dest"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column8.Text1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column9.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta Dest"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column9.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas
+------------------------------------------------------------
+  ColumnCount = 9
+  FontSize = 8
+  Height = 340
+  Left = 9
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 19
+  Top = 5
+  Width = 975
+  GridLineColor = 128,128,128
+  Name = "grdItnOperas"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.ControlSource = ""
+  Column1.Width = 36
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.ControlSource = ""
+  Column2.Width = 106
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.ControlSource = ""
+  Column3.Width = 382
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 6
+  Column4.ControlSource = ""
+  Column4.Width = 35
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 7
+  Column5.ControlSource = ""
+  Column5.Width = 80
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 8
+  Column6.ControlSource = ""
+  Column6.Width = 100
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 9
+  Column7.ControlSource = ""
+  Column7.Width = 130
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .T.
+  Column7.Name = "Column7"
+  Column8.FontSize = 8
+  Column8.ColumnOrder = 4
+  Column8.ControlSource = ""
+  Column8.Width = 38
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.ReadOnly = .T.
+  Column8.Name = "Column8"
+  Column9.FontSize = 8
+  Column9.ColumnOrder = 5
+  Column9.ControlSource = ""
+  Column9.Width = 38
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.ReadOnly = .T.
+  Column9.Name = "Column9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column1.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Item"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column1.Text1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column2.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column2.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column3.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column3.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column4.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Uni"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column4.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column5.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Quantidade"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column5.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column6.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Unitário"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column6.Text1
+------------------------------------------------------------
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column7.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Total"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column7.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column8.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column8.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column9.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tam"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column9.Text1
+------------------------------------------------------------
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cmdProcessar
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 122
+  Left = 733
+  Top = 11
+  Width = 105
+  TabIndex = 3
+  Name = "cmdProcessar"
+  Command1.Top = 0
+  Command1.Left = 0
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_datas_60.jpg
+  Command1.Caption = "Processar Distribuição"
+  Command1.MousePointer = 15
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Gerar Operações dos Pedidos"
+  Command1.SpecialEffect = 0
+  Command1.PicturePosition = 7
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnProcessar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cntOperacao
+------------------------------------------------------------
+  Top = 13
+  Left = 3
+  Width = 564
+  Height = 165
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 0
+  TabIndex = 1
+  ZOrderSet = 4
+  Name = "cntOperacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cntOperacao.Say_Obs
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Obs. :"
+  Left = 12
+  Top = 10
+  TabIndex = 21
+  ForeColor = 90,90,90
+  ZOrderSet = 45
+  Name = "Say_Obs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cntOperacao.getObs
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Height = 112
+  Left = 83
+  SpecialEffect = 1
+  TabIndex = 23
+  Top = 10
+  Width = 407
+  BorderColor = 90,90,90
+  Name = "getObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cntOperacao.getCodObs
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 20
+  Left = 52
+  Margin = 2
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 10
+  Width = 27
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  BorderColor = 90,90,90
+  Name = "getCodObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRDIS
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE calcula_saldo
+------------------------------------------------------------
+PROCEDURE calcula_saldo
+If crDistribui.QtdDistr <= 0
+	Replace crDistribui.QtdDistr With 0
+EndIf
+
+Select crDistribui
+lnReg = Recno()
+Sum QtdDistr for Cpros = crDisponivel.Cpros to lnQtdDistr
+Go lnReg
+
+If crDisponivel.Sqtds - lnQtdDistr < 0
+	Messagebox('Saldo insuficiente para movimentar.',48,'Aviso')
+	Replace QtdDistr With 0 in crDistribui
+	Select crDistribui
+	lnReg = Recno()
+	Sum QtdDistr for Cpros = crDisponivel.Cpros to lnQtdDistr
+	Go lnReg
+Endif 
+
+Replace QtdSaida With lnQtdDistr in crDisponivel
+Replace QtdSaldo With Sqtds - lnQtdDistr in crDisponivel
+
+This.Pagina.dados.pageframe1.page2.grdDisponivel.Refresh()
+This.Pagina.dados.pageframe1.page2.grdDistribui.Refresh()
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Select crSigPrDis
+Locate for Codigos >= ThisForm.Pagina.Dados.GetCodigos.Value
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+* Incluindo os Registros
+llOK = .t.
+If Not ThisForm.poDataMgr.Update('crSigPrDis')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - 1.0)')
+	llOK = .f.
+EndIf
+
+If llOK
+	With ThisForm
+		.poDataMgr.Commit()
+		=fGravarLog('C',ThisForm.Name,'INSERIR',;
+					('Tabela('+.poDataMgr.pfSqlTabela(2).pcTabela+;
+					 ') C.P.('+.poDataMgr.pfSqlTabela(2).pcChaveprimaria+')='+;
+					 Alltrim(Transform(Evaluate(.poDataMgr.pfSqlTabela(2).pcNomecursor+'.'+.poDataMgr.pfSqlTabela(2).pcChaveprimaria)))),;
+					 Iif(Type('m.usuar')=='C',m.usuar,''))
+	EndWith
+	NoDefault
+Else
+	ThisForm.poDataMgr.RollBack()
+	Return 0
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+
+_Codigo = Iif(Empty(TmpSigPrDis.Codigos), Replicate(Chr(254), 10), TmpSigPrDis.Codigos)
+
+llOK = .t.
+
+* Eliminando os Registros
+If llOK
+	If (ThisForm.poDataMgr.SQLExecute([Delete From SigPrDis Where Codigos = ?_Codigo], '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 1)')
+		llOK = .f.
+	EndIf
+EndIf
+
+* Incluindo os Registros
+If llOK
+	If Not ThisForm.poDataMgr.Update('crSigPrDis')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 5.0)')
+		llOK = .f.
+	EndIf
+EndIf
+
+If llOK
+	With ThisForm
+		.poDataMgr.Commit()
+		=fGravarLog('C',ThisForm.Name,'ALTERAR',;
+						('Tabela('+.poDataMgr.pfSqlTabela(2).pcTabela+;
+						 ') C.P.('+.poDataMgr.pfSqlTabela(2).pcChaveprimaria+')='+;
+						 Alltrim(Transform(Evaluate(.poDataMgr.pfSqlTabela(2).pcNomecursor+'.'+.poDataMgr.pfSqlTabela(2).pcChaveprimaria)))),;
+						 Iif(Type('m.usuar')=='C',m.usuar,''))
+	EndWith
+Else
+	ThisForm.poDataMgr.RollBack()
+EndIf
+NoDefault
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+ldDatai = ThisForm.Pagina.Lista.Dt_inicial.Value
+ldDataf = ThisForm.Pagina.Lista.Dt_final.Value
+ldDatai = fDtoSQL(ldDatai)
+ldDataf = fDtoSQL(ldDataf,'23:59:59')
+
+Dodefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	.poDataMgr2 = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		_Codigo = []
+		ldDatai = fDtoSQL(Date())
+		ldDataf = fDtoSQL(Date(),'23:59:59')		
+		lcQueryLista = [Select Distinct Codigos, Datas from SigPrDis where Datas Between ?ldDatai And ?ldDataF]
+		lcQueryPrDis = [Select * from SigPrDis where Codigos = ?_Codigo]
+		With .poDataMgr
+			.AddCursor('SigPrDis', 'Codigos', 'TmpSigPrDis', '', ThisForm.Pagina.Lista.Grade,lcQueryLista)
+			.pfSqlTabela(1).pColuna('Codigos', '', '', 'Código', 80, .t.)
+			.pfSqlTabela(1).pColuna('Datas',  '', '', 'Data', 80, .t.)
+			
+			.AddCursor('SigPrDis', 'cIdChaves', 'crSigPrDis', '', '',lcQueryPrDis)
+			.AddCursor('SigMvCab', 'cIdChaves', 'crSigMvCab', '', '')
+			.AddCursor('SigMvItn', 'cIdChaves', 'crSigMvItn', '', '')
+			.AddCursor('SigMvIts', 'cIdChaves', 'crSigMvIts', '', '')
+			.AddCursor('SigMvHst', 'cIdChaves', 'crSigMvHst', '', '')
+			.AddCursor('SigOpEtq', 'cBars', 'crSigOpEtq', '', '')
+			.Addcursor('SigCdMlc', 'CidChaves', 'crSigCdMlc','','')			
+		EndWith
+
+		.Podatamgr2.AddCursor('SigTempd','CidChaves','CrSigTempd','','')
+		
+		If Not .Podatamgr.Cursorquery('SigCdPam','CrSigCdPam',.f.,.f.)
+			=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'crSigCdPam')
+			Return .f.
+		EndIf
+
+		lcSql = [Select * From SigCdPac ]
+		.poDataMgr.Sqlexecute(lcsql,'crSigCdPac')
+		ThisForm.Sigkey = crSigCdPac.SigKeys
+		
+		lcSql = [select a.cmoes,a.datas,a.horas,a.valos from SigCdCot a order by 1 asc,2 desc,3 desc]
+		.poDataMgr.Sqlexecute(lcsql,'crSigCdCot')
+		
+		thisform.poobjext1 = Null
+		thisform.pagina.lista.Dt_inicial.Value = Date()
+		thisform.pagina.lista.dt_final.Value = Date()
+		=DoDefault()
+		thisform.pagina.lista.Dt_inicial.SetFocus()		
+	Else
+		MessageBox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Destroy
+------------------------------------------------------------
+PROCEDURE Destroy
+**
+If Used( "crDistribui" )
+	Use IN crDistribui
+EndIf
+
+If Used( "crDisponivel" )
+	Use IN crDisponivel
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Lparameters Opcao
+
+Thisform.LockScreen   = .T.
+llOk = .t.
+
+If Not DoDefault(Opcao)
+	ThisForm.mAtivaPagina1
+	Return 0
+EndIf
+
+If (Type('Opcao') = 'N')
+	This.Value = Opcao
+Endif
+
+_Codigo = TmpSigPrDis.Codigos
+thisform.podatamgr.Requery([crSigPrDis])
+
+thisform.pagina.dados.pageframe1.page1.grdEstoque.RecordSource = []
+
+lcQuery = [Select 0 as nMarca, * From SigCdCeg Where TpCads = 3]
+If ThisForm.PodataMgr.SqlExecute(lcquery,'crSigCdCeg') < 1
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCeg)')
+	Return 0
+Endif
+
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.RecordSource = []
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.RecordSource = []
+
+lcQuery = [Select b.* from (Select Distinct a.EmpDopNums from SigPrDis a Where a.Codigos = ?_Codigo And a.EmpDopNums <> '') a Inner Join SigMvCab b On a.EmpDopNums = b.EmpDopNums]
+If thisform.podatamgr.SqlExecute(lcQuery, [crCabOpera] ) < 1
+	MessageBox( [Problemas no Select dos Produtos com Saldo], 48, [Atenção] )
+	Return .f.
+Endif
+
+lcQuery = [Select b.*, c.CodCors, c.CodTams from (Select Distinct a.EmpDopNums from SigPrDis a Where a.Codigos = ?_Codigo And a.EmpDopNums <> '') a Inner Join SigMvItn b On a.EmpDopNums = b.EmpDopNums ] +;
+			[Inner Join SigMvIts c On b.EmpDopNums = c.EmpDopNums And b.Citens = c.Citens]
+If thisform.podatamgr.SqlExecute(lcQuery, [crItnOpera] ) < 1
+	MessageBox( [Problemas no Select dos Produtos com Saldo], 48, [Atenção] )
+	Return .f.
+Endif
+Index On Dopes + Str(Numes, 6) + CPros + Str(Units, 12, 4) Tag Ordem
+
+Select crCabOpera
+If !Eof() And Inlist(thisform.pcescolha,[ALTERAR],[EXCLUIR])
+	Messagebox([Distribuição já processada. Não é possível alterar ou excluir.],48,[Aviso])
+	llOk = .f.
+Endif
+SET STEP ON 
+If llOk
+	Select TmpSigPrDis
+	=DoDefault( opcao )
+	thisform.LockScreen = .f.	
+	Do Case
+		Case InList(Thisform.pcEscolha, 'INSERIR', 'PROCURAR')
+			Replace Datas With Date() in TmpSigPrDis
+			
+			thisform.pagina.dados.pageframe1.page1.Enabled = .t.
+			thisform.pagina.dados.pageframe1.page2.Enabled = .f.
+			thisform.pagina.dados.pageframe1.page3.Enabled = .f.
+			thisform.pagina.dados.pageframe1.ActivePage = 1
+					
+		Case Inlist(Thisform.pcEscolha,'ALTERAR','EXCLUIR','CONSULTAR')		
+			*** Filtro de estoques de distribuição
+			Select a.EmpGruEsts, Substr(a.EmpGruEsts,1,3) as Emps, Substr(a.EmpGruEsts,4,10) as Grupos, Substr(a.EmpGruEsts,14,10) as Contas, 1 as nMarca, b.Priors ;
+				from crSigPrDis a Inner Join crSigCdCeg b On Substr(a.EmpGruEsts,1,3) + Substr(a.EmpGruEsts,4,10) + Substr(a.EmpGruEsts,14,10) = b.Emps + b.Grupos + b.Contas ;
+				Where !Empty(EmpGruEsts) into cursor crSigCdCeg
+			lcEgc = []
+			lcEmps = []
+			Select crSigCdCeg
+			Scan
+				lcEgc = lcEgc + Iif(Empty(lcEgc),[('],[',']) + crSigCdCeg.EmpGruEsts
+				lcEmps = lcEmps + Iif(Empty(lcEmps),[('],[',']) + Substr(crSigCdCeg.EmpGruEsts,1,3)
+			EndScan
+			lcEgc = Iif(Empty(lcEgc),'',lcEgc + [') ])
+			lcEmps = Iif(Empty(lcEmps),'',lcEmps + [') ])
+
+
+			logrdDisponivel = ThisForm.Pagina.dados.pageframe1.page2.grdDisponivel
+			logrdDistribui = ThisForm.Pagina.dados.pageframe1.page2.grdDistribui
+			logrdDisponivel.RecordSource = []
+			logrdDistribui.RecordSource = [] 
+			
+			Text tO lcSQL NoShow TextMerge
+				Select a.CPros, b.Dpros, a.CodCors, a.CodTams, Sum(a.SQtds) as Sqtds, 0000000 As QtdSaida, Sum(a.SQtds) As QtdSaldo, b.Cgrus, b.Sgrus
+				From SigMvEst a, SigCdpro b
+				Where a.EmpGruEsts in <<lcEgc>>
+				  And a.Cpros = b.Cpros 
+				  And a.SQtds > 0 
+				Group By a.CPros, b.Dpros, a.CodCors, a.CodTams, b.Cgrus, b.Sgrus	
+			EndText
+
+			If thisform.podatamgr.SqlExecute(lcSQL, [crDisponivel] ) < 1
+				MessageBox( [Problemas no Select dos Produtos com Saldo], 48, "Atenção" )
+				Return(0)
+			EndIf
+
+			If thisform.pcescolha = [ALTERAR]
+*!*					Text tO lcQuery NoShow TextMerge
+*!*						Select b.cEmps, Case When d.SQtds is null Then 0000000 Else d.Sqtds End As QtdSaldo, 
+*!*						Case When e.Qtds is null Then 0000000 Else e.Qtds End As QtdDistr,
+*!*						Case When e.Locals is null Then space(10) Else e.Locals End As Locals, a.CPros, a.CodCors, a.CodTams, c.Dopes, 
+*!*						Case When e.QtdOs is null Then 0000000 Else e.QtdOs End As QtdOs
+*!*						from (Select Distinct a.CPros, a.CodCors, a.CodTams From SigMvEst a
+*!*						Where a.EmpGruEsts in <<lcEgc>> And a.SQtds > 0) a 
+*!*						Inner Join SigCdEmp b On b.cEmps not in <<lcEmps>>
+*!*						Inner Join SigCdOpe c On b.DirColOuts = c.Dopes
+*!*						Left Join SigMvEst d On d.EmpGruEsts = b.cEmps + c.GruDests + c.ConDests And d.CPros + d.CodCors + d.CodTams = a.CPros + a.CodCors + a.CodTams
+*!*						Left Join SigPrDis e On e.EmpDs + e.CPros + e.CodCors + e.CodTams = b.cEmps + a.CPros + a.CodCors + a.CodTams And e.codigos = '<<_Codigo>>'
+*!*						Order By a.CPros, a.CodCors, a.CodTams, b.cEmps
+*!*					EndText
+
+				Text tO lcQuery NoShow TextMerge
+					Select b.cEmps, Case When d.SQtds is null Then 0000000 Else d.Sqtds End As QtdSaldo, 0000000 As QtdDistr,
+					space(10) As Locals, a.CPros, a.CodCors, a.CodTams, c.Dopes, 0000000 As QtdOs
+					from (Select Distinct a.CPros, a.CodCors, a.CodTams From SigMvEst a
+					Where a.EmpGruEsts in <<lcEgc>> And a.SQtds > 0) a 
+					Inner Join SigCdEmp b On b.cEmps not in <<lcEmps>>
+					Inner Join SigCdOpe c On b.DirColOuts = c.Dopes
+					Left Join SigMvEst d On d.EmpGruEsts = b.cEmps + c.GruDests + c.ConDests And d.CPros + d.CodCors + d.CodTams = a.CPros + a.CodCors + a.CodTams
+					Order By a.CPros, a.CodCors, a.CodTams, b.cEmps
+				EndText
+			
+				If thisform.podatamgr.SqlExecute(lcQuery, [crDistribui] ) < 1
+					MessageBox( [Problemas no Select dos Produtos Distribuidos], 48, "Atenção" )
+					Return(0)
+				Endif
+			
+				lcQuery = [Select a.EmpDs as cEmps, 0000000 as QtdSaldo, a.Qtds as QtdDistr, a.Locals, a.CPros, a.CodCors, a.CodTams, a.QtdOs, b.Dpros, b.cgrus, b.sgrus ] +;
+							[from SigPrDis a Inner Join SigCdPro b On a.Cpros = b.Cpros where a.codigos = '] + _Codigo + [' And a.Cpros <> '']
+				If thisform.podatamgr.SqlExecute(lcQuery, [crDistribui2] ) < 1
+					MessageBox( [Problemas no Select dos Produtos Distribuidos], 48, "Atenção" )
+					Return(0)
+				Endif			
+				Select crDistribui2
+				Scan
+					Select crDistribui
+					Go top 
+					Locate for cEmps + CPros + CodCors + CodTams = crDistribui2.cEmps + crDistribui2.CPros + crDistribui2.CodCors + crDistribui2.CodTams
+					If !Eof()
+						Replace QtdDistr With QtdDistr + crDistribui2.QtdDistr in crDistribui
+					Else
+						Select crDistribui2
+						Scatter Memo Memvar
+						Insert into crDistribui from Memvar
+					Endif 
+				Endscan					
+			Else
+				lcQuery = [Select a.EmpDs as cEmps, 0000000 as QtdSaldo, a.Qtds as QtdDistr, a.Locals, a.CPros, a.CodCors, a.CodTams, a.QtdOs, b.Dpros, b.cgrus, b.sgrus ] +;
+							[from SigPrDis a Inner Join SigCdPro b On a.Cpros = b.Cpros where a.codigos = '] + _Codigo + [' And a.Cpros <> '']
+				If thisform.podatamgr.SqlExecute(lcQuery, [crDistribui] ) < 1
+					MessageBox( [Problemas no Select dos Produtos Distribuidos], 48, "Atenção" )
+					Return(0)
+				Endif
+			Endif			
+			
+			logrdDistribui.RecordSourceType = 1 
+			logrdDistribui.RecordSource = [crDistribui]
+			
+			*** Atualiza as colunas SAlDO e DISTRIBUIDO dos estoques disponíveis
+			If thisform.pcescolha = [ALTERAR]			
+				Select a.CPros, a.Dpros, a.CodCors, a.CodTams, ;
+				Iif(thisform.pcescolha=[ALTERAR], a.Sqtds, b.QtdOs) as Sqtds, a.QtdSaida + b.QtdDistr as QtdSaida, a.Sqtds - b.QtdDistr as QtdSaldo, Cgrus, Sgrus ;
+				from crDisponivel a Inner Join (Select Max(QtdOs) as QtdOs, Sum(QtdDistr) as QtdDistr, CPros, CodCors, CodTams From crDistribui Group By CPros, CodCors, CodTams) b ;
+				On a.Cpros + a.CodCors + a.CodTams = b.Cpros + b.CodCors + b.CodTams ;
+				Into Cursor crDisponivel ReadWrite	
+				
+				Select crDistribui2
+				Scan
+					Select crDisponivel
+					Go top 
+					Locate for CPros + CodCors + CodTams = crDistribui2.CPros + crDistribui2.CodCors + crDistribui2.CodTams
+					If Eof()
+						Select crDistribui2
+						Scatter Memo Memvar
+						m.QtdSaida =  crDistribui2.QtdDistr
+						m.QtdSlado = crDistribui2.QtdDistr *( -1)
+						Insert into crDisponivel from Memvar
+					Endif 
+				Endscan									
+			Else
+				Select Distinct Cpros, Dpros, CodCors, CodTams, QtdOs as Sqtds, 0000000 as QtdSaida, 0000000 as QtdSaldo, Cgrus, Sgrus from crDistribui into cursor crDisponivel ReadWrite
+			Endif
+			
+			Select crDistribui
+			Index ON cPros+CodCors+CodTams Tag Tag1
+			Set Order To Tag1
+						
+			Select crDisponivel
+			Index on Cgrus Tag Cgrus		
+			Set Relation TO cPros+CodCors+CodTams INTO crDistribui
+			
+			logrdDisponivel.RecordSourceType = 1 
+			logrdDisponivel.RecordSource = [crDisponivel]
+		
+			ThisForm.pagina.dados.pageframe1.page2.grdDisponivel.SetAll('DynamicForeColor','iif(crDisponivel.QtdSaldo < 0,Rgb(255,0,0),RGB(0,0,0))','Column')
+			thisform.pagina.dados.pageframe1.page1.Enabled = .f.
+			thisform.pagina.dados.pageframe1.page2.Enabled = .t.
+			thisform.pagina.dados.pageframe1.page3.Enabled = .t.
+			thisform.pagina.dados.grupo_Salva.salva.Enabled = Iif(thisform.pcescolha=[CONSULTAR],.f.,.t.)
+			thisform.pagina.dados.pageframe1.ActivePage = 2
+	Endcase
+Else
+	Thisform.LockScreen = .F.
+	If Thisform.pcEscolha = 'INSERIR'
+		Thisform.plcancelar = .T.
+	Endif
+	Thisform.mAtivapagina1
+	Thisform.Visible = .T.
+	Thisform.Enabled = .T.	
+Endif
+
+thisform.pagina.dados.pageframe1.page1.grdEstoque.RecordSource = [crSigCdCeg]
+thisform.pagina.dados.pageframe1.page1.grdEstoque.column1.ControlSource = [crSigCdCeg.nMarca]
+thisform.pagina.dados.pageframe1.page1.grdEstoque.column2.ControlSource = [crSigCdCeg.Emps]
+thisform.pagina.dados.pageframe1.page1.grdEstoque.column3.ControlSource = [crSigCdCeg.Grupos]
+thisform.pagina.dados.pageframe1.page1.grdEstoque.column4.ControlSource = [crSigCdCeg.Contas]
+
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.RecordSource = [crCabOpera]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column2.ControlSource = [crCabOpera.Emps]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column3.ControlSource = [crCabOpera.Dopes]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column4.ControlSource = [crCabOpera.Numes]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column5.ControlSource = [crCabOpera.EmpDs]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column6.ControlSource = [crCabOpera.GrupoOs]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column7.ControlSource = [crCabOpera.ContaOs]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column8.ControlSource = [crCabOpera.GrupoDs]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column9.ControlSource = [crCabOpera.ContaDs]
+
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.RecordSource = [crItnOpera]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column1.ControlSource = [crItnOpera.Citens]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column2.ControlSource = [crItnOpera.CPros]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column3.ControlSource = [crItnOpera.Dpros]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column8.ControlSource = [crItnOpera.CodCors]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column9.ControlSource = [crItnOpera.CodTams]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column4.ControlSource = [crItnOpera.CUnis]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column5.ControlSource = [crItnOpera.Qtds]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column6.ControlSource = [crItnOpera.Units]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column7.ControlSource = [crItnOpera.totas]
+
+Select TmpSigPrDis
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])
+	If Reccount([crSigMvCab]) > 0 && Se já foi processado pega a numeração gerada
+		_Codigo = TmpSigPrDis.Codigos
+	Else 
+		Select crSigPrDis
+		Zap
+	
+		_Codigo = Iif(thisform.pcescolha = [INSERIR],Alltrim(Str(fGerUniqueKey([SIGPRDIS]),10)),TmpSigPrDis.Codigos)
+
+		Select crDisponivel
+		Set Relation to		
+
+		Select crDistribui
+		Set Order To
+		Scan
+			If crDistribui.QtdDistr # 0
+				Insert Into crSigPrDis (Codigos, Datas, CidChaves, Cpros, CodCors, CodTams, EmpDopNums, Qtds, EmpDs, Locals ) Values ;
+					(_Codigo, TmpSigPrDis.Datas, fUniqueIds(), crDistribui.Cpros, crDistribui.CodCors, crDistribui.CodTams, [], crDistribui.QtdDistr, crDistribui.cEmps, crDistribui.Locals )
+
+				Replace DtAlts With Iif(thisform.pcescolha = [ALTERAR],Datetime(),Ctod([])) in crSigPrDis 
+				Replace UsuAlts With Iif(thisform.pcescolha = [ALTERAR],m.usuar,[]) in crSigPrDis 
+				
+				Select crDisponivel
+				Go top 
+				Locate for cPros + CodCors + CodTams = crDistribui.Cpros + crDistribui.CodCors + crDistribui.CodTams
+				If !Eof()
+					Replace QtdOs With crDisponivel.Sqtds in crSigPrDis
+				Endif
+			Endif 
+		EndScan	
+	Endif
+	
+	*** Filtro de estoques de distribuição
+	Select crSigCdCeg
+	Scan
+		If crSigCdCeg.nMarca = 1
+			Insert Into crSigPrDis (CidChaves, Datas, Codigos, EmpGruEsts, Usuars) Values ;
+				(fUniqueIds(), TmpSigPrDis.Datas, _Codigo, crSigCdCeg.Emps + crSigCdCeg.Grupos + crSigCdCeg.Contas, m.usuar)
+			Replace DtAlts with Iif(thisform.pcescolha = [ALTERAR],Datetime(),Ctod([])), UsuAlts with Iif(thisform.pcescolha = [ALTERAR],m.usuar,[]) in crSigPrDis
+		EndIf
+	EndScan
+Endif
+=DoDefault()
+ThisForm.mAtivaPagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+	ThisForm.Pagina.Lista.Enabled = .T. 
+	ThisForm.Pagina.ActivePage = 1
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Lista.Dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value > This.Parent.Dt_final.Value
+	This.Parent.Dt_Final.Value = This.Value
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Lista.Dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < This.Parent.Dt_Inicial.Value
+	This.Parent.Dt_Inicial.Value = This.Value
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ldDatai = ThisForm.Pagina.Lista.Dt_inicial.Value
+ldDataf = ThisForm.Pagina.Lista.Dt_final.Value
+ldDatai = fDtoSQL(ldDatai)
+ldDataf = fDtoSQL(ldDataf,'23:59:59')
+
+thisform.podatamgr.Requery([TmpSigPrDis])
+ThisForm.Pagina.Lista.Grade.SetFocus()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1
+* Classe: pageframe (Base: pageframe)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Page1.Activate
+------------------------------------------------------------
+PROCEDURE Page1.Activate
+thisform.pagina.dados.Grupo_Salva.salva.Enabled = .f.
+thisform.pagina.dados.pageframe1.page2.Enabled = .f.
+thisform.pagina.dados.pageframe1.page3.Enabled = .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Page2.Activate
+------------------------------------------------------------
+PROCEDURE Page2.Activate
+this.grdDisponivel.col01_Codigo.SetFocus()
+this.grdDisponivel.Refresh()
+this.grdDistribui.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.cmdMarcaDesmarca
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnMarcar.Click
+------------------------------------------------------------
+PROCEDURE btnMarcar.Click
+Update crSigCdCeg Set nMarca = 1
+thisform.pagina.dados.pageframe1.page1.grdEstoque.Refresh()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnDesmarcar.Click
+------------------------------------------------------------
+PROCEDURE btnDesmarcar.Click
+Update crSigCdCeg Set nMarca = 0
+tthisform.pagina.dados.pageframe1.page1.grdEstoque.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Replace nMarca With Iif(crSigCdCeg.nMarca = 0,1,0) In crSigCdCeg
+thisform.pagina.dados.pageframe1.page1.grdEstoque.Refresh()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 13, 32)
+		Replace nMarca With Iif(crSigCdCeg.nMarca = 0,1,0)In crSigCdCeg
+Endcase
+thisform.pagina.dados.pageframe1.page1.grdEstoque.Refresh()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+*!*	Do Case
+*!*		Case InList(nKeyCode, 9) && TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus
+*!*			NoDefault
+
+*!*		Case InList(nKeyCode, 15) && SHIFT + TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus
+*!*			NoDefault
+*!*	EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+*!*	Do Case
+*!*		Case InList(nKeyCode, 9) && TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus
+*!*			NoDefault
+
+*!*		Case InList(nKeyCode, 15) && SHIFT + TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus
+*!*			NoDefault
+*!*	EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.grdEstoque.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+*!*	Do Case
+*!*		Case InList(nKeyCode, 9) && TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdMarcaDesmarca.btnMarcar.SetFocus
+*!*			NoDefault
+
+*!*		Case InList(nKeyCode, 15) && SHIFT + TAB
+*!*			ThisForm.pgfPagina.pgDados.cmdBotoes.btnSair.SetFocus
+*!*			NoDefault
+*!*	EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page1.processar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local loEmp As Object, loGrp As Object, loCta As Object 
+Local logrdDisponivel As Object, logrdDistribui As Object 
+
+logrdDisponivel = ThisForm.Pagina.dados.pageframe1.page2.grdDisponivel
+logrdDistribui = ThisForm.Pagina.dados.pageframe1.page2.grdDistribui 
+
+Select crSigCdceg
+Go top 
+Count for nMarca = 1 to lnSel1
+If lnSel1 = 0 
+	=MessageBox('Nenhum estoque foi selecionado.', 16, 'Aviso')		
+	Return .f.
+Endif
+
+Select 0
+logrdDisponivel.RecordSourceType = 1 	&& Alias
+logrdDisponivel.RecordSource = ""
+
+logrdDistribui.RecordSourceType = 1		&& Alias
+logrdDistribui.RecordSource = ""
+
+*** Filtro de estoques de distribuição
+lcEgc = []
+lcEmps = []
+Select crSigCdCeg
+Scan
+	If crSigCdCeg.nMarca = 1
+		lcEgc = lcEgc + Iif(Empty(lcEgc),[('],[',']) + crSigCdCeg.Emps + crSigCdCeg.Grupos + crSigCdCeg.Contas
+		lcEmps = lcEmps + Iif(Empty(lcEmps),[('],[',']) + crSigCdCeg.Emps
+	EndIf
+EndScan
+lcEgc = Iif(Empty(lcEgc),'',lcEgc + [') ])
+lcEmps = Iif(Empty(lcEmps),'',lcEmps + [') ])
+
+Text tO lcSQL NoShow TextMerge
+	Select a.CPros, b.Dpros, a.CodCors, a.CodTams, Sum(a.SQtds) as Sqtds, 0000000 As QtdSaida, Sum(a.SQtds) As QtdSaldo, b.Cgrus, b.Sgrus
+	From SigMvEst a, SigCdpro b
+	Where a.EmpGruEsts in <<lcEgc>>
+	  And a.Cpros = b.Cpros 
+	  And a.SQtds > 0 
+	Group By a.CPros, b.Dpros, a.CodCors, a.CodTams, b.Cgrus, b.Sgrus	
+EndText
+
+If thisform.podatamgr.SqlExecute(lcSQL, [crDisponivel] ) < 1
+	MessageBox( [Problemas no Select dos Produtos com Saldo], 48, "Atenção" )
+	Return(0)
+EndIf
+
+Text tO lcSQL NoShow TextMerge
+	Select b.cEmps, Case When d.SQtds is null Then 0000000 Else d.Sqtds End As QtdSaldo, 0 As QtdDistr, Space(10) as Locals, a.CPros, a.CodCors, a.CodTams, c.Dopes
+	from (Select Distinct a.CPros, a.CodCors, a.CodTams From SigMvEst a
+	Where a.EmpGruEsts in <<lcEgc>> And a.SQtds > 0) a 
+	Inner Join SigCdEmp b On b.cEmps not in <<lcEmps>>
+	Inner Join SigCdOpe c On b.DirColOuts = c.Dopes
+	Left Join SigMvEst d On d.EmpGruEsts = b.cEmps + c.GruDests + c.ConDests And d.CPros + d.CodCors + d.CodTams = a.CPros + a.CodCors + a.CodTams
+	Order By a.CPros, a.CodCors, a.CodTams, b.cEmps
+EndText
+
+If thisform.podatamgr.SqlExecute(lcSQL, [crDistribui] ) < 1
+	MessageBox( [Problemas no Select dos Produtos Distribuidos], 48, "Atenção" )
+	Return(0)
+EndIf
+
+Select crDistribui
+Index ON cPros+CodCors+CodTams Tag Tag1
+Set Order To Tag1
+
+logrdDistribui.RecordSourceType = 1 
+logrdDistribui.RecordSource = [crDistribui]
+
+Select crDisponivel
+Index on Cgrus Tag Cgrus
+Set Relation TO cPros+CodCors+CodTams INTO crDistribui
+
+logrdDisponivel.RecordSourceType = 1 
+logrdDisponivel.RecordSource = [crDisponivel]
+
+ThisForm.Pagina.dados.pageframe1.page1.Enabled = .f.
+thisform.pagina.dados.pageframe1.page2.Enabled = .t.
+thisform.pagina.dados.pageframe1.page3.Enabled = .t.
+thisform.pagina.dados.Grupo_Salva.salva.Enabled = .t.
+ThisForm.Pagina.dados.pageframe1.ActivePage = 2
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel
+* Classe: fwgrade (Base: grid)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+lcArquivo2 = Sys(2023) + [\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]
+
+m.SelectPro   = [Select a.cpros,a.cgrus,a.dpros,a.sgrus,a.cunis,a.cunips,a.ifors,a.reffs,a.qmins,a.valors,a.moedas,a.icms,]+;
+				[a.custofs,a.moecusfs,a.margems,a.markupa,a.pvens,a.moevs,a.dtincs,a.datas,a.pesoms,a.fcustos,a.moepcs,]+;
+				[a.fvendas,a.moepvs,a.obspeds,a.obspes,a.DPro2s,a.linhas,a.situas,a.colecoes,a.cftios,a.pftios,a.mftios,]+;
+				[a.pcuss,a.moecs,a.pvideals,a.CodCors,c.rclis,g.dgrus,g.arreds,g.tipoestos,]+;
+				[g.Caracteris,u.cEstos, b.descs As desccol,l.descs As desclin,f.descs As descftio,]+;
+				[a.Volumes, a.FigTecs,a.cproeqs,a.obsetqs,a.UltComps,a.vultcomps,a.multcomps,a.cClass,a.UsuIncs,]+;
+				[a.Locals,a.Mercs, a.cbars, h.descs as descgru,a.volumes,a.pesoms,] + ;
+				[a.pesobs,a.tamps,a.tamhs,a.cpros,a.ltminsv,]+;
+				[a.DPro3s,a.tamls,a.CodFinP, a.FigJpgs ]+;
+				[From SigCdPro a ]+;
+				[Left Join SigCdGrp g On a.cgrus = g.cgrus ]+;
+				[Left Join SigCdUni u On a.cunis = u.cunis ]+;
+				[Left Join SigCdCol b On a.colecoes = b.colecoes ]+;
+				[Left Join SigCdLin l On a.linhas = l.linhas ]+;
+				[Left Join SigPrFti f On a.cftios = f.cods ]+;
+				[Left Join SigCdCli c On a.ifors = c.iclis ]+;
+				[Left Join SigCdGpr h On a.Mercs= h.codigos ]+;
+				[Where a.cpros = ']+crDisponivel.Cpros+[' ]
+
+If Used('crSidCdPro')
+	Use In crSidCdPro
+EndIf
+lnQueryOk = ThisForm.poDataMgr.SqlExecute(m.SelectPro,'crSidCdPro')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select crSidCdPro
+Go Top
+lcCodGru  = crSidCdPro.cgrus
+lcCodSgru = crSidCdPro.sgrus
+lcCodCor  = crSidCdPro.CodCors
+
+If Used('Tmp_Sgru')
+	Use In Tmp_Sgru
+EndIf
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select s.codigos,s.descricaos ]+;
+				  [From SigCdPsg s ]+;
+				 [Where s.cgrus = ']+lcCodGru+[' And s.codigos = ']+lcCodSgru+[' ],'Tmp_Sgru')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+With Thisform.pagina.dados.pageframe1.page2
+	.Get_cd_fornecedor.Value      = Nvl(crSidCdPro.ifors,'')
+	.Get_ref_fornecedor.Value     = Nvl(crSidCdPro.reffs,'')
+	.Get_cd_grupo.Value           = Nvl(crSidCdPro.cgrus,'')
+	.Get_cd_sgrupo.Value          = Nvl(crSidCdPro.sgrus,'')
+	.Get_peso_medio.Value         = Nvl(crSidCdPro.pesoms,0)
+	.Get_GrVenda.Value            = Nvl(crSidCdPro.colecoes,'')
+	.Get_ds_fornecedor.Value      = Nvl(crSidCdPro.rclis,'')
+	.Get_ds_grupo.Value           = Nvl(crSidCdPro.dgrus,'')
+	.Get_ds_sgrupo.Value          = Nvl(Tmp_Sgru.descricaos,'')
+	.Get_GrDVenda.Value           = Nvl(crSidCdPro.desccol,'')
+	.Get_CdLinha.Value            = Nvl(crSidCdPro.linhas,'')
+	.Get_DsLinha.Value            = Nvl(crSidCdPro.desclin,'')
+	.getCodFinP.Value			  = Nvl(crSidCdPro.CodFinP ,'')
+	.Get_cd_fornecedor.Refresh
+	.Get_ref_fornecedor.Refresh
+	.Get_cd_grupo.Refresh
+	.Get_cd_sgrupo.Refresh
+	.Get_peso_medio.Refresh
+	.Get_GrVenda.Refresh
+	.Get_ds_fornecedor.Refresh
+	.Get_ds_grupo.Refresh
+	.Get_ds_sgrupo.Refresh
+	.Get_GrDVenda.Refresh
+	.Get_CdLinha.Refresh
+	.Get_DsLinha.Refresh
+	
+	If Not IsNull(crSidCdPro.FigJpgs) And Not IsEmpty(crSidCdPro.FigJpgs)
+		.FigJpg.Visible = .F.
+		.FigJpg.Picture = ''
+		Clear Resources
+		lcFoto=Strconv(Strtran(Strtran(Strtran(crSidCdPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+		StrToFile(lcFoto, lcArquivo2)
+		.FigJpg.Picture = (lcArquivo2)
+		.FigJpg.Visible = .T.
+	Else
+		.FigJpg.Visible = .F.
+		.FigJpg.Picture = ''
+	EndIf
+		
+	Select crSidCdPro
+	If IsEmpty(CrSigCdPam.moedetqs)
+		.Get_pr_venda.Value          = Nvl(crSidCdPro.pvens,0)
+		.Get_pr_venda_moeda.Value    = Nvl(crSidCdPro.moevs,'')
+	Else
+		Select CrSigCdCot
+		Locate For (CrSigCdCot.cmoes = CrSigCdPam.moedetqs) 
+		If Found()
+			cotacao = CrSigCdCot.valos
+		Else
+			cotacao = 1
+		EndIf
+		Select CrSigCdCot
+		Go Top
+		Locate For (CrSigCdCot.cmoes = crSidCdPro.moevs)
+		If Found()
+			cotven = CrSigCdCot.valos
+		Else
+			cotven = 1
+		EndIf
+		ValVenda = Round(crSidCdPro.pvens * cotven / cotacao,2)
+		.Get_pr_venda.Value          = ValVenda
+		.Get_pr_venda_moeda.Value    = CrSigCdPam.moedetqs
+	EndIf
+	If crSidCdPro.arreds # 0
+		_FatArred = crSidCdPro.arreds
+		_Soma = _FatArred
+		Do While _Soma < .Get_pr_venda.Value
+			_Soma = _Soma + _FatArred
+		EndDo
+		.Get_pr_venda.Value = _Soma
+	EndIf
+
+EndWith
+
+With ThisForm.pagina.dados.pageframe1.page2
+	.getDesFinP.Value = []
+	If Not Empty(crSidCdPro.CodFinP)
+		ThisForm.poDataMgr.CursorQuery([SigCdFip], [LocalBus], [Cods], crSidCdPro.CodFinP, [Descs])
+		If Not Used([LocalBus])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (CursorQuery - LocalBus 2)])
+			Return .f.
+		EndIf
+		.getDesFinP.Value = LocalBus.Descs
+	EndIf
+	.getCodFinP.Refresh
+	.getDesFinP.Refresh
+EndWith
+
+this.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col01_Codigo.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()
+		NoDefault
+EndCase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+If Not Empty(This.Value)
+	If IsNull(ThisForm.poObjExt1)
+		If goSistema.ConsultaAberta
+			=MessageBox([Pesquisa Global de Produtos em Execução!!!], 0+16, [Atenção!!!])
+			Return
+		Else
+			Do Form SigOpCgp.Scx Name ThisForm.poObjExt1 Linked With [SigOpCgp] NoShow
+		EndIf
+	EndIf
+
+	If (Type([ThisForm.poObjExt1])=[O])
+		With ThisForm.poObjExt1
+			.fld_principal.Pag_Consulta.Commandgroup1.Command1.Click()
+			.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_inicial.Value = Padr(This.Value, 14)
+			.fld_principal.Pag_Consulta.Filtro.Principal.get_produto_final.Value   = Padr(This.Value, 14)
+			.fld_principal.Pag_Consulta.grp_operacao.cmd_consulta.Click()
+		EndWith 
+	EndIf 
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col02_Descricao.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()
+		NoDefault
+EndCase
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col03_COR.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()
+		NoDefault
+EndCase
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col04_Tamanho.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()
+		NoDefault
+EndCase
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col05_QtdEstoque.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()
+		NoDefault
+EndCase
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col06_QtdSaida.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()
+		NoDefault
+EndCase
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDisponivel.Col07_QtdSaldo.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pagina.dados.pageframe1.page2.grdDistribui.col03_Distribuido.SetFocus()
+		NoDefault
+EndCase
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Col03_Distribuido.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( Inlist( ThisForm.pcescolha, 'INSERIR', 'ALTERAR' ))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.Calcula_Saldo()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.grdDistribui.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 45
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( Inlist( ThisForm.pcescolha, 'INSERIR', 'ALTERAR' ))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrLcl', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Localização')
+		loLista.mAddColuna('Descricaos', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = Iif(Lastkey()=27, '', crListaRemota.Codigos)
+	Use In crListaRemota
+EndIf
+This.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pagina.dados.pageframe1.page2.grdDisponivel.col01_Codigo.SetFocus()
+		NoDefault
+EndCase
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.FigJpg
+* Classe: image (Base: image)
+* Registro: 46
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+Local lcArquivo
+
+lcArquivo = Sys(2023) + '\' + goSistema.Sys2015Tmp + Sys(2015) + '.Jpg'
+
+Select crDisponivel
+lcCodPro  = crDisponivel.Cpros
+
+lcSql = [Select a.cpros,a.FigJpgs From SigCdPro a Where a.cpros = ']+lcCodPro+[' ]
+ThisForm.Podatamgr.Sqlexecute(lcsql,'CrTmpPro')
+
+* Figura no Campo Memo
+If Not Empty(crTmpPro.FigJpgs) And Not IsNull(crTmpPro.FigJpgs)
+	lcFoto=Strconv(Strtran(Strtran(Strtran(CrTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+	=StrToFile(lcFoto, lcArquivo)
+
+	If File(lcArquivo)
+		Do Form SigOpZom With lcArquivo, ;
+							'Produto : ' + crDisponivel.CPros + ' - ' + crDisponivel.DPros, ' '
+	EndIf
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_dgrupo
+* Classe: textbox (Base: textbox)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR]) And (Empty(This.Parent.get_cgrupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+With ThisForm.pagina.dados.pageframe1.page2
+	If Empty(This.Value)
+		.get_cgrupo.Value = ''
+		.get_cgrupo.Refresh
+	Else
+		m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','DGrus',This.Value,'Grupos',.T.)
+		If !(m.loLista.plAchouRegistro)
+			m.loLista.mAddColuna('DGrus','','Descrição')
+			m.loLista.mAddColuna('CGrus','XXXXXX','Código')
+			m.loLista.Show()
+		EndIf
+		m.loLista = NULL
+		If LastKey() <> 27 And Used('CrGrupos')
+			.get_cgrupo.Value = Evaluate('CrGrupos.cgrus')
+			.Get_DGrupo.Value = Evaluate('CrGrupos.dgrus')
+		Else
+			.get_cgrupo.Value = ''
+			.Get_DGrupo.Value = ''
+		EndIf
+	EndIf
+	.get_cgrupo.Refresh
+	.Get_DGrupo.Refresh
+EndWith
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cgrupo
+* Classe: textbox (Base: textbox)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+With ThisForm.pagina.dados.pageframe1.page2
+	If Empty(This.Value)
+		.Get_DGrupo.Value = ''
+		.Get_DGrupo.Refresh
+	Else
+		m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos',.T.)
+		If !(m.loLista.plAchouRegistro)
+			m.loLista.mAddColuna('CGrus','XXXXXX','Código')
+			m.loLista.mAddColuna('DGrus','','Descrição')
+			m.loLista.Show()
+		EndIf
+		m.loLista = NULL
+		If LastKey() <> 27 And Used('CrGrupos')
+			.get_cgrupo.Value = Evaluate('CrGrupos.cgrus')
+			.Get_DGrupo.Value = Evaluate('CrGrupos.dgrus')
+		Else
+			.get_cgrupo.Value = ''
+			.Get_DGrupo.Value = ''
+		EndIf
+	EndIf
+	.get_cgrupo.Refresh
+	.Get_DGrupo.Refresh
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Filtrar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crDisponivel
+If Empty(thisform.pagina.dados.pageframe1.page2.get_cgrupo.Value) And Empty(thisform.pagina.dados.pageframe1.page2.get_csgrupo.Value)
+	Set Key To
+Else
+	If !Empty(thisform.pagina.dados.pageframe1.page2.get_cgrupo.Value) And Empty(thisform.pagina.dados.pageframe1.page2.get_csgrupo.Value)
+		Index on Cgrus Tag Cgrus
+		Set Key To thisform.pagina.dados.pageframe1.page2.get_cgrupo.Value
+	Endif
+	If Empty(thisform.pagina.dados.pageframe1.page2.get_cgrupo.Value) And !Empty(thisform.pagina.dados.pageframe1.page2.get_csgrupo.Value)
+		Index on Sgrus Tag Sgrus
+		Set Key To thisform.pagina.dados.pageframe1.page2.get_csgrupo.Value
+	Endif	
+	If !Empty(thisform.pagina.dados.pageframe1.page2.get_cgrupo.Value) And !Empty(thisform.pagina.dados.pageframe1.page2.get_csgrupo.Value)
+		Index on Cgrus + Sgrus Tag Sgrus
+		Set Key To thisform.pagina.dados.pageframe1.page2.get_cgrupo.Value + thisform.pagina.dados.pageframe1.page2.get_csgrupo.Value
+	Endif	
+Endif 
+
+thisform.pagina.dados.pageframe1.page2.grdDisponivel.Refresh()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_produto_inicial
+* Classe: textbox (Base: textbox)
+* Registro: 52
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(this.Value)
+	Select crDisponivel
+	lnReg = Recno()
+	Go top
+	Locate for Cpros = this.Value
+	If Eof()
+		Go lnReg
+	Endif
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_pr_venda
+* Classe: textbox (Base: textbox)
+* Registro: 53
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ds_fornecedor
+* Classe: textbox (Base: textbox)
+* Registro: 54
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cd_fornecedor
+* Classe: textbox (Base: textbox)
+* Registro: 56
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ref_fornecedor
+* Classe: textbox (Base: textbox)
+* Registro: 58
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_peso_medio
+* Classe: textbox (Base: textbox)
+* Registro: 61
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ds_sgrupo
+* Classe: textbox (Base: textbox)
+* Registro: 63
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cd_sgrupo
+* Classe: textbox (Base: textbox)
+* Registro: 64
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_cd_grupo
+* Classe: textbox (Base: textbox)
+* Registro: 65
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_ds_grupo
+* Classe: textbox (Base: textbox)
+* Registro: 66
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_GrVenda
+* Classe: textbox (Base: textbox)
+* Registro: 69
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_GrDvenda
+* Classe: textbox (Base: textbox)
+* Registro: 70
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_CdLinha
+* Classe: textbox (Base: textbox)
+* Registro: 71
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.Get_DsLinha
+* Classe: textbox (Base: textbox)
+* Registro: 72
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.getCodFinP
+* Classe: fwget (Base: textbox)
+* Registro: 74
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.getDesFinP
+* Classe: fwget (Base: textbox)
+* Registro: 76
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_pr_venda_moeda
+* Classe: textbox (Base: textbox)
+* Registro: 77
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_dsgrupo
+* Classe: textbox (Base: textbox)
+* Registro: 79
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR]) And Empty(This.Parent.Get_CSGrupo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Local loLista
+
+With ThisForm.pagina.dados.pageframe1.page2
+	If Empty(This.Value)
+		.Get_CSGrupo.Value = ''
+		.Get_CSGrupo.Refresh
+	Else
+		m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPsg','CrSubGrupo','Descricaos',This.Value,'Sub-Grupos',.T.)
+		If !(m.loLista.plAchouRegistro)
+			m.loLista.mAddColuna('Descricaos','XXXXXXXXXXXXXXXXXXXX','Descrição')
+			m.loLista.mAddColuna('Codigos','XXXXXXXXXX','Sub-Grupo')
+			m.loLista.mAddColuna('CGrus','XXXXXXXXXX','Grupo')
+			m.loLista.Show()
+		EndIf
+		m.loLista = NULL
+		If LastKey() <> 27 And Used('CrSubGrupo')
+			.Get_CSGrupo.Value = Evaluate('CrSubGrupo.codigos')
+			.Get_DSgrupo.Value = Evaluate('CrSubGrupo.descricaos')
+		Else
+			.Get_CSGrupo.Value = ''
+			.Get_DSgrupo.Value = ''
+		EndIf
+	EndIf
+	.Get_CSGrupo.Refresh
+	.Get_DSgrupo.Refresh
+EndWith
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page2.get_csgrupo
+* Classe: textbox (Base: textbox)
+* Registro: 80
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+With ThisForm.pagina.dados.pageframe1.page2
+	If Empty(This.Value)
+		.Get_DSgrupo.Value = ''
+		.Get_DSgrupo.Refresh
+	Else
+		m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPsg','CrSubGrupo','Codigos',This.Value,'Sub-Grupos',.T.)
+		If !(m.loLista.plAchouRegistro)
+			m.loLista.mAddColuna('Codigos','XXXXXXXXXX','Sub-Grupo')
+			m.loLista.mAddColuna('Descricaos','XXXXXXXXXXXXXXXXXXXX','Descrição')
+			m.loLista.mAddColuna('CGrus','XXXXXXXXXX','Grupo')
+			m.loLista.Show()
+		EndIf
+		m.loLista = NULL
+		If LastKey() <> 27 And Used('CrSubGrupo')
+			.Get_CSGrupo.Value = Evaluate('CrSubGrupo.codigos')
+			.Get_DSgrupo.Value = Evaluate('CrSubGrupo.descricaos')
+		Else
+			.Get_CSGrupo.Value = ''
+			.Get_DSgrupo.Value = ''
+		EndIf
+	EndIf
+	.Get_CSGrupo.Refresh
+	.Get_DSgrupo.Refresh
+EndWith
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes
+* Classe: pageframe (Base: pageframe)
+* Registro: 81
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE pgItens.Activate
+------------------------------------------------------------
+PROCEDURE pgItens.Activate
+Select crItnOpera
+Set Order To Ordem
+Set Key To crCabOpera.Dopes + Str(crCabOpera.Numes, 6) In crItnOpera
+Go Top In crItnOpera
+ThisForm.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.Refresh() 
+ThisForm.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.Column1.SetFocus()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 84
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 86
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 88
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 90
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 92
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 94
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column8.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 96
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgOperacoes.grdCabOperas.Column9.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 98
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 101
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 103
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 105
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 107
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 109
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 111
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.pgOperacoes.pgItens.grdItnOperas.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 113
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Do Case
+	Case InList(nKeyCode, 9) && TAB
+		ThisForm.pgfPagina.pgPedidos.cmdBotoes.btnSair.SetFocus
+		NoDefault
+
+	Case InList(nKeyCode, 15) && SHIFT + TAB
+		ThisForm.pgfPagina.pgPedidos.cntOperacao.cmdEntrega.SetFocus
+		NoDefault
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRDIS.Pagina.Dados.Pageframe1.Page3.cmdProcessar
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 118
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnProcessar.When
+------------------------------------------------------------
+PROCEDURE btnProcessar.When
+Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnProcessar.Click
+------------------------------------------------------------
+PROCEDURE btnProcessar.Click
+Select crDistribui
+Count for QtdDistr > 0 to lnTotDis
+If lnTotDis = 0
+	Messagebox([Nenhum produto foi informado para distribuir],48,[Aviso])
+	Return .f.
+Endif 
+
+Select crDisponivel
+Go top
+Count for QtdSaldo < 0 to lnQtdNeg
+If lnQtdNeg > 0
+	Messagebox([Existe produtos distribuídos que estão ficando com saldo negativo.] + Chr(13) +[Favor checar antes de processar.],48,[Aviso])
+	Return .f.
+Endif
+
+*** Atualiza tabela temporária com os estoques que serão distribuídos
+lccidquerys = fUniqueIds()
+Select crSigCdCeg
+If Reccount() > 0
+	Scan
+		Select CrSigTempd
+		Append Blank
+		Replace Grupos    With crSigCdCeg.Grupos,;
+				Contas    With crSigCdCeg.Contas,;
+				codObs    With crSigCdCeg.Priors,;
+				Emps      With crSigCdCeg.Emps  ,;
+				CidChaves With fUniqueIds(),;
+				CidQuerys With lccidquerys
+	EndScan
+Else
+	Select CrSigTempd
+	Append Blank
+	Replace Grupos    With crSigCdPam.GrupoEsts,;
+			Contas    With crSigCdPam.contaEsts,;
+			CodObs    With 1,;
+			Emps      With _Empr,;
+			CidChaves With fUniqueIds(),;
+			CidQuerys With lccidquerys
+EndIf
+
+If !ThisForm.Podatamgr2.UpDate('CrSigTempd')
+	=ThisForm.Podatamgr2.RollBack()
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (CrSigTempD)')
+	Return .f.
+EndIf
+If ThisForm.PoDataMgr2.commit() < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (Commit)')
+	Return .f.
+Endif
+
+*** Busca os produtos que estão nos estoques que serão distribuídos
+lcQuery = [Select a.*, b.CodObs as Priors From SigMvEst a, SigTempd b ]+;
+		[Where a.Grupos = b.Grupos And a.Estos = b.Contas And a.Emps = b.Emps And a.Sqtds > 0 ] +;
+		[Union ] +;
+		[Select a.*, b.CodObs as Priors From SigMvEst a, SigTempd b ] +;
+		[Where a.Grupos = b.Grupos and b.Contas = '' And a.Emps = b.Emps And a.Sqtds > 0]
+		
+If ThisForm.PodataMgr.SqlExecute(lcquery,'TmpEstoque') < 1
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpEstoque)')
+	Return 0
+EndIf
+
+ThisForm.PodataMgr2.fSqlApagarTmp('SigTempD', lcCidquerys )
+
+Create Cursor TmpSaldg ( Emps c(3), Grupos c(10), Estos c(10), CPros c(14), CodCors c(4), CodTams c(4), Saldo n(12,3), Disps n(12,3), Priors n(2) )
+Index on CPros + CodCors + CodTams + Str(priors,2) + Grupos + Estos + Emps Tag CPros
+
+Select crSigPrDis
+Zap
+Select crSigMvCab
+Zap
+Select crSigMvItn
+Zap
+Select crSigMvIts
+Zap
+Select crSigMvHst
+Zap
+Select crSigOpEtq
+Zap
+Select crSigCdMlc
+Zap
+
+Select TmpEstoque
+Scan
+*!*		Select TmpSaldo
+*!*		If Not Seek(TmpEstoque.Cpros + TmpEstoque.CodCors + TmpEstoque.CodTams)
+*!*			Insert Into TmpSaldo ( CPros, CodCors, CodTams, Saldo, Disps );
+*!*						Values ( TmpEstoque.CPros, TmpEstoque.CodCors, TmpEstoque.CodTams, 0, 0 )
+*!*		EndIf
+*!*		Replace Saldo With Saldo + TmpEstoque.Sqtds,;
+*!*				Disps With Disps + TmpEstoque.Sqtds In TmpSaldo
+
+	Insert Into TmpSaldg ( Grupos, Estos, CPros, CodCors, CodTams, Saldo, Disps, Priors, Emps );
+				Values ( TmpEstoque.Grupos, TmpEstoque.Estos, TmpEstoque.CPros, TmpEstoque.CodCors,;
+						 TmpEstoque.CodTams, TmpEstoque.SQtds, TmpEstoque.SQtds, TmpEstoque.Priors, TmpEstoque.Emps )
+Endscan
+
+Create Cursor TmpEstoque (EmpDs c(3), Cpros c(14), CodCors c(4), CodTams c(4), Emps c(3), Dopes c(20), Numes n(6), grupos c(10), Estos c(10), Estoque n(12,3), Locals c(10))
+Index On EmpDs + Grupos + Estos + Emps + Dopes + Str(Numes,6) Tag EmpDopNum
+
+Select crDistribui
+Set Order To
+Scan
+	If crDistribui.QtdDistr # 0
+		xBaixa = crDistribui.QtdDistr
+		Select TmpSaldG
+		Set Order To Cpros
+		=Seek(crDistribui.Cpros + crDistribui.CodCors + crDistribui.CodTams)
+		Scan While Cpros = crDistribui.Cpros And CodCors = crDistribui.CodCors And CodTams = crDistribui.CodTams And xBaixa > 0
+			If TmpSaldg.Disps >= xBaixa && Reservs 
+				Replace TmpSaldg.Disps with TmpSaldg.Disps - xBaixa In TmpSaldG
+				Insert Into TmpEstoque (Cpros, CodCors, CodTams, Emps, dopes, Numes, Grupos, Estos, Estoque, EmpDs, Locals ) Values ;
+					(crDistribui.Cpros, crDistribui.CodCors, crDistribui.CodTams, TmpSaldG.Emps, crDistribui.Dopes, 0, ;
+					 TmpSaldg.Grupos, TmpSaldG.Estos, xBaixa, crDistribui.cEmps, crDistribui.Locals )
+				xBaixa = 0
+			Else
+				If TmpSaldg.Disps > 0
+					xBaixa = xBaixa - TmpSaldg.Disps 
+					Insert Into TmpEstoque (Cpros, CodCors, CodTams, Emps, dopes, Numes, Grupos, Estos, Estoque, EmpDs, Locals ) Values ;
+						(crDistribui.Cpros, crDistribui.CodCors, crDistribui.CodTams, TmpSaldG.Emps, crDistribui.Dopes, 0, ;
+						 TmpSaldg.Grupos, TmpSaldg.Estos, TmpSaldg.Disps, crDistribui.cEmps, crDistribui.Locals )
+					Replace TmpSaldg.Disps with 0 in TmpSaldG
+				Endif
+			Endif
+		EndScan
+	EndIf
+EndScan	
+
+lcCodObs = thisform.pagina.dados.pageframe1.page3.cntOperacao.getCodObs.Value
+lcObs = thisform.pagina.dados.pageframe1.page3.cntOperacao.getObs.Value
+
+Select crDisponivel
+Set Relation to
+
+_GrvMvCab = .f.
+_Chave   = Space(30)
+_Chave2  = Space(22)
+_citens  = 1
+
+Select TmpEstoque
+Set Order to EmpDopNum
+Scan
+	ThisForm.poDataMgr.CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', TmpEstoque.CPros)
+	ThisForm.poDataMgr.CursorQuery('SigCdGrp', 'crSigCdGrp', 'CGrus', crSigCdPro.CGrus)
+	ThisForm.poDataMgr.cursorquery('SigCdUni', 'CrTmpUni', 'Cunis', crSigCdPro.Cunis)	
+
+	Select TmpEstoque
+
+	If ( EmpDs + Grupos + Estos <> _Chave2 ) &&Or ( Emps + Dopes + Str( Numes, 6 ) <> _Chave )
+*!*			If ( EmpDs + Grupos + Estos <> _Chave2 )
+			_GrvEest = .f.
+*!*			EndIf
+		_Chave2 = EmpDs + Grupos + Estos
+*!*			_Chave  = Emps + Dopes + Str( Numes, 6 )
+
+
+		ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'crSigCdOpe', 'Dopes', TmpEstoque.Dopes)
+		ThisForm.poDataMgr.CursorQuery('SigOpCdc', 'crSigOpCdc', 'Dopes', TmpEstoque.Dopes)
+		ThisForm.poDataMgr.CursorQuery('SigOpCdi', 'crSigOpCdi', 'Dopes', TmpEstoque.Dopes)
+
+		_Grupod = crSigCdOpe.GruDests &&TempEest.Grupods
+		_Contad = crSigCdOpe.ConDests &&TempEest.Contads
+
+		_Nume   = fGerUniqueKey(TmpEstoque.Emps + TmpEstoque.Dopes)
+		_CItens = 1
+		_pData = Iif(thisform.pcescolha = [ALTERAR],TmpSigPrDis.Datas,Datetime())
+		
+		Insert Into crSigMvCab (Emps, Dopes, Numes, MascNum, Datas, Datars, Usuars, Grupoos, Contaos, ;
+							   Grupods, Contads, cIdChaves, Dtalts, EmpDopNums, EmpDs, Utilizados, CodObs, Obses) ;
+					   Values (TmpEstoque.Emps, TmpEstoque.Dopes, _Nume, Alltrim(fGerMascara(_Nume)), _pData, _pData, Usuar, ;
+							   TmpEstoque.grupos, TmpEstoque.Estos, _Grupod, _Contad, ;
+							   fUniqueIds(), _pData, TmpEstoque.Emps+TmpEstoque.Dopes+Str(_Nume,6), TmpEstoque.EmpDs, 0, lcCodObs, lcObs)
+							   
+		_GrvMvCab = .t.
+	EndIf
+
+	Insert Into crSigMvItn (Emps, Dopes, Numes, EmpDopNums, CPros, Qtds, Cunis, Pesos, CuniPs, DPros, Opers, cItens, CidChaves, DtAlts, Locals, Moedas, SitTrIcms) ;
+				Values (TmpEstoque.Emps, TmpEstoque.Dopes, _Nume, crSigMvCab.EmpDopNums, TmpEstoque.CPros, TmpEstoque.Estoque, crSigCdPro.Cunis, ;
+						crSigCdPro.PesoMs, crSigCdPro.CuniPs, crSigCdPro.Dpros, 'S', _Citens, fUniqueIds(), _pData, TmpEstoque.Locals, crSigCdPro.moecusfs, crSigCdPro.SitTrIcms)
+
+	Select crSigMvItn
+	Scatter Memo Memvar	
+	m.CidChaves = fUniqueIds()
+	m.Datas = _pData
+	m.CodTams = TmpEstoque.CodTams
+	m.CodCors = TmpEstoque.CodCors
+
+	Select crDisponivel
+	Go top
+	Locate for cPros + CodCors + CodTams = TmpEstoque.Cpros + TmpEstoque.CodCors + TmpEstoque.CodTams
+	m.QtdOs = crDisponivel.Sqtds
+	m.Datas = Ttod(_pData)
+	m.EmpDs = crSigMvCab.EmpDs
+	m.DtAlts = Iif(thisform.pcescolha = [ALTERAR],Datetime(),Ctod([]))
+	m.UsuAlts = Iif(thisform.pcescolha = [ALTERAR],m.usuar,[])
+	
+	Insert Into crSigPrDis from Memvar
+	
+	Select TmpEstoque
+	
+	If (crSigCdGrp.TipoEstos > 1)
+		Insert Into crSigMvIts (cItens, Emps, Dopes, Numes, EmpDopNums, CPros, Qtds, Pesos, CodCors, CodTams, QtdEmbs, CidChaves, DtAlts, Locals) ;
+					Values (_Citens, TmpEstoque.Emps, TmpEstoque.Dopes, _Nume, crSigMvCab.EmpDopNums, TmpEstoque.CPros, TmpEstoque.Estoque, crSigCdPro.PesoMs, ;
+							TmpEstoque.CodCors, TmpEstoque.CodTams, 1, fUniqueIds(), _pData, TmpEstoque.Locals)
+	EndIf
+			
+	llGeraEti = (crSigCdOpe.Estoqs = 1) And (crSigOpCdc.IEtiqs = 1) And (crTmpUni.Etiqs = 'S')
+
+	CodBarra = 0
+	If llGeraEti
+		cbar  = Transform(fGerUniqueKey('SigOpEtq',ThisForm.poDataMgr2.PnidConn,.f.,.f.,.t.),"@L 9999999999999")
+		cbar1 = fDigVerificador(cbar)
+		cbar2 = cbar + Transform(cbar1,"@L 9")
+		Set Decimals To 0
+		CodBarra = Val( cbar2 )
+		Set Decimals To 2
+		If (crSigCdGrp.TipoEstos > 1)
+			Select crSigMvIts
+		Else
+			Select crSigMvItn
+		Endif 
+		Replace CodBarras With CodBarra
+		
+		llUpd = (Int(Val(Substr(crSigOpCdi.lbltxidCs, 18, 1))) = 1)		
+		lcCodAmss = Iif(llUpd,crSigCdOpe.Abrevs,[])
+
+		Insert into crSigOpEtq (cbars,cpros,pesos,qtds,emps,Dopes,numes,datas,empos,obsetiqs, DtMovs, DtBals, DtIncs, Localizas, Grupos, Contas, CodAmss,EmpDopNums, ;
+								CodCors, CodTams, Usuars) ;
+						values (CodBarra, crSigMvItn.cpros, crSigMvItn.pesos, ;
+								crSigMvItn.Qtds, crSigMvItn.Emps, crSigMvItn.Dopes, ;
+								crSigMvItn.numes, crSigMvCab.datas, Iif(crSigCdOpe.Transs = 1,crSigMvCab.EmpDs,crSigMvCab.Emps),Nvl(crSigMvItn.obs, ''), ;
+								_pData, _pData, _pData, crSigMvItn.Locals, crSigMvCab.GrupoDs, crSigMvCab.ContaDs, lcCodAmss,crSigMvCab.EmpDopNums, ;
+								TmpEstoque.CodCors, TmpEstoque.CodTams,m.Usuar)
+
+		If crSigOpCdc.MovLocs <> 2
+			lncodigo = fGerUniqueKey('SigCdMlc' + crSigOpEtq.Empos)
+			lclocAtu = crSigOpEtq.Localizas			
+			Insert Into crSigCdMlc (Barras, Codigos, Contas, cpros, Datas, Emps, Grupos, Horas, ;
+								 LocAtus, LocNews, Usuars, EmpDopNums, cIdChaves, EmpCods) ;
+						 Values (crSigOpEtq.Cbars, lnCodigo, crSigOpEtq.Contas, crSigOpEtq.cpros, _pData, ;
+						 		 crSigOpEtq.Empos, crSigOpEtq.Grupos, Time(), lcLocAtu, crSigMvItn.Locals, Usuar, ;
+						 		 crSigMvCab.Emps + crSigMvCab.Dopes + Str(crSigMvCab.Numes,6), fUniqueIds(), ;
+						 		 crSigOpEtq.Empos + Str(lnCodigo, 10))
+		Endif							
+	Endif
+	
+	_CItens = (_CItens + 1)
+
+	ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'crSigCdOpe', 'Dopes', TmpEstoque.Dopes)
+
+	If (crSigCdOpe.Estoqs = 1)
+		pSeq  = 0
+		Insert Into crSigMvHst (Usuars, Datas, Datars, Emps, Dopes, Numes, Empos, Cpros, Qtds, Opers, Grupos, ;
+							  Estos, CodCors, CodTams, EmpDopNums, EmpGruEsts, OriDopNums, cIdChaves, Seqs, CodBarras) ;
+					  Values (Usuar, _pData, _pData, TmpEstoque.Emps, TmpEstoque.Dopes, _Nume, TmpEstoque.Emps, TmpEstoque.CPros, ;
+					  		  TmpEstoque.Estoque, 'S', TmpEstoque.Grupos, TmpEstoque.Estos, ;
+					  		  TmpEstoque.CodCors, TmpEstoque.CodTams, TmpEstoque.Emps + TmpEstoque.Dopes + Str(_Nume,6), ;
+					  		  TmpEstoque.Emps + TmpEstoque.Grupos + TmpEstoque.Estos, ;
+					  		  TmpEstoque.Emps + TmpEstoque.Dopes + Str(_Nume,6), [], pSeq, 0)
+					  		  
+		_Inicio    = fGerUniqueKey(Dtos(crSigMvHst.Datas))
+		_IniSeq    = fGerUniqueKey('HISTBAR')
+		m.NewOpe = crSigMvHst.Opers	
+		*** Tiago - 23/10/2015 - Definido com o Richard que vamos gravar no cidchaves a mesma letra da movimentação para padronizar, assim a ordem do histórico fica correta				
+*!*			If 	crSigCdOpe.Estoqs = 1 and crSigCdOpe.Origems = 1 and InList(crSigCdOpe.EstOrigs,1,2) And ;
+*!*					crSigCdOpe.destinos = 1 and InList(crSigCdOpe.EstDests,1,2)
+*!*				m.NewOpe = Iif(crSigMvHst.Opers = [E],[H],[K])
+*!*			EndIf
+		Replace CidChaves With Dtos(Datas)+m.NewOpe+Transform(_Inicio,"@L 999999")+ThisForm.Sigkey ,;
+				Seqs      WITH _IniSeq in crSigMvHst
+					  		  
+		=fRecalculaP(crSigMvHst.Emps, crSigMvHst.Grupos, crSigMvHst.Estos, crSigMvHst.CPros, crSigMvHst.Datas, CrSigMvHst.CodCors, CrSigMvHst.CodTams, ThisForm.Podatamgr  )
+		=fRecalculaC(crSigMvHst.Emps, crSigMvHst.CPros, crSigMvHst.Datas, ThisForm.Podatamgr  )
+					  		  
+		pSeq  = 0
+		Insert Into crSigMvHst (Usuars, Datas, Datars, Emps, Dopes, Numes, Empos, Cpros, Qtds, Opers, Grupos, ;
+							  Estos, CodCors, CodTams, EmpDopNums, EmpGruEsts, OriDopNums, cIdChaves, Seqs, CodBarras) ;
+					  Values (Usuar, _pData, _pData, TmpEstoque.EmpDs, TmpEstoque.Dopes, _Nume, TmpEstoque.Emps, TmpEstoque.CPros, ;
+					  		  TmpEstoque.Estoque, 'E', _Grupod, _Contad, TmpEstoque.CodCors, TmpEstoque.CodTams, ;
+							  TmpEstoque.EmpDs + TmpEstoque.Dopes + Str(_Nume,6), TmpEstoque.EmpDs + _Grupod + _Contad, ;
+							  TmpEstoque.Emps + TmpEstoque.Dopes + Str(_Nume,6), [], pSeq, CodBarra)
+
+		_Inicio    = fGerUniqueKey(Dtos(crSigMvHst.Datas))
+		_IniSeq    = fGerUniqueKey('HISTBAR')
+		m.NewOpe = crSigMvHst.Opers	
+		*** Tiago - 23/10/2015 - Definido com o Richard que vamos gravar no cidchaves a mesma letra da movimentação para padronizar, assim a ordem do histórico fica correta	
+*!*			If 	crSigCdOpe.Estoqs = 1 and crSigCdOpe.Origems = 1 and InList(crSigCdOpe.EstOrigs,1,2) And ;
+*!*					crSigCdOpe.destinos = 1 and InList(crSigCdOpe.EstDests,1,2)
+*!*				m.NewOpe = Iif(crSigMvHst.Opers = [E],[H],[K])
+*!*			EndIf
+		Replace CidChaves With Dtos(Datas)+m.NewOpe+Transform(_Inicio,"@L 999999")+ThisForm.Sigkey ,;
+				Seqs      WITH _IniSeq in crSigMvHst
+											  
+		=fRecalculaP(crSigMvHst.Emps, crSigMvHst.Grupos, crSigMvHst.Estos, crSigMvHst.CPros, crSigMvHst.Datas, CrSigMvHst.CodCors, CrSigMvHst.CodTams, ThisForm.Podatamgr  )
+		=fRecalculaC(crSigMvHst.Emps, crSigMvHst.CPros, crSigMvHst.Datas, ThisForm.Podatamgr  )							  
+	EndIf
+EndScan
+
+If _GrvMvCab
+	lcCodigo  = Iif(thisform.pcescolha = [INSERIR],Alltrim(Str(fGerUniqueKey([SIGPRDIS]),10)),TmpSigPrDis.Codigos)
+	Select crSigPrDis
+	Go top
+	Replace all Codigos With lcCodigo
+	Replace Codigos With lcCodigo in TmpSigPrDis
+Endif 
+
+llErro = .f.
+If Not ThisForm.poDataMgr.Update('crSigPrDis')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigPrDis)')
+	llErro = .t.
+EndIf
+If Not llErro And Not ThisForm.poDataMgr.Update('crSigMvCab')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvCab)')
+	llErro = .t.
+EndIf
+If Not llErro And Not ThisForm.poDataMgr.Update('crSigMvItn')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvItn)')
+	llErro = .t.
+EndIf
+If Not llErro And Not ThisForm.poDataMgr.Update('crSigMvIts')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvIts)')
+	llErro = .t.
+Endif
+If Not llErro And Not ThisForm.poDataMgr.Update('crSigCdMlc')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdMlc)')
+	llErro = .t.
+EndIf
+If Not llErro And Not ThisForm.poDataMgr.Update('crSigOpEtq')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigOpEtq)')
+	llErro = .t.
+Endif
+If Not llErro And Not ThisForm.poDataMgr.Update('crSigMvHst')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigMvHst)')
+	llErro = .t.
+EndIf
+If Not llErro And Not fRecalculaP(.t., ThisForm.poDataMgr)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigOpClP)')
+	llErro = .t.
+EndIf
+If Not llErro And Not fRecalculaC(.t., .f., .f., ThisForm.poDataMgr)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigOpClC)')
+	llErro = .t.
+EndIf
+
+If Not llErro And (ThisForm.poDataMgr.Commit() < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Commit)')
+	llErro = .t.
+EndIf
+
+If llErro
+	ThisForm.poDataMgr.RollBack()
+	Return 0
+Endif
+
+Select crSigMvCab
+Scan
+	ThisForm.poDataMgr.CursorQuery('SigCdOpe', 'crSigCdOpe', 'Dopes', crSigMvCab.Dopes)
+	ThisForm.poDataMgr.CursorQuery('SigOpCdc', 'crSigOpCdc', 'Dopes', crSigMvCab.Dopes)
+	ThisForm.poDataMgr.CursorQuery('SigOpCdi', 'crSigOpCdi', 'Dopes', crSigMvCab.Dopes)
+	ThisForm.poDataMgr.CursorQuery('SigOpCdd', 'crSigOpCdd', 'Dopes', crSigMvCab.Dopes) 
+
+	lcQuery = [ Select a.Ndopes, b.chkImpDoc, b.carcompos, b.dckTermos, a.Cmoes, a.TipoNfs, a.Opers ] + ;
+			    [ From SigCdOpe a, SigOpCdc b ]+ ;
+			    [ Where a.Dopes = '] + crSigMvCab.Dopes + [' and b.Dopes = a.Dopes ]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigCdOpeD]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crSigCdOpeD)])
+		Return .f.
+	EndIf
+	
+	DO SigPrIdc with crSigMvCab.Emps, crSigMvCab.Dopes, crSigMvCab.Numes, crSigMvCab.valdevs, 1,.F.,.F.,.F.,.F.,3,.F.,Thisform,.F.
+Endscan
+
+
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.RecordSource = []
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.RecordSource = []
+
+Select * from crSigMvCab into cursor crCabOpera
+Select a.*, b.codcors, b.codtams from crSigMvItn a Inner Join crSigMvIts b On a.EmpDopNums = b.EmpDopNums and a.Citens = b.Citens into cursor crItnOpera
+Index On Dopes + Str(Numes, 6) + CPros + Str(Units, 12, 4) Tag Ordem
+
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.RecordSource = [crCabOpera]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column2.ControlSource = [crCabOpera.Emps]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column3.ControlSource = [crCabOpera.Dopes]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column4.ControlSource = [crCabOpera.Numes]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column5.ControlSource = [crCabOpera.EmpDs]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column6.ControlSource = [crCabOpera.GrupoOs]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column7.ControlSource = [crCabOpera.ContaOs]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column8.ControlSource = [crCabOpera.GrupoDs]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgOperacoes.grdCabOperas.column9.ControlSource = [crCabOpera.ContaDs]
+
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.RecordSource = [crItnOpera]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column1.ControlSource = [crItnOpera.Citens]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column2.ControlSource = [crItnOpera.CPros]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column3.ControlSource = [crItnOpera.Dpros]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column8.ControlSource = [crItnOpera.CodCors]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column9.ControlSource = [crItnOpera.CodTams]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column4.ControlSource = [crItnOpera.CUnis]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column5.ControlSource = [crItnOpera.Qtds]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column6.ControlSource = [crItnOpera.Units]
+thisform.pagina.dados.pageframe1.page3.pgOperacoes.pgItens.grdItnOperas.column7.ControlSource = [crItnOpera.totas]
+
+this.Enabled = .f.
+thisform.pagina.dados.grupo_Salva.salva.Click()
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRDIS
+RESERVED3 (ClassInfo): podatamgr2
+poobjext1
+sigkey
+_memberdata XML Metadata for customizable properties
+*calcula_saldo 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 89
+================================================================================

@@ -1,0 +1,13 @@
+﻿All 7 fixes applied to `sigreanrBO.prg`:
+
+| Line | Problem | Fix |
+|------|---------|-----|
+| 254 | `SEEK expr TAG tag` ÔÇö missing `ORDER` keyword | `SEEK expr ORDER TAG tag` |
+| 314 | `SEEK(...)` as statement ÔÇö VFP9 parses as command, rejects the comma-separated args | `= SEEK(...)` forces function interpretation |
+| 317 | Same as above | `= SEEK(...)` |
+| 371 | Same as above | `= SEEK(...)` |
+| 375 | Same as above | `= SEEK(...)` |
+| 390 | Same as above | `= SEEK(...)` |
+| 642 | `SET RELATION TO IN alias` ÔÇö invalid syntax | `SELECT TmpFinal` + `SET RELATION TO` |
+
+**Root cause**: VFP9 sees `SEEK(...)` at the start of a statement line as the SEEK **command**, making `(expr, alias, tag)` an invalid expression (the comma is unexpected). The fix `= SEEK(...)` forces the parser to treat it as a function call. The `IF !SEEK(...)` occurrences were already correct because expression context forces function interpretation. The `SET RELATION TO IN alias` form is simply not valid VFP9 syntax; only `SET RELATION TO` (clears relation in current work area) works.

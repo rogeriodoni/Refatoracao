@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto e completo. Fase 2/8 conclu├¡da.
+
+**O que foi adicionado ao `sigrehtcBO.prg`:**
+
+- **`PrepararDados()`** (PROTECTED) ÔÇö tradu├º├úo fiel do `processamento` do legado: monta t├¡tulos/descri├º├Áes sem literais acentuados, executa `SQLEXEC` em `SigCqChi`, cria `cursor_4c_Resultado` com estrutura id├¬ntica ao original, aplica ├¡ndice conforme `this_nOpOrdem`, varre os registros com filtro de cancelamento/emiss├úo, e para cada cheque n├úo cancelado faz sub-query em `SigCdPit` ÔåÆ `SigMvPar` ou `SigMvCcr` para obter hist├│rico/moeda. Calcula `TotCon` ao final para ordem por Conta.
+
+- **`Imprimir()`** / **`Visualizar()`** ÔÇö chamam `PrepararDados()` internamente e executam `REPORT FORM SigReHtc.frx` com `TO PRINTER` ou `PREVIEW`. Nenhum `RETURN` dentro do `TRY`.
+
+- **`BuscarContas()`** ÔÇö substitui o `crContas` do `Init()` legado, populando `cursor_4c_Contas` com as contas que t├¬m `emichqs = 1` em `SigOpFp`.
+
+- **`ObterMensagemErro()`** / **`Destroy()`** ÔÇö utilit├írios padr├úo.

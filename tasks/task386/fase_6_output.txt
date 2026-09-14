@@ -1,0 +1,13 @@
+﻿Fase 6 conclu├¡da. Resumo do que foi feito:
+
+**Corre├º├úo no FormCsi.prg:**
+- `BtnBuscarClick`: removida chamada redundante a `Buscar("Cods = ...")` que era imediatamente sobrescrita pelo `CarregarLista()` subsequente.
+
+**Integra├º├úo no menu.prg:**
+- `DEFINE BAR 68 OF popCadastros` ÔåÆ "Categoria do Site"
+- `ON SELECTION BAR 68 OF popCadastros DO AbrirFormCsi`
+- Procedimento `AbrirFormCsi()` adicionado ao final
+
+**Sem altera├º├Áes necess├írias no config.prg:** o ADIR() j├í carrega automaticamente `CsiBO.prg` (padr├úo `*BO.prg`) e `FormCsi.prg` (padr├úo `Form*.prg` em `cadastros\`).
+
+O formul├írio estava funcionalmente completo desde a Fase 5 ÔÇö este form tem apenas 2 campos (Cods/Descs) e nenhum lookup, ent├úo n├úo h├í "50% restantes" a adicionar.

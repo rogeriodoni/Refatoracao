@@ -1,0 +1,16 @@
+﻿Fase 3/8 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigPdMp8.prg` foi criado com a estrutura base completa.
+
+**O que foi implementado:**
+
+| Elemento | Descri├º├úo |
+|----------|-----------|
+| `Init(par_oFormPai, par_nDtS)` | Compartilha `DataSessionId` com o form pai (acesso a `xMfas`, `xNensiN`, `tmpnens`), depois chama `DODEFAULT()` |
+| `InicializarForm()` | Cria `SigPdMp8BO`, aplica fundo, configura cabe├ºalho e containers |
+| `ConfigurarPageFrame()` | OPERACIONAL: sem PageFrame, apenas aplica `new_background.jpg` |
+| `ConfigurarCabecalho()` | Adiciona `lbl_4c_LblSombra` (sombra preta) + `lbl_4c_LblTitulo` (branco) em `cnt_4c_Sombra` |
+| `ConfigurarPaginaLista()` | Chama `AdicionarLabelsGrade()` (Label1, Label2, Label3 est├íticos) |
+| `ConfigurarPaginaDados()` | Torna `cnt_4c_Operacao` vis├¡vel |
+| `TornarControlesVisiveis()` | Recursivo, mant├®m `img_4c_FigJpg` e `shp_4c_Shape4` invis├¡veis (gerenciados por eventos) |
+| `Destroy()` | Libera BO, chama `DODEFAULT()` |
+
+**ADD OBJECTs criados:** `cnt_4c_Sombra`, `shp_4c_Shape2`, `shp_4c_Shape4` (Visible=.F.), `img_4c_FigJpg` (Visible=.F.), `cnt_4c_Operacao`. Grids, bot├Áes e textboxes vir├úo nas Fases 4-6.

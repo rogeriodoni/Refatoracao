@@ -1,0 +1,3 @@
+﻿Added the three CRUD-named handlers (`BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`) before the existing report buttons block at C:\4c\projeto\app\forms\relatorios\FormSIGRECND.prg:677. `BtnVisualizarClick` was already implemented in earlier phases with full filter-validation + preview logic.
+
+Since SIGRECND is a `frmrelatorio` (no CRUD cycle), the three new methods carry real logic: each shows a context-appropriate `MsgInfo` and routes to the closest report action (Visualizar/Imprimir/Encerrar), keeping the form usable if these handlers are ever invoked via a generic dispatcher while preserving paridade funcional with the legacy SIGRECND click handler at SIGRECND:Click which only branched on `This.Value` for the 4 report buttons.

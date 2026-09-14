@@ -1,0 +1,16 @@
+﻿A Fase 7 j├í est├í completa. Os handlers dos bot├Áes principais j├í foram implementados nas fases anteriores:
+
+| Handler (REPORT) | Linha | Mapeamento do original |
+|---|---|---|
+| `BtnVisualizarClick()` | 386 | `SIGPRCCR.visualizacao` ÔåÆ PREVIEW |
+| `BtnImprimirClick()` | 402 | `SIGPRCCR.impressao` ÔåÆ PRINTER + PROMPT |
+| `BtnExcelClick()` | 418 | `SIGPRCCR.memail` ÔåÆ TO PRINTER (direto) |
+| `BtnSairClick()` | 433 | ESC/Encerrar ÔåÆ Release() |
+
+Os `BINDEVENT` que conectam os bot├Áes do `cmg_4c_Botoes` a esses handlers est├úo nas linhas 72-75 de `InicializarForm()`. O BO `SIGPRCCRBO.prg` tamb├®m est├í completo com `PrepararDados()`, `Atualizar()`, e `Destroy()`.
+
+> **Nota**: O template de fase usou nomes CRUD (`BtnIncluirClick`, `BtnAlterarClick`, etc.) mas este ├® um form REPORT ÔÇö os equivalentes corretos j├í est├úo implementados.
+
+H├í apenas um ponto de aten├º├úo para testes: a chamada `fChecaAcesso("SIGPRCCR", "PDF")` na linha 112 vem do original `fChecaAcesso(ThisForm.Name,'PDF')`. Se essa fun├º├úo n├úo estiver portada na nova arquitetura, causar├í erro em runtime ao abrir o form. Recomendo verificar se `fChecaAcesso` existe em `utils/functions.prg` antes do primeiro teste.
+
+**Fase 7/8 conclu├¡da** ÔÇö nenhuma modifica├º├úo necess├íria nos arquivos.

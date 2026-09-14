@@ -1,0 +1,13 @@
+﻿Fase 3 conclu├¡da. O arquivo `Formsigprdis.prg` foi criado em `C:\4c\projeto\app\forms\cadastros\` com 255 linhas.
+
+**Estrutura criada:**
+- `DEFINE CLASS Formsigprdis AS FormBase` com `Height=621`, `Width=996` (valores exatos do SCX original)
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö cria o BO (`sigprdisBO`), chama os 3 configuradores, ativa Page1
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com `Top=-29`, `Tabs=.F.`, 2 p├íginas (Lista/Dados)
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo`), `cnt_4c_Botoes` (Left=542), `cnt_4c_Saida` (Left=917 can├┤nico)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` (Left=842) + `pgf_4c_Dados` com 3 abas (Estoques/Distribui├º├úo/Opera├º├Áes), `Top=35` (Top=6+29 compensa├º├úo), `Height=600`
+- `TornarControlesVisiveis()` e `FormatarGridLista()` ÔÇö implementa├º├Áes completas
+- `Destroy()` ÔÇö libera o BO e chama `DODEFAULT()`
+
+**Pr├│xima fase (4/8):** Grid da lista (Page1) + bot├Áes CRUD com ├¡cones.

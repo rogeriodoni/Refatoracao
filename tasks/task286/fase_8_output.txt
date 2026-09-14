@@ -1,0 +1,18 @@
+﻿Arquivo completo e correto. A Fase 8 est├í conclu├¡da.
+
+**O que foi adicionado** (linhas 2470ÔÇô2643):
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `BtnBuscarClick` | Delega a `CmdCmdloadClick` (conectar + listar) |
+| `BtnEncerrarClick` | `THIS.Release()` |
+| `BtnSalvarClick` | Delega a `Transfere("A")` ÔÇö enviar todos ao FTP |
+| `BtnCancelarClick` | Delega a `Receber("A")` ÔÇö receber todos do FTP |
+| `FormParaBO` | Copia props FTP do form (caminhos, credenciais, flags) para o BO |
+| `BOParaForm` | Copia props do BO para o form + atualiza TextBoxes de caminhos nas Pages |
+| `HabilitarCampos` | Habilita/desabilita bot├Áes Transfere/Recebe/Conecta respeitando `this_lSomenteEnvio`/`this_lSomenteRecebimento` |
+| `LimparCampos` | ZAP em logftp e tmpprog + RemoveItem em todos os 4 ListBoxes + limpa label de progresso |
+| `CarregarLista` | Adaptador ÔåÆ `MontarContainer()` |
+| `AjustarBotoesPorModo` | Chama `HabilitarCampos(.T.)` |
+
+O arquivo `Formsigprftp.prg` est├í agora completo com todas as 8 fases consolidadas.

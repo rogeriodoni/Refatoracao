@@ -1,0 +1,21 @@
+[2026-08-01 10:13:49] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-01 10:13:49] [INFO] Prompt File: C:\4c\tasks\task402\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-08-01 10:13:49] [INFO] Output File: C:\4c\tasks\task402\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-01 10:13:49] [INFO] Model: sonnet
+[2026-08-01 10:13:49] [INFO] Timeout: 3600 segundos
+[2026-08-01 10:13:49] [INFO] Max Output Tokens: 128000
+[2026-08-01 10:13:49] [INFO] Context Files: 0 arquivo(s)
+[2026-08-01 10:13:49] [INFO] Invocando Claude CLI...
+[2026-08-01 10:13:49] [INFO] Prompt carregado: 61390 caracteres
+[2026-08-01 10:13:49] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-01 10:13:49] [INFO] Tamanho total do prompt: 61390 caracteres
+[2026-08-01 10:13:49] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-01 10:18:29] [INFO] Claude CLI finalizado em 280.0060626 segundos
+[2026-08-01 10:18:29] [INFO] Exit Code: 0
+[2026-08-01 10:18:29] [INFO] Output salvo em: C:\4c\tasks\task402\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-01 10:18:29] [INFO] Output size: 572 bytes
+[2026-08-01 10:18:29] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-01 10:18:29] [INFO] Preview do output:
+[2026-08-01 10:18:29] [INFO] Corre+º+úo aplicada. A linha `IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI` foi removida ÔÇö `CarregarLista()` agora +® chamada incondicionalmente em `InicializarForm()`.
+
+**Raiz do problema:** O guard impedia a chamada em modo mock (`gb_4c_ValidandoUI = .T.`), ent+úo nenhum `cursor_4c_Dados` era criado durante a instancia+º+úo. O teste `CarregarLista` verifica a exist+¬ncia do cursor ap+¦s a cria+º+úo do form, e como o m+®todo mock cria o cursor com `CREATE CURSOR` (sem SQL), +® 

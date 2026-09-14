@@ -1,0 +1,25 @@
+﻿An├ílise completa. Vou verificar os resultados:
+
+**Schema verificado:**
+- `SigCdGcr`: tem `codigos` (char(10)) e `descrs` (char(40)) ÔÇö **colunas corretas**
+- `SigClLan`: tem `cidchaves` (char(20)) como PRIMARY KEY ÔÇö **coluna correta**
+- `SIGCCCCO`: tem `cods` e `descs` ÔÇö confirmado pelo JOIN original `a.cocos = b.cods` + `b.descs`
+- `SigCdCli`: tem `IClis` e `RClis` ÔÇö confirmado por m├║ltiplos BOs migrados no projeto
+
+## Resultado da Verifica├º├úo: Falsos Positivos
+
+Todos os 4 alertas s├úo **falsos positivos** do verificador autom├ítico. Explica├º├úo:
+
+| Coluna flagada | Tabela usada | Tipo de uso | Status |
+|---|---|---|---|
+| `CODIGOS` | `SigCdGcr` | Lookup de descri├º├úo de grupo (PK da tabela) | Ô£à Leg├¡timo |
+| `ICLIS` | `SigCdCli` | Lookup de descri├º├úo de conta (PK da tabela) | Ô£à Leg├¡timo |
+| `CODS` | `SigCcCco` | Lookup de ocorr├¬ncia (PK da tabela) | Ô£à Leg├¡timo |
+| `CIDCHAVES` | `SigClLan` | CRUD ÔÇö UPDATE/DELETE/SELECT por PK | Ô£à Leg├¡timo |
+
+O verificador comparou **todas** as condi├º├Áes WHERE do c├│digo migrado contra o WHERE da query principal (`grucontas` / `cocos`). Mas essas 4 condi├º├Áes pertencem a **queries completamente diferentes**:
+
+- As colunas `CODIGOS`, `ICLIS` e `CODS` s├úo as PKs das tabelas de lookup (`SigCdGcr`, `SigCdCli`, `SigCcCco`) ÔÇö n├úo t├¬m rela├º├úo com o WHERE da query principal do `SigClLan`
+- A coluna `CIDCHAVES` ├® a PK de `SigClLan` (confirmada no schema), usada em opera├º├Áes CRUD (Atualizar/ExecutarExclusao/CarregarPorCodigo) ÔÇö o original usava `SEEK` em VFP, que o SQL equivalente substitui por `WHERE cidchaves = ...`
+
+**Nenhuma altera├º├úo ├® necess├íria.** Os arquivos est├úo corretos. Remover essas condi├º├Áes quebraria os lookups de descri├º├úo e as opera├º├Áes CRUD do sistema.

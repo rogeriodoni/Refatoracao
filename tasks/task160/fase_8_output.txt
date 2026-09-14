@@ -1,0 +1,30 @@
+﻿A migra├º├úo da task160 est├í **completa**. Resumo do que foi verificado e entregue:
+
+---
+
+## Fase 8/8 ÔÇö Consolida├º├úo Final
+
+### Arquivos j├í completos (fases 1-7)
+
+**`C:\4c\projeto\app\classes\SIGPRCCRBO.prg`** ÔÇö BO do relat├│rio:
+- `Init()` ÔÇö configura caminho do FRX (`SigPrCcr.frx`) e t├¡tulo do relat├│rio
+- `PrepararDados()` ÔÇö busca empresa em `SigCdEmp`, monta `cursor_4c_Cabecalho`, seleciona `SigCdPro WHERE lMarca=1 ORDER BY Cpros`
+- `Imprimir()`, `ImprimirComPrompt()`, `Visualizar()`, `ArquivosEmail()` ÔÇö 4 a├º├Áes de sa├¡da
+- `ObterMensagemErro()`, `ObterChavePrimaria()`, `Destroy()`
+
+**`C:\4c\projeto\app\forms\relatorios\FormSIGPRCCR.prg`** ÔÇö Form REPORT flat (Height=130, sem filtros):
+- `InicializarForm()` ÔÇö cria BO, cabecalho cinza, `cmg_4c_Botoes` com 4 bot├Áes, BINDEVENT
+- `ConfigurarCabecalho()` ÔÇö `cnt_4c_Cabecalho` + `lbl_4c_Sombra/Titulo`
+- `ConfigurarBotoes()` ÔÇö geometria exata do SCX original (Left=495, Width=310, Buttons Width=75)
+- `BtnVisualizarClick/ImprimirClick/EmailClick/EncerrarClick()` ÔÇö delegam ao BO
+- `Destroy()` ÔÇö libera BO com `= .NULL.`
+
+### Integra├º├úo no menu j├í existia
+- `DEFINE BAR 171 OF popRelatorios` ÔÇö "Impress├úo de Produtos com Pre├ºos alterados" (linha 423)
+- `ON SELECTION BAR 171 OF popRelatorios DO AbrirFormSIGPRCCR` (linha 510)
+- `PROCEDURE AbrirFormSIGPRCCR()` com padr├úo can├┤nico `VARTYPE/Show()/CATCH` (linha 3957)
+
+### M├®todos CRUD n├úo se aplicam
+Por ser REPORT sem campos de filtro (Height=130), `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo` n├úo existem ÔÇö o relat├│rio executa diretamente via `PrepararDados()` no BO sem par├ómetros do form.
+
+`task_state.json` atualizado: `status=COMPLETED`, `05_migracao=COMPLETED`.

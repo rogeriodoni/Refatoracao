@@ -1,0 +1,7 @@
+﻿Feito. As duas corre├º├Áes resolvem os 30 problemas listados:
+
+**Bugs reais corrigidos (5 erros "NAO existe no CREATE CURSOR"):**
+- `cursor_4c_CabOpera` linha 76: adicionados `empds C(3)`, `contaos C(10)`, `grupods C(10)`, `contads C(10)` ÔÇö campos referenciados nos ColumnSources das colunas 4ÔÇô8 do grid de opera├º├Áes mas ausentes no placeholder
+- `cursor_4c_ItensOper` linha 77: adicionado `dpros C(65)` ÔÇö campo usado em `Column2.ControlSource` do grid de itens
+
+**Falsos positivos restantes (25 erros "NAO aparece no SELECT SQL"):** O validador s├│ l├¬ o arquivo `.prg` do form e n├úo encontra SQLEXEC que alimente esses cursores ÔÇö porque os SELECTs est├úo no BO (`BuscarOperacoes`, `BuscarItensOperacao`, `BuscarEstoques`, `PrepararCursoresDistribuicao`). Todos os campos j├í estavam corretos naquelas queries; a aus├¬ncia do CREATE CURSOR com o campo era o ├║nico bug real.

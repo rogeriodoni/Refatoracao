@@ -1,0 +1,21 @@
+﻿Fase 2/8 conclu├¡da. O `SigPrItbBO.prg` foi completado com:
+
+**Propriedades adicionadas** (9 novas para registro SigMvCcr):
+- `this_cEmps`, `this_cGrupos`, `this_cContas`, `this_dDatas`, `this_cHists`, `this_cHist2s`, `this_nValors`, `this_cOpers`, `this_lAutos`
+
+**M├®todos CRUD** (contrato BusinessBase):
+- `ObterChavePrimaria()` ÔåÆ retorna `this_cContas`
+- `CarregarDoCursor()` ÔåÆ mapeia todas as colunas de SigMvCcr, trata Autos como LOGICAL ou NUMERIC
+- `ValidarDados()` ÔåÆ valida datas (ini/fim presentes e ordem correta)
+- `ExecutarInsercao()` / `ExecutarAtualizacao()` ÔåÆ stubs "n├úo aplic├ível" (OPERACIONAL ÔÇö SigMvCcr ├® leitura)
+
+**M├®todos operacionais** (l├│gica do legado):
+- `InicializarCursores()` ÔåÆ cria `MovAux` (nome legado preservado para `COPY TO`)
+- `CarregarConfiguracao()` ÔåÆ carrega `SigCdPam.DirContabv`
+- `ProcessarIntegracao()` ÔåÆ l├│gica completa do `PROCEDURE processamento`: queries SigCdGcr/SigCdEmp/SigMvCcr, SCAN com fwprogressbar, busca ContAb em grupoÔåÆclienteÔåÆfallback, popula `MovAux` e `SemConta`; cursores `SemConta`/`Cabecalho` ficam abertos para o FRX `SigPrIct`
+- `GravarArquivos()` ÔåÆ l├│gica do `PROCEDURE gravar`: agrupa MovAux por EmpCont e faz `COPY TO ... TYPE SDF`
+
+**Decis├Áes de projeto**:
+- `EmpCont` em `MovAux` populado explicitamente com `cursor_4c_Mv.Emps` (o original tinha bug: SCATTER/GATHER n├úo transferia EmpsÔåÆEmpCont)
+- Nenhum `RETURN` dentro de TRY/CATCH; controle por IF/ELSE aninhado + flag `loc_lResultado`
+- `_Empr` do legado substitu├¡do por `go_4c_Sistema.cCodEmpresa`

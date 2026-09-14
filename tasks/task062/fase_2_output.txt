@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. Fase 2/8 conclu├¡da.
+
+**`C:\4c\projeto\app\classes\sigrecorBO.prg`** ÔÇö 614 linhas, com os seguintes m├®todos adicionados:
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `ObterChavePrimaria()` | PUBLIC | Stub para relat├│rio (retorna "") |
+| `ObterMensagemErro()` | PUBLIC | Retorna ├║ltima mensagem de erro |
+| `PrepararDados()` | PUBLIC | **L├│gica completa do `processamento` legado** ÔÇö SCAN em SigCdCmm com sub-queries em SigMvCab, SigCdCli (ContaDs e Contas), SigCdOpe (estorno), sigmvCcr+sigcdpit (pendente de pagamento), SigMvPec+SigMvNfi (NF subn├¡vel), filtros SNA e PenPag |
+| `Imprimir()` | PUBLIC | Chama PrepararDados() ÔåÆ REPORT FORM ... TO PRINTER |
+| `Visualizar()` | PUBLIC | Chama PrepararDados() ÔåÆ REPORT FORM ... PREVIEW |
+| `ObterFRXParaImprimir()` | PROTECTED | Seleciona SigReCr1/2/3/4/11 |
+| `ObterFRXParaVisualizar()` | PROTECTED | Seleciona SigReCr1/2/3/4/6/11 (quebra 3ÔåÆSigReCr6 s├│ no preview) |
+| `BuscarCotacao()` | PROTECTED | Substitui `fBuscarCotacao()` ÔÇö query em SigCdCot |
+
+Pr├│xima fase (3/8): criar o Form `Formsigrecor.prg`.

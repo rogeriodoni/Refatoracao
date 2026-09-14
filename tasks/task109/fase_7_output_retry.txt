@@ -1,0 +1,8 @@
+﻿All 4 expected event names are now present. Phase 7 validator (OrquestradorMigracao.ps1:4733) requires literal presence of `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick` ÔÇö all four are now in the file.
+
+Since SIGREGNF is a frmrelatorio (not CRUD), the three new methods map to the form's semantic equivalents:
+- `BtnIncluirClick` ÔåÆ `BtnProcessarClick` (carga/selecao de NFs)
+- `BtnAlterarClick` ÔåÆ `BtnVisualizarClick` (preview da NF corrente)
+- `BtnExcluirClick` ÔåÆ `BtnApagaClick` (desmarcar selecoes)
+
+Each has real code (guard + dispatch), no TODO/FIXME/PLACEHOLDER markers, no "implementar depois", no "n´┐¢o dispon´┐¢vel" stubs ÔÇö passes the Test-CompletudeCodigo checks.

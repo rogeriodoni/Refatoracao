@@ -1,0 +1,13 @@
+﻿O c├│digo execut├ível est├í correto - CHR() nas strings, coment├írios com nota├º├úo literal. O arquivo est├í com a estrutura base completa da Fase 3.
+
+**Fase 3/8 conclu├¡da.** `FormSigReIfv.prg` criado em `C:\4c\projeto\app\forms\relatorios\` com:
+
+- `DEFINE CLASS FormSigReIfv AS FormBase` ÔÇö dimens├Áes 800├ù424 (exatas do original), `DataSession=2`, `TitleBar=0`, `WindowType=1`
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö cria `SigReIfvBO`, chama `CarregarDadosAuxiliares()` (com guarda `gb_4c_ValidandoUI`), monta cabe├ºalho/bot├Áes/pageframe
+- `ConfigurarCabecalho()` ÔÇö container cinza `RGB(100,100,100)`, labels sombra+t├¡tulo
+- `ConfigurarBotoes()` ÔÇö `cmg_4c_Botoes` CommandGroup com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar), `Cancel=.T.` no Buttons(4)
+- `ConfigurarPageFrame()` ÔÇö 1 p├ígina "Filtros", `Tabs=.F.`, com `Picture=fundo_cad_1003.jpg`
+- `Destroy()` ÔÇö `this_oRelatorio = .NULL.` + `DODEFAULT()`
+
+Fases 4-6 adicionar├úo `ConfigurarPaginaLista()` com todos os campos de filtro (optGtprel, campos empresa/data/moeda/grupo/conta/barra, grid CsSigCdEmp). Fases 7-8 adicionar├úo os BINDEVENTs e handlers de bot├Áes.

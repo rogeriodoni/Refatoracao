@@ -1,0 +1,968 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigPrIbb.SCX
+* Data/Hora: 03/07/2026 17:51:57
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRIBB
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRIBB
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRIBB.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRIBB.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGPRIBB
+  Class: shape
+  BaseClass: shape
+
+Objeto: ok
+  Parent: SIGPRIBB
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: grdItens
+  Parent: SIGPRIBB
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGPRIBB.grdItens.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRIBB.grdItens.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRIBB.grdItens.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRIBB.grdItens.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRIBB.grdItens.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRIBB.grdItens.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGPRIBB.grdItens.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRIBB.grdItens.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label31
+  Parent: SIGPRIBB
+  Class: label
+  BaseClass: label
+
+Objeto: getTxtCds
+  Parent: SIGPRIBB
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Label3
+  Parent: SIGPRIBB
+  Class: label
+  BaseClass: label
+
+Objeto: getEmps
+  Parent: SIGPRIBB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDopes
+  Parent: SIGPRIBB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getNumes
+  Parent: SIGPRIBB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnImprimir
+  Parent: SIGPRIBB
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: getLocals
+  Parent: SIGPRIBB
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: getTotal
+  Parent: SIGPRIBB
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 597
+  Height = 326
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 700
+  Width = 1000
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Impressão de Boleto Bancário"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  AlwaysOnTop = .F.
+  Name = "SIGPRIBB"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1008
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.Shape1
+------------------------------------------------------------
+  Top = 9
+  Left = 820
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.ok
+------------------------------------------------------------
+  Top = 3
+  Left = 922
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 11
+  ToolTipText = "[ESC] Sair"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.grdItens
+------------------------------------------------------------
+  ColumnCount = 4
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 22
+  Height = 520
+  Left = 7
+  ReadOnly = .T.
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 5
+  Top = 138
+  Width = 425
+  GridLineColor = 238,238,238
+  Name = "grdItens"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 120
+  Column1.ReadOnly = .T.
+  Column1.BackColor = 245,251,136
+  Column1.Name = "Column1"
+  Column2.FontBold = .T.
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Alignment = 2
+  Column2.Width = 31
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 100
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 150
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.grdItens.Column1.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Condição Pagto."
+  ForeColor = 90,90,90
+  BackColor = 255,255,223
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.grdItens.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 245,251,136
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.grdItens.Column2.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "X"
+  ForeColor = 90,90,90
+  BackColor = 255,255,223
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.grdItens.Column2.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.grdItens.Column3.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Vencimento"
+  ForeColor = 90,90,90
+  BackColor = 255,255,223
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.grdItens.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.grdItens.Column4.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Valor"
+  ForeColor = 90,90,90
+  BackColor = 255,255,223
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.grdItens.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.Label31
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Texto de Responsabilidade do Cedente "
+  Height = 15
+  Left = 444
+  Top = 438
+  Width = 224
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Label31"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.getTxtCds
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Height = 201
+  Left = 444
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 455
+  Width = 548
+  ControlSource = "crGrade.CTxtCds"
+  Name = "getTxtCds"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Local de Pagamento "
+  Height = 15
+  Left = 444
+  Top = 211
+  Width = 119
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.getEmps
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 11
+  BorderStyle = 1
+  Enabled = .F.
+  Height = 27
+  Left = 7
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 101
+  Width = 44
+  ForeColor = 0,0,0
+  BackColor = 245,251,136
+  DisabledBackColor = 245,251,136
+  DisabledForeColor = 36,84,155
+  Name = "getEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.getDopes
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 11
+  BorderStyle = 1
+  Enabled = .F.
+  Height = 27
+  Left = 57
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 101
+  Width = 288
+  ForeColor = 0,0,0
+  BackColor = 245,251,136
+  DisabledBackColor = 245,251,136
+  DisabledForeColor = 36,84,155
+  Name = "getDopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.getNumes
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 11
+  BorderStyle = 1
+  Enabled = .F.
+  Height = 27
+  Left = 352
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 101
+  Width = 80
+  ForeColor = 0,0,0
+  BackColor = 245,251,136
+  DisabledBackColor = 245,251,136
+  DisabledForeColor = 36,84,155
+  Name = "getNumes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.btnImprimir
+------------------------------------------------------------
+  Top = 3
+  Left = 846
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Caption = "\<Imprimir"
+  TabIndex = 10
+  ToolTipText = ""
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnImprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.getLocals
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Height = 201
+  Left = 444
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 228
+  Width = 548
+  ControlSource = "crGrade.CLocals"
+  Name = "getLocals"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIBB.getTotal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Enabled = .F.
+  Height = 23
+  Left = 262
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 657
+  Width = 150
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  DisabledBackColor = 224,253,254
+  Name = "getTotal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 11, 7, 18, 15, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRIBB
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE detalhe
+------------------------------------------------------------
+PROCEDURE detalhe
+Lparameters lnLin, lnCol, lcDet, lcEst, lcTam, lcAlt
+
+lnLin = Iif(Type([lnLin]) == [N], lnLin, 0)
+lnCol = Iif(Type([lnCol]) == [N], lnCol, 0)
+lcDet = Iif(Type([lcDet]) == [C], lcDet, [])
+lcEst = Iif(Type([lcEst]) == [C], Alltrim(lcEst), [X])
+
+If (Not lcEst = [*] And (lnCol <> 0 Or lnLin <> 0))
+	Insert Into TmpImprime (Linha, Coluna, Conteudo, Style, LineSize, NHeight) ;
+  		   			Values (lnLin, lnCol, lcDet, lcEst, lcTam, lcAlt)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE imprimir
+------------------------------------------------------------
+PROCEDURE imprimir
+Local lcCli, llImp, lnCnt, ldVct, lcDoc, lnTm1, lnTm2, lnTam
+
+Zap In crDados
+Zap In TmpImprime
+
+If Not ThisForm.poDataMgr.CursorQuery([SigMvCab], [crTprMvCab], [EmpDopNums], ThisForm.EmpDopNum, [Dopes, ContaOs, ContaDs])
+	=MessageBox([Movimentação Não Encontrada!!!], 0+16, [Inconsistência Nos Dados])
+	Return 0
+EndIf
+
+lcDoc = [Parc.: ] + Alltrim(Str(crGrade.Parcs, 2))
+If ThisForm.poDataMgr.CursorQuery([SigMvNfi], [crTmpNfis], [EmpDopNums], ThisForm.EmpDopNum, [NFis])
+	lcDoc = crTmpNfis.NFis + [-] + Alltrim(Str(crGrade.Parcs, 2))
+EndIf
+
+If Not ThisForm.poDataMgr.CursorQuery([SigCdOpe], [crTmpOpe], [Dopes], crTprMvCab.Dopes, [Nfiscals])
+	=MessageBox([Operação Não Encontrada!!!], 0+16, [Inconsistência Nos Dados])
+	Return 0
+EndIf
+
+lcCli = Iif(crTmpOpe.Nfiscals = 1, crTprMvCab.ContaOs, crTprMvCab.ContaDs)
+If Not ThisForm.poDataMgr.CursorQuery([SigCdCli], [crTmpCli], [Iclis], lcCli, [Razaos, Cpfs, EndCobs, Endes, BaiCobs, Bairs, CidCobs, Cidas, EstCobs, Estas, CepCobs, Ceps])
+	=MessageBox([Conta "] + lcCli + [" Não Encontrada!!!], 0+16, [Inconsistência Nos Dados])
+	Return 0
+EndIf
+
+If Not ThisForm.poDataMgr.CursorQuery([SigOpFp], [crTmpFpag], [Fpags], crGrade.Fpags, [ImpBols, ImpNotas])
+	=MessageBox([Forma de Pagamento Não Encontrada!!!], 0+16, [Inconsistência Nos Dados])
+	Return 0
+EndIf
+
+lcQuery = [Update SigCnFBl ] + ;
+		     [Set CLocals = '] + crGrade.CLocals + [', ] + ;
+		     	 [CTxtCds = '] + crGrade.CTxtCds + [' ] + ;
+		   [Where FPags = '] + crGrade.FPags + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+	=MessageBox([A Configuração de Boleto Bancário Não Pode Ser Atualizada!!!], 0+16, ;
+				[Condição de Pagamento: ] + crGrade.FPags)
+	Return 0
+EndIf
+
+If (ThisForm.poDataMgr.Commit() < 1)
+	=MessageBox([A Configuração de Boleto Bancário Não Pode Ser Atualizada!!!], 0+16, ;
+				[Condição de Pagamento: ] + crGrade.FPags)
+	Return 0
+EndIf
+
+If Not ThisForm.poDataMgr.CursorQuery([SigCnFBl], [LocalCfgBl], [FPags], crGrade.FPags)
+	ThisForm.poDataMgr.CursorQuery([SigCnFBl], [LocalCfgBl], [FPags], Space(12))
+EndIf
+
+If Not Used('LocalCfgBl') Or Eof('LocalCfgBl')
+	=MessageBox([Configuração de Boleto Bancário Não Encontrada!!!], 0+16, ;
+				[Condição de Pagamento: ] + crGrade.FPags)
+Else
+	* Checa Se Existe a Impressora de Boletos da Configuração
+	llImp = .f.
+	Declare laPrn (1)
+	If (APrinters(laPrn) > 0)
+		For lnCnt = 1 To Alen(laPrn, 1)
+			If (Upper(Alltrim(laPrn(lnCnt, 1))) = Upper(Alltrim(LocalCfgBl.CNomeImps)))
+				llImp = .t.
+				lnCnt = (Alen(laPrn, 1) + 1)
+			EndIf
+		Next
+	EndIf
+
+	If Not llImp
+		=MessageBox([Impressora de Boleto Bancário Não Encontrada!!!], 0+16, ;
+					[Condição de Pagamento: ] + crGrade.FPags)
+	Else
+		ldVct = Iif(crTmpFpag.ImpNotas = 1, Dtoc(crGrade.Vencs), crGrade.FPags)
+		
+		Insert Into crDados (CLocals, Vencs, DatDoc, NumDoc, Valor, Razaos, Cpfs, Texto, ;
+							 EndCobs, BaiCobs, CidCobs, EstCobs, CepCobs) ; 
+				     Values (crGrade.CLocals, ldVct, crGrade.Datas, lcDoc, ;
+				     		 crGrade.Valos, crTmpCli.Razaos, crTmpCli.Cpfs, crGrade.CTxtCds, ;
+				   		     IIf(Not Empty(crTmpCli.EndCobs), crTmpCli.EndCobs, crTmpCli.Endes), ;
+				   		     Iif(Not Empty(crTmpCli.BaiCobs), crTmpCli.BaiCobs, crTmpCli.Bairs), ;
+				   		     IIf(Not Empty(crTmpCli.CidCobs), crTmpCli.CidCobs, crTmpCli.Cidas), ;
+				   		     Iif(Not Empty(crTmpCli.EstCobs), crTmpCli.EstCobs, crTmpCli.Estas), ;
+				   		     Iif(Not Empty(crTmpCli.CepCobs), crTmpCli.CepCobs, crTmpCli.Ceps))
+		With ThisForm
+			.Detalhe(LocalCfgBl.nLnLocals,  LocalCfgBl.nClLocals,  [crDados.CLocals],,60,1)  		&& Local de Pagamento
+			.Detalhe(LocalCfgBl.nLnDtVencs, LocalCfgBl.nClDtVencs, [crDados.Vencs],,9,1)  			&& Data do Vencimento
+			.Detalhe(LocalCfgBl.nLnDtDocs,  LocalCfgBl.nClDtDocs,  [Dtoc(crDados.Datdoc)],,9,1)  	&& Data do Documento
+			.Detalhe(LocalCfgBl.nLnNrDocs,  LocalCfgBl.nClNrDocs,  [crDados.NumDoc],,9,1)  			&& No. do Documento
+			.Detalhe(LocalCfgBl.nLnVlDocs,  LocalCfgBl.nClVlDocs,  [TransForm(crDados.Valor,'@Z 999,999,999.99')],,15,1)  && Valor do Documento
+			.Detalhe(LocalCfgBl.nLnRazClis, LocalCfgBl.nClRazClis, [Alltrim(crDados.Razaos)],,50,1) && Razao Social
+			.Detalhe(LocalCfgBl.nLnCgcClis, LocalCfgBl.nClCgcClis, [Alltrim(crDados.Cpfs)],,20,1)  	&& C.G.C. do cliente
+			.Detalhe(LocalCfgBl.nLnEndCobs, LocalCfgBl.nClEndCobs, [Alltrim(crDados.EndCobs)],,80,1)&& Endereco de Cobranca
+			.Detalhe(LocalCfgBl.nLnBaiCobs, LocalCfgBl.nClBaiCobs, [Alltrim(crDados.BaiCobs)],,20,1)&& Bairro de Cobranca
+			.Detalhe(LocalCfgBl.nLnCidCobs, LocalCfgBl.nClCidCobs, [Alltrim(crDados.CidCobs)],,20,1)&& Cidade de Cobranca
+			.Detalhe(LocalCfgBl.nLnEstCobs, LocalCfgBl.nClEstCobs, [Alltrim(crDados.EstCobs)],,2,1) && Estado de Cobranca
+			.Detalhe(LocalCfgBl.nLnCepCobs, LocalCfgBl.nClCepCobs, [Alltrim(crDados.CepCobs)],,9,1) && Cep de Cobranca
+			.Detalhe(LocalCfgBl.nLntxtcds,  LocalCfgBl.nCltxtcds,  [crDados.Texto],,60,6)  			&& Texto de Cobranca
+		EndWith
+		
+		lnTm1 = At('/', LocalCfgBl.CTamFolha, 1) + 1
+		lnTm2 = At('/', LocalCfgBl.CTamFolha, 2) - (At('/', LocalCfgBl.CTamFolha, 1) + 1)
+		lnTam = Val(Alltrim(Substr(LocalCfgBl.CTamFolha, lnTm1, lnTm2)))
+																					 
+		Do SigPrIbl With [TmpImprime], Alltrim(LocalCfgBl.CNomeImps), ;
+						 [To Printer NoConsole], 0, lnTam, 0, 0, [crDados], 17
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montagrades
+------------------------------------------------------------
+PROCEDURE montagrades
+With ThisForm
+	With .grdItens
+		.ColumnCount 	   = 4
+		.RecordSource 	   = [crGrade]
+		.DeleteMark 	   = .f.
+		.RecordMark 	   = .f.
+		.ReadOnly 		   = .t.
+		.Scrollbars 	   = 2
+		.AllowHeaderSizing = .f.
+		.AllowRowSizing    = .f.
+
+		.Column1.ControlSource  = [crGrade.FPags]
+		.Column2.ControlSource  = [crGrade.Parcs]
+		.Column2.InputMask 	    = [99]
+		.Column3.ControlSource  = [crGrade.Vencs]
+		.Column4.ControlSource  = [crGrade.Valos]
+		.Column4.InputMask 	    = [9999999.99]
+
+		For I=1 To .ColumnCount
+			lcCol = Alltrim(Str(I))
+			.Column&lcCol..Movable   = .f.
+			.Column&lcCol..Resizable = .f.
+			.Column&lcCol..ReadOnly  = .t.
+
+			.Column&lcCol..FontName  	  = [Courier New]
+			.Column&lcCol..Text1.FontName = [Courier New]
+		Next
+		.Refresh
+	EndWith
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE selecionadados
+------------------------------------------------------------
+PROCEDURE selecionadados
+Local lcQuery
+
+Zap In crGrade
+
+lcQuery = [Select b.FPags, b.Parcs, b.Vencs, b.Datas, b.Valos ] + ;
+		    [From SigMvCab a, SigMvPar b, SigCdOpe c, SigOpCdc d, SigOpFp e ] + ;
+		   [Where a.EmpDopNums = '] + ThisForm.EmpDopNum + [' And ] + ;
+		   		 [a.EmpDopNums = b.EmpDopNums And ] + ;
+		   		 [b.Dopes = c.Dopes And ] + ;
+		   		 [c.Dopes = d.Dopes And ] + ;
+		   		 [d.ImpBols = 1 And ] + ;
+		   		 [b.FPags = e.FPags And ] + ;
+		   		 [e.ImpBols = 1 ] + ;
+		   [Order By b.FPags, b.Parcs]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSelecao') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSelecao)')
+	Return 0
+EndIf
+Go Top In crSelecao
+
+lnTot = 0
+Select crSelecao
+Scan
+	If Not ThisForm.poDataMgr.CursorQuery('SigCnFBl', 'LocalCfgBl', 'FPags', crSelecao.FPags, 'CLocals, CTxtCds')
+		ThisForm.poDataMgr.CursorQuery('SigCnFBl', 'LocalCfgBl', 'FPags', Space(12), 'CLocals, CTxtCds')
+	EndIf
+	
+	If Used('LocalCfgBl') And Not Eof('LocalCfgBl')
+		Insert Into crGrade (FPags, Parcs, Vencs, Datas, Valos, CLocals, CTxtCds) ;
+					 Values (crSelecao.FPags, crSelecao.Parcs, ;
+					 		 Ttod(Nvl(crSelecao.Vencs, Ctot([]))), ;
+					 		 Ttod(Nvl(crSelecao.Datas, Ctot([]))), ;
+					 		 crSelecao.Valos, LocalCfgBl.CLocals, ;
+					 		 Nvl(LocalCfgBl.CTxtCds, []))
+
+		lnTot = lnTot + crSelecao.Valos
+	EndIf
+EndScan
+Go Top In crGrade
+
+ThisForm.getTotal.Value = lnTot
+ThisForm.getTotal.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pEdn, pFrm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.EmpDopNum = Padr(pEdn, 29)
+
+		.getEmps.Value  = Substr(.EmpDopNum, 01, 03)
+		.getDopes.Value = Substr(.EmpDopNum, 04, 20)
+		.getNumes.Value = Substr(.EmpDopNum, 24, 06)
+
+		.getEmps.Refresh
+		.getDopes.Refresh
+		.getNumes.Refresh
+
+		.MontaGrades
+
+		.SelecionaDados
+
+		.grdItens.Refresh
+		.grdItens.Column1.Setfocus
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor crGrade (FPags c(12), Parcs n(2), CLocals c(100), Vencs d(8), Datas d(8), Valos n(12,2), CTxtCds m(4))
+
+Create Cursor crDados (CLocals c(100), Vencs c(12), DatDoc d, NumDoc c(8), Valor n(14,2), Razaos c(50), Cpfs c(20), ;
+					   EndCobs c(80), BaiCobs c(20), CidCobs c(20), EstCobs c(2), CepCobs c(9), Texto m)
+
+Create Cursor TmpImprime (Linha n(6,2), Coluna n(6,2), Conteudo c(100), Style c(3), FontName c(64), ;
+						  FontSize i, LineSize n(6,2), NHeight n(6,2))
+Index On (Linha * 1000000000) + (Coluna * 100) Tag Ordem
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIBB.ok
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIBB.grdItens
+* Classe: grid (Base: grid)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LParameters nColIndex
+
+Select crGrade
+This.Refresh
+ThisForm.Refresh
+ThisForm.getLocals.Refresh
+ThisForm.getTxtCds.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIBB.btnImprimir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Not Eof('crGrade')
+	If MessageBox([Confirma a Impressão do Boleto Bancário da Condição de Pagamento:] + Chr(13) + Chr(13) + ;
+				  Alltrim(crGrade.FPags) + [ - Parcela: ] + Alltrim(Str(crGrade.Parcs,2)), 32+4 )==6
+		ThisForm.Imprimir 
+	EndIf
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRIBB
+RESERVED3 (ClassInfo): empdopnum
+podatamgr
+*detalhe 
+*imprimir 
+*montagrades 
+*selecionadados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

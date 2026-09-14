@@ -1,0 +1,13 @@
+﻿The file is complete and correct. Phase 6/8 is done. Here's what was added:
+
+**`ConfigurarPaginaDados()` extensions:**
+- `cnt_4c_Destino` (Top=458) ÔÇö mirrors Origem layout with `txt_4c_GrupoDs`, `txt_4c_ContaDs`, `txt_4c_NomeContaDs`
+- `cnt_4c_Responsavel` (Top=537) ÔÇö mirrors Origem layout with `txt_4c_GrVends`, `txt_4c_Vends`, `txt_4c_NomeVends`
+- `grd_4c_GradeOperacao` (Top=97, Left=266, Width=171, Height=182, Visible=.F.) ÔÇö "Ordem Produ├º├úo" column
+- `cmd_4c_Bot_Pendentes` (Top=98, Left=440, Width=40) ÔÇö positioned beside the grade
+
+**12 new event handlers** for Destino (TxtGrupoDsKeyPress/LostFocus, AbrirLookupGrupoDs, TxtContaDsKeyPress/LostFocus, AbrirLookupContaDs, TxtNomeContaDsKeyPress, AbrirLookupNomeContaDs) and Responsavel (same 8 methods for GrVends/Vends/NomeVends).
+
+**`BtnBotPendentesClick()`** ÔÇö toggles the grade; when showing, loads from `SigCdNei WHERE empdnps = ...` into `cursor_4c_Operacoes`.
+
+**Data binding extended:** `FormParaBO`, `BOParaForm` (with RClis lookups for Destino/Responsavel), `HabilitarCampos`, `LimparCampos` (also hides grade), `ValidarDados` (Destino grupo+conta now required).

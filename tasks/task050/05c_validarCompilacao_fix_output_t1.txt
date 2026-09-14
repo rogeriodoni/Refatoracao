@@ -1,0 +1,5 @@
+﻿O arquivo est├í correto. Todas as 36+ linhas com separador `:` foram expandidas em atribui├º├Áes individuais em todos os 4 m├®todos afetados (`ConfigurarCamposFiltro`, `ConfigurarPaginaDados`, `ConfigurarGridOperacoes`, `ConfigurarGridImprimir`).
+
+**Causa raiz**: VFP9 n├úo aceita o separador `:` (m├║ltiplos comandos por linha) dentro de blocos `WITH` em m├®todos de classes definidas com `DEFINE CLASS` durante compila├º├úo ÔÇö a sintaxe ├® v├ílida em c├│digo procedural mas gera "Syntax error" em contexto de classe.
+
+**Corre├º├úo aplicada**: Todos os padr├Áes como `.Top = N : .Left = N : .Width = N : .Height = N` e `.FontName = "..." : .FontSize = N` foram expandidos para uma propriedade por linha ÔÇö sintaxe universalmente v├ílida em VFP9.

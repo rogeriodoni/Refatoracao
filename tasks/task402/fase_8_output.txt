@@ -1,0 +1,9 @@
+﻿Todas as mudan├ºas est├úo corretas. Fase 8 conclu├¡da.
+
+**Resumo do que foi feito:**
+
+- **Bug corrigido em FormEmb.prg**: `FormParaBO()` e `BOParaForm()` estavam referenciando `this_nPreco`/`this_nPeso` (inexistentes no EmbBO) ÔÇö corrigido para `this_nPrecos`/`this_nPesos` (nomes reais das propriedades do BO, que espelham as colunas `precos`/`pesos` da tabela).
+
+- **menu.prg integrado**: adicionado `DEFINE BAR 82` ("Embalagens"), `ON SELECTION BAR 82 DO AbrirFormEmb`, e o procedimento `AbrirFormEmb()` no padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`).
+
+- **config.prg**: nenhuma mudan├ºa necess├íria ÔÇö `EmbBO.prg` ├® carregado automaticamente via `ADIR(*BO.prg)` e `FormEmb.prg` via `ADIR(Form*.prg)`.

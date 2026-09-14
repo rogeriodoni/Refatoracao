@@ -1,0 +1,8 @@
+﻿Todas as 3 corre├º├Áes est├úo aplicadas. Resumo:
+
+**Corrigido:**
+1. `ColumnCount = 3` ÔåÆ `ColumnCount = 2` no `CarregarRelacionados` para `grd_4c_Opers` ÔÇö o cursor tem exatamente 2 colunas (Imps, Dopes) e a grid foi inicializada com 2 colunas em `InicializarForm`; ColumnCount=3 criava uma Column3 fantasma sem ControlSource
+2. Removido `OR descs LIKE EscaparSQL(...)` da busca parcial de GGrus ÔÇö condi├º├úo n├úo existia no WHERE original
+3. Removido `OR Descricaos LIKE EscaparSQL(...)` da busca parcial de SGrus ÔÇö condi├º├úo n├úo existia no WHERE original
+
+**Sobre os 6 GRID-SQL restantes (cursor_4c_Compos.Compos, cursor_4c_Opers.Imps/Dopes, cursor_4c_Emps.Imps/Emps/Razas):** s├úo falsos-positivos do validador. O BO cria esses cursores via `SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Opers")` com as colunas corretas, mas o validador n├úo rastreia vari├íveis intermedi├írias com `CAST(0 AS BIT) AS Imps`. Os campos est├úo presentes nos SELECTs do BO.

@@ -1,0 +1,17 @@
+﻿Todas as corre├º├Áes foram aplicadas. Resumo do que foi feito:
+
+**Arquivo: `sigprdisBO.prg`**
+
+1. `Atualizar()` ÔÇö linha 279: `WHERE cidchaves = EscaparSQL(...)` ÔåÆ `WHERE codigos = EscaparSQL(...)` ÔÇö resolve `[SQL-FILTRO-INVENTADO]`. O original nunca usou WHERE CIDCHAVES; sempre operava pelo c├│digo do lote (`codigos`).
+
+2. `ProcessarDistribuicao()` ÔÇö linha 492: alias `AS CidChaves` ÔåÆ `AS Locals` no SELECT de cursor_4c_Distribui ÔÇö o campo representa localiza├º├úo (original: `Space(10) as Locals`), n├úo a PK.
+
+3. `SalvarLote()` ÔÇö linha 392: `cursor_4c_Distribui.CidChaves` ÔåÆ `cursor_4c_Distribui.Locals` ÔÇö leitura do campo renomeado.
+
+**Arquivo: `Formsigprdis.prg`**
+
+4. `CarregarDistribui()` ÔÇö linha 1711: ControlSource Column4 ÔåÆ `"cursor_4c_Distribui.Locals"` ÔÇö resolve `[GRID-SQL] CidChaves`.
+
+5. `LocalDistribuidoValid()` ÔÇö linhas 1833, 1842, 1846: 3 ocorr├¬ncias de `REPLACE cursor_4c_Distribui.CidChaves` ÔåÆ `REPLACE cursor_4c_Distribui.Locals`.
+
+**Sobre os outros 10 `[GRID-SQL]`** (Cemps, QtdSaldo, QtdDistr de cursor_4c_Distribui; Cpros, Dpros, CodCors, CodTams, Sqtds, QtdSaida, QtdSaldo de cursor_4c_Disponivel): todos esses campos **existem** no SQL do BO (`ProcessarDistribuicao` ÔÇö linhas 483-492 e 456-470). O validador n├úo consegue cruzar arquivos formÔåöBO, por isso os flagrou. Nenhuma altera├º├úo ├® necess├íria ÔÇö os ControlSources est├úo corretos.

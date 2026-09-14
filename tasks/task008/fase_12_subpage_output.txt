@@ -1,0 +1,10 @@
+﻿`this_nAntOrd` is declared at line 35 and `this_cCodigo` at line 33. Everything is properly wired.
+
+FASE 12 is complete. The `PgDadosFaseP` sub-page has been fully migrated into `FormProduto.prg` as **Page4** of `pgf_4c_DadosInterno` with:
+
+- **35 methods** covering all legacy handlers (ConfigurarPgPgDadosFaseP, BOParaFormFaseP, FormParaBOFaseP, CarregarFaseP, CarregarMatrizes, all 20 PUBLIC event handlers, and 8 PROTECTED lookup methods)
+- **Full integration**: called from ConfigurarPaginaDados (line 2332), BOParaForm (line 2012), FormParaBO (line 2144), and NavegacaoDadosChange (lines 2163-2164)
+- **Both grids** (grd_4c_GradFase with 5 columns, grd_4c_Matrizes with 4 columns) with cursor placeholders and proper BINDEVENT wiring
+- **All lookups** (SigCdGcr, SigCdUpd, SigCdAca, SigCdCor, SigCdCnq, SigCdPro for matrices) with the `par_cFiltro` pattern where needed
+- **Real-time DB writes** in all column edit handlers
+- **Image handling** (FigProcs via STRTOFILE, FigJpgs for matrices) with proper temp file cleanup

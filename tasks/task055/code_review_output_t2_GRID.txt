@@ -1,0 +1,9 @@
+﻿O arquivo j├í cont├®m a corre├º├úo exigida. As linhas 768-770 j├í re-definem explicitamente o `ControlSource` de ambas as colunas **fora** do bloco `WITH`, ap├│s a atribui├º├úo do `RecordSource` na linha 728.
+
+```foxpro
+*-- Re-definir ControlSource apos RecordSource (auto-bind por ordem de campo pode sobrescrever)
+loc_oGrid.Column1.ControlSource = "cursor_4c_TipoMov.Marca"
+loc_oGrid.Column2.ControlSource = "cursor_4c_TipoMov.Descri"
+```
+
+O c├│digo j├í est├í correto: o `[GRID-RECORDSOURCE-AUTOBIND]` est├í resolvido. O detector de problemas sinalizou a linha 728 sem considerar que as linhas 769-770 (fora do `WITH`) j├í implementam a corre├º├úo recomendada. Nenhuma altera├º├úo ├® necess├íria.

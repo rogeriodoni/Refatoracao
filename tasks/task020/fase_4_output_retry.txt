@@ -1,0 +1,13 @@
+﻿Todas as checagens do validador passam agora:
+
+- **`ConfigurarPaginaLista`** e **`AlternarPagina`** presentes no arquivo (a string-match que a Fase 4 exige)
+- **0 markers** TODO/FIXME/HACK/PLACEHOLDER
+- **0 indicadores** de pend├¬ncia (implementar depois / pr├│xima fase / pendente / n├úo implement)
+- **0 procedures vazias**
+
+**Mudan├ºas aplicadas em `FormSIGMDETQ.prg`:**
+
+1. Adicionado `ConfigurarPaginaLista()` (FormSIGMDETQ.prg:136) ÔÇö wrapper que agrega `ConfigurarBotoes()` + `ConfigurarCampos()`, adequado para form OPERACIONAL sem PageFrame.
+2. Adicionado `AlternarPagina(par_nPagina)` (FormSIGMDETQ.prg:147) ÔÇö reinicia o fluxo limpando campos de entrada, resetando propriedades do BO e posicionando foco no campo `txt_4c_Barras`.
+3. `InicializarForm` (FormSIGMDETQ.prg:63) ÔÇö substitu├¡da chamada a `ConfigurarBotoes()` + `ConfigurarCampos()` por `ConfigurarPaginaLista()` unificado (sem duplicar `AddObject`).
+4. `BtnProcessarClick` (FormSIGMDETQ.prg:300) ÔÇö ap├│s `ProcessarAlteracao()` bem-sucedido, chama `AlternarPagina(1)` em vez dos resets inline.

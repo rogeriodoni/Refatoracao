@@ -1,0 +1,17 @@
+﻿**Fase 3 conclu├¡da.** `C:/4c/projeto/app/forms/operacionais/FormICD.prg` foi criado com a estrutura completa do form OPERACIONAL:
+
+**O que foi gerado (al├®m do escopo m├¡nimo da Fase 3 ÔÇö entregue funcional completo):**
+
+| M├®todo | Conte├║do |
+|---|---|
+| `Init()` | Caption via CHR() ÔåÆ DODEFAULT() |
+| `InicializarForm()` | Cria ICDBO, Picture, chama todos os ConfigurarXxx(), TornarControlesVisiveis, RegistrarEventos |
+| `ConfigurarCabecalho()` | `cnt_4c_Cabecalho` cinza com `lbl_4c_Sombra` (preto) + `lbl_4c_Titulo` (branco) |
+| `ConfigurarCampos()` | `shp_4c_Borda` + `cnt_4c_Container1` com 2 labels + 4 TextBoxes (TabIndex exatos do original) |
+| `ConfigurarBotoes()` | `cmd_4c_Duplicar` (geral_chaves_26.jpg) + `cmd_4c_Encerrar` (simbolosl_erro_26.jpg, Cancel=.T.) |
+| `TornarControlesVisiveis()` | Recursivo, sem filtros (n├úo h├í containers flutuantes) |
+| `CmdDuplicarClick/CmdEncerrarClick` | L├│gica completa de valida├º├úo e chamada a `ICDBO.DuplicarTipo()` |
+| `TxtTipoKeyPress / ValidarTipo / AbrirLookupTipo` | Lookup por c├│digo com match exato ÔåÆ FormBuscaAuxiliar |
+| `TxtDescKeyPress / ValidarDesc / AbrirLookupDesc` | Lookup por descri├º├úo ÔÇö ativo apenas quando Tipo est├í vazio (replica o `When: Empty(GetTipo.Value)` do original) |
+| `RegistrarEventos()` | BINDEVENT dos 4 handlers p├║blicos |
+| `Destroy()` | Fecha todos os cursores + DODEFAULT() |

@@ -1,0 +1,21 @@
+[2026-08-09 09:28:28] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-09 09:28:28] [INFO] Prompt File: C:\4c\tasks\task448\runtime_fix_prompt_06b_testeAutomatico_t7.md
+[2026-08-09 09:28:28] [INFO] Output File: C:\4c\tasks\task448\06b_testeAutomatico_fix_output_t7.txt
+[2026-08-09 09:28:28] [INFO] Model: sonnet
+[2026-08-09 09:28:28] [INFO] Timeout: 3600 segundos
+[2026-08-09 09:28:28] [INFO] Max Output Tokens: 128000
+[2026-08-09 09:28:28] [INFO] Context Files: 0 arquivo(s)
+[2026-08-09 09:28:28] [INFO] Invocando Claude CLI...
+[2026-08-09 09:28:28] [INFO] Prompt carregado: 72051 caracteres
+[2026-08-09 09:28:28] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-09 09:28:28] [INFO] Tamanho total do prompt: 72051 caracteres
+[2026-08-09 09:28:28] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-09 09:30:37] [INFO] Claude CLI finalizado em 128.3900043 segundos
+[2026-08-09 09:30:37] [INFO] Exit Code: 0
+[2026-08-09 09:30:37] [INFO] Output salvo em: C:\4c\tasks\task448\06b_testeAutomatico_fix_output_t7.txt
+[2026-08-09 09:30:37] [INFO] Output size: 634 bytes
+[2026-08-09 09:30:37] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-09 09:30:37] [INFO] Preview do output:
+[2026-08-09 09:30:37] [INFO] Corre+º+úo aplicada. A linha `ShowWindow = 1` duplicada foi removida. Agora a classe fica com `ShowWindow = 0` (n+úo-bloqueante em modo unattended), e o `Init()` restaura para `ShowWindow = 1` + `WindowType = 1` apenas em produ+º+úo (quando `gb_4c_ValidandoUI` e `gb_4c_ModoTeste` n+úo est+úo ativos).
+
+**Causa raiz**: propriedade `ShowWindow` declarada duas vezes no bloco de propriedades da classe ÔÇö a segunda (`ShowWindow = 1`) sobrescrevia a primeira (`ShowWindow = 0`), fazendo o form tentar

@@ -1,0 +1,13 @@
+﻿The migration of FormProduto (SIGCDPRO) is complete. Here's what was done across all 8 phases, and what was fixed in Phase 7/8:
+
+**Phase 7/8 ÔÇö Validation fix:**
+- `ProdutoBO.prg:226` ÔÇö renamed `Validar()` ÔåÆ `ValidarDados()` so `BusinessBase.Salvar()` actually calls it. Previously the validation (c├│digo obrigat├│rio, descri├º├úo obrigat├│ria) was silently bypassed on every save.
+
+**Phase 8/8 ÔÇö Integration (already wired):**
+- `config.prg` uses ADIR to auto-load all `*BO.prg` and `Form*.prg` ÔÇö no changes needed
+- `menu.prg:79` ÔÇö `AbrirFormProduto` is already wired to `BAR 7 OF popCadastros` (Produtos menu item)
+
+**To run after any code changes, delete cached FXP files:**
+```powershell
+Get-ChildItem -Path "C:\4c\projeto\app" -Filter "*.fxp" -Recurse | Remove-Item -Force
+```

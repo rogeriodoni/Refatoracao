@@ -1,0 +1,25 @@
+[2026-08-07 23:20:54] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-07 23:20:54] [INFO] Prompt File: C:\4c\tasks\task440\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-08-07 23:20:54] [INFO] Output File: C:\4c\tasks\task440\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-07 23:20:54] [INFO] Model: sonnet
+[2026-08-07 23:20:54] [INFO] Timeout: 3600 segundos
+[2026-08-07 23:20:54] [INFO] Max Output Tokens: 128000
+[2026-08-07 23:20:54] [INFO] Context Files: 0 arquivo(s)
+[2026-08-07 23:20:54] [INFO] Invocando Claude CLI...
+[2026-08-07 23:20:54] [INFO] Prompt carregado: 107815 caracteres
+[2026-08-07 23:20:54] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-07 23:20:54] [INFO] Tamanho total do prompt: 107815 caracteres
+[2026-08-07 23:20:54] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-07 23:41:43] [INFO] Claude CLI finalizado em 1249.0019635 segundos
+[2026-08-07 23:41:43] [INFO] Exit Code: 0
+[2026-08-07 23:41:43] [INFO] Output salvo em: C:\4c\tasks\task440\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-07 23:41:43] [INFO] Output size: 724 bytes
+[2026-08-07 23:41:43] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-07 23:41:43] [INFO] Preview do output:
+[2026-08-07 23:41:43] [INFO] All three fixes are confirmed:
+
+1. `InteractiveChange` BINDEVENT removed ÔÇö only `KeyPress` remains for `txt_4c_MatPrincs` (line 828)
+2. `IF PCOUNT() = 0 / RETURN / ENDIF` added at top of `AbrirLookupMatPrincs` (line 1436)
+3. `IF THIS.Visible` guard wraps `SetFocus()` in `ValidarPrioridade` (line 1522)
+
+**Root cause of tentativa 2 timeout**: The `InteractiveChange` binding on `txt_4c_MatPrincs` fired with `PCOUNT()=0` during VFP9's internal rendering when `ActivePage` was set. The existin

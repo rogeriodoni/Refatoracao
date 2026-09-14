@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Adicionei ao `Formsigrecrp.prg`:
+
+- **BINDEVENTs** para os 4 bot├Áes do `cmg_4c_Botoes` no final de `ConfigurarPaginaDados()`
+- **`FormParaRelatorio()`** ÔÇö transfere todos os 16 filtros dos controles para as propriedades do BO (`this_nOper`, datas, grupos, contas, subgrupos, subcontas, empresa, moeda)
+- **`BtnVisualizarClick()`** ÔÇö chama `FormParaRelatorio()` + `this_oRelatorio.Visualizar()` (preview em tela)
+- **`BtnImprimirClick()`** ÔÇö chama `FormParaRelatorio()` + `this_oRelatorio.Imprimir()` (impressora com PROMPT)
+- **`BtnExcelClick()`** ÔÇö chama `FormParaRelatorio()` + `PrepararDados()` + `COPY TO ... TYPE XL5` com feedback ao usu├írio
+- **`BtnEncerrarClick()`** ÔÇö chama `THIS.Release()` (o ESC tamb├®m dispara via `Cancel=.T.` no Buttons(4))

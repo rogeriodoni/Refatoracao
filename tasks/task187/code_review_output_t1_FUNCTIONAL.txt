@@ -1,0 +1,12 @@
+﻿Todas as corre├º├Áes foram aplicadas. Resumo do que foi feito:
+
+---
+
+**[CONTAINER-VISIVEL]** ÔÇö 4 linhas removidas em 2 m├®todos:
+- `ConfigurarContainers` (linhas 359 e 373 originais): `.Visible = .T.` sobrescrevia o valor condicional correto (`.Visible = NOT THIS.this_lReserva` e `.Visible = loc_lGlobAutos2`). Removidas.
+- `ConfigurarPaginaDados` (linhas 1671 e 1687 originais): mesmo bug duplicado. Removidas.
+- `TornarControlesVisiveis`: INLIST expandido para incluir `CNT_4C_CABECALHO` e `CNT_4C_PREVISAO` ÔÇö esses containers agora gerenciam seu pr├│prio Visible nos m├®todos `Configurar*` e o iterador n├úo os deve sobrescrever.
+
+**[METODO-INEXISTENTE]** ÔÇö `THIS.Controls(loc_i)` ├® a propriedade array nativa do VFP9 para iterar controles de containers (`Container`, `Form`, `Page`). N├úo ├® m├®todo inventado. Sem altera├º├úo.
+
+**[LAYOUT-POSITION]** ÔÇö `lbl_4c_LblConta.Left` corrigido de 95 para 139 (alinhado com Left=139 dos containers cnt_4c_Conta/Operacao/TipoOp acima dele).

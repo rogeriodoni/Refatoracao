@@ -1,0 +1,30 @@
+﻿O `FormBuscaAuxiliar.Init()` na linha 71 aceita exatamente os par├ómetros `(conn, tabela, cursor, campo, valor, titulo, lBuscaExata, lMostraGrid, cFiltro)` ÔÇö os calls do Produto com `.F., .T., loc_cWhere` s├úo v├ílidos.
+
+Analisando o arquivo completo, a **Fase 6 j├í est├í implementada**. O trabalho foi realizado em sess├úo anterior (provavelmente ao final da Fase 5). Verifica├º├úo completa:
+
+**Campos adicionados em `ConfigurarPaginaLista()` (├║ltimos 50%):**
+- Ô£à Grupo de Produto (txt_4c_CdGPro / txt_4c_DsGPro)
+- Ô£à Subgrupo de Produto (txt_4c_CdSgrupo / txt_4c_DsSgrupo)
+- Ô£à Produto (txt_4c_CdCodigo / txt_4c_DsCodigo)
+- Ô£à C├│digo de Barras (txt_4c_CBars)
+- Ô£à C├│digo Reduzido (txt_4c_Reduzs ÔÇö sem lookup conforme original)
+- Ô£à 5 CheckBoxes (Dura├º├úo, Imagem, Custo, Venda, Anal├¡tico)
+
+**BINDEVENTs registrados:** Ô£à Todos os campos de c├│digo/descri├º├úo com F4=115/ENTER=13/TAB=9
+
+**M├®todos de lookup (completamente implementados, sem TODOs):**
+- Ô£à GrEstoque: AbrirBuscaCd/Ds + ValidarCd/Ds ÔåÆ tabela `SigCdGcr` (codigos/descrs)
+- Ô£à Estoque: AbrirBuscaCd/Ds + ValidarCd/Ds ÔåÆ tabela `SigCdCli` (iclis/rclis)
+- Ô£à Fornecedor: AbrirBuscaI/D + ValidarI/D ÔåÆ tabela `SigCdCli` (iclis/rclis)
+- Ô£à Empresa: AbrirBuscaCd/Ds + ValidarCd/Ds ÔåÆ tabela `sigcdemp` (cemps/razas)
+- Ô£à Grande Grupo: AbrirBuscaC/D + ValidarC/D ÔåÆ tabela `SigCdGpr` (Codigos/Descs)
+- Ô£à Grupo Produto: AbrirBuscaCd/Ds + ValidarCd/Ds ÔåÆ tabela `SigCdGrp` (CGrus/DGrus)
+- Ô£à Subgrupo: AbrirBuscaCd/Ds + ValidarCd/Ds ÔåÆ tabela `SigCdPsg` (Codigos/Descricaos)
+- Ô£à Produto: AbrirBuscaCd/Ds + ValidarCd/Ds ÔåÆ tabela `SigCdPro` (cpros/dpros) com filtro por CGrus quando preenchido
+- Ô£à ValidarCBars ÔåÆ SQLEXEC em `SigOpEtq` ÔÇö equivalente exato ao legado
+
+**Outros:**
+- Ô£à ChkCheck5Click (Check5 Anal├¡tico desmarca Check3 Dura├º├úo)
+- Ô£à Destroy() com `this_oRelatorio = .NULL.` + DODEFAULT()
+
+A Fase 6 est├í conclu├¡da ÔÇö o arquivo `Formsigrehbr.prg` (2774 linhas) tem paridade funcional 100% com o legado SIGREHBR para todos os filtros e lookups.

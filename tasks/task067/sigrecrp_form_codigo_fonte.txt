@@ -1,0 +1,1298 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrecrp.SCX
+* Data/Hora: 18/05/26 14:06:38
+* Total de registros: 28
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECRP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGRECRP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Ds_Grupo
+  Parent: SIGRECRP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say5
+  Parent: SIGRECRP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_vencimento_a
+  Parent: SIGRECRP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Conta
+  Parent: SIGRECRP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Grupo
+  Parent: SIGRECRP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGRECRP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DCONTA
+  Parent: SIGRECRP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGRECRP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_vencimento
+  Parent: SIGRECRP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECRP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dsgrupo
+  Parent: SIGRECRP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Sgrupo
+  Parent: SIGRECRP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say3
+  Parent: SIGRECRP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DsConta
+  Parent: SIGRECRP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Sconta
+  Parent: SIGRECRP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_ds_empresa
+  Parent: SIGRECRP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_empresa
+  Parent: SIGRECRP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_empresa
+  Parent: SIGRECRP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_oper
+  Parent: SIGRECRP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECRP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_moeda
+  Parent: SIGRECRP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_moeda
+  Parent: SIGRECRP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGRECRP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 6
+  Left = 51
+  Width = 779
+  Height = 510
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = (PROMPT())
+  Name = "SIGRECRP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 526
+  btnReport.Top = 3
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo : "
+  Left = 203
+  Top = 114
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.get_Ds_Grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 23
+  Left = 329
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 112
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "get_Ds_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta : "
+  Left = 203
+  Top = 140
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.lbl_vencimento_a
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 333
+  Top = 219
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbl_vencimento_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Get_Conta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  Left = 248
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 137
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "Get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Get_Grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  Left = 248
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 112
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Left = 248
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 216
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Get_DCONTA
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 23
+  Left = 329
+  ReadOnly = .F.
+  SpecialEffect = 1
+  TabIndex = 8
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 137
+  Width = 327
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "Get_DCONTA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  InputMask = ""
+  Left = 345
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 18
+  Top = 216
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.lbl_vencimento
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Vencimento : "
+  Left = 177
+  Top = 219
+  Width = 67
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "lbl_vencimento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo (C.P.) :"
+  Height = 15
+  Left = 174
+  Top = 165
+  Width = 70
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Get_Dsgrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 329
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 11
+  Top = 162
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 14
+  Name = "Get_Dsgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Get_Sgrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 248
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 162
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Name = "Get_Sgrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta (C.P.) :"
+  Left = 174
+  Top = 193
+  Width = 70
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Get_DsConta
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 329
+  MaxLength = 50
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 189
+  Width = 327
+  ForeColor = 0,0,0
+  ZOrderSet = 17
+  Name = "Get_DsConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Get_Sconta
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 248
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 13
+  ToolTipText = ""
+  Top = 189
+  Width = 79
+  ForeColor = 0,0,0
+  ZOrderSet = 18
+  Name = "Get_Sconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.get_ds_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 281
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 21
+  Top = 241
+  Width = 290
+  ForeColor = 0,0,0
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.get_cd_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 248
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 20
+  ToolTipText = ""
+  Top = 241
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa : "
+  Left = 191
+  Top = 244
+  Width = 53
+  TabIndex = 19
+  ForeColor = 90,90,90
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Opt_oper
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 27
+  Left = 243
+  SpecialEffect = 0
+  Top = 87
+  Width = 268
+  TabIndex = 2
+  Name = "Opt_oper"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Débitos Pendentes"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 108
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Créditos Pendentes"
+  Option2.Left = 136
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Opção : "
+  Left = 201
+  Top = 92
+  Width = 43
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.get_cd_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 248
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 23
+  Top = 266
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 50
+  Themes = .F.
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.lbl_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda : "
+  Height = 15
+  Left = 200
+  Top = 270
+  Width = 44
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 51
+  Name = "lbl_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECRP.get_ds_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 1
+  Format = "K!"
+  Height = 21
+  Left = 281
+  MaxLength = 15
+  SpecialEffect = 1
+  TabIndex = 24
+  Top = 266
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 52
+  Themes = .F.
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECRP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+report form SigReCrP preview NoConsole
+use in CsCabecalho
+use in resultado
+if thisform.opt_oper.value = 1
+	thisform.opt_oper.option1.setfocus
+else
+	thisform.opt_oper.option2.setfocus
+endif
+return(.t.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private ldInicial,ldFinal,lcCdEmpresa,lcDsEmpresa,lnOper,lcGrupo,lcConta, lcSgrupo, lcSconta
+Local lcValor
+lcQryEmp = [Select CEmps,Razas From SigCdEmp Where CEmps=']+_Empr+[']
+If (ThisForm.poDataMgr.SqlExecute(lcQryEmp, 'crSigCdEmp') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdEmp)')
+	Return 0
+EndIf
+
+ldInicial    = thisform.get_dt_inicial.value
+ldFinal      = thisform.get_dt_final.value
+lcCdEmpresa  = thisform.get_cd_empresa.value
+lcDsEmpresa  = thisform.get_ds_empresa.value
+lnOper 		 = thisform.opt_oper.value
+lcGrupo		 = thisform.get_grupo.value
+lcConta 	 = thisform.get_conta.value
+lcSgrupo  	 = Thisform.Get_Sgrupo.Value
+lcSconta  	 = ThisForm.Get_Sconta.Value
+lcMoe		 = ThisForm.get_Cd_moeda.Value
+lcValor		 = 0
+
+lcCbEmpresa = crSigCdEmp.razas
+lcCbTitulo  = 'Relatório de ' + iif(lnOPer = 1,'Débitos', 'Créditos' ) + ' Pendentes'
+lcCbPeriodo = ' de ' + dtoc(ldInicial) + ' à ' + dtoc(ldFinal)
+lcCbTitulo = lcCbTitulo + lcCbPeriodo
+create cursor CsCabecalho (cb_empresa c(80),cb_titulo c(80),cb_periodo c(80))
+insert into CsCabecalho (cb_empresa,cb_titulo,cb_periodo) values (lcCbEmpresa,lcCbTitulo,lcCbPeriodo)
+
+Create Cursor Resultado ( Tipo n(1), Grupo c(10), Conta c(10), Nome c(40), Empresa c(3), Data d,;
+						   Vecto d, Historico c(40), Integral n(12,2), Pendente n(12,2), Moeda c(3))
+
+
+lcQrySigCdGcr = [Select * From SigCdGcr ]+Iif(!IsEmpty(lcGrupo),[ Where Codigos=']+lcGrupo+['],[])+[ Order By Codigos ]
+If (ThisForm.poDataMgr.SqlExecute(lcQrySigCdGcr, 'crSigCdGcr') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdGcr)')
+	Return 0
+EndIf
+lcOperacao=Iif(lnOper=1,'D','C')
+Select crSigCdGcr
+Scan
+	If Used('crSigMvCcr')
+	  Select crSigMvCcr
+	  Zap
+	  USE in crSigMvCcr
+	EndIf
+****Mena 06/01/2012 - incluido filtro de grupo/conta contra partida ****
+	lcSigMvCcr = [Select a.contas, a.grupos, a.Nopers, a.Tipos, a.Emps, a.Dopes, a.Numes, a.opers, a.Datas, ]+;
+				[ a.Valors, a.ValPags, a.Moedas, a.Vencs, a.Hists, b.iclis,b.rclis ]+;
+				[ From SigMvCcr a, SigCdCli b ]+;
+	            [ Where b.iclis=a.contas ]+;
+	            Iif(!Empty(lcConta),[ and a.Contas=']+lcConta+['],[ ])+;
+	            Iif(!Empty(lccdEmpresa),[ and a.Emps=']+lccdEmpresa+[' ],[])+;
+				Iif(!Empty(lcSgrupo),[ And a.Sgrupos = ']+lcSgrupo+[' ],[ ])+;
+				Iif(!Empty(lcSConta),[ And a.SContas = ']+lcSconta+[' ],[ ])+;
+				Iif(!Empty(lcMoe),   [ And a.Moedas = ']+lcMoe+[' ],[ ])+;
+	            [ and a.Nopers <> 0 and (a.Tipos=' ' or a.Tipos='X') ]+;
+	            [ and a.Opers = ']+lcOperacao+[']+;
+	            [ and a.grupos=']+crSigCdGcr.Codigos+[']+;
+	            [ and a.Vencs BetWeen ?ldInicial And ?ldFinal ]+;
+	            [ Order By GruConMoes ]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcSigMvCcr, 'crSigMvCcr') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvCcr)')
+		Return 0
+	EndIf
+	Select crSigMvCcr
+	Scan
+		If !IsEmpty( crSigMvCcr.Dopes ) And !IsEmpty( crSigMvCcr.Numes ) And crSigMvCcr.Tipos <> 'X'
+			Loop
+		Endif
+		lcValor  = crSigMvCcr.Valors - crSigMvCcr.ValPags
+		If lcValor <> 0
+			Insert Into Resultado ( Tipo, Grupo, Conta, Nome, Empresa, Data, Vecto, Historico, Integral, Pendente, Moeda ) ;
+						Values ( 1, crSigCdGcr.Codigos, crSigMvCcr.Contas, crSigMvCcr.RClis, crSigMvCcr.Emps, ;
+								Nvl(crSigMvCcr.Datas,Ctod(Space(08))), Nvl(crSigMvCcr.Vencs,Ctod(Space(08))), ;
+								crSigMvCcr.Hists, crSigMvCcr.Valors, lcValor, crSigMvCcr.Moedas )
+		Endif
+	Endscan
+
+	
+	For  _x = 1 to 2
+		If _x = 1
+			_Grupo = 'Grupods'
+			_Conta = 'Contads'
+		Else
+			_Grupo = 'Grupoos'
+			_Conta = 'Contaos'
+		ENDIF
+		
+****Mena 06/01/2012 - se filtro de grupo/conta contra partida não seleciona nada ****
+		lcQrySigMvCab = [Select a.empdopnums, a.]+_Grupo+[, a.]+_Conta+[, a.Datas, ]+;
+					   [ b.Dopes, b.ValPends, b.parcs, b.Copers, c.iclis, c.rclis ]+;
+   					   [ From SigMvCab a, SigCdOpe b, SigCdCli c ]+;
+   					   [ Where a.]+_Grupo+[=']+crSigCdGcr.Codigos+[']+;
+	 	               Iif(!IsEmpty(lcConta),[ and a.]+_Conta+[=']+lcConta+['],[])+;
+	 	               [ and (b.Dopes=a.Dopes and b.ValPends=1 and b.parcs=1) ]+;
+                       Iif(!IsEmpty(lccdEmpresa),[ and a.Emps=']+lccdEmpresa+[' ],[])+;
+					   Iif(!Empty(lcSgrupo),[ And 0=1 ],[ ])+;
+					   Iif(!Empty(lcSConta),[ And 0=1 ],[ ])+;
+                       [ and c.iclis=a.]+_Conta+;
+		               [ Order By ]+_Grupo+[,]+_Conta
+		If (ThisForm.poDataMgr.SqlExecute(lcQrySigMvCab, 'crSigMvCab') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigMvCab)')
+			Return 0
+		EndIf
+		
+		Select crSigMvCab
+		Go Top
+		Scan
+			m.Grupos = &_Grupo
+			m.Contas = &_Conta
+
+			lcQrySigMvPar = [Select  a.empdopnums, a.VPags, a.Valos, a.FPags, a.Moefpgs, ]+;
+			              [ a.Bancos, a.Agencias, a.Contas, a.Numeros, a.Nopers, a.Vencs ]+;
+			              [ From SigMvPar a ] + ;
+			              [ Where a.Vencs BetWeen ?ldInicial And ?ldFinal ]+;
+			              [   and a.empdopnums = ']+crSigMvCab.empdopnums+['] + ;
+			              Iif(Empty(lcMoe), [], [ And a.Moefpgs = '] + lcMoe + ['])
+			              
+			If (ThisForm.poDataMgr.SqlExecute(lcQrySigMvPar, 'crSigMvPar') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigMvPar)')
+				Return 0
+			EndIf
+			Select crSigMvPar
+			  Scan
+				lcQrySigOpFps = [Select a.FPags, a.ValPends, a.Infos, a.Grupods, a.contads ]+;
+				              [ From SigOpFp a ] + ;
+				              [   Where a.FPags=']+crSigMvPar.FPags+[']
+				              
+				If (ThisForm.poDataMgr.SqlExecute(lcQrySigOpFps, 'crSigOpFps') < 1)
+					=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigOpFps)')
+					Return 0
+				EndIf
+
+				If ( crSigOpFps.Valpends <> 1 Or crSigMvPar.Nopers = 0 ) And crSigMvPar.VPags = crSigMvPar.Valos
+					Loop
+				Endif
+				If !IsEmpty( crSigOpFps.Grupods ) And !IsEmpty( crSigOpFps.Contads ) And crSigMvPar.VPags = crSigMvPar.Valos
+					Loop
+				Endif
+	              
+				If crSigOpFps.Infos = "C"
+					lcQrySigChe = [Select a.UMovs ] + ;
+					              [ From SigChe a ] + ;
+					              [ Where a.Bancos=']+crSigMvPar.Bancos+[' And ]+;
+					              [       a.Agencias=']+crSigMvPar.Agencias+[' And ]+;
+					              [       a.Contas=']+crSigMvPar.Contas+[' And ]+;
+					              [       a.ncheques=']+crSigMvPar.Numeros+[']
+					If (ThisForm.poDataMgr.SqlExecute(lcQrySigChe,'CrSigChe') < 1)
+						=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigChe)')
+						Return 0
+					EndIf
+					
+					lcQuery = [Select a.operacaos ] + ;
+					          [ From SigCdOpt a ] + ;
+					          [ Where a.Operacaos=']+crSigChe.UMovs+[' and a.Tipos='DB']
+					If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdOpt') < 1)
+						=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdOpt)')
+						Return 0
+					EndIf
+					Select crSigCdOpt
+					Go Top
+					If Eof()
+					  Loop
+					EndIf
+				Endif
+				If crSigOpFps.Valpends <> 1 And crSigMvPar.VPags <> crSigMvPar.Valos
+					m.Opers = Iif( crSigMvCab.Copers = 1, 'C', 'D' )
+				Else						
+					m.Opers = Iif( crSigMvCab.Copers = 1, 'D', 'C' )
+				Endif
+				If ( lnOper = 1 And m.Opers = 'C' ) Or ;
+					( lnOper = 2 And m.Opers = 'D' ) 
+					Loop
+				Endif
+				_Emps=Substr(crSigMvPar.empdopnums,1,3)
+				_Dopes=Substr(crSigMvPar.empdopnums,4,20)
+				_Numes=Substr(crSigMvPar.empdopnums,24,6)
+				_Hist = Alltrim( crSigMvPar.FPags ) + " " + _Emps + ;
+							Alltrim( _Dopes ) + " " + Alltrim( _Numes ) 
+				lcValor  = crSigMvPar.Valos - crSigMvPar.VPags
+				If lcValor=0
+				  Loop
+				EndIf
+				Insert Into Resultado ( Tipo, Grupo, Conta, Nome, Empresa, Data, Vecto, Historico, Integral, Pendente, Moeda ) ;
+							Values ( 1, crSigCdGcr.Codigos, crSigMvCab.&_Conta., crSigMvCab.RClis, _Emps, crSigMvCab.Datas, crSigMvPar.Vencs,;
+									_Hist, crSigMvPar.Valos, lcValor, crSigMvPar.Moefpgs )
+			Endscan
+            Select crSigMvCab
+		EndScan
+	EndFor
+Select crSigCdGcr
+Endscan
+
+Select Resultado
+Index on Str( Tipo, 1 )+ Empresa + Grupo + Conta + Dtos( Vecto ) Tag GruConVec
+Go Top
+If Eof()
+	Messagebox( "Não há " + iif(lnOPer = 1,'Débitos', 'Créditos' ) + " pendente nesta conta!", 0+48, "ATENÇÃO!!" )
+	Return
+Endif
+
+Select Moeda, Sum(Integral) as Integral, Sum(Pendente) as Pendente ;
+  From Resultado ;
+ Group By Moeda ;
+ Order By Moeda ;
+  Into Cursor Totaliza
+
+Select Totaliza
+_Tipo = 2
+Scan
+	Insert Into Resultado ( Tipo, Moeda, Pendente, Integral ) ;
+			Values ( _Tipo, Totaliza.Moeda, Totaliza.Pendente, Totaliza.Integral )
+	If _Tipo = 2
+		_Tipo = 3
+	Endif
+Endscan
+Select Resultado
+Go Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	If (.poDataMgr.pnIdconn > 0)
+		* inicialização das variáveis do formulário
+		thisform.get_dt_inicial.value = date()
+		thisform.get_dt_final.value = date()
+		thisform.opt_oper.value = 1
+		thisform.get_cd_empresa.value = ''
+		thisform.get_ds_empresa.value = ''
+		thisform.refresh
+		thisform.lacpdf = .t.
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+report form SigReCrP to printer prompt noconsole 
+use in CsCabecalho
+use in resultado
+if thisform.opt_oper.value = 1
+	thisform.opt_oper.option1.setfocus
+else
+	thisform.opt_oper.option2.setfocus
+endif
+return(.t.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+report form SigReCrP to printer noconsole 
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.get_Ds_Grupo
+* Classe: textbox (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.get_Grupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'D',This.value,ThisForm.get_Grupo,ThisForm.get_Ds_Grupo)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.Get_Conta
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = ( Empty(This.Value) Or fAcessoContas(Usuar,ThisForm.get_Grupo.value,'C',This.Value,ThisForm.get_Conta,ThisForm.get_Dconta) )
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.get_Conta.Value = ''
+	ThisForm.get_Dconta.Value = ''
+	ThisForm.get_Conta.Refresh
+	ThisForm.get_Dconta.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.Get_Grupo
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'C',This.value,ThisForm.get_Grupo,ThisForm.get_Ds_Grupo)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.Get_DCONTA
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty( Thisform.Get_Conta.Value )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+m.llRetorno = ( Empty(This.Value) Or fAcessoContas(Usuar,ThisForm.get_Grupo,'D',This.Value,ThisForm.get_Conta,ThisForm.get_Dconta))
+
+If .Not.m.llRetorno
+
+	MessageBox('Conta Inválida, Acesso Negado.',16,'')
+
+	ThisForm.get_Conta.Value = ''
+	ThisForm.get_Dconta.Value = ''
+	ThisForm.get_Conta.Refresh
+	ThisForm.get_Dconta.Refresh
+	
+EndIf
+
+Return(m.llRetorno)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.Get_Dsgrupo
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(Thisform.Get_Sgrupo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoContab(Usuar, 'D', This.Value, This.Parent.Get_Sgrupo, This.Parent.Get_DsGrupo)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.Get_Sgrupo
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoContab(Usuar, 'C', This.Value, This.Parent.Get_SGrupo, This.Parent.Get_DsGrupo)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.Get_DsConta
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Get_Sconta.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+If Empty(This.Value)
+	llRetorno = .t.
+Else	
+	llRetorno = (fAcessoContas(Usuar, ThisForm.Get_Sgrupo.Value, 'D', This.Value, ThisForm.Get_Sconta, ThisForm.Get_DsConta))
+EndIf
+
+If Not llRetorno
+	=MessageBox('Conta Inválida!!! Acesso Negado!!!', 16, '')
+	ThisForm.Get_Sconta.Value = ''
+	ThisForm.Get_DsConta.Value = ''
+	ThisForm.Get_Sconta.Refresh
+	ThisForm.Get_DsConta.Refresh
+EndIf
+
+Return(llRetorno)
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.Get_Sconta
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno
+
+If Empty(This.Value)
+	llRetorno = .t.
+Else	
+	llRetorno = (fAcessoContas(Usuar, ThisForm.Get_Sgrupo.Value, 'C', This.Value, ThisForm.Get_Sconta, ThisForm.Get_DsConta))
+EndIf
+
+If Not llRetorno
+	=MessageBox('Conta Inválida!!! Acesso Negado!!!', 16, '')
+	ThisForm.Get_Sconta.Value = ''
+	ThisForm.Get_DsConta.Value = ''
+	ThisForm.Get_Sconta.Refresh
+	ThisForm.Get_DsConta.Refresh
+EndIf
+
+Return llRetorno
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.get_ds_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return IsEmpty( thisform.get_cd_empresa.value )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar,'D',This.Value,This.Parent.get_Cd_Empresa,This.Parent.get_Ds_Empresa)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.get_cd_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+fAcessoEmpresa(Usuar,'C',This.Value,This.Parent.get_Cd_Empresa,This.Parent.get_Ds_Empresa)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.get_cd_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_cd_moeda.Value = crListaRemota.CMoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+ThisForm.get_cd_moeda.Refresh
+ThisForm.get_ds_moeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECRP.get_ds_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_cd_moeda.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMoes', '', 'Código')
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_cd_moeda.Value = crListaRemota.CMoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+ThisForm.get_cd_moeda.Refresh
+ThisForm.get_ds_moeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECRP
+RESERVED3 (ClassInfo): podatamgr
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 24
+================================================================================

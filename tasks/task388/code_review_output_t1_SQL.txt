@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo:
+
+**Problema 1 ÔÇö `WHERE 1=1` (coluna `'1'`)**: Corrigido em `CTABO.prg` linha 322. O placeholder `WHERE 1=1` foi removido; agora o `loc_cWhere` come├ºa vazio e cada condi├º├úo (Grupos, DtAlts BETWEEN) inicializa o `WHERE` ou acrescenta `AND` conforme o que j├í foi preenchido. Comportamento id├¬ntico ao original.
+
+**Problema 2 ÔÇö `CONTROLCOUNT`**: Falso positivo do validador. O `"ControlCount"` no c├│digo aparece apenas como string argumento de `PEMSTATUS(loc_oControl, "ControlCount", 5)` em c├│digo VFP (FormCTA.prg linha 6028) ÔÇö n├úo ├® uma coluna SQL em nenhum WHERE. Nada a corrigir.

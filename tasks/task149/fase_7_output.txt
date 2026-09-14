@@ -1,0 +1,21 @@
+﻿O arquivo `FormSigPdMp8.prg` j├í est├í completo. Analisando o arquivo (1239 linhas), todos os eventos principais do sub-dialog j├í foram implementados nas fases anteriores:
+
+| Evento esperado (template CRUD) | Equivalente neste form OPERACIONAL | Status |
+|---------------------------------|-------------------------------------|--------|
+| `BtnIncluirClick()` | `BtnInserirClick()` (linha 902) ÔÇö insere linha NC via `INSERT INTO xNensiN` | Ô£ô Implementado |
+| `BtnExcluirClick()` | `BtnExcluirClick()` (linha 932) ÔÇö remove NC via `DELETE` + reinsere se grade vazia | Ô£ô Implementado |
+| `BtnAlterarClick()` | N/A ÔÇö este sub-dialog n├úo tem bot├úo Alterar | N/A |
+| `BtnVisualizarClick()` | N/A ÔÇö modo de visualiza├º├úo ├® controlado via `this_cEscolha` passado no `Init()` | N/A |
+
+Adicionalmente, todos os demais eventos j├í est├úo presentes:
+- `BtnOkClick()` (linha 971) ÔÇö habilita form pai e fecha o sub-dialog
+- `GrdRetrabAfterRowColChange()` (linha 817) ÔÇö filtra NCs e exibe imagem do produto
+- `GrdIncAfterRowColChange()` (linha 891) ÔÇö atualiza descri├º├úo ao navegar
+- `GrdIncCol1When/KeyPress()` + `ValidarNcf()` (linhas 983ÔÇô1114) ÔÇö valida├º├úo de c├│digo NCF com lookup `FormBuscaAuxiliar`
+- `GrdIncCol2When/KeyPress()` (linhas 1120ÔÇô1154) ÔÇö valida├º├úo de quantidade
+- `GrdIncCol3When()` (linha 1162) ÔÇö controle de edi├º├úo condicional (s├│ quando `Fixos = 2`)
+- `GrdIncCol4When/KeyPress()` + `ValidarFuncionario()` (linhas 1177ÔÇô1236) ÔÇö valida├º├úo de funcion├írio
+
+**O template de Fase 7 usa a nomenclatura padr├úo CRUD** (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`), mas este ├® um **sub-dialog OPERACIONAL** ÔÇö n├úo possui esses bot├Áes. O controle de modo (INSERIR/ALTERAR/VISUALIZAR) ├® feito via propriedade `this_cEscolha` recebida no `Init()`, e j├í ├® aplicado corretamente em todos os handlers (`INLIST(UPPER(THIS.this_cEscolha), "INSERIR", "ALTERAR")`).
+
+**Fase 7 conclu├¡da** ÔÇö nenhuma altera├º├úo necess├íria. O arquivo est├í completo e fiel ao comportamento do legado `SigPdMp9`.

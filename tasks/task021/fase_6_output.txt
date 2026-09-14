@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. A Fase 6 foi conclu├¡da com sucesso. As altera├º├Áes adicionadas ao `FormSigAcCcr.prg`:
+
+1. **6 BINDEVENTs de KeyPress** em `ConfigurarPaginaDados()` ÔÇö um para cada campo com lookup (Grupo, Usuario, GrConta, DGrConta, CdConta, DCONTA)
+
+2. **6 handlers `txt_4c_Xxx_KeyPress`** ÔÇö cada um verifica `par_nKeyCode = 115` (F4) e chama o `AbrirLookupXxx()` correspondente
+
+3. **6 m├®todos `AbrirLookupXxx()` completos e funcionais:**
+   - `AbrirLookupGrupoAcesso` ÔåÆ SigCdGrA, campo Grupos
+   - `AbrirLookupUsuario` ÔåÆ SigCdUsu, campos Usuarios+CCargs
+   - `AbrirLookupGrConta` ÔåÆ SigCdGcr, campos CODIGOS+DESCRS; ao selecionar, preenche DGrConta e limpa CdConta/DCONTA
+   - `AbrirLookupDGrConta` ÔåÆ SigCdGcr, campos DESCRS+CODIGOS (campo habilitado apenas quando GrConta vazio)
+   - `AbrirLookupCdConta` ÔåÆ SigCdCli filtrado por Grupos, campos IClis+RClis
+   - `AbrirLookupDConta` ÔåÆ SigCdCli filtrado por Grupos, campos RClis+IClis (habilitado apenas quando CdConta vazio)
+
+4. **Destroy atualizado** para fechar `cursor_4c_BuscaCli` e `cursor_4c_BuscaCliN`

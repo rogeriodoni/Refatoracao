@@ -1,0 +1,267 @@
+﻿{
+    "taskId":  "task090",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-06-04T19:32:30",
+    "atualizadoEm":  "2026-06-04T21:19:47",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-06-04T19:32:30",
+                                            "fim":  "2026-06-04T19:32:30",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task090\\SigReEsp.sct",
+                                            "baseName":  "SigReEsp",
+                                            "scxFile":  "C:\\4c\\tasks\\task090\\SigReEsp.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-06-04T19:32:30",
+                                          "fim":  "2026-06-04T19:32:31",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigReEsp",
+                                          "txtFile":  "C:\\4c\\tasks\\task090\\SigReEsp_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-04T19:32:31",
+                                              "fim":  "2026-06-04T19:32:31",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task090\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-04T19:32:32",
+                                              "fim":  "2026-06-04T19:32:32",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "REPORT",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task090\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task090\\meta_prompt.md",
+                                              "boClass":  "SigReEspBO",
+                                              "formClass":  "FormSigReEsp",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task090\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-04T19:32:32",
+                                              "fim":  "2026-06-04T19:32:33",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task090\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-06-04T19:32:33",
+                                               "fim":  "2026-06-04T19:32:33",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task090\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormSigReEsp_esqueleto.prg",
+                                                                "SigReEspBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-06-04T19:32:33",
+                                       "fim":  "2026-06-04T20:47:00",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\SigReEspBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  80.28,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReEsp.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  2576
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-06-04T20:47:00",
+                                                  "fim":  "2026-06-04T20:47:11",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReEsp.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\SigReEspBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-06-04T20:47:11",
+                                                 "fim":  "2026-06-04T20:48:34",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-06-04T21:19:31",
+                                       "fim":  "2026-06-04T21:19:39",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-06-04T21:19:39",
+                                               "fim":  "2026-06-04T21:19:45",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task090\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-06-04T21:19:45",
+                                        "fim":  "2026-06-04T21:19:46",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormSigReEsp_20260604211946.html",
+                                        "diferencas":  0,
+                                        "erros":  4,
+                                        "totalProblemas":  436,
+                                        "avisos":  432
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-06-04T21:19:46",
+                                              "fim":  "2026-06-04T21:19:46",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task090_SigReEsp.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-06-04T19:32:31",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-06-04T19:32:32",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task090\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-06-04T19:32:32",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-06-04T19:32:32"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-06-04T20:47:11",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-06-04T20:47:11",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormSigReEsp_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReEsp.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task090\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-06-04T20:48:34",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-06-04T20:50:06",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-06-04T20:50:06",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-06-04T21:11:54",
+                                          "passes":  5,
+                                          "problemas":  "[OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u00272\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: DOPES, EMPDOPNUMS, CONTAOS, SERVICOS, NOPS, UTILIZADOS, CPROS, CITENS, CODCORS, CODTAMS, QTDOPS, EMPS, NUMES, LNCITEM, QTRESERVAS, CONTADS, CODIGOS, TIPOS, VALUE, EMPDOPNOPS, EMPSUBNS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CEMPS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: DOPES, EMPDOPNUMS, CONTAOS, SERVICOS, NOPS, UTILIZADOS, CPROS, CITENS, CODCORS, CODTAMS, QTDOPS, EMPS, NUMES, LNCITEM, QTRESERVAS, CONTADS, CODIGOS, TIPOS, VALUE, EMPDOPNOPS, EMPSUBNS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027EMPDOPNUMB\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: DOPES, EMPDOPNUMS, CONTAOS, SERVICOS, NOPS, UTILIZADOS, CPROS, CITENS, CODCORS, CODTAMS, QTDOPS, EMPS, NUMES, LNCITEM, QTRESERVAS, CONTADS, CODIGOS, TIPOS, VALUE, EMPDOPNOPS, EMPSUBNS; [METODO-INEXISTENTE] Metodo \u0027THIS.Width()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027optAnaSin\u0027 (parent: SIGREESP): Top original=347 vs migrado \u0027obj_4c_OptAnaSin\u0027 Top=5 (diff=342px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optAnaSin\u0027 (parent: SIGREESP): Left original=89 vs migrado \u0027obj_4c_OptAnaSin\u0027 Left=5 (diff=84px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_dopes\u0027 (parent: SIGREESP): Top original=124 vs migrado \u0027lbl_4c_Lbl_dopes\u0027 Top=44 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGREESP): Top original=232 vs migrado \u0027lbl_4c_Say3\u0027 Top=152 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGREESP): Top original=232 vs migrado \u0027lbl_4c_Say2\u0027 Top=152 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGREESP): Top original=325 vs migrado \u0027lbl_4c_Say5\u0027 Top=245 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_estoque\u0027 (parent: SIGREESP): Top original=178 vs migrado \u0027lbl_4c_Lbl_estoque\u0027 Top=98 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_periodo\u0027 (parent: SIGREESP): Top original=97 vs migrado \u0027lbl_4c_Lbl_periodo_a\u0027 Top=17 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_periodo\u0027 (parent: SIGREESP): Left original=47 vs migrado \u0027lbl_4c_Lbl_periodo_a\u0027 Left=188 (diff=141px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGREESP): Top original=259 vs migrado \u0027lbl_4c_Say1\u0027 Top=179 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_periodo_a\u0027 (parent: SIGREESP): Top original=97 vs migrado \u0027lbl_4c_Lbl_periodo_a\u0027 Top=17 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027estado\u0027 (parent: SIGREESP): Top original=227 vs migrado \u0027txt_4c_Estado\u0027 Top=147 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Cidade\u0027 (parent: SIGREESP): Top original=227 vs migrado \u0027txt_4c_Cidade\u0027 Top=147 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGREESP): Top original=352 vs migrado \u0027lbl_4c_Say7\u0027 Top=272 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027chkTpope\u0027 (parent: SIGREESP): Top original=369 vs migrado \u0027chk_4c_ChkTpope\u0027 Top=289 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027chkItens\u0027 (parent: SIGREESP): Top original=304 vs migrado \u0027chk_4c_ChkItens\u0027 Top=224 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027chkIndus\u0027 (parent: SIGREESP): Top original=387 vs migrado \u0027chk_4c_ChkIndus\u0027 Top=307 (diff=80px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027chkSemVals\u0027 (parent: SIGREESP): Top original=369 vs migrado \u0027chk_4c_ChkSemVals\u0027 Top=289 (diff=80px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  23
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-06-04T21:11:54",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-06-04T21:19:31",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\SigReEspBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\relatorios\\FormSigReEsp.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-06-04T21:19:45",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-06-04T21:19:45",
+                                             "thresholdPx":  5,
+                                             "unmatched":  14,
+                                             "errors":  15,
+                                             "matched":  24,
+                                             "warnings":  27,
+                                             "reportFile":  "C:\\4c\\tasks\\task090\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

@@ -1,0 +1,28 @@
+﻿Ap├│s an├ílise completa dos dois arquivos, ambos os alertas s├úo **falsos positivos** do scanner autom├ítico. Nenhuma corre├º├úo ├® necess├íria.
+
+---
+
+**Alerta 1 ÔÇö `PKCHAVES` em WHERE**
+
+As ocorr├¬ncias est├úo em `SigPrCarBO.prg`:
+- Linha 213: `WHERE pkchaves = ...` (m├®todo `Atualizar`)
+- Linha 245: `WHERE pkchaves = ...` (m├®todo `ExecutarExclusao`)
+
+Isso ├® **correto e necess├írio**. O c├│digo legado usava opera├º├Áes posicionais em cursores VFP (`Delete In crSigPrCar` deleta o registro atual da posi├º├úo do cursor). Na migra├º├úo para SQL Server, n├úo existe "registro atual" ÔÇö ├® obrigat├│rio ter um WHERE expl├¡cito para identificar qual registro alterar/excluir. A PK `pkchaves` ├® exatamente o identificador correto para isso. Usar `codigos` ou `cpros` aqui seria errado (n├úo identificam unicamente o registro).
+
+---
+
+**Alerta 2 ÔÇö `CONTROLCOUNT` em WHERE**
+
+N├úo existe nenhuma cl├íusula WHERE com `CONTROLCOUNT` em nenhum dos dois arquivos. O scanner detectou a propriedade VFP `.ControlCount` (n├║mero de controles em um container) nas linhas 218 e 233 do form:
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount          && linha 218
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ...  && linha 233
+```
+
+Isso ├® c├│digo VFP de itera├º├úo sobre controles visuais ÔÇö sem nenhuma rela├º├úo com SQL.
+
+---
+
+**Resultado:** Nenhum arquivo precisa ser alterado. Os dois SQLs s├úo corretos como est├úo.

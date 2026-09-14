@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto ÔÇö 3433 linhas, termina com `ENDDEFINE`. As altera├º├Áes da Fase 6 est├úo conclu├¡das:
+
+**O que foi feito:**
+1. **BINDEVENTs corrigidos** ÔÇö todos os 7 `LostFocus` foram substitu├¡dos por `KeyPress` (com `DblClick` adicional para F4-lookups). Isso elimina o risco de recurs├úo quando um dialog de lookup toma o foco.
+
+2. **7 handlers KeyPress adicionados** (linhas 1153ÔÇô1204):
+   - `TxtCdEmpresaKeyPress`, `TxtDsEmpresaKeyPress`
+   - `TxtCdContaKeyPress`, `TxtDsContaKeyPress`
+   - `TxtCdEmpConvKeyPress`, `TxtDsEmpConvKeyPress`
+   - `TxtDatafKeyPress`
+   - Cada handler: F4=115 abre lookup, ENTER=13/TAB=9 valida
+
+3. **3 m├®todos AbrirLookupXxx() completos** (linhas 1208ÔÇô1317):
+   - `AbrirLookupEmpresa()` ÔåÆ `SigCdEmp` (Cemps, RazSocs, Cgcs)
+   - `AbrirLookupConta()` ÔåÆ `SigCdCeb` (GruContas, bancos, NAgencias)
+   - `AbrirLookupEmpConv()` ÔåÆ `SigCdEmp` (Cemps, RazSocs, Cgcs)
+   - Todos com padr├úo completo: `CREATEOBJECT("FormBuscaAuxiliar")`, `mAddColuna`, `Show()`, verifica├º├úo `this_lSelecionou`, preenchimento dos campos, `USE IN cursor`, `Release()`

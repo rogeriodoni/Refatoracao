@@ -1,0 +1,7 @@
+﻿Todos os pontos est├úo corretos. Fase 4 entregue.
+
+**O que foi feito:** Para este formul├írio REPORT (n├úo CRUD), `ConfigurarPaginaLista()` e `AlternarPagina()` j├í existiam desde a Fase 3. O equivalente funcional da Fase 4 para um formul├írio de relat├│rio foi implementar a l├│gica do `When` event original do campo `get_dt_cotacao`:
+
+- `txt_4c__dt_cotacao` inicializa com `ReadOnly = .T.` e fundo cinza quando moeda est├í vazia
+- Novo m├®todo `AtualizarEstadoDtCotacao()` (linha 1897) habilita/desabilita o campo conforme a moeda
+- Chamado em `LimparCampos`, `ValidarCdMoeda` e `AbrirBuscaMoeda` sempre que o estado da moeda muda

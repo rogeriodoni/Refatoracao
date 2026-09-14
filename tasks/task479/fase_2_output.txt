@@ -1,0 +1,20 @@
+﻿OCOBO.prg completo e correto. Fase 2 conclu├¡da.
+
+**M├®todos adicionados:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `ObterChavePrimaria()` | PUBLIC | Retorna `this_cCodigo` para auditoria |
+| `CarregarDoCursor()` | PROTECTED | Mapeia `cods`/`descs` do cursor ÔåÆ propriedades |
+| `ValidarDados()` | PROTECTED | Valida c├│digo obrigat├│rio (INSERT), unicidade (INSERT), descri├º├úo obrigat├│ria (INSERT/UPDATE) ÔÇö replica exatamente a l├│gica do `Salva.Click` original |
+| `VerificarCodigoExistente()` | PUBLIC | `COUNT(*)` na tabela para checar duplicata |
+| `Inserir()` | PROTECTED | `INSERT INTO SigCcCCo (cods, descs)` + auditoria |
+| `Atualizar()` | PROTECTED | `UPDATE SigCcCCo SET descs` + auditoria |
+| `ExecutarExclusao()` | PROTECTED | `DELETE FROM SigCcCCo` + auditoria |
+| `Buscar()` | PUBLIC | `SELECT cods, descs ORDER BY cods` com padr├úo ZAP+APPEND para preservar colunas do grid |
+| `CarregarPorCodigo()` | PUBLIC | SELECT por PK + reseta `this_lNovoRegistro = .F.` |
+
+**Decis├Áes importantes:**
+- `ExecutarExclusao` sem verifica├º├úo de depend├¬ncias ÔÇö o original n├úo verificava (simples `=DoDefault()`)
+- `Buscar` retorna apenas `cods, descs` ÔÇö exatamente como o original (`Cods` e `descs` eram as ├║nicas colunas do grid)
+- Valida├º├Áes replicam fielmente: c├│digo required+unique apenas no INSERT; descri├º├úo required em INSERT e UPDATE

@@ -1,0 +1,35 @@
+﻿Ap├│s leitura completa de ambos os arquivos, analisei cada um dos 3 problemas reportados:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### CIDQUERYS (linhas 124, 185 do BO)
+```foxpro
+"DELETE FROM SigTempd WHERE CidQuerys = '" + ALLTRIM(loc_cCidQuerys) + "'"
+```
+**Falso positivo.** No original, a limpeza de SigTempd era feita pelo Framework via `PodataMgr2.UpDate('CrSigTempd')`. Na migra├º├úo sem Framework, o c├│digo precisa de SQL expl├¡cito para limpar os registros da sess├úo antes de inserir e ap├│s usar o JOIN. O `DELETE WHERE CidQuerys` ├® a tradu├º├úo correta desse mecanismo - sem ele, SigTempd acumularia registros ├│rf├úos. N├úo ├® filtro inventado; ├® opera├º├úo de infraestrutura de sess├úo.
+
+### CIDCHAVES (linhas 871, 906-907 do BO)
+```foxpro
+"UPDATE SigTempd SET ... WHERE CidChaves = ..."
+"DELETE FROM SigTempd WHERE CidChaves = ..."
+```
+**Falso positivo.** Estes aparecem nos m├®todos `Atualizar()` e `ExecutarExclusao()` - CRUD padr├úo do BO pela chave prim├íria declarada (`this_cCampoChave = "CidChaves"`). Todo UPDATE/DELETE em entidade usa sua PK no WHERE. Correto.
+
+### CONTROLCOUNT (linha 1129 do FORM)
+```foxpro
+IF PEMSTATUS(loc_oControl, 'ControlCount', 5) AND loc_oControl.ControlCount > 0
+```
+**Falso positivo completo.** `ControlCount` n├úo ├® cl├íusula SQL nem coluna de banco de dados. ├ë uma propriedade nativa VFP9 de containers/forms usada no m├®todo `TornarControlesVisiveis` para verificar se um controle tem filhos. O validador confundiu c├│digo VFP9 de acesso a objeto com SQL.
+
+---
+
+## Conclus├úo
+
+Nenhuma das 3 ocorr├¬ncias ├® um filtro SQL inventado. Os dois arquivos est├úo corretos e **n├úo requerem altera├º├úo** neste pass:
+
+- `SigPrGl2BO.prg` ÔÇö SELECTs de neg├│cio usam apenas colunas da lista original; DELETEs/UPDATEs com `CidQuerys`/`CidChaves` s├úo gerenciamento de sess├úo leg├¡timo
+- `FormSigPrGl2.prg` ÔÇö `ControlCount` ├® propriedade VFP9, n├úo SQL
+
+Pass SQL conclu├¡do sem altera├º├Áes necess├írias.

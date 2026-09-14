@@ -1,0 +1,284 @@
+{
+  "resumo": {
+    "totalMetodos": 16,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 9,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fDtoSQL", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREVIS",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReVis To Printer NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "SELECT crResu \nLOCATE\nDODEFAULT()\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReVis To Printer Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS",
+      "evento": "Init",
+      "linhas": 59,
+      "codigoOriginal": "Lparameters pSNT,lcNomeFrm1\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\t\n\tlcQryPar = [Select GrPadVens From SigCdPam]\t\n\n\tIf (.poDataMgr.SqlExecute(lcQryPar, 'crSigCdPam') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMccr)')\n\t\tReturn 0\n\tEndIf\n\n\tpGru = Alltrim(crSigCdPam.GrPadVens)\n\tthisform.antgru = pGru\n\n\t** Verifica se existe conta cadastrada para esse usuario **************************\t\n\tIf !fChecaAcesso('SIGCDVIS','ALTCONTA'... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Value = Alltrim,Value   = Space",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREVIS",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS",
+      "evento": "Procedure",
+      "linhas": 55,
+      "codigoOriginal": "Private pDtI, pDtF\n\npGru = thisform.antgru \n\nThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')\nm.lcEmpresa = _Empr + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)\nm.ldDatai   = ThisForm.getDatai.Value\nm.ldDataf   = ThisForm.getDataf.Value\nm.lcCconta  = ThisForm.getCdConta.Value\nm.lcDconta  = ThisForm.getDsConta.Value\nm.lcCrepr  = ThisForm.getCdRepr.Value\nm.lcDrepr  = ThisForm.getDsRepr.Value\nm.lcVenda = ThisForm.opt_Venda.Value\nm.lcPedido = ThisForm.opt_Pedido.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,Value), Ctod,Value), Space,Value),   Space,SqlExecute",
+        "controlesReferenciados": "opt_Venda,opt_Pedido",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Report Form SigReVis Preview NoConsole",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "If (This.Value <> 3)\n\tIf (ThisForm.getDatai.Value > ThisForm.getDataf.Value)\n\t\t=Messagebox('Data Final Menor Que a Inicial!!!', 16, '')\n\t\tThisForm.getDataf.SetFocus\n\t\tReturn 0\n\tEndIf\nEndIf\n\nIf Used('cMovto1')\n\tUse In cMovto1\nEndIf\n\nIf Used('cMovto2')\n\tUse In cMovto2\nEndIf\n\nIf Used('cMovto3')\n\tUse In cMovto3\nEndIf\n\nIf Used('cMovto4')\n\tUse In cMovto4\nEndIf\n\nfrmrelatorio::btnReport.Click\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS.getDatai",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.getDataf.Value = Iif(This.Value>ThisForm.getDataf.Value, This.Value, ThisForm.getDataf.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS.getCdRepr",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local loLista\n\nlcGru = thisform.antgru\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'iclis', This.Value, 'Seleção de Representante', .T.,'','Grupos = ?lcGru')\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('iclis', '', 'Código')\n\t\tloLista.mAddColuna('rclis', '', 'Nome')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Iclis\n\tThisForm.getDsRepr.Value = crListaRemota.rclis\n\n\tUse In crListaRemota\nEl... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS.getDsRepr",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local loLista\n\nlcGru = thisform.antgru\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'rclis', This.Value, 'Seleção de Representante', .T.,'','Grupos = ?lcGru')\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('rclis', '', 'Nome')\n\t\tloLista.mAddColuna('iclis', '', 'Código')\t\t\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.rclis\n\tThisForm.getCdRepr.Value = crListaRemota.iclis\n\n\tUse In crListaRemota\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS.getDsRepr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.getCdRepr.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS.getDsConta",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'rclis', This.Value, 'Seleção de Contas', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('rclis', '', 'Nome')\n\t\tloLista.mAddColuna('iclis', '', 'Código')\t\t\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.rclis\n\tThisForm.getCdConta.Value = crListaRemota.iclis\n\t\n\tUse In crListaRemota\nElse\n\tThis.Value = []\n\tThisForm.getCdConta.Value =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS.getDsConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(Thisform.getCdConta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREVIS.getCdConta",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'iclis', This.Value, 'Seleção de Contas', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('iclis', '', 'Código')\n\t\tloLista.mAddColuna('rclis', '', 'Nome')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Iclis\n\tThisForm.getDsConta.Value = crListaRemota.rclis\n\n\tUse In crListaRemota\nElse\n\tThis.Value = []\n\tThisForm.getDsConta.Value = []... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREVIS.Init",
+      "queryOriginal": "\tlcQryPar = [Select GrPadVens From SigCdPam]\t",
+      "tabelas": "SigCdPam",
+      "colunas": "GrPadVens",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPam"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

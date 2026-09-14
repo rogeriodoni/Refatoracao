@@ -1,0 +1,12 @@
+﻿**Fase 3/8 conclu├¡da.** Arquivo `Formsigrecrf.prg` criado em `C:\4c\projeto\app\forms\relatorios\`.
+
+Estrutura gerada:
+- `DEFINE CLASS Formsigrecrf AS FormBase` ÔÇö Width=800, Height=330, WindowType=1, TitleBar=0
+- `Init()` ÔåÆ `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö instancia `sigrecrfBO`, valida GrPadVens (skip em modo UI), chama ConfigurarCabecalho/ConfigurarBotoes/ConfigurarPageFrame
+- `ConfigurarCabecalho()` ÔÇö cnt_4c_Cabecalho (RGB 100,100,100) com lbl_4c_Sombra/lbl_4c_Titulo
+- `ConfigurarBotoes()` ÔÇö cmg_4c_Botoes Left=529 Width=273 com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar), Cancel=.T. no Buttons(4)
+- `ConfigurarPageFrame()` ÔÇö pgf_4c_Paginas Top=85, 1 p├ígina "Filtros" com Picture=fundo_cad_1003.jpg
+- `Destroy()` ÔÇö nullifica `this_oRelatorio` e chama `DODEFAULT()`
+
+Pr├│xima fase (4/8): adicionar os campos de filtro em `ConfigurarPaginaLista()` ÔÇö Data, C├│digo, Vendedor (c├│digo+descri├º├úo), Grupo Estoque, Conta Estoque, Produto e OptionGroup.

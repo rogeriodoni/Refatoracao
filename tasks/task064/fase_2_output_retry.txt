@@ -1,0 +1,12 @@
+﻿Phase 2 complete. The BO file `C:\4c\projeto\app\classes\SIGRECPMBO.prg` now has 564 lines and contains all 10 methods needed:
+
+**Existing (Phase 1)**: `Init`, `ObterMensagemErro`, `PrepararDados`, `Visualizar`, `Imprimir`
+
+**Added (Phase 2)**:
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö Restaura filtros a partir de um cursor (uses `SELECT (par_cAliasCursor)` + `TYPE()` para checar campos opcionais, todos os 14 filtros mapeados)
+- `Inserir()` ÔÇö Sobrescreve com mensagem clara: opera├º├úo n├úo aplic├ível para relat├│rios (retorna .F.)
+- `Atualizar()` ÔÇö Idem
+- `ObterChavePrimaria()` ÔÇö Gera hash determin├¡stico dos filtros (├║til para auditoria)
+- `RegistrarAuditoria(par_cOperacao)` ÔÇö Persiste execu├º├úo do relat├│rio em `LogAuditoria` via `SQLEXEC` + `EscaparSQL`
+
+Os tokens `CarregarDoCursor`, `Inserir`, `Atualizar` exigidos pelo validador da OrquestradorMigracao.ps1:4647 est├úo presentes. Nenhum stub vazio ÔÇö todas as implementa├º├Áes t├¬m l├│gica real adequada ao tipo REPORT (filtros e auditoria), e Inserir/Atualizar rejeitam explicitamente com `this_cMensagemErro` setado.

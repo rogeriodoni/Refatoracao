@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. As se├º├Áes cr├¡ticas est├úo implementadas conforme as regras:
+
+- **CheckBox no Grid**: `AddObject("Check1")` ÔåÆ configurar propriedades ÔåÆ `CurrentControl = "Check1"` ÔåÆ `RecordSource` ÔåÆ `ControlSource` ÔåÆ `Header1.Caption` (ordem exata)
+- **Handlers BINDEVENT**: todos PUBLIC (`BtnVisualizarClick`, `CmgGradeEClick`, `TeclaEmpresa`, etc.)
+- **CommandGroup**: sem `FontName` no grupo, apenas nos `Buttons(N)`
+- **Sem literais acentuados**: todos usando `CHR()`
+
+**Fase 4 conclu├¡da.** O arquivo `Formsigreimp.prg` (1307 linhas, 37 m├®todos) agora cont├®m:
+
+- `ConfigurarPaginaFiltros()` orquestrando 8 sub-m├®todos que populam Page1 com todos os controles
+- Filtros: per├¡odo (DtInicial/DtFinal + chkSubTotDat), empresa (c├│digo+descri├º├úo), conta (c├│digo+descri├º├úo), OptionGroup Detalhado/Resumido
+- Duas grades (`grd_4c_OperacoesE` / `grd_4c_OperacoesS`) com CheckBox na Column1
+- CommandGroups `cmg_4c_BtnGradeE` / `cmg_4c_BtnGradeS` (Marcar/Desmarcar Todos)
+- `VincularEventos()` com 10 BINDEVENTs (bot├Áes, campos, OptionGroup)
+- `FormParaRelatorio()`, `LimparCampos()`, `InicializarEmpresa()`, `AlternarPagina()`
+- Handlers completos para todos os eventos com lookups F4/ENTER e valida├º├úo de codes

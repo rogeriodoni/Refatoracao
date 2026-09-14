@@ -1,0 +1,35 @@
+﻿Verifica├º├úo completa contra o c├│digo fonte original (`SigReEsp_form_codigo_fonte.txt`). Os tr├¬s problemas reportados s├úo **falsos positivos** ÔÇö o c├│digo migrado est├í correto:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### [SQL-FILTRO-INVENTADO] Coluna `'2'`
+**Falso positivo.** O validador confundiu o VALOR `'2'` com um nome de coluna. A condi├º├úo `Tipos = '2'` aparece literalmente no original em 3 lugares:
+- Linha 1863: `WHERE Emps + Dopes + STR(Numes,6) = lcEdn AND Tipos = '2'`
+- Linha 1935: `FROM csRelatorio WHERE tipos = '2' INTO CURSOR csTotal2`
+- Linha 1957: `DELETE FROM csRelatorio WHERE Tipos = '2'`
+
+O migrado (linhas 679, 775, 802 do BO) reproduz corretamente essas condi├º├Áes.
+
+---
+
+### [SQL-FILTRO-INVENTADO] Coluna `CEMPS`
+**Falso positivo.** `Cemps` ├® a chave prim├íria da tabela `SigCdEmp` (c├│digo da empresa). O original usa exatamente isso na linha 1452:
+```
+CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+```
+O migrado (linha 208 do BO) traduz corretamente para `WHERE Cemps = ` + EscaparSQL(go_4c_Sistema.cCodEmpresa), substituindo `_EMPR` pela vari├ível nova.
+
+---
+
+### [SQL-FILTRO-INVENTADO] Coluna `EMPDOPNUMB`
+**Falso positivo.** `EmpDopNumB` ├® a coluna real da tabela `SigBxEst`. O original na linha 1614 usa:
+```
+CursorQuery('SigBxEst', 'crSigBxEst', 'EmpDopNumB', lcEdn, 'Datas')
+```
+O migrado (linha 398 do BO) traduz corretamente para `WHERE EmpDopNumB = `. Note que `EmpDopNumB` (com **B** de Baixa) ├® diferente de `EmpDopNums` (de outros joins) ÔÇö s├úo colunas distintas em tabelas diferentes.
+
+---
+
+**Nenhuma corre├º├úo necess├íria.** O c├│digo migrado reflete fielmente o original nos tr├¬s casos. O validador gerou falsos alarmes ao: (1) confundir literal com nome de coluna, e (2) listar apenas as colunas WHERE dos SQLs principais sem incluir as queries auxiliares.

@@ -1,0 +1,403 @@
+{
+  "resumo": {
+    "totalMetodos": 23,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 18,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDMP4",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP4",
+      "evento": "Init",
+      "linhas": 67,
+      "codigoOriginal": "LParameters pForm\n\nThis.LockScreen = .t.\n\nThisForm.ParentForm = pForm\nThisForm.pcEscolha  = pForm.pcEscolha\nThisForm.poDataMgr  = pForm.poDataMgr\n\nSet DataSession To pForm.DataSessionId\n\nThisForm.Caption = 'Desagregar Componentes '\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n\nSelect xNensi\nThisForm.RecnoAnt = Recno()\nCreate Cursor TmpDistrib (Marca L, Nops n(10), Nenvs n(10), CodPds c (10), CMats c(14), CUnis c(3), Qtds n(10,3... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RecnoAnt = Recno",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Operação.GetCodigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Operação.GetEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Operação.GetOperação",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.Get_Cor.Value = Tmpdistrib.CodCors\nThisForm.Get_Tam.Value = Tmpdistrib.CodTams\nThisForm.get_descr.Refresh\nThisForm.Get_Cor.Refresh\nThisForm.Get_Tam.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cor,Get_Tam,get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column7.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni', 'CUnis', TmpDistrib.CUnis, 'Fators,QtEqualPs,cestos')\nOk = (LocalUni.Fators <> 0 And CrSigCdOpd.PesoBals # 1 And crSigCdOpd.GrOdns <> 1 And TmpDistrib.Marca)\nReturn ( Ok )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column7.Text1",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "If This.Value >= TmpDistrib.Qtds And CrSigCdOpd.LibrPqs <> 1\n\tMessageBox('Desagregar Parcialmente: Qtde tem que ser menor do que a original',0+16,'')\n\tThis.Value = TmpDistrib.Qtds\n\tReturn 0\nEndIf\n\nIf (LocalUni.Fators <> 0)\n\tThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'Cgrus')\n\tThisForm.poDataMgr.CursorQuery('SigCdGrp', 'CrTmpGru', 'CGrus', CrTmpPro.Cgrus, 'TpMovs')\n\t\n\tIf ( ( CrTmpGru.TpMovs <> 1 And LocalUni.Fators <> 1 ) OR ( LocalUni.QtEqualPs = [S] ) ) &&... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column9.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column10.Text1",
+      "evento": "When",
+      "linhas": 11,
+      "codigoOriginal": "Local m.retorno\nm.Retorno = .f.\nIf Not IsEmpty(TmpDistrib.cunis)\n\tlcSql = [Select cEstos From SigCdUni Where cunis = ']+TmpDistrib.cunis+[']\n\tThisForm.Podatamgr.Sqlexecute(lcsql,'TmpUni')\n\tIf TmpUni.cEstos = '3' And Not IsEmpty(TmpDistrib.cUniPs)\n\t\tm.Retorno = .t.\n\tEndIf\nEndIf\nReturn (m.retorno And Tmpdistrib.Marca)\n\t\t",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column10.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If This.Value >= TmpDistrib.Pesos And CrSigCdOpd.LibrPqs <> 1\n\tMessageBox('Desagregar Parcialmente:Peso tem que ser menor do que Original',0+16,'')\n\tThis.Value = TmpDistrib.Pesos\n\tReturn 0\nEndIf\n\nlcSql = [Select cEstos, Fators, QtEqualPs From SigCdUni Where cunis = ']+TmpDistrib.cuniPs+[']\nThisForm.Podatamgr.Sqlexecute(lcsql,'LocalUni2')\n\nIf (LocalUni2.Fators <> 0) \n\tThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'Cgrus')\n\tThisForm.poDataMgr.CursorQuery('SigCdG... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column11.Text1",
+      "evento": "When",
+      "linhas": 26,
+      "codigoOriginal": "If (crSigCdOpd.GrOdns = 1 Or Not TmpDistrib.Marca) Or (Not IsEmpty(CrSigCdPam.cUnippads) and TmpDistrib.cUniPs = CrSigCdPam.cUnipPads )\n\tReturn .f.\nEndIf\n\nThisForm.Balança.Ativa(This)\nIf (This.Value <> 0) And (Lastkey() <> 27) And Not ThisForm.Balança.TempoEsgotado\n\tThis.Valid\n\tReturn .f.\nEndIf\nIf CrSigCdOpd.PesoBals = 1\n\tThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmpPro', 'CPros', TmpDistrib.Cmats, 'Cgrus')\n\tThisForm.poDataMgr.CursorQuery('SigCdGrp', 'CrTmpGru', 'CGrus', CrTmpPro.Cgrus, 'TpM... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Ativa,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Grade.Column11.Text1",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "If This.Value >= TmpDistrib.Pesofs And CrSigCdOpd.LibrPqs <> 1\n\tMessageBox('Desagregar Parcialmente:Peso Fabr tem que ser menor do que Original',0+16,'')\n\tThis.Value = TmpDistrib.Pesofs\n\tReturn 0\nEndIf\n\nThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni', 'CUnis', TmpDistrib.CUnis, 'Fators,qtequalps,cestos')\nThisForm.poDataMgr.CursorQuery('SigCdUni', 'LocalUni2', 'CUnis', TmpDistrib.CUniPs, 'Fators,QtEqualPs,cestos')\n\nIf (LocalUni.Fators <> 0)\n\tThisForm.poDataMgr.CursorQuery('SigCdPro', 'CrTmp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.Get_descr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.get_Cor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.get_Tam",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPDMP4.ok",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "Select TmpDistrib\nScan\n\tSelect xNensi\n\tSet Order To NopCmat\n\tIf Seek(Str(TmpDistrib.Nops,10)+TmpDistrib.Cmats)\n\t\tScan while Nops = TmpDistrib.Nops And Cmats = TmpDistrib.Cmats\n\t\t\tIf Qtds = TmpDistrib.Qtds And Peso2s = TmpDistrib.Pesos And Pesos = TmpDistrib.Pesofs\n\t\t\t\tReplace Visivel With .t.,;\n\t\t\t\t\t\tRateio  With 3\n\t\t\t\tIf TmpDistrib.Marca\n\t\t\t\t\tReplace Pesos  With TmpDistrib.Pesofs - TmpDistrib.Pesof2s,;\n\t\t\t\t\t\t\tQtds   With TmpDistrib.Qtds   - TmpDistrib.Qtd2s,;\n\t\t\t\t\t\t\tPeso2s with TmpDistrib.Pesos... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPDMP4.Grade.Column10.Text1.When",
+      "queryOriginal": "\tlcSql = [Select cEstos From SigCdUni Where cunis = ']+TmpDistrib.cunis+['] \tThisForm.Podatamgr.Sqlexecute(lcsql,'TmpUni')",
+      "tabelas": "SigCdUni",
+      "colunas": "cEstos,cunis,cunis+[],Sqlexecutelcsql,TmpUni",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPDMP4.Grade.Column10.Text1.Valid",
+      "queryOriginal": "lcSql = [Select cEstos, Fators, QtEqualPs From SigCdUni Where cunis = ']+TmpDistrib.cuniPs+['] ThisForm.Podatamgr.Sqlexecute(lcsql,'LocalUni2')",
+      "tabelas": "SigCdUni",
+      "colunas": "cEstos,Fators,QtEqualPs,cunis,cuniPs+[],Sqlexecutelcsql,LocalUni2",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdUni"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

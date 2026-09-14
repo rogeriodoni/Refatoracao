@@ -1,0 +1,9 @@
+﻿Analisei todas as ocorr├¬ncias encontradas. Os tr├¬s casos de `ControlCount` nos arquivos est├úo no m├®todo `TornarControlesVisiveis` do FormFct.prg (linhas 1783, 1795, 1807) ÔÇö todos s├úo **acessos ├á propriedade VFP** `par_oContainer.ControlCount` (contagem de controles filhos), completamente dentro de c├│digo VFP de loop, sem nenhuma rela├º├úo com SQL.
+
+**Falso positivo do validador autom├ítico.** O scanner detectou `.ControlCount` no c├│digo e o confundiu com uma coluna SQL em WHERE, mas:
+
+1. N├úo existe nenhuma string SQL com `CONTROLCOUNT` em nenhum dos arquivos
+2. As tr├¬s ocorr├¬ncias s├úo `par_oContainer.ControlCount` e `loc_oCtrl.ControlCount` ÔÇö propriedade padr├úo VFP de containers
+3. Nenhum `SQLEXEC` ou string SQL cont├®m essa refer├¬ncia
+
+**Nenhuma corre├º├úo necess├íria.** O c├│digo migrado est├í correto para este ponto de verifica├º├úo.

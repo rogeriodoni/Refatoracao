@@ -1,0 +1,26 @@
+﻿O arquivo est├í perfeito. Aqui est├í o resumo do que foi criado:
+
+**`FormSIGPRIFF.prg`** (219 linhas) ÔÇö implementa├º├úo **completa** da FASE 3 (e fases 4-8 n├úo se aplicam a este form, que n├úo tem PageFrame, Grid nem CRUD).
+
+---
+
+**Decis├Áes de design importantes:**
+
+| Aspecto | Decis├úo | Motivo |
+|---|---|---|
+| Sem PageFrame | Flat layout | Form original ├® tiny dialog (Width=409, Height=50) |
+| `THIS.Hide()` em vez de `Release()` | Mant├®m objeto vivo | Caller l├¬ `ObterResposta()` depois do `Show(1)` |
+| `Closable = .F.` | Desabilita bot├úo X | For├ºa uso de ESC/ENTER para controlar o fluxo |
+| `KeyPreview = .T.` + form.KeyPress | ESC capturado pelo form | Antes dos controles, como no original |
+| Parsing inline em `ConfigurarComboBox` | Sem chamar `ObterOpcoes()` do BO | `RETURN array` em VFP9 retorna s├│ o 1┬║ elemento ÔÇö evita o bug |
+| `RowSourceType = 0` + `AddItem()` | Lista manual | Substitui `RowSourceType=5` (array p├║blico) do legado |
+
+**Fluxo can├┤nico para callers:**
+```foxpro
+loForm = CREATEOBJECT("FormSIGPRIFF", "Sim;Nao;", "M", "Confirmar", 0, 0, "")
+IF VARTYPE(loForm) = "O"
+    loForm.Show(1)
+    lcResposta = loForm.ObterResposta()  && "S" ou "N"
+    loForm.Release()
+ENDIF
+```

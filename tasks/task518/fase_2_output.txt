@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O `SedBO.prg` agora tem todos os m├®todos necess├írios:
+
+| M├®todo | Visibilidade | Descri├º├úo |
+|---|---|---|
+| `CarregarDoCursor(par_cAlias)` | PUBLIC | Popula propriedades do BO a partir de cursor |
+| `CarregarSedex(par_cEmps)` | PUBLIC | Carrega `cursor_4c_Sedex` com dados agrupados por faixa (porta o SELECT do `Init` legado) |
+| `GerarEtiquetas(par_cFaixaIni, par_cFaixaFin, par_cEmps)` | PUBLIC | Verifica duplicidade + gera etiquetas no SQL Server com c├│digo de barras Correios Mod-11 |
+| `ExcluirFaixa(par_cFaixaIni, par_cEmps, par_nUsadas)` | PUBLIC | Exclui faixa do SQL Server (com guarda de etiquetas j├í usadas) ÔÇö vers├úo correcta que deleta de verdade, diferente do legado que s├│ deletava do cursor local |
+| `ExtrairNumericos(par_cTexto)` | PROTECTED | Porta de `fSubstTxt(str,"","N")` ÔÇö extrai d├¡gitos da faixa |
+| `CalcularBarraSedex(par_cCodigo)` | PROTECTED | Porta de `fBarSedex()` ÔÇö algoritmo Correios M├│dulo-11 |
+
+**Regras cr├¡ticas respeitadas:** nenhum `RETURN` dentro de `TRY/CATCH` (usa `loc_lContinuar` como flag), `DO WHILE` em vez de `FOR` para poder controlar o loop com a flag, `CHR()` em vez de acentos literais.

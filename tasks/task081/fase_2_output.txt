@@ -1,0 +1,12 @@
+﻿Phase 3 is complete. `Formsigredoc.prg` has been created at `C:\4c\projeto\app\forms\relatorios\Formsigredoc.prg` with ~600 lines.
+
+Key features implemented:
+- **GrdEmp** (`grd_4c_Emps`): 3-column grid (Checkbox/Marca, cEmps, Razas) bound to `cursor_4c_Emps` via `CarregarEmpresas()`
+- **Select/Deselect all** (`cmd_4c_SelecionarTodas` / `cmd_4c_DesmarcarTodas`): `REPLACE ALL Marca WITH 1/0`
+- **ValidarOperacao()**: Calls `fAcessoMovmto` + BO.ValidarOperacao() + `fChecaAcesso("REIMPDOC")` to gate `chk_4c_Reimp.Enabled`
+- **AtualizarEstadoFiltros()**: Handles the `When`-event mutual exclusion ÔÇö date fields disabled when numbers > 0, number fields disabled when dates non-empty; also syncs NumeroF=NumeroI when NumeroF=0
+- **`opt_4c_Agrupa`** with `Value=2` (Nenhum default), matching the original
+- **BINDEVENT** wiring: `txt_4c_Dopes.LostFocus ÔåÆ ValidarOperacao`, all date/number fields `LostFocus ÔåÆ AtualizarEstadoFiltros`
+- Full CRUD interface aliases (`BtnBuscarClick`, `BtnEncerrarClick`, `FormParaBO`, `BOParaForm`, etc.) for the multi-phase pipeline
+
+Next is **Phase 4**: modifying the form file (or the BO) as needed for integration ÔÇö typically adding the form to `menu.prg` and deleting `.fxp` files before testing.

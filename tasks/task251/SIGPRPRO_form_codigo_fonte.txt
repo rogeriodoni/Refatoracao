@@ -1,0 +1,537 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRPRO.SCX
+* Data/Hora: 07/07/2026 10:58:48
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRPRO
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRPRO
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRPRO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRPRO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape
+  Parent: SIGPRPRO
+  Class: shape
+  BaseClass: shape
+
+Objeto: shpCodigo
+  Parent: SIGPRPRO
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGPRPRO
+  Class: shape
+  BaseClass: shape
+
+Objeto: Label1
+  Parent: SIGPRPRO
+  Class: label
+  BaseClass: label
+
+Objeto: GetMemo
+  Parent: SIGPRPRO
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GradeCarac
+  Parent: SIGPRPRO
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGPRPRO.GradeCarac.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGPRPRO.GradeCarac.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getComples
+  Parent: SIGPRPRO
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDPros
+  Parent: SIGPRPRO
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCPros
+  Parent: SIGPRPRO
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Ok
+  Parent: SIGPRPRO
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO
+------------------------------------------------------------
+  DataSession = 1
+  Height = 500
+  Width = 800
+  DoCreate = .T.
+  ShowTips = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Características de Produtos"
+  ControlBox = .F.
+  MaxButton = .F.
+  Movable = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  AlwaysOnTop = .F.
+  Themes = .F.
+  Name = "SIGPRPRO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.Shape
+------------------------------------------------------------
+  Top = 7
+  Left = 697
+  Height = 110
+  Width = 90
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.shpCodigo
+------------------------------------------------------------
+  Top = 94
+  Left = 13
+  Height = 34
+  Width = 671
+  BackStyle = 0
+  Curvature = 0
+  SpecialEffect = 1
+  BorderColor = 90,90,90
+  ZOrderSet = 3
+  Name = "shpCodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.Shape1
+------------------------------------------------------------
+  Top = 133
+  Left = 13
+  Height = 341
+  Width = 671
+  BackStyle = 0
+  Curvature = 0
+  SpecialEffect = 1
+  BorderColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Produto :"
+  Height = 15
+  Left = 25
+  Top = 103
+  Width = 47
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  RightToLeft = .F.
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.GetMemo
+------------------------------------------------------------
+  Height = 300
+  Left = 348
+  TabIndex = 5
+  Top = 167
+  Width = 329
+  RightToLeft = .F.
+  NullDisplay = " "
+  Name = "GetMemo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.GradeCarac
+------------------------------------------------------------
+  ColumnCount = 1
+  Height = 328
+  Left = 20
+  ReadOnly = .F.
+  TabIndex = 3
+  Top = 139
+  Width = 319
+  RightToLeft = .F.
+  Name = "GradeCarac"
+  Column1.FontName = "Courier New"
+  Column1.Width = 290
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Name = "Column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.GradeCarac.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Características"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.GradeCarac.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  MaxLength = 20
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  RightToLeft = .F.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.getComples
+------------------------------------------------------------
+  Height = 23
+  Left = 348
+  TabIndex = 4
+  Top = 139
+  Width = 329
+  RightToLeft = .F.
+  Name = "getComples"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.getDPros
+------------------------------------------------------------
+  Enabled = .F.
+  Format = "K!"
+  Height = 23
+  Left = 184
+  TabIndex = 2
+  Top = 99
+  Width = 494
+  DisabledBackColor = 255,255,230
+  DisabledForeColor = 90,90,90
+  RightToLeft = .F.
+  Name = "getDPros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.getCPros
+------------------------------------------------------------
+  Enabled = .F.
+  Left = 75
+  TabIndex = 1
+  Top = 99
+  Width = 108
+  DisabledBackColor = 255,255,230
+  DisabledForeColor = 90,90,90
+  RightToLeft = .F.
+  plprocurar = .T.
+  Name = "getCPros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRPRO.Ok
+------------------------------------------------------------
+  Top = 3
+  Left = 723
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "OK"
+  TabIndex = 7
+  RightToLeft = .F.
+  Name = "Ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRPRO
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pFrm, pPro
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+With ThisForm
+	.ParentForm = pFrm
+
+	lcQuery = [Select DPros ] + ;
+			    [From SigCdPro ] + ;
+			   [Where CPros = '] + Padr(pPro, 14) + [']
+
+	If (.ParentForm.poDataMgr.SqlExecute(lcQuery, 'LocalPro') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalPro)')
+		Return 0
+	EndIf
+	Go Top In LocalPro
+	.getCPros.Value = pPro
+	.getDPros.Value = LocalPro.DPros
+
+	* Acertando a Grade de Características
+	With .GradeCarac
+		.RecordSource = ''
+
+		ThisForm.ParentForm.poDataMgr.CursorQuery('SigPrCrr', 'LocalCrPro', 'CPros', pPro)
+		Go Top In LocalCrPro
+
+		.RecordSource           = 'LocalCrPro'
+		.Column1.ControlSource  = 'LocalCrPro.Caracteris'
+		.Column1.SetFocus
+	EndWith
+EndWith
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPRO.GetMemo
+* Classe: fwmemo (Base: editbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPRO.GradeCarac
+* Classe: fwgrade (Base: grid)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+Lparameters nColIndex
+
+ThisForm.getMemo.Value    = LocalCrPro.Infos
+ThisForm.getComples.Value = LocalCrPro.Compls
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPRO.GradeCarac.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPRO.getComples
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRPRO.Ok
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Used('LocalPro')
+	Use In LocalPro
+EndIf
+If Used('LocalCrPro')
+	Use In LocalCrPro
+EndIf
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRPRO
+RESERVED3 (ClassInfo): parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

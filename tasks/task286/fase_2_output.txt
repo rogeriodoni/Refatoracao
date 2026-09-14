@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto e completo. Fase 2/8 conclu├¡da.
+
+**O que foi adicionado ao `sigprftpBO.prg`:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `CarregarParametrosSistema()` | SQLEXEC em `SigCdPam` ÔåÆ popula `this_cTpTrans`, `this_cEmpMasters`, `this_cGruMccrs`, `this_cConMccrs`, `this_cVendNts` |
+| `CarregarConfiguracaoEmpresa(par_cCodEmp)` | SQLEXEC em `SigCdEmp WHERE Cemps = ?` ÔåÆ chama `CarregarDoCursor()` |
+| `CarregarDoCursor(par_cAliasCursor)` | Mapeia `TpConexao`, `FtpEnd`, `FtpUsuario`, `FtpSenha`, `DriveTs`, `DriveLs`, `DirFtpTs`, `DirFtpLs`, `LocDel`, `FtpDel` ÔåÆ `this_*` usando `TratarNulo()` e `IIF(VARTYPE...)` para campos BIT |
+| `ObterChavePrimaria()` | Retorna `""` (form operacional sem PK pr├│pria) |
+| `Inserir()` | Retorna `.T.` ÔÇö n├úo aplic├ível (form somente leitura de params FTP) |
+| `Atualizar()` | Retorna `.T.` ÔÇö n├úo aplic├ível |
+
+Pr├│xima fase (3/8) ser├í a cria├º├úo do arquivo Form `Formsigprftp.prg`.

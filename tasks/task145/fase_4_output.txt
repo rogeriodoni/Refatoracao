@@ -1,0 +1,23 @@
+﻿O arquivo est├í completo e correto. A Fase 4 foi implementada com sucesso.
+
+**Resumo do que foi adicionado ao `FormSigPdMp4.prg`:**
+
+1. **`InicializarForm()`** ÔÇö adicionada chamada a `THIS.ConfigurarPaginaLista()` antes de `LockScreen = .F.`
+
+2. **`ConfigurarPaginaLista()`** ÔÇö orquestra: cria grade + rodap├® + bot├úo OK, registra BINDEVENTs (AfterRowColChange, KeyPress nas colunas edit├íveis 7/10/11, Click do OK), chama `CarregarGrade()`
+
+3. **`AlternarPagina(par_nPagina)`** ÔÇö stub vazio (form OPERACIONAL n├úo tem PageFrame)
+
+4. **`ConfigurarGrade()`** ÔÇö cria `grd_4c_Dados` (Top=147, Left=9, Width=982, Height=417) com 11 colunas, ColumnOrders corretos, CheckBox na Column8 com sequ├¬ncia obrigat├│ria: AddObject ÔåÆ Caption/Value ÔåÆ CurrentControl (ControlSource s├│ em CarregarGrade)
+
+5. **`CarregarGrade()`** ÔÇö seta ColumnCount=11 antes de RecordSource="TmpDistrib", todos os ControlSources, caption din├ómico da Column1 (do form pai), redefine headers ap├│s ControlSource, inicia txt_4c_Descr com ControlSource="TmpDistrib.CDescs"
+
+6. **`ConfigurarRodape()`** ÔÇö cria labels e TextBoxes para Descri├º├úo, Cor e Tamanho (posi├º├Áes exatas do original)
+
+7. **`ConfigurarBotaoOk()`** ÔÇö bot├úo cmd_4c_Ok (Top=3, Left=925, Width=75, Cancel=.T.)
+
+8. **`GradeAfterRowColChange(par_nColIndex)`** ÔÇö atualiza txt_4c_Cor/Tam/Descr; calcula editabilidade din├ómica das colunas 7, 10 e 11 via SQLEXEC ├á SigCdUni (BuscarUnidade do BO) e cursores CrSigCdOpd/CrSigCdPam do form pai
+
+9. **`Col7ValidarQtd/Col10ValidarPeso/Col11ValidarPesoFabr`** ÔÇö handlers de KeyPress (ENTER/TAB=13/9) que chamam os m├®todos de valida├º├úo do BO; resetam valor e impedem navega├º├úo (NODEFAULT) se inv├ílido
+
+10. **`BtnOkClick()`** ÔÇö chama `SalvarDesagregacao("xNensi")` do BO, restaura `SET ORDER TO Editar` no cursor xNensi, reabilita o form pai e chama `THIS.Release()`

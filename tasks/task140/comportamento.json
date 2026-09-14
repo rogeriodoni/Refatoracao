@@ -1,0 +1,86 @@
+{
+  "resumo": {
+    "totalMetodos": 4,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDMEN",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\ndodefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMEN",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMEN",
+      "evento": "Init",
+      "linhas": 57,
+      "codigoOriginal": "Lparameters pCidChave, pDescr1, pDescr2\n\nLocal llMemo \nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n\n=Thisform.PodataMgr.Cursorquery('SigCdMsg','CrSigCdMsg','CidChaves',pCidChave)\n\nThisForm.Caption = 'Mensagem da Empresa: '+CrSigCdMsg.emps+' para o Produto : '+CrSigCdMsg.Cpros\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nllMemo = (Type('pDescr1') == 'C')\n\nlcCaptionA = Iif(Ty... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDMEN.ok",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "If Lastkey() # 13\n\tThisForm.Release\nElse\n\tMessageBox('Click No Botao Ok Para Sair',0+64,'')\n\tClear Typeahead\n\tKeyboard Chr(27)\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,15 @@
+﻿Estes s├úo **falsos positivos**. O validador est├í comparando coordenadas erradas:
+
+| | lblEmpresa | optTipImps |
+|---|---|---|
+| **SCX original** | Top=123 (relativo ao form) | Top=196 (relativo ao form) |
+| **Migrado** | Top=38 (relativo ├á Page) | Top=111 (relativo ├á Page) |
+| **Posi├º├úo visual real** | 85+38=**123** Ô£ô | 85+111=**196** Ô£ô |
+
+O `pgf_4c_Paginas.Top = 85` (linha 287). Os controles ficam dentro da Page, ent├úo suas coordenadas s├úo relativas ├á Page, n├úo ao form. O validador comparou os valores absolutos do SCX com os valores relativos do c├│digo migrado ÔÇö isso ├® sempre 85px de diferen├ºa (= offset do PageFrame).
+
+Se eu alterasse `lbl_4c_LblEmpresa.Top` de 38 para 123, o controle apareceria visualmente em 85+123=**208** (85px abaixo do correto). A mesma l├│gica vale para `opt_4c_OptTipImps`.
+
+Al├®m disso, os controles vizinhos das mesmas linhas (`txt_4c_CEmps.Top=35`, `txt_4c_DEmps.Top=35`, `lbl_4c_Label11.Top=116`) n├úo foram flagados mas t├¬m o mesmo offset de 85px ÔÇö corrigir apenas os dois flagados criaria desalinhamento dentro das pr├│prias linhas.
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.** Os valores atuais (38 e 111) produzem posi├º├Áes visuais id├¬nticas ao SCX original. Os dois problemas detectados s├úo falsos positivos do validador, que n├úo leva em conta o offset do PageFrame (Top=85) ao comparar coordenadas.

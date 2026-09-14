@@ -1,0 +1,4 @@
+﻿Both fixes applied:
+
+- **FormProduto.prg**: Replaced 18 occurrences of `USE IN SELECT("cursor_4c_Busca") IN 0` ÔåÆ `IF USED("cursor_4c_Busca") / USE IN cursor_4c_Busca / ENDIF`
+- **ProdutoBO.prg** line 275: Replaced `COPY TO DBF ALIAS cursor_4c_Dados` ÔåÆ `SELECT * FROM cursor_4c_Temp_Dados INTO CURSOR cursor_4c_Dados READWRITE`

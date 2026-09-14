@@ -1,0 +1,9 @@
+﻿Phase 7 is complete. Here's a summary of what was fixed in each CRUD button:
+
+**BtnIncluirClick**: Added `THIS.LimparCampos()` between `NovoRegistro()` and `AlternarPagina(2)`. Moved `this_cModoAtual = "INCLUIR"` to AFTER `AlternarPagina(2)` ÔÇö critical because `AlternarPagina(2)` overwrites the mode to `"DADOS"`, which would break `ConfirmarClick`'s INSERT vs UPDATE detection.
+
+**BtnVisualizarClick**: Added `SELECT cursor_4c_Dados` before reading the field. Added `EOF()` guard. Moved `BOParaForm()` before `AlternarPagina(2)` (data ready before page switch). Moved `this_cModoAtual = "VISUALIZAR"` to AFTER `AlternarPagina(2)`.
+
+**BtnAlterarClick**: Added `SELECT cursor_4c_Dados`, `EOF()` guard, and `THIS.this_oBusinessObject.EditarRegistro()` (sets `this_lNovoRegistro = .F.` so BO knows to UPDATE not INSERT). Moved `this_cModoAtual = "ALTERAR"` to AFTER `AlternarPagina(2)`.
+
+**BtnExcluirClick**: Added `SELECT cursor_4c_Dados` and `EOF()` guard for consistency.

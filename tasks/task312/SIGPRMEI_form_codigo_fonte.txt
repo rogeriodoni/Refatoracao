@@ -1,0 +1,1195 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRMEI.SCX
+* Data/Hora: 17/07/2026 19:34:18
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRMEI
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRMEI
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRMEI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRMEI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cmdBtnForm
+  Parent: SIGPRMEI
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Label2
+  Parent: SIGPRMEI
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGPRMEI
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 52
+  Left = 33
+  Width = 757
+  Height = 479
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMEI
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 147
+  Width = 500
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Integração SIS E-Commerce"
+  ControlBox = .F.
+  FontBold = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  AlwaysOnTop = .T.
+  lnnofabr = 
+  parametrizado = .F.
+  poobjext = .F.
+  _memberdata = <VFPData></VFPData>
+  Name = "SIGPRMEI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMEI.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMEI.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMEI.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMEI.cmdBtnForm
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 345
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 4
+  BorderColor = 136,189,188
+  Themes = .F.
+  Name = "cmdBtnForm"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_processar_60.jpg
+  Command1.Caption = "Processar"
+  Command1.TabIndex = 2
+  Command1.ToolTipText = "Processar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnCopiar"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.TabIndex = 3
+  Command2.ToolTipText = "[ESC] Sair"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "btnSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMEI.Label2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = "Integração Sis e-Commerce"
+  Height = 20
+  Left = 147
+  Top = 96
+  Width = 205
+  TabIndex = 4
+  ForeColor = 90,90,90
+  BackColor = 255,255,234
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRMEI.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  BorderStyle = 0
+  Caption = ""
+  Height = 20
+  Left = 56
+  Top = 114
+  Width = 387
+  TabIndex = 4
+  ForeColor = 90,90,90
+  BackColor = 255,255,234
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRMEI
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE gravararquivos
+------------------------------------------------------------
+PROCEDURE gravararquivos
+Local lcDpd, laDir, lnDir, llOks, lcChr
+
+lcDeq = Alltrim(crsigcdpam.CdChepSais)
+lcDeq = Iif(Right(lcDeq, 1)=[\], lcDeq, lcDeq + [\])
+llOks = .F.
+lcChr = CHR(13) + CHR(10)
+
+lcArq = lcDeq + [estoque.xml]
+IF FILE(lcArq)
+	DELETE FILE &lcArq
+ENDIF
+
+*** mena 27/04/2016 - incluido o campo IPI no select para colocar no xml ***
+lcQuery = 	[select a.cpros, a.sqtds, b.dpros, b.pvens, b.pcuss, b.prodwebs, b.prodvars, b.Encargos, ] +;
+			[case when b.aliqipis<>0 then b.aliqipis else c.aipis end as ipi ] +;
+			[from sigmvest a, SigCdPro b, SigcdClf c where b.clfiscals = c.codigos and a.cpros = b.cpros and a.grupos = 'ESTOQUE' and a.estos = 'ESTOQUE' ] +;
+			[and b.prodwebs<> 0 and b.prodwebs <> 2 ] +;
+			[union ] +;
+			[(select b.cpros, 0.000 as sqtds, b.dpros, b.pvens, b.pcuss, b.prodwebs, b.prodvars, b.Encargos, ] +;
+			[case when b.aliqipis<>0 then b.aliqipis else c.aipis end as ipi ] +;
+			[from SigCdPro b, SigcdClf c where b.clfiscals = c.codigos and  b.cpros not in(select cpros from sigmvest where grupos = 'ESTOQUE' and estos = 'ESTOQUE') ] +;
+			[and b.prodwebs<> 0 and b.prodwebs <> 2 ) order by 1] 
+	
+
+
+*** Mena - 02/04/2014 - retirado e substituido pela querie acima ***
+*!*	lcQuery =	[select a.cpros, a.sqtds, b.dpros, b.pvens, b.pcuss, b.prodwebs, b.prodvars ] +;
+*!*				[from sigmvest a, SigCdPro b where a.cpros = b.cpros and a.grupos = 'ESTOQUE' and a.estos = 'ESTOQUE' ] + ;
+*!*				[and b.prodwebs<> 0 and b.prodwebs <> 2 ] 
+
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalEst]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalEst)])
+	 llOks = .f.
+EndIf
+
+SELECT localEst
+GO top
+
+*** mena 20/12/2016 - monta xml numa string e salva no final ***
+IF not EOF()
+
+	lcTexto=[]
+	lcTexto=lcTexto+[<?xml version="1.0" encoding="UTF-8" ?>]+ lcChr
+	lcTexto=lcTexto+[<importa_estoque>]+ lcChr
+	lcTexto=lcTexto+[<produtos>]+ lcChr
+
+	scan
+		IF prodvars = 0 or prodvars = 2
+			lcTexto=lcTexto+[<produto>]+ lcChr
+			lcTexto=lcTexto+[<tipo>] + 'P' + [</tipo>]+ lcChr
+			lcTexto=lcTexto+[<codigo_produto>] + '' + [</codigo_produto>]+ lcChr
+			lcTexto=lcTexto+[<referencia>] + ALLTRIM(cpros) +[</referencia>]+ lcChr
+			IF prodwebs = 1 or prodwebs = 4
+				lcTexto=lcTexto+[<saldo>]+ALLTRIM(TRANSFORM(sqtds, '@R 999999.99'))+[</saldo>]+ lcChr
+			ENDIF
+			IF prodwebs = 1 or prodwebs = 3
+				lnPvens = Pvens + Iif(!Empty(Encargos),((Pvens * Encargos) / 100),0)
+				lcTexto=lcTexto+[<preco>]+ALLTRIM(TRANSFORM(lnPvens, '@R 999999.99'))+[</preco>]+ lcChr
+			ENDIF
+			*** mena 27/04/2016 se tem ipi coloca no xml ***	
+			IF ipi <> 0
+				lcTexto=lcTexto+[<imposto>] + ALLTRIM(TRANSFORM(ipi, '@R 99'))+[% IPI]+[</imposto>]+ lcChr
+			ENDIF
+			lcTexto=lcTexto+[</produto>]+ lcChr
+		ELSE
+		*** variação do produto ****
+			lcTexto=lcTexto+[<produto_variacao>]+ lcChr
+			lcTexto=lcTexto+[<tipo>] + 'V' + [</tipo>]+ lcChr
+			lcTexto=lcTexto+[<codigo_produto>] + '' + [</codigo_produto>]+ lcChr
+			lcTexto=lcTexto+[<codigo_variacao>] + '' + [</codigo_variacao>]+ lcChr
+			lcTexto=lcTexto+[<referencia>] + ALLTRIM(cpros) +[</referencia>]+ lcChr
+			IF prodwebs = 1 or prodwebs = 4
+				lcTexto=lcTexto+[<saldo>]+ALLTRIM(TRANSFORM(sqtds, '@R 999999.99'))+[</saldo>]+ lcChr
+			ENDIF
+			IF prodwebs = 1 or prodwebs = 3
+				lnPvens = Pvens + Iif(!Empty(Encargos),((Pvens * Encargos) / 100),0)			
+				lcTexto=lcTexto+[<preco>]+ALLTRIM(TRANSFORM(lnPvens, '@R 999999.99'))+[</preco>]+ lcChr
+			endif
+			*** mena 27/04/2016 se tem ipi coloca no xml ***	
+			IF ipi <> 0
+				lcTexto=lcTexto+[<imposto>] + ALLTRIM(TRANSFORM(ipi, '@R 99'))+[% IPI]+[</imposto>]+ lcChr
+			ENDIF
+			lcTexto=lcTexto+[</produto_variacao>]+ lcChr
+		ENDIF
+	endscan
+	lcTexto=lcTexto+[</produtos>]+ lcChr
+	lcTexto=lcTexto+[</importa_estoque>]+ lcChr
+	llOks = .t.
+	=STRTOFILE(lcTexto, lcArq,.f.)	
+ENDIF
+
+
+*!*	SELECT localEst
+*!*	GO top
+
+*!*	IF not EOF()
+
+*!*		=StrToFile([], lcArq)
+*!*		=Strtofile(Alltrim([<?xml version="1.0" encoding="UTF-8" ?>]+ lcChr), lcArq,.T.)
+*!*		=Strtofile(Alltrim([<importa_estoque>]+ lcChr), lcArq,.T.)
+*!*		=Strtofile(Alltrim([<produtos>]+ lcChr), lcArq,.T.)
+
+*!*		scan
+*!*			IF prodvars = 0 or prodvars = 2
+*!*				=Strtofile(Alltrim([<produto>]+ lcChr), lcArq,.T.)
+*!*				=Strtofile(Alltrim([<tipo>] + 'P' + [</tipo>]+ lcChr), lcArq,.T.)
+*!*				=Strtofile(Alltrim([<codigo_produto>] + '' + [</codigo_produto>]+ lcChr), lcArq,.T.)
+*!*				=Strtofile(Alltrim([<referencia>] + ALLTRIM(cpros) +[</referencia>]+ lcChr), lcArq,.T.)
+*!*				IF prodwebs = 1 or prodwebs = 4
+*!*					=Strtofile(Alltrim([<saldo>]+ALLTRIM(TRANSFORM(sqtds, '@R 999999.99'))+[</saldo>]+ lcChr), lcArq,.T.)
+*!*				ENDIF
+*!*				IF prodwebs = 1 or prodwebs = 3
+*!*					lnPvens = Pvens + Iif(!Empty(Encargos),((Pvens * Encargos) / 100),0)
+*!*					=Strtofile(Alltrim([<preco>]+ALLTRIM(TRANSFORM(lnPvens, '@R 999999.99'))+[</preco>]+ lcChr), lcArq,.T.)
+*!*				ENDIF
+*!*				*** mena 27/04/2016 se tem ipi coloca no xml ***	
+*!*				IF ipi <> 0
+*!*					=Strtofile(Alltrim([<imposto>] + ALLTRIM(TRANSFORM(ipi, '@R 99'))+[% IPI]+[</imposto>]+ lcChr), lcArq,.T.)
+*!*				ENDIF
+*!*				=Strtofile(Alltrim([</produto>]+ lcChr), lcArq,.T.)
+*!*			ELSE
+*!*			*** variação do produto ****
+*!*				=Strtofile(Alltrim([<produto_variacao>]+ lcChr), lcArq,.T.)
+*!*				=Strtofile(Alltrim([<tipo>] + 'V' + [</tipo>]+ lcChr), lcArq,.T.)
+*!*				=Strtofile(Alltrim([<codigo_produto>] + '' + [</codigo_produto>]+ lcChr), lcArq,.T.)
+*!*				=Strtofile(Alltrim([<codigo_variacao>] + '' + [</codigo_variacao>]+ lcChr), lcArq,.T.)
+*!*				=Strtofile(Alltrim([<referencia>] + ALLTRIM(cpros) +[</referencia>]+ lcChr), lcArq,.T.)
+*!*				IF prodwebs = 1 or prodwebs = 4
+*!*					=Strtofile(Alltrim([<saldo>]+ALLTRIM(TRANSFORM(sqtds, '@R 999999.99'))+[</saldo>]+ lcChr), lcArq,.T.)
+*!*				ENDIF
+*!*				IF prodwebs = 1 or prodwebs = 3
+*!*					lnPvens = Pvens + Iif(!Empty(Encargos),((Pvens * Encargos) / 100),0)			
+*!*					=Strtofile(Alltrim([<preco>]+ALLTRIM(TRANSFORM(lnPvens, '@R 999999.99'))+[</preco>]+ lcChr), lcArq,.T.)
+*!*				endif
+*!*				*** mena 27/04/2016 se tem ipi coloca no xml ***	
+*!*				IF ipi <> 0
+*!*					=Strtofile(Alltrim([<imposto>] + ALLTRIM(TRANSFORM(ipi, '@R 99'))+[% IPI]+[</imposto>]+ lcChr), lcArq,.T.)
+*!*				ENDIF
+*!*				=Strtofile(Alltrim([</produto_variacao>]+ lcChr), lcArq,.T.)
+*!*			ENDIF
+*!*		endscan
+*!*		=Strtofile(Alltrim([</produtos>]+ lcChr), lcArq,.T.)
+*!*		=Strtofile(Alltrim([</importa_estoque>]+ lcChr), lcArq,.T.)
+*!*		llOks = .t.
+*!*	ENDIF
+
+
+
+
+
+
+RETURN llOks
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE lerarquivos
+------------------------------------------------------------
+PROCEDURE lerarquivos
+Local lcDpd, laDir, lnDir
+
+lcDpd = Alltrim(crsigcdpam.DirLivrosV)
+lcDpd = Iif(Right(lcDpd, 1)=[\], lcDpd, lcDpd + [\])
+
+lcDeq = Alltrim(crsigcdpam.CdChepSais)
+lcDeq = Iif(Right(lcDeq, 1)=[\], lcDeq, lcDeq + [\])
+
+lnArq = ADir(laArq, lcDpd + [*.XML])
+
+llOks = .t.
+
+lcDop = [VENDA WEB]
+lcGrO = [ESTOQUE]
+lcCtO = [ESTOQUE]
+lcGrD = [CLIENTEWEB]
+lcGrV = [VENDEDOR]
+lcCtV = [V34]
+lcUsu = [WEB]
+lcEmp = [ESC]
+
+lcQuery = [Select * ] + ;
+		    [From SigCdOpe ] + ;
+		   [Where Dopes = '] + Padr(lcDop, 20) + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalOpe]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalOpe)])
+	 llOks = .f.
+EndIf
+If llOks									
+	Select LocalOpe
+	Go Top In LocalOpe
+	If Not Eof([LocalOpe])
+		lcGrO = Iif(Empty(LocalOpe.GruOrigs), lcGrO, LocalOpe.GruOrigs)
+		lcCtO = Iif(Empty(LocalOpe.ConOrigs), lcGrO, LocalOpe.ConOrigs)
+		lcGrD = Iif(Empty(LocalOpe.GruDests), lcGrD, LocalOpe.GruDests)
+		lcGrV = Iif(Empty(Left(LocalOpe.GrVends,10)), lcGrV, Left(LocalOpe.GrVends,10))
+	EndIf
+EndIf
+
+If (lnArq > 0) And llOks
+	For lnPrc = 1 To lnArq
+		ThisForm.Label1.Caption = [Processando Pedido ] + Alltrim(Str(lnPrc)) + [ de ] + Alltrim(Str(lnArq))
+		*!*Create Cursor LocalPedidos (Linha c(254))
+		
+		If llOks
+			lcArq = lcDpd + Alltrim(laArq(lnPrc, 1))
+
+				*** mena - 01/10/2014 - todos os pontos que lia o DBF foi trocado por ler a string lcDadA ***
+*!*				Select LocalPedidos
+*!*				Append From &lcArq. Type SDF
+*!*				Go Top In LocalPedidos
+*!*				If Not Eof([LocalPedidos])
+				lcDadA = FILETOSTR(lcArq)
+				lcDadA = Alltrim(Upper(lcDadA))
+
+			If !empty(lcDadA)
+
+				*** mena 20/01/2016 - checa se tem cep válido. Se não tem renomeia arquivo para txt, e mostra mensagem 
+				IF [<CLIENTE_CEP>]$lcDadA
+					lcAtu = Alltrim(StrExtract(lcDadA, [<CLIENTE_CEP>], [</CLIENTE_CEP>]))
+					lcCep = PADL(STRTRAN(lcAtu,[-],[]),8,[0])
+					lcCep = LEFT(lcCep,5)+[-]+RIGHT(lcCep,3)
+
+					lcQuery = [Select * From cep Where ceps = '] + lcCep + [']
+
+					If (ThisForm.poobjext.SqlExecute(lcQuery, [LocalCep]) < 1)
+						=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalOpe)])
+						 return .f.
+					EndIf
+					IF RECCOUNT('localCep') = 0
+						=MessageBox([Cep não encontrado. Pedido será ignorado.!!!], 16, [Arquivo será renomeado para .TXT])
+						lcArqTo = SUBSTR(lcArq, 1,LEN(lcArq)-3)+[TXT]
+						RENAME &lcArq to &lcArqTo
+						LOOP
+					ENDIF
+				EndIf
+				
+
+				Zap In crSigMvCab
+				Zap In crSigMvItn
+				Zap In crsigmvpar
+				Zap In crSigCdCli
+
+				*** mena - 01/10/2014 - o arquivo agora é lido numa string ***	
+				lcDadA = Chrtran(lcDadA,[,],[.])
+				lcDadA = Chrtran(lcDadA,["'],[ ])
+				lcDadA = Chrtran(lcDadA,"[]"," ")
+				lcDadA = Chrtran(lcDadA,[	],[])
+
+*!*				Delete In LocalPedidos
+*!*				Update LocalPedidos Set Linha = Alltrim(Upper(Linha))
+*!*				Update LocalPedidos Set Linha = Chrtran(Linha,[,],[.])
+*!*				Update LocalPedidos Set Linha = Chrtran(Linha,["'],[ ])
+*!*				Update LocalPedidos Set Linha = Chrtran(Linha,"[]"," ")
+*!*				Update LocalPedidos Set Linha = Chrtran(Linha,[	],[])
+*!*				Go Top In LocalPedidos
+
+				Select crSigMvCab
+
+				lnNum = fGerUniqueKey(Alltrim(lcDop) + lcEmp, ThisForm.poDataMgr.pnIdConn, .f., .f., .t.)
+				lcEdn = Padr(lcEmp, 3) + Padr(lcDop, 20) + Str(lnNum, 6)
+				lcEgn = Padr(lcEmp, 3) + Space(20) + Str(lnNum, 6)
+				lcCtD = []
+
+				Append Blank In crSigMvCab
+				Replace Emps 		With lcEmp, ;
+						Dopes 		With lcDop, ;
+						Numes 		With lnNum, ;
+						MascNum     With Alltrim(fGerMascara(lnNum)), ;
+						Datars		With Datetime(), ;
+						Datas		With Date(), ;
+						DataTrans 	With Null, ;
+						DtAlts 		With Null, ;
+						Transps 	With .f., ;
+						Usuals		With [], ;
+						Usuars		With lcUsu, ;
+						Vends		With lcUsu, ;
+						Resps		With lcUsu, ;
+						Obses		With [], ;
+						Opers		With [S], ;
+						UltGrvs		With [SIGPRMEI - ] + Ttoc(Datetime()), ;
+						EmpDopNums  With lcEdn, ;
+						EmpGopNums  With lcEgn, ;
+						GrupoOs		With lcGrO, ;
+						ContaOs		With lcCtO, ;
+						GrupoDs		With lcGrD, ;
+						GrVends		With lcGrV, ;
+						GrResps		With lcGrV, ;
+						cIdChaves   With fUniqueIds() In crSigMvCab
+
+				lnCpo = 12
+				Dimension laCpo(lnCpo)
+				laCpo(01) = [<PEDIDO_CODIGO>]
+				laCpo(02) = [<PEDIDO_STATUS_CODIGO>]
+				laCpo(03) = [<PEDIDO_STATUS>]
+				laCpo(04) = [<PEDIDO_DATA_HORA>]
+				laCpo(05) = [<CLIENTE_TIPO_DOCUMENTO>]
+				laCpo(06) = [<PEDIDO_FRETE_CODIGO>]
+				laCpo(07) = [<PEDIDO_FRETE_FORMA>]
+				laCpo(08) = [<PEDIDO_FRETE_VALOR>]
+				laCpo(09) = [<PEDIDO_PAGAMENTO_CODIGO>]
+				laCpo(10) = [<PEDIDO_INFO_OBS_CLIENTE>]
+				laCpo(11) = [<PEDIDO_INFO_OBS_LOJA>]
+				laCpo(12) = [<PEDIDO_INFO_QUANTIDADE_PRODUTOS>]
+				
+				lnTit = 0
+				For lnBus = 1 To lnCpo
+					lcBus = laCpo(lnBus)
+					
+*!*					Select LocalPedidos
+*!*					Go Top In LocalPedidos
+*!*					Locate For UPPER(Left(Linha, Len(lcBus))) = lcBus
+*!*					If Not Eof([LocalPedidos]) And llOks
+					IF lcBus$lcDadA And llOks
+						lcFim = [</] + SUBSTR(lcBus,2)
+						lcDad = Alltrim(StrExtract(lcDadA, lcBus, lcFim))
+
+						Do Case
+							Case lnBus = 1
+								*** mena - 25/09/2014 - agora o pedido tem 9 caracteres - pega os ultimos 6 ***
+								Replace Notas With SUBSTR(lcDad, 4) In crSigMvCab
+								Replace Obses With Obses + [-] + lcDad + Chr(13) In crSigMvCab
+								**Replace Notas With Padl(lcDad, 6, [0]) In crSigMvCab
+								
+							Case lnBus = 2 And Not Empty(lcDad)
+								Replace Obses With Obses + [STATUS: ] + lcDad In crSigMvCab
+								
+							Case lnBus = 3 And Not Empty(lcDad)
+								Replace Obses With Obses + [-] + lcDad + Chr(13) In crSigMvCab
+								
+							Case lnBus = 4
+								*** mena - 25/09/2014 - ajusta o formato da data que esta vindo invertida ***
+								lcDat = SUBSTR(lcDad,9,2)+'/'+SUBSTR(lcDad,6,2)+'/'+SUBSTR(lcDad,1,4) + ' '+SUBSTR(lcDad,12)
+								Replace Datas With Ctot(lcDat) In crSigMvCab
+								
+							Case lnBus = 5
+								lnTps = 1 && Pessoa Física
+							
+*!*								Select LocalPedidos
+*!*								Go Top In LocalPedidos
+*!*								Locate For Left(Linha, Len([<CLIENTE_DOCUMENTO>])) = [<CLIENTE_DOCUMENTO>]
+*!*								If Not Eof([LocalPedidos])
+								IF [<CLIENTE_DOCUMENTO>]$lcDadA 
+									lcCPF = Alltrim(StrExtract(lcDadA, [<CLIENTE_DOCUMENTO>], [</CLIENTE_DOCUMENTO>]))
+									If lcDad = [CPF] or LEN(ALLTRIM(lcCpf)) = 14	&& mena 02/10/2014 - considera cpf ou cnpj pelo tamanho e não formata pois já esta vindo formatado
+*!*										lcCPF = Left(lcCPF, 3) + [.] + Substr(lcCPF, 4, 3) + [.] + Substr(lcCPF, 7, 3) + [-] + Right(lcCPF, 2)
+									Else
+										lnTps = 2 && Pessoa Jurídica
+*!*										lcCPF = Left(lcCPF, 2) + [.] + Substr(lcCPF, 3, 3) + [.] + Substr(lcCPF, 6, 3) + [/] + ;
+*!*												Substr(lcCPF, 9, 4) + [-] + Right(lcCPF, 2)
+									EndIf
+									
+									lcQuery = [Select * ] + ;
+											    [From SigCdCli ] + ;
+											   [Where Cpfs = '] + Padr(lcCPF, 20) + [']
+
+									If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCli]) < 1)
+										=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCli)])
+										 llOks = .f.
+									EndIf
+									If llOks									
+										Select LocalCli
+										Go Top In LocalCli
+										If Eof([LocalCli])
+											lnCdC = fGerUniqueKey(Alltrim(lcGrD) + lcEmp)
+											lcCtD = Alltrim([CW]) + lcEmp + Padl(lnCdC, 5, [0])
+
+											Insert Into crSigCdCli (Grupos, IClis, TpClis, Cpfs, Paises, Usuars, DataIncs, Emps, ContaVens) ;
+														  Values (lcGrD, lcCtD, lnTps, lcCpf, [BRASIL], lcUsu, Datetime(), lcEmp, lcCtV)
+
+*!*											Select LocalPedidos
+*!*											Go Top In LocalPedidos
+*!*											Locate For Left(Linha, Len([<CLIENTE_CODIGO>])) = [<CLIENTE_CODIGO>]
+*!*											If Not Eof([LocalPedidos])
+											IF [<CLIENTE_CODIGO>>]$lcDadA 
+												lcCww = Alltrim(StrExtract(lcDadA, [<CLIENTE_CODIGO>], [</CLIENTE_CODIGO>]))
+												Replace Obs With Obs + [CODIGO WEB: ] + lcCww + Chr(13) In crSigCdCli
+											EndIf
+										Else
+											lcCtD = LocalCli.IClis
+											Select LocalCli
+											Scatter Memvar Memo
+											Insert Into crSigCdCli From Memvar
+										EndIf
+										Use In LocalCli
+									EndIf
+									
+ 									If llOks
+										Replace ContaDs With lcCtD In crSigMvCab
+									EndIf
+									
+ 									If llOks
+	 									* e-Mail
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_EMAIL>])) = [<CLIENTE_EMAIL>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_EMAIL>]$lcDadA
+											lcAtu = Alltrim(StrExtract(lcDadA, [<CLIENTE_EMAIL>], [</CLIENTE_EMAIL>]))
+											If Not Empty(lcAtu) And (Empty(crSigCdCli.Emails) Or (Alltrim(crSigCdCli.Emails) <> lcAtu))
+												Replace EMails With lcAtu In crSigCdCli
+											EndIf
+										EndIf
+										
+										* Nome
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_NOME>])) = [<CLIENTE_NOME>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_NOME>]$lcDadA
+											lcAtu = TiraAcima128(fLimpaTexto(Alltrim(StrExtract(lcDadA, [<CLIENTE_NOME>], [</CLIENTE_NOME>]))))
+											If Not Empty(lcAtu) And (Empty(crSigCdCli.RClis) Or (Alltrim(crSigCdCli.RClis) <> lcAtu))
+												Replace RClis With lcAtu In crSigCdCli
+												If Empty(crSigCdCli.Razaos)
+													Replace Razaos With lcAtu In crSigCdCli
+												EndIf
+											EndIf
+										EndIf
+										
+										* Endereço
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_ENDERECO>])) = [<CLIENTE_ENDERECO>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_ENDERECO>]$lcDadA
+											lcAtu = TiraAcima128(fLimpaTexto(Alltrim(StrExtract(lcDadA, [<CLIENTE_ENDERECO>], [</CLIENTE_ENDERECO>]))))
+											If Not Empty(lcAtu) And (Empty(crSigCdCli.Endes) Or (Alltrim(crSigCdCli.Endes) <> lcAtu))
+												Replace Endes With lcAtu In crSigCdCli
+											EndIf
+										EndIf
+
+										* Número
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_NUMERO>])) = [<CLIENTE_NUMERO>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_NUMERO>]$lcDadA
+											lcAtu = Alltrim(StrExtract(lcDadA, [<CLIENTE_NUMERO>], [</CLIENTE_NUMERO>]))
+											If Not Empty(lcAtu) And (Empty(crSigCdCli.Nums) Or (Alltrim(crSigCdCli.Nums) <> lcAtu))
+												Replace Nums With lcAtu In crSigCdCli
+											EndIf
+										EndIf
+
+										* Complemento
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_COMPLEMENTO>])) = [<CLIENTE_COMPLEMENTO>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_COMPLEMENTO>]$lcDadA	
+											lcAtu = TiraAcima128(fLimpaTexto(Alltrim(StrExtract(lcDadA, [<CLIENTE_COMPLEMENTO>], [</CLIENTE_COMPLEMENTO>]))))
+											If Not Empty(lcAtu) And (Empty(crSigCdCli.Compls) Or (Alltrim(crSigCdCli.Compls) <> lcAtu))
+												Replace Compls With lcAtu In crSigCdCli
+											EndIf
+										EndIf
+
+										* Bairro
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_BAIRRO>])) = [<CLIENTE_BAIRRO>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_BAIRRO>]$lcDadA
+											lcAtu = TiraAcima128(fLimpaTexto(Alltrim(StrExtract(lcDadA, [<CLIENTE_BAIRRO>], [</CLIENTE_BAIRRO>]))))
+											If Not Empty(lcAtu) And (Empty(crSigCdCli.Bairs) Or (Alltrim(crSigCdCli.Bairs) <> lcAtu))
+												Replace Bairs With lcAtu In crSigCdCli
+											EndIf
+										EndIf
+
+										* Cidade
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_CIDADE>])) = [<CLIENTE_CIDADE>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_CIDADE>]$lcDadA
+											lcAtu = TiraAcima128(fLimpaTexto(Alltrim(StrExtract(lcDadA, [<CLIENTE_CIDADE>], [</CLIENTE_CIDADE>]))))
+											If Not Empty(lcAtu) And (Empty(crSigCdCli.Cidas) Or (Alltrim(crSigCdCli.Cidas) <> lcAtu))
+												Replace Cidas With lcAtu In crSigCdCli
+											EndIf
+										EndIf
+
+										* Estado
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_ESTADO>])) = [<CLIENTE_ESTADO>]
+*!*										If Not Eof([LocalPedidos])
+										*** Mena - 15/10/2014 - pega a sigla do estado ***
+										IF [<CLIENTE_ESTADO>]$lcDadA
+											lcAtu = TiraAcima128(fLimpaTexto(Alltrim(StrExtract(lcDadA, [<CLIENTE_ESTADO>], [</CLIENTE_ESTADO>]))))
+											lcQuery = [select estados, descrs from sigcdufs Where descrs = '] + alltrim(lcAtu) + [']
+											If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalUf]) < 1)
+												=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalUf)])
+												 llOks = .f.
+											else	
+												If Not Empty(LocalUf.estados) And (Empty(crSigCdCli.Estas) Or (Alltrim(crSigCdCli.Estas) <> LocalUf.estados))
+													Replace Estas With IIF(EOF('localCep'),ALLTRIM(localUf.estados),ALLTRIM(localcep.estados)) In crSigCdCli
+												EndIf
+											ENDIF
+										EndIf
+
+										* CEP
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_CEP>])) = [<CLIENTE_CEP>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_CEP>]$lcDadA
+											lcAtu = Alltrim(StrExtract(lcDadA, [<CLIENTE_CEP>], [</CLIENTE_CEP>]))
+											If Not Empty(lcAtu) And (Empty(crSigCdCli.Ceps) Or (Alltrim(crSigCdCli.Ceps) <> lcAtu))
+												Replace Ceps With IIF(EOF('localCep'),Left(lcAtu, 5) + [-] + Right(lcAtu, 3),ALLTRIM(localcep.ceps)) In crSigCdCli
+											EndIf
+										EndIf
+
+										* Telefone 1
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_TELEFONE_1>])) = [<CLIENTE_TELEFONE_1>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_TELEFONE_1>]$lcDadA
+											lcAtu = Alltrim(StrExtract(lcDadA, [<CLIENTE_TELEFONE_1>], [</CLIENTE_TELEFONE_1>]))
+											If Not Empty(lcAtu) And (Empty(crSigCdCli.Tel1s) Or (Alltrim(crSigCdCli.Tel1s) <> lcAtu))
+												Replace Tel1s With lcAtu In crSigCdCli
+											EndIf
+										EndIf
+
+										* Telefone 2
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_TELEFONE_2>])) = [<CLIENTE_TELEFONE_2>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_TELEFONE_2>]$lcDadA
+											lcAtu = Alltrim(StrExtract(lcDadA, [<CLIENTE_TELEFONE_2>], [</CLIENTE_TELEFONE_2>]))
+											If Not Empty(lcAtu) And (Empty(crSigCdCli.Tel2s) Or (Alltrim(crSigCdCli.Tel2s) <> lcAtu))
+												Replace Tel2s With lcAtu In crSigCdCli
+											EndIf
+										EndIf
+
+										* RG/IE
+*!*										Select LocalPedidos
+*!*										Go Top In LocalPedidos
+*!*										Locate For Left(Linha, Len([<CLIENTE_IE_RG_DOCUMENTO>])) = [<CLIENTE_IE_RG_DOCUMENTO>]
+*!*										If Not Eof([LocalPedidos])
+										IF [<CLIENTE_IE_RG_DOCUMENTO>]$lcDadA
+											lcAtu = Alltrim(StrExtract(lcDadA, [<CLIENTE_IE_RG_DOCUMENTO>], [</CLIENTE_IE_RG_DOCUMENTO>]))
+											If (Not Empty(lcAtu) And (Empty(crSigCdCli.Rgs) Or (Alltrim(crSigCdCli.Rgs) <> lcAtu)) And ;
+												Not InList(Alltrim(Upper(lcAtu)), [ISENTO], [ISENTA]))
+												Replace Rgs With lcAtu In crSigCdCli
+											EndIf
+										EndIf
+									EndIf
+								EndIf
+								
+							Case lnBus = 6 And Not Empty(lcDad)
+								Replace Obses With Obses + [FRETE: ] + lcDad In crSigMvCab
+								
+							Case lnBus = 7 And Not Empty(lcDad)
+								Replace Obses With Obses + [-] + lcDad + Chr(13) In crSigMvCab
+								
+							Case lnBus = 8 And Not Empty(lcDad)
+								Replace Obses With Obses + [VALOR FRETE: R$] + lcDad + Chr(13) In crSigMvCab
+								Replace ValVars With Val(lcDad) In crSigMvCab
+								
+							Case lnBus = 9 And Not Empty(lcDad)
+								lcFpg = [WEB ] + lcDad
+
+								lnVal = 0
+*!*								Select LocalPedidos
+*!*								Go Top In LocalPedidos
+*!*								Locate For Left(Linha, Len([<PEDIDO_PAGAMENTO_VALOR>])) = [<PEDIDO_PAGAMENTO_VALOR>]
+*!*								If Not Eof([LocalPedidos])
+								IF [<PEDIDO_PAGAMENTO_VALOR>]$lcDadA
+									lnVal = Val(Alltrim(StrExtract(lcDadA, [<PEDIDO_PAGAMENTO_VALOR>], [</PEDIDO_PAGAMENTO_VALOR>])))
+								EndIf
+								
+								Append Blank In crsigmvpar
+								lnNop = fGerUniqueKey([SIGMVCCR], ThisForm.poDataMgr.pnIdConn, .f., .f., .t.)
+
+								Replace FPags       With lcFpg, ;
+										Emps 		With lcEmp, ;
+										Dopes 		With lcDop, ;
+										Numes 		With lnNum, ;
+										EmpDopNums  With lcEdn, ;
+										Datas		With crSigMvCab.Datas, ;
+										DataTrans 	With Null, ;
+										Vencs    	With crSigMvCab.Datas, ;
+										DtAlts		With Null, ;
+										Nopers		With lnNop, ;
+										CotFpgs     With 1, ;
+										Parcs		With 1, ;
+										TParcs		With 1, ;
+										Pagos 		With [1], ;
+										MoeFpgs     With [R], ;
+										Valos		With lnVal, ; 
+										VPags		With 0, ;
+										cIdChaves   With fUniqueIds() In crsigmvpar
+
+								Replace ValInis With lnVal, ;
+										Valos	With lnVal In crSigMvCab
+										
+							Case lnBus = 10 And Not Empty(lcDad)
+								Replace Obses With Obses + [OBS. CLIENTE: ] + lcDad + Chr(13) In crSigMvCab
+
+							Case lnBus = 11 And Not Empty(lcDad)
+								Replace Obses With Obses + [OBS. LOJA: ] + lcDad + Chr(13) In crSigMvCab
+
+							Case lnBus = 12 And Not Empty(lcDad)
+								lnTit = Val(lcDad)
+						EndCase
+					EndIf
+				Next
+
+				If (lnTit > 0) And llOks
+					* Inserindo os Itens do Pedido
+					For lnItn = 1 To lnTit
+						If llOks
+							lcPro = [PRODUTOWEB]
+							
+*!*							Select LocalPedidos
+*!*							Go Top In LocalPedidos
+*!*							Locate For Left(LocalPedidos.Linha, Len([<PRODUTO_CODIGO>])) = [<PRODUTO_CODIGO>]
+*!*							If Not Eof([LocalPedidos])
+							IF [<PRODUTO_CODIGO>]$lcDadA
+								Append Blank In crSigMvItn
+								Replace CItens		With lnItn, ;
+										CPros 		With lcPro, ;
+										Emps 		With lcEmp, ;
+										Dopes 		With lcDop, ;
+										Numes 		With lnNum, ;
+										DataTrans 	With Null, ;
+										DtAlts		With Null, ;
+										EmpDopNums  With lcEdn, ;
+										FatVals 	With 1, ;
+										MoeVals 	With 1, ;
+										Opers		With [S], ;
+										Moedas		With [R], ;
+										Moevs		With [R], ;
+										CUnis		With [PC], ;
+										cIdChaves   With fUniqueIds() In crSigMvItn
+
+								lcCod = Alltrim(StrExtract(lcDadA, [<PRODUTO_CODIGO>], [</PRODUTO_CODIGO>]))
+								Replace Obs With Obs + lcCod + [ ] In crSigMvItn
+
+*!*								lnRec = Recno([LocalPedidos])
+*!*								Delete In LocalPedidos
+*!*								Skip In LocalPedidos
+*!*								Do While Not Eof([LocalPedidos]) And llOks And (Left(LocalPedidos.Linha, Len([<PRODUTO_CODIGO>])) <> [<PRODUTO_CODIGO>])
+*!*								Do While llOks And [<PRODUTO_CODIGO>]$lcDadA
+								*!*	Do Case
+								if llOks And [<PRODUTO_CODIGO>]$lcDadA
+										if [<PRODUTO_VARIACAO_INFORMACAO>]$lcDadA
+											lcDad = Alltrim(StrExtract(lcDadA, [<PRODUTO_VARIACAO_INFORMACAO>], [</PRODUTO_VARIACAO_INFORMACAO>]))
+											Replace Obs With Obs + lcDad In crSigMvItn
+										ENDIF
+										
+										if [<PRODUTO_PRECO_TOTAL>]$lcDadA
+											lcDad = Alltrim(StrExtract(lcDadA, [<PRODUTO_PRECO_TOTAL>], [</PRODUTO_PRECO_TOTAL>]))
+											Replace Totas With Val(lcDad) In crSigMvItn
+										ENDIF
+
+										if [<PRODUTO_QUANTIDADE>]$lcDadA
+											lcDad = Alltrim(StrExtract(lcDadA, [<PRODUTO_QUANTIDADE>], [</PRODUTO_QUANTIDADE>]))
+											Replace Qtds With Val(lcDad) In crSigMvItn
+										ENDIF
+
+										if [<PRODUTO_REFERENCIA>]$lcDadA
+											lcDad = Alltrim(StrExtract(lcDadA, [<PRODUTO_REFERENCIA>], [</PRODUTO_REFERENCIA>]))
+
+											lcQuery = [Select CUnis ] + ;
+													    [From SigCdPro ] + ;
+													   [Where CPros = '] + Padr(lcDad, 14) + [']
+
+											If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+												=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)])
+												llOks = .f.
+											EndIf
+											If llOks
+												Select LocalPro
+												Go Top In LocalPro
+												If Not Eof([LocalPro])
+													lcPro = lcDad
+													Replace CPros With lcPro, ;
+															CUnis With LocalPro.CUnis In crSigMvItn
+												EndIf
+											EndIf
+										ENDIF
+
+										if [<PRODUTO_PRECO>]$lcDadA
+											lcDad = Alltrim(StrExtract(lcDadA, [<PRODUTO_PRECO>], [</PRODUTO_PRECO>]))
+											Replace Units With Val(lcDad) In crSigMvItn
+										ENDIF
+
+										if [<PRODUTO_NOME>]$lcDadA
+											lcDad = Alltrim(StrExtract(lcDadA, [<PRODUTO_NOME>], [</PRODUTO_NOME>]))
+											Replace DPros With lcDad In crSigMvItn
+										Endif
+										*** Tiago - 26/06/2015 - Mult - Retira o IPI do valor unitário e total
+										lcQuery = [Select Encargos From SigCdPro Where CPros = '] + crSigMvItn.Cpros + [']
+										If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPro]) < 1)
+											=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPro)])
+											llOks = .f.
+										Endif
+										If llOks And !Empty(LocalPro.Encargos)
+											Replace Units With Units - ((Units * LocalPro.Encargos) / 100) In crSigMvItn
+											Replace Totas With Qtds * Units In crSigMvItn
+										Endif
+											
+*!*									EndCase
+									lcDadA = StrExtract(lcDadA, [</PRODUTO>],[])
+									
+*!*									Delete In LocalPedidos 
+*!*									Skip In LocalPedidos
+*!*								EndDo
+								Endif
+							EndIf 
+						EndIf 
+					Next
+				EndIf
+			EndIf
+
+			If llOks And Not ThisForm.poDataMgr.Update([crSigMvCab])
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvCab)])
+				llOks = .f.
+			EndIf
+
+			If llOks And Not ThisForm.poDataMgr.Update([crSigMvItn])
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigMvItn)])
+				llOks = .f.
+			EndIf
+
+			If llOks And Not ThisForm.poDataMgr.Update([crsigmvpar])
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crsigmvpar)])
+				llOks = .f.
+			EndIf
+
+			If llOks And Not ThisForm.poDataMgr.Update([crSigCdCli])
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdCli)])
+				llOks = .f.
+			EndIf
+
+			If llOks And (ThisForm.poDataMgr.Commit() < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+				Return 0
+			EndIf
+
+			If Not llOks
+				ThisForm.poDataMgr.Rollback()
+			Else
+				lcOK1 = lcDpd + [OK\]
+				
+				If Not Directory(lcOK1)
+					MkDir &lcOK1.
+				EndIf
+				
+				If Directory(lcOK1)
+					lcDst = lcOK1 + Alltrim(laArq(lnPrc, 1))
+					Copy File &lcArq. To &lcDst.
+				EndIf
+				
+				If File(lcDst)
+					Delete File &lcArq.
+				EndIf
+			EndIf
+		EndIf
+	Next
+EndIf
+
+Return llOks
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.PodataMgr.Release
+
+DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters pPar
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+ThisForm.Parametrizado = pPar
+thisform.poObjext = CreateObject('fSqlConector', 'CEP')
+
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector])
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .podatamgr
+			.AddCursor([SigCdCli],   [IClis],     [crSigCdCli])
+			.AddCursor([SigMvCab],	 [cIdChaves], [crSigMvCab])
+			.AddCursor([SigMvItn],	 [cIdChaves], [crSigMvItn])
+			.AddCursor([SigMvpar],   [cIdChaves], [crSigMvpar])
+		EndWith
+
+		=DoDefault()
+		
+		lcQuery = [Select DirLivrosV, CdChepSais, Mascnums, CdChepEnts ] + ;
+				    [From sigcdpam]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crsigcdpam]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crsigcdpam)])
+			Return .f.
+		EndIf
+		Go Top In crsigcdpam
+	Else
+		If Not ThisForm.Parametrizado
+			=Messagebox([Impossivel Efetuar Conexão com Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Endif
+		Return .f.
+	EndIf
+
+	
+	If !(.poObjext.pnIdconn > 0)
+		Return .f.
+	Endif
+
+
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Activate
+------------------------------------------------------------
+PROCEDURE Activate
+If ThisForm.Parametrizado
+	ThisForm.OK.Click()
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRMEI.cmdBtnForm
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnCopiar.Click
+------------------------------------------------------------
+PROCEDURE btnCopiar.Click
+Local llOk1, llOk2, lcCidChave, lnErro1
+
+This.Enabled = .f.
+
+Set Cursor Off
+
+Keyboard [{LEFTARROW}]
+
+lnMov = 1
+Do While .t.
+	ThisForm.cmdBtnForm.BtnSair.Enabled = .f.
+
+	ThisForm.Label1.Caption = [Aguardando Arquivos Para Processar] + Replicate([.], lnMov)
+	lnMov = Iif(lnMov < 5, lnMov + 1, 1)
+
+	llOk1 = ThisForm.LerArquivos()
+	llOk2 = ThisForm.GravarArquivos()
+
+	ThisForm.cmdBtnForm.BtnSair.Enabled = .t.
+	
+	lnError = 0
+	lcErro  = On([Error])
+	On Error lnError = 1
+
+	lnKey = Inkey(.5, 'M')
+
+	If lnError <> 0
+		lnKey = 0
+	Endif
+	On Error &lcErro.
+
+	If Not ThisForm.Parametrizado Or lnKey = 27
+		Exit
+	Endif
+
+	lcForm = ThisForm.Name
+	If ThisForm.MouseSobreBotaoSair(mCol(lcForm, 3), mRow(lcForm, 3), ThisForm.cmdBtnForm.BtnSair) And (lnKey=151)
+		ThisForm.cmdBtnForm.BtnSair.Click()
+		Exit
+	EndIf
+EndDo
+Set Cursor On
+
+ThisForm.Label1.Caption = []
+This.Enabled = .t.
+
+If ThisForm.Parametrizado
+	Thisform.Release
+	Quit
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnSair.Click
+------------------------------------------------------------
+PROCEDURE btnSair.Click
+Thisform.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRMEI
+RESERVED3 (ClassInfo): lnnofabr
+parametrizado
+podatamgr
+poobjext armazena objeto do cadastro de produtos
+_memberdata XML Metadata for customizable properties
+*desabotao 
+*gravararquivos 
+*habilitabotao 
+*lerarquivos 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================

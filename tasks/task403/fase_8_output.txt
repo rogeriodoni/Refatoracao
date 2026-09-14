@@ -1,0 +1,10 @@
+﻿Fase 8 conclu├¡da. O que foi feito:
+
+**FormEmn.prg** ÔÇö adicionado `AjustarBotoesPorModo()` (linha 2303), que ajusta o estado dos 5 bot├Áes CRUD da Page1, do bot├úo Confirmar/Cancelar na Page2 e chama `HabilitarCampos()` conforme o modo atual.
+
+**menu.prg** ÔÇö tr├¬s adi├º├Áes:
+- `DEFINE BAR 83 OF popCadastros PROMPT "Estoque Alvo"` (linha 195)
+- `ON SELECTION BAR 83 OF popCadastros DO AbrirFormEmn` (linha 266)
+- `PROCEDURE AbrirFormEmn()` no final (linha 7120), seguindo o padr├úo can├┤nico com `VARTYPE`, `Show()` sem par├ómetro e sem `Release()` ap├│s Show.
+
+A integra├º├úo com `config.prg` ├® autom├ítica ÔÇö o ADIR() j├í carrega todos os `*BO.prg` de `classes/` e `Form*.prg` de `forms/cadastros/` dinamicamente.

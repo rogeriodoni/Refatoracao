@@ -1,0 +1,3 @@
+﻿**Root cause**: `Init()` guarded `WindowType = 1` with `gb_4c_ModoTeste`, but `TesteAutomatico.prg` sets `gb_4c_ValidandoUI` (the same variable already used by `InicializarForm()`). Since `gb_4c_ModoTeste` was never defined, `TYPE(...)` returned `"U"`, the guard evaluated to `.T.`, `WindowType = 1` was set, and the modal form blocked indefinitely.
+
+**Fix**: Changed `gb_4c_ModoTeste` ÔåÆ `gb_4c_ValidandoUI` in `Init()` so both Init and InicializarForm use the same test-mode flag. Also removed the duplicate `ShowWindow = 1` class property (it conflicted with `ShowWindow = 0` one line above and would have made the form initially visible as a floating window).

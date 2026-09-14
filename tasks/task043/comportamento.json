@@ -1,0 +1,376 @@
+{
+  "resumo": {
+    "totalMetodos": 20,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 13,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fAcessoEmpresa", "fAcessoContas", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECBH",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "IF ThisForm.ImpTotal.Value\n\tREPORT form SigReCb1 PREVIEW NoConsole\nelse\n\treport form SigReCb2 preview NoConsole\nENDIF\nuse in CsCabecalho\nuse in CsRelatorio\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH",
+      "evento": "Procedure",
+      "linhas": 167,
+      "codigoOriginal": "Private lcNomeEmpresa,lcTitulo,lcPeriodo,lcOperacao,lcEmissor\nPrivate lnNrTipo,ldDtInicial,ldDtFinal,lcNmOperacao,lcCdEmpresa,lcDsEmpresa,lnNrOpcao\nPrivate lcGrupo,lcConta, lcRespo\n\nPrivate lcVerData,lcVerOperacao,lcVerEmpresa,lcVerOpcao\nPrivate lcVerEmiGrupo,lcVerEmiConta,lcVerAberto, lsEmp, lcCdEmpresa\n\n* inicializa variáveis de campos\nlnNrTipo     = Thisform.opt_nr_tipo.Value\nldDtInicial  = Iif(!Empty(Thisform.get_dt_inicial.Value),fDtoSQL(Thisform.get_dt_inicial.Value),Ctod(\"\"))\nldDtFinal   ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Value),fDtoSQL,CursorQuery,Value)+' à '+Dtoc,SqlExecute",
+        "controlesReferenciados": "opt_nr_tipo,get_dt_inicial,get_dt_final,get_grupo,get_conta,get_respo,get_dconta,get_drespo,get_ordem,opt_quebra,get_cd_empresa,get_ds_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nCreate Cursor TmpOpera ( Flag l, Operacaos c(15), Devolvidos c(1) )\nIndex on Operacaos Tag Operacaos\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH",
+      "evento": "Init",
+      "linhas": 40,
+      "codigoOriginal": "WITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.SqlExecute([Select * From SigCdOpt],'crSigCdOpt')\n\t\t.SqlExecute([Select GRPADVENS From SigCdPam],'crSigCdPam')\n\t\t\n\t\t*** Rafael - 04/04/2018 - seleciona empresas que usuario tem acesso *** \n\t\tlcQuery = [select emps from sigcdace where usuarios=']+usua... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "value        = Date",
+        "controlesReferenciados": "Opt],Opt',get_dt_inicial,get_dt_final,opt_quebra,get_ordem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "IF ThisForm.ImpTotal.Value\n\tREPORT form SigReCb1 to printer prompt noconsole\nelse\n\treport form SigReCb2 to printer prompt noconsole\nENDIF\n\nuse in CsCabecalho\nuse in CsRelatorio\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH",
+      "evento": "Click",
+      "linhas": 39,
+      "codigoOriginal": "if this.value <> 4\n\n\t* consiste o campo data final\n\tif empty(thisform.get_dt_final.value)\n\t\tmessagebox('Data final inválida !',16,'')\n\t\tthisform.get_dt_final.setfocus\n\t\treturn(.f.)\n\tendif\n\t\n\t* consiste os campos de datas\n\tif thisform.get_dt_final.value < thisform.get_dt_inicial.value\n\t\tmessagebox('Data inicial maior que data final !',16,'')\n\t\tthisform.get_dt_inicial.setfocus\n\t\treturn(.f.)\n\tendif\n\t\t\n\t* consiste o campo operação\n\tSelect TmpOpera\n\tllSelect = .f.\n\tScan for flag\n\t\tllSelect = .t.\n\tEnd... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_final,get_dt_inicial,get_ordem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.get_ds_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_Cd_Empresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "= fAcessoEmpresa(Usuar,'D',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.Command3",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lnRecno1\nm.lnRecno1 = RecNo('tmpOpera')\nUpDate TmpOpera Set Flag=.t.\nIf BetWeen(m.lnRecno1,1,RecCount('TmpOpera'))\n\tGoTo m.lnRecno1 In ('TmpOpera')\nEndIf\nThisForm.GradeOpera.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.Command4",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lnRecno1\nm.lnRecno1 = RecNo('tmpopera')\nUpDate tmpopera Set Flag=.F.\nIf BetWeen(m.lnRecno1,1,RecCount('tmpopera'))\n\tGoTo m.lnRecno1 In ('tmpopera')\nEndIf\nThisForm.GradeOpera.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.get_respo",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local llRetorno\n\nm.lcGrupo = crSigCdPaM.GRPADVENS\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,lcGrupo,'C',This.Value,ThisForm.get_respo,ThisForm.get_drespo)\n\t\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\t\tThisForm.get_respo.Value = ''\n\t\tThisForm.get_Drespo.Value = ''\n\t\tThisForm.get_respo.Refresh\n\t\tThisForm.get_Drespo.Refresh\n\t\tThisForm.opt_quebra.Value = 3\n\t\tThisForm.opt_quebra.Refresh\n\tEndIf\nEndif\nReturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_respo,get_drespo,opt_quebra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.get_drespo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(Thisform.get_respo.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_respo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.get_drespo",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loBrowse,llRetorno,lcGrupo\n\nm.lcGrupo = crSigCdPaM.GRPADVENS\nIf .Not.Empty(This.Value)\n\tIf !fAcessoContas(Usuar,ThisForm.get_respo.Value,'D',This.Value,ThisForm.get_respo,ThisForm.get_drespo)\n\t\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\t\tThisForm.get_respo.Value = ''\n\t\tThisForm.get_Drespo.Value = ''\n\t\tThisForm.get_respo.Refresh\n\t\tThisForm.get_Drespo.Refresh\n\tElse\n\t\tThisForm.opt_quebra.Value = 3\n\t\tThisForm.opt_quebra.Refresh\n\tEndif\nElse\n\tThisForm.get_respo.Value = Space(10)\n\tThisFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "Value = Space",
+        "controlesReferenciados": "get_respo,get_drespo,opt_quebra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.Get_Grupo",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "= fAcessoContab(Usuar,'C',This.Value,ThisForm.get_Grupo,ThisForm.get_DGrupo)\nIf Empty(This.Value)\n\tThisForm.get_conta.Value = ''\n\tThisForm.get_dconta.Value = ''\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Grupo,get_DGrupo,get_conta,get_dconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.Get_dgrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.Get_dgrupo",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "= fAcessoContab(Usuar,'D',This.Value,ThisForm.get_Grupo,ThisForm.get_DGrupo)\n\nIf Empty(This.Value)\n\n\tThisForm.get_conta.Value = ''\n\tThisForm.get_dconta.Value = ''\n\t\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Grupo,get_DGrupo,get_conta,get_dconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.Get_Conta",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loBrowse,llRetorno,lcGrupo\n\nm.lcGrupo = PadR(Thisform.get_Grupo.Value,10)\n\nIf .Not.Empty(This.Value)\n\tIf !fAcessoContas(Usuar, lcGrupo, 'C', This.Value, ThisForm.get_Conta, ThisForm.get_Dconta)\n\t\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\t\tThisForm.get_Conta.Value = ''\n\t\tThisForm.get_DConta.Value = ''\n\t\tThisForm.get_Conta.Refresh\n\t\tThisForm.get_DConta.Refresh\n\tElse\n\t\tThisForm.opt_quebra.Value = 3\n\t\tThisForm.opt_quebra.Refresh\n\tEndif\n\nElse\n\t\n\tThisForm.get_Conta.Value = Space(50)\n\tT... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "Value = Space",
+        "controlesReferenciados": "get_Grupo,get_Conta,get_Dconta,opt_quebra",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_conta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECBH.Get_dconta",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loBrowse,llRetorno,lcGrupo\n\nm.lcGrupo = PadR(ThisForm.get_Grupo.Value,10)\n\nIf .Not.Empty(This.Value)\n\tIf !fAcessoContas(Usuar,ThisForm.get_Conta.Value,'D',This.Value,ThisForm.get_Conta,ThisForm.get_dconta)\n\t\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\t\tThisForm.get_Conta.Value = ''\n\t\tThisForm.get_DConta.Value = ''\n\t\tThisForm.get_Conta.Refresh\n\t\tThisForm.get_DConta.Refresh\n\tElse\n\t\tThisForm.opt_quebra.Value = 3\n\t\tThisForm.opt_quebra.Refresh\n\tEndif\nElse\n\tThisForm.get_Conta.Value = Spa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "Value = Space",
+        "controlesReferenciados": "get_Grupo,get_Conta,get_dconta,opt_quebra",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECBH.Init",
+      "queryOriginal": "\t\t.SqlExecute([Select * From SigCdOpt],'crSigCdOpt')",
+      "tabelas": "SigCdOpt",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECBH.Init",
+      "queryOriginal": "\t\t.SqlExecute([Select GRPADVENS From SigCdPam],'crSigCdPam')",
+      "tabelas": "SigCdPam",
+      "colunas": "GRPADVENS",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECBH.Init",
+      "queryOriginal": "\t\tlcQuery = [select emps from sigcdace where usuarios=']+usua... [TRUNCADO]",
+      "tabelas": "sigcdace",
+      "colunas": "emps,usuarios",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECBH.Command3.Click",
+      "queryOriginal": "UpDate TmpOpera Set Flag=.t.",
+      "tabelas": "TmpOpera",
+      "colunas": "Flag",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECBH.Command4.Click",
+      "queryOriginal": "UpDate tmpopera Set Flag=.F.",
+      "tabelas": "tmpopera",
+      "colunas": "Flag",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpt", "SigCdPam", "sigcdace", "TmpOpera"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

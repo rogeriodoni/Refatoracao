@@ -1,0 +1,9 @@
+﻿A corre├º├úo foi aplicada. O que mudou:
+
+1. **`.RecordSource` removido de dentro do `WITH THIS.grd_4c_Dados`** ÔÇö seguindo a regra `[RECORDSOURCE-WITH]` do CLAUDE.md.
+
+2. **`THIS.grd_4c_Dados.RecordSource = "cursor_4c_DivOp"` movido para ap├│s o `ENDWITH`** ÔÇö o auto-bind do VFP9 agora ocorre ap├│s todas as propriedades visuais das colunas j├í terem sido configuradas.
+
+3. **`ControlSource` re-definido explicitamente para todas as 5 colunas ap├│s o `RecordSource`** ÔÇö garante que os bindings corretos (incluindo a express├úo composta da Column1) prevalecem sobre o auto-bind por ordem de campo do cursor.
+
+O cursor `cursor_4c_DivOp` tem os campos na ordem `Qtds, QtdDivs, Dopes, Numes, Dataes...`, que difere completamente da ordem visual desejada ÔÇö sem essa re-defini├º├úo, Column1 exibiria `Qtds` em vez de `Dopes+Numes`, Column4 exibiria `Numes` em vez de `Qtds`, etc.

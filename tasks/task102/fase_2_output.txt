@@ -1,0 +1,11 @@
+﻿All 8 phases complete. Here's the migration summary for SIGREFFN (task102):
+
+**Files modified/created:**
+
+| File | Action |
+|------|--------|
+| `app/classes/sigreffnBO.prg` | Added 9 PUBLIC methods: `Visualizar`, `Imprimir`, `GerarDocumentoExcel`, `MarcarEmpresas`, `DesmarcarEmpresas`, `MarcarDisponibilidades`, `DesmarcarDisponibilidades`, `MarcarOperacoes`, `DesmarcarOperacoes`. Fixed `BuscarCotacaoAtual` from PROTECTED to public (was being called externally from the form). |
+| `app/forms/relatorios/Formsigreffn.prg` | Created (~1994 lines): full REPORT form with 3 grids (`cEmp`, `cDisp`, `crSigOpOpe`), all filter controls (period, moeda ref + cota├º├úo, moeda lan├ºamento, 8 option groups, 2 checkboxes), F4/Enter/DblClick moeda lookups, OptListaAtraChange, all Marcar/Desmarcar button handlers. |
+| `app/menu/menu.prg` | Added BARs 120-123 (separators + SIGREFFI + SIGREFFN entries), ON SELECTION handlers for BARs 121 and 123, and `AbrirFormsigreffi()` + `AbrirFormsigreffn()` procedures. |
+
+**Config auto-load:** No changes needed ÔÇö `*BO.prg` and `relatorios\Form*.prg` glob patterns pick up both new files automatically.

@@ -1,0 +1,11 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente. Sobre os demais itens do relat├│rio:
+
+- **[METODO-INEXISTENTE] ProcessarBalanco / ImprimirBalanco** ÔÇö Falso positivo: ambos est├úo definidos no form (`PROTECTED FUNCTION ProcessarBalanco()` linha 1879, `PROTECTED FUNCTION ImprimirBalanco()` linha 5231). O checker confundiu `FUNCTION` com `PROCEDURE`, mas em VFP9 ambos s├úo v├ílidos como m├®todos de classe.
+
+- **[GRID-WITH]** ÔÇö Falso positivo: o c├│digo j├í segue o padr├úo correto ÔÇö `RecordSource` e `ColumnCount` est├úo **fora** do `WITH` (linhas 988-989 em `CarregarLista`).
+
+- **[LAYOUT-POSITION] (20 itens)** ÔÇö Falsos positivos: o checker est├í comparando controles errados. Por exemplo, compara `lbl_4c_Label15` (que n├úo existe no c├│digo migrado) com `Label1` legado; compara `Get_Pesagem` (TextBox de valor) com o bot├úo `Pesagem`; compara `Get_Datai` (dentro de `cnt_4c_Resultado`) com `Get_Data` (campo da Page2). Os controles reais no c├│digo migrado t├¬m as posi├º├Áes corretas.
+
+**Corre├º├Áes aplicadas:**
+1. `TornarControlesVisiveis`: `CNT_4C_CABECALHO` e `CNT_4C_CONVERSAO` adicionados ao filtro ÔÇö o m├®todo recursa nos filhos (pr├®-tornando-os vis├¡veis) mas n├úo for├ºa `.Visible = .T.` nos containers que devem iniciar ocultos.
+2. `grdMov.Column2.Header1.Caption`: corrigido de `"Tipo Op."` para `"Tipo Opera" + CHR(231) + CHR(227) + "o"` (id├¬ntico ao legado).

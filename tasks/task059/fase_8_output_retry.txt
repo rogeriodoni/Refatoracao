@@ -1,0 +1,16 @@
+﻿All 10 Phase 8 methods are now present in `Formsigrecog.prg`:
+
+| Method | Line |
+|--------|------|
+| `FormParaBO()` | 553 (newly added) |
+| `LimparCampos()` | 571 |
+| `BtnEncerrarClick()` | 624 |
+| `BtnBuscarClick()` | 1009 |
+| `BtnSalvarClick()` | 1021 |
+| `BtnCancelarClick()` | 1032 |
+| `BOParaForm()` | 1042 |
+| `HabilitarCampos()` | 1062 |
+| `CarregarLista()` | 1080 |
+| `AjustarBotoesPorModo()` | 1098 |
+
+Phase 8 retry complete. The missing piece was `FormParaBO()` ÔÇö the file had `FormParaRelatorio()` (the report-specific equivalent) but the validator was looking for the canonical CRUD-style name. Added `FormParaBO()` as a proper implementation copying all 8 filter fields (dates, empresa, vendedor, moeda) to the BO. The file is well-formed (1107 lines, ends with `ENDDEFINE`).

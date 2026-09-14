@@ -1,0 +1,263 @@
+﻿{
+    "taskId":  "task404",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-08-01T12:06:22",
+    "atualizadoEm":  "2026-08-01T14:54:42",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-08-01T12:06:22",
+                                            "fim":  "2026-08-01T12:06:22",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task404\\sigcdemp.sct",
+                                            "baseName":  "sigcdemp",
+                                            "scxFile":  "C:\\4c\\tasks\\task404\\sigcdemp.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-08-01T12:06:22",
+                                          "fim":  "2026-08-01T12:06:23",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigcdemp",
+                                          "txtFile":  "C:\\4c\\tasks\\task404\\sigcdemp_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-01T12:06:23",
+                                              "fim":  "2026-08-01T12:06:23",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task404\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-01T12:06:24",
+                                              "fim":  "2026-08-01T12:06:33",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task404\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task404\\meta_prompt.md",
+                                              "boClass":  "empBO",
+                                              "formClass":  "Formemp",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task404\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-01T12:06:33",
+                                              "fim":  "2026-08-01T12:06:33",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task404\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-01T12:06:33",
+                                               "fim":  "2026-08-01T12:06:34",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task404\\esqueletos",
+                                               "arquivos":  [
+                                                                "empBO_esqueleto.prg",
+                                                                "Formemp_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-01T12:06:34",
+                                       "fim":  "2026-08-01T14:17:11",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\empBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  338.64,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formemp.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  12527
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-08-01T14:17:11",
+                                                  "fim":  "2026-08-01T14:18:06",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formemp.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\empBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-08-01T14:18:07",
+                                                 "fim":  "2026-08-01T14:18:08",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-01T14:48:50",
+                                       "fim":  "2026-08-01T14:50:33",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-01T14:50:33",
+                                               "fim":  "2026-08-01T14:54:34",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task404\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-08-01T14:54:37",
+                                        "fim":  "2026-08-01T14:54:41",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_Formemp_20260801145441.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  3133,
+                                        "avisos":  3133
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-01T14:54:41",
+                                              "fim":  "2026-08-01T14:54:42",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task404_sigcdemp.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-08-01T12:06:23",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-08-01T12:06:24",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task404\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-08-01T12:06:24",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-01T12:06:24"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-08-01T14:18:06",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-08-01T14:18:07",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formemp_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formemp.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task404\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-08-01T14:18:08",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-08-01T14:18:08",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-08-01T14:18:08",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-08-01T14:29:12",
+                                          "passes":  1,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO, CNT_4C_PAGE3, CNT_4C_PAGE4. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page1): Top original=473 vs migrado \u0027lbl_4c_Label5b\u0027 Top=295 (diff=178px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page1): Left original=300 vs migrado \u0027lbl_4c_Label5b\u0027 Left=508 (diff=208px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpcaoCPFCGC\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page1): Top original=137 vs migrado \u0027obj_4c_OpcaoCPFCGC\u0027 Top=0 (diff=137px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpcaoCPFCGC\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page1): Left original=269 vs migrado \u0027obj_4c_OpcaoCPFCGC\u0027 Left=0 (diff=269px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027chkAnaVends\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page1): Top original=266 vs migrado \u0027chk_4c_ChkAnaVends\u0027 Top=577 (diff=311px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027chkAnaVends\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page1): Left original=646 vs migrado \u0027chk_4c_ChkAnaVends\u0027 Left=56 (diff=590px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_comis\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Top original=215 vs migrado \u0027obj_4c_Opc_comis\u0027 Top=0 (diff=215px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_comis\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Left original=698 vs migrado \u0027obj_4c_Opc_comis\u0027 Left=0 (diff=698px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OPT_ALTTRANS\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Top original=256 vs migrado \u0027obj_4c_OPT_ALTTRANS\u0027 Top=0 (diff=256px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OPT_ALTTRANS\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Left original=698 vs migrado \u0027obj_4c_OPT_ALTTRANS\u0027 Left=0 (diff=698px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OPTCALCCUSTOS\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Top original=235 vs migrado \u0027obj_4c_OPTCALCCUSTOS\u0027 Top=0 (diff=235px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OPTCALCCUSTOS\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Left original=699 vs migrado \u0027obj_4c_OPTCALCCUSTOS\u0027 Left=0 (diff=699px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Top original=270 vs migrado \u0027obj_4c_Optiongroup1\u0027 Top=0 (diff=270px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Left original=698 vs migrado \u0027obj_4c_Optiongroup1\u0027 Left=0 (diff=698px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup2\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Top original=201 vs migrado \u0027obj_4c_Optiongroup2\u0027 Top=0 (diff=201px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup2\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Left original=698 vs migrado \u0027obj_4c_Optiongroup2\u0027 Left=0 (diff=698px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_blqdt\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Top original=291 vs migrado \u0027obj_4c_Op_blqdt\u0027 Top=0 (diff=291px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_blqdt\u0027 (parent: SIGCDEMP.Pagina.Dados.PgDados.Page2): Left original=698 vs migrado \u0027obj_4c_Op_blqdt\u0027 Left=0 (diff=698px, tolerancia=30px)",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  19
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-08-01T14:29:12",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-08-01T14:48:50",
+                                                "status":  "FIXED",
+                                                "retries":  3,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\empBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formemp.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-08-01T14:54:34",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-01T14:54:37",
+                                             "thresholdPx":  5,
+                                             "unmatched":  52,
+                                             "errors":  52,
+                                             "matched":  305,
+                                             "warnings":  40,
+                                             "reportFile":  "C:\\4c\\tasks\\task404\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

@@ -1,0 +1,7 @@
+﻿A Fase 5 est├í completa. O arquivo `FormSigReGla.prg` foi atualizado com:
+
+1. **`ConfigurarPaginaDados()`** adicionado (linhas 368ÔÇô427) ÔÇö configura Page2 com o container de cabe├ºalho escuro (`cnt_4c_Cabecalho`) contendo `lbl_4c_Sombra` e `lbl_4c_Titulo`, id├¬ntico ao padr├úo do Page1.
+
+2. **`InicializarForm()`** atualizado (linha 54) ÔÇö agora chama `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarContaineresPage2()`.
+
+**Nota importante**: O formul├írio original (`SigReGla.SCX`) era essencialmente vazio ÔÇö apenas `Form1` (375├ù250, TitleBar=0, sem controles, sem c├│digo, sem campos). O BO confirma que n├úo h├í propriedades `this_*` nem tabela CRUD. Por isso, a "primeira metade dos campos da Page2" corresponde apenas ao container de cabe├ºalho ÔÇö n├úo h├í TextBoxes ou Labels adicionais para mapear do original. A Fase 6 adicionar├í os bot├Áes Confirmar/Cancelar (`cnt_4c_Salva`) e os BINDEVENTs correspondentes.

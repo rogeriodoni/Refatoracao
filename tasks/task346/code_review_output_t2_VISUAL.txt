@@ -1,0 +1,9 @@
+﻿Ap├│s ler o arquivo completo, os 3 problemas reportados j├í est├úo **todos corrigidos** na vers├úo atual de `FormAli.prg`:
+
+1. **[GRID-WITH]** ÔÇö Linhas 337-338: `RecordSource` e `ColumnCount` j├í est├úo **fora** do WITH, antes do bloco `WITH loc_oPg1.grd_4c_Lista` (linha 340). O acesso ├ás colunas dentro do WITH funciona corretamente.
+
+2. **[LAYOUT-POSITION] opt_4c_OptPefins Top** ÔÇö Linha 652: `.Top = 320` (valor correto: 291+29=320). O code review detectou Top=5, mas isso corresponde a uma vers├úo anterior do arquivo.
+
+3. **[LAYOUT-POSITION] opt_4c_OptPefins Left** ÔÇö Linha 653: `.Left = 335` (valor correto). O code review detectou Left=5, mas j├í est├í corrigido.
+
+O arquivo `FormAli.prg` foi modificado (conforme o `git status` mostra `M projeto/app/forms/cadastros/FormAli.prg`) ap├│s a gera├º├úo do code review output ÔÇö as corre├º├Áes j├í foram incorporadas. Nenhuma altera├º├úo ├® necess├íria.

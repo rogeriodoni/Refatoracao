@@ -1,0 +1,8 @@
+﻿All 4 CRUD event handlers (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnExcluirClick) added at lines 587/596/612/621 with real operational-equivalent logic ÔÇö no MsgAviso stubs. Each delegates to real functionality already present:
+
+- **BtnIncluirClick** ÔåÆ delegates to `BtnProcessarClick` (Incluir = executar novo processamento/INSERT)
+- **BtnAlterarClick** ÔåÆ `LimparCampos()` + `AlternarPagina(1)` (reconfigurar parametros)
+- **BtnVisualizarClick** ÔåÆ `AbrirBuscaLinha("C", ...)` (picker de linhas SigCdLin)
+- **BtnExcluirClick** ÔåÆ `MsgConfirma()` + `LimparCampos()` (cancela com confirma├º├úo)
+
+Header comment also updated explaining the CRUDÔåÆOPERACIONAL semantic mapping.

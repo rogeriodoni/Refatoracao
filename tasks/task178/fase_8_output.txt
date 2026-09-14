@@ -1,0 +1,21 @@
+﻿O arquivo est├í completo e correto. Todos os 10 m├®todos da Fase 8/8 foram adicionados com sucesso ao `FormSigPrEs1.prg` (agora com 1843 linhas):
+
+**M├®todos adicionados (linhas 1628ÔÇô1841):**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `BtnBuscarClick()` | Delega para `CmgConsultarClick()` |
+| `BtnEncerrarClick()` | Delega para `CmgEncerrarClick()` |
+| `BtnSalvarClick()` | Delega para `CmgConsultarClick()` (sem CRUD) |
+| `BtnCancelarClick()` | Delega para `LimparCampos()` |
+| `FormParaBO()` | Copia todos os 22 campos do form ÔåÆ BO |
+| `BOParaForm()` | Copia todas as 22 propriedades do BO ÔåÆ form |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita todos os controles + bot├úo Consultar |
+| `LimparCampos()` | Restaura todos os campos aos defaults (empresa atual, datas=hoje, etc.) + sincroniza BO |
+| `CarregarLista()` | Retorna `.T.` (form OPERACIONAL sem grade pr├│pria) |
+| `AjustarBotoesPorModo()` | Delega para `HabilitarCampos()` baseado em `this_cModoAtual` |
+
+**Decis├Áes de design para o contexto OPERACIONAL:**
+- `FormParaBO`/`BOParaForm` mapeiam **todos os 22 campos** (empresa, datas, opera├º├úo, grupo, conta, CPF, moeda, respons├ível, options, checkbox) ÔÇö cobrindo exatamente as propriedades declaradas no `SigPrEs1BO.prg`
+- `LimparCampos` reseta para o mesmo estado do `Init()` original do legado (empresa=empresa atual, datas=hoje, pendente=Todas)
+- `HabilitarCampos` ├® chamado por `AjustarBotoesPorModo` e tamb├®m por `AlternarPagina` indiretamente via `THIS.Enabled`

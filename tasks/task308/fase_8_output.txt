@@ -1,0 +1,18 @@
+﻿Arquivo completo e correto. A fase 8 est├í conclu├¡da. Aqui o resumo do que foi adicionado:
+
+**M├®todos adicionados na Fase 8** (todos com implementa├º├úo real, sem stubs):
+
+| M├®todo | L├│gica |
+|--------|--------|
+| `BtnEncerrarClick()` | Delega para `CmdEncerrarClick()` |
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` (recarrega do banco) |
+| `BtnSalvarClick()` | Encerra (viewer sem edi├º├úo) |
+| `BtnCancelarClick()` | Encerra (viewer sem edi├º├úo) |
+| `CarregarLista()` | Alias can├┤nico para `CarregarItens()` |
+| `AjustarBotoesPorModo()` | No-op ÔÇö viewer n├úo tem modos CRUD |
+| `HabilitarCampos(par_lHabilitar)` | No-op ÔÇö todos os controles s├úo ReadOnly por defini├º├úo |
+| `LimparCampos()` | ZAP dos dois cursores + oculta imagem + Refresh dos grids |
+| `FormParaBO()` | Sincroniza par├ómetros Emp/Dop/Num do form para o BO |
+| `BOParaForm()` | Atualiza Caption do form e labels do cabe├ºalho a partir do BO |
+
+O arquivo final tem 1555 linhas. A integra├º├úo via `config.prg` ├® autom├ítica (ADIR() carrega `Formsigprite.prg` automaticamente). N├úo h├í entrada de menu ÔÇö este form ├® aberto por outros forms com par├ómetros (pattern `CREATEOBJECT("Formsigprite", cEmp, cDop, nNum, lDis)` + `.Show()`).

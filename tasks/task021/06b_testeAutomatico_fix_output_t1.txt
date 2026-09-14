@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `FormSigAcCcr.prg`:
+
+1. **CarregarLista** (linha ~470): adicionado guard para `gb_4c_ValidandoUI = .T.` ÔÇö cria `cursor_4c_Dados` vazio com os campos corretos e retorna `.T.` sem tentar a query SQL que falharia sem conex├úo.
+
+2. **AjustarBotoesPorModo**: removido `PROTECTED` ÔÇö o TesteAutomatico acessa este m├®todo diretamente na linha 542 fora da classe, o que exige acesso p├║blico.

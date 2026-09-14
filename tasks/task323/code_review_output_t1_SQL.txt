@@ -1,0 +1,28 @@
+﻿Ap├│s leitura completa dos dois arquivos, posso analisar as duas ocorr├¬ncias flaggeadas:
+
+**[SQL-FILTRO-INVENTADO] CIDCHAVES em WHERE**
+
+Aparece em Atualizar (linha equivalente) e ExecutarExclusao no BO:
+```foxpro
+"WHERE cidchaves = " + EscaparSQL(...)
+```
+`cidchaves` ├® a chave prim├íria de `SigPrCrr` (declarada em `THIS.this_cCampoChave = "cidchaves"`). Usar a PK no WHERE de UPDATE/DELETE ├® obrigat├│rio - remover quebraria todas as linhas da tabela. O SELECT de busca usa `WHERE cpros = ...` corretamente. **Falso positivo.**
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT em WHERE**
+
+Aparece nas linhas 197 e 203 do Form:
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount
+IF PEMSTATUS(..., "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+```
+Isto ├® a propriedade VFP9 `.ControlCount` de um container, dentro de `TornarControlesVisiveis`. **N├úo ├® SQL.** O scanner capturou a string "ControlCount" fora de contexto SQL. **Falso positivo.**
+
+---
+
+**Conclus├úo: ambos os problemas s├úo falsos positivos do scanner autom├ítico.**
+
+Nenhuma corre├º├úo ├® necess├íria nos arquivos:
+- `FormSIGPRPRO.prg`: `ControlCount` ├® propriedade VFP9 de container, n├úo coluna SQL
+- `SIGPRPROBO.prg`: `WHERE cidchaves = ...` em Atualizar/ExecutarExclusao ├® o filtro correto pela PK da tabela `SigPrCrr`; o SELECT `BuscarCaracteristicas` usa corretamente `WHERE cpros = ...` como o original
+
+Os arquivos est├úo corretos e n├úo precisam de altera├º├úo neste pass.

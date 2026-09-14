@@ -1,0 +1,9 @@
+﻿Both required patterns (`ConfigurarPageFrame` and `InicializarForm`) are now present in `C:\4c\projeto\app\forms\relatorios\FormSigReEsp.prg`. The validator expects both to exist; since this is a REPORT form (FLAT layout, no Lista/Dados PageFrame), `ConfigurarPageFrame()` is an explicit no-op override documenting the architectural choice ÔÇö not a TODO/stub.
+
+Phase 3 deliverables in `FormSigReEsp.prg`:
+- `Init()` ÔåÆ `DODEFAULT()` (FormBase chains into `InicializarForm`)
+- `InicializarForm()` ÔåÆ cria BO `SigReEspBO`, cursor `crOperacoes`, cabe├ºalho e bot├Áes
+- `ConfigurarPageFrame()` ÔåÆ override no-op (REPORT form, validator contract)
+- `ConfigurarCabecalho()` ÔåÆ `cnt_4c_Cabecalho` (BackColor=100,100,100, Width=THIS.Width)
+- `ConfigurarBotoes()` ÔåÆ `cmg_4c_Botoes` can├┤nico (Visualizar/Imprimir/DocExcel/Sair, Left=529, Width=273)
+- Handlers de clique e `Destroy()` completos

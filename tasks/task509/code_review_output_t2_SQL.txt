@@ -1,0 +1,13 @@
+﻿Corre├º├Áes aplicadas. Resumo das mudan├ºas:
+
+**RecBO.prg ÔÇö `BuscarGrupoGcr`** (2 branches):
+- `SELECT codigos, descrs FROM SigCdGcr` ÔåÆ `SELECT grupos, descrs FROM SigCdGcr`
+- `WHERE codigos = ...` ÔåÆ `WHERE grupos = ...` (tipo "C")
+- `ORDER BY codigos` ÔåÆ `ORDER BY grupos`
+- `WHERE descrs LIKE ...` ÔåÆ `WHERE grupos LIKE ...` (tipo "D" ÔÇö original usa s├│ GRUPOS)
+- `ORDER BY descrs` ÔåÆ `ORDER BY grupos`
+
+**FormRec.prg** (4 locais):
+- `cursor_4c_BuscaGcr.codigos` ÔåÆ `cursor_4c_BuscaGcr.grupos` (linhas 874, 904, 934)
+- `FormBuscaAuxiliar` 4┬║ param `"codigos"` ÔåÆ `"grupos"`
+- `mAddColuna("codigos", ...)` ÔåÆ `mAddColuna("grupos", ...)`

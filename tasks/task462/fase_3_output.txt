@@ -1,0 +1,11 @@
+﻿`FormMda.prg` criado com 418 linhas. A Fase 3 est├í completa com:
+
+- **DEFINE CLASS FormMda AS FormBase** ÔÇö propriedades visuais (Height=600, Width=1000, Caption setado via CHR(233) em InicializarForm)
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()`
+- **InicializarForm()** ÔÇö cria MdaBO, chama ConfigurarPageFrame(), propaga Caption para labels, guarda `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()** ÔÇö pgf_4c_Paginas Top=-29, 2 pages com fundo_cad_1003.jpg
+- **ConfigurarPaginaLista()** ÔÇö cnt_4c_Cabecalho (com lbl_4c_Sombra/lbl_4c_Titulo), cnt_4c_Botoes (vazio para Fase 4), cnt_4c_Saida + cmd_4c_Encerrar com BINDEVENT
+- **ConfigurarPaginaDados()** ÔÇö cnt_4c_BotoesAcao + cmd_4c_Confirmar/cmd_4c_Cancelar com BINDEVENTs
+- **CarregarLista()** ÔÇö chama `MdaBO.Buscar("")`; Fase 4 adicionar├í o grid e a vincula├º├úo
+- **BtnEncerrarClick/BtnSalvarClick/BtnCancelarClick** ÔÇö implementa├º├Áes funcionais (n├úo stubs)
+- **TornarControlesVisiveis(), FormatarGridLista(), Destroy()** ÔÇö m├®todos auxiliares completos

@@ -1,0 +1,7 @@
+﻿**Fase 6 conclu├¡da.** O formul├írio `FormSigReEtp.prg` estava j├í completo desde a Fase 5 ÔÇö todos os 18 controles do original est├úo implementados e n├úo h├í lookups (sem F4/F5, sem `fwBuscaExt`, sem `sigacess` no original).
+
+Corre├º├Áes feitas nesta fase:
+1. **FormSigReEtp.prg**: Removido o coment├írio enganoso "primeiros 50% dos controles" em `ConfigurarPaginaDados()` ÔÇö o m├®todo cria todos os controles de sele├º├úo do dialog.
+2. **mapeamento.json**: Corrigido conflito de nome ÔÇö `SIGREETP.Label2` ("Selecione Impressora") agora mapeia para `lbl_4c_LblImpressora` em vez de `lbl_4c_Label2` (que ├® o `Say2` = "Horizontal :").
+
+O form ├® um dialog modal OPERACIONAL sem estrutura CRUD (sem Page1/Page2, sem `cnt_4c_BotoesAcao`). A integra├º├úo ├® autom├ítica via `config.prg` (carrega todos `Form*.prg` de `operacionais\` e todos `*BO.prg` de `classes\` dinamicamente). N├úo h├í entrada direta no menu pois o form recebe `par_cDopes` e ├® chamado de dentro do `FormSigMvCab`.

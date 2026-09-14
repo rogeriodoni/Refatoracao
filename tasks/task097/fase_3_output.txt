@@ -1,0 +1,14 @@
+﻿**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\relatorios\Formsigrefc2.prg` criado com:
+
+**O que foi implementado:**
+- `DEFINE CLASS Formsigrefc2 AS FormBase` com propriedades visuais exatas do original (Width=800, Height=300, ControlBox=.F., BorderStyle=2, DataSession=2)
+- `Init()` ÔåÆ `RETURN DODEFAULT()` (FormBase.Init() chama InicializarForm automaticamente)
+- `InicializarForm()` ÔåÆ Cria `sigrefc2BO`, define dimens├Áes, monta header e bot├Áes, seta `Visible=.T.`
+- `ConfigurarCabecalho()` ÔåÆ Container cinza (`RGB(100,100,100)`) com `lbl_4c_Sombra` (sombra preta) + `lbl_4c_Titulo` (texto branco)
+- `ConfigurarBotoesRelatorio()` ÔåÆ `cmg_4c_Botoes` CommandGroup com geometria exata do framework: Top=0, Left=529, Width=273, Height=80, 4 bot├Áes (Visualizar/Imprimir/Excel/Sair), `Buttons(4).Cancel=.T.`
+- `Destroy()` ÔåÆ Limpa `this_oRelatorio = .NULL.`, chama `DODEFAULT()`
+
+**Pr├│ximas fases (Read + Edit):**
+- Fase 4-5: `ConfigurarCamposFiltro()` ÔÇö TextBoxes empresa/datas, OptionGroup TpRel, Labels
+- Fase 6: `LimparCampos()`, `FormParaRelatorio()`
+- Fase 7-8: BINDEVENTs para bot├Áes e campos (KeyPress/LostFocus para valida├º├úo empresa)

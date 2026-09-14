@@ -1,0 +1,31 @@
+﻿Analisei todos os 19 problemas reportados. A conclus├úo ├® que **todos s├úo falsos positivos** do validador. Explico:
+
+---
+
+## [METODO-INEXISTENTE] `CarregarCursores()`
+
+O m├®todo **existe** ÔÇö est├í definido como `PROTECTED FUNCTION CarregarCursores()` nas linhas 975ÔÇô1084 do arquivo. O validador procurava `PROCEDURE` mas o m├®todo ├® uma `FUNCTION` (ambas s├úo cham├íveis com `THIS.NomeMetodo()` em VFP9, sem diferen├ºa).
+
+---
+
+## [LAYOUT-POSITION] 18 problemas de posi├º├úo
+
+**Todos corretos.** Dois padr├Áes de falso positivo:
+
+**Padr├úo 1 ÔÇö diff=85px (12 ocorr├¬ncias):** O `pgf_4c_Paginas` tem `Top=85`. Controles dentro de `Page1` devem ter `Top = top_original - 85`. Exemplos:
+- `ck_MarcaEmp`: original=283, migrado=198 ÔåÆ 283-85=**198** Ô£ô
+- `lbl_fator`: original=183, migrado=98 ÔåÆ 183-85=**98** Ô£ô
+- `LblPeriodo`: original=129, migrado=44 ÔåÆ 129-85=**44** Ô£ô
+
+**Padr├úo 2 ÔÇö OptionGroups com diff grande (6 ocorr├¬ncias):** O validador leu as coordenadas do `Button(1)` (TopÔëê5-6, LeftÔëê5) em vez do `OptionGroup` pai. Os grupos est├úo no lugar certo:
+- `obj_4c_Opt_AnaSi`: c├│digo tem `.Top=13, .Left=92` ÔåÆ 98-85=13 Ô£ô, Left=92 Ô£ô
+- `obj_4c_OptDatas`: `.Top=39, .Left=287` ÔåÆ 124-85=39 Ô£ô, Left=287 Ô£ô
+- `obj_4c_OptSaldos`: `.Top=40, .Left=798` ÔåÆ 125-85=40 Ô£ô, Left=798 Ô£ô
+- `obj_4c_Opt_Juros`: `.Top=68, .Left=646` ÔåÆ 153-85=68 Ô£ô, Left=646 Ô£ô
+- `obj_4c_OptAutorizados`: `.Top=145, .Left=92` ÔåÆ 230-85=145 Ô£ô, Left=92 Ô£ô
+
+Todos os bot├Áes dos OptionGroups tamb├®m t├¬m `.Left`, `.Top` e `.AutoSize` definidos corretamente ÔÇö sem sobreposi├º├úo.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo `Formsigreapp.prg` est├í funcionalmente correto. Os 19 itens s├úo artefatos do validador n├úo considerando o offset do PageFrame nem a diferen├ºa entre coordenadas de OptionGroup vs. Button.

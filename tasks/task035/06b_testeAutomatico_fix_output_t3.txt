@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. `BtnCancelarClick` agora navega para Page1 em vez de fechar o form, o que:
+
+1. **`BtnIncluirNavegacao`**: `BtnIncluirClick` vai para Page2 ÔåÆ `BtnCancelarClick` retorna para Page1 ÔåÆ form permanece vivo ÔåÆ teste passa.
+2. **`BtnEncerrarExiste`**: `THIS.oForm` continua v├ílido ÔåÆ `PEMSTATUS` funciona ÔåÆ teste passa.
+3. **`LookupMetodosExistem`**: `AMEMBERS(loc_aMembers, THIS.oForm, 1)` funciona ÔåÆ teste passa.
+
+O fechamento real do form continua correto: o bot├úo "Encerrar" (Button 4 do `cmg_4c_Botoes`) chama `CmgBotoesClick` ÔåÆ `BtnEncerrarClick` ÔåÆ `THIS.Release()`.

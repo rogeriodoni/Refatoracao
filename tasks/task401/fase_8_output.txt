@@ -1,0 +1,10 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**Formema.prg** ÔÇö adicionado `AjustarBotoesPorModo()` que habilita/desabilita os bot├Áes CRUD da Page1 e os bot├Áes Salvar/Cancelar da Page2 conforme o modo atual (LISTA/INCLUIR/ALTERAR/VISUALIZAR).
+
+**menu.prg** ÔÇö tr├¬s altera├º├Áes:
+1. `DEFINE BAR 81 OF popCadastros` ÔÇö item "Email" no menu Cadastros
+2. `ON SELECTION BAR 81 OF popCadastros DO AbrirFormema` ÔÇö v├¡nculo da a├º├úo
+3. `PROCEDURE AbrirFormema()` ÔÇö abre o form com o padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+
+**config.prg** ÔÇö nenhuma altera├º├úo necess├íria: `emaBO.prg` j├í ├® carregado pelo ADIR `*BO.prg` em `classes/` e `Formema.prg` j├í ├® carregado pelo ADIR `Form*.prg` em `cadastros/`.

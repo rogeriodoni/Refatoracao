@@ -1,0 +1,186 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 4,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt", "Fpags", "Sum"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDTBD",
+      "evento": "Init",
+      "linhas": 60,
+      "codigoOriginal": "LParameters poForm, pnDataSes\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm          = poForm\nThisform.ParentForm.Enabled  = .F.\n\nThisform.GravaDados = .f.\n\nWith Thisform\n\t.Caption = 'Condições de Pagamento ' + AllTrim(crSigCdOpe.Dopes)\nEndWith\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nlcOperacao = crSigCdOpe.Dopes\n\nWith Thisform\n\t.poDatamgr = CreateObject('fSqlConector')\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Imp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBD",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBD.GradeOpe.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lcFpags, lnRecNo, loBrowse\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigOpFp', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Fpags', This.Value, 'Seleção', .t.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Fpags', '', 'Condição de Pagamento',.t.)\n\t\tloLista.mAddColuna('descrs', '',  'Descrição',.t.)\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = CrListaRemota.Fpags\n\tReplace Descrs with CrListaRemota.descrs In xOpe\n\tUse In CrListaRemota\nElse\n\tThis.Value = '... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBD.GradeOpe.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.AntValue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBD.GradeOpe.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTBD.cmdInserir",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Insert Into xOpe (fpags) Values ( Space(12))\nSelect xOpe\nThisForm.GravaDados = .t.\nThisform.GradeOpe.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBD.cmdExcluir",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "Select xOpe\nIf Not Eof()\n\tSelect xOpe\n\tDelete \n\tSkip\n\tIf Eof()\n\t\tGo Bott\n\tEndif\nEndIf\nThisform.GradeOpe.SetFocus\nThisForm.GravaDados = .t.\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBD.cmdSair",
+      "evento": "Click",
+      "linhas": 43,
+      "codigoOriginal": "If ThisForm.GravaDados\n\n\tSelect Fpags, Sum(1) as Qt From xOpe Group by 1 Into Cursor Selecao where Fpags <> ' ' having Sum(1) > 1\n\tIf Reccount('Selecao') > 0\n\t\tMessageBox('Existem lancamentos de Condições Em Duplicidade!!!',0+16,'')\n\t\tReturn .f.\n\tEndIf\n\t\n\tSelect CrSigCdFpN\n\tZap\n\t\n\tSelect xOpe\n\tScan\n\t\tIf Not Empty(Fpags)\n\t\t\tInsert Into CrSigCdFpN (Dopes, Fpags, cIdChaves) ;\n\t\t\t\t\t\t\tValues (crSigCdOpe.Dopes, xOpe.Fpags, fUniqueIds())\n\t\tEndif\n\tEndScan\n\t\n\tm.lnErro1 = ThisForm.poDatamgr.pnIdConn\n\n\tWit... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Fpags, Sum",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTBD.Cancela",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.parentform.enabled = .T.\nThisform.release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDTBD.cmdInserir.Click",
+      "queryOriginal": "Insert Into xOpe (fpags) Values ( Space(12))",
+      "tabelas": "xOpe",
+      "colunas": "fpags",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDTBD.cmdSair.Click",
+      "queryOriginal": "\tSelect Fpags, Sum(1) as Qt From xOpe Group by 1 Into Cursor Selecao where Fpags <> ' ' having Sum(1) > 1",
+      "tabelas": "xOpe",
+      "colunas": "Fpags,having,Sum1",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDTBD.cmdSair.Click",
+      "queryOriginal": "\t\t\tInsert Into CrSigCdFpN (Dopes, Fpags, cIdChaves) ; \t\t\t\t\t\t\tValues (crSigCdOpe.Dopes, xOpe.Fpags, fUniqueIds())",
+      "tabelas": "CrSigCdFpN",
+      "colunas": "Dopes,Fpags,cIdChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["xOpe", "CrSigCdFpN"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

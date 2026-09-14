@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks correct and well-formed. The edit is complete.
+
+## Summary
+
+I implemented **Fase 7/8** for `FormTop.prg` (`C:\4c\projeto\app\forms\cadastros\FormTop.prg`), adding the 4 requested event handlers plus the minimal supporting helpers needed so they're fully functional (not stubs), per the project's "paridade funcional 100%" rule:
+
+**Eventos principais (PUBLIC, sem PROTECTED ÔÇö obrigat├│rio para BINDEVENT):**
+- `BtnIncluirClick()` ÔÇö `NovoRegistro()` no BO, limpa campos, modo `INCLUIR`, habilita apenas os campos edit├íveis nesse modo, navega para Page2.
+- `BtnAlterarClick()` ÔÇö l├¬ o c├│digo selecionado no `cursor_4c_Dados`, `CarregarPorCodigo()` + `EditarRegistro()`, popula a Page2 via `BOParaForm()`, modo `ALTERAR`.
+- `BtnVisualizarClick()` ÔÇö mesma leitura de sele├º├úo, carrega e popula em modo somente-leitura `VISUALIZAR`.
+- `BtnExcluirClick()` ÔÇö confirma via `MsgConfirma()` (retorno l├│gico, regra #7), `CarregarPorCodigo()` + `this_oBusinessObject.Excluir()`, recarrega a lista em caso de sucesso. Reproduzi fielmente o legado: a checagem de `lAlts` (registro autom├ítico) estava **comentada** (`*!*`) no c├│digo original, ent├úo n├úo foi replicada ÔÇö exclus├úo vale para qualquer registro, igual ao comportamento ativo do legado.
+
+**Helpers protegidos adicionados (necess├írios para os 4 eventos n├úo serem stubs):**
+- `BOParaForm()` ÔÇö mapeia as 19 propriedades do `TopBO` para os controles da Page2.
+- `LimparCampos()` ÔÇö reseta para os mesmos defaults declarados na cria├º├úo dos controles.
+- `HabilitarCampos(par_cModo)` ÔÇö replica fielmente as regras `When`/`Procedure` do `comportamento.json`: `Get_Codigos` s├│ edit├ível em `INCLUIR` (legado: INSERIR/PROCURAR), `Get_Descrs` e todos os OptionGroups edit├íveis em `INCLUIR`/`ALTERAR` (legado: INSERIR/ALTERAR), e desabilita `cmd_4c_Confirmar` fora desses modos.
+
+Os BINDEVENTs para esses 4 bot├Áes j├í existiam desde a Fase 4 (`ConfigurarPaginaLista`), ent├úo nada precisou ser alterado l├í. Os m├®todos `BtnSalvarClick`, `BtnCancelarClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `FormParaBO` e a integra├º├úo com `config.prg`/`menu.prg` ficam para a Fase 8, conforme escopo desta fase.

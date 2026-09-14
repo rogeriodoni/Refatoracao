@@ -1,0 +1,5 @@
+﻿Fix applied. `SIGPRIMPBO.prg` line 149: `CHARACTER '|'` ÔåÆ `CHARACTER 124` (ASCII for pipe).
+
+**Root cause**: VFP9's `DELIMITED WITH CHARACTER` clause requires a numeric expression (ASCII code), not a character literal. The invalid syntax caused SIGPRIMPBO to fail compilation, which meant `DEFINE CLASS SIGPRIMPBO` never registered in the procedure chain. This cascaded: in TestFormWrapper (Test 1) the `ON ERROR` handler let the loop continue past the BO, so FormSIGPRIMP.prg loaded but `CREATEOBJECT("SIGPRIMPBO")` in its Init() returned .NULL.; in TesteAutomatico (Test 2) without an error handler, the BO compile error aborted the entire ConfigurarAmbiente() loop, so FormSIGPRIMP.prg itself never loaded ÔåÆ "Class definition FORMSIGPRIMP is not found."
+
+FormSIGPRIMP.prg requires no changes ÔÇö all block structures are balanced with no syntax errors.

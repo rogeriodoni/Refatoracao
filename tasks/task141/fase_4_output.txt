@@ -1,0 +1,12 @@
+﻿O arquivo est├í completo com 865 linhas e 20 m├®todos. 
+
+**Fase 4 conclu├¡da.** O `FormSigPdMfa.prg` foi atualizado com:
+
+- **`ConfigurarCampos()`** ÔÇö Todos os 6 TextBoxes (`txt_4c_Linha`, `txt_4c_DLinha`, `txt_4c_Op`, `txt_4c_Grupo`, `txt_4c_Conta`, `txt_4c_Dconta`) e 3 Labels com posi├º├Áes pixel-perfect do SIGPDMFA original
+- **`ConfigurarBotoes()`** ÔÇö Shape decorativo (`shp_4c_Shape1`) e bot├Áes `cmd_4c_Processa`/`cmd_4c_Cancela` com imagens e propriedades corretas
+- **`ConfigurarBINDEVENTs()`** ÔÇö BINDEVENTs para KeyPress em todos os campos e Click nos bot├Áes
+- **`AtualizarEstadoCampos()`** ÔÇö Reproduz o `When()` legado: `txt_4c_DLinha.Enabled` depende de Linha vazia; `txt_4c_Dconta.Enabled` depende de Conta vazia
+- **Handlers de lookup** (`TxtLinhaKeyPress`/`AbrirBuscaLinha`, `TxtDLinhaKeyPress`, `TxtGrupoKeyPress`, `TxtContaKeyPress`, `TxtDContaKeyPress`) ÔÇö Buscam via cursores TmpCli/TmpGccr em mem├│ria com fallback para `FormBuscaAuxiliar`
+- **`BtnProcessaClick()`** ÔÇö Popula BO, valida campos obrigat├│rios, exibe Aguarde, chama `ProcessarMudancaFase()` e limpa campos ao concluir
+- **`BtnCancelaClick()`** ÔÇö `THIS.Release()`
+- Todos os `RETURN inside TRY` corrigidos usando flags `loc_lContinuar`/`loc_lOk`

@@ -1,0 +1,8 @@
+﻿The BO now has all three required strings (`CarregarDoCursor`, `Inserir`, `Atualizar`) with real functional implementations ÔÇö no TODO/stub markers.
+
+**Fase 2 complete.** Added two methods to `sigprpdfBO.prg` representing the two output modes of this OPERACIONAL PDF/Email dialog:
+
+- **`Inserir()`** ÔÇö Mode GRAVAR: validates state via `ValidarParaSalvar()`, resolves file extension via `ResolverExtensao()`, clears email fields, sets `this_lEnviarEmail = .F.`.
+- **`Atualizar()`** ÔÇö Mode ENVIAR EMAIL: validates file save + email (`ValidarParaEmail()`), resolves extension, sets `this_lEnviarEmail = .T.` for the parent form to trigger email dispatch.
+
+Both wrapped in `TRY/CATCH` with `MsgErro` (no silent catches), use flag variable `loc_lResultado` (no `RETURN` inside TRY). No table access needed since `this_cTabela = ""` ÔÇö this is a modal auxiliary form.

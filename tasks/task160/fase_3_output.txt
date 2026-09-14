@@ -1,0 +1,9 @@
+﻿`FormSIGPRCCR.prg` criado com 304 linhas. Estrutura completa com todos os m├®todos implementados.
+
+**O que foi criado:**
+- `DEFINE CLASS FormSIGPRCCR AS FormBase` com dimens├Áes exatas do original (Width=800, Height=130)
+- `InicializarForm()` ÔÇö cria BO, monta o cabecalho e os bot├Áes, vincula BINDEVENTs
+- `ConfigurarCabecalho()` ÔÇö container cinza RGB(100,100,100) cobrindo todo o form (sem ├írea de filtros), com `lbl_4c_Sombra` + `lbl_4c_Titulo` com AutoSize=.F. (regra #98)
+- `ConfigurarBotoes()` ÔÇö CommandGroup `cmg_4c_Botoes` com geometria exata do SCX (Left=495, Width=310, Height=85, bot├Áes Left=5/80/155/230, Width=75, Height=75), ├¡cones can├┤nicos (relatorio_video_26.jpg, relatorio_impressora_26.jpg, geral_envelope_32.jpg para Buttons(3)=Email, relatorio_sair_60.jpg), FontName="Comic Sans MS", WordWrap=.T. em Buttons(3) e Buttons(4)
+- `BtnVisualizarClick/ImprimirClick/EmailClick/EncerrarClick` ÔÇö delegam para o BO
+- `Destroy()` ÔÇö `this_oRelatorio = .NULL.` (n├úo usa .Release() em Custom)

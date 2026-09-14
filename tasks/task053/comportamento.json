@@ -1,0 +1,198 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For TmpResult.ordem = Val", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "Dataenvironment",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "        Create Cursor cGevcl (cChave1s c(70),gGrafico g,cLg1s c(150),cLg2s c(175),cLg3s c(150),cEmpresas c(50))\n        Index On cChave1s Tag cChave1s",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "Dataenvironment",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "        If Used('cGevcl')\n                Use In cGevcl\n        EndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMG",
+      "evento": "Procedure",
+      "linhas": 272,
+      "codigoOriginal": "LParameters lnLinhaCmb1\nLocal Array laCorGrafico1(5),laCliente(1),laGrpfat1(1),laGrpprod1(1)\nLocal lcEscape,lcChave1,lnTmStr1,lcMacro1, lcQtVal\n\n#Define TAB Chr(9)\n#Define CRLF CHR(13)+CHR(10)\n\nIf !Used('CrGrafico1')\n\tCreate Cursor CrGrafico1 (gGrafico1s g(4),cChave1s c(100),cEmpresas c(128),cTitulo1s c(64),cTitulo2s c(64),;\n\t\t\t\t\t\t\t\tcTitulo3s c(64),cTitulo4s c(64))\n\tIndex On cChave1s Tag pkchave1\nEndIf\nWith ThisForm\n\tm.lcEscape   = Set('Escape')\n\tm.lcPoint    = Set('Point')\n\tm.lcOldPoint = Set('... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For TmpResult.ordem = Val",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_SelRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMG",
+      "evento": "Init",
+      "linhas": 51,
+      "codigoOriginal": "LParameters loForm1\nLocal lnLeftIni1\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.LockScreen = .T.\n\tm.loForm1 = Iif(Type('m.loForm1') = 'O',m.loForm1,ThisForm)\n\t.SetAll('AutoSize',.T.,'Label')\n\t.SetAll('Format','K','TextBox')\n\t.SetAll('InputMask','','TextBox')\n\t.SetAll('MaxLength',0,'TextBox')\n\t.SetAll('BackStyle',1,'TextBox')\n\t.SetAll('Alignment',3,'TextBox')\n\t.SetAll('FontName','Courier New','TextBox')\n\t.SetAl... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkGraficos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMG",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMG.cntGrf2.cmbChave1",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "With ThisForm\n\t.cntAguarde.Visible = .T.\n\t.Refresh\n\t.Draw\n\t.LockScreen         = .T.\n\t.SetAll('Enabled',.F.,'Oleboundcontrol')\n\t.mGeraGrafico(.cntGrf2.cmbChave1.ListIndex)\n\t.cntGrf2.cmbChave1.SetFocus\n\t.cntAguarde.Visible = .F.\n\t.Refresh\n\t.Draw\n\t.LockScreen         = .F.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMG.cntGrf2.cmbChave1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.SetAll('Enabled',.F.,'OleBoundControl')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetAll",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMG.cmdGgrafico",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "Local lcChave1,lcChave2\n\nWith ThisForm\n\t.LockScreen   = .T.\n\t.pnNumGrf     = Max(1,(.pnNumGrf - 1))\n\t.cmdgGrafico.cmdGrfAnterior.Enabled = (.pnNumGrf > 1)\n\t.cmdgGrafico.cmdGrfProximo.Enabled  = (.pnNumGrf < 3)\n\tm.lcQtVal     = PadR(Iif(ThisForm.poForm1.Opt_SelRel.Value = 1,'Valor','Quantidade'),10)\n\tm.lnQtVal     = ThisForm.poForm1.Opt_SelRel.Value\n\n\tm.lcChave1    = .cntGrf2.cmbChave1.List(.cntGrf2.cmbChave1.ListIndex)\n\tm.lcChave2    = (m.lcChave1 + SubStr('Operações Ranking   ' + lcQtVal,(.pnNu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_SelRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMG.cmdGgrafico",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "Local lcChave1,lcChave2\n\nWith ThisForm\n\t.LockScreen   = .T.\n\t.pnNumGrf     = Max(1,(.pnNumGrf + 1))\n\t.cmdgGrafico.cmdGrfAnterior.Enabled = (.pnNumGrf > 1)\n\t.cmdgGrafico.cmdGrfProximo.Enabled  = (.pnNumGrf < 3)\n\tm.lcQtVal     = Padr(Iif(ThisForm.poForm1.Opt_SelRel.Value = 1,'Valor','Quantidade'),10)\n\tm.lnQtVal     = ThisForm.poForm1.Opt_SelRel.Value\n\n\tm.lcChave1 = .cntGrf2.cmbChave1.List(.cntGrf2.cmbChave1.ListIndex)\n\tm.lcChave2 = (m.lcChave1 + SubStr('Operações Ranking   ' + lcQtVal,(.pnNumGrf *... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_SelRel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMG.cmdGgrafico",
+      "evento": "Click",
+      "linhas": 63,
+      "codigoOriginal": "Local lnRecno1,loList1,lnConta1,lcPrnAtual\n\nWith ThisForm\n\t.cntAguarde.Visible = .T.\n\t.Refresh\n\t.Draw\n\t.LockScreen = .T.\n\tm.lnGrafico = .NumGraficos.Value\n\tm.lnRecno1  = RecNo('CrGrafico1')\n\tm.lcChave1  = .cntGrf2.cmbChave1.List(.cntGrf2.cmbChave1.ListIndex)\n\tm.lnPosic   = .cntGrf2.cmbChave1.ListIndex\n\t.SetAll('Enabled',.F.,'OleBoundControl')\n\n\tIf .chkGraficos.Value = 1\n\t\tlcName = GetPrinter()\n\t\tSet Printer To Name (lcName)\n\t\tSet Printer On\n\t\tFor m.lnConta1 = m.lnGrafico To .cntGrf2.cmbChave1.Li... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkGraficos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECMG.cmdGgrafico",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "With ThisForm\n\t.LockScreen = .T.\n\t.cntGrf1.oleGrafico1.ControlSource = ''\n\tIf Used('CrGrafico1')\n\t\tUse In CrGrafico1\n\tEndIf\n\n\t.Release\n\t.Refresh\n\t.LockScreen = .F.\n\n\tIf Type('ThisForm.poForm1') = 'O'\n\t\t.poForm1.LockScreen = .T.\n\t\t.poForm1.Enabled    = .T.\n\t\t.poForm1.LockScreen = .F.\n\tEndIf\t\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

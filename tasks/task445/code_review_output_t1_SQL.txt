@@ -1,0 +1,42 @@
+﻿Analisei ambos os arquivos completamente. Este ├® um **falso positivo** do validador automatizado. Aqui est├í a an├ílise:
+
+## An├ílise do [SQL-FILTRO-INVENTADO]
+
+O validador flagou que `CIDCHAVES` aparece em cl├íusulas WHERE no c├│digo migrado mas n├úo no original. Comparando:
+
+**Original (ImportarPlanilha):**
+```foxpro
+* SELECT: WHERE ufs, codigo, chave, versao  ÔåÉ correto
+lcQuery = [Select cidchaves From SigcdIbp where ufs=']+...+[' and codigo=']+...
+* UPDATE: via DataMgr.Update([crSigCdIbp])  ÔåÉ sem WHERE expl├¡cito (cursor-based)
+If Not ThisForm.poDataMgr.Update([crSigCdIbp])
+```
+
+**Migrado (ImportarPlanilha) ÔÇö IBPBO.prg:343-402:**
+```foxpro
+* SELECT: WHERE ufs, codigo, chave, versao  ÔåÉ id├¬ntico ao original Ô£ô
+loc_lcQuery = "SELECT cidchaves FROM SigCdIbp" + ;
+              " WHERE ufs = ... AND codigo = ... AND chave = ... AND versao = ..."
+
+* UPDATE: WHERE cidchaves = ...  ÔåÉ tradu├º├úo arquitetural do DataMgr.Update
+loc_lcQuery = "UPDATE SigCdIbp SET ... WHERE cidchaves = " + EscaparSQL(loc_lcCidChaves)
+```
+
+### Por que N├âO ├® um filtro inventado
+
+O `poDataMgr.Update([crSigCdIbp])` do legado internamente usa a PK (`cidchaves`) para identificar o registro a atualizar ÔÇö ele s├│ n├úo exp├Áe isso no c├│digo-fonte VFP. A tradu├º├úo correta para SQL direto EXIGE um `WHERE cidchaves = ...` ap├│s recuperar o valor via SELECT.
+
+Remover esse WHERE seria **catastr├│fico**: transformaria um UPDATE pontual num UPDATE de toda a tabela SigCdIbp.
+
+### Verifica├º├úo de todas as ocorr├¬ncias WHERE cidchaves no c├│digo migrado
+
+| Local | Uso | Status |
+|-------|-----|--------|
+| `CarregarPorCodigo` (linha 93) | SELECT por PK ÔÇö padr├úo CRUD | Ô£ô Correto |
+| `Atualizar` (linha 234) | UPDATE por PK ÔÇö padr├úo CRUD | Ô£ô Correto |
+| `ExecutarExclusao` (linha 259) | DELETE por PK ÔÇö padr├úo CRUD | Ô£ô Correto |
+| `ImportarPlanilha` UPDATE (linha 402) | UPDATE por PK obtido do SELECT anterior | Ô£ô Correto |
+
+**Nenhum dos WHERE cidchaves foi inventado.** Todos s├úo ou opera├º├Áes CRUD padr├úo por PK (herdadas do BusinessBase), ou a tradu├º├úo direta e necess├íria do `DataMgr.Update` cursor-based para SQL direto.
+
+O c├│digo est├í correto como est├í. Nenhuma altera├º├úo ├® necess├íria nos arquivos.

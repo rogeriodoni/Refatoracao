@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O `sigrecrpBO.prg` agora cont├®m a implementa├º├úo completa com:
+
+- **`PrepararDados()`** ÔÇö replica fielmente a l├│gica de 220 linhas do `processamento` original: busca empresa, cria `cursor_4c_Cabecalho` e `cursor_4c_Dados`, itera SigCdGcr ÔåÆ SigMvCcr ÔåÆ SigMvCab ÔåÆ SigMvPar ÔåÆ SigOpFp ÔåÆ SigChe/SigCdOpt (para cheques), totaliza por moeda
+- **`Visualizar()`** ÔÇö chama PrepararDados + `REPORT FORM ... PREVIEW NOCONSOLE`
+- **`Imprimir()`** ÔÇö chama PrepararDados + `REPORT FORM ... TO PRINTER PROMPT NOCONSOLE`
+- **`ObterMensagemErro()`** / **`ObterChavePrimaria()`** ÔÇö helpers padr├úo
+- **`Destroy()`** ÔÇö fecha todos os 11 cursors intermedi├írios
+
+Regras respeitadas: `EMPTY()` no lugar de `IsEmpty()`, `RETURN` apenas fora de `TRY/CATCH`, `CHR()` para acentos, SQL quebrado em m├║ltiplas linhas com `+;`, flag `this_lMensagemAviso` para distinguir "sem dados" (aviso) de erro SQL.

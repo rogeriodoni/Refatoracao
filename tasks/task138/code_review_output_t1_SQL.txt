@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas em `SigPdM13BO.prg`:
+
+- **Atualizar()**: removido ` AND EmpDnPs = ...` e ` AND Cmats = ...` do WHERE ÔÇö o filtro ficou `WHERE Nenvs = X`, consistente com `this_cCampoChave = "Nenvs"`.
+- **ExecutarExclusao()**: mesma remo├º├úo.
+- **CONTROLCOUNT**: falso positivo confirmado ÔÇö a linha 180 do form usa `loc_oControl.ControlCount > 0`, que ├® propriedade VFP9 de container, n├úo filtro SQL. Nenhuma altera├º├úo no form necess├íria.

@@ -1,0 +1,12 @@
+﻿**Fase 4 conclu├¡da.**
+
+O FormSIGREDES.prg j├í estava completo como formul├írio RELATORIO desde a Fase 3. A Fase 4 (template gen├®rico para CRUD) mapeia assim para este form de relat├│rio:
+
+- **ConfigurarPaginaLista()** ÔåÆ j├í existe como `ConfigurarFiltros()` (m├®todo equivalente para RELATORIO)
+- **AlternarPagina()** ÔåÆ j├í existia (linha 1968) corretamente para form de 1 p├ígina
+- **Grid grd_4c_Forma** ÔåÆ j├í configurado em `ConfigurarFiltros()`
+
+**Bug corrigido**: a `Column1.ControlSource` estava sendo definida **antes** de `AddObject("chk_4c_Marca")`, violando a regra cr├¡tica do VFP9 (CheckBox em Grid Column - Error 1767). A corre├º├úo move `.ControlSource = "cursor_4c_OpFp.nMarca"` para **depois** de `AddObject` e `CurrentControl`, na ordem obrigat├│ria:
+1. `AddObject("chk_4c_Marca", "CheckBox")`
+2. `CurrentControl = "chk_4c_Marca"`
+3. `ControlSource = "cursor_4c_OpFp.nMarca"` ÔåÉ agora na posi├º├úo correta

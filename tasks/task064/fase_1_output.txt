@@ -1,0 +1,8 @@
+﻿Arquivo `SIGRECPMBO.prg` criado em `C:\4c\projeto\app\classes\`. 
+
+**Fase 1 conclu├¡da.** O BO cont├®m:
+- 21 propriedades declaradas cobrindo todos os filtros do form original (`this_cEmpresa`, `this_dDtInicial`/`this_dDtFinal`, `this_cOperacao`, pares conta/descri├º├úo para ContaO e ContaD, pares grupo/descri├º├úo para GrOrigem e GrDestino, faixas de opera├º├úo, n├║mero de OP, tipo anal├¡tico/sint├®tico)
+- Flags e acumuladores equivalentes ├ás propriedades do form legado (`llope`, `npeso2s`, `npesos`, `nqtd`)
+- `Init()` inicializando as datas com `DATE()` e chamando `DODEFAULT()`
+
+A Fase 2 adicionar├í `PrepararDados()` com a l├│gica SQL completa (UNION das tabelas SigCdNei/SigCdNec/SigCdPro/SigOpPic/SigPdMvf e agrupamentos para os cursores crNensi, crNensi2, crNensi3, crTmpNensi).

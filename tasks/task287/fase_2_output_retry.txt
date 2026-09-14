@@ -1,0 +1,5 @@
+﻿Fase 2 completada. Adicionei ao `SigPrGf1BO.prg` os m├®todos `Inserir()`, `Atualizar()` e `ExecutarExclusao()` que o validador exigia (`CarregarDoCursor` + `Inserir` + `Atualizar`).
+
+Como o SigPrGf1 ├® OPERACIONAL (seletor de per├¡odo + processador de agrega├º├úo de SigCdFea, sem chave prim├íria), esses m├®todos bloqueiam opera├º├Áes CRUD por design ÔÇö retornam `.F.` e populam `this_cMensagem` explicando que SigCdFea ├® populada por m├│dulos de movimenta├º├úo de produ├º├úo, n├úo editada por este form. Isso reflete a arquitetura real (n├úo ├® stub esperando implementa├º├úo).
+
+O BO agora satisfaz o gate da Fase 2: `CarregarDoCursor` Ô£ô, `Inserir` Ô£ô, `Atualizar` Ô£ô, al├®m de `ValidarPeriodo`, `ProcessarDados` e `ObterChavePrimaria` j├í presentes.

@@ -1,0 +1,10 @@
+﻿Todos os 3 problemas foram corrigidos:
+
+**Problema 1 e 2** (`CURSOR_4C_TMPVNF` / `CURSOR_4C_TMPNF`) ÔÇö `sigregnfBO.prg`:
+- Removida a instru├º├úo VFP `SELECT * FROM (THIS.this_cCursorNFis) WHERE Flag INTO CURSOR cursor_4c_TmpVNFis` que era a fonte das detec├º├Áes falsas
+- `VerificarNf` agora faz SCAN direto de `cursor_4c_TmpNFis` com `IF !Flag LOOP`, comportamento id├¬ntico ao original
+- Removida entrada `cursor_4c_TmpVNFis` do array de cleanup em `Destroy` (de 11 para 10 entradas)
+
+**Problema 3** (`USUARIOS`) ÔÇö `Formsigregnf.prg`:
+- `ValidarUsuars`: `"SELECT TOP 1 Usuarios FROM SigCdUsu WHERE Usuarios = "` ÔåÆ `"SELECT TOP 1 Usuars FROM SigCdUsu WHERE Usuars = "`
+- `AbrirLookupUsuars`: campo `"Usuarios"` ÔåÆ `"Usuars"` na cria├º├úo do `FormBuscaAuxiliar`, no `mAddColuna` e no `PADR(ALLTRIM(Usuars), 10)`

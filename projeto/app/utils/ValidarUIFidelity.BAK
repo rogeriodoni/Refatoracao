@@ -1,0 +1,205 @@
+*====================================================================
+* ValidarUIFidelity.prg
+*
+* Script para validar fidelidade visual entre formulario original e migrado
+*
+* Uso:
+*   DO ValidarUIFidelity WITH "task1\SIGCDCOR_form_codigo_fonte.txt", "FormCor"
+*
+* Parametros:
+*   par_cArquivoOriginal - Caminho do .txt com codigo fonte extraido
+*   par_cClasseForm      - Nome da classe do form migrado
+*
+* Retorno:
+*   Gera relatorio HTML em projeto\app\utils\relatorios\
+*====================================================================
+
+LPARAMETERS par_cArquivoOriginal, par_cClasseForm
+
+LOCAL loc_cCaminhoBase, loc_cCaminhoUtils, loc_cCaminhoTasks
+LOCAL loc_oExtrator, loc_oComparador, loc_oRelatorio
+LOCAL loc_oFormMigrado
+LOCAL loc_cArquivoCompleto, loc_cRelatorioPath
+LOCAL loc_lSucesso, loc_cMsgErro
+LOCAL loc_cCaminhoClasses, loc_cCaminhoForms, loc_cNomeBO, loc_cArquivoForm
+
+*-- Inicializa controle de fluxo
+loc_lSucesso = .T.
+loc_cMsgErro = ""
+
+*-- Configura caminhos
+loc_cCaminhoBase = JUSTPATH(SYS(16))
+loc_cCaminhoUtils = ADDBS(loc_cCaminhoBase)
+loc_cCaminhoTasks = ADDBS(loc_cCaminhoBase) + "..\..\..\tasks\"
+
+*-- Monta caminho completo do arquivo original
+IF !("\" $ par_cArquivoOriginal) AND !("/" $ par_cArquivoOriginal)
+    *-- Apenas nome do arquivo, assume que esta em tasks\
+    loc_cArquivoCompleto = loc_cCaminhoTasks + par_cArquivoOriginal
+ELSE
+    loc_cArquivoCompleto = par_cArquivoOriginal
+ENDIF
+
+*-- Verifica se arquivo existe
+IF !FILE(loc_cArquivoCompleto)
+    MESSAGEBOX("Arquivo original n" + CHR(227) + "o encontrado: " + loc_cArquivoCompleto, 16, "Erro")
+    RETURN .F.
+ENDIF
+
+*-- Limpa arquivos .fxp compilados para forcar recompilacao
+? "Limpando arquivos .fxp..."
+IF FILE(loc_cCaminhoUtils + "ExtratorPropriedades.fxp")
+    DELETE FILE (loc_cCaminhoUtils + "ExtratorPropriedades.fxp")
+ENDIF
+IF FILE(loc_cCaminhoUtils + "ComparadorUI.fxp")
+    DELETE FILE (loc_cCaminhoUtils + "ComparadorUI.fxp")
+ENDIF
+IF FILE(loc_cCaminhoUtils + "RelatorioUI.fxp")
+    DELETE FILE (loc_cCaminhoUtils + "RelatorioUI.fxp")
+ENDIF
+
+*-- Carrega classes necessarias para validacao
+SET PROCEDURE TO (loc_cCaminhoUtils + "ExtratorPropriedades.prg") ADDITIVE
+SET PROCEDURE TO (loc_cCaminhoUtils + "ComparadorUI.prg") ADDITIVE
+SET PROCEDURE TO (loc_cCaminhoUtils + "RelatorioUI.prg") ADDITIVE
+
+*-- Cria variaveis globais minimas necessarias
+? "Configurando ambiente..."
+PUBLIC gnConnHandle, gc_4c_CaminhoIcones
+gnConnHandle = -1  && Nao ha conexao (apenas validacao visual)
+gc_4c_CaminhoIcones = ADDBS(loc_cCaminhoBase) + "..\..\..\vbmp\"
+
+*-- Carrega dependencias minimas do formulario
+? "Carregando dependencias do formul" + CHR(225) + "rio..."
+
+*-- De C:\4c\projeto\app\utils para C:\4c\projeto\app\classes
+loc_cCaminhoClasses = ADDBS(loc_cCaminhoBase) + "..\classes\"
+loc_cCaminhoForms = ADDBS(loc_cCaminhoBase) + "..\forms\cadastros\"
+
+*-- Classes base necessarias
+SET PROCEDURE TO (loc_cCaminhoClasses + "dataaccess.prg") ADDITIVE
+SET PROCEDURE TO (loc_cCaminhoClasses + "businessbase.prg") ADDITIVE
+SET PROCEDURE TO (loc_cCaminhoClasses + "formbase.prg") ADDITIVE
+SET PROCEDURE TO (loc_cCaminhoClasses + "gridbase.prg") ADDITIVE
+
+*-- Business object especifico (FormCor precisa de CorBO)
+*-- Remove "Form" do inicio para obter nome do BO
+IF LEFT(par_cClasseForm, 4) = "Form"
+    loc_cNomeBO = SUBSTR(par_cClasseForm, 5) + "BO"
+ELSE
+    loc_cNomeBO = par_cClasseForm + "BO"
+ENDIF
+
+IF FILE(loc_cCaminhoClasses + loc_cNomeBO + ".prg")
+    SET PROCEDURE TO (loc_cCaminhoClasses + loc_cNomeBO + ".prg") ADDITIVE
+ENDIF
+
+*-- Formulario
+loc_cArquivoForm = loc_cCaminhoForms + par_cClasseForm + ".prg"
+
+IF !FILE(loc_cArquivoForm)
+    MESSAGEBOX("Formul" + CHR(225) + "rio n" + CHR(227) + "o encontrado: " + loc_cArquivoForm, 16, "Erro")
+    RETURN .F.
+ENDIF
+
+SET PROCEDURE TO (loc_cArquivoForm) ADDITIVE
+
+*-- 1. Extrai propriedades do arquivo original (FORA do TRY)
+? "Extraindo propriedades do arquivo original..."
+loc_oExtrator = CREATEOBJECT("ExtratorPropriedades")
+
+IF !loc_oExtrator.ExtrairDeArquivo(loc_cArquivoCompleto)
+    MESSAGEBOX("Nenhuma propriedade encontrada no arquivo original", 16, "Erro")
+    RETURN .F.
+ENDIF
+
+? "  - " + ALLTRIM(STR(loc_oExtrator.nResultados)) + " propriedades encontradas"
+
+*-- 2. Instancia formulario migrado
+? "Instanciando formul" + CHR(225) + "rio migrado..."
+? "  AVISO: Se o Init() do formulario tiver TRY/CATCH com RETURN, pode dar erro"
+
+*-- Captura erro de TRY/CATCH com RETURN
+LOCAL loc_lErroInit
+loc_lErroInit = .F.
+
+ON ERROR loc_lErroInit = .T.
+loc_oFormMigrado = CREATEOBJECT(par_cClasseForm)
+ON ERROR
+
+IF loc_lErroInit
+    MESSAGEBOX("ERRO: O Init() do formul" + CHR(225) + "rio tem TRY/CATCH com RETURN dentro." + CHR(13) + CHR(10) + ;
+               "Corrija o FormBase.prg ou " + par_cClasseForm + ".prg primeiro." + CHR(13) + CHR(10) + CHR(13) + CHR(10) + ;
+               "REGRA VFP9: NUNCA use RETURN dentro de TRY/CATCH!", 16, "Erro de Arquitetura")
+    RETURN .F.
+ENDIF
+
+IF ISNULL(loc_oFormMigrado)
+    MESSAGEBOX("Erro ao instanciar formul" + CHR(225) + "rio: " + par_cClasseForm, 16, "Erro")
+    RETURN .F.
+ENDIF
+
+*-- 3. Compara propriedades
+? "Comparando propriedades..."
+loc_oComparador = CREATEOBJECT("ComparadorUI")
+loc_oComparador.Comparar(loc_oExtrator, loc_oFormMigrado)
+
+? "  - " + ALLTRIM(STR(loc_oComparador.nDiferencasEncontradas)) + " diferen" + CHR(231) + "as encontradas"
+
+*-- 4. Gera relatorio
+? "Gerando relat" + CHR(243) + "rio..."
+loc_oRelatorio = CREATEOBJECT("RelatorioUI")
+
+*-- Copia array para variavel local (VFP9 nao aceita @objeto.propriedade)
+LOCAL ARRAY loc_aDiferencasTemp[1, 7]
+LOCAL loc_i
+
+IF loc_oComparador.nDiferencasEncontradas > 0
+    DIMENSION loc_aDiferencasTemp[loc_oComparador.nDiferencasEncontradas, 7]
+    FOR loc_i = 1 TO loc_oComparador.nDiferencasEncontradas
+        loc_aDiferencasTemp[loc_i, 1] = loc_oComparador.aDiferencas[loc_i, 1]
+        loc_aDiferencasTemp[loc_i, 2] = loc_oComparador.aDiferencas[loc_i, 2]
+        loc_aDiferencasTemp[loc_i, 3] = loc_oComparador.aDiferencas[loc_i, 3]
+        loc_aDiferencasTemp[loc_i, 4] = loc_oComparador.aDiferencas[loc_i, 4]
+        loc_aDiferencasTemp[loc_i, 5] = loc_oComparador.aDiferencas[loc_i, 5]
+        loc_aDiferencasTemp[loc_i, 6] = loc_oComparador.aDiferencas[loc_i, 6]
+        loc_aDiferencasTemp[loc_i, 7] = loc_oComparador.aDiferencas[loc_i, 7]
+    ENDFOR
+ENDIF
+
+*-- Passa array por referencia (@) - IMPORTANTE no VFP9
+loc_cRelatorioPath = loc_oRelatorio.Gerar(par_cClasseForm, ;
+                                           @loc_aDiferencasTemp, ;
+                                           loc_oComparador.nDiferencasEncontradas)
+
+*-- 5. Libera formulario
+IF !ISNULL(loc_oFormMigrado)
+    loc_oFormMigrado.Release()
+ENDIF
+
+*-- 6. Exibe resultado
+? ""
+? "===== VALIDACAO CONCLUIDA ====="
+? "Formul" + CHR(225) + "rio: " + par_cClasseForm
+? "Original: " + loc_cArquivoCompleto
+? "Diferen" + CHR(231) + "as: " + ALLTRIM(STR(loc_oComparador.nDiferencasEncontradas))
+? "Relat" + CHR(243) + "rio: " + loc_cRelatorioPath
+? ""
+
+IF loc_oComparador.nDiferencasEncontradas = 0
+    ? "*** UI FIDELITY OK - Nenhuma diferen" + CHR(231) + "a encontrada! ***"
+    MESSAGEBOX("UI Fidelity OK!" + CHR(13) + CHR(10) + ;
+               "Nenhuma diferen" + CHR(231) + "a encontrada.", 64, "Sucesso")
+    RETURN .T.
+ELSE
+    ? "*** AVISO: Diferen" + CHR(231) + "as encontradas! Verifique o relat" + CHR(243) + "rio. ***"
+    MESSAGEBOX("Diferen" + CHR(231) + "as encontradas: " + ALLTRIM(STR(loc_oComparador.nDiferencasEncontradas)) + CHR(13) + CHR(10) + ;
+               "Relat" + CHR(243) + "rio: " + loc_cRelatorioPath, 48, "Aten" + CHR(231) + CHR(227) + "o")
+
+    *-- Abre relatorio no navegador
+    IF MESSAGEBOX("Deseja abrir o relat" + CHR(243) + "rio agora?", 4+32, "Abrir Relat" + CHR(243) + "rio") = 6
+        RUN /N rundll32 url.dll,FileProtocolHandler "&loc_cRelatorioPath"
+    ENDIF
+
+    RETURN .F.
+ENDIF

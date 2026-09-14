@@ -1,0 +1,1072 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGRECMV.SCX
+* Data/Hora: 17/05/26 11:37:59
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECMV
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape2
+  Parent: SIGRECMV
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGRECMV
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say15
+  Parent: SIGRECMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_dopes
+  Parent: SIGRECMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_nm_operacao
+  Parent: SIGRECMV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDGrupoMov
+  Parent: SIGRECMV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getGrupoMov
+  Parent: SIGRECMV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_estoque
+  Parent: SIGRECMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsEstoque
+  Parent: SIGRECMV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdEstoque
+  Parent: SIGRECMV
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGRECMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGRECMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_mes
+  Parent: SIGRECMV
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGRECMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ano
+  Parent: SIGRECMV
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_moeda
+  Parent: SIGRECMV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_moeda
+  Parent: SIGRECMV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGRECMV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV
+------------------------------------------------------------
+  DataSession = 2
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  Caption = "CMV - Custo Médio de Venda"
+  Name = "SIGRECMV"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.sair.Top = 2
+  btnReport.sair.Left = 204
+  btnReport.sair.Name = "sair"
+  btnReport.Left = 525
+  btnReport.Top = 3
+  btnReport.TabIndex = 10
+  btnReport.ZOrderSet = 2
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.Shape2
+------------------------------------------------------------
+  Top = 197
+  Left = 175
+  Height = 49
+  Width = 246
+  BackStyle = 0
+  ZOrderSet = 0
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.Shape1
+------------------------------------------------------------
+  Top = 259
+  Left = 174
+  Height = 72
+  Width = 481
+  BackStyle = 0
+  ZOrderSet = 1
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.Say15
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 214
+  Top = 284
+  Width = 38
+  TabIndex = 14
+  ForeColor = 90,90,9
+  ZOrderSet = 3
+  Name = "Say15"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.lbl_dopes
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Operação :"
+  Left = 194
+  Top = 223
+  Width = 56
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_dopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.get_nm_operacao
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 260
+  MaxLength = 20
+  SpecialEffect = 0
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 220
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_nm_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.getDGrupoMov
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 21
+  Left = 342
+  MaxLength = 20
+  TabIndex = 7
+  Top = 281
+  Width = 304
+  ZOrderSet = 6
+  Name = "getDGrupoMov"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.getGrupoMov
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 21
+  Left = 260
+  MaxLength = 10
+  TabIndex = 6
+  Top = 281
+  Width = 80
+  ZOrderSet = 7
+  Name = "getGrupoMov"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 215
+  Top = 307
+  Width = 38
+  TabIndex = 15
+  ForeColor = 90,90,9
+  ZOrderSet = 8
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.getDsEstoque
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 21
+  Left = 342
+  MaxLength = 40
+  TabIndex = 9
+  Top = 304
+  Width = 304
+  ZOrderSet = 9
+  Name = "getDsEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.getCdEstoque
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 21
+  Left = 260
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 8
+  ToolTipText = ""
+  Top = 304
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 10
+  Name = "getCdEstoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Custo geral"
+  Left = 181
+  Top = 262
+  Width = 66
+  TabIndex = 12
+  ForeColor = 90,90,9
+  ZOrderSet = 11
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Finalização da produção"
+  Left = 182
+  Top = 200
+  Width = 137
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Mês :"
+  Left = 199
+  Top = 131
+  Width = 28
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 31
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.get_mes
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Format = "K"
+  Height = 21
+  InputMask = "99"
+  Left = 231
+  TabIndex = 1
+  Top = 128
+  Width = 24
+  ForeColor = 0,0,0
+  ZOrderSet = 32
+  Name = "get_mes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ano :"
+  Left = 267
+  Top = 130
+  Width = 28
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 33
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.get_ano
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  Format = "K"
+  Height = 21
+  InputMask = "9999"
+  Left = 298
+  TabIndex = 2
+  Top = 128
+  Width = 38
+  ForeColor = 0,0,0
+  ZOrderSet = 34
+  Name = "get_ano"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.get_cd_moeda
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  Left = 231
+  MaxLength = 3
+  TabIndex = 3
+  Top = 159
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 41
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.lbl_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda : "
+  Height = 15
+  Left = 183
+  Top = 162
+  Width = 44
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 42
+  Name = "lbl_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMV.get_ds_moeda
+------------------------------------------------------------
+  Format = "K!"
+  Height = 21
+  Left = 264
+  MaxLength = 15
+  TabIndex = 4
+  Top = 159
+  Width = 115
+  ForeColor = 0,0,0
+  ZOrderSet = 43
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECMV
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReCmv NoConsole To PRINTER
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReCmv NoConsole To PRINTER Prompt
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _Acesso
+
+ThisForm.lacpdf = .t.
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	EndIf
+
+	lcQuery = [Select a.dopes from SigCdOpe a inner join SigCdTom b on a.TipoOps = b.Codigos ] + ;
+				[where b.GeraCmvs = 1 And a.vendas = 1 And a.caixas = 1 And a.copers = 1]
+	If ThisForm.poDataMgr.SqlExecute(lcQuery,[crSigCdOpe]) < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (crSigCdOpe)')
+		Return(.F.)
+	EndIf
+
+	lcQuery = [Select GruCmvs, ConCmvs, OpeCmvs from SigCdPac]
+	If ThisForm.poDataMgr.SqlExecute(lcQuery,[crSigCdPac]) < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (crSigCdPac)')
+		Return(.F.)
+	EndIf
+
+	.poDataMgr.AddCursor('SigCdCmv', 'PkChaves', 'crSigCdCmv', '', '')
+	
+	thisform.get_mes.Value = Padl(Month(Date()),2,[0])
+	thisform.get_ano.Value = Padl(Year(Date()),4,[0])
+	thisform.get_nm_operacao.Value = crSigCdPac.OpeCmvs
+	thisform.getGrupoMov.Value = crSigCdPac.GruCmvs
+	thisform.getDGrupoMov.Value = iif(thisform.poDatamgr.CursorQuery('SigCdGcr','crSigCdGcr','codigos',crSigCdPac.GruCmvs),evaluate('crSigCdGcr.descrs'),'')
+	thisform.getCdEstoque.Value = crSigCdPac.ConCmvs
+	thisform.getDsEstoque.Value = iif(thisform.poDatamgr.CursorQuery('SigCdCli','crSigCdCli','iclis',crSigCdPac.ConCmvs),evaluate('crSigCdCli.rclis'),'')
+Endwith	
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+lcOpeFinal = thisform.get_nm_operacao.Value
+lcGrupo = thisform.getGrupoMov.Value
+lcConta = thisform.getCdEstoque.Value
+ldDtIni = Ctod([01/] + thisform.get_mes.Value + [/] + thisform.get_Ano.Value)
+ldDtFin = Ctod([01/] + Transform((Val(thisform.get_mes.Value) + 1),'@L 99') + [/] + thisform.get_Ano.Value) - 1
+ldDtIni = fDtoSQL(ldDtIni)
+ldDtFin = fDtoSQL(ldDtFin,'23:59:00')
+llGrava  = .t.
+lcMoeda = thisform.get_cd_moeda.Value
+lnCotaOpera = fBuscarCotacao(lcMoeda, ldDtFin, ThisForm.poDataMgr) && Cotação do último dia do mês
+
+lcQuery = [select distinct Valcuss from SigCdCmv where Datas = '] + Padl(thisform.get_mes.Value,2,[0]) + [/] + Padl(thisform.get_Ano.Value,4,[0]) + [']
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crCustoIte]) < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crCustoIte)')
+	Return .f.
+EndIf
+If Reccount([crCustoIte]) > 0
+	llGrava = MessageBox([Esse período já foi calculado o CMV. Gravar valor do recalculado?],4+32+256,[Aviso]) = 6
+EndIf
+
+If !Empty(lcOpeFinal) &&& Busca os itens finalizados da produção
+	lcQuery = [Select cpros, qtds, pesos from SigMvItn where Dopes = '] + lcOpeFinal+ [' and DtAlts between ?ldDtIni and ?ldDtFin]
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crItens]) < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvSlc)')
+		Return .f.
+	EndIf	
+EndIf
+
+*** Busca o Saldo do Custo de Produção
+Create Cursor crCusto(Saldos n(11,2))
+
+lcQuery = [Select a.Emps, a.Grupos, a.Contas, a.Moedas, a.Saldos, b.RClis, b.Situas, b.Cpfs, b.ContaMats, ' ' as Matriz ] + ;
+		    [From SigMvSlc a, SigCdCli b ] + ;
+		   [Where a.Grupos = '] + lcGrupo + [' And a.Contas = '] + lcConta + [' And ]+ ;
+		   		 [a.Contas = b.IClis ] + ;
+		   [Order By a.Contas, a.Moedas]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSaldo]) < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvSlc)')
+	Return .f.
+EndIf
+
+lnSal = 0
+Select crSaldo
+Scan
+	lcGCM = crSaldo.Grupos + crSaldo.Contas + crSaldo.Moedas
+	
+	lcQuery = [Select a.Saldos, a.Datas, a.Opers From SigMvCcr a ] + ;
+			   [Where a.GruConMoes = '] + lcGCM + [' And ] + ;
+			         [a.Datas Between ?ldDtIni And ?ldDtFin] 
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpMcc1') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpMcc1)')
+		Return 0
+	EndIf
+
+	_MoeOpe = crSaldo.Moedas
+	Select crTmpMcc1
+	Scan
+		lnValor =  crTmpMcc1.Saldos
+		If (_MoeOpe <> lcMoeda)
+			lnCota  = fBuscarCotacao(_MoeOpe, crTmpMcc1.Datas, ThisForm.poDataMgr)
+			lnValor = lnValor * lnCota / lnCotaOpera
+		EndIf
+
+		If (crTmpMcc1.Opers = [D])
+			lnSal = lnSal + Abs(lnValor )
+		Else
+			lnSal = lnSal - Abs(lnValor )
+		EndIf
+	EndScan
+EndScan
+
+Insert into crCusto(Saldos) VALUES (lnSal)
+Set Step On 
+*** Soma peso dos itens produzidos
+Select Sum(Pesos) as TotPeso, Sum(Qtds) as TotQtd from crItens Into Cursor crTotItens
+
+*** Soma saldo do custo de produção
+Select crCusto
+Go top
+Sum Saldos to lnTotCusto
+
+If Nvl(crTotItens.TotPeso,0) = 0 or lnTotCusto = 0
+	MessageBox([Não é possível calcular o 'Custo do Grama Produzido' desse período pois não teve nenhum produto vendido ou custo de produção lançada.])
+	lnCusGr = 0
+Else
+	*** Calcula preço da grama produzida
+	lnCusGr = Abs(lnTotCusto) / Abs(crTotItens.TotPeso)
+EndIf
+
+lcQuery = [Select 0 as ordem, dopes, cpros, qtds, pesos, dtalts as Datas, 00000000.0000 as ValCuss, 00000000.0000 as TotCuss, '  ' as MoeCuss from SigMvItn where 0=1]
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crVenda]) < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crVendas)')
+	Return .f.
+EndIf
+
+Insert into crVenda(ordem,qtds,pesos,TotCuss,ValCuss,MoeCuss) values (1,Nvl(crTotItens.TotQtd,0),Nvl(crTotItens.TotPeso,0),Abs(lnTotCusto),lnCusGr,lcMoeda)
+
+*** Calcula o preço de custo dos itens vendidos conforme a configuração dos tipos de operação
+Select crSigCdOpe
+Scan
+	lcQuery = [Select 2 as ordem, a.dopes, a.cpros, a.qtds, a.pesos, b.Datas, 00000000.0000 as ValCuss, 00000000.0000 as TotCuss, '  ' as MoeCuss ] +;
+				[from SigMvItn  a inner join sigopetq b on a.codbarras = b.cbars where a.Dopes = '] + crSigCdOpe.Dopes + [' and a.DtAlts between ?ldDtIni and ?ldDtFin]
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crSigMvItn]) < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvItn)')
+		Return .f.
+	EndIf
+
+	Select crSigMvItn
+	Scan
+		lnCusto = lnCusGr
+		If Padl(thisform.get_Mes.Value,2,[0]) + Padl(thisform.get_Ano.Value,4,[0]) <> Padl(Month(crSigMvItn.Datas),2,[0]) + Padl(Year(crSigMvItn.Datas),4,[0])
+			lcChave = Padr(crSigMvItn.Cpros,14) + Padl(Month(crSigMvItn.Datas),2,[0]) + Padl(Year(crSigMvItn.Datas),4,[0])
+			lcQuery = [select Valcuss, Moedas, Datas from SigCdCmv where PkChaves = '] + lcChave  + [']
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crCustoIte]) < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigMvItn)')
+				Return .f.
+			EndIf
+			lnCusto = crCustoIte.ValCuss
+			If (crCustoIte.Moedas <> lcMoeda)
+				ldData = Ctod([01/] + Padl(Val(Substr(crCustoIte.Datas,1,2)) + 1,2,[0]) + [/] + Substr(crCustoIte.Datas,3,4)) - 1 && Último dia do mês
+				lnCota  = fBuscarCotacao(crCustoIte.Moedas, ldData, ThisForm.poDataMgr)
+				lnCusto = lnCusto * lnCota / lnCotaOpera
+			EndIf
+			
+		Endif
+		Select crSigMvItn		
+		replace ValCuss with lnCusto, TotCuss with Nvl(Pesos * lnCusto,0), MoeCuss with lcMoeda
+	EndScan
+
+	Select crSigMvItn
+	Go top
+		
+	Select crVenda
+	Append From Dbf('crSigMvItn')
+EndScan
+
+If llGrava
+	*** Grava em SigCdCmv o valor de custo calculdo de cada período
+	Select distinct Cpros, lnCusGr as ValCuss from crItens Into Cursor crGravar
+	Select crGravar
+	Scan
+		Scatter memo memvar
+		m.PkChaves = Padr(crGravar.Cpros,14) + Padl(thisform.get_Mes.Value,2,[0]) + Padl(thisform.get_Ano.Value,4,[0])
+		m.Datas = Padl(thisform.get_Mes.Value,2,[0]) + [/] + Padl(thisform.get_Ano.Value,4,[0])
+		m.Moedas = lcMoeda
+		
+		Insert into crSigCdCmv from memvar
+	EndScan
+
+	If Reccount('crSigCdCmv') > 0
+		llOK = thisform.poDataMgr.Update('crSigCdCmv')
+		If llOK
+			With ThisForm
+				.poDataMgr.Commit()
+				=fGravarLog('C',ThisForm.Name,'GERACMV',;
+							('Tabela('+.poDataMgr.pfSqlTabela(1).pcTabela+;
+							 ') C.P.('+.poDataMgr.pfSqlTabela(1).pcChaveprimaria+')='+;
+							 Alltrim(Transform(Evaluate(.poDataMgr.pfSqlTabela(1).pcNomecursor+'.'+.poDataMgr.pfSqlTabela(1).pcChaveprimaria)))),;
+							 Iif(Type('m.usuar')=='C',m.usuar,''))
+			EndWith
+		Else
+			ThisForm.poDataMgr.RollBack()
+			Return .f.
+		EndIf
+	EndIf
+EndIf
+
+* Inicializa variáveis de cabeçalho
+lcNmTitulo  = 'CMV - Custo da Mercadoria Vendida'
+lcDtPeriodo = 'Período: ' + Ttoc(ldDtIni) + ' à ' + Ttoc(ldDtFin)
+
+* Cria o arquivo temporário de cabeçalho de impressão
+Create Cursor crCabec (titulos c(80),titulo2s c(80))
+Insert Into crCabec (titulos,titulo2s) Values (lcNmTitulo,lcDtPeriodo)
+
+Select crVenda
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReCmv NoConsole Preview
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If this.Value <> 4
+	If Empty(thisform.get_mes.Value) or Empty(thisform.get_ano.Value)
+		MessageBox([Mês e Ano são obrigatórios.],48,[Aviso])
+		thisform.get_mes.SetFocus()
+		Return .f.
+	EndIf
+
+	If Empty(thisform.get_nm_operacao.Value)
+		MessageBox([Operação de finalização da produção é obrigatória.],48,[Aviso])
+		thisform.get_nm_operacao.SetFocus()
+		Return .f.
+	EndIf
+
+	If Empty(thisform.getGrupoMov.Value) or Empty(thisform.getCdEstoque.Value)
+		MessageBox([Grupo e conta do custo da produção são obrigatórios.],48,[Aviso])
+		thisform.getGrupoMov.SetFocus()
+		Return .f.
+	EndIf
+
+	If Empty(thisform.get_cd_moeda.Value)
+		MessageBox([Moeda de conversão é obrigatória.],48,[Aviso])
+		thisform.get_cd_moeda.SetFocus()
+		Return .f.
+	EndIf
+EndIf
+
+DoDefault()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMV.get_nm_operacao
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoMovmto(Usuar, This.Value, This)
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(this.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMV.getDGrupoMov
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, 'D', This.Value, ThisForm.getGrupoMov, ThisForm.getDGrupoMov)
+Else
+	ThisForm.getGrupoMov.Value = ''
+	ThisForm.getGrupoMov.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getGrupoMov.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMV.getGrupoMov
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoContab(Usuar, 'C', This.Value, ThisForm.getGrupoMov, ThisForm.getDGrupoMov)
+Else
+	ThisForm.getDGrupoMov.Value = ''
+	ThisForm.getDGrupoMov.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(this.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMV.getDsEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ''
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.getcdestoque, ThisForm.getdsestoque)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getcdestoque.Value = ''
+		ThisForm.getcdestoque.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getcdestoque.Value = ''
+	ThisForm.getcdestoque.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCdEstoque.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMV.getCdEstoque
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ''
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.getcdestoque, ThisForm.getdsestoque)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getdsestoque.Value = ''
+		ThisForm.getdsestoque.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getdsestoque.Value = ''
+	ThisForm.getdsestoque.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(this.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMV.get_mes
+* Classe: fweditdata (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Val(this.Value) > 12
+	MessageBox([Mês inválido.],48,[Aviso])
+	this.Value = []
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMV.get_cd_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_cd_moeda.Value = crListaRemota.CMoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+ThisForm.get_cd_moeda.Refresh
+ThisForm.get_ds_moeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMV.get_ds_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMoes', '', 'Código')
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_cd_moeda.Value = crListaRemota.CMoes
+	ThisForm.get_ds_moeda.Value = crListaRemota.DMoes
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+ThisForm.get_cd_moeda.Refresh
+ThisForm.get_ds_moeda.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_cd_moeda.Value)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECMV
+RESERVED3 (ClassInfo): podatamgr
+*montasaldo Busca saldo do período selecionado
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 21
+================================================================================

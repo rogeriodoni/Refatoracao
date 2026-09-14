@@ -1,0 +1,22 @@
+﻿No residual `STR(Nopers)` calls anywhere. Phase 7 is complete. Here's a summary of all changes made:
+
+---
+
+**Phase 7/8 - `Formsigmvccr.prg` (2922 lines)**
+
+**Bug fixes:**
+
+1. **`cursor_4c_Grade` + CarregarLista** ÔÇö Added `Cidchaves C(20)` to the placeholder cursor and `a.Cidchaves` to the SELECT in `CarregarLista`. All CRUD handlers (`BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnMovimentoClick`) now use `cursor_4c_Grade.Cidchaves` instead of `STR(Nopers)` to call `CarregarPorCodigo()`. Previously this would never find the record since the WHERE clause uses cidchaves not nopers.
+
+2. **Conta descriptions ÔåÆ SigCdCli** ÔÇö The legacy code (`fAcessoContas`) resolves conta codes via `SigCdCli.Iclis`/`Rclis`, not SigCdGcr. Fixed in:
+   - `CarregarDescricoesGruposConta()` (DcConta, SDcConta)
+   - `ContaLostFocus()` / `SContaLostFocus()`
+   - `AbrirLookupConta()` / `AbrirLookupSConta()`
+
+3. **Job descriptions ÔåÆ SigCdCli** ÔÇö Legacy code also resolves Jobs via SigCdCli. Added:
+   - `CarregarDescricoesGruposConta()` ÔÇö now also loads DJob from SigCdCli
+   - `AbrirLookupJob()` ÔÇö new lookup method
+   - `JobLostFocus()` / `JobKeyPress()` ÔÇö new event handlers
+   - BINDEVENT for `txt_4c_Job` in `ConfigurarPaginaDados()`
+
+4. **Form validations in `BtnSalvarClick()`** ÔÇö Implements the same pre-save checks as the legacy `Salva.Click`: required fields (Data, Oper D/C, Grupo, Conta, Moeda, Valor for both sides), Vencimento validation when Contapgs=Sim, cotacao consistency check when same moeda on both sides, and the "lan├ºamento inconsistente" check when Grupo+Conta+Moeda is identical on both sides.

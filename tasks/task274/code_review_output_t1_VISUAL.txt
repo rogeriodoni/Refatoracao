@@ -1,0 +1,8 @@
+﻿Done. Added the two propagation lines in `InicializarForm` (after `ConfigurarPageFrame`, before `ConfigurarConteudo`):
+
+```foxpro
+THIS.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+THIS.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+```
+
+This form is OPERACIONAL (flat layout, no PageFrame), so the header labels live at `THIS.cnt_4c_Cabecalho.*` rather than `THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.*`. The propagation runs after `THIS.Caption` is set (line 124) and after `ConfigurarPageFrame` creates the container and labels, so the objects exist by the time these lines execute.

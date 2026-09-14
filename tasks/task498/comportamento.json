@@ -1,0 +1,86 @@
+{
+  "resumo": {
+    "totalMetodos": 4,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 0,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fCarregaGrade"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDPGB",
+      "evento": "Init",
+      "linhas": 24,
+      "codigoOriginal": "Parameters _Emp, _Dope, _Nume, _pCnx\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n=_pCnx.Cursorquery('SigPrCtb','CrTmpTcBal','EmpdopNums',_Emp + _Dope + Str( _Nume, 6 ))\n\nSelect CrTmpTcBal\nGo Bott\n\nThisform.Grade.RecordSource='CrTmpTcBal'\nThisform.Grade.Column1.ControlSource='CrTmpTcBal.datas'\nThisform.Grade.Column2.ControlSource='CrTmpTcBal.Etiqs'\nThisform.Grade.Column3.ControlSource='CrTmpTcBal.ccustos'\nThisform.Grade.Column4... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGB.Grade",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "LPARAMETERS nColIndex\nThisForm.Text1.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGB.Grade.Column6.Header1",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGB.Saída",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

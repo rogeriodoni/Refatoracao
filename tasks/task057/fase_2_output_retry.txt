@@ -1,0 +1,8 @@
+﻿Phase 2 complete. Added the three methods required by the validator (`CarregarDoCursor`, `Inserir`, `Atualizar`) plus `ObterChavePrimaria`, following the canonical pattern from SIGREVISBO for REPORT BOs:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö loads filter values (data/grupo/conta/moeda) from a cursor with `TYPE()` guards, useful for "last filter used" restoration.
+- **`Inserir()`** ÔÇö blocked with explanatory error; reports don't write to `SigMvCcr`.
+- **`Atualizar()`** ÔÇö blocked symmetrically; the legacy `SIGRECND` form had no "Incluir/Alterar" buttons.
+- **`ObterChavePrimaria()`** ÔÇö composes filter values as execution identity (reports have no entity PK).
+
+All methods use `CHR()` codes for accents and avoid `RETURN` inside `TRY/CATCH` (using `DO WHILE .T.` + `EXIT` pattern). The existing `PrepararDados()`, `Imprimir()`, `ImprimirComPrompt()`, `Visualizar()`, `BuscarCotacao()`, and `ObterMensagemErro()` remain unchanged.

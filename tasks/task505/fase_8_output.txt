@@ -1,0 +1,19 @@
+﻿O config.prg usa ADIR() para carregar automaticamente todos os `*BO.prg` de `classes\` e `Form*.prg` de `cadastros\`. Como PubBO.prg e FormPub.prg j├í est├úo nos diret├│rios corretos, n├úo ├® necess├írio adicionar entradas manuais.
+
+A migra├º├úo da task505 est├í **completa**. Resumo do que foi entregue:
+
+**PubBO.prg** (`C:\4c\projeto\app\classes\PubBO.prg`):
+- Tabela `SigCdFpb`, campos `cods` (PK) e `descs`
+- `ValidarDados()` com checagem de c├│digo vazio, descri├º├úo vazia e duplicata (equivalente ao `ChkRegister` do legado)
+- `Buscar()`, `CarregarPorCodigo()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`
+
+**FormPub.prg** (`C:\4c\projeto\app\forms\cadastros\FormPub.prg`):
+- Estrutura completa: PageFrame Top=-29, Page1 (Lista com Grid 2 colunas), Page2 (Dados)
+- Todos os bot├Áes CRUD com ├¡cones can├┤nicos
+- `BtnBuscarClick()` via FormBuscaAuxiliar, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`, `AjustarBotoesPorModo()`
+- C├│digo somente leitura em modo ALTERAR (replicando o `Get_codigo.When` do legado)
+
+**Integra├º├úo**:
+- `menu.prg`: BAR 158 no `popCadastros` + `AbrirFormPub()` j├í presentes
+- `config.prg`: carregamento autom├ítico via ADIR() ÔÇö nenhuma altera├º├úo necess├íria

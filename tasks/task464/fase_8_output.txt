@@ -1,0 +1,12 @@
+﻿Arquivo correto. Fase 8/8 conclu├¡da:
+
+**O que foi adicionado:**
+- `HabilitarCampos(par_lHabilitar)` (linha 1634): habilita/desabilita todos os 15 campos da Page2; o c├│digo da moeda (PK) s├│ fica habilitado em modo INCLUIR
+- `AjustarBotoesPorModo()` (linha 1661): Confirmar habilitado em INCLUIR/ALTERAR, desabilitado em VISUALIZAR ÔÇö padr├úo can├┤nico CLAUDE.md
+
+**O que foi corrigido nos bot├Áes existentes:**
+- `BtnIncluirClick` ÔåÆ agora chama `HabilitarCampos(.T.)` e `AjustarBotoesPorModo()` ap├│s setar o modo
+- `BtnVisualizarClick` ÔåÆ agora chama `HabilitarCampos(.F.)` e `AjustarBotoesPorModo()` (readonly)
+- `BtnAlterarClick` ÔåÆ agora chama `HabilitarCampos(.T.)` e `AjustarBotoesPorModo()` ap├│s carregar dados
+
+**Integra├º├úo:** config.prg usa ADIR() para carregar automaticamente todos os `*BO.prg` e `Form*.prg` ÔÇö MoeBO.prg e FormMoe.prg j├í ser├úo encontrados sem altera├º├úo manual. menu.prg j├í tem `AbrirFormMoe()` e o item de menu (BAR 124 em popCadastros).

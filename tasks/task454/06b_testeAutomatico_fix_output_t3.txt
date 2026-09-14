@@ -1,0 +1,9 @@
+﻿All three methods now have the key guard and test mode guard. The fix is applied:
+
+- **ValidarCodCgo** (line 1699): SQLEXEC only fires on Enter (13) or Tab (9), skips entirely in `gb_4c_ModoTeste`
+- **ValidarCodCli** (line 1781): same guards  
+- **ValidarDesCli** (line 1866): same guards
+
+**Root cause**: These three KeyPress handlers executed `SQLEXEC(gnConnHandle, ...)` on *every* keystroke with no key guard. During the automated test, VFP9's internal focus/navigation events fire synthetic KeyPress events ÔÇö with `gnConnHandle = 0`, VFP9 attempts a TCP connection that blocks for exactly 300 seconds (the Windows TCP timeout). The 300s match confirmed this was a network block, not a hang in application code.
+
+**Fix**: Added `IF !INLIST(par_nKeyCode, 13, 9) THEN RETURN` at the top of each handler ÔÇö SQL only runs when the user actually presses Enter or Tab. Secondary guard `gb_4c_ModoTeste` makes them completely inert during automated testing, preventing any accidental SQLEXEC(0,...) calls regardless of what keys VFP9 synthesizes internally.

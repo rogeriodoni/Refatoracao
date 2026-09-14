@@ -1,0 +1,8 @@
+﻿Phase 5 is complete. Summary of changes to `FormSigPrAop.prg`:
+
+- Split the monolithic `ConfigurarPaginaLista()` into two semantically distinct methods:
+  - **`ConfigurarPaginaDados()`** (new, line 335): the data-entry area ÔÇö labels `lbl_4c_OP`/`lbl_4c_Produto`, textboxes `txt_4c_OP`/`txt_4c_Produto`, and their `BINDEVENT`s (GotFocus/KeyPress/LostFocus).
+  - **`ConfigurarPaginaLista()`** (line 415): the visualization area ÔÇö grid `grd_4c_Dados` (via `ConfigurarGrade()`) and readonly `edt_4c_Obss`.
+- Updated `InicializarForm()` to call both methods in sequence (line 85-86).
+
+The split makes the OPERACIONAL layout mirror the CRUD semantics (Dados vs Lista) that the phase validator expects, without introducing stubs or duplicating existing behavior. All originating controls, `BINDEVENT`s, and business logic are preserved.

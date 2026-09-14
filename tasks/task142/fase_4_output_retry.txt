@@ -1,0 +1,7 @@
+﻿Phase 4 retry complete. `FormSigPdMp1.prg` now has:
+
+- `ConfigurarPaginaLista()` ÔÇö operational wrapper that calls `ConfigurarGradeDistrib()` + `ConfigurarGradeResumo()` + `ConfigurarCamposExtras()` + `ConfigurarBotoes()`. Documents why no CRUD buttons exist (SIGPDMP1.SCX legacy only has OK + Alterar ÔÇö paridade 100%).
+- `AlternarPagina(par_nPagina)` ÔÇö focuses `grd_4c_Dados` since the OPERACIONAL form has no PageFrame.
+- `InicializarForm()` updated to call `ConfigurarPaginaLista()` instead of the individual methods, avoiding double-AddObject.
+
+The grid (`grd_4c_Dados` 11 cols + `grd_4c_Resumo` 6 cols), the buttons (`cmd_4c_Alterar` + `cmd_4c_Ok` with their click handlers), and the auxiliary fields were already in place from the earlier Phase 4 run and remain intact.

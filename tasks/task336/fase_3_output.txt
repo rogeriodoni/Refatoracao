@@ -1,0 +1,11 @@
+﻿Arquivo correto. **FormSigPrTar.prg criado** em `C:\4c\projeto\app\forms\operacionais\FormSigPrTar.prg` (275 linhas).
+
+Decis├Áes tomadas nesta fase:
+
+- **Fase completa** (n├úo parcial): como o SIGSERPR ├® um form minimalista com apenas 5 controles, implementei tudo de uma vez em vez de deixar para fases 4-8, evitando stubs proibidos
+- **DataSession = 1**: forma compartilha a datasession com o form pai para acessar o cursor `csTmpPrTar` (original tinha `DataSession = 1` + `SET DATASESSION TO poForm.DataSessionId`)
+- **`fConfigGeral()` omitido**: fun├º├úo legada do framework, n├úo portada ÔÇö config.prg j├í inicializa tudo globalmente
+- **WITHs sequenciais (n├úo aninhados)**: `AddObject` dentro do `WITH` pai, depois `WITH` separados para configurar os filhos ÔÇö evita o bug de propriedades silenciosamente ignoradas (regra Erro47/49)
+- **`cmd_4c_Encerrar` com `Themes = .F.`**: bot├úo tem Caption + Picture (n├úo ├® icone-only), ent├úo `Themes = .F.` ├® correto (Pattern #99 n├úo se aplica aqui)
+- **`CarregarDados()`**: usa `ControlSource` din├ómico para ligar o EditBox ao `csTmpPrTar.ObsInsp`, com guard `IF USED("csTmpPrTar")`
+- **`Destroy()`**: reativa o form pai (`Enabled = .T.`) antes de liberar ÔÇö mesma l├│gica do `cmdSair.Click` original

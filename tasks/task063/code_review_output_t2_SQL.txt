@@ -1,0 +1,58 @@
+﻿Ap├│s an├ílise completa das 6 ocorr├¬ncias, todos s├úo **falsos positivos do validador autom├ítico**. Nenhuma altera├º├úo ├® necess├íria.
+
+---
+
+## An├ílise - por que s├úo falsos positivos
+
+### CGRUS, CUNIS, LINHAS, COLECOES (itens 1-4)
+
+Estas colunas aparecem no BO (`sigrecpeBO.prg`) como condi├º├Áes de filtro VFP ÔÇö n├úo SQL Server:
+
+```foxpro
+SELECT Cpros, cproEqs, ... FROM cursor_4c_LocalPro WHERE &loc_cWhere.
+```
+
+O `loc_cWhere` ├® constru├¡do dinamicamente com `cgrus`, `Cunis`, `Linhas`, `Colecoes` ÔÇö exatamente como o legado:
+
+```foxpro
+Select ... From LocalPro Where &lcWhere.  ÔåÉ original
+```
+
+O validador confundiu **filtro em cursor VFP** com **WHERE em SQL Server**. Al├®m disso, `SigCdPro` retorna essas colunas no SELECT (conforme o original), e o `&loc_cWhere.` as usa para filtrar o cursor local `cursor_4c_LocalPro`. **Comportamento id├¬ntico ao legado.**
+
+---
+
+### CODIGOS (item 5)
+
+Aparece em `ValidarCdGrEstoqueA()` (linha 1244):
+```foxpro
+SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = ...
+```
+
+A coluna `codigos` ├® a chave prim├íria de `SigCdGcr` ÔÇö confirmado pelo pr├│prio `AbrirBuscaGrEstoque` que usa `FormBuscaAuxiliar` com `codigos` como campo-chave e `mAddColuna("codigos", ...)`. O WHERE ├® obrigat├│rio: sem ele, sempre retornaria o primeiro registro arbitr├írio, quebrando a valida├º├úo.
+
+---
+
+### ICLIS (item 6)
+
+Aparece em `ValidarCdEstoqueA()` (linha 1337):
+```foxpro
+SELECT TOP 1 iclis, razaos FROM SigCdCli WHERE iclis = ...
+```
+
+Mesma situa├º├úo: `iclis` ├® a chave de `SigCdCli`, confirmado por `mAddColuna("iclis", ...)` no m├®todo de busca. WHERE obrigat├│rio.
+
+---
+
+## Resultado
+
+| Item | Coluna | Veredicto | Motivo |
+|------|--------|-----------|--------|
+| 1 | CGRUS | Falso positivo | VFP WHERE macro `&loc_cWhere.`, id├¬ntico ao legado |
+| 2 | CUNIS | Falso positivo | Idem |
+| 3 | LINHAS | Falso positivo | Idem |
+| 4 | COLECOES | Falso positivo | Idem |
+| 5 | CODIGOS | Falso positivo | Chave PK de `SigCdGcr`, WHERE necess├írio |
+| 6 | ICLIS | Falso positivo | Chave PK de `SigCdCli`, WHERE necess├írio |
+
+Nenhum arquivo foi alterado. Remover qualquer dessas condi├º├Áes quebraria a filtragem de produtos (regra `NAO alterar logica de negocio`) ou os lookups de Grupo/Conta de Estoque (regra `NAO remover funcionalidades ou lookups`).

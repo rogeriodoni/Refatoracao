@@ -1,0 +1,27 @@
+﻿Everything looks correct. The implementation is complete. Here's a summary of what was added:
+
+**Phase 6 deliverables in `FormMda.prg` (1772 ÔåÆ 2587 lines):**
+
+**ConfigurarPaginaDados()** ÔÇö Added 10 new UI elements:
+- `lbl_4c_Label8` ("Opera├º├Áes"), `lbl_4c_Label7` ("Empresas"), `lbl_4c_Label13` ("Composi├º├úo") ÔÇö labels with Top = legacy_top + 29
+- `grd_4c_Opers` (2-col grid: CheckBox/Imps + Text/Dopes) with all 7 required CheckBox props + 4 BINDEVENTs
+- `grd_4c_Emps` (3-col grid: CheckBox/Imps + Text/Emps + Text/Razas) + 4 BINDEVENTs
+- `grd_4c_Compo` (1-col editable grid: Text/Compos) + BINDEVENT for `Valid` lookup
+- `cnt_4c_CmdOpers` container (MarcaOpers/DesmarcaOpers buttons) + 2 BINDEVENTs
+- `cnt_4c_CmdEmps` container (MarcaEmps/DesmarcaEmps buttons) + 2 BINDEVENTs
+- `cmd_4c_InserirCompo` / `cmd_4c_ExcluirCompo` + 2 BINDEVENTs
+
+**14 new PUBLIC methods:**
+- `CarregarRelacionados(par_cCodigos)` ÔÇö calls BO to load all 3 cursors, sets grid RecordSources/ControlSources/Headers
+- `OperCheckboxMouseDown/Up/Click/KeyPress` ÔÇö toggle pattern with NODEFAULT to prevent VFP9 double-toggle
+- `EmpCheckboxMouseDown/Up/Click/KeyPress` ÔÇö same pattern for Empresas
+- `MarcaTodosOpersClick`, `DesmarcaTodosOpersClick`, `MarcaTodosEmpsClick`, `DesmarcaTodosEmpsClick` ÔÇö REPLACE ALL bulk operations
+- `CompoInserirClick` ÔÇö APPEND BLANK + REPLACE + GO BOTTOM + Refresh
+- `CompoExcluirClick` ÔÇö rebuild cursor via SELECT...INTO CURSOR READWRITE (avoids PACK issues on SQLEXEC cursors)
+- `CompoTextValid` ÔÇö Pattern A canonical lookup against `cursor_4c_CsCompos` with FormBuscaAuxiliar fallback
+
+**Updated existing methods:**
+- `BtnIncluirClick/AlterarClick/VisualizarClick` ÔåÆ call `CarregarRelacionados` after `AlternarPagina(2)`
+- `HabilitarCampos` ÔåÆ enable/disable grid buttons and `grd_4c_Compo.ReadOnly` based on mode
+- `LimparCampos` ÔåÆ reset Imps/.F. in Emps/Opers, ZAP Compos
+- `Destroy` ÔåÆ close 5 additional cursors

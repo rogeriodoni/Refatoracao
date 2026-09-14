@@ -1,0 +1,9 @@
+﻿Fase 5 conclu├¡da. Foram adicionados ao `FormSIGRECND.prg`:
+
+- **`ConfigurarPaginaDados()`** ÔÇö cria `cnt_4c_Mensagem` + `lbl_4c_LblMensagem` ("Aguarde!!!") no form, inicialmente oculto (`Visible=.F.`), correspondendo ao `cntMensagem` do mapeamento.json que estava ausente
+- **`FormParaRelatorio()`** ÔÇö copia todos os 7 filtros dos TextBoxes para as propriedades do BO (`this_dDtInicial`, `this_cGrupos`, `this_cDGrupos`, `this_cContas`, `this_cDContas`, `this_cMoedas`, `this_cDMoedas`)
+- **`LimparCampos()`** ÔÇö inicializa `DtInicial = DATE()` e demais campos como `""`
+- **`MostrarAguarde()` / `EsconderAguarde()`** ÔÇö controla visibilidade do container de progresso durante gera├º├úo do relat├│rio
+- **`InicializarForm()`** atualizado para chamar `ConfigurarPaginaDados()` e `LimparCampos()` ap├│s montar os controles
+
+Fase 6/8 ficar├í com: handlers de KeyPress para os campos de lookup (Grupo, Conta, Moeda) e os respectivos m├®todos de valida├º├úo/busca.

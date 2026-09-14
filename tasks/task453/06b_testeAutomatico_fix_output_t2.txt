@@ -1,0 +1,5 @@
+﻿Both fixes confirmed. Two bugs fixed in `Formint.prg`:
+
+1. **`GrdColOcorWhen()` (line 3344)** ÔÇö Added `RETURN .T.`. VFP9 `When` event handlers must return `.T.` to allow the control to receive focus; without it, VFP returns `.NULL.` (treated as `.F.`), which refuses focus on Column8's TextBox. In test mode, this triggers `BINDEVENT` to fire `GrdColOcorWhen` repeatedly as the grid tries to find a focusable cell, causing the 300-second hang.
+
+2. **`TornarControlesVisiveis` INLIST (line 2904)** ÔÇö Added `"GRD_4C_DADOS"` to the skip list. Page3's treatment grid is explicitly set `Visible = .F.` in `ConfigurarPaginaTratamento`, but the recursive `TornarControlesVisiveis` call was overriding that by making it visible (it wasn't in the INLIST of objects to leave hidden).

@@ -1,0 +1,18 @@
+﻿Phase 6 is already complete. Verified state:
+
+**FormSigPrApr.prg** (1883 lines) ÔÇö all requirements met:
+
+- **All 59 layout objects** from `layout.json` are instantiated (cabe├ºalho, bot├Áes CRUD, 8 checkboxes/optiongroups, ~30 textboxes/labels, grid, shape+image de foto).
+- **BINDEVENTs** wired for the 3 CommandGroup buttons, OptTipo, ChkAuditado, Grid (3 events), plus all 12 lookup textboxes.
+- **All lookups fully implemented** (no TODOs/stubs):
+  - `AbrirBuscaGrupo` (SigCdGrp) ÔÇö GrupoIni/GrupoFim
+  - `TxtColecaoKeyPress` (SigCdCol)
+  - `TxtContaKeyPress` / `TxtDContaKeyPress` (SigCdCli)
+  - `TxtPromoKeyPress` (SigPrPmc)
+  - `AbrirBuscaMoeda` shared helper ÔÇö Moeda/MoeCs/MoeCusFs/Moedas/MoeVs/MoeCusto
+  - `TxtCFtiosKeyPress` (SigPrFti)
+  - `AtualizarLinhaGrid` (SigCdPro) via `GrdKeyPress` ÔÇö grid column 2 product lookup
+- All handlers follow the canonical pattern: `LPARAMETERS` + guard on `13/9/115`, SELECT TOP 1 exato ÔåÆ auto-preenche ou abre `FormBuscaAuxiliar` com `mAddColuna`+`Show`+`this_lSelecionou`+`USE IN`+`Release`.
+- Pipeline state confirms `05_migracao` status = **COMPLETED** (finished 2026-07-14 17:50:59), so all 8 phases already ran through.
+
+The prior retry's tweaks (`chk_4c_Auditado` graphical style with `geral_produtos_60.jpg` + Comic Sans MS on cmg buttons) were the last legitimate deltas needed for UX fidelity. No further code changes required for Fase 6.

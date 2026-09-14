@@ -1,0 +1,25 @@
+﻿An├ílise completa. Todos os 11 problemas reportados s├úo **falsos positivos**.
+
+## Diagn├│stico: Falsos Positivos
+
+O code review comparou **todos** os WHEREs do arquivo migrado contra apenas o trecho SQL das etiquetas (`WHERE CBars`/`Cbars_old`), que ├® somente uma das dezenas de queries do form. O `FormSigPrRet` ├® um form de filtros com m├║ltiplos campos de filtragem, cada um com seu pr├│prio procedimento de valida├º├úo em tabelas diferentes.
+
+Verifica├º├úo contra o schema real (`docs/schema.sql`):
+
+| Coluna flagrada | Tabela usada no c├│digo | Existe no schema? |
+|---|---|---|
+| `CEMPS` | `sigcdemp` | Ô£à `cemps char(3)` |
+| `CODIGOS` | `SigCdGcr`, `SigCdGpr`, `SigCdPsg` | Ô£à `codigos char(10/6)` |
+| `CONTAS` | `SIGCDGFC` | Ô£à `contas char(10)` |
+| `GRUPOS` | `SIGCDGFC` | Ô£à `grupos char(10)` |
+| `CGRUS` | `SigCdGrp`, `SigCdPsg` | Ô£à `cgrus char(3)` |
+| `DGRUS` | `SigCdGrp` | Ô£à `dgrus char(20)` |
+| `DESCRICAOS` | `SigCdPsg` | Ô£à `descricaos char(20)` |
+| `COLECOES` | `SIGCDCOL` | Ô£à `colecoes char(10)` |
+| `DESCS` | `SIGCDCOL`, `SigCdLin` | Ô£à `descs char(40)` |
+| `LINHAS` | `SigCdLin` | Ô£à `linhas char(10)` |
+| `PROMOS` | `SigPrPmc` | Ô£à `promos char(25)` |
+
+**Nenhuma condi├º├úo WHERE foi inventada.** Todas as colunas existem exatamente nas tabelas em que s├úo usadas. O reviewer errou ao tomar o snippet de SQL da etiqueta (`SigOpEtq`/`SigOpEta` com `CBars`/`Cbars_old`) como refer├¬ncia universal para todos os WHEREs do arquivo de 3321 linhas.
+
+**A├º├úo correta: nenhuma modifica├º├úo necess├íria.** O arquivo `FormSigPrRet.prg` est├í correto neste pass SQL.

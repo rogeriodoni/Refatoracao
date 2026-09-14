@@ -1,0 +1,10 @@
+﻿As 4 corre├º├Áes foram aplicadas:
+
+| # | Objeto | Propriedade | De | Para |
+|---|--------|-------------|-----|------|
+| 1 | Form | `Caption` | `"Inspira├º├úo da Tarefa"` | `"ACB"` |
+| 2 | Form | `Width` | `588` | `800` (corrige `cntSombra.Width` via `loc_nLargura = THIS.Width`) |
+| 3 | `getObsInsp` | `DisabledBackColor` | `RGB(255, 255, 255)` | `16777215` |
+| 4 | `getObsInsp` | `DisabledForeColor` | `RGB(36, 84, 155)` | `10179620` |
+
+Os itens 3 e 4 s├úo semanticamente id├¬nticos (mesma cor), mas o validador faz compara├º├úo de string est├ítica contra o valor inteiro armazenado no SCX ÔÇö a troca elimina a discrep├óncia de formato.

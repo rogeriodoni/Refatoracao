@@ -1,0 +1,3 @@
+﻿**Causa do timeout:** `SQLSTRINGCONNECT()` em ETAPA 1B n├úo tinha nenhum timeout de login configurado. Quando o servidor SQL (192.168.15.101) est├í inacess├¡vel, o VFP9 fica bloqueado aguardando a conex├úo TCP indefinidamente ÔÇö o que consumia os 300s do timeout externo sem produzir nenhuma mensagem de erro vis├¡vel.
+
+**Corre├º├úo:** `SQLSETPROP(0, "LoginTimeout", 30)` define 30 segundos de timeout para *novas* conex├Áes antes da chamada `SQLSTRINGCONNECT`. Com isso, se o servidor n├úo responder em 30s, `SQLSTRINGCONNECT` retorna `-1` e o c├│digo j├í existente na linha 133 captura o erro, escreve no log e encerra corretamente ÔÇö em vez de travar por 5 minutos.

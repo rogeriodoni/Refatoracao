@@ -1,0 +1,23 @@
+﻿**An├ílise dos 7 problemas: todos s├úo FALSOS POSITIVOS.**
+
+Aqui est├í o racioc├¡nio matem├ítico:
+
+O validador compara o `.Top` bruto do controle migrado com o `.Top` original do SCX. Por├®m, no form migrado os controles est├úo **dentro de Page1 do PageFrame** (`pgf_4c_Paginas.Top = 85`, `Tabs = .F.`). Isso significa que o `.Top` do controle ├® relativo ├á Page, n├úo ao form.
+
+Posi├º├úo absoluta real (relativa ao form) = `PageFrame.Top` + `Control.Top`
+
+| Controle | Top migrado | Top absoluto | Top original | Status |
+|----------|-------------|--------------|--------------|--------|
+| chk_4c_ChkEnderecos | 63 | 85 + 63 = **148** | 148 | CORRETO |
+| chk_4c_ChkTelefones | 63 | 85 + 63 = **148** | 148 | CORRETO |
+| chk_4c_ChkDtCom | 63 | 85 + 63 = **148** | 148 | CORRETO |
+| chk_4c_ChkClassif | 83 | 85 + 83 = **168** | 168 | CORRETO |
+| chk_4c_ChkRepres | 83 | 85 + 83 = **168** | 168 | CORRETO |
+| opt_4c_Option | 105 | 85 + 105 = **190** | 190 | CORRETO |
+| opt_4c_OpOrdem | 105 | 85 + 105 = **190** | 190 | CORRETO |
+
+O validador n├úo considerou a hierarquia de containers. A f├│rmula correta ├® `OriginalTop - PageFrame.Top = 85`, que ├® exatamente o que est├í no c├│digo (`148 - 85 = 63`, `168 - 85 = 83`, `190 - 85 = 105`).
+
+**Se eu aplicar as corre├º├Áes solicitadas** (Top=148/168/190 dentro da Page), os controles ficariam em posi├º├úo absoluta de `85 + 148 = 233`, `85 + 168 = 253` e `85 + 190 = 275` ÔÇö 85px abaixo do correto, quebrando o layout visual.
+
+**Nenhuma altera├º├úo foi feita.** O arquivo est├í correto e n├úo deve ser modificado. O validador precisa ser corrigido para somar o offset do PageFrame pai antes de comparar posi├º├Áes.

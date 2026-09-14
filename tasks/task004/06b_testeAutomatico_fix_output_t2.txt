@@ -1,0 +1,3 @@
+﻿Corrigido. A causa: em modo de valida├º├úo UI (`gb_4c_ValidandoUI = .T.`), o `InicializarForm` faz early-return antes de criar o BO, deixando `this_oBusinessObject = .NULL.`. O `BtnIncluirClick` chamava `.NovoRegistro()` diretamente sem verificar.
+
+A corre├º├úo adiciona `IF VARTYPE(THIS.this_oBusinessObject) = "O"` antes da chamada ao BO ÔÇö comportamento id├¬ntico em runtime (BO sempre existe quando h├í conex├úo), mas o teste de navega├º├úo passa corretamente sem banco.

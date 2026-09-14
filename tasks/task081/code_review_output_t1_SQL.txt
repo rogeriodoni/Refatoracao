@@ -1,0 +1,18 @@
+﻿An├ílise conclu├¡da. Os 5 problemas reportados s├úo **falsos positivos** do code review tool. Aqui est├í o que encontrei:
+
+| Coluna Reportada | Onde aparece no c├│digo migrado | Tipo real |
+|---|---|---|
+| `VALVARS` | `IF CrTmpDcOpe.DckAcres = 1 AND TmpRel.valvars > 0` (linhas 1156, 1522) | VFP `IF` condition ÔÇö n├úo SQL WHERE |
+| `DCKDEVO` | `IF CrTmpDcOpe.DckDevo = 1 AND par_nDev # 0` (linha 1510) | VFP `IF` condition ÔÇö n├úo SQL WHERE |
+| `DCKACRES` | `IF CrTmpDcOpe.DckAcres = 1 AND ...` (linhas 1156, 1522, 1537) | VFP `IF` condition ÔÇö n├úo SQL WHERE |
+| `DCKDESCO` | `IF CrTmpDcOpe.DckDesco = 1 AND TmpRel.valvars < 0` (linhas 1163, 1529) | VFP `IF` condition ÔÇö n├úo SQL WHERE |
+| `CAMPO` | `* par_cCampo : campo de filtro (WHERE campo = valor)` (linha 1807) | Coment├írio numa docstring |
+
+**Nenhuma das 5 colunas aparece em SQL WHERE clause.** O tool de revis├úo fez uma busca textual e confundiu condi├º├Áes VFP `IF` e um coment├írio com filtros SQL inventados.
+
+O c├│digo est├í correto:
+- `DckAcres`, `DckDesco`, `DckDevo` s├úo flags leg├¡timas da tabela `SigOpCdc` que controlam a formata├º├úo do rodap├® do documento (acr├®scimos, descontos, devolu├º├Áes)
+- `valvars` ├® um campo leg├¡timo do cursor `TmpRel` (valor vari├ível/percentual)
+- `campo` ├® apenas o nome do par├ómetro documentado num coment├írio
+
+Remover essas condi├º├Áes quebraria a l├│gica de neg├│cio ÔÇö violando a regra "NAO remover campos, funcionalidades ou lookups". **Nenhuma altera├º├úo necess├íria no arquivo.**

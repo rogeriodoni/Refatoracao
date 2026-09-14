@@ -1,0 +1,34 @@
+﻿Ap├│s an├ílise completa, ambos os alertas s├úo **falsos positivos** do verificador autom├ítico. Explica├º├úo:
+
+---
+
+## [SQL-FILTRO-INVENTADO] `CODIGO` ÔÇö FALSO POSITIVO
+
+O verificador comparou os WHEREs do migrado contra as queries legadas de `sigcddes` que usavam apenas `emps/dtini/dtfin`. Mas `codigo` ├® a **chave prim├íria** da tabela e aparece em 5 locais, todos obrigat├│rios:
+
+| M├®todo | Uso de `WHERE codigo` | Por qu├¬ ├® necess├írio |
+|---|---|---|
+| `GerarCodigo()` linha 74 | `LIKE prefixo%` | conta sequ├¬ncia para gerar pr├│ximo c├│digo |
+| `ValidarSobreposicaoPeriodo()` linha 107 | `AND codigo <>` | exclui o pr├│prio registro do check de sobreposi├º├úo no UPDATE |
+| `Atualizar()` linha 239 | `WHERE codigo =` | identifica qual registro atualizar |
+| `ExecutarExclusao()` linha 268 | `WHERE codigo =` | identifica qual registro deletar |
+| `CarregarPorCodigo()` linha 322 | `WHERE codigo =` | carrega registro espec├¡fico pelo PK |
+
+O legado usava o framework `Podatamgr.Update()` (navega├º├úo posicional interna). A nova arquitetura **obrigatoriamente** usa WHERE PK para opera├º├Áes CRUD. Remover quebraria 100% das opera├º├Áes de edi├º├úo/exclus├úo.
+
+---
+
+## [SQL-FILTRO-INVENTADO] `CEMPS` ÔÇö FALSO POSITIVO
+
+A ocorr├¬ncia est├í na linha 823-824 do Form, consultando **SigCdEmp** (tabela de empresas), n├úo `sigcddes`:
+
+```foxpro
+loc_cSQL = "SELECT Cemps, Razas FROM SigCdEmp" + ;
+           " WHERE Cemps = " + EscaparSQL(loc_cEmps)
+```
+
+O legado usava `WHERE nemps = ` (campo num├®rico). A mem├│ria do projeto define explicitamente: **"SigCdEmp ÔÇö colunas can├┤nicas s├úo `Cemps`/`Razas`, NUNCA `Emps`/`emps`/`NComps`/`nemp`"**. Portanto, usar `Cemps` ├® **correto** e `nemps` ├® proibido.
+
+---
+
+**Nenhuma altera├º├úo ├® necess├íria.** Os dois arquivos est├úo corretos. Os alertas foram gerados porque o verificador rastreou colunas em WHEREs sem distinguir em qual tabela o SQL opera, e sem considerar que `codigo` ├® a PK do schema.

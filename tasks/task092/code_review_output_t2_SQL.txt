@@ -1,0 +1,6 @@
+﻿Feito. O bloco `SELECT ndopes FROM SigCdOpe WHERE dopes = ...` foi removido da fun├º├úo `Imprimir()`. 
+
+**An├ílise da corre├º├úo:**
+- O filtro `WHERE dopes` nessa posi├º├úo era inventado: o original n├úo re-lia `NDopes` antes de imprimir ÔÇö usava o valor j├í carregado por `CarregarDados()` no init
+- `this_cIni` (prefixo do c├│digo de barras) j├í est├í correto via `CarregarDados()` chamado no `CarregarConfiguracoes()`
+- As outras duas ocorr├¬ncias de `WHERE dopes` ÔÇö em `CarregarDados()` (linha 90) e `RegistrarBatchImpresso()` (linha 578 original) ÔÇö s├úo necess├írias e foram mantidas

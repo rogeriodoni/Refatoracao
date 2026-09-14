@@ -1,0 +1,12 @@
+﻿Fase 6 conclu├¡da. O que foi feito:
+
+1. **`FormCtg.prg` ÔÇö `ConfigurarPaginaDados()` completada**: adicionados `lbl_4c_Descricao` e `txt_4c_Descricao` que estavam sendo referenciados em `HabilitarCampos`, `LimparCampos`, `BOParaForm`, `FormParaBO` e `BtnSalvarClick` mas n├úo haviam sido criados.
+
+2. **Integra├º├úo no menu.prg**:
+   - `DEFINE BAR 72 OF popCadastros` ÔÇö item "Categorias" (SigCdCtg, distinto de FormCat/SIGCDCAT que ├® BAR 37)
+   - `ON SELECTION BAR 72 DO AbrirFormCtg`
+   - `PROCEDURE AbrirFormCtg()` com padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+
+3. **config.prg** ÔÇö nenhuma altera├º├úo necess├íria: j├í usa `ADIR()` para carregar automaticamente todos os `*BO.prg` e `Form*.prg` das pastas corretas.
+
+N├úo h├í lookups neste form (o original n├úo usava `fwbuscaext`, `fwBuscaSel` nem `sigacess`) ÔÇö apenas dois campos simples: C├│digo e Descri├º├úo.

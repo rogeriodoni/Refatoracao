@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O `INNER JOIN SigCdCli c ON c.IClis = a.Vends` foi alterado para `LEFT JOIN`.
+
+**Problema corrigido**: O `inner join` criava um filtro impl├¡cito equivalente a `WHERE c.IClis IS NOT NULL` ÔÇö registros de SigMvCab cujo `Vends` n├úo tivesse correspondente em SigCdCli eram silenciosamente exclu├¡dos. O original n├úo juntava SigCdCli na query principal (usava apenas SigMvCab, SigMvItn, SigMvItd, sigcddes, SigCdPsg, SigCdCtg). Com `left join`, todos os registros s├úo retornados e `repre` fica `NULL`/vazio quando n├úo h├í match, preservando o comportamento original.
+
+**ValidarVend (linha 1419)**: Mantido como est├í. O `WHERE IClis = ...` ├® uma query de valida├º├úo auxiliar de campo (replica `fAcessoContas modo 'C'` do legado) ÔÇö `IClis` ├® a coluna correta para lookup em SigCdCli, conforme evidenciado pelo pr├│prio JOIN `c.IClis = a.Vends`.

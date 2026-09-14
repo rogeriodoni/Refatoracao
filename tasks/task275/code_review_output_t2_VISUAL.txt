@@ -1,0 +1,6 @@
+﻿Dois problemas corrigidos em `Formsigprdis.prg`:
+
+- **Linha 758** (ConfigurarSubPaginaDistribuicao): `"Sa" + CHR(237) + "da"` ÔåÆ `"Distribuido"`
+- **Linha 1624** (BtnFiltrarClick, caminho filtrado): `"Sa" + CHR(237) + "da"` ÔåÆ `"Distribuido"`
+
+O caption do Column6 de `grd_4c_Disponivel` agora ├® consistente em todos os tr├¬s pontos onde o header ├® atribu├¡do (static init, runtime load em linha 1338, e load filtrado) ÔÇö todos usando `"Distribuido"`, que ├® o caption presente nos headers legados.

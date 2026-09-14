@@ -1,0 +1,11 @@
+﻿Phase 2 is now complete. All required CRUD methods have been added to `SigPrChrBO.prg`:
+
+- **`CarregarDoCursor()`** (line 127) ÔÇö maps all SigCqChi columns including the previously missing `grupos`, `nemissoes`, `vencs`, `versos`, `empdopnums`, `impversos`, plus BIT fields `emitidos`/`cancelas` with proper type handling
+- **`ObterChavePrimaria()`** (line 120) ÔÇö returns `this_cCidchaves`
+- **`ValidarDados()`** (line 231) ÔÇö validates required fields before INSERT/UPDATE
+- **`Inserir()`** (line 283) ÔÇö INSERT into SigCqChi with all 21 NOT NULL columns; calls `RegistrarAuditoria("INSERT")` on success
+- **`Atualizar()`** (line 347) ÔÇö UPDATE SigCqChi by `cidchaves`; calls `RegistrarAuditoria("UPDATE")` on success
+- **`ExecutarExclusao()`** (line 402) ÔÇö DELETE by `cidchaves`; calls `RegistrarAuditoria("DELETE")` before removal
+- **`CarregarPorChave()`** (line 436) ÔÇö bonus loader for editing existing cheque records
+
+Also added missing schema properties (`this_cGrupos`, `this_nNemissoes`, `this_dVencs`, `this_cVersos`, `this_cEmpDopNums`, `this_nImpVersos`, `this_lEmitidos`, `this_lCancelas`) so INSERT/UPDATE can populate every non-null column.

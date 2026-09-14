@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. O erro estava em duas chamadas a `TABLEREVERT(.T., "cursor_4c_Config")`:
+
+- **Linha 340** (`AtualizaBoleto`): chamada antes de recriar o cursor a cada atualiza├º├úo
+- **Linha 1254** (`Destroy`): chamada ao fechar o form ÔÇö esta ├® a que disparou o erro no teste "Fechar"
+
+`TABLEREVERT()` exige que o cursor esteja em modo de buffering (`CURSORSETPROP("Buffering", ...)`), mas `cursor_4c_Config` ├® criado com `CREATE CURSOR` simples (sem buffering). A solu├º├úo ├® usar apenas `USE IN cursor_4c_Config` para fechar, que ├® suficiente para liberar o cursor.

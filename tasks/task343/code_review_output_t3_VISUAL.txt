@@ -1,0 +1,23 @@
+﻿Encontrei o fonte legado. Agora posso verificar os headers reais. Veja a linha 689-693 do legado (`SIGCDACJ_form_codigo_fonte.txt`):
+
+```foxpro
+.pfSqlTabela(1).pColuna([RCLis],    [], [], [Nome],       345, .t.)
+.pfSqlTabela(1).pColuna([Razaos],   [], [], [Descritivo], 332, .t.)
+.pfSqlTabela(1).pColuna([IClis],    [], [], [C├│digo],     080, .t.)
+.pfSqlTabela(1).pColuna([Usuars],   [], [], [Usu├írio],    080, .t.)
+.pfSqlTabela(1).pColuna([DataIncs], [], [], [Inclus├úo],   074, .t.)
+```
+
+**Os 6 problemas detectados s├úo falsos positivos.** O validador scaneou apenas as propriedades est├íticas do SCX e encontrou `grdUsuarios.Header1.Caption = "Usu├írio"` e `Header2.Caption = "Nome"` (o grid da p├ígina Dados). Os captions do grid da Lista (`Grade`) s├úo definidos **em runtime** via `pColuna()`, portanto o scanner n├úo os detectou. Mas eles existem no legado com exatamente os mesmos valores:
+
+| Header no migrado | No legado | Status |
+|---|---|---|
+| `"C" + CHR(243) + "digo"` = **C├│digo** | `[C├│digo]` | Ô£ô CORRETO |
+| `"Nome"` | `[Nome]` | Ô£ô CORRETO |
+| `"Descritivo"` | `[Descritivo]` | Ô£ô CORRETO |
+| `"Usu" + CHR(225) + "rio"` = **Usu├írio** | `[Usu├írio]` | Ô£ô CORRETO |
+| `"Inclus" + CHR(227) + "o"` = **Inclus├úo** | `[Inclus├úo]` | Ô£ô CORRETO |
+
+**Nenhuma corre├º├úo necess├íria nos captions.** O c├│digo migrado j├í est├í id├¬ntico ao legado.
+
+H├í por├®m uma diverg├¬ncia visual real n├úo listada nos problemas deste pass: a **ordem e largura das colunas** no `grd_4c_Lista` difere do legado (legado tem `Nome`/345 como Column1, `Descritivo`/332 como Column2, `C├│digo`/80 como Column3 - mas o migrado tem `C├│digo` como Column1). Isso afeta PILAR 1 (UX fidelity). Quer que eu corrija isso tamb├®m neste mesmo pass?

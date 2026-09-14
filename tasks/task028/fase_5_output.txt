@@ -1,0 +1,11 @@
+﻿As tr├¬s edi├º├Áes foram aplicadas corretamente. Fase 5/8 completa.
+
+**O que foi adicionado em Phase 5:**
+
+1. **Header** ÔÇö bloco `FASE 5/8 - Controle de Progresso` documentando as mudan├ºas
+2. **`Closable = .F.`** ÔÇö propriedade do original SIGREAGV.SCX que estava faltando nas Fases 3-4
+3. **`CmgBotoesClick()` atualizado** ÔÇö agora chama `MostrarAguarde()` antes de cada opera├º├úo do BO e `OcultarAguarde()` ao concluir
+4. **`MostrarAguarde()`** ÔÇö torna `cnt_4c_Mensagem` vis├¡vel e executa `DOEVENTS` para garantir que o "Aguarde!!!" apare├ºa na tela antes do `PrepararDados()` iniciar (que roda m├║ltiplas queries em SCAN loops pesados)
+5. **`OcultarAguarde()`** ÔÇö oculta `cnt_4c_Mensagem` ap├│s a conclus├úo
+
+O `cnt_4c_Mensagem` foi criado na Fase 4 mas nunca era ativado ÔÇö agora o ciclo de exibi├º├úo est├í completo.

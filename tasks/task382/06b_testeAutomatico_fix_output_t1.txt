@@ -1,0 +1,8 @@
+﻿Todos os fixes est├úo corretos. Resumo do que foi corrigido em `FormCRC.prg`:
+
+| Erro | Causa | Fix |
+|------|-------|-----|
+| `CarregarLista`: nenhum cursor criado | Guard `gb_4c_ValidandoUI=.T.` impedia chamada ao `Buscar` que cria o cursor stub | Removido o early-exit; `Buscar` j├í trata aus├¬ncia de conex├úo |
+| `ModoIncluir`: Property ALTERNARPAGINA is not found | `AlternarPagina` era `PROTECTED` ÔÇö TesteAutomatico chama de fora do objeto | Removido `PROTECTED` |
+| `ModoVisualizar`: Property AJUSTARBOTOESPORMODO is not found | `AjustarBotoesPorModo` era `PROTECTED` ÔÇö mesmo motivo | Removido `PROTECTED` |
+| BOParaForm (latente) | Sintaxe malformada `.this_nXxx .Value = IIF(...)` nos 4 CheckBoxes | Corrigido para `IIF(this_nXxx = 1, 1, 0)` |

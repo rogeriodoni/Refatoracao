@@ -1,0 +1,10 @@
+﻿As tr├¬s corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito em `SigPdM11BO.prg`:
+
+**Problema XNENS** (`BuscarDescricaoCategoria`, linha 227):
+- Removida query `SELECT Desc2s FROM SigCdCat WHERE Cods = ...` (inventada pela LLM ÔÇö o original n├úo consulta SigCdCat; `cDescs` j├í existe no cursor xNensiS)
+- Removida a chamada `THIS.BuscarDescricaoCategoria(...)` de `GravarItens`
+- Removido `cDescs WITH this_cDescsCat` do REPLACE em `GravarItens`
+
+**Problema CODS** (`BuscarFatorRetrabalho`, linha 258-261):
+- Removido `WHERE Cods = ...` da query de SigPrCrt (filtro inventado ÔÇö original usa apenas `WHERE Emps = ...`)
+- Agora carrega todos os registros filtrados por Emps (igual ao original) e faz `INDEX ON Cods` + `SEEK` para localizar o c├│digo espec├¡fico

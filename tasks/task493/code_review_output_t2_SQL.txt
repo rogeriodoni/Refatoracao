@@ -1,0 +1,16 @@
+﻿Ap├│s an├ílise completa dos dois arquivos (todas as 1142 linhas do form + BO), n├úo existe nenhum `WHERE ordems` em SQL. Os ├║nicos usos de `ordems` nos arquivos s├úo:
+
+| Linha | Contexto | Tipo |
+|-------|----------|------|
+| 1018 | `"SELECT ordems, descrs FROM SigFiNtb ORDER BY ordems"` | `ORDER BY` (n├úo WHERE) |
+| 1023 | `LOCATE FOR cursor_4c_NtbVal.ordems = loc_nOrdem` | Opera├º├úo VFP cursor (n├úo SQL) |
+| 1053 | `"SELECT ordems, descrs, Imps, OpeRnf FROM SigFiNtb ORDER BY ordems"` | `ORDER BY` (n├úo WHERE) |
+
+**Este ├® um falso positivo do validador autom├ítico.** Ele confundiu o `LOCATE FOR cursor_4c_NtbVal.ordems = loc_nOrdem` (opera├º├úo de cursor VFP, an├ílogo ao `Get_cupomnfis.Valid` do legado) com uma condi├º├úo `WHERE` SQL inventada.
+
+O c├│digo est├í correto:
+- O legado usa `Get_cupomnfis` (controle framework Fortyus) que internamente consulta `SigFiNtb.ordems`
+- O c├│digo migrado substitui isso por SQL expl├¡cito (`SELECT ... FROM SigFiNtb ORDER BY ordems`) + `LOCATE FOR` para encontrar o valor ÔÇö comportamento id├¬ntico ao original
+- Nenhuma condi├º├úo WHERE foi inventada
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `Formpaf.prg` e `pafBO.prg` est├úo corretos em rela├º├úo ao pass SQL.

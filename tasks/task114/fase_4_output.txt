@@ -1,0 +1,5 @@
+﻿Corre├º├úo confirmada. A Fase 4 para este formul├írio de relat├│rio consistiu em corrigir um bug de dupla execu├º├úo de queries:
+
+**Bug corrigido**: `BtnVisualizarClick()` e `BtnImprimirClick()` chamavam `PrepararDados()` explicitamente, mas o BO's `Visualizar()` e `Imprimir()` tamb├®m chamam `PrepararDados()` internamente ÔÇö o que causaria todas as queries SQL do hist├│rico de produtos rodarem duas vezes, inclusive os loops de enriquecimento de registros (SCAN/ENDSCAN aninhados com m├║ltiplos SQLEXEC por linha).
+
+**Padr├úo correto aplicado**: Form chama `FormParaRelatorio()` ÔåÆ `Visualizar()`/`Imprimir()`. O BO gerencia internamente a prepara├º├úo dos dados e os erros via `MsgErro` + `this_cMensagemErro`.

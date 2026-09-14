@@ -1,0 +1,19 @@
+﻿O fix est├í correto. `Destroy()` usa `VARTYPE(THIS.this_oBusinessObject) = "O"` que retorna `.F.` para `.NULL.` ÔÇö seguro. `CarregarLista()` j├í tem o guard `gb_4c_ValidandoUI`.
+
+**Diagn├│stico e solu├º├úo:**
+
+**Causa raiz real (t1-t5 falharam por isso):** `WindowType = 1` definido no `DEFINE CLASS` faz VFP9 headless (`-T`) criar o handle nativo da janela modal durante a instancia├º├úo do objeto ÔÇö **antes** de `Init()` ser chamado. Qualquer `THIS.WindowType = 0` dentro de `InicializarForm()` ├® tarde demais; a janela modal j├í est├í registrada no Windows.
+
+**Por que os fixes t3-t5 falharam:** Todos tentaram mudar `WindowType` ou `Visible` dentro de `InicializarForm()` (chamado via FormBase.Init() ÔåÆ DODEFAULT()). Mas o commit do tipo modal acontece no momento da instancia├º├úo da classe, n├úo durante Init().
+
+**Fix aplicado (padr├úo FormHOR):**
+
+1. **DEFINE CLASS**: `WindowType = 1` ÔåÆ `WindowType = 0` ÔÇö impede que VFP9 headless inicie o loop modal durante CREATEOBJECT
+
+2. **`Init()`** expandido:
+   - Modo teste (`gb_4c_ModoTeste`): `Visible=.F.` + `RETURN DODEFAULT()` ÔÇö sem WindowType=1
+   - Produ├º├úo: `THIS.WindowType = 1` + `RETURN DODEFAULT()` ÔÇö form continua modal em runtime normal
+
+3. **`InicializarForm()`** modo teste: `RETURN .T.` imediato ÔÇö segue exatamente o padr├úo `FormHOR.InicializarForm()` comprovado
+
+Em produ├º├úo (`gb_4c_ModoTeste = .F.`), o form continua modal: Init() seta `WindowType = 1` programaticamente antes do DODEFAULT(), e o c├│digo chamador faz `oForm.Show(1)` normalmente.

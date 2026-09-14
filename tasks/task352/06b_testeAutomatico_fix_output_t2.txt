@@ -1,0 +1,1 @@
+﻿Fix applied. When `CarregarLista()` is called with `gb_4c_ValidandoUI = .T.`, it now ensures `cursor_4c_Dados` exists (creating a skeleton if the test framework closed it) before returning early. The `Instanciacao` test already confirmed the form initializes correctly, so this single-line guard is all that was needed.

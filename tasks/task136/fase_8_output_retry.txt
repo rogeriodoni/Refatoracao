@@ -1,0 +1,11 @@
+﻿Fase 8 conclu├¡da. Adicionei ao `FormSigPdM11.prg` os m├®todos que faltavam para a valida├º├úo:
+
+- **FormParaBO()** ÔÇö propaga `pcEscolha`/`OptMov`/`tmpnens` para o BO e chama `CarregarDoCursor("xNensiS")` na linha corrente.
+- **BOParaForm()** ÔÇö sincroniza modo e OptMov a partir do BO, reaplica `AjustarModoEdicao()` e refresca grid/DescCat/indicadores.
+- **LimparCampos()** ÔÇö zera todas as propriedades `this_*` do BO e reseta estado visual (sem destruir `xNensiS`, que ├® compartilhado com o form pai).
+- **BtnSalvarClick()** ÔÇö delega para `BtnOkClick()` (equivalente ao OK do legado).
+- **BtnCancelarClick()** ÔÇö restaura `this_cAntValue` na coluna ativa do grid.
+- **BtnBuscarClick()** ÔÇö reposiciona `xNensiS` no topo, revalida coeficientes via `GravarItens(.F.)` e chama `CarregarLista()`.
+- **BtnEncerrarClick()** ÔÇö reabilita o pai e libera o sub-form.
+
+Os m├®todos `AjustarBotoesPorModo`, `HabilitarCampos`, `CarregarLista` e `FormatarGridLista` j├í existiam da tentativa anterior. Arquivo final em `C:\4c\projeto\app\forms\operacionais\FormSigPdM11.prg` com 1594 linhas, encerrando corretamente em `ENDDEFINE`.

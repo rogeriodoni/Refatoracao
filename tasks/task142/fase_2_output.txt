@@ -1,0 +1,16 @@
+﻿Arquivo correto. A Fase 2 est├í completa.
+
+**O que foi adicionado ao `SigPdMp1BO.prg`:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `ObterChavePrimaria()` | Retorna `this_nNumPs` (contrato BusinessBase) |
+| `CarregarDoCursor(alias)` | Carrega Nops/CMats/CDescs do cursor para o BO |
+| `InicializarDistrib(titulo)` | Cria `cursor_4c_Distrib` a partir de xNensi (linhas com `Visivel=.F.`), salva `nRecnoAnt`, acumula total de peso |
+| `InicializarResumo()` | Cria `cursor_4c_Resumo` via `SELECT...GROUP BY` em xNensi (linhas com `Visivel=.T.`) |
+| `SalvarAlteracoes()` | Varre `cursor_4c_Distrib`, atualiza `Qtds/Pesos/Peso2s` em xNensi via `nTrans` (somente se `this_lLiberaAlteracao=.T.`) |
+| `HabilitarAlteracao()` | Seta `this_lLiberaAlteracao=.T.` (chamado pelo bot├úo Alterar do form) |
+| `MarcarModificado()` | `REPLACE Locals WITH "M"` na linha corrente do cursor (chamado pelos handlers de edi├º├úo do grid) |
+| `RegistrarAuditoria()` | Vazio/PROTECTED ÔÇö form operacional n├úo persiste em LogAuditoria |
+
+**Pr├│xima fase:** Fase 3/8 ÔÇö criar `FormSigPdMp1.prg` com o layout e comportamento completos do form operacional.

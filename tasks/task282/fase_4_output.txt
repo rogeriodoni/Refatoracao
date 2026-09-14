@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. A Fase 4/8 foi conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+- **`ConfigurarPaginaLista()` ÔÇö completo:**
+  - Grid `grd_4c_Lista` com 11 colunas vinculadas ao `csTemporario` (Numes, Datas, GrupoOs, ContaOs, GrupoDs, ContaDs, Nops, Usuars, PStatus, Emps, Empds)
+  - `ColumnCount` e `RecordSource` fora do `WITH` (evita Problema 36)
+  - Guard `IF USED("csTemporario")` antes do RecordSource (seguran├ºa em UIFidelity)
+  - Bot├úo `cmd_4c_Consultar` (├║nico vis├¡vel ÔÇö legado desabilita Incluir/Alterar/Excluir/Buscar)
+  - Bot├úo `cmd_4c_Encerrar` no `cnt_4c_Saida` can├┤nico
+  - `BINDEVENT` para ambos os bot├Áes
+
+- **`AlternarPagina(par_nPagina)`** ÔÇö alterna entre pages, reabilita Page1 e chama `CarregarLista()` ao voltar
+
+- **`CarregarLista()`** ÔÇö revincula grid + redefine headers (Regra Problema 32) + guard UIFidelity
+
+- **`BtnConsultarClick()`** ÔÇö verifica sele├º├úo, desabilita Page1, navega para Page2
+
+- **`BtnEncerrarClick()`** ÔÇö fecha o formul├írio

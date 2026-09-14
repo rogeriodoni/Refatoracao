@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. Fase 4 completa com 593 linhas. Resumo do que foi adicionado:
+
+**`ConfigurarPaginaLista()`** ÔÇö expandida para chamar `ConfigurarBotoesCRUD()` e `ConfigurarGrade()`.
+
+**`ConfigurarBotoesCRUD()`** ÔÇö cria `cnt_4c_Botoes` (Top=5, Left=238, Width=390) com 5 bot├Áes usando path expl├¡cito `THIS.cnt_4c_Botoes.cmd_4c_*` (evitando o bug de WITH aninhado). Visualizar/Alterar/Excluir iniciam desabilitados (sem registros).
+
+**`ConfigurarGrade()`** ÔÇö cria `cursor_4c_Dados (Codigo C20, Descricao C60)` com `SET NULL ON` + `grd_4c_Lista` (Top=95, Height=300, RecordMark=.F., DeleteMark=.F., FontName="Verdana").
+
+**`CarregarLista()`** ÔÇö reabre/zapa o cursor, redefine `ColumnCount` antes de `RecordSource`, chama `AlternarPagina(1)`.
+
+**`AlternarPagina(par_nPagina)`** ÔÇö modo 1 (Lista) habilita Incluir/Buscar e os demais se houver registros; modo 2 (Dados) desabilita todos.
+
+**Handlers** ÔÇö `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick` com valida├º├Áes via `MsgAviso`/`MsgConfirma`/`MsgInfo`/`MsgErro`.
+
+**`TornarControlesVisiveis()`** ÔÇö refatorado para chamar `TornarVisivelRecursivo()` que percorre todos os filhos recursivamente, garantindo que bot├Áes dentro de `cnt_4c_Botoes` e `cnt_4c_Saida` fiquem vis├¡veis.
+
+**`Destroy()`** ÔÇö fecha `cursor_4c_Dados` antes de liberar o BO.

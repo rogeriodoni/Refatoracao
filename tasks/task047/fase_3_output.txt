@@ -1,0 +1,14 @@
+﻿O arquivo est├í criado corretamente. Fase 3/8 conclu├¡da.
+
+**`C:\4c\projeto\app\forms\relatorios\FormSigReCgc.prg`** criado com:
+
+- **DEFINE CLASS FormSigReCgc AS FormBase** ÔÇö Width=800, Height=300, TitleBar=0 (id├¬ntico ao original)
+- **`this_cGrupo` / `this_cConta`** ÔÇö propriedades do form equivalentes ├ás `ThisForm.Grupo` / `ThisForm.Conta` do original
+- **`Init(par_cGrupo, par_cConta)`** ÔÇö seta as propriedades *antes* de `DODEFAULT()` para que `InicializarForm()` as encontre dispon├¡veis ao criar o BO
+- **`InicializarForm()`** ÔÇö cria `SigReCgcBO`, transfere Grupo/Conta para o BO, chama os tr├¬s m├®todos de configura├º├úo estrutural
+- **`ConfigurarCabecalho()`** ÔÇö `cnt_4c_Cabecalho` com `BackColor=RGB(100,100,100)`, `lbl_4c_Sombra` (preto) e `lbl_4c_Titulo` (branco)
+- **`ConfigurarBotoes()`** ÔÇö `cmg_4c_Botoes` (CommandGroup ButtonCount=4) com Visualizar/Imprimir/Excel/Encerrar, geometria exata do framework, `FontName="Comic Sans MS"`, `PicturePosition=13`
+- **`ConfigurarPageFrame()`** ÔÇö `pgf_4c_Paginas` com PageCount=1, Tabs=.F., Page1 com fundo `fundo_cad_1003.jpg`
+- **`Destroy()`** ÔÇö `this_oRelatorio = .NULL.` (nunca `.Release()` em Custom)
+
+Filtros (TextBoxes de data + OptionGroup) e BINDEVENTs dos bot├Áes ser├úo adicionados nas fases 4-8.

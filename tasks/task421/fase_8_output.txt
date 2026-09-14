@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. A Fase 8 adicionou os 10 m├®todos restantes ao `FormFop.prg`:
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `BtnBuscarClick()` | Delega para `CarregarLista()` ÔÇö recarrega grid do SQL Server |
+| `BtnEncerrarClick()` | Delega para `CmdEncerrarClick()` ÔÇö valida, salva e fecha |
+| `BtnSalvarClick()` | Valida + persiste via BO sem fechar (salvar progresso) |
+| `BtnCancelarClick()` | `TABLEREVERT` + fecha sem validar |
+| `CarregarLista()` | `BuscarPorProduto` no BO + revincula `RecordSource` do grid |
+| `AjustarBotoesPorModo()` | Inserir/Excluir/Repetir vis├¡veis s├│ em modo edi├º├úo |
+| `HabilitarCampos(par_lHabilitar)` | Percorre `Columns(1..10).ReadOnly` e ajusta |
+| `LimparCampos()` | `ZAP` no cursor + zera flags `lHouveIncl`/`lHouveExcl` |
+| `FormParaBO()` | Chama `CarregarDoCursor("crSigPrFnc")` para sincronizar linha corrente no BO |
+| `BOParaForm()` | No-op (dados ficam no cursor, exibidos pelo grid diretamente) |
+
+O arquivo final tem 1522 linhas e est├í funcional e completo.

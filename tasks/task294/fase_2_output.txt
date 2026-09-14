@@ -1,0 +1,22 @@
+﻿O arquivo foi criado corretamente com 568 linhas. Fase 2/8 conclu├¡da.
+
+**Resumo do que foi adicionado ao `SigPrGmiBO.prg`:**
+
+| M├®todo | Descri├º├úo |
+|---|---|
+| `CarregarDoCursor()` | Mapeia campos de `crSigCdLin` (linhas/descs/pedidos) para propriedades do BO |
+| `ObterChavePrimaria()` | Retorna `emps + PADR(operacao,20) + SPACE(6)` |
+| `CarregarCursorLinhas()` | Carrega `cursor_4c_SigCdLin` com INDEXes (chamado pelo Form no Init) |
+| `ValidarDados()` | Valida empresa, grupo, conta, linha e data como obrigat├│rios |
+| `Inserir()` | Entry point p├║blico ÔÇö valida e chama `ProcessarPedido()` |
+| `Atualizar()` | Retorna `.F.` (n├úo aplic├ível neste form operacional) |
+| `ProcessarPedido()` | L├│gica completa do `Processa.Click` original (241 linhas): duas branches SQL (negativos / abaixo do m├¡nimo), UNION ALL local, join com pedidos em andamento, SCAN com INSERT direto em `SigMvCab`/`SigMvItn` dentro de `BEGIN TRANSACTION`, UPDATE de totais, COMMIT/ROLLBACK |
+| `RegistrarAuditoria()` | Grava em `LogAuditoria` com `GETDATE()` |
+
+**Pontos cr├¡ticos tratados:**
+- UNION ALL via VFP local SELECT com `m.` prefix em vars locais
+- `empgruests` char(23) usado corretamente no NOT IN do crTemp2
+- `PADR(loc_cOperacao, 20)` para compor `EmpDopNums` char(29)
+- `EscaparSQL()` para todos os strings, `FormatarNumeroSQL()` e `FormatarDataSQL()` para num├®ricos/datas
+- Campos do SCAN cacheados em vars locais antes das chamadas SQLEXEC
+- Cleanup de todos os cursores no CATCH

@@ -1,0 +1,20 @@
+﻿Todas as 13 corre├º├Áes aplicadas. Resumo do que foi feito:
+
+**sigrecheBO.prg ÔÇö 3 corre├º├Áes [NULL-CURSOR]:**
+- `CREATE CURSOR cursor_4c_Imprimir` ÔÇö envolvido com `SET NULL ON` / `SET NULL OFF`
+- `CREATE CURSOR cursor_4c_Operacoes` ÔÇö envolvido com `SET NULL ON` / `SET NULL OFF`
+- `CREATE CURSOR cursor_4c_Cabecalho` ÔÇö envolvido com `SET NULL ON` / `SET NULL OFF`
+
+**Formsigreche.prg ÔÇö 7 corre├º├Áes [BUSCA-CURSOR]:**
+- Adicionado `loLookup.this_cCursorDestino = "cursor_4c_EmpLst"` em `AbrirBuscaEmpresa`
+- Adicionado `loLookup.this_cCursorDestino = "cursor_4c_CarGrupoLst"` em `AbrirBuscaCarGrupo`
+- Adicionado `loLookup.this_cCursorDestino = "cursor_4c_CarContaLst"` em `AbrirBuscaCarConta`
+- Adicionado `loLookup.this_cCursorDestino = "cursor_4c_DepGrupoLst"` em `AbrirBuscaDepGrupo`
+- Adicionado `loLookup.this_cCursorDestino = "cursor_4c_DepContaLst"` em `AbrirBuscaDepConta`
+- Adicionado `loLookup.this_cCursorDestino = "cursor_4c_EmiGrupoLst"` em `AbrirBuscaEmiGrupo`
+- Adicionado `loLookup.this_cCursorDestino = "cursor_4c_EmiContaLst"` em `AbrirBuscaEmiConta`
+
+**Formsigreche.prg ÔÇö 3 corre├º├Áes [GRID-HEADER]:**
+- `grd_4c_Operacoes.Column2.Header1.Caption` ÔåÆ `""` (era `"Opera??o"` ÔÇö inventado)
+- `grd_4c_Operacoes.Column3.Header1.Caption` ÔåÆ `""` (era `"Tipo"` ÔÇö inventado)
+- `grd_4c_Imprimir.Column2.Header1.Caption` ÔåÆ `""` (era `"Campo"` ÔÇö inventado)

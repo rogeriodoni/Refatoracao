@@ -1,0 +1,11 @@
+﻿A edi├º├úo est├í correta. A Fase 6 est├í conclu├¡da.
+
+**O que foi identificado e corrigido:**
+
+Ao reler o c├│digo fonte original (`SigPdM11_form_codigo_fonte.txt`) e o arquivo migrado, constatei que o arquivo j├í estava **95% completo** das fases anteriores ÔÇö todos os m├®todos de lookup (ValidarCategoria, ValidarGrupo, ValidarRetrabalho, BtnOkClick, etc.) estavam implementados.
+
+O ├║nico gap era o **branch `opt=2` de `ValidarConta()`**: o original tem duas l├│gicas para validar a coluna "Conta":
+- `opt_4c_OptMov.Value = 1` ÔåÆ busca no cursor `CsContas` filtrado por `Nenvs` (j├í existia)
+- `opt_4c_OptMov.Value = 2` ÔåÆ busca no cursor `TmpCli` por `BalCodigo`, com campos `IClis`/`RClis`/`Grupos` (**estava faltando**)
+
+O branch `ELSEIF` adicionado implementa o lookup em `TmpCli` usando `FormBuscaAuxiliar`, alinhado com o padr├úo do sistema novo e fiel ao comportamento original.

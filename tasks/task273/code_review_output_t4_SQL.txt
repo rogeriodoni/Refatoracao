@@ -1,0 +1,46 @@
+﻿Analisei ambos os arquivos em detalhe. Todos os 14 problemas reportados s├úo **falsos positivos** do validador. Aqui est├í a an├ílise:
+
+---
+
+## Resultado da An├ílise: 14/14 Falsos Positivos
+
+### GRID-SQL (11 problemas) ÔÇö Todos falsos positivos
+
+**cursor_4c_Pendentes** (Emps, Dopes, Numes, Grupos):  
+O BO's `BuscarMovimentosPendentes` executa:
+```sql
+SELECT 0 AS nMarca, a.Emps, a.Dopes, a.Numes,
+       a.EmpDopNums AS OriDopNums,
+       a.GrupoOs AS Grupos, a.ContaOs AS Contas
+```
+Todas as 4 colunas est├úo presentes. O validador n├úo rastreou o SQL no BO porque ele est├í em m├®todo separado do Form.
+
+**cursor_4c_Movimentos** (Cpros, Dpros, Units, Qtds, QtBaixas, QtReservas, Saldo):  
+O `CREATE CURSOR cursor_4c_Movimentos` nas linhas 2477ÔÇô2481 define exatamente esses 7 campos. O SQL em `CmdProcessarClick` (linha 2434) tamb├®m os projeta. O validador n├úo correlacionou o `CREATE CURSOR` com as atribui├º├Áes de ControlSource em `ConfigurarPaginaDadosDetalhe`.
+
+---
+
+### SQL-FILTRO-INVENTADO (3 problemas) ÔÇö Todos falsos positivos
+
+**QTDOS**: Grep completo no arquivo retornou **zero ocorr├¬ncias**. O termo n├úo existe no c├│digo migrado. Falso positivo puro do validador.
+
+**RCLIS** (linha 1997):
+```vfp
+" WHERE Rclis LIKE " + EscaparSQL(loc_cDconta + "%")
+```
+Query contra `SigCdCli`. `Rclis` **├® coluna v├ílida** de `SigCdCli` (nome do cliente). Usado para busca por nome ÔÇö comportamento correto e esperado.
+
+**CMOES** (linhas 3516 e 3528):
+```vfp
+"SELECT TOP 1 valos FROM SigCdCot WHERE cmoes = " + EscaparSQL(...)
+```
+`cmoes` **├® coluna v├ílida** de `SigCdCot` ÔÇö confirmado no schema.sql (linha 2570: `[cmoes] [char](3) NOT NULL`). Usado para busca de cota├º├úo por moeda ÔÇö l├│gica correta.
+
+---
+
+## Conclus├úo
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo de `FormSigPrCtr.prg` e `SigPrCtrBO.prg` est├í correto. O validador gerou falsos positivos porque:
+1. N├úo rastreia SQL em m├®todos de BO separados do Form
+2. N├úo encontrou `QTDOS` (que de fato n├úo existe)
+3. Classificou como "inventadas" colunas v├ílidas (`Rclis` em `SigCdCli`, `cmoes` em `SigCdCot`) por comparar com a lista de WHERE da query principal do form, n├úo das subqueries de lookup

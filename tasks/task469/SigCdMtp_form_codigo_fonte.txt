@@ -1,0 +1,749 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdMtp.SCX
+* Data/Hora: 19/08/2026 08:55:43
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDMTP
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_tipos
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Descs
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_moedas
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_limites
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_fmaxs
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_valors
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Desc_Moe
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fwcheckbox_ganhos
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_grupo
+  Parent: SIGCDMTP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 218
+  Left = 64
+  Width = 520
+  Height = 199
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = (prompt())
+  WindowState = 0
+  placalterar = .T.
+  placexcluir = .T.
+  placinserir = .T.
+  Name = "SIGCDMTP"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 81
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 157
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 233
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 309
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 339
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 389
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 18
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Say8
+------------------------------------------------------------
+  Caption = "Grupo : "
+  Left = 254
+  Top = 174
+  TabIndex = 2
+  ZOrderSet = 2
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Say1
+------------------------------------------------------------
+  Caption = "Código : "
+  Left = 250
+  Top = 147
+  TabIndex = 1
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Say2
+------------------------------------------------------------
+  Caption = "Descrição : "
+  Left = 237
+  Top = 202
+  TabIndex = 3
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Say3
+------------------------------------------------------------
+  Caption = "Produção Mínima : "
+  Left = 203
+  Top = 229
+  TabIndex = 4
+  ZOrderSet = 4
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Say7
+------------------------------------------------------------
+  Caption = "Moeda : "
+  Left = 251
+  Top = 311
+  TabIndex = 8
+  ZOrderSet = 5
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Say4
+------------------------------------------------------------
+  Caption = "Falha Admitida : "
+  Left = 213
+  Top = 256
+  TabIndex = 5
+  ZOrderSet = 5
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Say5
+------------------------------------------------------------
+  Caption = "Valor do Premio : "
+  Left = 209
+  Top = 284
+  TabIndex = 7
+  ZOrderSet = 6
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Get_tipos
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigIdPcp.tipos"
+  Format = "!K"
+  InputMask = ""
+  Left = 299
+  TabIndex = 9
+  Top = 144
+  Width = 24
+  ZOrderSet = 7
+  Name = "Get_tipos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Get_Descs
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigIdPcp.descs"
+  Format = "K"
+  InputMask = ""
+  Left = 299
+  TabIndex = 11
+  Top = 199
+  Width = 80
+  ZOrderSet = 8
+  Name = "Get_Descs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Get_moedas
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigIdPcp.moedas"
+  Format = "K"
+  InputMask = ""
+  Left = 299
+  TabIndex = 15
+  Top = 308
+  Width = 31
+  ZOrderSet = 10
+  Name = "Get_moedas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Get_limites
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "crSigIdPcp.limites"
+  Format = "R"
+  InputMask = ""
+  Left = 299
+  TabIndex = 12
+  Top = 226
+  Width = 94
+  ZOrderSet = 9
+  Name = "Get_limites"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Get_fmaxs
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "crSigIdPcp.fmaxs"
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 299
+  TabIndex = 13
+  Top = 253
+  Width = 66
+  ZOrderSet = 10
+  Name = "Get_fmaxs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Get_valors
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "crSigIdPcp.valors"
+  Format = ""
+  InputMask = ""
+  Left = 299
+  TabIndex = 14
+  Top = 281
+  Width = 66
+  ZOrderSet = 11
+  Name = "Get_valors"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Get_Desc_Moe
+------------------------------------------------------------
+  Value = 
+  Format = "K"
+  InputMask = ""
+  Left = 335
+  TabIndex = 16
+  Top = 308
+  Width = 115
+  ZOrderSet = 15
+  Name = "Get_Desc_Moe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Say6
+------------------------------------------------------------
+  Caption = "%"
+  Left = 371
+  Top = 256
+  TabIndex = 6
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.fwcheckbox_ganhos
+------------------------------------------------------------
+  Top = 338
+  Left = 298
+  Height = 17
+  Width = 132
+  Alignment = 0
+  Caption = "Contabilizar Ganhos"
+  ControlSource = "crSigIdPcp.ganhos"
+  TabIndex = 17
+  Name = "fwcheckbox_ganhos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDMTP.Pagina.Dados.Get_grupo
+------------------------------------------------------------
+  ControlSource = "crSigIdPcp.GRUPOS"
+  Left = 299
+  TabIndex = 10
+  Top = 171
+  Width = 80
+  Name = "Get_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDMTP
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDatamgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Select crSigIdPcp
+Set Near On
+Index On tipos+grupos tag TpGru
+Set Order To TpGru
+Seek Thisform.pagina.dados.get_tipos.Value+Thisform.pagina.dados.get_Grupo.Value
+Set Near Off
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQryTpCp = [Select * From SigIdPcp ]
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigIdPcp', 'cIdChaves', 'crSigIdPcp', '', ThisForm.Pagina.Lista.Grade, lcQryTpCp)
+			.pfSqlTabela(1).pColuna('Tipos', '', '', 'Código', 30, .t.)
+			.pfSqlTabela(1).pColuna('descs', '', '', 'Descrição', 80, .t.)
+			.pfSqlTabela(1).pColuna('limites', '', '', 'Prod. Mínima', 105, .t.)
+		EndWith
+
+		=DoDefault()
+
+		lcQuery = [Select codigos,Descrs ] + ;
+		    [ From SigCdGcr] + ;
+		    [ Where gerbals=1 ] + ;
+		    [ Order By codigos,Descrs ]
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdGcr') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdGcr)')
+			Return 0
+		EndIf
+
+		Select crSigIdPcp
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Select crSigIdPcp
+
+* posiciona o cursor de acordo com a opção
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		thisform.pagina.dados.get_Tipos.setfocus	
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		thisform.pagina.dados.get_descs.setfocus
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		thisform.pagina.dados.grupo_salva.salva.setfocus
+EndCase
+
+If ThisForm.poDataMgr.CursorQuery('SigCdMoe', 'crSigCdMoe', 'CMoes', crSigIdPcp.Moedas)
+	thisform.pagina.dados.get_Desc_Moe.value = crSigCdMoe.Dmoes
+else
+	thisform.pagina.dados.get_Desc_Moe.value = ''
+EndIf
+
+ThisForm.Pagina.Dados.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha = 'INSERIR'
+	IF IsEmpty(ThisForm.Pagina.Dados.Get_Tipos.Value)
+    	MessageBox( 'Obrigatório Informar o Código...', 48, '' )
+		ThisForm.Pagina.Dados.Get_Tipos.SetFocus
+		Return
+	Endif
+	IF IsEmpty(ThisForm.Pagina.Dados.Get_Grupo.Value)
+    	MessageBox( 'Obrigatório Informar o Grupo...', 48, '' )
+		ThisForm.Pagina.Dados.Get_Grupo.SetFocus
+		Return
+	EndIf
+	lcQuery = [Select Tipos,Grupos ] + ;
+		    [ From SigIdPcp] + ;
+		    [ Where Tipos=']+ThisForm.pagina.dados.get_tipos.Value+[']+;
+		    [ and  Grupos=']+ThisForm.pagina.dados.get_grupo.Value+[']
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crPesqSigIdPcp') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crPesqSigIdPcp)')
+		Return 0
+	EndIf
+	Select crPesqSigIdPcp
+	Go Top
+	If not Eof()
+		MessageBox( 'Código já cadastrado...', 48, '' )
+		ThisForm.Pagina.Dados.Get_Grupo.SetFocus
+		Return
+	EndIf
+	Replace cIdChaves With fUniqueIds() in crSigIdPcp
+Endif
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDMTP.Pagina.Dados.Get_tipos
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDMTP.Pagina.Dados.Get_Descs
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDMTP.Pagina.Dados.Get_moedas
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if not IsEmpty(this.value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMOES', This.Value, 'Seleção', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMOES', '', 'Código')
+		loLista.mAddColuna('DMOES', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	If Lastkey() = 27
+		This.Value = ''
+		thisform.pagina.dados.get_Desc_Moe.value = ''
+	Else
+		this.value = crListaRemota.Cmoes
+		thisform.pagina.dados.get_Desc_Moe.value = crListaRemota.DMoes
+	Endif
+	Use In crListaRemota
+	This.Refresh
+	thisform.pagina.dados.get_Desc_Moe.Refresh
+Else
+	This.Value = ''
+	thisform.pagina.dados.get_Desc_Moe.value = ''
+	This.Refresh
+	thisform.pagina.dados.get_Desc_Moe.Refresh
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDMTP.Pagina.Dados.Get_Desc_Moe
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(Thisform.pagina.dados.get_Moedas.value) AND ;
+       Inlist(ThisForm.pcEscolha, "INSERIR", "ALTERAR"))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if not IsEmpty(this.value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMOES', This.Value, 'Seleção', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMOES', '', 'Descrição')
+		loLista.mAddColuna('CMOES', '', 'Código')
+		loLista.Show()
+	EndIf
+	If Lastkey() = 27
+		This.Value = ''
+		thisform.pagina.dados.get_Moedas.value = ''
+	Else
+		this.value = crListaRemota.Cmoes
+		thisform.pagina.dados.get_Moedas.value = crListaRemota.DMoes
+	Endif
+	Use In crListaRemota
+	This.Refresh
+	thisform.pagina.dados.get_Moedas.Refresh
+Else
+	This.Value = ''
+	thisform.pagina.dados.get_Moedas.value = ''
+	This.Refresh
+	thisform.pagina.dados.get_Moedas.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDMTP.Pagina.Dados.Get_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR")
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If not IsEmpty(This.Value)
+	xBrow = CreateObject('fwBuscaInt', 'crSigCdGcr', 'Codigos', This.Value, 'Cadastro de Grupos')
+	xBrow.mAddColuna('Codigos', '', 'Código', .t.)
+	xBrow.mAddColuna('Descrs', '', 'Descrição', .t.)
+	xBrow.Show
+	If Lastkey()#27
+		This.Value = crSigCdGcr.Codigos
+		This.Refresh
+	Endif
+EndIf
+Select crSigIdPcp
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

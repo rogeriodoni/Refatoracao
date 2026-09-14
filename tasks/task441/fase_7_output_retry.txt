@@ -1,0 +1,8 @@
+﻿Fase 7 complete. Added `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick` to `FormGps.prg` with real logic (no stubs):
+
+- **BtnIncluirClick**: valida modo INSERIR/ALTERAR, insere linha em branco no `cursor_4c_Operacao`, seta `this_lGravaDados=.T.`, foca `Column1`.
+- **BtnAlterarClick**: valida modo, garante RECCOUNT > 0, ajusta EOF, foca `Column1` para edi├º├úo via lookup.
+- **BtnVisualizarClick**: se h├í edi├º├Áes pendentes pergunta via `MsgConfirma`, chama `CarregarDados()` para recarregar do SQL Server e limpa flag.
+- **BtnExcluirClick**: valida modo/reccount, pede confirma├º├úo, `DELETE`+`SKIP`+`GO BOTTOM` no EOF.
+
+Todos os handlers seguem o padr├úo obrigat├│rio: TRY/CATCH com `MsgErro` verboso (Message + LineNo + Procedure), guards de modo, uso de `CHR()` para acentos, sem RETURN dentro de TRY/CATCH.

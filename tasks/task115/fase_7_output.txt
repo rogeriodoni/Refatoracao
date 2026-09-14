@@ -1,0 +1,13 @@
+﻿Fase 7 conclu├¡da. Veja o que foi adicionado:
+
+**`sigrehtcBO.prg`** ÔÇö novo m├®todo `ExportarExcel(par_cArquivo)`: chama `PrepararDados()` internamente (m├®todo PROTECTED) e faz `COPY TO TYPE XLS` no cursor de resultado.
+
+**`Formsigrehtc.prg`** ÔÇö duas mudan├ºas:
+
+1. **`ConfigurarBotoes()`** ÔÇö 4 BINDEVENTs adicionados ap├│s o `ENDWITH` da CommandGroup, ligando cada `Buttons(N).Click` ao handler correspondente.
+
+2. **4 m├®todos handler** inseridos antes de `Destroy()`:
+   - `BtnVisualizarClick()` ÔÇö chama `FormParaRelatorio()` + `this_oRelatorio.Visualizar()`
+   - `BtnImprimirClick()` ÔÇö chama `FormParaRelatorio()` + `this_oRelatorio.Imprimir()`
+   - `BtnExcelClick()` ÔÇö abre `PUTFILE` para escolha do arquivo, depois chama `FormParaRelatorio()` + `this_oRelatorio.ExportarExcel()`
+   - `BtnSairClick()` ÔÇö chama `THIS.Release()`

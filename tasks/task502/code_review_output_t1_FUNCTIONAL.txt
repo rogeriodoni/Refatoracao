@@ -1,0 +1,9 @@
+﻿Todos os 5 fixes foram aplicados corretamente. Resumo das corre├º├Áes:
+
+| # | Problema | Corre├º├úo aplicada |
+|---|----------|-------------------|
+| **[GRID-SQLEXEC]** | `SQLEXEC` direto em `cursor_4c_Dados` (RecordSource do Grid) destru├¡a as colunas | SQLEXEC agora vai para `cursor_4c_DadosTemp`; depois `ZAP` + `APPEND FROM DBF()` preserva a estrutura do Grid |
+| **[BINDEVENT-PARAMS]** | `CodigosEtqLostFocus` declarava params no cabe├ºalho `PROCEDURE Foo(p1,p2)` ÔÇö forma n├úo can├┤nica para BINDEVENT | Convertido para `PROCEDURE CodigosEtqLostFocus` + `LPARAMETERS par_nKeyCode, par_nShiftAltCtrl` dentro do corpo |
+| **[BUSCA-CURSOR]** | `FormBuscaAuxiliar` Modo 2 sem `this_cCursorDestino` definido antes de `Mostrar()` | Adicionado `loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEtqLst"` antes de `DefinirCursor` |
+| **[OPTIONGROUP-LEFT]** | `opt_4c_TipoEtq.Buttons(1)` e `Buttons(2)` sem `.Themes` (obrigat├│rio) | Adicionado `.Themes = .F.` em ambos os Buttons |
+| **[NULL-CURSOR]** | `CREATE CURSOR cursor_4c_LocalPrLoc` sem `SET NULL ON` ÔÇö falha ao `APPEND FROM` cursor com NULLs | Envolvido com `SET NULL ON` antes e `SET NULL OFF` depois do `CREATE CURSOR` |

@@ -1,0 +1,35 @@
+﻿## Resultado da Verifica├º├úo: Falsos Positivos Confirmados
+
+Ap├│s comparar cuidadosamente as condi├º├Áes flagadas com o c├│digo original, **nenhuma altera├º├úo ├® necess├íria**. Os dois flags s├úo falsos positivos do verificador autom├ítico.
+
+---
+
+### FLAG 1: `ICLIS` no WHERE
+
+**Onde aparece no migrado:**
+
+- **BO linha 348 e 388:** `"a.Vends = c.Iclis And "` ÔÇö condi├º├úo de **JOIN impl├¡cito** entre `SigMvCab.Vends` e `SigCdCli.Iclis`. Isso est├í **diretamente no original**: `From SigMvCab a, SigMvMov b, SigCdCli c, SigCdOpe O`. O estilo de join do VFP legado coloca as condi├º├Áes no WHERE, n├úo como JOIN expl├¡cito.
+- **Form linha 1226:** `WHERE Iclis = ?` ÔÇö query de **valida├º├úo de UI** para o campo vendedor. N├úo ├® filtro do relat├│rio principal.
+
+**Conclus├úo:** Ambos corretos. Remover o join condition criaria produto cartesiano.
+
+---
+
+### FLAG 2: `CMOES` no WHERE
+
+**Onde aparece no migrado:**
+
+- **BO linha 106 (`CarregarParametrosPadrao`):** `WHERE CMoes = ?` ÔÇö busca a descri├º├úo da moeda padr├úo. Query de **inicializa├º├úo**, n├úo filtro do relat├│rio.
+- **Form linha 1383 (`ValidarMoeda`):** `WHERE CMoes = ?` ÔÇö valida├º├úo de UI do campo moeda. O campo `getCmoeda` existe no form original e precisa validar o c├│digo digitado contra `SigCdMoe`.
+
+**Conclus├úo:** Ambos corretos. Remover tornaria a valida├º├úo in├║til (sempre retornaria o primeiro registro).
+
+---
+
+### Por que o verificador flagou incorretamente
+
+A lista de colunas do WHERE original (`DOPES, NUMES, VALPRES, VALINIS, EMPDOPNUMS, CIDQUERYS, VENDS, OPERS, CEMPS, DATAS`) refere-se apenas ao WHERE da **query principal do relat├│rio** (`csSqlEest` / `csSqlEest2`). O verificador n├úo distinguiu entre:
+1. Condi├º├Áes de JOIN impl├¡cito (WHERE de join = correto no estilo legado VFP9)
+2. Queries de lookup de UI (valida├º├úo de campos = queries separadas, n├úo filtros do relat├│rio)
+
+**Nenhum arquivo foi alterado.** Os dois flags s├úo falsos positivos e o c├│digo est├í correto.

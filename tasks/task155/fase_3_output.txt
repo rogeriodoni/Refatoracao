@@ -1,0 +1,13 @@
+﻿Arquivo correto e limpo. **Fase 3/8 conclu├¡da.**
+
+`C:\4c\projeto\app\forms\operacionais\FormSigPrAop.prg` criado com:
+
+| M├®todo | O que entrega |
+|--------|--------------|
+| `Init()` | Delega para `DODEFAULT()` ÔåÆ FormBase chama `InicializarForm()` |
+| `InicializarForm()` | Cria `SigPrAopBO`, carrega par├ómetros (DoppPads/MascNums), cria `cursor_4c_DivOp` com estrutura id├¬ntica ao `Temp_DivOp` legado, chama `ConfigurarPageFrame()`, propaga caption e torna controles vis├¡veis |
+| `ConfigurarPageFrame()` | Define `Picture = fundo_cad_1003.jpg` + cria `cnt_4c_Sombra` com `lbl_4c_Sombra` (sombra preta) e `lbl_4c_Titulo` (branco) ÔÇö headers com CHR(231)+CHR(227) correto |
+| `TornarControlesVisiveis()` | Recursivo com PEMSTATUS |
+| `Destroy()` | Fecha todos os 11 cursores tempor├írios usados pelo BO + nulifica o BO |
+
+**Pr├│ximas fases** usar├úo Read + Edit para adicionar ao arquivo existente: grid `grd_4c_Dados` (Fase 4), labels/textboxes do OP+Produto (Fase 5), editbox de Obs + CommandGroup Grupo_Conf (Fase 6), e eventos BINDEVENT (Fases 7-8).

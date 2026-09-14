@@ -1,0 +1,3 @@
+﻿O `TxtRedetefValid` est├í correto: quando SEEK falha, CrSigFiNfs fica em EOF, ent├úo `!EOF("CrSigFiNfs")` ├® `.F.` e a linha que sobrescreveria o valor selecionado no picker ├® pulada. O fluxo est├í OK.
+
+Fase 6 conclu├¡da. A ├║nica corre├º├úo necess├íria era no m├®todo `AbrirBuscaRedetef`, que usava `AddColuna` (m├®todo inexistente) com 4-5 params e passava nome de cursor em vez de `gnConnHandle` para o `FormBuscaAuxiliar`. A corre├º├úo aplica a API can├┤nica: `CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigFiNfs", "cursor_4c_BuscaRedetef", ...)` + `mAddColuna` (3 params) + leitura de `this_lSelecionou` + cleanup do cursor.

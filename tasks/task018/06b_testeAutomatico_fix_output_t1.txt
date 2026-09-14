@@ -1,0 +1,17 @@
+﻿**Bug corrigido.** O problema estava no m├®todo `BOParaForm` do `FormUfs.prg`.
+
+**Causa raiz:** Todas as atribui├º├Áes de checkboxes tinham `.Value` esp├║rio inserido no meio da express├úo, como:
+```foxpro
+*-- ERRADO (causa "Property VALUE is not found")
+loc_oPg2.chk_4c_ChkGer50.Value = (loc_oBO.this_nGer50 .Value = IIF(...))
+```
+
+`loc_oBO.this_nGer50` ├® NUMERIC - n├úo ├® um objeto e n├úo tem propriedade `.Value`. Isso gerava um erro de runtime ÔåÆ `MsgErro()` tentava exibir dialog ÔåÆ com `SYS(2335, 0)` o dialog travava o VFP9 indefinidamente ÔåÆ TIMEOUT de 300s.
+
+**Corre├º├úo aplicada:**
+```foxpro
+*-- CORRETO
+loc_oPg2.chk_4c_ChkGer50.Value = IIF(loc_oBO.this_nGer50 = 1, 1, 0)
+```
+
+Foram corrigidas 22 linhas no m├®todo `BOParaForm` (CAT 52 + todos os flags Sintegra).

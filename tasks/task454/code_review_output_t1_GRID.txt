@@ -1,0 +1,21 @@
+﻿Ambos os problemas reportados s├úo **falsos positivos**. O c├│digo j├í implementa o padr├úo correto:
+
+**Linha 1163 (CarregarLista):**
+```
+loc_oGrid.RecordSource = "cursor_4c_Dados"   ÔåÉ auto-bind acontece aqui
+loc_oGrid.ColumnCount  = 14
+THIS.AtualizarBindingGrid(loc_oGrid)           ÔåÉ redefine os 14 ControlSources
+```
+
+**Linha 1569 (BtnBuscarClick):**
+```
+loc_oGrid.RecordSource = "cursor_4c_Dados"   ÔåÉ auto-bind acontece aqui
+loc_oGrid.ColumnCount  = 14
+THIS.AtualizarBindingGrid(loc_oGrid)           ÔåÉ redefine os 14 ControlSources
+```
+
+O m├®todo `AtualizarBindingGrid` (linhas 1206ÔÇô1278) j├í redefine explicitamente o `ControlSource` de todas as 14 colunas imediatamente ap├│s o `RecordSource` ser atribu├¡do. Isso ├® exatamente o fix prescrito pela instru├º├úo `[GRID-RECORDSOURCE-AUTOBIND]`.
+
+O scanner de code review detectou o padr├úo `RecordSource = "..."` e verificou apenas se as pr├│ximas linhas **diretas** continham `.ColumnN.ControlSource =`, mas como a redefini├º├úo acontece dentro do m├®todo `AtualizarBindingGrid` (uma chamada de m├®todo, n├úo linhas diretas), o detector n├úo reconheceu e emitiu falso positivo.
+
+**Nenhuma altera├º├úo necess├íria.** O `FormJrn.prg` j├í est├í correto para este pass.

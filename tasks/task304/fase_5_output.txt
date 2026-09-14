@@ -1,0 +1,7 @@
+﻿Fase 5 conclu├¡da. O que foi feito:
+
+- **Adicionados `shp_4c_Shape1` e `shp_4c_Shape2`** em `ConfigurarCampos()` ÔÇö os dois objetos Shape presentes no mapeamento.json mas ausentes no form migrado. Ambos t├¬m `BackStyle=0` + `BorderStyle=0` (invis├¡veis, puramente decorativos), mantendo fidelidade com o SCX original.
+
+- **`ConfigurarPaginaDados()` permanece stub vazio** ÔÇö correto para form OPERACIONAL flat (sem PageFrame/Page2). N├úo h├í campos de "dados" para adicionar pois todo o UI j├í foi implementado nas fases anteriores em `ConfigurarCabecalho()`, `ConfigurarBotoes()` e `ConfigurarCampos()`.
+
+O form e o BO est├úo completos. O SIGPRIMPBO tem toda a l├│gica de `ProcessarArquivo()` (valida├º├úo, INSERT em SigMvCab/SigMvItn/SigMvIts/SigMvMov, transa├º├úo, movimenta├º├úo de arquivos para OK\). Pr├│xima fase ser├í integra├º├úo em `config.prg` e `menu.prg`.

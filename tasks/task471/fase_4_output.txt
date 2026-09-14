@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Verifico os pontos cr├¡ticos:
+
+**Confirmados:**
+- `grd_4c_Lista.ColumnCount = 2` fora do `WITH` (linha 321) ÔÇö evita Problem 36
+- `RecordSource` setado antes de `Column1/2.ControlSource` em `CarregarLista` ÔÇö sem auto-bind incorreto
+- `Header1.Caption` redefinidos ap├│s `RecordSource` ÔÇö cabe├ºalhos preservados
+- Todos os `Btn*Click` s├úo `PROCEDURE` (sem `PROTECTED`) ÔÇö BINDEVENT funciona
+- 6 BINDEVENTs wired: Encerrar + Incluir + Visualizar + Alterar + Excluir + Buscar
+- `MsgConfirma(...)` usado como booleano (`IF loc_lConfirma`) ÔÇö n├úo `= 6`
+- `RETURN .F.` fora do TRY em `AlternarPagina` (guarda de valida├º├úo de par├ómetro)
+- `RETURN .T.` fora do TRY em `CarregarLista` (guarda do `gb_4c_ValidandoUI`)
+
+**Fase 4 conclu├¡da.** `FormMTV.prg` agora tem: 5 bot├Áes CRUD completos no `cnt_4c_Botoes` com ├¡cones/fontes corretos, `grd_4c_Lista` com 2 colunas (C├│digo/Descri├º├úo), `AlternarPagina()`, `FormatarGridLista()`, e handlers funcionais para Incluir/Visualizar/Alterar/Excluir/Buscar. A Fase 5 adiciona os campos `txt_4c_Codigo`/`txt_4c_Descricao` em `ConfigurarPaginaDados()`.

@@ -1,0 +1,13 @@
+﻿Fase 8/8 conclu├¡da. O FormSed.prg est├í completo com **797 linhas** e todos os m├®todos implementados:
+
+**Adicionados na Fase 8:**
+- `BtnBuscarClick()` ÔÇö recarrega grid via `CarregarDados()`
+- `BtnEncerrarClick()` ÔÇö alias p├║blico para `cmd_4c_SairClick()`
+- `BtnSalvarClick()` ÔÇö mapeia "Salvar" para `cmd_4c_CmdprocessarClick()` (Gerar)
+- `BtnCancelarClick()` ÔÇö limpa campos de faixa + SetFocus
+- `FormParaBO()` ÔÇö transfere faixa inicial/final + empresa do form para o BO
+- `BOParaForm()` ÔÇö transfere propriedades do BO para os TextBoxes
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita txt_4c_Faixainicial, txt_4c_Faixafinal e cmd_4c_Cmdprocessar
+- `LimparCampos()` ÔÇö zera os dois campos de faixa
+- `CarregarLista()` ÔÇö alias de `CarregarDados()` para compatibilidade com interface CRUD
+- `AjustarBotoesPorModo()` ÔÇö centraliza habilita├º├úo dos controles e visibilidade do bot├úo Excluir conforme `this_cModoAtual` (equivalente ao `When = INLIST(pcEscolha,'INSERIR','ALTERAR')` do legado)

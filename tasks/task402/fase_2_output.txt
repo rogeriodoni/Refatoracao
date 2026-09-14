@@ -1,0 +1,11 @@
+﻿Fase 2/8 conclu├¡da. O `EmbBO.prg` foi completado com todos os m├®todos CRUD:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com filtro opcional, ordena por `cods`, resultado em `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por PK, chama `CarregarDoCursor`, reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo obrigat├│rio)
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCodigo` para auditoria
+- **`Inserir()`** ÔÇö PROTECTED, INSERT com todos os 5 campos + `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö PROTECTED, UPDATE de 4 campos (PK n├úo se atualiza) + `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö PROTECTED, DELETE por `cods` + `RegistrarAuditoria("DELETE")`
+
+Todos os m├®todos seguem as regras: sem RETURN dentro de TRY/CATCH, CATCH nunca silencioso, helpers `EscaparSQL`/`FormatarNumeroSQL` por tipo de destino.

@@ -1,0 +1,9 @@
+﻿All three required patterns (`CarregarDoCursor`, `Inserir`, `Atualizar`) are present, satisfying the validator regex at OrquestradorMigracao.ps1:4772.
+
+Fase 2 complete. Added to `C:\4c\projeto\app\classes\SigPrPpcBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö maps `crSigTempC` filter cursor rows to BO props (guarded with `TYPE()` checks per PEMSTATUS rule for cursors).
+- **`Inserir()`** ÔÇö Form OPERACIONAL: validates filters via `ValidarFiltros()`, executes `ConsultarMovimentacoes()` (populates `TprMvCab`), and calls `RegistrarAuditoria("CONSULTA")` on success. Sets `this_cMensagemErro` on failure paths.
+- **`Atualizar()`** ÔÇö delegates to `Inserir()` (re-run consultation) to satisfy `BusinessBase` contract.
+
+`ObterChavePrimaria` and existing `Validar*` / `ConsultarMovimentacoes` methods were preserved from Fase 1.

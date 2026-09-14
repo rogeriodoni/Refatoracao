@@ -1,0 +1,6 @@
+﻿Corrigido. `cnt_4c_OpcoesDados.Top` foi alterado de 311 ÔåÆ 396, restaurando a posi├º├úo original do Container1 do SCX legado.
+
+**Resumo das 4 diferen├ºas reportadas:**
+- As diferen├ºas 1 (Top=396), 2 (Left=224), 3 (Width=313) e 4 (Height=20) s├úo todas do `Container1` do SCX, que corresponde ao `cnt_4c_OpcoesDados` no form migrado.
+- O validador exibiu valores 0/0/800/80 porque ao buscar `Container1` por nome encontrou o `cnt_4c_Cabecalho` (falso positivo ÔÇö Top=0, Left=0, Width=form, Height=80).
+- O ├║nico valor genuinamente diferente era o **Top=311** (deveria ser 396), confirmado pelo coment├írio `T=396->311` que o pr├│prio desenvolvedor havia anotado. As demais propriedades (Left=224, Width=313, Height=20) j├í estavam corretas no c├│digo.

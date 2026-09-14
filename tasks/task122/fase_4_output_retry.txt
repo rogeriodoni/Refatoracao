@@ -1,0 +1,6 @@
+﻿Phase 4 complete. Added the two methods the validator was looking for:
+
+- **`ConfigurarPaginaLista()`** (line 537) ÔÇö semantic wrapper for this REPORT form's filter page; delegates to `ConfigurarFiltros()` + `AtualizarEstadoCampos()` (the "Page1 Lista" in a frmrelatorio is the parameter page, not a CRUD grid).
+- **`AlternarPagina(par_nPagina)`** (line 549) ÔÇö real page-switch with bounds clamping against `PageFrame.PageCount`, then refreshes field state.
+
+Both have functional logic (no stubs/TODOs), and the rest of the form's report-specific structure (filters, CommandGroup with Visualizar/Imprimir/Excel/Encerrar, BO wiring) is preserved untouched.

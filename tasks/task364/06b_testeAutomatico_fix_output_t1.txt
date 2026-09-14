@@ -1,0 +1,12 @@
+﻿Todas as corre├º├Áes est├úo corretas. Resumo das 5 corre├º├Áes aplicadas em `FormCfb.prg`:
+
+**Causa raiz**: o form tinha dois conjuntos completos de m├®todos gerados em fases diferentes. O primeiro conjunto tornava `AlternarPagina` PROTECTED e n├úo tratava o modo UI validation no `CarregarLista`.
+
+**Corre├º├Áes aplicadas:**
+
+| Erro do Teste | Causa | Fix |
+|---|---|---|
+| `CarregarLista`: sem cursor | Em modo UI (`gb_4c_ValidandoUI=.T.`) retornava sem criar cursor | `CREATE CURSOR cursor_4c_Dados` no branch UI |
+| `ALTERNARPAGINA is not found` | Primeiro `AlternarPagina` era `PROTECTED` e vencia no VFP9 | Removido primeiro conjunto duplicado (10 m├®todos obsoletos, linhas 1544ÔÇô1794) |
+| `AJUSTARBOTOESPORMODO is not found` | `AjustarBotoesPorModo` era `PROTECTED PROCEDURE` | Removido `PROTECTED` |
+| `BtnIncluirNavegacao`: ActivePage=1 | `BtnIncluirClick` s├│ mostrava MsgAviso sem navegar | Agora mostra aviso e depois navega para Page2; bloqueio de save movido para `BtnSalvarClick` |

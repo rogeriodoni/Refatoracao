@@ -1,0 +1,22 @@
+﻿Conclu├¡da a verifica├º├úo completa. Resumo dos achados:
+
+## Resultado da Verifica├º├úo ÔÇö FALSO POSITIVO
+
+Ap├│s an├ílise do schema (`schema.sql`) e compara├º├úo com o c├│digo original, **nenhuma altera├º├úo ├® necess├íria**.
+
+### Por que ├® falso positivo
+
+A flag `[SQL-FILTRO-INVENTADO]` apontou `WHERE Dopes = ...` como "inventado", mas a verifica├º├úo confirma:
+
+| Query | Tabela | Coluna `Dopes` | Coluna selecionada | Status |
+|---|---|---|---|---|
+| `SigCdOpe WHERE Dopes = ...` | SigCdOpe | PK `[dopes] char(20)` | `docus`, `nopcrs` | Ô£ô Correto |
+| `SigOpCdc WHERE Dopes = ...` | SigOpCdc | FK `[dopes] char(20)` | `qtddocs`, `geropes` | Ô£ô Correto |
+| `SigOpCdi WHERE Dopes = ...` | SigOpCdi | FK `[dopes] char(20)` | `lbltxidCs`, `chkInvs` | Ô£ô Correto |
+| `SigOpCdd WHERE Dopes = ...` | SigOpCdd | FK `[dopes] char(20)` | `ConfigGers` | Ô£ô Correto |
+
+### Por que o check errou
+
+A lista de WHERE do original fornecida ao validador (`DATATRANS, EMPDOPNUMS, PROGS...`) estava **incompleta** ÔÇö os snippets de refer├¬ncia mostraram apenas as queries de `CarregarListaEmail` e o loop de email, mas o m├®todo `ImprimirDocumento` (adaptado de `SIGPREMA.impdocto`) tamb├®m existia no original. A prova est├í no pr├│prio c├│digo de refer├¬ncia que lista `cursor_4c_OpCdc.QtdDocs` como argumento de `DO FORM SigPrIdc WITH ...` ÔÇö o cursor `cursor_4c_OpCdc` s├│ existe se houve uma query `SELECT ... FROM SigOpCdc WHERE Dopes = ...` antes.
+
+Todas as 6 ocorr├¬ncias de `WHERE Dopes = ...` no `ImprimirDocumento` s├úo corretas, usam o PK/FK leg├¡timo das tabelas de configura├º├úo de opera├º├úo, e nenhuma deve ser removida. **O arquivo n├úo precisa de altera├º├úo para este pass.**

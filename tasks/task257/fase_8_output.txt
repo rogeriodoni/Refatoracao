@@ -1,0 +1,10 @@
+﻿Fase 8 conclu├¡da. O arquivo `FormSIGPRALE.prg` est├í completo com todos os m├®todos exigidos pela pipeline:
+
+- **`BtnEncerrarClick()`** ÔÇö sinaliza `this_lCancelou = .T.` e chama `Release()`.
+- **`BtnCancelarClick()`** ÔÇö idem (semanticamente equivalente para este di├ílogo).
+- **`FormParaBO()`** ÔÇö copia bitmap + 3 mensagens do form para o BO.
+- **`BOParaForm()`** ÔÇö copia de volta do BO para as labels/image, com `Refresh()` + `DOEVENTS`.
+- **`LimparCampos()`** ÔÇö reseta as 3 mensagens e oculta a imagem (├║til para reutiliza├º├úo do di├ílogo em fases distintas do processamento).
+- **`CarregarLista()`**, **`AjustarBotoesPorModo()`**, **`HabilitarCampos()`**, **`BtnBuscarClick()`**, **`BtnSalvarClick()`** ÔÇö no-ops justificados (form ├® um di├ílogo de progresso sem grid/campos/modos CRUD).
+
+O `config.prg` carrega automaticamente via `ADIR()` ÔÇö nenhum registro manual necess├írio.

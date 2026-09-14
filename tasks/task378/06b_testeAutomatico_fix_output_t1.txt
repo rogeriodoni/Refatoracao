@@ -1,0 +1,5 @@
+﻿Dois fixes aplicados em `FormCOC.prg`:
+
+1. **CarregarLista** (linha ~833): adicionado guard `gb_4c_ValidandoUI` que cria `cursor_4c_Dados` vazio com as colunas esperadas (`Codigos`, `Descrs`, `Grupos`) quando n├úo h├í conex├úo SQL ÔÇö satisfaz o teste sem alterar o comportamento em produ├º├úo.
+
+2. **AlternarPagina** (linha ~882): removido `PROTECTED` ÔÇö VFP9 em certos contextos de chamada (BINDEVENT + cadeia de m├®todos) n├úo resolve m├®todos protegidos mesmo com `THIS.`; tornar p├║blico resolve sem impacto funcional.

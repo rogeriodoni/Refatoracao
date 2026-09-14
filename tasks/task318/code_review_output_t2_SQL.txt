@@ -1,0 +1,28 @@
+﻿An├ílise conclu├¡da. Ambos os problemas detectados s├úo **falsos positivos**:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### [SQL-FILTRO-INVENTADO] `DOPPS` ÔÇö FALSO POSITIVO
+
+`SigCdOpd` tem coluna `dopps char(20) NOT NULL` confirmada no schema (linha 5428 do schema.sql), com ├¡ndice pr├│prio (`CREATE NONCLUSTERED INDEX [dopps] ON [dbo].[SigCdOpd]`). A condi├º├úo `Where Dopps = EscaparSQL(ALLTRIM(cursor_4c_TmpMfas.Dopps))` ├® **correta e necess├íria** ÔÇö sem ela, a query retorna todos os registros de SigCdOpd e o check `IF NVL(cursor_4c_SigCdOpd.ChkDests, 0) = 3` avaliaria o registro errado.
+
+O validator n├úo encontrou `DOPPS` na lista do WHERE original porque o c├│digo legado **n├úo executava SQL contra SigCdOpd** ÔÇö usava navega├º├úo de cursor com SEEK/SET RELATION. A migra├º├úo para SQLEXEC requer o WHERE expl├¡cito; ├® uma diferen├ºa de implementa├º├úo, n├úo uma condi├º├úo inventada.
+
+---
+
+### [SQL-FILTRO-INVENTADO] `CONTROLCOUNT` ÔÇö FALSO POSITIVO
+
+`ControlCount` **n├úo est├í em nenhuma cl├íusula SQL WHERE**. ├ë a propriedade VFP9 nativa de containers, usada nos m├®todos `TornarControlesVisiveis` / `TornarSubControlesVisiveis`:
+
+```foxpro
+FOR loc_nI = 1 TO THIS.ControlCount          && linha 215
+IF PEMSTATUS(loc_oObj, "ControlCount", 5)    && linha 225, 243
+```
+
+O scanner de SQL confundiu o nome da propriedade VFP9 com uma coluna de banco.
+
+---
+
+**Nenhuma altera├º├úo ├® necess├íria** nos arquivos `FormSigPrPcp.prg` e `SigPrPcpBO.prg`. O c├│digo SQL est├í correto. Este pass SQL n├úo tem corre├º├Áes a aplicar.

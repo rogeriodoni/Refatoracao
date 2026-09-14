@@ -1,0 +1,20 @@
+﻿**Fase 7 j├í est├í completa para este formul├írio OPERACIONAL.**
+
+Ap├│s analisar o arquivo completo (1279 linhas), os 3 eventos de bot├úo do formul├írio original SIGREECH j├í est├úo implementados nas fases anteriores:
+
+| Handler | Linha | Bot├úo | Status |
+|---------|-------|-------|--------|
+| `BtnVisualizarClick()` | 717 | `cmd_4c_Visualizar` | Ô£à implementado |
+| `BtnImprimirClick()` | 725 | `cmd_4c_Imprimir` | Ô£à implementado |
+| `BtnEncerrarClick()` | 740 | `cmd_4c_Encerrar` | Ô£à implementado |
+
+**Por que n├úo h├í BtnIncluirClick/BtnAlterarClick/BtnExcluirClick:**
+
+Este ├® um formul├írio **OPERACIONAL** de emiss├úo de cheque, n├úo um cadastro CRUD. O SIGREECH original possui apenas 3 bot├Áes (Visualizar, imprimir, Sair ÔÇö ver `layout.json`). A Fase 7 foi gerada a partir de um template CRUD, mas esses 3 handlers simplesmente n├úo existem no formul├írio original e n├úo teriam bot├Áes correspondentes na UI.
+
+Adicionar `BtnIncluirClick()`, `BtnAlterarClick()` ou `BtnExcluirClick()` vazios violaria a regra **"NUNCA criar stubs"**.
+
+O arquivo est├í completo e funcional ÔÇö todos os handlers do legado est├úo mapeados:
+- `imprimir.Click` ÔåÆ `BtnImprimirClick` (EmiteCheque/EmiteVerso/EmiteCopia por op├º├úo)
+- `Visualizar.Click` ÔåÆ `BtnVisualizarClick` (EmiteCopia com enviaimp=.F.)  
+- `Sair.Click` ÔåÆ `BtnEncerrarClick` (com l├│gica de confirma├º├úo do original)

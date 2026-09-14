@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto com 1372 linhas e termina com `ENDDEFINE`. Fase 4 conclu├¡da.
+
+**O que foi adicionado:**
+
+- `ConfigurarPaginaLista()` ÔÇö cria o grid `grd_4c_Dados` com 7 colunas vinculadas ao cursor `xOpi`, inicializa o tag do header Column5, e adiciona a ├írea inferior do form (lbl+txt Descri├º├úo, lbl+editbox Observa├º├úo, lbl Aten├º├úo)
+
+- `ConfigurarGrade()` ÔÇö configura todas as 7 colunas com headers, ControlSources e BINDEVENTs; aplica o padr├úo cr├¡tico (AddObject Check1 ÔåÆ CurrentControl ÔåÆ ControlSource) para Column5 e Column7 com CheckBoxes
+
+- `ConfigurarBotoesForm()` ÔÇö adiciona bot├Áes Encerrar (Left=775), Pesagem (Left=850) e OK (Left=925) com BINDEVENTs
+
+- `AlternarPagina()` ÔÇö no-op documentado (form plano sem PageFrame)
+
+- Handlers do grid: `GradeAfterRowColChange`, `GradeColumn2KeyPress`, `GradeColumn3KeyPress`, `GradeColumn5InteractiveChange`, `GradeColumn5HeaderClick`, `GradeColumn7InteractiveChange`, `GradeColumn7HeaderClick`
+
+- Handlers de bot├Áes: `BtnOkClick` (com l├│gica de etiquetas, replica original), `BtnPesagemClick` (abre FormSigPdMp9), `BtnEncerrarClick`

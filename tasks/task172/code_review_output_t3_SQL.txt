@@ -1,0 +1,25 @@
+﻿Analisei todos os 12 problemas em profundidade, rastreando o fluxo cruzado entre form e BO.
+
+**Resultado da an├ílise:**
+
+**Problemas 1-11 (GRID-SQL)** ÔÇö Todos s├úo falsos positivos. O checker est├ítico s├│ analisou o arquivo do form e n├úo rastreou o BO. Os cursores s├úo criados pelo `sigprdisBO.ProcessarDistribuicao()`, que cont├®m todos os campos:
+
+- `cursor_4c_Distribui` (BO linha 483-492): `AS Cemps`, `AS QtdSaldo`, `AS QtdDistr`, `AS CidChaves` Ô£ô
+- `cursor_4c_Disponivel` (BO linha 456-462): `AS Cpros`, `AS Dpros`, `AS CodCors`, `AS CodTams`, `AS Sqtds`, `AS QtdSaida`, `AS QtdSaldo` Ô£ô
+
+O form chama `ProcessarDistribuicao` na linha 1006, que cria os cursores, e s├│ ent├úo `CarregarDisponivel`/`CarregarDistribui` vinculam o grid aos cursores j├í existentes.
+
+**Problema 12 (SQL-FILTRO-INVENTADO: CIDCHAVES)** ÔÇö O checker detectou `WHERE cidchaves = ...` no m├®todo `Atualizar()` do BO (linha 279). Esta condi├º├úo ├® o filtro PK obrigat├│rio de todo UPDATE ÔÇö equivale exatamente ao que o `DataMgr.Update()` original fazia internamente. Remover o WHERE tornaria o UPDATE inv├ílido (atualizaria todas as linhas da tabela).
+
+Adicionalmente, no form, `CidChaves` aparece apenas em:
+- `ControlSource = "cursor_4c_Distribui.CidChaves"` (grid Column4 = campo "Local")
+- `REPLACE cursor_4c_Distribui.CidChaves` (atualiza├º├úo do cursor local)
+
+Nenhum SQL `SELECT ... WHERE cidchaves` existe no form.
+
+**Conclus├úo:** Os 12 problemas s├úo falsos positivos do analisador est├ítico. O c├│digo est├í correto:
+- Os campos nos `ControlSource` existem nos SELECTs do BO
+- O `WHERE cidchaves` no UPDATE ├® o filtro PK necess├írio e arquitetonicamente correto
+- Nenhuma altera├º├úo ├® necess├íria ÔÇö modificar c├│digo correto violaria a regra "NAO alterar logica de negocio"
+
+Nenhuma altera├º├úo nos arquivos foi feita. O c├│digo de `Formsigprdis.prg` e `sigprdisBO.prg` est├í correto conforme a arquitetura em camadas do projeto.

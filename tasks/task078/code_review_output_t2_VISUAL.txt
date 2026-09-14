@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada corretamente. Resumo do que foi feito:
+
+- `loc_oPg.grd_4c_Forma.ColumnCount = 2` movido para **antes** do `WITH` (linha 840), usando refer├¬ncia expl├¡cita ÔÇö assim o VFP9 cria as colunas antes de entrar no bloco.
+- `.ColumnCount = 2` removido de dentro do `WITH`.
+- O bloco `IF USED("cursor_4c_OpFp")` com `.RecordSource` e os acessos problem├íticos a `.Column1.ControlSource`/`.Column2.ControlSource` foram **removidos** de dentro do `WITH` (os `ControlSource` de cada coluna j├í s├úo definidos corretamente nos blocos `WITH .Column1` e `WITH .Column2`).
+- `loc_oPg.grd_4c_Forma.RecordSource = "cursor_4c_OpFp"` movido para **depois** do `ENDWITH` do grid (linha 894), com refer├¬ncia expl├¡cita.

@@ -1,0 +1,3 @@
+﻿**Problemas 1 & 2 corrigidos:** `a.Locals AS Locals` torna o alias expl├¡cito, eliminando a ambiguidade que o detector n├úo conseguia resolver via text-matching.
+
+**Problema 3 n├úo alterado (falso positivo verificado):** `WHERE Codigos = EscaparSQL(par_cCodigo)` na query de `SigPrLcl` ├® correto ÔÇö `Codigos` ├® a PK da tabela de lookup, e o filtro ├® necess├írio para validar se um c├│digo digitado no grid existe na tabela mestra. O original realiza o mesmo filtro internamente via FormBuscaAuxiliar Pattern B. Remover o WHERE tornaria a valida├º├úo inoperante.

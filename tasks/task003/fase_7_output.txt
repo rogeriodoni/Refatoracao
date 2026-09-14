@@ -1,0 +1,5 @@
+﻿Phase 7 complete. Two bugs were fixed:
+
+1. **`BtnExcluirClick()`** ÔÇö Added `CarregarPorCodigo(loc_cCpros)` before `Excluir()`. Without it, `this_lNovoRegistro` stays `.T.` and `Excluir()` returns `.F.` with "N├úo h├í registro para excluir".
+
+2. **`BtnSalvarClick()`** ÔÇö Replaced direct calls to PROTECTED `Inserir()`/`Atualizar()` with `Salvar()` (PUBLIC). In VFP9, calling a PROTECTED method from outside the class throws "Member is protected and cannot be accessed from this context."

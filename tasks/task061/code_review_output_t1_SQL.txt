@@ -1,0 +1,10 @@
+﻿`CMOEDATA` n├úo ├® uma condi├º├úo WHERE - ├® um **nome de tag de ├¡ndice** em cursor VFP9. Contexto completo:
+
+**Linha 175:** `INDEX ON PADR(cmoes, 3) + DTOS(datas) TAG CMOEDATA`  
+**Linha 217:** `SET ORDER TO CMOEDATA`
+
+O BO cria um ├¡ndice no cursor `crSigCdCot` (tabela de cota├º├Áes) usando `PADR(cmoes,3) + DTOS(datas)` e nomeia esse tag como `CMOEDATA`. Em seguida, usa `SET ORDER TO CMOEDATA` + `SEEK(...)` para fazer lookup eficiente de cota├º├úo por moeda+data.
+
+Isso ├® c├│digo VFP9 leg├¡timo e correto. O detector do pass SQL confundiu o nome do tag de ├¡ndice (`TAG CMOEDATA`) com uma coluna em cl├íusula WHERE.
+
+**Nenhuma corre├º├úo necess├íria.** O arquivo `sigrecopBO.prg` est├í correto ÔÇö o `[SQL-FILTRO-INVENTADO]` ├® um falso positivo causado pelo nome do tag de ├¡ndice coincidir com o padr├úo de busca do validador.

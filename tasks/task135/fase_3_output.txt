@@ -1,0 +1,9 @@
+﻿All three fixes are applied. The file now has:
+
+1. **`lbl_4c_Label1.Caption`** set with proper CHR() codes (`"Movimenta" + CHR(231) + CHR(245) + "es Finalizadas"`) in `ConfigurarGradePedidos()` ÔÇö the ADD OBJECT literal `"Movimentacoes Finalizadas"` is now overridden at runtime.
+
+2. **`CarregarConfigImpressora()`** ÔÇö `RETURN` inside TRY replaced with `IF NOT EMPTY(par_cImpresS)` wrapping all the body logic.
+
+3. **`CarregarTiposEtiqueta()`** ÔÇö `RETURN` inside TRY replaced with `IF loc_nRet > 0` wrapping the cursor processing block.
+
+The rest of the file was already correct: `RETURN DODEFAULT()` in `Init()` is outside TRY, all other RETURNs are after ENDTRY, BINDEVENT targets are PUBLIC methods, canonical `cnt_4c_Saida` pattern (Left=917, Width=90, cmd_4c_Encerrar 75├ù75) is applied, and `TornarControlesVisiveis()` correctly skips `CNT_4C_OPS` and `CNT_4C_ETIQUETAS` via INLIST.

@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fCarregarImps"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREETP",
+      "evento": "Procedure",
+      "linhas": 130,
+      "codigoOriginal": "* 01 - 4 Colunas Vertical Simples\nLocal lcBar, lcLin, lcCol, lnCnt\n\nlnCnt = 0\nFor I = 1 To (ThisForm.loObj.Qtd)\n\tlnCnt = lnCnt + 1\n\tIf (lnCnt > 4)\n\t\tlnCnt = 1\n\tEndIf\n\t\n\t* Inicializando a Etiqueta\n\tIf (lnCnt = 1)\n\t\tSet Printer To Name (ThisForm.loObj.Imp)\n\t\tSet Device To Printer\n\n\t\t??? Chr(02) + 'L' + Chr(13)\n\t\t??? 'H' + Alltrim(Str(ThisForm.loObj.Den)) + Chr(13)\n\t\t??? 'D11' + CHR(13)\n\tEndIf\n\t\n\tlcBar = ThisForm.loObj.Ini + Padl(fGerUniqueKey([ETIQ] + ThisForm.Dopes), 6, '0')\n\tlnInc = (107 * (lnCn... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Den)) + Chr,Ini + Padl,Qtd) Or",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREETP",
+      "evento": "Procedure",
+      "linhas": 106,
+      "codigoOriginal": "* 02 - 4 Colunas Vertical Dupla\nLocal lcBar, lcLin, lcCol\n\nFor I = 1 To (ThisForm.loObj.Qtd + Mod(ThisForm.loObj.Qtd, 2)) Step 2\n\tSet Printer To Name (ThisForm.loObj.Imp)\n\tSet Device To Printer\n\n\t* Inicializando a Etiqueta\n\t??? Chr(02) + 'L' + Chr(13)\n\t??? 'H' + Alltrim(Str(ThisForm.loObj.Den)) + Chr(13)\n\t??? 'D11' + CHR(13)\n\n\tlcBar = ThisForm.loObj.Ini + Padl(fGerUniqueKey([ETIQ] + ThisForm.Dopes), 6, '0')\n\n\t* Etiqueta 1 \n\n\t\t* Superior\n\t\tlcLin = 018 + ThisForm.loObj.Hor\n\t\tlcCol = 030 + ThisForm... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Qtd + Mod,Den)) + Chr,Ini + Padl",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREETP",
+      "evento": "Procedure",
+      "linhas": 40,
+      "codigoOriginal": "* 03 - 2 Colunas Horizontal\nLocal lcBar, lcLin, lcCol\n\nFor I = 1 To ThisForm.loObj.Qtd\n\tSet Printer To Name (ThisForm.loObj.Imp)\n\tSet Device To Printer\n\n\tlcBar = ThisForm.loObj.Ini + Padl(fGerUniqueKey([ETIQ] + ThisForm.Dopes), 6, '0')\n\n\t* Inicializando a Etiqueta\n\t??? Chr(02) + 'L' + Chr(13)\n\t??? 'H' + Alltrim(Str(ThisForm.loObj.Den)) + Chr(13)\n\t??? 'D11' + CHR(13)\n\n\t* Etiqueta da Esquerda\n\tlcLin = 030 + ThisForm.loObj.Hor\n\tlcCol = 037 + ThisForm.loObj.Ver\n\t??? '1e63040' + Padl(lcLin, 4, '0') +... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Ini + Padl,Den)) + Chr",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREETP",
+      "evento": "Procedure",
+      "linhas": 34,
+      "codigoOriginal": "Local Array laPrinter1(1)\nLocal lnDen, llOks, lcImp, lnTip\n\nWith ThisForm\n\t.poDataMgr.CursorQuery('SigCdOpe', 'LocalOpe', 'Dopes', .Dopes, 'NDopes')\n\n\t.loObj.Qtd = Int(.getQtde.Value)\n\t.loObj.Den = Int(.spnDensidade.Value)\n\t.loObj.Hor = Int(.spnHorizontal.Value)\n\t.loObj.Ver = Int(.spnVertical.Value)\n\t.loObj.Imp = .optImpressora.Buttons(.optImpressora.Value).Tag\n\t.loObj.Tip = Padl(.cmbTipos.ListIndex, 2, [0])\n\t.loObj.Ini = Padl(LocalOpe.NDopes, 4, [0])\nEndWith\n\nIf (ThisForm.loObj.Qtd < 1)\n\t=Messa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optImpressora",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREETP",
+      "evento": "Init",
+      "linhas": 135,
+      "codigoOriginal": "Lparameters pDop\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.Dopes = Padr(pDop, 20)\n\n\t\tlcCpo = [nMaxTpEtis, TpEtiPads, nMaxImpEti, ImpEtis, AjVerts, AjHorzs]\n\t\t.poDataMgr.CursorQuery('SigCdPam', 'LocalParam', .F., .F., lcCpo)\n\n\t\tlnPrinters = APrinters(laPrinters)\n\t\tIf (lnPrinters <> 0)\n\t\t\tFor lnI = 1 to lnPrinters\n\t\t\t\tlaPr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "optImpressora,Option&lcI,Option1",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREETP",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREETP.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Imprimir",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREETP.cmdBtnForm",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREETP.optImpressora",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "=fCarregarImps(ThisForm.optImpressora.Buttons(ThisForm.optImpressora.Value).Tag, .f., ;\n\t\t\t   ThisForm.spnVertical, ThisForm.spnHorizontal, ThisForm.spnDensidade, .f., ThisForm.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarImps",
+        "metodosFormChamados": "Buttons",
+        "controlesReferenciados": "optImpressora",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

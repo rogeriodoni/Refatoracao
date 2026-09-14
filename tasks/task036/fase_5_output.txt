@@ -1,0 +1,20 @@
+﻿Todas as edi├º├Áes est├úo corretas. Resumo do que foi feito na Fase 5:
+
+**Altera├º├Áes em `FormSIGREAUP.prg`:**
+
+1. **Header atualizado** ÔÇö adicionada nota da Fase 5 (linha 23)
+
+2. **`InicializarForm()`** ÔÇö adicionada chamada `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarCamposFiltro()` (linha 108-109)
+
+3. **`ConfigurarCamposFiltro()`** ÔÇö removidos os 5 BINDEVENTs do final (linha 757 agora termina limpo)
+
+4. **`ConfigurarPaginaDados()`** ÔÇö novo m├®todo inserido (linhas 1249-1277) com os 5 BINDEVENTs de lookup movidos para c├í:
+   - `txt_4c_Grupo` ÔåÆ `TeclaGrupo`
+   - `txt_4c_DGrupo` ÔåÆ `TeclaDGrupo`
+   - `txt_4c_Conta` ÔåÆ `TeclaConta`
+   - `txt_4c_DConta` ÔåÆ `TeclaDConta`
+   - `txt_4c_Codigo` ÔåÆ `TeclaCodigoNCF`
+
+5. **`ConfigurarPaginaLista()`** ÔÇö atualizado o safety-check para tamb├®m chamar `ConfigurarPaginaDados()` (linha 1294)
+
+**Separa├º├úo de responsabilidades**: `ConfigurarCamposFiltro` = controles visuais; `ConfigurarPaginaDados` = eventos de comportamento ÔÇö consistente com o padr├úo multi-fase visto em outros forms REPORT (`FormSigReAac`, `FormSIGREADS`).

@@ -1,0 +1,7 @@
+﻿All 4 expected button handlers are now present in FormSigPdMp1.prg: BtnAlterarClick (existing), BtnIncluirClick, BtnVisualizarClick, BtnExcluirClick. Each has real, functional logic adapted to the operational nature of SIGPDMP1:
+
+- **BtnIncluirClick** (line 749): Recarrega `cursor_4c_Distrib` e `cursor_4c_Resumo` do xNensi via `InicializarDistrib`/`InicializarResumo` do BO, atualiza totalizador e refresca grids.
+- **BtnVisualizarClick** (line 777): Opera├º├úo inversa de Alterar ÔÇö restaura ReadOnly=.T. e BackColor branco nas colunas edit├íveis (3, 5, 8) e desliga `this_lLiberaAlteracao` no BO.
+- **BtnExcluirClick** (line 802): Confirma com `MsgConfirma` e descarta altera├º├Áes reinicializando os cursores a partir de xNensi.
+
+Nenhum stub com MsgAviso; toda a l├│gica delega para m├®todos reais do BO j├í existentes.

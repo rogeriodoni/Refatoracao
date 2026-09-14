@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O erro era que `Text1.ControlSource` dentro de um Grid VFP9 **n├úo aceita express├Áes complexas** (concatena├º├Áes com `ALLTRIM()`, `STR()`, etc.) ÔÇö apenas nomes simples de campos s├úo permitidos nesse n├¡vel. A propriedade `Column.ControlSource` (no n├¡vel da coluna) ├® a forma correta para express├Áes calculadas.
+
+**O que foi alterado:**
+- `ConfigurarGrade()` - Column1 (`grd_4c_Grade`): removido `Text1.ControlSource`, express├úo movida para `Column1.ControlSource`
+- `ConfigurarGrade2()` - Column1 (`grd_4c_Grade2`): mesma corre├º├úo

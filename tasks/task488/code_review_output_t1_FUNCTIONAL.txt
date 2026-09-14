@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬ cada item foi tratado:
+
+| Problema | A├º├úo |
+|---|---|
+| **[BUSCA-CURSOR]** | Adicionado `loc_oBusca.this_cCursorDestino = loc_cCursorBusca` antes de `Mostrar()` em `AbrirLookupCanonico` (linha 4586). Necess├írio para que o FormBuscaAuxiliar, que roda em DataSession=1 (shared), consiga localizar o cursor pre-populado quando o form pai tem DataSession=2 (private). |
+| **[BINDEVENT-PARAMS] x21** | J├í estavam corretos ÔÇö todos os handlers (`ValidarOpAnts`, `ValidarOpContas`, ..., `ValidarDescGrupoT`) declaram `par_nKeyCode, par_nShiftAltCtrl` na linha `PROCEDURE`. Nenhuma altera├º├úo necess├íria. |
+| **[GRID-SQLEXEC]** | J├í estava correto em `OptBO.Buscar()` ÔÇö quando `cursor_4c_Dados` est├í aberto (RecordSource do Grid), o BO usa `cursor_4c_DadosTmp` e depois `ZAP + APPEND FROM DBF()`. Nenhuma altera├º├úo necess├íria. |

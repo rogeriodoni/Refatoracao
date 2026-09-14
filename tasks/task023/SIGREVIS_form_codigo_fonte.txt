@@ -1,0 +1,898 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREVIS.SCX
+* Data/Hora: 14/05/26 15:25:03
+* Total de registros: 18
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREVIS
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDatai
+  Parent: SIGREVIS
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_vencimento_a
+  Parent: SIGREVIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCdRepr
+  Parent: SIGREVIS
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDataf
+  Parent: SIGREVIS
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGREVIS
+  Class: label
+  BaseClass: label
+
+Objeto: Opt_Venda
+  Parent: SIGREVIS
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Opt_Pedido
+  Parent: SIGREVIS
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: getDsRepr
+  Parent: SIGREVIS
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say4
+  Parent: SIGREVIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREVIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREVIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsConta
+  Parent: SIGREVIS
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdConta
+  Parent: SIGREVIS
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_estoque
+  Parent: SIGREVIS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 300
+  Left = 88
+  Width = 703
+  Height = 167
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS
+------------------------------------------------------------
+  DataSession = 1
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório de Visitas"
+  antgru = .F.
+  Name = "SIGREVIS"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 8
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 8
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 8
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.SAIR.Top = 8
+  btnReport.SAIR.Left = 204
+  btnReport.SAIR.Name = "SAIR"
+  btnReport.Left = 526
+  btnReport.Top = -3
+  btnReport.ZOrderSet = 2
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.getDatai
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 260
+  MaxLength = 10
+  TabIndex = 3
+  Top = 106
+  Width = 80
+  ZOrderSet = 3
+  Name = "getDatai"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.lbl_vencimento_a
+------------------------------------------------------------
+  FontBold = .F.
+  Caption = "à"
+  Left = 348
+  Top = 111
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_vencimento_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.getCdRepr
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 260
+  MaxLength = 10
+  SpecialEffect = 0
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 133
+  Width = 80
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 18
+  Name = "getCdRepr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.getDataf
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 360
+  MaxLength = 10
+  TabIndex = 4
+  Top = 106
+  Width = 80
+  ZOrderSet = 6
+  Name = "getDataf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Height = 15
+  Left = 209
+  Top = 111
+  Width = 45
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.Opt_Venda
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  Height = 27
+  Left = 260
+  Top = 189
+  Width = 241
+  TabIndex = 9
+  ZOrderSet = 19
+  Name = "Opt_Venda"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 57
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 17
+  Option2.Left = 92
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 57
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Ambos"
+  Option3.Value = 1
+  Option3.Height = 17
+  Option3.Left = 179
+  Option3.Style = 0
+  Option3.Top = 5
+  Option3.Width = 57
+  Option3.AutoSize = .F.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.Opt_Pedido
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  Height = 27
+  Left = 260
+  Top = 215
+  Width = 241
+  TabIndex = 10
+  ZOrderSet = 19
+  Name = "Opt_Pedido"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 57
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 17
+  Option2.Left = 92
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 57
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Ambos"
+  Option3.Value = 1
+  Option3.Height = 17
+  Option3.Left = 179
+  Option3.Style = 0
+  Option3.Top = 5
+  Option3.Width = 57
+  Option3.AutoSize = .F.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.getDsRepr
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 342
+  MaxLength = 50
+  TabIndex = 6
+  Top = 133
+  Width = 313
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 17
+  Name = "getDsRepr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Venda :"
+  Height = 15
+  Left = 215
+  Top = 195
+  Width = 39
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Pedidos :"
+  Height = 15
+  Left = 208
+  Top = 221
+  Width = 46
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta :"
+  Height = 15
+  Left = 216
+  Top = 165
+  Width = 38
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.getDsConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 342
+  MaxLength = 20
+  TabIndex = 8
+  Top = 160
+  Width = 313
+  ZOrderSet = 14
+  Name = "getDsConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.getCdConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 25
+  Left = 260
+  MaxLength = 10
+  TabIndex = 7
+  Top = 160
+  Width = 80
+  ZOrderSet = 15
+  Name = "getCdConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREVIS.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Representante :"
+  Height = 15
+  Left = 173
+  Top = 138
+  Width = 81
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREVIS
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReVis To Printer NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documentoexcel
+------------------------------------------------------------
+PROCEDURE documentoexcel
+SELECT crResu 
+LOCATE
+DODEFAULT()
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReVis To Printer Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pSNT,lcNomeFrm1
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	
+	lcQryPar = [Select GrPadVens From SigCdPam]	
+
+	If (.poDataMgr.SqlExecute(lcQryPar, 'crSigCdPam') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMccr)')
+		Return 0
+	EndIf
+
+	pGru = Alltrim(crSigCdPam.GrPadVens)
+	thisform.antgru = pGru
+
+	** Verifica se existe conta cadastrada para esse usuario **************************	
+	If !fChecaAcesso('SIGCDVIS','ALTCONTA')
+		lcQryCta = [Select iclis,rclis From SigCdCli ] + ;
+						[Where rclis = '] + usuar + [' AND Grupos = '] + pGru + [']
+						
+		If (.poDataMgr.SqlExecute(lcQryCta, 'SigCdCli') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMccr)')
+			Return 0
+		EndIf 
+
+		If Empty(SigCdCli.rclis)&& = []
+			=MessageBox('Conta não cadastrada no Cadastro de Contas de Representantes', 0+256, 'Cadastro de Visitas')
+			Return .f.				
+		Else
+			thisform.getCdRepr.Value = Alltrim(SigCdCli.iclis)
+			thisform.getDsRepr.Value = Alltrim(SigCdCli.rclis)
+			thisform.getDsRepr.Enabled = .F.
+			thisform.getCdRepr.Enabled = .F. 
+		EndIf
+	Else
+		ThisForm.getCdRepr.Value   = Space(10)
+		ThisForm.getDsRepr.Value   = Space(40) 	
+	EndIf 
+	** Fim *****************************************************************************
+
+	If (.poDataMgr.pnIdconn > 0)
+		.LockScreen = .t.
+		.getCdConta.Value = Space(10)
+		.getDsConta.Value = Space(20)
+		.getDatai.Value       = Date()
+		.getDataf.Value       = Date()
+
+		.getDatai.SetFocus
+		.Refresh
+		.LockScreen = .f.
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF
+
+pGru = thisform.antgru 
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+m.lcEmpresa = _Empr + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+m.ldDatai   = ThisForm.getDatai.Value
+m.ldDataf   = ThisForm.getDataf.Value
+m.lcCconta  = ThisForm.getCdConta.Value
+m.lcDconta  = ThisForm.getDsConta.Value
+m.lcCrepr  = ThisForm.getCdRepr.Value
+m.lcDrepr  = ThisForm.getDsRepr.Value
+m.lcVenda = ThisForm.opt_Venda.Value
+m.lcPedido = ThisForm.opt_Pedido.Value
+
+ldDtI = Iif(Empty(ThisForm.getDataI.Value), Ctod('01/01/0001'), ThisForm.getDataI.Value)
+ldDtF = Iif(Empty(ThisForm.getDataF.Value), Ctod('31/12/9999'), ThisForm.getDataF.Value)
+lcCta = Iif(Empty(ThisForm.getCdConta.Value), Space(10), ThisForm.getCdConta.Value)
+lcRep = Iif(Empty(ThisForm.getCdRepr.Value),   Space(10), ThisForm.getCdRepr.Value)
+lnVen = Iif(ThisForm.opt_Venda.Value=3, 0, ThisForm.opt_Venda.Value)
+lnPed = Iif(ThisForm.opt_Pedido.Value=3, 0, ThisForm.opt_Pedido.Value)
+
+pDtI = fDtoSQL(ldDtI)
+pDtF = fDtoSQL(ldDtF, '23:59:59')    
+		    
+lcQuery = [Select a.*, b.rclis as descri, c.rclis as repr, ] + ;
+		[case when a.vendas=1 then 'Sim' else 'Não' end as descvendas, ] + ;
+		[case when a.pedidos=1 then 'Sim' else 'Não' end as descpedidos ] + ;
+	      [From SigCdVis a ] + ;
+	      [Inner Join SigCdCli b on a.iclis=b.iclis ] + ;
+	      [Inner Join SigCdCli c on a.Contas=c.iclis ] + ;	      
+		 [Where a.Grupos = ?pGru And ] + ;
+		 	[(a.Pedidos = ?lnPed Or ?lnPed='') And ] +;
+		 	[(a.Vendas = ?lnVen Or ?lnVen='') And ] +;
+		 	[(a.iclis = ?lcCta Or ?lcCta='') And ] +;
+		 	[(a.Contas = ?lcRep Or ?lcRep='') And ] +;
+		 	   [a.Datas Between ?pDtI And ?pDtF ] + ;
+		 [Order By a.contas] 
+    				    
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdVis') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpConta)')
+	Return 0
+EndIf
+
+* inicializa as variáveis de cabeçalho
+ThisForm.podatamgr.CursorQuery('SigCdEmp','crSigCdEmp', 'cEmps', _Empr)
+lcCbEmpresa = crSigCdEmp.Razas
+lcCbTitulo  = 'Relatório de Visitas'
+lcCbPeriodo = 'Período: '+dtoc(ldDtI)+' à '+dtoc(ldDtF)
+
+create cursor CsCabecalho (cb_empresa c(80),cb_titulo c(80),cb_periodo c(80))
+insert into CsCabecalho (cb_empresa,cb_titulo,cb_periodo);
+				 values (lcCbEmpresa,lcCbTitulo,lcCbPeriodo)
+
+Select crSigCdVis
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReVis Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If (This.Value <> 3)
+	If (ThisForm.getDatai.Value > ThisForm.getDataf.Value)
+		=Messagebox('Data Final Menor Que a Inicial!!!', 16, '')
+		ThisForm.getDataf.SetFocus
+		Return 0
+	EndIf
+EndIf
+
+If Used('cMovto1')
+	Use In cMovto1
+EndIf
+
+If Used('cMovto2')
+	Use In cMovto2
+EndIf
+
+If Used('cMovto3')
+	Use In cMovto3
+EndIf
+
+If Used('cMovto4')
+	Use In cMovto4
+EndIf
+
+frmrelatorio::btnReport.Click
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREVIS.getDatai
+* Classe: textbox (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.getDataf.Value = Iif(This.Value>ThisForm.getDataf.Value, This.Value, ThisForm.getDataf.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREVIS.getCdRepr
+* Classe: textbox (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+lcGru = thisform.antgru
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'iclis', This.Value, 'Seleção de Representante', .T.,'','Grupos = ?lcGru')
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('iclis', '', 'Código')
+		loLista.mAddColuna('rclis', '', 'Nome')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Iclis
+	ThisForm.getDsRepr.Value = crListaRemota.rclis
+
+	Use In crListaRemota
+Else
+	This.Value = []
+	ThisForm.getDsRepr.Value = []
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREVIS.getDsRepr
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+lcGru = thisform.antgru
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'rclis', This.Value, 'Seleção de Representante', .T.,'','Grupos = ?lcGru')
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('rclis', '', 'Nome')
+		loLista.mAddColuna('iclis', '', 'Código')		
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.rclis
+	ThisForm.getCdRepr.Value = crListaRemota.iclis
+
+	Use In crListaRemota
+Else
+	This.Value = []
+	ThisForm.getCdRepr.Value = []
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCdRepr.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREVIS.getDsConta
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Local loLista
+
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'rclis', This.Value, 'Seleção de Contas', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('rclis', '', 'Nome')
+		loLista.mAddColuna('iclis', '', 'Código')		
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.rclis
+	ThisForm.getCdConta.Value = crListaRemota.iclis
+	
+	Use In crListaRemota
+Else
+	This.Value = []
+	ThisForm.getCdConta.Value = []
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(Thisform.getCdConta.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREVIS.getCdConta
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Local loLista
+
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'iclis', This.Value, 'Seleção de Contas', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('iclis', '', 'Código')
+		loLista.mAddColuna('rclis', '', 'Nome')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Iclis
+	ThisForm.getDsConta.Value = crListaRemota.rclis
+
+	Use In crListaRemota
+Else
+	This.Value = []
+	ThisForm.getDsConta.Value = []
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREVIS
+RESERVED3 (ClassInfo): antgru
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 16
+================================================================================

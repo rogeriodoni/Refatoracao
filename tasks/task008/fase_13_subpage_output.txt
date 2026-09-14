@@ -1,0 +1,15 @@
+﻿FASE 13 is complete. Here's a summary of what was implemented:
+
+**3 changes to `FormProduto.prg`** (9362 ÔåÆ 10850 lines):
+
+**1. `ConfigurarPaginaDados()` (line 2359)**
+- Added call `THIS.ConfigurarPgpgDadosFiscais(loc_oPgfInner.Page3)` ÔÇö Page3 is the "Fiscal" page
+
+**2. `ConfigurarEventos()` (lines 1385-1410)**
+- New `*-- === DadosFiscais (Page3 do inner pageframe) ===` section with 24 BINDEVENT calls for: `txt_4c__gruccus/dgruccus/contaccus/dcontaccus`, `txt_4c_Clfiscal/Dclfiscal/Origmerc/Dorigmerc/Sittricm/Dsittricm/Codigo/TpTrib/Iat/AliqIPI/Mvalor/Metal/Teor`, and `cmd_4c_BtnDescFis`
+
+**3. `ConfigurarPgpgDadosFiscais()` + 30 handler methods (lines 9383-10840)**
+- `PROTECTED PROCEDURE ConfigurarPgpgDadosFiscais()`: All 54 objects ÔÇö 20 labels, 24 textboxes, 1 combobox, 1 editbox, 1 grid (3 cols), 1 button ÔÇö with exact Top/Left/Width/Height from original (+29 offset applied)
+- `cursor_4c_Cmv` placeholder created before the grid
+- All labels use `CHR()` codes for accented characters
+- **30 PUBLIC/PROTECTED handler methods**: `GruccusFisc/Dgruccus/Contaccus/Dcontaccus` (call `fAcessoContab`/`fAcessoContas`), `Clfiscal/Dclfiscal/Origmerc/Dorigmerc/Sittricm/Dsittricm` (bidirectional lookup via `FormBuscaAuxiliar`), `CodServsFisc` (fills Sittricm), `TpTrib`, `IatFisc`, `AliqIPI` (SQLEXEC validation), `Mvalor`, `Metal/Teor` (use local cursors TmpMTal/TmpTeor), `BtnDescFis` (calls `fGerDescFis`)

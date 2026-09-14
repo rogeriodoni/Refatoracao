@@ -1,0 +1,18 @@
+﻿Arquivo criado. Fase 1 conclu├¡da.
+
+**`C:\4c\projeto\app\classes\sigreatoBO.prg`** criado com:
+
+- **Propriedades de filtro** mapeadas do `loObj` original:
+  - Per├¡odo: `this_dDtInicial` / `this_dDtFinal` (inicializados com `DATE()`)
+  - Grupo: `this_cGrupo` / `this_cDGrupo` (SigCdGrp, CGrus/DGrus)
+  - Produto: `this_cCPros` / `this_cDPros` (SigCdPro)
+  - Linha: `this_cLin` / `this_cDLin` (SigCdLin)
+  - Fornecedor: `this_cFornecedor` / `this_cDFornecedor`
+  - Op├º├Áes: `this_lImagem`, `this_nTipos` (1=Anal├¡tico/2=Sint├®tico), `this_nDiferenca` (1-4)
+  - Controle: `this_cTrataErro`, `this_cCursorDados`, `this_cArquivoRelatorio`, `this_cArquivoRelatorioImg`
+
+- **Init()** define os valores padr├úo id├¬nticos ao legado (`loObj.AddProperty` no Init original) e chama `DODEFAULT()`
+
+- **ObterMensagemErro()** exp├Áe `this_cMensagemErro` herdado de RelatorioBase
+
+Fase 2 adicionar├í `PrepararDados()`, `CarregarCursoresOperacoes()` e `ValidarParametros()`.

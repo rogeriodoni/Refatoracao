@@ -1,0 +1,13 @@
+﻿All 9 fix sets have been applied correctly. Here's a summary of what was changed:
+
+| Fix | Lines | Change |
+|-----|-------|--------|
+| 1 | 1188, 1190, 1197 | `p.Instalas` ÔåÆ `g.chkInstalas` (SigCdGrp has chkInstalas, SigCdPro does not) |
+| 2 | 1875-1876 | `DSGrus FROM SigCdSGr WHERE CSGrus =` ÔåÆ `Descricaos AS DSGrus FROM SigCdPsg WHERE Codigos =` |
+| 3 | 1897-1898 | `DLins FROM SigCdLin WHERE CLins =` ÔåÆ `Descs AS DLins FROM SigCdLin WHERE Linhas =` |
+| 4 | 1912-1913 | `DCols FROM SigCdCol WHERE CCols =` ÔåÆ `Descs AS DCols FROM SigCdCol WHERE Colecoes =` |
+| 5 | 7514-7522 | CarregarComposicao: all wrong SigPrCpo columns fixed (`unicompos`, `pcompos`, `totas`, `moeds`, `obscompos`, `etiqs`, `qtscons`, `pesos`, `cunips`, `ordts`, `matriz`) |
+| 6 | 8019-8030 | CarregarCusto: same column fixes + ORDER BY `c.ordts` |
+| 7 | 8048-8049 | GROUP BY query: `c.Totals` ÔåÆ `c.totas`, `c.Moedas` ÔåÆ `c.moeds` |
+| 8 | 8413-8452 | CarregarConsP: `unicompos`, `qtscons`, `cats`; replaced SigCdPrf JOIN with `SigCdGcr` JOIN for `gcr.Descrs`; DTemp `c.qtscons` |
+| 9 | 7953, 7979 | ValidarFtio/ValidarCmkpc: `CodFinPs` ÔåÆ `Cods` (SigPrFti PK is `Cods`) |

@@ -1,0 +1,7 @@
+﻿Todos os 3 erros foram corrigidos:
+
+1. **Linha 2025 ÔÇö "Too many arguments"**: `CnabItau240Lote` tinha 29 par├ómetros (limite VFP9 = 26). Removidos 7 par├ómetros n├úo usados no corpo (`par_cTpPgto`, `par_cVersao`, `par_cFinId`, `par_oCursor`, `par_lPix`, `lcFin`, `par_nPix`). Defini├º├úo e chamada alinhadas com 22 par├ómetros.
+
+2. **Linha 3685 ÔÇö "Date/datetime contains illegal characters"**: `{}` ├® literal de data em VFP9. `{"cursor...", ...}` era interpretado como data inv├ílida. Substitu├¡do por `LOCAL loc_aCur(9)` com atribui├º├úo individual.
+
+3. **Linha 3754 ÔÇö "Command contains unrecognized phrase/keyword"**: Mesmo problema no `Destroy()`. Substitu├¡do por `LOCAL loc_aCursores(16)` com atribui├º├úo individual.

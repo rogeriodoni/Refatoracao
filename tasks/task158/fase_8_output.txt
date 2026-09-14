@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. Todos os 10 m├®todos foram adicionados com implementa├º├úo real antes do `ENDDEFINE` (linha 1896).
+
+**Fase 8 conclu├¡da.** Aqui o resumo do que foi adicionado em `FormSigPrCcc.prg`:
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `FormParaBO()` | Copia flags dos checkboxes e todos os campos de par├ómetros dos 4 containers para as props `this_*` do BO |
+| `BOParaForm()` | L├¬ `this_nRegistros` do BO ÔåÆ `txt_4c_Registro.Value` + visibilidade do `lbl_4c_LblEnd` |
+| `LimparCampos()` | Zera checkboxes, todos os campos dos 4 containers, rodap├® e oculta containers flutuantes |
+| `HabilitarCampos(par_l)` | Habilita/desabilita checkboxes + Encerrar; delega `AtualizarBotaoProcessar()` quando habilita |
+| `AjustarBotoesPorModo()` | Alias de `AtualizarBotaoProcessar()` para compatibilidade com pipeline |
+| `CarregarLista()` | Chama `ConfigurarPaginaLista()` + `Refresh()` ÔÇö reinicia estado inicial |
+| `BtnBuscarClick()` | Delega para `BtnVisualizarClick()` (exibe resumo do ├║ltimo processamento) |
+| `BtnEncerrarClick()` | Delega para `CmdEncerrarClick()` ÔåÆ `THIS.Release()` |
+| `BtnSalvarClick()` | Valida sele├º├úo ÔåÆ `FormParaBO()` ÔåÆ `CmdProcessarClick()` |
+| `BtnCancelarClick()` | Confirma ÔåÆ `LimparCampos()` + `AjustarBotoesPorModo()` + `Refresh()` |

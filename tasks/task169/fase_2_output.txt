@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. A valida├º├úo de duplicidade ocorre **antes** do TRY/CATCH, ent├úo o `RETURN .F.` ├® v├ílido. O restante da l├│gica segue o padr├úo correto ÔÇö sem RETURN dentro do TRY.
+
+**Resumo da Fase 2 conclu├¡da:**
+
+`SigPrCtcBO.prg` agora tem todos os m├®todos CRUD e operacionais:
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|---------|
+| `InicializarCursor()` | PROCEDURE | Cria `cursor_4c_CtMoe` com estrutura correta (SET NULL ON) |
+| `Buscar(par_cFiltro)` | PUBLIC FUNCTION | Carrega cursor local via SQL com JOIN em SigCdMoe |
+| `InserirLinha(par_cEmpDopNums)` | PUBLIC FUNCTION | Adiciona linha em branco ao cursor local |
+| `ExcluirLinhaAtual()` | PUBLIC FUNCTION | Marca linha atual como exclu├¡da no cursor |
+| `ValidarDuplicidade()` | PUBLIC FUNCTION | VFP SQL local (GROUP BY cMoes) ÔÇö sem SQLEXEC |
+| `SalvarCotacoes(par_cEmpDopNums)` | PUBLIC FUNCTION | BEGIN TRANSACTION ÔåÆ DELETE + INSERT ÔåÆ COMMIT/ROLLBACK |
+| `BuscarMoeda(par_cCodigo, par_cCursorDestino)` | PUBLIC FUNCTION | Lookup em SigCdMoe |
+| `CarregarDoCursor(par_cAliasCursor)` | PROTECTED FUNCTION | SELECT (par_cAlias) + TratarNulo por campo |
+| `Inserir()` | PROTECTED PROCEDURE | INSERT individual para um registro SIGPRCTC |
+| `Atualizar()` | PROTECTED PROCEDURE | UPDATE individual por pkChaves |
+| `ExecutarExclusao()` | PROTECTED PROCEDURE | DELETE individual por pkChaves + auditoria |

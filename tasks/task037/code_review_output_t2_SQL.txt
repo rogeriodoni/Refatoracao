@@ -1,0 +1,26 @@
+﻿Verifica├º├úo completa. Resultado da an├ílise:
+
+**Nenhum dos 5 flags ├® um bug real.** Todos s├úo falsos positivos do validador:
+
+---
+
+### Resultado da verifica├º├úo (arquivo por arquivo)
+
+**OPBALANCOS** ÔÇö Nunca aparece em SQL WHERE em nenhum dos dois arquivos. No BO (sigrebalBO.prg), `OpBalancos` aparece apenas:
+- Na lista SELECT: `SELECT Classes, Descrs, Nivels, OpBalancos FROM SigCdCss`
+- Em compara├º├úo de cursor VFP: `cursor_4c_BalCss.OpBalancos = 1` (equivalente exato ao `crSigCdCss.OpBalancos=1` do legado)
+
+**CMOES / DMOES** (form linhas 758 e 835) ÔÇö S├úo queries de **valida├º├úo de lookup do campo moeda**, consultando a tabela `SigCdMoe` com sua pr├│pria chave/descri├º├úo. N├úo s├úo filtros adicionados ├á query principal `SigMvCcr`. S├úo estruturalmente corretas.
+
+**CEMPS / RAZAS** (form linhas 905 e 982) ÔÇö S├úo queries de **valida├º├úo de lookup do campo empresa**, consultando `SigCdEmp`. Mesmo padr├úo ÔÇö consultas auxiliares de valida├º├úo de campo, n├úo filtros inventados sobre a query de dados principal.
+
+---
+
+### Por que o validador errou
+
+O validador comparou as colunas presentes em qualquer `WHERE` do c├│digo migrado contra as colunas do `WHERE` da query principal `SigMvCcr` (que usa apenas `Datas`). Ele n├úo distinguiu entre:
+- A query de dados principal (SigMvCcr ÔåÆ filtro por Datas ÔÇö correto)
+- Queries auxiliares de valida├º├úo de campo (SigCdMoe, SigCdEmp ÔÇö corretas, buscando os pr├│prios campos dessas tabelas)
+- Compara├º├Áes de cursor VFP (`cursor.Campo = valor` ÔÇö n├úo ├® SQL WHERE)
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto para todos os 5 itens flagados. Fazer qualquer remo├º├úo quebraria a l├│gica de valida├º├úo dos campos de moeda e empresa no formul├írio.

@@ -1,0 +1,12 @@
+﻿O arquivo foi criado corretamente. Todos os pontos cr├¡ticos est├úo corretos:
+
+- `RETURN loc_lSucesso` est├í **fora** do TRY/CATCH
+- CHR() usado para acentos no c├│digo (`CHR(227)`, `CHR(231)`, etc.)
+- `DataSession = 1` (obrigat├│rio ÔÇö form acessa cursores do form chamador: TmpLanca, xPar, etc.)
+- `Destroy()` usa `this_oRelatorio = .NULL.` (n├úo `.Release()` ÔÇö BO herda de Custom)
+- `Init(par_nQbols)` armazena o par├ómetro **ap├│s** `DODEFAULT()` (que j├í executou `InicializarForm`)
+- `MsgErro()` em todo CATCH (n├úo silencioso)
+- Nenhum `PUBLIC` dentro de `DEFINE CLASS`
+- `BackStyle=1 + BackColor=RGB(100,100,100)` no cabe├ºalho (padr├úo correto do framework)
+
+**Fase 3 entregue:** `C:\4c\projeto\app\forms\relatorios\FormSigReIpc.prg` com estrutura base ÔÇö DEFINE CLASS, Init, InicializarForm, ConfigurarCabecalho e Destroy. As pr├│ximas fases adicionar├úo o `cmg_4c_Botoes` (Fase 4) e os handlers de eventos Click (Fases 7-8). Como este form n├úo tem campos de filtro, as Fases 5-6 ser├úo m├¡nimas ou inexistentes.

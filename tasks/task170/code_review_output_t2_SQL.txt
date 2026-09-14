@@ -1,0 +1,21 @@
+﻿Todas as corre├º├Áes foram aplicadas com sucesso. Resumo do que foi feito:
+
+**FormSigPrCtr.prg** ÔÇö 5 problemas resolvidos:
+
+1. **SITUAS** (`CarregarItemXML`): Removido `AND a.situas <> 'I'` da query de busca em `SigCdPro`. Coluna n├úo existe no WHERE original.
+
+2. **ICLIS** (`ValidarContaAba`): Removido o bloco TRY com `WHERE Iclis = ?`. O m├®todo agora chama `AbrirBuscaContaAba()` diretamente ÔÇö o picker j├í valida a sele├º├úo. Vari├ível `loc_nRet` tamb├®m removida da declara├º├úo LOCAL.
+
+3. **ICLIS** (`AbrirBuscaContaAba`): Removido `WHERE Iclis LIKE ?` ÔÇö picker carrega toda a tabela `SigCdCli ORDER BY Iclis` (FormBuscaAuxiliar filtra internamente).
+
+4. **CPFS** (`ValidarCpfAba`): Removido o bloco TRY com `WHERE Cpfs = ?` (busca reversa CPFÔåÆConta n├úo existe no original). A valida├º├úo de formato (11/14 d├¡gitos) foi mantida. Vari├ível `loc_nRet` removida.
+
+5. **CMOES** (`ValidarMoedaAba`): Removido bloco TRY com `WHERE CMoes = ?`. M├®todo agora chama `AbrirBuscaMoedaAba()` diretamente. Vari├íveis `loc_nRet` e declara├º├úo desnecess├íria removidas.
+
+6. **CMOES** (`AbrirBuscaMoedaAba`): Removido `WHERE CMoes LIKE ?` ÔÇö picker carrega toda a tabela `SigCdMoe ORDER BY CMoes`.
+
+7. **ICLIS** (`BOParaForm`): Query reestruturada para usar JOIN atrav├®s de `SigPrCtr` com `WHERE a.Contas = ?` ÔÇö usa coluna CONTAOS (presente no original) em vez de `WHERE Iclis` direto em SigCdCli.
+
+**SigPrCtrBO.prg** ÔÇö 1 problema resolvido:
+
+8. **PKCHAVE** (`Atualizar`): `WHERE PkChave = THIS.this_cPkChave` ÔåÆ `WHERE Codigos = THIS.this_cCodigos`. Coluna `Codigos` ├® a chave de sess├úo presente no WHERE original.

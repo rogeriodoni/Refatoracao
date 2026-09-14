@@ -1,0 +1,19 @@
+﻿O arquivo `FormSigPrCcc.prg` est├í **completamente implementado** desde a Fase 5 (retry). Todos os requisitos da Fase 6 j├í est├úo presentes:
+
+**Verifica├º├úo do estado atual:**
+- Ô£ô **`ConfigurarConteudoOpConta()`** ÔÇö Empresa, Grupos, Contas, Moeda, Data (linhas 476-620)
+- Ô£ô **`ConfigurarConteudoOpEstoque()`** ÔÇö Empresa, Grupos, Estoque, Produto, Descri├º├úo, Data (linhas 622-778)
+- Ô£ô **`ConfigurarConteudoOpCusto()`** ÔÇö Empresa, Produto, Descri├º├úo, Data (linhas 780-886)
+- Ô£ô **`ConfigurarConteudoOpCompra()`** ÔÇö Empresa, Produto, Descri├º├úo, Data (linhas 888-994)
+- Ô£ô **Todos os lookups** implementados: `AbrirLookupEmpresa`, `AbrirLookupProduto`, `AbrirLookupDescricao`, `AbrirLookupMoeda` (linhas 1220-1349)
+- Ô£ô **BINDEVENTs** registrados para todos os campos com lookup (linhas 997-1032)
+- Ô£ô **Handlers KeyPress/DblClick** para todos os 4 containers (linhas 1351-1487)
+- Ô£ô **`TornarControlesVisiveis`** com skip+recurs├úo correta nos containers flutuantes (linhas 1490-1531)
+- Ô£ô **`CmdProcessarClick`** com delega├º├úo completa ao `SigPrCccBO.Processar()` (linhas 1152-1211)
+- Ô£ô **`SigPrCccBO.Processar()`** existe com 4 m├®todos de processamento protegidos
+
+**Nota sobre campos sem lookup** (`txt_4c_GruposConta`, `txt_4c_ContasConta`, `txt_4c_GruposEst`, `txt_4c_EstoqueEst`): O legado usava `fAcessoContas`/`fAcessoContab` ÔÇö fun├º├Áes propriet├írias do Framework VFP que n├úo existem no novo sistema. Estes campos ficam como texto livre, o que ├® a decis├úo correta para a migra├º├úo.
+
+**`cnt_4c_BotoesAcao` (Salvar/Cancelar)**: N├úo aplic├ível ÔÇö este ├® um form OPERACIONAL com bot├Áes Processar/Encerrar, n├úo um CRUD.
+
+A Fase 6 est├í completa. O arquivo tem 1547 linhas com paridade 100% funcional.

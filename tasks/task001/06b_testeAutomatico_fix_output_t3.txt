@@ -1,0 +1,31 @@
+﻿The fix is applied. Here's what was done and why:
+
+## Diagn├│stico
+
+**Causa raiz**: `ValidarDiretor` era o ├║nico m├®todo que acessa SQL e cria `FormBuscaAuxiliar` **sem o guard `gb_4c_ValidandoUI`**.
+
+Todos os outros m├®todos que fazem SQL j├í tinham o guard:
+- `InicializarForm`: `IF NOT (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)` Ô£ô
+- `CarregarLista`: `IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI` Ô£ô
+- `ValidarDiretor`: **sem guard** Ô£ù ÔåÆ **CORRIGIDO**
+
+## O que acontecia no timeout (run 3)
+
+No 3┬║ run, `gnConnHandle > 0` (SQL Server acess├¡vel). Quando `ValidarDiretor` era disparado (via `LostFocus` de `txt_4c_Diretores`):
+
+1. `SQLEXEC(gnConnHandle, ...)` ÔåÆ aguarda at├® QueryTimeOut (60s)
+2. `CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ...)` ÔåÆ executa **2 SQLEXECs** no Init (at├® 120s)
+3. `FormBuscaAuxiliar.Show()` ÔåÆ form flutuante aberta
+
+Com m├║ltiplos timeouts de SQL empilhando, facilmente ultrapassava 300s.
+
+## Fix aplicado
+
+```foxpro
+*-- Pula validacao em modo de validacao UI (evita SQLEXEC e dialogs modais)
+IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+    RETURN
+ENDIF
+```
+
+Adicionado no in├¡cio de `ValidarDiretor`, seguindo o mesmo padr├úo dos outros m├®todos do form.

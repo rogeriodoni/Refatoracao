@@ -1,0 +1,9 @@
+﻿Arquivo criado em `C:\4c\projeto\app\classes\SigReIprBO.prg`.
+
+**FASE 1/8 conclu├¡da.** O BO declara todas as propriedades extra├¡das do original:
+- `this_cCodigos` / `this_cDescs` ÔÇö filtro de mailing (SigMlItn)
+- `this_nImpEnderecos/Telefones/Classif/Repres/DtCom` ÔÇö checkboxes (valor num├®rico 1/0, padr├úo 1)
+- `this_nOrdemImpressao` / `this_nOrdemDirecao` ÔÇö optiongroups de ordena├º├úo
+- `this_cCaminhoFRX` / `this_cTituloRelatorio` / `this_cSubtituloRelatorio` ÔÇö dados do relat├│rio
+
+`Init()` configura tabela (`SigMlCab`), chave (`cIdChaves`), t├¡tulo com CHR() e path do FRX, depois chama `DODEFAULT()`. Pr├│xima fase: `PrepararDados()` com a l├│gica de SQL + indexa├º├úo do cursor `Relacao`.

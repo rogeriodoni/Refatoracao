@@ -1,0 +1,7 @@
+﻿Fase 6 conclu├¡da. As duas corre├º├Áes foram aplicadas:
+
+**Corre├º├úo 1 ÔÇö Inicializa├º├úo do rodap├® ap├│s carga** (`InicializarForm`, linhas 109-118): O legado original (`SelecionaDados`) populava explicitamente `grdRodape.Column1.Text1.Value = "Empresa Destino : " + crGrade.EmpDs` ap├│s carregar os dados. A migra├º├úo dependia do `AfterRowColChange` disparar via `SetFocus()`, o que n├úo ├® garantido na carga inicial. Agora o form replica o comportamento exato do original.
+
+**Corre├º├úo 2 ÔÇö Declara├º├úo LOCAL faltando** (`GrdRodapeCol1GotFocus`, linha 690): Adicionado `LOCAL loc_oErro` para consist├¬ncia com os demais m├®todos do form.
+
+**Por que n├úo h├í lookups ou campos adicionais:** Esta form ├® OPERACIONAL pura ÔÇö todos os grids s├úo `ReadOnly=.T.`, o campo `getRClis` tem `When Return .F.` (bloqueia foco), e o original n├úo cont├®m F4/F5, `fwBuscaExt` ou `sigacess`. A Fase 5 j├í havia implementado todos os componentes da UI completa. O arquivo permanece em 757 linhas e est├í funcionalmente completo.

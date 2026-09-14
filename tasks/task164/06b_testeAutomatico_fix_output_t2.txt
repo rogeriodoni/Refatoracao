@@ -1,0 +1,7 @@
+﻿All 5 fixes are confirmed. Summary of what was changed in `FormSIGPRCNB.prg`:
+
+1. **Line 1101 (compile error ÔÇö root cause)**: `SEEK PADR(loc_cCod, 12) TAG FpagSgru` ÔåÆ `SEEK PADR(loc_cCod, 12) ORDER TAG FpagSgru`. VFP9 requires `ORDER` before `TAG` in SEEK; without it the compiler rejected the file silently, making `CREATEOBJECT("FormSIGPRCNB")` fail with "Class definition not found."
+
+2. **Line 89 (runtime error)**: Removed `loc_oPgf.ErasePage = .T.` ÔÇö `ErasePage` is not a VFP9 PageFrame property.
+
+3. **ImpBoleto, BtnVisualizarClick, BtnExcluirClick**: Replaced `RETURN` inside `TRY` blocks with `ELSE` / `ENDIF` restructuring ÔÇö VFP9 Rule 1 compliance.

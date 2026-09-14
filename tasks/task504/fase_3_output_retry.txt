@@ -1,0 +1,13 @@
+﻿FASE 3 conclu├¡da. Criei `C:\4c\projeto\app\forms\cadastros\FormProduto.prg` (270 linhas) com a estrutura base:
+
+**Estrutura implementada:**
+- `DEFINE CLASS FormProduto AS FormBase` com propriedades visuais (Width=1010, Height=600, Caption="Cadastro de Produtos")
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (evita duplica├º├úo de InicializarForm)
+- `InicializarForm()` ÔÇö cria `ProdutoBO`, chama `ConfigurarPageFrame`, propaga Caption para labels
+- `ConfigurarPageFrame()` ÔÇö PageFrame com 2 pages (Lista/Dados), Top=-29, Tabs=.F.
+- `ConfigurarPaginaLista()` ÔÇö cria `cnt_4c_Cabecalho` (com lbl_4c_Sombra + lbl_4c_Titulo), `cnt_4c_Botoes` (vazio, can├┤nico Left=542) e `cnt_4c_Saida` (vazio, can├┤nico Left=917)
+- `ConfigurarPaginaDados()` ÔÇö cria `cnt_4c_BotoesAcao` (vazio, can├┤nico Left=842)
+- `TornarControlesVisiveis()` ÔÇö helper recursivo
+- `Destroy()` ÔÇö libera BO e cursores
+
+**N├úo inclu├¡do (fases seguintes):** bot├Áes CRUD, grid, TextBoxes, pgframeDados interno com 8 abas, eventos ÔÇö conforme escopo da FASE 3.

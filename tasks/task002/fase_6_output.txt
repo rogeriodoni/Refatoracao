@@ -1,0 +1,16 @@
+﻿Matches the BO properties exactly (`this_cCodigo`, `this_cDescricao`, `this_cDiretor`). Fase 6 conclu├¡da.
+
+**Resumo das altera├º├Áes:**
+
+1. **3 OptionGroups adicionados** em `ConfigurarPaginaDados()` com posi├º├Áes exatas do legado (+29px compensa├º├úo):
+   - `opt_4c_Subclas` (nchksubs) ÔÇö "Obriga Subclas. Encerramento"
+   - `opt_4c_Tipos` (nchktipos) ÔÇö "Tipo"
+   - `opt_4c_Autos` (autos) ÔÇö "Autom├ítico" ÔÇö default Value=2 (N├úo) conforme legado
+
+2. **DblClick para txt_4c_Diretores** ÔÇö BINDEVENT + handler `DiretoresDblClick()` adicionados
+
+3. **Bug corrigido** ÔÇö `FormParaBO`/`BOParaForm` usavam nomes errados (`this_cCodigos`ÔåÆ`this_cCodigo`, `this_cDescricaos`ÔåÆ`this_cDescricao`, `this_cDiretors`ÔåÆ`this_cDiretor`)
+
+4. **`LimparCampos()`** ÔÇö OptionGroups resetados para Value=2 (N├úo)
+
+5. **`HabilitarCampos()`** ÔÇö OptionGroups inclu├¡dos no habilitar/desabilitar conforme modo

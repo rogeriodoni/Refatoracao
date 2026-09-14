@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. A Fase 4/8 foi implementada com sucesso.
+
+**Resumo do que foi adicionado:**
+
+1. **`InicializarForm`** ÔÇö atualizado para chamar os 6 novos m├®todos de configura├º├úo visual ap├│s o processamento de dados.
+
+2. **`ConfigurarGrades()`** ÔÇö cria `grd_4c_Dados` (Grade principal, 6 colunas: Prioridade/editable, Emp, Opera├º├úo, Codigo, Cliente, Prazo.Entrega) e `grd_4c_Itens` (GradeItem, 4 colunas: Envelope, O.P., Produto, Qtde) com todas as propriedades originais.
+
+3. **`ConfigurarBotoes()`** ÔÇö cria `cmd_4c_Confirmar` (Salva, esq=650) e `cmd_4c_Cancelar` (Sair, esq=725) com ├¡cones e estilo Comic Sans.
+
+4. **`ConfigurarControlesAuxiliares()`** ÔÇö cria `txt_4c_Info` (fundo azul, exibe Emps+Dopes+Numes), `txt_4c_Cliente` (fundo amarelo, readonly), labels e `cbo_4c_Ordenacao` (combo Operacao/Cliente/Prazo Entrega/Prioridade).
+
+5. **`ConfigurarImagemProduto()`** ÔÇö cria `shp_4c_Shape4` e `img_4c_FigJpg` (ambos `Visible=.F.`, aparecem s├│ quando h├í foto do produto).
+
+6. **`CarregarGrades()`** ÔÇö vincula `RecordSource`/`ControlSource` nos dois grids, popula o combo com default "Prazo Entrega" e dispara `GrdDadosAfterRowColChange`.
+
+7. **`VincularEventos()`** ÔÇö BINDEVENTs para AfterRowColChange das duas grades, LostFocus do Column1.Text1 de cada grade, InteractiveChange do combo, Click dos dois bot├Áes.
+
+8. **Handlers de eventos** ÔÇö `GrdDadosAfterRowColChange`, `GrdItensAfterRowColChange` (com SQL para foto do produto), `GrdDadosCol1LostFocus`/`GrdItensCol1LostFocus` (TAB entre grades), `CboOrdenacaoInteractiveChange` (re-indexa cursor), `BtnConfirmarClick` (SCAN + UPDATE SigMvCab + SQLCOMMIT), `BtnCancelarClick` (confirma├º├úo + Release).

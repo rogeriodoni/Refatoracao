@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. A Fase 4 foi conclu├¡da com sucesso.
+
+**O que foi feito:**
+
+1. **`ConfigurarFiltros()`** ÔÇö novo m├®todo que adiciona os 6 controles de filtro na `Page1` do PageFrame, com posi├º├Áes exatas do original (convertidas de coordenadas absolutas do form para coordenadas relativas ├á page):
+   - `lbl_4c_Label1` ("Nota :") ÔÇö original top=96, page-relativo top=16
+   - `txt_4c_NotaIni` ÔÇö original top=92, page-relativo top=12, width=52
+   - `lbl_4c_Label2` ("a")
+   - `txt_4c_NotaFim` ÔÇö original top=92, page-relativo top=12, width=52
+   - `lbl_4c_Label3` ("N├║mero de c├│pias :") ÔÇö com CHR(250)/CHR(243)
+   - `txt_4c_Copias` ÔÇö original top=124, page-relativo top=44, width=31
+
+2. **`AtualizarEstadoCampos()`** ÔÇö equivalente ao evento `When` do legado: bloqueia `txt_4c_NotaIni` e `txt_4c_NotaFim` quando EDNs foi passado como par├ómetro junto com os valores das notas (chamada contextual de outro form).
+
+3. **`InicializarForm()`** ÔÇö agora chama `ConfigurarFiltros()` e `AtualizarEstadoCampos()` ap├│s o PageFrame.
+
+4. **`LimparCampos()`** ÔÇö atualizado para popular os campos visuais (`txt_4c_NotaIni`, `txt_4c_NotaFim`, `txt_4c_Copias`) al├®m de sincronizar o BO.
+
+5. **`FormParaRelatorio()`** ÔÇö atualizado para ler os valores atuais dos campos visuais (o usu├írio pode ter alterado NotaIni/NotaFim/Copias) em vez de usar apenas as propriedades fixas do Init.

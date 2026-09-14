@@ -1,0 +1,12 @@
+﻿Ambos os arquivos agora t├¬m exatamente um `DEFINE CLASS` e um `ENDDEFINE`. As tr├¬s corre├º├Áes da Fase 6 foram aplicadas:
+
+1. **Bug cr├¡tico corrigido**: `ENDDEFINE` adicionado ao final de `sigredocBO.prg` (linha 1931) ÔÇö sem isso o arquivo n├úo compilava.
+
+2. **Menu atualizado** (`menu.prg`):
+   - `DEFINE BAR 92` (separador) e `DEFINE BAR 93 "Impress├úo de Documento"` adicionados ├á defini├º├úo do popup
+   - `ON SELECTION BAR 93 OF popRelatorios DO AbrirFormsigredoc` adicionado
+   - Procedure `AbrirFormsigredoc()` adicionado seguindo o padr├úo can├┤nico do sistema
+
+3. **config.prg n├úo precisa de altera├º├úo**: usa `ADIR()` para carregar dinamicamente todos os `*BO.prg` e `Form*.prg`, portanto `sigredocBO.prg` e `Formsigredoc.prg` ser├úo carregados automaticamente.
+
+O form j├í estava completo desde as fases anteriores (todos os 20 controles do original migrados, valida├º├Áes, l├│gica de exclus├úo m├║tua datas/n├║meros, etc.). A fase 6 para este form REPORT n├úo tinha lookups F4/F5 para implementar (o original n├úo possui ÔÇö apenas valida├º├úo de c├│digo de opera├º├úo via SQL).

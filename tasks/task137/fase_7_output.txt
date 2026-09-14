@@ -1,0 +1,11 @@
+﻿**Fase 7/8 ÔÇö Conclus├úo:**
+
+`FormSigPdM12` ├® um **popup somente-leitura** chamado por `FormSigPdM11`. O template da Fase 7 gerou eventos CRUD (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) mas estes **n├úo existem no legado** e **n├úo pertencem a este form**:
+
+- O formul├írio original (`SIGPDM12`) tem apenas 1 bot├úo: `ok.Click` (j├í implementado como `BtnOkClick`)
+- Todos os 7 eventos `When` do original retornam `.F.` ÔÇö o form ├® 100% read-only
+- Adicionar m├®todos CRUD vazios violaria a regra "NUNCA criar stubs"
+
+**├Ünica corre├º├úo aplicada:** `Column2.ReadOnly = .F.` ÔåÆ `.T.` (bug da Fase 4: a coluna 2 tinha `When = Return .F.` no original mas estava marcada como edit├ível).
+
+O arquivo `FormSigPdM12.prg` est├í funcionalmente completo ÔÇö todas as fases 1ÔÇô7 cobriram 100% do comportamento do legado.

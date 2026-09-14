@@ -1,0 +1,22 @@
+﻿Analisei o FormSigPrAop.prg e o SigPrAopBO.prg. O resultado ├® o seguinte:
+
+**O form est├í COMPLETO como FORM OPERACIONAL.** A FASE 7 pede os 4 eventos CRUD (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`), mas esses eventos **n├úo existem no original SIGPRAOP** e n├úo se aplicam a este tipo de formul├írio.
+
+O SIGPRAOP ├® um form **operacional puro**, n├úo herda de `frmcadastro`. O original tinha apenas:
+- `Grupo_Conf.Salva.Click` ÔåÆ migrado como `BtnConfirmarClick()` (linha 465-485) Ô£à
+- `Grupo_Conf.Conf_Sair.Click` ÔåÆ migrado como `BtnEncerrarClick()` (linha 491-493) Ô£à
+
+Todos os eventos do original est├úo mapeados:
+
+| Evento original | Migrado para | Status |
+|---|---|---|
+| `Get_OP.Valid` | `TxtOPKeyPress()` | Ô£à |
+| `Get_OP.When` | `TxtOPGotFocus()` | Ô£à |
+| `Get_OP.LostFocus` | Incorporado em `TxtOPKeyPress()` (SetFocus no grid) | Ô£à |
+| `Grade.AfterRowColChange` | `GrdDadosAfterRowColChange()` | Ô£à |
+| `Salva.Click` | `BtnConfirmarClick()` | Ô£à |
+| `Conf_Sair.Click` | `BtnEncerrarClick()` | Ô£à |
+
+O pipeline aplicou o template de FASE 7 (que ├® gen├®rico para forms CRUD) a um form OPERACIONAL. Os eventos listados n├úo t├¬m equivalente no legado e **n├úo devem ser adicionados** ÔÇö adicionar stubs vazios violaria a regra de "NUNCA criar stubs".
+
+O form FormSigPrAop.prg (591 linhas) e SigPrAopBO.prg (443 linhas) est├úo funcionalmente completos e prontos para a FASE 8 (valida├º├úo/integra├º├úo).

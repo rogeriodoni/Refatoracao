@@ -1,0 +1,296 @@
+*==============================================================================
+* RELATORIOBASE.PRG
+* Classe base para geracao de relatorios
+*
+* Responsabilidade: Padronizar criacao e impressao de relatorios VFP
+*
+* REGRAS APLICADAS:
+* - Nomenclatura: loc_ para locais, par_ para parametros, this_ para classe
+* - Herda de Custom
+* - Suporta visualizacao, impressao direta e exportacao PDF
+*==============================================================================
+
+DEFINE CLASS RelatorioBase AS Custom
+
+    *-- Propriedades do relatorio
+    this_cArquivoFRX = ""           && Caminho do arquivo .FRX
+    this_cTitulo = ""               && Titulo do relatorio
+    this_cCursorDados = ""          && Nome do cursor com dados
+    this_cFiltro = ""               && Filtro SQL adicional
+    this_cOrdenacao = ""            && Ordenacao dos dados
+    this_lVisualizarAntes = .T.     && Visualizar antes de imprimir
+    this_cMensagemErro = ""         && Mensagem de erro
+    this_cCaminhoExportacao = ""    && Caminho para exportacao PDF
+
+    *--------------------------------------------------------------------------
+    * INIT - Construtor
+    *--------------------------------------------------------------------------
+    PROCEDURE Init(par_cArquivoFRX, par_cTitulo)
+        IF VARTYPE(par_cArquivoFRX) = "C" AND !EMPTY(par_cArquivoFRX)
+            THIS.this_cArquivoFRX = ALLTRIM(par_cArquivoFRX)
+        ENDIF
+
+        IF VARTYPE(par_cTitulo) = "C" AND !EMPTY(par_cTitulo)
+            THIS.this_cTitulo = ALLTRIM(par_cTitulo)
+        ENDIF
+
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Visualizar - Visualiza o relatorio na tela
+    *--------------------------------------------------------------------------
+    PROCEDURE Visualizar()
+        LOCAL loc_lResultado, loc_cCursorAtual
+
+        loc_lResultado = .F.
+
+        * Validar arquivo FRX
+        IF !THIS.ValidarArquivoFRX()
+            RETURN .F.
+        ENDIF
+
+        * Preparar dados
+        IF !THIS.PrepararDados()
+            RETURN .F.
+        ENDIF
+
+        TRY
+            * Garantir que o cursor correto esta selecionado
+            IF !EMPTY(THIS.this_cCursorDados) AND USED(THIS.this_cCursorDados)
+                loc_cCursorAtual = ALIAS()
+                SELECT (THIS.this_cCursorDados)
+                GO TOP
+            ENDIF
+
+            REPORT FORM (THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
+
+            * Restaurar alias anterior
+            IF !EMPTY(loc_cCursorAtual) AND USED(loc_cCursorAtual)
+                SELECT (loc_cCursorAtual)
+            ENDIF
+
+            loc_lResultado = .T.
+        CATCH TO loc_oEx
+            THIS.this_cMensagemErro = "Erro ao visualizar relatorio: " + loc_oEx.Message
+            loc_lResultado = .F.
+        ENDTRY
+
+        * Limpar dados
+        THIS.LimparDados()
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Imprimir - Imprime o relatorio diretamente
+    *--------------------------------------------------------------------------
+    PROCEDURE Imprimir()
+        LOCAL loc_lResultado, loc_cCursorAtual
+
+        loc_lResultado = .F.
+
+        * Validar arquivo FRX
+        IF !THIS.ValidarArquivoFRX()
+            RETURN .F.
+        ENDIF
+
+        * Preparar dados
+        IF !THIS.PrepararDados()
+            RETURN .F.
+        ENDIF
+
+        TRY
+            * Garantir que o cursor correto esta selecionado
+            IF !EMPTY(THIS.this_cCursorDados) AND USED(THIS.this_cCursorDados)
+                loc_cCursorAtual = ALIAS()
+                SELECT (THIS.this_cCursorDados)
+                GO TOP
+            ENDIF
+
+            IF THIS.this_lVisualizarAntes
+                REPORT FORM (THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
+            ELSE
+                REPORT FORM (THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
+            ENDIF
+
+            * Restaurar alias anterior
+            IF !EMPTY(loc_cCursorAtual) AND USED(loc_cCursorAtual)
+                SELECT (loc_cCursorAtual)
+            ENDIF
+
+            loc_lResultado = .T.
+        CATCH TO loc_oEx
+            THIS.this_cMensagemErro = "Erro ao imprimir relatorio: " + loc_oEx.Message
+            loc_lResultado = .F.
+        ENDTRY
+
+        * Limpar dados
+        THIS.LimparDados()
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExportarPDF - Exporta o relatorio para PDF
+    * NOTA: VFP9 nao tem suporte nativo a PDF. Esta funcao exporta para HTML
+    *       e sugere impressao para PDF via driver de impressora PDF.
+    *--------------------------------------------------------------------------
+    PROCEDURE ExportarPDF(par_cArquivoPDF)
+        LOCAL loc_lResultado, loc_cArquivo, loc_cArquivoHTML, loc_cCursorAtual
+
+        loc_lResultado = .F.
+
+        * Definir nome do arquivo
+        IF EMPTY(par_cArquivoPDF)
+            loc_cArquivo = ADDBS(THIS.this_cCaminhoExportacao) + ;
+                          JUSTSTEM(THIS.this_cArquivoFRX) + "_" + ;
+                          DTOS(DATE()) + "_" + STRTRAN(TIME(), ":", "")
+        ELSE
+            loc_cArquivo = JUSTSTEM(par_cArquivoPDF)
+            IF !EMPTY(JUSTPATH(par_cArquivoPDF))
+                loc_cArquivo = ADDBS(JUSTPATH(par_cArquivoPDF)) + loc_cArquivo
+            ENDIF
+        ENDIF
+
+        * Usar extensao .html para exportacao (VFP9 nao suporta PDF nativo)
+        loc_cArquivoHTML = FORCEEXT(loc_cArquivo, "html")
+
+        * Validar arquivo FRX
+        IF !THIS.ValidarArquivoFRX()
+            RETURN .F.
+        ENDIF
+
+        * Preparar dados
+        IF !THIS.PrepararDados()
+            RETURN .F.
+        ENDIF
+
+        TRY
+            * Garantir que o cursor correto esta selecionado
+            IF !EMPTY(THIS.this_cCursorDados) AND USED(THIS.this_cCursorDados)
+                loc_cCursorAtual = ALIAS()
+                SELECT (THIS.this_cCursorDados)
+                GO TOP
+            ENDIF
+
+            * Exportar para HTML (suportado nativamente pelo VFP9)
+            REPORT FORM (THIS.this_cArquivoFRX) TO FILE (loc_cArquivoHTML) TYPE HTML
+
+            * Restaurar alias anterior
+            IF !EMPTY(loc_cCursorAtual) AND USED(loc_cCursorAtual)
+                SELECT (loc_cCursorAtual)
+            ENDIF
+
+            * Verificar se arquivo foi criado
+            IF FILE(loc_cArquivoHTML)
+                loc_lResultado = .T.
+                THIS.this_cMensagemErro = "Arquivo exportado: " + loc_cArquivoHTML + CHR(13) + CHR(13) + ;
+                                          "NOTA: VFP9 nao suporta PDF nativo." + CHR(13) + ;
+                                          "Abra o arquivo HTML e use 'Imprimir para PDF' do navegador."
+            ELSE
+                THIS.this_cMensagemErro = "Falha ao criar arquivo de exportacao"
+                loc_lResultado = .F.
+            ENDIF
+        CATCH TO loc_oEx
+            THIS.this_cMensagemErro = "Erro ao exportar relatorio: " + loc_oEx.Message
+            loc_lResultado = .F.
+        ENDTRY
+
+        * Limpar dados
+        THIS.LimparDados()
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarArquivoFRX - Valida se o arquivo FRX existe
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ValidarArquivoFRX()
+        IF EMPTY(THIS.this_cArquivoFRX)
+            THIS.this_cMensagemErro = "Arquivo de relatorio nao definido"
+            RETURN .F.
+        ENDIF
+
+        IF !FILE(THIS.this_cArquivoFRX)
+            THIS.this_cMensagemErro = "Arquivo de relatorio nao encontrado: " + THIS.this_cArquivoFRX
+            RETURN .F.
+        ENDIF
+
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * PrepararDados - Prepara os dados para o relatorio
+    * Subclasses devem sobrescrever este metodo
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE PrepararDados()
+        * Subclasses devem implementar a logica de busca de dados
+        * e criar o cursor com o nome definido em this_cCursorDados
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparDados - Limpa os cursores usados no relatorio
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE LimparDados()
+        IF !EMPTY(THIS.this_cCursorDados) AND USED(THIS.this_cCursorDados)
+            USE IN (THIS.this_cCursorDados)
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ObterMensagemErro - Retorna mensagem de erro
+    *--------------------------------------------------------------------------
+    PROCEDURE ObterMensagemErro()
+        RETURN THIS.this_cMensagemErro
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * DESTROY - Destrutor
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        THIS.LimparDados()
+    ENDPROC
+
+ENDDEFINE
+
+
+*==============================================================================
+* Exemplo de uso - Relatorio de Cores
+*==============================================================================
+* DEFINE CLASS RelatorioCores AS RelatorioBase
+*
+*     PROCEDURE Init()
+*         DODEFAULT("C:\4c\projeto\app\reports\RelCores.frx", "Relatorio de Cores")
+*         THIS.this_cCursorDados = "cursor_4c_RelCores"
+*         RETURN .T.
+*     ENDPROC
+*
+*     PROTECTED PROCEDURE PrepararDados()
+*         LOCAL loc_cSQL, loc_nResultado
+*
+*         loc_cSQL = "SELECT cods, descs, varias, Pesos, grupos, tpCors " + ;
+*                    "FROM SigCdCor"
+*
+*         IF !EMPTY(THIS.this_cFiltro)
+*             loc_cSQL = loc_cSQL + " WHERE " + THIS.this_cFiltro
+*         ENDIF
+*
+*         IF !EMPTY(THIS.this_cOrdenacao)
+*             loc_cSQL = loc_cSQL + " ORDER BY " + THIS.this_cOrdenacao
+*         ELSE
+*             loc_cSQL = loc_cSQL + " ORDER BY cods"
+*         ENDIF
+*
+*         loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorDados)
+*
+*         IF loc_nResultado < 0
+*             THIS.this_cMensagemErro = "Erro ao buscar dados para relatorio"
+*             RETURN .F.
+*         ENDIF
+*
+*         RETURN .T.
+*     ENDPROC
+*
+* ENDDEFINE

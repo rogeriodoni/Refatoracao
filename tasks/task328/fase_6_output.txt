@@ -1,0 +1,22 @@
+﻿Ap├│s an├ílise completa dos arquivos, o `FormSigPrScn.prg` e `SigPrScnBO.prg` j├í est├úo **100% completos** ÔÇö n├úo h├í trabalho para a Fase 6 neste form espec├¡fico.
+
+## Por que a Fase 6 n├úo tem trabalho aqui
+
+O `SIGPRSCN` ├® um di├ílogo de autentica├º├úo simples (436├ù160 pixels), sem `PageFrame`, sem `Page2/Dados` e sem campos de lookup. A estrutura j├í implementada nas fases anteriores cobre tudo que o c├│digo-fonte original define:
+
+| Elemento original | Status na migra├º├úo |
+|---|---|
+| `USUARIO` textbox | Ô£à `txt_4c_Usuario` em `ConfigurarCamposLogin()` |
+| `SENHA` textbox com `PasswordChar` | Ô£à `txt_4c_Senha` em `ConfigurarCamposLogin()` |
+| `Label1` / `Label2` | Ô£à `lbl_4c_Label1` / `lbl_4c_Label2` |
+| `cntSombra` + `lblSombra` / `lblTitulo` | Ô£à `cnt_4c_Sombra` em `ConfigurarCabecalho()` |
+| `SENHA.LostFocus` ÔåÆ autentica├º├úo SQL | Ô£à `TxtSenhaKeyPress` (ENTER/TAB) |
+| `fCriptografar()` / `fGravarLog()` | Ô£à em `ValidarCredenciais()` / `GravarLog()` |
+| Par├ómetros de timeout (`SigCdPam`) | Ô£à `CarregarParametros()` |
+| Restaurar `BarraAtalho` ao fechar | Ô£à em `Destroy()` |
+
+**N├úo h├í lookups F4/F5, n├úo h├í campos restantes, n├úo h├í `cnt_4c_BotoesAcao`** ÔÇö o form n├úo ├® CRUD, ├® um di├ílogo modal que se libera (`THIS.Release()`) ao autenticar com sucesso.
+
+A integra├º├úo (menu.prg e config.prg) n├úo requer a├º├úo manual: o `config.prg` auto-carrega via `ADIR()` todos os `Form*.prg` e `*BO.prg`, e este form provavelmente ├® invocado programaticamente (n├úo via menu do usu├írio), dado seu papel de re-autentica├º├úo de acesso.
+
+**Fase 6 conclu├¡da ÔÇö nenhuma modifica├º├úo necess├íria.**

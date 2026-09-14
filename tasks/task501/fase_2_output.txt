@@ -1,0 +1,9 @@
+﻿Phase 2 is complete. `prcBO.prg` (484 lines) has all CRUD methods:
+
+- **`Buscar()`** ÔÇö SELECT for grid (processos, emps, codigos)
+- **`CarregarPorCodigo(par_nCodigos)`** ÔÇö loads by PK into BO properties (`class` aliased as `tclass` to avoid reserved-word parse issue)
+- **`CarregarDoCursor()`** ÔÇö populates BO from cursor after SELECT
+- **`Inserir()`** / **`Atualizar()`** / **`ExecutarExclusao()`** (PROTECTED) ÔÇö full INSERT/UPDATE/DELETE with cascade (SigPcOoI ÔåÆ SigPcOog ÔåÆ SigPcOoP)
+- **`ObterProxCodigos()`** ÔÇö MAX+1 PK generation
+- **`SalvarItens(par_cProcessos, par_nCodigos)`** ÔÇö DELETE+INSERT child records from `csDestinos`/`csDestinoG` cursors, linking SigPcOoI rows to SigPcOog groups via `fkchaves`
+- **`AtualizarSigCdPrg()`** ÔÇö DELETE+INSERT in SigCdPrg registry table

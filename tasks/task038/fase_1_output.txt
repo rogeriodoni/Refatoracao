@@ -1,0 +1,12 @@
+﻿Fase 1/8 conclu├¡da. Arquivo `sigrebctBO.prg` criado com:
+
+- **12 propriedades `this_*`** mapeadas diretamente dos controles do formul├írio original:
+  - 2 datas de per├¡odo (`this_dDtInicial`, `this_dDtSaldo`)
+  - 2 pares c├│digo/descri├º├úo (moeda e empresa)
+  - 6 op├º├Áes num├®ricas com defaults id├¬nticos ao original (ex: `this_nOptConc = 2` pois `optconcilias.Value = 2`)
+  
+- **Propriedades do relat├│rio** (`this_cTitulo`, `this_cCaminhoFRX`, `this_cCursorDados`)
+
+- **`Init()`** completo com TRY/CATCH correto (RETURN fora do bloco), configurando t├¡tulo "Balancete" e caminho do FRX seguindo conven├º├úo `RelSigrebct.frx`
+
+Pr├│xima fase (2/8): implementar `PrepararDados()` com toda a l├│gica do `processamento` do original ÔÇö ├® a parte mais complexa, incluindo o SCAN em `SigMvCcr`, c├ílculo de saldos/cr├®ditos/d├®bitos por n├¡vel de conta e popula├º├úo do cursor `cursor_4c_Balancete`.

@@ -1,0 +1,14 @@
+﻿All functional fixes have been applied to `FormProduto.prg`. Here's a summary of what was changed:
+
+**Fixes applied (18 changes):**
+
+1. **cursor_4c_Lista** (lines 334-346): Added `SET NULL ON` before and `SET NULL OFF` after `CREATE CURSOR`, with `NULL` keyword on all 9 field definitions. Prevents "Field does not accept null values" errors when SQLEXEC populates the cursor.
+
+2. **grd_4c_Compo.Column14** and **grd_4c_SubCp.Column14**: Changed header `"Bloqueio"` ÔåÆ `"Matriz"` on both grids to match legacy display.
+
+3. **CarregarLista() added** to 13 `Validar*` methods before their CATCH blocks:
+   - `ValidarGrupoFiltro`, `ValidarCgruDados`, `ValidarCSGruDados`, `ValidarLinDados`, `ValidarColDados`, `ValidarIforDados`, `ValidarCodFinPDados`, `ValidarCodAcbDados`, `ValidarClassDados`, `ValidarCuniDados`, `ValidarCunipDados`, `ValidarFtio`, `ValidarCmkpc`
+
+4. **ConfigurarEventos()**: Added 4 BINDEVENT calls for `opt_4c_SituacaoCopia` (Page1/cnt_4c_Acabado), `opt_4c_SituacaoPro`, `opt_4c_ProdWeb`, `opt_4c_OpcVar` (all 3 on pgf_4c_DadosInterno.Page1).
+
+5. **4 PUBLIC handler methods added**: `SituacaoCopiaChange()`, `SituacaoProChange()`, `ProdWebChange()`, `OpcVarChange()` ÔÇö required because BINDEVENT handlers must be PUBLIC in VFP9.

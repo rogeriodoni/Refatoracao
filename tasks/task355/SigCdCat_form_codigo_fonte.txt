@@ -1,0 +1,554 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdCat.SCX
+* Data/Hora: 22/07/2026 04:25:31
+* Total de registros: 15
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCAT
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getPrazo
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Cods
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Desc2s
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Descs
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getGdeGrp
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say13
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDCAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT
+------------------------------------------------------------
+  DoCreate = .T.
+  Caption = (prompt())
+  placalterar = .T.
+  placexcluir = .T.
+  placinserir = .T.
+  Name = "SIGCDCAT"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 81
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 157
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 233
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 309
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 339
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 389
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 6
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.getPrazo
+------------------------------------------------------------
+  ControlSource = "crSigCdCat.prazos"
+  InputMask = "99"
+  Left = 301
+  TabIndex = 5
+  Top = 294
+  Width = 24
+  ZOrderSet = 1
+  Name = "getPrazo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.Say1
+------------------------------------------------------------
+  Caption = "Código :"
+  Left = 256
+  Top = 200
+  TabIndex = 7
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.Say5
+------------------------------------------------------------
+  Caption = "Descrição Completa :"
+  Left = 195
+  Top = 248
+  TabIndex = 9
+  ZOrderSet = 3
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.Say2
+------------------------------------------------------------
+  Caption = "Descrição :"
+  Left = 243
+  Top = 224
+  TabIndex = 8
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.Get_Cods
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigCdCat.Cods"
+  Format = "K"
+  InputMask = ""
+  Left = 301
+  TabIndex = 1
+  Top = 197
+  Width = 52
+  ZOrderSet = 6
+  Name = "Get_Cods"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.Get_Desc2s
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigCdCat.Desc2s"
+  Format = "K"
+  InputMask = ""
+  Left = 301
+  TabIndex = 3
+  Top = 245
+  Width = 290
+  ZOrderSet = 7
+  Name = "Get_Desc2s"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.Get_Descs
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigCdCat.Descs"
+  Format = "K"
+  InputMask = ""
+  Left = 301
+  TabIndex = 2
+  Top = 221
+  Width = 115
+  ZOrderSet = 7
+  Name = "Get_Descs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.getGdeGrp
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigCdCat.gdegrps"
+  Height = 23
+  Left = 301
+  MaxLength = 3
+  TabIndex = 4
+  Top = 270
+  Width = 34
+  ZOrderSet = 8
+  Name = "getGdeGrp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.Say13
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Gde.Grp.:"
+  Left = 248
+  Top = 273
+  Visible = .T.
+  Width = 50
+  TabIndex = 10
+  ZOrderSet = 9
+  Name = "Say13"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Dias"
+  Left = 329
+  Top = 298
+  Visible = .T.
+  Width = 22
+  TabIndex = 11
+  ZOrderSet = 10
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCAT.Pagina.Dados.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Alignment = 0
+  Caption = "Prazo de Entrega :"
+  Left = 206
+  Top = 297
+  Visible = .T.
+  Width = 92
+  TabIndex = 12
+  ZOrderSet = 10
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCAT
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Activate
+------------------------------------------------------------
+PROCEDURE Activate
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQryCat = [Select * From SigCdCat ]
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdCat', 'cIdChaves', 'crSigCdCat', '', ThisForm.Pagina.Lista.Grade, lcQryCat)
+			.pfSqlTabela(1).pColuna('Cods', '', '', 'Códigos', 52, .t.)
+			.pfSqlTabela(1).pColuna('descs', '', '', 'Descrição', 115, .t.)
+			.pfSqlTabela(1).pColuna('gdegrps', '', '', 'Gde. Grp', 50, .t.)
+			.pfSqlTabela(1).pColuna('prazos', '', '', 'Prazos', 30, .t.)
+		EndWith
+		Select crSigCdCat
+		Index On cods tag cods
+		Index On descs tag descs
+		Set Order To cods
+		=DoDefault()
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Set Near On
+IF !IsEmpty(thisform.pagina.dados.get_Cods.value)
+   SET ORDER TO TAG "Cods" IN crSigCdCat
+   Seek thisform.pagina.dados.get_Cods.value
+ENDIF
+
+IF !IsEmpty(thisform.pagina.dados.get_Descs.value)
+   SET ORDER TO TAG "Descs" IN crSigCdCat
+   Seek thisform.pagina.dados.get_Descs.value
+ENDIF
+Set Near Off
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.podatamgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Select crSigCdCat
+
+* posiciona o cursor de acordo com a opção
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )
+		thisform.pagina.dados.get_Cods.setfocus	
+
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		thisform.pagina.dados.get_Descs.setfocus	
+
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		thisform.pagina.dados.grupo_salva.salva.setfocus
+Endcase
+
+Select crSigCdCat
+ThisForm.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+lcCodigo = ThisForm.pagina.dados.get_Cods.Value
+
+If ThisForm.pcEscolha = 'INSERIR'
+	Replace cIdChaves With fUniqueIds() in crSigCdCat
+Endif
+
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCAT.Pagina.Dados.Get_Cods
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+IF Inlist( ThisForm.pcEscolha, 'ALTERAR', 'CONSULTAR', 'EXCLUIR' )
+   RETURN(.F.)
+ENDIF
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCAT.Pagina.Dados.Get_Desc2s
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCAT.Pagina.Dados.Get_Descs
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCAT.Pagina.Dados.getGdeGrp
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+if not IsEmpty(this.value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Grandes Grupos de Produtos', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.mAddColuna('Descs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	If Lastkey() = 27
+		This.Value = ''
+	Else
+		This.Value = crListaRemota.Codigos
+	Endif
+	Use In crListaRemota
+	this.refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

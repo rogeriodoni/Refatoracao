@@ -1,0 +1,33 @@
+﻿## Resultado da Verifica├º├úo ÔÇö Falsos Positivos
+
+Ap├│s comparar cada WHERE flaggado com o contexto do c├│digo, ambas as detec├º├Áes s├úo **falsos positivos**. Nenhuma altera├º├úo ├® necess├íria.
+
+---
+
+### ICLIS (linha 1223)
+
+```foxpro
+"SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE Iclis = " + EscaparSQL(loc_cCodigo)
+```
+
+Localiza├º├úo: m├®todo `ValidarVended()` ÔÇö ├® uma **query de valida├º├úo de lookup** (verifica se o c├│digo de vendedor digitado existe). `Iclis` ├® a PK de `SigCdCli` e ├® exatamente o que deve aparecer no WHERE dessa query. O original usava `a.Vends = c.Iclis` como JOIN nas queries principais ÔÇö o migrado mant├®m isso e adiciona a valida├º├úo de entrada, que ├® comportamento correto.
+
+Remover o WHERE deixaria a query retornar o primeiro registro da tabela ÔÇö funcionalidade quebrada.
+
+---
+
+### CMOES (linha 1380)
+
+```foxpro
+"SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + EscaparSQL(loc_cCodigo)
+```
+
+Localiza├º├úo: m├®todo `ValidarCmoeda()` ÔÇö query de valida├º├úo de lookup de moeda. `CMoes` ├® a PK de `SigCdMoe`. O original selecionava `o.cMoes` de `SigCdOpe` nas queries principais (coluna diferente, tabela diferente), mas a valida├º├úo usa `SigCdMoe.CMoes` que ├® a tabela correta para cadastro de moedas.
+
+---
+
+### Por que o validator flaggou
+
+O validator extraiu a lista de colunas do WHERE das **queries principais do relat├│rio** (`DOPES, NUMES, VALPRES, VALINIS, EMPDOPNUMS, CIDQUERYS, VENDS, OPERS, CEMPS, DATAS`) e verificou se todas as ocorr├¬ncias de WHERE no arquivo usam apenas essas colunas. `CMoes` e `Iclis` est├úo em **queries auxiliares de valida├º├úo** (m├®todos `ValidarCmoeda` e `ValidarVended`), n├úo nas queries do relat├│rio ÔÇö compara├º├úo de contexto diferente.
+
+**Nenhum arquivo foi alterado.** Os dois problemas detectados s├úo falsos positivos; o c├│digo est├í correto.

@@ -1,0 +1,916 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrecgp.SCX
+* Data/Hora: 16/05/26 16:11:54
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECGP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Container1
+  Parent: SIGRECGP
+  Class: container
+  BaseClass: container
+
+Objeto: Opc_Ordem
+  Parent: SIGRECGP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECGP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opc_Rel
+  Parent: SIGRECGP
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGRECGP
+  Class: label
+  BaseClass: label
+
+Objeto: Label1
+  Parent: SIGRECGP
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGP
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 300
+  Width = 800
+  DoCreate = .T.
+  Caption = "Relatório de Composição de Produtos"
+  lnval = .F.
+  Name = "SIGRECGP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = 0
+  cntSombra.ZOrderSet = 1
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.sair.Top = 5
+  btnReport.sair.Left = 230
+  btnReport.sair.Height = 75
+  btnReport.sair.Width = 75
+  btnReport.sair.Name = "sair"
+  btnReport.Height = 85
+  btnReport.Left = 495
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.TabIndex = 1
+  btnReport.ZOrderSet = 2
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 216
+  REGISTRY1.Left = 636
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGP.Container1
+------------------------------------------------------------
+  Top = 113
+  Left = 289
+  Width = 222
+  Height = 66
+  SpecialEffect = 0
+  TabIndex = 5
+  BackColor = 255,255,255
+  ZOrderSet = 0
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGP.Opc_Ordem
+------------------------------------------------------------
+  Height = 27
+  Left = 135
+  Top = 195
+  Width = 190
+  TabIndex = 3
+  ZOrderSet = 4
+  Name = "Opc_Ordem"
+  Option1.Caption = "Produto"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.Caption = "Ref.Fornecedor"
+  Option2.Left = 80
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGP.Say1
+------------------------------------------------------------
+  Caption = "Ordem : "
+  Left = 87
+  Top = 200
+  TabIndex = 4
+  ZOrderSet = 5
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGP.Opc_Rel
+------------------------------------------------------------
+  ButtonCount = 5
+  Height = 102
+  Left = 81
+  Top = 93
+  Width = 186
+  TabIndex = 2
+  ZOrderSet = 6
+  Name = "Opc_Rel"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Composição"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Themes = .F.
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Custo / Venda"
+  Option2.Left = 5
+  Option2.Top = 24
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Themes = .F.
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Composição Específica 1"
+  Option3.Height = 17
+  Option3.Left = 5
+  Option3.Top = 43
+  Option3.Width = 161
+  Option3.ForeColor = 90,90,90
+  Option3.Themes = .F.
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Composição Específica 2"
+  Option4.Height = 17
+  Option4.Left = 5
+  Option4.Top = 62
+  Option4.Width = 165
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+  Option5.FontName = "Tahoma"
+  Option5.FontSize = 8
+  Option5.BackStyle = 0
+  Option5.Caption = "Custo / Venda 2"
+  Option5.Height = 17
+  Option5.Left = 5
+  Option5.Top = 81
+  Option5.Width = 136
+  Option5.ForeColor = 90,90,90
+  Option5.Name = "Option5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGP.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 11
+  FontCondense = .F.
+  BackStyle = 0
+  Caption = "Selecionando Registros..."
+  Height = 20
+  Left = 304
+  Top = 144
+  Width = 193
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECGP.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 11
+  FontExtend = .T.
+  BackStyle = 0
+  Caption = "Aguarde !!!"
+  Height = 20
+  Left = 359
+  Top = 126
+  Width = 83
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECGP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE proccompesp1
+------------------------------------------------------------
+PROCEDURE proccompesp1
+Local lcImg, lcEmp, lcCompos, cMaoObraPro, cMaoObraGarra
+
+ThisForm.Container1.Visible = .T.
+ThisForm.Label1.Visible = .T.
+ThisForm.Label2.Visible = .T.
+
+Create Cursor Cabecalho(Empresa c(50), Titulos c(50), lImpTit l)
+Create Cursor crProCompos(cPros c(14), dPros c(40), PesoMs n(12,2), PVens n(12,2), Compos m,;
+					      DtIncs d, DataAlts d, CodGarras c(10), cProdPai c(14),;
+					      MoeVs c(3), PrecoGarra n(12,2), PesoGarra n(12,2),;
+					      MoeGarra c(3), cMObraPro c(50), cMObraGarra c(50),;
+					      Colecoes c(10))
+
+ThisForm.Podatamgr.CursorQuery('SigCdEmp', 'TmpEmp', 'Cemps', _Empr)
+lcEmp = TmpEmp.Razas
+
+Insert into Cabecalho(Empresa,Titulos,lImpTit) Values(lcEmp,'Composição Específica 1',.F.)
+
+** Cursor para produtos sem imagem
+m.lcImgJpg = ''
+If ThisForm.poDataMgr.CursorQuery('SigSyIco','crIcone1','carqicones','brjpg.jpg','carqicones,marqicones','carqicones')
+	Select ('crIcone1')
+	Locate 
+	m.lcImgJpg = Nvl(crIcone1.mArqIcones,'')
+EndIf 
+Create Cursor CrBranco (branco m)
+Select CrBranco
+Append Blank
+Replace Branco With m.lcImgJpg In crBranco
+
+Select crProdutos
+Go Top in crProdutos
+Scan
+
+	lcQuery = [Select b.CPros, MAX(b.dpros) as dpros, b.PVens, b.PesoMs, b.DtIncs, Max(c.DataAlts) as DataAlts, b.Colecoes, ] + ;
+			  [b.CodGarras, b.cProEqs, b.MoeVs, d.PVens as PrecoGarra, d.PesoMs as PesoGarra, ] + ;
+			  [d.MoeVs as MoeGarra ] + ;
+					[From SigCdPro b ] + ;
+					[Left Join SigCdPro d on d.cPros = b.CodGarras ] + ;
+					[Left Join SigCdPrc c on c.cPros = b.cPros ] + ;				
+				   [Where b.cPros = '] + crProdutos.cPros + [' ] + ;
+					     [Group by b.cPros, b.PVens, b.PesoMs, b.DtIncs, b.Colecoes, b.CodGarras, b.cProEqs, ] + ;
+					     [b.MoeVs, d.PVens, d.PesoMs, d.MoeVs ] + ;
+				   [Order By b.CPros]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crTmpPro') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpPro)')
+		Return 0
+	EndIf
+	
+	lcCompos = []	
+	cMaoObraPro   = []
+	cMaoObraGarra = []
+	lcQryComp = [Select a.cGrus, a.Mats, a.dCompos, a.Qtds, a.UniCompos, a.Pesos, a.cUniPs, ] + ;
+				[b.CustoFs, c.nTipoJoals from SigPrCpo a ] + ;
+				[Inner join SigCdPro b on b.cPros = a.Mats ] + ;
+				[Inner join SigCdGrp c on c.cGrus = a.cGrus ] + ;
+				[where a.cPros = ']+crTmpPro.cPros+[']
+	If (ThisForm.poDataMgr.SQLExecute(lcQryComp,[crTmpCompo]) < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crTmpCompo)')
+		Return 0
+	EndIf
+	Select crTmpCompo
+	Scan
+		If( crTmpCompo.nTipoJoals == 4 )
+			cMaoObraPro = cMaoObraPro + Iif(!Empty(cMaoObraPro),[/],[]) + Alltrim(crTmpCompo.Mats)
+		Endif
+		lcCompos = lcCompos + Iif(Not Empty(lcCompos),Chr(13)+Chr(10),[])
+		lcCompos = lcCompos + crTmpCompo.Mats + [  ] + Left(crTmpCompo.dCompos,34) + [ ] + ;
+				   Transform(crTmpCompo.Qtds,'9999.999') + [ ] + crTmpCompo.UniCompos + [ ] + ;
+				   Transform(crTmpCompo.Pesos,'9999.999') + [ ] + crTmpCompo.cUniPs
+	EndScan	
+
+	** Mão de Obra da Garra
+	If !IsEmpty(crTmpPro.CodGarras)
+		lcQryMObra = [Select a.Mats from SigPrCpo a ] + ;
+					 [Inner Join SigCdPro b on b.cPros = a.Mats ] + ;
+					 [Inner Join SigCdGrp c on c.cGrus = a.cGrus ] + ;
+					 [Where a.cPros = ']+crTmpPro.CodGarras+[' ] + ;
+					 [And c.nTipoJoals = 4]
+		If (ThisForm.poDataMgr.SQLExecute(lcQryMObra,[crMaoObra]) < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crMaoObra)')
+			Return 0
+		EndIf
+		Select crMaoObra
+		Scan
+			cMaoObraGarra = cMaoObraGarra + Iif(!Empty(cMaoObraGarra),[/],[]) + Alltrim(crMaoObra.Mats)
+		EndScan			
+	Endif		
+
+	ThisForm.podatamgr.CursorQuery([SigCdPro],[crLocPro],[cPros],crTmpPro.cPros,[FigJpgs]) 
+	xImg = AllTrim(fLimpaString(CrTmpPro.Cpros))	&& Mena 02/05/2017 troca forma de limpar o nome do arquivo para ficar igual ao report &&Strtran(Strtran(CrTmpPro.Cpros,'/',''),' ','')
+
+	lcArquivo = Sys(2023) + '\T' + xImg + '.jpg'
+	Clear Resources
+	If !IsEmpty(crLocPro.FigJpgs)
+		lcFoto=Strconv(Strtran(Strtran(Strtran(crLocPro.figjpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+		*Copy Memo crLocPro.figjpgs To (lcArquivo)
+	Else
+		lcFoto=Strconv(Strtran(Strtran(Strtran(crBranco.Branco,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+		*Copy Memo crBranco.Branco to (lcArquivo)
+	EndIf
+	StrToFile(lcFoto, lcArquivo)
+	
+	** Insere no cursor
+	Insert into crProCompos(cPros,dPros,PesoMs,PVens,Compos,DtIncs,DataAlts,CodGarras,cProdPai,;
+						  	MoeVs,PrecoGarra,PesoGarra,MoeGarra,cMObraPro,cMObraGarra,Colecoes);
+						  	Values(;
+						  	crTmpPro.cPros, crTmpPro.dPros, crTmpPro.PesoMs, crTmpPro.PVens,;
+						  	lcCompos,Nvl(crTmpPro.DtIncs,Ctod('')),Nvl(crTmpPro.DataAlts,Ctod('')),;
+						  	crTmpPro.CodGarras,crTmpPro.cProEqs,crTmpPro.MoeVs,;
+						  	Nvl(crTmpPro.PrecoGarra,0),Nvl(crTmpPro.PesoGarra,0),Nvl(crTmpPro.MoeGarra,''),;
+						  	cMaoObraPro,cMaoObraGarra,crTmpPro.Colecoes)
+
+EndScan
+
+ThisForm.Container1.Visible = .F.
+ThisForm.Label1.Visible = .F.
+ThisForm.Label2.Visible = .F.
+
+Select crProCompos
+Go Top in crProCompos
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+If ThisForm.Opc_Rel.Value = 1
+	Report Form SigReCgp To Print Prompt NoConsole
+ENDIF
+If INLIST(ThisForm.Opc_Rel.Value,2)		&& mena - 05/03/3017 - incluida opcao 5 JAL
+	Report Form SigReCg1 To Print Prompt NoConsole
+endif
+If INLIST(ThisForm.Opc_Rel.Value,5)		&& mena - 13/04/3017 - novo report para opcao 5 JAL
+	Report Form SigReCg2 To Print Prompt NoConsole
+ENDIF
+If ThisForm.Opc_Rel.Value = 3
+	Report Form SigPrCpr To Print Prompt NoConsole
+Endif		
+*** mena - 01/09/2016 - inclusao de novo formato - igual ao rel 3 sem alguns campos
+If ThisForm.Opc_Rel.Value = 4
+	Report Form SigPrCp2 To Print Prompt NoConsole
+Endif		
+
+lcApagar = Sys(2023) + '\F*.Jpg'
+Delete File &lcApagar.
+
+If Used('csCabecalho')
+	Use In csCabecalho
+Endif
+If Used('Relatorio')
+	Use In Relatorio
+Endif
+If Used('csRelatorio')
+	Use In csRelatorio
+Endif
+If Used('csMoedas')
+	Use In csMoedas
+EndIf
+If Used('Cabecalho')
+	Use in Cabecalho
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters loForm
+
+ThisForm.parentform = loForm
+DoDefault()
+Thisform.poDataMgr = CreateObject('fSqlConector')
+
+ThisForm.Container1.Visible = .F.
+ThisForm.Label1.Visible = .F.
+ThisForm.Label2.Visible = .F.
+
+*** Só habilita tipo de relatorio 5 se houver filtro por movimentação ***
+WITH thisform.parentform.fld_principal.pag_Consulta.filtro.principal
+	thisform.opc_Rel.option5.Enabled=.get_operaçãoi.value<>0
+ENDWITH
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lcEmpresa, lcTitulo, lcSubtit, lcGrupo, llImpImag
+Local lcApagar, lcBrancos, lcEDN
+public pcTotais
+
+llImpImag = .T.
+
+lnOrdem = ThisForm.Opc_Ordem.Value
+lnTpRel = ThisForm.Opc_Rel.Value
+
+ThisForm.lnval = Iif(INLIST(lnTpRel,2),1,0)
+
+If( INLIST(lnTpRel,3,4) )	&& mena 01/09/2016 - incluido relatorio tipo 4
+	ThisForm.ProcCompEsp1()
+	Return
+Endif
+
+******   Criação do Cabeçalho do Relatório   *****
+Create Cursor csCabecalho (NomeEmpresa c(80), Titulo c(200), ImpImagem l(1))
+Select CrSigCdEmp
+Go Top
+lcEmpresa = _empr + ' - ' + IIf(!IsEmpty(CrSigCdEmp.razas),AllTrim(CrSigCdEmp.razas),'')
+lcTitulo  = 'RELATÓRIO DE COMPOSIÇÃO DE PRODUTOS'
+
+Insert Into csCabecalho (NomeEmpresa, Titulo, ImpImagem) Value (lcEmpresa, lcTitulo, llImpImag)
+
+*********   Criação da Imagem em Branco Para o Relatório   ***********************************
+lcBrancos = Addbs(JustPath(ThisForm.poDataMgr.GetDatabase())) + 'BrJpg.JPG'
+Create Cursor CrBranco (Branco M)
+Select CrBranco
+Append Blank
+Append Memo Branco From (lcBrancos) OverWrite
+Copy Memo CrBranco.Branco to Sys(2023)+'\FBRANCOS.JPG'
+
+*********   Criação das Selects com os Dados do Relatório   **********************************
+Set Talk On
+Set Talk Window
+
+ThisForm.Container1.Visible = .T.
+ThisForm.Label1.Visible = .T.
+ThisForm.Label2.Visible = .T.
+
+If Used('Tmp_Memos')
+	Use In Tmp_Memos
+EndIf
+
+Create Cursor Tmp_Memos (Cids c(1), Imagem m, ValTot m, MoeTot m)
+
+If Used('Tmp_Compos')
+	Use in Tmp_Compos
+EndIf
+
+*** mena - 14/04/2017 - pega filtro de operacao 
+WITH thisform.parentform.fld_principal.pag_Consulta.filtro.principal
+	lcEDN = ALLTRIM(.getempso.value)+PADR(ALLTRIM(.get_operação.value),20)+PADL(ALLTRIM(STR(.get_operaçãoi.value)),6)
+ENDWITH
+
+IF INLIST(lnTpRel,5)		&& mena Seleciona dados da operação para relatorio tipo 5 - JAL - 13/04/2017
+		ThisForm.poDataMgr.SqlExecute([ Select a.cpros,a.mats,a.dcompos,a.cats,a.qtscons*b.qtds as qtscons,a.unicompos,]+;
+					[a.moeds,a.cgrus,a.obscompos,a.etiqs,a.vlrcvs,a.qtdcvs*b.qtds as qtdcvs,a.qtds,a.pcompos, b.totas, b.moedas ]+;
+			   [From SigPrCpo a, sigmvitn b where b.cpros = a.cpros and empdopnums = ']+lcEDN+['],'TmpAux')
+		
+	*** acumula valores por mats ***
+	SELECT cpros, mats, MAX(dcompos) as dcompos,MAX(cats) as cats, SUM(ROUND(qtscons,3)) as qtscons, MAX(unicompos) as unicompos, MAX(moeds) as moeds, ;
+	MAX(cgrus) as cgrus, MAX(obscompos) as obscompos, MAX(etiqs) as etiqs, SUM(vlrcvs) as vlrcvs, SUM(ROUND(qtdcvs,3)) as qtdcvs, SUM(qtds) as qtds, ;
+	SUM(pcompos) as pcompos, 00000000.00 as valtotmoe, 0 as ps from TmpAux group by cpros, mats into cursor AuxCompos readwrite
+	
+	*** acumula qtscons por produto ***
+	SELECT cpros, 'xxxxxxxxxxxxxx' as mats, SUM(qtscons) as qtscons from AuxCompos group by cpros into cursor AuxCons
+	
+	*** acumula qtdcvs por unicomps/produto ***
+	SELECT cpros, 'xxxxxxxxxxxxxx' as mats, unicompos, SUM(qtdcvs) as qtdcvs from AuxCompos group by cpros,unicompos into cursor AuxMat
+
+	*** acumula valtotmoe por moeds/produto ***
+	SELECT cpros, 'xxxxxxxxxxxxxx' as mats, moeds, SUM(vlrcvs*qtdcvs) as valtotmoe  from AuxCompos group by cpros,moeds into cursor AuxMoe
+
+	*** acumula geral por material ***
+	SELECT mats, dcompos, unicompos, MAX(moeds) as moeds, SUM(qtscons) as qtscons, SUM(qtdcvs) as qtdcvs, SUM(vlrcvs*qtdcvs) as valtotmoe ;
+	from AuxCompos group by mats, dcompos, unicompos  into cursor AuxG
+
+	SELECT AuxCons
+	GO top
+	SCAN
+		SELECT AuxCompos
+		LOCATE for cpros = AuxCons.cpros and mats = 'xxxxxxxxxxxxxx' and qtscons=0
+		IF !FOUND()
+			APPEND BLANK
+			replace ps with 1
+		ENDIF
+		replace mats with 'xxxxxxxxxxxxxx'
+		replace cgrus with 'xxx'
+		replace cpros with AuxCons.cpros
+		replace qtscons with AuxCons.qtscons
+		SELECT AuxCons
+	ENDSCAN
+	
+	SELECT AuxMat
+	GO top
+	SCAN
+		SELECT AuxCompos
+		LOCATE for cpros = AuxMat.cpros and mats = 'xxxxxxxxxxxxxx' and unicompos='   '
+		IF !FOUND()
+			APPEND BLANK
+		ENDIF
+		replace mats with 'xxxxxxxxxxxxxx'
+		replace cgrus with 'xxx'
+		replace cpros with AuxMat.cpros
+		replace unicompos with AuxMat.unicompos
+		replace qtdcvs with AuxMat.qtdcvs
+		SELECT AuxMat
+	ENDSCAN
+
+	SELECT AuxMoe
+	GO top
+	SCAN
+		SELECT AuxCompos
+		LOCATE for cpros = AuxMoe.cpros and mats = 'xxxxxxxxxxxxxx' and moeds='   '
+		IF !FOUND()
+			APPEND BLANK
+		ENDIF
+		replace mats with 'xxxxxxxxxxxxxx'
+		replace cgrus with 'xxx'
+		replace cpros with AuxMoe.cpros
+		replace moeds with AuxMoe.moeds
+		replace valtotmoe with AuxMoe.valtotmoe
+		SELECT AuxMoe
+	ENDSCAN
+
+	SELECT * from AuxCompos order by cpros, mats into cursor tmp_compos readwrite
+
+	SELECT cpros, MAX(totas) as totas, MAX(moedas) as moedas from TmpAux group by cpros into cursor TmpMov readwrite
+
+
+	SELECT AuxG
+	GO top
+	pcTotais = 'TOTAIS POR MATERIAL' +CHR(10)
+	pcTotais = pcTotais+ 'Material      Descricao                                  Consumo      Qtde Un      Total' +CHR(10)
+	pcTotais = pcTotais+ '___________________________________________________________________________________________' +CHR(10)
+	SCAN
+		pcTotais = pcTotais + AuxG.mats + dcompos + TRANSFORM(qtscons, '@R 999999.999') + TRANSFORM(qtdcvs, '@R 999999.999') +' '+unicompos+;
+				   TRANSFORM(valtotmoe, '@R 9999999.99')+' '+ moeds +CHR(10)
+	ENDSCAN
+
+
+
+
+ELSE
+	ThisForm.poDataMgr.SqlExecute([ Select a.cpros,a.mats,a.dcompos,a.cats,a.qtscons,a.unicompos,]+;
+				[a.moeds,a.cgrus,a.obscompos,a.etiqs,a.vlrcvs,a.qtdcvs,a.qtds,a.pcompos, 00000000.00 as valtotmoe, 0 as ps ]+;
+		   [From SigPrCpo a ],'Tmp_Compos')
+ENDIF
+
+	 Select a.cpros      As Codigo, ;
+			a.dpros      As Descricao, ;
+			Space(10)    As Linha, ;
+			Space(3)     As Unidade, ;
+			000000.00    As Peso, ;
+			00000000.00  As PreCusto, ;
+			Space(3)     As MoeCusto, ;
+			00000000.00  As PreVenda, ;
+			Space(3)     As MoeVenda, ;
+			000000000.00 As PreIdeal, ;
+			Space(3)     As MoeIdeal, ;
+			c.mats       As CodMateria, ;
+			c.dcompos    As DesMateria, ;
+			c.cats       As Categoria, ;
+			c.qtscons    As Consumo, ;
+			Iif(lnTpRel = 1,c.qtds,c.qtdcvs)    As Quantidade, ;
+			c.unicompos  As UniMateria, ;
+			Iif(lnTpRel = 1,c.pcompos,c.vlrcvs) As ValMateria, ;
+			c.moeds      As MoeMateria, ;
+			c.cpros + c.cgrus As Grupos, ;
+			999999       As Quadro, ;
+			Space(8)     As OrdImg, ;
+			Space(15)    As RefFor, ;
+			c.obscompos  As Observa, ;
+			Space(6)     As SubGrupo, ;
+			c.etiqs      As Imprime, ;
+		   	c.cgrus      As GruProd, ;
+		   	Space(20)    As DesGrupo, ;
+		   	c.valtotmoe  As valtotmoe, ;
+		   	c.ps   		 As Ps ;
+	   From CrProdutos a, Tmp_Compos c ;
+	  Where a.cpros = c.cpros And IIf(INLIST(lnTpRel,2),c.vlrcvs # 0,.T.) ;
+   Order By Grupos ;
+Into Cursor CsRels
+Set Talk Off
+
+	 Select a.*,b.Imagem,b.ValTot,b.MoeTot ;
+	   From CsRels a ;
+	   Full Join Tmp_Memos b On b.cids = ' ' ;
+Into Cursor CsRelatorio
+Use In CsRels
+
+If Used('Relatorio')
+	Use in Relatorio
+EndIf
+
+Use Dbf( 'CsRelatorio' ) Alias Relatorio In 0 Again
+
+Select Relatorio
+Go Top
+Scan
+	lcCodPro = Relatorio.Codigo
+
+	If Used('TmpProds')
+		Use In TmpProds
+	EndIf
+	
+	IF INLIST(lnTpRel,5)	&& mena 13/04/2017 se tipo de impressao = 5 pega preco de venda da movimentação
+		SELECT Tmpmov
+		LOCATE for cpros = lcCodPro
+	ENDIF
+		
+	ThisForm.poDataMgr.SqlExecute([Select a.cpros,a.linhas,a.cunis,a.pesoms,a.custofs,]+;
+				[a.moecusfs,a.moecs,a.pvens,a.moevs,a.pvideals,a.moedas,a.reffs,]+;
+				[a.figjpgs,a.sgrus,s.descricaos ]+;
+		   [From SigCdPro a ]+;
+	  [Left Join SigCdPsg s On a.sgrus = s.codigos ]+;
+		  [Where a.cpros = ']+lcCodPro+[' ],'TmpProds')
+
+	
+	Select TmpProds
+	Go Top
+	If !Eof()
+		Replace Relatorio.Linha    With TmpProds.linhas
+		Replace Relatorio.Unidade  With TmpProds.cunis
+		Replace Relatorio.Peso     With TmpProds.pesoms
+		Replace Relatorio.PreCusto With TmpProds.custofs
+		Replace Relatorio.MoeCusto With IIf(lnTpRel = 1,TmpProds.moecusfs,TmpProds.moecs)
+		Replace Relatorio.PreVenda With IIF(lnTpRel=5,tmpmov.totas, TmpProds.pvens)
+		Replace Relatorio.MoeVenda With IIF(lnTpRel=5,tmpmov.moedas, TmpProds.moevs)
+		Replace Relatorio.PreIdeal With TmpProds.pvideals
+		Replace Relatorio.MoeIdeal With TmpProds.moedas
+		Replace Relatorio.Imagem   With Strconv(Strtran(Strtran(Strtran(TmpProds.figjpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+		Replace Relatorio.RefFor   With TmpProds.reffs
+		Replace Relatorio.SubGrupo With TmpProds.sgrus
+		Replace Relatorio.DesGrupo With TmpProds.descricaos
+	EndIf
+	Select Relatorio
+EndScan	
+
+Index On RefFor + Grupos + Str(Quadro,6) Tag Ordem
+
+Set Order to Ordem
+
+lnCnt   = 0
+lcGrupo = Relatorio.RefFor + Relatorio.Grupos
+lcProdt = Substr(Relatorio.grupos,1,10)
+
+Select Relatorio
+Go Top
+Scan
+	Replace Relatorio.ValTot With '',;
+			Relatorio.MoeTot With ''
+	If IsEmpty(Imagem) Or IsNull(Imagem)
+		Replace Relatorio.OrdImg With 'FBRANCOS'
+	Else
+		Replace Relatorio.OrdImg With 'F' + Padl(Recno(),7,'0')
+		lcFoto=Strconv(Strtran(Strtran(Strtran( Relatorio.Imagem,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)	
+		=StrToFile(lcFoto, Sys(2023)+'\F'+Padl(Recno(),7,'0')+'.Jpg')
+		*Copy Memo Relatorio.Imagem to Sys(2023)+'\F'+Padl(Recno(),7,'0')+'.Jpg'
+	Endif
+	If Relatorio.Imprime = "S" And lnTpRel = 2
+		If !IsEmpty(Relatorio.Observa) And !IsNull(Relatorio.Observa)
+			Replace Relatorio.DesMateria With Relatorio.Observa
+		Else
+			If !IsEmpty(Relatorio.DesGrupo) And !IsNull(Relatorio.DesGrupo)
+				Replace Relatorio.DesMateria With Relatorio.DesGrupo
+			EndIf
+		EndIf
+	Endif
+		
+	If lcGrupo # Relatorio.RefFor + Relatorio.Grupos
+		Skip - 1
+		
+			 Select a.Grupos,a.MoeCusto,Sum(a.Quantidade * a.ValMateria) As Valor ;
+			   From CsRelatorio a ;
+			  Where a.RefFor + a.Grupos = lcGrupo ;
+		   Group By a.Grupos, a.MoeCusto ;
+		Into Cursor csMoedas
+	      
+	    Select csMoedas
+	    Scan
+			Select Relatorio
+			Replace Relatorio.ValTot With IIf(IsEmpty(ValTot),Transform(csMoedas.Valor,'999,999.99'),;
+							ValTot + Chr(13) + Transform(csMoedas.Valor, '999,999.99')), ;
+					Relatorio.MoeTot With IIf(IsEmpty(MoeTot), csMoedas.MoeCusto, ;
+								MoeTot + Chr(13) + csMoedas.MoeCusto)
+		    Select csMoedas
+		EndScan
+
+		Select Relatorio
+		Skip
+
+		lcGrupo = Relatorio.RefFor + Relatorio.Grupos
+	Endif
+
+	If lcProdt # Subs(Relatorio.Grupos, 1, 10)
+		lcProdt = Subs(Relatorio.Grupos, 1, 10)
+		lnCnt = 0
+	Endif
+
+	Replace Relatorio.Quadro With lnCnt
+
+	Select Relatorio
+	lnCnt = lnCnt + 1
+EndScan
+
+Select Relatorio
+Go Bottom
+
+Select a.Grupos, ;
+	   a.MoeCusto, ;
+	   Sum(a.Quantidade * a.ValMateria) As Valor ;
+  From CsRelatorio a ;
+ Where a.Reffor + a.Grupos = lcGrupo ;
+ Group By a.Grupos, a.MoeCusto ;
+  Into Cursor CsMoedas
+  
+Select CsMoedas
+Scan  
+	Select Relatorio
+	Replace Relatorio.ValTot With IIf(IsEmpty(ValTot),Transform(CsMoedas.Valor,'999,999.99'),;
+						ValTot+Chr(13)+Transform(CsMoedas.Valor,'999,999.99')),;
+			Relatorio.MoeTot With IIf(IsEmpty(MoeTot),CsMoedas.MoeCusto,;
+						MoeTot+Chr(13)+CsMoedas.MoeCusto)
+    Select CsMoedas
+EndScan
+
+Select Relatorio
+If lnOrdem = 1
+	Index On Grupos + Str(Quadro,6) Tag Ordem
+ENDIF
+
+Select Relatorio
+Set Order To Ordem
+Go Top
+
+ThisForm.Container1.Visible = .F.
+ThisForm.Label1.Visible = .F.
+ThisForm.Label2.Visible = .F.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+If Used('crRelProm') Then
+	Select crRelProm
+	Go Top
+	Scan
+		xImg = AllTrim(fLimpaString(crRelProm.cPros))
+		lcArquivo = Sys(2023) + '\T' + xImg + '.jpg'
+		If File(lcArquivo)
+			Delete File (lcArquivo)
+		Endif
+	EndScan
+EndIf
+
+ThisForm.parentform.Enabled = .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+If ThisForm.Opc_Rel.Value = 1
+	Report Form SigReCgp Preview NoConsole
+ENDIF
+
+If INLIST(ThisForm.Opc_Rel.Value,2)		&& mena - 05/03/3017 - incluida opcao 5 JAL
+	Report Form SigReCg1 Preview NoConsole
+ENDIF
+
+If INLIST(ThisForm.Opc_Rel.Value,5)		&& mena - 13/04/3017 - novo report para opcao 5 JAL
+	Report Form SigReCg2 Preview NoConsole
+ENDIF
+
+If ThisForm.Opc_Rel.Value = 3
+	Report Form SigPrCpr Preview NoConsole
+Endif		
+
+*** mena - 01/09/2016 - formato para atender solicitação da DRW
+If ThisForm.Opc_Rel.Value = 4
+	Report Form SigPrCp2 Preview NoConsole
+Endif		
+
+lcApagar = Sys(2023) + '\F*.Jpg'
+Delete File &lcApagar.
+
+If Used('csCabecalho')
+	Use In csCabecalho
+Endif
+If Used('Relatorio')
+	Use In Relatorio
+Endif
+If Used('csRelatorio')
+	Use In csRelatorio
+Endif
+If Used('csMoedas')
+	Use In csMoedas
+EndIf
+If Used('Cabecalho')
+	Use in Cabecalho
+Endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECGP
+RESERVED3 (ClassInfo): lnval
+parentform
+podatamgr
+*proccompesp1 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

@@ -1,0 +1,7 @@
+﻿Fase 2 conclu├¡da. O `SigPrGf2BO.prg` agora tem os tr├¬s m├®todos de neg├│cio:
+
+- **`ObterChavePrimaria()`** ÔÇö override PROTECTED retornando `""` (form sem tabela pr├│pria)
+- **`CarregarChaves(par_cCursorRel)`** ÔÇö popula `cursor_4c_Chaves` com os valores distintos de `cEmps` do cursor `crRel1` via `SELECT DISTINCT` VFP local (READWRITE + INDEX)
+- **`ObterDadosPorChave(par_cChave, par_cCursorRel)`** ÔÇö itera o `crRel1` para a chave selecionada e preenche as propriedades `this_cTitulo`, `this_cEmpresa`, `this_cStrMeses`, `this_cStrFalhas`, `this_cStrRecup`, `this_nNumMeses`, `this_nNumGrupos` ÔÇö as strings TAB-delimitadas que alimentam o `MSGraph.Chart` via OLE
+
+N├úo foram adicionados `Inserir`/`Atualizar`/`RegistrarAuditoria` pois este form ├® OPERACIONAL read-only sem escrita em banco.

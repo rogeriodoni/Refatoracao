@@ -1,0 +1,26 @@
+﻿O arquivo est├í completo e correto. Fase 6 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+**Campos restantes em `ConfigurarPaginaDados()`** (todos com compensa├º├úo +29px):
+- `shp_4c_Shape3` ÔÇö separador horizontal da se├º├úo de auditoria (top=264)
+- `lbl_4c_Label20` ÔÇö "Data / Usu├írio" (top=249)
+- `lbl_4c_Label24` ÔÇö "Inclus├úo" (top=268)
+- `lbl_4c_Label25` ÔÇö "Altera├º├úo" (top=268)
+- `txt_4c_DtIncs` ÔÇö data inclus├úo, ReadOnly, fundo cinza (top=283)
+- `txt_4c_Usuario` ÔÇö usu├írio inclus├úo, ReadOnly (top=308)
+- `txt_4c_DataAlts` ÔÇö data altera├º├úo, ReadOnly (top=283)
+- `txt_4c_UsuaAlts` ÔÇö usu├írio altera├º├úo, ReadOnly (top=308)
+
+**M├®todos adicionados:**
+- `FormParaBO` / `BOParaForm` ÔÇö binding bidirecional
+- `LimparCampos` ÔÇö zera todos os campos da Page2
+- `HabilitarCampos` ÔÇö C├│digo sempre ReadOnly (auto-gerado); dtInicial/dtFinal/inativo habilitados somente em INCLUIR/ALTERAR; campos de auditoria sempre ReadOnly
+- `AjustarBotoesPorModo` ÔÇö Confirmar desabilitado em VISUALIZAR
+- `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` ÔÇö fluxo completo CRUD
+- `BtnBuscarClick` ÔÇö modo BUSCAR: habilita txt_4c_Codigo para digitar c├│digo
+- `BtnSalvarClick` ÔÇö em BUSCAR executa filtro; em INCLUIR/ALTERAR valida datas (Ini obrigat├│ria, Fin >= Ini) e salva via BO
+- `BtnCancelarClick` ÔÇö volta para lista e recarrega
+- `BtnEncerrarClick` ÔÇö fecha form
+
+N├úo h├í lookups neste formul├írio (confirmado no `comportamento.json` ÔÇö sem fwbuscaext/fwBuscaSel/sigacess).

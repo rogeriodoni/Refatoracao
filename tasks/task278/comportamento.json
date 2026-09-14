@@ -1,0 +1,204 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPREML",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREML",
+      "evento": "Init",
+      "linhas": 198,
+      "codigoOriginal": "Parameters prDopes, pcEscolha, laOpeBaixa\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n*!*\tCursor que irá receber a lista final de e-mails para serem enviados\nCreate Cursor crLocalTotal (Checks N(1),grupos c(10),Contas c(10),Rclis c(30),emails c(50),mensagems m,prioridade c(15),EmpDopNums c(29), Acaos c(10))\nIndex on Contas Tag Contas\nIndex on Rclis Tag Rclis\nIndex on Emails Tag Emails\n\nThisform.lcEmp = Substr(prdopes,1,3)\nlcDo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "lcEmp = Substr,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPREML.Commandgroup1",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lcFrm\n\nWith ThisForm\n\t.Release\n\tlcFrm = .Name\n\tRelease &lcFrm.\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREML.grade_alerta.Column2.Header1",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "Select crLocalTotal\nSet Order To tag Contas\n\nThis.Parent.Parent.Column2.header1.BackColor = RGB(64,128,128)\nThis.Parent.Parent.Column3.header1.BackColor = RGB(192,192,192)\nThis.Parent.Parent.Column4.header1.BackColor = RGB(192,192,192)\n\nthisform.grade_alerta.Refresh()\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREML.grade_alerta.Column3.Header1",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select crLocalTotal\nSet Order To tag Rclis\n\nThis.Parent.Parent.Column2.header1.BackColor = RGB(192,192,192)\nThis.Parent.Parent.Column3.header1.BackColor = RGB(64,128,128)\nThis.Parent.Parent.Column4.header1.BackColor = RGB(192,192,192)\n\nthisform.grade_alerta.Refresh()\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREML.grade_alerta.Column4.Header1",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Select crLocalTotal\nSet Order To tag Emails\n\nThis.Parent.Parent.Column2.header1.BackColor = RGB(192,192,192)\nThis.Parent.Parent.Column3.header1.BackColor = RGB(192,192,192)\nThis.Parent.Parent.Column4.header1.BackColor = RGB(64,128,128)\n\nthisform.grade_alerta.Refresh()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREML.grade_alerta.Column6.fwcheckbox1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREML.grade_alerta.Column6.fwcheckbox1",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "Replace Checks With this.Value in crLocalTotal",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREML.btnEmail",
+      "evento": "Click",
+      "linhas": 139,
+      "codigoOriginal": "lcReceptor\t\t\t= ''\nlcReceptorCopia\t\t= ''\nlcAssunto\t\t\t= 'ALERTA'\nlcTxtMensagem\t\t= ''\nlcArqAnexo\t\t\t= ''\nlnImportancia\t\t= 1\nlcMsgRetorno\t\t= ''\n\nSelect * From crLocaltotal Where Checks = 1 Into Cursor crLocalTotal2\n\nSelect crLocaltotal2\nScan\n\tIf Recno() = 1\n\t\tlcReceptor\t\t= crLocaltotal2.emails\n\t\tlcTxtMensagem\t= Iif(!IsEmpty(TmpMvCab.Jobs),[JOB          : ] + TmpMvCab.Jobs + [ - ] + Alltrim(TmpMvCab.Rclis) + Chr(13) + Chr(10),[]) +;\n\t\t\t\t\t\t  Iif(!IsEmpty(TmpMvCab.ObsCabMovs),[Descritivo : ] + Alltrim(T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "pcescolha + Chr,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPREML.apaga",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select crLocalTotal\nGo top\nReplace All Checks With 0\nGo Top\nThisForm.Refresh()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPREML.SelTudo",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select crLocalTotal\nGo top\nReplace All Checks With 1\nGo Top\nThisForm.Refresh()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPREML.btnEmail.Click",
+      "queryOriginal": "Select * From crLocaltotal Where Checks = 1 Into Cursor crLocalTotal2",
+      "tabelas": "crLocaltotal",
+      "colunas": "Checks,crLocalTotal2",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crLocaltotal"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,16 @@
+﻿Todos os m├®todos est├úo presentes. O arquivo FormDCC.prg est├í completo com 1045 linhas, contendo os 10 m├®todos adicionados na Fase 8:
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `BtnEncerrarClick` | Wrapper para `CmdEncerrarClick` (valida e encerra) |
+| `BtnBuscarClick` | Informa que busca ├® feita inline na grade |
+| `BtnSalvarClick` | Persiste linha corrente via `FormParaBO` + `BO.Atualizar` |
+| `BtnCancelarClick` | Fecha sem validar, reabilita form pai |
+| `FormParaBO` | Mapeia linha corrente de `xEestDsc` ÔåÆ propriedades do BO |
+| `BOParaForm` | Mapeia propriedades do BO ÔåÆ linha corrente de `xEestDsc` via REPLACE |
+| `HabilitarCampos` | Habilita/desabilita `cmd_4c_Inserir`, `cmd_4c_Excluir` e `grd_4c_Dados.ReadOnly` conforme `this_lModoEdicao` |
+| `LimparCampos` | Zera totalizador e d├í Refresh na grade |
+| `CarregarLista` | Refresh na `grd_4c_Dados` + `AtualizarTotal` |
+| `AjustarBotoesPorModo` | Delega para `HabilitarCampos(this_lModoEdicao)` |
+
+A migra├º├úo do FormDCC est├í finalizada. O arquivo DCCBO.prg n├úo precisou de altera├º├Áes ÔÇö todos os m├®todos necess├írios j├í estavam implementados nas fases anteriores.

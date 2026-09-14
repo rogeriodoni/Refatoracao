@@ -1,0 +1,7 @@
+﻿Ambas as corre├º├Áes est├úo corretas. Fase 6 conclu├¡da com as seguintes corre├º├Áes aplicadas:
+
+**Corre├º├úo 1 ÔÇö Placeholder `cs_SigCdTom` (linhas 65-69):** O grid `grd_4c_GrdTipo` usa `cs_SigCdTom` como `RecordSource`. Sem o BO (modo `gb_4c_ValidandoUI`), o cursor n├úo existia e o grid falharia ao inicializar. Agora o form garante que o cursor existe antes de chamar `ConfigurarPaginaLista()`.
+
+**Corre├º├úo 2 ÔÇö Ordem do `ControlSource` no CheckBox da grid (linha 879):** `Column1.ControlSource` estava sendo definido ANTES do `AddObject("chk_4c_GrdMarca")`, o que viola a regra CLAUDE.md (Error 1767). Movido para depois de `.CurrentControl = "chk_4c_GrdMarca"`.
+
+O restante do form (todos os campos, lookups de Empresa/Moeda/Usu├írio/Operador, handlers de teclado, valida├º├Áes e bot├Áes) j├í estava completo desde a Fase 5.

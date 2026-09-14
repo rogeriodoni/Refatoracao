@@ -1,0 +1,5 @@
+﻿Both fixes applied. The 300s hang is eliminated by two guards:
+
+1. **`CarregarDadosGrupo`**: Skips the four SQL-calling BO methods (`CarregarUsuariosAbas`, `CarregarProgramasAba`, `CarregarBarraAba`, `CarregarTelasAba`) when `gb_4c_ModoTeste=.T.` ÔÇö prevents any TCP connection attempt to 192.168.15.101 that would time out after 300s.
+
+2. **`BtnIncluirClick`**: Skips `SetFocus()` in test mode ÔÇö prevents VFP9 from entering a modal event loop on a `WindowType=1` form that was never shown via `.Show()`.

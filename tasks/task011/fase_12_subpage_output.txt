@@ -1,0 +1,22 @@
+﻿Everything looks correct. Here's a summary of what was implemented:
+
+**FASE 12 complete** ÔÇö Added `ConfigurarPgPgDadosFaseP` (Page4 "Fases P.") to `FormProduto.prg`:
+
+**Main method** (`ConfigurarPgPgDadosFaseP`, line 4288):
+- 2 cursor placeholders: `cursor_4c_Fase` (5+3 fields) and `cursor_4c_Matrizes` (6 fields, with 1 empty row)
+- Grid `grd_4c_FasePro` (5 cols: Ordem|Fase|Utiliza├º├úo|Uni.Produtiva|Material)
+- 4 action buttons: InsFase, ExcFase, AltFase, CmdFicha
+- 10 label+field pairs: Qmin, CodGarras (RO), Conquilha, PesoBris, PesoMetal, PesoPdrs, Cor, Tam, CodAcb+Dacb
+- 2 checkboxes: CravCera, PesoVar
+- Shape + Image for process photo (shp_4c_ShpFig, img_4c_ImgFigJpg)
+- 2 CommandGroups: CmdgFigura (select photo), CmdgFigCam (camera)
+- Label + TextBox + EditBox for description/observations
+- Grid `grd_4c_Matrizes` (3 cols: Matriz|Local|Qtde)
+- 2 matrix buttons: BtnInsereMtx, BtnExcluiMtz
+- Shape + Image for borracha photo
+
+**14 PUBLIC handlers** (lines 5151ÔÇô5820): GrdFaseAfterRowColChange, GrdMatrizesAfterRowColChange, ImgFigJpgClick, CmdgFiguraClick, CmdgFigCamClick, FaseInserirClick, FaseExcluirClick, FaseAlternativaClick, CmdFichaClick, FaseGrdCol2/4/5Valid, ValidarAcabamento/Conquilha/Cor/Tam, BtnInsereMtxClick, BtnExcluiMtzClick, MatrizGrdCol1Valid
+
+**Method call** added at line 641 in `ConfigurarPaginaDados()` before `TornarControlesVisiveis`.
+
+**Destroy cleanup** extended from 37 to 39 cursors (added `cursor_4c_Fase` and `cursor_4c_Matrizes`).

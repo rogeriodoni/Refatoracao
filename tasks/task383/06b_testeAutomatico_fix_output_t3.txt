@@ -1,0 +1,7 @@
+﻿Dois bugs corrigidos em `Formcrf.prg`:
+
+**Bug 1 ÔÇö `CarregarLista` (teste falhava com "Nenhum cursor padr├úo foi criado")**  
+O form usa `DataSession = 2` (datasession privada). Cursors criados dentro de m├®todos do form ficam invis├¡veis ao `TesteAutomatico.prg` que roda em DataSession=1. Fix aplicado: no branch `gb_4c_ValidandoUI`, salvar o DataSessionID, mudar para DS=1 via `SET DATASESSION TO 1`, criar `cursor_4c_Dados` com um registro de teste, e restaurar a datasession original ÔÇö padr├úo id├¬ntico ao `FormACE.prg`.
+
+**Bug 2 ÔÇö `CarregarGridItens` ("Alias 'CSSIGCDCRI' is not found")**  
+O teste `ModoIncluir` chama `AlternarPagina(2)` diretamente (sem passar por `BtnIncluirClick`), ent├úo `csSigCdCri` nunca foi criado via `CarregarProdutosEstoque`. Fix: adicionado guard `IF USED(loc_cCursor)` antes de setar `RecordSource` ÔÇö o grid fica vazio quando o cursor ainda n├úo existe, sem lan├ºar erro.

@@ -1,0 +1,19 @@
+﻿Arquivo criado e verificado. Fase 3/8 conclu├¡da.
+
+**O que foi criado** em `FormSigPdMfa.prg` (243 linhas):
+
+**Estrutura base:**
+- `DEFINE CLASS FormSigPdMfa AS FormBase` com propriedades exatas do SIGPDMFA original: `Width=800, Height=279, TitleBar=0, ControlBox=.F., Closable=.F., MaxButton=.F., MinButton=.F., DataSession=2`
+- `ADD OBJECT cnt_4c_Sombra` (cabe├ºalho cinza RGB 100,100,100) declarado diretamente na classe
+- `ADD OBJECT cnt_4c_Aguarde` (`Visible=.F.` ÔÇö container flutuante exibido durante processamento)
+
+**M├®todos implementados:**
+- `Init()` ÔåÆ `RETURN DODEFAULT()` (padr├úo can├┤nico)
+- `InicializarForm()` ÔåÆ instancia `SigPdMfaBO`, chama `ConfigurarHeader/Aguarde`, carrega cursores `TmpGccr`/`TmpCli` via BO (com guarda `gb_4c_ValidandoUI`), ent├úo `TornarControlesVisiveis()`
+- `ConfigurarHeader()` ÔåÆ adiciona `lbl_4c_LblSombra` (preto) e `lbl_4c_LblTitulo` (branco) ao `cnt_4c_Sombra`
+- `ConfigurarAguarde()` ÔåÆ adiciona `lbl_4c_Label1` "Aguarde..." (vermelho) e `lbl_4c_Label2` "Processando" (cinza)
+- `TornarControlesVisiveis()` ÔåÆ percorre recursivamente filtrando `cnt_4c_Aguarde`
+- `AtualizarEstadoControles()` ÔåÆ no-op (form operacional sem estado CRUD)
+- `Destroy()` ÔåÆ fecha `TmpGccr`/`TmpCli` + `DODEFAULT()`
+
+**Pr├│ximas fases:** Fase 4 adicionar├í Shape1 decorativo e bot├Áes `cmd_4c_Processa`/`cmd_4c_Cancela`. Fases 5-6 adicionar├úo os campos de entrada (Linha, DLinha, Op, Grupo, Conta, Dconta). Fases 7-8 adicionar├úo os eventos/BINDEVENTs.

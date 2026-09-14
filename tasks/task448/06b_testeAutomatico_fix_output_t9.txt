@@ -1,0 +1,3 @@
+﻿The duplicate `ShowWindow = 1` line was removed. The class now correctly has `ShowWindow = 0` and `WindowType = 0` at definition time, and the `Init()` guard restores them to 1/1 only in production mode (when not running under `gb_4c_ValidandoUI` or `gb_4c_ModoTeste`).
+
+**Root cause**: Two `ShowWindow` assignments in the class definition ÔÇö `ShowWindow = 0` followed by `ShowWindow = 1`. VFP9 uses the last value, so the form was always created with `ShowWindow = 1` (top-level window), which causes a 300-second TCP timeout when running under VFP9 `-T` mode. The comment in `Init()` explicitly warned about this, but the duplicate line negated the intended class-level default.

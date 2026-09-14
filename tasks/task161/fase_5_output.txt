@@ -1,0 +1,21 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi feito:**
+
+1. **`InicializarForm()`** ÔÇö adicionada chamada a `THIS.ConfigurarPaginaVencimentos()` ap├│s `ConfigurarPaginaCalculo()`
+
+2. **`Calculos()`** ÔÇö reescrito com a l├│gica completa do original:
+   - Usa `JurosMes` para juros simples (f├│rmula `PV * i/100 * n/30`) e `JurosDia` para compostos
+   - Loop sobre venc1-10 via `PEMSTATUS` (campos inexistentes s├úo ignorados com seguran├ºa)
+   - Quando o primeiro vencimento preenchido ├® encontrado, zera `lnJuros` e recalcula por parcela individual
+   - Parcela = Total ├À n├║mero de vencimentos preenchidos
+
+3. **`ConfigurarPaginaVencimentos()`** ÔÇö novo m├®todo com:
+   - Bot├úo "< C├ílculo" (Voltar) no topo
+   - Label "Vencimentos :" 
+   - `txt_4c_Venc1` a `txt_4c_Venc5` nas posi├º├Áes originais (colunas 1-3, linhas 1-2 parcial)
+   - BINDEVENT KeyPress para todos
+
+4. **`CmdVoltarClick()`** e **`TxtVencKeyPress()`** ÔÇö handlers para navega├º├úo e valida├º├úo dos vencimentos
+
+**Pr├│xima fase (6/8):** adicionar venc6-10 em `ConfigurarPaginaVencimentos()`.

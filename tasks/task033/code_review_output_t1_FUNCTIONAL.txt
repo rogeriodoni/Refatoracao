@@ -1,0 +1,23 @@
+﻿Analisados os dois problemas. Ambos s├úo **falsos positivos do validador** ÔÇö explico:
+
+---
+
+**[METODO-INEXISTENTE] ÔÇö Falso positivo**
+
+`THIS.Width()` (chamada de m├®todo) n├úo existe em nenhuma linha do arquivo. O que existe ├® `THIS.Width` (acesso ├á propriedade) nas linhas 131, 142, 157 e 292 ÔÇö sintaxe v├ílida em VFP9. O validador confundiu acesso ├á propriedade com chamada de m├®todo.
+
+**[LAYOUT-POSITION] ÔÇö Falso positivo**
+
+O validador compara `198` (Top original no SCX) com `113` (Top do controle migrado) e v├¬ um diff de 85px. Mas os controles est├úo dentro de `pgf_4c_Paginas.Page1`, que est├í num PageFrame com `Top=85`. Posi├º├úo absoluta renderizada = `85 + 113 = 198` ÔÇö pixel-perfect com o original.
+
+Isso ├® consistente com todos os outros controles no arquivo:
+| Original top | Migrado top | PageFrame offset | Absoluto |
+|---|---|---|---|
+| 98 (Say1/DtInicial label) | 13 | +85 | 98 Ô£ô |
+| 123 (Say2/Grupo label) | 38 | +85 | 123 Ô£ô |
+| 195 (txt_Fornecedor) | 110 | +85 | 195 Ô£ô |
+| **198 (lbl_fornecedor)** | **113** | +85 | **198 Ô£ô** |
+
+---
+
+**Nenhuma altera├º├úo ├® necess├íria.** O arquivo `FormSIGREAPR.prg` est├í correto. Os dois alertas s├úo artefatos do validador que n├úo considera: (a) acesso a propriedade vs chamada de m├®todo, e (b) o offset do PageFrame na convers├úo de coordenadas.

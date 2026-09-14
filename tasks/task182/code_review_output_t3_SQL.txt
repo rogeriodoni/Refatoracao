@@ -1,0 +1,10 @@
+﻿The flagged issue is a **false positive**. There is no SQL WHERE clause with `CONTROLCOUNT` anywhere in `FormSigPrFem.prg`.
+
+The three occurrences of `ControlCount` at lines 1083, 1091, and 1099 are all in the `TornarControlesVisiveis` method ÔÇö they access the standard VFP9 object property `ControlCount` (how many child controls a container has), used for recursive container traversal:
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount          && property access
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ...  && PEMSTATUS check
+```
+
+This is valid VFP9 code, not a SQL column. No changes are required for this pass.

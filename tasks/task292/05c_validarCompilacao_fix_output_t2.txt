@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. O problema era que a sintaxe `(variavel)->campo` falha na **compila├º├úo** VFP9 quando a vari├ível ├® uma string local ÔÇö o compilador n├úo consegue resolver a refer├¬ncia indireta em tempo de compila├º├úo.
+
+A corre├º├úo usa acesso direto ao campo (sem prefixo de alias) porque:
+1. `SELECT (loc_cCompo)` ├® chamado imediatamente antes do `SCAN`
+2. Ao final de cada itera├º├úo, h├í `SELECT (loc_cCompo)` que restaura o work area
+3. Portanto, no in├¡cio de cada itera├º├úo do SCAN, o work area corrente j├í ├® o cursor `loc_cCompo`, tornando `CGrus`, `Mats`, `Qtds`, `Pesos` refer├¬ncias v├ílidas ao cursor correto.

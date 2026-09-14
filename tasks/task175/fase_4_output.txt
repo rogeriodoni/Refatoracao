@@ -1,0 +1,21 @@
+﻿O arquivo est├í completo e correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado a `FormSigPrEml.prg`:**
+
+- **`InicializarForm`**: Agora chama `ConfigurarPaginaLista()` e `CarregarDados()` antes de `TornarControlesVisiveis()`
+
+- **`ConfigurarPaginaLista()`**: Alias can├┤nico do pipeline; delega para `ConfigurarGrade()` + `ConfigurarBotoesOpe()`
+
+- **`AlternarPagina()`**: Stub vazio (OPERACIONAL n├úo usa PageFrame de navega├º├úo)
+
+- **`ConfigurarGrade()`**: Cria `grd_4c_Dados` com 5 colunas (Conta/Nome/Email/Mensagem/Checks), checkbox em Column5 com padr├úo correto (`AddObject` ÔåÆ `CurrentControl` ÔåÆ `ControlSource` na Column, nunca no Check1), e BINDEVENTs nos headers para ordena├º├úo
+
+- **`ConfigurarBotoesOpe()`**: Cria `cmd_4c_SelTudo` (geral_marcar_26.jpg), `cmd_4c_Apaga` (cadastro_excluir_26.jpg) e `cmd_4c_BtnEmail` (geral_envelope_32.jpg) ÔÇö todos com `Themes=.T.` pois s├úo standalone com `.Picture`, sem `.Enabled=.F.` em runtime (icone-only)
+
+- **`CarregarDados()`**: Chama `SigPrEmlBO.CarregarAlertasEmail()`, depois reconfigura headers do grid ap├│s `RecordSource`
+
+- **`CmdSelTudoClick/CmdApagaClick`**: REPLACE ALL via SELECT + Refresh
+
+- **`CmdBtnEmailClick`**: Verifica sele├º├úo ÔåÆ busca config SMTP ÔåÆ monta texto da mensagem a partir de `cursor_4c_MvCab` ÔåÆ envia via `sp_send_dbmail` ÔåÆ registra hist├│rico em SigAlert via `InserirAlertaHistoricoItem` para cada destinat├írio + opera├º├Áes de baixa
+
+- **`GrdColContaClick/NomeClick/EmailClick`**: SET ORDER TO TAG correspondente + destaque visual do header ativo (RGB 64,128,128)

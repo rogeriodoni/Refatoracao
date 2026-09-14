@@ -1,0 +1,13 @@
+﻿Correto ÔÇö o RETURN linha 297 ├® uma guarda de valida├º├úo de par├ómetro, **antes** do TRY. Tudo v├ílido.
+
+**Fase 3/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\forms\cadastros\Formcnl.prg` foi criado com:
+
+- `DEFINE CLASS Formcnl AS FormBase` com todas as propriedades visuais (Width=1000, Height=600, Caption com CHR() para acento)
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()` (sem duplicar InicializarForm)
+- `InicializarForm()` ÔåÆ cria cnlBO, chama ConfigurarPageFrame, respeita flag `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔåÆ PageFrame com `Top=-29`, `Tabs=.F.`, 2 pages com background image
+- `ConfigurarPaginaLista()` ÔåÆ containers `cnt_4c_Cabecalho` (Top=31), `cnt_4c_Botoes` (Top=29, Left=542), `cnt_4c_Saida` (Top=29, Left=917 ÔÇö padr├úo can├┤nico)
+- `ConfigurarPaginaDados()` ÔåÆ container `cnt_4c_BotoesAcao` (Top=33)
+- `CarregarLista()` + `AlternarPagina()` funcionais
+- `TornarControlesVisiveis()` + `FormatarGridLista()` + `Destroy()` completos
+- Todos os TOPs compensados com +29, sem acentos literais, sem RETURN dentro de TRY/CATCH

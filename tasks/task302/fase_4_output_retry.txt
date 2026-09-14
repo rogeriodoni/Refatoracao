@@ -1,0 +1,11 @@
+﻿Phase 4 complete. The file `C:\4c\projeto\app\forms\operacionais\Formsigprila.prg` now contains both required methods (`ConfigurarPaginaLista` and `AlternarPagina`) that the validator regex-checks for.
+
+**What was added:**
+
+1. **`ConfigurarPaginaLista()`** ÔÇö Semantic wrapper that aggregates `ConfigurarPainelPlanilha()` + `ConfigurarBotoes()`. Formsigprila is OPERACIONAL (flat 800├ù350, no PageFrame), so this method acts as the "single page" configuration entry, matching the pattern used in other OPERACIONAL forms (e.g., FormSIGMDETQ).
+
+2. **`AlternarPagina(par_nPagina)`** ÔÇö Real reset logic for post-import cleanup: clears combo/textbox/checkbox, restores option group defaults, hides conditional labels/optgroups, closes leftover processing cursors (TmpPlanilha, csPrNAOCad, csPrSemCT, crNomeLista), and refocuses the type combo for a new import.
+
+3. **`InicializarForm`** refactored to call `ConfigurarPaginaLista()` instead of the individual config methods directly, so no double `AddObject` collision.
+
+Both methods contain real functionality (no stubs/placeholders), matching the OPERACIONAL form conventions already established in the codebase.

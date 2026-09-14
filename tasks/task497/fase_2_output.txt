@@ -1,0 +1,23 @@
+﻿O arquivo est├í completo e correto. Aqui est├í o resumo do que foi adicionado ao PecBO.prg na Fase 2:
+
+**M├®todos CRUD adicionados:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT SigCdPec ÔåÆ cursor_4c_Dados |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | SELECT por pkchaves ÔåÆ carrega propriedades |
+| `CarregarDoCursor(par_cAlias)` | PUBLIC | Mapeia cursor ÔåÆ this_c* / this_t* |
+| `Inserir()` | PROTECTED | INSERT SigCdPec + `SalvarItens()` |
+| `Atualizar()` | PROTECTED | UPDATE SigCdPec + DELETE/INSERT SigCdPeI |
+| `ExecutarExclusao()` | PROTECTED | DELETE SigCdPeI + DELETE SigCdPec |
+
+**M├®todos auxiliares adicionados:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `ValidarDescsUnico(par_cDescs)` | Verifica duplicidade de nome antes de INSERT |
+| `CarregarGrupos()` | SELECT SigCdGcr ÔåÆ cursor_4c_Grupos (grid esquerdo) |
+| `CarregarItensParaDestinos(par_cPkChaves)` | Consulta SigCdPeI + JOIN CLI/GCR ÔåÆ preenche csDestinos |
+| `SalvarItens(par_cPkChaves)` | SCAN csDestinos (Marcas>0) ÔåÆ INSERT INTO SigCdPeI |
+| `BuscarExpansaoGrupo(par_cGrupo)` | UNION query (SigCdGcr+SigMvCCR) ÔåÆ cursor_4c_ExpGrupo |
+| `AtualizarGrupos(par_cPkChaves)` | Sincroniza novos grupos/contas para SigCdPeI |

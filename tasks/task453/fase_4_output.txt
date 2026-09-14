@@ -1,0 +1,15 @@
+﻿The file is complete and correct. All three edits applied successfully. Here's a summary of what FASE 4/8 added to `Formint.prg`:
+
+**Edit 2 ÔÇö ConfigurarPaginaLista():** Added 7 column-header sort buttons (cmd_4c_Processo through cmd_4c_Usuario) at Top=153 with BINDEVENT wiring, then `grd_4c_Dados` (10 columns, ColumnCount set outside WITH per Problem 36, HeaderHeight=0 since buttons serve as visual headers, Width=905 so 12+905=917 aligns with cnt_4c_Saida.Left).
+
+**Edit 3 ÔÇö CarregarLista():** After `Buscar("")` succeeds, now sets `RecordSource`, 10 `ControlSource` bindings, calls `FormatarGridLista()`, and initializes `this_nCodigoSel`/`this_cCIdChavesSel` from the first record.
+
+**Edit 4 ÔÇö New handler methods:**
+- `GrdDadosAfterRowColChange` ÔÇö tracks row selection into form properties
+- `FormatarGridLista` ÔÇö applies Tahoma/9pt and alternating row colors via `DynamicBackColor`
+- `BtnBalancoClick` ÔÇö queries `SigCdPam.GesInd`, opens `FormSigReInr` or `FormSigReIr1` with guard for existence
+- `BtnBaixaAutoClick` ÔÇö validates encerras=.T. + tratas=.F., then navigates to Page3 BAIXAAUTO mode
+- `BtnTratamentoClick` ÔÇö same validation, navigates to Page3 TRATAMENTO mode
+- `BtnFecharClick` ÔÇö validates !encerras, confirms, calls `BO.AtualizarEncerramento(.T., DATETIME())`, refreshes list
+- `BtnProcurarClick` ÔÇö navigates to Page2
+- 7 `CmdXxxClick` sort handlers ÔÇö each does `INDEX ON ... TAG xxx TEMPORARY` on `cursor_4c_Dados` then focuses the corresponding grid column

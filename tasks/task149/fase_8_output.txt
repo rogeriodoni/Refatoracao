@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. A Fase 8 foi conclu├¡da com sucesso.
+
+**Resumo do que foi adicionado ao `FormSigPdMp8.prg`:**
+
+| M├®todo | Descri├º├úo |
+|---|---|
+| `FormParaBO()` | Popula o BO com dados dos cursores `tmpnens`, `xMfas` e `xNensiN` compartilhados via DataSession |
+| `BOParaForm()` | Atualiza controles via `Refresh()` (campos usam `ControlSource` ÔÇö nenhuma atribui├º├úo manual necess├íria) |
+| `HabilitarCampos()` | Controla `ReadOnly` do `grd_4c_Inc` e `Enabled` dos bot├Áes do `cmdg_4c_Compo` conforme `this_cEscolha` |
+| `LimparCampos()` | Posiciona `xNensiN` no topo e atualiza grid e campo de descri├º├úo |
+| `CarregarLista()` | Delegado a `CarregarGradeRetrab()` (recarga completa dos dois grids) |
+| `AjustarBotoesPorModo()` | Ajusta estado dos bot├Áes de NC e `ReadOnly` do grid ap├│s mudan├ºa de modo |
+| `BtnBuscarClick()` | Refiltra `xNensiN` pela OP corrente em `xMfas` via `SET KEY TO` |
+| `BtnEncerrarClick()` | Habilita form pai e libera o sub-dialog (id├¬ntico ao `BtnOkClick`) |
+| `BtnSalvarClick()` | Consolida via `FormParaBO()`, refresh do grid, reabilita pai e fecha |
+| `BtnCancelarClick()` | Reverte buffer do `xNensiN` via `TABLEREVERT`, reabilita pai e fecha |
+
+O arquivo final tem 1490 linhas e est├í funcionalmente completo conforme o legado `SigPdMp9.SCX`.

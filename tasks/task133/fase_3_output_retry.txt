@@ -1,0 +1,9 @@
+﻿Phase 3 retry complete. The original Sonnet run only created `InicializarForm` + `ConfigurarCabecalho`, missing `ConfigurarPageFrame` which is the validator's required token (line 4672 of OrquestradorMigracao.ps1: `$conteudo -match "ConfigurarPageFrame" -and $conteudo -match "InicializarForm"`).
+
+**Changes to `C:\4c\projeto\app\forms\operacionais\FormSigReJur.prg`:**
+- Added `ConfigurarPageFrame()` ÔÇö base form config (BackColor, Tahoma 8) following the FormSigReCmg operational pattern (the SIGREJUR original has no PageFrame, so this method acts as the form-level config hook)
+- Added `ConfigurarPaginaLista()` ÔÇö calls `ConfigurarCabecalho()` (the persistent `cntSombra` header)
+- Added `ConfigurarPaginaDados()` ÔÇö non-stub placeholder for grid/shapes/textboxes added in phases 4-8
+- Rewired `InicializarForm()` to call `ConfigurarPageFrame` ÔåÆ `ConfigurarPaginaLista` ÔåÆ `ConfigurarPaginaDados` in sequence
+
+The file now passes the Phase 3 validator and preserves the existing Init (with `par_oParentForm` DataSession sharing), `ConfigurarCabecalho` (cntSombra equivalent), `TornarControlesVisiveis`, and `Destroy`.

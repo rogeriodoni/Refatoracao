@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico
+
+O erro n├úo estava no `FormTpc.prg` nem no `TpcBO.prg` (ambos corretos) ÔÇö estava no arquivo de mapeamento gerado `projeto\app\utils\mapeamentos\FormTpc_mapeamento.json`, usado pelo `ComparadorUI.prg` para resolver cada objeto do legado no form migrado.
+
+**Causa raiz:** a entrada
+
+```json
+"SIGCDTPC.pagina.dados.grdProdutos": "grd_4c_Lista"
+```
+
+mapeava o grid de Grupos vinculados da Page2 (legado `grdProdutos`, Top=221/Left=400/Width=223/Height=350/RowHeight=15) para `grd_4c_Lista` ÔÇö que ├® o **grid da Page1 (Lista)**, n├úo relacionado, com Top=117/Left=26/Width=890/Height=498/RowHeight=16.
+
+Como `grd_4c_Lista` existe de fato no form (embora seja o objeto errado), o `ComparadorUI.ResolverObjeto()` consegue resolv├¬-lo e compara os valores como se fossem do mesmo controle ÔÇö gerando 5 falsas "DIFERENCA" (Height/Left/RowHeight/Top/Width), todas classificadas como bloqueantes (limite 0), enquanto os demais campos da Page2 (mapeados corretamente, ex. `getTipos`ÔåÆ`txt_4c_Tipos`) apenas n├úo resolviam e ca├¡am como AVISO (n├úo-bloqueante).
+
+O grid correto para `grdProdutos` ├® `grd_4c_Dados` (declarado em `FormTpc.prg:833`, Top=258/Left=400/Width=223/Height=350/RowHeight=15 ÔÇö os mesmos valores esperados, exceto Top, que tem o deslocamento arquitetural documentado de +37 j├í coberto pela l├│gica de fallback/toler├óncia do comparador para caminhos n├úo resolvidos).
+
+## Corre├º├úo aplicada
+
+`projeto\app\utils\mapeamentos\FormTpc_mapeamento.json`:
+```diff
+- "SIGCDTPC.pagina.dados.grdProdutos": "grd_4c_Lista",
++ "SIGCDTPC.pagina.dados.grdProdutos": "grd_4c_Dados",
+```
+
+Isso elimina o falso positivo (o caminho passa a apontar para o grid certo, cessando a colis├úo acidental com o grid da Lista) sem alterar nenhum c├│digo funcional do form ou do BO.
+
+N├úo foi poss├¡vel validar rodando o `ValidarUIFidelity.prg` de ponta a ponta neste ambiente (VFP9 encerrou em <1s sem gerar novo relat├│rio, provavelmente por falta de conectividade com o SQL Server 192.168.200.10 aqui); a corre├º├úo foi verificada estaticamente via leitura do `ComparadorUI.prg` (l├│gica de `ResolverObjeto`/`ConstruirCaminhoCompleto`/toler├óncia) e compara├º├úo linha a linha com os valores reais do `FormTpc.prg`.

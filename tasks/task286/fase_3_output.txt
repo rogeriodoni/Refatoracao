@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto e completo para a Fase 3. Tudo em ordem:
+
+**Resumo do que foi criado em `Formsigprftp.prg` (Fase 3/8):**
+
+- **DEFINE CLASS** com todas as propriedades de estado FTP (`this_cTpConnect`, `this_cFtpAdd`, `this_cDirEnvFtp`, etc.), flags de modo e refer├¬ncia ao BO
+- **`Init()`** ÔåÆ apenas `RETURN DODEFAULT()` (FormBase chama `InicializarForm()`)
+- **`InicializarForm()`** ÔåÆ cria cursores, instancia BO, configura form, carrega par├ómetros; com TRY/CATCH verboso e sem `RETURN` dentro do bloco
+- **`CriarCursores()`** ÔåÆ equivalente ao `Load()` do legado: cria `logftp` e `tmpprog` com campos id├¬nticos ao SCX original
+- **`ConfigurarForm()`** ÔåÆ aplica `BackColor`, `FontName`, `Picture` (com guard `IF FILE()`)
+- **`CarregarParametros()`** ÔåÆ chama `sigprftpBO.CarregarParametrosSistema()` + `CarregarConfiguracaoEmpresa()`, normaliza separadores de diret├│rio, detecta modo s├│-envio/s├│-recebimento
+- **`TornarControlesVisiveis()`** ÔåÆ recursivo para ativar controles ap├│s `AddObject()`
+- **`Inf()`** ÔåÆ adiciona linha ao cursor `logftp` (m├®todo p├║blico usado extensivamente nos handlers FTP)
+- **`Destroy()`** ÔåÆ fecha `logftp`, `tmpprog`, `FtpServer`; anula BO; chama `DODEFAULT()`
+
+As Fases 4-8 adicionar├úo os controles visuais (bot├Áes, container duplo com PageFrames, grids e handlers de eventos FTP).

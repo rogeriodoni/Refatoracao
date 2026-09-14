@@ -1,0 +1,195 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 4,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["formas", "bandeira", "Sum", "Cast", "fConfigGeral", "fDtoSQL", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREFC1",
+      "evento": "Procedure",
+      "linhas": 177,
+      "codigoOriginal": "lcQuery = [Select c.datas, c.Emps, c.Dopes, c.Numes, c.empdopnums, c.cidchaves as chaPar, c.fpags, (c.valos*c.cotfpgs) as valos, ] +; \n\t[d.fparcs, c.valos as valosM, c.moefpgs, ] +; \n\t[case when d.infos = 'T' then d.formas else e.descrs end as info, ] +;  \n\t[d.formas, d.valpends, d.trocos,d.bandeira,c.adquirente ] +;  \n\t[From sigmvPar c, sigopfp d, sigprinf e, sigcdope g, sigcdtom h ] +; \n\t[Where c.datas BetWeen ?pDtI And ?pDtF And ] +;  \n\t[c.empdopnums in(select a.empdopnums ] +; \n\t[from  sigmv... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "formas, bandeira, Sum,formas, bandeira, Cast",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFC1",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "\tReport Form SigReFc3 To Printer Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFC1",
+      "evento": "Init",
+      "linhas": 45,
+      "codigoOriginal": "Public m.reslanca, m.resforma, m.rescheque, m.rescartao, m.resvende, m.resconta, m.reslanfor, m.resqtdes, m.ResvDets\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tlnQueryOk = ThisForm.podataMgr.SqlExecute([Select * From SigCdPam ],'CrSigCdPam')\n\t\tIf lnQueryOk < 1\n\t\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')\n\t\t\tReturn(.F.)\n\t\tEndIf\n\n*!*\t\t\tlnQueryOk = ThisForm.podataMgr.SqlExecute([Select cemps,razas From SigCdEmp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final,get_cd_empresa",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFC1",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor csSigCdTom (Marca n(1), Descri c(40), Codigos n(2))\nIndex On Codigos Tag Codigos\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFC1",
+      "evento": "Procedure",
+      "linhas": 768,
+      "codigoOriginal": "Private pDtI, pDtF, lnOpt\nLocal lcCbEmp, lcTitulo, lcPeriodo, lcGru, lcVendedor, lcOperacao, ldInicial, ldFinal, lcModa, ;\n\tlnAgru, lnAgru2, lnAgru3, lcFPubl\nLocal cheVen, cheTop, cheFP, cheProd, cheCole, cheCate, cheLstOp, cheLstOp1, lcLstOp, lcHInicial, lcHFinal, lcDataIni, lcDataFin, lcEmpAnt\n\nldInicial   = Thisform.get_dt_inicial.Value\nlcHInicial  = [00:00:00]\nldFinal     = Thisform.get_dt_Final.Value\nlcHFinal    = [23:59:59]\nlcEmp\t\t= Thisform.get_cd_empresa.Value\nlnTpRel \t= Thisform.tpRel.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_Final,get_cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFC1",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFC1",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFc3 Preview\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFC1",
+      "evento": "Procedure",
+      "linhas": 33,
+      "codigoOriginal": "*-- Deleta a Devolução que foi feita na LOJA X e a Origem é Y\nLocal lnOldSel\nlnOldSel = Select()\nSelect csDados1\nGo top\nScan \n\n\tlcEdn = csDados1.Emps + csDados1.Dopes + Str(csDados1.Numes,6)\n\t\n\tlcQuery = [Select a.EmpSubns as emps, d.dopes, convert(int,right(codigos,6)) as numes, e.datas, e.vends\t]+;\n\t\t[From SigMvPec a ]+;\n\t\t[inner join SigMvCab b on a.EmpDopnums = b.EmpDopNums ]+;\n\t\t[inner join SigCdOpe c on b.Dopes = c.Dopes ]+;\n\t\t[inner join SigCdOpe d on d.ndopes = replace(a.codigos,right(co... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFC1.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa,get_ds_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFC1.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa,get_ds_empresa",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREFC1.Init",
+      "queryOriginal": "\t\tlnQueryOk = ThisForm.podataMgr.SqlExecute([Select * From SigCdPam ],'CrSigCdPam')",
+      "tabelas": "SigCdPam",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREFC1.Procedure",
+      "queryOriginal": "\tlcQuery = [Select a.EmpSubns as emps, d.dopes, convert(int,right(codigos,6)) as numes, e.datas, e.vends\t]+; \t\t[From SigMvPec a ]+; \t\t[inner join SigMvCab b on a.EmpDopnums = b.EmpDopNums ]+; \t\t[inner join SigCdOpe c on b.Dopes = c.Dopes ]+; \t\t[inner join SigCdOpe d on d.ndopes = replace(a.codigos,right(co... [TRUNCADO]",
+      "tabelas": "SigMvCab,SigCdOpe",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPam", "SigMvCab", "SigCdOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

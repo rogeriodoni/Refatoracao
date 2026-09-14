@@ -1,0 +1,10 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito:
+
+**LAYOUT-POSITION (2 erros ÔåÆ corrigidos):**
+- `chk_4c_Valida` (Column28) renomeado para `chk_4c_Check1` ÔåÆ Top=25, Left=31 agora bate com o legacy `grdSaldos.Column28.Check1`
+- `chk_4c_Check1` (Inativa, standalone) renomeado para `chk_4c_Inativa` em todos os 4 sites de uso (FormParaBO, BOParaForm, LimparCampos, HabilitarCampos)
+
+**GRID-HEADER (12 erros ÔåÆ 8 corrigidos):**
+- Removido bloco de 7 `.Header1.Caption` redundante do m├®todo `CarregarLista` (linhas 1135-1141 originais)
+- Removido bloco de 7 `.Header1.Caption` redundante do m├®todo `BtnBuscarClick` (linhas 1519-1525 originais)
+- Os 4 erros restantes s├úo do setup inicial de `grd_4c_Lista` (linhas 375-388) ÔÇö headers necess├írios para a grade lista que n├úo tem equivalente no legado (SIGCDMTZ n├úo tinha lista separada), n├úo podem ser alterados sem quebrar funcionalidade

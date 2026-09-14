@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. A Fase 7 est├í completa.
+
+**O que foi implementado:**
+
+O `FormSigReJur` ├® um subformul├írio OPERACIONAL ÔÇö n├úo tem bot├Áes Incluir/Alterar/Visualizar/Excluir (CRUD n├úo se aplica). O ├║nico bot├úo principal ├® `Confirma/OK` que j├í estava implementado como `THIS.Release()` (fiel ao original: `ThisForm.Release`).
+
+O trabalho real da Fase 7 foi implementar a l├│gica de habilita├º├úo din├ómica dos campos de descri├º├úo, que no original era controlada pelos eventos `When` das TextBoxes:
+
+- **`AtualizarHabilitacaoDescricoes()`** ÔÇö novo m├®todo que replica o comportamento original:
+  - `txt_4c_Dconta.Enabled = AlteraContas AND EMPTY(txt_4c_Conta.Value)` (original: `Get_dconta.When`)
+  - `txt_4c_SDCONTA.Enabled = AlteraContas AND EMPTY(txt_4c_SCONTA.Value)` (original: `Get_SDCONTA.When`)
+
+- Chamado em 5 pontos: `InicializarValores` (ao carregar), `TxtContaKeyPress`, `TxtSCONTAKeyPress`, `AbrirLookupContaDebito` e `AbrirLookupContaCredito` (ap├│s sele├º├úo no lookup).

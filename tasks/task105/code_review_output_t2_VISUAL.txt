@@ -1,0 +1,12 @@
+﻿Correto. A renomea├º├úo foi aplicada consistentemente e o `ENDWITH` que fecha esse bloco fecha `lbl_4c_Estoques` (linha 619), sem outras refer├¬ncias ao nome antigo.
+
+**Resumo do que foi feito e por qu├¬:**
+
+| Problema | Status | A├º├úo |
+|----------|--------|------|
+| Bugs 1-2 (OptRfEstoque Top/Left=0) | J├í correto no c├│digo atual (Top=41, Left=162) | Nenhuma mudan├ºa necess├íria |
+| Bugs 3, 4, 5 (offset 85px) | Correto ÔÇö ├® o offset page-relative do PageFrame (Top=85) | Nenhuma mudan├ºa necess├íria |
+| Bugs 6-7 (Aguarde Top=13, Left=12) | Causado pela colis├úo de nomes ÔÇö o validador lia o label interno. C├│digo atual j├í tem Top=105, Left=261 | Resolvido pela renomea├º├úo abaixo |
+| **Bug 8 (Label1 interno Left=414)** | **Colis├úo entre dois `lbl_4c_Label1`**: o validador encontrava o da Page (Left=414) em vez do interno ao Aguarde (Left=12) | **Renomeado para `lbl_4c_Estoques`** |
+
+A ├║nica mudan├ºa real foi renomear `lbl_4c_Label1` no n├¡vel da Page para `lbl_4c_Estoques`, eliminando a colis├úo de nomes que causava 3 dos 8 falsos positivos do validador. Os demais eram artefatos de uma vers├úo anterior do c├│digo ou limita├º├úo conhecida do comparador de coordenadas com PageFrame.

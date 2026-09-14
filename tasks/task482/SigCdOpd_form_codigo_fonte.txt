@@ -1,0 +1,583 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdOpd.SCX
+* Data/Hora: 22/08/2026 04:13:12
+* Total de registros: 9
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDOPD
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label3
+  Parent: SIGCDOPD.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: getnopes
+  Parent: SIGCDOPD.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDopes
+  Parent: SIGCDOPD.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptPagos
+  Parent: SIGCDOPD.pagina.dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptUtils
+  Parent: SIGCDOPD.pagina.dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOPD
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = (prompt())
+  Name = "SIGCDOPD"
+  pagina.ErasePage = .T.
+  pagina.lista.cntSombra.lblSombra.Name = "lblSombra"
+  pagina.lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  pagina.lista.cntSombra.Name = "cntSombra"
+  pagina.lista.grade.FontName = "Tahoma"
+  pagina.lista.grade.ForeColor = 90,90,90
+  pagina.lista.grade.Name = "grade"
+  pagina.lista.grupo_op.inserir.Top = 5
+  pagina.lista.grupo_op.inserir.Left = 5
+  pagina.lista.grupo_op.inserir.Name = "inserir"
+  pagina.lista.grupo_op.consultar.Top = 5
+  pagina.lista.grupo_op.consultar.Left = 80
+  pagina.lista.grupo_op.consultar.Name = "consultar"
+  pagina.lista.grupo_op.alterar.Top = 5
+  pagina.lista.grupo_op.alterar.Left = 155
+  pagina.lista.grupo_op.alterar.Name = "alterar"
+  pagina.lista.grupo_op.excluir.Top = 5
+  pagina.lista.grupo_op.excluir.Left = 230
+  pagina.lista.grupo_op.excluir.Name = "excluir"
+  pagina.lista.grupo_op.procurar.Top = 5
+  pagina.lista.grupo_op.procurar.Left = 305
+  pagina.lista.grupo_op.procurar.Name = "procurar"
+  pagina.lista.grupo_op.Left = 343
+  pagina.lista.grupo_op.Top = -1
+  pagina.lista.grupo_op.Name = "grupo_op"
+  pagina.lista.grupo_saida.sair.Top = 5
+  pagina.lista.grupo_saida.sair.Left = 5
+  pagina.lista.grupo_saida.sair.Name = "sair"
+  pagina.lista.grupo_saida.Left = 718
+  pagina.lista.grupo_saida.Top = -1
+  pagina.lista.grupo_saida.Name = "grupo_saida"
+  pagina.lista.cntFiltros.Top = 49
+  pagina.lista.cntFiltros.Left = 179
+  pagina.lista.cntFiltros.Name = "cntFiltros"
+  pagina.lista.Name = "lista"
+  pagina.dados.grupo_salva.salva.Top = 5
+  pagina.dados.grupo_salva.salva.Left = 5
+  pagina.dados.grupo_salva.salva.Name = "salva"
+  pagina.dados.grupo_salva.cancelar.Top = 5
+  pagina.dados.grupo_salva.cancelar.Left = 80
+  pagina.dados.grupo_salva.cancelar.Name = "cancelar"
+  pagina.dados.grupo_salva.Left = 618
+  pagina.dados.grupo_salva.Top = 11
+  pagina.dados.grupo_salva.TabIndex = 5
+  pagina.dados.grupo_salva.ZOrderSet = 2
+  pagina.dados.grupo_salva.Name = "grupo_salva"
+  pagina.dados.Name = "dados"
+  pagina.Name = "pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOPD.pagina.dados.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Operação:"
+  Height = 15
+  Left = 135
+  Top = 121
+  Width = 53
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOPD.pagina.dados.getnopes
+------------------------------------------------------------
+  ControlSource = "crSigOpPed.nDopes"
+  Format = "!K"
+  Height = 23
+  Left = 203
+  TabIndex = 1
+  Top = 117
+  Width = 37
+  ZOrderSet = 7
+  plprocurar = .F.
+  Name = "getnopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOPD.pagina.dados.GetDopes
+------------------------------------------------------------
+  ControlSource = "crSigOpPed.Dopes"
+  Format = "!K"
+  Height = 23
+  Left = 243
+  TabIndex = 2
+  Top = 117
+  Width = 150
+  ZOrderSet = 7
+  plprocurar = .F.
+  Name = "GetDopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOPD.pagina.dados.OptPagos
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  ControlSource = "crSigOpPed.Tpagos"
+  Height = 27
+  Left = 198
+  Top = 143
+  Width = 268
+  TabIndex = 3
+  BorderColor = 36,84,155
+  Name = "OptPagos"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Pagos"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não Pagos"
+  Option2.Left = 87
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Todos"
+  Option3.Height = 15
+  Option3.Left = 200
+  Option3.Top = 5
+  Option3.Width = 47
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOPD.pagina.dados.OptUtils
+------------------------------------------------------------
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  ControlSource = "crSigOpPed.Tutils"
+  Height = 27
+  Left = 198
+  Top = 164
+  Width = 268
+  TabIndex = 4
+  BorderColor = 36,84,155
+  Name = "OptUtils"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Utilizados"
+  Option1.Value = 1
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não Utilizados"
+  Option2.Left = 87
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Todos"
+  Option3.Value = 0
+  Option3.Height = 15
+  Option3.Left = 200
+  Option3.Top = 5
+  Option3.Width = 47
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDOPD
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+	
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigOpPed], [cIdChaves], [crSigOpPed], [], ThisForm.Pagina.Lista.Grade)
+			.pfSqlTabela(1).pColuna([Ndopes], [], [], [Código]	   , 31, .t.)
+			.pfSqlTabela(1).pColuna([Dopes ], [], [], [Operação]  ,150, .t.)
+			.pfSqlTabela(1).pColuna([tPagos], [], [], [Pagamentos], 80)
+			.pfSqlTabela(1).pColuna([tUtils], [], [], [Utilizados],108)
+			
+		EndWith
+
+		=DoDefault()
+		
+		.Pagina.Lista.Grade.Columns(3).ControlSource = [Iif(crSigOpPed.tPagos = 1,'Pagos',Iif(crSigOpPed.tpagos = 2,'Não Pagos','Todos'))]
+		.Pagina.Lista.Grade.Columns(4).ControlSource = [Iif(crSigOpPed.tUtils= 1,'Utilizados',Iif(crSigOpPed.tUtils= 2,'Não Utilizados','Todos'))]
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+loDad = ThisForm.Pagina.Dados
+
+Select crSigOpPed
+If Not Empty(loDad.GetDopes.Value)
+	Locate For Alltrim(Dopes) = Alltrim(loDad.GetDopes.Value)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.lista.grupo_op.Click
+------------------------------------------------------------
+PROCEDURE pagina.lista.grupo_op.Click
+LParameters lnOpcao
+
+If (Type('lnOpcao') = 'N')
+	This.Value = lnOpcao
+EndIf
+
+Select crSigOpPed
+
+If Not DoDefault(lnOpcao)
+	ThisForm.mAtivapagina1
+	Return 0
+EndIf
+
+Replace cIdChaves With Iif(Empty(cIdChaves), fUniqueIds(), cIdChaves)
+
+loDad = ThisForm.Pagina.Dados
+
+Do Case
+	Case Inlist(ThisForm.pcEscolha, 'INSERIR','PROCURAR','ALTERAR')
+		loDad.getnopes.Setfocus
+
+	Case Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')
+		loDad.Grupo_Salva.Salva.Setfocus
+
+EndCase
+
+Select crSigOpPed
+
+loDad.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.grupo_salva.salva.Click
+------------------------------------------------------------
+PROCEDURE pagina.dados.grupo_salva.salva.Click
+Local loDad
+
+loDad = ThisForm.Pagina.Dados
+
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	If Empty(loDad.GetNopes.Value)
+		=MessageBox('Obrigatório Informar a Operação!!!', 48, '')
+		loDad.GetNopes.SetFocus
+		Return 0
+	EndIf
+		
+	If loDad.OptPagos.Value < 1
+		=MessageBox('Obrigatório Informar a Pagamento!!!', 48, '')
+		loDad.OptPagos.option1.SetFocus
+		Return 0	
+	EndIf 
+	
+	If loDad.OptUtils.Value < 1
+		=MessageBox('Obrigatório Informar o Utilização!!!', 48, '')
+		loDad.OptUtils.option1.SetFocus
+		Return 0	
+	EndIf
+
+	If (Thisform.pcEscolha = 'INSERIR' )
+		lcQuery = [Select * ] + ;
+				    [From SigOpPed ] + ;
+				   [Where Dopes = '] + Padr(loDad.GetDopes.Value, 20) + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crBusca]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (crBusca)])
+			Return 0
+		EndIf
+		Select crBusca
+		Go Top In crBusca
+		If Not Eof([crBusca])
+			=MessageBox([Operação já Cadastrada!!!], 48, [Atenção!!!])
+			loDad.getnopes.SetFocus
+			Return 0
+		EndIf
+
+	EndIf
+
+	If (Thisform.pcEscolha = [EXCLUIR])
+		Delete In crSigOpPed
+	EndIf 
+EndIf
+Select crSigOpPed
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+* Fim ************************************************************************************** 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.grupo_salva.cancelar.Click
+------------------------------------------------------------
+PROCEDURE pagina.dados.grupo_salva.cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOPD.pagina.dados.getnopes
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpe', ;
+						   'crListaRemota', 'Ndopes', This.Value, 'Seleção', 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Ndopes', '9999', 'Código')
+		loLista.mAddColuna('Dopes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.Getnopes.Value = crListaRemota.Ndopes
+	This.Parent.GetDopes.Value = crListaRemota.Dopes
+
+	Use In crListaRemota
+Else
+	This.Parent.Getnopes.Value = ''
+	This.Parent.GetDopes.Value = ''
+EndIf
+
+This.Parent.Getnopes.Refresh
+This.Parent.GetDopes.Refresh
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (InList(Thisform.pcEscolha ,[INSERIR],[PROCURAR]))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOPD.pagina.dados.GetDopes
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpe', ;
+						   'crListaRemota', 'Dopes', This.Value, 'Seleção', 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Ndopes', '9999', 'Código')
+		loLista.mAddColuna('Dopes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.Getnopes.Value = crListaRemota.Ndopes
+	This.Parent.GetDopes.Value = crListaRemota.Dopes
+
+	Use In crListaRemota
+Else
+	This.Parent.Getnopes.Value = ''
+	This.Parent.GetDopes.Value = ''
+EndIf
+
+This.Parent.Getnopes.Refresh
+This.Parent.GetDopes.Refresh
+
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (InList(Thisform.pcEscolha ,[INSERIR],[PROCURAR]))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOPD.pagina.dados.OptPagos
+* Classe: fwoption (Base: optiongroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return (InList(Thisform.pcEscolha ,[INSERIR],[ALTERAR]))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOPD.pagina.dados.OptUtils
+* Classe: fwoption (Base: optiongroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return (InList(Thisform.pcEscolha ,[INSERIR],[ALTERAR]))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDOPD
+RESERVED3 (ClassInfo): podatacep
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

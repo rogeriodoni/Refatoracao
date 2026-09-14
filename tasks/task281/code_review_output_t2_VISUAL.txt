@@ -1,0 +1,8 @@
+﻿A ├║nica ocorr├¬ncia de `.Top = 13` no arquivo ├® na linha 195 ÔÇö pertence ao `lbl_4c_Empresa` (label filho dentro do container), n├úo ao `cnt_4c_Container1` em si.
+
+Verificando o container:
+- Linha 184: `.Top = 84` ÔÇö j├í est├í correto, igual ao original.
+
+**Diagn├│stico:** falso positivo do review tool. Ele encontrou `.Top = 13` no `lbl_4c_Empresa` (primeiro controle filho do container) e atribuiu erroneamente esse valor ao `cnt_4c_Container1`. O container em si j├í est├í em `Top=84`, id├¬ntico ao original SCX.
+
+Nenhuma altera├º├úo necess├íria no arquivo ÔÇö o problema reportado n├úo existe no c├│digo atual.

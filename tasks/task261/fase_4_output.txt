@@ -1,0 +1,16 @@
+﻿All BINDEVENT handler methods are `PROCEDURE` (public by default, no `PROTECTED` keyword). The lookup helpers are `PROTECTED PROCEDURE` which is correct (called internally only via `THIS.`).
+
+Both files are complete and correct. Here's what Phase 4 delivered:
+
+**FormSigPrCcc.prg** (1053ÔåÆ1519 lines):
+- `ConfigurarBINDEVENTs()`: wires 6 button/checkbox events + 12 textbox KeyPress events across all 4 floating containers
+- `BtnProcessarClick()`: full processing loop ÔÇö disables UI, delegates to BO per checked section, shows progress, re-enables controls, reveals LblEnd on success
+- `ChkContaClick/ChkEstoqueClick/ChkCustoClick/ChkCompraClick`: toggle container visibility + enable/disable Processa button via `AtualizarEstadoProcessa()`
+- 12 KeyPress handlers with `LPARAMETERS` + Enter/Tab/F4 guard
+- 7 lookup helpers: `AbrirLookupEmpresa` (sigcdemp), `AbrirLookupGruposCcr` (SigCdGcr), `AbrirLookupContas` (SigCdCli), `AbrirLookupMoeda` (SigCdMoe), `AbrirLookupProduto` (SigCdPro + fills Descricao), `AbrirLookupGruposEst` (SigMvHst), `AbrirLookupEstoque` (SigMvHst)
+
+**SigPrCccBO.prg** (244ÔåÆ572 lines):
+- `RecalcularSaldosConta()`: recalculates running `saldos` in SigMvCcr per (emps, grupos, contas, moedas) group ordered by datas/numes
+- `RecalcularSaldosEstoque()`: recalculates running `sqtds` in SigMvHst per (cpros, emps, grupos, estos) group
+- `RecalcularSaldosCusto()`: updates `custofs` in SigCdPro with weighted average from SigMvHst purchase entries
+- `RecalcularSaldosCompra()`: updates/inserts SigOpClU with most recent purchase entry per (cpros, emps) from SigMvHst

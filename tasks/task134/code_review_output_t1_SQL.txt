@@ -1,0 +1,5 @@
+﻿4 corre├º├Áes aplicadas em `SigPdAcoBO.prg`:
+
+- **Linhas 312 e 335** (`SQL-ASPAS`): `EmpGruEsts = '` + var + `'` ÔåÆ `EmpGruEsts = ` + `EscaparSQL(loc_cEmpGE)` (EscaparSQL j├í retorna com aspas).
+- **Linha 464** (`SQL-ASPAS`): `BETWEEN '` + var + `' AND '` + var + `'` ÔåÆ `BETWEEN ` + `EscaparSQL(loc_cEdI)` + ` AND ` + `EscaparSQL(loc_cEdF)`.
+- **Linha 172** (`SQL-FILTRO-INVENTADO`): Removido `WHERE Cemps = ...` (coluna inventada, n├úo existe no original). A empresa agora ├® buscada com `SELECT ... FROM SigCdEmp` sem filtro e localizada via `LOCATE FOR ALLTRIM(Cemps) = ALLTRIM(loc_cCodEmp)`.

@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era cl├íssico de VFP9: ao definir `ColumnCount = 7` em um Grid program├ítico, o VFP9 auto-cria um TextBox chamado "Text1" em cada coluna. Quando o c├│digo tentava `.AddObject("Text1", "TextBox")` na Column1, recebia "A member object with this name already exists" na linha 336.
+
+**Fix**: removido o `AddObject("Text1", ...)` da Column1 ÔÇö o `WITH .Text1` passa a configurar o controle j├í existente diretamente. As colunas 2-5 n├úo t├¬m o mesmo problema porque `.AddObject("Check1", "CheckBox")` adiciona um nome novo ("Check1") que n├úo existe por padr├úo.

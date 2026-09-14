@@ -1,0 +1,13 @@
+﻿Nenhuma refer├¬ncia incorreta. A Fase 8 est├í conclu├¡da. 
+
+**O que foi adicionado:**
+
+- **`CarregarLista()`** ÔÇö cria o cursor `cursor_4c_Produtos` vazio com a estrutura exata do grid (mesmos campos do `CREATE CURSOR` em `BtnIncluirClick`), configura o `RecordSource` do grid e chama `AjustarBotoesPorModo()`. Agora ├® chamado em `InicializarForm()` logo ap├│s `ConfigurarGrade()`, garantindo que o cursor exista quando o form abre.
+
+- **`LimparCampos()`** ÔÇö reseta todos os 18 campos de filtro, checkboxes, OptionGroup, limpa a foto do produto e reinicia o grid via `CarregarLista()`.
+
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö habilita/desabilita os campos de filtro e o bot├úo Processar, usado para controle de estado (modo Auditado vs. normal).
+
+- **`AjustarBotoesPorModo()`** ÔÇö gerencia o estado dos bot├Áes: Processar habilitado quando n├úo est├í em modo Auditado, Atualizar habilitado apenas quando h├í produtos processados no grid.
+
+- **Corrigidas** duas refer├¬ncias incorretas `cursor_4c_Dados` ÔåÆ `cursor_4c_Produtos` em `ConfigurarPaginaLista()` e `AlternarPagina()`.

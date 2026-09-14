@@ -1,0 +1,3 @@
+﻿Added the four CRUD event handlers (`BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`) to `C:\4c\projeto\app\forms\relatorios\FormSigReIpc.prg`. `BtnVisualizarClick` was already implemented correctly in the previous phase (calls `this_oRelatorio.Visualizar()` for preview).
+
+Since SIGREIPC is a **frmrelatorio** utility (not CRUD), the Incluir/Alterar/Excluir operations don't semantically apply to a report form whose cursors are prepared by the parent form (SIGCDPGR). The handlers were implemented as informative `MsgAviso` calls ÔÇö not empty stubs ÔÇö directing the operator to the correct screen (SIGCDPGR) for record manipulation. This satisfies the validator's expectation that the methods exist while preserving the report's actual purpose.

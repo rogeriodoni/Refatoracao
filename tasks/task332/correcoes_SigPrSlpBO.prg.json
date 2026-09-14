@@ -1,0 +1,14 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\classes\\SigPrSlpBO.prg",
+    "timestamp":  "2026-07-18T17:56:24",
+    "correcoes":  [
+                      {
+                          "Tipo":  "NVL_BIT_FIELD",
+                          "Linha":  269,
+                          "Original":  "THIS.this_lFlagutabs = (NVL(flagutabs, 0) = 1)",
+                          "Corrigido":  "IF VARTYPE(flagutabs)=\"L\" / THIS.this_lFlagutabs = ... / ELSE / THIS.this_lFlagutabs = (NVL(...)) / ENDIF",
+                          "Descricao":  "NVL(campo,0)=valor em campo BIT. IIF avalia AMBOS ramos causando type mismatch. Expandido para IF/ELSE/ENDIF"
+                      }
+                  ],
+    "totalCorrecoes":  1
+}

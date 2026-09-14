@@ -1,0 +1,262 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDALE",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE",
+      "evento": "Init",
+      "linhas": 153,
+      "codigoOriginal": "Lparameters pform,lpiclis,lpgrupos,lcacesso\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nlcpiclis = lpiclis\nThisform.iclis = lpiclis\nThisform.parentform = pform\n\nWith Thisform\n\t.poDatamgr = Createobject('fSqlConector','sige')\n\n\t.LockScreen = .t.\n\tThisform.grade_ale.RecordSource = ''\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdAle','pkchaves','crSigCdAle','','') &&,lStrQuery)\n\t\t.Requery(1)\n\tEndwith\n\n\t*** Busca as Movimentações ativas e... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.grade_ale",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.grade_ale.Column2.fwcheckbox1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "* Desabilitando default()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.grade_ale.Column2.fwcheckbox1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "* Desabilitando default()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.grade_ale.Column3.fwcheckbox1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "* Desabilitando default()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.grade_ale.Column3.fwcheckbox1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "* Desabilitando default()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.grade_ale.Column4.fwcheckbox1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "* Desabilitando default()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.grade_ale.Column4.fwcheckbox1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "* Desabilitando default()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.grade_ale.Column5.fwcheckbox1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "* Desabilitando default()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.grade_ale.Column5.fwcheckbox1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "* Desabilitando default()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.grade_ale.Column6.fwcombo1",
+      "evento": "InteractiveChange",
+      "linhas": 4,
+      "codigoOriginal": "lnClick = this.ListItemId\nreplace priors with lnClick in crSigCdAle\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.btnconfirma",
+      "evento": "Click",
+      "linhas": 53,
+      "codigoOriginal": "*!*\tIf Inlist( thisform.pcEscolha, 'INSERIR')\n*!*\t\tIf Empty( crSigCdAle.Infos)\n*!*\t\t\tMessagebox( 'Código Inválido.', 48 , '' )\n*!*\t\t\tThisForm.Pagina.Dados.Get_Info.SetFocus\n*!*\t\t\tReturn\n*!*\t\tEndif\n*!*\t\tif ThisForm.poDataMgr.ChkRegister('SigCdAle','Infos',ThisForm.Pagina.Dados.Get_Info.Value)\n*!*\t\t\tMessagebox( 'Código já cadastrada.', 48,'' )\n*!*\t\t\tThisForm.Pagina.Dados.Get_Info.SetFocus\n*!*\t\t\tReturn\n*!*\t\tEndif\n*!*\tEndif\n\nSelect crSigCdAle\nSet Order To Tag Tabelas\nSet Key To\n\nSELECT Dopes, Usuari... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute,Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.btnsair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "thisform.poDatamgr.Release()\nthisform.Release()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Release",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDALE.optTabela",
+      "evento": "InteractiveChange",
+      "linhas": 6,
+      "codigoOriginal": "Select crSigCdAle\nSet Order To Tag Tabelas\nSet Key To Iif(this.Value = 1,[SIGCDOPE],Iif(this.Value = 2,[SIGCDGCR],Iif(this.Value = 3,[SIGCDOPD],Iif(this.Value = 4,[SIGCDPRO],[SIGOPOPE]))))\nGo top\n\nthisform.grade_ale.Refresh()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

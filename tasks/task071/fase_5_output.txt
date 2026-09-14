@@ -1,0 +1,15 @@
+﻿Tudo aplicado corretamente. Fase 5/8 conclu├¡da.
+
+**O que foi feito:**
+
+1. **Header atualizado** ÔÇö coment├írio de `FASE 3/8` para `FASE 5/8` com o novo m├®todo documentado.
+
+2. **`ConfigurarPaginaDados()` adicionado** (linhas 635-672) ÔÇö m├®todo completo que aplica as propriedades de UI fidelity ausentes no c├│digo original:
+   - `txt_4c_Fpags`: `InputMask = "!!!!!!!!!!!!"` + `MaxLength = 12` (original: `fwget` com InputMask de 12 `!`)
+   - `txt_4c_Cemps`: `Format = "!"` + `MaxLength = 3` (original: `Format = "!"`, MaxLength=3)
+   - `txt_4c_Razas`: `Format = "!"` + `MaxLength = 40` (original: `Format = "!"`, MaxLength=40)
+   - TabIndex 1-14 id├¬ntico ao SIGRECTC.SCX original
+
+3. **`InicializarForm()` atualizado** ÔÇö chama `ConfigurarPaginaDados()` logo ap├│s `ConfigurarPaginaLista()`.
+
+4. **`LimparCampos()` corrigido** ÔÇö `DATE() - 1` trocado por `DATE()` para data inicial (o original inicializa ambas as datas com `date()`).

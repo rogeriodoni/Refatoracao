@@ -1,0 +1,18 @@
+﻿Verifica├º├Áes passaram:
+- `RETURN DODEFAULT()` em Init() ÔåÆ fora de TRY/CATCH Ô£ô  
+- `RETURN loc_lSucesso` em InicializarForm() ÔåÆ linha 86, ap├│s `ENDTRY` na linha 84 Ô£ô  
+- Sem `ISEMPTY`, `MostrarAviso` ou `PUBLIC FUNCTION/PROCEDURE` Ô£ô
+
+**Fase 3/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\forms\cadastros\FormCOM.prg` foi criado com 277 linhas contendo:
+
+| M├®todo | Conte├║do |
+|--------|----------|
+| `Init()` | Apenas `RETURN DODEFAULT()` |
+| `InicializarForm()` | Cria COMBO, chama `CarregarConfigGeral()`, chama `ConfigurarPageFrame()`, inicializa cursores crGrdItP/V/M vazios |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, Height=629, 2 pages, chama ConfigurarPagina* |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` vazio (Left=542), `cnt_4c_Saida` can├┤nico (Left=917) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` vazio (Left=842) |
+| `TornarControlesVisiveis()` | Implementa├º├úo completa recursiva (Pages + Controls) |
+| `Destroy()` | Chama `FecharCursores()` no BO e `DODEFAULT()` |
+
+**Pr├│xima fase (4/8):** adicionar grid de lista em Page1 e bot├Áes CRUD usando `Read + Edit`.

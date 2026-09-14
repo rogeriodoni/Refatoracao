@@ -1,0 +1,11 @@
+﻿Os tr├¬s alertas s├úo **falsos positivos**. Ap├│s verifica├º├úo:
+
+- **`cemps`** (linha 967): query auxiliar de lookup para validar c├│digo de Empresa em `SigCdEmp` ÔÇö separada da query principal do relat├│rio.
+- **`codigos`** (linha 1103): query auxiliar de lookup para validar Grupo em `SigCdGcr`.
+- **`contas`** (linha 1172): query auxiliar de lookup para validar Conta em `SigReCtb`.
+
+Nenhuma dessas condi├º├Áes faz parte da query principal do relat├│rio. O WHERE principal est├í no BO (`SIGRECPMBO.prg`) e usa exatamente as colunas corretas: `b.Datas`, `a.Emps`, `a.Dopps`, `a.Numps`, `b.GrupoOs`, `b.ContaOs`, `b.GrupoDs`, `b.ContaDs`, `a.Nops` ÔÇö todas presentes no original.
+
+O detector de `SQL-FILTRO-INVENTADO` varreu todo o arquivo e encontrou essas queries de valida├º├úo de lookup nos m├®todos `AbrirBuscaEmpresa`, `AbrirBuscaGrOrigem` e `AbrirBuscaContaO`, mas as confundiu com filtros inventados da query principal.
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto ÔÇö remover essas queries quebraria a valida├º├úo de lookup dos campos de filtro da tela.

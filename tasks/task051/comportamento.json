@@ -1,0 +1,401 @@
+{
+  "resumo": {
+    "totalMetodos": 22,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 15,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fAcessoEmpresa", "fAcessoContab", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGRECHP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "select CsRelatorio\n\nreport form SigReChp to printer prompt noconsole\n\nuse in CsCabecalho\nuse in CsRelatorio\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP",
+      "evento": "Init",
+      "linhas": 50,
+      "codigoOriginal": "WITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.SqlExecute([Select * From SigCdOpt],'crSigCdOpt')\n\tEndWith\nEndwith\t\n\nSelect crSigCdOpt\nScan for Tipos = 'DB' or Tipos = 'TR' \n\tScatter Memvar\n\tInsert Into TmpOpera From Memvar\nEndscan \n\nSelect TmpOpera\nGo Top\n\n=DoDefault()\n\nlcSql = [Select TitOpcS, T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,value      = date,value        = date,value      = space,value    = space",
+        "controlesReferenciados": "Opt],Opt',Opt_nr_opcao,option1,option2,option3,opt_nr_tipo,get_dt_inicial,get_dt_final,get_cd_empresa,get_ds_empresa,get_cd_emi_grupo,get_ds_emi_grupo,get_cd_emi_conta,get_ds_emi_conta,get_ordem",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGRECHP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nCreate Cursor TmpOpera ( Flag l, Operacaos c(15) )\nIndex on Operacaos Tag Operacaos\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP",
+      "evento": "Procedure",
+      "linhas": 122,
+      "codigoOriginal": "* declara as variáveis de cabeçalho\nPrivate lcNomeEmpresa,lcTitulo,lcPeriodo,lcOperacao,lcEmissor\n* declara as variáveis de campos\nPrivate lnNrTipo,ldDtInicial,ldDtFinal,lcNmOperacao,lcCdEmpresa,lcDsEmpresa,lnNrOpcao\nPrivate lcCdEmiGrupo,lcDsEmiGrupo,lcCdEmiConta,lcDsEmiConta\n* declara as variáveis de verificação\nPRIVATE lcVerData,lcVerOperacao,lcVerEmpresa,lcVerOpcao\nprivate lcVerEmiGrupo,lcVerEmiConta,lcVerAberto\n\n* inicializa variáveis de campos\nlnNrTipo     = thisform.opt_nr_tipo.value\nldDtI... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "opt_nr_tipo,get_dt_inicial,get_dt_final,get_ordem,get_cd_empresa,get_ds_empresa,opt_nr_opcao,get_cd_emi_grupo,get_ds_emi_grupo,get_cd_emi_conta,get_ds_emi_conta,get_cd_dep_grupo,get_ds_dep_grupo,get_cd_dep_conta,get_ds_dep_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "select CsRelatorio\n\nreport form SigReChp preview NoConsole\n\nuse in CsCabecalho\nuse in CsRelatorio\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "= fAcessoEmpresa(Usuar,'D',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_ds_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_Cd_Empresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.get_Cd_Empresa,ThisForm.get_Ds_Empresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa,get_Ds_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_cd_emi_grupo",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "= fAcessoContab(Usuar,'C',This.value,ThisForm.get_Cd_Emi_Grupo,ThisForm.get_Ds_Emi_Grupo)\n\nIf Empty(This.Value)\n\n\tThisForm.get_cd_emi_conta.Value = ''\n\tThisForm.get_ds_emi_conta.Value = ''\n\t\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Emi_Grupo,get_Ds_Emi_Grupo,get_cd_emi_conta,get_ds_emi_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_ds_emi_grupo",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "= fAcessoContab(Usuar,'D',This.value,ThisForm.get_Cd_Emi_Grupo,ThisForm.get_Ds_Emi_Grupo)\n\nIf Empty(This.Value)\n\n\tThisForm.get_cd_emi_conta.Value = ''\n\tThisForm.get_ds_emi_conta.Value = ''\n\t\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Emi_Grupo,get_Ds_Emi_Grupo,get_cd_emi_conta,get_ds_emi_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_ds_emi_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(empty(thisform.get_cd_emi_grupo.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_emi_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_cd_emi_conta",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local llRetorno\n\nm.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Emi_Grupo.Value,'C',This.Value,ThisForm.get_Cd_Emi_Conta,ThisForm.get_Ds_Emi_Conta))\n\nIf .Not.m.llRetorno\n\n\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\n\tThisForm.get_Cd_Emi_Conta.Value = ''\n\tThisForm.get_Ds_Emi_Conta.Value = ''\n\tThisForm.get_Cd_Emi_Conta.Refresh\n\tThisForm.get_Ds_Emi_Conta.Refresh\n\t\nEndIf\n\nReturn(m.llRetorno)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Emi_Grupo,get_Cd_Emi_Conta,get_Ds_Emi_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_ds_emi_conta",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local llRetorno\n\nm.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Emi_Grupo.Value,'D',This.Value,ThisForm.get_Cd_Emi_Conta,ThisForm.get_Ds_Emi_Conta))\n\nIf .Not.m.llRetorno\n\n\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\n\tThisForm.get_Cd_Emi_Conta.Value = ''\n\tThisForm.get_Ds_Emi_Conta.Value = ''\n\tThisForm.get_Cd_Emi_Conta.Refresh\n\tThisForm.get_Ds_Emi_Conta.Refresh\n\t\nEndIf\n\nReturn(m.llRetorno)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Emi_Grupo,get_Cd_Emi_Conta,get_Ds_Emi_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_ds_emi_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(empty(thisform.get_cd_emi_conta.value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_emi_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_cd_dep_grupo",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "= fAcessoContab(Usuar,'C',This.Value,ThisForm.get_Cd_Dep_Grupo,ThisForm.get_Ds_Dep_Grupo)\n\nIf Empty(This.Value)\n\n\tThisForm.get_cd_dep_conta.Value = ''\n\tThisForm.get_ds_dep_conta.Value = ''\n\t\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Dep_Grupo,get_Ds_Dep_Grupo,get_cd_dep_conta,get_ds_dep_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.Command3",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lnRecno1\nm.lnRecno1 = RecNo('tmpOpera')\nUpDate TmpOpera Set Flag=.t.\nIf BetWeen(m.lnRecno1,1,RecCount('TmpOpera'))\n\tGoTo m.lnRecno1 In ('TmpOpera')\nEndIf\nThisForm.GradeOpera.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_ds_dep_grupo",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "= fAcessoContab(Usuar,'D',This.Value,ThisForm.get_Cd_Dep_Grupo,ThisForm.get_Ds_Dep_Grupo)\n\nIf Empty(This.Value)\n\n\tThisForm.get_cd_dep_conta.Value = ''\n\tThisForm.get_ds_dep_conta.Value = ''\n\t\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Dep_Grupo,get_Ds_Dep_Grupo,get_cd_dep_conta,get_ds_dep_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_ds_dep_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_cd_dep_grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_dep_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_cd_dep_conta",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local llRetorno\n\nm.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Dep_Grupo.Value,'C',This.Value,ThisForm.get_Cd_Dep_Conta,ThisForm.get_Ds_Dep_Conta))\n\nIf .Not.m.llRetorno\n\n\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\n\tThisForm.get_Cd_Dep_Conta.Value = ''\n\tThisForm.get_Ds_Dep_Conta.Value = ''\n\tThisForm.get_Cd_Dep_Conta.Refresh\n\tThisForm.get_Ds_Dep_Conta.Refresh\n\t\nEndIf\n\nReturn(m.llRetorno)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Dep_Grupo,get_Cd_Dep_Conta,get_Ds_Dep_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_ds_dep_conta",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local llRetorno\n\nm.llRetorno = (fAcessoContas(Usuar,ThisForm.get_Cd_Dep_Grupo.Value,'D',This.Value,ThisForm.get_Cd_Dep_Conta,ThisForm.get_Ds_Dep_Conta))\n\nIf .Not.m.llRetorno\n\n\tMessageBox('Conta Inválida, Acesso Negado.',16,'')\n\n\tThisForm.get_Cd_Dep_Conta.Value = ''\n\tThisForm.get_Ds_Dep_Conta.Value = ''\n\tThisForm.get_Cd_Dep_Conta.Refresh\n\tThisForm.get_Ds_Dep_Conta.Refresh\n\t\nEndIf\n\nReturn(m.llRetorno)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Dep_Grupo,get_Cd_Dep_Conta,get_Ds_Dep_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.get_ds_dep_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.get_cd_dep_conta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_dep_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGRECHP.Command4",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Local lnRecno1\nm.lnRecno1 = RecNo('tmpopera')\nUpDate tmpopera Set Flag=.F.\nIf BetWeen(m.lnRecno1,1,RecCount('tmpopera'))\n\tGoTo m.lnRecno1 In ('tmpopera')\nEndIf\nThisForm.GradeOpera.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGRECHP.Init",
+      "queryOriginal": "\t\t.SqlExecute([Select * From SigCdOpt],'crSigCdOpt')",
+      "tabelas": "SigCdOpt",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECHP.Init",
+      "queryOriginal": "\tInsert Into TmpOpera From Memvar",
+      "tabelas": "TmpOpera",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECHP.Command3.Click",
+      "queryOriginal": "UpDate TmpOpera Set Flag=.t.",
+      "tabelas": "TmpOpera",
+      "colunas": "Flag",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGRECHP.Command4.Click",
+      "queryOriginal": "UpDate tmpopera Set Flag=.F.",
+      "tabelas": "tmpopera",
+      "colunas": "Flag",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdOpt", "TmpOpera"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

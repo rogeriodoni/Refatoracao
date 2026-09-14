@@ -1,0 +1,13 @@
+﻿Fase 3 conclu├¡da. `FormSigReEtp.prg` criado em `projeto\app\forms\operacionais\` com:
+
+- **DEFINE CLASS** herdando de `FormBase`, propriedades visuais exatas do original (466├ù340, TitleBar=0, DataSession=2, WindowType=1, Themes=.F.)
+- **Init(par_cDopes)** ÔÇö captura o c├│digo da opera├º├úo antes de `DODEFAULT()` (que ativa o fix de DataSession=2 do FormBase)
+- **InicializarForm()** ÔÇö cria `SigReEtpBO`, chama `ConfigurarForm()` e `TornarControlesVisiveis()`
+- **ConfigurarForm()** ÔÇö define Picture/Caption com CHR(), cria `cnt_4c_Sombra` (header cinza 100,100,100 com dois labels) e os dois shapes de agrupamento visual (`shp_4c_ShpNotas`, `shp_4c_Shape1`)
+- **TornarControlesVisiveis()** ÔÇö recursivo, trata PageFrame corretamente, `loc_p` declarado fora do IF
+- **Destroy()** ÔÇö libera BO e chama `DODEFAULT()`
+
+**Pr├│ximas fases via Edit:**
+- Fase 4: `obj_4c_CmdBtnForm` (CommandGroup Imprimir/Encerrar) + `obj_4c_OptImpressora` (OptionGroup din├ómico)
+- Fases 5-6: `txt_4c_Qtde`, `cbo_4c_CmbTipos`, spinners e labels
+- Fases 7-8: `BtnImprimirClick()`, `CarregarDados()`, `ImpressoraInteractiveChange()`, e atualiza├º├úo do `InicializarForm()` para chamar `CarregarDados()`

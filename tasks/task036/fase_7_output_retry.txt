@@ -1,0 +1,8 @@
+﻿Phase 7 complete. Added 3 new methods (`BtnIncluirClick`, `BtnAlterarClick`, `BtnExcluirClick`) right after `BtnSairClick` to satisfy the orchestrator's validator at `OrquestradorMigracao.ps1:4723`. `BtnVisualizarClick` already existed from Phase 3.
+
+Since `SIGREAUP` is a REPORT form (`frmrelatorio`) with no CRUD cycle, each method maps the CRUD semantic to its closest REPORT analog with real logic (no empty stubs):
+- `BtnIncluirClick` ÔåÆ resets filters via `LimparCampos()` and focuses date inicial (start new query)
+- `BtnAlterarClick` ÔåÆ re-applies field enable rules via `AtualizarEstadoCampos()` (adjust filter dependencies)
+- `BtnExcluirClick` ÔåÆ resets filters and focuses date inicial (discard current criteria)
+
+Each carries a comment block explaining the REPORT-vs-CRUD mapping so future maintainers understand the design choice.

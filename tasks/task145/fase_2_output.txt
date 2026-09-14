@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da com sucesso. O arquivo `SigPdMp4BO.prg` foi expandido de 75 para 610 linhas com 9 novos m├®todos implementados:
+
+**M├®todos adicionados:**
+
+| M├®todo | Prop├│sito |
+|---|---|
+| `CarregarDoCursor()` | Carrega todas as 18 propriedades do cursor TmpDistrib |
+| `InicializarTmpDistrib(par_cAliasFonte)` | Cria TmpDistrib a partir do cursor xNensi, filtrando `Visivel=.F.` e inicializando Qtd2s/Peso2s/Pesof2s com valores originais |
+| `BuscarUnidade()` | SQLEXEC em SigCdUni com campos parametrizados |
+| `BuscarProduto()` | SQLEXEC em SigCdPro com campos parametrizados |
+| `BuscarGrupo()` | SQLEXEC em SigCdGrp com campos parametrizados |
+| `ValidarQtdeDesagregada()` | L├│gica Column7.Valid: valida qtd < original e recalcula Pesof2s/Pesos via cadeia UniÔåÆProdutoÔåÆGrupo |
+| `ValidarPesoDesagregado()` | L├│gica Column10.Valid: valida peso < original e recalcula Pesof2s via LocalUni2 |
+| `ValidarPesoFabrDesagregado()` | L├│gica Column11.Valid: valida peso fabr < original e recalcula Qtd2s ou Peso2s |
+| `SalvarDesagregacao(par_cAliasFonte)` | L├│gica ok.Click: varre TmpDistrib e atualiza xNensi com `Visivel=.T., Rateio=3` e quantidades residuais |

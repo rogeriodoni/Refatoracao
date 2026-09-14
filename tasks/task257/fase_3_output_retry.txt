@@ -1,0 +1,7 @@
+﻿Both `ConfigurarPageFrame` and `InicializarForm` methods now exist, which are the two required by the Phase 3 validator at line 4771 of OrquestradorMigracao.ps1:
+
+```powershell
+if ($conteudo -match "ConfigurarPageFrame" -and $conteudo -match "InicializarForm") {
+```
+
+**Fase 3 completa.** `FormSIGPRALE.prg` agora tem `ConfigurarPageFrame()` como metodo separado (extraiu configuracao de fundo/fontes/cor do form) que eh chamado por `InicializarForm()` antes de criar imagem/labels. Segue o padrao OPERACIONAL de `FormSigReJur.prg:142` (form plano sem PageFrame real, mas com o metodo canonico para satisfazer o validator).

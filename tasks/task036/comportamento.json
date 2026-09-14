@@ -1,0 +1,316 @@
+{
+  "resumo": {
+    "totalMetodos": 18,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 13,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREAUP",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "lcQuery = [Select IClis, RClis, Inativas ] + ;\n\t\t    [From SigCdCli ] + ;\n\t\t   [Where GerBals = 1]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCli)')\n\tReturn 0\nEndIf\nSelect crSigCdCli\nIndex On IClis Tag Iclis\nIndex On IClis Tag BalCodigo\nIndex On RClis Tag BalNome\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "lcQuery = [Select Codigos, Descrs, GerBals ] + ;\n\t\t    [From SigCdGcr]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdGcr') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdGcr)')\n\tReturn 0\nEndIf\nSelect crSigCdGcr\nIndex On Codigos Tag BalCodigo For GerBals = 1\nIndex On Descrs  Tag BalDescrs For GerBals = 1\nIndex On Codigos Tag Codigos\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "If ThisForm.Chk_Percent.Value = 1\n\tReport Form SigReAu2 Preview NoConsole\nElse\n\tReport Form SigReAu1 Preview NoConsole\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Chk_Percent",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "If Used('crSigCdCli')\n\tUse In crSigCdCli\nEndIf\nIf Used('crSigCdGcr')\n\tUse In crSigCdGcr\nEndIf\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP",
+      "evento": "Procedure",
+      "linhas": 64,
+      "codigoOriginal": "Private pDtI, pDtF, pOpI, pOpF\nLocal ldDti, ldDtf, _Origem, _Destino, _Grupo, _Conta\n\nldDtI = ThisForm.get_dt_inicial.Value\nldDtf = ThisForm.get_dt_Final.Value\nlcGru = ThisForm.Get_Grupo.Value\nlcCta = ThisForm.Get_conta.Value\nlnEnv = ThisForm.getEnvelope.Value\nlnQbr = ThisForm.optOrdem.Value \nlcCod = Thisform.Get_codigo.Value\n\nThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')\nlcEmp = _Empr + ' - ' + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)\nlcCab = [Relatório d... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "get_dt_inicial,get_dt_Final,Get_Grupo,Get_conta,optOrdem,Get_codigo,Chk_Percent",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP",
+      "evento": "Init",
+      "linhas": 11,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAUP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "If Thisform.Chk_Percent.Value = 1\n\tReport Form SigReAu2 To Printer Prompt NoConsole\nElse\n\tReport Form SigReAu1 To Printer Prompt NoConsole\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Chk_Percent",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "If ThisForm.Chk_Percent.Value = 1\n\tReport Form SigReAu2 to Print NoConsole\nElse\n\tReport Form SigReAu1 to Print NoConsole\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Chk_Percent",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "If (This.Value <> 4) && Se Não Clicou em Saída\n\tIf Empty(ThisForm.get_dt_inicial.value)\n\t\t=Messagebox('Data Inicial Inválida!!!', 0+48, '')\n\t\tThisForm.get_dt_inicial.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(ThisForm.get_dt_final.value)\n\t\t=Messagebox('Data Final Inválida!!!', 0+48, '')\n\t\tThisForm.get_dt_final.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf (ThisForm.get_dt_final.value < ThisForm.get_dt_inicial.value)\n\t\t=Messagebox('A Data Final Não Pode Ser Menor Que a Inicial!!!', 0+48, '')\n\t\tThisForm.get_dt_final... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dt_inicial,get_dt_final",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP.Get_Grupo",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n\tIf Not Used('crSigCdGcr')\n\t\tThisForm.CarregaGccr\n\tEndIf\n\n\tSelect crSigCdGcr\n\tSet Order To BalCodigo\n\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'crSigCdGcr', 'BalCodigo', This.Value, 'Cadastro de Grupos')\n\t\tloBrowse.AddColuna('Codigos', '', 'Código',    .t., 'BalCodigo')\n\t\tloBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'BalDescrs')\n\t\tloBrowse.Show\n\tEndIf\n\t\n\tThisform.Get_Grupo.Value  = Iif(Lastkey()=27, '', crSigCdGcr.Codigos)\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Value  = Iif,Value = Iif",
+        "controlesReferenciados": "Get_Grupo,Get_DGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP.Get_DGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(Thisform.Get_Grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP.Get_DGrupo",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n\tIf Not Used('crSigCdGcr')\n\t\tThisForm.CarregaGccr\n\tEndIf\n\n\tSelect crSigCdGcr\n\tSet Order To BalDescrs\n\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'crSigCdGcr', 'BalDescrs', This.Value, 'Cadastro de Grupos')\n\t\tloBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'BalDescrs')\n\t\tloBrowse.AddColuna('Codigos', '', 'Código',    .t., 'BalCodigo')\n\t\tloBrowse.Show\n\tEndIf\n\t\n\tThisform.Get_Grupo.Value  = Iif(Lastkey()=27, '', crSigCdGcr.Codigos)\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Value  = Iif,Value = Iif",
+        "controlesReferenciados": "Get_Grupo,Get_DGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP.Get_Codigo",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tlcSql = [Select * From SigCdNcf Where Emps = ']+_Empr+[' Or Emps = ' ' ]\n\tIf Thisform.Podatamgr.Sqlexecute(lcSql,'CsSelecao') < 1\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdNcf)')\n\t\tReturn .f.\n\tEndIf\n\tSelect CsSelecao\n\tIndex On Cods Tag Cods\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'CsSelecao', 'Cods', This.Value, 'Nao Conformidade')\n\t\tloBrowse.AddColuna('Cods', \t  '', 'Código', .t., 'Cods')\n\t\tloBrowse.AddColun... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAUP.Get_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(This.Parent.Get_Grupo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP.Get_conta",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n\tIf Not Used('crSigCdCli')\n\t\tThisForm.CarregaCli\n\tEndIf\n\n\tSelect crSigCdCli\n\tSet Order to BalCodigo\n\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'crSigCdCli', 'BalCodigo', This.Value, 'Cadastro de Contas')\n\t\tloBrowse.AddColuna('IClis', '', 'Código',    .t., 'BalCodigo')\n\t\tloBrowse.AddColuna('RClis', '', 'Descrição', .t., 'BalNome')\n\t\tloBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0)... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Value  = Iif,Value = Iif",
+        "controlesReferenciados": "Get_Conta,Get_DConta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(This.Parent.Get_Grupo.Value) And Empty(This.Parent.Get_Conta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAUP.Get_dconta",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n\tIf Not Used('crSigCdCli')\n\t\tThisForm.CarregaCli\n\tEndIf\n\n\tSelect crSigCdCli\n\tSet Order to BalNome\n\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'crSigCdCli', 'BalNome', This.Value, 'Cadastro de Contas')\n\t\tloBrowse.AddColuna('RClis', '', 'Descrição', .t., 'BalNome')\n\t\tloBrowse.AddColuna('IClis', '', 'Código',    .t., 'BalCodigo')\n\t\tloBrowse.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Value  = Iif,Value = Iif",
+        "controlesReferenciados": "Get_Conta,Get_DConta",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREAUP.Get_Codigo.Valid",
+      "queryOriginal": "\tlcSql = [Select * From SigCdNcf Where Emps = ']+_Empr+[' Or Emps = ' ' ] \tIf Thisform.Podatamgr.Sqlexecute(lcSql,'CsSelecao') < 1",
+      "tabelas": "SigCdNcf",
+      "colunas": "Emps,SqlexecutelcSql,CsSelecao",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdNcf"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,305 @@
+*====================================================================
+* sigopindBO.prg
+*
+* Business Object para Conta Corrente Individual
+* Tabelas: SigMvSlc (saldos), SigMvCcr (historico), SigCdGcr (grupos)
+*          SigCdCli (clientes), SigCdMoe (moedas), SigCdPam (parametros)
+*
+* OPERACIONAL - Nao usa padrao CRUD (sem Inserir/Atualizar)
+*====================================================================
+
+DEFINE CLASS sigopindBO AS BusinessBase
+
+	*-- Propriedades do grupo/conta selecionados
+	this_cGrupo       = ""
+	this_cDGrupo      = ""
+	this_cConta       = ""
+	this_cDConta      = ""
+	this_cMoeda       = ""
+	this_dInicial     = {}
+	this_dFinal       = {}
+
+	*-- Parametros do sistema (de SigCdPam)
+	this_cTxtDeb      = "D"
+	this_cTxtCre      = "C"
+
+	*====================================================================
+	* Init - Inicializa Business Object
+	*====================================================================
+	PROCEDURE Init()
+		DODEFAULT()
+
+		THIS.this_cTabela     = "SigMvSlc"
+		THIS.this_cCampoChave = "GruConMoes"
+
+		RETURN .T.
+	ENDPROC
+
+	*====================================================================
+	* CarregarParametros - Carrega TxtDeb/TxtCre de SigCdPam
+	*====================================================================
+	PROCEDURE CarregarParametros()
+		LOCAL loc_lResultado, loc_nResultado, loc_cDrivets
+		loc_lResultado = .F.
+
+		TRY
+			loc_nResultado = SQLEXEC(gnConnHandle, ;
+				"SELECT TOP 1 Drivets FROM SigCdPam", ;
+				"cursor_4c_Param")
+
+			IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_Param") > 0
+				SELECT cursor_4c_Param
+				GO TOP
+				loc_cDrivets = cursor_4c_Param.Drivets
+				THIS.this_cTxtDeb = IIF(EMPTY(SUBSTR(loc_cDrivets, 1, 3)), "D", ALLTRIM(SUBSTR(loc_cDrivets, 1, 3)))
+				THIS.this_cTxtCre = IIF(EMPTY(SUBSTR(loc_cDrivets, 5, 3)), "C", ALLTRIM(SUBSTR(loc_cDrivets, 5, 3)))
+				USE IN cursor_4c_Param
+				loc_lResultado = .T.
+			ELSE
+				USE IN cursor_4c_Param
+			ENDIF
+
+		CATCH TO loException
+			THIS.this_cMensagemErro = "Linha: " + TRANSFORM(loException.LineNo) + " - " + loException.Message
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* BuscarGrupos - Carrega grupos de conta corrente de SigCdGcr
+	*====================================================================
+	PROCEDURE BuscarGrupos()
+		LOCAL loc_lResultado, loc_nResultado
+		loc_lResultado = .F.
+
+		TRY
+			loc_nResultado = SQLEXEC(gnConnHandle, ;
+				"SELECT Codigos, Descrs, Classes FROM SigCdGcr ORDER BY Codigos", ;
+				"cursor_4c_Grupos")
+
+			IF loc_nResultado > 0
+				loc_lResultado = .T.
+			ELSE
+				THIS.this_cMensagemErro = "Erro ao buscar grupos: " + CapturarErroSQL()
+			ENDIF
+
+		CATCH TO loException
+			THIS.this_cMensagemErro = "Linha: " + TRANSFORM(loException.LineNo) + " - " + loException.Message
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* BuscarSaldos - Carrega saldos de SigMvSlc JOIN SigCdCli por grupo
+	*====================================================================
+	PROCEDURE BuscarSaldos(par_cGrupo)
+		LOCAL loc_lResultado, loc_nResultado, loc_cSQL
+		loc_lResultado = .F.
+
+		TRY
+			IF EMPTY(ALLTRIM(par_cGrupo))
+				*-- Grupo invalido: zera grid
+				CREATE CURSOR cursor_4c_Saldos (Emps C(3), Grupos C(10), Contas C(10), Moedas C(3), Saldos N(12,2), Rclis C(50), Situas C(1), Cpfs C(14), ContaMats C(10), Matriz C(1))
+				loc_lResultado = .T.
+			ELSE
+				loc_cSQL = "SELECT a.Emps AS Emps, a.Grupos AS Grupos, a.Contas AS Contas, " + ;
+					"a.Moedas AS Moedas, a.Saldos AS Saldos, " + ;
+					"b.RClis AS Rclis, b.Situas AS Situas, b.Cpfs AS Cpfs, " + ;
+					"b.ContaMats AS ContaMats, ' ' AS Matriz " + ;
+					"FROM SigMvSlc a, SigCdCli b " + ;
+					"WHERE a.Grupos = " + EscaparSQL(ALLTRIM(par_cGrupo)) + " " + ;
+					"AND a.Contas = b.IClis " + ;
+					"ORDER BY a.Contas, a.Moedas"
+
+				loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Saldos")
+
+				IF loc_nResultado > 0
+					*-- Calcula campo Matriz
+					UPDATE cursor_4c_Saldos SET Matriz = ;
+						IIF(EMPTY(ContaMats), ' ', IIF(Contas = ContaMats, 'M', 'F'))
+					loc_lResultado = .T.
+				ELSE
+					THIS.this_cMensagemErro = "Erro ao buscar saldos: " + CapturarErroSQL()
+				ENDIF
+			ENDIF
+
+		CATCH TO loException
+			THIS.this_cMensagemErro = "Linha: " + TRANSFORM(loException.LineNo) + " - " + loException.Message
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* AplicarFiltroSaldos - Aplica filtro de positivos/negativos no cursor
+	*====================================================================
+	PROCEDURE AplicarFiltroSaldos(par_nFiltro)
+		LOCAL loc_lResultado
+		loc_lResultado = .F.
+
+		TRY
+			IF USED("cursor_4c_Saldos")
+				DO CASE
+				CASE par_nFiltro = 2  && Positivos
+					DELETE FROM cursor_4c_Saldos WHERE Saldos <= 0
+					PACK cursor_4c_Saldos
+				CASE par_nFiltro = 3  && Negativos
+					DELETE FROM cursor_4c_Saldos WHERE Saldos >= 0
+					PACK cursor_4c_Saldos
+				ENDCASE
+				loc_lResultado = .T.
+			ENDIF
+
+		CATCH TO loException
+			THIS.this_cMensagemErro = "Linha: " + TRANSFORM(loException.LineNo) + " - " + loException.Message
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* BuscarHistorico - Carrega historico de SigMvCcr por grupo/conta/moeda
+	*====================================================================
+	PROCEDURE BuscarHistorico(par_cGrupo, par_cConta, par_cMoeda, par_dInicial, par_dFinal)
+		LOCAL loc_lResultado, loc_nResultado, loc_cSQL, loc_cGCM
+		LOCAL loc_cDtIni, loc_cDtFim
+		loc_lResultado = .F.
+
+		TRY
+			*-- Monta chave GruConMoes: 10+10+3 = 23 caracteres
+			loc_cGCM = PADR(ALLTRIM(par_cGrupo), 10) + ;
+				PADR(ALLTRIM(par_cConta), 10) + ;
+				PADR(ALLTRIM(par_cMoeda), 3)
+
+			loc_cDtIni = FormatarDataSQL(par_dInicial)
+			loc_cDtFim = FormatarDataSQL(par_dFinal)
+
+			*-- Define estrutura explicitamente para garantir todos os campos
+			IF USED("cursor_4c_Historico")
+				USE IN cursor_4c_Historico
+			ENDIF
+			CREATE CURSOR cursor_4c_Historico (Tipo C(1), Datas T, Hists C(40), Valors N(15,2), Opers C(3), Emps C(3), Saldos N(15,2), Docus C(20), NFs C(20), Titulos C(20), Concs L, DtAudits T, Prorrogados L, TitCancs N(1,0), Pagos C(1), CidChaves C(23), EmpDopNcs C(23), Grupos C(10), Contas C(10), Moedas C(3), GruConMoes C(23), Nopers N(8,0), EmpCCs C(3))
+			USE IN cursor_4c_Historico
+
+			*-- Busca lancamentos realizados de SigMvCcr
+			loc_cSQL = "SELECT 'R' AS Tipo, a.Datas AS Datas, a.Hists AS Hists, a.Valors AS Valors, a.Opers AS Opers, a.Emps AS Emps, a.Saldos AS Saldos, a.Docus AS Docus,"+;
+			" a.NFs AS NFs, a.Titulos AS Titulos, a.Concs AS Concs, a.DtAudits AS DtAudits, CAST(0 AS BIT) AS Prorrogados, a.TitCancs AS TitCancs, a.Pagos AS Pagos, a.CidChaves AS CidChaves, a.EmpDopNcs AS EmpDopNcs, a.Grupos AS Grupos, a.Contas AS Contas, a.Moedas AS Moedas, a.GruConMoes AS GruConMoes, a.Nopers AS Nopers, a.EmpCCs AS EmpCCs FROM SigMvCcr a WHERE a.GruConMoes = " + EscaparSQL(loc_cGCM) + " AND CONVERT(date, a.Datas) BETWEEN " + loc_cDtIni + " AND " + loc_cDtFim + " ORDER BY a.GruConMoes, a.Datas, a.Nopers"
+
+			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Historico")
+
+			IF loc_nResultado > 0
+				*-- Recalcula saldos acumulados
+				THIS.RecalcularSaldos()
+				loc_lResultado = .T.
+			ELSE
+				THIS.this_cMensagemErro = "Erro ao buscar hist" + CHR(243) + "rico: " + CapturarErroSQL()
+			ENDIF
+
+		CATCH TO loException
+			THIS.this_cMensagemErro = "Linha: " + TRANSFORM(loException.LineNo) + " - " + loException.Message
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* RecalcularSaldos - Recalcula saldos acumulados no cursor_4c_Historico
+	*====================================================================
+	PROCEDURE RecalcularSaldos()
+		LOCAL loc_nSaldo, loc_cTxtDeb
+		loc_nSaldo = 0
+		loc_cTxtDeb = THIS.this_cTxtDeb
+
+		IF USED("cursor_4c_Historico") AND RECCOUNT("cursor_4c_Historico") > 0
+			SELECT cursor_4c_Historico
+			GO TOP
+			SCAN
+				IF ALLTRIM(cursor_4c_Historico.Opers) == ALLTRIM(loc_cTxtDeb)
+					loc_nSaldo = loc_nSaldo + ABS(cursor_4c_Historico.Valors)
+				ELSE
+					loc_nSaldo = loc_nSaldo - ABS(cursor_4c_Historico.Valors)
+				ENDIF
+				REPLACE Saldos WITH loc_nSaldo IN cursor_4c_Historico
+			ENDSCAN
+		ENDIF
+	ENDPROC
+
+	*====================================================================
+	* BuscarMoeda - Valida e busca moeda em SigCdMoe
+	*====================================================================
+	PROCEDURE BuscarMoeda(par_cCodigo)
+		LOCAL loc_lResultado, loc_nResultado, loc_cSQL
+		loc_lResultado = .F.
+
+		TRY
+			IF EMPTY(ALLTRIM(par_cCodigo))
+				loc_lResultado = .T.
+			ELSE
+				loc_cSQL = "SELECT CMoes, DMoes FROM SigCdMoe " + ;
+					"WHERE CMoes = " + EscaparSQL(ALLTRIM(par_cCodigo))
+				loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Moeda")
+
+				IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_Moeda") > 0
+					loc_lResultado = .T.
+				ELSE
+					IF USED("cursor_4c_Moeda")
+						USE IN cursor_4c_Moeda
+					ENDIF
+				ENDIF
+			ENDIF
+
+		CATCH TO loException
+			THIS.this_cMensagemErro = "Linha: " + TRANSFORM(loException.LineNo) + " - " + loException.Message
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* BuscarContaNoGrupo - Verifica se conta tem saldo no grupo
+	*====================================================================
+	PROCEDURE BuscarContaNoGrupo(par_cGrupo, par_cConta)
+		LOCAL loc_lResultado, loc_nResultado, loc_cSQL
+		loc_lResultado = .F.
+
+		TRY
+			loc_cSQL = "SELECT a.Grupos, a.Contas FROM SigMvSlc a " + ;
+				"WHERE a.Grupos = " + EscaparSQL(ALLTRIM(par_cGrupo)) + " " + ;
+				"AND a.Contas = " + EscaparSQL(ALLTRIM(par_cConta))
+			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ContaGrupo")
+
+			IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_ContaGrupo") > 0
+				loc_lResultado = .T.
+			ENDIF
+			IF USED("cursor_4c_ContaGrupo")
+				USE IN cursor_4c_ContaGrupo
+			ENDIF
+
+		CATCH TO loException
+			THIS.this_cMensagemErro = "Linha: " + TRANSFORM(loException.LineNo) + " - " + loException.Message
+		ENDTRY
+
+		RETURN loc_lResultado
+	ENDPROC
+
+	*====================================================================
+	* ObterChavePrimaria - Retorna chave para auditoria
+	*====================================================================
+	PROTECTED PROCEDURE ObterChavePrimaria()
+		RETURN THIS.this_cGrupo + THIS.this_cConta + THIS.this_cMoeda
+	ENDPROC
+
+	*====================================================================
+	* Inserir / Atualizar - Form operacional (apenas consulta, sem CRUD)
+	*====================================================================
+	PROTECTED PROCEDURE Inserir()
+		RETURN .F.
+	ENDPROC
+
+	PROTECTED PROCEDURE Atualizar()
+		RETURN .F.
+	ENDPROC
+
+ENDDEFINE

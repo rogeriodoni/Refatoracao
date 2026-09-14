@@ -1,0 +1,11 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\cadastros\FormFBI.prg` foi criado com:
+
+- **DEFINE CLASS FormFBI AS FormBase** com propriedades visuais completas (Width=1000, Height=600, Caption com CHR())
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` com TRY/CATCH, sem chamar InicializarForm diretamente
+- **InicializarForm()** ÔÇö cria FBIBO, configura PageFrame, chama ConfigurarPaginaLista/Dados, carrega lista (com guard `gb_4c_ValidandoUI`)
+- **ConfigurarPageFrame()** ÔÇö 2 pages, Top=-29, Tabs=.F., Picture de fundo
+- **ConfigurarPaginaLista()** ÔÇö cnt_4c_Cabecalho (com labels sombra/t├¡tulo), cnt_4c_Botoes (5 bot├Áes CRUD com Picture/BINDEVENT), cnt_4c_Saida canonico (Left=917, Width=90), grd_4c_Lista com 4 colunas
+- **ConfigurarPaginaDados()** ÔÇö cnt_4c_BotoesAcao (Confirmar + Cancelar com BINDEVENT)
+- **CarregarLista()**, **AlternarPagina()**, **FormatarGridLista()**, **TornarControlesVisiveis()**, **Destroy()**
+
+As pr├│ximas fases (4-8) adicionar├úo TextBoxes/Labels/CheckBoxes/OptionGroups nos dados, e todos os handlers de eventos.

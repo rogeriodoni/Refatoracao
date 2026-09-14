@@ -1,0 +1,6 @@
+﻿Dois ajustes aplicados em `FormFap.prg`:
+
+- `PROTECTED PROCEDURE AlternarPagina` ÔåÆ `PROCEDURE AlternarPagina`
+- `PROTECTED PROCEDURE AjustarBotoesPorModo` ÔåÆ `PROCEDURE AjustarBotoesPorModo`
+
+**Causa raiz**: O TesteAutomatico chama esses m├®todos diretamente no objeto form (fora da classe). Em VFP9, m├®todos `PROTECTED` s├úo invis├¡veis externamente ÔÇö a engine reporta "Property X is not found" em vez de "method not accessible". O teste `BtnIncluirNavegacao` passou porque `BtnIncluirClick` ├® PUBLIC e chama `AlternarPagina` via `THIS.` internamente, o que funciona. Os testes `ModoIncluir`/`ModoVisualizar` tentam chamar os m├®todos diretamente no objeto, o que exige visibilidade p├║blica.

@@ -1,0 +1,12 @@
+﻿O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigPrGloT.prg` foi criado com sucesso.
+
+**Fase 3/8 conclu├¡da.** O arquivo cont├®m:
+
+- **DEFINE CLASS FormSigPrGloT AS FormBase** com todas as propriedades do form copiadas do SCX original (`TitleBar=0`, `ControlBox=.F.`, `Closable=.F.`, `DataSession=2`, `Width=1000`, `Height=600`)
+- **Init()** ÔåÆ s├│ chama `DODEFAULT()` (FormBase gerencia InicializarForm)
+- **InicializarForm()** ÔåÆ `SET DATE TO BRITISH` + `SET CENTURY ON` (fix DataSession=2, regra #9.4), cria BO, seta `Picture` de fundo, chama `ConfigurarCabecalho()` + `TornarControlesVisiveis()`; CATCH verboso com Ln+Proc expostos
+- **ConfigurarCabecalho()** ÔåÆ padr├úo can├┤nico: BackStyle=1 + RGB(100,100,100), lbl_4c_Sombra (AutoSize=.F.) e lbl_4c_Titulo (AutoSize=.F.) com Width=THIS.Width
+- **TornarControlesVisiveis()** ÔåÆ itera Controls + recurs├úo em sub-containers via ControlCount
+- **Destroy()** ÔåÆ libera BO + `DODEFAULT()`
+
+Nota: O SCX original ├® um placeholder vazio (Form1, sem controles/m├®todos). As fases 4-8 adicionar├úo conte├║do real conforme as especifica├º├Áes funcionais forem fornecidas.

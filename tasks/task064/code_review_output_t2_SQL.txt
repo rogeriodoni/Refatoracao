@@ -1,0 +1,23 @@
+﻿An├ílise conclu├¡da. Estes s├úo **falsos positivos** do validador autom├ítico.
+
+**Verifica├º├úo realizada:**
+
+| Coluna flaggada | Localiza├º├úo | Tipo de query |
+|---|---|---|
+| `cemps` (linha 967) | `AbrirBuscaEmpresa()` | SELECT de valida├º├úo para FormBuscaAuxiliar |
+| `codigos` (linhas 1103, 1242) | `AbrirBuscaGrOrigem/GrDestino()` | SELECT de valida├º├úo para FormBuscaAuxiliar |
+| `contas` (linhas 1172, 1311) | `AbrirBuscaContaO/ContaD()` | SELECT de valida├º├úo para FormBuscaAuxiliar |
+
+**Motivo do falso positivo:** O validador escaneou **todas** as cl├íusulas WHERE do arquivo e comparou com o WHERE da query principal do relat├│rio. Mas `cemps`, `codigos` e `contas` est├úo em queries de lookup separadas ÔÇö padr├úo obrigat├│rio do FormBuscaAuxiliar ÔÇö n├úo no WHERE do relat├│rio.
+
+**WHERE do relat├│rio (BO)** est├í correto e usa exatamente as colunas esperadas:
+- `b.Datas` ÔåÆ DATAS Ô£ô
+- `a.Emps` ÔåÆ EMPS Ô£ô  
+- `a.Dopps` ÔåÆ DOPPS Ô£ô
+- `a.Numps` ÔåÆ NUMPS Ô£ô
+- `b.GrupoOs` ÔåÆ GRUPOOS Ô£ô
+- `b.ContaOs` ÔåÆ CONTAOS Ô£ô
+- `b.GrupoDs` ÔåÆ GRUPODS Ô£ô
+- `b.ContaDs` ÔåÆ CONTADS Ô£ô
+
+**Nenhuma altera├º├úo necess├íria.** Remover essas queries de lookup quebraria a valida├º├úo dos campos de filtro da tela (o usu├írio n├úo conseguiria buscar empresa, grupo ou conta). O c├│digo est├í correto.

@@ -1,0 +1,14 @@
+﻿Fase 2/8 conclu├¡da. O `sigregnfBO.prg` foi atualizado com os seguintes m├®todos adicionados:
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `ObterMensagemErro()` | Retorna ├║ltima mensagem de erro |
+| `SelecionarDados()` | Queries NFs de SigMvNfi (com/sem filtro de usu├írio), filtra por tipo via SigCdOpe/SigCdSer, popula `cursor_4c_TmpNFis` |
+| `VerificarNf()` | Detecta NFs anteriores n├úo impressas da mesma s├®rie via UNION ALL em SigMvNfi+SigCdOpe+SigCdSer |
+| `Processamento()` | Consulta SigCnFn2 para sequ├¬ncia e chama `VerificarNf()`, seta `this_lNotasAnt` |
+| `Impressao()` | Itera NFs marcadas (Flag=.T.), busca SigMvCab+SigMvNfi, chama `DO SigPrNfs WITH "I"`, recarrega lista ao final |
+| `Visualizacao()` | Busca SigMvCab+SigMvNfi do registro corrente, chama `DO SigPrNfs WITH "V"` |
+| `MarcarTodos()` | `UPDATE cursor SET Flag = .T.` |
+| `DesmarcarTodos()` | `UPDATE cursor SET Flag = .F.` |
+
+`Destroy()` expandido para 11 cursors (adicionado `cursor_4c_Selecao`). Todos os m├®todos seguem as regras cr├¡ticas VFP9: sem RETURN dentro de TRY/CATCH (usa `loc_lAbortado`), sem literais acentuados (usa CHR()), CATCH n├úo silencioso.

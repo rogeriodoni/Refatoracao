@@ -1,0 +1,32 @@
+﻿Analisei o arquivo existente. O `FormSigPdM12.prg` j├í est├í **completo** desde a Fase 3 ÔÇö e a Fase 4 (CRUD + `ConfigurarPaginaLista`) **n├úo se aplica** a este form.
+
+## Por que a Fase 4 n├úo se aplica aqui
+
+Este ├® um form **OPERACIONAL read-only popup**, n├úo um cadastro CRUD:
+
+| Aspecto | CRUD frmcadastro | SIGPDM12 (este form) |
+|---------|-----------------|----------------------|
+| Estrutura | PageFrame Page1=Lista / Page2=Dados | Layout flat direto no form |
+| Bot├Áes | Incluir/Alterar/Excluir/Buscar/Encerrar | Apenas **OK** (fecha popup) |
+| Opera├º├Áes | CRUD completo | Read-only (todas as colunas When retornam `.F.`) |
+| Abertura | Menu principal | Chamado pelo FormSigPdM11 via par├ómetro |
+
+Adicionar `ConfigurarPaginaLista()` com bot├Áes CRUD violaria:
+- **PILAR 1** ÔÇö o original (`comportamento.json`) tem apenas `ok.Click = ThisForm.ParentForm.Enabled = .T. + Release`
+- **Regra OPERACIONAL** ÔÇö "NAO segue padrao Page1=Lista/Page2=Dados do CRUD"
+
+## O que a Fase 3 j├í entregou (completo)
+
+O arquivo atual j├í tem **tudo** o que o original SIGPDM12 fazia:
+
+| M├®todo | Equivalente no legado |
+|--------|-----------------------|
+| `Init(par_oFormPai)` | `LPARAMETERS pForm + Set DataSession To pForm.DataSessionId` |
+| `ConfigurarCabecalho()` | `cntSombra.lblSombra/lblTitulo` |
+| `ConfigurarAreaOperacao()` | Container `Opera??o` com campos tmpnens.* |
+| `ConfigurarGrid()` | `Grade.Column1-5.ControlSource + Header1.Caption` |
+| `CarregarDados()` | `Select xNensiR / Go Top / Grade.RecordSource = 'xNensiR'` |
+| `BtnOkClick()` | `ThisForm.ParentForm.Enabled = .T. + Release` |
+| `GrdDadosAfterRowColChange()` | `Grade.AfterRowColChange ÔåÆ GetRclis.Refresh` |
+
+**Nenhuma modifica├º├úo ├® necess├íria.** O form est├í correto e completo para um popup read-only de consulta de retrabalhos. A Fase 4 pode ser marcada como conclu├¡da sem altera├º├Áes no c├│digo.

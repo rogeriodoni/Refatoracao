@@ -1,0 +1,11 @@
+﻿Corre├º├úo aplicada. O problema era `BoundColumn = 0` no `cbo_4c_Operacao` ÔÇö valor inv├ílido em VFP9 que causa "Expression evaluated to an illegal value" na inicializa├º├úo do form.
+
+**O que foi corrigido em `FormBch.prg`:**
+
+1. **`ConfigurarPaginaDados`** ÔÇö removido `BoundColumn = 0` (inv├ílido em VFP9; o padr├úo ├® 1) e alterado `Value = 1` para `Value = "1a. Entrada"` (texto, que ├® o tipo correto quando BoundColumn=1)
+
+2. **`FormParaBO`** ÔÇö `cbo_4c_Operacao.Value` ÔåÆ `cbo_4c_Operacao.ListIndex` (retorna inteiro 1-4 para o BO)
+
+3. **`BOParaForm`** ÔÇö `cbo_4c_Operacao.Value = .this_nTipos` ÔåÆ `cbo_4c_Operacao.ListIndex = .this_nTipos`
+
+4. **`LimparCampos`** ÔÇö `cbo_4c_Operacao.Value = 1` ÔåÆ `cbo_4c_Operacao.ListIndex = 1`

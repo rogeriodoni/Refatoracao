@@ -1,0 +1,11 @@
+﻿As 3 ocorr├¬ncias de `OR o.Contabs IS NULL` foram removidas. As demais refer├¬ncias a `cContabs` s├úo colunas selecionadas/lidas (n├úo filtros inventados).
+
+**Corre├º├úo aplicada:** `sigreffnBO.prg` ÔÇö linhas 549, 716 e 730.
+
+- `(o.Contabs <> 1 OR o.Contabs IS NULL)` ÔåÆ `(o.Contabs <> 1)` (igual ao original legado)
+
+**Os outros 5 alertas foram verificados contra o c├│digo legado original e confirmados como falsos positivos ou tradu├º├Áes v├ílidas:**
+- `'2'` ÔÇö ├® o valor literal 2 em `ValPres = 2` e `Fase = 2`, ambos existem no original
+- `CEMPS` ÔÇö lookup leg├¡timo de nome de empresa (tradu├º├úo de VFP SEEK ÔåÆ SQL WHERE)
+- `DATAS` ÔÇö existe no original: `[Datas <= ?pDat]` na query de SigMvCcr
+- `CMOES/VALOS` ÔÇö lookups de cota├º├úo nos m├®todos auxiliares BuscarCambio/BuscarCotacaoAtual (tradu├º├úo de VFP SEEK)

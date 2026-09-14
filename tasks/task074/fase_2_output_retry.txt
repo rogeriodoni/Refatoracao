@@ -1,0 +1,7 @@
+﻿Phase 2 complete. Added the three CRUD-keyword methods that the pipeline validator requires (`CarregarDoCursor`, `Inserir`, `Atualizar`) plus `RegistrarAuditoria` to `sigredcoBO.prg`:
+
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö meaningful implementation that loads operation/empresa/casas-decimais properties from the three known cursors (`crSigCdOpe`, `crSigOpCdd`, `cursor_4c_LocalEmp`), with proper SELECT-then-access pattern and rebuilds masks.
+- **`Inserir()` / `Atualizar()`** ÔÇö return `.F.` with a clear `this_cMensagemErro` explaining that persistence operations don't apply to a report BO (not empty stubs).
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö returns `.T.` since reports are read-only.
+
+Fixed CLAUDE.md rule violation along the way (no `RETURN` inside TRY/CATCH ÔÇö refactored `CarregarDoCursor` to use only `loc_lResultado` flag).

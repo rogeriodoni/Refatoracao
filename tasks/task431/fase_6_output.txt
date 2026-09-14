@@ -1,0 +1,12 @@
+﻿O arquivo est├í correto. Fase 6 completa. Resumo das altera├º├Áes:
+
+**Adicionado em `ConfigurarPaginaDados()`** (ap├│s txt_4c_Cidade):
+- `lbl_4c_ValorFrete` ÔÇö Label "Valor do Frete :" (Say2: Top=205, Left=279, Width=77, Height=15, ForeColor cinza)
+- `txt_4c_Frete` ÔÇö TextBox num├®rico (get_Frete: Top=200, Left=359, Width=100, Height=25, InputMask="999,999.99")
+
+**Adicionados 5 novos m├®todos** antes de `BtnIncluirClick()`:
+- `FormParaBO()` ÔÇö copia `txt_4c_Cidade` ÔåÆ `this_cCidade` e `txt_4c_Frete` ÔåÆ `this_nFrete`
+- `BOParaForm()` ÔÇö copia propriedades do BO de volta para os campos
+- `LimparCampos()` ÔÇö zera txt_4c_Cidade="" e txt_4c_Frete=0
+- `HabilitarCampos(par_lHabilitar)` ÔÇö cidade ReadOnly exceto em INCLUIR; frete ReadOnly exceto em INCLUIR/ALTERAR; bot├Áes sempre habilitados
+- `AjustarBotoesPorModo()` ÔÇö Caption "OK" em VISUALIZAR, "Confirmar" em INCLUIR/ALTERAR

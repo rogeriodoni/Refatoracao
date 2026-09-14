@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No actual stubs/TODOs ÔÇö those are just false-positive matches on the word "TODOS" (Portuguese for "all"/"every") and "Produto". The implementation is complete and clean.
+
+## Summary
+
+Phase 6/8 of the FormSRV migration is complete. I edited `C:\4c\projeto\app\forms\cadastros\FormSRV.prg` (grew from 1798 ÔåÆ ~3500 lines):
+
+**1. Remaining 50% of fields (Page2 Parte 2):**
+- `ConfigurarAbaVencimentos()` ÔÇö full "Vencimentos" tab: 6 imposto rows (PIS/COFINS/IRRF/INSS/CSLL/ISS) each with Grupo/Conta/DConta textboxes + a 3-option OptionGroup (built via a shared `CriarOptionVencimento` helper using VFP macro substitution to avoid duplicating ~20 lines ├ù 6), plus the Produtos grid (`grd_4c_Dados`) with Inserir/Excluir buttons.
+- `ConfigurarAbaRetencao()` ÔÇö full "Reten├º├úo" tab: PIS/COFINS/CSLL retention codes + the RPA container (Sim/N├úo OptionGroup, valor m├íximo INSS, 4 c├│digos de receita DARF).
+
+**2. Container `cnt_4c_BotoesAcao`** now has `cmd_4c_Confirmar`/`cmd_4c_Cancelar` buttons wired to `BtnSalvarClick`/`BtnCancelarClick` (forward references, consistent with the existing pattern for not-yet-implemented CRUD methods from earlier phases).
+
+**3. Lookups ÔÇö fully implemented, no stubs:**
+- 4 generic core helpers (`AbrirLookupGrupoContabil` ÔåÆ SigCdGcr, `AbrirLookupContaContabil` ÔåÆ SigCdCli filtered by grupo, `AbrirLookupOcorrencia` ÔåÆ SigOpOco, `AbrirLookupProdutoDoGrid` ÔåÆ SigCdPro), each doing the full `CREATEOBJECT("FormBuscaAuxiliar")` ÔåÆ `mAddColuna` ÔåÆ `Show(1)` ÔåÆ check `this_lSelecionou` ÔåÆ fill field ÔåÆ `USE IN` ÔåÆ `Release()` cycle.
+- 20 field-specific `KeyPress`(F4)/`DblClick`/`AbrirLookupX` trios covering all Grupo/Conta pairs (Impostos + 6 impostos in Vencimentos) and all 6 C├│digo de Ocorr├¬ncia fields, plus the 2 grid-column lookups for Produtos.
+- All registered centrally via `ConfigurarBindingsLookup()`.
+
+Table/column names (SigCdGcr.Codigos/Descrs, SigCdCli.Iclis/Rclis/Grupos, SigOpOco.Codigos/Descrs) were verified against `Framework\sigacess.PRG` (the actual `fAcessoContab`/`fAcessoContas` legacy functions) and `tasks\task525\schema_ascii.sql`, not guessed.
+
+I also caught and fixed a rule #1 violation I initially introduced (`RETURN` inside `TRY/CATCH` in the two new grid button handlers) before finishing ÔÇö moved the guard clauses outside the `TRY` blocks. Final balance checks (PROCEDURE/ENDPROC, WITH/ENDWITH, TRY/ENDTRY, IF/ENDIF all matched) confirm the file is structurally sound.

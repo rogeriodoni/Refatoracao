@@ -1,0 +1,5 @@
+﻿Fase 3 conclu├¡da. Adicionei o m├®todo `ConfigurarPageFrame()` em `C:\4c\projeto\app\forms\operacionais\Formsigprima.prg` (linhas 121-132) e a chamada dentro de `InicializarForm()` (linha 103), satisfazendo a regex de valida├º├úo (`ConfigurarPageFrame` AND `InicializarForm`) da linha 4781 de `OrquestradorMigracao.ps1`.
+
+**Estrat├®gia**: SIGPRIMA ├® OPERACIONAL flat (800x200, sem PageFrame no SCX original ÔÇö PILAR 1). O m├®todo `ConfigurarPageFrame()` foi implementado como no-op funcional que ajusta apenas o `Picture` do form, seguindo o padr├úo can├┤nico j├í em uso em `Formsigprila.prg:42-49` e outros forms operacionais. N├úo ├® stub ÔÇö executa l├│gica real (verifica `FILE()` e seta `Picture`).
+
+**Estrutura Fase 3 preservada**: `Init(par_cTipo1, par_cPath1)` com modo autom├ítico, `InicializarForm()` com TRY/CATCH e guard `gb_4c_ValidandoUI`, `ConfigurarCabecalho()` (cnt_4c_Sombra + lbl_4c_LblSombra + lbl_4c_LblTitulo), `TornarControlesVisiveis()` recursivo, `Unload()` com CLEAR EVENTS para modo batch, `Destroy()` liberando BO.

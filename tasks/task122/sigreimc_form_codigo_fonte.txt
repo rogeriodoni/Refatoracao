@@ -1,0 +1,386 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigreimc.SCX
+* Data/Hora: 06/06/2026 10:57:13
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIMC
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREIMC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREIMC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_NotaIni
+  Parent: SIGREIMC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_NotaFim
+  Parent: SIGREIMC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCopias
+  Parent: SIGREIMC
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREIMC
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMC
+------------------------------------------------------------
+  DataSession = 2
+  Height = 160
+  Width = 800
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Impressão de Cartas"
+  WindowType = 1
+  Name = "SIGREIMC"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.PicturePosition = 7
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 495
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 36
+  REGISTRY1.Left = 372
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMC.Say1
+------------------------------------------------------------
+  Caption = "Nota :"
+  Left = 323
+  Top = 96
+  TabIndex = 5
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMC.Say2
+------------------------------------------------------------
+  Caption = "a"
+  Left = 414
+  Top = 95
+  TabIndex = 6
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMC.Get_NotaIni
+------------------------------------------------------------
+  Left = 357
+  MaxLength = 6
+  TabIndex = 1
+  Top = 92
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "Get_NotaIni"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMC.Get_NotaFim
+------------------------------------------------------------
+  Left = 424
+  MaxLength = 6
+  TabIndex = 2
+  Top = 92
+  Width = 52
+  ForeColor = 0,0,0
+  Name = "Get_NotaFim"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMC.GetCopias
+------------------------------------------------------------
+  ControlSource = ""
+  Format = ""
+  Height = 23
+  InputMask = "999"
+  Left = 445
+  MaxLength = 3
+  TabIndex = 3
+  Top = 124
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "GetCopias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIMC.Say3
+------------------------------------------------------------
+  Caption = "Numero de cópias :"
+  Left = 349
+  Top = 128
+  TabIndex = 4
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIMC
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReImc Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local lnVia
+
+Create Cursor XCorNf (cemps C(3),cseries C(3),cnfis C(6),noccors N(3),mretifs M(4) NULL,;
+					clifors C(10),emis D(8),correcs L(1),rclis C(50),razaos C(50),endes C(60),;
+					cidas C(30),estas C(2),nums C(10),compls C(25),cdescrs C(30),numvias N(8))
+Index On cemps+cseries+cnfis+Str(numvias,8) Tag XCorNf
+
+NumVia = ThisForm.GetCopias.Value
+
+pcEmps    = ThisForm.Emp
+pcSeries  = ThisForm.Serie
+pcEDNs    = ThisForm.EDNs
+pEmisDe   = Evaluate([{^]+TransForm((DtoS(Max(ThisForm.EmisDe,CtoD('01/01/1900')))+'000000'),'@R 9999-99-99 99:99:99')+[}])
+pEmisAte  = Evaluate([{^]+TransForm((DtoS(Max(ThisForm.EmisAte,CtoD('01/01/1900')))+'235959'),'@R 9999-99-99 99:99:99')+[}])
+pcNFisDe  = ThisForm.Get_NotaIni.Value
+pcNFisAte = ThisForm.Get_NotaFim.Value
+
+ThisForm.poDataMgr.Requery('CrSigCdEmp')
+ThisForm.poDataMgr.Requery('CrSigNfCor')
+
+SELECT CrSigCdEmp
+Go Top
+
+Select CrSigNfCor
+Goto Top
+Scan
+	For lnVia = 1 to NumVia
+		Select CrSigNfCor
+		Scatter Memvar Memo
+		Select XCorNf
+		Append Blank
+		Gather Memvar Memo
+		Replace NumVias with lnVia
+	EndFor
+	Select CrSigNfCor
+EndScan
+Select XCorNf
+Set Order TO XCorNf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters Emp,Serie,EmisDe,EmisAte,EDNs,NotaIni,NotaFim
+Private pcEmps,pcSeries,pcNFisDe,pcNFisAte,pcEDNs,pEmisDe,pEmisAte,pEmpEdns
+
+=DoDefault()
+
+ThisForm.poDataMgr = CreateObject('fSqlConector','SigNfCor')
+
+pcEmps    = ''
+pcSeries  = ''
+pcNFisDe  = ''
+pcNFisAte = Replicate(Chr(254),6)
+pcEDNs    = Null
+pEmisDe   = Null
+pEmisAte  = Null
+
+If Type('EDNs') = 'C'
+	If IsEmpty(EDNs)
+		pEmpEdns = .f.
+	Else
+		pEmpEdns = .t.
+	EndIf 
+Else
+	pEmpEdns  = EDNs
+EndIf 
+
+lcQryCorNf = [Select f.*,n.clifors,n.emis,n.correcs,c.rclis,c.razaos,c.endes,c.cidas,c.estas,c.nums,c.compls,o.cdescrs ]+;
+			[From SigNfCor f , SigMvNfi n, SigCdCli c, SigCcOco o ]+;
+			[Where f.cnfis = n.nfis And f.cemps = n.emps And f.cseries = n.series ] + Iif(pEmpEdns, [ And n.empdopnums = ?pcEDNs ],[]) +;
+				[And n.clifors = c.iclis And f.noccors = o.ncodigos And f.cemps = ?pcEmps And f.cseries = ?pcSeries ]+;
+				[And f.cnfis Between ?pcNFisDe And ?pcNFisAte And n.emis Between ?pEmisDe And ?pEmisAte ]+;
+			[Order By cemps,cseries,cnfis,noccors ]
+ 
+lcQryEmp   = [Select * From SigCdEmp Where cemps = ?pcEmps ]
+
+With ThisForm.poDataMgr
+	.AddCursor('SigNfCor','cidchaves','CrSigNfCor','','',lcQryCorNf)
+	.AddCursor('SigCdPam','viacarta' ,'CrSigCdPam','','')
+	.AddCursor('SigCdEmp'  ,'cemps'    ,'CrSigCdEmp'  ,'','',lcQryEmp)
+EndWith
+
+ThisForm.poDataMgr.Requery('CrSigCdPam')
+
+Select CrSigCdPam
+
+ThisForm.Emp     = Emp
+ThisForm.Serie   = Serie
+ThisForm.EmisDe  = EmisDe
+ThisForm.EmisAte = EmisAte
+ThisForm.EDNs    = EDNs
+ThisForm.NotaIni = NotaIni
+ThisForm.NotaFim = NotaFim
+ThisForm.Get_NotaIni.Value = NotaIni
+ThisForm.Get_NotaFim.Value = NotaFim
+ThisForm.GetCopias.Value   = CrSigCdPam.viacarta
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReImc To Printer Prompt NoConsole
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMC.Get_NotaIni
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If !IsEmpty(ThisForm.NotaIni) and !IsEmpty(ThisForm.EDNs)
+	Return(.F.)
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIMC.Get_NotaFim
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If !IsEmpty(ThisForm.NotaFim)  and !IsEmpty(ThisForm.EDNs)
+	Return(.F.)
+EndIf
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIMC
+RESERVED3 (ClassInfo): edns
+emisate
+emisde
+emp
+notafim
+notaini
+podatamgr
+serie
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

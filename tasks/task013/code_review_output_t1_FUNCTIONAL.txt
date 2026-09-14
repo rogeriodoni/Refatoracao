@@ -1,0 +1,25 @@
+﻿All fixes are verified. Here's a summary of what was applied to `FormProduto.prg`:
+
+**1. CONTAINER-VISIVEL (1 fix)**
+- `TornarControlesVisiveis()`: added guard to skip `cnt_` containers that are intentionally `Visible=.F.`
+
+**2. LOSTFOCUS-SEM-GUARDIA (11 fixes)**
+- Added 11 property initializations in `InicializarForm` (`this_cUltimoTxtXxxLostFocusValidado = ""`)
+- Added guard blocks to: `TxtTamLostFocus`, `TxtCorLostFocus`, `TxtConquilhaLostFocus`, `TxtClfiscalFiscLostFocus`, `TxtDclfiscalFiscLostFocus`, `TxtOrigmercFiscLostFocus`, `TxtSittricmFiscLostFocus`, `TxtTpTribFiscLostFocus`, `TxtMetalFiscLostFocus`, `TxtMvalorFiscLostFocus`, `TxtTeorFiscLostFocus`
+
+**3. NULL-CURSOR (1 fix)**
+- Wrapped `CREATE CURSOR cursor_4c_Dados` (line 477) with `SET NULL ON` / `SET NULL OFF`
+
+**4. GRID-HEADER (4 fixes)**
+- `"Subgrupo"` ÔåÆ `"Subgrp."` at lines 521 and 3280
+- `"Total "` ÔåÆ `"Total"` (trailing space) at lines 1357 and 8027
+
+**5. LAYOUT-POSITION (8 fixes)**
+- `lbl_4c_LblGrupoP`: Top 182ÔåÆ18, Left 73ÔåÆ21
+- `lbl_4c_LblAltura`: Top 250ÔåÆ474, Left 860ÔåÆ749
+- `lbl_4c_Label13FP`: Top 156ÔåÆ32, Left 33ÔåÆ72
+- `lbl_4c_Label9FP`: Top 231ÔåÆ451, Left 58ÔåÆ884
+- `lbl_4c_Label10FP`: Top 256ÔåÆ451, Left 74ÔåÆ967
+- `lbl_4c_Label8FP`: Top 281ÔåÆ5, Left 72ÔåÆ8
+- `chk_4c_Fwoption1`: Top 331ÔåÆ172, Left 180ÔåÆ879
+- `lbl_4c_Label2` (pgCusto): Top 415ÔåÆ134, Left 479ÔåÆ58

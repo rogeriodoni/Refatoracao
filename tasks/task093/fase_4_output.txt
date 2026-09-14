@@ -1,0 +1,14 @@
+﻿A Fase 4 j├í est├í **completa**. Ambos os arquivos est├úo totalmente implementados:
+
+**`Formsigreeun.prg`** (1602 linhas) j├í cont├®m:
+- `ConfigurarPaginaLista()` (linhas 287-470) ÔÇö todos os campos de filtro na Page1: Grupo de Estoque, Conta/Estoque, Unidade, Data
+- `ConfigurarPaginaDados()` (linhas 481-686) ÔÇö campos de filtro restantes: Moeda, DtCotacao, OptionGroups (ImpCotacao, FatorVenda) + todos os BINDEVENTs
+- `AlternarPagina()` (linhas 716-742) ÔÇö implementado
+- Todos os lookups, validadores, handlers de teclado e stubs de interface FormBase
+
+**`sigreeunBO.prg`** (770 linhas) j├í cont├®m:
+- Todas as propriedades `this_*` dos filtros
+- `PrepararDados()` completo com 2 caminhos (com/sem filtro de unidade)
+- `ValidarFiltros()`, `RegistrarCotacao()`, `CarregarDoCursor()`, `Destroy()`
+
+Este ├® um formul├írio **REPORT** (n├úo CRUD), portanto n├úo h├í grid de lista nem bot├Áes CRUD. O equivalente da "Page1" para este tipo ├® a p├ígina ├║nica com campos de filtro ÔÇö que j├í foi implementada integralmente. Nenhuma altera├º├úo necess├íria.

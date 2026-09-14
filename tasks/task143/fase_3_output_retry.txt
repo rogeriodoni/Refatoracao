@@ -1,0 +1,14 @@
+﻿Phase 3 complete. Rewrote `C:\4c\projeto\app\forms\operacionais\Formsigpdmp2.prg` with only the base structure for the OPERACIONAL form (PageFrame doesn't apply ÔÇö operational layout is custom).
+
+Contents:
+- `DataMgrProxy` class (legado-compat wrapper around `gnConnHandle` for `SqlExecute`/`CursorQuery` calls from sub-forms)
+- `DEFINE CLASS Formsigpdmp2 AS FormBase` with visual props (Width=1000, Height=600, DataSession=2, TitleBar=0) and full set of legacy state props (`pcEscolha`, `pEmps`, `InfoLote`, `InfoEnve`, `EditaEnve`, `CtrlAgrega`, `TrfPesa`, `CompAgru`, `LibInserir`, `InibeInserir/Alterar/Excluir`, `AntValue/Qtde/Peso/ValueP`, `ObsAnterior`)
+- `Init(par_oFormPai, par_nDatSes)` stores parent ref + sets DATASESSION before `DODEFAULT()`
+- `InicializarForm()` creates `DataMgrProxy` + `sigpdmp2BO`, syncs `pcEscolha`/`pEmps` to BO, sets `Picture`, calls the three Configurar* methods, then `TornarControlesVisiveis(THIS)`
+- `ConfigurarCabecalho()` builds `cnt_4c_Sombra` with `lbl_4c_LblSombra` + `lbl_4c_LblTitulo`
+- `ConfigurarContainerOperacao()` builds empty `cnt_4c_Operacao` (children added Fase 5)
+- `ConfigurarContainersAuxiliares()` creates floating `cnt_4c_Container1`, `cnt_4c_Servico`, `cnt_4c_Container2` (all Visible=.F.)
+- `TornarControlesVisiveis()` filters the three floating containers via `INLIST(...)` so they stay hidden
+- `Destroy()` releases BO/poDataMgr/ParentForm refs
+
+Grid (`grd_4c_Dados`), buttons, checkboxes, lower fields and events are intentionally absent ÔÇö they belong to Phases 4ÔÇô8.

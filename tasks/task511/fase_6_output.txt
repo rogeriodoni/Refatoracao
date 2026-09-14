@@ -1,0 +1,18 @@
+﻿Phase 6/8 is complete. Here's what was implemented across all 11 edits to `Formrgr.prg`:
+
+**Edit 1-3** (prior session):
+- Fixed 4 column header captions in grd_4c_Dados
+- Added BINDEVENT for txt_4c_Descricao LostFocus
+- Added all 11 missing Page2 controls (separator shapes, EditBox Observa├º├úo, 4 audit fields)
+
+**Edits 4-11** (this session):
+- **GradeRegraAfterRowColChange**: Added cases 1, 2, 3 for Empresa/Grupo/Conta column validation
+- **ValidarEmpresaGrid()**: Calls `fAcessoEmpresa(Usuar, 'C', ...)` via TRY/CATCH; clears Empresa on denied
+- **ValidarGrupoContabilGrid()**: Calls `fAcessoContab(Usuar, 'C', ...)` via TRY/CATCH; shows "Acesso Negado" + clears Grupo on denied
+- **ValidarContaGrid()**: Calls `fAcessoContas(Usuar, grupo, 'C', ...)` with Grupo context from current row; clears Conta on denied
+- **FormParaBO()**: Added `this_cObservacao` from `edt_4c_Observacao.Value`
+- **BOParaForm()**: Added Observacao + 4 audit fields; `this_dDatas`/`this_dDtaAlts` converted with `TTOD()` for date TextBoxes; maps `this_cUsuIncs` ÔåÆ `txt_4c_Usuario` and `this_cUsaAlts` ÔåÆ `txt_4c_UsuaAlts`
+- **LimparCampos()**: Clears all 5 new fields (EditBox `""`, date TextBoxes `{}`, user TextBoxes `""`)
+- **HabilitarCampos()**: Added `edt_4c_Observacao.ReadOnly = !par_lHabilitar`
+- **DescricaoLostFocus()** (PUBLIC): Auto-triggers `CmdInsRowClick()` + sets focus to grid when Descricao is not empty and mode is INCLUIR/ALTERAR
+- **BtnSalvarClick()**: Added pre-TRY validation ÔÇö empty C├│digo in INCLUIR mode shows aviso and sets focus back to field

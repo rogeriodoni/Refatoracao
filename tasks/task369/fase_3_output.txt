@@ -1,0 +1,12 @@
+﻿Todos os RETURN est├úo fora de TRY/CATCH. O arquivo est├í correto.
+
+**Fase 3 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\FormCla.prg` criado com:
+
+- `DEFINE CLASS FormCla AS FormBase` com propriedades visuais (Height=600, Width=1000, DataSession=2, Caption definido via CHR() em InicializarForm)
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()` com TRY/CATCH
+- `InicializarForm()` ÔåÆ cria ClaBO, chama ConfigurarPageFrame(), propaga Caption para labels, chama CarregarLista() (com guard gb_4c_ValidandoUI)
+- `ConfigurarPageFrame()` ÔåÆ pgf_4c_Paginas com 2 p├íginas + background
+- `ConfigurarPaginaLista()` ÔåÆ cnt_4c_Cabecalho (com lbl_4c_Sombra/Titulo), cnt_4c_Botoes (vazio, fase 4), cnt_4c_Saida (vazio, fase 4)
+- `ConfigurarPaginaDados()` ÔåÆ cnt_4c_BotoesAcao (vazio, fase 4)
+- `CarregarLista()` ÔåÆ completo com PEMSTATUS guard (funciona antes do grid ser criado na fase 4)
+- `AlternarPagina()`, `TornarControlesVisiveis()`, `FormatarGridLista()`, `Destroy()` ÔåÆ todos completos

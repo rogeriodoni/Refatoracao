@@ -1,0 +1,12 @@
+﻿Ap├│s pesquisa, ambos os problemas s├úo **falsos positivos**. Vou explicar a an├ílise:
+
+**`CITENS` no WHERE** ÔÇö aparece em `Atualizar()` (linha 385) e `ExecutarExclusao()` (linha 415) do BO como chave composta `EmpDopNums + CItens` para identificar a linha espec├¡fica no UPDATE/DELETE. `CItens` ├® coluna real de `SigMvItn` (sequencial do item) e ├® necess├íria para identificar um item espec├¡fico dentro de uma OP. N├úo ├® filtro inventado.
+
+**`CONTROLCOUNT` no WHERE** ÔÇö n├úo existe em nenhum contexto SQL. O c├│digo em `TornarControlesVisiveis()` (linha 1137/1151/1153 do form) usa `.ControlCount` como **propriedade VFP de objeto** para iterar controles visuais, n├úo como coluna SQL. O validador confundiu propriedade VFP com coluna de banco de dados.
+
+O `BuscarItens()` (o ├║nico SELECT que filtra registros) usa exatamente as mesmas condi├º├Áes que o original:
+- `a.EmpDopNums = ...` ÔåÆ original `EMPDOPNUMS` / `I`
+- `a.Dopes = b.Dopes` ÔåÆ original `DOPES`  
+- `a.CPros = c.CPros` ÔåÆ original `CPROS`
+
+**Nenhuma corre├º├úo ├® necess├íria** ÔÇö os dois alertas s├úo falsos positivos do validador est├ítico que confundiu contextos SQL com c├│digo VFP.

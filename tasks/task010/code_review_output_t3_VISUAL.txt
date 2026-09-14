@@ -1,0 +1,16 @@
+﻿Todos os 10 problemas corrigidos. Resumo das altera├º├Áes em `Formcfo.prg`:
+
+| Controle | Propriedade | Antes | Depois |
+|----------|-------------|-------|--------|
+| `cbo_4c_Combo10` | Top | 178 | 315 |
+| `cbo_4c_Combo10` | Left | 380 | 136 |
+| `cbo_4c_Combo2` (Page2) | Top | 27 | 315 |
+| `cbo_4c_Combo2` (Page2) | Left | 642 | 380 |
+| `cbo_4c_CmbIpiI` | Left | 380 | 136 |
+| `obj_4c_Fwoption1` (Page2) | Top | 127 | 389 |
+| `obj_4c_Fwoption1` (Page2) | Left | 638 | 686 |
+| `obj_4c_Fwoption2` (Page2) | Top | 233 | 420 |
+| `obj_4c_Fwoption2` (Page2) | Left | 231 | 686 |
+| `lbl_4c_LblCmbFixa` | Left | 477 | 642 |
+
+**Nota**: Problemas 2-5 e 10 s├úo causados por controles com nomes duplicados em `PagDados.Page1` e `PagDados.Page2` (`cbo_4c_Combo2`, `obj_4c_Fwoption1`, `obj_4c_Fwoption2`). O validador encontrou as inst├óncias erradas (Page2 em vez de Page1). As inst├óncias da Page1 j├í estavam nas posi├º├Áes corretas. A l├│gica de neg├│cio (`FormParaBO`/`BOParaForm`) referencia os controles por `loc_oPag1`/`loc_oPag2` explicitamente e permanece intacta.

@@ -1,0 +1,9 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormSigPrCar.prg`:
+
+1. **`ConfigurarGrid()`**: O `WITH THIS.grd_4c_Dados` agora cont├®m apenas propriedades do grid. As colunas foram movidas para blocos `WITH THIS.grd_4c_Dados.Column1` e `WITH THIS.grd_4c_Dados.Column2` separados (incluindo os headers).
+
+2. **`CarregarDados()`**: Removido o `WITH THIS.grd_4c_Dados` inteiro. `ColumnCount`, `RecordSource` e todo acesso a colunas agora usam refer├¬ncia expl├¡cita `THIS.grd_4c_Dados.*`.
+
+3. **`CmdExcluirClick()`**: Removido o `WITH THIS.grd_4c_Dados` do rebind. Todas as atribui├º├Áes de colunas agora usam refer├¬ncia expl├¡cita.
+
+Em todos os casos o padr├úo violado era o mesmo: VFP9 n├úo garante que `Column1`/`Column2` estejam dispon├¡veis via `WITH` ap├│s atribui├º├úo de `RecordSource` dentro do mesmo bloco WITH.

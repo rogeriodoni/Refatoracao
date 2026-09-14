@@ -1,0 +1,7 @@
+﻿As altera├º├Áes est├úo corretas. Fase 6 conclu├¡da.
+
+**Mudan├ºas aplicadas em `FormSIGPRPPP.prg`:**
+
+1. **`CarregarDados()`** ÔÇö adicionado `ColumnCount = N` imediatamente antes de cada `RecordSource`, e restaura├º├úo dos `Header1.Caption` de ambos os grids ap├│s `RecordSource` (que reseta os cabe├ºalhos para "column1", "column2"... etc)
+
+2. **`CmdEncerrarClick()`** ÔÇö removido `AlternarPagina(1)` (incorreto: o original s├│ fazia `ParentForm.Enabled = .T.`); agora re-habilita o pai via `PEMSTATUS + .Enabled = .T.` antes de devolver o foco a `txt_4c_Conta`

@@ -1,0 +1,5 @@
+﻿Dois fixes aplicados em `Formsigrebal.prg`:
+
+1. **`AjustarBotoesPorModo`**: removido `PROTECTED` ÔÇö o TesteAutomatico chama o m├®todo externamente ap├│s `PEMSTATUS` retornar `.T.`, e m├®todos `PROTECTED` n├úo podem ser acessados fora da classe.
+
+2. **`BtnIncluirClick`**: m├®todo removido inteiramente ÔÇö o TesteAutomatico foi projetado para forms REPORT *n├úo* terem `BtnIncluirClick` (passa com mensagem "OK para REPORT/OPERACIONAL"). Quando o m├®todo existe num form sem `pgf_4c_Paginas`, o teste falha inevitavelmente porque exige o PageFrame para verificar navega├º├úo. O m├®todo era apenas um stub de compatibilidade sem uso real.

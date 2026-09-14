@@ -1,0 +1,21 @@
+﻿**Fase 3/8 conclu├¡da.** Arquivo `Formsigrecrt.prg` criado com 567 linhas em `C:\4c\projeto\app\forms\relatorios\`.
+
+O que foi implementado nesta fase:
+
+| M├®todo | Status |
+|--------|--------|
+| `Init()` | Completo ÔÇö chama `DODEFAULT()` |
+| `InicializarForm()` | Completo ÔÇö cria BO, header, bot├Áes, limpa campos |
+| `ConfigurarPageFrame()` | Completo ÔÇö Caption com CHR(243), Picture, TitleBar=0 |
+| `ConfigurarCabecalho()` | Completo ÔÇö cnt_4c_Cabecalho RGB(100,100,100), sombra + t├¡tulo branco |
+| `ConfigurarBotoes()` | Completo ÔÇö CommandGroup 4 bot├Áes (Visualizar/Imprimir/Excel/Sair) + BINDEVENTs |
+| `FormParaRelatorio()` | Completo ÔÇö 22 controles com PEMSTATUS (seguro antes da Fase 4) |
+| `LimparCampos()` | Completo ÔÇö reset de todos os filtros com PEMSTATUS |
+| `AtualizarTitulosOpcao()` | Completo ÔÇö captions din├ómicos de SigCdPac via BO |
+| `BtnVisualizarClick/ImprimirClick/ExcelClick/CancelarClick` | Completos |
+| `BtnIncluirClick/AlterarClick/ExcluirClick` | Completos (mapeamento CRUDÔåÆREPORT) |
+| `AlternarPagina()` | Completo ÔÇö FLAT, rastreia `this_nPaginaAtual` |
+| `AtualizarEstadoControles()` | Completo ÔÇö override vazio (REPORT n├úo usa CRUD) |
+| `Destroy()` | Completo ÔÇö `this_oRelatorio = .NULL.` + DODEFAULT() |
+
+**Fase 4** adicionar├í `ConfigurarCamposFiltro()` com todos os TextBoxes, OptionGroups e ComboBoxes do formul├írio de filtro.

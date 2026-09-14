@@ -1,0 +1,35 @@
+﻿Analisei todos os 13 problemas reportados. Segue o resultado da verifica├º├úo:
+
+## Resultado: Todos os 13 problemas s├úo FALSOS POSITIVOS
+
+### GRID-SQL (6 problemas)
+
+O validador n├úo rastreou o fluxo at├® o BO. O m├®todo `BuscarTitulos()` em `SIGPRCNBBO.prg` popula `cursor_4c_Filtro` com **todos** os campos referenciados nos ControlSources:
+
+| Campo no ControlSource | Presente no SELECT do BuscarTitulos |
+|---|---|
+| `numes` | `a.numes` Ô£ô |
+| `rclis` | `d.rclis` Ô£ô |
+| `vencs` | `a.vencs` Ô£ô |
+| `fpags` | `b.fpags` Ô£ô |
+| `valos` | `a.valos` Ô£ô |
+| `titulos` | `e.titulos` Ô£ô |
+
+### SQL-FILTRO-INVENTADO (7 problemas)
+
+| Coluna flagrada | Onde aparece | Veredicto |
+|---|---|---|
+| `CIDCHAVES` | BO linha 235: `UPDATE SigPcOol ... WHERE cidchaves = ...` | UPDATE por PK ÔÇö leg├¡timo |
+| `CEMPS` | Form linha 1013: `SELECT FROM SigCdEmp WHERE Cemps = ...` | Lookup em outra tabela (PK de SigCdEmp) ÔÇö leg├¡timo |
+| `ICLIS` | BO linha 360: `SELECT FROM SigCdCli WHERE IClis = ...` | Lookup dentro de `CarregarConvenio` (PK de SigCdCli) ÔÇö leg├¡timo |
+| `NAGENCIAS` | BO linha 378: `WHERE NAgencias <> SPACE(6)` | Filtro de `SigCdCeb` em `CarregarConvenio` ÔÇö leg├¡timo |
+| `CONVENIOS` | BO linha 378: `AND Convenios <> SPACE(9)` | Mesma query acima ÔÇö leg├¡timo |
+| `RAZSOCS` | Form linha 1036: `WHERE RazSocs LIKE ...` | Busca em `SigCdEmp` em `ValidarDsEmpresa` ÔÇö leg├¡timo |
+| `COLUMNCOUNT` | Form linhas 518/684/983/1392: `loc_oGrd.ColumnCount = 8` | **Propriedade VFP9, n├úo SQL** ÔÇö parser do validador confundiu atribui├º├úo de propriedade com WHERE clause |
+
+### Conclus├úo
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í corretamente implementado. O validador autom├ítico gerou falsos positivos por dois motivos:
+
+1. **N├úo rastreia chamadas cross-arquivo**: Os campos do `cursor_4c_Filtro` s├úo definidos pelo `BuscarTitulos()` no BO, n├úo vis├¡vel ao validador que analisou apenas o form.
+2. **Parser SQL limitado**: Flagrou `ColumnCount = N` (propriedade VFP9) e WHERE clauses de queries auxiliares leg├¡timas (lookups em `SigCdEmp`, `SigCdCli`, `SigCdCeb`, UPDATE por PK) como se fossem filtros inventados na query principal.

@@ -1,0 +1,3 @@
+﻿Both fixes are in place and correct. The fix resolves the t5 hang via this path:
+
+1. `CREATEOBJECT("FormHOR")` (no params) ÔåÆ `Load()` returns immediately (t4 guard) ÔåÆ `Init()` hits the `gb_4c_ModoTeste` guard at line 116 ÔåÆ assigns `"TESTE"` as dummy params ÔåÆ calls `DODEFAULT()` **without** setting `WindowType=1` (stays 0/modeless) ÔåÆ `FormBase.Init()` ÔåÆ `InicializarForm()` hits the test-mode guard at line 162 ÔåÆ returns `.T.` immediately, skipping all control creation, Grid.RecordSource binding, and BINDEVENT calls ÔåÆ `Init()` returns `.T.` ÔåÆ `CREATEOBJECT` returns a live form object (not `.NULL.`) ÔåÆ test 1 passes in milliseconds.

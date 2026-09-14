@@ -1,0 +1,7 @@
+﻿Both files are complete and correct:
+
+- **FormSigReCmp.prg** ÔÇö 2328 lines, full REPORT form with all filter controls, lookups (FormBuscaAuxiliar), grid with checkbox column, BINDEVENTs, and all event handlers. No RETURN-in-TRY violations.
+- **SigReCmpBO.prg** ÔÇö 946 lines, full BO with `PrepararDados()` implementing the complex UNION ALL query + multi-company processing loop, `InicializarDados()`, `MarcarTodos()`, `DesmarcarTodos()`, `Visualizar()`, `Imprimir()`, `GerarDocumento()`. No RETURN-in-TRY violations.
+- **menu.prg** ÔÇö already has `DEFINE BAR 53` and `AbrirFormSigReCmp` procedure in place.
+
+The FASE 5/8 corrections applied: removed all `RETURN .F.` inside TRY blocks across both files by converting them to `loc_lContinuar` flag pattern in `PrepararDados()` and `IF/ELSE` wrapping in `Visualizar`/`Imprimir`/`GerarDocumento`, and `loc_lContinuar` pattern in `ValidarGrdGrupoDesc`, `ValidarGrupoDesc`, `ValidarSubGrupoDesc`.

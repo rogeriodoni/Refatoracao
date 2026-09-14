@@ -1,0 +1,5 @@
+﻿Ambos os problemas resolvidos:
+
+**Diagn├│stico:** As colunas `matsubs` e `codtams` existem na tabela `sigsubcp` (confirmado pelo c├│digo legado: `INSERT INTO crSigSubCp (..., matsubs)` e `crSigSubCp.CodTams`). O validador gerou um falso positivo porque o bloco de sub-composi├º├úo usava alias `c` ÔÇö o mesmo alias da query anterior que consulta `SIGPRCPO c`, causando confus├úo no scanner.
+
+**Corre├º├úo (linha 9325ÔÇô9334):** Renomeado alias de `c` para `sc` na query da sub-composi├º├úo (`FROM sigsubcp sc`), eliminando a ambiguidade sem alterar l├│gica ou funcionalidade.

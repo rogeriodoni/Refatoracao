@@ -1,0 +1,3 @@
+﻿**Causa raiz**: Os tr├¬s grids em `ConfigurarSubPaginaLayout()` tinham um `ColumnCount = 3` intermedi├írio que sobreescrevia os valores corretos (5, 12, 7) antes de o `RecordSource` ser atribu├¡do. Como resultado, quando o bloco `WITH .Column4` era executado, a coluna n├úo existia.
+
+**Corre├º├úo aplicada** nos tr├¬s grids (`grd_4c_PropsTitulo`, `grd_4c_PropsCampos`, `grd_4c_PropsGrp`): moveu `RecordSource` para **antes** de `ColumnCount`, e eliminou o `ColumnCount = 3` esp├║rio. O padr├úo correto ÔÇö `RecordSource` primeiro, `ColumnCount` depois para fixar o n├║mero de colunas ÔÇö evita que o auto-bind do cursor destrua as colunas j├í criadas.

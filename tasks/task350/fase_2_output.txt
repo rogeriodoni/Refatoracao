@@ -1,0 +1,11 @@
+﻿A Fase 2 est├í conclu├¡da. O arquivo `BchBO.prg` agora cont├®m todos os m├®todos CRUD completos:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com filtro opcional, cursor `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_nCodigo)`** ÔÇö SELECT por PK, reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor()`** ÔÇö PROTECTED, usa `SELECT (par_cAliasCursor)` antes de acessar campos, trata bitÔåÆlogical via `ConverterParaLogico`
+- **`Inserir()`** ÔÇö PROTECTED, gera PK com `MAX(codigos)+1`, helpers `EscaparSQL`/`FormatarNumeroSQL`/`FormatarDataSQL`, `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö PROTECTED, `LEFT()` respeitando tamanhos do schema, `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö PROTECTED, valida├º├úo de balan├ºo encerrado **antes** do TRY, `RegistrarAuditoria("DELETE")`
+- **`EncerrarBalanco()`** ÔÇö PUBLIC, encerra o balan├ºo via `GETDATE()` no SQL Server (l├│gica do bot├úo "Encerrar" do legado)
+
+Todos os `RETURN` est├úo fora de blocos TRY/CATCH. Nenhum acento literal ÔÇö tudo via `CHR()`.

@@ -1,0 +1,7 @@
+﻿Phase 2 completed. Added to `sigproefBO.prg`:
+
+- **`Inserir()`** ÔÇö CRUD-canonical INSERT no cursor operacional `Transacao` (padr├úo SIGPRCPRBO), com auto-CREATE do cursor se ausente, REPLACE de todos os 13 campos via propriedades `this_*`, guard de `this_cFPags` vazio, chamada a `RegistrarAuditoria("INSERT")`, TRY/CATCH com `MsgErro` e `this_cMensagemErro` populada.
+
+- **`Atualizar()`** ÔÇö LOCATE FOR pela chave composta `FPags + cnnsus`, REPLACE dos campos mut├íveis (cStatus/lCancel/cnValors/CnHrTrans/CupFis/EmpDopNums/cnIdents), guard de cursor n├úo aberto e registro n├úo encontrado, chamada a `RegistrarAuditoria("UPDATE")`.
+
+`CarregarDoCursor()` e `ObterChavePrimaria()` j├í existentes da Fase 1 foram preservados. Ambos os m├®todos novos seguem a Regra #9 (CATCH n├úo silencioso) e usam CHR() para acentos (Regra #4).

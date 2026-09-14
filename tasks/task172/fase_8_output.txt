@@ -1,0 +1,12 @@
+﻿Both files are correct. Phase 8 is complete:
+
+**`Formsigprdis.prg`** ÔÇö 5 methods added before `ENDDEFINE` (now 2687 lines):
+- `FormParaBO()` (line 2563) ÔÇö transfers `txt_4c_DtInicial` date to `this_oBusinessObject.this_dDatas`
+- `BOParaForm()` (line 2580) ÔÇö restores BO date to period filter fields on Page1
+- `HabilitarCampos(par_lHabilitar)` (line 2603) ÔÇö enables/disables Aba2 filters, `grd_4c_Distribui` columns 3/4, and Aba1 Processar/MarcaDesmarca buttons
+- `LimparCampos()` (line 2635) ÔÇö clears all 5 filter fields + 16 product info panel fields
+- `AjustarBotoesPorModo()` (line 2672) ÔÇö enables Salvar only for INCLUIR/ALTERAR, always enables Cancelar, delegates to `HabilitarCampos`
+
+**`menu.prg`** ÔÇö integrated:
+- BAR 35 = separator, BAR 36 = "Distribui├º├úo de Produtos" in `popMovimentos` (lines 172ÔÇô177)
+- `AbrirFormsigprdis()` procedure at line 4110 with canonical error handling pattern

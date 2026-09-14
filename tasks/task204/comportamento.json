@@ -1,0 +1,433 @@
+{
+  "resumo": {
+    "totalMetodos": 24,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 8,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds", "fAcessoContab", "fAcessoContas", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRLNC",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "iGrupo = thisform.pagina.dados.get_Grupos.Value\nthisform.podatamgr.cursorquery('SigCdGcr','crTmpgccr','codigos',iGrupo)\nthisform.pagina.dados.get_Desc_Gru.Value = crTmpgccr.Descrs\niContas = thisform.pagina.dados.get_Contas.Value\nthisform.podatamgr.cursorquery('SigCdCli','crTmpSigCdCli','iclis',iContas)\nthisform.pagina.dados.get_Desc_Con.Value = crTmpSigCdCli.rclis",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "get_Grupos,get_Desc_Gru,get_Contas,get_Desc_Con",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "If (.Not. Empty(ThisForm.Pagina.Dados.Get_Grupos.Value)) AND (Empty(ThisForm.Pagina.Dados.Get_Contas.Value))\n  sGruContas = ThisForm.Pagina.Dados.Get_Grupos.Value+ThisForm.Pagina.Dados.Get_Contas.Value\n  ThisForm.poDataMgr.LocateCursor('crSigClLan','grucontas',sGruContas)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value)) AND,LocateCursor",
+        "controlesReferenciados": "Get_Grupos,Get_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\nCreate Cursor csSigClLan (Grupos c(10), Contas c(10), Cocos c(2), descs c(30) )\nIndex On cocos tag cocos\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "=fConfigGeral()\n\nlcQryLancamento = [Select * From SigClLan]\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigClLan', 'cIdChaves', 'crSigClLan', '', ThisForm.Pagina.Lista.Grade, lcQryLancamento)\n\t\t\t\t.pfSqlTabela(1).pColuna('Grupos', '', '', 'Grupos', 80, .t.)\n\t\t\t\t.pfSqlTabela(1).pColuna('Contas','', '','Contas', 80, .t.)\n\t\t\t\t.pfSqlTabela(1).pColuna('Cocos','', '','Operação', 80, .t.)\n\t\tEndWith\n\n\t\t=DoDefault(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRLNC",
+      "evento": "Click",
+      "linhas": 47,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndIf\n\nSelect csSigClLan\nZap\n\ngruconta = crSigClLan.grupos + crSigClLan.contas\n\nlcquery = [Select a.*, b.descs from SigClLan a, SigCcCco b where a.grucontas=']+gruconta+[' and a.cocos = b.cods]\n=Thisform.podatamgr.sqlexecute(lcquery,'CrTmpLanc')\n\nSelect crtmplanc\nScan\n\tScatter memvar\n\tSelect csSigClLan\n\tAppend Blank\n\tGather memvar\nEndScan\n\nSelect csSigClLan\n\nthisform.pagina.dados.GradeOco.Refresh()\nThisForm.Pagina.Dados.Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "sqlexecute,Refresh,inicdesc",
+        "controlesReferenciados": "get_Grupos,get_Desc_Gru,get_Desc_Con",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC",
+      "evento": "Click",
+      "linhas": 42,
+      "codigoOriginal": "If ThisForm.pcEscolha =  'PROCURAR'\n\tIf (.Not. Empty(ThisForm.Pagina.Dados.Get_Grupos.Value)) AND (Empty(ThisForm.Pagina.Dados.Get_Contas.Value))\n      =Messagebox('Atenção ! Para pesquisar é necessário escolher também a Conta.', 0+48, 'CreateObject')\n      Thisform.pagina.dados.Get_Contas.SetFocus\n      Return (.F.)\t\n\tEndIf\n    Thisform.pagina.dados.GradeOco.Enabled = .T.\t\nENDIF\n\nIF Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n   IF IsEmpty(Thisform.pagina.dados.Get_Grupos.Value)\t\n      =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "Value)) AND,sqlexecute",
+        "controlesReferenciados": "Get_Grupos,Get_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "IF ThisForm.pcEscolha =  'PROCURAR'\n   Thisform.pagina.dados.GradeOco.Enabled = .T.\t\nENDIF\n\n=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.Pagina.Lista.Activate\n\tThisForm.Pagina.Lista.Grade.SetFocus\n\tThisForm.mAtivapagina1\nEndif\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Get_Desc_Gru",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(IsEmpty(Thisform.pagina.dados.get_grupos.value) AND ;\n       Inlist(ThisForm.pcEscolha, \"PROCURAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Get_Desc_Gru",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "fAcessoContab(Usuar,'C',this.value,Thisform.pagina.dados.get_grupos,Thisform.pagina.dados.get_desc_gru)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupos,get_desc_gru",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Get_Desc_Con",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(IsEmpty(Thisform.pagina.dados.get_contas.value) AND ;\n       Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Get_Desc_Con",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If not fAcessoContas(Usuar,Thisform.pagina.dados.get_grupos.value,'D',this.value,;\n\t\tthisform.pagina.dados.get_contas,thisform.pagina.dados.get_desc_con)\n\tMessagebox('Conta Inválida (Acesso Negado)!!',0+48,'')\nEndif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupos,get_contas,get_desc_con",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.inserir",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(Inlist(ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\"))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.inserir",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "GruAux = thisform.pagina.dados.get_Grupos.value\nContAux = thisform.pagina.dados.get_Contas.value \n\nInsert Into csSigClLan( Contas, Grupos) Values ( ContAux, GruAux )\n\nthisform.pagina.dados.GradeOco.Refresh()\nthisform.pagina.dados.GradeOco.Column2.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "get_Grupos,get_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.excluir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.excluir",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "GruAux = thisform.pagina.dados.get_Grupos.value\nContAux = thisform.pagina.dados.get_Contas.value \n\nthisform.pagina.dados.SetFocus\nthisform.pagina.dados.GradeOco.Column2.SetFocus\n\nDelete\ngo bottom\nIF EOF()\n\tInsert Into csSigClLan( Contas, Grupos) Values ( ContAux, GruAux )\nENDIF\n\nthisform.pagina.dados.GradeOco.Refresh() \nthisform.pagina.dados.GradeOco.Column2.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "get_Grupos,get_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Get_Grupos",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return(Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\"))\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Get_Grupos",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "fAcessoContab(Usuar,'C',this.value,Thisform.pagina.dados.get_grupos,Thisform.pagina.dados.get_desc_gru)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupos,get_desc_gru",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Gradeoco",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "IF Inlist(ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\")\n  This.ReadOnly = .F.\nElse\n  This.ReadOnly = .T.\nEndIf\nRETURN(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.CodAnt = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Gradeoco.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 51,
+      "codigoOriginal": "IF This.Value = ThisForm.CodAnt\n   RETURN\nENDIF\n   \nlocal lcod,lfan,codcor,xobj\n\nif not IsEmpty(this.value)\n\n\tPonteiro = Recno('csSigClLan')\n\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCcCco', ;\n\t\t\t\t\t\t   'crListaRemota', 'Cods', This.Value, 'Seleção', .T.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cods', '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = crListaRemota.Cods\n\tsDescLista = crListaRemota.Descs\n\tU... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "Get_Grupos,Get_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Gradeoco.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Get_Contas",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return(Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\"))\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRLNC.Pagina.Dados.Get_Contas",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If not fAcessoContas(Usuar,Thisform.pagina.dados.get_grupos.value,'C',this.value,;\n\t\tthisform.pagina.dados.get_contas,thisform.pagina.dados.get_desc_con)\n\tMessagebox('Conta Inválida (Acesso Negado)!!',0+48,'')\nEndif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupos,get_contas,get_desc_con",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRLNC.Init",
+      "queryOriginal": "lcQryLancamento = [Select * From SigClLan]",
+      "tabelas": "SigClLan",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRLNC.Click",
+      "queryOriginal": "lcquery = [Select a.*, b.descs from SigClLan a, SigCcCco b where a.grucontas=']+gruconta+[' and a.cocos = b.cods] =Thisform.podatamgr.sqlexecute(lcquery,'CrTmpLanc')",
+      "tabelas": "SigClLan",
+      "colunas": "descs,grucontas,cocos,cods],sqlexecutelcquery,CrTmpLanc",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRLNC.Pagina.Dados.inserir.Click",
+      "queryOriginal": "Insert Into csSigClLan( Contas, Grupos) Values ( ContAux, GruAux )",
+      "tabelas": "csSigClLan",
+      "colunas": "Contas,Grupos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRLNC.Pagina.Dados.excluir.Click",
+      "queryOriginal": "\tInsert Into csSigClLan( Contas, Grupos) Values ( ContAux, GruAux )",
+      "tabelas": "csSigClLan",
+      "colunas": "Contas,Grupos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigClLan", "csSigClLan"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

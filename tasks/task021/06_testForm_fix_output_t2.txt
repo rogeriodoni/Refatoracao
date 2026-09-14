@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O IP do servidor voltou para `192.168.15.101`.
+
+**Causa raiz:** `config.prg` tinha `DB_SERVER "192.168.200.10"` (servidor inexistente) em vez de `192.168.15.101`. O `SQLSTRINGCONNECT` tentava conectar a um host inacess├¡vel e, sem resposta TCP, aguardava o timeout do SO (~300s) ÔÇö bem al├®m dos 30s configurados pelo `SQLSETPROP(0, "ConnectTimeOut", 30)`, que funciona para conex├Áes recusadas mas n├úo para hosts completamente inacess├¡veis.
+
+**O que foi corrigido:** Um ├║nico `#DEFINE` em `config.prg` ÔÇö o form e o BO n├úo precisavam de altera├º├úo, o problema era de infraestrutura (IP errado), n├úo de l├│gica de formul├írio.

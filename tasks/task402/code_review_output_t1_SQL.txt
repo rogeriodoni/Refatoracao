@@ -1,0 +1,17 @@
+﻿**Diagn├│stico: falso positivo confirmado.**
+
+As ├║nicas ocorr├¬ncias de `Total` nos dois arquivos s├úo:
+
+- **Linha 1037** ÔÇö alias SQL: `SELECT COUNT(*) AS Total FROM SigCdEmb WHERE cods = ...`  
+  O `WHERE` usa `cods` ÔÇö correto, id├¬ntico ao original.
+
+- **Linha 1039** ÔÇö condi├º├úo VFP: `cursor_4c_ChkEmb.Total > 0`  
+  Isso ├® c├│digo VFP lendo o campo `Total` do cursor de resultado do `COUNT(*)`. **N├úo ├® uma cl├íusula SQL WHERE.**
+
+O detector automatizado confundiu a express├úo VFP `cursor_4c_ChkEmb.Total > 0` (leitura do resultado do COUNT) com uma condi├º├úo WHERE inventada. A l├│gica est├í correta:
+
+1. `SQLEXEC(...)` retorna `COUNT(*) AS Total` ÔÇö alias necess├írio para ler o resultado.
+2. `cursor_4c_ChkEmb.Total > 0` verifica se o c├│digo j├í existe ÔÇö duplicata check padr├úo.
+3. O `WHERE cods = EscaparSQL(loc_cCodigo)` ├® a ├║nica condi├º├úo SQL, usando `cods` como o original.
+
+**Nenhuma altera├º├úo ├® necess├íria.** O c├│digo migrado n├úo inventou nenhum filtro WHERE ÔÇö o `Total` ├® somente o alias do `COUNT(*)` e a verifica├º├úo de duplicidade est├í correta. O pass SQL n├úo tem corre├º├Áes a aplicar neste arquivo.

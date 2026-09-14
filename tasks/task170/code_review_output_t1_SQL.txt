@@ -1,0 +1,13 @@
+﻿Tudo correto. Resumo das corre├º├Áes aplicadas:
+
+**FormSigPrCtr.prg ÔÇö 2 corre├º├Áes:**
+
+1. **Linha 2051 removida** (`loc_oGrd.ColumnCount = 5`): bug duplo que sobrescrevia o ColumnCount=6 correto, fazendo Column6 n├úo existir ÔÇö impedindo o ControlSource de `Contas` e o Caption "Conta" de serem atribu├¡dos. Isso causava o aviso [GRID-SQL] nos 5 campos (nMarca, Emps, Dopes, Numes, Grupos), porque o validator detectava inconsist├¬ncia entre 6 ControlSources definidos e apenas 5 colunas existentes.
+
+2. **Bloco CASE removido** (linhas 2018-2024): filtro `situas <> 'I'` inventado pela LLM que n├úo existe no WHERE original. Era tamb├®m c├│digo morto: `loc_nOpt` era lido de `opt_4c_Fil` mas o `DO CASE` nunca executava porque `loc_nOpt` padr├úo ├® 1.
+
+**SigPrCtrBO.prg ÔÇö 1 corre├º├úo:**
+
+3. **Gera├º├úo de PkChave em `Inserir()`**: `pkchave` ├® a PK real da tabela (`char(20) NOT NULL`). O m├®todo `Inserir()` era chamado em loop por `GravarSessaoXml()` sem nunca setar `this_cPkChave`, causando `pkchave=''` em todos os INSERTs ÔÇö viola├º├úo de PK a partir do segundo produto. Fix: gera via `PADR(ALLTRIM(SYS(2015)), 20)` se vazio.
+
+**Problemas 7/8/9 (ICLIS/CPFS/CMOES)**: S├úo queries de lookup leg├¡timas em `ValidarContaAba`, `ValidarCpfAba` e `ValidarMoedaAba`. Iclis ├® PK de SigCdCli, Cpfs e CMoes s├úo colunas reais. O validator as flagou porque n├úo constam no WHERE das queries principais ÔÇö mas s├úo helpers de valida├º├úo necess├írios. Remover quebraria o UX de valida├º├úo dos campos.

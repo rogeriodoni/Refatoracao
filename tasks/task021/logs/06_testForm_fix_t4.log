@@ -1,0 +1,21 @@
+[2026-04-28 11:13:30] [INFO] === CLAUDE CLI INVOKER ===
+[2026-04-28 11:13:30] [INFO] Prompt File: C:\4c\tasks\task021\runtime_fix_prompt_06_testForm_t4.md
+[2026-04-28 11:13:30] [INFO] Output File: C:\4c\tasks\task021\06_testForm_fix_output_t4.txt
+[2026-04-28 11:13:30] [INFO] Model: sonnet
+[2026-04-28 11:13:30] [INFO] Timeout: 3600 segundos
+[2026-04-28 11:13:30] [INFO] Max Output Tokens: 128000
+[2026-04-28 11:13:30] [INFO] Context Files: 0 arquivo(s)
+[2026-04-28 11:13:30] [INFO] Invocando Claude CLI...
+[2026-04-28 11:13:30] [INFO] Prompt carregado: 96617 caracteres
+[2026-04-28 11:13:30] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-04-28 11:13:30] [INFO] Tamanho total do prompt: 96617 caracteres
+[2026-04-28 11:13:30] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-04-28 11:25:03] [INFO] Claude CLI finalizado em 692.4469751 segundos
+[2026-04-28 11:25:03] [INFO] Exit Code: 0
+[2026-04-28 11:25:03] [INFO] Output salvo em: C:\4c\tasks\task021\06_testForm_fix_output_t4.txt
+[2026-04-28 11:25:03] [INFO] Output size: 1204 bytes
+[2026-04-28 11:25:03] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-04-28 11:25:03] [INFO] Preview do output:
+[2026-04-28 11:25:03] [INFO] Todas as 6 corre+º+Áes aplicadas. As corre+º+Áes feitas em `FormSigAcCcr.prg`:
+
+**Bug 1 (cr+¡tico) ÔÇö BINDEVENT no evento errado:** Os 6 handlers de valida+º+úo (`ValidarGrupoUsuario`, `ValidarUsuario`, `ValidarGrConta`, `ValidarDGrConta`, `ValidarCdConta`, `ValidarDConta`) estavam atrelados a `"KeyPress"` em vez de `"LostFocus"`. Com `KeyPress`, cada tecla digitada disparava o `FormBuscaAuxiliar` (modal), travando VFP9. Corrigido para `"LostFocus"` ÔÇö comportamento correto: lookup abre ao s

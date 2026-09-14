@@ -1,0 +1,1012 @@
+=== OBJECT: SIGCDROM (parent: , class: form) ===
+PROCEDURE impressao
+parameters pcTipo
+
+lcCodigo = crSigCdRom.Codigo
+lcQuery = [Select a.*, IsNull(c.razaos,'') as razaos, IsNull(d.rclis,'') as rclis, IsNull(d.cpfs,'') as cpfs, b.chave, ] + ;
+	[convert(varchar(4),replicate('0',4-len(ROW_NUMBER() OVER(ORDER BY b.chave ASC)))+convert(varchar(3),ROW_NUMBER() OVER(ORDER BY b.chave ASC))) AS Ids, ] + ; 
+	[isnull(e.empdopnums,'') as empdopnums, isnull(f.pedidoweb,'') as pedidoweb, isnull(f.cdrastreio,'') as cdrastreio, isnull(f.notas,'') as notas, ] + ; 
+	[isnull(e.series,'') as series, isnull(g.rclis,'') as nome, isnull(h.descricaos,'') as dDepOrig, isnull(i.descricaos,'') as dDepDest ] + ;
+	[from sigcdrom a ] + ;   
+	[join sigcdroi b on a.codigo = b.codigo ] + ;   
+	[left join sigprtrp c on a.codtransp = c.itras ] + ;  
+	[left join sigcdcli d on a.contas = d.iclis ] + ; 
+	[left join sigmvnfi e on b.chave = e.nfechv ] + ;
+	[left join sigmvcab f on e.empdopnums = f.empdopnums ] + ;
+	[left join sigcdcli g on f.contads = g.iclis ] + ;
+	[left join sigcddpt h on a.deporig = h.codigos ] + ;
+	[left join sigcddpt i on a.depDest = i.codigos ] + ;
+	[Where a.codigo = ']+lcCodigo+[' ]
+	
+Thisform.podatamgr.SqlExecute(lcQuery,[csRel])
+
+Select csRel
+Index on Ids Tag Ids
+Go Top
+
+If pcTipo = 'V'
+	Report Form SIGCDROM Preview NoConsole
+Else
+	Report Form SIGCDROM To Printer Prompt NoConsole
+EndIf 
+ENDPROC
+PROCEDURE sqldados
+llDatai = ThisForm.Pagina.Lista.Cnt_periodo.Dt_inicial.Value
+llDataf = ThisForm.Pagina.Lista.Cnt_periodo.Dt_final.Value
+llDatai = fDtoSQL(llDatai)
+llDataf = fDtoSQL(llDataf,'23:59:59')
+lcTipo  = ThisForm.Tiporomaneio
+
+ThisForm.Podatamgr.Requery('crSigCdRom')
+Select crSigCdRom
+Go Top
+
+ThisForm.LockScreen = .T.
+ThisForm.Pagina.Lista.Grade.Refresh
+=fCarregaGrade(ThisForm.Pagina.Lista.Grade)
+ThisForm.LockScreen = .F.
+ENDPROC
+PROCEDURE atualizatotal
+Local lnOldSel, lnTotal
+lnOldSel = Select()
+
+Select csSigCdRoI
+Select Count(*) as Qtd From csSigCdRoI Where Not Empty(Chave) into Cursor csTotal ReadWrite
+
+Select csTotal
+ThisForm.Pagina.Dados.getTotal.Value = csTotal.Qtd
+ThisForm.Pagina.Dados.getTotal.Refresh
+
+Select(lnOldSel)
+Return .T.
+ENDPROC
+PROCEDURE buscachave
+parameters pcChave
+
+Local lnOldSel, lcChave
+
+lnOldSel = Select()
+lcChave = Iif(Type([pcChave])=[C],pcChave,[])
+
+If Not Empty(lcChave) And Len(lcChave)=44
+	=ThisForm.poDataMgr.CursorQuery([SigMvNfi],[csSigMvNfi],[nfechv],lcChave,[nfexml])
+	If Reccount([csSigMvNfi])>0
+		lcDestino = StrExtract(csSigMvNfi.nfexml,"<enderDest>","</enderDest>")
+		lcUfDestino = StrExtract(lcDestino,"<UF>","</UF>")
+		
+		If Not IsEmpty(lcUfDestino)
+			lcQuery = [select estados, chkgnre from sigcdufs where estados = ']+lcUfDestino+[']
+			If Thisform.podatamgr.SqlExecute(lcQuery,[crEstas]) < 1
+				Messagebox([Favor Reiniciar o Processo],0+16,[Atenção])
+				Return .F.
+			Endif
+			If Reccount([crEstas])>0
+				If crEstas.chkgnre = 1
+					If MessageBox([NF com inscrição pendente.Guia GRNE foi paga?],4+32,[Atenção])=6
+						Return .T.
+					EndIf 
+				EndIf 
+			EndIf 
+		EndIf 
+	EndIf 
+EndIf 
+
+Select(lnOldSel)
+Return .T.
+ENDPROC
+PROCEDURE mativapagina1
+llDatai = ThisForm.Pagina.Lista.Cnt_periodo.Dt_inicial.Value
+llDataf = ThisForm.Pagina.Lista.Cnt_periodo.Dt_final.Value
+llDatai = fDtoSQL(llDatai)
+llDataf = fDtoSQL(llDataf,'23:59:59')
+
+=DoDefault()
+
+lcCol = Padr(ThisForm.Busca,1)
+ThisForm.Pagina.Lista.Grade.SetFocus
+ThisForm.Pagina.Lista.Grade.Column&lcCol..SetFocus
+ThisForm.Pagina.Lista.Grade.Refresh
+ENDPROC
+PROCEDURE msv_procurar
+With Thisform
+	With Thisform.Pagina.Dados
+		lcCodigo=.GetCodigo.Value
+		Select crSigCdRom
+		Set Order To Codigo
+		Set Near On
+		Seek lcCodigo
+		Set Near Off
+		Thisform.Pagina.lista.grade.Columns(2).SetFocus
+	Endwith
+Endwith
+
+ENDPROC
+PROCEDURE msv_inserir
+llOk = .t.
+
+If Not Thisform.poDataMgr.Update('crSigCdRom')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdRom )')
+	llOks = .F.
+Endif
+
+If llOk And Not Thisform.poDataMgr.Update('crSigCdRoI')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdRoI )')
+	llOk = .F.
+Endif
+If llOk
+	ThisForm.poDataMgr.Commit()
+Else
+	Thisform.poDataMgr.Rollback()
+	Return .F.
+Endif
+ENDPROC
+PROCEDURE msv_excluir
+llOk = .t.
+
+lcCodigo = crSigCdRom.Codigo
+If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRom Where Codigo = ?lcCodigo], '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')
+	llOk = .f.
+EndIf
+
+If llOk
+	If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRoI Where Codigo = ?lcCodigo], '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')
+		llOk = .f.
+	EndIf
+EndIf
+
+If llOk
+	ThisForm.poDataMgr.Commit()
+Else
+	Thisform.poDataMgr.Rollback()
+	Return .F.
+Endif
+ENDPROC
+PROCEDURE msv_alterar
+llOk = .t.
+
+lcCodigo = crSigCdRom.Codigo
+If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRom Where Codigo = ?lcCodigo], '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')
+	llOk = .f.
+EndIf
+
+If llOk
+	If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRoI Where Codigo = ?lcCodigo], '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')
+		llOk = .f.
+	EndIf
+EndIf
+
+If llOk And Not Thisform.poDataMgr.Update('crSigCdRom')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdRom )')
+	llOk = .F.
+Endif
+
+If llOk And Not Thisform.poDataMgr.Update('crSigCdRoI')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdRoI )')
+	llOk = .F.
+EndIf
+
+If llOk
+	ThisForm.poDataMgr.Commit()
+Else
+	Thisform.poDataMgr.Rollback()
+	Return .F.
+Endif
+ENDPROC
+PROCEDURE Init
+LParameters pTipo
+
+If Substr(Alltrim(pTipo),1,1) = 'R'
+	This.Caption = "Romaneio Recebimento XML"
+	ThisForm.Name = [SIGCDROMR]
+	ThisForm.Pagina.Dados.cntRec.Visible = .T.
+	ThisForm.Pagina.Dados.cntRom.Visible = .F.
+Else
+	This.Caption = "Romaneio XML"
+	ThisForm.Name = [SIGCDROM]
+	ThisForm.Pagina.Dados.cntRec.Visible = .F.
+	ThisForm.Pagina.Dados.cntRom.Visible = .T.
+Endif
+
+ThisForm.Busca=1
+ThisForm.Tiporomaneio = Substr(Alltrim(pTipo),1,1)
+
+With Thisform
+	.poDatamgr = Createobject('fSqlConector',Thisform.Name)
+
+	ThisForm.Pagina.Lista.Cnt_periodo.Dt_inicial.Value = Date()
+	ThisForm.Pagina.Lista.Cnt_periodo.Dt_Final.Value = Date()
+	
+	llDatai = ThisForm.Pagina.Lista.Cnt_periodo.Dt_inicial.Value
+	llDataf = ThisForm.Pagina.Lista.Cnt_periodo.Dt_final.Value
+	llDatai = fDtoSQL(llDatai)
+	llDataf = fDtoSQL(llDataf,'23:59:59')
+	lcTipo  = ThisForm.Tiporomaneio
+	
+	lcQryRom = [Select a.*, IsNull(b.razaos,'') as Razaos, IsNull(c.rclis,'') as RClis, ] + ;
+		[isnull(h.descricaos,'') as dDepOrig, isnull(i.descricaos,'') as dDepDest, ] + ;
+		[Left(a.Obs,20) as ObsRed, case when a.nAceite = 1 then 'S' else 'N' end as aceite ] + ;
+		[from sigcdrom a ] + ;
+		[left join sigprtrp b on a.codtransp = b.itras ] + ;
+		[Left Join SigCdCli c on a.Contas = c.iclis ] + ;
+		[left join sigcddpt h on a.deporig = h.codigos ] + ;
+		[left join sigcddpt i on a.depDest = i.codigos ] + ;
+		[Where a.Datas Between ?llDatai And ?llDataf ] + ;
+		[And a.Tipo = ']+lcTipo+[' ]
+		
+	If Not .poDatamgr.pnIdconn > 0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.F.)
+	Endif
+		
+	lcCodigo = Space(10)
+	lcSqlCdCri = [Select * From SigCdRoI Where Codigo = ?lcCodigo]
+
+	With .poDatamgr
+		.AddCursor('SigCdRom','cidchaves','crSigCdRom','',Thisform.pagina.lista.grade, lcQryRom)
+		.pfSqlTabela(1).pColuna('Codigo','','','Código',60,.T.)
+		If ThisForm.Tiporomaneio = 'R'
+			.pfSqlTabela(1).pColuna('DepOrig','','','Origem',100,.T.)
+			.pfSqlTabela(1).pColuna('dDepOrig','','','Descrição',150,.T.)
+			.pfSqlTabela(1).pColuna('DepDest','','','Destino',100,.T.)
+			.pfSqlTabela(1).pColuna('dDepDest','','','Descrição',150,.T.)
+		Else
+			.pfSqlTabela(1).pColuna('CodTransp','','','Transportadora.',100,.T.)
+			.pfSqlTabela(1).pColuna('razaos','','','Nome',150,.T.)
+		EndIf 
+		.pfSqlTabela(1).pColuna('Datas','','','Data',73,.T.)
+		If ThisForm.Tiporomaneio = 'R'
+			.pfSqlTabela(1).pColuna('ObsRed','','','Obs',150,.T.)
+			.pfSqlTabela(1).pColuna('aceite','','','Aceite',60,.T.)
+		EndIf 
+		.pfSqlTabela(1).pColuna('Contas','','','Conta',80,.T.)
+		.pfSqlTabela(1).pColuna('RClis','','','Nome',150,.T.)
+		.pfSqlTabela(1).pColuna('Valor','','','Valor',80,.T.)
+		.pfSqlTabela(1).pColuna('Usuarios','','','Usuario',80,.T.)
+		.pfSqlTabela(1).pColuna('dataact','','','Aceite',75,.T.)
+
+		.AddCursor('SigCdRoI','CidChaves','crSigCdRoI','','',lcSqlCdCri)
+	Endwith
+
+Endwith
+
+ThisForm.Pagina.Lista.Aceite.Visible = fChecaAcesso(ThisForm.Name,'ACEITE')
+ThisForm.Pagina.Lista.Aceite.Enabled = fChecaAcesso(ThisForm.Name,'ACEITE')
+
+ThisForm.Pagina.Lista.Grade.SetAll('DynamicForeColor','Iif(crSigCdRom.naceite=1,RGB(0,0,255),RGB(0,0,0))','Column')
+
+ThisForm.poDataMgr.CursorQuery([SigCdPam],[crSigCdPam])
+ThisForm.poDataMgr.CursorQuery([SigCdPaC],[crSigCdPaC])
+
+=DoDefault()
+
+
+ENDPROC
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Lparameters opcao
+
+If !DoDefault( opcao )
+	Thisform.mAtivapagina1
+	Return
+Endif
+
+lcCodigo = crSigCdRom.Codigo
+*Thisform.podatamgr.Requery([crSigCdRoI])
+
+Select crSigCdRoI
+Zap
+
+Thisform.pagina.dados.grdChaves.RecordSource = []
+
+lcQuery = [Select a.* ] + ;
+	[from SigCdRoI a ] + ;
+	[join SigCdRom b on a.codigo = b.codigo ] + ;
+	[Where a.codigo = ']+lcCodigo+[' ]
+	
+Thisform.podatamgr.SqlExecute(lcQuery,[csSigCdRoI])
+
+Thisform.podatamgr.Requery([csSigCdRoI])
+
+Select csSigCdRoI
+= CURSORSETPROP('Buffering', 5, 'csSigCdRoI' )
+Go Top
+
+Thisform.pagina.dados.grdChaves.RecordSource = [csSigCdRoI]
+Thisform.pagina.dados.grdChaves.column1.ControlSource = [csSigCdRoI.chave]
+Thisform.pagina.dados.grdChaves.Refresh()
+
+Select crSigCdRoI
+Go Top
+
+Do Case
+	Case InList(ThisForm.pcEscolha,'ALTERAR','EXCLUIR') And crSigCdRom.naceite = 1
+		Messagebox('Romaneio Já Aceito !!!',48,'')
+		ThisForm.mAtivaPagina1
+		Return
+		
+	Case ThisForm.pcEscolha='PROCURAR'
+		This.parent.parent.Dados.getcodigo.SetFocus	
+	Case ThisForm.pcEscolha = 'INSERIR'
+			
+		lnCodigo = fGerUniqueKey('XMLROM')
+		Replace Codigo With Iif(Type([lnCodigo])=[C],lnCodigo,Alltrim(Str(lnCodigo))) ,;
+				Datas With Date() ,;
+				Tipo With ThisForm.TipoRomaneio	In crSigCdRom
+		If ThisForm.Tiporomaneio = 'R'
+			This.parent.parent.Dados.cntRec.GetDepOrig.SetFocus 
+		Else
+			This.parent.parent.Dados.cntRom.getCodTransp.Setfocus
+		EndIf 		
+		
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		If ThisForm.Tiporomaneio = 'R'
+			This.parent.parent.Dados.cntRec.GetDepOrig.SetFocus 
+		Else
+			This.parent.parent.Dados.cntRom.getCodTransp.Setfocus
+		EndIf 	
+
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus
+Endcase
+
+If Inlist( ThisForm.pcEscolha, 'CONSULTAR')
+	This.parent.parent.Dados.cmdVideo.Enabled = .T.
+	This.parent.parent.Dados.cmdImprimir.Enabled = .T.
+Else
+	This.parent.parent.Dados.cmdVideo.Enabled = .F.
+	This.parent.parent.Dados.cmdImprimir.Enabled = .F.
+EndIf 
+
+*-- Limpa Campos
+This.parent.parent.Dados.cntRom.GetDCodTransp.Value = []
+This.parent.parent.Dados.cntRom.GetDCodTransp.Refresh
+This.parent.parent.Dados.cntRom.Get_Dconta.Value = []
+This.parent.parent.Dados.cntRom.Get_Dconta.Refresh
+This.parent.parent.Dados.cntRom.Get_cpf.Value = []
+This.parent.parent.Dados.cntRom.Get_Dconta.Refresh
+This.parent.parent.Dados.cntRec.getDDepDest.Value = []
+This.parent.parent.Dados.cntRec.getDDepDest.Refresh
+This.parent.parent.Dados.cntRec.GetDDepOrig.Value = []
+This.parent.parent.Dados.cntRec.GetDDepOrig.Refresh
+
+ThisForm.poDataMgr.CursorQuery([SigPrTrp],[csTmpTrp],[iTras],crSigCdRom.CodTransp,[Razaos])
+If Reccount([csTmpTrp])>0
+	This.parent.parent.Dados.cntRom.GetDCodTransp.Value = csTmpTrp.Razaos
+	This.parent.parent.Dados.cntRom.GetDCodTransp.Refresh
+EndIf 
+
+ThisForm.poDataMgr.CursorQuery([SigCdDpt],[csT1CdDpt],[Codigos],crSigCdRom.DepOrig,[Descricaos])
+If Reccount([csT1CdDpt])>0
+	This.parent.parent.Dados.cntRec.GetDDepOrig.Value = csT1CdDpt.Descricaos
+	This.parent.parent.Dados.cntRec.GetDDepOrig.Refresh
+EndIf 
+
+ThisForm.poDataMgr.CursorQuery([SigCdDpt],[csT2CdDpt],[Codigos],crSigCdRom.DepDest,[Descricaos])
+If Reccount([csT2CdDpt])>0
+	This.parent.parent.Dados.cntRec.getDDepDest.Value = csT2CdDpt.Descricaos
+	This.parent.parent.Dados.cntRec.getDDepDest.Refresh
+EndIf 
+
+=ThisForm.Atualizatotal()
+
+ThisForm.poDataMgr.CursorQuery([SigCdCli],[csTmpCli],[IClis],crSigCdRom.Contas,[Cpfs, RClis])
+If Reccount([csTmpCli])>0
+	This.parent.parent.Dados.cntRom.Get_cpf.Value = csTmpCli.Cpfs
+	This.parent.parent.Dados.cntRom.Get_cpf.Refresh
+	
+	This.parent.parent.Dados.cntRom.Get_Dconta.Value = csTmpCli.RClis
+	This.parent.parent.Dados.cntRom.Get_Dconta.Refresh
+EndIf 
+
+Thisform.Refresh()
+
+ENDPROC
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+lcCodigo = thisform.pagina.dados.getCodigo.value
+
+If Inlist( ThisForm.pcEscolha,[INSERIR],[ALTERAR] )
+	If Inlist( ThisForm.pcEscolha,[INSERIR]) 
+		If Empty(lcCodigo)
+			Messagebox([Código obrigatório.],64,[Aviso])
+			thisform.pagina.dados.getCodigo.Setfocus()
+			Return .f.
+		EndIf
+		
+		If Empty(This.parent.parent.GetDatas.Value)
+			Messagebox([Data Obrigatória.],64,[Aviso])
+			thisform.pagina.dados.GetDatas.Setfocus()
+			Return .f.
+		EndIf
+		
+		If ThisForm.Tiporomaneio = 'R' &&recebimento
+			If Empty(This.parent.parent.cntRec.getDDepOrig.Value)
+				Messagebox([Origem Obrigatória.],64,[Aviso])
+				This.parent.parent.cntRec.getDDepOrig.Setfocus()
+				Return .f.
+			EndIf
+			
+			If Empty(This.parent.parent.cntRec.getDDepDest.Value)
+				Messagebox([Destino Obrigatório.],64,[Aviso])
+				This.parent.parent.cntRec.getDDepDest.Setfocus()
+				Return .f.
+			EndIf
+		Else
+			
+			If Empty(This.parent.parent.cntRom.GetCodTransp.Value)
+				Messagebox([Transportadora Obrigatória.],64,[Aviso])
+				This.parent.parent.cntRom.GetCodTransp.Setfocus()
+				Return .f.
+			EndIf 
+		EndIf 
+		
+		
+		If ThisForm.podatamgr.ChkRegister('SigCdRom', 'Codigo', lcCodigo)
+			Messagebox([Código já cadastrado.],64,[Aviso])
+			thisform.pagina.dados.getCodigo.Setfocus()
+			Return .f.
+		Endif
+		
+		Replace CidChaves With fUniqueIds() in crSigCdRom
+
+	Endif
+
+	Select crSigCdRoI
+	Go Top
+	
+	Select csSigCdRoI
+	Scan 
+		If Empty(Chave)
+			loop
+		EndIf 
+		Scatter Memvar
+		
+		Select crSigCdRoI
+		Append Blank 
+		
+		Gather Memvar 
+		Select csSigCdRoI
+	EndScan 
+	
+	Select crSigCdRoI
+	Go Top
+	Delete For (Empty(Chave)) 
+	Go Top
+	
+	Replace Codigo With crSigCdRom.Codigo For Empty(Codigo) In crSigCdRoI 
+	Replace CidChaves With fUniqueIds() For Empty(CidChaves) In crSigCdRoI
+Endif
+
+
+DoDefault()
+
+Thisform.mAtivapagina1
+ENDPROC
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+lnCodigo = CrSigCdRom.Codigo
+lnCodigo = Iif(Type([lnCodigo])=[C],Val(lnCodigo),lnCodigo)
+=DoDefault()
+
+If ThisForm.plCancelar
+	If ThisForm.pcEscolha = 'INSERIR'
+		=fCanUniqueKey(lnCodigo ,'XMLROM')
+	EndIf
+	ThisForm.mAtivaPagina1
+EndIf
+ENDPROC
+
+---
+=== OBJECT: Aceite (parent: SIGCDROM.Pagina.Lista, class: commandbutton) ===
+PROCEDURE Click
+Local lnErro1
+
+lnErro1 = Thisform.poDataMgr.pnIdConn
+
+Select CrSigCdRom
+
+If Eof()
+	Return
+Endif
+
+If CrSigCdRom.nAceite = 1
+	Messagebox('Romaneio Já Aceito !!!',48,'')
+	Return
+Endif
+
+If Messagebox('Deseja Aceitar o Romaneio ???',4+32+256,'ATENÇÃO !!!') = 6
+
+	Wait Clear
+
+	Select CrSigCdRom
+	Replace DataAct With Date() ,;
+			nAceite With 1   ,;
+			Usuarios With Usuar In CrSigCdRom
+
+	If lnErro1>0
+		lnErro1 = Iif(Thisform.poDataMgr.Update('CrSigCdRom'),1,-1)
+	Endif
+
+	If lnErro1>0
+		lnErro1 = Thisform.poDataMgr.Commit()
+	Endif
+
+	If Not lnErro1>0
+		= Thisform.poDataMgr.Rollback()
+		= Messagebox('Erro na Gravação dos Dados do Romaneio.', 0 + 16, '')
+	Endif
+Endif
+
+This.Parent.Grade.Column1.SetFocus
+Thisform.Refresh
+
+ENDPROC
+
+---
+=== OBJECT: Dt_inicial (parent: SIGCDROM.Pagina.Lista.Cnt_periodo, class: textbox) ===
+PROCEDURE Valid
+If This.Value > This.Parent.Dt_final.Value
+	This.Parent.Dt_Final.Value = This.Value
+Endif
+
+ENDPROC
+PROCEDURE LostFocus
+This.Parent.Dt_final.SetFocus
+ENDPROC
+
+---
+=== OBJECT: Dt_final (parent: SIGCDROM.Pagina.Lista.Cnt_periodo, class: textbox) ===
+PROCEDURE LostFocus
+Thisform.Pagina.Lista.Grade.Column1.SetFocus
+
+
+ENDPROC
+PROCEDURE Valid
+If This.Value < This.Parent.Dt_Inicial.Value
+	This.Parent.Dt_Inicial.Value = This.Value
+EndIf
+ThisForm.SqlDados
+
+ENDPROC
+
+---
+=== OBJECT: GetDDepOrig (parent: SIGCDROM.Pagina.Dados.cntRec, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(This.parent.GetDepOrig.Value))
+ENDPROC
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdDpt', 'crListaRemota', 'Descricaos', This.Value, 'Seleção', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('codigos',  '', 'Código',.t.,'codigos')
+		loLista.mAddColuna('Descricaos', '', 'Descrição',.t.,'Descricaos')
+		loLista.Show()
+	EndIf
+	If LastKey() # 27
+		This.parent.GetDepOrig.Value = CrListaRemota.codigos
+		This.Value = CrListaRemota.Descricaos
+	Else
+		This.parent.GetDepOrig.Value = ''
+		This.Value = ''
+	Endif
+Else
+	This.parent.GetDepOrig.Value = ''
+Endif
+
+ENDPROC
+
+---
+=== OBJECT: getDepDest (parent: SIGCDROM.Pagina.Dados.cntRec, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdDpt', 'crListaRemota', 'Codigos', This.Value, 'Seleção', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Código'	,.t.,'Codigos')
+		loLista.mAddColuna('descricaos', '', 'Descrição',.t.,'descricaos')
+		loLista.Show()
+	EndIf
+	If LastKey() # 27
+		This.Value = CrListaRemota.Codigos
+		This.parent.GetDDepDest.Value = CrListaRemota.descricaos
+	Else
+		This.Value = ''
+		This.parent.GetDDepDest.Value = ''
+	Endif
+Else
+	This.parent.GetDDepDest.Value = ''
+Endif
+
+ENDPROC
+
+---
+=== OBJECT: GetDepOrig (parent: SIGCDROM.Pagina.Dados.cntRec, class: textbox) ===
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdDpt', 'crListaRemota', 'Codigos', This.Value, 'Seleção', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Código'	,.t.,'Codigos')
+		loLista.mAddColuna('descricaos', '', 'Descrição',.t.,'descricaos')
+		loLista.Show()
+	EndIf
+	If LastKey() # 27
+		This.Value = CrListaRemota.Codigos
+		This.parent.GetDDepOrig.Value = CrListaRemota.descricaos
+	Else
+		This.Value = ''
+		This.parent.GetDDepOrig.Value = ''
+	Endif
+Else
+	This.parent.GetDDepOrig.Value = ''
+Endif
+
+ENDPROC
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+---
+=== OBJECT: getDDepDest (parent: SIGCDROM.Pagina.Dados.cntRec, class: textbox) ===
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdDpt', 'crListaRemota', 'Descricaos', This.Value, 'Seleção', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('codigos',  '', 'Código',.t.,'codigos')
+		loLista.mAddColuna('Descricaos', '', 'Descrição',.t.,'Descricaos')
+		loLista.Show()
+	EndIf
+	If LastKey() # 27
+		This.parent.GetDepDest.Value = CrListaRemota.codigos
+		This.Value = CrListaRemota.Descricaos
+	Else
+		This.parent.GetDepDest.Value = ''
+		This.Value = ''
+	Endif
+Else
+	This.parent.GetDepDest.Value = ''
+Endif
+
+ENDPROC
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(This.parent.GetDepDest.Value))
+ENDPROC
+
+---
+=== OBJECT: getObs (parent: SIGCDROM.Pagina.Dados.cntRec, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+---
+=== OBJECT: Get_Dconta (parent: SIGCDROM.Pagina.Dados.cntRom, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(This.Parent.Get_Conta.Value))
+ENDPROC
+PROCEDURE Valid
+Grupo = crSigCdPam.GrPadClis
+
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'D', This.Value, This.Parent.Get_Conta, This.Parent.Get_dconta)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.parent.get_conta.Value = ''
+		This.parent.Get_cpf.Value = ''
+	EndIf
+Else
+	This.parent.get_conta.Value = ''
+	This.parent.Get_cpf.Value = ''
+EndIf
+
+If Not Empty(This.parent.get_conta.Value)
+	lcConta = This.parent.get_conta.Value
+	=ThisForm.Podatamgr.CursorQuery([SigCdCli],[crTmpCli],[iClis],lcConta,[Cpfs])
+	This.parent.Get_cpf.Value = crTmpCli.Cpfs
+EndIf 
+
+This.Refresh
+This.parent.Get_cpf.Refresh
+This.parent.get_conta.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+---
+=== OBJECT: Get_Conta (parent: SIGCDROM.Pagina.Dados.cntRom, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+PROCEDURE Valid
+Grupo = crSigCdPam.GrPadClis
+
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'C', This.Value, This.Parent.Get_Conta, This.Parent.Get_Dconta)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.parent.Get_DConta.Value = ''
+		This.parent.Get_cpf.Value = ''
+	EndIf
+Else
+	This.parent.get_dConta.Value = ''
+	This.parent.Get_cpf.Value = ''
+EndIf
+
+If Not Empty(This.Value)
+	lcConta = This.Value
+	=ThisForm.Podatamgr.CursorQuery([SigCdCli],[crTmpCli],[iClis],lcConta,[Cpfs])
+	This.parent.Get_cpf.Value = crTmpCli.Cpfs
+EndIf 
+
+This.Refresh
+This.parent.Get_cpf.Refresh 
+This.parent.Get_Dconta.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+---
+=== OBJECT: GetCodTransp (parent: SIGCDROM.Pagina.Dados.cntRom, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrTrp', 'crListaRemota', 'Itras', This.Value, 'Seleção', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('ITras',  '', 'Código',.t.,'Itras')
+		loLista.mAddColuna('Razaos', '', 'Razão Social',.t.,'Razaos')
+		loLista.mAddColuna('Cgcs',   '', 'CPF/CNPJ',.t.,'Cgcs')
+		loLista.Show()
+	EndIf
+	If LastKey() # 27
+		This.Value = CrListaRemota.iTras
+		This.parent.GetDCodTransp.Value = CrListaRemota.Razaos
+		This.parent.parent.chkTipos.Value = Iif(InList(Alltrim(Upper(CrListaRemota.IdTransp)),'192B31E','15F2739','192B31E'),1,0)
+	Else
+		This.Value = ''
+		This.parent.GetDCodTransp.Value = ''
+		This.parent.parent.chkTipos.Value = 0
+	Endif
+Else
+	This.parent.GetDCodTransp.Value = ''
+	This.parent.parent.chkTipos.Value = 0
+Endif
+
+ENDPROC
+
+---
+=== OBJECT: GetDCodTransp (parent: SIGCDROM.Pagina.Dados.cntRom, class: textbox) ===
+PROCEDURE Valid
+Local loLista
+
+If !Empty( This.Value )
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrTrp', 'crListaRemota', 'Razaos', This.Value, 'Seleção', .T.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('ITras',  '', 'Código',.t.,'Itras')
+		loLista.mAddColuna('Razaos', '', 'Razão Social',.t.,'Razaos')
+		loLista.mAddColuna('Cgcs',   '', 'CPF/CNPJ',.t.,'Cgcs')
+		loLista.Show()
+	EndIf
+	If LastKey() # 27
+		This.parent.GetCodTransp.Value = CrListaRemota.iTras
+		This.Value = CrListaRemota.Razaos
+	Else
+		This.parent.GetCodTransp.Value = ''
+		This.Value = ''
+	Endif
+Else
+	This.parent.GetCodTransp.Value = ''
+Endif
+
+ENDPROC
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(This.parent.GetCodTransp.Value))
+ENDPROC
+
+---
+=== OBJECT: Get_cpf (parent: SIGCDROM.Pagina.Dados.cntRom, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Empty(This.Parent.Get_Conta.Value))
+
+ENDPROC
+PROCEDURE Valid
+Grupo = crSigCdPam.GrPadClis
+If !Empty(This.Value)
+	lnVerCpfCgc = 0
+	lcCgc = This.Value
+	lcCgc = StrTran(StrTran(StrTran(lcCgc,'.',''),'-',''),'/','')
+	If Len(Alltrim(lcCgc)) <> 14
+		lcCgc1 = TransForm(lcCgc,'@R 999.999.999-99')
+		If Len(Alltrim(lcCgc)) = 11
+			lnVerCpfCgc = Iif(fValidarCPF(lcCgc1),1,2)
+		EndIf
+	Else
+		lcCgc1 = TransForm(lcCgc,'@R 99.999.999/9999-99')
+		lnVerCpfCgc = Iif(fValidarCNPJ(lcCgc1),1,2)
+	EndIf
+	
+	If lnVerCpfCgc = 2
+		MessageBox('CPF / CGC Incorreto !!!',48,'')
+		Return 0
+	EndIf
+
+	If !(ThisForm.poDataMgr.CursorQuery('SigCdCli',,'cpfs',Padr(Alltrim(lcCgc1),20)))
+		If lnVerCpfCgc = 1
+			MessageBox('CPF / CGC não encontrado !!!',48,'')
+			Return 0
+		EndIf
+	EndIf
+	
+	lcIclis = CqSigCdCli.iclis
+	If !fAcessoContas(Usuar,Grupo,'C',lcIclis,This.Parent.Get_Conta.Value,This.Parent.Get_DConta.Value)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Parent.Get_Conta.Value  = ''
+		This.Parent.Get_DConta.Value = ''
+		This.Parent.Get_Cpf.Value    = ''
+		Return 0
+	Else
+		Select CqSigCdCli
+		This.Parent.Get_Conta.Value  = CqSigCdCli.iclis
+		This.Parent.Get_DConta.Value = CqSigCdCli.rclis
+		This.Parent.Get_Cpf.Value    = CqSigCdCli.cpfs
+		This.Parent.Get_Conta.Refresh
+		This.Parent.Get_DConta.Refresh
+		This.Parent.Get_Cpf.Refresh
+	EndIf
+Else
+	This.Parent.Get_DConta.Value = ''
+EndIf
+
+Return(.T.)
+ENDPROC
+
+---
+=== OBJECT: getCodigo (parent: SIGCDROM.Pagina.Dados, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'PROCURAR'))
+ENDPROC
+
+---
+=== OBJECT: getTotal (parent: SIGCDROM.Pagina.Dados, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+---
+=== OBJECT: getValor (parent: SIGCDROM.Pagina.Dados, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+---
+=== OBJECT: cmdInsFtc (parent: SIGCDROM.Pagina.Dados, class: commandgroup) ===
+PROCEDURE cmdInserir.When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+PROCEDURE cmdInserir.Click
+lnCodigo = This.parent.parent.getCodigo.Value 
+
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Not Empty(lnCodigo)
+
+*!*		If Used([csMaxPrior])
+*!*			Use In csMaxPrior
+*!*		EndIf 
+*!*		
+*!*		Select csSigCdRoI
+*!*		Locate For .F.
+*!*		Select Nvl(Max(ID),0) as UltID From csSigCdRoI Into Cursor csMaxId
+*!*		Select csMaxId
+*!*		lnMax = csMaxId.UltID + 1
+*!*		Select csSigCdRoI
+*!*		Go Top In csSigCdRoI
+*!*		Locate For (Empty(chave))
+*!*		If Eof([csSigCdRoI])
+*!*			Insert Into csSigCdRoI (ID, Codigo, cIdChaves) Values (lnMax, lnCodigo, fUniqueIds())
+*!*		EndIf
+
+	Select csSigCdRoI
+	Go Top In csSigCdRoI
+	Locate For (Empty(chave))
+	If Eof([csSigCdRoI])
+		Insert Into csSigCdRoI (Codigo, cIdChaves) Values (lnCodigo, fUniqueIds())
+	EndIf
+	=ThisForm.Atualizatotal()
+	This.parent.parent.grdChaves.Refresh
+	This.parent.parent.grdChaves.Column1.SetFocus
+EndIf
+
+ENDPROC
+PROCEDURE cmdExcluir.When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+PROCEDURE cmdExcluir.Click
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	Select csSigCdRoI
+	If Not Eof()
+		Delete
+	EndIf
+	
+	=ThisForm.Atualizatotal()
+	
+	This.parent.parent.grdChaves.SetFocus
+	This.parent.parent.grdChaves.Refresh
+EndIf
+* Fim *********************************************************************************
+
+ENDPROC
+
+---
+=== OBJECT: chkTipos (parent: SIGCDROM.Pagina.Dados, class: checkbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+---
+=== OBJECT: Text1 (parent: SIGCDROM.Pagina.Dados.grdChaves.Column1, class: textbox) ===
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+PROCEDURE Valid
+If Not Empty(This.Value)
+	lnCodigo = This.parent.parent.parent.getCodigo.Value 
+	Select csSigCdRoI
+	=TableUpdate(.T.)
+
+	Select Chave, Count(*) as qt from csSigCdRoI where chave = This.Value Group by Chave Into Cursor csRegDup ReadWrite
+	
+	Select csRegDup
+	If Reccount([csRegDup])>0 And csRegDup.qt > 1
+		MessageBox([Registro já Informado.],0+48,[Aviso])
+		Return .F.
+	EndIf 
+	
+	If ThisForm.Tiporomaneio <> 'R'
+		If Not ThisForm.BuscaChave(This.Value)
+			Return .F.
+		EndIf 
+	EndIf 
+	Select csSigCdRoI
+	Go Top In csSigCdRoI
+	Locate For (Empty(chave))
+	If Eof([csSigCdRoI])
+		Insert Into csSigCdRoI (Codigo, cIdChaves) Values (lnCodigo, fUniqueIds())
+	EndIf
+	=ThisForm.Atualizatotal()
+	Keyboard '{DNARROW}'
+	This.parent.parent.Refresh
+EndIf 
+ENDPROC
+
+---
+=== OBJECT: cmdVideo (parent: SIGCDROM.Pagina.Dados, class: commandbutton) ===
+PROCEDURE Click
+=ThisForm.impressao([V])
+
+ENDPROC
+
+---
+=== OBJECT: GetDatas (parent: SIGCDROM.Pagina.Dados, class: textbox) ===
+PROCEDURE When
+Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR'))
+ENDPROC
+
+---
+=== OBJECT: cmdImprimir (parent: SIGCDROM.Pagina.Dados, class: commandbutton) ===
+PROCEDURE Click
+=ThisForm.impressao([I])
+
+ENDPROC
+
+---

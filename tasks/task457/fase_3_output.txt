@@ -1,0 +1,14 @@
+﻿Estrutura validada. Fase 3 conclu├¡da com sucesso.
+
+**`C:\4c\projeto\app\forms\cadastros\Formlct.prg`** criado (302 linhas) com:
+
+- **DEFINE CLASS Formlct AS FormBase** ÔÇö propriedades visuais can├┤nicas (Height=600, Width=1000, DataSession=2, WindowType=1, etc.)
+- **Init()** ÔÇö apenas `DODEFAULT()`, sem chamar InicializarForm diretamente
+- **InicializarForm()** ÔÇö seta Caption com CHR(231), cria lctBO, chama ConfigurarPageFrame, CarregarLista, etc.
+- **ConfigurarPageFrame()** ÔÇö PageFrame com Top=-29, Tabs=.F., 2 pages com fundo_cad_1003.jpg; delega para ConfigurarPaginaLista/Dados
+- **ConfigurarPaginaLista()** ÔÇö cnt_4c_Cabecalho (lbl_4c_Sombra + lbl_4c_Titulo), cnt_4c_Botoes (Left=542, vazio), cnt_4c_Saida (Left=917, vazio)
+- **ConfigurarPaginaDados()** ÔÇö cnt_4c_Salva (Left=611, vazio)
+- **CarregarLista()** ÔÇö chama Buscar() e vincula ao grid via PEMSTATUS guard (seguro quando grid ainda n├úo existe na Fase 3)
+- **TornarControlesVisiveis()** + **FormatarGridLista()** + **Destroy()** ÔÇö implementados completos
+
+Pr├│xima fase (4/8) ir├í adicionar o grid `grd_4c_Lista` em Page1 e os bot├Áes CRUD nos containers j├í criados.

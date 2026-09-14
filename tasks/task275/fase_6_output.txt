@@ -1,0 +1,18 @@
+﻿Form grew from 1775 ÔåÆ 2142 lines (+367 lines of new UI controls and lookup methods). Here's what was completed in FASE 6/8:
+
+**`sigprdisBO.prg` ÔÇö BuscarProduto() expanded:**
+- Added 4 columns to SELECT: `a.sgrus`, `a.colecoes`, `a.codfinp`, and aliases `desclin`, `descfeitio`
+- Added 2 JOINs: `LEFT JOIN SigCdLin l` (for line description) and `LEFT JOIN SigPrFti f` (for feitio description)
+
+**`Formsigprdis.prg` ÔÇö ConfigurarSubPaginaDistribuicao():**
+- Added **18 missing TextBoxes + Labels** across 4 product info rows (top=470/492/514/537):
+  - Row 470 right: `txt_4c_CdLinha`, `txt_4c_DsLinha` + label
+  - Row 492 left: `txt_4c_CdSgrupoP`, `txt_4c_DsSgrupoP` + label
+  - Row 492 right: fornecedor fields moved from wrong top=470 ÔåÆ **corrected top=492**
+  - Row 514: `txt_4c_CodFinP`, `txt_4c_DesFinP`, `txt_4c_RefFornecedor` + labels
+  - Row 537: `txt_4c_GrpVenda`, `txt_4c_GrDvenda`, `txt_4c_PrVenda`, `txt_4c_MoedaPrVenda`, `txt_4c_PesoMedio` + labels (pre├ºo/peso moved from wrong top=493 ÔåÆ **corrected top=536**)
+  - Filter row: `txt_4c_CodSgrupo`, `txt_4c_DsSgrupo` + label "Subgrupo :"
+
+**`GrdDisponivelAfterRowColChange()`** ÔÇö fully populates all 15 product info fields, including a live SQLEXEC to `SigCdPsg` for subgrupo description (mirroring the original legacy pattern with `Tmp_Sgru`).
+
+**2 new lookup methods**: `TxtCodSgrupoValid()` and `TxtDsSgrupoValid()` with full BINDEVENT-triggered F4/F5 picker flow via `FormBuscaAuxiliar` on `SigCdPsg`.

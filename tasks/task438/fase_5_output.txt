@@ -1,0 +1,14 @@
+﻿All 4 occurrences correctly use `this_nMtprimas`. No `this_lMtprimas` remains. FASE 5 is complete.
+
+**Summary of changes made:**
+
+**`gpdBO.prg`** (3 fixes for `this_lMtprimas` ÔåÆ `this_nMtprimas`):
+- Property declaration: `.F.` ÔåÆ `0` (logical ÔåÆ numeric, stores 1ÔÇô4 for Prim├írio/Secund├írio/Acabado/Matriz)
+- `CarregarDoCursor`: `(mtprimas = 1)` ÔåÆ direct `mtprimas` assignment
+- INSERT and UPDATE SQL: `STR(IIF(...),1)` ÔåÆ `STR(THIS.this_nMtprimas, 1)`
+
+**`Formgpd.prg`** (FASE 5 additions):
+- `ConfigurarPaginaDados()`: calls `THIS.ConfigurarAbaCadastro()` before ZOrder
+- New `ConfigurarAbaCadastro()`: adds 9 labels + 7 TextBoxes + `txt_4c_DgdeMercs` (readonly) + `obj_4c_Fwoption1` (2 buttons Sim/N├úo) + `obj_4c_Fwoption2` (4 buttons Prim├írio/Secund├írio/Acabado/Matriz), all with pixel-perfect positions (original Top+29 compensation for inner PageFrame)
+- `FormParaBO()`, `BOParaForm()`, `LimparCampos()`, `HabilitarCampos()`: extended with OptionGroup field handling
+- New event handlers: `MercsValid()`, `MercsKeyPress()`, `AbrirBuscaGdeGrupo()`, `EtiPadValid()`, `Fwoption2Valid()`, `CarregarDescGdeGrupo()`

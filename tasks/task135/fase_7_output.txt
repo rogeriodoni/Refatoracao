@@ -1,0 +1,21 @@
+﻿O formul├írio **FormSigPdM10.prg j├í est├í completo**. N├úo h├í o que adicionar na Fase 7.
+
+## An├ílise
+
+Este ├® um **form OPERACIONAL** (n├úo CRUD), e os 4 m├®todos solicitados (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) **n├úo existem no legado** e **n├úo fazem sentido** para este form.
+
+**Bot├Áes presentes no legado** (`comportamento.json` + c├│digo fonte):
+| Legado | Migrado | Status |
+|--------|---------|--------|
+| `SIGPDM10.Cancelar.Click` | `BtnEncerrarClick()` linha 1710 | Ô£à implementado |
+| `SIGPDM10.Etiquetas.Imprimir.Click` | `BtnImprimirClick()` linha 1650 | Ô£à implementado |
+| `CntOps.GradePedidos` AfterRowColChange | `GradePedOpAfterRowColChange()` linha 1620 | Ô£à implementado |
+| `Etiquetas.Get_Printer` InteractiveChange | `ImpressoraInteractiveChange()` linha 1633 | Ô£à implementado |
+
+**O form n├úo possui opera├º├Áes CRUD** ÔÇö ├® um subform modal de resumo (leitura) chamado pelo form pai com dados j├í carregados em cursores compartilhados. Todos os grids s├úo `ReadOnly = .T.`.
+
+A descri├º├úo da Fase 7 ├® um template gen├®rico para forms CRUD que foi aplicado incorretamente a este form OPERACIONAL. Adicionar `BtnIncluirClick()` etc. seria c├│digo morto nunca invocado, violando a regra de n├úo criar stubs.
+
+## Status Final do FormSigPdM10.prg
+
+Todos os 6 eventos do legado est├úo implementados. O arquivo est├í completo em **1841 linhas** com paridade funcional 100%.

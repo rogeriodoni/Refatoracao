@@ -1,0 +1,10 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\PcpBO.prg` criado com 347 linhas.
+
+O BO cont├®m:
+- **14 propriedades** `this_*` mapeando todos os campos de `SigCdPcz` (schema validado)
+- `Init()` configurando `this_cTabela = "SigCdPcz"` e `this_cCampoChave = "Codigos"`
+- `CarregarDoCursor()` com padr├úo `SELECT (par_cAliasCursor)` obrigat├│rio
+- `Buscar()` / `CarregarPorCodigo()` (PUBLIC)
+- `Inserir()` / `Atualizar()` / `ExecutarExclusao()` (PROTECTED) ÔÇö exclus├úo em cascata das 4 tabelas relacionadas: SigCdPcz ÔåÆ SigCdPco ÔåÆ SigCdPcp ÔåÆ SigCdPcg (conforme `msv_excluir` do original)
+- `BuscarOperacoes()` ÔÇö carga do cursor TmpOper com `Globalizas IN (1,2)` do original
+- `BuscarParametros()` ÔÇö carga dos campos de `SigCdPam` usados no Init original

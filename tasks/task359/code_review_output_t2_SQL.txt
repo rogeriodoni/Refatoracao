@@ -1,0 +1,16 @@
+﻿**Falso positivo confirmado ÔÇö nenhuma altera├º├úo necess├íria.**
+
+Todas as ocorr├¬ncias de `ControlCount` no arquivo s├úo acessos ├á **propriedade de objeto VFP9** (`.ControlCount`), n├úo colunas SQL em cl├íusula WHERE:
+
+| Linha | C├│digo | Contexto |
+|-------|--------|----------|
+| 5048 | `par_oPg.Controls(par_oPg.ControlCount)` | Obt├®m ├║ltimo controle adicionado via `AddObject()` |
+| 5715 | `FOR loc_nI = 1 TO par_oContainer.ControlCount` | Itera filhos de um container |
+| 6705 | `FOR loc_nI = 1 TO par_oContainer.ControlCount` | Itera filhos de um container |
+| 6709 | `PEMSTATUS(..., "ControlCount", 5) AND loc_oObjeto.ControlCount > 0` | Checa se container tem filhos |
+
+Nenhuma dessas linhas ├® uma condi├º├úo `WHERE` de SQL. O detector de `SQL-FILTRO-INVENTADO` confundiu a propriedade nativa VFP9 `.ControlCount` com um nome de coluna SQL.
+
+O arquivo `ccrBO.prg` j├í usa corretamente `cnt` como alias no `ExecutarExclusao` (`SELECT COUNT(*) AS cnt FROM ...`), e os WHEREs usam `Grupos`, `Iclis`, `Codigos` ÔÇö exatamente como o original.
+
+**Nenhuma corre├º├úo aplicada** ÔÇö o c├│digo est├í correto.

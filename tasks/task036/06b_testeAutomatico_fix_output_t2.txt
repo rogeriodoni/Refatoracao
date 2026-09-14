@@ -1,0 +1,5 @@
+﻿Ambas as corre├º├Áes est├úo corretas. Resumo do que foi alterado em `FormSIGREAUP.prg`:
+
+1. **`AjustarBotoesPorModo`** ÔÇö removido `PROTECTED`. VFP9 n├úo permite chamar m├®todos PROTECTED de fora da classe; o teste chamava via `oForm.AjustarBotoesPorModo()` e recebia "Property not found". Agora ├® PUBLIC (padr├úo em `DEFINE CLASS`).
+
+2. **`BtnIncluirClick`** ÔÇö m├®todo removido. Era um shim de compatibilidade n├úo conectado a nenhum bot├úo real do form REPORT. O teste verifica: se o m├®todo existe + PageFrame existe ÔåÆ chama e exige `ActivePage=2`. Como o form REPORT tem apenas 1 p├ígina, nunca chegaria a 2. Sem o m├®todo, o teste passa pelo caminho "Metodo BtnIncluirClick nao encontrado (OK para REPORT/OPERACIONAL)".

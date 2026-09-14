@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREDCO",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "Local lnCnt\n\nlnCnt = 1\n\nFor lnCnt = 1 To ThisForm.Qbols\n\tIf Inlist(crSigCdOpe.DigItens,6,7)\n\t\tReport Form SigReDco6 Preview NoConsole\n\tElse\n\t\tIf LocalEmp.DIVNOTAS = 2 && P&G\n\t\t\tReport Form SigReDco4 Preview NoConsole\n\t\tElse && SRCOM\n\t\t\tIf thisform.chkIcentivo.Value = 1 or thisform.chkNf.Value = 1\t\t\n\t\t\t\tReport Form SigReDco3 Preview NoConsole\n\t\t\tElse\n\t\t\t\tReport Form SigReDco5 Preview NoConsole\n\t\t\tEndif \t\t\n\t\tEndif\n\tEndif\nNext\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkIcentivo,chkNf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCO",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.oForm.Enabled = .t.\nSet Printer to Default\nDoDefault()\nThisForm.poDataMgr2.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCO",
+      "evento": "Procedure",
+      "linhas": 29,
+      "codigoOriginal": "Thisform.AlwaysOnTop = .f.\n\nllImpNf = (thisform.chkNf.Value = 1)\nllImpIcen = (thisform.chkIcentivo.Value = 1)\n\nSelect crSigMvOrc\nreplace all Dpro2s With Nvl(Dpro2s,[]), Obs With Nvl(Obs,[])\nGo Top\n\nlcMasQ = '999999' + Iif(crSigOpCdd.CasQtds > 0, '.' + Repl( '9', crSigOpCdd.CasQtds ),'')\nlcMasP = '999999' + Iif(crSigCdOpe.NCPesos > 0, '.' + Repl( '9', crSigCdOpe.NCPesos ),'')\n\nSelect a.Citens, a.Citem2, a.Citem3, a.Cblocos, a.Dpros, a.Dpro2s, a.Obs, Transform(a.Qtds,lcMasQ) as Qtds, a.Cunis, Tran... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkNf,chkIcentivo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCO",
+      "evento": "Init",
+      "linhas": 53,
+      "codigoOriginal": "Lparameters qbols, Pcnx, cEmail, pEmp, pDop, pNum, pImpress, pForm, pChkImpDoc\n\nLocal lnBotW, lnOldW\n\nThisform.oForm = pForm\nThisForm.Contaemail = cEmail\n\nThisForm.pcEmps  = pEmp\nThisForm.pcDopes = pDop\nThisForm.pcNumes = pNum\n\n=DoDefault([SIGREDCU])\n\nThisform.Qbols = qbols\nThisForm.Conexao = Pcnx\nThisForm.poDataMgr2 = CreateObject('fSqlConector', ThisForm.Name)\ngoSistema.ControlaImp = .F. \nThisForm.Caption = 'Impressão de Documento ('+Alltrim(pDop)+'/'+Alltrim(Str(pNum))+')'\nThisForm.Tpimpressa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poDataMgr2 = CreateObject,Caption = 'Impressão de Documento,Tpimpressao = Iif,CursorQuery,Visible And InList,Click",
+        "controlesReferenciados": "ChkImpDoc,chkNf,chkIcentivo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREDCO",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Local lnCnt\n\nlnCnt = 1\n\nFor lnCnt = 1 To ThisForm.Qbols\n\t_Prompt = Iif(InList(ThisForm.TpImpressao, 2, 4), [], [Prompt])\n\tIf LocalEmp.DIVNOTAS = 2 && P&G\n\t\tReport Form SigReDco4 To Printer &_prompt NoConsole\t\n\tElse && SRCOM\n\t\tIf thisform.chkIcentivo.Value = 1 or thisform.chkNf.Value = 1\t\n\t\t\tReport Form SigReDco3 To Printer &_prompt NoConsole\n\t\tElse\n\t\t\tReport Form SigReDco5 To Printer &_prompt NoConsole\t\t\n\t\tEndif\n\tEndif\nNext",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkIcentivo,chkNf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCO",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "If LocalEmp.DIVNOTAS = 2 && P&G\n\tReport Form SigReDco4 To Printer NoConsole\t\nElse && SRCOM\n\tIf thisform.chkIcentivo.Value = 1 or thisform.chkNf.Value = 1\n\t\tReport form SigReDco3 To Printer NoConsole\n\tElse\n\t\tReport form SigReDco5 To Printer NoConsole\n\tEndif\t\nEndif\nDoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkIcentivo,chkNf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCO.chkNf",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "*!*\tDo PImpDoc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;\n*!*\t\t\t\t   .f., .t., ThisForm.Conexao, ;\n*!*\t\t\t\t   .f., .f., .f., ThisForm.oForm\n\n\nIf this.Value = 1 And Messagebox([Deseja realmente imprimir ] + Iif(LocalEmp.DIVNOTAS = 2,[descritivo?],[versão completa?]),4+32+256,[Aviso]) = 7\n\tthis.Value = 0\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREDCO.chkIcentivo",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "*!*\tDo PImpDoc With TmpRel.Emps, TmpRel.Dopes, TmpRel.Numes, 0, Thisform.QBols, ;\n*!*\t\t\t\t   (Thisform.optAgrupa.Value = 1), .t., ThisForm.Conexao, ;\n*!*\t\t\t\t   (Thisform.chkImagem.Value = 1), .f., (Thisform.chkItensP.Value = 1), Thisform.oForm\n\nIf this.Value = 1 And Messagebox([Deseja realmente imprimir versão completa?],4+32+256,[Aviso]) = 7\n\tthis.Value = 0\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

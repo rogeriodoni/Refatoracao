@@ -1,0 +1,10 @@
+﻿Todas as corre├º├Áes est├úo aplicadas:
+
+**FormSET.prg** ÔÇö 3 ocorr├¬ncias de `ColumnCount = 3` corrigidas para `ColumnCount = 2`:
+- `CarregarLista` (linha 608): grid de cursor_4c_Dados que tem 2 colunas (Setores, Descrs)
+- `BtnIncluirClick` (linha 688): grid de cursor_4c_Localizacoes
+- `BOParaForm` (linha 966): grid de cursor_4c_Localizacoes
+
+**SETBO.prg** ÔÇö 2 corre├º├Áes:
+- `ValidarLocalizacaoDuplicada`: removido `AND cidchaves <> X` do WHERE (CIDCHAVES n├úo existia nas condi├º├Áes originais) e simplificada assinatura para `(par_cLocals, par_cSetores)`
+- `BuscarLocalizacao`: removido `OR Codigos LIKE X%` (inventado pela LLM) ÔÇö mantido apenas match exato `WHERE Codigos = X`

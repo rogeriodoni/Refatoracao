@@ -1,0 +1,12 @@
+﻿`C:\4c\projeto\app\forms\cadastros\FormSIGACGCT.prg` criado com a estrutura base da Fase 3.
+
+O arquivo cont├®m:
+- **DEFINE CLASS** com todas as propriedades visuais (Height=600, Width=1000, Caption sem acentos na declara├º├úo, corrigido em InicializarForm)
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()`
+- **InicializarForm()** ÔÇö cria `SIGACGCTBO`, chama os 3 ConfigurarXxx, guarda `gb_4c_ValidandoUI` antes de `CarregarLista`
+- **ConfigurarPageFrame()** ÔÇö `pgf_4c_Paginas` com `Top=-29`, `Tabs=.F.`, 2 pages com imagem de fundo
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (com `lbl_4c_Titulo`), `cnt_4c_Botoes` (vazio ÔÇö Fase 4), `cnt_4c_Saida` com `cmd_4c_Encerrar` can├┤nico (Left=917, Width=75, Caption="Encerrar")
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` vazio (Fase 4)
+- **CarregarLista()** ÔÇö m├¡nima e funcional (chama `BO.Buscar`; grid ser├í vinculado na Fase 4)
+- **TornarControlesVisiveis()** e **FormatarGridLista()** ÔÇö implementa├º├Áes completas
+- **Destroy()** ÔÇö limpa BO e cursor

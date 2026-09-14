@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 1/8 conclu├¡da.** Criei `C:\4c\projeto\app\classes\TpcBO.prg` com:
+
+- Herda de `BusinessBase`
+- Propriedades da entidade principal `SigCdTpc` (extra├¡das de `docs/schema.sql`, validado via `Get-Content -Raw` por ser UTF-16 ÔÇö regra #14):
+  - `this_cTipo` (tipos, PK, char(20))
+  - `this_cDescricao` (descrs, char(40))
+  - `this_nCalculaCustos` (custos, numeric(1,0) ÔÇö OptionGroup `optCustos`)
+  - `this_nImprimir` (nchkimps, numeric(1,0) ÔÇö OptionGroup `OptImp`)
+  - `this_nMaiusculos` (nchkmais, numeric(1,0) ÔÇö OptionGroup `OptMaius`)
+  - `this_nOrdemImpressao` (nordems, numeric(2,0) ÔÇö `GetnOrdems`)
+  - `this_nUtilizaProdutoAcabado` (usarpas, numeric(1,0) ÔÇö OptionGroup `optUsarPAs`)
+- Propriedade auxiliar `this_cCursorGrupos` apontando para o cursor local do grid de detalhe (grupos vinculados via `SigCdCom`, que n├úo tem coluna de descri├º├úo pr├│pria ÔÇö `dgrus` s├│ existe em `SigCdGrp`, exigindo JOIN nas pr├│ximas fases)
+- `Init()` com `this_cTabela = "SigCdTpc"` e `this_cCampoChave = "tipos"` (nomes corretos herdados do `BusinessBase`, conforme regra do projeto)
+
+Nenhum outro m├®todo foi inclu├¡do propositalmente ÔÇö `CarregarDoCursor`, `Inserir`, `Atualizar`, `ExecutarExclusao`, `Buscar`, `CarregarPorCodigo` e `ObterChavePrimaria` ficam para a Fase 2, sem stubs/placeholders.

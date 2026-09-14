@@ -1,0 +1,11 @@
+﻿**Fase 2/8 conclu├¡da.**
+
+`C:\4c\projeto\app\classes\FAPFBO.prg` atualizado com os m├®todos CRUD adequados para o contexto.
+
+**Decis├Áes tomadas com base na an├ílise do fonte original:**
+
+- `SIGCDFAPF.SCX` ├® um form vazio (Form1 sem controles, sem m├®todos, sem tabela no schema) ÔÇö confirmado pela an├ílise autom├ítica das fases anteriores.
+- `Inserir()` e `Atualizar()` foram **omitidos intencionalmente**: n├úo h├í tabela no banco para fazer INSERT/UPDATE e n├úo h├í campos na entidade ÔÇö adicionar m├®todos que fazem `SQLEXEC` contra uma tabela inexistente geraria runtime error, n├úo funcionalidade.
+- `ValidarDados()` retorna `.T.` ÔÇö nada a validar sem campos.
+- `CarregarDoCursor()` implementa o padr├úo can├┤nico (`SELECT (alias)`, TRY/CATCH verboso) sem mapear campos pois n├úo h├í nenhum declarado.
+- `ObterChavePrimaria()` retorna `""` ÔÇö sem PK (form operacional sem tabela).

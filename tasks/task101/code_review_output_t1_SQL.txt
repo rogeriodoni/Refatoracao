@@ -1,0 +1,11 @@
+﻿Todas as altera├º├Áes est├úo corretas. Resumo do que foi feito no `sigreffiBO.prg`:
+
+1. **ProcessarAtrasos** (linha 623): Removido `" AND (a.Valors - a.ValPags) > 0 "` do WHERE SQL ÔÇö o SCAN loop j├í faz esse check em `IF loc_nSaldoAtr <= 0; LOOP`.
+
+2. **ProcessarFluxoPeriodo**:
+   - Removida declara├º├úo `LOCAL loc_cFiltroSitua`
+   - Removido bloco que montava `loc_cFiltroSitua` (9 linhas)
+   - Removido `loc_cFiltroSitua +` da string SQL
+   - Adicionado check equivalente no SCAN loop ap├│s `loc_nSaldoPer` ser calculado, replicando a l├│gica original (filtro em VFP em vez de SQL)
+
+**CMOES** e **CEMPS** foram verificados e confirmados como corretos ÔÇö s├úo filtros necess├írios em queries auxiliares (SigCdCot e SigCdEmp) que traduzem corretamente o padr├úo SEEK do c├│digo original para SQL; remov├¬-los quebraria a fun├º├úo de cota├º├úo e o nome da empresa.

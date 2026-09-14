@@ -1,0 +1,18 @@
+﻿A corre├º├úo foi aplicada. Vou fazer uma revis├úo final completa para confirmar que n├úo h├í nenhum outro problema:
+
+**An├ílise da Fase 6/8 para FormSigReIdt:**
+
+O formul├írio SIGREIDT ├® um `frmrelatorio` com layout **flat** (800x180px). Ao contr├írio de forms CRUD que t├¬m Page1/Page2 com TextBoxes e lookups, este form tem apenas:
+- 2 OptionGroups (optTipo e OptAgrupa)
+- 2 Labels de acompanhamento
+- CommandGroup com 4 bot├Áes (Visualizar/Imprimir/Documento/Encerrar)
+
+Portanto, n├úo h├í "50% de campos restantes" nem "lookups com BINDEVENT" para adicionar ÔÇö o template gen├®rico da Fase 6 n├úo se aplica a este form espec├¡fico.
+
+**O que foi corrigido nesta fase:**
+- `FontName = "Tahoma"` ÔåÆ `"Comic Sans MS"` em todos os 4 bot├Áes do `cmg_4c_Botoes` (regra obrigat├│ria do CLAUDE.md para forms REPORT, observada em task023/task024)
+
+**Estado completo da task117:**
+- `SigReIdtBO.prg` ÔÇö PrepararDados() completo (toda a l├│gica do `processamento` original), Visualizar/Imprimir/Documento, Destroy()
+- `FormSigReIdt.prg` ÔÇö Controles, eventos, FormParaRelatorio, handlers dos bot├Áes, OptTipoChange, Destroy()
+- `menu.prg` ÔÇö DEFINE BAR 147, ON SELECTION BAR 147, AbrirFormSigReIdt()

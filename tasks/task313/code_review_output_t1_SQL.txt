@@ -1,0 +1,9 @@
+﻿3 corre├º├Áes aplicadas:
+
+**`FormSigPrMlu.prg` linha 654** ÔÇö removido `AND Nregis > 0` do SELECT COUNT WHERE.
+
+**`SigPrMluBO.prg` linha 122** ÔÇö removido `AND NRegis > 0` do SELECT COUNT WHERE em `ProcessarUnificacao`.
+
+**`SigPrMluBO.prg` linha 161** ÔÇö removido `AND NRegis > 0` do `SCAN FOR` em `ProcessarUnificacao`.
+
+**`CONTROLCOUNT`** ÔÇö falso positivo do scanner: as ocorr├¬ncias s├úo da propriedade VFP9 `ControlCount` nos m├®todos `TornarControlesVisiveis`/`TornarSubControlesVisiveis` (IF de objeto, n├úo WHERE de SQL). Nenhuma altera├º├úo necess├íria.

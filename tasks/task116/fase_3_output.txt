@@ -1,0 +1,11 @@
+﻿Fase 3/8 conclu├¡da. `C:\4c\projeto\app\forms\relatorios\FormSIGREIDC.prg` foi criado com:
+
+- **DEFINE CLASS FormSIGREIDC AS FormBase** ÔÇö propriedades exatas do original (Width=800, Height=300, DataSession=2, TitleBar=0, ControlBox=.F.)
+- **Init()** ÔåÆ `RETURN DODEFAULT()`
+- **InicializarForm()** ÔÇö instancia `SIGREIDCBO`, verifica `gb_4c_ValidandoUI`, chama `InicializarFiltros()`, cria cabecalho + bot├Áes + pageframe, seta `Visible=.T.`
+- **ConfigurarCabecalho()** ÔÇö `cnt_4c_Cabecalho` (RGB 100,100,100) com `lbl_4c_Sombra` e `lbl_4c_Titulo`
+- **ConfigurarBotoes()** ÔÇö `cmg_4c_Botoes` (Left=529) com 4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar, fontes Comic Sans MS, imagens corretas
+- **ConfigurarPageFrame()** ÔÇö `pgf_4c_Paginas` com 1 p├ígina (REPORT = flat), Top=85, Height=215, Tabs=.F.
+- **Destroy()** ÔÇö `this_oRelatorio = .NULL.` + DODEFAULT()
+
+Pr├│ximas fases: Fase 4 adicionar├í o container de filtros (estrutura), Fases 5-6 adicionar├úo os TextBoxes/Labels (campos de Grupo, Conta, Linha, Coluna, checkbox de logo), e Fases 7-8 adicionar├úo os BINDEVENTs e handlers dos bot├Áes.

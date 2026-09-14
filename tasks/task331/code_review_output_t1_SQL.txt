@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. Resumo do que foi encontrado e corrigido:
+
+**Diagn├│stico**: O validador detectou `WHERE cidchaves = ...` em `Atualizar()` como filtro inventado. A investiga├º├úo no schema confirmou que `cidchaves` ├® a PK real de `SigCdNei`, **mas** os dois `SQLEXEC` no BO n├úo selecionam `b.cidchaves`, e o `CREATE CURSOR TmpDistrib` tamb├®m n├úo tem o campo ÔÇö logo `this_cCidchaves` nunca ├® populado. O guard `IF EMPTY(THIS.this_cCidchaves)` fazia `Atualizar()` sempre abortar prematuramente.
+
+**Corre├º├úo** em `SigPrSerBO.prg` linhas 332ÔÇô355:
+- Guard alterado: `IF EMPTY(THIS.this_cEmpdnps) OR EMPTY(THIS.this_cCmats)` (campos que **existem** em TmpDistrib)
+- WHERE alterado: `WHERE Empdnps = ... AND Cmats = ...` ÔÇö chave natural que o original usa e que est├í dispon├¡vel no cursor
+- Removido `"Empdnps = ..."` do SET (n├úo faz sentido atualizar a chave de localiza├º├úo usada no WHERE)

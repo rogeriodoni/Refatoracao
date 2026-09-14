@@ -1,0 +1,16 @@
+﻿Fase 2 conclu├¡da. O `SigPrEmlBO.prg` est├í completo com todos os m├®todos CRUD e de neg├│cio:
+
+**M├®todos adicionados:**
+- `InicializarConexaoAlerta()` ÔÇö abre segunda conex├úo com banco `ALERTA` (onde SigAlert reside)
+- `ObterChavePrimaria()` ÔÇö retorna `this_cPkChaves`
+- `CarregarDoCursor()` ÔÇö mapeia todas as colunas de SigAlert, com deriva├º├úo de `this_cPrioridade` a partir de `this_nPriors`
+- `ValidarDados()` ÔÇö valida Contas, Emails e EmpDopNums
+- `Inserir()` ÔÇö INSERT em SigAlert via `this_nConnAlerta`, gera PkChaves com `fUniqueIds()`, auto-derivia Emps/Dopes/Numes do EmpDopNums
+- `Atualizar()` ÔÇö UPDATE em SigAlert via `this_nConnAlerta`
+- `ExecutarExclusao()` ÔÇö DELETE em SigAlert
+- `CarregarAlertasEmail()` ÔÇö l├│gica completa do Init original: cria `cursor_4c_Dados`, busca SigCdAle + SigCdPam, filtra por job, processa laOpeBaixa
+- `CarregarAlertasBaixa()` ÔÇö l├│gica do bloco laOpeBaixa: busca SigAlert (ALERTA) com fallback para SigCdAle (SIGE)
+- `BuscarConfigEmailEmpresa()` ÔÇö l├¬ AleServs/AleEmails/AleSenhas/AlePortas de SigCdEmp
+- `InserirAlertaHistoricoItem()` ÔÇö INSERT granular para cada destinat├írio selecionado (chamado pelo form no BtnEmailClick)
+
+**Regras VFP9 seguidas:** sem `ISEMPTY()` (usando `EMPTY()`), sem `RETURN` dentro de TRY/CATCH (usando padr├úo flag `loc_lResultado`), `TYPE(alias + ".campo")` para verificar exist├¬ncia de campo, `CHR()` para acentos.

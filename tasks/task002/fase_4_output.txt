@@ -1,0 +1,21 @@
+﻿Fase 4 conclu├¡da. Aqui est├í o resumo do que foi adicionado ao `FormDepartamento.prg`:
+
+**ConfigurarPaginaLista() ÔÇö completada:**
+- `grd_4c_Lista`: Grid com 3 colunas (codigos/80, Descricaos/290, Diretors/80), `RecordMark=.F.`, `DeleteMark=.F.`, `GridLines=3`
+- `cnt_4c_Botoes` com 6 bot├Áes CRUD com ├¡cones, Caption, PicturePosition=13, BINDEVENT:
+  - Incluir (`cadastro_inserir_26.jpg`) ┬À Visualizar (`cadastro_vizualizar_60.jpg`) ┬À Alterar (`cadastro_alterar_60.jpg`) ┬À Excluir (`cadastro_excluir_60.jpg`) ┬À Buscar (`cadastro_procurar_60.jpg`) ┬À Encerrar (`cadastro_sair_60.jpg`)
+
+**ConfigurarPaginaDados() ÔÇö Salvar/Cancelar adicionados:**
+- `cmd_4c_Salvar` (`cadastro_salvar_60.jpg`) e `cmd_4c_Cancelar` com BINDEVENT
+
+**CarregarLista() ÔÇö grid wiring:**
+- `RecordSource` e `ColumnCount` fora de WITH (Problema 36)
+- ControlSources, Widths e `Header1.Caption` definidos ap├│s RecordSource (Problema 48/32)
+
+**Handlers adicionados (todos PUBLIC para BINDEVENT):**
+- `BtnIncluirClick` ÔåÆ NovoRegistro + LimparCampos + this_cModoAtual + HabilitarCampos + AlternarPagina(2)
+- `BtnVisualizarClick` / `BtnAlterarClick` ÔåÆ l├¬ cursor_4c_Dados + CarregarPorCodigo + BOParaForm
+- `BtnExcluirClick` ÔåÆ MsgConfirma (.T./.F.) + Excluir + CarregarLista
+- `BtnSalvarClick` ÔåÆ ValidarCampos + FormParaBO + Salvar
+- `BtnCancelarClick` / `BtnEncerrarClick` / `BtnBuscarClick`
+- `AjustarBotoesPorModo` ÔåÆ controla Enabled do cmd_4c_Salvar conforme modo

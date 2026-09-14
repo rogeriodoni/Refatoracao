@@ -1,0 +1,28 @@
+﻿Todos os `RETURN` est├úo corretamente FORA dos blocos TRY/CATCH. A estrutura est├í correta.
+
+## Fase 3/8 conclu├¡da Ô£ô
+
+**Arquivo criado**: `C:\4c\projeto\app\forms\cadastros\FormSigPrCtr.prg` (378 linhas)
+
+### O que foi criado:
+
+| M├®todo | Responsabilidade |
+|--------|-----------------|
+| `Init()` | Apenas `RETURN DODEFAULT()` (padr├úo can├┤nico) |
+| `InicializarForm()` | Cria BO, define filtros de hoje, chama ConfigurarPageFrame, carrega lista |
+| `ConfigurarPageFrame()` | PageFrame externo Top=-29, Tabs=.F., PageCount=2 |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho (com lbl_4c_Sombra + lbl_4c_Titulo), cnt_4c_Botoes, cnt_4c_Saida |
+| `ConfigurarPaginaDados()` | cnt_4c_BotoesAcao, pgf_4c_Abas (PageCount=2, Tabs=.T.) |
+| `CarregarLista()` | Propaga filtros de data para o BO e chama `Buscar("")` |
+| `TornarControlesVisiveis()` | Recursivo, trata PageFrames e Containers |
+| `Destroy()` | Fecha todos os cursors (4c + legado), DODEFAULT() |
+
+### Regras verificadas:
+- **Sem RETURN dentro de TRY** Ô£ô
+- **Sem acentos literais** (todos via CHR()) Ô£ô  
+- **PageFrame compensa├º├úo +29** nos containers Ô£ô
+- **cnt_4c_Saida Left=917** (can├┤nico CLAUDE.md regra #10) Ô£ô
+- **VARTYPE em vez de ISNULL** para o BO Ô£ô
+- **CATCH nunca silencioso** (exceto Destroy: usa MsgErro) Ô£ô
+
+**Pr├│xima fase (4/8)**: Adicionar bot├Áes CRUD em `cnt_4c_Botoes` e `cmd_4c_Encerrar` em `cnt_4c_Saida`, mais o grid `grd_4c_Lista` na Page1.

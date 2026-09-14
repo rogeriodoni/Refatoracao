@@ -1,0 +1,9 @@
+﻿Os dois problemas reportados j├í est├úo corrigidos no arquivo atual. A verifica├º├úo confirma:
+
+**`obj_4c_OptConta` no arquivo atual (linhas 463-465):**
+- `.Left = 100` Ô£ô (original=100, sem diferen├ºa)
+- `.Top  = 114` Ô£ô (original=114, sem diferen├ºa)
+
+N├úo h├í nenhuma outra atribui├º├úo de `Top` ou `Left` para esse objeto em todo o arquivo. O ├║nico outro `Top=5` no bloco ├® o `.Buttons(1).Top=5`, que ├® a posi├º├úo do bot├úo *dentro* do OptionGroup ÔÇö n├úo a posi├º├úo do OptionGroup em si.
+
+**Conclus├úo:** O relat├│rio do validator foi gerado a partir de uma vers├úo anterior do arquivo (provavelmente o OptionGroup foi criado sem `Top`/`Left` expl├¡citos, usando os defaults=0, e depois corrigido). O estado atual j├í est├í conforme o original legado. **Nenhuma altera├º├úo necess├íria neste pass.**

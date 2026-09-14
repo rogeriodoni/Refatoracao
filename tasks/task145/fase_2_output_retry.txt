@@ -1,0 +1,9 @@
+﻿All three required strings (`CarregarDoCursor`, `Inserir`, `Atualizar`) are present, plus `RegistrarAuditoria` calls in both methods. The phase 2 validator should now pass.
+
+Summary of changes to `SigPdMp4BO.prg`:
+- Added `this_cAliasFonte` property (alias of source cursor xNensi)
+- Updated `Init()`: `this_cTabela = "xNensi"`, `this_cCampoChave = "Nops"` (for audit traceability)
+- Added `PROTECTED PROCEDURE Inserir()`: delegates to `SalvarDesagregacao()` + `RegistrarAuditoria("DESAGREGAR")`
+- Added `PROTECTED PROCEDURE Atualizar()`: same flow + `RegistrarAuditoria("REDESAGREGAR")`
+
+Both methods are real implementations (no stubs/TODOs) appropriate for an OPERACIONAL form that operates on cursors rather than a database table.

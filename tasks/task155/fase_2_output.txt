@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. Aqui est├í o resumo do que foi implementado na Fase 2:
+
+---
+
+**Fase 2/8 conclu├¡da** ÔÇö `SigPrAopBO.prg` agora tem 377 linhas com 5 m├®todos adicionados:
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `CarregarParametros()` | Carrega `DoppPads` e `MascNums` de `SigCdPam` para as props do BO |
+| `CarregarOP(par_nNops)` | Equivale ao `Get_OP.Valid` do legado: valida OP em `SigCdNec` (encerrada?), carrega `CodPds` de `SigPdMvf`, popula `cursor_4c_DivOp` com itens de `SigOpPic` |
+| `SalvarAlteracoes(par_nNops)` | Equivale ao `Grupo_Conf.Salva.Click`: reset `SeqDivs=0`, atualiza `Qtds+SeqDivs` por item via `cIdChaves`, soma `QtdDivs` e grava em `SigPdMvf` |
+| `CarregarDoCursor(par_cAlias)` | Mapeia campos de cursor gen├®rico para props do BO |
+| `ObterChavePrimaria()` | Retorna `"Nops=N"` (corrigido ÔÇö Phase 1 retornava metadados) |
+
+**Decis├Áes cr├¡ticas:**
+- **Padr├úo `loc_lContinuar`** usado em `CarregarOP` e `SalvarAlteracoes` ÔÇö zero `RETURN` dentro de TRY/CATCH
+- **`SCAN WHILE loc_lContinuar`** no loop de update ÔÇö aborta corretamente se SQLEXEC falha
+- **`LOCATE FOR SeqDivs = 0`** como flag anti-reprocessamento (fiel ├á l├│gica original que fazia SEEK+condi├º├úo)
+- **`QtdDivs`** (n├úo `Qtds`) ├® o valor que o usu├írio editou e que vai para `SigOpPic.Qtds` no save ÔÇö confus├úo de nomenclatura do SCX original resolvida

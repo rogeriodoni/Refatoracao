@@ -1,0 +1,10 @@
+﻿Fase 6 conclu├¡da. Duas corre├º├Áes foram aplicadas:
+
+**1. Bug cr├¡tico: `cnt_4c_Cabecalho.Height`** (`ConfigurarCabecalho()`, linha 134)
+- **Antes:** `THIS.Height` (= 205) ÔÇö cobria o form inteiro com cinza, tornando o label "Sele├º├úo :" e os TextBoxes (Top=136-139) quase invis├¡veis sobre fundo cinza escuro.
+- **Depois:** `80` ÔÇö padr├úo correto confirmado pelo `FormSIGREVIS.prg` (mesmo tipo de form, mesma classe). O container fica s├│ no cabe├ºalho (0-80px); os controles de filtro (136-205px) ficam sobre o fundo normal do form.
+
+**2. Pre-valida├º├úo em `FormParaRelatorio()`**
+- Cobre o gap do mouse-click: se o usu├írio digitou descri├º├úo mas clicou direto no bot├úo "Visualizar" sem pressionar ENTER/TAB, `ValidarDesc()` ├® chamada para buscar o c├│digo correspondente antes de transferir os filtros ao BO ÔÇö garantindo que o relat├│rio sempre filtre com o c├│digo correto.
+
+O restante da Fase 6 (lookups, BINDEVENTs, campos) j├í estava 100% implementado desde fases anteriores: `AbrirBuscaCodigo()`, `AbrirBuscaDesc()`, `ValidarCodigo()`, `ValidarDesc()`, `TeclaCodigo()`, `TeclaDesc()` ÔÇö todos completos e funcionais, sem TODOs ou stubs.

@@ -1,0 +1,22 @@
+﻿O arquivo est├í completo e correto. A Fase 2/8 est├í conclu├¡da.
+
+**Resumo do que foi adicionado ao `RegBO.prg`:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `CarregarDoCursor()` | PUBLIC | Mapeia cursor ÔåÆ propriedades BO (regiaos, descs, skchaves) |
+| `Buscar()` | PUBLIC | SELECT de SigCdReg ordenado por regiaos ÔåÆ cursor_4c_Dados |
+| `CarregarPorCodigo()` | PUBLIC | SELECT por PK; reseta `this_lNovoRegistro = .F.` |
+| `BuscarMunicipios()` | PUBLIC | SELECT SigCdRgi JOIN sigcdmun/sigcdufs WHERE tipos='M' ÔåÆ crMuni |
+| `BuscarVendedores()` | PUBLIC | SELECT SigCdRgi JOIN sigcdcli WHERE tipos='C' ÔåÆ crVend |
+| `InserirFilhos()` | PROTECTED | Itera crMuni + crVend inserindo rows em SigCdRgi com fUniqueIds() |
+| `Inserir()` | PROTECTED | INSERT SigCdReg + gera skchaves + chama InserirFilhos() |
+| `Atualizar()` | PROTECTED | UPDATE SigCdReg + DELETE/re-INSERT SigCdRgi |
+| `ExecutarExclusao()` | PROTECTED | DELETE SigCdRgi (filhos primeiro) ÔåÆ DELETE SigCdReg |
+| `ObterChavePrimaria()` | PUBLIC | Retorna regiaos para auditoria |
+
+**Pontos cr├¡ticos respeitados:**
+- Nenhum RETURN dentro de TRY/CATCH
+- `BuscarMunicipios`/`BuscarVendedores` criam cursores vazios com linha em branco para regi├Áes novas (sem skchaves)
+- `InserirFilhos` respeita registros marcados como DELETED (grid tem bot├úo excluir que faz DELETE local)
+- `Atualizar` faz DELETE + re-INSERT completo dos filhos (padr├úo do legado)

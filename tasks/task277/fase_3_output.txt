@@ -1,0 +1,7 @@
+﻿O arquivo `Formsigprema.prg` j├í existia com implementa├º├úo completa de todas as 8 fases. Corrigi 3 bugs encontrados na revis├úo:
+
+1. **Removido `THIS.TornarControlesVisiveis()`** (linha 102) ÔÇö m├®todo n├úo existe em FormBase nem no form; causaria "Property not found" em runtime.
+
+2. **Adicionado `.Visible = .T.`** nos labels `lbl_4c_Sombra` e `lbl_4c_Titulo` dentro de `cnt_4c_Cabecalho` ÔÇö AddObject cria com `Visible=.F.` por padr├úo; sem isso o cabe├ºalho ficaria em branco.
+
+3. **Corrigidos todos os caminhos de imagens** de `gc_4c_CaminhoBase + "Framework\imagens\"` para `gc_4c_CaminhoIcones` ÔÇö o caminho anterior apontava para `C:\4c\projeto\app\start\Framework\imagens\` (inexistente); correto ├® `C:\4c\vbmp\` via `gc_4c_CaminhoIcones`.

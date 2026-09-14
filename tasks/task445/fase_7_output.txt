@@ -1,0 +1,18 @@
+﻿Fase 7 conclu├¡da. O `FormIBP.prg` foi atualizado com:
+
+**BINDEVENTs adicionados** em `ConfigurarPaginaLista()`:
+- `cmd_4c_Incluir` ÔåÆ `BtnIncluirClick`
+- `cmd_4c_Alterar` ÔåÆ `BtnAlterarClick`
+- `cmd_4c_Visualizar` ÔåÆ `BtnVisualizarClick`
+- `cmd_4c_Excluir` ÔåÆ `BtnExcluirClick`
+
+**4 m├®todos implementados** (todos PUBLIC para compatibilidade com BINDEVENT):
+
+| M├®todo | Comportamento |
+|--------|---------------|
+| `BtnIncluirClick` | `NovoRegistro()` ÔåÆ `LimparCampos()` ÔåÆ modo "INCLUIR" ÔåÆ `HabilitarCampos(.T.)` ÔåÆ Page2 |
+| `BtnAlterarClick` | L├¬ `cidchaves` do cursor ÔåÆ `CarregarPorCodigo()` ÔåÆ `EditarRegistro()` ÔåÆ `BOParaForm()` ÔåÆ Page2 |
+| `BtnVisualizarClick` | L├¬ `cidchaves` do cursor ÔåÆ `CarregarPorCodigo()` ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.F.)` ÔåÆ Page2 |
+| `BtnExcluirClick` | L├¬ `cidchaves` ÔåÆ `MsgConfirma()` ÔåÆ `CarregarPorCodigo()` ÔåÆ `Excluir()` ÔåÆ `CarregarLista()` |
+
+Todos seguem os padr├Áes cr├¡ticos: `this_cModoAtual` setado ANTES de `HabilitarCampos()`, `NovoRegistro()`/`EditarRegistro()` para preparar o BO, `Excluir()` (PUBLIC) em vez de `ExecutarExclusao()`, e `MsgConfirma()` retornando l├│gico.

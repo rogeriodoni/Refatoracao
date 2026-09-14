@@ -1,0 +1,7 @@
+﻿Feito. As 3 edi├º├Áes (4 ocorr├¬ncias) foram aplicadas no `sigrecheBO.prg`:
+
+- **Linha 232**: `loc_cVerData` removido do `LOCAL`
+- **Linhas 248-253**: Bloco `IF THIS.this_nNrTipo = 3 ... ENDIF` inteiro removido (condi├º├Áes inventadas `a.Dtents >= ...` e `a.Vencs >= ...`)
+- **Linhas 486 e 522**: `&loc_cVerData.` removido dos dois `WHERE` dos `SELECT` locais sobre `cursor_4c_Relatorio0`
+
+O filtro de data simplesmente n├úo existe no c├│digo original ÔÇö o legado retorna todos os registros do SQLEXEC sem filtrar por DTENTS/VENCS, e os `SELECT` locais sobre o cursor VFP tamb├®m n├úo tinham essa condi├º├úo.

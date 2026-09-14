@@ -1,0 +1,41 @@
+﻿An├ílise completa. Encontrei os tr├¬s contextos exatos. Deixa eu explicar o que encontrei:
+
+---
+
+## Resultado da Verifica├º├úo
+
+Os tr├¬s alertas SQL-FILTRO-INVENTADO s├úo **falsos positivos**. O detector comparou *toda* cl├íusula WHERE do arquivo migrado contra a lista de vari├íveis de filtro do SELECT din├ómico do legado (`lcWhere`), mas as ocorr├¬ncias encontradas **n├úo s├úo filtros de SELECT** ÔÇö s├úo identificadores de linha em instru├º├Áes `UPDATE`.
+
+### Ocorr├¬ncia 1 ÔÇö CIDCHAVES (linha 221)
+
+```vfp
+"UPDATE SigOpClU SET ... WHERE cidchaves = " + EscaparSQL(THIS.this_cChaves)
+```
+
+Contexto: m├®todo `Atualizar()` padr├úo do BusinessBase ÔÇö UPDATE pela chave prim├íria. Remover o WHERE tornaria o UPDATE sem condi├º├úo, corrompendo **todos** os registros de SigOpClU.
+
+### Ocorr├¬ncia 2 ÔÇö NUMES (linha 301)
+
+```vfp
+"UPDATE SigMvCcr SET saldos = X WHERE emps=... AND grupos=... AND contas=... AND moedas=... AND datas=... AND numes=N"
+```
+
+Contexto: dentro de um SCAN ordenado por `emps, grupos, contas, moedas, datas, numes`. Sem o `AND numes`, transa├º├Áes distintas no mesmo dia para a mesma conta receberiam **o mesmo saldo** (valor da ├║ltima linha processada) ÔÇö o saldo corrente acumulado seria perdido.
+
+### Ocorr├¬ncia 3 ÔÇö ESTOS + NUMES (linhas 377ÔÇô379)
+
+```vfp
+"UPDATE SigMvHst SET sqtds = X WHERE cpros=... AND emps=... AND grupos=... AND estos=... AND datas=... AND numes=N"
+```
+
+Contexto: dentro de um SCAN em SigMvHst. Sem `estos`, o UPDATE cruzaria dep├│sitos distintos. Sem `numes`, cruzaria transa├º├Áes no mesmo dia. Ambos identificadores s├úo necess├írios para atualizar a linha correta.
+
+---
+
+### Por que o detector errou
+
+O filtro WHERE do legado (`lcWhere`) ├® constru├¡do dinamicamente **apenas para os SELECTs de busca** ÔÇö vari├íveis como `GRUPOS, CONTAS, EMPS, DATAS`. O c├│digo migrado respeita isso: nenhum `loc_cWhere` dos quatro m├®todos de rec├ílculo cont├®m `cidchaves`, `numes` ou `estos`.
+
+As tr├¬s ocorr├¬ncias est├úo em `UPDATE ... WHERE` dentro de loops `SCAN`, onde identificam a **linha espec├¡fica a ser atualizada**, n├úo filtram quais registros buscar.
+
+**Nenhuma altera├º├úo deve ser feita.** Remover qualquer uma dessas condi├º├Áes introduziria um bug real de corrup├º├úo de dados.

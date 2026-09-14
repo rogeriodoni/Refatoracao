@@ -1,0 +1,21 @@
+﻿Arquivo gerado com 395 linhas. Fase 2/8 conclu├¡da.
+
+**O que foi adicionado ao `sigprdftBO.prg`:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `CarregarDoCursor(par_cAliasCursor)` | L├¬ FPags, Tcdc, Garantias, lSaque, lCartao, Dias, MesFec do cursor crSigOpFp |
+| `CarregarConfig(par_cOpers)` | SQLEXEC para SigOpFp (forma de pagamento) + SigCdEmp (empresa) |
+| `CarregarCaixa(par_cCaixa)` | SQLEXEC para SigFiMpF ÔÇö carrega `Cncaixas` para compor ID terminal |
+| `MontarRetorno(...)` | Monta cursor crSiTef e escreve `IntPos.001` + `IntPos.STS` (retorno sucesso) |
+| `RetornoFalha(par_cMensagem, par_nValPago)` | Monta cursor crSiTef e escreve arquivos de falha |
+| `ErroTef(par_nRetorno)` | Trata c├│digos -1 a -5 do SiTef chamando RetornoFalha com mensagem adequada |
+| `ObterResultadoFinal()` | Retorna string `saque/parcs/data+bandeira+cartao` (substitui o Unload legado) |
+| `Inserir()` / `Atualizar()` | Retornam `.T.` ÔÇö sem tabela SQL Server neste form TEF |
+| `ObterChavePrimaria()` | Retorna `this_cFPags` |
+
+**Decis├Áes arquiteturais:**
+- `SET SAFETY OFF/ON` envolve os `COPY TO` para evitar prompt de sobrescrita de arquivo
+- `LOCAL ARRAY loc_aCartao[11]` declarado fora do TRY (requisito VFP9)
+- Nenhum `RETURN` dentro de TRY/CATCH (regra #1 do CLAUDE.md)
+- `this_cBandeira` usado para indexar o array de bandeiras (fiel ao legado que usava `ThisForm.pcBandeira`)

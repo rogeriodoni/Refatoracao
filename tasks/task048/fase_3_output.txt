@@ -1,0 +1,13 @@
+﻿Estrutura correta. A Fase 3 est├í completa com todos os m├®todos implementados sem stubs.
+
+**Fase 3/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\forms\relatorios\Formsigrecgp.prg` criado com:
+
+- **`Init(par_oParentForm)`** ÔÇö armazena refer├¬ncia ao form pai antes de `DODEFAULT()` para que `InicializarForm()` j├í tenha acesso
+- **`InicializarForm()`** ÔÇö cria `sigrecgpBO`, repassa `this_oParentForm` ao BO, monta cabe├ºalho + bot├Áes + indicador de progresso
+- **`ConfigurarCabecalho()`** ÔÇö `cnt_4c_Cabecalho` (RGB 100,100,100) + `lbl_4c_Sombra` + `lbl_4c_Titulo` (equivalente ao `cntSombra` do legado)
+- **`ConfigurarBotoes()`** ÔÇö `cmg_4c_Botoes` com 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar) nas posi├º├Áes exatas do original SIGRECGP: `Left=495, Width=310`, cada bot├úo `Width=75, Height=75`
+- **`ConfigurarContainerProgresso()`** ÔÇö `cnt_4c_Progresso` + `lbl_4c_Aguarde` + `lbl_4c_Selecionando`, todos invis├¡veis por padr├úo
+- **`MostrarProgresso(par_lMostrar)`** ÔÇö toggle do indicador de progresso
+- **`Destroy()`** ÔÇö libera BO e reabilita o form pai (equivalente ao `Release` do legado)
+
+`DataSession=1` mantido para compatibilidade com cursores do form pai (`CrProdutos`). Fase 4 adicionar├í os controles de filtro (`Opc_Rel`, `Opc_Ordem`, `Say1`) via `Edit` no arquivo existente.

@@ -1,0 +1,466 @@
+{
+  "resumo": {
+    "totalMetodos": 23,
+    "metodosComSQL": 11,
+    "metodosComValidacao": 5,
+    "totalQueries": 11,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds", "fGravarLog", "fAcessoEmpresa", "Found"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDEMP",
+      "evento": "Init",
+      "linhas": 33,
+      "codigoOriginal": "LParameters lcAcesso\n\nlcQryEmp  = 'Select Cemps, Razas From SigCdEmp'\nlcQryEmpU = 'Select * From SigCdAcE'\nlcQryUsua = 'Select * From SigCdUsu'\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector','acesso')\n\t\n\tWith .poDatamgr\n\t\t* Cursor Principal Para Montagem da Lista (Tabela Grande)\n\t\t.AddCursor('SigCdEmp', 'Cemps', 'crSigCdEmp', '', ThisForm.Pagina.Lista.Grade, lcQryEmp)\n\t\t.pfSqlTabela(1).pColuna('Cemps', '', '', 'Empresa',   070, .t.)\n\t\t.pfSqlTabela(1).pColuna('Razas', '', '', 'Descrição... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "Private pEmp\n\npEmp = Padr(Thisform.Pagina.Dados.Get_Empresa.Value, 3)\n\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdAcE Where Emps = ?pEmp], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (3)')\n\tReturn 0\nEndIf\nIf Not ThisForm.poDataMgr.Update('crSigCdAcE')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (4)')\n\tReturn 0\nEndIf\nIf (ThisForm.poDataMgr.Commit() < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Update,Commit",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP",
+      "evento": "Procedure",
+      "linhas": 15,
+      "codigoOriginal": "Private pEmp\n\npEmp = Padr(Thisform.Pagina.Dados.Get_Empresa.Value, 3)\n\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdAcE Where Emps = ?pEmp], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (3)')\n\tReturn 0\nEndIf\nIf (ThisForm.poDataMgr.Commit() < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (5)')\n\tReturn 0\nEndIf\n\nNoDefault\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Commit",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "Private pEmp\n\npEmp = Padr(Thisform.Pagina.Dados.Get_Empresa.Value, 3)\n\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdAcE Where Emps = ?pEmp], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (3)')\n\tReturn 0\nEndIf\nIf Not ThisForm.poDataMgr.Update('crSigCdAcE')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (6)')\n\tReturn 0\nEndIf\nIf (ThisForm.poDataMgr.Commit() < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Update,Commit",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Local lcEmp\n\nlcEmp = Alltrim(ThisForm.Pagina.Dados.Get_Empresa.Value)\n\nSelect crSigCdEmp\nSet Near On\nLocate For Cemps = lcEmp\nSet Near Off\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP",
+      "evento": "Click",
+      "linhas": 98,
+      "codigoOriginal": "Lparameters Opcao\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndIf\n\nSelect crSigCdAcE\n\nThisForm.LockScreen = .t.\n\nlcCEmps = crSigCdEmp.CEmps\nlcRazas = crSigCdEmp.Razas\n\nIf Not DoDefault(Opcao)\n\tThisForm.LockScreen = .f.\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf\n\nWith ThisForm.Pagina.Dados\n\t.Usuario.Clear\n\t.UsuEmp.Clear\n\n\tIf (ThisForm.pcEscolha <> 'PROCURAR')\n\t\tIf InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\t\t\tlcSQLCmd = [Select Distinct Usuarios ] + ;\n\t\t\t\t\t\t [From SigCdUsu ] + ;\n\t\t\t\t\t\t[Whe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "get_Empresa,get_DEmpresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "If InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n\tZap In crSigCdAcE\n\t\n\tm.Emps  = crSigCdEmp.Cemps\n\tm.DEmps = crSigCdEmp.Razas\n\tFor C = 1 To ThisForm.Pagina.Dados.UsuEmp.ListCount\n\t\tm.Usuarios = ThisForm.Pagina.Dados.UsuEmp.List(C)\n\t\tm.pkChaves = fUniqueIds()\n\t\tInsert Into crSigCdAcE From Memvar\n\tNext\nEndIf\n\nSelect crLogData\nScan\n\t=fGravarLog(cTipos, 'CADEMP', ThisForm.pcEscolha, cOcors, Usuar)\nEndScan\n\n=DoDefault()\n\nThisForm.mAtivaPagina1\n* Fim ************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds,fGravarLog",
+        "metodosFormChamados": "List",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.Get_Empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, This, Thisform.Pagina.Dados.Get_DEmpresa)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DEmpresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.Get_Empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.Get_DEmpresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, Thisform.Pagina.Dados.Get_Empresa, This)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.Get_DEmpresa",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = 'PROCURAR') And Empty(ThisForm.Pagina.Dados.get_Empresa.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha = 'PROCURAR') And Empty",
+        "controlesReferenciados": "get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.Usuario",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tThisForm.Pagina.Dados.cmdAdd.Click()\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.Usuemp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tThisForm.Pagina.Dados.cmdRemove.Click()\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.cmdAdd",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tWith ThisForm.Pagina.Dados\n\t\tIf .Usuario.Selected(.Usuario.ListIndex)\n\t\t\t_Valor = .Usuario.List(.Usuario.ListIndex)\n\t\t\tlcIdChaves = 'USUARIO'+_Valor\n\t\t\tSelect crLogData\n\t\t\tSeek lcIdChaves\n\t\t\tIf ! Found()\n\t\t\t\tInsert Into crLogData (cIdChaves, cOcors, cTipos) ;\n\t\t\t\t\tValues(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'I')\n\t\t\tElse\n\t\t\t\tIf cTipos = 'E'\n\t\t\t\t\tDelete \n\t\t\t\tEndIf\n\t\t\tEndif\n\t\t\t.Usuario.RemoveItem(.Usu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.cmdAdd",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.cmdAddAll",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\n\nWith ThisForm.Pagina.Dados\n\tFor I = 1 To .Usuario.ListCount\n\t\t.UsuEmp.AddItem(.Usuario.List(I))\n\t\t_Valor = .Usuario.List(I)\n\t\tlcIdChaves = 'USUARIO'+_Valor\n\t\tSelect crLogData\n\t\tSeek lcIdChaves\n\t\tIf ! Found()\n\t\t\tInsert Into crLogData (cIdChaves, cOcors, cTipos) ;\n\t\t\t\tValues(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'I')\n\t\tElse\n\t\t\tIf cTipos = 'E'\n\t\t\t\tDelete \n\t\t\tEndIf\n\t\tEndif\n\tEndFor\n\t.Usuario.Clear\nEndWith\n\nThisForm.LockScreen = .... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.cmdAddAll",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.cmdRemove",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tWith ThisForm.Pagina.Dados\n\t\tIf .UsuEmp.Selected( .UsuEmp.ListIndex )\n\t\t\t_Valor = .UsuEmp.List( .UsuEmp.ListIndex )\n\t\t\tlcIdChaves = 'USUARIO'+_Valor\n\t\t\tSelect crLogData\n\t\t\tSeek lcIdChaves\n\t\t\tIf ! Found()\n\t\t\t\tInsert Into crLogData (cIdChaves, cOcors, cTipos) ;\n\t\t\t\t\tValues(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'E')\n\t\t\tElse\n\t\t\t\tIf cTipos = 'I'\n\t\t\t\t\tDelete \n\t\t\t\tEndIf\n\t\t\tEndif\n\t\t\t.UsuEmp.RemoveItem( .Usu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.cmdRemove",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.cmdRemoveAll",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\n\nWith ThisForm.Pagina.Dados\n\tFor I = 1 to .UsuEmp.ListCount\n\t\t.Usuario.AddItem(.UsuEmp.List(I))\n\t\t_Valor =  .UsuEmp.List(I)\n\t\tlcIdChaves = 'USUARIO'+_Valor\n\t\tSelect crLogData\n\t\tSeek lcIdChaves\n\t\tIf ! Found()\n\t\t\tInsert Into crLogData (cIdChaves, cOcors, cTipos) ;\n\t\t\t\tValues(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'E')\n\t\tElse\n\t\t\tIf cTipos = 'I'\n\t\t\t\tDelete \n\t\t\tEndIf\n\t\tEndif\n\tEndFor\n\t.UsuEmp.Clear\nEndWith\n\nThisForm.LockScreen = .f.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMP.Pagina.Dados.cmdRemoveAll",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDEMP.Init",
+      "queryOriginal": "lcQryEmp  = 'Select Cemps, Razas From SigCdEmp'",
+      "tabelas": "SigCdEmp",
+      "colunas": "Cemps,Razas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEMP.Init",
+      "queryOriginal": "lcQryEmpU = 'Select * From SigCdAcE'",
+      "tabelas": "SigCdAcE",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEMP.Init",
+      "queryOriginal": "lcQryUsua = 'Select * From SigCdUsu'",
+      "tabelas": "SigCdUsu",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEMP.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdAcE Where Emps = ?pEmp], '') < 1)",
+      "tabelas": "SigCdAcE",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEMP.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdAcE Where Emps = ?pEmp], '') < 1)",
+      "tabelas": "SigCdAcE",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEMP.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdAcE Where Emps = ?pEmp], '') < 1)",
+      "tabelas": "SigCdAcE",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEMP.Click",
+      "queryOriginal": "\t\tInsert Into crSigCdAcE From Memvar",
+      "tabelas": "crSigCdAcE",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEMP.Pagina.Dados.cmdAdd.Click",
+      "queryOriginal": "\t\t\t\tInsert Into crLogData (cIdChaves, cOcors, cTipos) ; \t\t\t\t\tValues(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'I')",
+      "tabelas": "crLogData",
+      "colunas": "cIdChaves,cOcors,cTipos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEMP.Pagina.Dados.cmdAddAll.Click",
+      "queryOriginal": "\t\t\tInsert Into crLogData (cIdChaves, cOcors, cTipos) ; \t\t\t\tValues(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'I')",
+      "tabelas": "crLogData",
+      "colunas": "cIdChaves,cOcors,cTipos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEMP.Pagina.Dados.cmdRemove.Click",
+      "queryOriginal": "\t\t\t\tInsert Into crLogData (cIdChaves, cOcors, cTipos) ; \t\t\t\t\tValues(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'E')",
+      "tabelas": "crLogData",
+      "colunas": "cIdChaves,cOcors,cTipos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEMP.Pagina.Dados.cmdRemoveAll.Click",
+      "queryOriginal": "\t\t\tInsert Into crLogData (cIdChaves, cOcors, cTipos) ; \t\t\t\tValues(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'E')",
+      "tabelas": "crLogData",
+      "colunas": "cIdChaves,cOcors,cTipos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmp", "SigCdAcE", "SigCdUsu", "crSigCdAcE", "crLogData"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

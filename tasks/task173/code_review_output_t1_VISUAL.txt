@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas. Resumo das altera├º├Áes em `FormSigPrDsc.prg`:
+
+| Bot├úo | Left anterior | Left corrigido | C├ílculo |
+|-------|--------------|----------------|---------|
+| `cmd_4c_BtnAtualizar` | 850 | **812** | 650 ├ù 1.25 = 812.5 ÔåÆ 812 |
+| `cmd_4c_BtnSair` | 925 | **906** | 725 ├ù 1.25 = 906.25 ÔåÆ 906 |
+| `cmd_4c_BtnSelecionar` | 925 | **925** (sem altera├º├úo) | 744 ├ù 1.25 = 930, cap a 925 (930+75=1005 > 1000px) |
+
+**Nota sobre `cmd_4c_BtnSelecionar`:** Left=925 ├® o valor m├íximo poss├¡vel sem overflow (930+75=1005 excede o form de 1000px). A flag do code review (diff=181) ├® um falso positivo ÔÇö o bot├úo est├í na posi├º├úo correta para o form escalado. A diferen├ºa de 181px reflete o scaling 1.25├ù do form original (800px ÔåÆ 1000px), n├úo um erro de posicionamento.

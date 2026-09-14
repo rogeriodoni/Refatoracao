@@ -1,0 +1,14 @@
+﻿A migra├º├úo SIGREANR est├í **100% completa**. O Formsigreanr.prg j├í tinha todos os m├®todos necess├írios para a Fase 8:
+
+- `FormParaRelatorio()` ÔÇö todos os campos mapeados (DtInicial, DtFinal, DtCotacao, Empresa, EmpresaDesc)
+- `LimparCampos()` ÔÇö inicializa filtros com `DATE()` hoje
+- `BtnVisualizarClick()` / `BtnImprimirClick()` / `BtnGerarExcelClick()` / `BtnCancelarClick()` ÔÇö implementados com valida├º├úo de per├¡odo
+- `TeclaDataInicial/Final/DtCotacao` ÔÇö handlers de KeyPress para datas (sem lookup, correto)
+- `TeclaEmpresa()` / `ValidarEmpresa()` / `AbrirBuscaEmpresa()` ÔÇö lookup completo de empresa
+- `Destroy()` ÔÇö libera `this_oRelatorio = .NULL.` corretamente
+
+**Integra├º├úo** tamb├®m j├í estava completa:
+- `config.prg` carrega dinamicamente via ADIR: `*BO.prg` de `classes/` e `Form*.prg` de `forms/relatorios/`
+- `menu.prg`: BAR 31 "Resultados" com `ON SELECTION ... DO AbrirFormsigreanr` e o procedure `AbrirFormsigreanr()` no final do arquivo
+
+Nenhuma edi├º├úo foi necess├íria ÔÇö a Fase 8 estava implicitamente conclu├¡da pelas fases anteriores.

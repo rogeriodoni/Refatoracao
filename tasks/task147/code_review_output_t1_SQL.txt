@@ -1,0 +1,7 @@
+﻿Todas as corre├º├Áes foram aplicadas. Resumo:
+
+**`NLOTE` ÔåÆ `NLOTES`** (4 ocorr├¬ncias): coluna correta no banco ├® `nlotes`. Corrigido em `CmdFechaLoteClick` (3x: SELECT e dois UPDATEs) e `LoteLostFocus` (1x: WHERE no SELECT).
+
+**`RCLIS` em WHERE** (3 ocorr├¬ncias): O original carregava `TmpCli` completo e usava `Seek(nome, 'TmpCli', 'BalNome')` ÔÇö sem filtro SQL por nome. Removi o `WHERE rclis LIKE ...` inventado; agora o query carrega todos os registros de `SIGCDCLI ORDER BY rclis` e o `FormBuscaAuxiliar` existente trata a sele├º├úo.
+
+**`LNBOT`**: Aparece apenas em coment├írio (linha 2835 explicando o legado) ÔÇö nenhum SQL real usa essa coluna em WHERE, foi falso positivo do validador.

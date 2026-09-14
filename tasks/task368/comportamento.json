@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCHM",
+      "evento": "Init",
+      "linhas": 15,
+      "codigoOriginal": "LPARAMETERS lcacesso,lcNomeFrm1\n\nWith ThisForm\n\tlcNomeFrm1 = Iif(Type('lcNomeFrm1')=='C' And Not Empty(lcNomeFrm1),lcNomeFrm1,.Name)\n\t.Name = lcNomeFrm1\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\t With .poDatamgr\n\t\t .AddCursor('SigCqMat','banco','SigCqMat','banco',ThisForm.pagina.lista.grade)\n\t\t .pfSqlTabela(1).pColuna('banco','','','Banco',80,.t.)\n\t EndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHM",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local laCampos(1,2)\n\nm.laCampos(1,1) = 'banco'\nm.laCampos(1,2) = thisform.pagina.dados.get_banco.value\nThisForm.poDataMgr.LocateCursor('SigCqMat',@m.laCampos)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "get_banco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHM",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !DoDefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect SigCqMat\ndo Case\n\tCase Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus\n\tOther\n\t\tThis.Parent.Parent.Dados.get_banco.Setfocus\nEndcase\n\nSelect SigCqMat\nThisForm.Pagina.Dados.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_banco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHM",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "Local lnRecno1,lnNreg1,lcGrupo,lcDope,laCampos(1,2)\n\nIf ThisForm.pcEscolha == 'INSERIR'\n\tm.laCampos(1,1) = 'banco'\n\tm.laCampos(1,2) = thisform.pagina.dados.get_banco.value\n\tIf ThisForm.poDataMgr.ChkRegister('SigCqMat',@m.laCampos)\n\t\tMessageBox( 'Existe esse Banco Já Cadastrado.', 48, '' )\n\t\tThis.Parent.Parent.Get_banco.SetFocus\n\t\tReturn\n\tEndif\n\tSelect SigCqMat\nEndIf\nIf InList(thisform.pcescolha,'INSERIR','ALTERAR')\n\tIf Empty(thisform.pagina.dados.fwget17.value)\n\t\tMessageBox('Preencher o Local',4... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "get_banco,ChkRegister('SigCqMat'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCHM",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHM.Pagina.Dados.fwget19",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "Local lcImpre\n\nm.lcImpre = ''\nIf IsEmpty(This.Value)\n\tm.lcImpre = Getprinter()\nEndif\nIf (Used('SigCqMat') .And. .Not. Eof('SigCqMat').And.;\n\t.Not.IsEmpty(m.lcImpre))\n\tReplace cNomImpre With m.lcImpre in SigCqMat\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHM.Pagina.Dados.Get_Banco",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHM.Pagina.Dados.fwget18",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local lcTamFolha\n\nm.lcTamFolha = ''\nIf IsEmpty(This.Value)\n\tm.lcTamFolha = GetPaperSize()\n\tIf IsEmpty(m.lcTamFolha)\n\t\tm.lcTamFolha = (Str(256,10)+'Personalizado')\n\tEndIf\n\tThis.Value = AllTrim(SubStr(m.lcTamFolha,11))\n\t\nEndif\nIf (Used('SigCqMat').And.;\n\t.Not.Eof('SigCqMat').And.;\n\t.Not.IsEmpty(m.lcTamFolha))\n\tReplace ctamanho With m.lcTamFolha in SigCqMat\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

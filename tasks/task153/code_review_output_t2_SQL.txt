@@ -1,0 +1,21 @@
+﻿Verifica├º├úo completa. Resultado da an├ílise:
+
+## Resultado da Verifica├º├úo
+
+Ap├│s comparar cada ocorr├¬ncia contra o c├│digo original, todos os 4 itens s├úo **falsos positivos** do validador automatizado. Aqui est├í o motivo para cada um:
+
+### CEMPS (`WHERE Cemps = ...`)
+Ocorre em `ValidarCdEmpresa()` (linha 1015) e `ValidarCdEmpConv()` (linha 1102) ÔÇö s├úo **queries de lookup separadas** contra `SigCdEmp`, onde `Cemps` ├® a PK da tabela. **N├úo faz parte do WHERE do filtro CNAB principal.** Remover quebraria a valida├º├úo de empresa.
+
+### RAZSOCS (`WHERE RazSocs LIKE ...`)
+Ocorre em `ValidarDsEmpresa()` (linha 1038) e `ValidarDsEmpConv()` (linha 1125) ÔÇö s├úo **queries de busca por descri├º├úo** contra `SigCdEmp`. Tamb├®m separadas do filtro principal. Remover quebraria a busca por nome de empresa.
+
+### ICLIS (`AND a.contas = b.iclis`)
+Ocorre na linha 311 do BO, em `BuscarOperacoes`. ├ë a **condi├º├úo de JOIN** entre `SigMvCcr a` e `SigCdCli b`. O original usa `From SigMvCcr a, sigcdcli b` (Cartesian join old-style), e esse `AND` ├® **obrigat├│rio** para conectar as tabelas ÔÇö sem ele a query retornaria produto cartesiano completo e resultados incorretos.
+
+### COLUMNCOUNT
+Todas as ocorr├¬ncias (`loc_oGrd.ColumnCount = 8`, `.ColumnCount = 2`) s├úo **atribui├º├Áes de propriedade de Grid VFP9** ÔÇö n├úo s├úo SQL. O validador confundiu c├│digo VFP9 com SQL WHERE. N├úo existe nada para remover.
+
+---
+
+**Nenhuma altera├º├úo ├® necess├íria nos arquivos.** O validador comparou **todos** os WHERE do arquivo contra as colunas do **query principal de filtro CNAB**, sem distinguir que as queries de suporte (lookups de empresa, join de SigCdCli) operam em tabelas e contextos diferentes. Modificar qualquer um desses pontos quebraria funcionalidades do form.

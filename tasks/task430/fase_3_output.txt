@@ -1,0 +1,21 @@
+﻿O arquivo foi criado corretamente. Os `CHR()` nos coment├írios s├úo apenas texto livre (linhas com `*--`) ÔÇö VFP9 ignora todo o conte├║do ap├│s `*`, ent├úo n├úo causam nenhum erro de compila├º├úo. O c├│digo funcional est├í correto.
+
+**Resumo da Fase 3/8 ÔÇö FormFpr.prg criado em `C:\4c\projeto\app\forms\cadastros\FormFpr.prg`:**
+
+| M├®todo | Status | Notas |
+|--------|--------|-------|
+| `Init()` | Ô£à Completo | Apenas `RETURN DODEFAULT()` |
+| `InicializarForm()` | Ô£à Completo | Cria FprBO, chama ConfigurarPageFrame, fix DataSession=2 |
+| `ConfigurarPageFrame()` | Ô£à Completo | pgf_4c_Paginas: Top=-29, Tabs=.F., 2 pages com Picture |
+| `ConfigurarPaginaLista()` | Ô£à Completo | cnt_4c_Cabecalho (+ labels sombra/titulo), cnt_4c_Botoes (Top=28, Left=542), cnt_4c_Saida (Left=917 can├┤nico) |
+| `ConfigurarPaginaDados()` | Ô£à Completo | cnt_4c_BotoesAcao (Top=39, Left=819) |
+| `TornarControlesVisiveis()` | Ô£à Completo | Recurs├úo em Pages e Controls |
+| `Destroy()` | Ô£à Completo | Libera BO, chama DODEFAULT() |
+
+**Compensa├º├Áes aplicadas** (PageFrame.Top=-29 ÔåÆ +29 em todos os controles):
+- `cntSombra.Top=1` ÔåÆ `cnt_4c_Cabecalho.Top=30`
+- `Grupo_op.Top=-1` ÔåÆ `cnt_4c_Botoes.Top=28`
+- `Grupo_Saida.Top=-1` ÔåÆ `cnt_4c_Saida.Top=28` (Left=917 can├┤nico)
+- `Grupo_Salva.Top=10` ÔåÆ `cnt_4c_BotoesAcao.Top=39`
+
+**Pr├│xima fase (4/8):** Adicionar grid `grd_4c_Lista`, bot├Áes CRUD em `cnt_4c_Botoes`, `cmd_4c_Encerrar` em `cnt_4c_Saida`, m├®todo `CarregarLista()` e `FormatarGridLista()`.

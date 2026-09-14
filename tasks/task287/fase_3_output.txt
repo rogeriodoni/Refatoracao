@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. A Fase 3 est├í completa.
+
+**`C:\4c\projeto\app\forms\operacionais\FormSigPrGf1.prg`** criado com a estrutura base completa:
+
+- **`ConfigurarPageFrame()`** ÔÇö define apar├¬ncia do form (fundo `new_background.jpg`, fontes globais)
+- **`InicializarForm()`** ÔÇö instancia `SigPrGf1BO`, chama os 4 configuradores, define datas iniciais (1┬║ do m├¬s / ├║ltimo dia do m├¬s), foco em `txt_4c_DtInicial`
+- **`ConfigurarCabecalho()`** ÔÇö `cnt_4c_Cabecalho` cinza escuro com `lbl_4c_Sombra`/`lbl_4c_Titulo` (FontSize=18, sem AutoSize)
+- **`ConfigurarFiltros()`** ÔÇö `lbl_4c_Periodo` + `txt_4c_DtInicial` + `txt_4c_DtFinal` com posi├º├Áes pixel-perfect do original
+- **`ConfigurarBotoes()`** ÔÇö `cmg_4c_Processar` (CommandGroup) com Buttons(1)=Processar e Buttons(2)=Encerrar; BINDEVENT nos dois
+- **`ConfigurarAguarde()`** ÔÇö `cnt_4c_Aguarde` com `Visible=.F.` inicial (indicador de processamento)
+- **`TornarControlesVisiveis()`** ÔÇö recursa filhos do `cnt_4c_Aguarde` antes do LOOP (regra tcv_skip_recursao), mant├®m container oculto
+- **`BtnProcessarClick()`** ÔÇö flag `loc_lContinuar` (sem RETURN dentro de TRY), CREATEOBJECT("FormSigPrGf2", THIS) para abrir resultados
+- **`BtnEncerrarClick()`** ÔÇö libera cursores e chama `THIS.Release()`
+- **`Destroy()`** ÔÇö limpa BO e chama `DODEFAULT()`

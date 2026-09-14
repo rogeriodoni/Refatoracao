@@ -1,0 +1,12 @@
+﻿All required CRUD-named methods are now present in the BO with full functional logic (no stubs/TODOs):
+
+**Fase 2 conclu├¡da.** Adicionados ao `sigredcuBO.prg` (635 linhas / 27.5 KB):
+
+| M├®todo | Sem├óntica REPORT | Implementa├º├úo |
+|--------|------------------|---------------|
+| `CarregarDoCursor(par_cAliasCursor)` | Restaurar configura├º├úo salva | SCATTER MEMVAR mapeando cEmps/cDopes/nNumes/nQbols/op├º├Áes dos checkboxes |
+| `Inserir()` | Produzir documento impresso | Valida par├ómetros ÔåÆ `Impressao()` ÔåÆ `RegistrarAuditoria("IMPRIMIR")` |
+| `Atualizar()` | Reprocessar e visualizar | Valida par├ómetros ÔåÆ `Processamento()` ÔåÆ `Visualizacao()` ÔåÆ `RegistrarAuditoria("VISUALIZAR")` |
+| `RegistrarAuditoria(par_cOperacao)` (aprimorado) | Log + impress├úo | INSERT em LogAuditoria + atualiza SigMvCab.Impress quando IMPRIMIR |
+
+Valida├º├úo do orquestrador (linha 4647): `CarregarDoCursor` Ô£ô, `Inserir` Ô£ô, `Atualizar` Ô£ô ÔÇö todos presentes. ENDDEFINE preservado na linha 635.

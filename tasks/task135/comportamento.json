@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For", "fConfigGeral", "fCarregarImps"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPDM10",
+      "evento": "Init",
+      "linhas": 559,
+      "codigoOriginal": "Lparameters _ParentForm, _Etiq\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nLocal _TEtiq, _TPeso, _Nenv, _Posicaor, lnTipoPadrao, _Dopps\n\nThisform.ParentForm    = _ParentForm\nThisform.DataSessionId = _ParentForm.DataSessionId\nThisform.poDataMgr     = Thisform.ParentForm.poDataMgr\n\nSelect TmpNens\nGo Top\n\n_Posicaor = TmpNens.Emps + TmpNens.Dopps + Str(TmpNens.Numps, 10)\n_Dopps\t  = TmpNens.Dopps\n\nThisform.poDataMgr.CursorQuery('Si... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "CursorQuery,sqlexecute",
+        "controlesReferenciados": "Opt_Tipo,Option&lcI,Option1,Opt_Preco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM10",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM10.CntOps.GradePedidos",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nSelect xTotPedOp\n\nSelect xMatOp\nSet Filter To Nops = xTotPedOp.Nops \nGo Top \nThis.parent.GradeMateriais.Refresh \n\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM10.Etiquetas.Get_Printer",
+      "evento": "InteractiveChange",
+      "linhas": 3,
+      "codigoOriginal": "loImp = ThisForm.etiquetas.cnt_Impressora\n=fCarregarImps(Alltrim(crImpreV.impresS), loImp.Opcao_Imp, loImp.Spn_AjVerts, loImp.Spn_AjHorzs, ;\n\t\t\t   loImp.Spn_AjDenss, loImp.Spn_AjVelos, ThisForm.ParentForm.poDataMgr)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarImps",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM10.Etiquetas.Imprimir",
+      "evento": "Click",
+      "linhas": 123,
+      "codigoOriginal": "Private vTipEtq\n\nLocal lnTipos, lnImpres, llImpPreco\n\n*** mena - 10/09/2015 - pega o nome da impressora que está no combobox *** \nlnImpres  = RECNO('crImpreV')\nvNomeImp  = crImpreV.impres\n\nWith Thisform.Etiquetas\n\tllImpPreco = (.Opt_Preco.Value = 1)\n\tllImppeso = (.Opt_Peso.Value = 1)\n\tlnTipos    = .Opt_Tipo.Value\n\tvTipEtq    = Int(Val(.Opt_Tipo.Buttons(lnTipos).Tag))\n*** mena 19/10/2015 - retirado para usar informacoes do cursor acima ***\n*!*\t\tlnImpres   = .Opt_Impressora.Value\n*!*\t\tvNomeImp   =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute,CursorQuery",
+        "controlesReferenciados": "Opt_Preco,Opt_Peso,Opt_Tipo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPDM10.Cancelar",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.ParentForm.Enabled = .t.\nThisForm.Release\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

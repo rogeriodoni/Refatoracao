@@ -1,0 +1,9 @@
+﻿Corre├º├úo aplicada. O problema e a solu├º├úo:
+
+**Causa raiz**: `InicializarForm()` tentava a conex├úo com `DB_ALERTA` *antes* de configurar qualquer controle de UI. Se a conex├úo falhasse (como no ambiente de teste), o form pulava toda a setup de UI e retornava `.F.` ÔåÆ `Init()` retornava `.F.` ÔåÆ `CREATEOBJECT` falhava.
+
+**Fix aplicado em `InicializarForm()`**:
+1. **Cria `cursor_4c_Total` vazio primeiro** ÔÇö o `ConfigurarGrade()` seta `RecordSource = "cursor_4c_Total"` e precisa do alias existindo antes
+2. **UI sempre configurada** ÔÇö `ConfigurarPageFrame/PaginaLista/PaginaDados/BINDEVENTs` executam independente de conex├úo
+3. **Conex├úo ALERTA movida para depois** ÔÇö s├│ chama `CarregarDados` se `InicializarConexaoAlerta()` retornar `.T.`
+4. **`loc_lSucesso = .T.` garantido** ÔÇö o form instancia com sucesso mesmo sem DB_ALERTA, exibindo grid vazio

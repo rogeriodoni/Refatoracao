@@ -1,0 +1,5 @@
+﻿6 ocorr├¬ncias corrigidas ÔÇö exatamente os 6 erros reportados (linhas 120, 150, 308, 456, 1013, 1023).
+
+**Causa:** Dentro de `DEFINE CLASS ... ENDDEFINE`, VFP9 usa `ENDFUNC` para finalizar m├®todos `FUNCTION`. `ENDFUNCTION` ├® inv├ílido nesse contexto e gera "Unrecognized command verb".
+
+**Corre├º├úo:** Todos os 6 `ENDFUNCTION` nos m├®todos `CursorQueryStr`, `PrepararDadosInterno`, `PrepararCabecalho`, `PrepararRelatorio1`, `PrepararRelatorio2` e `ObterTituloRelatorio2` foram substitu├¡dos por `ENDFUNC`.

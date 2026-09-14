@@ -1,0 +1,45 @@
+﻿A corre├º├úo est├í aplicada. Vou agora dar o diagn├│stico completo do que encontrei.
+
+---
+
+## Diagn├│stico
+
+### Causa do timeout
+
+Ap├│s an├ílise detalhada do `TestFormWrapper.prg`, `config.prg`, `RelatorioBase.prg`, `FormBase.prg`, `FormSigReAac.prg` e `SigReAacBO.prg`, o timeout ocorre em **ETAPA 1B** no `SQLSTRINGCONNECT` ÔÇö antes do form sequer ser criado (ETAPA 2). Isso ├® um problema de **infraestrutura/ODBC**, n├úo do c├│digo do form:
+
+```
+[ETAPA 1B] Conectando ao banco de dados...
+                                          ÔåÉ SQLSTRINGCONNECT trava aqui 300s
+```
+
+O driver `{SQL Server}` (legacy ODBC) pode ignorar `Login Timeout=30;` na string de conex├úo dependendo do ambiente Windows 11. O `SQLSETPROP(0, "ConnectTimeOut", 30)` em `config.prg` linha 35 est├í correto, mas n├úo consegue interromper um `SQLSTRINGCONNECT` que j├í travou ao n├¡vel TCP (firewall dropando pacotes para 192.168.200.10:1433).
+
+### Bug de c├│digo encontrado e corrigido
+
+**`SigReAacBO.prg` ÔÇö `RegistrarAuditoria()`: CATCH silencioso** (viola Regra 9 do CLAUDE.md)
+
+```foxpro
+* ANTES (silencioso ÔÇö engole erros, impossibilita debug):
+CATCH TO loc_oErro
+    THIS.this_cMensagemErro = loc_oErro.Message
+ENDTRY
+
+* DEPOIS (corrigido):
+CATCH TO loc_oErro
+    THIS.this_cMensagemErro = loc_oErro.Message
+    MsgErro(loc_oErro.Message, "RegistrarAuditoria")
+ENDTRY
+```
+
+### Para resolver o timeout
+
+O timeout exigir├í uma corre├º├úo de infraestrutura. A forma mais robusta ├® atualizar `config.prg` para usar um driver ODBC mais moderno:
+
+```foxpro
+* Troca {SQL Server} (legacy) por driver moderno que respeita LoginTimeout
+"DRIVER={SQL Server Native Client 11.0};SERVER=...;LoginTimeout=30;"
+* Nota: atributo sem espa├ºo ÔÇö "LoginTimeout", n├úo "Login Timeout"
+```
+
+O arquivo `SigReAacBO.prg` foi salvo com a corre├º├úo do CATCH silencioso.

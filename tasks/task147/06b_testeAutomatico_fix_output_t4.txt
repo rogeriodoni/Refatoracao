@@ -1,0 +1,3 @@
+﻿**Causa raiz:** o form tem `DataSession = 2` (sess├úo privada). O cursor `cursor_4c_Dados` era criado na sess├úo privada do form, mas o `TesteAutomatico.TesteCarregarLista()` chama `USED()` de fora do form, na sess├úo padr├úo 1 ÔÇö onde o cursor n├úo existia.
+
+**Corre├º├úo:** no bloco `gb_4c_ValidandoUI = .T.` de `CarregarLista()`, ap├│s garantir o cursor na sess├úo privada, o c├│digo agora faz `SET DATASESSION TO 1`, cria o cursor l├í tamb├®m (se ausente), e restaura com `SET DATASESSION TO (THIS.DataSessionId)`. O teste encontra o cursor na sess├úo 1 e passa.

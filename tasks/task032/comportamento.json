@@ -1,0 +1,700 @@
+{
+  "resumo": {
+    "totalMetodos": 42,
+    "metodosComSQL": 9,
+    "metodosComValidacao": 19,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fAbrirTabs", "fwBuscaExt", "fBuscarCambio", "fAcessoContas", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREAPP",
+      "evento": "Procedure",
+      "linhas": 45,
+      "codigoOriginal": "Private pDat\n\npDat = fDtoSQL(Iif(ThisForm.optSaldos.Value = 2, ThisForm.getDtInicial.Value, Date()), [23:59:59]) && 1-Informado; 2-Data Inicial; 3-Data Atual\n\nlcQuery = [Select c.Grupos, c.Contas, d.RClis, c.Datas, c.Saldos ] + ;\n\t\t\t[From SigMvCcr c, SigCdCli d ] + ;\n\t\t   [Where c.cIdChaves In (] + ;\n\t\t  [Select Max(b.cIdChaves) as cIdChaves ] + ;\n\t\t    [From SigCdGcr a, SigMvCcr b ] + ;\n\t\t   [Where a.Coletors = 11 And ] + ;\n\t\t   \t\t [a.Codigos = b.Grupos And ] + ;\n\t\t   \t\t [b.Datas <= ?pDat ] + ;... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SqlExecute,Saldos1 = [Saldo Inicial :] + Chr,Saldos2 = [ ] + Chr,Saldos2 = [0,00",
+        "controlesReferenciados": "optSaldos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters llPagRec\n\nlcLabel = Iif(ThisForm.ck_Pagamentos.Value == 1,[Pagamento:],[Recebimento:]) \n\nThisForm.get_Numes.Enabled = llPagRec\nThisForm.Opt_AnaSi.Enabled = not(llPagRec)\nThisForm.lblPeriodo.Caption = Iif(llPagRec,lcLabel,[Vencimento:])\nThisForm.Opt_Juros.Enabled = not(llPagRec)\nThisform.get_Juros.Enabled = not(llPagRec)\n\nReturn\n  ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Enabled = not,Caption = Iif",
+        "controlesReferenciados": "get_Numes,Opt_AnaSi,Opt_Juros,get_Juros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "Lparameters ldDataVenc, nVlrBase\n\nLocal lnVlrJuros, lnDias, lnJurosDia\n\nlnVlrJuros = 0\nlnJurosDia = Round((((1+ThisForm.Get_Juros.Value/100) ^ (1/30)) - 1) * 100, 9)\n\nIf( ldDataVenc < Date() ) and (ThisForm.Opt_Juros.Value == 1) \n\tlnDias = Date() - ldDataVenc\t\n\tlnVlrJuros = Round(nVlrBase * (((1+lnJurosDia / 100) ^ (lnDias))-1), 2)\t\nEndif\nReturn(lnVlrJuros)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value/100) ^",
+        "controlesReferenciados": "Get_Juros,Opt_Juros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP",
+      "evento": "Procedure",
+      "linhas": 170,
+      "codigoOriginal": "Private pDataIni, pDataFin\nLocal lcDopes, ldDataIni, ldDataFin, lcGrupo, lcConta\n\nlcDopes = Padr(Iif(ThisForm.ck_Pagamentos.Value = 1,[PAGAMENTO],[RECEBIMENTO]),20 )\n\nldDataIni = ThisForm.getDtInicial.Value\nldDataFin = ThisForm.getDtFinal.Value\nlcGrupo   = ThisForm.get_Grupo.Value\nlcConta   = ThisForm.get_Conta.Value\nlnCodOper = ThisForm.get_Numes.Value \n\npDataIni = fDtoSQL(ldDataIni)  \npDataFin = fDtoSQL(ldDataFin,[23:59:59])\n\nCreate Cursor crDados(Vencs d(8), Emps c(3), Numes n(6), Datas d(8),... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "get_Grupo,get_Conta,get_Numes",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Local llPagRec\nllPagRec  = (ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)\n\nIf (ThisForm.Opt_AnaSi.Value = 3)\n\tReport Form SigReAp4 Preview NoConsole\nElse\n\tIf not llPagRec\n\t\tIf( ThisForm.opt_AnaSi.Value == 1 )\n\t\t\tReport Form SigReAp1 Preview NoConsole\n\t\tElse\n\t\t\tReport Form SigReAp2 Preview NoConsole\n\t\tEndif\t\n\tElse\n\t\tReport Form SigReAp3 Preview NoConsole\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = 1) or",
+        "controlesReferenciados": "Opt_AnaSi",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP",
+      "evento": "Procedure",
+      "linhas": 304,
+      "codigoOriginal": "Private pdDataIni, pdDataFin\nLocal lnJuros, lcGrupo, lcConta, ldDataIni, ldDataFin, lcTitulo, lcSubTit, lcPeriodo, lcEmpresa, lnQtdEmp, llPagRec, lcJob, lcDesJob\n\nldDataIni = ThisForm.getDtInicial.Value\nldDataFin = ThisForm.getDtFinal.Value\nlnDatas   = ThisForm.optDatas.Value \nlcCpoDt   = Iif(lnDatas = 1, [Vencs], Iif(lnDatas = 2, [DtEmis], [Datas]))\nlnJuros   = ThisForm.get_Juros.Value\nlcGrupo   = ThisForm.get_Grupo.Value\nlcConta   = ThisForm.get_Conta.Value\nllPagRec  = (ThisForm.ck_Pagamentos.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Value = 1) or,ProcessaPagRec,Value = 1, Iif,BuscaSaldos,Saldos2 = Alltrim,SQLExecute",
+        "controlesReferenciados": "optDatas,get_Juros,get_Grupo,get_Conta,optSaldos,Get_jobs,get_djobs,optAutorizados,opt_AnaSi,get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP",
+      "evento": "Init",
+      "linhas": 156,
+      "codigoOriginal": "ThisForm.getDtInicial.Value = Date()\nThisForm.getDtFinal.Value = Date()\nThisForm.get_Numes.Value = 0 \n\nThisForm.lnVlCotacao = 1\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',Thisform.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\n\tThisForm.poDataMgr.CursorQuery('SigCdMoe', 'crSigCdMoe', .f., .f., 'CMoes, Cotas')\n\tSelect crSigCdMoe\n\tIndex On CMoes Tag CMoes\n\t\n\tThisForm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAbrirTabs",
+        "metodosFormChamados": "Value = Date,CursorQuery,SQLExecute",
+        "controlesReferenciados": "get_Numes,get_cd_moeda,get_ds_moeda",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAPP",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Local llPagRec\nllPagRec  = (ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)\n\nIf (ThisForm.Opt_AnaSi.Value = 3)\n\tReport Form SigReAp4 to PRINTER Prompt NoConsole\nElse\n\tIf not llPagRec\n\t\tIf( ThisForm.opt_AnaSi.Value == 1 )\n\t\t\tReport Form SigReAp1 to Print Prompt NoConsole\n\t\tElse\n\t\t\tReport Form SigReAp2 to Print Prompt NoConsole\n\t\tEndif\t\n\tElse\n\t\tReport Form SigReAp3 to PRINTER Prompt NoConsole\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = 1) or",
+        "controlesReferenciados": "Opt_AnaSi",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "If ThisForm.Opt_AnaSi.Value = 3\n\tSelect crDados\n\tGo Top in crDados\n\t\n\tSelect grpsaldos,vencs,titulos,hists,especienfs,valors,opers,debitos,creditos,saldodia,saldotot,moedas From crProcessar ;\n\tWhere 0=0 Into Cursor crDados3 ReadWrite \n\n\tSelect crDados3\n\tGo Top in crDados3\nEndIf \n=DoDefault()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_AnaSi",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Local llPagRec\nllPagRec  = (ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)\n\nIf (ThisForm.Opt_AnaSi.Value = 3)\n\tReport Form SigReAp4 to PRINTER NoConsole\nElse\n\tIf not llPagRec\n\t\tIf( ThisForm.opt_AnaSi.Value == 1 ) \n\t\t\tReport Form SigReAp1 to Print NoConsole\n\t\tElse\n\t\t\tReport Form SigReAp2 to Print NoConsole\n\t\tEndif\t\n\tElse\n\t\tReport Form SigReAp3 to PRINTER NoConsole\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = 1) or",
+        "controlesReferenciados": "Opt_AnaSi",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.Cmoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.Dmoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.get_ds_moeda",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "lnVlCotacao = 0\nlnVlCotacao = fBuscarCambio({}, Date(), Space(03), ThisForm.get_cd_moeda.Value)\nThisForm.lnVlCotacao = Iif(lnVlCotacao=0, 1, lnVlCotacao)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCambio",
+        "metodosFormChamados": "lnVlCotacao = Iif",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.Cmoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.Dmoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.get_cd_moeda",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "lnVlCotacao = 0\nlnVlCotacao = fBuscarCambio({}, Date(), Space(03), ThisForm.get_cd_moeda.Value)\nThisForm.lnVlCotacao = Iif(lnVlCotacao=0, 1, lnVlCotacao)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fBuscarCambio",
+        "metodosFormChamados": "lnVlCotacao = Iif",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdCla.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdCla.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal Imps\n\nm.Imps = Iif( crSigCdClc.Imps = 0, 1, 0 )\n\nSelect crSigCdClc\nGather Memvar Fields Imps\nThisForm.grdCla.Refresh() \n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdCla.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 15,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal Imps\n\nIf InList(nKeyCode, 13, 32)\n\tm.Imps = Iif( crSigCdClc.Imps = 1, 0, 1 )\n\n\tSelect crSigCdClc\n\tGather Memvar Fields Imps\n\tThisForm.GrdCla.Refresh()  \n\n\tNoDefault\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdCla.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdCla.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdEmps.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdEmps.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal Imps\n\nm.Imps = Iif( crSigCdEmp.Imps = 0, 1, 0 )\n\nSelect crSigCdEmp\nGather Memvar Fields Imps\nThisForm.grdEmps.Refresh\n\nNoDefault\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdEmps.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 15,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal Imps\n\nIf InList(nKeyCode, 13, 32)\n\tm.Imps = Iif( crSigCdEmp.Imps = 1, 0, 1 )\n\n\tSelect crSigCdEmp\n\tGather Memvar Fields Imps\n\tThisForm.grdEmps.Refresh\n\n\tNoDefault\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdEmps.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdEmps.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAPP.grdEmps.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAPP.ck_MarcaEmp",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "if( ThisForm.ck_MarcaEmp.Value = 1 ) Then\n\tReplace all Imps with 1 in crSigCdEmp\nElse\n\tReplace all Imps with 0 in crSigCdEmp\nEndif ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.Get_DConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Conta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.Get_DConta",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.Get_Grupo.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.Value,This.Parent.Get_Conta,This)\n\t\tMessageBox('Acesso Negado !!',48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Get_Conta.Value = ''\n\t\tThisForm.Get_Conta.Refresh() \n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.Get_Conta.Value = ''\t\n\tThisForm.Get_Conta.Refresh() \n\tReturn(.T.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "Get_Grupo,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.Get_Conta",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Grupo = ThisForm.Get_Grupo.Value\nIf !Empty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'C',This.Value,This,This.Parent.Get_Dconta)\n\t\tMessageBox('Acesso Negado !!',48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Get_DConta.Value = ''\n\t\tThisForm.Get_DConta.Refresh() \n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.Get_DConta.Value = ''\n\tThisForm.Get_DConta.Refresh() \n\tReturn(.T.)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "Get_Grupo,Get_Dconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.Get_DGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.Get_Grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.Get_DGrupo",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'D',This.Value,This.Parent.Get_Grupo,This)\nElse\n\tThisForm.Get_Grupo.Value = ''\n\tThisForm.Get_Grupo.Refresh() \nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.Get_Grupo",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(This.Value)\n\tfAcessoContab(Usuar,'C',This.Value,This,This.Parent.Get_DGrupo)\nElse\n\tThisForm.Get_DGrupo.Value = [] \n\tThisForm.Get_DGrupo.Refresh() \nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "Get_DGrupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.opt_Juros",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "If( This.Value == 2 )\n\tThisForm.get_Juros.Value = 0\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Juros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.get_Juros",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.Opt_Juros.Value == 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Juros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.ck_MarcaOpe",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "if( ThisForm.ck_MarcaOpe.Value = 1 ) Then\n\tReplace all Imps with 1 in crSigOpOpe\nElse\n\tReplace all Imps with 0 in crSigOpOpe\nEndif ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.ck_Pagamentos",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.ck_Recebimentos.Value = Iif(This.Value = 1, 0, ThisForm.ck_Recebimentos.Value )\nThisForm.HabObjs((ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Iif,HabObjs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.ck_Recebimentos",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.ck_Pagamentos.Value = Iif(This.Value = 1, 0, ThisForm.ck_Pagamentos.Value )\nThisForm.HabObjs((ThisForm.ck_Pagamentos.Value = 1) or (ThisForm.ck_Recebimentos.Value = 1)) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Iif,HabObjs",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.get_Jobs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value ) And this.peantvalue <> this.Value\n\tIf !fAcessoContas( Usuar, '', 'C', This.Value,this,ThisForm.Get_dJobs, .f., .f. ,.f.,.f.,.f.,.f.,.f.,10)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThisform.get_Jobs.Value =\"\"\n\t\tThisForm.Get_dJobs.Value = ''\n\t\tReturn .f.\n\tEndIf\nElse\n\tThisform.Get_dJobs.Value = ''\nEndif\n\n\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_dJobs,get_Jobs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREAPP.ck_MarcaCla",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "if( ThisForm.ck_MarcaCla.Value = 1 ) Then\n\tReplace all Imps with 1 in crSigCdClc\nElse\n\tReplace all Imps with 0 in crSigCdClc\nEndif ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.Get_dJobs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( Empty(thisform.get_dJobs.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dJobs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREAPP.Get_dJobs",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty( This.Value ) And this.peantvalue <> this.Value\n\tIf !fAcessoContas( Usuar, '', 'D', This.Value, Thisform.Get_Jobs, This, .f., .f. ,.f.,.f.,.f.,.f.,.f.,10)\t\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t    Thisform.get_Jobs.Value = ''\n\t\tThis.Value = ''\n\t\tReturn .f.\n\tEndif\nElse\n    Thisform.get_Jobs.Value = ''\nEndif\n\n\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Jobs",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREAPP.Procedure",
+      "queryOriginal": "\tSelect grpsaldos,vencs,titulos,hists,especienfs,valors,opers,debitos,creditos,saldodia,saldotot,moedas From crProcessar ; \tWhere 0=0 Into Cursor crDados3 ReadWrite",
+      "tabelas": "crProcessar",
+      "colunas": "grpsaldos,vencs,titulos,hists,especienfs,valors,opers,debitos,creditos,saldodia,saldotot,moedas",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crProcessar"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

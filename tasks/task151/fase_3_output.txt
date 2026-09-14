@@ -1,0 +1,22 @@
+﻿O arquivo est├í limpo. A **Fase 3/8 est├í conclu├¡da**. 
+
+## O que foi criado: `FormSigPdMpf.prg`
+
+**Estrutura implementada** (`C:\4c\projeto\app\forms\operacionais\`):
+
+| M├®todo | Responsabilidade |
+|--------|-----------------|
+| `Init()` | `RETURN DODEFAULT()` ÔÇö FormBase.Init() cuida do DataSession/SET DATE |
+| `InicializarForm()` | Cria BO, define Caption/Picture, chama todos os Config*, TornarControlesVisiveis |
+| `ConfigurarPageFrame()` | Form plano ÔÇö aplica ScrollBars=0, FontName/Size globais |
+| `ConfigurarCabecalho()` | `cnt_4c_Sombra` com `lbl_4c_LblSombra` + `lbl_4c_LblTitulo` |
+| `ConfigurarFiltros()` | `cnt_4c_Filtros` vazio (Top=92, Left=151, Width=498, Height=141) ÔÇö controles internos v├¬m nas Fases 5-6 |
+| `ConfigurarBotoes()` | `shp_4c_Saida` (shape decorativo teal), `cmd_4c_Pesquisar` (Left=650), `cnt_4c_Saida` + `cmd_4c_Encerrar` |
+| `InicializarFiltros()` | Popula defaults no BO (Date(), OptConta=3) |
+| `FormParaBO()` | Usa `TYPE()` para ler controles que existirem ÔÇö funciona j├í em Fase 3 sem erros, expandido em Fases 5-6 |
+| `CmdPesquisarClick()` | Chama FormParaBO ÔåÆ BO.ExecutarConsulta ÔåÆ CREATEOBJECT("FormSigPdMp7") |
+| `CmdEncerrarClick()` | `THIS.Release()` |
+| `TornarControlesVisiveis()` | Recursivo, itera Controls + Pages |
+| `Destroy()` | Libera BO, DODEFAULT() |
+
+**Pr├│xima fase**: Fase 4/8 ÔÇö Grade e bot├Áes CRUD (para este form OPERACIONAL sem grade, a Fase 4 pode focar em valida├º├Áes ou ser adaptada para os controles de filtro).

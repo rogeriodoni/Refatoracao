@@ -1,0 +1,7 @@
+﻿Ambos os problemas reportados **j├í est├úo corrigidos** no arquivo atual:
+
+**Linha 384 (`grd_4c_Dados`):** O bloco WITH termina na linha 524, e nas linhas 526-537 j├í existe a redefini├º├úo expl├¡cita de todos os 11 ControlSource com o coment├írio `*-- Redefine ControlSource apos RecordSource para neutralizar auto-bind do VFP`.
+
+**Linha 561 (`grd_4c_Resumo`):** O bloco WITH termina na linha 630, e nas linhas 632-638 j├í existe a redefini├º├úo expl├¡cita de todos os 6 ControlSource com o mesmo coment├írio.
+
+O detector `[GRID-RECORDSOURCE-AUTOBIND]` provavelmente flagou o `.RecordSource =` nas linhas 384 e 561 sem perceber que o bloco de redefini├º├úo j├í existia mais abaixo (ap├│s o ENDWITH). **Nenhuma altera├º├úo ├® necess├íria** ÔÇö o arquivo j├í est├í correto.

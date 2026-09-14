@@ -1,0 +1,5 @@
+﻿Ambas as corre├º├Áes est├úo corretas. Resumo das mudan├ºas:
+
+- **Linha 265** ÔÇö removido `AND SeqDivs = 0` do `SCAN FOR`. O filtro era inventado pela LLM; a busca correta usa apenas `Nops + Citens`, com a verifica├º├úo de `Dopes + Numes` dentro do scan garantindo o match exato.
+
+- **Linha 298** ÔÇö `WHERE EmpDNps = EscaparSQL(THIS.this_cEmpDNps)` substitu├¡do por `WHERE Nops = FormatarNumeroSQL(loc_nNops, 0)`. O original usava `Seek(Str(lnOp,10))` no cursor SigPdMvf ÔÇö busca por Nops, n├úo pela chave composta EmpDNps.

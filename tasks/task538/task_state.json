@@ -1,0 +1,264 @@
+﻿{
+    "taskId":  "task538",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-09-09T21:26:47",
+    "atualizadoEm":  "2026-09-09T22:13:02",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-09-09T21:26:47",
+                                            "fim":  "2026-09-09T21:26:47",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task538\\SigCdTop.sct",
+                                            "baseName":  "SigCdTop",
+                                            "scxFile":  "C:\\4c\\tasks\\task538\\SigCdTop.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-09-09T21:26:47",
+                                          "fim":  "2026-09-09T21:26:48",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigCdTop",
+                                          "txtFile":  "C:\\4c\\tasks\\task538\\SigCdTop_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-09T21:26:48",
+                                              "fim":  "2026-09-09T21:26:48",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task538\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-09T21:26:49",
+                                              "fim":  "2026-09-09T21:26:57",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task538\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task538\\meta_prompt.md",
+                                              "boClass":  "TopBO",
+                                              "formClass":  "FormTop",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task538\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-09T21:26:57",
+                                              "fim":  "2026-09-09T21:26:58",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task538\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-09T21:26:58",
+                                               "fim":  "2026-09-09T21:26:58",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task538\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormTop_esqueleto.prg",
+                                                                "TopBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-09T21:26:58",
+                                       "fim":  "2026-09-09T21:59:41",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\TopBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  56.57,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTop.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  2166
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-09-09T21:59:41",
+                                                  "fim":  "2026-09-09T21:59:57",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTop.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\TopBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-09-09T21:59:57",
+                                                 "fim":  "2026-09-09T21:59:59",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-09T22:09:27",
+                                       "fim":  "2026-09-09T22:11:17",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-09T22:11:17",
+                                               "fim":  "2026-09-09T22:13:00",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task538\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-09-09T22:13:01",
+                                        "fim":  "2026-09-09T22:13:02",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormTop_20260909221302.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  642,
+                                        "avisos":  642
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-09T22:13:02",
+                                              "fim":  "2026-09-09T22:13:02",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task538_SigCdTop.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-09-09T21:26:48",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-09-09T21:26:49",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task538\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-09-09T21:26:49",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-09T21:26:49"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-09-09T21:59:57",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-09-09T21:59:57",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormTop_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTop.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task538\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-09-09T21:59:59",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-09-09T22:01:48",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-09-09T22:01:48",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-09-09T22:09:10",
+                                          "passes":  4,
+                                          "problemas":  "[GRID-WITH] Bloco WITH ENDPROC define .RecordSource E acessa .Column dentro do mesmo WITH. Isso causa \u0027Unknown member COLUMN1\u0027 porque colunas nao sao criadas imediatamente dentro de WITH. SOLUCAO: Mover .RecordSource e .ColumnCount para FORA do WITH (usar referencia explicita: ENDPROC.RecordSource).; [LAYOUT-POSITION] Controle \u0027optReposicaos\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=442 vs migrado \u0027obj_4c_OptReposicaos\u0027 Top=514 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label11\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=322 vs migrado \u0027lbl_4c_Label11\u0027 Top=394 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label9\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=298 vs migrado \u0027lbl_4c_Label9\u0027 Top=370 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=211 vs migrado \u0027lbl_4c_Label3\u0027 Top=283 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=154 vs migrado \u0027lbl_4c_Label2\u0027 Top=226 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=74 vs migrado \u0027lbl_4c_Label11\u0027 Top=394 (diff=320px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTOP.Pagina.Dados): Left original=110 vs migrado \u0027lbl_4c_Label11\u0027 Left=57 (diff=53px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=240 vs migrado \u0027lbl_4c_Label4\u0027 Top=312 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027getEntPends\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=324 vs migrado \u0027obj_4c_GetEntPends\u0027 Top=396 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say1\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=240 vs migrado \u0027lbl_4c_Say1\u0027 Top=312 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption6\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=295 vs migrado \u0027obj_4c_Fwoption6\u0027 Top=367 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say2\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=270 vs migrado \u0027lbl_4c_Say2\u0027 Top=342 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjCancPdv\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=208 vs migrado \u0027obj_4c_ObjCancPdv\u0027 Top=280 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption1\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=237 vs migrado \u0027obj_4c_Fwoption1\u0027 Top=309 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption2\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=266 vs migrado \u0027obj_4c_Fwoption2\u0027 Top=338 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption5\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=295 vs migrado \u0027obj_4c_Fwoption5\u0027 Top=367 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption4\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=266 vs migrado \u0027obj_4c_Fwoption4\u0027 Top=338 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption3\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=237 vs migrado \u0027obj_4c_Fwoption3\u0027 Top=309 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say3\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=440 vs migrado \u0027lbl_4c_Say3\u0027 Top=512 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say4\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=375 vs migrado \u0027lbl_4c_Say4\u0027 Top=447 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=399 vs migrado \u0027lbl_4c_Label5\u0027 Top=471 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label6\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=399 vs migrado \u0027lbl_4c_Label6\u0027 Top=471 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say6\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=299 vs migrado \u0027lbl_4c_Say6\u0027 Top=371 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say5\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=270 vs migrado \u0027lbl_4c_Say5\u0027 Top=342 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label7\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=399 vs migrado \u0027lbl_4c_Label7\u0027 Top=471 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label8\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=183 vs migrado \u0027lbl_4c_Label8\u0027 Top=255 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optTpMercs\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=179 vs migrado \u0027obj_4c_OptTpMercs\u0027 Top=251 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption7\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=324 vs migrado \u0027obj_4c_Fwoption7\u0027 Top=396 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say7\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=328 vs migrado \u0027lbl_4c_Say7\u0027 Top=400 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label10\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=125 vs migrado \u0027lbl_4c_Label10\u0027 Top=197 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption8\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=121 vs migrado \u0027obj_4c_Fwoption8\u0027 Top=193 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Say8\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=356 vs migrado \u0027lbl_4c_Say8\u0027 Top=428 (diff=72px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption9\u0027 (parent: SIGCDTOP.Pagina.Dados): Top original=353 vs migrado \u0027obj_4c_Fwoption9\u0027 Top=425 (diff=72px, tolerancia=30px)",
+                                          "tentativas":  4,
+                                          "problemasRestantes":  34
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-09-09T22:09:10",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-09-09T22:09:27",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\TopBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTop.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-09-09T22:13:00",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-09T22:13:01",
+                                             "thresholdPx":  5,
+                                             "unmatched":  10,
+                                             "errors":  10,
+                                             "matched":  33,
+                                             "warnings":  34,
+                                             "reportFile":  "C:\\4c\\tasks\\task538\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

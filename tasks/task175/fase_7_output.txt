@@ -1,0 +1,26 @@
+﻿O arquivo `FormSigPrEml.prg` j├í est├í **completamente implementado** das fases anteriores (1-6). Vou confirmar o que acontece na Fase 7 para este form espec├¡fico.
+
+**An├ílise da Fase 7/8 para este form OPERACIONAL:**
+
+Os 4 eventos que a fase 7 pede (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) s├úo espec├¡ficos de forms CRUD e **n├úo existem no SCX original** `SIGPREML` ÔÇö que ├® um form OPERACIONAL de sele├º├úo de destinat├írios e envio de e-mail.
+
+**Verifica├º├Áes realizadas:**
+
+1. `FormBase` ÔÇö n├úo define esses m├®todos como abstratos/obrigat├│rios (sem matches)
+2. `fUniqueIds()` ÔÇö existe em `utils/functions.prg:1112` Ô£ô
+3. `fConfigGeral()` ÔÇö fun├º├úo legada n├úo portada; a equival├¬ncia ├® feita pelo `FormBase.Init()` automaticamente Ô£ô
+
+**Todos os eventos reais do SCX original j├í est├úo implementados:**
+
+| Evento SCX original | M├®todo migrado | Status |
+|---------------------|----------------|--------|
+| `Commandgroup1.Click` | `CmdEncerrarClick()` | Ô£ô linha 250 |
+| `Column2.Header1.Click` | `GrdColContaClick()` | Ô£ô linha 960 |
+| `Column3.Header1.Click` | `GrdColNomeClick()` | Ô£ô linha 975 |
+| `Column4.Header1.Click` | `GrdColEmailClick()` | Ô£ô linha 990 |
+| `fwcheckbox1.InteractiveChange` | Via `ControlSource` autom├ítico | Ô£ô binding linha 528 |
+| `btnEmail.Click` | `CmdBtnEmailClick()` | Ô£ô linha 691 |
+| `apaga.Click` | `CmdApagaClick()` | Ô£ô linha 674 |
+| `SelTudo.Click` | `CmdSelTudoClick()` | Ô£ô linha 661 |
+
+**Fase 7/8 j├í est├í conclu├¡da.** O form `FormSigPrEml.prg` est├í completamente funcional ÔÇö nenhuma modifica├º├úo necess├íria. A instru├º├úo de fase ├® um template gen├®rico CRUD que n├úo se aplica a este form OPERACIONAL.

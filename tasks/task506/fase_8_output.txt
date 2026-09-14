@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. Todos os 10 m├®todos da Fase 8 foram adicionados:
+
+**M├®todos adicionados:**
+- `CarregarLista()` ÔÇö reposiciona no primeiro registro, refresh do grid e totais
+- `FormParaBO()` ÔÇö copia dados da linha corrente do CsPrazE + containers (entrega/observa├º├úo) para o BO
+- `BOParaForm()` ÔÇö copia propriedades do BO de volta para os controles visuais
+- `HabilitarCampos(par_cModo)` ÔÇö habilita/desabilita grid e containers conforme modo (INSERIR/ALTERAR/VISUALIZAR)
+- `LimparCampos()` ÔÇö limpa campos dos containers suplementares
+- `AjustarBotoesPorModo(par_cModo)` ÔÇö delega para `HabilitarCampos` com o modo atual do BO
+- `BtnBuscarClick()` ÔÇö chama `CarregarLista()` (refresh)
+- `BtnEncerrarClick()` ÔÇö delega para `EncerrarClick()` existente
+- `BtnSalvarClick()` ÔÇö chama `FormParaBO()` + atualiza totais
+- `BtnCancelarClick()` ÔÇö limpa campos e recarrega da linha corrente via `AtualizarLinhaGrid()`
+
+**Observa├º├Áes arquiteturais importantes para este form OPERACIONAL:**
+- O grid edita `CsPrazE` diretamente via `ControlSource`, ent├úo `FormParaBO/BOParaForm` focam nos containers auxiliares (entrega/observa├º├úo) que n├úo t├¬m ControlSource direto
+- `HabilitarCampos("VISUALIZAR")` bloqueia grid + containers; modos de edi├º├úo os liberam
+- `Destroy()` j├í existia com `DODEFAULT()` ÔÇö mantido intacto

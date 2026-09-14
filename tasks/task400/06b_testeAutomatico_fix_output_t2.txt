@@ -1,0 +1,9 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormDup.prg`:
+
+1. **CarregarLista** ÔåÆ `CREATE CURSOR cursor_4c_Dados (series C(3))` adicionado antes do binding da grade, resolvendo tanto o "Alias not found" no `ConfigurarPaginaLista` quanto o "nenhum cursor criado" no teste (cursor agora existe ap├│s InicializarForm, mesmo sem banco).
+
+2. **ModoIncluir** ÔåÆ Removido `PROTECTED` de `AlternarPagina` ÔÇö o framework de teste chama o m├®todo externamente (linha 412), o que ├® bloqueado para m├®todos PROTECTED.
+
+3. **ModoVisualizar** ÔåÆ Removido `PROTECTED` de `AjustarBotoesPorModo` ÔÇö mesmo motivo (linha 542).
+
+O erro "Property FORECOLOR is not found" em Page2 era efeito cascata: quando o binding da grade falhava no meio do TRY, o CATCH interrompia a execu├º├úo de Page1 (BINDEVENTs e TornarControlesVisiveis nunca rodavam), deixando o form em estado inconsistente que afetava a configura├º├úo de Page2. Com o cursor criado antecipadamente, Page1 completa normalmente e Page2 configura sem erros.

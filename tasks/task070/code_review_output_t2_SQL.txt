@@ -1,0 +1,37 @@
+﻿Analisei completamente o contexto. Vou explicar o resultado da verifica├º├úo.
+
+## Resultado da Verifica├º├úo: 4 Falsos Positivos
+
+Ap├│s comparar o c├│digo migrado com o legado (`SigReCsp_form_codigo_fonte.txt`), **todos os 4 problemas s├úo falsos positivos** do validador.
+
+### An├ílise detalhada
+
+O validador afirma que "WHERE original usa: DATAS, EMPS, DOPES, NUMES, NOTAS, OBSES" e flaggeou CEMPS, RAZAS, CODIGOS, ICLIS. Por├®m:
+
+**1. CEMPS e RAZAS** (linhas 1399, 1451 do form)
+- S├úo usados em queries de lookup na tabela `SigCdEmp`, **n├úo no WHERE principal de SigMvCab**
+- O original usava `fAcessoEmpresa(Usuar, 'C', ...)` e `fAcessoEmpresa(Usuar, 'D', ...)` ÔÇö que internamente consultam exatamente estas colunas
+- A migra├º├úo substituiu a fun├º├úo legada por SQL direto: correto
+
+**2. CODIGOS** (linha 1598 do form)
+- Usado em lookup na tabela `SigCdGcr`
+- O original usava `fAcessoContab(Usuar,'C'/'D', ...)` que consulta `SigCdGcr.codigos`
+- Substitui├º├úo correta
+
+**3. ICLIS** (linhas 1724, 1727, 1788 do form)
+- Usado em lookups na tabela `SigCdCli`
+- O original usava `fAcessoContas(Usuar,Grupo,'C'/'D', ...)` que consulta `SigCdCli.iclis`
+- Substitui├º├úo correta
+
+### Por que o validador errou
+
+O validador escaneia **todo o arquivo** em busca de cl├íusulas WHERE e compara com o WHERE da query principal (`SigMvCab`). Por├®m, os 4 WHERE flaggeados est├úo em **queries auxiliares para tabelas completamente diferentes** (`SigCdEmp`, `SigCdGcr`, `SigCdCli`) ÔÇö nunca no WHERE da SigMvCab.
+
+### Conclus├úo
+
+Nenhuma altera├º├úo de c├│digo ├® necess├íria. Os 4 lookups s├úo:
+- **Funcionalmente corretos** ÔÇö correspondem ├ás fun├º├Áes `fAcessoEmpresa`, `fAcessoContab`, `fAcessoContas` do legado
+- **Tecnicamente corretos** ÔÇö usam as colunas certas para cada tabela
+- **Protegidos pela regra** "NAO remover campos, funcionalidades ou lookups"
+
+O `PrepararDados()` do BO usa apenas as colunas corretas de SigMvCab (Emps, Dopes, numes, notas, datas, Obses, GrupoOs/GrupoDs, ContaOs/ContaDs) ÔÇö exatamente como o original.

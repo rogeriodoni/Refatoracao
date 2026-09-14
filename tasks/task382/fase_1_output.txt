@@ -1,0 +1,10 @@
+﻿Fase 1 conclu├¡da. `CRCBO.prg` criado em `C:\4c\projeto\app\classes\CRCBO.prg` com:
+
+**14 propriedades** mapeadas diretamente do schema `SIGCRRAC`:
+- `this_cCodigos`, `this_cDescrs`, `this_cGrupos` (campos texto)
+- `this_nAutos`, `this_nLocks`, `this_nBloqueios`, `this_nObrigs`, `this_nCodobs`, `this_nOrdems`, `this_nTipoops`, `this_nTpprocs` (num├®ricos)
+- `this_dDtInis`, `this_dDtFins` (datetime NULL)
+- `this_cRelacs` (char 30)
+- `this_cDGrupos` (auxiliar de UI ÔÇö vem de `SigCdGcr.Descrs`, n├úo persiste)
+
+**Init()** configurando `this_cTabela = "SigCrRac"` e `this_cCampoChave = "Codigos"`. **ObterChavePrimaria()** retornando `this_cCodigos`. Pronto para a Fase 2 (CarregarDoCursor, Inserir, Atualizar, ExecutarExclusao, Buscar).

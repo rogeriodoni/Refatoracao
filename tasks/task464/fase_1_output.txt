@@ -1,0 +1,11 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\MoeBO.prg` criado com:
+
+- **17 propriedades** mapeadas do schema `SigCdMoe` (cmoes, dmoes, cotas, datatrans, fmults, nordrels, disfpres, valadics, moeqs, qtdeqs, toleras, grumoes, submoes, tabrefs, fpags, consultas, obgfator)
+- **Init()** configurando `this_cTabela = "SigCdMoe"` e `this_cCampoChave = "cmoes"`
+- **ObterChavePrimaria()** retornando `ALLTRIM(this_cCodigo)`
+
+Observa├º├Áes relevantes para as pr├│ximas fases:
+- `cotas` e `tabrefs` s├úo `[bit]` no SQL Server ÔåÆ propriedades `this_l*` (logical)
+- `datatrans` ├® `datetime NULL` ÔåÆ inicializado como `{}` (data vazia)
+- `consultas` inicia em `1` (OptionGroup default = Option1 = "Sim")
+- FK lookup: `moeqs ÔåÆ SigCdMoe.cmoes`, `fpags ÔåÆ SigOpFp.fpags`

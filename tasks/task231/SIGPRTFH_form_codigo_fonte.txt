@@ -1,0 +1,1517 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRTFH.SCX
+* Data/Hora: 03/07/2026 18:17:21
+* Total de registros: 32
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRIFF
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGPRIFF
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGPRIFF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGPRIFF.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: SAIDA
+  Parent: SIGPRIFF
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Shape2
+  Parent: SIGPRIFF
+  Class: shape
+  BaseClass: shape
+
+Objeto: Label5
+  Parent: SIGPRIFF
+  Class: label
+  BaseClass: label
+
+Objeto: GetPraca
+  Parent: SIGPRIFF
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGPRIFF
+  Class: label
+  BaseClass: label
+
+Objeto: GetAgencia
+  Parent: SIGPRIFF
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label7
+  Parent: SIGPRIFF
+  Class: label
+  BaseClass: label
+
+Objeto: GetConta
+  Parent: SIGPRIFF
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label8
+  Parent: SIGPRIFF
+  Class: label
+  BaseClass: label
+
+Objeto: Container1
+  Parent: SIGPRIFF
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGPRIFF.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGPRIFF.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGPRIFF.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: Label4
+  Parent: SIGPRIFF.Container1
+  Class: label
+  BaseClass: label
+
+Objeto: GetBanco
+  Parent: SIGPRIFF
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDvAgencia
+  Parent: SIGPRIFF
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label6
+  Parent: SIGPRIFF
+  Class: label
+  BaseClass: label
+
+Objeto: GetCheque
+  Parent: SIGPRIFF
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDvConta
+  Parent: SIGPRIFF
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetDvCheque
+  Parent: SIGPRIFF
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label1
+  Parent: SIGPRIFF
+  Class: label
+  BaseClass: label
+
+Objeto: GetCpf
+  Parent: SIGPRIFF
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SIGPRIFF
+  Class: label
+  BaseClass: label
+
+Objeto: Label4
+  Parent: SIGPRIFF
+  Class: label
+  BaseClass: label
+
+Objeto: Label9
+  Parent: SIGPRIFF
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF
+------------------------------------------------------------
+  Height = 350
+  Width = 467
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "SiTef - Consulta de Cheque"
+  ControlBox = .F.
+  Closable = .T.
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .T.
+  Icon = 
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Name = "SIGPRIFF"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.cntSombra
+------------------------------------------------------------
+  Top = 1
+  Left = 1
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.SAIDA
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  ControlSource = "OPSENHA"
+  Height = 85
+  Left = 387
+  Top = -1
+  Width = 85
+  TabIndex = 9
+  Name = "SAIDA"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "<Esc> \<Sair"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "CANCELA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Shape2
+------------------------------------------------------------
+  Top = 84
+  Left = 0
+  Height = 202
+  Width = 466
+  SpecialEffect = 0
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Praca de Compesacao :"
+  Enabled = .T.
+  Height = 15
+  Left = 64
+  Top = 97
+  Width = 132
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.GetPraca
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  Enabled = .T.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 198
+  TabIndex = 1
+  Top = 94
+  Width = 32
+  DisabledForeColor = 0,0,0
+  Name = "GetPraca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Agencia :"
+  Enabled = .T.
+  Height = 15
+  Left = 143
+  Top = 161
+  Width = 53
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.GetAgencia
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Enabled = .T.
+  Height = 23
+  InputMask = ""
+  Left = 198
+  TabIndex = 2
+  Top = 158
+  Width = 40
+  BackColor = 255,255,255
+  Name = "GetAgencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Label7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Conta :"
+  Enabled = .T.
+  Height = 15
+  Left = 155
+  Top = 193
+  Width = 41
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.GetConta
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 198
+  TabIndex = 7
+  Top = 190
+  Width = 78
+  Name = "GetConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Label8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BorderStyle = 0
+  Caption = "Banco :"
+  Enabled = .T.
+  Height = 15
+  Left = 154
+  Top = 129
+  Width = 42
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Container1
+------------------------------------------------------------
+  Top = 288
+  Left = 37
+  Width = 393
+  Height = 58
+  SpecialEffect = 0
+  Visible = .T.
+  TabIndex = 9
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Container1.Label1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Aguarde Consulta de Cheque"
+  Height = 43
+  Left = 4
+  Top = 8
+  Width = 383
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Container1.Label2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Aguarde Consulta de Cheque"
+  Height = 20
+  Left = 4
+  Top = 3
+  Width = 383
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Container1.Label3
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Aguarde Consulta de Cheque"
+  Height = 19
+  Left = 4
+  Top = 21
+  Width = 383
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Container1.Label4
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Aguarde Consulta de Cheque"
+  Height = 19
+  Left = 4
+  Top = 39
+  Width = 383
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.GetBanco
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  Enabled = .T.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 198
+  MaxLength = 0
+  TabIndex = 1
+  Top = 126
+  Width = 32
+  DisabledForeColor = 0,0,0
+  Name = "GetBanco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.GetDvAgencia
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Enabled = .T.
+  Height = 23
+  InputMask = ""
+  Left = 310
+  TabIndex = 3
+  Top = 158
+  Width = 19
+  BackColor = 255,255,255
+  DisabledForeColor = 64,0,64
+  Name = "GetDvAgencia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Numero de Cheque :"
+  Enabled = .T.
+  Height = 15
+  Left = 82
+  Top = 225
+  Width = 114
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.GetCheque
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Enabled = .T.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 198
+  TabIndex = 8
+  Top = 222
+  Width = 54
+  DisabledForeColor = 0,0,0
+  Name = "GetCheque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.GetDvConta
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 310
+  TabIndex = 7
+  Top = 190
+  Width = 19
+  Name = "GetDvConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.GetDvCheque
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Enabled = .T.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 310
+  TabIndex = 8
+  Top = 222
+  Width = 19
+  DisabledForeColor = 0,0,0
+  Name = "GetDvCheque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "CPF :"
+  Enabled = .T.
+  Height = 15
+  Left = 168
+  Top = 257
+  Width = 28
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.GetCpf
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Value = 
+  Enabled = .T.
+  Format = ""
+  Height = 23
+  InputMask = ""
+  Left = 198
+  MaxLength = 0
+  TabIndex = 1
+  Top = 254
+  Width = 132
+  DisabledForeColor = 0,0,0
+  Name = "GetCpf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "DV:"
+  Enabled = .T.
+  Height = 15
+  Left = 288
+  Top = 194
+  Width = 20
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "DV:"
+  Enabled = .T.
+  Height = 15
+  Left = 288
+  Top = 226
+  Width = 20
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRIFF.Label9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "DV:"
+  Enabled = .T.
+  Height = 15
+  Left = 288
+  Top = 162
+  Width = 20
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRIFF
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE errotef
+------------------------------------------------------------
+PROCEDURE errotef
+PARAMETERS pnRetornos
+
+If Type("lnRetorno") <> "N" and (lnRetorno > -1 Or lnRetorno < -5)
+	ThisForm.RetornoFalha("Operacao Cancelada pelo Usuario", "0,00")
+Endif
+
+IF pnRetornos = -1
+	ThisForm.RetornoFalha("Modulo Nao Iniciado", "0,00")
+ENDIF
+IF pnRetornos = -2
+	ThisForm.RetornoFalha("Operacao Cancelada pelo Usuario", "0,00")
+ENDIF
+IF pnRetornos = -3
+	ThisForm.RetornoFalha("Fornecida uma Modalidade Invalida", "0,00")
+ENDIF
+IF pnRetornos = -4
+	ThisForm.RetornoFalha("Falta Memoria para Rodar a Funcao", "0,00")
+ENDIF
+IF pnRetornos = -5
+	ThisForm.RetornoFalha("Sem Comunicacao com o SiTef", "0,00")
+ENDIF
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montaretorno
+------------------------------------------------------------
+PROCEDURE montaretorno
+PARAMETERS lsTipTran, lsDataHora, lsCupom, lsCartao, lsNsu, lsAutoriza, lsFinaliza, lnValPago, MenRet
+
+lsValPago=STRTRAN(ALLTRIM(Transform(lnValPago,"99999999999.99")),".",",")
+
+DECLARE laCartao[11]
+laCartao[1]="Outro, nao definido"
+laCartao[2]="Visa"
+laCartao[3]="Mastercard"
+laCartao[4]="Diners"
+laCartao[5]="American Express"
+laCartao[6]="Sollo"
+laCartao[7]="Sidecard (Redecard)"
+laCartao[8]="Private Label (Redecard)"
+laCartao[9]="Redeshop"
+laCartao[10]=""
+laCartao[11]="Fininvest"
+
+IF VAL(lsCartao) > 10 .or. VAL(lsCartao) < 0
+	lsCartao="0"
+Endif
+
+CREATE CURSOR crSiTef (tef c(100))
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = "+STR(ThisForm.pcIdent,10))
+INSERT INTO crSiTef (Tef) VALUES ("002-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("003-000 = "+lsValPago)
+INSERT INTO crSiTef (Tef) VALUES ("004-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("009-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("010-000 = "+laCartao[VAL(lsCartao)+1])
+INSERT INTO crSiTef (Tef) VALUES ("011-000 = "+lsTipTran)
+INSERT INTO crSiTef (Tef) VALUES ("012-000 = "+lsNsu)
+INSERT INTO crSiTef (Tef) VALUES ("013-000 = "+lsAutoriza)
+INSERT INTO crSiTef (Tef) VALUES ("015-000 = "+SUBSTR(lsDataHora,7,2)+SUBSTR(lsDataHora,5,2)+SUBSTR(lsDataHora,9,6))
+INSERT INTO crSiTef (Tef) VALUES ("017-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("018-000 = 1")
+INSERT INTO crSiTef (Tef) VALUES ("017-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("019-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("020-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("021-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("022-000 = "+SUBSTR(lsDataHora,7,2)+SUBSTR(lsDataHora,5,2)+SUBSTR(lsDataHora,1,4))
+INSERT INTO crSiTef (Tef) VALUES ("023-000 = "+SUBSTR(lsDataHora,9,6))
+INSERT INTO crSiTef (Tef) VALUES ("023-000 = "+lsFinaliza)
+INSERT INTO crSiTef (Tef) VALUES ("027-000 = "+SUBSTR(lsDataHora,9,6))
+lsPos=1
+lnLinha=1
+DO WHILE lsPos <> 0
+	lsPos=AT(CHR(10),lsCupom)
+	INSERT INTO crSiTef (Tef) VALUES ("029-"+TRANSFORM(lnLinha,"@L 999")+" = "+IIF(lsPos<>0,SUBSTR(lsCupom,1,lsPos-1),lsCupom))
+	lsCupom=SUBSTR(lscupom,lsPos+1)
+	lnLinha=lnLinha+1
+Enddo
+INSERT INTO crSiTef (Tef) VALUES ("028-000 = "+ALLTRIM(STR(lnLinha-2)))
+INSERT INTO crSiTef (Tef) VALUES ("030-000 = "+MenRet)
+INSERT INTO crSiTef (Tef) VALUES ("150-000 = 00000000")
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+SELECT crSitef 
+COPY TO C:\client\Resp\IntPos.001 SDF
+ZAP
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = "+STR(ThisForm.pcIdent,10))
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+COPY TO C:\client\Resp\IntPos.STS SDF
+	
+USE
+	
+Return
+
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE retornofalha
+------------------------------------------------------------
+PROCEDURE retornofalha
+PARAMETERS lcMensagem, lnValPago
+
+lcMensagem=Iif(Empty(lcMensagem),"Operação Cancelada Pelo Usuario",lcMensagem)
+
+lsValPago=STRTRAN(ALLTRIM(Transform(lnValPago,"99999999999.99")),".",",")
+
+CREATE CURSOR crSiTef (tef c(100))
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = "+STR(ltIdent,10))
+INSERT INTO crSiTef (Tef) VALUES ("002-000 = ")
+INSERT INTO crSiTef (Tef) VALUES ("003-000 = "+lsValPago)
+INSERT INTO crSiTef (Tef) VALUES ("004-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("009-000 = FF")
+INSERT INTO crSiTef (Tef) VALUES ("010-000 = 05")
+INSERT INTO crSiTef (Tef) VALUES ("028-000 = 0")
+INSERT INTO crSiTef (Tef) VALUES ("030-000 = "+lcMensagem)
+INSERT INTO crSiTef (Tef) VALUES ("150-000 = 00000000")
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+SELECT crSitef 
+COPY TO C:\client\Resp\IntPos.001 SDF
+ZAP
+
+INSERT INTO crSiTef (Tef) VALUES ("000-000 = CRT")
+INSERT INTO crSiTef (Tef) VALUES ("001-000 = "+STR(ltIdent,10))
+INSERT INTO crSiTef (Tef) VALUES ("999-999 = 0")
+
+COPY TO C:\client\Resp\IntPos.STS SDF
+
+USE
+	
+Return
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+PARAMETERS pcIp,lcInicio, pcValor, pcCupom, pcCaixa, pcIdent, pcPos, pcParcs, PcFuncoes,;
+           pcBanco,pcAgencia,pcConta,pcnCheque,pcDtCheque,pcCpf,pcTpPessoa,pcCupomnv,;
+ 		   pcAgendc,pcContadc,pcNumdc,pcPraca, pcPesquisa, pcCMC7, pcteste
+
+With ThisForm
+	.GetPraca.Value = pcPraca
+	.GetBanco.Value = pcBanco
+	.GetAgencia.Value = pcAgencia
+	.GetDvAgencia.Value = pcAgendc
+	.GetConta.Value = pcConta
+	.GetDvConta.Value = pcContadc
+	.GetCheque.Value = pcnCheque
+	.GetDvCheque.Value = pcNumdc
+	.Label1.Caption = Iif(pcTpPessoa='F','CPF :','CGC :')
+	.GetCpf.Value = pcCpf
+	.pcIp = pcIp
+	.pcInicio = lcInicio
+	.pcValor = pcValor
+	.pcCupom = pcCupom
+	.pcCaixa = pcCaixa
+	.pcIdent = pcIdent
+	.pcPos = pcPos
+	.pcParcs = pcParcs
+	.pcFuncoes = pcFuncoes
+	.pcBanco = pcBanco
+	.pcAgencia = pcAgencia
+	.pcConta = pcConta
+	.pcnCheque = pcnCheque
+	.pcDtCheque = pcDtCheque
+	.pcCpf = pcCpf
+	.pcTpPessoa = pcTpPessoa
+	.pcCupomnv = pcCupomnv
+ 	.pcAgendc = pcAgendc
+ 	.pcContadc = pcContadc
+ 	.pcNumdc = pcNumdc
+ 	.pcPraca = pcPraca
+ 	.pcPesquisa = pcPesquisa
+	.CMC7 = pcCMC7
+EndWith
+
+ThisForm.Container1.Label2.Visible = .f.
+ThisForm.Container1.Label3.Visible = .f.
+ThisForm.Container1.Label4.Visible = .f.
+
+Declare CodSerasa[8],RetSerasa[8,3]
+
+CodSerasa[1]='00'
+CodSerasa[2]='19'
+CodSerasa[3]='56'
+CodSerasa[4]='57'
+CodSerasa[5]='60'
+CodSerasa[6]='61'
+CodSerasa[7]='65'
+CodSerasa[8]='76'
+
+RetSerasa[1,1]=''
+RetSerasa[1,2]='Aprovado'
+RetSerasa[1,3]=''
+
+RetSerasa[2,1]='Banco Nao Existe ou'
+RetSerasa[2,2]='Nao Trabalha com Conta Corrente ou'
+RetSerasa[2,3]='Esta em Processo de Liquidacao'
+
+RetSerasa[3,1]='Pagamento de Compra com Cheque Pre'
+RetSerasa[3,2]='por Cliente Nao Cadastrado no '
+RetSerasa[3,3]='Estabelecimento'
+
+RetSerasa[4,1]=''
+RetSerasa[4,2]='Realizar Consulta Analitica'
+RetSerasa[4,3]=''
+
+RetSerasa[5,1]=''
+RetSerasa[5,2]='Falha no Processo de Consulta'
+RetSerasa[5,3]=''
+
+RetSerasa[6,1]='Excedido Limite para Pagamento'
+RetSerasa[6,2]='de Compras com Cheque Pre-Datados'
+RetSerasa[6,3]='Determinado pelo Estabelecimento'
+
+RetSerasa[7,1]=''
+RetSerasa[7,2]='Cheque Maior que o Limite de Compra'
+RetSerasa[7,3]=''
+
+RetSerasa[8,1]='Cliente Cadastrado Alem do Prazo'
+RetSerasa[8,2]='Definido pelo Estabelecimento para'
+RetSerasa[8,3]='Validade do Cartao provisorio'
+
+
+ThisForm.Saida.Cancela.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+DECLARE Integer ConfiguraIntSiTefInterativo IN "CliSiTef32I.DLL" string lsEndereco, String lsLoja, String lsTerminal, Integer lnReservado 
+DECLARE Integer IniciaFuncaoSiTefInterativo IN "CliSiTef32I.DLL" Integer lnModalidade, String lsValor, String lsCupom, String lsData, String lsHorario, String lsOperador, String lsRestricao 
+DECLARE Integer ContinuaFuncaoSiTefInterativo IN "CliSiTef32I.DLL" Integer @lnComando, Integer @lnTipo, Integer @lnMinimo, Integer @lnMaximo, String @lsBuffer, Integer lnTamanho, Integer lnResultado 
+DECLARE integer FinalizaTransacaoSiTefInterativo IN "CliSiTef32I.DLL" Integer lnConfirma, String lsCupom, String lsData, String lsHorario 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+ThisForm.pcRetChe = Iif(Type('ThisForm.pcRetChe') = 'L','999 - Consulta com Erro',ThisForm.pcRetChe)
+Return(ThisForm.pcRetChe)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIFF.SAIDA
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE CANCELA.Click
+------------------------------------------------------------
+PROCEDURE CANCELA.Click
+If Lastkey() = 13
+	Return
+Endif
+RELEASE WINDOWS
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE CANCELA.GotFocus
+------------------------------------------------------------
+PROCEDURE CANCELA.GotFocus
+IF ! EMPTY(ThisForm.pcFuncoes)
+	DECLARE funcoes[OCCURS(",",ThisForm.pcFuncoes)+1]
+
+	FOR npos = 1 TO OCCURS(",",ThisForm.pcFuncoes)
+		funcoes[npos]=SUBSTR(ThisForm.pcFuncoes,IIF(npos=1,1,AT(",",ThisForm.pcFuncoes,npos)+1),1)
+	NEXT
+	funcoes[npos]=SUBSTR(ThisForm.pcFuncoes,LEN(ThisForm.pcFuncoes),1)
+ELse
+	DECLARE funcoes[1]
+	ThisForm.pcFuncoes=""
+Endif
+
+Declare CodSerasa[8],RetSerasa[8,3]
+
+CodSerasa[1]='00'
+CodSerasa[2]='19'
+CodSerasa[3]='56'
+CodSerasa[4]='57'
+CodSerasa[5]='60'
+CodSerasa[6]='61'
+CodSerasa[7]='65'
+CodSerasa[8]='76'
+
+RetSerasa[1,1]=''
+RetSerasa[1,2]='Aprovado'
+RetSerasa[1,3]=''
+
+RetSerasa[2,1]='Banco Nao Existe ou'
+RetSerasa[2,2]='Nao Trabalha com Conta Corrente ou'
+RetSerasa[2,3]='Esta em Processo de Liquidacao'
+
+RetSerasa[3,1]='Pagamento de Compra com Cheque Pre'
+RetSerasa[3,2]='por Cliente Nao Cadastrado no '
+RetSerasa[3,3]='Estabelecimento'
+
+RetSerasa[4,1]=''
+RetSerasa[4,2]='Realizar Consulta Analitica'
+RetSerasa[4,3]=''
+
+RetSerasa[5,1]=''
+RetSerasa[5,2]='Falha no Processo de Consulta'
+RetSerasa[5,3]=''
+
+RetSerasa[6,1]='Excedido Limite para Pagamento'
+RetSerasa[6,2]='de Compras com Cheque Pre-Datados'
+RetSerasa[6,3]='Determinado pelo Estabelecimento'
+
+RetSerasa[7,1]=''
+RetSerasa[7,2]='Cheque Maior que o Limite de Compra'
+RetSerasa[7,3]=''
+
+RetSerasa[8,1]='Cliente Cadastrado Alem do Prazo'
+RetSerasa[8,2]='Definido pelo Estabelecimento para'
+RetSerasa[8,3]='Validade do Cartao provisorio'
+
+lsIdTerminal="00000"+_Empr
+
+lnValPago=ALLTRIM(STRTRAN(TRANSFORM(ThisForm.pcValor,"999999999.99"),".",","))
+
+IF ConfiguraIntSiTefInterativo(ThisForm.pcIP,lsIdTerminal,ThisForm.pcPos,0) <> 0 
+*IF ConfiguraIntSiTefInterativo(pcIP,'00000000',pcPos,0) <> 0 
+	DO SigTfSup WITH "P", "Sem comunicacao com SiTef", "", "", "", "", "", "", "", lnValPago, "", pcIdent
+	Return
+Endif
+lcData=STR(YEAR(DATE()),4)+SUBSTR(DTOC(DATE()),4,2)+SUBSTR(DTOC(DATE()),1,2)
+lchora=STRTRAN(TIME(),":","")
+IF IniciaFuncaoSiTefInterativo(ThisForm.pcInicio, lnValPago, ThisForm.pcCupom, lcData,lcHora, ThisForm.pcCaixa, "")  <> 10000
+	DO SigTfSup WITH "P", "Sem comunicacao com SiTef", "", "", "", "", "", "", "", lnValPago, "", ThisForm.pcIdent
+	Return
+ENDIF
+
+lcRet=0 
+Stts=10000 
+ProximoComando=0 
+TipoCampo=0 
+TamanhoMinimo=0 
+TamanhoMaximo=0 
+Buffer=Space(2000) 
+lnRetorno=0 
+lnResultado=0 
+Valores=""
+
+lsTipTran=""
+lsDataHora=""
+lsCupom=""
+lsCartao=""
+lsNsu=""
+lsAutoriza=""
+lsFinaliza=""
+lsMRet=""
+lsMensagem=''
+nNumParcs=ALLTRIM(STR(ThisForm.pcParcs))
+nValores="0,00"
+nDatas=""
+
+lcTitulo=""
+lnPos=1
+carsen=1
+lnTipo=1
+lnCard=1
+Opcaoc="0"
+lsMensagem1=""
+
+DO WHILE Stts = 10000 
+    Stts = ContinuaFuncaoSiTefInterativo(@ProximoComando, @TipoCampo,@TamanhoMinimo, @TamanhoMaximo, @Buffer, Len(ALLTRIM(Buffer)), lnResultado) 
+    lnResultado=0
+    IF stts = -2
+    	lsMensagem="Operacao Canceleda pelo Usuario"
+    	EXIT
+    EndIf
+    If Stts <> 10000
+    	lsMensagem=Alltrim(Buffer)
+    	Exit
+    Endif
+    if Stts = 10000 
+    	IF !empty(lsMensagem) 
+   			Wait Clear
+			ThisForm.Container1.Label1.ForeColor = Rgb(0,120,0)
+			ThisForm.Container1.Label1.FontSize = 24
+   			ThisForm.Container1.Label1.Caption=Alltrim(lsMensagem)
+    		If !Empty(ThisForm.pcBanco)
+    			ThisForm.pcRetChe='00'+Alltrim(lsMensagem)
+    		Endif
+    		lsMensagem=""
+    	ENDIF
+		IF ProximoComando = 21 and ThisForm.PcFuncoes = "1"
+			IF lnTipo = 1
+				Buffer="1"+REPLICATE(CHR(0),1999)
+				lnContinua=1000
+				lnTipo=2
+				loop
+			ENDIF
+			IF lnTipo = 2
+				IF EMPTY(ThisForm.pcPesquisa)
+					DO FORM SigCqTef TO opcaoc
+				ELSE
+					opcaoc=ThisForm.pcPesquisa
+				Endif
+				IF opcaoc = "0"
+					DO Form SigTfDss With "Erro na Transação","","Operacao Cancelada pelo Usuario","","","VM",ThisForm.Left,ThisForm.Top 
+*					MESSAGEBOX("Operacao Cancelada pelo Usuario",48,"")
+					RETURN .t.
+				Endif
+				Buffer=opcaoc+REPLICATE(CHR(0),1999)
+				lnContinua=1000
+				lnTipo=3
+				loop
+			Endif
+		Endif
+		IF ProximoComando = 30 and ThisForm.PcFuncoes = "1"
+			IF lnCard = 1
+				Buffer=IIF(ThisForm.pcTpPessoa="F","0","1")+REPLICATE(CHR(0),1999)
+				lnContinua=1000
+				lnCard=2
+				loop
+			ENDIF
+			IF lnCard = 2
+				Buffer=ThisForm.pcCpf
+				Buffer=Buffer+REPLICATE(CHR(0),2000-LEN(Buffer))
+				lnContinua=1000
+				lnCard=3
+				loop
+			Endif
+			IF lnCard = 3
+				Buffer=ThisForm.pcDtCheque+REPLICATE(CHR(0),1992)
+				lnContinua=1000
+				lnCard=4
+				loop
+			Endif
+		ENDIF
+		IF ProximoComando = 31 and ThisForm.PcFuncoes = "1"
+			If Empty(ThisForm.CMC7)
+				Buffer = "0:"+ThisForm.pcPraca+ThisForm.pcBanco+ThisForm.pcAgencia+ThisForm.pcAgendc+PADR(ThisForm.pcConta,10)+ThisForm.pcContadc+ThisForm.pcnCheque+ThisForm.pcNumdc
+			Else
+				Buffer = "1:"+ThisForm.CMC7
+			Endif
+			buffer = Buffer+REPLICATE(CHR(0),2000-LEN(Buffer))
+			loop
+		Endif
+		IF ProximoComando = 31 and TipoCampo = 517
+			DO FORM SIGCHTEF TO DDCHQ
+			Buffer = DDCHQ
+			buffer = Buffer+REPLICATE(CHR(0),2000-LEN(Buffer))
+			loop
+		Endif
+        IF ProximoComando = 30 .or. ProximoComando = 21 .or.;
+           ProximoComando = 34 .or. ProximoComando = 20 .or.;
+           ProximoComando = 31
+        	IF ProximoComando = 21
+        		lptipo="M"
+        	ELSE
+        		lptipo="N"
+        	ENDIF
+        	IF ProximoComando = 30 .or. ProximoComando = 34 .or. ProximoComando = 20
+        		lcTitulo=ALLTRIM(Buffer)
+        	ENDIF
+        	IF ! EMPTY(ThisForm.pcFuncoes) AND lnPos <= OCCURS(",",ThisForm.pcFuncoes)+1
+	        	Buffer = funcoes[lnpos]
+   		    	buffer = buffer+REPLICATE(CHR(0),2000-LEN(buffer))
+   		    	lnResultado=1000
+   		    	lnPos=lnPos+1
+   		    	loop
+        	Else
+				IF ProximoComando = 30 and (TipoCampo = 505 OR TipoCampo = 511) AND ThisForm.pcParcs <> 0
+					Buffer=ALLTRIM(TRANSFORM(ThisForm.pcParcs,"@L 99"))+REPLICATE(CHR(0),1998)
+					ThisForm.pcParcs=0
+					lnContinua=1000
+					LOOP
+				ENDIF
+				TipoDados=""
+				IF TipoCampo = 504 OR TipoCampo = 506 OR TipoCampo = 515 OR "DDMMAAAA"$Buffer
+					TipoDados="D"
+				ENDIF
+				IF TipoCampo = 130
+					TipoDados="V"
+				ENDIF
+				IF ProximoComando = 20 &&TipoCampo = 507 OR TipoCampo = 509
+					Escolhas="0:Sim;1:Nao;"
+					LcTitulo=ALLTRIM(Buffer)
+					lptipo="M"
+				ELSE
+					Escolhas=ALLTRIM(Buffer)
+				Endif
+	        	DO FORM SIGPRIFF WITH Escolhas,lptipo,lcTitulo,TamanhoMinimo,TamanhoMaximo,TipoDados TO Valores 
+				IF ProximoComando = 30 and (TipoCampo = 505 OR TipoCampo = 511)
+					nNumParcs=Valores
+				Endif
+				IF EMPTY(valores) .or. ISNULL(valores)
+					DO SigTfSup WITH "P", "Operacao Cancelada pelo Usuario", "", "", "", "", "", "", "", lnValPago, "", ThisForm.pcIdent
+					RETURN
+				Endif
+				IF TipoCampo = 504 OR TipoCampo = 506 OR TipoCampo = 515 OR "DDMMAAAA"$Buffer
+					Valores=DTOC(Valores)
+					nDatas=Valores
+					Valores=SUBSTR(valores,1,2)+SUBSTR(valores,4,2)+SUBSTR(valores,7,4)
+				endif
+				IF TipoCampo = 130
+					Valores=STRTRAN(ALLTRIM(TRANSFORM(Valores,"99999999.99")),".",",")
+					nValores=Valores
+				ENDIF
+    	    	Buffer = ALLTRIM(Valores)
+        		buffer = buffer+REPLICATE(CHR(0),2000-LEN(buffer))
+        		lcTitulo=""
+        		loop
+        	Endif
+        endif 
+        IF ProximoComando = 23 
+        	IF carsen = 1
+        		WAIT WINDOW "Passe ou Insira o Cartao" NOWAIT
+        	ELSE
+        		WAIT WINDOW "Digite a Senha" NOWAIT
+        	ENDIF
+        	loop
+        ENDIF
+        IF ProximoComando = 13
+        	WAIT clear
+        	carsen=2
+        Endif
+        IF ProximoComando = 4
+        	lcTitulo=ALLTRIM(Buffer)
+        endif
+		IF ProximoComando = 3
+			lsMRet=ALLTRIM(Buffer)
+		Endif
+        IF ProximoComando = 22
+      	  	lsMensagem=ALLTRIM(Strtran(Buffer,Chr(0),''))
+      	  	loop
+       	endif 
+		IF TipoCampo = 100
+			lsTipTran=Buffer
+		Endif
+		IF TipoCampo = 105
+			lsDataHora=Buffer
+		Endif
+		IF TipoCampo = 121
+			lsCupom=Buffer
+		Endif
+		IF TipoCampo = 132
+			lsCartao=Buffer
+		Endif
+		IF TipoCampo = 134
+			lsNsu=ALLTRIM(STR(VAL(Buffer)))
+		Endif
+		IF TipoCampo = 135
+			lsAutoriza=Buffer
+		ENDIF
+		IF opcaoc = "4" AND stts <> 0
+			lsMensagem1=ALLTRIM(buffer)
+		ENDIF
+     	IF ProximoComando <> 30 .and. ProximoComando <> 21 .and. ProximoComando <> 34 .and. ProximoComando <> 20 .and. ProximoComando <> 31
+     		Buffer=SPACE(2000)
+       	endif
+    ENDIF 
+Enddo 
+
+If stts <> 1000 and stts <> 0
+	npos = Ascan(CodSerasa,Substr(Buffer,1,2))
+	If nPos = 0
+		ThisForm.Pcretche=Alltrim(Buffer)
+		ThisForm.Container1.Label1.ForeColor = Rgb(255,0,0)
+		ThisForm.Container1.Label1.Caption=ThisForm.Pcretche
+	Else
+		ThisForm.Pcretche=Substr(Buffer,1,2)+RetSerasa(nPos,1)+' '+RetSerasa(nPos,2)+' '+RetSerasa(nPos,3)
+		ThisForm.Container1.Label1.Visible = .f.
+		ThisForm.Container1.Label2.Visible = .t.
+		ThisForm.Container1.Label3.Visible = .t.
+		ThisForm.Container1.Label4.Visible = .t.
+		ThisForm.Container1.Label2.ForeColor = Rgb(255,0,0)
+		ThisForm.Container1.Label3.ForeColor = Rgb(255,0,0)
+		ThisForm.Container1.Label4.ForeColor = Rgb(255,0,0)
+		ThisForm.Container1.Label2.Caption=RetSerasa(nPos,1)
+		ThisForm.Container1.Label3.Caption=RetSerasa(nPos,2)
+		ThisForm.Container1.Label4.Caption=RetSerasa(nPos,3)
+	EndIf
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIFF.GetPraca
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIFF.GetAgencia
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIFF.GetConta
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIFF.GetBanco
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIFF.GetDvAgencia
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIFF.GetCheque
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIFF.GetDvConta
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIFF.GetDvCheque
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Container1.Label1.Caption="Digite o Numero"+CHR(13)+"de Parcelas"
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGPRIFF.GetCpf
+* Classe: textbox (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRIFF
+RESERVED3 (ClassInfo): abandona
+cmc7
+pcagencia
+pcagendc
+pcbanco
+pccaixa
+pcconta
+pccontadc
+pccpf
+pccupom
+pccupomnv
+pcdtcheque
+pcfuncoes
+pcident
+pcinicio
+pcip
+pcncheque
+pcnumdc
+pcparcs
+pcpesquisa
+pcpos
+pcpraca
+pcretche
+pctppessoa
+pcvalor
+podatamgr
+*errotef 
+*montaretorno 
+*retornofalha 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 18
+================================================================================

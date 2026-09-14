@@ -1,0 +1,18 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**FormSIGREAPR.prg** ÔÇö Adicionados os 8 m├®todos de consolida├º├úo:
+- `BtnBuscarClick()` ÔÇö redireciona para BtnVisualizarClick (preview)
+- `BtnSalvarClick()` ÔÇö redireciona para BtnImprimirClick
+- `BtnCancelarClick()` ÔÇö redireciona para BtnEncerrarClick
+- `FormParaBO()` ÔÇö delega para FormParaRelatorio()
+- `BOParaForm()` ÔÇö recarrega todos os 11 filtros do BO para os controles
+- `HabilitarCampos()` ÔÇö habilita todos os campos de filtro + AtualizarEstadoCampos
+- `CarregarLista()` ÔÇö retorna .T. (form REPORT n├úo tem grid)
+- `AjustarBotoesPorModo()` ÔÇö mant├®m os 4 bot├Áes do CommandGroup sempre habilitados
+
+**menu.prg** ÔÇö Integra├º├úo completa:
+- BAR 34 (separador) + BAR 35 ("Altera├º├Áes de Produtos") no `popRelatorios`
+- `ON SELECTION BAR 35 OF popRelatorios DO AbrirFormSIGREAPR`
+- Procedure `AbrirFormSIGREAPR()` adicionada ao final
+
+O config.prg j├í estava carregando os arquivos automaticamente via ADIR(), sem necessidade de altera├º├úo.

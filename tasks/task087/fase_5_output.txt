@@ -1,0 +1,7 @@
+﻿Fase 5 conclu├¡da. Foram adicionados dois m├®todos ao `Formsigreeqe.prg`:
+
+- **`FormParaRelatorio()`** (PROTECTED) ÔÇö copia `txt_4c_Empresa`, `txt_4c_DesEmpresa` e `opg_4c_Agrupa` para as propriedades `this_cEmpresa`, `this_cDesEmpresa` e `this_nAgrupa` do BO. Ser├í chamado antes de Visualizar/Imprimir.
+
+- **`LimparCampos()`** (PUBLIC) ÔÇö carrega os defaults do BO (empresa padr├úo j├í preenchida pelo `sigreeqeBO.Init()`) nos campos do form, e redefine agrupamento para 1 (Barra). ├ë chamado agora em `InicializarForm()` logo ap├│s montar o layout, para que o form abra j├í com a empresa do usu├írio preenchida ÔÇö igual ao comportamento do legado (`ThisForm.GetEmpresa.Value = _Empr`).
+
+As pr├│ximas fases (6ÔÇô8) implementam: `BINDEVENTs`, `BtnVisualizarClick()`, `BtnImprimirClick()`, `BtnEncerrarClick()` e `ValidarCodEmpresa()`.

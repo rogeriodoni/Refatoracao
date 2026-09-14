@@ -1,0 +1,13 @@
+﻿Fase 6 conclu├¡da. As altera├º├Áes feitas:
+
+**BINDEVENTs adicionados** em `ConfigurarPaginaDados()`:
+- `KeyPress` ÔåÆ `CodTamKeyPress` (F4 abre lookup)
+- `DblClick` ÔåÆ `CodTamDblClick`
+
+**M├®todos novos/refatorados:**
+- `ValidarCodTam()` ÔÇö simplificado: delega para `AbrirLookupCodTam()` se valor n├úo vazio
+- `CodTamKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö PUBLIC, abre lookup ao pressionar F4 (c├│digo 28)
+- `CodTamDblClick()` ÔÇö PUBLIC, delega para `AbrirLookupCodTam()`
+- `AbrirLookupCodTam()` ÔÇö l├│gica completa: campo vazio ÔåÆ exibe lista completa; n├úo-vazio ÔåÆ tenta match exato primeiro; sempre limpa `cursor_4c_BuscaTam` e `loc_oBusca.Release()` no final
+
+Todas as regras cr├¡ticas respeitadas: m├®todos de handler PUBLIC (n├úo PROTECTED), `LPARAMETERS` em `CodTamKeyPress`, nenhum `RETURN` dentro de `TRY/CATCH`, `CATCH` com `MostrarErro`, `mAddColuna` com 3 par├ómetros, guard `!Enabled` antes de abrir o picker.

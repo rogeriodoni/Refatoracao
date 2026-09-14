@@ -1,0 +1,17 @@
+﻿**Fase 3/8 conclu├¡da.** `FormMoe.prg` criado com 277 linhas em `C:\4c\projeto\app\forms\cadastros\FormMoe.prg`.
+
+**O que foi entregue:**
+
+| M├®todo | Status |
+|--------|--------|
+| `DEFINE CLASS FormMoe AS FormBase` | Width=1000, Height=600, Caption="Cadastro de Moedas" |
+| `Init()` | Apenas `RETURN DODEFAULT()` (padr├úo can├┤nico) |
+| `InicializarForm()` | Cria MoeBO, chama ConfigurarPageFrame, propaga Caption para labels |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, 2 Pages com `fundo_cad_1003.jpg` |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo) + `cnt_4c_Botoes` (Left=542) + `cnt_4c_Saida` (Left=917, can├┤nico) |
+| `ConfigurarPaginaDados()` | `cnt_4c_Salva` (Left=842, Top=45 = original 16+29) |
+| `TornarControlesVisiveis()` | Recursivo, c├│pia exata do FormCor |
+| `FormatarGridLista()` | Verdana/8 (padr├úo Grade do framework) |
+| `Destroy()` | Libera BO + fecha todos os cursores da Moedas |
+
+**Pr├│ximas fases:** Fase 4 adicionar├í Grid + bot├Áes CRUD em `cnt_4c_Botoes`/`cnt_4c_Saida` e chamar├í `CarregarLista()` em `InicializarForm()`.

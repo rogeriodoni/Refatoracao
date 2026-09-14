@@ -1,0 +1,10 @@
+﻿O arquivo est├í correto. A Fase 2/8 est├í conclu├¡da ÔÇö DupBO.prg agora cont├®m todos os m├®todos CRUD completos:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com filtro opcional, retorna `cursor_4c_Dados` com coluna `series`
+- **`CarregarPorCodigo(par_cSeries)`** ÔÇö SELECT por PK, chama CarregarDoCursor, reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia todas as 46 colunas do cursor para propriedades BO usando `SELECT (alias)` antes de acessar campos (padr├úo correto, sem `(var).campo`)
+- **`Inserir()`** ÔÇö INSERT com todos os campos NOT NULL; usa `GETDATE()` para `ddatas`, `TIME()` para `choras`, `go_4c_Sistema.cCodEmpresa` para `cemps`, string vazia para `clocals`
+- **`Atualizar()`** ÔÇö UPDATE com todos os campos edit├íveis + WHERE por `series`
+- **`ExecutarExclusao()`** ÔÇö DELETE por PK com auditoria
+
+Todos os m├®todos seguem as regras: RETURN fora de TRY/CATCH, CATCH n├úo silencioso, `FormatarNumeroSQL()`/`EscaparSQL()` corretos por tipo de coluna.

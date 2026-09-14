@@ -1,0 +1,16 @@
+﻿Fase 4 conclu├¡da. O arquivo `Formsigrefec.prg` foi atualizado de 272 para 1082 linhas com as seguintes adi├º├Áes:
+
+**Modifica├º├Áes:**
+- `InicializarForm()` ÔÇö agora chama `ConfigurarCamposFiltro()`, `ConfigurarEventos()`, `LimparCampos()`
+- `ConfigurarBotoes()` ÔÇö FontName dos 4 bot├Áes corrigido para `"Comic Sans MS"` (regra cr├¡tica do framework)
+
+**M├®todos novos adicionados:**
+- `ConfigurarCamposFiltro()` ÔÇö 20 controles criados na Page1: empresa (txt+desc), per├¡odo (2 datas), usu├írio, forma de pagamento, linha separadora, 6 checkboxes de op├º├úo de impress├úo, campo vendedor
+- `ConfigurarEventos()` ÔÇö BINDEVENTs para 4 bot├Áes do CommandGroup + KeyPress em 6 campos + Click em 2 checkboxes
+- `AtualizarEstadoCampos()` ÔÇö habilita/desabilita `chkVends`, `txt_4c_Vends` (requer `chkDetOpe`) e os checkboxes de resumo (desabilitados quando vendedor selecionado)
+- `FormParaRelatorio()` ÔÇö mapeia 13 valores do form para o BO
+- `LimparCampos()` ÔÇö inicializa com empresa logada (SQLEXEC em `SigCdEmp`) + datas de hoje + defaults dos checkboxes
+- 4 handlers de bot├úo: Visualizar, Imprimir, Excel (`COPY TO TYPE XLS`), Encerrar
+- 6 handlers `TeclaXxx()` com F4=busca e ENTER/TAB=validar (datas com handler vazio, padr├úo correto)
+- 2 handlers `ChkDetOpeClick()`, `ChkVendsClick()` com l├│gica de cascata
+- 8 m├®todos de valida├º├úo/busca: `ValidarEmps/AbrirBuscaEmps`, `ValidarUsuars/AbrirBuscaUsuars`, `ValidarFPags/AbrirBuscaFPags`, `ValidarVends/AbrirBuscaVends`

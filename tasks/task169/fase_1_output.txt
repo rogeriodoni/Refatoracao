@@ -1,0 +1,15 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\SigPrCtcBO.prg` criado com:
+
+- **12 propriedades** extra├¡das do c├│digo fonte original:
+  - `this_cEmpDopNums` ÔÇö chave combinada empresa+dope+numes (campo `EmpDopNums` da tabela)
+  - `this_cEmps`, `this_cDopes`, `this_nNumes` ÔÇö componentes individuais da chave
+  - `this_cPkChaves` ÔÇö PK gerada por `fUniqueIds()`
+  - `this_cMoes`, `this_cDescMoes`, `this_nValos` ÔÇö dados da cota├º├úo (lookup SigCdMoe)
+  - `this_cEscolha` ÔÇö controle de permiss├úo (`pcEscolha`)
+  - `this_lHouveExcl`, `this_lHouveIns` ÔÇö flags de rastreamento de sess├úo
+
+- **Init()** com `this_cTabela = "SIGPRCTC"` e `this_cCampoChave = "pkChaves"`
+
+- **ObterChavePrimaria()** para auditoria
+
+N├úo inclu├¡dos nesta fase (pr├│ximas): `CarregarDoCursor()`, `Buscar()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`.

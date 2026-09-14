@@ -1,0 +1,25 @@
+[2026-04-15 10:33:22] [INFO] === CLAUDE CLI INVOKER ===
+[2026-04-15 10:33:22] [INFO] Prompt File: C:\4c\tasks\task017\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-04-15 10:33:22] [INFO] Output File: C:\4c\tasks\task017\06b_testeAutomatico_fix_output_t2.txt
+[2026-04-15 10:33:22] [INFO] Model: sonnet
+[2026-04-15 10:33:22] [INFO] Timeout: 3600 segundos
+[2026-04-15 10:33:22] [INFO] Max Output Tokens: 128000
+[2026-04-15 10:33:22] [INFO] Context Files: 0 arquivo(s)
+[2026-04-15 10:33:22] [INFO] Invocando Claude CLI...
+[2026-04-15 10:33:22] [INFO] Prompt carregado: 127627 caracteres
+[2026-04-15 10:33:22] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-04-15 10:33:22] [INFO] Tamanho total do prompt: 127627 caracteres
+[2026-04-15 10:33:22] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-04-15 10:36:15] [INFO] Claude CLI finalizado em 172.6275733 segundos
+[2026-04-15 10:36:15] [INFO] Exit Code: 0
+[2026-04-15 10:36:15] [INFO] Output salvo em: C:\4c\tasks\task017\06b_testeAutomatico_fix_output_t2.txt
+[2026-04-15 10:36:15] [INFO] Output size: 966 bytes
+[2026-04-15 10:36:15] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-04-15 10:36:15] [INFO] Preview do output:
+[2026-04-15 10:36:15] [INFO] Duas corre+º+Áes aplicadas:
+
+**Causa raiz 1** ÔÇö `fConfigGeral: File 'fconfiggeral.prg' does not exist.`  
+Removido o bloco `TRY/fConfigGeral()/CATCH/MsgErro`. A fun+º+úo n+úo faz parte da arquitetura 4c (n+úo existe no projeto). O `MsgErro` dentro do CATCH mostrava dialog que, combinado com o fluxo seguinte, levava +á falha.
+
+**Causa raiz 2** ÔÇö `Erro: Property USUARIO is not found.`  
+Em `ValidarUsuario()`, `goSistema.Usuario = loc_cUsuario` era chamado sem verificar se a propriedade e

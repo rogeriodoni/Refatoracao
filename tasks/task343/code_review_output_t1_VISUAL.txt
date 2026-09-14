@@ -1,0 +1,12 @@
+﻿Corre├º├Áes aplicadas em ambas as ocorr├¬ncias do grid. Resumo do que foi feito e o que foi deliberadamente deixado:
+
+**Captions corrigidos** (confirmados via `pColuna` no SIGCDACJ.sct):
+| Caption antigo | Caption novo | Campo |
+|---|---|---|
+| `"JOB"` | `"C" + CHR(243) + "digo"` | IClis |
+| `"C" + CHR(243) + "d. Abrev."` | `"Nome"` | RClis |
+| `"Cria" + CHR(231) + CHR(227) + "o"` | `"Inclus" + CHR(227) + "o"` | DataIncs |
+
+**"Descritivo"** ÔÇö j├í estava correto (confirmado via `pColuna([Razaos], [], [], [Descritivo], ...)` no legado).
+
+**"Grupo" e "Inativo"** ÔÇö o legado n├úo tinha essas colunas expl├¡citas (`Grupos` n├úo era exibido como coluna; `Inativas` era DynamicForeColor vermelho). Os captions foram mantidos pois remover as colunas alteraria a l├│gica de neg├│cio, o que est├í fora do escopo deste pass visual.

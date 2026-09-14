@@ -1,0 +1,10 @@
+﻿Feito. Resumo das corre├º├Áes aplicadas:
+
+**[SQL-FILTRO-INVENTADO] `cidchaves` em WHERE** ÔÇö removido de todos os 4 locais onde aparecia:
+- `Buscar`: removido do SELECT (form n├úo precisa mais pass├í-lo)
+- `CarregarPorCodigo`: assinatura mudou para `(par_cImps, par_nOrdems)` com `WHERE imps = ... AND ordems = ...`
+- `ValidarUnicidade`: substitu├¡do por l├│gica de early-return quando chave composta n├úo mudou; WHERE sem `cidchaves`
+- `Atualizar` e `ExecutarExclusao`: WHERE usa `this_cImpsOriginal` e `this_nOrdemsOriginal` (armazenados em `CarregarDoCursor` para ser seguro quando o usu├írio edita imps/ordems)
+- Nos 3 handlers do form: leem `cursor_4c_Dados.imps` + `.ordems` em vez de `.cidchaves`
+
+**[SQL-FILTRO-INVENTADO] `trnfis` em WHERE** ÔÇö removido inteiramente o bloco de valida├º├úo de `SigCdOpe.trnfis` de `ExecutarExclusao` (condi├º├úo inventada, inexistente no original).

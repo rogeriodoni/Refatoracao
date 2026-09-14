@@ -1,0 +1,11 @@
+﻿`C:\4c\projeto\app\forms\operacionais\FormICO.prg` criado com sucesso. 
+
+**O que foi entregue na Fase 3:**
+
+- **DEFINE CLASS FormICO AS FormBase** com todas as propriedades do original: `Width=800`, `Height=620`, `TitleBar=0`, `ControlBox=.F.`, `AutoCenter=.T.`, etc.
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` (FormBase.Init() chama InicializarForm())
+- **InicializarForm()** ÔÇö cria ICOBO, seta Caption e Picture din├ómicos com `CHR(205)` e `FILE()` guard, chama ConfigurarCabecalho(), carrega ├¡cones do SQL Server com guard `gb_4c_ValidandoUI`, `LockScreen .T./.F.`
+- **ConfigurarCabecalho()** ÔÇö cria `cnt_4c_Cabecalho` (RGB 100,100,100), `lbl_4c_Sombra` (ForeColor preto, shadow), `lbl_4c_Titulo` (ForeColor branco, vis├¡vel) ÔÇö todos com paths expl├¡citos ap├│s AddObject (sem WITH aninhado)
+- **Destroy()** ÔÇö fecha `crTmpcdico`, nulifica BO, chama `DODEFAULT()` como ├║ltima linha
+
+**Pr├│xima fase (4/8):** Grid + CommandGroup (bot├Áes Incluir/Excluir/Encerrar).

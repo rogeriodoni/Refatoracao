@@ -1,0 +1,10 @@
+﻿Todas as corre├º├Áes aplicadas:
+
+**ProdutoBO.prg** (6 locais):
+- `QultComp` ÔåÆ `qtdultcomp` em SELECT (Buscar + CarregarPorCodigo), INSERT column list, UPDATE SET
+- `WebPros` ÔåÆ `prodwebs` em SELECT (Buscar + CarregarPorCodigo), INSERT column list, UPDATE SET
+
+**FormProduto.prg** (3 locais ÔÇö linhas 4127, 4649, 5087):
+- `WHERE PKChave = ` ÔåÆ `WHERE Codigos = ` nas queries de valida├º├úo/lookup da tabela `sigcdmod`
+
+**Problema `TOP`**: Falso positivo do checker ÔÇö o c├│digo original usa `Select Top 1 ...` (palavra reservada SQL Server), n├úo existe nenhuma coluna `TOP` em cl├íusula WHERE nos arquivos migrados.

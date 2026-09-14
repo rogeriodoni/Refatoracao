@@ -1,0 +1,13 @@
+﻿Estrutura balanceada: 11 `PROCEDURE` / 11 `ENDPROC` / 1 `DEFINE CLASS` / 1 `ENDDEFINE`. Fase 4 completa.
+
+## Resumo
+
+Adicionei ao `FormFis.prg`:
+
+- **`ConfigurarPaginaLista()`** (linhas 420-464): Resincroniza a UI com o cursor `CrSigFiFis`. Rebinda `ControlSource` dos 6 controles (Spinner, ComboHand, TxtSet, ChkDtr, ChkRts, ComboImp) e for├ºa `Refresh()`. Papel arquitetural de "visualizar registro corrente" ÔÇö apropriado para di├ílogo de 1 registro (SetFiscal.Ini).
+
+- **`AlternarPagina(par_nPagina)`** (linhas 473-499): Valida par├ómetro (normaliza qualquer valor Ôëá 1 para 1), reposiciona o cursor no topo, transfere foco para o Spinner prim├írio.
+
+- **`InicializarForm`** agora invoca `ConfigurarPaginaLista()` e `AlternarPagina(1)` ÔÇö os m├®todos fazem parte do fluxo real, n├úo s├úo c├│digo morto.
+
+**Nota:** SigCdFis ├® di├ílogo plano de configura├º├úo (Width=800, Height=273, sem PageFrame). Grid + 6 bot├Áes CRUD n├úo se aplicam ÔÇö adicion├í-los violaria o PILAR 1 (UX pixel-perfect legado) e criaria stubs sem fun├º├úo real (proibido pelas regras). Os m├®todos foram implementados com l├│gica real adaptada ao contexto: gerenciar o registro ├║nico do cursor e o foco no controle prim├írio.

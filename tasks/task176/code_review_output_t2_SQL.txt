@@ -1,0 +1,14 @@
+﻿Ambos os alertas s├úo **falsos positivos** do validador autom├ítico. N├úo h├í corre├º├úo necess├íria.
+
+## An├ílise dos Alertas
+
+**`CURSOR_4C_IMPACESSIVE`** ÔÇö O validador confundiu o nome do cursor `cursor_4c_ImpAcessiveis` com uma coluna SQL em WHERE. As ocorr├¬ncias s├úo todas c├│digo VFP9 leg├¡timo:
+- `USED("cursor_4c_ImpAcessiveis")` ÔÇö fun├º├úo VFP9 de verifica├º├úo de cursor aberto
+- `SCAN FOR cursor_4c_ImpAcessiveis.ntpimpres = 2` ÔÇö acesso a campo de cursor VFP9, n├úo SQL
+- `SELECT cursor_4c_ImpAcessiveis` ÔÇö sele├º├úo de ├írea de trabalho VFP9
+
+**`CONTROLCOUNT`** ÔÇö O validador confundiu a propriedade VFP9 `loc_oControl.ControlCount` (linha 163) com uma coluna SQL em WHERE. ├ë acesso a propriedade de objeto VFP9 dentro de `TornarControlesVisiveis()`.
+
+## Conclus├úo
+
+Nenhum dos dois arquivos cont├®m filtros WHERE inventados. Todos os SQL do c├│digo migrado usam apenas colunas que correspondem ao original (USUACESS, USUARIOS, NTIPOS, NSITUAS, etc.). Os arquivos est├úo corretos e **n├úo requerem altera├º├úo**.

@@ -1,0 +1,19 @@
+﻿All 8 lookup methods are present. Phase 6 is complete. Here's a summary of all changes made to `Formccr.prg`:
+
+**Changes made:**
+
+1. **`txt_4c_Grupo` position fixed** (line 1675-1676): Changed from wrong `Top=196, Left=486` to correct `Top=17, Left=760` ÔÇö aligned with the "Grupo Padr├úo" label at Top=19, Left=678.
+
+2. **`getSituas` lookups** (CriarAbaCadastro): Added `KeyPress`/`DblClick`/`LostFocus` BINDEVENTs + 3 new methods:
+   - `SituacaoKeyPress` / `SituacaoDblClick` / `SituacaoLostFocus`
+   - `AbrirBuscaSituacao()` ÔåÆ queries `SigCdCst` with `autos <> 2` filter via `par_cFiltro`
+
+3. **`Get_grupo` in Estoque tab** (CriarAbaEstoque): Added `KeyPress`/`DblClick` BINDEVENTs + 2 new methods:
+   - `GrupoEstoqueKeyPress` / `GrupoEstoqueDblClick`
+   - `AbrirBuscaGrupoEstoque()` ÔåÆ queries `SigCdGcr` (codigos/descrs)
+
+4. **9 tax container lookups** (CriarAbaFaturamento loop): Added 8 BINDEVENTs per container (GotFocus+KeyPress+DblClick+LostFocus for each of getCdGrupos and getCdContas) + 8 new methods:
+   - `GrupoFatKeyPress/DblClick/LostFocus/GotFocus` + `AbrirBuscaGrupoFat()` ÔåÆ queries `SigCdGcr`
+   - `ContaFatKeyPress/DblClick/LostFocus/GotFocus` + `AbrirBuscaContaFat()` ÔåÆ queries `SigCdCli` filtered by `grupos` if getCdGrupos has a value
+
+5. **New property** `this_oUltimoCntFat = .NULL.` ÔÇö tracks the last focused tax container so LostFocus handlers can find which container to clean

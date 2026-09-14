@@ -1,0 +1,9 @@
+﻿Os 4 m├®todos `AbrirBusca*` foram corrigidos para o padr├úo can├┤nico: `CREATEOBJECT` ÔåÆ `mAddColuna` ÔåÆ `Show()` ÔåÆ verificar `this_lSelecionou`. O padr├úo antigo (verificar `this_lAchouRegistro` antes de configurar colunas e mostrar) era um bug ÔÇö as colunas nunca eram configuradas antes da exibi├º├úo, o que impedia a sele├º├úo.
+
+**Corre├º├Áes aplicadas:**
+1. `AbrirBuscaEmpresa` ÔÇö padr├úo can├┤nico
+2. `AbrirBuscaGGrupo` ÔÇö padr├úo can├┤nico
+3. `AbrirBuscaGrEstoque` ÔÇö padr├úo can├┤nico + limpeza de Conta de Estoque ao trocar grupo (comportamento do original: `get_Cd_GrEstoque.Valid` limpa `get_cd_estoque`/`get_ds_estoque`)
+4. `AbrirBuscaEstoque` ÔÇö padr├úo can├┤nico (filtro por grupo preservado)
+
+O restante do arquivo j├í estava completo das fases anteriores: todos os campos de filtro (Empresa, Grande Grupo, Grupo Estoque, Conta Estoque, Per├¡odo), todas as valida├º├Áes, todos os handlers de teclado (F4=115, ENTER=13, TAB=9) e todos os bot├Áes do relat├│rio via `cmg_4c_Botoes`.

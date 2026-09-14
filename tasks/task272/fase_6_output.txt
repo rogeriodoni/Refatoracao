@@ -1,0 +1,27 @@
+﻿O arquivo est├í completo e correto. Fase 6/8 conclu├¡da com todas as implementa├º├Áes funcionais.
+
+**Resumo do que foi adicionado:**
+
+1. **`txt_4c_Valos`** ÔÇö campo Cota├º├úo (numeric, InputMask "99999.9999999") com label "Cota├º├úo" na Page2, referenciado mas ausente nas fases anteriores
+
+2. **BINDEVENTs em `txt_4c_Cmoes`** ÔÇö KeyPress (F4ÔåÆlookup), DblClick (ÔåÆlookup), LostFocus (ÔåÆvalida├º├úo)
+
+3. **`CmoesLookupKeyPress` / `CmoesLookupDblClick`** ÔÇö handlers PUBLIC (obrigat├│rio para BINDEVENT funcionar)
+
+4. **`CmoesLostFocus`** ÔÇö valida c├│digo digitado; se vazio limpa descri├º├úo, se preenchido chama lookup
+
+5. **`AbrirBuscaMoedaPage2`** ÔÇö lookup completo via FormBuscaAuxiliar para uso na Page2 (equivalente ao Valid de Column1.Text1 do legado)
+
+6. **`LimparCampos`** ÔÇö limpa Cmoes, Descrs e Valos na Page2
+
+7. **`HabilitarCampos`** ÔÇö habilita/desabilita campos + muda bot├úo Confirmar para "Fechar" em modo VISUALIZAR
+
+8. **`ControlarBotoesPorEscolha`** ÔÇö controla visibilidade de Incluir/Excluir conforme `pcEscolha` recebido (equivalente ao `mCtrlBotoes + fChecaAcesso` do original)
+
+9. **`BtnIncluirClick`** ÔÇö agora navega para Page2 ap├│s inserir linha blank no cursor
+
+10. **`BtnAlterarClick`** ÔÇö agora navega para Page2 em modo edi├º├úo (em vez de apenas setar foco no grid)
+
+11. **`BtnVisualizarClick`** ÔÇö agora chama `HabilitarCampos(.F.)` para modo somente leitura
+
+12. **`BtnSalvarClick`** ÔÇö agora detecta modo VISUALIZAR e apenas volta para lista

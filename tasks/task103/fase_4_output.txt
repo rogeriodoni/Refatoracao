@@ -1,0 +1,19 @@
+﻿Fase 4 implementada. Aqui est├í o resumo do que foi adicionado:
+
+**`ConfigurarPaginaLista()`** ÔÇö Adiciona ao `cnt_4c_Corpo`:
+- `grd_4c_Dados` (top=79, left=385, w=318, h=387) com 4 colunas:
+  - Column1: CheckBox (lMarca, width=35) ÔÇö sequ├¬ncia obrigat├│ria: `AddObject` ÔåÆ `CurrentControl` ÔåÆ `ControlSource`
+  - Column2: Ordems (Ordem, width=45)
+  - Column3: Grupos (Grupo, width=45)
+  - Column4: Descrps (Descri├º├úo, width=193, ReadOnly)
+  - RecordSource ao final + re-defini├º├úo de cabe├ºalhos (padr├úo FORMCOR_LICOES)
+- `cmd_4c_SelTodos` e `cmd_4c_LimparSel` (top=228/268, left=707)
+- BINDEVENTs para `AfterRowColChange`, `Check1.Click` e os dois bot├Áes
+
+**`AlternarPagina()`** ÔÇö Stub vazio (form flat n├úo usa page switching)
+
+**`GrdAfterRowColChange(par_nColIndex)`** ÔÇö Exibe imagem de `FigProcs` em `img_4c_FigJpg` (guarda com `PEMSTATUS` pois o controle ├® adicionado na Fase 5)
+
+**`GrdCheckClick()`** ÔÇö Sincroniza `lMarca` com o valor do checkbox (trata tipos L e N)
+
+**`BtnSelTodosClick()` / `BtnLimparSelClick()`** ÔÇö Delegam para `BO.MarcarTodos()` / `BO.DesmarcarTodos()` e fazem `Refresh()`

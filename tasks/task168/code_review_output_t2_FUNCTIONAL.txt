@@ -1,0 +1,23 @@
+﻿O problema detectado j├í est├í corrigido no arquivo. Vou confirmar verificando o m├®todo:
+
+O c├│digo atual nas linhas 365-375 j├í inclui `CNT_4C_CABECALHO` no INLIST:
+
+```foxpro
+IF INLIST(UPPER(loc_oControl.Name), ;
+          "GRD_4C_DADOS", ;
+          "TXT_4C_LEITURA", ;
+          "LBL_4C_TXT_LEITURA", ;
+          "CNT_4C_CABECALHO")     ÔåÉ j├í filtrado
+    *-- Recursao nos filhos mesmo com LOOP (filhos ficam .T.)
+    IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+        THIS.TornarControlesVisiveis(loc_oControl)
+    ENDIF
+    LOOP
+ENDIF
+```
+
+O fix j├í est├í aplicado corretamente seguindo o padr├úo can├┤nico da mem├│ria (`feedback_tcv_skip_recursao.md`):
+- `CNT_4C_CABECALHO` est├í no INLIST ÔåÆ LOOP impede que `.Visible = .T.` seja chamado no container
+- A recurs├úo nos filhos ocorre **antes** do LOOP ÔåÆ `lbl_4c_Sombra` e `lbl_4c_Titulo` ficam Visible=.T.
+
+O ├║nico problema listado no pass Functional j├í est├í corrigido no arquivo. Nenhuma altera├º├úo ├® necess├íria.

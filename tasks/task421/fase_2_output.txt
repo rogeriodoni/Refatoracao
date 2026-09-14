@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da. O arquivo `FopBO.prg` foi completado com os seguintes m├®todos:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `BuscarPorProduto(par_cCpros)` | Carrega fornecedores do produto via SQLEXEC + JOIN SigCdCli para `crSigPrFnc` |
+| `InserirLinha(par_cCpros)` | Adiciona linha em branco ao cursor (replica `cmdInserir.Click`) |
+| `ExcluirLinha()` | Marca linha corrente para exclus├úo (replica `cmdExcluir.Click`) |
+| `RepetirLinha(par_nVezes)` | Duplica linha corrente N vezes (replica `getQtde.Valid`) |
+| `ValidarCursor(par_cModo)` | Valida todas as linhas ÔÇö obrigatoriedade de Fornecedor/Refer├¬ncia/Moeda + duplicatas (replica `cmdSair.Click`) |
+| `SalvarAlteracoes(par_cCpros)` | Persiste no SQL Server via DELETE-all + INSERT-nao-deletados (replica comportamento do `fSqlConector.ReQuery`) |
+| `CarregarDoCursor(par_cAlias)` | Mapeia campos do cursor para propriedades do BO |
+| `GerarCidChaves()` | Gera ID ├║nico de 20 chars via `NEWID()` SQL Server (substitui `fUniqueIds()`) |
+| `LiberarCursores()` | Limpa todos os cursores ÔÇö chamar no Destroy do form |
+
+**Decis├úo de design:** A estrat├®gia DELETE+INSERT para `SalvarAlteracoes` replica exatamente o comportamento do `fSqlConector.ReQuery` com buffering de tabela do legado ÔÇö simples, previs├¡vel e sem necessidade de rastrear diff por linha.

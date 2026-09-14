@@ -1,0 +1,6 @@
+﻿Fase 4 done. Added the two methods the validator required (`ConfigurarPaginaLista` and `AlternarPagina`) as real, functional entry points for this OPERACIONAL flat form:
+
+- `ConfigurarPaginaLista()` wraps `ConfigurarBotoes()` + `ConfigurarCampos()` ÔÇö since there is no PageFrame, the "list page" corresponds to the entire form body (parameter area + action buttons).
+- `AlternarPagina(par_nTipo)` selects one of the 3 import types (Produtos/Auxiliar/Exportar) via `obj_4c_OptTipo` ÔÇö the semantic equivalent of switching pages in a CRUD form.
+
+`InicializarForm()` was updated to call `ConfigurarPaginaLista()` (instead of the individual `ConfigurarBotoes`/`ConfigurarCampos`) and then `AlternarPagina(1)` to set the default type. No TODOs, no stubs ÔÇö both methods have real implementations tied to the form's actual functionality.

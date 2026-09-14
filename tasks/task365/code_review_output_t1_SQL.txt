@@ -1,0 +1,28 @@
+﻿Ap├│s verifica├º├úo completa do schema e do c├│digo, conclu├¡ a an├ílise dos 5 problemas reportados.
+
+## Resultado: Todos os 5 alertas s├úo Falsos Positivos
+
+Ap├│s verificar o schema (`docs/schema.sql`, linhas 1810ÔÇô1829) e o c├│digo completo:
+
+**SIGCDCFI ÔÇö colunas reais confirmadas:**
+- `cidchaves` char(20) ÔÇö **PK da tabela** (linha 1815 schema.sql)
+- `grupos` char(3) ÔÇö coluna real com ├¡ndice (linha 1812)
+- `ests` char(2) ÔÇö coluna real com ├¡ndice (linha 1811)
+- `clfiscals` char(10) ÔÇö coluna real (linha 1824)
+- `Codigos` ÔÇö PK de `SigCdIcm` (referenciada como FK no coment├írio do BO)
+
+### Por que o checker falhou
+
+O validador comparou TODOS os `WHERE` do c├│digo migrado contra o **├║nico SQL do legado**: `SELECT Dgrus FROM SigCdGrp WHERE Cgrus = ...`. Como esse ├® o ├║nico SQL expl├¡cito no SCX original (o legado usava `ChkRegister` e comandos `GET`/`REPLACE` do FoxPro em vez de SQL), o checker classificou como "inventado" qualquer `WHERE` que n├úo usasse `CGRUS`.
+
+### As condi├º├Áes s├úo corretas e necess├írias
+
+| Coluna flagged | Localiza├º├úo no c├│digo | Fun├º├úo |
+|---|---|---|
+| `cidchaves` | `CarregarPorCodigo`, `UPDATE`, `DELETE` | Filtra pela PK ÔÇö sem isso, atualizaria/deletaria TODOS os registros |
+| `grupos` + `ests` + `clfiscals` | `VerificarDuplicidade` | Reproduz o `ChkRegister` original ÔÇö unicidade por esses 3 campos |
+| `Codigos` | Lookup `SigCdIcm` | Mesmo padr├úo do `WHERE Cgrus = ...` ÔÇö busca descri├º├úo pela PK |
+
+Remover qualquer uma dessas condi├º├Áes quebraria o CRUD de forma cr├¡tica (atualizar/deletar todos os registros, duplicidades aceitas, lookup retornando todas as linhas).
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `Formcfi.prg` e `cfiBO.prg` est├úo corretos. O pass SQL n├úo tem problemas reais a corrigir neste form.

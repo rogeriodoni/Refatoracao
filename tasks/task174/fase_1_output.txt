@@ -1,0 +1,14 @@
+﻿Arquivo criado em `C:\4c\projeto\app\classes\sigpremaBO.prg`.
+
+**Fase 1 conclu├¡da.** O BO cont├®m:
+
+- **11 propriedades** mapeadas do form original:
+  - `this_cEmpDopNums` / `this_cEmps` / `this_cDopes` / `this_nNumes` ÔÇö par├ómetros do movimento
+  - `this_lAutomatico` ÔÇö modo silencioso (pAuto)
+  - `this_cArqEmail` / `this_cEscolha` ÔÇö estado do processo PDF/email
+  - `this_cPadEmails` / `this_cPadServs` / `this_cPadSenhas` / `this_nPadPortas` ÔÇö config SMTP de SigCdEmp
+  - `this_lEmailAtivo` ÔÇö flag de disponibilidade do PDFCreator
+
+- **Init()** configura `this_cTabela = "SigMvCab"` e `this_cCampoChave = "EmpDopNums"` antes de `DODEFAULT()`.
+
+Os campos do cursor de trabalho (`crLocalTotal`: Checks, grupos, Contas, Rclis, emails, mensagems, EmpDopNums, prioridade) s├úo dados de cursor ÔÇö n├úo propriedades do BO ÔÇö e ser├úo gerenciados no Form nas fases seguintes.

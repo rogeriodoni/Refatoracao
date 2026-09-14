@@ -1,0 +1,20 @@
+﻿Analisei o arquivo completo. O resultado ├®:
+
+**Ambos os problemas j├í est├úo corrigidos no arquivo atual em disco:**
+
+1. **[CONTAINER-VISIVEL]**: O filtro INLIST j├í est├í presente na linha 1644:
+   ```foxpro
+   IF !INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO", "CNT_4C_BOTOESACAO")
+       loc_oObjeto.Visible = .T.
+   ENDIF
+   ```
+
+2. **[MADDCOLUNA-PARAMS]**: O `grep` confirmou que as 6 chamadas `mAddColuna` no arquivo t├¬m exatamente 3 par├ómetros (`campo`, `mascara`, `titulo`):
+   - Linha 1726: `mAddColuna("Usuarios", "XXXXXXXXXX", "Usu├írio")` Ô£ô
+   - Linha 1727: `mAddColuna("NComps", "X(40)", "Nome Completo")` Ô£ô
+   - Linha 1846: `mAddColuna("Setores", "XXXXXXXXXX", "Setor")` Ô£ô
+   - Linha 1847: `mAddColuna("Descrs", "X(40)", "Descri├º├úo")` Ô£ô
+   - Linha 1928: `mAddColuna("Usuars", "XXXXXXXXXX", "Usu├írio")` Ô£ô
+   - Linha 1929: `mAddColuna("NComps", "X(40)", "Nome Completo")` Ô£ô
+
+O code review foi gerado contra uma vers├úo anterior do arquivo. O `FormCVI.prg` atual j├í est├í correto ÔÇö nenhuma altera├º├úo necess├íria.

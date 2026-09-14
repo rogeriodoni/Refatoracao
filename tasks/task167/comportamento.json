@@ -1,0 +1,259 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 11,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fStoM", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGPRCPD",
+      "evento": "Init",
+      "linhas": 105,
+      "codigoOriginal": "LParameters pFase, pUnidade, pData, pCodigo\n\nThisForm.Setor   = pFase\nThisForm.Unidade = pUnidade\nThisForm.data    = pData\nThisForm.Codigo  = pCodigo\n\nWith ThisForm\n\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\n\t\tThisForm.Refresh\n\t\tThisForm.Draw\n\t\tThisForm.Show\n\n\t\tpDatai = ThisForm.Data\n\t\tpFase  = ThisForm.Setor\n\t\tpnCod  = ThisForm.Codigo\n\t\tpUnid  = ThisForm.Unidade\n\t\t\n\t\tlcSql = [Select * From SigCdPcz Where codigos = ]+Str(pnCod)\n\t\tIf (ThisForm.poDat... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fStoM",
+        "metodosFormChamados": "SqlExecute,AfterRowColChange",
+        "controlesReferenciados": "Get_Data,Get_Fase,Get_Cap,Get_Utz,Get_Sld",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPD",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPD",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\nDodefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Get_descr",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Container1.Get_Fase",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Container1.get_Data",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Grade",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisform.LockScreen = .T.\nlcArquivo4 = Sys(2023)+'\\sigprcpd.jpg'\n\nThisForm.FigJpg.Visible = .F.\nThisForm.FigJpg.Picture = ''\n\nlcQuery = [Select FigJpgs, Dpros From SigCdPro Where Cpros= ']+zTmpPcpOp.Cpros+[']\n=ThisForm.PodataMgr.SqlExecute(lcQuery,'CrTmpPro')\n\nIf Not Empty(CrTmpPro.FigJpgs) And Not IsNull(CrTmpPro.FigJpgs)\n\tlcFoto=Strconv(Strtran(Strtran(Strtran(CrTmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)\n\tIf... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Picture =",
+        "controlesReferenciados": "Get_descr,Get_qtde,Get_cliente,Get_tEnv",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Container2.Get_Cap",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Container2.Get_Utz",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Container2.get_Sld",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Get_qtde",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Get_Cliente",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Get_tEnv",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGPRCPD.Sair",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGPRCPD.Init",
+      "queryOriginal": "\t\tlcSql = [Select * From SigCdPcz Where codigos = ]+Str(pnCod) \t\tIf (ThisForm.poDat... [TRUNCADO]",
+      "tabelas": "SigCdPcz",
+      "colunas": "codigos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGPRCPD.Grade.Procedure",
+      "queryOriginal": "lcQuery = [Select FigJpgs, Dpros From SigCdPro Where Cpros= ']+zTmpPcpOp.Cpros+['] =ThisForm.PodataMgr.SqlExecute(lcQuery,'CrTmpPro')",
+      "tabelas": "SigCdPro",
+      "colunas": "FigJpgs,Dpros,Cpros,Cpros+[],SqlExecutelcQuery,CrTmpPro",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPcz", "SigCdPro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

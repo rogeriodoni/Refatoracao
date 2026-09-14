@@ -1,0 +1,22 @@
+﻿O arquivo est├í completo e correto. A Fase 6 foi executada com sucesso.
+
+**Resumo do que foi adicionado/modificado:**
+
+**Campos novos em `ConfigurarPaginaDados()`:**
+- `txt_4c_Bairros` (Bairro, top=279, width=220)
+- `txt_4c_Cidades` (Cidade, top=306, width=430) + BINDEVENT KeyPress/DblClick para lookup
+- `txt_4c_Estados` (UF em Page2, top=333, width=24, sempre ReadOnly ÔÇö original `getEstados.When=.F.`)
+- `txt_4c_Nums` (N├║mero, top=359, width=80)
+
+**M├®todos atualizados:**
+- `FormParaBO()` ÔÇö agora transfere todos os 8 campos (incluindo Bairros, Cidades, Estados, Nums)
+- `BOParaForm()` ÔÇö idem
+- `HabilitarCampos()` ÔÇö habilita Bairros/Cidades/Nums; mant├®m Estados sempre `.F.`
+- `LimparCampos()` ÔÇö limpa os 4 novos campos
+- `BtnIncluirClick()` ÔÇö pr├®-preenche UF em Page2 a partir de `this_cUfFiltro`
+- `BtnSalvarClick()` ÔÇö valida├º├Áes de CEP/TipoNomes/Nomes/UF obrigat├│rias antes do TRY (espelha o original)
+
+**Novos m├®todos:**
+- `CidadesKeyPress()` ÔÇö handler F4 para o campo Cidade
+- `CidadesDblClick()` ÔÇö handler DblClick para o campo Cidade
+- `AbrirLookupCidades()` ÔÇö busca em `SigCdMun` filtrado por `UFIBGES = this_cCodUFs` (espelha `laFil` do original)

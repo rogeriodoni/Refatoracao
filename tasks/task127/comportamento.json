@@ -1,0 +1,99 @@
+{
+  "resumo": {
+    "totalMetodos": 4,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 0,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREIPC",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "For x = 1 to Thisform.Qbols\n\tlcNomeEmpresa = Iif( Seek( _empr, 'crSigCdEmp', 'Cemps'), crSigCdEmp.Razas, '' )\n\tlcRelTitulo   = 'Relação de ' + Proper( Alltrim( crSigCdPgr.Dopes ) ) + 's'\n\tlcPeriodo     = 'Operação : ' + Alltrim( crSigCdPgr.Dopes ) + ' ' + fGerMascara( crSigCdPgr.Numes )\n\t\n\tCreate Cursor Cabecalho ( pNomeEmpresa C(80), pRelTitulo C(80), pTipo n(1),;\n\t\t\t\t\t\t\t pPeriodo C(80) )\n\tInsert Into Cabecalho ( pNomeEmpresa, pRelTitulo, pPeriodo, pTipo ) ;\n\t\t\t\tValues ( lcNomeEmpresa, lcRelTit... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPC",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "SELECT TMPLANCA\ngoto top\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPC",
+      "evento": "Init",
+      "linhas": 7,
+      "codigoOriginal": "Lparameters qbols\n\n=DoDefault()\n\n\nThisform.Qbols=qbols\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREIPC",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "For x = 1 to Thisform.Qbols\n\tlcNomeEmpresa = Iif( Seek( _empr, 'crSigCdEmp', 'Cemps'), crSigCdEmp.Razas, '' )\n\tlcRelTitulo   = 'Relação de ' + Proper( Alltrim( crSigCdPgr.Dopes ) ) + 's'\n\tlcPeriodo     = 'Operação : ' + Alltrim( crSigCdPgr.Dopes ) + ' ' + fGerMascara( crSigCdPgr.Numes )\n\t\n\tCreate Cursor Cabecalho ( pNomeEmpresa C(80), pRelTitulo C(80), pTipo n(1),;\n\t\t\t\t\t\t\t pPeriodo C(80) )\n\tInsert Into Cabecalho ( pNomeEmpresa, pRelTitulo, pPeriodo, pTipo ) ;\n\t\t\t\tValues ( lcNomeEmpresa, lcRelTit... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREIPC.Procedure",
+      "queryOriginal": "\tInsert Into Cabecalho ( pNomeEmpresa, pRelTitulo, pPeriodo, pTipo ) ; \t\t\t\tValues ( lcNomeEmpresa, lcRelTit... [TRUNCADO]",
+      "tabelas": "Cabecalho",
+      "colunas": "pNomeEmpresa,pRelTitulo,pPeriodo,pTipo",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGREIPC.Procedure",
+      "queryOriginal": "\tInsert Into Cabecalho ( pNomeEmpresa, pRelTitulo, pPeriodo, pTipo ) ; \t\t\t\tValues ( lcNomeEmpresa, lcRelTit... [TRUNCADO]",
+      "tabelas": "Cabecalho",
+      "colunas": "pNomeEmpresa,pRelTitulo,pPeriodo,pTipo",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["Cabecalho"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,8 @@
+﻿Fase 5 conclu├¡da. O form `Formsigprenv.prg` j├í estava completamente implementado nas fases anteriores (todos os controles, eventos e l├│gica de neg├│cio). A tarefa desta fase foi integrar o form ao menu do sistema:
+
+**O que foi adicionado em `menu.prg`:**
+- `DEFINE BAR 56` (separador) e `DEFINE BAR 57` ("Impress├úo de Etiquetas de Envelopes") no popup `popMovimentos`
+- `ON SELECTION BAR 57 OF popMovimentos DO AbrirFormsigprenv`
+- Procedure `AbrirFormsigprenv()` ao final do arquivo (padr├úo can├┤nico com VARTYPE + MostrarErro)
+
+**Por que n├úo foi necess├írio adicionar `ConfigurarPaginaDados()`:** Este ├® um form OPERACIONAL (flat, sem PageFrame CRUD), ent├úo o equivalente de "Page2 Dados" ├® o m├®todo `ConfigurarControlesOperacionais()` que j├í cont├®m todos os campos (txt_4c_Etq_Ini, txt_4c_Etq_Qtd, obj_4c_Opt_Tipo, obj_4c_Opt_Impressora, cnt_4c__Impressora com spinners). O BO e o Form j├í s├úo auto-carregados pelo config.prg via ADIR (`*BO.prg` e `Form*.prg`).

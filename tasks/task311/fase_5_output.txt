@@ -1,0 +1,19 @@
+﻿A migra├º├úo da `Formsigprmdp` est├í **completa** ÔÇö a Fase 5 ├® uma no-op para este form espec├¡fico.
+
+## An├ílise da Fase 5
+
+Este ├® um form OPERACIONAL **plano** (800├ù270px, sem PageFrame), ent├úo n├úo existe `ConfigurarPaginaDados` ou Page2. O pipeline gen├®rico de 8 fases assumiu que haveria campos de dados para adicionar, mas o `analise.json` confirma `"campos": []`.
+
+**O que j├í est├í implementado e completo:**
+
+| Componente | Status | Detalhes |
+|---|---|---|
+| `sigprmdpBO.prg` | Ô£à Completo | Init, InicializarCursorContas, BuscarCalcCustos, ValidarParesNoGrid, ImportarXLS, InserirPendencia |
+| `Formsigprmdp.prg` | Ô£à Completo | Cabecalho, Botoes (5), Grid (2 colunas), PainelResultado (progresso), BtnProcessarClick (l├│gica completa) |
+| `config.prg` | Ô£à Auto-carregado | ADIR carrega `*BO.prg` em classes/ e `Form*.prg` em forms/operacionais/ automaticamente |
+| `menu.prg` | Ô£à Integrado | BAR 81 de popMovimentos ÔåÆ `AbrirFormsigprmdp` |
+
+**Por que a Fase 5 n├úo tem trabalho:**  
+O form original `sigprmdp.SCX` ├® um form flat sem PageFrame. Toda a estrutura ÔÇö cabe├ºalho, grade de pares `(CprosAnt, CprosNov)`, painel de progresso, bot├Áes ÔÇö foi implementada integralmente nas Fases 3 e 4. N├úo h├í campos de dados para uma "Page2".
+
+As Fases 6, 7 e 8 tamb├®m ser├úo no-ops por essa mesma raz├úo ÔÇö o form est├í 100% completo e integrado.

@@ -1,0 +1,1350 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReCsp.SCX
+* Data/Hora: 03/06/2026 17:43:15
+* Total de registros: 43
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECSP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape1
+  Parent: SIGRECSP
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say6
+  Parent: SIGRECSP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Empresa
+  Parent: SIGRECSP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dempresa
+  Parent: SIGRECSP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGRECSP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_inicial
+  Parent: SIGRECSP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECSP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_dopes
+  Parent: SIGRECSP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECSP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_codigo
+  Parent: SIGRECSP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_nm_operacao
+  Parent: SIGRECSP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_documento
+  Parent: SIGRECSP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_periodo_a
+  Parent: SIGRECSP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGRECSP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Grid1
+  Parent: SIGRECSP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGRECSP.Grid1.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGRECSP.Grid1.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGRECSP.Grid1.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGRECSP.Grid1.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGRECSP.Grid1.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGRECSP.Grid1.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGRECSP.Grid1.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGRECSP.Grid1.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGRECSP.Grid1.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGRECSP.Grid1.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGRECSP.Grid1.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGRECSP.Grid1.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Dados
+  Parent: SIGRECSP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdProcessar
+  Parent: SIGRECSP
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: lbl_estoque
+  Parent: SIGRECSP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGRECSP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGRECSP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGRECSP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Obses
+  Parent: SIGRECSP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getConta
+  Parent: SIGRECSP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDConta
+  Parent: SIGRECSP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getGrupo
+  Parent: SIGRECSP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGrupo
+  Parent: SIGRECSP
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptConta
+  Parent: SIGRECSP
+  Class: optiongroup
+  BaseClass: optiongroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP
+------------------------------------------------------------
+  BorderStyle = 1
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  Caption = "Pesquisa operações"
+  podatamgr = .F.
+  Name = "SIGRECSP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 71
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 137
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 203
+  btnReport.Sair.Name = "Sair"
+  btnReport.ControlSource = ""
+  btnReport.Height = 80
+  btnReport.Left = 528
+  btnReport.Top = -1
+  btnReport.Width = 273
+  btnReport.TabIndex = 17
+  btnReport.ZOrderSet = 1
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 206
+  REGISTRY1.Left = 732
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Shape1
+------------------------------------------------------------
+  Top = 118
+  Left = 536
+  Height = 110
+  Width = 174
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  ZOrderSet = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  Caption = "Empresa :"
+  Left = 61
+  Top = 96
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Get_Empresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 114
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 93
+  Width = 33
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "Get_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Get_Dempresa
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 148
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 93
+  Width = 359
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "Get_Dempresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  Caption = "Perío\<do : "
+  Left = 63
+  Top = 121
+  Width = 48
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.get_dt_inicial
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 21
+  Left = 114
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 118
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Número :"
+  Left = 277
+  Top = 146
+  Width = 46
+  TabIndex = 13
+  ZOrderSet = 8
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.lbl_dopes
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  Caption = "Movimentação :"
+  Left = 33
+  Top = 146
+  Width = 78
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "lbl_dopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Documento:"
+  Left = 392
+  Top = 146
+  Width = 60
+  TabIndex = 14
+  ZOrderSet = 10
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.get_codigo
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = "999999"
+  Left = 326
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = ""
+  Top = 143
+  Width = 45
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.get_nm_operacao
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 114
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 143
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 12
+  Name = "get_nm_operacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.get_documento
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 21
+  InputMask = ""
+  Left = 455
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 7
+  ToolTipText = ""
+  Top = 143
+  Width = 52
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "get_documento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "à"
+  Left = 199
+  Top = 121
+  Width = 8
+  TabIndex = 16
+  ZOrderSet = 14
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.get_dt_final
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Format = "K"
+  Height = 21
+  Left = 209
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 118
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1
+------------------------------------------------------------
+  ColumnCount = 6
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 308
+  Left = 16
+  RowHeight = 16
+  ScrollBars = 3
+  SplitBar = .F.
+  TabIndex = 9
+  Top = 260
+  Width = 776
+  GridLineColor = 238,238,238
+  ZOrderSet = 16
+  Name = "Grid1"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 150
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 50
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 52
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 74
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 80
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.Width = 529
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Movimentação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Número"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Docum."
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuário"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Observação"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Grid1.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Dados
+------------------------------------------------------------
+  AutoSize = .F.
+  Top = 122
+  Left = 619
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_pastas_60.jpg
+  Caption = "Movimento"
+  TabIndex = 10
+  ToolTipText = ""
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 17
+  Themes = .F.
+  Name = "Dados"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.cmdProcessar
+------------------------------------------------------------
+  AutoSize = .F.
+  Top = 122
+  Left = 543
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Caption = "P\<rocessar"
+  TabIndex = 8
+  ToolTipText = ""
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 18
+  Themes = .F.
+  Name = "cmdProcessar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 73
+  Top = 214
+  Width = 38
+  TabIndex = 40
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 73
+  Top = 189
+  Width = 38
+  TabIndex = 39
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  Caption = "Contas :"
+  Left = 68
+  Top = 167
+  Width = 43
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Observação :"
+  Left = 44
+  Top = 235
+  Width = 67
+  TabIndex = 40
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.get_Obses
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = ""
+  Height = 21
+  Left = 114
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 235
+  Width = 393
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "get_Obses"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.getConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 114
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 211
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.getDConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 196
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 211
+  Width = 311
+  ForeColor = 0,0,0
+  Name = "getDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.getGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 114
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 186
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "getGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.getDGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 196
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 186
+  Width = 311
+  ForeColor = 0,0,0
+  Name = "getDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECSP.OptConta
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 21
+  Left = 114
+  Top = 164
+  Width = 131
+  Name = "OptConta"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Origem"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.Width = 52
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Destino"
+  Option2.Height = 15
+  Option2.Left = 68
+  Option2.Top = 4
+  Option2.Width = 54
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECSP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+lcempresa = Thisform.get_Empresa.Value
+lcNmOperacao = Thisform.get_nm_operacao.Value
+lccodigo = Thisform.get_codigo.Value
+lcdoc = Thisform.get_documento.Value
+ldDtInicial = Thisform.get_dt_inicial.Value
+ldDtFinal = Thisform.get_dt_final.Value
+
+lcObses = ThisForm.get_Obses.Value
+lcConta = ThisForm.getConta.Value
+lcGrupo = ThisForm.getGrupo.Value
+lcOpCta = Iif(ThisForm.OptConta.Value = 1,[ContaOs],[ContaDs])
+lcOpGru = Iif(ThisForm.OptConta.Value = 1,[GrupoOs],[GrupoDs])
+
+lcFiltro = []
+If Not Empty(lcGrupo)
+	lcFiltro = lcFiltro + [ And A.] + Alltrim(lcOpGru) + [ = '] + lcGrupo + [' ]
+EndIf 
+If Not Empty(lcConta)
+	lcFiltro = lcFiltro + [ And A.] + Alltrim(lcOpCta) + [ = '] + lcConta + [' ]
+EndIf 
+
+lcquery = [Select emps,dopes,numes,datas,notas,datars,empdopnums,operadors,usulibs,IsNull(convert(varchar(250),Obses),'') as Obses From SigMvCab a ] +;
+	[Where datas BetWeen ?ldDtInicial And ?ldDtFinal ]+;
+	Iif(Empty(lcempresa)   ,'', [And a.Emps = ']  + lcempresa + [' ])+;
+	Iif(Empty(lcNmOperacao),'', [And a.Dopes = '] + lcNmOperacao + [' ])+;
+	Iif(Empty(lccodigo),'', [And a.numes = ] + lccodigo )+;
+	Iif(Empty(lcdoc),'', [And a.notas = '] + lcdoc + ['])+;
+	Iif(Empty(lcFiltro),'', lcFiltro )+;	
+	Iif(Empty(lcObses),'', [And a.Obses like '%]+Alltrim(lcObses)+[%' ])+;
+	[Order By a.EmpDopNums ]
+
+Wait Window 'Processando dados ...' Nowait
+With Thisform
+	.grid1.RecordSource = []
+	.poDataMgr.sqlexecute(lcquery,[crSigMvCab])
+
+	Select crSigMvCab
+	Scan
+		Wait Window 'Filtrando operações - Número : ' + crSigMvCab.dopes Nowait
+		If !fAcessoMovmto(Usuar, crSigMvCab.dopes)
+			Delete
+		Endif
+	Endscan
+	Go Top
+	Wait Clear
+	.grid1.RecordSource = [crSigMvCab]
+	.grid1.column1.ControlSource = [crSigMvCab.dopes]
+	.grid1.column2.ControlSource = [crSigMvCab.numes]
+	.grid1.column3.ControlSource = [crSigMvCab.notas]
+	.grid1.column4.ControlSource = [crSigMvCab.datas]
+	.grid1.column5.ControlSource = [crSigMvCab.usulibs]
+	.grid1.column6.ControlSource = [crSigMvCab.Obses]
+Endwith
+
+Thisform.Refresh()
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters _Acesso
+
+With Thisform
+	.poDataMgr = Createobject('fSqlConector', Thisform.Name)
+	
+	If Not .poDataMgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.F.)
+	EndIf
+	
+	.poDataMgr.CursorQuery([SigCdEmp],[crSigCdEmp],[Cemps],_Empr)
+	.Get_Empresa.Value = _Empr
+	.Get_DEmpresa.Value = crSigCdEmp.Razas
+	.get_dt_inicial.Value = Date()
+	.get_dt_final.Value = Date()
+	
+*!*		lcempresa = Thisform.Get_Empresa.Value
+*!*		lcNmOperacao = Thisform.get_nm_operacao.Value
+*!*		lcconta = Thisform.get_codigo.Value
+*!*		lcdoc = Thisform.get_documento.Value
+*!*		
+*!*		ldDtInicial = Date()
+*!*		ldDtFinal = Date()
+*!*		
+*!*		lcquery = [Select emps,dopes,numes,datas,notas,datars,empdopnums,operadors,usulibs From SigMvCab a ] +;
+*!*			[Where datas BetWeen ?ldDtInicial And ?ldDtFinal ]+;
+*!*			Iif(Empty(lcempresa)   ,'', [And a.Emps = ']  + lcempresa + [' ])+;
+*!*			Iif(Empty(lcNmOperacao),'', [And a.Dopes = '] + lcNmOperacao + [' ])+;
+*!*			Iif(Empty(lcconta),'', [And a.numes = ] + lcconta )+;
+*!*			Iif(Empty(lcdoc),'', [And a.notas = ] + lcdoc )+;
+*!*			[Order By a.EmpDopNums ]
+	
+*!*		.poDataMgr.AddCursor('SigMvCab', 'empdopnums', 'crSigMvCab', '',thisform.grid1,lcquery)
+*!*		.poDataMgr.pfSqlTabela(1).pColuna('dopes','','','Operação',150,.t.)
+*!*		.poDataMgr.pfSqlTabela(1).pColuna('numes','','','Código',52,.t.)
+*!*		.poDataMgr.pfSqlTabela(1).pColuna('notas','','','Documento',52,.t.)
+*!*		.poDataMgr.pfSqlTabela(1).pColuna('datas','','','Data',80,.t.)
+*!*		.poDataMgr.pfSqlTabela(1).pColuna('datars','','','Data/hora',160,.t.)
+*!*		.poDataMgr.pfSqlTabela(1).pColuna('operadors','','','Op. caixa',80,.t.)
+*!*		.poDataMgr.pfSqlTabela(1).pColuna('usulibs','','','Usuário',80,.t.)
+
+*!*		.poDataMgr.sqlexecute(lcquery,[crSigMvCab])
+*!*		thisform.grid1.RecordSource = [crSigMvCab]
+*!*		thisform.grid1.column1.ControlSource = [crSigMvCab.dopes]
+*!*		thisform.grid1.column2.ControlSource = [crSigMvCab.numes]
+*!*		thisform.grid1.column3.ControlSource = [crSigMvCab.notas]
+*!*		thisform.grid1.column4.ControlSource = [crSigMvCab.datas]
+*!*		thisform.grid1.column5.ControlSource = [crSigMvCab.datars]
+*!*		thisform.grid1.column6.ControlSource = [crSigMvCab.operadors]
+*!*		thisform.grid1.column7.ControlSource = [crSigMvCab.usulibs]
+*!*		thisform.processamento()
+
+Endwith
+
+DoDefault()
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSP.Get_Empresa
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.get_Empresa, ThisForm.get_DEmpresa)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSP.Get_Dempresa
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_Empresa.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.get_Empresa, ThisForm.get_DEmpresa)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSP.get_nm_operacao
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	=fAcessoMovmto(Usuar, This.Value, This)
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSP.Dados
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+IF USED('crSigMvCab') AND RECCOUNT('crSigMvCab') > 0
+	ThisForm.Enabled = .f.
+	thisform.Refresh()
+	lcSql = [Select Dopes From SigCdOpe Where Dopes = ']+crSigMvCab.Dopes+[']
+	If thisform.Podatamgr.SqlExecute(lcsql,'TmpOpe') > 0 And Reccount('TmpOpe') > 0
+		Do Form SigMvExp With crSigMvCab.Dopes, 'C', crSigMvCab.Numes, crSigMvCab.Emps, .t.
+	ENDIF
+	SELECT crSigMvCab
+	ThisForm.Enabled = .t.
+	thisform.Refresh()
+ENDIF
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSP.cmdProcessar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+thisform.processamento()
+
+llRet = Iif(Type([llRet]) = [L], llRet, .t.)
+If llRet
+	If (Used() And Not Eof())
+		thisform.grid1.SetFocus()
+	Else
+		=Messagebox([Não Existe Movimentação...],0+48, [Geração de Relatório])
+	EndIf
+Else
+	=MessageBox([Falha Na Conexão! Favor Reinicializar o Processo!], 0+48, [Erro])
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSP.getConta
+* Classe: fwget (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.getGrupo.Value
+If !IsEmpty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'C',This.Value,ThisForm.getConta,ThisForm.getDConta)
+		MessageBox('Acesso Negado !!!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getDConta.Value = ''
+		ThisForm.getDConta.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getDConta.Value = ''
+	ThisForm.getDConta.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSP.getDConta
+* Classe: fwget (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.getConta.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.getGrupo.Value
+If !IsEmpty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.getConta,ThisForm.getDConta)
+		MessageBox('Acesso Negado !!!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getConta.Value = ''
+		ThisForm.getConta.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getConta.Value = ''
+	ThisForm.getConta.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSP.getGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	fAcessoContab(Usuar,'C',This.Value,ThisForm.getGrupo,ThisForm.getDGrupo)
+Else
+	ThisForm.getDGrupo.Value = ''
+	ThisForm.getDGrupo.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECSP.getDGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 41
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.getGrupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	=fAcessoContab(Usuar,'D',This.Value,ThisForm.getGrupo,ThisForm.getDGrupo)
+Else
+	ThisForm.getGrupo.Value = ''
+	ThisForm.getGrupo.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECSP
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

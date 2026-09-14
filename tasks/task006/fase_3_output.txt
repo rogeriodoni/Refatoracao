@@ -1,0 +1,19 @@
+﻿Fase 3 conclu├¡da. Arquivo criado: `C:\4c\projeto\app\forms\cadastros\Formsigmvccr.prg`
+
+**O que foi criado:**
+
+- `DEFINE CLASS Formsigmvccr AS FormBase` com propriedades visuais exatas (Width=1000, Height=600, Caption="Conta Corrente Geral")
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔåÆ cria BO (`sigmvccrBO`), chama m├®todos de configura├º├úo, respeita `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔåÆ PageFrame com Top=-29, Tabs=.F., 2 pages (Lista + Dados)
+- `ConfigurarPaginaLista()` ÔåÆ `cnt_4c_Cabecalho` (fundo escuro + lbl_4c_Titulo) + `cnt_4c_Botoes` vazio
+- `ConfigurarPaginaDados()` ÔåÆ `cnt_4c_BotoesAcao` vazio
+- `CarregarLista()` ÔåÆ implementado com filtro de per├¡odo e guarda `gb_4c_ValidandoUI`
+- `AlternarPagina()` ÔåÆ completo
+- `TornarControlesVisiveis()` + `FormatarGridLista()` ÔåÆ implementados
+- `Destroy()` ÔåÆ libera BO
+
+**Pr├│ximas fases:**
+- Fase 4: Grid (11 colunas) + bot├Áes CRUD (Incluir, Visualizar, Alterar, Excluir, Buscar, Movimento, Encerrar) + filtro per├¡odo
+- Fases 5-6: Campos da Page2 (Get_DATA, Get_grupo, Get_conta, Get_VALOR, etc.)
+- Fases 7-8: Eventos, lookups e valida├º├Áes

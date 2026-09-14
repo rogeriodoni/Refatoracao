@@ -1,0 +1,10 @@
+﻿Nenhuma ocorr├¬ncia restante. O arquivo est├í corrigido.
+
+**Causa raiz:** `ISOBJECT()` n├úo ├® reconhecida como built-in neste ambiente VFP9 (mesmo padr├úo de `ISEMPTY()` documentado no CLAUDE.md), causando `File 'isobject.prg' does not exist.` ao instanciar o form.
+
+**Corre├º├úo aplicada:** Substitu├¡das todas as 6 ocorr├¬ncias de `ISOBJECT(x)` por `VARTYPE(x) = "O"` em `FormSigPrGlx.prg`:
+- `Init()` ÔÇö guard do par_oParentForm
+- `TornarControlesVisiveis()` ÔÇö guard do par_oContainer  
+- `FormatarGrid()` ÔÇö guard do par_oGrid
+- `AjustarVisibilidadeBotoes()` ÔÇö 2 guards do this_oBusinessObject
+- `BtnEncerrarClick()` e `Destroy()` ÔÇö guard do this_oParentForm

@@ -1,0 +1,11 @@
+﻿As edi├º├Áes est├úo corretas. A Fase 6/8 foi conclu├¡da.
+
+**Resumo do que foi feito:**
+
+O form `FormSIGPRCPR.prg` j├í estava estruturalmente completo nas fases anteriores (este OPERACIONAL n├úo tem campos adicionais nem lookups ÔÇö o original SIGPRCPR.SCX ├® um popup simples de leitura de c├│digo de barras). A Fase 6 corrigiu dois bugs reais:
+
+1. **`CmdOkClick` ÔÇö libera├º├úo condicional**: antes sempre liberava o form ap├│s `ConfirmarConferencia()`, mesmo em caso de falha. Agora s├│ libera (`THIS.Release()`) se o BO retornar `.T.`; em falha, recoloca o foco no campo de leitura para o usu├írio tentar novamente.
+
+2. **`InicializarValores` ÔÇö guard `gb_4c_ValidandoUI`**: protege as chamadas `CarregarSigKey()` e `CarregarBars("TmpEnc")` (que requerem conex├úo SQL e cursor TmpEnc do form pai) quando o ValidarUIFidelity est├í em execu├º├úo. O cursor TmpBaixa ainda ├® criado vazio e a grade ainda ├® vinculada ÔÇö o form instancia sem erro.
+
+Ambos os arquivos (`FormSIGPRCPR.prg` e `SIGPRCPRBO.prg`) s├úo carregados automaticamente pelo `config.prg` via `ADIR()`.

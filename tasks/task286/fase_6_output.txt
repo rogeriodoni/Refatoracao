@@ -1,0 +1,20 @@
+﻿Phase 6 is complete. Here's a summary of what was added to `Formsigprftp.prg` (now 2364 lines):
+
+**Pictures (3 locations):**
+- `ConfigurarBotoesSuperiores`: `a_arrow1.bmp`, `baix_aut.bmp`, `d_disk1.bmp` (already done in prior session)
+- `ConfigurarBotoesTransferencia`: `b_arrow2.bmp` (ÔåÆ) and `b_arrow1.bmp` (<)
+- `ConfigurarRodape`: `c_comm1.bmp` for the Dial-Up connect button
+
+**CarregarParametros**: Now calls `THIS.CarregarConexoesDialUp()` when `this_cTpConnect == "D"`
+
+**13 utility methods added before `Destroy`:**
+- `CToWord` / `WordToC` ÔÇö DWORD buffer Ôåö integer conversions for RASAPI/WinInet
+- `SectToHour` ÔÇö seconds ÔåÆ "Xh, Xm, Xs" string
+- `CrackAttributes` ÔÇö extracts R/H/S/D/A/N/T/C/O attribute letters from WIN32 DWORD
+- `CrackDate` ÔÇö converts FILETIME 8-byte buffer via `FileTimeToSystemTime` ÔåÆ "dd/mm/aaaa"
+- `CrackFile` ÔÇö parses WIN32_FIND_DATA 319-byte buffer, inserts row into `FtpServer` cursor
+- `FileCtrlUp` ÔÇö replaces unavailable `FileControl` Framework class with `lbl_4c_Lblprog.Caption` updates + `DOEVENTS`
+- `Processa` ÔÇö full progress tracker (tmpprog cursor + label + post-transfer listbox updates + optional delete)
+- `InErrorCase` ÔÇö maps ~60 WinInet/Win32 error codes to readable strings
+- `RasAtivas` / `RasConexao` / `RasDescon` ÔÇö RAS connection enumeration and teardown via `RASAPI32.DLL`
+- `CarregarConexoesDialUp` ÔÇö calls `RasConexao` and populates `cbo_4c_CboProvedor`

@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarGrid()`** ÔÇö `ReadOnly = .T.` inicial no grid (registros existentes s├úo read-only, equivalente ao `When: Return Incluir = Recno()` do legado) + 3 `BINDEVENT` para KeyPress de cada `Column.Text1`.
+
+2. **`CmdInserirClick`** ÔÇö `grd_4c_Cotacoes.ReadOnly = .F.` ao inserir nova linha, desbloqueando apenas aquela linha para edi├º├úo.
+
+3. **`GrdCotacoesAfterRowColChange`** ÔÇö `ReadOnly = .T.` ao navegar para qualquer registro diferente de `this_nIncluir` (voltar ao read-only).
+
+4. **`GrdDataText1KeyPress`** ÔÇö avisa se data ficou vazia ao pressionar ENTER/TAB (equivalente ao `data.Text1.Valid`).
+
+5. **`GrdHoraText1KeyPress`** ÔÇö detecta cota├º├úo duplicada (mesma moeda+data+hora em outro registro) e limpa o campo hora com aviso (equivalente ao `hora.Text1.Valid`).
+
+6. **`GrdCotacaoText1KeyPress`** ÔÇö vai para o ├║ltimo registro e refresca o grid ao sair da coluna cota├º├úo (equivalente ao `cotacao.Text1.Valid`).

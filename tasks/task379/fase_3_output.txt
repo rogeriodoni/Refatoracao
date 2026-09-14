@@ -1,0 +1,13 @@
+﻿**Fase 3/8 conclu├¡da.** `FormCol.prg` criado em `C:\4c\projeto\app\forms\cadastros\FormCol.prg` (656 linhas) com:
+
+**O que foi criado:**
+- `DEFINE CLASS FormCol AS FormBase` com todas as propriedades visuais (Width=1000, Height=600, Caption, DataSession=2, etc.)
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()` (padr├úo correto)
+- `InicializarForm()` ÔÇö cria ColBO, chama ConfigurarPageFrame(), guard `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö pgf_4c_Paginas (Top=-29, Tabs=.F., 2 pages com background)
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (com lbl_4c_Sombra/lbl_4c_Titulo), `cnt_4c_Botoes` (vazio, aguarda Fase 4), `cnt_4c_Saida` com cmd_4c_Encerrar + BINDEVENT
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_Salva` com cmd_4c_Confirmar/cmd_4c_Cancelar + BINDEVENTs
+- Todos os m├®todos CRUD (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnExcluirClick, BtnBuscarClick, BtnSalvarClick, BtnCancelarClick, BtnEncerrarClick)
+- `TornarControlesVisiveis()`, `FormatarGridLista()`, `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`, `AjustarBotoesPorModo()`, `AlternarPagina()`, `CarregarLista()`, `Destroy()` ÔÇö todos implementados
+
+**Pr├│xima fase (4/8):** Adicionar Grid `grd_4c_Lista` na Page1 e os 5 bot├Áes CRUD dentro de `cnt_4c_Botoes`, completar `CarregarLista()` com vincula├º├úo ao Grid.

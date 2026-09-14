@@ -1,0 +1,28 @@
+﻿O FormSigPrGlp.prg j├í est├í **completamente migrado** pelo pipeline nas execu├º├Áes anteriores. Vou confirmar o status:
+
+**Fase 3/8 - Status: CONCLU├ìDA (mais do que a fase pede)**
+
+O arquivo `C:\4c\projeto\app\forms\operacionais\FormSigPrGlp.prg` j├í existe com:
+- **2461 linhas, 43 m├®todos** - arquivo completo (todas as 8 fases)
+- Compila├º├úo: **OK** (verificado em `compilacao_task189.log`)
+- CorretorAutomatico aplicou 9 corre├º├Áes (05b conclu├¡do)
+
+**Estrutura Phase 3 verificada:**
+
+| Requisito Phase 3 | Status |
+|---|---|
+| `DEFINE CLASS FormSigPrGlp AS FormBase` | Ô£ô linha 23 |
+| `Init()` com par├ómetros do legado | Ô£ô linha 53 |
+| `InicializarForm()` PROTECTED | Ô£ô linha 80 |
+| `ConfigurarCabecalho()` (cntSombra) | Ô£ô linha 122 |
+| `Destroy()` com DODEFAULT() | Ô£ô linha 73 |
+| `ENDDEFINE` | Ô£ô linha 2460 |
+
+**Form OPERACIONAL (sem PageFrame)** - layout flat com:
+- Header (cnt_4c_Cabecalho) com t├¡tulo din├ómico ("Pr├®via da Reserva" / "Pr├®via da Globaliza├º├úo")
+- 7 bot├Áes principais na barra superior
+- GradeItens (9 colunas) + Container3 (sempre visible)
+- 4 containers flutuantes (Container1,2,4,5) toggled pelos bot├Áes
+- TornarControlesVisiveis() com filtro INLIST para containers flutuantes
+
+**Pr├│ximo passo do pipeline**: `06_testForm` (PENDING) - testar abertura do form no VFP9.

@@ -1,0 +1,5 @@
+﻿**Corre├º├úo aplicada:** linha 418 de `FormEnd.prg`, `ConfigurarGrid`.
+
+**Causa raiz:** `crGrade.Atuals` ├® campo `L` (Logical). VFP9 rejeita `.Check1.Value = 0` (Numeric) quando o CheckBox est├í vinculado (via `ControlSource`) a um campo L├│gico ÔÇö o tipo do controle torna-se Logical e a atribui├º├úo num├®rica dispara "Data type mismatch". A exce├º├úo era capturada pelo CATCH de `InicializarForm`, que retornava `.F.`, fazendo o `CREATEOBJECT` devolver n├úo-objeto.
+
+**Fix:** `= 0` ÔåÆ `= .F.` (Logical), consistente com o tipo do campo `crGrade.Atuals`.

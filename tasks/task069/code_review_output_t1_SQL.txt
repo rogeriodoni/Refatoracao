@@ -1,0 +1,13 @@
+﻿A query principal do relat├│rio (BO, linha 211) usa corretamente: `datas`, `emps` (via `loc_cEmpWhere`), `GrVends`/`GrResps` (via `loc_cGrupoWhere`), `Vends`/`Resps` (via `loc_cContaWhere`) ÔÇö todas da lista original.
+
+**Diagn├│stico: Falsos positivos.** As 6 ocorr├¬ncias flaggadas s├úo queries auxiliares de valida├º├úo de campo (lookup codeÔåödesc), **n├úo filtros do relat├│rio**. O validador automatizado escaneou todos os WHERE do arquivo sem distinguir entre a query do relat├│rio e queries de valida├º├úo de UI.
+
+Evid├¬ncia do original que confirma que essas valida├º├Áes existiam:
+- `If .Not.Seek(This.Value,'crSigCdMoe','Dmoes')` ÔåÆ valida moeda por descri├º├úo (agora como `WHERE DMoes LIKE`)
+- `If .Not.Seek(This.Value,'crSigCdMoe','Cmoes')` ÔåÆ valida moeda por c├│digo (agora como `WHERE CMoes =`)
+
+A nova implementa├º├úo usa `SQLEXEC` no lugar de `SEEK` em cursor pr├®-carregado ÔÇö mesma funcionalidade, arquitetura diferente (conforme Pilar 3).
+
+**Nenhuma altera├º├úo necess├íria.** Remover qualquer um desses WHERE quebraria completamente a valida├º├úo dos campos de filtro do formul├írio (empresa, grupo, conta/vendedor, moeda), violando a regra "NAO remover campos, funcionalidades ou lookups".
+
+Os 6 problemas s├úo falsos positivos do validador autom├ítico causados por varredura sem contexto. O SQL principal do relat├│rio est├í correto.

@@ -1,0 +1,8 @@
+﻿Corre├º├Áes aplicadas:
+
+**Corrigidos (2/3):**
+- `SigReDdpBO.prg:173-176` ÔÇö `SET NULL ON` antes e `SET NULL OFF` ap├│s `CREATE CURSOR cursor_4c_Cabecalho`
+- `SigReDdpBO.prg:180-184` ÔÇö `SET NULL ON` antes e `SET NULL OFF` ap├│s `CREATE CURSOR cursor_4c_Result`
+
+**Falso positivo (1/3):**
+- `[LAYOUT-POSITION] lbl_4c_Say4.Top=64` ÔÇö valor CORRETO. O SCX original usa coordenadas form-absolutas (Top=149), mas o controle fica dentro de `Page1` com `PageFrame.Top=85`. A posi├º├úo page-relativa correta ├® `149 - 85 = 64`, confirmada pelos demais controles da mesma p├ígina (`txt_4c_Demonstrativo.Top=59`, `lbl_4c_LblData.Top=91`, `txt_4c_DtFinal.Top=86`). Alterar para 149 colocaria o label fora da ├írea vis├¡vel da page.

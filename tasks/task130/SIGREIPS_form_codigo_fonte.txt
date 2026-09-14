@@ -1,0 +1,332 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREIPS.SCX
+* Data/Hora: 06/06/2026 18:26:23
+* Total de registros: 7
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIPS
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_codigo
+  Parent: SIGREIPS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_desc
+  Parent: SIGREIPS
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREIPS
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPS
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 205
+  Width = 596
+  DoCreate = .T.
+  Caption = (PROMPT())
+  Name = "SIGREIPS"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 290
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 96
+  REGISTRY1.Left = 516
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPS.Get_codigo
+------------------------------------------------------------
+  Left = 124
+  MaxLength = 8
+  TabIndex = 1
+  Top = 136
+  Width = 66
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPS.Get_desc
+------------------------------------------------------------
+  Left = 192
+  MaxLength = 30
+  TabIndex = 2
+  Top = 136
+  Width = 220
+  Name = "Get_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIPS.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  Caption = "Seleção : "
+  Left = 61
+  Top = 139
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIPS
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReIp3 Preview NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pCod
+
+pCod = Thisform.Get_Codigo.Value
+
+ThisForm.poDataMgr.Requery('Relacao')
+
+Select Relacao
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters _Acesso
+
+Private pCod
+
+=fConfigGeral()
+
+=DoDefault()
+
+pCod = Space(10)
+
+lcQryMala = 'Select RClis, IClis, Endes, Nums, Compls, Bairs, Cidas, Ceps, Estas, Tel1s, Tel2s, Faxs, cIdChaves ' + ;
+			  'From SigMlCab ' + ;
+			 'Where Codigos = ?pCod ' + ;
+		  'Order By RClis, IClis, Endes, Nums, Compls, Bairs, Cidas, Ceps, Estas, Tel1s, Tel2s, Faxs, cIdChaves'
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	With .poDataMgr
+		.AddCursor('SigMlCab', 'cIdChaves', 'Relacao', '', '', lcQryMala)
+	EndWith
+EndWith
+
+ThisForm.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReIp3 To Printer NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigReIp3 To Printer
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPS.Get_codigo
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigMlItn', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.mAddColuna('Descs',   '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_codigo.Value = crListaRemota.Codigos
+	ThisForm.get_desc.Value   = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.get_codigo.Value = ''
+	ThisForm.get_desc.Value   = ''
+EndIf
+ThisForm.get_codigo.Refresh
+ThisForm.get_desc.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIPS.Get_desc
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Get_codigo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigMlItn', ;
+						   'crListaRemota', 'Descs', This.Value, 'Seleção', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descs',   '', 'Descrição')
+		loLista.mAddColuna('Codigos', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_codigo.Value = crListaRemota.Codigos
+	ThisForm.get_desc.Value   = crListaRemota.Descs
+	Use In crListaRemota
+Else
+	ThisForm.get_codigo.Value = ''
+	ThisForm.get_desc.Value   = ''
+EndIf
+ThisForm.get_codigo.Refresh
+ThisForm.get_desc.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIPS
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

@@ -1,0 +1,14 @@
+﻿Arquivo criado corretamente. `C:\4c\projeto\app\classes\SigReIr1BO.prg` cont├®m:
+
+- **Heran├ºa**: `RelatorioBase` (n├úo BusinessBase ÔÇö correto para form REPORT)
+- **18 propriedades** extra├¡das do c├│digo fonte original:
+  - `this_nNumBalanco` ÔÇö n├║mero do invent├írio (par├ómetro LParameters do original)
+  - `this_nTipoRelatorio/Analitico/Ordem/Diferenca/Leitura` ÔÇö 5 OptionGroups do form
+  - `this_cCodProduto/DesProduto/Local/DesLocal` ÔÇö campos de lookup Produto e Local
+  - `this_nTpCusto/TpVenda/Descricao/Barras/Localizacao` ÔÇö 5 OptionGroups de exibi├º├úo com valores padr├úo do original
+  - `this_lImprimirImagem/TrataPeso/Horizontal` ÔÇö flags l├│gicas
+  - `this_cTitulo/CursorDados` e `this_nSaldo/SaldoPs`
+- **`Init()`**: chama `DODEFAULT()`, seta `this_cTabela = ""` e `this_cCampoChave = ""` (relat├│rio n├úo tem tabela ├║nica)
+- **`ObterChavePrimaria()`**: retorna `TRANSFORM(this_nNumBalanco)` para auditoria
+
+Fase 1/8 conclu├¡da. A Fase 2 completar├í o BO com `PrepararDados()` que monta a query SQL com os filtros e processa os cursores intermedi├írios do relat├│rio.

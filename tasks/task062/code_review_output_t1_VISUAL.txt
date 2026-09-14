@@ -1,0 +1,14 @@
+﻿Corre├º├Áes aplicadas em `sigrecorBO.prg`.
+
+**Resumo do que foi corrigido:**
+
+| Problema | Arquivo | Corre├º├úo |
+|---|---|---|
+| `[NULL-CURSOR] cursor_4c_Cabecalho` | sigrecorBO.prg | `SET NULL ON` antes + `SET NULL OFF` ap├│s o `CREATE CURSOR` |
+| `[NULL-CURSOR] cursor_4c_Analitico` | sigrecorBO.prg | `SET NULL ON` antes + `SET NULL OFF` ap├│s o `CREATE CURSOR` |
+
+**Por que os [LAYOUT-POSITION] n├úo foram alterados:**
+
+- **Diff 85px** (lbl_estoque, lbl_moeda, chk_4c_OptPenPag): A diferen├ºa ├® exatamente `PageFrame.Top=85`. As posi├º├Áes no c├│digo (`67`, `94`) s├úo coordenadas relativas ├á Page ÔÇö posi├º├úo visual absoluta = `85+67=152` e `85+94=179`, ambas id├¬nticas ao original. Alterar para os valores absolutos do SCX colocaria os controles fora da ├írea vis├¡vel da Page.
+
+- **Diff de 0** (obj_4c_OptSNA, obj_4c_OptTipo, obj_4c_OptQuebras): O validator est├í lendo `Buttons(1).Top=0` em vez do OptionGroup em si. No c├│digo, os grupos est├úo em `Top=116/141/164, Left=235` ÔÇö valores corretos para as coordenadas de Page (201-85=116, 226-85=141, 249-85=164). Mover para 226/249 causaria overflow (Page height=215px).

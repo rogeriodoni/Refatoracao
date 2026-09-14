@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. O que foi feito:
+
+1. **`CarregarCursores` (ap├│s linha 990)**: adicionado carregamento de `cursor_4c_SigCdMoe` (`SELECT CMoes, DMoes FROM SigCdMoe ORDER BY CMoes`) com `INDEX ON CMoes TAG CMoes` ÔÇö alinhado com o padr├úo original de pr├®-carregar `crSigCdMoe`.
+
+2. **Linha ~1047 (init moeda padr├úo)**: substitu├¡do `SQLEXEC(...WHERE CMoes = ...)` por `SEEK(loc_cMoeda, "cursor_4c_SigCdMoe", "CMoes")` no cursor pr├®-carregado.
+
+3. **Linha ~1734 (valida├º├úo ao digitar moeda)**: substitu├¡do `SQLEXEC(...WHERE CMoes = ...)` por `SEEK(loc_cValor, "cursor_4c_SigCdMoe", "CMoes")`, mantendo a mesma l├│gica (preenche campos ou abre busca).

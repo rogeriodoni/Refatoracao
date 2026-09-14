@@ -1,0 +1,23 @@
+﻿O BO est├í completo com 638 linhas e 14 m├®todos. Fase 2/8 conclu├¡da.
+
+**Resumo do que foi adicionado ao `cnlBO.prg`:**
+
+| M├®todo | Acesso | Finalidade |
+|--------|--------|------------|
+| `Buscar(par_cFiltro)` | public | Lista SigCdCnL + JOINs SigCdCli + SigPrLcl |
+| `CarregarPorCodigo(cods)` | public | Carrega um registro pelo Cods |
+| `CarregarDoCursor(alias)` | public | Popula propriedades do BO a partir de cursor |
+| `Inserir()` | protected | INSERT em sigcdcnl com cidchaves+cods gerados |
+| `Atualizar()` | protected | UPDATE em sigcdcnl (vends, locals, qtds) |
+| `ExecutarExclusao()` | protected | DELETE em sigcdcni (itens) + sigcdcnl (cabe├ºalho) |
+| `SalvarItens(cursor, cods)` | public | DELETE+INSERT em sigcdcni a partir de csSigCdCnI |
+| `CarregarItens(cods, cursor)` | public | Carrega sigcdcni para cursor |
+| `FecharContagem(cods)` | public | UPDATE conferido=1 |
+| `ReobrirContagem(cods)` | public | UPDATE conferido=0 |
+| `CarregarParametrosVendedor(cursor)` | public | L├¬ GrPadVens de SigCdPam |
+| `BuscarVendedores(filtro, grp, cursor)` | public | Query complexa de vendedores v├ílidos |
+| `CarregarLocalizacoesNivel(nivel, cursor)` | public | Carrega SigLcNv1/2/3/4 |
+| `ObterNovoCidChaves()` | protected | Gera cidchaves via NEWID() |
+| `ObterProximoCodigo()` | protected | Gera Cods sequencial via MAX+1 |
+
+**Regras cr├¡ticas respeitadas:** sem `RETURN` dentro de TRY/CATCH, `SELECT (alias)` antes de acessar campos no `CarregarDoCursor`, CATCH nunca silencioso, `ExecutarExclusao()` (n├úo `Excluir()`).

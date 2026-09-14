@@ -1,0 +1,7 @@
+﻿Os 3 Buttons agora t├¬m propriedades completas e consistentes (`.AutoSize`, `.FontName`, `.FontSize`, `.BackStyle`, `.ForeColor`, `.Caption`, `.Left`, `.Top`, `.Width`, `.Themes`). O OptionGroup pai tamb├®m recebeu `.Themes = .F.` expl├¡cito.
+
+**Resumo das corre├º├Áes:**
+
+- **[OPTIONGROUP-LEFT] CORRIGIDO**: `obj_4c_Opcao_imp.Buttons(1)` recebu `.FontName`, `.FontSize` e `.Themes = .F.` (alinhado com Buttons(2) e Buttons(3)). O OptionGroup pai recebeu `.Themes = .F.` expl├¡cito. Todos os 3 Buttons agora t├¬m `.Left`, `.Top`, `.AutoSize`, `.ForeColor`, `.Themes` definidos.
+
+- **[LAYOUT-POSITION] x4 ÔÇö SEM ALTERA├ç├âO**: O c├│digo atual j├í tem `obj_4c_Opt_Tipo.Top=179/Left=140` e `obj_4c_Opt_Impressora.Top=180/Left=396` corretos. O validador capturou os `.Top=10`/`.Left=10` dos `Buttons(1)` internos (posi├º├Áes relativas dentro dos OptionGroups) e os confundiu com a posi├º├úo dos pr├│prios controles ÔÇö falso positivo.

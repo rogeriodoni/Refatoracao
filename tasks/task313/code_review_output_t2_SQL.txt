@@ -1,0 +1,21 @@
+﻿Confirmado. Os dois alertas s├úo **falsos positivos** do validador autom├ítico. Nenhuma altera├º├úo ├® necess├íria.
+
+**An├ílise detalhada:**
+
+**[SQL-FILTRO-INVENTADO] NREGIS:**
+- Grep em ambos os arquivos: zero correspond├¬ncias de `NREGIS` em cl├íusula `WHERE` SQL.
+- `NRegis` aparece apenas em: SELECT list de `BuscarMalas()` (coluna projetada), em `CREATE CURSOR` (defini├º├úo do campo) e num coment├írio de propriedade (`&& SelImp=1 AND NRegis>0`). O validador provavelmente detectou o coment├írio como condi├º├úo SQL.
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT:**
+- Grep encontrou `ControlCount` em duas linhas do Form ÔÇö linhas 560 e 576:
+  ```foxpro
+  FOR loc_i = 1 TO THIS.ControlCount
+  FOR loc_i = 1 TO par_oContainer.ControlCount
+  ```
+  S├úo la├ºos `FOR...ENDFOR` do VFP9 iterando controles visuais, **n├úo cl├íusulas SQL**. O validador confundiu o `FOR` de loop com `SCAN FOR` ou `WHERE...FOR`.
+
+**WHEREs SQL reais no c├│digo migrado** (todos corretos, espelham o original):
+- `WHERE SelImp = 1` ÔÇö em `ProcessarUnificacao` (BO) e `BtnProcessarClick` (Form)
+- `WHERE Codigos = ` + `EscaparSQL(loc_pCod)` ÔÇö em `ProcessarUnificacao` (BO)
+
+Os arquivos `FormSigPrMlu.prg` e `SigPrMluBO.prg` est├úo corretos. Nenhuma corre├º├úo necess├íria neste pass.

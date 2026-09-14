@@ -1,0 +1,13 @@
+﻿Arquivo criado corretamente. A Fase 3 est├í completa.
+
+**Resumo do que foi criado em `Formsigprcpd.prg`:**
+
+- **Propriedades da classe**: Width=1000, Height=600, TitleBar=0, ControlBox=.F., Movable=.F., WindowType=1 ÔÇö copiadas exatamente do SCX legado (exceto Width escalado de 800ÔåÆ1000)
+- **Init(par_cFase, par_cUnidade, par_dData, par_nCodigo)**: armazena os 4 par├ómetros nos `this_*` ANTES de `DODEFAULT()`, garantindo que `InicializarForm` os encontre prontos
+- **InicializarForm()**: define background `new_background.jpg`, cria BO `sigprcpdBO`, chama `ConfigurarCabecalho()`, torna controles vis├¡veis, e carrega dados via `CarregarDados()` (protegido pela flag `gb_4c_ValidandoUI`)
+- **ConfigurarCabecalho()**: container cinza RGB(100,100,100) com `lbl_4c_Sombra` (sombra preta) e `lbl_4c_Titulo` (texto branco) ÔÇö padr├úo can├┤nico com AutoSize=.F.
+- **CarregarDados()**: delega ao BO passando os 4 par├ómetros armazenados
+- **TornarControlesVisiveis()**: recursivo, com skip expl├¡cito para `img_4c_FigJpg` e `shp_4c_Shape4` (ficam Visible=.F. e s├úo toggled pelo AfterRowColChange da grade)
+- **Destroy()**: limpa o BO e chama DODEFAULT()
+
+**Pr├│ximas fases**: Fase 4 adicionar├í a grade com 8 colunas e o bot├úo Encerrar; Fases 5-6 adicionar├úo Container1 (Fase/Data), Container2 (Cap/Utz/Sld) e os campos de detalhe abaixo da grade; Fases 7-8 adicionar├úo os eventos (AfterRowColChange e CmdEncerrarClick).

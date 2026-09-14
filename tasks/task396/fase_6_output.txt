@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto e completo. Fase 6/8 conclu├¡da.
+
+**O que foi adicionado:**
+
+- `lbl_4c_Descricao` e `txt_4c_Descricao` em `ConfigurarPaginaDados()` ÔÇö posi├º├Áes exatas do legado (top=196/192, left=341/400, width=264, MaxLength=30)
+- `FormParaBO()` / `BOParaForm()` ÔÇö mapeamento bidirecional `this_cCods`/`this_cDescs`
+- `LimparCampos()` ÔÇö limpa os dois campos
+- `HabilitarCampos(par_lHabilitar)` ÔÇö respeita o `getCods.When` do legado: c├│digo habilitado apenas em modo INCLUIR
+- `AjustarBotoesPorModo()` ÔÇö habilita bot├Áes de Page1 no modo LISTA, Confirmar apenas em INCLUIR/ALTERAR
+- `BtnIncluirClick()` ÔÇö `NovoRegistro()` ÔåÆ limpa ÔåÆ modo INCLUIR ÔåÆ Page2
+- `BtnVisualizarClick()` ÔÇö l├¬ `cursor_4c_Dados.cods` ÔåÆ `CarregarPorCodigo` ÔåÆ modo VISUALIZAR ÔåÆ Page2 read-only
+- `BtnAlterarClick()` ÔÇö `CarregarPorCodigo` ÔåÆ `EditarRegistro()` ÔåÆ modo ALTERAR ÔåÆ Page2 edit├ível (c├│digo desabilitado)
+- `BtnExcluirClick()` ÔÇö confirma├º├úo `MsgConfirma()` (retorno logical) ÔåÆ `Excluir()` ÔåÆ recarrega lista
+- `BtnBuscarClick()` ÔÇö `FormBuscaAuxiliar` com `mAddColuna` (3 params) ÔåÆ ao selecionar, vai para VISUALIZAR
+- `BtnConfirmarClick()` ÔÇö valida├º├Áes fora do TRY ÔåÆ `FormParaBO()` ÔåÆ `Salvar()` ÔåÆ volta para lista
+- `BtnCancelarClick()` ÔÇö restaura modo LISTA ÔåÆ `AlternarPagina(1)`

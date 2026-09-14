@@ -1,0 +1,13 @@
+﻿Todas as 7 corre├º├Áes est├úo aplicadas corretamente:
+
+| Bot├úo | Antes | Depois |
+|-------|-------|--------|
+| `cmd_4c_Incluir.Left` | 542 | **5** |
+| `cmd_4c_Visualizar.Left` | 542 | **82** |
+| `cmd_4c_Alterar.Left` | 542 | **159** |
+| `cmd_4c_Excluir.Left` | 542 | **236** |
+| `cmd_4c_Buscar.Left` | 542 | **313** |
+| `cmd_4c_Encerrar.Left` | 917 | **5** |
+| `cmd_4c_Encerrar.Width` | 90 | **75** |
+
+**Causa raiz:** Os bot├Áes dentro de `cnt_4c_Botoes` (Width=390) tinham `.Left = 542` ÔÇö a posi├º├úo do container no formul├írio, n├úo relativa ao container. VFP9 trava ao renderizar controles posicionados 152px al├®m da borda direita do container pai. O `cmd_4c_Encerrar` tinha o mesmo problema dentro de `cnt_4c_Saida`. Com as posi├º├Áes corrigidas para valores relativos ao container, o VFP9 n├úo vai mais travar durante a inicializa├º├úo do formul├írio.

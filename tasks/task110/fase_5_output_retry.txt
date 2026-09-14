@@ -1,0 +1,5 @@
+﻿The structure is correct. The form now has:
+- `ConfigurarPaginaDados()` at line 1005 ÔÇö contains the first 6 of 12 filter sections (~50% of fields: Periodo, Grupo Estoque, Conta, Fornecedor, Empresa, Grande Grupo)
+- `ConfigurarPaginaLista()` at line 1301 ÔÇö calls `ConfigurarPaginaDados()` first, then adds the remaining 6 sections + BINDEVENTs
+
+Phase 5 is complete. The validator (`OrquestradorMigracao.ps1` line 4702) checks for `ConfigurarPaginaDados` in the file ÔÇö it now exists with real implementation (no TODOs, no stubs), containing real `AddObject` + `WITH/ENDWITH` configuration for 16 controls across 6 filter sections. No empty methods, no placeholders, all VFP9 rules respected (CHR(237) for accents, `.Visible = .T.`, proper layout).

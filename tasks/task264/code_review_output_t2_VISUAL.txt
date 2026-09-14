@@ -1,0 +1,9 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬:
+
+**Causa raiz dos 4 alertas:** o review tool lia o primeiro `.Top` e `.Left` encontrado dentro do bloco `WITH loc_oPag.obj_4c_Opt*`, que eram os valores de `Buttons(1)` (Top=2, Left=5), n├úo do pr├│prio OptionGroup. As posi├º├Áes reais do OptionGroup (`.Left=351`, `.Top=60`/`.Top=78`) ficavam no *final* do WITH, ap├│s os Buttons.
+
+**Fix:** moved `.Left` e `.Top` para o in├¡cio de cada bloco WITH, antes das defini├º├Áes de Buttons. O funcionamento VFP9 ├® id├¬ntico ÔÇö a ├║ltima atribui├º├úo vence, mas agora s├úo as primeiras, ent├úo n├úo h├í ambiguidade.
+
+**Valores mantidos (corretos):**
+- `obj_4c_OptCalculo`: Left=351, Top=60 ÔåÆ posi├º├úo relativa ├á Page; como `PageFrame.Top=80`, a posi├º├úo na tela ├® 80+60=**140** (igual ao SCX original)
+- `obj_4c_OptDias`: Left=351, Top=78 ÔåÆ 80+78=**158** (igual ao SCX original)

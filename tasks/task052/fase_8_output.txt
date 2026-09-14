@@ -1,0 +1,9 @@
+﻿O `config.prg` usa carregamento din├ómico via `ADIR()` - os arquivos `*BO.prg` e `Form*.prg` s├úo carregados automaticamente. O menu j├í tem a entrada para `AbrirFormsigrecmc`. 
+
+A Fase 8 est├í conclu├¡da. Adicionei os 3 m├®todos ausentes ao `Formsigrecmc.prg`:
+
+1. **`BtnBuscarClick()`** (linha 1970) ÔÇö delega para `BtnVisualizarClick()`, o comportamento correto para formul├írio REPORT
+2. **`HabilitarCampos(par_lHabilitar)`** (linha 1978) ÔÇö habilita/desabilita todos os campos de filtro do formul├írio, incluindo os OptionGroups, CheckBoxes e bot├Áes da grade; chama `AjustarCamposMoeda()` e `AjustarCamposProduto()` ap├│s habilitar para manter regras de neg├│cio
+3. **`AjustarBotoesPorModo()`** (linha 2017) ÔÇö para formul├írio REPORT mant├®m todos os 4 bot├Áes do `cmg_4c_Botoes` habilitados (Visualizar/Imprimir/Excel/Encerrar)
+
+O arquivo final tem 2047 linhas com `ENDDEFINE` correto. Menu e carregamento din├ómico j├í estavam configurados desde fases anteriores.

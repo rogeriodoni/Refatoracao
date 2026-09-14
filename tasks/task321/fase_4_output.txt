@@ -1,0 +1,7 @@
+﻿Fase 4 conclu├¡da. Mudan├ºas aplicadas em `FormSIGPRPPP.prg`:
+
+1. **`ConfigurarPaginaDados()` ÔåÆ `ConfigurarPaginaLista()`** ÔÇö renomeado para o nome can├┤nico do pipeline. Todo o conte├║do (cmg_4c_Encerrar, shapes, labels de filtro, grids grd_4c_Operacoes e grd_4c_Itens) permanece intacto.
+2. **`InicializarForm()`** ÔÇö atualizado para chamar `THIS.ConfigurarPaginaLista()`.
+3. **`AlternarPagina(par_nPagina)`** ÔÇö stub adicionado. Este form OPERACIONAL n├úo tem PageFrame CRUD; a chamada real vai para `THIS.this_oFormPai.AlternarPagina(1)` em `CmdEncerrarClick`.
+
+Nota: bot├Áes CRUD (Incluir/Visualizar/Alterar/Excluir/Buscar) n├úo foram adicionados pois este ├® um form OPERACIONAL popup (somente leitura), onde o ├║nico controle de sa├¡da ├® o `cmg_4c_Encerrar` ÔÇö j├í presente desde a Fase 3.

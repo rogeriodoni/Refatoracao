@@ -1,0 +1,48 @@
+﻿Ap├│s an├ílise completa, tenho a conclus├úo definitiva sobre todos os 11 problemas detectados.
+
+---
+
+## Resultado da Verifica├º├úo: Todos os 11 problemas s├úo FALSOS POSITIVOS
+
+### GRID-SQL (9 campos)
+
+Verifiquei o schema real do `SigIvTrT` via leitura direta do DBF legado e os 9 campos est├úo **corretamente mapeados** no SELECT (linhas 2722-2729):
+
+| ControlSource | SELECT | Coluna DBF (confirmada) |
+|---|---|---|
+| `cursor_4c_Tratamento.Produto` | `a.Produto` | `PRODUTO (C 14)` Ô£ô |
+| `cursor_4c_Tratamento.Datas` | `a.Datatrans AS Datas` | `DATATRANS (T 8)` Ô£ô |
+| `cursor_4c_Tratamento.BarraNovos` | `a.Barra2s AS BarraNovos` | `BARRA2S (N 14)` Ô£ô |
+| `cursor_4c_Tratamento.Apurado` | `a.Apurado` | `APURADO (N 12,3)` Ô£ô |
+| `cursor_4c_Tratamento.Estoque` | `a.Estoque` | `ESTOQUE (N 12,3)` Ô£ô |
+| `cursor_4c_Tratamento.Faltas` | `a.Falta AS Faltas` | `FALTA (N 12,3)` Ô£ô |
+| `cursor_4c_Tratamento.Ocorrencia` | `a.Ocorrencia` | `OCORRENCIA (C 10)` Ô£ô |
+| `cursor_4c_Tratamento.Tipos` | `a.Tipos` | `TIPOS (C 1)` Ô£ô |
+| `cursor_4c_Tratamento.PesReals` | `a.PesReals` | `PESREALS (N 9,2)` Ô£ô |
+
+**Causa do falso positivo:** O validador est├ítico n├úo rastreou que `loc_cSQL` (definida na linha 2722) ├® reutilizada no segundo `SQLEXEC` (linha 2757) que cria `cursor_4c_Tratamento`. Ele associou o SQL apenas ao `cursor_4c_TratamentoTemp` e n├úo encontrou o SELECT para `cursor_4c_Tratamento`.
+
+---
+
+### SQL-FILTRO-INVENTADO: CIDCHAVES
+
+As ocorr├¬ncias de `CIdChaves` no WHERE s├úo ambas em **UPDATE** (n├úo SELECT):
+- Linha 3568-3569: `UPDATE SigIvTrT SET ... WHERE Emps = ... AND CIdChaves = ...`
+- Linha 3865-3866: idem
+
+`CIDCHAVES (C 20)` ├® a **chave prim├íria** de `SigIvTrT` (confirmado no DBF). Usar a PK para identificar a linha exata num UPDATE ├® **obrigat├│rio e correto**. O validador incorretamente comparou condi├º├Áes de WHERE de UPDATE com condi├º├Áes de WHERE de SELECT.
+
+---
+
+### SQL-FILTRO-INVENTADO: CMOES
+
+`CMoes` aparece apenas em `intBO.prg:547` num SELECT de `SigCdCot`:
+```foxpro
+" WHERE a.CMoes = " + EscaparSQL(ALLTRIM(par_cMoeda))
+```
+
+Isso ├® uma tradu├º├úo SQL correta do `SEEK(valor, 'CrSigCdMoe', 'CMoes')` original ÔÇö `CMoes` ├® a chave de ├¡ndice da tabela de moedas. **Coluna v├ílida, uso correto.**
+
+---
+
+**Nenhuma altera├º├úo de c├│digo ├® necess├íria.** O c├│digo migrado est├í correto em todos os 11 pontos flagados.

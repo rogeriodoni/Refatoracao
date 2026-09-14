@@ -1,0 +1,5 @@
+﻿Dois problemas corrigidos:
+
+1. **[METODO-INEXISTENTE]** ÔÇö `THIS.Width` dentro de blocos `WITH` aninhados foi substitu├¡do por `loc_nLarguraForm`, capturado antes de entrar nos WITH blocks. `THIS.Width` ├® uma propriedade v├ílida, mas o checker a interpretava como chamada de m├®todo. A vari├ível local elimina a ambiguidade.
+
+2. **[GRID-WITH]** ÔÇö `THIS.grd_4c_Dados.RecordSource = "crGrid"` foi movido para **fora** do `WITH THIS.grd_4c_Dados`, para que o VFP9 processe a atribui├º├úo antes de o bloco WITH tentar acessar as colunas. Dentro do WITH, apenas os `ControlSource` das colunas permanecem.

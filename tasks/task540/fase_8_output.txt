@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 8/8 conclu├¡da. Resumo do que foi feito em `FormTpa.prg` e integra├º├úo:
+
+**FormTpa.prg (finaliza├º├úo):**
+- Corrigi `cnt_4c_BotoesAcao` (Page2) de `Top=45` para o can├┤nico `Top=33` (framework_frmcadastro_layout.md / refer├¬ncia FormCor).
+- Adicionei os bot├Áes `cmd_4c_Confirmar` (├¡cone `cadastro_salvar_60.jpg`) e `cmd_4c_Cancelar` (├¡cone `cadastro_cancelar_60.jpg`) dentro de `cnt_4c_BotoesAcao`, com BINDEVENT para `BtnSalvarClick`/`BtnCancelarClick`.
+- Adicionei os BINDEVENTs que faltavam: `cmd_4c_Buscar` ÔåÆ `BtnBuscarClick`, `cmd_4c_Encerrar` ÔåÆ `BtnEncerrarClick`.
+- Implementei os m├®todos que faltavam, todos com l├│gica completa (sem stubs):
+  - `BtnBuscarClick()` ÔÇö abre `FormBuscaAuxiliar` sobre `SigCdAca`/`cods`, localiza o registro selecionado na grade.
+  - `BtnEncerrarClick()` ÔÇö `THIS.Release()`.
+  - `FormParaBO()` ÔÇö transfere `txt_4c_Codigos`/`txt_4c_Descrs` para `this_cCodigo`/`this_cDescricao`.
+  - `BtnSalvarClick()` ÔÇö valida modo, chama `FormParaBO()` + `Salvar()` (sem par├ómetro), volta para a lista.
+  - `BtnCancelarClick()` ÔÇö volta para a lista sem gravar.
+  - `AjustarBotoesPorModo()` ÔÇö habilita Confirmar s├│ em INCLUIR/ALTERAR; Cancelar sempre habilitado.
+- Adicionei chamadas a `THIS.AjustarBotoesPorModo()` em `BtnIncluirClick`/`BtnVisualizarClick`/`BtnAlterarClick`.
+- `Destroy()` agora tamb├®m libera `cursor_4c_BuscaTpa`.
+
+**Integra├º├úo:**
+- `config.prg` j├í carrega BOs/Forms dinamicamente via `ADIR()` ÔÇö nenhuma altera├º├úo necess├íria.
+- `menu.prg`: adicionei `DEFINE BAR 183 OF popCadastros` ("Tipos de Acabamento") + `ON SELECTION BAR 183 OF popCadastros DO AbrirFormTpa`, e a procedure `AbrirFormTpa()` (padr├úo can├┤nico `VARTYPE`/`Show()` sem `Release()`).
+
+**Valida├º├Áes feitas:**
+- Confirmei `SigCdAca(cods char(3) PK, descrs char(20))` no `docs/schema.sql` (via `Get-Content -Raw`, n├úo grep ÔÇö schema ├® UTF-16) batendo exatamente com o BO/Form.
+- Chequei balanceamento de `PROCEDURE/ENDPROC`, `WITH/ENDWITH`, `TRY/ENDTRY`, `DEFINE CLASS/ENDDEFINE` ÔÇö todos batendo, sem m├®todos duplicados.
+- Verifiquei que n├úo h├í `RETURN` dentro de blocos `TRY/CATCH` (regra cr├¡tica #1).
+- Confirmei que `FormBuscaAuxiliar.prg` existe em `classes/`.
+
+O formul├írio est├í completo: Init/InicializarForm, PageFrame (Lista+Dados), CRUD completo (Incluir/Visualizar/Alterar/Excluir/Buscar/Encerrar/Confirmar/Cancelar), FormParaBO/BOParaForm, HabilitarCampos/LimparCampos/AjustarBotoesPorModo, CarregarLista/AlternarPagina (PUBLIC para TesteAutomatico.prg), e integra├º├úo no menu.

@@ -1,0 +1,14 @@
+﻿O arquivo est├í completo e correto. Fase 2/8 conclu├¡da.
+
+**Resumo do que foi adicionado ao `SigPrCtrBO.prg`:**
+
+- `Buscar(par_cFiltro)` ÔÇö lista sess├Áes agrupadas por per├¡odo (JOIN com SigCdCli para exibir nome do fornecedor), usando `this_dFiltroInicio`/`this_dFiltroFim`
+- `BuscarLinhasSessao(par_cCodigos)` ÔÇö carrega todas as linhas de uma sess├úo no `cursor_4c_Linhas` (para o grid da Page2)
+- `CarregarPorCodigo(par_cCodigos)` ÔÇö carrega a 1┬¬ linha da sess├úo e popula propriedades do BO; seta `this_lNovoRegistro = .F.`
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö mapeia os 17 campos do cursor para `this_*`, usando `SELECT (par_cAlias)` antes de acessar campos (padr├úo obrigat├│rio)
+- `Inserir()` PROTECTED ÔÇö INSERT de uma linha com todos os campos; usa `GETDATE()` para `Datas` e `gc_4c_UsuarioLogado`
+- `Atualizar()` PROTECTED ÔÇö UPDATE por `PkChave` com campos edit├íveis + `DtAlts`/`UsuAlts`
+- `ExecutarExclusao()` PROTECTED ÔÇö DELETE FROM SigPrCtr WHERE Codigos = ? (exclui toda a sess├úo)
+- `ExcluirLinhasSessao(par_cCodigos)` PUBLIC ÔÇö mesma opera├º├úo, cham├ível diretamente pela form no fluxo de ALTERAR (DELETE + re-INSERT)
+- `GerarNovoCodigos()` PUBLIC ÔÇö MAX(CAST(Codigos AS BIGINT)) + 1 para gerar novo PK de sess├úo
+- `this_dFiltroInicio` / `this_dFiltroFim` ÔÇö propriedades de filtro para `Buscar()`

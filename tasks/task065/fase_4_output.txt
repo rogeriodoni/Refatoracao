@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com todas as implementa├º├Áes necess├írias:
+
+**Adicionado a `Formsigrecpr.prg`:**
+
+1. **`ConfigurarPaginaFiltros()`** ÔÇö adiciona os 10 controles de filtro ao `cnt_4c_Filtros` com posi├º├Áes offsetadas -80px do original (container come├ºa em Top=80):
+   - `lbl_4c_Say3` ("Filtrar por :"), `opt_4c_OptFiltro` (Prorrogados/Vencimento)
+   - `lbl_4c_Say1` ("Per├¡odo :"), `txt_4c_DataIni`, `lbl_4c_Say2` ("├á"), `txt_4c_DataFin`
+   - `lbl_4c_Operacao` ("Opera├º├úo :"), `cbo_4c_TipoRel` (ATIVOS..DEVOLVIDOS)
+   - `opt_4c_Bons` (Ativos/Todos, oculto at├® "BONS"), `opt_4c_Opcao` (permanece oculto como no legado)
+   - BINDEVENT `cbo_4c_TipoRel.InteractiveChange ÔåÆ TipoRelChanged`
+
+2. **`LimparCampos()`** ÔÇö reseta filtros para defaults (datas vazias, OptFiltro=1, TipoRel=1/ATIVOS, Opt_Bons oculto)
+
+3. **`FormParaRelatorio()`** ÔÇö transfere valores do form para o BO antes de imprimir/visualizar
+
+4. **`TipoRelChanged()`** ÔÇö replica o Valid event do `GetTipoRel` do legado: exibe `opt_4c_Bons` somente quando ListIndex=4 (BONS)
+
+**M├®todos existentes atualizados:** `BtnVisualizarClick`, `BtnImprimirClick`, `BtnExcelClick` ÔÇö todos chamam `FormParaRelatorio()` antes de acionar o BO.

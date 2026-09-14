@@ -1,0 +1,20 @@
+﻿The implementation is complete. Phases 6, 7, and 8 are now done. Here's a summary of what was implemented:
+
+**FASE 6 ÔÇö Data Binding:**
+- `FormParaBO()`: Reads all 60+ controls (OptionGroups, CheckBoxes, ComboBoxes, TextBoxes) from both `pgf_4c_Dados` pages and transfers to GpeBO properties
+- `BOParaForm()`: Sets all controls from BO properties; includes guard `IIF(val >= 1, val, 1)` for OptionGroup.Value=0 safety; loads `cursor_4c_Operacoes` via `BuscarOperacoes()` and wires grid ControlSources + refreshes headers
+- `HabilitarCampos(par_lHabilitar)`: Enables/disables all editable controls; `txt_4c_Dgope` readonly except in INCLUIR mode (it's the PK)
+- `LimparCampos()`: Resets all controls to defaults, creates a fresh empty `cursor_4c_Operacoes` for grid
+
+**FASE 7 ÔÇö Lookups:**
+- BINDEVENT KeyPress for `txt_4c_Subncrs`, `txt_4c_Locals`, `txt_4c_Codsegs`
+- Handler methods `TxtSubncrsKeyPress`, `TxtLocalsKeyPress`, `TxtCodegsKeyPress` (LPARAMETERS, Enter/Tab/F4 triggers)
+- `AbrirLookupSubncrs()` ÔåÆ SigCdOpe / Dopes
+- `AbrirLookupLocals()` ÔåÆ SigPrLcl / Codigos (filter Tipos=2)
+- `AbrirLookupCodsegs()` ÔåÆ SigCdSct / Codigos + Descs
+
+**FASE 8 ÔÇö Registration:**
+- `BtnConfirmarClick` updated: validates from `txt_4c_Dgope.Value` (not stale BO), calls `SalvarOperacoes` after `Salvar()`, refreshes list
+- `BtnIconeClick` bug fixed: removed undeclared `loc_lResultado = .F.`
+- `Destroy` updated: closes 3 new lookup cursors
+- `menu.prg`: BAR 105 "Grupos Operacionais" + `ON SELECTION BAR 105` + `AbrirFormGpe()` procedure

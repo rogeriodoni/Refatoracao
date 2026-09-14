@@ -1,0 +1,17 @@
+﻿The `CONTROLCOUNT` occurrences in `FormSigPrDsc.prg` (lines 288 and 294) are **not SQL WHERE conditions** ÔÇö they are standard VFP9 object property accesses in the `TornarControlesVisiveis` method:
+
+```foxpro
+FOR loc_nI = 1 TO loc_oConteiner.ControlCount          && iterating form controls
+    ...
+    IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+        THIS.TornarControlesVisiveis(loc_oObjeto)
+    ENDIF
+```
+
+This is correct VFP9 code for recursively making controls visible. `ControlCount` is a built-in VFP9 property of any container object, not a SQL column.
+
+**The automated review produced a false positive.** The tool misidentified VFP9 `.ControlCount` property accesses as a SQL WHERE column named `CONTROLCOUNT`. Neither `FormSigPrDsc.prg` nor `SigPrDscBO.prg` contain `CONTROLCOUNT` in any SQL string.
+
+The `WHERE` columns used across all SQL in these files are exactly what they should be: `CPros`, `Idioma`, `CGrus`, `CodCors` ÔÇö all valid against `SigCdPro`/`SigCdGrp`/`SigCdCor`/`SigCdDic`. No invented SQL filters exist.
+
+**No changes needed. The code is correct.**

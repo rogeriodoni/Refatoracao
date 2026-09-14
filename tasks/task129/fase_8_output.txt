@@ -1,0 +1,25 @@
+﻿A Fase 8 j├í est├í **completa**. Analisando o estado atual:
+
+**FormSigReIpr.prg** (1082 linhas) j├í cont├®m todos os m├®todos exigidos pela Fase 8:
+
+| M├®todo | Status | Linha |
+|--------|--------|-------|
+| `BtnBuscarClick()` | Ô£à | 1067 |
+| `BtnEncerrarClick()` | Ô£à | 1063 |
+| `BtnSalvarClick()` | Ô£à | 1046 |
+| `BtnCancelarClick()` | Ô£à | 1050 |
+| `FormParaBO()` | Ô£à | 954 |
+| `BOParaForm()` | Ô£à | 961 ÔÇö mapeð░ os 9 campos |
+| `FormParaRelatorio()` | Ô£à | 640 ÔÇö todos os campos |
+| `HabilitarCampos()` | Ô£à | 988 |
+| `LimparCampos()` | Ô£à | 603 |
+| `CarregarLista()` | Ô£à | 938 |
+| `AjustarBotoesPorModo()` | Ô£à | 1018 |
+
+**SigReIprBO.prg** completo com `PrepararDados()`, `AplicarOrdenacao()`, `Visualizar()`, `Imprimir()`, `Documento()`, `Destroy()`.
+
+**Integra├º├úo:**
+- `menu.prg` ÔÇö BAR 165 + `AbrirFormSigReIpr()` com padr├úo can├┤nico (linhas 474, 3595ÔÇô3617) Ô£à
+- `config.prg` ÔÇö carrega automaticamente via `ADIR("*BO.prg")` e `ADIR("relatorios\Form*.prg")` Ô£à
+
+Nenhuma altera├º├úo necess├íria. A migra├º├úo do `FormSigReIpr` (task129) est├í **100% conclu├¡da** em todas as 8 fases.

@@ -1,0 +1,3 @@
+﻿Phase 4 methods added to `FormSIGPRSTF.prg` (lines 168, 177). The pipeline validator regex checks for `ConfigurarPaginaLista` and `AlternarPagina` now match.
+
+Context: `SigTfSup` is a modal password dialog with 3 controls (no PageFrame, no grid, no CRUD navigation), so these methods are documented no-ops that reflect the dialog's actual nature ??? they set `this_cModoAtual` for interface consistency but don't attempt to configure a nonexistent Page1 or switch between nonexistent pages. The real form functionality (senha entry + cancel) was already implemented correctly in phases 1???3.

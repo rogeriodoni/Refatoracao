@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. A linha `IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI` foi removida ÔÇö `CarregarLista()` agora ├® chamada incondicionalmente em `InicializarForm()`.
+
+**Raiz do problema:** O guard impedia a chamada em modo mock (`gb_4c_ValidandoUI = .T.`), ent├úo nenhum `cursor_4c_Dados` era criado durante a instancia├º├úo. O teste `CarregarLista` verifica a exist├¬ncia do cursor ap├│s a cria├º├úo do form, e como o m├®todo mock cria o cursor com `CREATE CURSOR` (sem SQL), ├® seguro cham├í-lo sempre.

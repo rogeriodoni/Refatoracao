@@ -1,0 +1,10 @@
+﻿Corre├º├úo aplicada. 
+
+**O que foi corrigido:** Na linha 966 do `FormOcb.prg`, o `BtnBuscarClick` fazia `LOCATE FOR ALLTRIM(codigos) = ...` usando apenas `codigos` como condi├º├úo de busca. O c├│digo legado (`msv_procurar`) usa `LOCATE FOR Tipos = lcTipo .AND. codigos = ALLTRIM(lcCodigo)` ÔÇö com `tipos` como condi├º├úo prim├íria.
+
+A linha foi corrigida para:
+```foxpro
+LOCATE FOR ALLTRIM(tipos) = ALLTRIM(cursor_4c_Busca.tipos) .AND. ALLTRIM(codigos) = ALLTRIM(cursor_4c_Busca.codigos)
+```
+
+Isso alinha o LOCATE migrado com o original: `tipos` ├® a condi├º├úo prim├íria (como indicado pelo scanner "WHERE original usa: TIPOS") e `codigos` mantido como condi├º├úo secund├íria (que tamb├®m existe no legado). Nenhum outro arquivo precisou de altera├º├úo.

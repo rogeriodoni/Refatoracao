@@ -1,0 +1,9 @@
+﻿Tr├¬s edi├º├Áes aplicadas em `FormCHM.prg`:
+
+| Linha | De | Para |
+|---|---|---|
+| `CarregarLista` | `PROTECTED FUNCTION` | `FUNCTION` |
+| `AlternarPagina` | `PROTECTED FUNCTION` | `FUNCTION` |
+| `AjustarBotoesPorModo` | `PROTECTED PROCEDURE` | `PROCEDURE` |
+
+O `TesteAutomatico.prg` chama esses m├®todos diretamente de fora da inst├óncia. Em VFP9, `PROTECTED` impede acesso externo ÔÇö resultando em "Property X is not found". Removendo `PROTECTED`, os m├®todos ficam p├║blicos por default (conforme regra 9.1 do CLAUDE.md: m├®todos em `DEFINE CLASS` s├úo p├║blicos por padr├úo). Nenhuma l├│gica de neg├│cio foi alterada.

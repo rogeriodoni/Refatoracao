@@ -1,0 +1,22 @@
+﻿O arquivo est├í correto. A Fase 5 est├í completa.
+
+**Resumo do que foi adicionado:**
+
+**`InicializarForm()`** ÔÇö duas novas chamadas inseridas:
+- `THIS.ConfigurarPaginaDados()` ÔÇö cria os 15 controles da metade 1
+- `THIS.CarregarTiposEtiqueta()` ÔÇö popula `obj_4c_Opt_Tipo` via SQL `SigCdTpe`
+
+**`ConfigurarPaginaDados()`** ÔÇö 15 controles (Fase 5, ~50%):
+- **Lista de Pre├ºos**: `lbl_4c_Label2`, `chk_4c_ChkLista`, `txt_4c_Lpreco`, `txt_4c_LPreco2`
+- **Movimenta├º├Áes**: `lbl_4c_Label4`, `chk_4c_ChkOperacoes`, `lbl_4c_Label5/6/7`, `txt_4c_Emps`, `txt_4c_Dopes`, `txt_4c_Numes`
+- **Tipo de Etiqueta**: `shp_4c_Shape3`, `lbl_4c_Label1`, `obj_4c_Opt_Tipo`
+
+**M├®todos novos** (total 9):
+- `CarregarTiposEtiqueta()` ÔÇö popula buttons do OptionGroup dinamicamente com SCAN/DO WHILE
+- `TxtLprecoKeyPress` / `TxtLPreco2KeyPress` ÔÇö Enter(13)/Tab(9)/F4(115) ÔåÆ `AbrirBuscaLPreco`
+- `AbrirBuscaLPreco()` ÔÇö match exato + FormBuscaAuxiliar SigCdLpc; se `chk_4c_ChkLista=1` ÔåÆ `CarregarItensListaPreco`
+- `CarregarItensListaPreco()` ÔÇö carrega SigCdLpi; verifica validade de pre├ºo vs SigCdPro
+- `TxtEmpsKeyPress` ÔåÆ `AbrirBuscaEmps` (SigCdEmp: Cemps+Razas)
+- `TxtDopesKeyPress` ÔåÆ `AbrirBuscaDopes` (SigCdOpe: coluna ├║nica Dopes, sem descrs)
+
+Nenhum `RETURN` dentro de `TRY/CATCH`. Todos os handlers s├úo PUBLIC (BINDEVENT compat├¡vel). A Fase 6 adicionar├í: `cnt_4c__Impressora`, `cbo_4c_Get_Printer`, `obj_4c_Opt_Preco` (6 bot├Áes), `obj_4c_Opt_separador/peso/optCompos/OptOrdem` e os labels correspondentes.

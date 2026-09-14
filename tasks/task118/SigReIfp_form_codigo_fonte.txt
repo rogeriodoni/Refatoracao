@@ -1,0 +1,1131 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReIfp.SCX
+* Data/Hora: 06/06/2026 05:24:12
+* Total de registros: 19
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREIFP
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: shp_materia_prima
+  Parent: SIGREIFP
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say1
+  Parent: SIGREIFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo
+  Parent: SIGREIFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsGrupo
+  Parent: SIGREIFP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getCdGrupo
+  Parent: SIGREIFP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_dt_inicial
+  Parent: SIGREIFP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_periodo_a
+  Parent: SIGREIFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_dt_final
+  Parent: SIGREIFP
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGREIFP
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGREIFP
+  Class: label
+  BaseClass: label
+
+Objeto: get_ifor
+  Parent: SIGREIFP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_tpmat
+  Parent: SIGREIFP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_dfor
+  Parent: SIGREIFP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: NivImprs
+  Parent: SIGREIFP
+  Class: spinner
+  BaseClass: spinner
+
+Objeto: Say4
+  Parent: SIGREIFP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 66
+  Left = 41
+  Width = 295
+  Height = 97
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 254
+  Width = 647
+  DoCreate = .T.
+  Caption = "Relatório de Falhas / Perdas"
+  Name = "SIGREIFP"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Top = 0
+  cntSombra.Left = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 230
+  btnReport.Sair.Height = 75
+  btnReport.Sair.Width = 75
+  btnReport.Sair.Name = "Sair"
+  btnReport.Height = 85
+  btnReport.Left = 340
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.TabIndex = 9
+  btnReport.ZOrderSet = 2
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 106
+  REGISTRY1.Left = 12
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.shp_materia_prima
+------------------------------------------------------------
+  Top = 96
+  Left = 86
+  Height = 139
+  Width = 461
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  ZOrderSet = 1
+  Name = "shp_materia_prima"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Left = 154
+  Top = 208
+  Width = 38
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.lbl_periodo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período :"
+  Left = 147
+  Top = 104
+  Width = 45
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "lbl_periodo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.getDsGrupo
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "K"
+  Height = 25
+  Left = 281
+  MaxLength = 20
+  TabIndex = 8
+  Top = 204
+  Width = 233
+  ZOrderSet = 5
+  Name = "getDsGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.getCdGrupo
+------------------------------------------------------------
+  FontName = "Courier New"
+  Format = "K"
+  Height = 25
+  Left = 199
+  MaxLength = 10
+  TabIndex = 7
+  Top = 204
+  Width = 80
+  ZOrderSet = 6
+  Name = "getCdGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.get_dt_inicial
+------------------------------------------------------------
+  Format = "K"
+  Left = 199
+  TabIndex = 1
+  Top = 101
+  Width = 80
+  ZOrderSet = 7
+  Name = "get_dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.lbl_periodo_a
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "à"
+  Left = 284
+  Top = 104
+  Width = 8
+  TabIndex = 11
+  ZOrderSet = 8
+  Name = "lbl_periodo_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.get_dt_final
+------------------------------------------------------------
+  Format = "K"
+  Left = 295
+  TabIndex = 2
+  Top = 101
+  Width = 80
+  ZOrderSet = 9
+  Name = "get_dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.Label2
+------------------------------------------------------------
+  AutoSize = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Recuperadora :"
+  Height = 17
+  Left = 115
+  Top = 181
+  Width = 87
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo de Material :"
+  Height = 15
+  Left = 107
+  Top = 157
+  Width = 85
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.get_ifor
+------------------------------------------------------------
+  Height = 23
+  Left = 199
+  MaxLength = 10
+  TabIndex = 5
+  Top = 179
+  Width = 80
+  ZOrderSet = 12
+  Name = "get_ifor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.get_tpmat
+------------------------------------------------------------
+  Height = 23
+  Left = 199
+  MaxLength = 15
+  TabIndex = 4
+  Top = 154
+  Width = 115
+  ZOrderSet = 13
+  Name = "get_tpmat"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.get_dfor
+------------------------------------------------------------
+  Height = 23
+  Left = 281
+  TabIndex = 6
+  Top = 179
+  Width = 233
+  ZOrderSet = 14
+  Name = "get_dfor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.NivImprs
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 25
+  InputMask = "9"
+  KeyboardHighValue = 7
+  KeyboardLowValue = 0
+  Left = 199
+  SpinnerHighValue =   7.00
+  SpinnerLowValue =   0.00
+  TabIndex = 3
+  Top = 127
+  Width = 33
+  Format = "K"
+  ZOrderSet = 15
+  Name = "NivImprs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREIFP.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo de Relatório:"
+  Left = 105
+  Top = 132
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 16
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREIFP
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Local lnTpRel
+lnTpRel = ThisForm.NivImprs.Value
+
+Do Case
+	Case LnTpRel = 1
+		Report Form SigReIfA to Print Noconsole
+	Case LnTpRel = 2
+		Report Form SigReIfB to Print Noconsole
+	Case LnTpRel = 3 Or LnTpRel = 4
+		Report Form SigReIfC to Print Noconsole
+	Case LnTpRel = 5
+		Report Form SigReIfD to Print Noconsole
+	Case LnTpRel = 6
+		Report Form SigReIfE to Print Noconsole
+	Case LnTpRel = 7
+		Report Form SigReIfF to Print Noconsole
+EndCase
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Local lnTpRel
+lnTpRel = ThisForm.NivImprs.Value
+Do Case
+	Case LnTpRel = 1
+		Report Form SigReIfA to Print Prompt Noconsole
+	Case LnTpRel = 2
+		Report Form SigReIfB to Print Prompt Noconsole
+	Case LnTpRel = 3 Or LnTpRel = 4
+		Report Form SigReIfC to Print Prompt Noconsole
+	Case LnTpRel = 5
+		Report Form SigReIfD to Print Prompt Noconsole
+	Case LnTpRel = 6
+		Report Form SigReIfE to Print Prompt Noconsole
+	Case LnTpRel = 7
+		Report Form SigReIfF to Print Prompt Noconsole
+EndCase
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		lcQuery = [Select * ] + ;
+				    [From SigCdGcr ] + ;
+				   [Where BalFalPers = 1]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpGccr') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpGccr)')
+			Return 0
+		EndIf
+		Select TmpGccr
+		Index On Codigos Tag Grupos
+
+		lcQuery = [Select a.* ] + ;
+				    [From SigCdCli a, SigCdGcr b ] + ;
+				   [Where a.Grupos = b.Codigos And ] + ;
+				   		 [b.BalFalPers = 1]
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpCli') < 1)
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpCli)')
+			Return 0
+		EndIf
+		Select TmpCli
+		Index on Iclis Tag Iclis
+		Index On Grupos + Iclis Tag Grupos
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF, pTru
+Local ldDti, ldDtf, lnNiv
+
+ldDtI = ThisForm.get_dt_inicial.Value
+ldDtf = ThisForm.get_dt_Final.Value
+lnNiv = ThisForm.NivImprs.Value
+lcNiv = Str(lnNiv,1)
+lcTpM = ThisForm.get_tpmat.Value
+lcFor = ThisForm.get_ifor.Value
+lcGrp = ThisForm.getCdGrupo.Value
+
+Create Cursor TmpRelat (Operacs c(30), Totas n(12,2), Grupos c(10), Dgrupos c(30), Contas c(10), Rclis c(30), ;
+						falhags n(12,2), Recupgs n(12,2), Perdags n(12,2), Falhaps n(7,2), Recupps n(7,2), ;
+						Perdaps n(7,2), Trabs n(12,2), fatrabs n(7,2), recfals n(7,2), Perdidos n(7,2), ;
+						pertrabs n(7,2), TpOps c(15), Pesbs n(12,2), recCcobs n(12,2), RecScobs n(12,2), ;
+						recpesos n(7,2), Nivels c(1), Datas d)
+Index On Operacs Tag Operacao
+Index On Nivels + Grupos  Tag Grupos
+Index On Contas  Tag Contas
+Index On Grupos + Contas Tag GruCon
+Index On Grupos + TpOps  Tag GruTp
+Index On TpOps  + Grupos + Contas + Dtos(Datas) Tag TpGruCond
+
+pDtI = fDtoSQL(ldDtI)
+pDtF = fDtoSQL(ldDtF, '23:59:59')
+pTru = .t.
+
+lcQuery = [Select * ] + ;
+		    [From SigCdFea ] + ;
+		   [Where Datas BetWeen ?pDtI And ?pDtF And ] + ;
+		   		[(Tipos = 'F' Or (Tipos = 'P' And Baixas = ?pTru))]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'csSelecao') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csSelecao)')
+	Return 0
+EndIf
+
+Select TmpGccr
+Count to TotGccr
+
+Select TmpCli
+Count to TotCli
+
+If (lnNiv = 1)
+	Select TmpRelat
+	Set Order to
+	Select csSelecao
+	Sum Produzidos, Falhas, Pesoccbs to lnTrab, lnFalha, lnPeso
+	lnPerda = lnFalha - lnPeso
+	Select TmpRelat
+	Append Blank
+	Replace Operacs With 'Produzido (g)',;
+			Totas   With lnTrab
+	Append Blank
+	Replace Operacs With 'Falha (g)',;
+			Totas   With lnFalha
+	Append Blank
+	Replace Operacs With 'Recuperação c/Cobr (g)',;
+			Totas   With lnPeso
+	Append Blank
+	Replace Operacs With 'Perda (g)',;
+			Totas   With lnPerda
+	Append Blank
+	Replace Operacs With 'Falha/Produzido (%)',;
+			Totas   With Iif(lnTrab<>0,( lnFalha / lnTrab * 100 ),0)
+	Append Blank
+	Replace Operacs With 'Recuperação/Falha (%)',;
+			Totas   With Iif(lnFalha<>0,( lnPeso / lnFalha * 100 ),0)
+	Append Blank
+	Replace Operacs With 'Perda/Produzido (%)',;
+			Totas   With Iif(lnTrab<>0,( lnPerda / lnTrab * 100 ),0)
+EndIf
+
+If (lnNiv = 2)
+	Select TmpRelat
+	Set Order to Grupos
+	Select csSelecao
+	Scan
+		If Empty(csSelecao.Grupos) And Empty(csSelecao.Contas) And Not Empty(csSelecao.Produzidos)
+			Loop
+		EndIf
+
+		If Empty(csSelecao.Grupos)
+			lnRecupera = (csSelecao.Pesoccbs) / TotGccr
+			Select TmpGccr
+			Scan
+				Select TmpRelat
+				Set Order to Grupos
+				Seek lcNiv + TmpGccr.Codigos
+				If Eof()
+					Append Blank
+					Replace Grupos  With TmpGccr.Codigos,;
+							Dgrupos With TmpGccr.Descrs,;
+							Nivels  With lcNiv
+				EndIf
+				Replace Recupgs With Recupgs + lnRecupera
+			EndScan
+		Else
+			Select TmpGccr
+			Set Order to Grupos
+			Seek CsSelecao.Grupos
+			lnRecupera = ( CsSelecao.pesoccbs )
+			Select TmpRelat
+			Seek lcNiv + CsSelecao.Grupos
+			If Eof()
+				Append Blank
+				Replace Grupos  With CsSelecao.Grupos,;
+						Dgrupos With TmpGccr.Descrs,;
+						Nivels  With lcNiv
+			EndIf
+			Replace Recupgs With Recupgs + lnRecupera
+			Replace falhags With falhags + CsSelecao.Falhas
+			Replace Trabs   With Trabs   + CsSelecao.Trabs
+		EndIf
+	EndScan
+	Select TmpRelat
+	Sum Falhags,Recupgs to TFalha,TRecup
+	TPerda = Tfalha - Trecup
+	Scan
+		Replace Perdags With Falhags - Recupgs,;
+				Falhaps With Iif(Tfalha <> 0,( Falhags / Tfalha * 100 ),0),;
+				Recupps With Iif(TRecup <> 0,( Recupgs / TRecup * 100 ),0),;
+				Perdaps With Iif(TPerda <> 0,( Perdags / TPerda * 100 ),0)
+	EndScan
+EndIf
+
+If (lnNiv = 3)
+	Select TmpRelat
+	Set Order to Contas
+	Select csSelecao
+	Sum Falhas to Tfalha
+	Scan
+		If Empty(CsSelecao.Grupos) And Empty(CsSelecao.Contas) And Not Empty(CsSelecao.Produzidos)
+			Loop
+		EndIf
+		If Tipos = [F]
+			=Seek(CsSelecao.Contas, 'TmpCli', 'Iclis')
+			Select TmpRelat
+			Seek CsSelecao.Contas
+			If Eof()
+				Append Blank
+				Replace Contas With CsSelecao.Contas,;
+						Rclis  With TmpCli.Rclis,;
+						Nivels With lcNiv
+			Endif
+			Replace Falhags With Falhags + CsSelecao.Falhas
+		Endif
+	EndScan
+	Select TmpRelat
+	Scan
+		Replace Falhaps With Iif(TFalha<>0,( Falhags / TFalha * 100 ), 0)
+	EndScan
+EndIf
+
+If (lnNiv = 4)
+	Select TmpRelat
+	Set Order to Contas
+	Select csSelecao
+	Scan
+		If Empty(CsSelecao.Grupos) And Empty(CsSelecao.Contas) And Not Empty(CsSelecao.Produzidos)
+			Loop
+		EndIf
+
+		If Empty(CsSelecao.Grupos)
+			lnRecupera = ( CsSelecao.pesoccbs ) / TotCli
+			Select TmpCli
+			Scan
+				Select TmpRelat
+				Set Order to Contas
+				Seek TmpCli.Iclis
+				If Eof()
+					Append Blank
+					Replace Contas With TmpCli.Iclis,;
+							Rclis  With TmpCli.Rclis,;
+							Nivels with lcNiv
+				EndIf
+				Replace Recupgs With Recupgs + lnRecupera
+			EndScan
+		Else
+			If Empty(CsSelecao.Contas)
+				Select TmpCli
+				Set Order to Grupos
+				Seek CsSelecao.Grupos
+				Count to TotClig While Grupos = CsSelecao.Grupos
+				lnRecupera = ( CsSelecao.pesoccbs ) / TotClig
+				Seek csSelecao.Grupos
+				Scan While Grupos = csSelecao.Grupos
+					Select TmpRelat
+					Seek TmpCli.Iclis
+					If Eof()
+						Append Blank
+						Replace Contas With TmpCli.Iclis,;
+								Rclis  With TmpCli.Rclis,;
+								Nivels With lcNiv
+					EndIf
+					Replace Recupgs With Recupgs + lnRecupera
+				EndScan
+			Else
+				lnRecupera = (CsSelecao.pesoccbs)
+				=Seek(CsSelecao.Contas, 'TmpCli', 'Iclis')
+				Select TmpRelat
+				Seek CsSelecao.Contas
+				If Eof()
+					Append Blank
+					Replace Contas With TmpCli.Iclis,;
+							Rclis  With TmpCli.Rclis,;
+							Nivels With lcNiv
+				EndIf
+				Replace falhags With falhags + CsSelecao.Falhas
+				Replace Recupgs With Recupgs + lnRecupera
+			EndIf
+		EndIf
+	EndScan
+	Select TmpRelat
+	Sum Falhags - Recupgs to TPerda
+	Scan
+		Replace Perdags With Falhags - Recupgs
+		Replace Perdaps With Iif(TPerda<>0,( Perdags / TPerda * 100 ) , 0 )
+	EndScan
+EndIf
+
+If (lnNiv = 5)
+	Select TmpRelat
+	Set Order to GruCon
+	Select CsSelecao
+	Scan
+		If Empty(CsSelecao.Grupos) And Empty(CsSelecao.Contas) And Not Empty(CsSelecao.Produzidos)
+			Loop
+		EndIf
+
+		If Tipos = [F]
+			Select TmpRelat
+			Seek CsSelecao.Grupos + CsSelecao.Contas
+			If Eof()
+				Append Blank
+				Replace Grupos With CsSelecao.Grupos,;
+						Contas With CsSelecao.Contas
+			Endif
+			Replace Trabs   With Trabs + CsSelecao.Trabs
+			Replace Falhags With Falhags + CsSelecao.Falhas
+		Else
+			If Empty(CsSelecao.Grupos)
+				lnRecupera = ( CsSelecao.pesoccbs ) / TotCli
+				Select TmpCli
+				Scan
+					Select TmpRelat
+					Seek TmpCli.Grupos + TmpCli.Iclis
+					If Eof()
+						Append Blank
+						Replace Grupos With TmpCli.Grupos,;
+								Contas With TmpCli.Iclis
+					EndIf
+					Replace Recupgs With Recupgs + lnRecupera
+				EndScan
+			Else
+				If Empty(CsSelecao.Contas)
+					Select TmpCli
+					Set Order to Grupos
+					Seek CsSelecao.Grupos
+					Count to TotClig While Grupos = CsSelecao.Grupos
+					lnRecupera = ( CsSelecao.pesoccbs ) / TotClig
+					Seek csSelecao.Grupos
+					Scan While Grupos = csSelecao.Grupos
+						Select TmpRelat
+						Seek TmpCli.Grupos + TmpCli.Iclis
+						If Eof()
+							Append Blank
+							Replace Contas With TmpCli.Iclis,;
+									Grupos With TmpCli.Grupos
+						EndIf
+						Replace Recupgs With Recupgs + lnRecupera
+					EndScan
+				Else
+					lnRecupera = ( CsSelecao.pesoccbs )
+					=Seek(CsSelecao.Contas, 'TmpCli', 'Iclis')
+					Select TmpRelat
+					Seek CsSelecao.Grupos + CsSelecao.Contas
+					If Eof()
+						Append Blank
+						Replace Contas With TmpCli.Iclis,;
+								Grupos With TmpCli.Grupos
+					Endif
+					Replace falhags With falhags + CsSelecao.Falhas
+					Replace Recupgs With Recupgs + lnRecupera
+				EndIf
+			EndIf
+		EndIf
+	EndScan
+	Select TmpRelat
+	Scan
+		Replace Perdags  With Falhags - Recupgs,;
+				Fatrabs  With Iif(Trabs<>0,( Falhags / Trabs * 100 ),0),;
+				Recfals  With Iif(Falhags<>0,( Recupgs / Falhags * 100 ),0),;
+				Pertrabs With Iif(Trabs<>0,( Perdags / Trabs * 100 ),0),;
+				Perdidos With Iif(Falhags<>0,( Perdags / Falhags * 100 ),0)
+	EndScan
+EndIf
+
+If (lnNiv = 6)
+	Select TmpRelat
+	Set order to GruTp
+	Select CsSelecao
+	Scan
+		If (Tipos = [F]) Or (Empty(CsSelecao.Grupos) And Empty(CsSelecao.Contas) And Not Empty(CsSelecao.Produzidos))
+			Loop
+		EndIf
+
+		If Empty(CsSelecao.Grupos)
+			lnPesob = CsSelecao.Brutos / TotGccr
+			lnReccb = ( CsSelecao.pesoccbs ) / TotGccr
+			lnRecsb = ( CsSelecao.Pesoscbs / TotGccr )
+			Select TmpGccr
+			Scan
+				Select TmpRelat
+				Set Order to GruTp
+				Seek TmpGccr.Codigos + CsSelecao.TpMats
+				If Eof()
+					Append Blank
+					Replace Grupos With TmpGccr.Codigos,;
+							TpOps  With CsSelecao.TpMats
+				EndIf
+				Replace Pesbs    With Pesbs + lnPesob,;
+						ReccCobs With ReccCobs + lnReccb,;
+						RecScobs With recScobs + lnRecsb
+			EndScan
+		Else
+			lnPesob = CsSelecao.Brutos
+			lnReccb = ( CsSelecao.pesoccbs )
+			lnRecsb = ( CsSelecao.Pesoscbs )
+			Select TmpRelat
+			Set Order to GruTp
+			Seek CsSelecao.Grupos + CsSelecao.TpMats
+			If Eof()
+				Append Blank
+				Replace Grupos With CsSelecao.Grupos,;
+						TpOps  With CsSelecao.TpMats
+			EndIf
+			Replace Pesbs    With Pesbs + lnPesob,;
+					ReccCobs With ReccCobs + lnReccb,;
+					RecScobs With recScobs + lnRecsb
+		EndIf
+	EndScan
+	Select TmpRelat
+	Scan
+		Replace RecPesos With Iif(Pesbs<>0,( RecsCobs / Pesbs * 100 ),0)
+	EndScan
+EndIf
+
+If (lnNiv = 7)
+	Select TmpRelat
+	Set order to TpGruCond
+	Select CsSelecao
+	Scan
+		If Tipos = [F] Or (Empty(CsSelecao.Grupos) And Empty(CsSelecao.Contas) And Not Empty(CsSelecao.Produzidos))
+			Loop
+		EndIf
+
+		If Not Empty(lcTpM) And lcTpM <> CsSelecao.TpMats
+			Loop
+		EndIf
+
+		If Not Empty(lcFor) And lcFor <> CsSelecao.Ifors
+			Loop
+		EndIf
+
+		If Not Empty(lcGrp) And lcGrp <> CsSelecao.Grupos
+			Loop
+		EndIf
+
+		ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crSigCdCli', 'IClis', CsSelecao.Ifors, 'RClis')
+		lnPesob = CsSelecao.Brutos
+		lnRecsb = CsSelecao.Pesoscbs
+		Select TmpRelat
+		Append Blank
+		Replace Contas   With CsSelecao.Grupos,;
+				TpOps    With CsSelecao.TpMats,;
+				Datas    With CsSelecao.Datas,;
+				Grupos   With CsSelecao.Ifors,;
+				Dgrupos  With crSigCdCli.Rclis,;
+				Pesbs    With Pesbs + CsSelecao.Brutos,;
+				RecScobs With RecScobs + CsSelecao.Pesoscbs,;
+				RecPesos With Iif(Pesbs<>0,( RecsCobs / Pesbs * 100 ),0)
+	EndScan
+EndIf
+
+lcCab = 'Relação de Falhas / Perdas'
+lcSub = 'Periodo: ' + Dtoc(ldDti) + ' a ' + Dtoc(ldDtf)
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr, 'Razas')
+lcEmp = _Empr + ' - ' + Iif(Eof('crSigCdEmp'), '', crSigCdEmp.Razas)
+lcTit = Iif(Not Empty(lcTpM), lcTpM, '') + Iif(Not Empty(lcFor), " / " + lcFor, '') + Iif(Not Empty(lcGrp), " / " + lcGrp, '')
+lcTit = Iif(Not Empty(lcTit), 'Filtros: ' + lcTit, '')
+
+Create Cursor dbCabecalho (Titulo c(100), SubTitulo c(100), NomeEmpresa c(100), Periodos c(100))
+Insert Into dbCabecalho (Titulo, Periodos, NomeEmpresa, SubTitulo) Values (lcCab, lcTit, lcEmp, lcSub)
+
+Select TmpRelat
+Go Top
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Local lnTpRel
+lnTpRel = ThisForm.NivImprs.Value
+Do Case
+	Case LnTpRel = 1 
+		Report Form SigReIfA Preview Noconsole
+	Case LnTpRel = 2
+		Report Form SigReIfB Preview Noconsole
+	Case LnTpRel = 3 or LntpRel = 4
+		Report Form SigReIfC Preview Noconsole
+	Case LnTpRel = 5
+		Report Form SigReIfD Preview Noconsole
+	Case LnTpRel = 6
+		Report Form SigReIfE Preview Noconsole
+	Case LnTpRel = 7
+		Report Form SigReIfF Preview Noconsole
+EndCase
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIFP.getDsGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIFP.getCdGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If Not Empty(This.Value)
+	If Not Seek(This.Value, 'TmpGccr','Grupos')
+		loBrowse = CreateObject('fwBuscaSel', 'TmpGccr', 'Grupos', This.Value, 'Cadastro de Setores')
+		loBrowse.AddColuna('Codigos', '', 'Grupo', .t., 'Grupos')
+		loBrowse.AddColuna('Descrs', '', 'Descrição')
+		loBrowse.Show
+	EndIf
+	
+	ThisForm.getCdGrupo.Value = Iif(LastKey()==27,'',Evaluate('TmpGccr.Codigos'))
+	ThisForm.getDsGrupo.Value = Iif(LastKey()==27,'',Evaluate('TmpGccr.Descrs'))
+	ThisForm.getCdGrupo.Refresh
+	ThisForm.getDsGrupo.Refresh
+Else
+	ThisForm.getDsGrupo.Value = Space(20)
+	ThisForm.getDsGrupo.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.NivImprs.Value = 7)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIFP.get_ifor
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	If !fAcessoContas( Usuar, [], 'C', This.Value, This, ThisForm.get_dfor)
+		MessageBox( 'Acesso Negado...', 48, '' )
+		This.Value = ' '
+		ThisForm.get_dFor.Value = ''
+		Return(.F.)
+	EndIf	
+Else
+	ThisForm.get_ifor.Value = ''
+	ThisForm.get_dfor.Value = ''
+EndIf
+ThisForm.get_ifor.Refresh
+ThisForm.get_dfor.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.NivImprs.Value = 7)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIFP.get_tpmat
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	lcQuery = [Select Cods, Descs ] + ;
+				[From SigOpOpt ] + ;
+			   [Where Situas = 3]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpOpt') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpOpt)')
+		Return 0
+	EndIf
+	Select TmpOpt
+	Index On Cods Tag Cods
+	
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'TmpOpt', 'Cods', This.Value, 'Cadastro de Tipos de Operação')
+		loBrowse.AddColuna('Cods',  '', 'Código', .t., 'Cods')
+		loBrowse.AddColuna('Descs', '', 'Descrição')
+		loBrowse.Show
+		This.Value = Iif( Lastkey() == 27, '', TmpOpt.Cods)
+	EndIf
+	Use In TmpOpt
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.NivImprs.Value = 7)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREIFP.get_dfor
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	If !fAcessoContas( Usuar, [], 'D', This.Value, ThisForm.get_Ifor, This)
+		MessageBox( 'Acesso Negado...', 48, '' )
+		This.Value = ' '
+		ThisForm.get_iFor.Value = ''
+		Return(.F.)
+	EndIf	
+Else
+	ThisForm.get_ifor.Value = ''
+	ThisForm.get_dfor.Value = ''
+EndIf
+ThisForm.get_ifor.Refresh
+ThisForm.get_dfor.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_ifor.Value) And (ThisForm.NivImprs.Value = 7)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREIFP
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 15
+================================================================================

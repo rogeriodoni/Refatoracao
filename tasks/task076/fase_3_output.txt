@@ -1,0 +1,16 @@
+﻿Arquivo criado corretamente. Fase 3/8 conclu├¡da.
+
+**O que foi entregue em `Formsigredcu.prg`:**
+
+| M├®todo | Status | O que faz |
+|--------|--------|-----------|
+| `DEFINE CLASS` + propriedades | Ô£à completo | Dimens├Áes exatas (798├ù250), `DataSession=1`, `ControlBox=.F.`, `AlwaysOnTop=.T.`, 7 propriedades `this_` do di├ílogo |
+| `Init()` | Ô£à completo | Recebe 9 par├ómetros, cria `sigredcuBO` **antes** de `DODEFAULT()`, transfere todos os par├ómetros para o BO, desabilita o form pai |
+| `InicializarForm()` | Ô£à completo (parcial para as fases seguintes) | Valida BO, configura `Picture`/`Caption`, chama `PrepararDados()`, chama `ConfigurarCabecalho()` |
+| `ConfigurarCabecalho()` | Ô£à completo | `cnt_4c_Cabecalho` (BackColor=RGB(100,100,100)), `lbl_4c_Sombra` + `lbl_4c_Titulo` com efeito 3D |
+| `Destroy()` | Ô£à completo | Reativa form pai (`.Enabled=.T.`), `SET PRINTER TO DEFAULT`, libera BO, `DODEFAULT()` fora do TRY |
+
+**Pr├│ximas fases** adicionar├úo via Edit:
+- **Fase 4**: `ConfigurarBotoesRelatorio()` ÔÇö `cmg_4c_Botoes` CommandGroup (4 bot├Áes: Visualizar/Imprimir/Excel/Encerrar)
+- **Fase 5**: `ConfigurarControles()` ÔÇö 5 checkboxes + `OptAgrupa` + `lbl_4c_Agrupa` diretamente no form (FLAT, sem PageFrame)
+- **Fases 7-8**: handlers de eventos (`BtnRelatorioClick`, `ChkImagemClick`, etc.) + `AplicarValoresIniciais()` + `VerificarControleReimpressao()`

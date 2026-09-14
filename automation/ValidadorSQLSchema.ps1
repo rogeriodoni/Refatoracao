@@ -1,0 +1,853 @@
+<#
+.SYNOPSIS
+    Valida nomes de colunas SQL em arquivos .prg contra o schema.sql e/ou banco SQL Server
+.DESCRIPTION
+    Analise estatica (sem LLM) que:
+    1. Parseia schema.sql para extrair tabelas e colunas
+    2. Opcionalmente consulta INFORMATION_SCHEMA.COLUMNS do SQL Server (DB first, fallback schema.sql)
+    3. Parseia arquivos .prg para extrair referencias SQL (SELECT, INSERT, UPDATE, DELETE)
+    4. Valida se as colunas referenciadas existem no schema
+    5. Valida tipos de dados em CREATE CURSOR vs schema
+.PARAMETER FormFile
+    Caminho do arquivo .prg do formulario
+.PARAMETER BOFile
+    Caminho do arquivo .prg do Business Object
+.PARAMETER SchemaFile
+    Caminho do schema.sql (default: C:\4c\docs\schema.sql)
+.PARAMETER DbServer
+    Servidor SQL Server (opcional). Ex: "192.168.15.101,1435"
+.PARAMETER DbName
+    Nome do banco de dados (opcional). Ex: "DB_MBAHIA"
+.PARAMETER DbUser
+    Usuario SQL Server (opcional). Ex: "sa"
+.PARAMETER DbPass
+    Senha SQL Server (opcional)
+.OUTPUTS
+    Array de strings com problemas encontrados. Vazio = sem problemas.
+.EXAMPLE
+    $problemas = & .\ValidadorSQLSchema.ps1 -FormFile "C:\4c\projeto\app\forms\cadastros\FormCor.prg"
+.EXAMPLE
+    $problemas = & .\ValidadorSQLSchema.ps1 -FormFile "FormCor.prg" -DbServer "192.168.15.101,1435" -DbName "DB_MBAHIA" -DbUser "sa" -DbPass "pwd"
+#>
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$FormFile,
+
+    [string]$BOFile = "",
+
+    [string]$SchemaFile = "C:\4c\docs\schema.sql",
+
+    [string]$DbServer = "",
+    [string]$DbName = "",
+    [string]$DbUser = "",
+    [string]$DbPass = ""
+)
+
+# Cache de schema obtido do banco (por tabela)
+$script:SchemaDBCache = @{}
+$script:DbConnectionString = ""
+
+# Cache das colunas NOT NULL sem DEFAULT (por tabela) - ver Validate-InsertNotNull
+$script:NotNullCache = @{}
+$script:NotNullFromFile = $null
+
+# Determinar se temos conexao DB disponivel
+$script:UseDB = ($DbServer -ne "" -and $DbName -ne "" -and $DbUser -ne "" -and $DbPass -ne "")
+if ($script:UseDB) {
+    $script:DbConnectionString = "Server=$DbServer;Database=$DbName;User Id=$DbUser;Password=$DbPass;"
+}
+
+# ============================================================================
+# FUNCAO: Get-SchemaFromDB - Consulta INFORMATION_SCHEMA.COLUMNS do SQL Server
+# ============================================================================
+function Get-SchemaFromDB {
+    param([string]$TableName)
+
+    $tableKey = $TableName.ToLower()
+
+    # Retornar do cache se ja consultado
+    if ($script:SchemaDBCache.ContainsKey($tableKey)) {
+        return $script:SchemaDBCache[$tableKey]
+    }
+
+    $columns = @{}
+
+    try {
+        $conn = New-Object System.Data.SqlClient.SqlConnection
+        $conn.ConnectionString = $script:DbConnectionString
+        $conn.Open()
+
+        $cmd = $conn.CreateCommand()
+        $cmd.CommandText = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @TableName"
+        $cmd.Parameters.AddWithValue("@TableName", $TableName) | Out-Null
+
+        $reader = $cmd.ExecuteReader()
+        while ($reader.Read()) {
+            $colName = $reader["COLUMN_NAME"].ToString().ToLower()
+            $dataType = $reader["DATA_TYPE"].ToString().ToLower()
+            $columns[$colName] = $dataType
+        }
+        $reader.Close()
+        $conn.Close()
+    }
+    catch {
+        Write-Warning "Erro ao consultar DB para tabela '$TableName': $($_.Exception.Message)"
+    }
+
+    # Cachear resultado (mesmo vazio, para nao re-consultar)
+    $script:SchemaDBCache[$tableKey] = $columns
+
+    return $columns
+}
+
+# ============================================================================
+# FUNCAO: Get-SchemaForTable - Tenta DB primeiro, fallback para schema.sql
+# ============================================================================
+function Get-SchemaForTable {
+    param(
+        [string]$TableName,
+        [hashtable]$FileSchema
+    )
+
+    $tableKey = $TableName.ToLower()
+
+    # Tentar DB primeiro (se disponivel)
+    if ($script:UseDB) {
+        $dbColumns = Get-SchemaFromDB -TableName $TableName
+        if ($dbColumns.Count -gt 0) {
+            return $dbColumns
+        }
+    }
+
+    # Fallback: schema.sql parseado
+    if ($FileSchema.ContainsKey($tableKey)) {
+        return $FileSchema[$tableKey]
+    }
+
+    return @{}
+}
+
+# ============================================================================
+# FUNCAO: Parse-Schema - Extrai tabelas e colunas do schema.sql
+# ============================================================================
+function Parse-Schema {
+    param([string]$SchemaFile)
+
+    $schema = @{}  # @{ "tabela_lower" = @{ "coluna_lower" = "tipo_original"; ... } }
+
+    if (-not $SchemaFile -or -not (Test-Path $SchemaFile)) {
+        Write-Warning "Schema file not found: $SchemaFile"
+        return $schema
+    }
+
+    $content = Get-Content $SchemaFile -Raw -Encoding UTF8
+
+    # Pattern para CREATE TABLE [dbo].[NomeTabela] ( ... )
+    # O schema.sql tem caracteres estranhos (espacados), entao usamos pattern flexivel
+    $tablePattern = 'CREATE\s+TABLE\s+\[dbo\]\.\[(\w+)\]'
+    $tableMatches = [regex]::Matches($content, $tablePattern, 'IgnoreCase')
+
+    foreach ($tm in $tableMatches) {
+        $tableName = $tm.Groups[1].Value.ToLower()
+        $startPos = $tm.Index + $tm.Length
+
+        # Encontrar o bloco de colunas (ate CONSTRAINT ou proximo CREATE)
+        $endPos = $content.Length
+        $constraintMatch = [regex]::Match($content.Substring($startPos), '(?i)\bCONSTRAINT\b|\bCREATE\b')
+        if ($constraintMatch.Success) {
+            $endPos = $startPos + $constraintMatch.Index
+        }
+
+        $block = $content.Substring($startPos, $endPos - $startPos)
+
+        # Extrair colunas: [nome_coluna] [tipo](tamanho)
+        $colPattern = '\[(\w+)\]\s+\[(\w+)\]'
+        $colMatches = [regex]::Matches($block, $colPattern)
+
+        if (-not $schema.ContainsKey($tableName)) {
+            $schema[$tableName] = @{}
+        }
+
+        foreach ($cm in $colMatches) {
+            $colName = $cm.Groups[1].Value.ToLower()
+            $colType = $cm.Groups[2].Value.ToLower()
+
+            # Ignorar nomes que sao tipos SQL (nao colunas)
+            if ($colType -in @('not','null','primary','key','clustered','asc','desc','on','off',
+                               'pad_index','statistics_norecompute','ignore_dup_key','allow_row_locks',
+                               'allow_page_locks','optimize_for_sequential_key','default')) {
+                continue
+            }
+
+            $schema[$tableName][$colName] = $colType
+        }
+    }
+
+    # Segundo pass: capturar colunas adicionadas via ALTER TABLE ADD
+    $alterPattern = '(?i)ALTER\s+TABLE\s+\[dbo\]\.\[(\w+)\]\s+ADD\s+\[(\w+)\]\s+\[(\w+)\]'
+    $alterMatches = [regex]::Matches($content, $alterPattern)
+    foreach ($am in $alterMatches) {
+        $tblName = $am.Groups[1].Value.ToLower()
+        $colName = $am.Groups[2].Value.ToLower()
+        $colType = $am.Groups[3].Value.ToLower()
+        if ($schema.ContainsKey($tblName)) {
+            if (-not $schema[$tblName].ContainsKey($colName)) {
+                $schema[$tblName][$colName] = $colType
+            }
+        }
+    }
+
+    return $schema
+}
+
+# ============================================================================
+# FUNCAO: Extract-SQLReferences - Extrai tabela.coluna de statements SQL
+# ============================================================================
+function Extract-SQLReferences {
+    param(
+        [string]$Content,
+        [hashtable]$Schema
+    )
+
+    $references = @()
+    $lines = $Content -split "`n"
+
+    # Primeiro: reconstruir statements SQL multi-linha
+    # Detectar linhas com loc_cSQL = "SELECT..." ou concatenacoes + ;
+    $sqlStatements = @()
+    $currentSQL = ""
+    $currentStartLine = 0
+    $inSQL = $false
+
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        $line = $lines[$i].TrimEnd()
+
+        # Detectar inicio de SQL: variavel = "SELECT|INSERT|UPDATE|DELETE..."
+        if ($line -match '(?i)=\s*[\["]?\s*(SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b') {
+            $inSQL = $true
+            $currentSQL = $line
+            $currentStartLine = $i + 1
+        }
+        elseif ($inSQL) {
+            $currentSQL += " " + $line
+        }
+
+        # Detectar fim do SQL (linha sem continuacao ;)
+        if ($inSQL -and $line -notmatch ';\s*$' -and $line -notmatch '\+\s*;?\s*$') {
+            $sqlStatements += [PSCustomObject]@{
+                SQL = $currentSQL
+                StartLine = $currentStartLine
+            }
+            $inSQL = $false
+            $currentSQL = ""
+        }
+    }
+
+    # Se ficou SQL pendente
+    if ($inSQL -and $currentSQL) {
+        $sqlStatements += [PSCustomObject]@{
+            SQL = $currentSQL
+            StartLine = $currentStartLine
+        }
+    }
+
+    # Post-processar: juntar strings VFP9 multi-linha (remover " + ; \n "  artefatos)
+    # Pattern: " + ;  seguido de espacos opcionais e "  ->  substituir por espaco simples
+    for ($j = 0; $j -lt $sqlStatements.Count; $j++) {
+        $cleanSQL = $sqlStatements[$j].SQL
+        # Remove VFP9 string concatenation: " + ; <whitespace> "
+        $cleanSQL = $cleanSQL -replace '"\s*\+\s*;\s*"', ' '
+        # Remove remaining line-continuation semicolons at end of quoted strings: " ;  (standalone)
+        $cleanSQL = $cleanSQL -replace '"\s*;\s*$', '"'
+        $sqlStatements[$j].SQL = $cleanSQL
+    }
+
+    return $sqlStatements
+}
+
+# ============================================================================
+# FUNCAO: Validate-SelectColumns - Valida colunas em SELECT statements
+# ============================================================================
+function Validate-SelectColumns {
+    param(
+        [string]$SQL,
+        [int]$LineNumber,
+        [hashtable]$Schema
+    )
+
+    $problemas = @()
+
+    # Extrair tabela(s) do FROM/JOIN com alias
+    # Pattern: FROM TableName alias | JOIN TableName alias
+    $aliasMap = @{}  # alias -> tablename_lower
+
+    $fromPattern = '(?i)\bFROM\s+(\w+)\s+(\w+)'
+    $fromMatches = [regex]::Matches($SQL, $fromPattern)
+    foreach ($m in $fromMatches) {
+        $table = $m.Groups[1].Value
+        $alias = $m.Groups[2].Value
+        if ($alias -notin @('WHERE','SET','ORDER','GROUP','HAVING','INNER','LEFT','RIGHT','OUTER','JOIN','ON','AND','OR','AS','INTO')) {
+            $aliasMap[$alias.ToLower()] = $table.ToLower()
+        }
+    }
+
+    # JOIN TableName alias (LEFT JOIN, INNER JOIN, RIGHT JOIN, CROSS JOIN)
+    $joinPattern = '(?i)\bJOIN\s+(\w+)\s+(\w+)'
+    $joinMatches = [regex]::Matches($SQL, $joinPattern)
+    foreach ($m in $joinMatches) {
+        $table = $m.Groups[1].Value
+        $alias = $m.Groups[2].Value
+        if ($alias -notin @('WHERE','SET','ORDER','GROUP','HAVING','INNER','LEFT','RIGHT','OUTER','JOIN','ON','AND','OR','AS','INTO')) {
+            $aliasMap[$alias.ToLower()] = $table.ToLower()
+        }
+    }
+
+    # FROM TableName sem alias (tabela direta)
+    $fromDirectPattern = '(?i)\bFROM\s+(\w+)\b(?!\s+\w+\s*(?:WHERE|SET|ORDER|JOIN|,))'
+    $fromDirectMatches = [regex]::Matches($SQL, $fromDirectPattern)
+    foreach ($m in $fromDirectMatches) {
+        $table = $m.Groups[1].Value.ToLower()
+        # Verificar se tabela existe no schema (file ou DB)
+        $directTableCols = Get-SchemaForTable -TableName $table -FileSchema $Schema
+        if ($directTableCols.Count -gt 0 -and -not $aliasMap.ContainsKey($table)) {
+            $aliasMap[$table] = $table
+        }
+    }
+
+    # Extrair colunas referenciadas: alias.coluna ou tabela.coluna
+    $colRefPattern = '(?i)\b(\w+)\.(\w+)\b'
+    $colMatches = [regex]::Matches($SQL, $colRefPattern)
+
+    foreach ($cm in $colMatches) {
+        $prefix = $cm.Groups[1].Value.ToLower()
+        $column = $cm.Groups[2].Value.ToLower()
+
+        # Ignorar prefixos conhecidos que nao sao alias de tabela
+        if ($prefix -in @('cursor_4c','dbo','loc','this','par','thisform','sys')) { continue }
+        # Ignorar propriedades VFP
+        if ($column -in @('value','caption','controlsource','enabled','visible','click','init')) { continue }
+
+        # Verificar se o prefixo eh um alias mapeado a uma tabela
+        if ($aliasMap.ContainsKey($prefix)) {
+            $tableName = $aliasMap[$prefix]
+            $tableColumns = Get-SchemaForTable -TableName $tableName -FileSchema $Schema
+
+            if ($tableColumns.Count -gt 0) {
+                if (-not $tableColumns.ContainsKey($column)) {
+                    $problemas += "[SQL-SCHEMA] Linha ~$LineNumber`: Coluna '$column' NAO EXISTE na tabela '$tableName' (referenciada como $($cm.Groups[1].Value).$($cm.Groups[2].Value))"
+                }
+            }
+        }
+    }
+
+    return $problemas
+}
+
+# ============================================================================
+# FUNCAO: Validate-InsertColumns - Valida colunas em INSERT statements
+# ============================================================================
+function Validate-InsertColumns {
+    param(
+        [string]$SQL,
+        [int]$LineNumber,
+        [hashtable]$Schema
+    )
+
+    $problemas = @()
+
+    # Pattern: INSERT INTO TableName (col1, col2, ...)
+    $insertPattern = '(?i)INSERT\s+INTO\s+(\w+)\s*\(([^)]+)\)'
+    $insertMatch = [regex]::Match($SQL, $insertPattern)
+
+    if ($insertMatch.Success) {
+        $tableName = $insertMatch.Groups[1].Value.ToLower()
+        $columnList = $insertMatch.Groups[2].Value
+
+        # Ignorar cursores locais (cursor_4c_*)
+        if ($tableName -match '^cursor_4c_') { return $problemas }
+
+        # Ignorar quando a lista de colunas e uma variavel VFP (ex: " + loc_cCols + ")
+        # Analise estatica nao consegue resolver variaveis em tempo de compilacao
+        if ($columnList -match '\+\s*\w+\s*\+') { return $problemas }
+
+        $tableColumns = Get-SchemaForTable -TableName $tableName -FileSchema $Schema
+        if ($tableColumns.Count -gt 0) {
+            $columns = $columnList -split ',' | ForEach-Object { $_.Trim().ToLower() }
+            foreach ($col in $columns) {
+                $col = $col -replace '[\[\]]', ''  # Remove brackets
+                if ($col -and -not $tableColumns.ContainsKey($col)) {
+                    $problemas += "[SQL-SCHEMA] Linha ~$LineNumber`: INSERT coluna '$col' NAO EXISTE na tabela '$tableName'"
+                }
+            }
+        }
+    }
+
+    return $problemas
+}
+
+# ============================================================================
+# FUNCAO: Parse-SchemaNotNullFile - colunas NOT NULL sem DEFAULT do schema.sql
+# Fallback usado quando nao ha conexao com o banco. Le o arquivo UTF-16 com
+# Get-Content -Raw (regra #14 do CLAUDE.md: grep/findstr devolvem ZERO).
+# ============================================================================
+function Parse-SchemaNotNullFile {
+    param([string]$SchemaFile)
+
+    $mapa = @{}
+    if (-not $SchemaFile -or -not (Test-Path $SchemaFile)) { return $mapa }
+
+    $content = Get-Content $SchemaFile -Raw
+
+    # Colunas declaradas NOT NULL dentro de cada CREATE TABLE
+    $reTable = [regex]'(?is)CREATE TABLE \[dbo\]\.\[(\w+)\]\s*\((.*?)\r?\n\)\s*ON \[PRIMARY\]'
+    foreach ($tm in $reTable.Matches($content)) {
+        $tabela = $tm.Groups[1].Value.ToLower()
+        $cols = @()
+        foreach ($linha in ($tm.Groups[2].Value -split "`n")) {
+            if ($linha -match '^\s*\[(\w+)\]\s+\[[\w ]+\]') {
+                $col = $Matches[1].ToLower()
+                if ($linha -match '(?i)\bIDENTITY\b') { continue }
+                if ($linha -match '(?i)\bDEFAULT\b')  { continue }
+                if ($linha -match '(?i)\bNOT NULL\b') { $cols += $col }
+            }
+        }
+        $mapa[$tabela] = $cols
+    }
+
+    # Remover as que ganham DEFAULT via ALTER TABLE (o banco preenche sozinho)
+    $reDef = [regex]'(?is)ALTER TABLE \[dbo\]\.\[(\w+)\]\s+ADD\s+(?:CONSTRAINT \[[^\]]+\]\s+)?DEFAULT\s+.*?FOR \[(\w+)\]'
+    foreach ($dm in $reDef.Matches($content)) {
+        $tabela = $dm.Groups[1].Value.ToLower()
+        $col    = $dm.Groups[2].Value.ToLower()
+        if ($mapa.ContainsKey($tabela)) {
+            $mapa[$tabela] = @($mapa[$tabela] | Where-Object { $_ -ne $col })
+        }
+    }
+
+    return $mapa
+}
+
+# ============================================================================
+# FUNCAO: Get-NotNullForTable - colunas obrigatorias (NOT NULL sem DEFAULT)
+# DB primeiro (autoridade), fallback schema.sql. Exclui IDENTITY e computadas:
+# o banco as gera sozinho e nunca entram no INSERT.
+# ============================================================================
+function Get-NotNullForTable {
+    param(
+        [string]$TableName,
+        [string]$SchemaFile
+    )
+
+    $chave = $TableName.ToLower()
+    if ($script:NotNullCache.ContainsKey($chave)) {
+        return $script:NotNullCache[$chave]
+    }
+
+    $cols = $null
+
+    if ($script:UseDB) {
+        try {
+            $conn = New-Object System.Data.SqlClient.SqlConnection
+            $conn.ConnectionString = $script:DbConnectionString
+            $conn.Open()
+            $cmd = $conn.CreateCommand()
+            # Traz TODAS as colunas com um flag de obrigatoriedade. Precisamos
+            # distinguir "tabela ausente do banco" (zero linhas) de "tabela sem
+            # nenhuma coluna obrigatoria" (linhas com OBRIG=0): so a primeira
+            # justifica o fallback.
+            $cmd.CommandText = @"
+SELECT c.COLUMN_NAME,
+       CASE WHEN c.IS_NULLABLE = 'NO'
+             AND c.COLUMN_DEFAULT IS NULL
+             AND COLUMNPROPERTY(OBJECT_ID(QUOTENAME(c.TABLE_SCHEMA) + '.' + QUOTENAME(c.TABLE_NAME)), c.COLUMN_NAME, 'IsIdentity') = 0
+             AND COLUMNPROPERTY(OBJECT_ID(QUOTENAME(c.TABLE_SCHEMA) + '.' + QUOTENAME(c.TABLE_NAME)), c.COLUMN_NAME, 'IsComputed') = 0
+            THEN 1 ELSE 0 END AS OBRIG
+  FROM INFORMATION_SCHEMA.COLUMNS c
+ WHERE c.TABLE_NAME = @T
+"@
+            $cmd.Parameters.AddWithValue("@T", $TableName) | Out-Null
+            $rd = $cmd.ExecuteReader()
+            $lista  = @()
+            $existe = $false
+            while ($rd.Read()) {
+                $existe = $true
+                if ([int]$rd[1] -eq 1) { $lista += $rd[0].ToString().ToLower() }
+            }
+            $rd.Close()
+            $conn.Close()
+
+            if ($existe) {
+                $cols = $lista
+            }
+            else {
+                # Tabela existe no schema.sql mas NAO no banco desta instalacao.
+                # Regra #14 do CLAUDE.md: se o legado usa o mesmo nome, o migrado
+                # esta FIEL e a divergencia e de BANCO/ambiente - nao se conserta
+                # no codigo. Nao acusar: travaria o pipeline por causa do ambiente.
+                $cols = @()
+            }
+        }
+        catch {
+            Write-Warning "NOT NULL: falha ao consultar '$TableName': $($_.Exception.Message)"
+        }
+    }
+
+    if ($null -eq $cols) {
+        if ($null -eq $script:NotNullFromFile) {
+            $script:NotNullFromFile = Parse-SchemaNotNullFile -SchemaFile $SchemaFile
+        }
+        if ($script:NotNullFromFile.ContainsKey($chave)) {
+            $cols = $script:NotNullFromFile[$chave]
+        }
+        else {
+            $cols = @()
+        }
+    }
+
+    $script:NotNullCache[$chave] = $cols
+    return $cols
+}
+
+# ============================================================================
+# FUNCAO: Validate-InsertNotNull - INSERT tem de cobrir TODA coluna NOT NULL
+#
+# O legado grava o registro inteiro (AddCursor sem query = SELECT * +
+# TABLEUPDATE), entao coluna que nao aparece na tela continua sendo gravada em
+# branco. O BO migrado lista so as colunas da tela; se alguma das ausentes for
+# NOT NULL sem DEFAULT o SQL Server recusa o INSERT inteiro e o cadastro fica
+# sem conseguir incluir. Ver migration-patterns.md secao 191.
+#
+# CONSERVADOR DE PROPOSITO: um falso positivo aqui BLOQUEIA o pipeline depois
+# de 3 tentativas de correcao (sqlSchemaBlocking). So reporta quando o
+# statement capturado esta comprovadamente COMPLETO - isto e, quando o VALUES
+# aparece depois da lista de colunas. SQL montado em varias atribuicoes
+# (loc_cSQL = loc_cSQL + "...") chega truncado aqui, sem o VALUES, e e
+# ignorado: melhor deixar passar do que travar a migracao por engano.
+# ============================================================================
+function Validate-InsertNotNull {
+    param(
+        [string]$SQL,
+        [int]$LineNumber,
+        [string]$SchemaFile
+    )
+
+    $problemas = @()
+
+    $m = [regex]::Match($SQL, '(?i)INSERT\s+INTO\s+(\w+)\s*\(([^)]+)\)(.*)$')
+    if (-not $m.Success) { return $problemas }
+
+    $tableName  = $m.Groups[1].Value.ToLower()
+    $columnList = $m.Groups[2].Value
+    $resto      = $m.Groups[3].Value
+
+    # Cursores locais e tabelas temporarias nao tem constraint de schema
+    if ($tableName -match '^cursor_4c_' -or $tableName -match '^#') { return $problemas }
+
+    # Lista de colunas montada em variavel: analise estatica nao resolve
+    if ($columnList -match '\+\s*\w+\s*\+') { return $problemas }
+
+    # GUARD principal: sem VALUES a captura esta truncada (multi-atribuicao)
+    if ($resto -notmatch '(?i)\bVALUES\b') { return $problemas }
+
+    $obrigatorias = Get-NotNullForTable -TableName $tableName -SchemaFile $SchemaFile
+    if ($obrigatorias.Count -eq 0) { return $problemas }
+
+    $declaradas = @()
+    foreach ($c in ($columnList -split ',')) {
+        $c = ($c -replace '[\[\]"'']', '').Trim().ToLower()
+        if ($c -match '^\w+$') { $declaradas += $c }
+    }
+    if ($declaradas.Count -eq 0) { return $problemas }
+
+    $faltando = @($obrigatorias | Where-Object { $declaradas -notcontains $_ })
+
+    if ($faltando.Count -gt 0) {
+        $problemas += "[SQL-SCHEMA] Linha ~$LineNumber`: INSERT na tabela '$tableName' OMITE coluna(s) NOT NULL sem DEFAULT: $($faltando -join ', '). O SQL Server recusa o INSERT inteiro. Acrescentar as colunas que faltam (NAO trocar as existentes - cuidado com colunas gemeas de nome parecido). Preenchimento: cidchaves/pkchaves = EscaparSQL(fUniqueIds()) (NUNCA string vazia); usuars/usualts = gc_4c_UsuarioLogado; com property no BO = a property; char sem property = EscaparSQL(''); numeric = FormatarNumeroSQL(0, <decimais>); bit = 0; datetime = sentinela '19000101'."
+    }
+
+    return $problemas
+}
+
+# ============================================================================
+# FUNCAO: Validate-TableNames - Valida que tabelas em FROM/JOIN existem
+# ============================================================================
+function Validate-TableNames {
+    param(
+        [string]$SQL,
+        [int]$LineNumber,
+        [hashtable]$Schema
+    )
+
+    $problemas = @()
+
+    # Coletar nomes de tabelas de FROM e JOIN
+    $tableNames = @()
+
+    # FROM TableName (com ou sem alias)
+    $fromMatches = [regex]::Matches($SQL, '(?i)\bFROM\s+(\w+)')
+    foreach ($m in $fromMatches) {
+        $tableNames += $m.Groups[1].Value
+    }
+
+    # JOIN TableName (LEFT/INNER/RIGHT/CROSS JOIN)
+    $joinMatches = [regex]::Matches($SQL, '(?i)\bJOIN\s+(\w+)')
+    foreach ($m in $joinMatches) {
+        $tableNames += $m.Groups[1].Value
+    }
+
+    # INSERT INTO TableName
+    $insertMatches = [regex]::Matches($SQL, '(?i)\bINSERT\s+INTO\s+(\w+)')
+    foreach ($m in $insertMatches) {
+        $tableNames += $m.Groups[1].Value
+    }
+
+    # UPDATE TableName
+    $updateMatches = [regex]::Matches($SQL, '(?i)\bUPDATE\s+(\w+)')
+    foreach ($m in $updateMatches) {
+        $tableNames += $m.Groups[1].Value
+    }
+
+    foreach ($tableName in ($tableNames | Select-Object -Unique)) {
+        $tableNameLower = $tableName.ToLower()
+
+        # Ignorar cursores locais e subqueries
+        if ($tableNameLower -match '^(cursor_4c_|tmp_|cr[a-z]|#)') { continue }
+        # Ignorar palavras-chave SQL que podem ser capturadas
+        if ($tableNameLower -in @('select','set','values','where','table')) { continue }
+
+        # Verificar se existe no schema (file ou DB)
+        $tableColumns = Get-SchemaForTable -TableName $tableNameLower -FileSchema $Schema
+        if ($tableColumns.Count -eq 0) {
+            $problemas += "[SQL-SCHEMA] Linha ~$LineNumber`: Tabela '$tableName' NAO EXISTE no banco. Verificar nome correto no schema.sql ou codigo original."
+        }
+    }
+
+    return $problemas
+}
+
+# ============================================================================
+# FUNCAO: Validate-UpdateColumns - Valida colunas em UPDATE statements
+# ============================================================================
+function Validate-UpdateColumns {
+    param(
+        [string]$SQL,
+        [int]$LineNumber,
+        [hashtable]$Schema
+    )
+
+    $problemas = @()
+
+    # Pattern: UPDATE TableName SET col1 = val, col2 = val WHERE ...
+    $updatePattern = '(?i)UPDATE\s+(\w+)\s+SET\s+(.*?)(?:\s+WHERE\b|$)'
+    $updateMatch = [regex]::Match($SQL, $updatePattern)
+
+    if ($updateMatch.Success) {
+        $tableName = $updateMatch.Groups[1].Value.ToLower()
+        $setClause = $updateMatch.Groups[2].Value
+
+        $tableColumns = Get-SchemaForTable -TableName $tableName -FileSchema $Schema
+        if ($tableColumns.Count -gt 0) {
+            # Extrair nomes de colunas do SET: col = valor
+            $setColPattern = '(?i)\b(\w+)\s*='
+            $setMatches = [regex]::Matches($setClause, $setColPattern)
+
+            foreach ($sm in $setMatches) {
+                $col = $sm.Groups[1].Value.ToLower()
+                # Ignorar keywords
+                if ($col -in @('and','or','not','where','set')) { continue }
+                if (-not $tableColumns.ContainsKey($col)) {
+                    $problemas += "[SQL-SCHEMA] Linha ~$LineNumber`: UPDATE coluna '$col' NAO EXISTE na tabela '$tableName'"
+                }
+            }
+        }
+
+        # Validar WHERE clause tambem
+        $wherePattern = '(?i)WHERE\s+(.*?)$'
+        $whereMatch = [regex]::Match($SQL, $wherePattern)
+        if ($whereMatch.Success) {
+            $whereClause = $whereMatch.Groups[1].Value
+            $whereColPattern = '(?i)\b(\w+)\s*='
+            $whereMatches = [regex]::Matches($whereClause, $whereColPattern)
+            foreach ($wm in $whereMatches) {
+                $col = $wm.Groups[1].Value.ToLower()
+                if ($col -in @('and','or','not','where')) { continue }
+                $whereTableColumns = Get-SchemaForTable -TableName $tableName -FileSchema $Schema
+                if ($whereTableColumns.Count -gt 0 -and -not $whereTableColumns.ContainsKey($col)) {
+                    $problemas += "[SQL-SCHEMA] Linha ~$LineNumber`: WHERE coluna '$col' NAO EXISTE na tabela '$tableName'"
+                }
+            }
+        }
+    }
+
+    return $problemas
+}
+
+# ============================================================================
+# FUNCAO: Validate-CursorTypes - Valida tipos CREATE CURSOR vs schema
+# ============================================================================
+function Validate-CursorTypes {
+    param(
+        [string]$Content,
+        [hashtable]$Schema
+    )
+
+    $problemas = @()
+
+    # Mapa de tipos SQL Server -> VFP esperado
+    $typeMap = @{
+        'char'     = @('C')           # Character
+        'varchar'  = @('C','M')       # Character ou Memo
+        'nvarchar' = @('C','M')
+        'text'     = @('M','C')       # Memo
+        'ntext'    = @('M','C')
+        'int'      = @('N','I')       # Numeric ou Integer
+        'smallint' = @('N','I')
+        'tinyint'  = @('N','I')
+        'bigint'   = @('N','I')
+        'numeric'  = @('N','B','Y')   # Numeric, Double, Currency
+        'decimal'  = @('N','B','Y')
+        'float'    = @('N','B')
+        'real'     = @('N','B')
+        'bit'      = @('L','N')       # Logical ou Numeric(1,0)
+        'datetime' = @('T','D')       # DateTime ou Date
+        'date'     = @('D','T')
+        'money'    = @('Y','N')       # Currency
+        'smallmoney' = @('Y','N')
+    }
+
+    # Encontrar SELECT ... FROM tabela que alimentam cursores via SQLEXEC
+    # Pattern: SQLEXEC(handle, sqlvar, "cursor_name")
+    $sqlexecPattern = '(?i)SQLEXEC\s*\(\s*\w+\s*,\s*(\w+)\s*,\s*"(cursor_4c_\w+)"\s*\)'
+    $sqlexecMatches = [regex]::Matches($Content, $sqlexecPattern)
+
+    foreach ($sem in $sqlexecMatches) {
+        $sqlVar = $sem.Groups[1].Value
+        $cursorName = $sem.Groups[2].Value
+
+        # Encontrar de qual tabela vem o SELECT
+        $sqlBuildPattern = "(?ims)$sqlVar\s*=\s*[`"[].*?FROM\s+(\w+)"
+        $sqlBuild = [regex]::Match($Content, $sqlBuildPattern)
+
+        if (-not $sqlBuild.Success) { continue }
+
+        $tableName = $sqlBuild.Groups[1].Value.ToLower()
+        $tableColumns = Get-SchemaForTable -TableName $tableName -FileSchema $Schema
+        if ($tableColumns.Count -eq 0) { continue }
+
+        # Encontrar CREATE CURSOR correspondente
+        $cursorPattern = "(?ims)CREATE\s+CURSOR\s+$cursorName\s*\(((?:[^()]*|\([^()]*\))*)\)"
+        $cursorMatch = [regex]::Match($Content, $cursorPattern)
+
+        if (-not $cursorMatch.Success) { continue }
+
+        $cursorDef = $cursorMatch.Groups[1].Value
+        $lineNum = ($Content.Substring(0, $cursorMatch.Index) -split "`n").Count
+
+        # Extrair campos e tipos do cursor: NomeCampo TIPO(tamanho)
+        $fieldPattern = '(?i)\b(\w+)\s+([CNDTLMBIYF])\s*(?:\(([^)]*)\))?'
+        $fieldMatches = [regex]::Matches($cursorDef, $fieldPattern)
+
+        foreach ($fm in $fieldMatches) {
+            $fieldName = $fm.Groups[1].Value.ToLower()
+            $vfpType = $fm.Groups[2].Value.ToUpper()
+
+            # Ignorar keywords
+            if ($fieldName -in @('set','null','on','off','not')) { continue }
+
+            # Verificar se campo existe na tabela
+            if ($tableColumns.ContainsKey($fieldName)) {
+                $sqlType = $tableColumns[$fieldName]
+
+                if ($typeMap.ContainsKey($sqlType)) {
+                    $expectedTypes = $typeMap[$sqlType]
+                    if ($vfpType -notin $expectedTypes) {
+                        $problemas += "[SQL-TIPO] Linha ~$lineNum`: Cursor '$cursorName' campo '$fieldName' tipo VFP='$vfpType' incompativel com SQL '$sqlType' (esperado: $($expectedTypes -join '/'))"
+                    }
+                }
+            }
+        }
+    }
+
+    return $problemas
+}
+
+# ============================================================================
+# MAIN - Execucao principal
+# ============================================================================
+
+$allProblemas = @()
+
+# 1. Parsear schema (arquivo)
+$schema = Parse-Schema -SchemaFile $SchemaFile
+
+if ($script:UseDB) {
+    Write-Host "  [SQL-SCHEMA] Modo DB ativo: $DbServer/$DbName (fallback: schema.sql)" -ForegroundColor Cyan
+}
+
+if ($schema.Count -eq 0 -and -not $script:UseDB) {
+    Write-Warning "Schema vazio ou nao parseado e sem conexao DB. Abortando validacao."
+    return @("Schema vazio - validacao SQL nao executada")
+}
+
+Write-Host "  [SQL-SCHEMA] Schema arquivo parseado: $($schema.Count) tabelas" -ForegroundColor Cyan
+
+# 2. Ler conteudo dos arquivos
+$content = ""
+if (Test-Path $FormFile) {
+    $content += Get-Content $FormFile -Raw -Encoding UTF8
+}
+if ($BOFile -and (Test-Path $BOFile)) {
+    $content += "`n" + (Get-Content $BOFile -Raw -Encoding UTF8)
+}
+
+if (-not $content) {
+    Write-Warning "Nenhum conteudo para validar."
+    return @()
+}
+
+# 3. Extrair statements SQL
+$sqlStatements = Extract-SQLReferences -Content $content -Schema $schema
+
+Write-Host "  [SQL-SCHEMA] Statements SQL encontrados: $($sqlStatements.Count)" -ForegroundColor Cyan
+
+# 4. Validar cada statement
+foreach ($stmt in $sqlStatements) {
+    $sql = $stmt.SQL
+    $lineNum = $stmt.StartLine
+
+    # TABELAS (FROM/JOIN/INSERT/UPDATE) - verificar se existem no schema
+    $allProblemas += Validate-TableNames -SQL $sql -LineNumber $lineNum -Schema $schema
+
+    # SELECT
+    if ($sql -match '(?i)\bSELECT\b.*\bFROM\b') {
+        $allProblemas += Validate-SelectColumns -SQL $sql -LineNumber $lineNum -Schema $schema
+    }
+
+    # INSERT INTO (apenas tabelas reais, nao cursores)
+    if ($sql -match '(?i)\bINSERT\s+INTO\b') {
+        $allProblemas += Validate-InsertColumns -SQL $sql -LineNumber $lineNum -Schema $schema
+        # Coluna NOT NULL sem DEFAULT que ficou de fora do INSERT (secao 191)
+        $allProblemas += Validate-InsertNotNull -SQL $sql -LineNumber $lineNum -SchemaFile $SchemaFile
+    }
+
+    # UPDATE
+    if ($sql -match '(?i)\bUPDATE\b.*\bSET\b') {
+        $allProblemas += Validate-UpdateColumns -SQL $sql -LineNumber $lineNum -Schema $schema
+    }
+}
+
+# 5. Validar tipos de cursor
+$allProblemas += Validate-CursorTypes -Content $content -Schema $schema
+
+# 6. Reportar resultados
+if ($allProblemas.Count -eq 0) {
+    Write-Host "  [SQL-SCHEMA] PASSOU - Nenhuma coluna invalida detectada" -ForegroundColor Green
+}
+else {
+    Write-Host "  [SQL-SCHEMA] $($allProblemas.Count) problema(s) encontrado(s):" -ForegroundColor Red
+    foreach ($p in $allProblemas) {
+        Write-Host "    $p" -ForegroundColor Yellow
+    }
+}
+
+return $allProblemas

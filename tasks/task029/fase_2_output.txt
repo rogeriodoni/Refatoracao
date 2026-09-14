@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O `SigReAivBO.prg` agora tem implementa├º├úo completa:
+
+- **`ValidarFiltros()`** ÔÇö valida empresa, Inv1, Inv2 e garante que os dois invent├írios s├úo diferentes
+- **`PrepararDados()`** (PROTECTED) ÔÇö executa o JOIN `SigIvTrh + SigCdPro`, cria `cursor_4c_Cabecalho` e `cursor_4c_DbImp`, processa o SCAN agrupando por produto/localiza├º├úo (modo anal├¡tico considera `localis`, sint├®tico ignora), calcula Sobras/Faltas e elimina registros sem diferen├ºa
+- **`Visualizar()`** / **`Imprimir()`** ÔÇö validam filtros, preparam dados e disparam `REPORT FORM ... PREVIEW/TO PRINTER`
+- **`ObterMensagemErro()`** ÔÇö getter para o form mostrar erros
+- **`Destroy()`** ÔÇö fecha os tr├¬s cursores ao destruir o BO
+
+A l├│gica do SCAN replica exatamente o `processamento` original: SCATTER MEMVAR do cursor SQL, ajuste manual de `m.cnInvs1`/`m.cnInvs2`, GATHER MEMVAR no cursor resultado, e REPLACE expl├¡cito de `cLocals` e `Tipos` (que n├úo mapeiam por nome via SCATTER).

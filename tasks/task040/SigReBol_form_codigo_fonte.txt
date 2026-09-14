@@ -1,0 +1,329 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReBol.SCX
+* Data/Hora: 16/05/26 15:05:18
+* Total de registros: 4
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREBOL
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 71
+  Left = 83
+  Width = 582
+  Height = 274
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREBOL
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 120
+  Width = 749
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Impressão de Boleto"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Arial"
+  FontSize = 9
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 1
+  ForeColor = 0,0,0
+  chkimpdoc = .F.
+  chkimpdocacess = .F.
+  pchkimpdoc = .F.
+  podatamgr2 = .F.
+  Name = "SIGREBOL"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 480
+  btnReport.Top = 1
+  btnReport.TabIndex = 7
+  btnReport.ZOrderSet = 2
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREBOL
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReBol Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local pEmp, pDop, pNum 
+
+pEmp = ThisForm.pcEmps
+pDop = ThisForm.pcDopes
+pNum = ThisForm.pcNumes
+
+lStrQuery = [Select FPags, Bancos, Agencias, Contas, Numeros, Cartaos, Datas, Valos, Vencs ]+;
+			  [From SigMvPar ]+;
+			 [Where EmpDopNums = '] + Padr(pEmp,3) + Padr(pDop,20) + Str(pNum,6) +[' ]
+
+If ThisForm.PodataMgr.SqlExecute(lStrQuery,'TmpPag') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpPag)')
+	Return(.F.)
+EndIf
+
+lStrQuery = [Select c.Emps, c.Dopes, c.Numes, c.Vends, c.GrupoOs, c.ContaOs, c.GrupoDs, c.ContaDs,]+;
+				[c.Datas, c.ValInis, c.Valos, c.EmpDs, c.Obses, c.PrazoEnts, c.nCupoms, c.Notas, ]+;
+				[i.cItens, i.Qtds, i.CPros, i.dpros ]+;
+			[From SigMvCab c ]+;
+			[Left Join SigMvItn i On c.Emps = i.Emps And c.Dopes = i.Dopes And c.Numes = i.Numes ]+;
+			[Left Join SigCdPro p On i.Cpros = p.Cpros ]+;
+			[Where c.EmpDopNums = '] +  Padr(pEmp,3) + Padr(pDop,20) + Str(pNum,6) +[' ]
+If ThisForm.PodataMgr.SqlExecute(lStrQuery,'TmpRel') < 1
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpRel)')
+	Return(.F.)
+EndIf
+
+=ThisForm.Podatamgr.CursorQuery('SigCdOpe','TmpOpe','Dopes',pDop,[Caixas,cOpers,Opers,Destinos,Origems,nDopes])
+
+lnNume = ( TmpOPe.nDopes * 1000000 ) + pNum
+lcNume = fAltBar2de5(Str(lnNume,10)) 
+
+ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr)
+lcNmEmpresa  =  Alltrim(crSigCdEmp.Razas)
+
+Select TmpRel
+Index On cItens tag cItens
+Go Top
+lnVend = TmpRel.Vends
+
+If (TmpOpe.Caixas = 1)
+	_Conta = Iif(TmpOpe.cOpers=1, TmpRel.Contads, TmpRel.Contaos)
+Else
+	_Conta = Iif((TmpOpe.Opers = 1 And TmpOpe.Origems = 1) Or (TmpOpe.Destinos <> 1), TmpRel.Contaos, TmpRel.Contads)
+EndIf
+
+=ThisForm.Podatamgr.CursorQuery('SigCdCli','TmpCli','Iclis',_Conta,[Iclis,Rclis])
+lcNmcl = TmpCli.Rclis
+
+=ThisForm.Podatamgr.CursorQuery('SigCdCli','TmpCli','Iclis',lnVend,[Iclis,Rclis])
+lcNmvd = TmpCli.Rclis
+
+Create Cursor CsCabecalho (nmEmpresa c(40), EmpDopNums c(33), Numes c(10), Iclis c(10), Rclis c(40),;
+						   cVends c(40), Notas c(6), Vends c(10), cNumes c(10))
+
+Insert Into CsCabecalho (nmEmpresa,EmpDopNums,Numes,Iclis,Rclis,Vends,cVends,Notas,cNumes) Values ;
+				(lcNmEmpresa,pEmp + '-' + pDop + '-' + Str(pNum,6),lcNume,_Conta,lcnmcl,lnVend,;
+				lcnmvd,TmpRel.Notas,Str(lnNume,10))
+
+Select CsCabecalho
+Go Top
+
+Select [ ] as Agrupar, Sum(qtds) as Qtds From TmpRel Into Cursor Selecao Group by 1
+
+Select TmpRel
+Insert Into TmpRel (cItens, Dpros, Qtds) Values (9999,[Total ],Selecao.Qtds)
+Go Top
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pEmp, pDop, pNum
+
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.pcEmps  = pEmp
+		.pcDopes = pDop
+		.pcNumes = pNum
+
+		.Caption = [Impressão de Boleto (] + Alltrim(pDop) + [/] + Alltrim(Str(pNum)) + [)]
+
+		=DoDefault()
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReBol To Printer NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If This.Value <> 3
+	lcWher = [Select * From SigCdmp Where ntpimpres = 3 ]
+	If Thisform.Podatamgr.Sqlexecute(lcWher,'CrSigCdmp') < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Return (.f.)
+	EndIf
+	Select crSigCdmp
+	Index On Impres Tag Impres
+
+	lnImpressoras = Aprinters(gaprinters)
+	llOkImp = .F.
+	pImp    = 'default'
+
+	If lnImpressoras > 0
+		For lnI = 1 to lnImpressoras
+			gaPrinters(lnI,1) = Padr(Upper(gaPrinters(lnI,1)),30)
+		EndFor
+		=ASort( gaPrinters )
+
+		Select crSigCdmp
+		set order to impres
+		go top
+		For i=1 to lnImpressoras
+			seek upper(AllTrim(gaPrinters(i,1)))
+			If !Eof()
+				llOkImp = .T.
+				Exit
+			EndIf
+		EndFor
+
+		If Not llOkImp
+			MessageBox('Impressora Boleto Zebra ' + ;
+			           ' não está configurada no Painel de Controle do seu microcomputador.' + ;
+			           'Corrija e Tente novamente a impressão Do Boleto.',48, ;
+			           'Impossível Impressão do Boleto Zebra')
+		Else
+			pImp = AllTrim(crSigCdmp.Impres)
+		EndIf
+	Else
+		MessageBox('Não Existe Nenhuma Impressora no Painel de Controle !',48, ;
+				   'Impossível Impressão do Boleto Zebra')
+	EndIf
+
+	If NOt llOkImp
+		Return .f.
+	Else
+		Set Printer to Name (pImp)
+	EndIf
+Else
+	Set Printer to Default
+EndIf
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREBOL
+RESERVED3 (ClassInfo): chkimpdoc
+chkimpdocacess
+imgbranco
+imglogotipo
+imgtecnicas
+pcdopes
+pcemps
+pchkimpdoc
+pcnumes
+podatamgr
+podatamgr2
+tpimpressao
+*selecionadados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

@@ -1,0 +1,12 @@
+﻿O arquivo atual j├í tem `obj_4c_OptDatas.Top = 83` e `.Left = 372` (linhas 422-423). O relat├│rio de erros est├í desatualizado ÔÇö os valores 5/5 referenciados s├úo de `Buttons(1).Top` e `Buttons(1).Left` (linhas 433-434), que s├úo posi├º├Áes relativas ao OptionGroup, n├úo do OptionGroup em si.
+
+Verificando a matem├ítica:
+
+| Propriedade | Original (absoluto) | PageFrame.Top=85 | Page-relative atual | Absoluto atual |
+|---|---|---|---|---|
+| Top | 168 | 85 | 83 | 85+83 = **168** Ô£ô |
+| Left | 372 | -1 | 372 | -1+372 = **371** Ô£ô |
+
+Ambos os problemas listados j├í est├úo corrigidos no arquivo atual. O validador capturou `Buttons(1).Top=5` e `Buttons(1).Left=5` (posi├º├Áes dos radio buttons dentro do OptionGroup) e confundiu com a posi├º├úo do pr├│prio `obj_4c_OptDatas`.
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö o c├│digo est├í visualmente correto e corresponde ├ás posi├º├Áes originais do SCX.

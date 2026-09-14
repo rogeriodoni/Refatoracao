@@ -1,0 +1,17 @@
+﻿Corre├º├úo aplicada. Aqui est├í a an├ílise completa:
+
+## Diagn├│stico
+
+**Causa raiz real**: `WindowType = 1` em VFP9 dispara READ EVENTS quando `ActivePage` ├® modificado em um PageFrame, **independente** de `Visible = .F.` no form ou no PageFrame.
+
+As corre├º├Áes anteriores (t4 e t5) foram baseadas na hip├│tese errada de que esconder o PageFrame antes de definir `ActivePage` seria suficiente. N├úo ├® ÔÇö o VFP9 verifica `WindowType` internamente ao processar mudan├ºas de `ActivePage`, e com `WindowType = 1` entra no loop modal em qualquer circunst├óncia.
+
+## Fix Aplicado
+
+Em `Init()`, no bloco de teste (`gb_4c_ValidandoUI`), adicionado:
+
+```foxpro
+THIS.WindowType = 0   && Modeless - elimina READ EVENTS independente de ActivePage
+```
+
+Com `WindowType = 0` (modeless), **nenhuma** opera├º├úo no form (incluindo `ActivePage = 1` em `InicializarForm()` e `ActivePage = 2` em `AlternarPagina(2)`) dispara READ EVENTS. Isso afeta apenas o modo de teste ÔÇö em produ├º├úo, `DO FORM` gerencia o ciclo de vida modal normalmente.

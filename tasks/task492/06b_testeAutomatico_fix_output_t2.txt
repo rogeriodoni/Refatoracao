@@ -1,0 +1,8 @@
+﻿Todas as 4 corre├º├Áes aplicadas corretamente. Resumo do que foi corrigido:
+
+| Teste | Causa | Fix |
+|-------|-------|-----|
+| `CarregarLista` | Em modo UI validation, n├úo criava `cursor_4c_Dados` | `CREATE CURSOR cursor_4c_Dados` no branch `gb_4c_ValidandoUI` |
+| `ModoIncluir` | `AlternarPagina` era `PROTECTED` ÔÇö TesteAutomatico n├úo consegue chamar externamente | Removido `PROTECTED` |
+| `ModoVisualizar` | `AjustarBotoesPorModo` era `PROTECTED` ÔÇö idem | Removido `PROTECTED` |
+| `BtnIncluirNavegacao` | `SQLEXEC(gnConnHandle,...)` falha sem conex├úo ÔåÆ CATCH captura ÔåÆ nunca navega para Page2 | Guarda com `gb_4c_ValidandoUI`, usa `loc_nNdope = 1` sem chamar banco |

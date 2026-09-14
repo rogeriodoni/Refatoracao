@@ -1,0 +1,9 @@
+﻿Todas as posi├º├Áes batem exatamente com o original. A corre├º├úo est├í completa.
+
+**Causa raiz**: O form REPORT (`SigReDdp.SCX`) usa layout FLAT (controles diretos no form), mas foi migrado com um PageFrame (`pgf_4c_Paginas`). O mapeamento ent├úo apontava para o pr├│prio PageFrame em vez dos controles individuais. O validador lia propriedades do PageFrame (Left=-1, Top=85, Width=802, Height=215) e comparava com as posi├º├Áes originais dos controles, gerando as 12 diferen├ºas visuais.
+
+**O que foi corrigido:**
+
+1. **`FormSigReDdp.prg`** ÔÇö Removido o PageFrame. Os 4 controles (`lbl_4c_Say4`, `txt_4c_Demonstrativo`, `lbl_4c_LblData`, `txt_4c_DtFinal`) agora s├úo adicionados diretamente ao form via `ConfigurarCampos()`, nas posi├º├Áes exatas do original (Top/Left/Width/Height id├¬nticos ao SCX legado). Todos os m├®todos que referenciavam `THIS.pgf_4c_Paginas.Page1.xxx` foram atualizados para `THIS.xxx`.
+
+2. **`FormSigReDdp_mapeamento.json`** ÔÇö Corrigido para mapear cada controle original ao seu equivalente direto no form migrado, eliminando as 12 diferen├ºas visuais.

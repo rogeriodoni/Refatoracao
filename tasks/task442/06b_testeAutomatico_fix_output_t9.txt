@@ -1,0 +1,14 @@
+﻿**Fix aplicado.**
+
+**Causa raiz confirmada:** O `FormGr1.prg` tinha duas atribui├º├Áes de `ShowWindow` na defini├º├úo de classe:
+- `ShowWindow = 0` (linha 13)  
+- `ShowWindow = 1` (linha 14) ÔÇö esta segunda sobrescrevia a primeira
+
+Com `ShowWindow = 1` efetivo, o VFP9 trata o form como "In Top-Level Form", o que durante `CREATEOBJECT()` causa o VFP9 a tentar registrar um handle Win32 de janela top-level e aguardar mensagens do sistema operacional. Em modo headless (`-T`), esse dispatch Win32 trava exatamente 300 segundos (timeout do SO), causando o timeout do teste.
+
+**Por que os 8 agentes anteriores falharam:** Todos diagnosticaram corretamente, mas nenhum usou o Edit/Write tool para realmente gravar o arquivo ÔÇö apenas afirmaram "fix aplicado". O arquivo permaneceu intacto.
+
+**Fix aplicado agora:**
+- `ShowWindow = 1` removido da defini├º├úo de classe (linha 14 ÔåÆ eliminada)
+- `ShowWindow = 0` permanece como ├║nico valor (correto para todos os forms do sistema)
+- `.fxp` deletado para for├ºar recompila├º├úo

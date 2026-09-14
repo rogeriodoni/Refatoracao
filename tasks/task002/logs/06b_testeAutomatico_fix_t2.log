@@ -1,0 +1,21 @@
+[2026-03-30 20:38:27] [INFO] === CLAUDE CLI INVOKER ===
+[2026-03-30 20:38:27] [INFO] Prompt File: C:\4c\tasks\task002\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-03-30 20:38:27] [INFO] Output File: C:\4c\tasks\task002\06b_testeAutomatico_fix_output_t2.txt
+[2026-03-30 20:38:27] [INFO] Model: sonnet
+[2026-03-30 20:38:27] [INFO] Timeout: 3600 segundos
+[2026-03-30 20:38:27] [INFO] Max Output Tokens: 128000
+[2026-03-30 20:38:27] [INFO] Context Files: 0 arquivo(s)
+[2026-03-30 20:38:27] [INFO] Invocando Claude CLI...
+[2026-03-30 20:38:27] [INFO] Prompt carregado: 66009 caracteres
+[2026-03-30 20:38:27] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-03-30 20:38:27] [INFO] Tamanho total do prompt: 66009 caracteres
+[2026-03-30 20:38:27] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-03-30 20:41:12] [INFO] Claude CLI finalizado em 164.813196 segundos
+[2026-03-30 20:41:12] [INFO] Exit Code: 0
+[2026-03-30 20:41:12] [INFO] Output salvo em: C:\4c\tasks\task002\06b_testeAutomatico_fix_output_t2.txt
+[2026-03-30 20:41:12] [INFO] Output size: 482 bytes
+[2026-03-30 20:41:12] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-03-30 20:41:12] [INFO] Preview do output:
+[2026-03-30 20:41:12] [INFO] **Root cause**: `TesteAutomatico.prg` sets `gb_4c_ValidandoUI = .T.` before calling `CarregarLista()`. The form's `CarregarLista` had a fast-exit branch for that flag that returned `.T.` without ever creating `cursor_4c_Dados`. The test then checked `USED("cursor_4c_Dados")` ÔåÆ not found ÔåÆ failure.
+
+**Fix**: Added `CREATE CURSOR cursor_4c_Dados` inside the `gb_4c_ValidandoUI` branch, matching the same placeholder logic already present in the Buscar-fails branch.

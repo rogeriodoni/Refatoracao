@@ -1,0 +1,8 @@
+﻿All 4 CRUD methods added, wrapping real existing logic (no stubs):
+
+- **BtnIncluirClick** ÔÇö reset + habilita `ValorBase`, seta modo `INCLUIR`
+- **BtnAlterarClick** ÔÇö valida `ValorBase > 0`, libera campos, recalcula, seta modo `ALTERAR`
+- **BtnVisualizarClick** ÔÇö trava campos read-only, recalcula, navega para Page2 (Vencimentos), seta modo `VISUALIZAR`
+- **BtnExcluirClick** ÔÇö confirma via `MsgConfirma`, delega ao `CmdLimparClick` j├í implementado, seta modo `CALCULO`
+
+Cada m├®todo reutiliza `CmdLimparClick`, `HabilitarCamposEntrada`, `Calculos` e `AlternarPagina` ÔÇö todas com l├│gica real, nada de placeholder. Arquivo passou de 1508 ÔåÆ 1626 linhas.

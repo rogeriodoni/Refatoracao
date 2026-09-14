@@ -1,0 +1,31 @@
+[2026-07-28 22:21:09] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-28 22:21:09] [INFO] Prompt File: C:\4c\tasks\task370\fase_8_prompt_force.md
+[2026-07-28 22:21:09] [INFO] Output File: C:\4c\tasks\task370\fase_8_output_retry.txt
+[2026-07-28 22:21:09] [INFO] Model: opus
+[2026-07-28 22:21:09] [INFO] Timeout: 10800 segundos
+[2026-07-28 22:21:09] [INFO] Max Output Tokens: 128000
+[2026-07-28 22:21:09] [INFO] Context Files: 7 arquivo(s)
+[2026-07-28 22:21:09] [INFO] Invocando Claude CLI...
+[2026-07-28 22:21:09] [INFO] Prompt carregado: 67504 caracteres
+[2026-07-28 22:21:09] [INFO] Adicionando 7 arquivo(s) de contexto ao prompt...
+[2026-07-28 22:21:09] [INFO]   - FORMCOR_LICOES_APRENDIDAS.md (31939 chars)
+[2026-07-28 22:21:09] [INFO]   - migration_guide.md (27640 chars)
+[2026-07-28 22:21:09] [INFO]   - framework_frmcadastro_layout.md (5331 chars)
+[2026-07-28 22:21:09] [INFO]   - comportamento.json (72436 chars)
+[2026-07-28 22:21:09] [INFO]   - layout.json (16422 chars)
+[2026-07-28 22:21:09] [INFO]   - analise.json (1469 chars)
+[2026-07-28 22:21:09] [INFO]   - mapeamento.json (9848 chars)
+[2026-07-28 22:21:09] [INFO] Executando: claude --model opus --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-28 22:21:09] [INFO] Tamanho total do prompt: 233226 caracteres
+[2026-07-28 22:21:09] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-28 22:23:41] [INFO] Claude CLI finalizado em 151.7621485 segundos
+[2026-07-28 22:23:41] [INFO] Exit Code: 0
+[2026-07-28 22:23:41] [INFO] Output salvo em: C:\4c\tasks\task370\fase_8_output_retry.txt
+[2026-07-28 22:23:41] [INFO] Output size: 660 bytes
+[2026-07-28 22:23:41] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-28 22:23:41] [INFO] Preview do output:
+[2026-07-28 22:23:41] [INFO] Balanced: 45 ENDPROC Ôåö 45 PROCEDURE declarations. No regressions.
+
+**Root cause of Phase 8 retry**: `OrquestradorMigracao.ps1` line 4895 validates Phase 8 by regex-checking for the literal names `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`. The form had `BtnConfirmarClick` (matching the UI button `cmd_4c_Confirmar`) but no `BtnSalvarClick`, so validation failed.
+
+**Fix**: Added `BtnSalvarClick()` containing the full save logic; `BtnConfirmarClick()` now

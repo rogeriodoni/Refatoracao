@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo:
+
+**[SQL-FILTRO-INVENTADO] `cidchaves` ÔÇö FALSO POSITIVO**: `cidchaves` ├® a PK real de SigCdCmi (`CONSTRAINT [sigcdcmi_cidchaves] PRIMARY KEY CLUSTERED`). Os WHERE em `CarregarPorCodigo`, `Atualizar` e `ExecutarExclusao` est├úo corretos. Nenhuma altera├º├úo necess├íria neles.
+
+**Bug real corrigido em ICMBO.prg (linhas 65 e 102)**: JOIN `ON b.cemps = a.cemps` ÔåÆ `ON b.cemps = a.emps`. SigCdCmi tem coluna `emps` (n├úo `cemps`); o `a.cemps` causaria SQL error em runtime ao abrir o formul├írio.
+
+FormICM.prg n├úo precisou altera├º├úo ÔÇö `cursor_4c_Dados.cidchaves` est├í correto pois o SELECT de `Buscar()` inclui `a.cidchaves`.

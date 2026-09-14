@@ -1,0 +1,9 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente. Sum├írio do que foi feito e o que foi avaliado:
+
+**Corrigido (2 problemas funcionais):**
+- `ValidarSerieDestino` (linha 2132): convertido para `LPARAMETERS` no corpo do m├®todo ÔÇö padr├úo can├┤nico obrigat├│rio para handlers BINDEVENT KeyPress.
+- `TornarControlesVisiveis` (linha 2846): adicionado `CNT_4C_CABECALHO` e `CNT_4C_BOTOESACAO` ao INLIST de exclus├úo ÔÇö esses containers t├¬m `Visible=.F.` por design e n├úo devem ser for├ºados para `.T.` pela recurs├úo.
+
+**N├úo alterado (8 LAYOUT-POSITION ÔÇö falsos positivos do validador):**
+- `cnt_4c_CopiaFl` ├ù `Copia`: o validador confundiu o bot├úo legado (`Copia`) com o container flutuante (`cnt_4c_CopiaFl`). O bot├úo correto `cmd_4c_Copia` j├í est├í em Left=474, Top=33 (4+29=33 com compensa├º├úo PageFrame), que ├® exato.
+- `txt_4c_Text19/38/42`: o validador fez match incorreto por ├¡ndice ordinal. `txt_4c_Text19` est├í em Left=183 com `lbl_4c_LblEnd` em Left=183 (correto). `txt_4c_Text21` (Bairro) j├í est├í em Left=293 que ├® o "original Left=293" que o validador procurava. Mover os textboxes sem mover seus labels quebraria o layout visual ÔÇö viola├º├úo do Pilar 1.

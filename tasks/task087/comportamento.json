@@ -1,0 +1,204 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 6,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoEmpresa", "fConfigGeral", "fCarregarCambio"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREEQE",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Report Form SigReEqe To Printer NoConsole\n\nIf Used('CsCabecalho')\n\tUse In CsCabecalho\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQE",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Report Form SigReEqe To Printer Prompt NoConsole\n\nIf Used('CsCabecalho')\n\tUse In CsCabecalho\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQE",
+      "evento": "Init",
+      "linhas": 83,
+      "codigoOriginal": "ThisForm.CGrupo  = ''\nThisForm.CConta  = ''\nThisForm.CTabela = ''\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector','SigReEqe')\n\tIf .poDataMgr.pnIdconn < 1\n\t\tMessageBox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',48,'Create Object')\n\t\tReturn(.F.)\n\tEndIf\n\t=DoDefault()\nEndWith\n\nIf ThisForm.poDataMgr.SqlExecute([Select GrupoEsts,ContaEsts From SigCdPam ],'CrSigCdPam') < 1\n\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrSigCdPam)')\n\tReturn(.F.)\nEndIf\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "OpTde,OpTdz",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQE",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQE",
+      "evento": "Procedure",
+      "linhas": 127,
+      "codigoOriginal": "Local lcEmpresa, lcGrupo, lcEstoque, lcTabela, lcEstas\n\nlcEmpresa = ThisForm.GetEmpresa.Value\nlcGrupo   = ThisForm.CGrupo\nlcEstoque = ThisForm.CConta\nlcTabela  = ThisForm.CTabela\nlnParcs   = 0\nlnAgrupa  = ThisForm.Opt_Agrupa.Value\n\nlcTitulo1     = 'Posição de Etiquetas' + Iif(!Empty(lcEmpresa),' - ' + Alltrim(lcEmpresa),'')\nlcNomeEmpresa = _Empr + IIf(Seek(_Empr,'CrSigCdEmp','CEmps'),' - ' + CrSigCdEmp.Razas,'')\n\nlcEstas = ''\nIf Seek(lcEmpresa,'CrSigCdEmp','CEmps')\n\tlcEstas = CrSigCdEmp.Estas\nEn... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarCambio",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Opt_Agrupa,OpTdz,OpTdt",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQE",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQE",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Report Form SigReEqe Preview NoConsole\n\nIf Used('CsCabecalho')\n\tUse In CsCabecalho\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQE",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "With ThisForm\n\tIf !(This.Value = 4)\n\n\t\tlcEmpresa = .GetEmpresa.Value\n\t\tIf Empty(lcEmpresa)\n\t\t\tMessageBox('Empresa Inválida',16,'Campo Obrigatório')\n\t\t\t.GetEmpresa.SetFocus\n\t\t\tReturn 0\n\t\tEndIf\n\n\t\tlcTabela = ThisForm.CTabela\n\t\tIf Empty(lcTabela)\n\t\t\tMessageBox('Empresa com Tabela de Desconto Padrão Não Informada !!!',16,'')\n\t\t\t.GetEmpresa.SetFocus\n\t\t\tReturn 0\n\t\tEndIf\n\n\tEndIf\nEndWith\n\nfrmrelatorio::btnReport.Click",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQE.GetDesEmpresa",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "If Empty(This.Value)\n\tReturn(.T.)\nEndIf\n\nllRet = .F.\n\nllRet = fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.GetEmpresa,ThisForm.GetDesEmpresa)\n\nIf llRet\n\t\n\tlStrQuery = [Select a.Emps,a.CodTabDs,b.Descrs ]+;\n\t\t\t\t[From SigOpTde a, SigOpTdz b ]+;\n\t\t\t\t[Where a.Emps = ']+ThisForm.GetEmpresa.Value+[' And a.Padraos = 1 And b.Codigos = a.CodTabDs ]\n\tIf ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpTabDe') < 1\n\t\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpTabDe)')\n\tElse\n\t\tSelect... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "OpTde,OpTdz",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQE.GetDesEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(ThisForm.GetEmpresa.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREEQE.GetEmpresa",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "If Empty(This.Value)\n\tReturn(.T.)\nEndIf\n\nllRet = .F.\n\nllRet = fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.GetEmpresa,ThisForm.GetDesEmpresa)\n\nIf llRet\n\t\n\tlStrQuery = [Select a.Emps,a.CodTabDs,b.Descrs ]+;\n\t\t\t\t[From SigOpTde a, SigOpTdz b ]+;\n\t\t\t\t[Where a.Emps = ']+ThisForm.GetEmpresa.Value+[' And a.Padraos = 1 And b.Codigos = a.CodTabDs ]\n\tIf ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpTabDe') < 1\n\t\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (TmpTabDe)')\n\tElse\n\t\tSelect... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "OpTde,OpTdz",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREEQE.Init",
+      "queryOriginal": "If ThisForm.poDataMgr.SqlExecute([Select GrupoEsts,ContaEsts From SigCdPam ],'CrSigCdPam') < 1",
+      "tabelas": "SigCdPam",
+      "colunas": "GrupoEsts,ContaEsts",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPam"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

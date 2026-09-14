@@ -1,0 +1,7 @@
+﻿All three changes are correctly applied. Here's a summary of what was done:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` (line 1664): Removed `CNT_4C_CABECALHO` from the hidden-INLIST so it gets `Visible=.T.` set. Added a `BaseClass = "CONTAINER"` check so any visible container (Cabecalho, Info, etc.) also has its children made visible via `TornarSubControlesVisiveis` before the `Visible=.T.` assignment.
+
+**[METODO-INEXISTENTE]** ÔÇö `Controls(n)` is a VFP9 built-in array property of every Form and Container object. No change needed; the automated checker incorrectly flagged it as a custom method.
+
+**[GRID-WITH]** ÔÇö All 6 grids (`grd_4c_Itens`, `grd_4c_DispInfo`, `grd_4c_DispProd`, `grd_4c_DispEstq`, `grd_4c_LinhasAgg`, `grd_4c_PedraReq`) now have `ColumnCount` assigned via explicit reference before entering the `WITH` block, so columns are guaranteed to exist when `.Column1` etc. are accessed inside the `WITH`.

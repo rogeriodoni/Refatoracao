@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `SigReCspBO.prg` foi completado com os seguintes m├®todos:
+
+**Adicionados:**
+- **`InicializarFiltros()`** ÔÇö Carrega empresa padr├úo de `go_4c_Sistema.cCodEmpresa` e busca a descri├º├úo em `SigCdEmp.Razas`. Equivale ao bloco `Init()` do legado que usava `poDataMgr.CursorQuery([SigCdEmp], ...)`.
+- **`PrepararDados()`** ÔÇö Monta e executa a query em `SigMvCab` com todos os filtros (`this_*`). Trata datas DATETIME com range 23:59:59, escolhe `ContaOs/GrupoOs` vs `ContaDs/GrupoDs` conforme `this_nOptConta`, e usa `ISNULL(CONVERT(VARCHAR(250), a.Obses))` para o campo TEXT nulo. O filtro legado `fAcessoMovmto` (controle de acesso por linha) n├úo foi replicado ÔÇö fun├º├úo inexistente no novo sistema.
+- **`CarregarDoCursor()`** ÔÇö Restaura filtros salvos sem quebrar se o schema do cursor mudar (verifica presen├ºa de cada campo com `TYPE()`). Corrigido sem `RETURN` dentro de TRY/CATCH.
+- **`Inserir()`** / **`Atualizar()`** ÔÇö Bloqueados com mensagem descritiva.
+- **`ObterChavePrimaria()`** ÔÇö Retorna `""`.
+- **`ObterMensagemErro()`** ÔÇö Retorna `this_cMensagemErro`.
+- **`Destroy()`** ÔÇö Fecha `cursor_4c_SigReCsp` e `cursor_4c_EmpRec`.

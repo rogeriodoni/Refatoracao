@@ -1,0 +1,12 @@
+﻿Fase 5 conclu├¡da. Adicionados 6 m├®todos ao `FormSigReCgc.prg`:
+
+1. **`ConfigurarPaginaDados()`** ÔÇö stub de compatibilidade com pipeline (form REPORT n├úo tem Page2)
+2. **`ConfigurarBindevents()`** ÔÇö vincula os 4 bot├Áes: Visualizar, Imprimir, Excel, Encerrar via BINDEVENT (PUBLIC handlers)
+3. **`FormParaRelatorio()`** ÔÇö transfere `DtIni`, `DtFin` e `OptDatas` para `this_oRelatorio`
+4. **`ValidarDatas()`** ÔÇö replica as 3 valida├º├Áes do `btnReport.Click` original: data inicial vazia, data final vazia, inicial > final
+5. **`BtnVisualizarClick()`** ÔÇö valida datas ÔåÆ `FormParaRelatorio()` ÔåÆ `this_oRelatorio.Visualizar()`
+6. **`BtnImprimirClick()`** ÔÇö valida datas ÔåÆ `FormParaRelatorio()` ÔåÆ `this_oRelatorio.Imprimir()`
+
+`InicializarForm()` foi atualizado para chamar `ConfigurarBindevents()` ap├│s `ConfigurarPaginaFiltros()`.
+
+Fase 6 completar├í a segunda metade: `BtnExcelClick()` e `BtnEncerrarClick()`.

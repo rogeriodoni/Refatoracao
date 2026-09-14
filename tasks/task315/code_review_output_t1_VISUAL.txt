@@ -1,0 +1,16 @@
+﻿Analisei o arquivo completo. O `obj_4c_OptProcessados` est├í em `Top=100, Left=127` (linhas 231-232), que **j├í corresponde ao original**.
+
+Os valores `-1` e `5` que o validator reportou s├úo as propriedades de `Buttons(1).Top` e `Buttons(1).Left` (linhas 241 e 240) ÔÇö coordenadas **relativas dentro do OptionGroup**, n├úo a posi├º├úo do pr├│prio container.
+
+**Este ├® um falso positivo do validator**: ele leu a posi├º├úo do primeiro bot├úo filho (`Buttons(1)`) no lugar da posi├º├úo do container OptionGroup.
+
+Evid├¬ncia:
+
+| Propriedade | Valor no c├│digo | O que o validator leu |
+|---|---|---|
+| `obj_4c_OptProcessados.Top` | **100** (linha 232) Ô£ô | -1 ÔåÉ Buttons(1).Top |
+| `obj_4c_OptProcessados.Left` | **127** (linha 231) Ô£ô | 5 ÔåÉ Buttons(1).Left |
+
+A posi├º├úo absoluta do primeiro bot├úo na tela ├® `100 + (-1) = 99` e `127 + 5 = 132`, diferen├ºa de apenas 1-5px ÔÇö dentro do normal para bordas de OptionGroup.
+
+Nenhuma altera├º├úo de c├│digo necess├íria para este pass: o posicionamento j├í est├í correto e qualquer mudan├ºa para "corrigir" o que o validator reportou tornaria o layout errado.

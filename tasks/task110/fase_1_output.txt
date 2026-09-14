@@ -1,0 +1,8 @@
+﻿Arquivo `sigrehbrBO.prg` criado em `C:\4c\projeto\app\classes\` com:
+
+- **27 propriedades** declaradas cobrindo todos os filtros do formul├írio original: per├¡odo, grupo/conta de estoque, empresa, fornecedor, grande grupo, grupo de produto, subgrupo, produto, c├│digo de barras, c├│digo reduzido e os 5 checkboxes de impress├úo
+- **Propriedades internas**: caminhos dos 3 FRXs (`SigReHb1/2/3.frx`), nomes dos cursores (`TmpEti`, `csCabecalho`) e nome da empresa para o cabe├ºalho
+- **Init()** com l├│gica real: inicializa datas com `DATE()`, configura caminhos dos FRXs via `gc_4c_CaminhoReports`, chama `DODEFAULT()`
+- **ObterMensagemErro()** exp├Áe `this_cMensagemErro` para o Form tratar erros
+
+Fase 1/8 conclu├¡da. A Fase 2 dever├í adicionar `PrepararDados()` com a query SQL complexa (join `SigOpEtq`/`SigCdPro`/`SigCdCli`, gera├º├úo do cursor `csCabecalho`, processamento de hist├│ricos em `SigMvHst`, e decodifica├º├úo de imagens Base64 para os FRXs de Imagem/Dura├º├úo).

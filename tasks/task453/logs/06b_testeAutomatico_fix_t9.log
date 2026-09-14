@@ -1,0 +1,21 @@
+[2026-08-10 15:33:00] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-10 15:33:00] [INFO] Prompt File: C:\4c\tasks\task453\runtime_fix_prompt_06b_testeAutomatico_t9.md
+[2026-08-10 15:33:00] [INFO] Output File: C:\4c\tasks\task453\06b_testeAutomatico_fix_output_t9.txt
+[2026-08-10 15:33:00] [INFO] Model: sonnet
+[2026-08-10 15:33:00] [INFO] Timeout: 3600 segundos
+[2026-08-10 15:33:00] [INFO] Max Output Tokens: 128000
+[2026-08-10 15:33:00] [INFO] Context Files: 0 arquivo(s)
+[2026-08-10 15:33:00] [INFO] Invocando Claude CLI...
+[2026-08-10 15:33:00] [INFO] Prompt carregado: 222592 caracteres
+[2026-08-10 15:33:00] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-10 15:33:00] [INFO] Tamanho total do prompt: 222592 caracteres
+[2026-08-10 15:33:00] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-10 16:19:26] [INFO] Claude CLI finalizado em 2785.7121251 segundos
+[2026-08-10 16:19:26] [INFO] Exit Code: 0
+[2026-08-10 16:19:26] [INFO] Output salvo em: C:\4c\tasks\task453\06b_testeAutomatico_fix_output_t9.txt
+[2026-08-10 16:19:26] [INFO] Output size: 1424 bytes
+[2026-08-10 16:19:26] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-10 16:19:26] [INFO] Preview do output:
+[2026-08-10 16:19:26] [INFO] The fix is successfully applied. Here's what was done and why:
+
+**Root cause**: Line 17 of Formint.prg had a duplicate `ShowWindow = 1` that overrode the correct `ShowWindow = 0` on line 15. In VFP9's DEFINE CLASS, the last declaration wins ÔÇö so the effective value was `1` (Top-Level Form). When VFP9 instantiates a Top-Level form in headless `-T` mode, it attempts to create a Win32 HWND without a valid desktop/MDI context, causing an indefinite block ÔÇö exactly matching the observed 300-sec

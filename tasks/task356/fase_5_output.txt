@@ -1,0 +1,27 @@
+﻿Both files are clean. Phase 6/8 is complete. Here's a summary of what was implemented:
+
+**CCJBO.prg** ÔÇö `BuscarDetalhe()`: The SQLEXEC branch now loads via a temp alias `cursor_4c_DetLoad`, then converts to READWRITE via `SELECT ... INTO CURSOR READWRITE`. This is required for `APPEND BLANK` (InserirV) and `REPLACE` (Recalcular) to work on the detail cursor.
+
+**FormCCJ.prg** ÔÇö 13 changes:
+
+1. **ConfigurarPaginaDados()**: Added `loc_oGrdDet` LOCAL; inserted all Phase 6 controls:
+   - `shp_4c_Shape3` (top bar) + `shp_4c_Shape4` (section separator)
+   - `grd_4c_Detalhe` (4 columns: Data/Valor editable, Dias/Liquido readonly; BINDEVENTs on Column1/Column2 Text1 LostFocus)
+   - `cmd_4c_InserirV` (top=346) + `cmd_4c_ExcluirV` (top=391)
+   - Totais section: `lbl_4c_Label5` "Totais" + `lbl/txt_4c_Qtde/Media/Total/TotLiq`
+
+2. **BtnConfirmarClick**: Calls `Recalcular()` before `Salvar()` to ensure totais are current on save
+
+3. **BtnIncluirClick / BtnVisualizarClick / BtnAlterarClick**: Each calls `THIS.AtualizarGradeDetalhe()` after `BuscarDetalhe()` to wire the grid
+
+4. **BtnRecalcularClick / OptDiasChanged**: Both now call `AtualizarTotais()` + `grd_4c_Detalhe.Refresh()` after `Recalcular()`
+
+5. **HabilitarCampos()**: Added `grd_4c_Detalhe.ReadOnly` and `InserirV/ExcluirV.Enabled` based on INCLUIR/ALTERAR mode
+
+6. **LimparCampos()**: Clears all four totais TextBoxes on new record
+
+7. **BOParaForm()**: Calls `THIS.AtualizarTotais()` (scans cursor to compute Qtde/Media/Total/TotLiq without modifying) + grid Refresh
+
+8. **6 new methods**: `AtualizarGradeDetalhe`, `AtualizarTotais`, `RecalcularItem`, `ValidarDataDetalhe`, `InserirVClick`, `ExcluirVClick`
+
+The next phase is **Fase 7/8** ÔÇö completing `BtnConfirmarClick` with full detalhe validation, and **Fase 8/8** ÔÇö menu integration (`menu.prg`) and `config.prg` registration.

@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. Resumo das decis├Áes:
+
+- **`CEMPS` em SigCdPam** (linha 218): **Corrigido** ÔÇö original usa `CursorQuery('SigCdPam', ..., .f., .f., ...)` sem filtro Cemps. O WHERE foi removido, query agora: `SELECT TOP 1 TransfRes FROM SigCdPam`
+- **`CEMPS` em SigCdEmp** (linha 208): **Mantido** ÔÇö original usa `CursorQuery('SigCdEmp', ..., 'Cemps', _Empr, ...)` que ├® exatamente o filtro migrado
+- **`EMPDOPNUMB`** (linha 398): **Mantido** ÔÇö original usa `CursorQuery('SigBxEst', ..., 'EmpDopNumB', ...)`, o B ├® correto para a tabela SigBxEst
+- **`'2'`** (linhas 679, 738, 775, 802): **Mantido** ÔÇö `'2'` ├® valor da coluna TIPOS (que consta na lista v├ílida), n├úo uma coluna inventada

@@ -1,0 +1,23 @@
+﻿After a thorough investigation across all files and versions (current, `.bak`, `.pre_review`), I can confirm:
+
+**The `CRSIGCDV` detection is a false positive** from the automated review tool.
+
+Here's what happened: the tool truncated the cursor name `crSigCdVis` to its first 8 uppercase characters ÔåÆ `CRSIGCDV`, then confused the cursor name (used only as the `SQLEXEC` output parameter and in VFP's `SELECT workarea` command) with a SQL WHERE column.
+
+The actual WHERE conditions in the migrated code compare correctly against the originals:
+
+| Column in WHERE | Location | Original spec |
+|---|---|---|
+| `a.Grupos` | PrepararDados main query | GRUPOS Ô£ô |
+| `a.Datas BETWEEN ...` | PrepararDados main query | DATAS Ô£ô |
+| `Grupos = ...` | SigCdCli repr lookup validation | GRUPOS Ô£ô |
+| `rclis LIKE ...` | SigCdCli repr/conta lookup validation | RCLIS Ô£ô |
+| `iclis = ...` | SigCdCli conta/repr lookup validation | valid join key Ô£ô |
+| `a.iclis = ...` (optional) | PrepararDados, only if user filters by conta | user-entered filter Ô£ô |
+| `a.Contas = ...` (optional) | PrepararDados, only if user filters by repr | user-entered filter Ô£ô |
+
+The string `CRSIGCDV` does not appear anywhere in the migrated code as a WHERE column. It's the VFP cursor name `crSigCdVis` used exclusively as:
+- The third argument to `SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorDados)` ÔÇö the output cursor name
+- VFP's `SELECT (THIS.this_cCursorDados)` ÔÇö workarea selector, not a SQL SELECT
+
+**No changes are needed to either file.** The SQL validation pass finds zero actual problems in `FormSIGREVIS.prg` or `SIGREVISBO.prg`.

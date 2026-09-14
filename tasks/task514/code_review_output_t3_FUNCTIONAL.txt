@@ -1,0 +1,10 @@
+﻿Ambas as corre├º├Áes est├úo corretas. Resumo das altera├º├Áes feitas:
+
+**Corrigidos (2 bugs reais):**
+- `cmd_4c_Encerrar.Left = 917` ÔåÆ `5` (linha 329): bot├úo dentro do container estava usando coordenada absoluta do container em vez de coordenada relativa interna ÔÇö causaria o bot├úo invis├¡vel/deslocado
+- Grid headers do `grd_4c_Lista`: field names brutos (`"Descr"`, `"DtCriacao"`, `"DtAlteracao"`) ÔåÆ captions amig├íveis em portugu├¬s com CHR() para acentos (`"T├¡tulo"`, `"Descri├º├úo"`, `"Dt. Cria├º├úo"`, `"Dt. Altera├º├úo"`)
+
+**Falsos positivos descartados (6):**
+- `RetornarFontStyle` ÔÇö m├®todo j├í definido nas linhas 2610-2627 como `PROTECTED FUNCTION`
+- `GRID-WITH` ÔÇö RecordSource e acesso a Columns j├í est├úo fora de qualquer WITH
+- `LAYOUT-POSITION` `cnt_4c_Container1` ÔÇö c├│digo j├í tem Top=170, Left=326 (correto: legado Top=141 + compensa├º├úo +29); reviewer confundiu com os labels internos (Top=4, Left=5 s├úo coordenadas relativas dentro do container)

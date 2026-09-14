@@ -1,0 +1,23 @@
+﻿The `config.prg` already auto-loads all `Form*.prg` from `operacionais\` via ADIR() at line 295-300, and all `*BO.prg` from classes at line 255-260. No changes needed there.
+
+**FASE 3/8 complete.** Summary of all work delivered:
+
+---
+
+**FASE 2 (previous session):** `C:\4c\projeto\app\classes\sigopdivBO.prg` ÔÇö 1404 lines
+- All properties, `Init`, `CarregarDoCursor`, `Inserir`, `Atualizar`, `ObterChavePrimaria`
+- `BuscarOP` ÔÇö loads Temp_DivOp and xNensi from SQL Server
+- `GerarNovaOP` ÔÇö opens BEGIN TRANSACTION, delegates to `GerarDivisao` or `GerarReinicio`
+- `ConfirmarGravacao` ÔÇö updates Obss, commits transaction
+- `RollbackTransacao`, `Destroy` (auto-rollback)
+- `GerarDivisao`, `GerarReinicio`, `ObterQtdTubos` (protected helpers)
+
+**FASE 3 (this session):** `C:\4c\projeto\app\forms\operacionais\Formsigopdiv.prg` ÔÇö 1142 lines
+- Inherits `FormBase`, `DataSession=2`, accepts `par_cOperacao` ('D'/'R') in `Init`
+- `InicializarForm`: creates BO, validates `SigCdPam.DivOps`, builds cursors (`Temp_DivOp`, `Temporario`, `xNensi` via `AFIELDS` from `SigCdNei`), builds all UI controls, BINDEVENTs all events
+- Complete grid setup: `grd_4c_Grade` (7 columns, Temp_DivOp) + `grd_4c_Grade2` (7 columns, Temporario, hidden)
+- All event handlers: `GetOpWhen/Valid/LostFocus`, `GrupoSalvaClick`, `GrupoConfClick`, `GradeAfterRowColChange`, `Grade2AfterRowColChange`, `GradeCol4Valid/When`, `GradeCol2Valid/When`, `MemoObsLostFocus`, `ObssLostFocus`
+- 'D' mode: shows Grade2+GrupoConf after generation; 'R' mode: auto-commits then resets
+- `ExecutarModoAutomatico` for programmatic OP division (legacy `laNop` array mode)
+
+**Menu:** `menu.prg` ÔÇö added BAR 9/10 in `popMovimentos` + `AbrirFormsigopdivDivisao` + `AbrirFormsigopdivReinicia` procedures

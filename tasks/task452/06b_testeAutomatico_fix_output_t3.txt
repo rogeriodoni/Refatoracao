@@ -1,0 +1,5 @@
+﻿O fix foi aplicado. A linha `loc_oPagina.grd_4c_Dados.ColumnCount = 3` foi removida. Agora o `RecordSource` ├® definido antes do `ColumnCount` final, seguindo o padr├úo can├┤nico Problema36.
+
+**Causa do bug:** `ColumnCount = 3` era definido antes de `RecordSource = "cursor_4c_Emps"`. Quando o VFP9 tentava vincular o `RecordSource` ao grid com 3 colunas e o cursor `cursor_4c_Emps` tem apenas 2 campos, o VFP9 gerava um crash interno (n├úo uma exce├º├úo catchable) ao tentar acessar o 3┬║ campo inexistente ÔÇö resultando em um dialog de sistema irrecuper├ível que travava o processo por 300 segundos.
+
+**Fix aplicado:** Removida a linha `ColumnCount = 3` esp├║ria. O `RecordSource` agora ├® definido diretamente (cursor j├í existia e tem as colunas corretas), seguido do `ColumnCount = 2` can├┤nico para confirmar o n├║mero de colunas.

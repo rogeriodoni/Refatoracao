@@ -1,0 +1,16 @@
+﻿Nenhum RETURN dentro de TRY/CATCH. O arquivo est├í correto.
+
+`C:\4c\projeto\app\forms\relatorios\Formsigrefc1.prg` criado com 909 linhas ÔÇö Fase 3/8 completa. O form inclui:
+
+- `DEFINE CLASS Formsigrefc1 AS FormBase` com dimens├Áes exatas do original (800├ù300)
+- `Init()` ÔåÆ `DODEFAULT()`, `InicializarForm()` com prote├º├úo `gb_4c_ValidandoUI`
+- `ConfigurarCabecalho()` ÔÇö container cinza RGB(100,100,100) com lbl_4c_Sombra/Titulo
+- `ConfigurarBotoes()` ÔÇö CommandGroup 4 bot├Áes (Visualizar/Imprimir/Excel/Encerrar)
+- `ConfigurarPageFrame()` ÔÇö 1 p├ígina (Filtros), Top=85
+- `ConfigurarPaginaLista()` ÔÇö campos Empresa (c├│digo+desc), Per├¡odo (ini/fin), label Tipo
+- `ConfigurarPaginaDados()` ÔÇö OptionGroup `opt_4c_TpRel` (2 op├º├Áes) + BINDEVENTs
+- `FormParaRelatorio()`, `LimparCampos()`, `ValidarPeriodo()`
+- `BtnVisualizarClick/Imprimir/Excel/Sair/Alterar/Excluir` (todos sem RETURN dentro de TRY)
+- Handlers de teclado: `TeclaCdEmpresa`, `TeclaDsEmpresa`, `TeclaDataInicial`
+- Lookups completos: `AbrirBuscaCdEmpresa`, `AbrirBuscaDsEmpresa`, `ValidarCdEmpresa`, `ValidarDsEmpresa` (usando `SigCdEmp.Cemps/Razas`)
+- `Destroy()` limpa `this_oRelatorio = .NULL.`

@@ -1,0 +1,18 @@
+﻿O arquivo `Formsigprpdf.prg` j├í est├í **completo**. Este ├® um di├ílogo auxiliar plano (sem PageFrame/Grid/CRUD), ent├úo a Fase 7 do template gen├®rico n├úo se aplica aqui.
+
+**Estado atual:** todos os eventos reais j├í est├úo implementados:
+
+| Evento | M├®todo | Linha |
+|--------|--------|-------|
+| `. . .` (browse arquivo) | `CmdGetFileClick()` | 679 |
+| Checkbox Email | `ChkEmailClick()` | 699 |
+| OptionGroup PDF/XLS | `OptArquivoClick()` | 727 |
+| Gravar/Enviar Email | `CmdGerarPDFClick()` | 745 |
+| Encerrar | `CmdSairClick()` | 817 |
+| Abrir pasta | `BtnPastasAClick()` | 835 |
+
+O template da Fase 7 menciona `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` porque ├® gen├®rico para forms CRUD. Este form n├úo tem esses bot├Áes ÔÇö ├® um di├ílogo modal auxiliar chamado por forms de impress├úo para gerar PDF/XLS e configurar envio de email.
+
+**BO (`sigprpdfBO.prg`) tamb├®m est├í completo** com: `CarregarEmailEmpresa`, `ValidarParaSalvar`, `ValidarParaEmail`, `MontarObjetoEmail`, `ResolverExtensao`, `AbrirPasta`, `Inserir` (modo gravar), `Atualizar` (modo email).
+
+A migra├º├úo do `Formsigprpdf` est├í finalizada. Pr├│ximo passo seria a Fase 8 ÔÇö integra├º├úo: adicionar entrada em `config.prg` e item de menu em `menu.prg`, al├®m de excluir arquivos `.fxp` antes de testar.

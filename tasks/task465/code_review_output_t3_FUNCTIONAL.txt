@@ -1,0 +1,5 @@
+﻿All 23 edits are correctly placed ÔÇö `this_cCursorDestino` is assigned immediately after `CREATEOBJECT` and before `DefinirCursor`, matching the canonical pattern. The PASS FUNCTIONAL for `FormMPD.prg` is complete:
+
+- **[CONTAINER-VISIVEL]**: Already correctly handled in existing code (INLIST filter for `cnt_4c_cabecalho` was present)
+- **[BUSCA-CURSOR]**: All 23 instances fixed ÔÇö `loc_oFrm.this_cCursorDestino = "cursor_4c_XXX"` injected before each `DefinirCursor()` call
+- **[LAYOUT-POSITION]**: Confirmed false positives ÔÇö OptionGroup Button relative positions (Top=2, Left=3 internal) were misread as the container's absolute position; no changes needed

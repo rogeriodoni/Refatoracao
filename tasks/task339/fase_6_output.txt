@@ -1,0 +1,11 @@
+﻿A Fase 6 est├í conclu├¡da. Resumo do que foi feito:
+
+**Fase 6/8 - FormSIGPRTRF:** O form j├í estava completo das fases anteriores ÔÇö este ├® um form OPERACIONAL flat (sem PageFrame/Page2), com apenas 1 campo edit├ível e 1 lookup (SigCdPro), ambos j├í implementados. As a├º├Áes realizadas nesta fase foram:
+
+1. **Corre├º├úo no FormSIGPRTRF.prg**: Adicionado `USE IN cursor_4c_ProBusca` antes de `loc_oBusca.Release()` no fluxo do FormBuscaAuxiliar ÔÇö garante o cursor fechado antes de liberar o objeto.
+
+2. **Integra├º├úo no menu.prg**:
+   - Adicionado `DEFINE BAR 103 OF popMovimentos` com prompt "Rela├º├úo de Produtos" e MESSAGE descritiva (BAR 102 ├® separador)
+   - Adicionado `PROCEDURE AbrirFormSIGPRTRF()` com o padr├úo can├┤nico `VARTYPE(loForm) = "O"` + `loForm.Show()` + catch detalhado
+
+O config.prg carrega `FormSIGPRTRF.prg` e `SIGPRTRFBO.prg` automaticamente via ADIR (sem necessidade de registro manual).

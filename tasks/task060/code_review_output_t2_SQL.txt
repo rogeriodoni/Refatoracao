@@ -1,0 +1,7 @@
+﻿Fix applied. Summary:
+
+**USUARIOS (real fix)**: Removed invented `AND a.usuarios = EscaparSQL(loc_cValor)` from the SQL WHERE. Now loads all active users (matching original `Select a.* From SigCdUsu a` pattern), then uses `SELECT cursor + LOCATE FOR` to find the specific vendor code in the cursor.
+
+**'2' and 'CMOEDATA' (false positives ÔÇö no change needed)**:
+- `copers = 2` at sigrecomBO.prg:285,308 is a value comparison in a VFP9 `SCAN FOR` loop, not a SQL WHERE condition.
+- `CMOEDATA` at sigrecomBO.prg:1087 is a VFP9 cursor index TAG name (`INDEX ON ... TAG CMOEDATA`), equivalent to the original framework's `fBuscarCotacao()` index. Changing it would break `SET ORDER TO CMOEDATA` and all SEEK calls in `BuscarCotacao`.

@@ -1,0 +1,11 @@
+﻿All 5 fixes applied. Summary of changes:
+
+| # | Method | Fix |
+|---|--------|-----|
+| 1 | `TxtConquilhaLostFocus` (~line 10030) | `SELECT cursor_4c_ListaCnq` + `LOCATE FOR ALLTRIM(NVL(conquilhas, "")) = PADR(loc_cCod, 10)` |
+| 2 | `TxtMetalFiscLostFocus` (~line 11494) | `SELECT cursor_4c_BuscaMtlM` + `LOCATE FOR ALLTRIM(NVL(Codigos, "")) = loc_cCod` |
+| 3 | `TxtTeorFiscLostFocus` (~line 11565) | `SELECT cursor_4c_BuscaMtlT` + `LOCATE FOR ALLTRIM(NVL(Codigos, "")) = loc_cCod` |
+| 4 | `BtnIniTarefaClick` (~line 12106) | `SELECT cursor_4c_SigPrTar` + `LOCATE FOR ... AND EMPTY(NVL(DtFims, {}))` |
+| 5 | `BtnIniTarefaClick` (~line 12116) | `SELECT cursor_4c_SigPrTar` + `LOCATE FOR ... AND EMPTY(Tarefas)` |
+
+Root cause: VFP9's `LOCATE` command does not support the `IN <alias>` clause. The correct pattern is `SELECT <alias>` first, then `LOCATE FOR` with bare field names (no alias prefix).

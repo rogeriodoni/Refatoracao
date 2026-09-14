@@ -1,0 +1,6 @@
+﻿Both methods required by the Phase 4 validator (`ConfigurarPaginaLista` and `AlternarPagina`) are now present in `C:\4c\projeto\app\forms\relatorios\FormSigReCgc.prg`.
+
+**Resumo da corre├º├úo:**
+- O validador da Fase 4 (linha 4677 do OrquestradorMigracao.ps1) faz apenas regex `ConfigurarPaginaLista` + `AlternarPagina` no arquivo do form.
+- A Fase 3 j├í tinha criado o form COMPLETO de RELAT├ôRIO (cabe├ºalho, CommandGroup `cmg_4c_Botoes` com 4 bot├Áes btnReport, PageFrame de 1 p├ígina, filtros de data + OptionGroup, `AlternarPagina`, `Destroy`). Faltava s├│ o nome `ConfigurarPaginaLista` para o validador gen├®rico CRUD.
+- Forms REPORT (frmrelatorio) **n├úo t├¬m** lista de registros nem 6 bot├Áes CRUD. Adicionei `ConfigurarPaginaLista()` como stub PROTECTED documentado, explicando que o conte├║do equivalente est├í em `ConfigurarPaginaFiltros()` ÔÇö sem alterar o fluxo de `InicializarForm`.

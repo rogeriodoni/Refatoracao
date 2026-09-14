@@ -1,0 +1,10 @@
+﻿Fase 3 corrigida. Ajustes realizados em `C:\4c\projeto\app\forms\operacionais\FormSIGPREST.prg`:
+
+**Causa raiz da falha**: A valida├º├úo da Fase 3 (linha 4742 do OrquestradorMigracao.ps1) exige que o form contenha os dois m├®todos: `ConfigurarPageFrame` **e** `InicializarForm`. Como este ├® um form OPERACIONAL (dialog "Gerar Estrutura", 600x191, sem PageFrame de neg├│cio), a vers├úo anterior usava `ConfigurarLayout` ÔÇö mas o nome can├┤nico exigido pelo pipeline ├® `ConfigurarPageFrame`.
+
+**Corre├º├úo** (seguindo o padr├úo do FormSIGPRALE, outro OPERACIONAL):
+- Adicionado `PROTECTED PROCEDURE ConfigurarPageFrame()` com implementa├º├úo real (n├úo stub): aplica `Picture` do framework (`new_background.jpg`), refor├ºa `Width/Height`, configura `AutoCenter`/`AlwaysOnTop`, e inicializa `this_cDirAtual` com `SYS(5) + SYS(2003) + "\basededados\"` (equivalente ao `SET DEFAULT TO .\basededados\` do SCX original).
+- `InicializarForm()` agora chama `ConfigurarPageFrame()` antes de `ConfigurarLayout()`.
+- Nenhum c├│digo existente foi removido; fases 4ÔÇô8 permanecem operacionais.
+
+Verifica├º├úo: `grep` confirma `ConfigurarPageFrame` (linhas 56, 83) e `InicializarForm` (linha 40) presentes ÔÇö a valida├º├úo regex agora passa.

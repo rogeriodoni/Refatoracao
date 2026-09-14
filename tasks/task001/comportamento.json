@@ -1,0 +1,181 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDDPT",
+      "evento": "Init",
+      "linhas": 22,
+      "codigoOriginal": "LParameters lcAcesso\n\nWith ThisForm\n\t.LockScreen = .T.\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDatamgr\n\t\t\t.AddCursor('SigCdDpt','codigos','crSigCdDpt','',ThisForm.pagina.lista.grade)\n\t\t\t.pfSqlTabela(1).pColuna('codigos',\t   '', '', 'Código',\t   080, .T.)\n\t\t\t.pfSqlTabela(1).pColuna('Descricaos', '', '', 'Departamento', 290, .T.)\n\t\t\t.pfSqlTabela(1).pColuna('Diretors',   '', '', 'Diretor',\t   080, .T.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\t.LockScreen... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDDPT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.LocateCursor('crSigCdDpt','codigos',ThisForm.Pagina.Dados.getcodigos.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDPT",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "Lparameters lnOpcao\n\nlnOpcao = Iif(Type(\"lnOpcao\")=='N',lnOpcao,This.Value)\n\nIf !dodefault( lnOpcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case && Ativa o Foco do mouse, de acordo com o Tipo de Escolha\n    Case INLIST(ThisForm.pcEscolha,'INSERIR')\n\t\tThisForm.Pagina.Dados.OptAutos.Value=2\n\tCase INLIST(ThisForm.pcEscolha,'INSERIR','PROCURAR')\n\t\tThisForm.Pagina.Dados.getcodigos.SetFocus\n\n\tCase ThisForm.pcEscolha=='ALTERAR'\n\t\tThisForm.Pagina.Dados.GETDescricaos.SetFocus\n        ThisForm.Pagina.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value=IIF",
+        "controlesReferenciados": "OptAutos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDPT",
+      "evento": "Click",
+      "linhas": 48,
+      "codigoOriginal": "*Faz Validacao dos Campos, nas Seguinte Operacoes\nIf InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\tIf Empty(crSigCdDpt.codigos)\n\t\tMessagebox( 'O Código precisa ser Informado...', 48, '' )\n\t\tThisForm.Pagina.Dados.getcodigos.SetFocus\n\t\tReturn\n\tEndIf\n\tIf Empty(crSigCdDpt.descricaos)\n\t\tMessagebox( 'A Descrição precisa ser Informada...', 48, '' )\n\t\tThisForm.Pagina.Dados.getDescricaos.SetFocus\n\t\tReturn\n\tEndIf\n\n\t*Verifica se o registro já existe\n\tIf ThisForm.pcEscolha = 'INSERIR' And ThisForm.poDataM... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,SetFocus,ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdDpt',OptAutos,option2,ChkRegister('SigCdUsu'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDDPT",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "= DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.LockScreen = .t.\n\tThisForm.mAtivapagina1\n\tThisForm.LockScreen = .f.\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDPT",
+      "evento": "Activate",
+      "linhas": 1,
+      "codigoOriginal": "DODEFAULT()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDPT.pagina.dados.getcodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDPT.pagina.dados.getDescricaos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDPT.pagina.dados.getDiretores",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUsu', ;\n\t\t\t\t\t\t   'crListaRemota', 'Usuarios', This.Value, 'Seleção', .t.,.f.,[Not cAtivos='N'])\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Usuarios', '', 'Diretor')\n\t\tloLista.mAddColuna('NComps',   '', 'Nome')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, '', crListaRemota.Usuarios)\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim ********************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDPT.pagina.dados.getDiretores",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  }
+}

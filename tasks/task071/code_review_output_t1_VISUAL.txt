@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo:
+
+**Corrigido (BO ÔÇö sigrectcBO.prg):**
+- Adicionado `SET NULL ON` antes dos 4 `CREATE CURSOR` (linha 132) e `SET NULL OFF` ap├│s o ├║ltimo (linha 156). Sem isso, `INSERT INTO ... FROM MEMVAR` falharia com "Field does not accept null values" sempre que o SQL Server retornasse NULLs em `rclis`, `razas`, `datas`, `Vencs` etc.
+
+**N├úo alterado (Form ÔÇö Formsigrectc.prg):**
+- Os 4 checkboxes com `Top=38` est├úo **corretos**. O validador comparou a coordenada absoluta do SCX original (`Top=123`) com a coordenada relativa ├á Page (`Top=38`), sem descontar o `PageFrame.Top=85`. O pr├│prio coment├írio do form documenta isso explicitamente: `"Posicoes: Top_original - 85 (PageFrame comeca em Top=85)"`. Alterar para `Top=123` dentro da Page moveria os controles para posi├º├úo 208px na tela, quebrando o pixel-perfect (PILAR 1).

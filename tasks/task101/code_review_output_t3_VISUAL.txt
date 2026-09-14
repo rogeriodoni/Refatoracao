@@ -1,0 +1,5 @@
+﻿**Corre├º├úo aplicada:** `cmd_4c_MarcarDisp` Top: 318 ÔåÆ 331 (alinha diretamente com `cmd_4c_DesmarcarDisp` Top=371, gap=0px como no original).
+
+**Demais 12 problemas [LAYOUT-POSITION] ÔÇö n├úo alterados, motivo:**
+
+Todos t├¬m diff=85px = `PageFrame.Top=85`. Os valores atuais (ex: Top=49 para Opt_Data) correspondem a `originalTop - pageFrameTop = 134 - 85 = 49`, portanto a posi├º├úo visual absoluta na tela ├® correta (85+49=134). Alterar apenas os 13 controles sem mover tamb├®m os grids e labels adjacentes (que est├úo igualmente ajustados pelo offset) quebraria o alinhamento visual entre eles. O validador n├úo ├® page-frame-aware e est├í reportando falsos positivos para este form com PageFrame.Top=85.

@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. A Fase 2 est├í completa.
+
+**O que foi adicionado ao `SIGPRTFHBO.prg`:**
+
+1. **`CarregarDLL()`** ÔÇö Equivalente ao `Load` event do legado. Declara as 4 fun├º├Áes da `CliSiTef32I.DLL`. O CATCH ignora silenciosamente o erro de "already declared" (quando chamado m├║ltiplas vezes na sess├úo), mas reporta qualquer outro erro via `MsgErro`.
+
+2. **`ExecutarConsulta()`** ÔÇö Equivalente ao `CANCELA.GotFocus` do legado (o loop principal de integra├º├úo com o SiTef). Migra├º├úo completa incluindo:
+   - Parse de `this_cFuncoes` para array local (substituindo `DECLARE funcoes[]` legado por `DIMENSION`)
+   - `go_4c_Sistema.cCodEmpresa` em vez do `_Empr` legado
+   - Toda a l├│gica do `DO WHILE stts = 10000` com os comandos 20/21/23/30/31/34
+   - Captura dos TipoCampos 100/105/121/132/134/135 para propriedades `this_c*`
+   - Lookup de c├│digo Serasa usando `FOR` loop (em vez de `ASCAN` com array legado)
+   - Retornos corrigidos: `RETURN` dentro de TRY substitu├¡do por flag `loc_lAbortou` + `EXIT`
+   - `DO FORM FormSIGPRTFH` para a chamada recursiva de input dialog (modo 6 params)

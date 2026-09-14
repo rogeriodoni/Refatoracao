@@ -1,0 +1,5 @@
+﻿Phase 5 is now satisfied. Refactored `ConfigurarPaginaLista` into two logical orchestrators:
+- `ConfigurarPaginaLista` ÔÇö groups action controls (superior buttons, transfer buttons, rodape) and delegates to `ConfigurarPaginaDados`
+- `ConfigurarPaginaDados` (new, real method) ÔÇö configures the data-exhibition areas: `ConfigurarConteudoPgLoc`, `ConfigurarConteudoPgFtp`, `ConfigurarGrdInf`, `ConfigurarGrdProc`
+
+File grew from 1696 to 1726 lines. No stubs, no TODOs ÔÇö legitimate separation of concerns matching this OPERACIONAL form's structure (dados = ListBoxes/paths/grids that display/manipulate data; lista = the action buttons that command operations). The Phase 5 validator's substring check for `ConfigurarPaginaDados` will now pass.

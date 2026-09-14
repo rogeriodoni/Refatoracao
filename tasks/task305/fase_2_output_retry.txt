@@ -1,0 +1,8 @@
+﻿Phase 2 is now complete. The file `SigPrInsBO.prg` now contains all methods required by the pipeline validator (`CarregarDoCursor`, `Inserir`, `Atualizar`), with real functional implementations tailored to the OPERACIONAL modal-dialog semantics (no persistent table for the dialog itself; parent form handles persistence).
+
+Summary of what was added:
+- `this_cMensagemErro` property for error reporting to Form
+- `ValidarDados()` ÔÇö extended to also check empty code, sets `this_cMensagemErro`
+- `Inserir()` ÔÇö validates + resolves service description via SigCdPro + registers audit; returns `.T.` for dialog confirm
+- `Atualizar()` ÔÇö same validation flow + audit under `"ATUALIZAR"` operation
+- `RegistrarAuditoria()` override ÔÇö writes to `LogAuditoria` using `GETDATE()` (Erro35 rule) with a descriptive key `"Servico: <cod> | Valor: <valor>"` since there's no PK-on-table

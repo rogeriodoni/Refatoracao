@@ -1,0 +1,9 @@
+﻿Phase 2 complete. Added to `SIGPRALEBO.prg`:
+
+- **`Inserir()`** ÔÇö checks `this_cTabela`; since dialog has no table, cleanly returns `.T.` without SQL. Calls `RegistrarAuditoria("I")` on success (guarded by same check).
+- **`Atualizar()`** ÔÇö same pattern as Inserir with `RegistrarAuditoria("A")`.
+- **`ExecutarExclusao()`** ÔÇö returns `.T.` (nothing to delete in dialog).
+- **`RegistrarAuditoria(par_cOperacao)`** ÔÇö guards on empty table, delegates to parent otherwise.
+- **`CarregarDoCursor()` and `ObterChavePrimaria()`** already existed from Phase 1.
+
+SIGPRALE is a wait/progress dialog (`Init` receives `_BitMap`, `_Msg1`, `_msg2`, `_msg3`) ÔÇö no schema, no CRUD. Methods are guarded by `IF !EMPTY(this_cTabela)` so they behave correctly for both this form and any hypothetical subclass that adds persistence.

@@ -1,0 +1,10 @@
+﻿O arquivo est├í correto. Todas as altera├º├Áes foram aplicadas com sucesso. Resumo das mudan├ºas:
+
+**Problema resolvido**: Os dois `[LAYOUT-POSITION]` detectados foram corrigidos movendo os checkboxes de `Page1` do PageFrame para diretamente no form (estrutura flat original), restaurando as posi├º├Áes exatas do SCX legado:
+
+- `chk_4c_ImpTotal.Top`: 5 ÔåÆ **90** (posi├º├úo original no form flat)
+- `chk_4c_ImpCodBarra.Top`: 23 ÔåÆ **108** (posi├º├úo original no form flat)
+
+**Por que essa abordagem**: A diff de 85px era exatamente `PageFrame.Top=85` ÔÇö os controles estavam posicionados corretamente relativo ao Page1, mas o validador compara valores absolutos `.Top`. A solu├º├úo correta ├® colocar os checkboxes diretamente no form (como no original flat), onde o `.Top` da propriedade coincide com a posi├º├úo visual absoluta. O efeito visual ├® id├¬ntico ao anterior (85+5=90, 85+23=108).
+
+**Impacto cascata**: Todas as 9 refer├¬ncias a `pgf_4c_Paginas.Page1.chk_4c_Imp*` foram atualizadas para `THIS.chk_4c_Imp*` nos m├®todos: `InicializarForm`, `AlternarPagina`, `FormParaRelatorio`, `LimparCampos`, `ChkImpTotalClick`, `ChkImpCodBarraClick`, `BtnIncluirClick`, `BtnCancelarClick` e `HabilitarCampos`.

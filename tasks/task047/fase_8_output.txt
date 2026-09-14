@@ -1,0 +1,16 @@
+﻿Fase 8 conclu├¡da. Aqui est├í um resumo do que foi feito:
+
+**Adicionado em `FormSigReCgc.prg`** (stubs de compatibilidade com o pipeline multi-fase):
+- `BtnBuscarClick()` ÔÇö stub (form REPORT n├úo tem lista)
+- `BtnSalvarClick()` ÔÇö stub (form REPORT n├úo persiste dados)
+- `BtnCancelarClick()` ÔÇö chama `THIS.Release()` (equivalente ao Encerrar para relat├│rios)
+- `FormParaBO()` ÔÇö stub (relat├│rio usa `FormParaRelatorio()`)
+- `BOParaForm()` ÔÇö stub (relat├│rio usa filtros do form direto)
+- `HabilitarCampos()` ÔÇö stub (filtros sempre habilitados)
+- `CarregarLista()` ÔÇö stub (dados carregados via `PrepararDados()` no BO)
+- `AjustarBotoesPorModo()` ÔÇö stub (bot├Áes do relat├│rio n├úo mudam por modo)
+
+**Adicionado em `menu.prg`**:
+- `DEFINE BAR 42` (separador) e `DEFINE BAR 43` ("Gen├®rico de Compras") em `popRelatorios`
+- `ON SELECTION BAR 43` vinculado a `AbrirFormSigReCgc`
+- Procedure `AbrirFormSigReCgc()` com padr├úo correto (VARTYPE, Show sem par├ómetro, MostrarErro no catch)

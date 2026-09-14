@@ -1,0 +1,2879 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReEtl.SCX
+* Data/Hora: 04/06/2026 21:19:47
+* Total de registros: 52
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREETL
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label9
+  Parent: SIGREETL
+  Class: label
+  BaseClass: label
+
+Objeto: Label8
+  Parent: SIGREETL
+  Class: label
+  BaseClass: label
+
+Objeto: getDEmpresa
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say2
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmpresa
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label5
+  Parent: SIGREETL
+  Class: label
+  BaseClass: label
+
+Objeto: getNvl4
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label6
+  Parent: SIGREETL
+  Class: label
+  BaseClass: label
+
+Objeto: getNvl3
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label7
+  Parent: SIGREETL
+  Class: label
+  BaseClass: label
+
+Objeto: getDNvl4
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getNvl2
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDNvl3
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getBase
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDNvl2
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say4
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDBase
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGREETL
+  Class: label
+  BaseClass: label
+
+Objeto: getConta
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDsProduto
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDConta
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCdProduto
+  Parent: SIGREETL
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getGrupo
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGrupo
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getLocal
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optSinAna
+  Parent: SIGREETL
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCgru
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDgru
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getcSubG
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDSubG
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say17
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDCol
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCol
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCSGru
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDsGru
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGREETL
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDLocal
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_Subt
+  Parent: SIGREETL
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: OptOrdem
+  Parent: SIGREETL
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: getForn
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDForn
+  Parent: SIGREETL
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Estoque Por Localização"
+  ControlBox = .F.
+  Closable = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  WindowType = 0
+  Name = "SIGREETL"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.ZOrderSet = 0
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 525
+  btnReport.Top = 3
+  btnReport.TabIndex = 48
+  btnReport.ZOrderSet = 50
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 105
+  Top = 125
+  Width = 50
+  TabIndex = 38
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Label9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Ordenação :"
+  Height = 15
+  Left = 93
+  Top = 520
+  Width = 62
+  TabIndex = 27
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Label9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Label8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Quarto Nível :"
+  Height = 15
+  Left = 86
+  Top = 301
+  Width = 69
+  TabIndex = 36
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Label8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDEmpresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 22
+  Left = 192
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 120
+  Width = 339
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "getDEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Localização :"
+  Left = 92
+  Top = 324
+  Width = 63
+  TabIndex = 43
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo :"
+  Left = 126
+  Top = 475
+  Width = 29
+  TabIndex = 47
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 117
+  Top = 173
+  Width = 38
+  TabIndex = 40
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getEmpresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "k"
+  Height = 22
+  InputMask = "XXX"
+  Left = 159
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 1
+  ToolTipText = ""
+  Top = 120
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "getEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Terceiro Nível :"
+  Height = 15
+  Left = 81
+  Top = 275
+  Width = 74
+  TabIndex = 35
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getNvl4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 159
+  Margin = 3
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 296
+  Width = 54
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "getNvl4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Segundo Nível :"
+  Height = 15
+  Left = 78
+  Top = 250
+  Width = 77
+  TabIndex = 34
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getNvl3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 159
+  Margin = 3
+  SpecialEffect = 1
+  TabIndex = 13
+  Top = 270
+  Width = 54
+  ForeColor = 0,0,0
+  ZOrderSet = 13
+  Name = "getNvl3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Label7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Base :"
+  Height = 15
+  Left = 123
+  Top = 225
+  Width = 32
+  TabIndex = 33
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "Label7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDNvl4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 215
+  Margin = 3
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 296
+  Width = 174
+  ForeColor = 0,0,0
+  ZOrderSet = 15
+  Name = "getDNvl4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getNvl2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 159
+  Margin = 3
+  SpecialEffect = 1
+  TabIndex = 11
+  Top = 245
+  Width = 54
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "getNvl2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDNvl3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 215
+  Margin = 3
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 270
+  Width = 174
+  ForeColor = 0,0,0
+  ZOrderSet = 17
+  Name = "getDNvl3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getBase
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 159
+  Margin = 3
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 220
+  Width = 54
+  ForeColor = 0,0,0
+  ZOrderSet = 18
+  Name = "getBase"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDNvl2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 215
+  Margin = 3
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 245
+  Width = 174
+  ForeColor = 0,0,0
+  ZOrderSet = 19
+  Name = "getDNvl2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Produto :"
+  Left = 108
+  Top = 424
+  Width = 47
+  TabIndex = 49
+  ForeColor = 90,90,90
+  ZOrderSet = 20
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDBase
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 215
+  Margin = 3
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 220
+  Width = 174
+  ForeColor = 0,0,0
+  ZOrderSet = 21
+  Name = "getDBase"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 117
+  Top = 148
+  Width = 38
+  TabIndex = 39
+  ForeColor = 90,90,90
+  ZOrderSet = 22
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Fornecedor :"
+  Left = 91
+  Top = 449
+  Width = 64
+  TabIndex = 42
+  ForeColor = 90,90,90
+  ZOrderSet = 23
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "* Localização com Outro Padrão"
+  Height = 15
+  Left = 537
+  Top = 325
+  Width = 155
+  TabIndex = 37
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 159
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 170
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 25
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDsProduto
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  Format = "K"
+  Height = 22
+  Left = 269
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 26
+  Top = 421
+  Width = 304
+  ForeColor = 0,0,0
+  ZOrderSet = 26
+  Themes = .F.
+  Name = "getDsProduto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDConta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 241
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 170
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 27
+  Name = "getDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getCdProduto
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Format = "K"
+  Height = 22
+  Left = 159
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 25
+  Top = 421
+  Width = 108
+  ForeColor = 0,0,0
+  ZOrderSet = 28
+  Themes = .F.
+  Name = "getCdProduto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 159
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 145
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 29
+  Name = "getGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 241
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 145
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 30
+  Name = "getDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getLocal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 159
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 17
+  Top = 321
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 31
+  Name = "getLocal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.optSinAna
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 6
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 52
+  Left = 157
+  Top = 470
+  Width = 477
+  TabIndex = 31
+  ZOrderSet = 32
+  Name = "optSinAna"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sintético"
+  Option1.Left = 5
+  Option1.Top = 6
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Analítico"
+  Option2.Left = 81
+  Option2.Top = 6
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Com Descrição"
+  Option3.Height = 15
+  Option3.Left = 156
+  Option3.Top = 6
+  Option3.Width = 88
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.BackStyle = 0
+  Option4.Caption = "Referência por Local"
+  Option4.Height = 17
+  Option4.Left = 266
+  Option4.Top = 5
+  Option4.Visible = .F.
+  Option4.Width = 136
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+  Option5.FontName = "Tahoma"
+  Option5.FontSize = 8
+  Option5.BackStyle = 0
+  Option5.Caption = "Analítico Com Descrição"
+  Option5.Height = 15
+  Option5.Left = 172
+  Option5.Top = 26
+  Option5.Width = 131
+  Option5.AutoSize = .T.
+  Option5.ForeColor = 90,90,90
+  Option5.Name = "Option5"
+  Option6.FontName = "Tahoma"
+  Option6.FontSize = 8
+  Option6.BackStyle = 0
+  Option6.Caption = "Sintético Com Descrição"
+  Option6.Height = 15
+  Option6.Left = 5
+  Option6.Top = 26
+  Option6.Width = 132
+  Option6.AutoSize = .T.
+  Option6.ForeColor = 90,90,90
+  Option6.Name = "Option6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getCgru
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Height = 22
+  InputMask = ""
+  Left = 159
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 21
+  Top = 371
+  Width = 31
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 33
+  Name = "getCgru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDgru
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  InputMask = ""
+  Left = 192
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 22
+  Top = 371
+  Width = 171
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 34
+  Name = "getDgru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Height = 15
+  Left = 117
+  Top = 375
+  Width = 38
+  TabIndex = 45
+  ForeColor = 90,90,90
+  ZOrderSet = 35
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getcSubG
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "!K"
+  Height = 22
+  InputMask = ""
+  Left = 159
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 23
+  Top = 396
+  Width = 52
+  ForeColor = 0,0,0
+  ZOrderSet = 36
+  Name = "getcSubG"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDSubG
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "!K"
+  Height = 22
+  InputMask = ""
+  Left = 213
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 24
+  Top = 396
+  Width = 150
+  ForeColor = 0,0,0
+  ZOrderSet = 37
+  Name = "getDSubG"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Subgrupo :"
+  Height = 15
+  Left = 100
+  Top = 399
+  Width = 55
+  TabIndex = 46
+  ForeColor = 90,90,90
+  ZOrderSet = 38
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Say17
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo de Venda :"
+  Height = 15
+  Left = 69
+  Top = 198
+  Width = 86
+  TabIndex = 41
+  ForeColor = 90,90,90
+  ZOrderSet = 39
+  Name = "Say17"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.GetDCol
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 22
+  InputMask = ""
+  Left = 241
+  MaxLength = 0
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 195
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 40
+  Name = "GetDCol"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.GetCol
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 22
+  InputMask = ""
+  Left = 159
+  MaxLength = 0
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 195
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 41
+  Name = "GetCol"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.GetCSGru
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "!K"
+  Height = 22
+  InputMask = ""
+  Left = 159
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 19
+  Top = 346
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 42
+  Name = "GetCSGru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.GetDsGru
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "!K"
+  Height = 22
+  InputMask = ""
+  Left = 192
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 20
+  Top = 346
+  Width = 171
+  ForeColor = 0,0,0
+  ZOrderSet = 43
+  Name = "GetDsGru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Say9
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grande Grupo :"
+  Height = 15
+  Left = 79
+  Top = 349
+  Width = 76
+  TabIndex = 44
+  ForeColor = 90,90,90
+  ZOrderSet = 44
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDLocal
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 22
+  InputMask = ""
+  Left = 241
+  MaxLength = 0
+  SpecialEffect = 1
+  TabIndex = 18
+  Top = 321
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 45
+  Name = "getDLocal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.Opt_Subt
+------------------------------------------------------------
+  Top = 475
+  Left = 582
+  Height = 15
+  Width = 147
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "SubTotais Grupo/Subgrupo"
+  TabIndex = 32
+  ForeColor = 90,90,90
+  ZOrderSet = 46
+  Name = "Opt_Subt"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.OptOrdem
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 4
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 26
+  Left = 157
+  Top = 515
+  Width = 432
+  TabIndex = 30
+  ZOrderSet = 47
+  Name = "OptOrdem"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Primeiro Nível"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 82
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Segundo Nível"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 111
+  Option2.Top = 5
+  Option2.Width = 86
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Terceiro Nível"
+  Option3.Value = 0
+  Option3.Height = 15
+  Option3.Left = 219
+  Option3.Top = 5
+  Option3.Width = 83
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Quarto Nível"
+  Option4.Value = 0
+  Option4.Height = 15
+  Option4.Left = 324
+  Option4.Top = 5
+  Option4.Width = 78
+  Option4.AutoSize = .T.
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getForn
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 22
+  Left = 159
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 28
+  Top = 446
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 48
+  Name = "getForn"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREETL.getDForn
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K"
+  Height = 22
+  InputMask = ""
+  Left = 241
+  MaxLength = 0
+  SpecialEffect = 1
+  TabIndex = 29
+  Top = 446
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 49
+  Name = "getDForn"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREETL
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE reverterxml
+------------------------------------------------------------
+PROCEDURE reverterxml
+Parameters pcCursor, pcNivAnt, pcCurDest
+
+Local lnOldSel, lcXML
+
+lnOldSel = Select()
+lcXML = []
+
+If Used([CrAux])
+	Use in CrAux
+EndIf 
+
+Select &pcCursor.
+Select cidchaves, Cods, Descs, 0 as Marcas, Space(4) as Codigo From &pcCursor. Where 1=0 Into Cursor CrAux ReadWrite
+
+Select &pcCursor.	
+Go top
+
+Scan 			
+	lcXML = Nvl(&pcCursor..Nivel,[])
+	Zap in CrAux
+	If Not Empty(lcXML)
+		= fXmlToCursor(lcXML, [CrAux], .f.)
+		Select CrAux
+		Scan For CrAux.Marcas <> 0
+			Select &pcCurDest.
+			Append Blank 
+			Replace Cods With CrAux.Cods ,;
+					Descs With &pcCursor..Descs ,;
+					CidChaves With CrAux.CidChaves ,;
+					Codigo With &pcCursor..Cods in &pcCurDest.
+			Select CrAux	
+		EndScan 
+	EndIf 
+EndScan 
+
+Select &pcNivAnt.
+Go Top 
+
+If Used([CrAux])
+	Use in CrAux
+EndIf 
+
+Select(lnOldSel)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Local lnTip
+
+lnTip = ThisForm.optSinAna.Value
+
+Do Case
+	Case (lnTip = 1)
+		Report Form SigReEt1 To Print Prompt NoConsole
+	Case (lnTip = 2)
+		Report Form SigReEt2 To Print Prompt NoConsole
+	Case (lnTip = 3) and this.Opt_Subt.Value = 0
+		Report Form SigReEt3 To Print Prompt NoConsole
+	Case (lnTip = 3) and this.Opt_Subt.Value = 1
+		Report Form SigReEt5 To Print Prompt NoConsole
+	Case (lnTip = 4)
+		Report Form SigReEt4 To Print Prompt NoConsole
+	Case (lnTip = 5)
+		Report Form SigReEt6 To Print Prompt NoConsole	
+	Case (lnTip = 6)
+		Report Form SigReEt7 To Print Prompt NoConsole			
+EndCase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+=fConfigGeral()
+
+=DoDefault()
+
+ThisForm.podataMgr = CreateObject('fSqlConector',thisform.Name)
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cemps,razas From SigCdEmp Where cemps = ']+_Empr+[' ],'CrSigCdEmp')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select CrSigCdEmp
+Go Top
+If !Eof()
+	ThisForm.getEmpresa.Value  = CrSigCdEmp.cemps
+	ThisForm.getDEmpresa.Value = CrSigCdEmp.razas
+EndIf
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select grupoests,contaests From SigCdPam ],'CrSigCdPam')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select CrSigCdPam
+Go Top
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select codigos,descrs From SigCdGcr ]+;
+	  [Where codigos = ']+CrSigCdPam.grupoests+[' ],'TmpGccr')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select TmpGccr
+Go Top
+If !Eof()
+	ThisForm.getGrupo.Value  = TmpGccr.codigos
+	ThisForm.getDGrupo.Value = TmpGccr.descrs
+EndIf
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select iclis,rclis From SigCdCli ]+;
+	  [Where iclis = ']+CrSigCdPam.contaests+[' ],'TmpCli')
+If lnQueryOk < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select TmpCli
+Go Top
+If !Eof()
+	ThisForm.getConta.Value  = TmpCli.iclis
+	ThisForm.getDConta.Value = TmpCli.rclis
+EndIf
+
+If Used('TmpGccr')
+	Use In TmpCli
+EndIf
+If Used('TmpCli')
+	Use In TmpCli
+EndIf
+
+lcQuery = [Select * From SigLcNv1]
+ThisForm.podatamgr.SqlExecute(lcQuery,[csNivel1])
+
+lcQuery = [Select * From SigLcNv2]
+ThisForm.podatamgr.SqlExecute(lcQuery,[csNivel2])
+
+lcQuery = [Select * From SigLcNv3]
+ThisForm.podatamgr.SqlExecute(lcQuery,[csNivel3])
+
+lcQuery = [Select * From SigLcNv4]
+ThisForm.podatamgr.SqlExecute(lcQuery,[csNivel4])
+
+Select csNivel1
+Select *, Space(4) as Codigo From csNivel1 Where 1=0 Into Cursor crSigLcNv1 ReadWrite
+
+Select csNivel2
+Select *, Space(4) as Codigo From csNivel2 Where 1=0 Into Cursor crSigLcNv2 ReadWrite
+
+Select csNivel3
+Select *, Space(4) as Codigo From csNivel3 Where 1=0 Into Cursor crSigLcNv3 ReadWrite
+
+Select csNivel4
+Select *, Space(4) as Codigo From csNivel4 Where 1=0 Into Cursor crSigLcNv4 ReadWrite
+
+ThisForm.ReverterXML('csNivel2','csNivel1','crSigLcNv2')
+ThisForm.ReverterXML('csNivel3','csNivel2','crSigLcNv3')
+ThisForm.ReverterXML('csNivel4','csNivel3','crSigLcNv4')
+
+ThisForm.getBase.Value  = []
+ThisForm.getDBase.Value = []
+ThisForm.getNvl2.Value  = []
+ThisForm.getDNvl2.Value = []
+ThisForm.getNvl3.Value  = []
+ThisForm.getDNvl3.Value = []
+ThisForm.getNvl4.Value  = []
+ThisForm.getDNvl4.Value = []
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local ldDtI, ldDtF, lcEmp, lnSit, lnTip
+
+lcChr  = Chr(13) + Chr(10)
+lcEmp  = Thisform.getEmpresa.Value
+lcDEp  = Thisform.getDEmpresa.Value
+lcGru  = Thisform.getGrupo.Value
+lcDGr  = Thisform.getDGrupo.Value
+lcCon  = Thisform.getConta.Value
+lcDCt  = Thisform.getDConta.Value
+lcLoc  = Thisform.getLocal.Value
+lcDLc  = Thisform.getDLocal.Value
+lnTip  = Thisform.optSinAna.Value
+lcPro  = Thisform.getCdProduto.Value
+lcFor  = ThisForm.getForn.Value
+llOptS = Thisform.opt_Subt.Value=1
+
+lnOrdem = ThisForm.OptOrdem.Value
+
+lcGruPro   = Thisform.getCgru.Value
+lcDgruPro  = Thisform.getDgru.Value
+
+lcSGrupro  = Thisform.GetCSGru.Value
+lcSDgrupro = Thisform.GetDsGru.Value
+
+lcGvenda   = Thisform.Getcol.Value
+lcGDvenda  = Thisform.getdCol.Value
+
+lcCSubG    = Thisform.GetCSubG.Value
+lcDSubG    = Thisform.GetDSubG.Value
+lcDForn	   = ThisForm.getDForn.Value 
+
+lcLocNew = []
+lcBase = Thisform.getBase.Value
+lcNvl2 = Thisform.getNvl2.Value
+lcNvl3 = Thisform.getNvl3.Value
+lcNvl4 = Thisform.getNvl4.Value
+
+lcLocNew = Alltrim(lcBase)+Alltrim(lcNvl2)+Alltrim(lcNvl3)+Alltrim(lcNvl4)
+
+
+lcTit = [Relatório de Estoque Por Localização]
+
+lcSub = [Empresa: ]		+ Alltrim(lcEmp) + [-] + Alltrim(lcDEp) + lcChr + ;
+	[Grupo: ] 		+ Alltrim(lcGru) + [-] + Alltrim(lcDGr) + lcChr + ;
+	Iif(Not Empty(lcCon),[Conta: ] 		+ Alltrim(lcCon) + [-] + Alltrim(lcDCt) + lcChr,[]) + ;
+	[Localização: ] + Iif(Empty(lcLoc), [Global], Alltrim(lcLoc) + [-] + Alltrim(lcDLc))
+
+lcSub2=	[Grande Grupo: ]  + Iif(Empty(lcSGrupro), [Global], lcSGrupro + [-] + lcSDgrupro) + lcChr +;
+	[Grupo Produto: ] + Iif(Empty(lcGruPro),  [Global], lcGruPro  + [-] + lcDgruPro) + lcChr +;
+	[Subgrupo: ]      + Iif(Empty(lcCSubG),   [Global], lcCSubG   + [-] + lcDSubG) + lcChr +;
+	[Grupo de Venda: ]+ Iif(Empty(lcGvenda),  [Global], lcGvenda  + [-] + lcGDvenda) + lcChr + ;
+	[Fornecedor: ]      + Iif(Empty(lcFor),   [Global], lcFor   + [-] + lcDForn)
+
+
+lcCep = Alltrim(_Empr) + Iif(Empty(CrSigCdEmp.razas), [], [-] + CrSigCdEmp.razas)
+
+Create Cursor csCabecalho (titulo c(100), subtitulo c(150), subtitulo2 c(150),empresa c(80))
+Insert Into csCabecalho (titulo,subtitulo,subtitulo2,empresa) ;
+	Values (lcTit,lcSub,lcSub2,lcCep)
+
+lcWhere   = [a.empos = ']+lcEmp+[' And a.grupos = ']+lcGru+[' ]+;
+	Iif(!IsEmpty(lcCon),	 [And a.contas = ']+lcCon+[' ],[])+;
+	Iif(!IsEmpty(lcLoc),	 [And a.localizas LIKE ']+lcLoc+	 [%' ],'' ) +;
+	Iif(!IsEmpty(lcLocNew),	 [And a.localizas LIKE ']+lcLocNew+ [%' ],'' ) +;
+	Iif(!IsEmpty(lcGruPro),  [And B.Cgrus = ']	  +lcGruPro+ [' ], '') +;
+	Iif(!IsEmpty(lcSGrupro), [And B.Mercs = ']	  +lcSGrupro+[' ], '') +;
+	Iif(!IsEmpty(lcCSubG),   [And B.SGrus = ']	  +lcCSubG+  [' ], '') +;
+	Iif(!IsEmpty(lcPro),     [And B.Cpros = ']	  +lcPro+    [' ], '') +;
+	Iif(!IsEmpty(lcFor),     [And B.IFors = ']	  +lcFor+    [' ], '') +;
+	Iif(!IsEmpty(lcGvenda ), [And B.Colecoes = '] +lcGvenda +[' ], '')
+
+lcWhere2   = [a.emps = ']+lcEmp+[' And a.grupos = ']+lcGru+[' ]+;
+		Iif(!IsEmpty(lcCon),	 [And a.estos = ']+lcCon+[' ],[])+;
+		Iif(!IsEmpty(lcLoc),	 [And a.locals LIKE ']   +lcLoc+	 [%' ],'' ) +;
+		Iif(!IsEmpty(lcLocNew),	 [And a.locals LIKE ']	  +lcLocNew+ [%' ],'' ) +;
+		Iif(!IsEmpty(lcGruPro),  [And B.Cgrus = ']	  +lcGruPro+ [' ], '') +;
+		Iif(!IsEmpty(lcSGrupro), [And B.Mercs = ']	  +lcSGrupro+[' ], '') +;
+		Iif(!IsEmpty(lcCSubG),   [And B.SGrus = ']	  +lcCSubG+  [' ], '') +;
+		Iif(!IsEmpty(lcPro),     [And B.Cpros = ']	  +lcPro+    [' ], '') +;
+		Iif(!IsEmpty(lcFor),     [And B.IFors = ']	  +lcFor+    [' ], '') +;
+		Iif(!IsEmpty(lcGvenda ), [And B.Colecoes = '] +lcGvenda +[' ], '')
+
+Wait Window 'Aguarde! Selecionando Registros...' Nowait
+
+Do Case
+Case (InList(lnTip,1,6)) && Sintético
+
+	lcQuery2 = [Select a.locals, sum(a.sqtds) as qtde,1 As agrupar, Space(100) as Descrs ] + ;
+		[From SigMvesl a, SigCdpro b ] + ;
+		[Where a.CPros = b.Cpros And ] + lcWhere2 + ;
+		[ And a.Locals Not in( ] + ;
+		[Select localizas ]+;
+		[ From SigOpEtq A ]+;
+		[ left join (Select Cpros,Cgrus,Mercs,Colecoes,SGrus, IFors from SigCdPro) B ]+;
+		[ on b.cpros = a.cpros ]+;
+		[Where &lcWhere. Group By A.localizas ] + ;
+		[) ] + ;
+		[Group by a.locals order by 1]
+
+	lcQuery = [Select localizas,Count(1) As qtde,1 As agrupar, Space(100) as Descrs ]+;
+		[ From SigOpEtq A ]+;
+		[ left join (Select Cpros,Cgrus,Mercs,Colecoes,SGrus, IFors from SigCdPro) B ]+;
+		[ on b.cpros = a.cpros ]+;
+		[Where &lcWhere. Group By A.localizas ]
+		
+	lnQueryOk = Thisform.poDataMgr.SqlExecute(lcQuery + [ Union All ] + lcQuery2,'CsDados1')
+	If lnQueryOk < 1
+		Return(.F.)
+	Endif
+
+	Select localizas,Sum(qtde) As qtde,2 As agrupar, Descrs ;
+		From CsDados1 ;
+		Group By 1, 3, 4 ;
+		Into Cursor CsDados2 ReadWrite
+
+	Select localizas,qtde,agrupar, Descrs ;
+		From CsDados1 ;
+		Union All ;
+		Select localizas,qtde,agrupar, Descrs ;
+		From CsDados2 ;
+		Into Cursor CsImpressao ReadWrite
+
+Case (Inlist(lnTip,2,5)) && Analítico
+	lcQuery = [Select a.localizas,a.cpros,a.cbars, IsNull(c.cbars_old,0) as Cbars_old,1 As agrupar, Space(100) as Descrs ]+;
+		[ From SigOpEtq A]+;
+		[ Left join SigOpEta c on a.cbars = c.cbars_new ] + ;
+		[ left join (Select Cpros AS Cpros2,Cgrus,Mercs,Colecoes,Sgrus, IFors from SigCdPro) B ] +;
+		[ on b.Cpros2 = a.cpros ] +;
+		[Where &lcWhere. Group By A.localizas,A.cbars,A.Cpros, c.cbars_old ]
+	lnQueryOk = Thisform.poDataMgr.SqlExecute(lcQuery,'CsImpressao')
+
+	If lnQueryOk < 1
+		Return(.F.)
+	Endif
+	Select CsImpressao
+	Index On localizas+Alltrim(Str(cbars)) Tag idxcsimp
+
+Case (lnTip = 3) && Com Descrição
+	lcQuery = [Select a.Localizas, a.CPros, a.CBars, IsNull(c.cbars_old,0) as Cbars_old, b.DPros, b.Reffs, b.PVens, b.CGrus, b.SGrus, 1 as Agrupar ] + ;
+		[From SigOpEtq a ] + ;
+		[ Left join SigOpEta c on a.cbars = c.cbars_new ] + ;
+		[, SigCdpro b ] + ;
+		[Where a.CPros = b.Cpros And ] + lcWhere + ;
+		[Group By a.Localizas, a.CBars, a.CPros, b.DPros, b.Reffs, b.PVens, b.CGrus, b.SGrus, c.cbars_old]
+
+	lnQueryOk = Thisform.poDataMgr.SqlExecute(lcQuery, [csImpressao])
+
+	If lnQueryOk < 1
+		Return(.F.)
+	Endif
+	If !llOptS
+		Select CsImpressao
+		Index On localizas + Alltrim(Str(cbars)) Tag idxcsimp
+	Else
+		Select CsImpressao
+		Index On localizas + cgrus + sgrus Tag idxLGS
+	Endif
+
+Case (lnTip = 4) && Estoque por localização
+
+	lcQuery = [Select a.*, b.DPros, b.Reffs, b.PVens, b.PCuss, b.CGrus, b.SGrus ] + ;
+		[From SigMvesl a, SigCdpro b ] + ;
+		[Where a.CPros = b.Cpros And ] + lcWhere2 + ;
+		[order by a.grupos, a.estos, a.locals, a.cpros]
+
+	lnQueryOk = Thisform.poDataMgr.SqlExecute(lcQuery, [csImpressao])
+
+	If lnQueryOk < 1
+		Return(.F.)
+	Endif
+Endcase
+
+Select CsImpressao
+Go Top
+
+If InList(lnTip,5,6)
+	Select CsImpressao
+	Scan
+
+		lcNvl3 = Substr(CsImpressao.localizas,5,2)
+		If Not Empty(lcNvl3)
+			Select csNivel3
+			Locate For Cods = lcNvl3
+			If Found()
+				Replace Descrs With csNivel3.Descs In CsImpressao
+			Endif
+		Endif
+		Select CsImpressao
+	Endscan
+Endif
+
+Select CsImpressao
+Index on localizas Tag localizas
+Index on Substr(localizas,3,2) Tag Nivel2s
+Index on Substr(localizas,5,2) Tag Nivel3s
+Index on Substr(localizas,7,4) Tag Nivel4s
+Go Top
+
+Do case
+Case lnOrdem = 1
+	Set Order To localizas
+Case lnOrdem = 2
+	Set Order To  Nivel2s
+Case lnOrdem = 3
+	Set Order To  Nivel3s
+Case lnOrdem = 4
+	Set Order To  Nivel4s
+EndCase
+Go Top In CsImpressao
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Local lnTip
+
+lnTip = ThisForm.optSinAna.Value
+
+Do Case
+	Case (lnTip = 1)
+		Report Form SigReEt1 Preview NoConsole
+	Case (lnTip = 2)
+		Report Form SigReEt2 Preview NoConsole
+	Case (lnTip = 3) and this.Opt_Subt.Value = 0
+		Report Form SigReEt3 Preview NoConsole
+	Case (lnTip = 3) and this.Opt_Subt.Value = 1
+		Report Form SigReEt5 Preview NoConsole
+	Case (lnTip = 4)
+		Report Form SigReEt4 Preview NoConsole
+	Case (lnTip = 5)
+		Report Form SigReEt6 Preview NoConsole
+	Case (lnTip = 6)
+		Report Form SigReEt7 Preview NoConsole	
+EndCase
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+If This.Value # 4 && Se não clicou em saída
+	If IsEmpty(ThisForm.getEmpresa.Value)
+		Messagebox('Empresa Inválida !!!',0+48,'')
+		ThisForm.getEmpresa.SetFocus
+		Return 0
+	EndIf
+	If IsEmpty(ThisForm.getGrupo.Value)
+		Messagebox('Grupo Inválido !!!',0+48,'')
+		ThisForm.getGrupo.SetFocus
+		Return 0
+	EndIf
+*!*		If IsEmpty(ThisForm.getConta.Value)
+*!*			Messagebox('Conta Inválida !!!',0+48,'')
+*!*			ThisForm.getConta.SetFocus
+*!*			Return 0
+*!*		EndIf
+EndIf
+
+frmrelatorio::btnReport.Click
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDEmpresa
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.getEmpresa,ThisForm.getDEmpresa))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.getEmpresa.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getEmpresa
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.getEmpresa,ThisForm.getDEmpresa))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getNvl4
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrow, lcNivel
+
+lcNivel = Alltrim(ThisForm.getNvl3.Value)
+
+If !IsEmpty(This.Value)
+	Select * From CrSigLcNv4 Where Cods = lcNivel Into Cursor LocalNivel Readwrite
+	Select LocalNivel
+	Index On Codigo Tag Codigo
+	Set Near On
+	If !Seek(This.Value)
+		loBrow = Createobject( 'fwbuscasel', 'LocalNivel', 'Codigo', This.Value, 'Seleção' )
+		loBrow.AddColuna( 'Codigo','', 'Código'  , .T., 'Codigo' )
+		loBrow.AddColuna( 'Descs', '', 'Descrção', .F. )
+		loBrow.Show
+		This.Value = LocalNivel.Codigo
+		ThisForm.getDNvl4.Value = LocalNivel.Descs
+	Endif
+	Set Near Off
+Endif
+This.Refresh
+ThisForm.getDNvl4.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If Empty(ThisForm.getNvl3.Value)
+	Wait Window [Nível Anterior não Informado.] Nowait 
+	Return .F.
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.getDNvl4.Value = []
+
+ThisForm.getLocal.Value = []
+ThisForm.getDLocal.Value = []
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getNvl3
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.getDNvl3.Value = []
+ThisForm.getNvl4.Value = []
+ThisForm.getDNvl4.Value = []
+
+ThisForm.getLocal.Value = []
+ThisForm.getDLocal.Value = []
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If Empty(ThisForm.getNvl2.Value)
+	Wait Window [Nível Anterior não Informado.] Nowait
+	Return .F.
+Endif
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrow, lcNivel
+
+lcNivel = Alltrim(ThisForm.getNvl2.Value)
+
+If !IsEmpty(This.Value)
+	Select * From CrSigLcNv3 Where Cods = lcNivel ;
+		Into Cursor LocalNivel Readwrite
+
+	Select LocalNivel
+	Index On Codigo Tag Codigo
+	Set Near On
+	If !Seek(This.Value)
+		loBrow = Createobject( 'fwbuscasel', 'LocalNivel', 'Codigo', This.Value, 'Seleção' )
+		loBrow.AddColuna( 'Codigo','', 'Código'  , .T., 'Codigo' )
+		loBrow.AddColuna( 'Descs', '', 'Descrção', .F. )
+		loBrow.Show
+		This.Value = LocalNivel.Codigo
+		ThisForm.getDNvl3.Value = LocalNivel.Descs
+	Endif
+	Set Near Off
+Endif
+This.Refresh
+ThisForm.getDNvl3.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDNvl4
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getNvl2
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.getDNvl2.Value = []
+ThisForm.getNvl3.Value = []
+ThisForm.getDNvl3.Value = []
+ThisForm.getNvl4.Value = []
+ThisForm.getDNvl4.Value = []
+
+ThisForm.getLocal.Value = []
+ThisForm.getDLocal.Value = []
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If Empty(ThisForm.getBase.Value)
+	Wait Window [Nível Anterior não Informado.] Nowait
+	Return .F.
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrow, lcNivel
+
+lcNivel = Alltrim(ThisForm.getBase.Value)
+
+If !IsEmpty(This.Value)
+	Select * From CrSigLcNv2 Where Cods = lcNivel ;
+		Into Cursor LocalNivel Readwrite
+
+	Select LocalNivel
+	Index On Codigo Tag Codigo
+	Set Near On
+	If !Seek(This.Value)
+		loBrow = Createobject( 'fwbuscasel', 'LocalNivel', 'Codigo', This.Value, 'Seleção' )
+		loBrow.AddColuna( 'Codigo','', 'Código'  , .T., 'Codigo' )
+		loBrow.AddColuna( 'Descs', '', 'Descrção', .F. )
+		loBrow.Show
+		This.Value = LocalNivel.Codigo
+		ThisForm.getDNvl2.Value = LocalNivel.Descs
+	Endif
+	Set Near Off
+Endif
+This.Refresh
+ThisForm.getDNvl2.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDNvl3
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getBase
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.getDBase.Value = []
+ThisForm.getNvl2.Value = []
+ThisForm.getDNvl2.Value = []
+ThisForm.getNvl3.Value = []
+ThisForm.getDNvl3.Value = []
+ThisForm.getNvl4.Value = []
+ThisForm.getDNvl4.Value = []
+
+ThisForm.getLocal.Value = []
+ThisForm.getDLocal.Value = []
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigLcNv1', ;
+						   'crListaRemota', 'Cods', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cods',  '', 'Localização')
+		loLista.mAddColuna('Descs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Cods
+	ThisForm.getDBase.Value = crListaRemota.Descs
+	
+	Use In crListaRemota
+
+EndIf
+This.Refresh
+ThisForm.getDBase.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDNvl2
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDBase
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getConta
+* Classe: fwget (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.getGrupo.Value
+If !IsEmpty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'C',This.Value,ThisForm.getConta,ThisForm.getDConta)
+		MessageBox('Acesso Negado !!!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getDConta.Value = ''
+		ThisForm.getDConta.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getDConta.Value = ''
+	ThisForm.getDConta.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDsProduto
+* Classe: textbox (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'DPros', This.Value, 'Seleção', 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getCdProduto.Value = crListaRemota.CPros
+	This.Parent.getDsProduto.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	This.Parent.getCdProduto.Value = ''
+	This.Parent.getDsProduto.Value = ''
+EndIf
+This.Parent.getCdProduto.Refresh
+This.Parent.getDsProduto.Refresh
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getCdProduto.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDConta
+* Classe: fwget (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ThisForm.getGrupo.Value
+If !IsEmpty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'D',This.Value,ThisForm.getConta,ThisForm.getDConta)
+		MessageBox('Acesso Negado !!!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getConta.Value = ''
+		ThisForm.getConta.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getConta.Value = ''
+	ThisForm.getConta.Refresh
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.getConta.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getCdProduto
+* Classe: textbox (Base: textbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', ;
+						   'crListaRemota', 'CPros', This.Value, 'Seleção', 1000)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getCdProduto.Value = crListaRemota.CPros
+	This.Parent.getDsProduto.Value = crListaRemota.DPros
+	Use In crListaRemota
+Else
+	This.Parent.getCdProduto.Value = ''
+	This.Parent.getDsProduto.Value = ''
+EndIf
+This.Parent.getCdProduto.Refresh
+This.Parent.getDsProduto.Refresh
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	fAcessoContab(Usuar,'C',This.Value,ThisForm.getGrupo,ThisForm.getDGrupo)
+Else
+	ThisForm.getDGrupo.Value = ''
+	ThisForm.getDGrupo.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	=fAcessoContab(Usuar,'D',This.Value,ThisForm.getGrupo,ThisForm.getDGrupo)
+Else
+	ThisForm.getGrupo.Value = ''
+	ThisForm.getGrupo.Refresh
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(ThisForm.getGrupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getLocal
+* Classe: fwget (Base: textbox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrLcl', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Localização')
+		loLista.mAddColuna('Descricaos', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getLocal.Value  = crListaRemota.Codigos
+	ThisForm.getDLocal.Value = crListaRemota.Descricaos
+	Use In crListaRemota
+Else
+	ThisForm.getLocal.Value  = []
+	ThisForm.getDLocal.Value = []
+EndIf
+ThisForm.getLocal.Refresh 
+ThisForm.getDLocal.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.getBase.Value  = []
+ThisForm.getDBase.Value = []
+ThisForm.getNvl2.Value  = []
+ThisForm.getDNvl2.Value = []
+ThisForm.getNvl3.Value  = []
+ThisForm.getDNvl3.Value = []
+ThisForm.getNvl4.Value  = []
+ThisForm.getDNvl4.Value = []
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.optSinAna
+* Classe: fwoption (Base: optiongroup)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+IF this.Value = 3
+	thisform.opt_Subt.Enabled = .t. 
+ELSE
+	thisform.opt_Subt.Enabled = .f. 
+ENDIF
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getCgru
+* Classe: fwget (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;
+						   'CrListaRemota', 'CGrus', This.Value, 'Seleção', .t., .f.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CGrus',    '', 'Código')
+		loLista.mAddColuna('DGrus', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getCgru.Value = CrListaRemota.Cgrus
+	ThisForm.getDgru.Value = CrListaRemota.Dgrus
+	Use In CrListaRemota
+Else
+	ThisForm.getCgru.Value = ''
+	ThisForm.getDgru.Value = ''
+EndIf
+ThisForm.getCgru.Refresh
+ThisForm.getDgru.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDgru
+* Classe: fwget (Base: textbox)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;
+						   'CrListaRemota', 'DGrus', This.Value, 'Seleção', .t., .f.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CGrus', '', 'Descricao')
+		loLista.mAddColuna('DGrus',    '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getCgru.Value = CrListaRemota.CGrus
+	ThisForm.getDgru.Value = CrListaRemota.Dgrus
+	Use In CrListaRemota
+Else
+	ThisForm.getCgru.Value = ''
+	ThisForm.getDgru.Value = ''
+EndIf
+ThisForm.getCgru.Refresh
+ThisForm.getDgru.Refresh
+
+* Fim ****************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If Not Empty(Thisform.GetCgru.Value)
+	Return .f.
+EndIf
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getcSubG
+* Classe: fwget (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	If Not IsEmpty(Thisform.Getcgru.Value)
+		laFiltro(1,1) = 'CGrus'
+		laFiltro(1,2) = Padr(ThisForm.getCgru.Value, 3)
+	
+		loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+							   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t., .f., @laFiltro)
+	Else
+		
+		loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+							   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t., .f.)						   
+	EndIf 
+
+
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.mAddColuna('Descricaos', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getcSubG.Value = CrListaRemota.Codigos
+	ThisForm.getDSubG.Value = CrListaRemota.Descricaos
+	Use In CrListaRemota
+Else
+	ThisForm.getcSubG.Value = ''
+	ThisForm.getDSubG.Value = ''
+EndIf
+ThisForm.getDSubG.Refresh
+ThisForm.getDSubG.Refresh
+
+
+* Fim ****************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDSubG
+* Classe: fwget (Base: textbox)
+* Registro: 39
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	If Not IsEmpty(Thisform.Getcgru.Value)
+		laFiltro(1,1) = 'CGrus'
+		laFiltro(1,2) = Padr(ThisForm.getCgru.Value, 3)
+		
+		loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+							   'CrListaRemota', 'Descricaos', This.Value, 'Seleção', .t., .f., @laFiltro)
+	Else
+		loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+							   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t., .f.)				
+	EndIf 
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descricaos', '', 'Descricao')
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getcSubG.Value = CrListaRemota.Codigos
+	ThisForm.getDSubG.Value = CrListaRemota.Descricaos
+	Use In CrListaRemota
+Else
+	ThisForm.getcSubG.Value = ''
+	ThisForm.getDSubG.Value = ''
+EndIf
+ThisForm.getcSubG.Refresh
+ThisForm.getDSubG.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If 	Not Empty(ThisForm.getDsubG.Value)
+	Return .f.
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.GetDCol
+* Classe: fwget (Base: textbox)
+* Registro: 42
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCol', ;
+						   'CrListaRemota', 'Descs', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descs',    '', 'Descrição')
+		loLista.mAddColuna('Colecoes', '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getCol.Value  = CrListaRemota.Colecoes
+	ThisForm.getDcol.Value = CrListaRemota.Descs
+	Use In CrListaRemota
+Else
+	ThisForm.getCol.Value  = ''
+	ThisForm.getDcol.Value = ''
+EndIf
+ThisForm.getCol.Refresh
+ThisForm.getDcol.Refresh
+* Fim ****************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.GetCol.Value) 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.GetCol
+* Classe: fwget (Base: textbox)
+* Registro: 43
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCol', ;
+						   'CrListaRemota', 'Colecoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Colecoes', '', 'Código')
+		loLista.mAddColuna('Descs',    '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getCol.Value  = CrListaRemota.Colecoes
+	ThisForm.getDcol.Value = CrListaRemota.Descs
+	Use In CrListaRemota
+Else
+	ThisForm.getCol.Value  = ''
+	ThisForm.getDcol.Value = ''
+EndIf
+ThisForm.getCol.Refresh
+ThisForm.getDcol.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.GetCSGru
+* Classe: fwget (Base: textbox)
+* Registro: 44
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;
+						   'CrListaRemota', 'Codigos', This.Value, 'Grandes Grupos', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.mAddColuna('Descs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	Thisform.getCSgru.Value = CrListaRemota.Codigos
+	Thisform.getDSgru.Value = CrListaRemota.Descs
+	Use In CrListaRemota
+Else
+	Thisform.getCSgru.Value = ''
+	Thisform.getDSgru.Value = ''
+EndIf
+This.Parent.getCSgru.Refresh
+This.Parent.getDSgru.Refresh
+
+* Fim ****************************************************************************
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.GetDsGru
+* Classe: fwget (Base: textbox)
+* Registro: 45
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+						   'CrListaRemota', 'Descricaos', This.Value, 'Seleção', .t., .f.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descricaos', '', 'Descricao')
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	Thisform.getCSgru.Value = CrListaRemota.Codigos
+	Thisform.getDSgru.Value = CrListaRemota.Descricaos
+	Use In CrListaRemota
+Else
+	Thisform.getCSgru.Value = ''
+	Thisform.getDSgru.Value = ''
+EndIf
+Thisform.getCSgru.Refresh
+Thisform.getDSgru.Refresh
+
+* Fim ****************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If 	Not Empty(ThisForm.getCSGru.Value)
+	Return .f.
+EndIf
+* Fim ****************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDLocal
+* Classe: fwget (Base: textbox)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrLcl', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descricaos', '', 'Descrição')
+		loLista.mAddColuna('Codigos',    '', 'Localização')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.getLocal.Value  = crListaRemota.Codigos
+	ThisForm.getDLocal.Value = crListaRemota.Descricaos
+	Use In crListaRemota
+Else
+	ThisForm.getLocal.Value  = []
+	ThisForm.getDLocal.Value = []
+EndIf
+ThisForm.getLocal.Refresh 
+ThisForm.getDLocal.Refresh 
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.getLocal.Value)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.getBase.Value  = []
+ThisForm.getDBase.Value = []
+ThisForm.getNvl2.Value  = []
+ThisForm.getDNvl2.Value = []
+ThisForm.getNvl3.Value  = []
+ThisForm.getDNvl3.Value = []
+ThisForm.getNvl4.Value  = []
+ThisForm.getDNvl4.Value = []
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.Opt_Subt
+* Classe: checkbox (Base: checkbox)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN thisform.optSinAna.value=3
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getForn
+* Classe: fwget (Base: textbox)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	If !fAcessoContas(Usuar,[],'C',This.Value,ThisForm.getForn,ThisForm.getDForn)
+		MessageBox('Acesso Negado !!!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getDForn.Value = ''
+		ThisForm.getDForn.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getDForn.Value = ''
+	ThisForm.getDForn.Refresh
+EndIf
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREETL.getDForn
+* Classe: fwget (Base: textbox)
+* Registro: 51
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+Return Empty(ThisForm.getForn.Value)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	If !fAcessoContas(Usuar,[],'D',This.Value,ThisForm.getForn,ThisForm.getDForn)
+		MessageBox('Acesso Negado !!!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.getDForn.Value = ''
+		ThisForm.getDForn.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.getDForn.Value = ''
+	ThisForm.getDForn.Refresh
+EndIf
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREETL
+RESERVED3 (ClassInfo): podatamgr
+*reverterxml 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 56
+================================================================================

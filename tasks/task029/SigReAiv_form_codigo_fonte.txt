@@ -1,0 +1,533 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigReAiv.SCX
+* Data/Hora: 16/05/26 02:53:05
+* Total de registros: 15
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREAIV
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGREAIV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Empresa
+  Parent: SIGREAIV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dempresa
+  Parent: SIGREAIV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGREAIV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Inv1
+  Parent: SIGREAIV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Inv2
+  Parent: SIGREAIV
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGREAIV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGREAIV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGREAIV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGREAIV
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptTipo
+  Parent: SIGREAIV
+  Class: optiongroup
+  BaseClass: optiongroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV
+------------------------------------------------------------
+  DataSession = 2
+  Height = 190
+  Width = 800
+  DoCreate = .T.
+  Caption = "Analise Entre Inventários"
+  Name = "SIGREAIV"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 70
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 135
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.Say3
+------------------------------------------------------------
+  Caption = "Empresa :"
+  Left = 110
+  Top = 90
+  TabIndex = 10
+  ZOrderSet = 3
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.Get_Empresa
+------------------------------------------------------------
+  Value = 
+  Height = 23
+  Left = 167
+  TabIndex = 1
+  Top = 87
+  Width = 33
+  ZOrderSet = 4
+  Name = "Get_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.Get_Dempresa
+------------------------------------------------------------
+  Height = 23
+  Left = 201
+  TabIndex = 2
+  Top = 87
+  Width = 205
+  ZOrderSet = 5
+  Name = "Get_Dempresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.Say1
+------------------------------------------------------------
+  Caption = "1º Inventário :"
+  Left = 87
+  Top = 115
+  TabIndex = 7
+  ZOrderSet = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.Get_Inv1
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = ""
+  Height = 23
+  InputMask = "999999999"
+  Left = 167
+  TabIndex = 3
+  Top = 112
+  Width = 87
+  ZOrderSet = 4
+  Name = "Get_Inv1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.Get_Inv2
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  Format = "R"
+  Height = 23
+  InputMask = "9999999999"
+  Left = 167
+  TabIndex = 4
+  Top = 137
+  Width = 87
+  ZOrderSet = 4
+  Name = "Get_Inv2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.Say2
+------------------------------------------------------------
+  Caption = ""
+  Height = 15
+  Left = 260
+  Top = 115
+  Width = 2
+  TabIndex = 11
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.Say5
+------------------------------------------------------------
+  Caption = ""
+  Height = 15
+  Left = 259
+  Top = 140
+  Width = 2
+  TabIndex = 12
+  ZOrderSet = 3
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.Say6
+------------------------------------------------------------
+  Caption = "Tipo :"
+  Left = 131
+  Top = 166
+  TabIndex = 9
+  ZOrderSet = 3
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.Say4
+------------------------------------------------------------
+  Caption = "2º Inventário :"
+  Left = 87
+  Top = 140
+  TabIndex = 8
+  ZOrderSet = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREAIV.OptTipo
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 24
+  Left = 167
+  SpecialEffect = 1
+  Top = 162
+  Width = 158
+  TabIndex = 5
+  Name = "OptTipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Analitico"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.Width = 58
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Sintético"
+  Option2.Height = 15
+  Option2.Left = 84
+  Option2.Top = 4
+  Option2.Width = 59
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREAIV
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReAiv Preview NoConsole
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+lcQuery = [Select a.*, b.dPros From SigIvTrh a Left Join SigCdPro b on a.cPros = b.cPros ]+;
+                                      [Where Emps = ']+ThisForm.Get_Empresa.Value+[' And not a.cPros = Space(14) And ]+;
+                                      [(codigos = ]+Alltrim(Str(ThisForm.Get_Inv1.Value))+[ Or ]+;
+                                      [codigos = ]+Alltrim(Str(ThisForm.Get_Inv2.Value))+[) Order By a.cPros, a.localis]
+
+ThisForm.poDatamgr.SqlExecute(lcQuery,'crSigIvTr')
+
+Create Cursor Cabec (cnInvs1 n(10), cnInvs2 n(10))
+Select Cabec 
+Append Blank
+Replace cnInvs1 With ThisForm.Get_Inv1.Value
+Replace cnInvs2 With ThisForm.Get_Inv2.Value
+
+Create Cursor DBImp (cPros c(14), dPros c(40), cLocals c(10), cnInvs1 n(6), cnInvs2 n(6), Sobras n(6), Faltas n(6), Tipos n(1))
+
+Select crSigIvTr
+
+lacPros = ''
+laLocal = ''
+
+
+Scan
+	Scatter MemVar
+	Select DbImp
+	If crSigIvTr.Codigos = ThisForm.Get_Inv1.Value
+		m.cnInvs1 = Qtds 
+		m.cnInvs2 = 0
+	Else
+		m.cnInvs1 = 0
+		m.cnInvs2 = Qtds 
+	EndIf
+	If lacPros <> crSigIvTr.cPros or Iif(ThisForm.OptTipo.Value = 1,laLocal <> crSigIvTr.localis,.F.)
+		If IsNull(m.dPros)
+			m.dPros = ''
+		Endif
+		Append Blank
+		Gather MemVar
+		Replace cLocals With crSigIvTr.localis
+		Replace Tipos With ThisForm.OptTipo.Value
+		lacPros = crSigIvTr.cPros
+		laLocal = crSigIvTr.localis
+	Else
+		If crSigIvTr.Codigos = ThisForm.Get_Inv1.Value
+			Replace cnInvs1 With cnInvs1+m.cnInvs1
+		Else
+			Replace cnInvs2 With cnInvs2+m.cnInvs2
+		Endif
+	EndIf
+	Select crSigIvTr
+EndScan
+
+Select DbImp
+
+Replace All Sobras With cnInvs1-cnInvs2 For cnInvs1-cnInvs2 > 0  
+Replace All Faltas With cnInvs2-cnInvs1 For cnInvs2-cnInvs1 > 0  
+
+Delete All for Sobras = 0 And Faltas = 0
+
+Go Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _Acesso
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+Endwith	
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAIV.Get_Empresa
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.Get_Empresa,ThisForm.Get_DEmpresa))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAIV.Get_Dempresa
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.Get_Empresa.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.Get_Empresa,ThisForm.Get_DEmpresa))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAIV.Get_Inv1
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	
+	Declare laEmps[1,2]
+	laEmps[1,1] = 'Emps'
+	laEmps[1,2] = ThisForm.Get_Empresa.Value
+	
+	xBrox = CreateObject('fwbuscaext',Thisform.poDatamgr.pnIdconn,'SigCdBal','crSigCdBal','Codigos',This.Value,'Inventários',.t.,'Codigos',@laEmps)
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('Codigos', '9999999999', 'Código', .t.)
+		xBrox.mAddColuna('Grupos', '', 'Grupo', .t.)
+		xBrox.mAddColuna('Contas', '', 'Conta', .t.)
+		xBrox.Show()
+	EndIf 
+
+	This.Value = Iif( LastKey() # 27, Evaluate('crSigCdBal.Codigos'), 0 )
+	ThisForm.Say2.Caption = Iif( LastKey() # 27,Alltrim(crSigCdBal.Grupos) + ' - ' + crSigCdBal.Contas, '' )
+
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREAIV.Get_Inv2
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	
+	Declare laEmps[1,2]
+	laEmps[1,1] = 'Emps'
+	laEmps[1,2] = ThisForm.Get_Empresa.Value
+	
+	xBrox = CreateObject('fwbuscaext',Thisform.poDatamgr.pnIdconn,'SigCdBal','crSigCdBal','Codigos',This.Value,'Inventários',.t.,'Codigos',@laEmps)
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('Codigos', '9999999999', 'Código', .t.)
+		xBrox.mAddColuna('Grupos', '', 'Grupo', .t.)
+		xBrox.mAddColuna('Contas', '', 'Conta', .t.)
+		xBrox.Show()
+	EndIf 
+
+	This.Value = Iif( LastKey() # 27, Evaluate('crSigCdBal.Codigos'), 0 )
+	ThisForm.Say5.Caption = Iif( LastKey() # 27,Alltrim(crSigCdBal.Grupos) + ' - ' + crSigCdBal.Contas, '' )
+
+	If This.Value = ThisForm.Get_Inv1.Value
+		MessageBox('Inventário Deve Ser Diferente do Anterior !!!',16,'')
+		Return(.f.)
+	Endif
+
+Endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREAIV
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================

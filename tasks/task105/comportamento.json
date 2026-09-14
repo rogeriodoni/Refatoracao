@@ -1,0 +1,412 @@
+{
+  "resumo": {
+    "totalMetodos": 24,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 16,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fBuscarCotacao", "Faixa de Preço '+Iif", "fConfigGeral", "fAcessoEmpresa", "fAcessoContab", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGREFXV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFxv Preview NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV",
+      "evento": "Procedure",
+      "linhas": 147,
+      "codigoOriginal": "ThisForm.Aguarde.Visible = .t.\n\nlcMoeda     = ThisForm.get_cd_moeda.Value\nlnNrPeriodo = ThisForm.optRfEstoque.Value\nlcCarac     = Thisform.Get_FichaT.Value\nlnCotMoe    = fBuscarCotacao(lcMoeda,Date(),ThisForm.PodataMgr)\nlcGrupo     = ThisForm.Get_cd_grupo.Value\nlcDgrupo    = ThisForm.Get_ds_grupo.Value\npDat        = fDtoSQL(ThisForm.GetDataSaldo.Value,'23:59:59')\nlcGde\t\t= ThisForm.getGGrus.Value\n\nThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', _Empr)\nlcNmEmpresa  =  Iif(Eof('cr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL,fBuscarCotacao,Faixa de Preço '+Iif",
+        "metodosFormChamados": "CursorQuery,Sqlexecute",
+        "controlesReferenciados": "get_cd_moeda,optRfEstoque,Get_FichaT,Get_cd_grupo,Get_ds_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor CsEstoque (Emps c(3), Grupos c(10))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV",
+      "evento": "Init",
+      "linhas": 22,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\n\t\tWith ThisForm.GrdEstoque\n\t\t\t.Recordsource = 'CsEstoque'\n\t\t\t.Column1.Controlsource = 'CsEstoque.Emps'\n\t\t\t.Column2.Controlsource = 'CsEstoque.Grupos'\n\t\tEndWith\n\t\t\n\t\tSelect CsEstoque\n\t\tAppend Blank\n\t\t\t\n\t\t=DoDefault()\n\n\tElse\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGREFXV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFxv To Printer Prompt NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Report Form SigReFxv To Printer NoConsole\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "If (This.Value <> 4)\n\tIf Empty(ThisForm.get_cd_moeda.Value)\n\t\t=MessageBox('Moeda Obrigatória!!!', 16, '')\n\t\tThisForm.get_cd_moeda.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(ThisForm.getGGrus.Value)\n\t\t=MessageBox('Grande Grupo Obrigatório!!!', 16, 'Atenção!!!')\n\t\tThisForm.getGGrus.SetFocus\n\t\tReturn 0\n\tEndIf\n\t\n\tSelect * From CsEstoque Into Cursor ChecDados where grupos+Emps <> ' ' ReadWrite\n\tSelect ChecDados\n\tIndex On Grupos + Emps Tag Grupos\n\tScan\n\t\tlcGrupo = Grupos\n\t\tlcEmp   = Emps\n\t\tSkip\n\t\tIf Grupos... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.GetDataSaldo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(ThisForm.OptRfEstoque.Value = 2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptRfEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.OptRfEstoque",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "With ThisForm\n\t.GetDataSaldo.Value = IIf(This.Value = 1,{},IIf(Empty(.GetDataSaldo.Value),Date(),.GetDataSaldo.Value))\n\t.GetDataSaldo.Refresh\nEndWith\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.OptRfEstoque",
+      "evento": "InteractiveChange",
+      "linhas": 11,
+      "codigoOriginal": "With Thisform\n\tIf This.Value = 1\n\t\t.SayEstoqueEm.Visible = .F.\n\t\t.GetDataSaldo.Visible = .F.\n\tElse\n\t\t.SayEstoqueEm.Visible = .T.\n\t\t.GetDataSaldo.Visible = .T.\n\tEndIf\n\t.GetDataSaldo.Refresh\nEndWith\n\t\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.grdEstoque.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoEmpresa(Usuar, 'C', This.Value, This, '')\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.grdEstoque.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Empty(This.Value)\n\t=fAcessoContab(Usuar, 'C', This.Value, This, '')\nElse\n\tThis.Value = ''\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.grdEstoque.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "Select CsEstoque\nLocate For Emps = ' ' and Grupos = ' '\nIf Eof()\n\tAppend Blank\nEndIf\nKeyboard '{DNARROW}'\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_cd_moeda.Value = crListaRemota.CMoes\n\tThisForm.get_ds_moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThisForm.get_cd_m... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_cd_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Código')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_cd_moeda.Value = crListaRemota.CMoes\n\tThisForm.get_ds_moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThisForm.get_cd_m... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda,get_ds_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.Get_FichaT",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrCpP', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Título Características')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.get_ds_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(Thisform.Get_Cd_Grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.get_ds_grupo",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "With ThisForm\n\tIf Empty(This.Value)\n\t\t.Get_Cd_Grupo.Value = ''\n\t\t.Get_Cd_Grupo.Refresh\n\tElse\n\t\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','DGrus',This.Value,'Grupos',.T.)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\t\tm.loLista.Show()\n\t\tEndIf\n\t\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\t\t.Get_Cd_Grupo.Value = Evaluate('CrGrupos.cgrus')\n\t\t\t.Get_Ds_Grupo.Value = Eval... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Grupo,Get_Ds_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.get_cd_grupo",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "With ThisForm\n\tIf Empty(This.Value)\n\t\t.Get_Ds_Grupo.Value = ''\n\t\t.Get_Ds_Grupo.Refresh\n\tElse\n\t\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos',.T.)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\t\tm.loLista.Show()\n\t\tEndIf\n\t\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\t\t.Get_Cd_Grupo.Value = Evaluate('CrGrupos.cgrus')\n\t\t\t.Get_Ds_Grupo.Value = Eval... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Ds_Grupo,Get_Cd_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.getDGRus",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not Empty(ThisForm.getGGrus.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.getDGRus",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;\n\t\t\t\t\t\t   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descs',   '', 'Descrição')\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getGGrus.Value = Iif(Lastkey()=27, '', crListaRemota.Codigos)\n\tThisForm.getDGRus.Value = Iif(Lastkey()=27, '', crListaRemota.Descs)\n\tUse In crListaRemot... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGREFXV.getGGrus",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descs',   '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.getGGrus.Value = Iif(Lastkey()=27, '', crListaRemota.Codigos)\n\tThisForm.getDGRus.Value = Iif(Lastkey()=27, '', crListaRemota.Descs)\n\tUse In crListaRem... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGREFXV.Click",
+      "queryOriginal": "\tSelect * From CsEstoque Into Cursor ChecDados where grupos+Emps <> ' ' ReadWrite",
+      "tabelas": "CsEstoque",
+      "colunas": "grupos+Emps,ReadWrite",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["CsEstoque"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

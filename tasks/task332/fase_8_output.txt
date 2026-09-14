@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. A Fase 8 est├í completa. Aqui est├í o resumo do que foi adicionado ao `FormSigPrSlp.prg`:
+
+**10 m├®todos adicionados** (linhas 807ÔÇô960+):
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `CarregarLista()` | Alias para `CarregarGradeLista()` ÔÇö compatibilidade com API padr├úo |
+| `BtnEncerrarClick()` | Fecha di├ílogo sem adicionar itens |
+| `BtnSalvarClick()` | Adiciona itens marcados e fecha (delega para `CmdAdicionarClick`) |
+| `BtnCancelarClick()` | Cancela e fecha sem adicionar |
+| `BtnBuscarClick()` | Refoca `grd_4c_Listas`; recarrega se cursor n├úo existe |
+| `FormParaBO()` | Popula `this_cLprecos` do BO com a lista selecionada no grid |
+| `BOParaForm()` | Refresca ambos os grids com cursores atuais do BO |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita grids e `cmd_4c_Adicionar` ÔÇö **nunca toca nos ├¡cone-only** |
+| `LimparCampos()` | Desvincula RecordSources e chama `LimparCursores()` no BO |
+| `AjustarBotoesPorModo()` | Conta itens marcados e habilita `cmd_4c_Adicionar` se >0 |
+
+O config.prg j├í carrega ambos os arquivos automaticamente via `ADIR` ÔÇö nenhuma altera├º├úo necess├íria. O di├ílogo ├® filho (n├úo tem entrada no menu.prg).

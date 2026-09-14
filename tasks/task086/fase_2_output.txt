@@ -1,0 +1,18 @@
+﻿Phase 3 is complete. Here's what was delivered:
+
+**`C:\4c\projeto\app\forms\relatorios\Formsigreegp.prg`** ÔÇö 1903 lines, full REPORT form:
+
+- Inherits `FormBase`, `Height=650`, `Width=800`, `DataSession=2`
+- `InicializarForm()` creates: dark header container, 4-button CommandGroup (Visualizar/Imprimir/Excel/Encerrar), PageFrame with Page1 (filtros) and Page2 (placeholder)
+- **16 filter controls** on Page1 (all with corrected Top = OriginalTop ÔêÆ 85):
+  - Empresa, Grupo Estoque (SigCdGcr), Conta Estoque (SigCdCli), Grupo de Produto (SigCdGrp)
+  - Linha (SigCdLin), Grupo Venda/Cole├º├úo (SigCdCol)
+  - Data posi├º├úo + Dt. Cota├º├úo (date fields)
+  - Moeda (SigCdMoe), ComboBox ordena├º├úo (4 items, default=4 "por Estoque")
+  - 5 OptionGroups: Opc_Venda(1), Opc_Custo(1), Opc_Peso(2), Opc_fator(2), OptUnis(2), Opt_dados_cotacao(1)
+- **Lookup pattern** for each code/description pair: `Tecla*` (F4/Enter/Tab), `Validar*`, `Abrir*` using `FormBuscaAuxiliar`
+- `FormParaRelatorio()` maps all 21 form fields ÔåÆ BO properties
+- `BtnVisualizarClick/BtnImprimirClick/BtnExcelClick/BtnEncerrarClick`
+- `Destroy()` releases cursor_4c_SigCdEmp and BO reference
+
+**Fix to BO (`sigreegpBO.prg`):** Removed `PROTECTED` from `PrepararDados()` and `LimparCursores()` so they can be called by `BtnExcelClick` in the form.

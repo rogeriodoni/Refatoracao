@@ -1,0 +1,14 @@
+﻿Phase 5/8 is now complete. Here's what was delivered:
+
+**5 stub methods replaced** with correct implementations:
+- `FormParaBO()` ÔÇö maps `txt_4c_CodigoÔåÆthis_nNumps`, `txt_4c_Dt_dataÔåÆthis_dDatas`, `txt_4c_LoteÔåÆthis_nNLotes`, `txt_4c_TotPesoÔåÆthis_nPesoLancs`, `txt_4c_DocuÔåÆthis_cDocus`, `txt_4c_Fwget1ÔåÆthis_nNAceites`
+- `BOParaForm()` ÔÇö reverse mapping with type-safe assignments
+- `LimparCamposDados()` ÔÇö clears all Phase 5 fields (date defaults to today)
+- `HabilitarCampos()` ÔÇö enables/disables editable fields; `txt_4c_Codigo` and `txt_4c_Fwget1` stay ReadOnly always
+- `ValidarCamposDados()` ÔÇö validates that `datas` (date) is mandatory
+
+**13 new handler procedures** added before `Destroy()`:
+- **Button handlers**: `BtnOperacaoClick` ÔåÆ FormSigPdMp5, `BtnComponentesClick` ÔåÆ FormSigPdMp4, `BtnEtiquetasClick` ÔåÆ FormSigPdMp3, `BtnServicosClick` ÔåÆ FormSigPdM11 (ALTERAR only), `BtnEtqCompoClick` ÔåÆ SigOpIbo, `BtnBoletoClick` + `ImpBol` (queries SigCdOpd.Boletos), `BtnDocumentoClick` ÔåÆ FormSigReDct (queries SigCdOpd.Docus/Etiqs), `BtnPendentesClick` ÔåÆ SigOpMpn (validates ContaOs before opening)
+- **Field handlers**: `DtDataLostFocus` (syncs date to BO), `LoteLostFocus` (validates against SigPdNlt), `TotPesoLostFocus` (syncs peso to BO), `BuscaOpLostFocus` (searches SigCdNec by OP range), `DocuLostFocus` (syncs document to BO)
+
+**Phase 6** will add the second 50% of Page2: Origem container, Destino container, Respons├ível container, GradeOpera├º├úo, Observa├º├úo fields, and `codobs`/`obss` fields.

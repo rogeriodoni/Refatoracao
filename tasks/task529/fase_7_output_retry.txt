@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7 conclu├¡da em `projeto/app/forms/operacionais/FormTbd.prg` (897 ÔåÆ 1048 linhas), com implementa├º├úo real ÔÇö nenhum stub.
+
+**O que foi implementado**
+
+| M├®todo | L├│gica real (origem no legado SIGCDTBD) |
+|---|---|
+| `HabilitarEdicaoGrid(par_lHabilitar)` | Alterna edi├º├úo inline do grid; Column2 fica sempre read-only (espelha `Column2.When = Return .f.`). N├úo usa `Enabled=.F.` nos bot├Áes (apagaria o ├¡cone ÔÇö Pattern #99/#106) |
+| `BtnIncluirClick()` | Handler can├┤nico do bot├úo Inserir: `INSERT INTO cursor_4c_Dados (codigos) VALUES (SPACE(10))` + `GravaDados=.T.` + foco na Column1 (espelha `cmdInserir.Click`). O `BINDEVENT` do `cmd_4c_Inserir` foi reapontado para ele (`BtnInserirClick` deixou de existir, sem c├│digo morto) |
+| `BtnAlterarClick()` | Valida sele├º├úo (cursor usado, `RECCOUNT>0`, n├úo EOF), reabilita edi├º├úo, guarda `AntValue = cursor_4c_Dados.codigos` (espelha `Column1.When`) e devolve foco ├á Column1, de onde F4/ENTER/TAB acionam o lookup SigOpTdz |
+| `BtnVisualizarClick()` | Modo somente-leitura + consulta o cadastro em SigOpTdz (`SELECT codigos, descrs ... WHERE RTRIM(codigos) = EscaparSQL(...)`) e exibe Opera├º├úo/C├│digo/Descri├º├úo; se o c├│digo n├úo existir em SigOpTdz, avisa (v├¡nculo ├│rf├úo) |
+| `BtnExcluirClick()` | Mant├®m o fluxo do `cmdExcluir.Click` (`DELETE / SKIP / GO BOTTOM se EOF / GravaDados=.T.`, sem confirma├º├úo), agora com guard de modo VISUALIZAR |
+
+**Conformidade verificada**
+- Acentos s├│ via `CHR()`; nenhum `RETURN` dentro de TRY/CATCH; todo CATCH com `Message + LineNo + Procedure`; `MsgAviso` para valida├º├úo de UI e `MsgErro` s├│ para exce├º├úo.
+- Cursor `cursor_4c_Dados` ├® `READWRITE` (`TbdBO.BuscarPorOperacao` usa `INTO CURSOR ... READWRITE`), ent├úo `INSERT`/`DELETE` funcionam.
+- **Compilado em VFP9**: `COMPILE FormTbd.prg` ÔåÆ "SEM ERROS". Os artefatos `.fxp`/`.err` gerados no teste foram removidos.
+- Valida├º├úo da Fase 7 (4 eventos presentes) e a checagem de completude (TODO/stub/procedure vazia) passam ÔÇö grep confirma zero marcadores.
+
+Ressalva de escopo que decidi manter: n├úo adicionei bot├Áes Alterar/Visualizar na tela. O SCX legado tem apenas Inserir/Excluir/Confirmar/Cancelar, e criar bot├Áes novos violaria o PILAR 1; os quatro m├®todos s├úo pontos de entrada p├║blicos, com `BtnIncluirClick`/`BtnExcluirClick` ligados aos bot├Áes reais.

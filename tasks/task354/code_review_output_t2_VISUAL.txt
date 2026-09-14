@@ -1,0 +1,6 @@
+﻿Feito. Corrigi as 2 ocorr├¬ncias de `[GRID-HEADER]`:
+
+- **Linha 363** (configura├º├úo inicial do `grd_4c_Lista`): `"C" + CHR(243) + "digo"` ÔåÆ `"Cargo"`
+- **Linha 2247** (reconfigura├º├úo din├ómica em `CarregarLista`): idem
+
+**Motivo**: O legado `SIGCDCAR` n├úo tem grade lista separada ÔÇö o `grd_4c_Lista` ├® novo na arquitetura migrada. O campo exibido ├® `ccargs`, que o legado denomina "Cargo :" no seu label. Usar "C├│digo" era um header gen├®rico inventado; "Cargo" reflete o nome sem├óntico correto conforme o legado.

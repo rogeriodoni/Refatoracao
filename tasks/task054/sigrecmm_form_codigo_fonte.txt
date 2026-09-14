@@ -1,0 +1,933 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigrecmm.SCX
+* Data/Hora: 17/05/26 01:56:14
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGRECMM
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCods
+  Parent: SIGRECMM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodVens
+  Parent: SIGRECMM
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGRECMM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGRECMM
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMM
+------------------------------------------------------------
+  DataSession = 2
+  Height = 300
+  Width = 700
+  DoCreate = .T.
+  Caption = "Relatório de Mapa de Comissão Por Vendedor"
+  Name = "SIGRECMM"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 2
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 68
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 134
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.Top = 5
+  btnReport.Sair.Left = 200
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 430
+  btnReport.Top = 0
+  btnReport.Name = "btnReport"
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMM.getCods
+------------------------------------------------------------
+  Left = 264
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 156
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "getCods"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMM.getCodVens
+------------------------------------------------------------
+  Left = 264
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 182
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "getCodVens"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMM.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código do Relatório :"
+  Left = 156
+  Top = 160
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGRECMM.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Vendedor :"
+  Left = 204
+  Top = 186
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGRECMM
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documentoexcel
+------------------------------------------------------------
+PROCEDURE documentoexcel
+Zap In crExcel
+
+Set Point To [,]
+Set Separator To [.]
+
+Select crImpressao
+Scan
+	Insert Into crExcel (V01, V02, V03, V04, V05, V06, V07, V08, V09, V10, V11, V12, V13, TotalV, Datas) ;
+				 Values (Transform(crImpressao.V01, [999999999.99]), Transform(crImpressao.V02, [999999999.99]), ;
+						 Transform(crImpressao.V03, [999999999.99]), Transform(crImpressao.V04, [999999999.99]), ;
+						 Transform(crImpressao.V05, [999999999.99]), Transform(crImpressao.V06, [999999999.99]), ;
+						 Transform(crImpressao.V07, [999999999.99]), Transform(crImpressao.V08, [999999999.99]), ;
+						 Transform(crImpressao.V09, [999999999.99]), Transform(crImpressao.V10, [999999999.99]), ;
+						 Transform(crImpressao.V11, [999999999.99]), Transform(crImpressao.V12, [999999999.99]), ;
+						 Transform(crImpressao.V13, [999999999.99]), Transform(crImpressao.TotalV, [999999999.99]), ;
+				 		 crImpressao.Datas)
+EndScan
+
+Set Point To [.]
+Set Separator To [,]
+
+Select crExcel
+Go Top In crExcel
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigReCmm To Printer Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		=DoDefault()
+	Else
+		=Messagebox([Impossivel Efetuar Conexão com Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor crAnalitico (CodVens c(10), Datas d(8), EmpDopNums c(29), Cpros c(14), Mercs c(3), ;
+						   CGrus c(3), SGrus c(6), FPags c(12), ValVdaCom n(12,2), ValComiss n(12,2), ;
+						   TpComiss c(3), PctComiss n(12,2), CodFaixas n(2), Apagar c(1))
+
+Create Cursor crImpressao (Datas c(10), V01 n(12,2), V02 n(12,2), V03 n(12,2), V04 n(12,2), V05 n(12,2), V06 n(12,2), ;
+						   V07 n(12,2), V08 n(12,2), V09 n(12,2), V10 n(12,2), V11 n(12,2), V12 n(12,2), V13 n(13,2), ;
+						   TotalV n(12,2))
+
+Create Cursor crCabecalho (V01 m(4), V02 m(4), V03 m(4), V04 m(4), V05 m(4), V06 m(4), V07 m(4), V08 m(4), ;
+						   V09 m(4), V10 m(4), V11 m(4), V12 m(4), V13 m(4), TotalV m(4), Titulo c(254), ;
+						   Subtitulo c(254), Periodo c(254), Datas m(4))
+
+Create Cursor crExcel (Datas c(10), V01 c(12), V02 c(12), V03 c(12), V04 c(12), V05 c(12), V06 c(12), V07 c(12), ;
+					   V08 c(12), V09 c(12), V10 c(12), V11 c(12), V12 c(12), V13 c(12), TotalV c(12))
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Private pDtI, pDtF
+
+Zap In crAnalitico
+Zap In crImpressao
+Zap In crCabecalho
+
+lcPrc = Padr(ThisForm.getCods.Value, 40)
+lcFvd = Padr(ThisForm.getCodVens.Value, 10)
+
+Set Step On 
+
+* Select Com Cabeçalho da Tabela de Comissão Selecionada
+lcQuery = [Select a.* ] + ;
+			[From SigCmCab a ] + ;
+		   [Where a.Cods = '] + lcPrc + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCmCab]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCmCab)])
+	Return .f.
+EndIf
+Go Top In LocalCmCab
+
+pDtI = fDtoSQL(LocalCmCab.DtInis)
+pDtF = fDtoSQL(LocalCmCab.DtFims, [23:59:59])
+
+* Select Com Todas as Vendas do Período Selecionado Que Pagam Comissão
+lcQuery = [Select a.Datas, a.EmpDopNums, a.Valos, a.ValVars, a.Vends, a.Resps, b.CPros, b.Moedas, b.MoeVals, b.Opers, ] + ;
+				 [b.Totas, c.Mercs, c.CGrus, c.SGrus ] + ;
+			[From SigCdOpe d ] + ;
+		   [Inner Join SigMvCab a On d.Dopes = a.Dopes ] + ;
+			[Left Join SigMvItn b On a.EmpDopNums = b.EmpDopNums ] + ;
+			[Left Join SigCdPro c On b.Cpros = c.CPros ] + ;
+		   [Where a.Datas BetWeen ?pDtI And ?pDtF And ] + ;
+		   		 [a.Emps = '] + LocalCmCab.Emps + [' And ] + ;
+		   		 [a.LCancelas = 0 And ] + ;
+		   		 [a.Valos <> 0 And ] + ;
+		   		 [(b.Opers = 'S' Or (b.Opers = 'E' And d.CalcFecs = 1)) And ] + ;
+		   		 [d.Dopes In ] + ;
+		   		 [(Select o.Dopes ] + ;
+		   		    [From SigCdTom t, SigCdOpe o ] + ;
+		   		   [Where t.nChkSdfs = 1 And ] + ;
+		   		   		 [t.Codigos = o.TipoOps) ] + ;
+		   	[Order By a.EmpDopNums]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalVendas]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalVendas)])
+	Return .f.
+EndIf
+
+Select LocalVendas
+Index On EmpDopNums Tag EmpDopNums
+Update LocalVendas ;
+   Set Valos = Valos * Iif(Opers = [E], -1, 1), ;
+   	   Totas = Totas * Iif(Opers = [E], -1, 1)
+
+* Select Do EmpDopNums Das Movimentações a Serem Processadas
+Select Distinct EmpDopNums, ValVars, Opers ;
+  From LocalVendas ;
+  Into Cursor LocalEdns
+Select LocalEdns 
+Index On EmpDopNums Tag EmpDopNums
+
+Select LocalEdns 
+Scan
+	lcEdn = LocalEdns.EmpDopNums
+
+	If (LocalEdns.ValVars <> 0)
+		* Select Com o Total dos Produtos Da Movimentação Analisada
+		Select Sum(Totas) as TotProds ;
+		  From LocalVendas ;
+	     Where EmpDopNums = lcEdn ;
+		  Into Cursor LocalTotProds
+		Go Top In LocalTotProds
+		lnPro = Iif(Eof([LocalTotProds]), 0, LocalTotProds.TotProds) && Valor Total Dos Produto Dessa Movimentação
+		Use In LocalTotProds
+
+		* Ajustando O Rateio dos Descontos Entre os Produtos
+		Select LocalVendas
+		Go Top In LocalVendas
+		=Seek(lcEdn, [LocalVendas], [EmpDopNums])
+		Scan While EmpDopNums = lcEdn
+			lnPct = Iif(lnPro = 0, 0, (LocalVendas.Totas * 100) / lnPro) && Percentual Relativo Desse Produto Nessa Movimentação
+			lnTtl = (LocalEdns.ValVars * lnPct) / 100
+			Replace Totas With Totas + lnTtl In LocalVendas
+		EndScan
+	EndIf
+	
+	* Select Com o Total dos Produtos Da Movimentação Analisada
+	Select Sum(Totas) as TotProds ;
+	  From LocalVendas ;
+     Where EmpDopNums = lcEdn ;
+	  Into Cursor LocalTotProds
+	Go Top In LocalTotProds
+	lnPro = Iif(Eof([LocalTotProds]), 0, LocalTotProds.TotProds) && Valor Total Dos Produto Dessa Movimentação
+	Use In LocalTotProds
+	
+	* Select Com o Total de Formas de Pagamento Que Pagam Comissão
+	lcQuery = [Select b.FPags, b.Trocos, Sum(a.Valos * a.CotFpgs) as Valos, b.FPComiss ] + ;
+				[From SigMvPar a, SigOpFp b ] + ;
+			   [Where a.EmpDopNums = '] + lcEdn + [' And ] + ;
+			   		 [a.FPags = b.FPags And ] + ;
+			   		 [Not b.BxComis = 2 ] + ;
+			   [Group by b.FPags, b.Trocos, b.FPComiss]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalPagtos1]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalPagtos1)])
+		Return .f.
+	EndIf
+	Update LocalPagtos1 Set Valos = Valos * Iif(LocalEdns.Opers = [E], -1, 1)
+
+	Select LocalVendas
+	Go Top In LocalVendas
+	=Seek(lcEdn, [LocalVendas], [EmpDopNums])
+	lnGe1 = 0
+	lnGe2 = 0
+	Scan While EmpDopNums = lcEdn
+		lnPct = Iif(lnPro = 0, 0, (LocalVendas.Totas * 100) / lnPro) && Percentual Relativo Desse Produto Nessa Movimentação
+
+		Select LocalPagtos1
+		Go Top In LocalPagtos1
+		If Eof([LocalPagtos1])
+			lnPag = ((LocalPagtos1.Valos * Iif(LocalPagtos1.Trocos = 1, -1, 1)) * lnPct) / 100	&& Valor da Condição de Pagamento
+			
+			If Not Empty(LocalVendas.Vends) And Not Empty(LocalCmCab.PctVd1)
+				lnPg1 = (lnPag * LocalCmCab.PctVd1) / 100
+				If Empty(LocalVendas.Resps) Or Empty(LocalCmCab.PctVd2)
+					lnPg1 = lnPag
+				EndIf
+				
+				Insert Into crAnalitico (CodVens, Datas, EmpDopNums, Cpros, Mercs, CGrus, SGrus, FPags, ValVdaCom, ;
+										 ValComiss, TpComiss, PctComiss, Apagar) ;
+								 Values (LocalVendas.Vends, LocalVendas.Datas, LocalVendas.EmpDopNums, LocalVendas.CPros, ;
+								 		 LocalVendas.Mercs, LocalVendas.CGrus, LocalVendas.SGrus, [NENHUMA], lnPg1, 0, [], 0, [S])
+				lnGe1 = lnGe1 + lnPg1
+				lnGe2 = lnGe2 + crAnalitico.ValVdaCom
+			EndIf
+
+			If Not Empty(LocalVendas.Resps) And Not Empty(LocalCmCab.PctVd2)
+				lnPg1 = (lnPag * LocalCmCab.PctVd2) / 100
+				If Empty(LocalVendas.Vends) Or Empty(LocalCmCab.PctVd1)
+					lnPg1 = lnPag
+				EndIf
+
+				Insert Into crAnalitico (CodVens, Datas, EmpDopNums, Cpros, Mercs, CGrus, SGrus, FPags, ValVdaCom, ;
+										 ValComiss, TpComiss, PctComiss, Apagar) ;
+								 Values (LocalVendas.Resps, LocalVendas.Datas, LocalVendas.EmpDopNums, LocalVendas.CPros, ;
+								 		 LocalVendas.Mercs, LocalVendas.CGrus, LocalVendas.SGrus, [NENHUMA], lnPg1, 0, [], 0, [S])
+				lnGe1 = lnGe1 + lnPg1
+				lnGe2 = lnGe2 + crAnalitico.ValVdaCom
+			EndIf
+		Else
+			Select LocalPagtos1
+			Scan
+				lnPag = ((LocalPagtos1.Valos * Iif(LocalPagtos1.Trocos = 1, -1, 1)) * lnPct) / 100	&& Valor da Condição de Pagamento		 
+				lnCpg = (lnPag * LocalPagtos1.FPComiss) / 100										&& Valor da Comissão Pela Cond. de Pagto.
+			
+				If Not Empty(LocalVendas.Vends) And Not Empty(LocalCmCab.PctVd1)
+					lnPg1 = (lnPag * LocalCmCab.PctVd1) / 100
+					lnCm1 = (lnCpg * LocalCmCab.PctVd1) / 100
+					If Empty(LocalVendas.Resps) Or Empty(LocalCmCab.PctVd2)
+						lnPg1 = lnPag
+						lnCm1 = lnCpg
+					EndIf
+
+					lcTip = Iif(Empty(lnCm1), [], [PAG])
+					
+					Insert Into crAnalitico (CodVens, Datas, EmpDopNums, Cpros, Mercs, CGrus, SGrus, FPags, ValVdaCom, ;
+											 ValComiss, TpComiss, PctComiss, Apagar) ;
+									 Values (LocalVendas.Vends, LocalVendas.Datas, LocalVendas.EmpDopNums, LocalVendas.CPros, ;
+									 		 LocalVendas.Mercs, LocalVendas.CGrus, LocalVendas.SGrus, LocalPagtos1.FPags, ;
+									 		 lnPg1, lnCm1, lcTip, LocalPagtos1.FPComiss, [S])
+					lnGe1 = lnGe1 + lnPg1
+					lnGe2 = lnGe2 + crAnalitico.ValVdaCom
+				EndIf
+
+				If Not Empty(LocalVendas.Resps) And Not Empty(LocalCmCab.PctVd2)
+					lnPg1 = (lnPag * LocalCmCab.PctVd2) / 100
+					lnCm1 = (lnCpg * LocalCmCab.PctVd2) / 100
+					If Empty(LocalVendas.Vends) Or Empty(LocalCmCab.PctVd1)
+						lnPg1 = lnPag
+						lnCm1 = lnCpg
+					EndIf
+
+					lcTip = Iif(Empty(lnCm1), [], [PAG])
+
+					Insert Into crAnalitico (CodVens, Datas, EmpDopNums, Cpros, Mercs, CGrus, SGrus, Fpags, ValVdaCom, ;
+											 ValComiss, TpComiss, PctComiss, Apagar) ;
+									 Values (LocalVendas.Resps, LocalVendas.Datas, LocalVendas.EmpDopNums, LocalVendas.CPros, ;
+									 		 LocalVendas.Mercs, LocalVendas.CGrus, LocalVendas.SGrus, LocalPagtos1.FPags, ;
+									 		 lnPg1, lnCm1, lcTip, LocalPagtos1.FPComiss, [S])
+					lnGe1 = lnGe1 + lnPg1
+					lnGe2 = lnGe2 + crAnalitico.ValVdaCom
+				EndIf
+			EndScan
+		EndIf
+	EndScan
+
+	&& Checando Se Há Diferença de Arredondamento e Lançando na Última Linha
+	If (Round(lnGe1, 2) <> lnGe2)
+		lnDif = Round(lnGe1, 2) - lnGe2
+		Replace ValVdaCom With ValVdaCom + lnDif In crAnalitico
+	EndIf
+EndScan
+
+* Nesse Ponto Tenho o Valor Equivalente de Cada Produto no Campo ValVdaCom. É Esse o Valor Que Deve Servir de 
+* Base Para Calcular a Comissão Pois Já Abateu os Descontos e as Condições de Pagamento Que NÃO Pagam Comissão
+* O Campo ValComiss Está Com Comissão Calculada Com Base nas Condições de Pagamento (Pode Ser Trocado Abaixo).
+
+* Select Com Produtos da Tabela de Comissão Selecionada
+lcQuery = [Select a.Mercs, a.CGrus, a.SGrus, a.PPctFixs ] + ;
+			[From SigCmItn a ] + ;
+		   [Where a.fkChaves = '] + LocalCmCab.pkChaves + [' And ] + ;
+		   		 [a.Tipos = 'PRO']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCmPro]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCmPro)])
+	Return .f.
+EndIf
+
+* Considerando os Produtos Que Devem Ser Mantidos Por Estarem Informados No Cadastro de Comissão E Aproveitando Para
+* Calcular a Comissão caso o % Fixo Esteja Configurado (Nesse Caso Irá Ignorar os Cálculos de Condição de Pagamento.
+Select LocalCmPro
+Scan
+	Do Case
+		Case Not Empty(LocalCmPro.Mercs) And Not Empty(LocalCmPro.CGrus) And Not Empty(LocalCmPro.SGrus)
+			Update crAnalitico ;
+			   Set Apagar = [N], ;
+				   ValComiss = Iif(Empty(LocalCmPro.PPctFixs), ValComiss, (ValVdaCom * LocalCmPro.PPctFixs) / 100), ;
+				   PctComiss = Iif(Empty(LocalCmPro.PPctFixs), PctComiss, LocalCmPro.PPctFixs), ;
+				   TpComiss = Iif(Empty(LocalCmPro.PPctFixs), TpComiss, [PRO]) ;
+			 Where Mercs = LocalCmPro.Mercs And CGrus = LocalCmPro.CGrus And Not SGrus = LocalCmPro.SGrus
+
+		Case Not Empty(LocalCmPro.Mercs) And Not Empty(LocalCmPro.CGrus)
+			Update crAnalitico ;
+			   Set Apagar = [N], ;
+				   ValComiss = Iif(Empty(LocalCmPro.PPctFixs), ValComiss, (ValVdaCom * LocalCmPro.PPctFixs) / 100), ;
+				   PctComiss = Iif(Empty(LocalCmPro.PPctFixs), PctComiss, LocalCmPro.PPctFixs), ;
+				   TpComiss = Iif(Empty(LocalCmPro.PPctFixs), TpComiss, [PRO]) ;
+			 Where Mercs = LocalCmPro.Mercs And CGrus = LocalCmPro.CGrus
+			
+		Case Not Empty(LocalCmPro.Mercs)
+			Update crAnalitico ;
+			   Set Apagar = [N], ;
+				   ValComiss = Iif(Empty(LocalCmPro.PPctFixs), ValComiss, (ValVdaCom * LocalCmPro.PPctFixs) / 100), ;
+				   PctComiss = Iif(Empty(LocalCmPro.PPctFixs), PctComiss, LocalCmPro.PPctFixs), ;
+				   TpComiss = Iif(Empty(LocalCmPro.PPctFixs), TpComiss, [PRO]) ;
+			 Where Mercs = LocalCmPro.Mercs
+	EndCase
+EndScan
+
+Delete From crAnalitico Where Apagar = [S]
+
+* Calculando a Comissão por Metas Caso a Venda Não Tenha Se Encaixado Na Comissão Por Condição de Pagamento
+
+* Select Com Faixas de Vendas da Tabela de Comissão Selecionada
+lcQuery = [Select a.CodFaixas, a.FxaInis, a.FxaFims, a.PctFaixas, a.Bonus ] + ;
+			[From SigCmItn a ] + ;
+		   [Where a.fkChaves = '] + LocalCmCab.pkChaves + [' And ] + ;
+		   		 [a.Tipos = 'MET']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCmFxa]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCmFxa)])
+	Return .f.
+EndIf
+
+* Selecionando os Valores de Vendas para Cálculo das Faixas
+Select CodVens, Sum(ValVdaCom) as ValVendas ;
+  From crAnalitico ;
+ Group By CodVens ;
+ Order By CodVens ;
+  Into Cursor crVendas Readwrite
+
+Select crVendas
+Scan
+	lcVen = crVendas.CodVens
+	lnVal = crVendas.ValVendas
+	
+	Select LocalCmFxa
+	Go Top In LocalCmFxa
+	Locate For Between(lnVal, LocalCmFxa.FxaInis, LocalCmFxa.FxaFims)
+	If Not Eof([LocalCmFxa])
+		Update crAnalitico ;
+		   Set CodFaixas = LocalCmFxa.CodFaixas ;
+		 Where CodVens = lcVen
+
+		If Not Empty(LocalCmFxa.PctFaixas)
+			Update crAnalitico ;
+			   Set TpComiss = [MET], ;
+	   			   PctComiss = Iif(Empty(LocalCmFxa.PctFaixas), PctComiss, LocalCmFxa.PctFaixas), ;
+				   ValComiss = (ValVdaCom * LocalCmFxa.PctFaixas) / 100 ;
+			 Where CodVens = lcVen And ;
+			 	   Not TpComiss = [PRO]
+		EndIf
+	EndIf
+EndScan
+
+* Select Com Vendedores da Tabela de Comissão Selecionada Para Cálculo de Responsáveis e Bonus
+lcQuery = [Select a.CodVens, a.VMetas, a.SalBases, a.CodResps, a.RPctFixs ] + ;
+			[From SigCmItn a ] + ;
+		   [Where a.fkChaves = '] + LocalCmCab.pkChaves + [' And ] + ;
+		   		 [a.Tipos = 'VEN']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCmVen]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCmVen)])
+	Return .f.
+EndIf
+
+Select LocalCmVen
+Scan
+	If Not Empty(LocalCmVen.CodResps) And Not Empty(LocalCmVen.RPctFixs)
+		lnVal = 0
+		Select crVendas
+		Go Top In crVendas
+		Locate For CodVens = LocalCmVen.CodVens
+		If Not Eof([crVendas])
+			lnCmR = (crVendas.ValVendas * LocalCmVen.RPctFixs) / 100
+			
+			Insert Into crAnalitico (CodVens, Datas, EmpDopNums, Cpros, Mercs, CGrus, SGrus, FPags, ValVdaCom, ;
+									 ValComiss, TpComiss, PctComiss, Apagar) ;
+							 Values (LocalCmVen.CodResps, pDtF, [Vendedor ] + Alltrim(LocalCmVen.CodVens), [], ;
+							 		 [], [], [], [], crVendas.ValVendas, lnCmR, [REP], LocalCmVen.RPctFixs, [N])
+		EndIf
+	EndIf
+EndScan
+
+* Montando o Cursor de Impressão
+Select CodVens, Sum(ValVdaCom) as ValVdaCom, Sum(ValComiss) as ValComiss ;
+  From crAnalitico ;
+ Where TpComiss = [REP] ;
+ Group By CodVens ;
+ Order By CodVens ;
+ Into Cursor crResps
+
+Set Point To [,]
+Set Separator To [.]
+
+lcSub = []
+Select crResps
+Scan
+	lcNom = []
+	lcQuery = [Select RClis ] + ;
+				[From SigCdCli ] + ;
+			   [Where IClis = '] + crResps.CodVens + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalNomVen]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalNomVen)])
+		Return .f.
+	EndIf
+	Select LocalNomVen
+	Go Top In LocalNomVen
+	If Not Eof([LocalNomVen])
+		lcNom = Alltrim(LocalNomVen.RClis)
+	EndIf
+
+	lcSub = lcSub + ;
+			Iif(Empty(lcSub), [], [ / ]) + Alltrim(crResps.CodVens) + Iif(Empty(lcNom), [], [ (] + lcNom + [)]) + ;
+			[ - V: ] + Alltrim(Transform(crResps.ValVdaCom, [999,999,999.99])) + ;
+			[ - C: ] + Alltrim(Transform(crResps.ValComiss, [999,999,999.99]))
+EndScan
+
+Set Point To [.]
+Set Separator To [,]
+
+lcTit = [Relatório de Comissão Por Vendedores - ] + Alltrim(Proper(lcPrc))
+lcPer = [Período: ] + Dtoc(Ttod(pDtI)) + [ até ] + Dtoc(Ttod(pDtF))
+
+Insert Into crCabecalho (TotalV, Titulo, Subtitulo, Periodo) Values ([TOTAL], lcTit, lcSub, lcPer)
+
+Select CodVens, Datas, Sum(ValVdaCom) as ValVdaCom ;
+  From crAnalitico ;
+ Where Iif(Empty(lcFvd), .t., CodVens = lcFvd) ;
+ Group By CodVens, Datas ;
+ Order By CodVens, Datas ;
+  Into Cursor crSintetico
+
+Select 99 as Ordem, a.CodVens, Sum(a.ValVdaCom) as ValVdaCom, Sum(a.ValComiss) as ValComiss ;
+  From crAnalitico a, LocalCmVen b ;
+ Where a.CodVens = b.CodVens And ; 
+	   Iif(Empty(lcFvd), .t., a.CodVens = lcFvd) ;
+ Group By a.CodVens ;
+ Order By a.CodVens ;
+  Into Cursor crVends ReadWrite
+
+Select LocalCmVen
+Scan
+	If Empty(lcFvd) Or (Not Empty(lcFvd) And CodVens = lcFvd)
+		Select crVends
+		Locate For CodVens = LocalCmVen.CodVens
+		If Eof([crVends])
+			Insert Into crVends (CodVens) Values (LocalCmVen.CodVens)
+		EndIf
+	EndIf
+EndScan
+
+Select crVends
+Index On CodVens Tag CodVens
+lnCnt = 0
+Scan
+	lnCnt = lnCnt + 1
+	Replace Ordem With lnCnt In crVends
+EndScan
+
+lnDia = (Ttod(pDtF) - Ttod(pDtI)) + 1
+ldDat = Ttod(pDtI)
+For I = 1 To lnDia
+	Insert Into crImpressao (Datas) Values (Ttoc(ldDat))
+	ldDat = ldDat + 1
+Next
+Insert Into crImpressao (Datas) Values ([VENDAS    ])
+Insert Into crImpressao (Datas) Values ([COMISSÃO  ])
+Insert Into crImpressao (Datas) Values ([BONUS     ])
+Insert Into crImpressao (Datas) Values ([METAS     ])
+Insert Into crImpressao (Datas) Values ([ATINGIDO  ])
+
+Select crVends
+Scan
+	lcCol = [V] + Padl(crVends.Ordem, 2, [0])
+
+	lcNom = []
+	lcQuery = [Select RClis ] + ;
+				[From SigCdCli ] + ;
+			   [Where IClis = '] + crVends.CodVens + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalNomVen]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalNomVen)])
+		Return .f.
+	EndIf
+	Select LocalNomVen
+	Go Top In LocalNomVen
+	If Not Eof([LocalNomVen])
+		lcNom = Padr(Alltrim(LocalNomVen.RClis), 10)
+	EndIf
+
+	Replace &lcCol. With Alltrim(crVends.CodVens) + Chr(13) + lcNom In crCabecalho
+	
+	lnVvd = crVends.ValVdaCom
+	lnVmt = 0
+	
+	Select crImpressao
+	Go Top In crImpressao
+	Locate For Datas = [VENDAS    ]
+	If Not Eof([crImpressao])
+		Replace &lcCol. With lnVvd In crImpressao
+	EndIf
+
+	Select crImpressao
+	Go Top In crImpressao
+	Locate For Datas = [COMISSÃO  ]
+	If Not Eof([crImpressao])
+		Replace &lcCol. With crVends.ValComiss In crImpressao
+		Select LocalCmVen
+		Go Top In LocalCmVen
+		If Not Eof([LocalCmVen]) And (LocalCmVen.SalBases > 0) And (crVends.ValComiss < LocalCmVen.SalBases)
+			Replace &lcCol. With crVends.ValComiss In crImpressao
+		EndIf
+	EndIf
+
+	llAti = .f.
+	Select crImpressao
+	Go Top In crImpressao
+	Locate For Datas = [METAS     ]
+	If Not Eof([crImpressao])
+		Select LocalCmVen
+		Go Top In LocalCmVen
+		Locate For CodVens = crVends.CodVens
+		If Not Eof([LocalCmVen])
+			lnVmt = LocalCmVen.VMetas
+			Replace &lcCol. With lnVmt In crImpressao
+			llAti = (lnVvd >= lnVmt)
+		EndIf
+	EndIf
+
+	If llAti && Se Atingiu a Meta Calcula o Bonus
+		Select crImpressao
+		Go Top In crImpressao
+		Locate For Datas = [BONUS     ]
+		If Not Eof([crImpressao])
+			Select LocalCmFxa
+			Go Top In LocalCmFxa
+			Locate For Between(lnVvd, LocalCmFxa.FxaInis, LocalCmFxa.FxaFims)
+			If Not Eof([LocalCmFxa]) And (crVends.ValComiss > 0) And (LocalCmFxa.Bonus > 0)
+				Replace &lcCol. With (crVends.ValComiss * LocalCmFxa.Bonus) / 100 In crImpressao
+			EndIf
+		EndIf
+	EndIf
+	
+	Select crImpressao
+	Go Top In crImpressao
+	Locate For Datas = [ATINGIDO  ]
+	If Not Eof([crImpressao])
+		lnAti = Iif(lnVmt = 0, 0, Iif(Empty(lnVmt), 100, (lnVvd * 100) / lnVmt))
+		Replace &lcCol. With lnAti In crImpressao
+	EndIf
+
+	Select crSintetico
+	Locate For CodVens = crVends.CodVens
+	Scan While CodVens = crVends.CodVens
+		ldDat = crSintetico.Datas
+		Select crImpressao
+		Go Top In crImpressao
+		Locate For Datas = Padr(Dtoc(ldDat), 10)
+		If Not Eof([crImpressao])
+			Replace &lcCol. With &lcCol. + crSintetico.ValVdaCom In crImpressao
+		EndIf
+	EndScan
+EndScan
+
+Update crImpressao ;
+   Set TotalV = V01 + V02 + V03 + V04 + V05 + V06 + V07 + V08 + V09 + V10 + V11 + V12 + V13 ;
+ Where Not Datas = [ATINGIDO  ]
+
+* Acertando a Os Totais da Coluna de Total
+lnVmt = LocalCmCab.MetaEmps
+lnVvd = 0
+Select crImpressao
+Go Top In crImpressao
+Locate For Datas = [VENDAS    ]
+If Not Eof([crImpressao])
+	lnVvd = crImpressao.TotalV
+EndIf
+
+Select crImpressao
+Go Top In crImpressao
+Locate For Datas = [METAS     ]
+If Not Eof([crImpressao])
+	Replace TotalV With lnVmt In crImpressao
+EndIf
+
+Select crImpressao
+Go Top In crImpressao
+Locate For Datas = [ATINGIDO  ]
+If Not Eof([crImpressao])
+	lnAti = Iif(lnVmt = 0, 0, Iif(Empty(lnVmt), 100, (lnVvd * 100) / lnVmt))
+	Replace TotalV With lnAti In crImpressao
+EndIf
+
+Select crCabecalho
+Go Top In crCabecalho
+
+Select crImpressao
+Go Top In crImpressao
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigReCmm Preview NoConsole
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMM.getCods
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista, llOk
+
+If Not Empty(This.Value)
+
+	*** mena - 26/10/2016 - mostra somente os mapas permitidos conforme a empresa do usuário ***
+	lcQuery = [select * from sigcmCab]
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalMap]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalMap)])
+		Return .f.
+	ENDIF
+	
+	SELECT LocalMap
+	SCAN
+		llOk=fAcessoEmpresa(Usuar,'C',LocalMap.emps,'','',ThisForm.PodataMgr,.t.)
+		IF !llOk
+			DELETE 
+		ENDIF
+	ENDSCAN
+
+*!*		loLista = CreateObject([fwListaRemota], ThisForm.poDataMgr.pnIdConn, [SigCmCab], ;
+*!*							   [crListaRemota], [Cods], This.Value, [Seleção], .t.)
+	loLista = CreateObject([fwbuscaint], [LocalMap], [Cods], this.value, [Seleção], .t.)
+
+	loLista.mAddColuna([Cods], [], [Código do Relatório])
+	loLista.mAddColuna([Emps], [], [Emp])
+	loLista.mAddColuna([DtInis], [99/99/9999], [Dt.Inicial])
+	loLista.mAddColuna([DtFims], [99/99/9999], [Dt.Final])
+	loLista.Show()
+	
+	This.Value = Iif(Lastkey()=27, [], LocalMap.Cods)
+EndIf
+This.Refresh
+
+If Empty(This.Value)
+	ThisForm.getCodVens.Value = []
+	ThisForm.getCodVens.Refresh 
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGRECMM.getCodVens
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	lcQuery = [Select b.CodVens, c.RClis, b.VMetas, b.CodResps ] + ;
+				[From SigCmCab a, SigCmItn b, SigCdCli c ] + ;
+			   [Where a.Cods = '] + Padr(ThisForm.getCods.Value, 40) + [' And ] + ;
+			   		 [a.pkChaves = b.fkChaves And ] + ;
+			   		 [b.Tipos = 'VEN' And ] + ;
+			   		 [b.CodVens = c.IClis]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalFilVen]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalFilVen)])
+		Return .f.
+	EndIf
+	Select LocalFilVen
+	Go Top In LocalFilVen
+	Locate For CodVens = Padr(This.Value, 10)
+	If Eof([LocalFilVen])
+		loLista = CreateObject([fwbuscaint], [LocalFilVen], [CodVens], This.Value)
+		loLista.mAddColuna([CodVens],  [], 			   [Vendedor], .t.)
+		loLista.mAddColuna([RClis],    [], 			   [Nome], .t.)
+		loLista.mAddColuna([VMetas],   [99999,999.99], [Meta], .t.)
+		loLista.mAddColuna([CodResps], [], 			   [Responsável], .t.)
+		loLista.Show()
+	EndIf
+	This.Value = Iif(LastKey()=27, [], LocalFilVen.CodVens)
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Not Empty(ThisForm.getCods.Value)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGRECMM
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

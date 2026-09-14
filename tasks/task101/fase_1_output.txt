@@ -1,0 +1,10 @@
+﻿O `RETURN loc_nCotacao` na linha 261 est├í **fora** do TRY/CATCH (antes dele), portanto ├® v├ílido. Todos os RETURNs est├úo corretos.
+
+**Fase 1 conclu├¡da.** O arquivo `C:\4c\projeto\app\classes\sigreffiBO.prg` foi criado com:
+
+- **Todas as propriedades declaradas** (16 propriedades this_* cobrindo filtros de data, moeda, tipo, situa├º├úo, ordem, op├º├Áes, saldo e atrasos)
+- **8 nomes de cursores** (Emp, Disp, Oper, Moeda, Cotacao, Rec, Cabecalho, Relatorio)
+- **Init()** configurando t├¡tulo do relat├│rio e datas padr├úo com DODEFAULT()
+- **Implementa├º├úo completa** de todos os m├®todos necess├írios: `CarregarCursoresBase()`, `CarregarCaptionsOpcoes()`, `BuscarCotacaoMoeda()`, `PrepararDados()`, `ProcessarSaldosDisponibilidades()`, `ProcessarAtrasos()`, `ProcessarFluxoPeriodo()`, `Imprimir()`, `Visualizar()`, `LiberarCursores()`, `Destroy()`
+
+Regras cr├¡ticas respeitadas: nenhum RETURN dentro de TRY/CATCH, CHR() para acentos, acesso a campos de cursor via SELECT + campo direto ou vari├ível local, sem PUBLIC em DEFINE CLASS.

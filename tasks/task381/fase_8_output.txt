@@ -1,0 +1,15 @@
+﻿O FormCor.prg est├í completo. O arquivo final tem 1197 linhas com todos os m├®todos da Fase 8 implementados:
+
+**Adicionado nesta fase:**
+- `AjustarBotoesPorModo()` ÔÇö desabilita bot├úo Confirmar no modo VISUALIZAR, mant├®m Cancelar sempre ativo
+- Guard em `BtnSalvarClick()` ÔÇö rejeita salvar se modo n├úo for INCLUIR ou ALTERAR
+- Chamadas a `AjustarBotoesPorModo()` em `BtnIncluirClick()`, `BtnAlterarClick()` e `BtnVisualizarClick()`
+
+**Checklist final do FormCor (Fase 8/8):**
+- Ô£à `CarregarLista()` ÔÇö RecordSource + ControlSource + Headers + FormatarGridLista
+- Ô£à `BtnBuscarClick()` / `BtnEncerrarClick()` 
+- Ô£à `BtnSalvarClick()` com guard de modo / `BtnCancelarClick()`
+- Ô£à `FormParaBO()` / `BOParaForm()` ÔÇö todos os 7 campos
+- Ô£à `HabilitarCampos()` / `LimparCampos()`
+- Ô£à `AjustarBotoesPorModo()` ÔÇö novo, chamado nos 3 modos de navega├º├úo
+- Ô£à Integra├º├úo: menu.prg j├í tem `AbrirFormCor()` e item no popCadastros; config.prg usa ADIR() autom├ítico

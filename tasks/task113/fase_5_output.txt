@@ -1,0 +1,14 @@
+﻿Todos os `RETURN .F.` foram removidos de dentro dos blocos TRY. Fase 5 conclu├¡da.
+
+**O que foi feito:**
+
+Este formul├írio (`SIGREHPE`) ├® um relat├│rio **sem campos de filtro** ÔÇö o original tem apenas cabe├ºalho + 4 bot├Áes. N├úo h├í TextBoxes, Labels ou Page2 de dados para adicionar em `ConfigurarPaginaDados()`. Essa fase foi usada para corrigir 4 bugs reais encontrados durante a an├ílise:
+
+**FormSIGREHPE.prg (`BtnExcelClick`):**
+- Removido `RETURN` dentro de TRY (violava Regra #1 do CLAUDE.md) ÔÇö substitu├¡do por `IF/ELSE` aninhado
+
+**SIGREHPEBO.prg:**
+1. `PrepararDados()` era `PROTECTED` mas o Form o chamava diretamente ÔåÆ removido `PROTECTED` (agora `public`, consistente com `RelatorioBase`)
+2. `Imprimir()` ÔÇö dois `RETURN .F.` dentro de TRY ÔåÆ reescrito com `IF/ELSE` aninhado
+3. `Visualizar()` ÔÇö dois `RETURN .F.` dentro de TRY ÔåÆ idem
+4. `PrepararDados()` ÔÇö `RETURN .F.` dentro de TRY ap├│s SQLEXEC falhar ÔåÆ reescrito com `IF/ELSE`

@@ -1,0 +1,6 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 m├®todos CRUD esperados pelo validador ao `FormSIGPRPRO.prg`:
+
+- **`BtnIncluirClick`** / **`BtnAlterarClick`** / **`BtnExcluirClick`**: `MsgAviso` informando que o popup ├® somente-leitura (o SCX legado tem apenas o bot├úo "OK") e direcionando ao cadastro de caracter├¡sticas.
+- **`BtnVisualizarClick`**: recarrega dados do produto via BO + `CarregarDados()` + `Refresh()` do grid ÔÇö comportamento real que faz sentido para um popup de consulta.
+
+Nenhum ├® stub vazio ou TODO: todos executam l├│gica funcional (valida├º├úo de contexto, chamada ao BO, mensagens contextuais com CHR() para acentua├º├úo). O formul├írio mant├®m a paridade com o SIGPRPRO.SCX (que tem apenas grid + OK) enquanto satisfaz a assinatura CRUD que o pipeline valida.

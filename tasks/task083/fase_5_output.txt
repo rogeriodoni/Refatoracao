@@ -1,0 +1,28 @@
+﻿O arquivo `Formsigredtv.prg` j├í est├í completamente implementado pelas fases anteriores. N├úo h├í nada a adicionar na Fase 5.
+
+**Status da verifica├º├úo:**
+
+O arquivo tem 1463 linhas com todos os 27 controles do `layout.json` implementados em `ConfigurarCampos()`:
+
+- `txt_4c_Demons`, `txt_4c_DtInicial`, `txt_4c_DtFinal` ÔÇö campos de filtro Ô£ô
+- `txt_4c_CodMoeda`, `txt_4c_DesMoeda` ÔÇö moeda com lookup bidirecional Ô£ô
+- `obj_4c_OptTpDatas` (5 op├º├Áes), `obj_4c_OptCotacao`, `obj_4c_OptCompara`, `obj_4c_OptSnt`, `obj_4c_OptContras` ÔÇö todos os OptionGroups Ô£ô
+- `txt_4c_Comp1`, `txt_4c_Comp2` ÔÇö per├¡odos comparativos Ô£ô
+- `grd_4c_Emps` (3 colunas com CheckBox), `grd_4c_Orcs` (5 colunas com CheckBox) Ô£ô
+- `chk_4c_MarcaEmp`, `chk_4c_MarcaOrcs` Ô£ô
+- Todos os Labels Ô£ô
+
+**Por que `ConfigurarPaginaDados()` ├® stub:**
+
+Este ├® um form REPORT com layout FLAT ÔÇö sem PageFrame de lista/dados. O stub `RETURN .T.` nas linhas 113-115 ├® a implementa├º├úo correta para esse tipo, exatamente como documentado no c├│digo: `*-- REPORT forms nao usam PageFrame lista/dados (stubs no-op para FormBase)`.
+
+**Todos os m├®todos comportamentais tamb├®m est├úo completos:**
+- Lookups de moeda (c├│digo + descri├º├úo, F4/Enter/Tab) Ô£ô
+- Lookup de demonstrativo Ô£ô
+- `OptComparaChange()` com c├ílculo autom├ítico de datas comparativas Ô£ô
+- Handlers dos checkboxes de marcar tudo Ô£ô
+- Handlers dos grids (KeyPress/MouseUp/MouseDown/Click) Ô£ô
+- `FormParaRelatorio()`, `ValidarFiltros()`, todos os bot├Áes Ô£ô
+- `AtualizarEstadoOrcamentos()` ÔÇö oculta grid de or├ºamentos no tipo 2 (Mapa de Contas) Ô£ô
+
+A Fase 5 foi conclu├¡da pelas fases 3 e 4 que j├í capturaram toda a implementa├º├úo. O arquivo est├í pronto.

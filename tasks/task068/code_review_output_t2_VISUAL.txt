@@ -1,0 +1,25 @@
+﻿Ap├│s verificar o arquivo atual, aqui est├í o que encontrei:
+
+## Resultado da An├ílise
+
+**6 de 7 problemas j├í est├úo corretos no c├│digo atual:**
+
+| Problema | Controle | Valor Reportado | Valor Real no Arquivo | Status |
+|----------|----------|-----------------|----------------------|--------|
+| 1 | `obj_4c_GetTipoDat` Top | 0 | **104** (linha 658) | Ô£ô J├í correto |
+| 2 | `obj_4c_GetTipoDat` Left | 0 | **237** (linha 659) | Ô£ô J├í correto |
+| 4 | `obj_4c_Opt_nr_opcao` Top | 0 | **189** (linha 858) | Ô£ô J├í correto |
+| 5 | `obj_4c_Opt_nr_opcao` Left | 0 | **428** (linha 859) | Ô£ô J├í correto |
+| 6 | `obj_4c_Opt_Bons` Top | 0 | **160** (linha 994) | Ô£ô J├í correto |
+| 7 | `obj_4c_Opt_Bons` Left | 0 | **378** (linha 995) | Ô£ô J├í correto |
+
+**Problema 3 ÔÇö falso positivo do validador:**
+
+O validador mapeou `lbl_periodo` (original, Left=188) ÔåÆ `lbl_4c_Lbl_periodo_a` (Left=323), mas isso est├í **errado**. Existem dois labels distintos:
+
+- `lbl_4c_Lbl_periodo` (linha 760): Left=**188**, Caption="Per├¡odo :" ÔåÆ **esta ├® a migra├º├úo correta de `lbl_periodo`**
+- `lbl_4c_Lbl_periodo_a` (linha 787): Left=323, Caption=CHR(225) ÔåÆ conector "├í" entre os dois campos de data (`txt_4c__dt_inicial` termina em 317, `txt_4c__dt_final` come├ºa em 336)
+
+Mover `lbl_4c_Lbl_periodo_a` para Left=188 quebraria o layout (colis├úo com `lbl_4c_Lbl_periodo`).
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö o arquivo est├í correto. O problema list foi gerado de uma vers├úo anterior do c├│digo onde os OptionGroups tinham Top/Left=0 (j├í corrigido), e o item 3 ├® um falso positivo por mapeamento incorreto de nome pelo validador.

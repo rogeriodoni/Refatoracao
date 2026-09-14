@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto. Resumo das mudan├ºas da Fase 5:
+
+**Corre├º├Áes cr├¡ticas:**
+- `Init()`: substitu├¡do `THIS.DataSessionId = X` (read-only, n├úo funciona) por `SET DataSession TO par_oFormPai.DataSessionId` ÔÇö sem isso o grid n├úo encontraria xNensiR na session do form pai
+- Grid `RowHeight`: corrigido de 16 para 17 (valor exato do original)
+
+**Larguras de coluna corrigidas para bater com o original:**
+| Coluna | Antes | Depois |
+|--------|-------|--------|
+| Column1 (O.S.) | 50 | 75 |
+| Column2 (Opera├º├úo) | 120 | 185 |
+| Column3 (Data) | 70 | 75 |
+| Column4 (Grupo/Conta) | 100 | 135 |
+| Column5 (Retrabalhos) | 200 | 175 |
+
+**Propriedades adicionadas ao grid:** `Movable=.F.`, `Resizable=.F.`, `ReadOnly` por coluna, `Format/InputMask` na Column1, `HeaderHeight=17`, `SetAll Margin/ForeColor/BackColor` para c├®lulas Text
+
+**`ConfigurarPaginaDados()` adicionado** (chamado por `ConfigurarPaginaLista()`): configura `lbl_4c_Label3`, `txt_4c_Rclis` (com `ControlSource = "xNensir.rclis"`) e `shp_4c_Shape1` (BackStyle=0, BorderStyle=0, BorderColor=RGB(136,189,188))
+
+**`txt_4c_Codigo`** em `ConfigurarAreaOperacao()`: adicionados `Format="L"` e `InputMask="9999999999"` (GetCodigo do original)

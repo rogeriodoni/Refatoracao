@@ -1,0 +1,5 @@
+﻿As corre├º├Áes est├úo corretas. Resumo do que foi feito em `sigpdmp7BO.prg`:
+
+**Fix 1 ÔÇö `CarregarPorCodigo` (linha 214):** Removido `OR empdnps = ...` inventado. O lookup agora usa apenas a PK `cidchaves`, que corresponde ao `_CHAVENENS` do c├│digo original.
+
+**Fix 2 ÔÇö `Buscar` (linhas 244-250 originais):** Removido o bloco `IF !EMPTY(par_cFiltro)` inteiro, que adicionava condi├º├Áes `empdnps LIKE`, `dopps LIKE` e `usuars LIKE` inexistentes no original. O original usava `WHERE 0=1` como cursor placeholder ÔÇö sem filtros din├ómicos por esses campos.

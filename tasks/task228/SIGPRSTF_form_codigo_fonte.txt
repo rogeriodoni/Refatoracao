@@ -1,0 +1,372 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRSTF.SCX
+* Data/Hora: 03/07/2026 18:15:30
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SigTfSup
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SigTfSup
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SigTfSup.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SigTfSup.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: SAIDA
+  Parent: SigTfSup
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Shape1
+  Parent: SigTfSup
+  Class: shape
+  BaseClass: shape
+
+Objeto: GetSenha
+  Parent: SigTfSup
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label3
+  Parent: SigTfSup
+  Class: label
+  BaseClass: label
+
+Objeto: SENHA
+  Parent: SigTfSup
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Container1
+  Parent: SigTfSup
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SigTfSup.Container1
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup
+------------------------------------------------------------
+  Height = 200
+  Width = 400
+  DoCreate = .T.
+  AutoCenter = .T.
+  BorderStyle = 2
+  Caption = "Senha de Risco"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SigTfSup"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup.SAIDA
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  ControlSource = "OPSENHA"
+  Height = 85
+  Left = 320
+  Top = -2
+  Width = 85
+  TabIndex = 4
+  BackColor = 255,255,255
+  Name = "SAIDA"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .F.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "\<Cancelar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "CANCELA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup.Shape1
+------------------------------------------------------------
+  Top = 90
+  Left = 76
+  Height = 42
+  Width = 247
+  SpecialEffect = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup.GetSenha
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Enabled = .F.
+  Height = 23
+  InputMask = ""
+  Left = 214
+  TabIndex = 2
+  Top = 99
+  Width = 100
+  ForeColor = 0,0,0
+  Name = "GetSenha"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Senha do Supervisor :"
+  Height = 15
+  Left = 87
+  Top = 104
+  Width = 108
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup.SENHA
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 1
+  Format = ""
+  Height = 23
+  Left = 214
+  MaxLength = 0
+  TabIndex = 1
+  Top = 99
+  Width = 100
+  PasswordChar = "*"
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "SENHA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup.Container1
+------------------------------------------------------------
+  Top = 137
+  Left = 114
+  Width = 171
+  Height = 56
+  SpecialEffect = 0
+  Visible = .T.
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SigTfSup.Container1.Label1
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .T.
+  FontName = "Trebuchet MS"
+  FontSize = 10
+  Alignment = 2
+  Caption = "Insira ou Passe o Cartao"
+  Height = 30
+  Left = 7
+  Top = 16
+  Width = 157
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 1, 8, 5, 16, 13, 35, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SigTfSup
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+RETURN (lcSenha)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+PUBLIC lcSenha
+
+ThisForm.Container1.Label1.Caption="Digite a Senha"+CHR(13)+"do Supervisor"
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SigTfSup.SAIDA
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE CANCELA.Click
+------------------------------------------------------------
+PROCEDURE CANCELA.Click
+ThisForm.Senha.Value=""
+RELEASE Windows
+ENDPROC
+
+
+================================================================================
+* OBJETO: SigTfSup.SENHA
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+IF nKeyCode = 13
+	lcSenha=ThisForm.SeNHA.Value
+	RELEASE Windows
+eNDIF
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SigTfSup
+RESERVED3 (ClassInfo): podatamgr
+*montaretorno 
+*retornofalha 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 4
+================================================================================

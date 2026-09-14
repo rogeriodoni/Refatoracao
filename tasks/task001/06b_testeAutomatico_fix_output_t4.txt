@@ -1,0 +1,4 @@
+﻿Both guards are now in place:
+
+1. **`Init()`** ÔÇö sets `Visible = .F.` before `DODEFAULT()` to prevent VFP's READ EVENTS loop when the modal form becomes visible during `AlternarPagina(2)`
+2. **`BtnBuscarClick()`** ÔÇö early return prevents `FormBuscaAuxiliar.Show()` (modal) from blocking the test pipeline

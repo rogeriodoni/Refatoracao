@@ -1,0 +1,12 @@
+﻿Estrutura correta. Fase 3 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\operacionais\FormFpN.prg` criado com:
+
+- **DEFINE CLASS FormFpN AS FormBase** ÔÇö 800├ù400, `DataSession=2`, sem barra de t├¡tulo/controles (popup modal fiel ao original)
+- **Init()** ÔÇö `LPARAMETERS par_oParentForm, par_cDopes`; desabilita form pai; armazena `this_oParentForm` e `this_cDopes`; termina com `DODEFAULT()`
+- **InicializarForm()** ÔÇö cria FpNBO, configura cabe├ºalho + bot├Áes + PageFrame; chama `CarregarDados()` (guardado por `gb_4c_ValidandoUI`)
+- **ConfigurarCabecalho()** ÔÇö `cnt_4c_Cabecalho` 800├ù80 cinza com `lbl_4c_Sombra` e `lbl_4c_Titulo` (caption din├ómico com `this_cDopes`)
+- **ConfigurarBotoes()** ÔÇö 4 bot├Áes standalone sobrepostos ao header: `cmd_4c_Inserir(500,4)`, `cmd_4c_Excluir(575,4)`, `cmd_4c_Confirmar(650,4)`, `cmd_4c_Cancelar(725,4)` ÔÇö posi├º├Áes id├¬nticas ao original
+- **ConfigurarPageFrame()** ÔÇö `pgf_4c_Principal` 1 p├ígina, top=80, height=320, `new_background.jpg`
+- **ConfigurarPaginaLista()** ÔÇö placeholder vazio (grid vem na Fase 4)
+- **CarregarDados()** ÔÇö delega para `FpNBO.CarregarRegistros(this_cDopes)`
+- **TornarControlesVisiveis()** ÔÇö recurs├úo por Controls e Pages de PageFrames
+- **Destroy()** ÔÇö reabilita form pai, limpa refer├¬ncias, chama `DODEFAULT()`

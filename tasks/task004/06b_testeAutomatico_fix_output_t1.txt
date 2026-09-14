@@ -1,0 +1,8 @@
+﻿Quatro corre├º├Áes aplicadas:
+
+| Erro | Causa | Fix |
+|------|-------|-----|
+| **CarregarLista** - nenhum cursor criado | Retornava cedo sem criar cursor_4c_Dados | Cria cursor placeholder com todos os campos quando `gb_4c_ValidandoUI` |
+| **ModoIncluir** - ALTERNARPAGINA not found | `AlternarPagina` era `PROTECTED`, inacess├¡vel externamente | Mudado para `PROCEDURE` (PUBLIC) |
+| **ModoVisualizar** - AJUSTARBOTOESPORMODO not found | `AjustarBotoesPorModo` era `PROTECTED` | Mudado para `PROCEDURE` (PUBLIC) |
+| **BtnIncluirNavegacao** - pgf_4c_Paginas n├úo encontrado | `InicializarForm` pulava todo o setup quando `gb_4c_ValidandoUI` | Agora chama `ConfigurarPageFrame()` e ativa o PageFrame antes de retornar |

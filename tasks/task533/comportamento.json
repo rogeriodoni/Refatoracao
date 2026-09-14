@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDTCL",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "Local laCampos(2,2)\n\nm.laCampos(1,1) = 'nivels'\nm.laCampos(1,2) = thisform.pagina.dados.get_nivel.value\nm.laCampos(2,1) = 'classes'\nm.laCampos(2,2) = thisform.pagina.dados.get_classe.value\nThisForm.poDataMgr.LocateCursor('crSigCdCss',@m.laCampos)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "get_nivel,get_classe",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTCL",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdCss','classes','crSigCdCss','classes',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('classes','','','Classe',100,.t.)\n\t\t.pfSqlTabela(1).pColuna('descrs','','','Descrição',319,.t.)\n\t\t.pfSqlTabela(1).pColuna('nivels','','','Nível',83,.t.)\n\t\t.AddCursor('SigCdGcr','codigos','crSigCdGcr','','')\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTCL",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "LPARAMETERS opcao\nselect CrSigCdCss\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\nif thisform.pcEscolha='INSERIR' or thisform.pcEscolha='PROCURAR'\n\tthisform.pagina.dados.get_nivel.value = 1\n\tthisform.pagina.dados.get_nivel.setfocus\nendif\n\nif thisform.pcEscolha='ALTERAR'\t\n\tthisform.pagina.dados.get_descr.setfocus\nendif\nif thisform.pcEscolha='CONSULTAR' or ;\n\tthisform.pcEscolha='EXCLUIR'\t\n\tthisform.pagina.dados.grupo_salva.salva.setfocus\nEndIf\n\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_nivel,get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTCL",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "if thisform.pcEscolha='INSERIR'\n\tif empty(thisform.pagina.dados.get_nivel.value)\n\t\tmessagebox('Nível Inválido !!',0+48,'')\n\t\tthisform.pagina.dados.get_nivel.setfocus\n\t\treturn\n\tendif\n\tif  .not.len(strtran(thisform.pagina.dados.get_classe.value,' ',''))==val(substr('124',thisform.pagina.dados.get_nivel.value,1))\n\t\tmessagebox('Classe Inválida !!',0+48,'')\n\t\tthisform.pagina.dados.get_classe.setfocus\n\t\treturn\n\tendif\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdCss','classes',ThisForm.Pagina.Dados.Get_cla... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister,Sqlexecute",
+        "controlesReferenciados": "get_nivel,get_classe,ChkRegister('SigCdCss'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTCL",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "DoDefault()\nThisForm.Refresh\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTCL.Pagina.Dados.Get_nivel",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "if not inList(thisform.pcEscolha,'INSERIR','PROCURAR')\n\treturn(.f.)\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTCL.Pagina.Dados.Get_nivel",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If not Inlist(this.value,1,2,3)\n\tmessagebox('Nível Inválido !!',0+48,'')\n\treturn 0\nEndif\n\nThis.Parent.optGreps.Value = Iif(This.Value==1,This.Parent.optGreps.Value,1)\nThis.Parent.optGreps.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optGreps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTCL.Pagina.Dados.Get_classe",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "if not inList(thisform.pcEscolha,'INSERIR','PROCURAR')\n\treturn(.f.)\nElse\n\tIf empty(thisform.pagina.dados.get_nivel.value)\n\t\treturn(.f.)\n\tEndif\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_nivel",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTCL.Pagina.Dados.Get_classe",
+      "evento": "GotFocus",
+      "linhas": 26,
+      "codigoOriginal": "* MONTAGEM DE MÁSCARA DO CAMPO\n\nMaxDig = 00\n\nDo Case\n\tCase Thisform.pagina.dados.get_nivel.value=1\n         Thisform.pagina.dados.get_classe.InputMask='9'\n         Maxdig = 1\n\tCase Thisform.pagina.dados.get_nivel.value=2\n\t     Thisform.pagina.dados.get_classe.InputMask='99'\n\t     Maxdig = 2\n\tCase Thisform.pagina.dados.get_nivel.value=3\n\t     Thisform.pagina.dados.get_classe.InputMask='9999'\n\t\t Maxdig = 4\nEndCase\n\n* SÓ LIMPA O CAMPO, CASO DIMINUI O TAMANHO DE DÍGITOS POSSÍVEIS\n\nIf Len(Alltrim(thi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_nivel,get_classe",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

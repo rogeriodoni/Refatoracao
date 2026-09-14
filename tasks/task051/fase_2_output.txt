@@ -1,0 +1,22 @@
+﻿Fase 2 conclu├¡da. O `sigrechpBO.prg` foi completado com todos os m├®todos necess├írios:
+
+**M├®todos adicionados:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `ObterMensagemErro()` | PUBLIC | Retorna `this_cMensagemErro` para o Form exibir |
+| `CarregarParametros()` | PUBLIC | Carrega captions de SigCdPac (Sim/N├úo/Ambos para opt_nr_opcao) |
+| `CarregarOperacoes()` | PUBLIC | Cria `cursor_4c_Operacoes` a partir de SigCdOpt (tipos DB/TR) para popular o grid |
+| `PrepararDados()` | PROTECTED | Constr├│i WHERE din├ómico, SQLEXEC em SigCqChm+SigChe, SELECT VFP local com opera├º├Áes selecionadas ÔåÆ CsRelatorio |
+| `BuscarClientes()` | PROTECTED | Row-by-row SQLEXEC em SigCdCli para preencher rClis (sem FollowUp) |
+| `ProcessarComFollowUp()` | PROTECTED | Cria CsRelatorio completo buscando Hists (SigCheH) e rClis (SigCdCli) por registro |
+| `MontarCabecalho()` | PROTECTED | Cria CsCabecalho com NomeEmpresa (SigCdEmp), T├¡tulo, Per├¡odo, Emissor, Destino |
+| `LimparCursores()` | PUBLIC | Fecha CsRelatorio, CsCabecalho e cursores tempor├írios |
+| `Imprimir()` | PUBLIC | PrepararDados + MontarCabecalho + REPORT FORM TO PRINTER |
+| `Visualizar()` | PUBLIC | PrepararDados + MontarCabecalho + REPORT FORM PREVIEW |
+
+**Decis├Áes de design:**
+- Cursores FRX usam nomes originais (`CsRelatorio`, `CsCabecalho`) que o arquivo `.frx` referencia
+- ORDER BY din├ómico implementado com 3 SELECTs separados (VFP n├úo permite express├úo em `ORDER BY N`)
+- `ALLTRIM()` nos dois lados do join `umovs = Operacaos` para evitar problemas de padding CHAR
+- `COUNT TO var FOR Flag` usa `SELECT cursor` antes (regra proibida: `COUNT ... IN alias`)

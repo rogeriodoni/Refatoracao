@@ -1,0 +1,877 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDACE.SCX
+* Data/Hora: 21/07/2026 09:12:31
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDEMP
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Empresa
+  Parent: SIGCDEMP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DEmpresa
+  Parent: SIGCDEMP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Usuario
+  Parent: SIGCDEMP.Pagina.Dados
+  Class: listbox
+  BaseClass: listbox
+
+Objeto: Say22
+  Parent: SIGCDEMP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Usuemp
+  Parent: SIGCDEMP.Pagina.Dados
+  Class: listbox
+  BaseClass: listbox
+
+Objeto: cmdAdd
+  Parent: SIGCDEMP.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdAddAll
+  Parent: SIGCDEMP.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdRemove
+  Parent: SIGCDEMP.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdRemoveAll
+  Parent: SIGCDEMP.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 109
+  Left = 43
+  Width = 569
+  Height = 109
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEMP
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Acesso de Empresas"
+  candropicon = H_Point.Cur
+  nodopicon = NoDrop02.Cur
+  Name = "SIGCDEMP"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.ZOrderSet = 1
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.ZOrderSet = 2
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.ZOrderSet = 3
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.ZOrderSet = 4
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.ZOrderSet = 0
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 10
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEMP.Pagina.Dados.Get_Empresa
+------------------------------------------------------------
+  ControlSource = "crSigCdEmp.cemps"
+  Left = 231
+  MaxLength = 3
+  TabIndex = 9
+  Top = 49
+  Width = 31
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  plprocurar = .T.
+  Name = "Get_Empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEMP.Pagina.Dados.Get_DEmpresa
+------------------------------------------------------------
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 264
+  MaxLength = 40
+  TabIndex = 10
+  Top = 49
+  Width = 290
+  plprocurar = .T.
+  Name = "Get_DEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEMP.Pagina.Dados.Usuario
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 429
+  Left = 231
+  MultiSelect = .T.
+  TabIndex = 13
+  Top = 96
+  Width = 135
+  Name = "Usuario"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEMP.Pagina.Dados.Say22
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa"
+  Left = 231
+  Top = 30
+  TabIndex = 32
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say22"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEMP.Pagina.Dados.Usuemp
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 429
+  Left = 418
+  MultiSelect = .T.
+  TabIndex = 18
+  Top = 96
+  Width = 135
+  Name = "Usuemp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEMP.Pagina.Dados.cmdAdd
+------------------------------------------------------------
+  Top = 203
+  Left = 370
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Small Fonts"
+  FontSize = 7
+  WordWrap = .T.
+  Picture = ..\vbmp\wznext.bmp
+  Caption = ""
+  TabIndex = 5
+  ToolTipText = "Selecionar Um Item"
+  ForeColor = 0,0,128
+  BackColor = 255,255,255
+  ZOrderSet = 10
+  Name = "cmdAdd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEMP.Pagina.Dados.cmdAddAll
+------------------------------------------------------------
+  Top = 293
+  Left = 370
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Small Fonts"
+  FontSize = 7
+  WordWrap = .T.
+  Picture = ..\vbmp\wzend.bmp
+  Caption = ""
+  TabIndex = 6
+  ToolTipText = "Selecionar Todos os Itens"
+  ForeColor = 0,0,128
+  BackColor = 255,255,255
+  ZOrderSet = 10
+  Name = "cmdAddAll"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEMP.Pagina.Dados.cmdRemove
+------------------------------------------------------------
+  Top = 248
+  Left = 370
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Small Fonts"
+  FontSize = 7
+  WordWrap = .T.
+  Picture = ..\vbmp\wzback.bmp
+  Caption = ""
+  TabIndex = 7
+  ToolTipText = "Remover um Item"
+  ForeColor = 0,0,128
+  BackColor = 255,255,255
+  ZOrderSet = 11
+  Name = "cmdRemove"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEMP.Pagina.Dados.cmdRemoveAll
+------------------------------------------------------------
+  Top = 338
+  Left = 370
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Small Fonts"
+  FontSize = 7
+  WordWrap = .T.
+  Picture = ..\vbmp\wztop.bmp
+  Caption = ""
+  TabIndex = 8
+  ToolTipText = "Remover todos os Itens"
+  ForeColor = 0,0,128
+  BackColor = 255,255,255
+  ZOrderSet = 11
+  Name = "cmdRemoveAll"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Small Fonts, 1, 7, 6, 11, 9, 10, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDEMP
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lcAcesso
+
+lcQryEmp  = 'Select Cemps, Razas From SigCdEmp'
+lcQryEmpU = 'Select * From SigCdAcE'
+lcQryUsua = 'Select * From SigCdUsu'
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector','acesso')
+	
+	With .poDatamgr
+		* Cursor Principal Para Montagem da Lista (Tabela Grande)
+		.AddCursor('SigCdEmp', 'Cemps', 'crSigCdEmp', '', ThisForm.Pagina.Lista.Grade, lcQryEmp)
+		.pfSqlTabela(1).pColuna('Cemps', '', '', 'Empresa',   070, .t.)
+		.pfSqlTabela(1).pColuna('Razas', '', '', 'Descrição', 340, .t.)
+
+		.AddCursor('SigCdAcE', 'pkChaves', 'crSigCdAcE', '', '', lcQryEmpU)
+		.AddCursor('SigCdUsu', 'Usuarios',  'crSigCdUsu', '', '', lcQryUsua)
+	EndWith
+EndWith
+
+With ThisForm.Pagina.Dados
+	.Usuario.DragIcon = This.CanDropIcon
+	.UsuEmp.DragIcon  = This.CanDropIcon
+EndWith
+
+=DoDefault()
+
+Create Cursor crLogData (cIdChaves c(20), cOcors c(100), cTipos c(1))
+Index On cIdChaves Tag cIdChaves
+
+ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+Private pEmp
+
+pEmp = Padr(Thisform.Pagina.Dados.Get_Empresa.Value, 3)
+
+If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdAcE Where Emps = ?pEmp], '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (3)')
+	Return 0
+EndIf
+If Not ThisForm.poDataMgr.Update('crSigCdAcE')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (4)')
+	Return 0
+EndIf
+If (ThisForm.poDataMgr.Commit() < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (5)')
+	Return 0
+EndIf
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+Private pEmp
+
+pEmp = Padr(Thisform.Pagina.Dados.Get_Empresa.Value, 3)
+
+If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdAcE Where Emps = ?pEmp], '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (3)')
+	Return 0
+EndIf
+If (ThisForm.poDataMgr.Commit() < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (5)')
+	Return 0
+EndIf
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+Private pEmp
+
+pEmp = Padr(Thisform.Pagina.Dados.Get_Empresa.Value, 3)
+
+If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdAcE Where Emps = ?pEmp], '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (3)')
+	Return 0
+EndIf
+If Not ThisForm.poDataMgr.Update('crSigCdAcE')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (6)')
+	Return 0
+EndIf
+If (ThisForm.poDataMgr.Commit() < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (5)')
+	Return 0
+EndIf
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcEmp
+
+lcEmp = Alltrim(ThisForm.Pagina.Dados.Get_Empresa.Value)
+
+Select crSigCdEmp
+Set Near On
+Locate For Cemps = lcEmp
+Set Near Off
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Lparameters Opcao
+
+If (Type('Opcao') = 'N')
+	This.Value = Opcao
+EndIf
+
+Select crSigCdAcE
+
+ThisForm.LockScreen = .t.
+
+lcCEmps = crSigCdEmp.CEmps
+lcRazas = crSigCdEmp.Razas
+
+If Not DoDefault(Opcao)
+	ThisForm.LockScreen = .f.
+	ThisForm.mAtivapagina1
+	Return 0
+EndIf
+
+With ThisForm.Pagina.Dados
+	.Usuario.Clear
+	.UsuEmp.Clear
+
+	If (ThisForm.pcEscolha <> 'PROCURAR')
+		If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+			lcSQLCmd = [Select Distinct Usuarios ] + ;
+						 [From SigCdUsu ] + ;
+						[Where Not cAtivos='N' And Usuarios Not In ] + ;
+					  [(Select Usuarios ] + ;
+						 [From SigCdAcE ] + ;
+						[Where Emps = '] + lcCEmps + [')]
+
+			If (ThisForm.poDataMgr.SQLExecute(lcSQLCmd, 'crTmp') < 1)
+				ThisForm.LockScreen = .f.
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (1)')
+				Return 0
+			EndIf
+			Select crTmp
+			Scan
+				.Usuario.AddItem(crTmp.Usuarios)
+			EndScan
+			Use In crTmp
+		EndIf
+
+		lcSQLCmd = [Select Distinct Usuarios ] + ;
+					 [From SigCdAcE ] + ;
+					[Where Emps = '] + lcCEmps + [']
+		
+		If (ThisForm.poDataMgr.SQLExecute(lcSQLCmd, 'crTmp') < 1)
+			ThisForm.LockScreen = .f.
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (2)')
+			Return 0
+		EndIf
+		Select crTmp
+		Scan
+			.UsuEmp.AddItem(crTmp.Usuarios)
+		EndScan
+		Use In crTmp
+		.Refresh
+	EndIf
+EndWith
+
+ThisForm.LockScreen = .f.
+Wait Clear
+
+_Altera = Not Inlist(ThisForm.pcEscolha, 'PROCURAR', 'CONSULTAR', 'EXCLUIR')
+With ThisForm.Pagina.Dados
+	.cmdAdd.Enabled       = _Altera
+	.cmdAddAll.Enabled    = _Altera
+	.cmdRemove.Enabled    = _Altera
+	.cmdRemoveAll.Enabled = _Altera
+EndWith
+
+ThisForm.Pagina.Dados.get_Empresa.Value  = ''
+ThisForm.Pagina.Dados.get_DEmpresa.Value = ''
+If (ThisForm.pcEscolha <> 'PROCURAR')
+	ThisForm.Pagina.Dados.get_Empresa.Value  = lcCEmps
+	ThisForm.Pagina.Dados.get_DEmpresa.Value = lcRazas
+EndIf
+
+Do Case
+	Case Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')
+		ThisForm.Pagina.Dados.Get_Empresa.SetFocus
+
+	Case Inlist(ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR')
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+
+	Case Inlist(ThisForm.pcEscolha, 'ALTERAR')
+		ThisForm.Pagina.Dados.Usuario.SetFocus
+EndCase
+
+Select crSigCdAcE
+
+Select crLogData
+Zap
+
+ThisForm.Pagina.Dados.Activate
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')
+	Zap In crSigCdAcE
+	
+	m.Emps  = crSigCdEmp.Cemps
+	m.DEmps = crSigCdEmp.Razas
+	For C = 1 To ThisForm.Pagina.Dados.UsuEmp.ListCount
+		m.Usuarios = ThisForm.Pagina.Dados.UsuEmp.List(C)
+		m.pkChaves = fUniqueIds()
+		Insert Into crSigCdAcE From Memvar
+	Next
+EndIf
+
+Select crLogData
+Scan
+	=fGravarLog(cTipos, 'CADEMP', ThisForm.pcEscolha, cOcors, Usuar)
+EndScan
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEMP.Pagina.Dados.Get_Empresa
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, This, Thisform.Pagina.Dados.Get_DEmpresa)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = 'PROCURAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEMP.Pagina.Dados.Get_DEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, Thisform.Pagina.Dados.Get_Empresa, This)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = 'PROCURAR') And Empty(ThisForm.Pagina.Dados.get_Empresa.Value)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEMP.Pagina.Dados.Usuario
+* Classe: listbox (Base: listbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	ThisForm.Pagina.Dados.cmdAdd.Click()
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEMP.Pagina.Dados.Usuemp
+* Classe: listbox (Base: listbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE DblClick
+------------------------------------------------------------
+PROCEDURE DblClick
+If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	ThisForm.Pagina.Dados.cmdRemove.Click()
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEMP.Pagina.Dados.cmdAdd
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	With ThisForm.Pagina.Dados
+		If .Usuario.Selected(.Usuario.ListIndex)
+			_Valor = .Usuario.List(.Usuario.ListIndex)
+			lcIdChaves = 'USUARIO'+_Valor
+			Select crLogData
+			Seek lcIdChaves
+			If ! Found()
+				Insert Into crLogData (cIdChaves, cOcors, cTipos) ;
+					Values(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'I')
+			Else
+				If cTipos = 'E'
+					Delete 
+				EndIf
+			Endif
+			.Usuario.RemoveItem(.Usuario.ListIndex)
+			.UsuEmp.AddItem(_Valor)
+		EndIf
+	EndWith
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEMP.Pagina.Dados.cmdAddAll
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.LockScreen = .t.
+
+With ThisForm.Pagina.Dados
+	For I = 1 To .Usuario.ListCount
+		.UsuEmp.AddItem(.Usuario.List(I))
+		_Valor = .Usuario.List(I)
+		lcIdChaves = 'USUARIO'+_Valor
+		Select crLogData
+		Seek lcIdChaves
+		If ! Found()
+			Insert Into crLogData (cIdChaves, cOcors, cTipos) ;
+				Values(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'I')
+		Else
+			If cTipos = 'E'
+				Delete 
+			EndIf
+		Endif
+	EndFor
+	.Usuario.Clear
+EndWith
+
+ThisForm.LockScreen = .f.
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEMP.Pagina.Dados.cmdRemove
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	With ThisForm.Pagina.Dados
+		If .UsuEmp.Selected( .UsuEmp.ListIndex )
+			_Valor = .UsuEmp.List( .UsuEmp.ListIndex )
+			lcIdChaves = 'USUARIO'+_Valor
+			Select crLogData
+			Seek lcIdChaves
+			If ! Found()
+				Insert Into crLogData (cIdChaves, cOcors, cTipos) ;
+					Values(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'E')
+			Else
+				If cTipos = 'I'
+					Delete 
+				EndIf
+			Endif
+			.UsuEmp.RemoveItem( .UsuEmp.ListIndex )
+			.Usuario.AddItem( _Valor )
+		EndIf
+	EndWith
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEMP.Pagina.Dados.cmdRemoveAll
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.LockScreen = .t.
+
+With ThisForm.Pagina.Dados
+	For I = 1 to .UsuEmp.ListCount
+		.Usuario.AddItem(.UsuEmp.List(I))
+		_Valor =  .UsuEmp.List(I)
+		lcIdChaves = 'USUARIO'+_Valor
+		Select crLogData
+		Seek lcIdChaves
+		If ! Found()
+			Insert Into crLogData (cIdChaves, cOcors, cTipos) ;
+				Values(lcIdChaves, 'Empresa : ' + This.Parent.Get_Empresa.Value + ' Usuario : ' + _Valor, 'E')
+		Else
+			If cTipos = 'I'
+				Delete 
+			EndIf
+		Endif
+	EndFor
+	.UsuEmp.Clear
+EndWith
+
+ThisForm.LockScreen = .f.
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDEMP
+RESERVED3 (ClassInfo): candropicon
+nodopicon
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 23
+================================================================================

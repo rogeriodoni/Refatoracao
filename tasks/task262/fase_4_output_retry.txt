@@ -1,0 +1,6 @@
+﻿Fase 4 is now complete. Added two methods to `C:\4c\projeto\app\forms\operacionais\Formsigprccp.prg`:
+
+- **`ConfigurarPaginaLista()`** (line 1597): Resets the OPERACIONAL form to its initial state ÔÇö zaps `cursor_4c_Produtos`, clears all filter textboxes, resets numeric fields, restores default OptionGroup values (Recalc=1, Pven=2, Compra=3, Situacao=1), hides the product image, calls `AjustarBotoesPorModo()` + `OptRecalcChange()`, and refocuses the first filter.
+- **`AlternarPagina(par_nPagina)`** (line 1669): Switches the working context ÔÇö `par_nPagina=1` returns to LISTA/FILTROS (focus on filters), `par_nPagina=2` moves to DADOS/GRID after processing (enables Atualizar/Imprimir, focuses grid), `par_nPagina=0` invokes `ConfigurarPaginaLista()`.
+
+Both methods use real implementations (no stubs), TRY/CATCH with `MsgErro` reporting line + procedure, and only reference controls that actually exist in the form (fixed `txt_4c_Encf` ÔåÆ `txt_4c_EncF` after cross-check with the AddObject declarations).

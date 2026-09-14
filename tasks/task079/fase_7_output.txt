@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Fase 7 conclu├¡da.
+
+**O que foi adicionado em `FormSigReDif.prg`:**
+
+1. **BINDEVENTs** no final de `ConfigurarBotoes()` (linhas 327-331) ÔÇö vinculam os cliques dos 4 bot├Áes do `cmg_4c_Botoes` aos handlers p├║blicos do form.
+
+2. **4 m├®todos handlers** (linhas 708-785):
+   - `BtnVisualizarClick()` ÔåÆ chama `this_oRelatorio.Visualizar()` (REPORT FORM... PREVIEW NOCONSOLE)
+   - `BtnImprimirClick()` ÔåÆ chama `this_oRelatorio.Imprimir()` (REPORT FORM... TO PRINTER PROMPT NOCONSOLE)
+   - `BtnDocumentoClick()` ÔåÆ chama `this_oRelatorio.GerarDocumento()` (REPORT FORM... TO PRINTER NOCONSOLE)
+   - `BtnEncerrarClick()` ÔåÆ `THIS.Release()`
+
+Todos os m├®todos delegam ao BO (`SigReDifBO`) que j├í tem as implementa├º├Áes correspondentes, seguindo o padr├úo do sistema.

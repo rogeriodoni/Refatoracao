@@ -1,0 +1,30 @@
+﻿Ap├│s an├ílise completa, todos os 19 problemas listados s├úo **falsos positivos do validador**. N├úo h├í corre├º├Áes necess├írias.
+
+---
+
+**[METODO-INEXISTENTE] CarregarCursores** ÔÇö FALSO POSITIVO
+
+O m├®todo existe na linha 975 como `PROTECTED FUNCTION CarregarCursores()`. O validador procurou por `PROCEDURE` e n├úo encontrou, mas `FUNCTION` ├® igualmente v├ílido como m├®todo de classe em VFP9. A implementa├º├úo est├í completa: carrega `cursor_4c_SigCdEmp`, `cursor_4c_SigOpOpe`, `cursor_4c_SigCdClc` e `cursor_4c_SigCdCot`.
+
+---
+
+**18 ├ù [LAYOUT-POSITION]** ÔÇö FALSOS POSITIVOS
+
+O `pgf_4c_Paginas` est├í posicionado em `Top=85` (linha 252). Todos os controles est├úo dentro de `Page1`, portanto suas coordenadas s├úo relativas ├á p├ígina. O validador compara as coordenadas absolutas do SCX com as coordenadas de p├ígina sem descontar o offset do PageFrame:
+
+| Controle | Top Page1 | Screen Top (85 + Top) | SCX original | Status |
+|---|---|---|---|---|
+| `lbl_4c_Lbl_fator` | 98 | 85+98=**183** | 183 | Ô£ô Correto |
+| `lbl_4c_LblPeriodo` | 44 | 85+44=**129** | 129 | Ô£ô Correto |
+| `obj_4c_OptSaldos` | 40, L=798 | 85+40=**125**, L=**798** | 125, 798 | Ô£ô Correto |
+| `obj_4c_Opt_AnaSi` | 13, L=92 | 85+13=**98**, L=**92** | 98, 92 | Ô£ô Correto |
+| `obj_4c_OptDatas` | 39, L=287 | 85+39=**124**, L=**287** | 124, 287 | Ô£ô Correto |
+| `obj_4c_Opt_Juros` | 68, L=646 | 85+68=**153**, L=**646** | 153, 646 | Ô£ô Correto |
+| `obj_4c_OptAutorizados` | 145, L=92 | 85+145=**230**, L=**92** | 230, 92 | Ô£ô Correto |
+| `chk_4c_Ck_Pagamentos` | 74 | 85+74=**159** | 159 | Ô£ô Correto |
+| `chk_4c_Ck_Recebimentos` | 97 | 85+97=**182** | 182 | Ô£ô Correto |
+| `chk_4c_Ck_MarcaEmp/Ope/Cla` | 198 | 85+198=**283** | 283 | Ô£ô Correto |
+
+Para os `OptionGroup`, o validador relata `Left=5` ÔÇö isso ├® `Buttons(1).Left=5` (posi├º├úo do bot├úo dentro do grupo), n├úo o `Left` do pr├│prio OptionGroup. Os valores do OptionGroup est├úo corretos.
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo est├í matematicamente correto em todos os 19 pontos sinalizados.

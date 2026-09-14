@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da. O `SigPdAcoBO.prg` foi completado com os seguintes m├®todos:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `CarregarDoCursor()` | Mapeia campos do cursor `cursor_4c_Pam` ÔåÆ `this_*` |
+| `ObterChavePrimaria()` | Retorna `""` (form operacional sem chave ├║nica) |
+| `CarregarParametros()` | SQLEXEC em `SigCdPam`, popula `this_cDopEmphs/Reqs/Pedcs/Comps/TrfCps` |
+| `CarregarEmpresa()` | SQLEXEC em `SigCdEmp`, monta `this_cNomeEmpresa` |
+| `CriarCursorRelatorio()` | Cria `csRel` (17 campos + 2 ├¡ndices) e `csCab` |
+| `Processar(par_oListbox)` | Algoritmo completo: estoque ÔåÆ csRel ÔåÆ 5 opera├º├Áes ÔåÆ c├ílculo pos.final/flags |
+| `FiltrarPorGrupo()` | `SET KEY TO` no cursor `csRel` com tag `GruMat` |
+| `AtualizarCabecalhoRelatorio()` | Atualiza `cbsubtit` no `csCab` |
+| `Destroy()` | Fecha 9 cursores auxiliares antes de `DODEFAULT()` |
+
+Pontos cr├¡ticos respeitados: `EMPTY()` (n├úo `ISEMPTY()`), sem `RETURN` dentro de `TRY/CATCH`, `DO CASE` em vez de macro `&lcCampo.`, `CHR()` para acentos, `SEEK()` com 3 argumentos (alias+tag expl├¡citos), `INDEX ON` com `SELECT` anterior, `LOCAL` fora dos loops `SCAN`.

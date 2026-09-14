@@ -1,0 +1,191 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGPRCCR.SCX
+* Data/Hora: 07/07/2026 10:46:52
+* Total de registros: 4
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGPRCCR
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGPRCCR
+------------------------------------------------------------
+  DataSession = 1
+  Height = 130
+  Width = 800
+  DoCreate = .T.
+  Caption = "Impressão de Produtos com Preços alterados"
+  Name = "SIGPRCCR"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .T.
+  btnReport.Visualiza.Top = 5
+  btnReport.Visualiza.Left = 5
+  btnReport.Visualiza.Height = 75
+  btnReport.Visualiza.Width = 75
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 5
+  btnReport.Imprime.Left = 80
+  btnReport.Imprime.Height = 75
+  btnReport.Imprime.Width = 75
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 5
+  btnReport.DocExcel.Left = 155
+  btnReport.DocExcel.Height = 75
+  btnReport.DocExcel.Width = 75
+  btnReport.DocExcel.PicturePosition = 7
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.sair.Top = 5
+  btnReport.sair.Left = 230
+  btnReport.sair.Height = 75
+  btnReport.sair.Width = 75
+  btnReport.sair.Name = "sair"
+  btnReport.Height = 85
+  btnReport.Left = 495
+  btnReport.Top = -2
+  btnReport.Width = 310
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 32
+  REGISTRY1.Left = 372
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGPRCCR
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE documento
+------------------------------------------------------------
+PROCEDURE documento
+Report Form SigPrCcr To Printer NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE impressao
+------------------------------------------------------------
+PROCEDURE impressao
+Report Form SigPrCcr To Print Prompt NoConsole
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+=DoDefault()
+
+ThisForm.lacpdf = fChecaAcesso(ThisForm.Name,'PDF')
+
+With Thisform
+	.poDataMgr = CreateObject('fSqlConector')
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE memail
+------------------------------------------------------------
+PROCEDURE memail
+Report Form SigPrCcr To Printer NoConsole
+
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Wait Window 'Aguarde Processamento !' Nowait
+
+lcSql = [Select Razas From SigCdEmp Where Cemps = ']+_Empr+[']
+=ThisForm.Podatamgr.Sqlexecute(lcSql,'CrSigCdEmp')
+Select CrSigCdEmp
+Go Top
+lcCbEmpresa = IIf(!IsEmpty(CrSigCdEmp.razas),CrSigCdEmp.razas,'')
+lcCbTitulo  = 'Relação de Produtos com Preço Alterado '
+lcSubTit    = 'Em '+Dtoc(Date())
+
+Create Cursor CsCabecalho (cb_empresa c(80), titulo c(80), SubTitulo c(80))
+
+Insert Into CsCabecalho (cb_empresa, titulo, SubTitulo) ;
+				 Values (lcCbEmpresa, lcCbTitulo, lcSubTit)
+
+Select * From CrProdutos Where lMarca = 1 Into Cursor CsRelatorio Order by Cpros
+Select CsRelatorio
+Go Top
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Report Form SigPrCcr Preview NoConsole
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGPRCCR
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

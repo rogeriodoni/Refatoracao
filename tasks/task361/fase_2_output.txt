@@ -1,0 +1,16 @@
+﻿Fase 2 conclu├¡da. O `CegBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+**Adicionados:**
+- `Buscar(par_cFiltro)` ÔÇö SELECT com JOIN em SigCdEmp para exibir nome da empresa, ordenado por grupos/contas/priors
+- `CarregarPorCodigo(par_cCidchaves)` ÔÇö SELECT completo pelo PK com JOIN para Razas; seta `this_lNovoRegistro = .F.`
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo correto); mapeia todos os 6 campos do schema + Razas para `this_cDEmps`
+- `VerificarDuplicidade()` ÔÇö COUNT por grupos+contas para o check duplicado da l├│gica original
+- `Inserir()` ÔÇö gera `cidchaves` via `LEFT(fUniqueIds(), 20)`, INSERT com todos os 6 campos, `LEFT()` para respeitar tamanhos do schema (char(10)/char(3))
+- `Atualizar()` ÔÇö UPDATE de todos os campos edit├íveis (n├úo atualiza cidchaves/PK)
+- `ExecutarExclusao()` ÔÇö DELETE por cidchaves, com `RegistrarAuditoria("DELETE")`
+
+**Pontos-chave respeitados:**
+- Nomes de colunas exatos do schema: `cidchaves, contas, grupos, priors, emps, tpcads` (lowercase conforme schema.sql)
+- `CarregarDoCursor` usa `SELECT (par_cAliasCursor)` antes de acessar campos (nunca `(var).campo`)
+- Nenhum `RETURN` dentro de TRY/CATCH
+- CATCH nunca silencioso ÔÇö todos com `MsgErro`

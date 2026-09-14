@@ -1,0 +1,13 @@
+﻿O problema reportado ÔÇö `CNT_4C_SOMBRA` ausente do INLIST ÔÇö j├í est├í corrigido no arquivo atual. A linha 1130 j├í cont├®m `"CNT_4C_SOMBRA"` no filtro:
+
+```foxpro
+IF INLIST(loc_cNome, ;
+        "GRD_4C_GRADE2",    ;
+        "EDT_4C_MEMOOBS",   ;
+        "GRP_4C_GRUPOCONF", ;
+        "CNT_4C_SOMBRA")    ; <- j├í presente
+    LOOP
+ENDIF
+```
+
+O arquivo `Formsigopdiv.prg` j├í est├í correto: `TornarControlesVisiveis` filtra `CNT_4C_SOMBRA` via `INLIST` e executa `LOOP`, impedindo tanto o `Visible = .T.` for├ºado quanto a recurs├úo nos filhos do container. Nenhuma altera├º├úo ├® necess├íria.

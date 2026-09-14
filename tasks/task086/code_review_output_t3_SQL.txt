@@ -1,0 +1,23 @@
+﻿Analisei completamente todos os SQLs em ambos os arquivos. Aqui est├í minha conclus├úo:
+
+## Resultado da Verifica├º├úo
+
+**A detec├º├úo ├® um falso positivo.** Ap├│s inspe├º├úo exaustiva de todas as ocorr├¬ncias de `lnOrdem` nos dois arquivos:
+
+**No BO (`sigreegpBO.prg`)**, `lnOrdem` aparece EXCLUSIVAMENTE como:
+1. Vari├ível VFP em condicionais (`CASE lnOrdem = 1`, `IF lnOrdem <> 4`, etc.) ÔÇö linhas 239-356
+2. Express├Áes VFP com IIF para formata├º├úo de strings de relat├│rio ÔÇö linhas 259, 656-696
+3. Nenhuma vez concatenada em qualquer string SQL WHERE
+
+**Nas strings WHERE reais**, tanto `lcWhere1` quanto `lcWhere1H` s├úo constru├¡das apenas com:
+- `a.emps+a.grupos+a.estos BETWEEN ...` (CEMPS, ICLIS)
+- `b.linhas = ...` (LINHAS) ÔÇö somente se lcLinha n├úo vazio
+- `b.colecoes = ...` (COLECOES) ÔÇö somente se lcGrupoVenda n├úo vazio  
+- `b.cgrus = ... AND a.Sqtds <> 0` (CGRUS, SQTDS) ÔÇö somente se lcGrupo n├úo vazio
+- `a.datas <= ...` (DATAS), `a.cpros = b.cpros` (CPROS)
+
+Esses campos correspondem exatamente ao WHERE original: `CEMPS, LINHAS, COLECOES, CGRUS, SQTDS, DATAS, CPROS`.
+
+**Causa prov├ível do falso positivo:** o detector deve ter capturado que `lnOrdem` ÔåÆ `lcOrdem` ÔåÆ `"Order By " + lcOrdem` e classificou incorretamente o ORDER BY como condi├º├úo WHERE, ou confundiu `IIF(...AND lnOrdem <> 4, ...)` (que monta cabe├ºalho de relat├│rio, n├úo SQL) como filtro SQL.
+
+**Nenhuma altera├º├úo de c├│digo ├® necess├íria.** O c├│digo migrado est├í correto ÔÇö `lnOrdem` nunca aparece em cl├íusula WHERE de nenhum SQL enviado ao servidor.

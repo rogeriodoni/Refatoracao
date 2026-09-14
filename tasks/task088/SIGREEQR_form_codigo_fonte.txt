@@ -1,0 +1,1563 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGREEQR.SCX
+* Data/Hora: 04/06/2026 16:45:36
+* Total de registros: 29
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGREEQR
+  Parent: (raiz)
+  Class: frmrelatorio
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDataSaldo
+  Parent: SIGREEQR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_moeda
+  Parent: SIGREEQR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_moeda
+  Parent: SIGREEQR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_moeda
+  Parent: SIGREEQR
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: apaga
+  Parent: SIGREEQR
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: get_cd_grupo
+  Parent: SIGREEQR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grade
+  Parent: SIGREEQR
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGREEQR.Grade.column1
+  Class: header
+  BaseClass: header
+
+Objeto: fwcheckbox1
+  Parent: SIGREEQR.Grade.column1
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGREEQR.Grade.column2
+  Class: header
+  BaseClass: header
+
+Objeto: Ingrid1
+  Parent: SIGREEQR.Grade.column2
+  Class: ingrid
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGREEQR.Grade.column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGREEQR.Grade.column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: SelTudo
+  Parent: SIGREEQR
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say29
+  Parent: SIGREEQR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optRfestoque
+  Parent: SIGREEQR
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_empresa
+  Parent: SIGREEQR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_empresa
+  Parent: SIGREEQR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_ds_grupo
+  Parent: SIGREEQR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_empresa
+  Parent: SIGREEQR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_cd_grupo_calc
+  Parent: SIGREEQR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_ds_grupo_calc
+  Parent: SIGREEQR
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGREEQR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_imp_custo
+  Parent: SIGREEQR
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_calcusto
+  Parent: SIGREEQR
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 68
+  Left = -13
+  Width = 649
+  Height = 387
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 800
+  DoCreate = .T.
+  BorderStyle = 2
+  Caption = "Relatório de Posição de Estoque Retroativo"
+  ControlBox = .F.
+  ClipControls = .T.
+  lacemail = .F.
+  lacexcel = .F.
+  lacimprimir = .F.
+  lacpdf = .F.
+  Name = "SIGREEQR"
+  cntSombra.lblSombra.Name = "lblSombra"
+  cntSombra.lblTitulo.Name = "lblTitulo"
+  cntSombra.Name = "cntSombra"
+  btnReport.AutoSize = .F.
+  btnReport.Visualiza.Top = 2
+  btnReport.Visualiza.Left = 6
+  btnReport.Visualiza.ToolTipText = "Processar"
+  btnReport.Visualiza.Name = "Visualiza"
+  btnReport.Imprime.Top = 2
+  btnReport.Imprime.Left = 72
+  btnReport.Imprime.Visible = .F.
+  btnReport.Imprime.Name = "Imprime"
+  btnReport.DocExcel.Top = 2
+  btnReport.DocExcel.Left = 138
+  btnReport.DocExcel.Name = "DocExcel"
+  btnReport.Sair.AutoSize = .F.
+  btnReport.Sair.Top = 2
+  btnReport.Sair.Left = 204
+  btnReport.Sair.Name = "Sair"
+  btnReport.Left = 525
+  btnReport.Top = 3
+  btnReport.TabIndex = 20
+  btnReport.ZOrderSet = 17
+  btnReport.Name = "btnReport"
+  REGISTRY1.Top = 12
+  REGISTRY1.Left = 522
+  REGISTRY1.Name = "REGISTRY1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.getDataSaldo
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 25
+  Left = 301
+  MaxLength = 10
+  TabIndex = 6
+  Top = 167
+  Width = 79
+  ZOrderSet = 3
+  Name = "getDataSaldo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.get_cd_moeda
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Left = 301
+  MaxLength = 3
+  TabIndex = 7
+  Top = 248
+  Width = 33
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  Name = "get_cd_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.lbl_moeda
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Moeda p/Conversão :"
+  Left = 191
+  Top = 253
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "lbl_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.get_ds_moeda
+------------------------------------------------------------
+  Format = "K!"
+  Height = 23
+  Left = 336
+  MaxLength = 15
+  TabIndex = 8
+  Top = 248
+  Width = 107
+  ForeColor = 0,0,0
+  ZOrderSet = 6
+  Name = "get_ds_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.apaga
+------------------------------------------------------------
+  Top = 419
+  Left = 549
+  Height = 45
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\cancelab.bmp
+  Caption = ""
+  TabIndex = 14
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 7
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.get_cd_grupo
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  Format = "K"
+  Height = 25
+  Left = 301
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 3
+  ToolTipText = ""
+  Top = 221
+  Width = 33
+  ForeColor = 0,0,0
+  ZOrderSet = 8
+  Name = "get_cd_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.Grade
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  AllowAddNew = .F.
+  AllowHeaderSizing = .F.
+  DeleteMark = .F.
+  Height = 167
+  Left = 302
+  Panel = 1
+  ReadOnly = .F.
+  ScrollBars = 2
+  TabIndex = 12
+  Top = 331
+  Visible = .T.
+  Width = 244
+  ZOrderSet = 9
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 9
+  Column1.ColumnOrder = 1
+  Column1.Width = 15
+  Column1.Movable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Sparse = .F.
+  Column1.Visible = .T.
+  Column1.Format = "K!"
+  Column1.InputMask = "!!!!!!!!!!"
+  Column1.ForeColor = 0,0,0
+  Column1.Name = "column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.Width = 100
+  Column2.Movable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Visible = .T.
+  Column2.Name = "column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.Width = 96
+  Column3.Movable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Visible = .T.
+  Column3.Name = "column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.Grade.column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = ""
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.Grade.column1.fwcheckbox1
+------------------------------------------------------------
+  Top = 31
+  Left = 12
+  FontName = "Tahoma"
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = ""
+  ReadOnly = .F.
+  Name = "fwcheckbox1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.Grade.column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.Grade.column2.Ingrid1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 17
+  ReadOnly = .T.
+  Top = 55
+  lingridactive = .F.
+  Name = "Ingrid1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.Grade.column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.Grade.column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Value = 0
+  InputMask = ""
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.SelTudo
+------------------------------------------------------------
+  Top = 374
+  Left = 549
+  Height = 45
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\vbmp\a_save1.bmp
+  Caption = ""
+  TabIndex = 13
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 10
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.Say29
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo Produto:"
+  Left = 221
+  Top = 226
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say29"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.optRfestoque
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 52
+  Left = 195
+  SpecialEffect = 0
+  Top = 147
+  Width = 142
+  TabIndex = 5
+  ZOrderSet = 12
+  Name = "optRfestoque"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Estoque \<Atual"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 85
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Estoque  \<em :"
+  Option2.Left = 5
+  Option2.Top = 24
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.lbl_empresa
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 247
+  Top = 199
+  Width = 50
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "lbl_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.get_ds_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 336
+  MaxLength = 40
+  TabIndex = 2
+  Top = 194
+  Width = 290
+  ZOrderSet = 14
+  Name = "get_ds_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.get_ds_grupo
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 336
+  MaxLength = 40
+  TabIndex = 4
+  Top = 221
+  Width = 290
+  ZOrderSet = 15
+  Name = "get_ds_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.get_cd_empresa
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "k"
+  Height = 25
+  InputMask = "XXX"
+  Left = 301
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 1
+  ToolTipText = ""
+  Top = 194
+  Width = 33
+  ForeColor = 0,0,0
+  ZOrderSet = 16
+  Name = "get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.get_cd_grupo_calc
+------------------------------------------------------------
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  Format = "K"
+  Height = 25
+  Left = 301
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 10
+  ToolTipText = ""
+  Top = 273
+  Visible = .F.
+  Width = 33
+  ForeColor = 0,0,0
+  ZOrderSet = 18
+  Name = "get_cd_grupo_calc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.get_ds_grupo_calc
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 336
+  MaxLength = 40
+  TabIndex = 11
+  Top = 273
+  Visible = .F.
+  Width = 290
+  ZOrderSet = 22
+  Name = "get_ds_grupo_calc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 259
+  Top = 278
+  Visible = .F.
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.lbl_imp_custo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cálculo de Custo:"
+  Left = 211
+  Top = 303
+  Width = 86
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 20
+  Name = "lbl_imp_custo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGREEQR.opt_calcusto
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 25
+  Left = 300
+  SpecialEffect = 0
+  Top = 298
+  Width = 108
+  TabIndex = 9
+  ZOrderSet = 21
+  Name = "opt_calcusto"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Total"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.TabIndex = 1
+  Option1.Top = 5
+  Option1.Width = 42
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Grupo"
+  Option2.Left = 56
+  Option2.TabIndex = 2
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGREEQR
+* Classe: frmrelatorio (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters llInventario
+
+=DoDefault()
+
+ThisForm.poDataMgr = CreateObject('fSqlConector',thisform.Name)
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cemps,razas From SigCdEmp Where cemps = ']+_Empr+[' ],'CrSigCdEmp')
+If lnQueryOk < 0
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+ThisForm.Grade.RecordSource = ''
+
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select codigos From SigCdGcr Where estoques = 1 ],'TmpGccr')
+If lnQueryOk < 0
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select b.grupos,b.iclis From SigCdCli b, SigCdGcr c ]+;
+			  [Where b.grupos = c.codigos And c.internos = ']+Space(20)+[' And c.estoques = 1 ],'TmpCliGccr')
+If lnQueryOk < 0
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+	 Select 0 As marcas,codigos As grupos,'          ' As contas ;
+	   From TmpGccr a ;
+  Union All ;
+	 Select 0 As marcas,grupos,iclis As contas ;
+	   From TmpCliGccr ;
+Into Cursor Selecao ReadWrite
+
+If !Used('Selecao')
+	Create Cursor Selecao (marcas n(1),grupos c(10),contas c(10))
+EndIf
+
+Select Selecao
+Go Top
+Index On grupos+contas Tag grucon
+
+With ThisForm.Grade
+	.RecordSource = 'Selecao'
+	.ChildOrder   = 'grucon'
+	.column1.ControlSource = 'Selecao.marcas'
+	.column1.Movable = .F.
+	.column1.Resizable = .F.
+	
+	.column2.ControlSource = 'Selecao.grupos'
+	.column2.Movable = .F.
+	.column2.Resizable = .F.
+	.column2.ReadOnly = .T.
+	
+	.column3.ControlSource = 'Selecao.contas'
+	.column3.Movable = .F.
+	.column3.Resizable = .F.
+	.column3.ReadOnly = .T.
+EndWith
+
+* Inicialização das variáveis do formulário
+ThisForm.get_cd_empresa.Value = _Empr
+ThisForm.get_ds_empresa.Value = IIf(!Empty(CrSigCdEmp.razas),CrSigCdEmp.razas,'')
+ThisForm.get_cd_grupo.Value = ''
+ThisForm.getDataSaldo.Value = {}
+ThisForm.optRfestoque.Value = 1
+ThisForm.opt_calcusto.Value = 1
+ThisForm.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+*!*	Executa os parâmetros Set iniciais
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Wait Window 'Aguarde. Processamento!!!' Nowait
+
+lcCdEmpresa    = ThisForm.get_cd_empresa.Value
+lcCdGrupo      = ThisForm.get_cd_grupo.Value
+lcDsGrupo      = ThisForm.get_ds_grupo.Value
+lnImpCusto     = ThisForm.opt_calcusto.Value
+lnRfEstoque    = ThisForm.optRfestoque.Value
+ldDatas        = ThisForm.getDataSaldo.Value
+lcMoeda        = ThisForm.get_cd_moeda.Value
+lcGrpCalc      = ThisForm.get_cd_grupo_calc.Value
+lcDatas        = Evaluate([{^]+TransForm((DtoS(Max(ldDatas,CtoD('01/01/1900')))+'235959'),'@R 9999-99-99 99:99:99')+[}])
+pConexao       = ThisForm.Podatamgr.GetDriver()
+
+* Inicializa as variáveis de cabeçalho
+lcCbEmpresa    = Iif(!Empty(CrSigCdEmp.razas),CrSigCdEmp.razas,'')
+lcCbTitulo     = 'Posição de Estoque Retroativo '+ IIf(lnRfEstoque = 1,'Atual','em '+ DtoC(ldDatas))
+lcCbGrupo      = 'Grupo p/Calculo de Custo : ' + IIf(Empty(lcGrpCalc),'Geral',AllTrim(lcGrpCalc)) +;
+				 'Grupo de Produto:' + IIf(Empty(lcCdGrupo),'Geral',AllTrim(lcCdGrupo) + ' - ' + Alltrim(lcDsGrupo))
+
+Create Cursor dbCabecalho ( Titulo c(100), SubTitulo c(100), NomeEmpresa c(100) )
+Insert Into dbCabecalho ( Titulo, SubTitulo, NomeEmpresa ) Value ( lcCbTitulo, lcCbGrupo, lcCbEmpresa )
+
+Create Cursor csTempoGr (grupos c(10),contas c(10),linhas c(10),tpesos n(12,2),tqtds n(12,3),vlvenda n(12,2),;
+						moevenda c(3),vlcusto n(12,2),moecusto c(3),tipos c(1), Quebra c(1))
+Index on tipos + grupos + contas + Quebra + linhas + moevenda + moecusto Tag Imprimir
+
+Create Cursor CsTempoCp (cpros c(14),dpros c(40),tpesos n(12,2),tqtds n(12,3),vlvenda n(12,2),moevenda c(3),;
+						vlcusto n(12,2),moecusto c(3),tipos c(1),grupos c(10),contas c(10),linhas c(10), Quebra c(1))
+Index on Tipos + grupos + contas + Quebra + linhas + cpros Tag Imprimir
+Index On Grupos + Contas + Linhas + Cpros Tag visualizar
+
+Set Talk On
+Set Talk Window
+If lnRfEstoque = 1 Or pConexao = 'foxpro'
+	lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.cpros,a.emps,a.grupos,a.estos,a.sqtds,a.sqtds As qtds, c.Dpros, c.Linhas, ]+;
+				[c.custofs, c.pvens, c.fvendas, c.moepvs, c.pesoms, c.moecusfs, c.moevs, d.tpcustos, d.tpvendas ]+;
+		   [From SigMvEst a, SigCdPro c, SigCdLin d ]+;
+		  [Where a.emps = ']+lcCdEmpresa+[' ]+Iif(lnRfEstoque = 1,[And a.sqtds <> 0 ],[])+[And a.cpros = c.cpros And c.Linhas = d.Linhas ]+;
+				Iif(!Empty(lcCdGrupo),[ And c.cgrus = ']+lcCdGrupo+[' ],'')+[ Order by a.cpros,a.emps,a.grupos,a.estos ],'CsTmpEst')
+	Set Talk Off
+	If lnQueryOk < 0
+		Return(.F.)
+	EndIf
+	DataConv = Date()
+EndIf
+
+If lnRfEstoque = 2
+	DataConv = lcDatas
+	If pConexao = 'sql'
+		lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select a.emps,a.grupos,a.estos,a.cpros,a.qtds,a.opers, ]+;
+					[c.Dpros, c.Linhas, c.custofs, c.pvens, c.fvendas, c.moepvs, c.pesoms, c.moecusfs, ]+;
+					[c.moevs, f.tpcustos, f.tpvendas ]+;
+			        [From SigMvHst a Left Join SigCdPro c on a.cpros = c.Cpros Left Join SigCdLin f On c.Linhas = f.Linhas ]+;
+			        [Where a.emps = ']+lcCdEmpresa+[' And a.datas <= ?lcDatas ]+;
+			        Iif(!Empty(lcCdGrupo),[ And c.cgrus = ']+lcCdGrupo+[' ],''), 'TmpEstPro')
+		Set Talk Off
+		If lnQueryOk < 0
+			Return(.F.)
+		EndIf
+		Select emps,grupos,estos,cpros,Sum(qtds * Iif(opers = 'E',1,-1)) As qtds, ;
+		Dpros, Linhas, custofs, pvens, fvendas, moepvs, pesoms, moecusfs, moevs, tpcustos, tpvendas ;
+		From TmpEstPro ;
+		Group By 1,2,3,4,6,7,8,9,10,11,12,13,14,15,16 ;
+		Having Sum(qtds * Iif(opers = 'E',1,-1)) <> 0 ;
+		Into Cursor CsTmpEst
+
+	Else
+
+		Select a.cpros,a.emps,a.grupos,a.estos,a.Dpros,a.Linhas,a.custofs,a.pvens,a.fvendas,;
+		a.moepvs, a.pesoms, a.moecusfs, a.moevs, a.tpcustos, a.tpvendas ;
+		From CsTmpEst a, Selecao b ;
+		Where a.grupos = b.grupos And Iif(!Empty(b.contas),a.estos = b.contas,.T.) And b.marcas = 1 ;
+		Group By 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 ;
+		Into Cursor TmpEst2
+
+		m.lcTblHis = (Addbs(JustPath(ThisForm.Podatamgr.GetDatabase()))+'SigMvHst.dbf')
+		If !Used('SigMvHst')
+			USE ( m.lcTblHis ) In 0
+		EndIf
+		
+		Select a.Emps, a.grupos, a.Estos, a.cpros, Sum(a.Qtds * Iif(a.Opers='E',1,-1)) as Qtds, b.Dpros, b.Linhas, ;
+			b.custofs, b.pvens, b.fvendas, b.moepvs, b.pesoms, b.moecusfs, b.moevs, b.tpcustos, b.tpvendas ;
+		From SigMvHst a, TmpEst2 b;
+		Where a.Datas <= DataConv And a.Emps + a.Grupos + a.Estos + a.cpros = b.Emps + b.Grupos + b.Estos + b.cpros ;
+		Into Cursor TmpEst Group By 1,2,3,4,6,7,8,9,10,11,12,13,14,15,16 ;
+		Order By a.Cpros Having Sum(a.Qtds * Iif(a.Opers='E',1,-1)) # 0
+		
+	Endif
+
+EndIf
+
+If lnRfEstoque = 1 Or pConexao = 'sql'
+	Select Distinct a.cpros,a.emps,a.grupos,a.estos,a.qtds,a.Dpros,a.Linhas,;
+	a.custofs, a.pvens, a.fvendas, a.moepvs, a.pesoms, a.moecusfs, a.moevs, a.tpcustos, a.tpvendas ;
+	From CsTmpEst a, Selecao b ;
+	Where a.grupos = b.grupos And Iif(!Empty(b.contas),a.estos = b.contas,.T.) And b.marcas = 1 ;
+	Into Cursor TmpEst Order By a.cpros
+Endif
+
+Select TmpEst
+Go Top
+
+loBarra = CreateObject('fwprogressbar','Processando Estoque...',RecCount('TmpEst'))
+loBarra.Rodape.Caption = '<ESC> para interromper...'
+loBarra.Show
+
+Select TmpEst 
+Go Top
+lcCpro = 'ZZZZZZZZZZZZZZ'
+
+llParar = .F.
+Set Escape On
+On Escape llParar = .T.
+
+Scan While !llParar
+	Scatter Memvar
+	Wait Window '' Nowait
+	loBarra.Update(.T.)
+	
+	m.vlCusto  = m.custofs
+	m.vlvenda  = Round(m.pvens * IIf(m.fvendas # 0 And !Empty(m.moepvs),m.fvendas,1),2)
+	m.moecusto = m.moecusfs
+	m.moevenda = m.moevs
+	m.tqtds    = m.qtds
+	m.tpesos   = m.pesoms * m.qtds
+	m.contas   = m.Estos
+	m.tipos    = ' '
+	If m.tpcustos = '2'
+		m.vlCusto = m.pesoms * m.vlCusto
+	EndIf
+	If m.tpvendas = '2'
+		m.vlVenda = m.pesoms * m.vlVenda
+	EndIf
+
+	If lnImpCusto = 2
+		If m.cpros # lcCpro
+			lnQueryOk = ThisForm.poDataMgr.SqlExecute([Select cpros,cgrus,pcompos,qtds,moeds ]+;
+				   [From SigPrCpo ]+;
+				  [Where cpros = ']+m.cpros+[' And cgrus = ']+lcGrpCalc+[' ],'CrSigPrCpo')
+			If lnQueryOk < 0
+				Return(.F.)
+			EndIf
+		Endif
+		ValGr = 0
+		Select CrSigPrCpo
+		Scan
+			ValGr = ValGr + ((CrSigPrCpo.pcompos * CrSigPrCpo.qtds) *;
+					fBuscarCotacao(CrSigPrCpo.moeds,dataconv,Thisform.podatamgr ) / fBuscarCotacao(m.moecusto,dataconv,ThisForm.Podatamgr))
+		EndScan
+		m.vlcusto = ValGr
+	EndIf
+	
+	If !Empty(lcmoeda)
+		m.vlcusto  = m.vlcusto * fBuscarCotacao(m.moecusto,DataConv,thisform.podatamgr ) / fBuscarCotacao(lcmoeda,DataConv,ThisForm.PodataMgr)
+		m.vlvenda  = m.vlvenda * fBuscarCotacao(m.moevenda,DataConv,thisform.podatamgr ) / fBuscarCotacao(lcmoeda,DataConv,ThisForm.PodataMgr)
+		m.moecusto = lcMoeda
+		m.moevenda = lcMoeda
+	EndIf
+
+	m.vlvenda = m.vlvenda * m.qtds
+	m.vlcusto = m.vlcusto * m.qtds
+
+	Select CsTempoCp
+	Append Blank
+	Gather memvar
+
+	Select csTempoGr
+	If !Seek(' '+m.grupos+m.contas+' '+m.linhas+m.moevenda+m.moecusto)
+		Append Blank
+		Gather Memvar
+		Replace CsTempoGr.tqtds   With 0
+		Replace CsTempoGr.tpesos  With 0
+		Replace CsTempoGr.vlvenda With 0
+		Replace CsTempoGr.vlCusto With 0
+	EndIf
+	Replace CsTempoGr.tqtds   With CsTempoGr.tqtds   + m.tqtds
+	Replace CsTempoGr.tpesos  With CsTempoGr.tpesos  + m.tpesos
+	Replace CsTempoGr.vlVenda With CsTempoGr.vlVenda + m.vlvenda
+	Replace CsTempoGr.vlcusto with CsTempoGr.vlcusto + m.vlcusto
+
+	If m.Cpros # lcCpro
+		lcCpro = m.Cpros
+	Endif
+	Select TmpEst
+EndScan
+loBarra.Complete(.T.)
+
+Set Escape Off
+On Escape
+If llParar
+	Messagebox( 'Processamento Interrompido...',32)
+	Return
+EndIf
+
+Select '5' As tipos,PadR('Tot Linha',10) As grupos,Space(10) As contas,linhas,Sum(tpesos) As tpesos,;
+	Sum(tqtds) As tqtds,Sum(vlvenda) As vlvenda,moevenda,Sum(vlcusto) As vlcusto,moecusto, Space(14) as Cpros, Space(40) as Dpros, ' ' as Quebra ;
+	From CsTempoGr Group by 1,4,8,10 ;
+Union all;
+Select '6' As tipos,PadR('Tot Geral',10) As grupos,Space(10) As contas,Space(10) As linhas,Sum(tpesos) As tpesos,;
+	Sum(tqtds) As tqtds,Sum(vlvenda) As vlvenda,moevenda,Sum(vlcusto) As vlcusto,moecusto, Space(14) as Cpros, Space(40) as Dpros, ' ' as Quebra ;
+	From CsTempoGr Group by 1,8,10 ;
+Union all;
+Select ' ' As tipos,grupos,contas,Padr('Total',10) As linhas,Sum(tpesos) As tpesos,;
+	Sum(tqtds) As tqtds,Sum(vlvenda) As vlvenda,moevenda,Sum(vlcusto) As vlcusto,moecusto, Space(14) as Cpros, Space(40) as Dpros, '1' as Quebra ;
+	From CsTempoGr Group by 1,2,3,8,10 ;
+Into Cursor Tempo
+
+Select CsTempoGr
+Append Blank
+Replace CsTempoGr.Tipos    With '2'
+Replace CsTempoGr.Grupos   With '----------'
+Replace CsTempoGr.Contas   With '----------'
+Replace CsTempoGr.Linhas   With '----------'
+Replace CsTempoGr.moevenda With '---'
+Replace CsTempoGr.moecusto With '---'
+
+Select Tempo
+Scan
+	Scatter Memvar
+	Select CsTempoGr
+	Append Blank
+	Gather Memvar
+	Select CsTempoCp
+	Append Blank
+	Gather Memvar
+EndScan
+
+Select CsTempoGr
+Go Top
+Wait Clear
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE visualizacao
+------------------------------------------------------------
+PROCEDURE visualizacao
+Do Form SigReEqT With ThisForm
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Sair.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Sair.Click
+ThisForm.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnReport.Click
+------------------------------------------------------------
+PROCEDURE btnReport.Click
+Local llRetorno
+
+If This.Value = 1
+
+	Do Case
+		Case Empty(ThisForm.get_cd_empresa.Value) Or !fAcessoEmpresa(Usuar,'C',ThisForm.get_cd_empresa.Value)
+				MessageBox('Empresa Inválida.',16,'')
+				ThisForm.get_cd_empresa.SetFocus
+				Return
+		Case ThisForm.opt_calcusto.Value = 2 And Empty(ThisForm.get_cd_grupo_calc.Value)
+				MessageBox('Grupo de Cálculo Obrigatório',16,'')
+				ThisForm.get_cd_grupo_calc.SetFocus
+				Return
+	EndCase
+EndIf
+=DoDefault()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.getDataSaldo
+* Classe: textbox (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(ThisForm.optRfestoque.Value = 2)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.get_cd_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Empty(This.Value)
+	ThisForm.get_ds_moeda.Value = ''
+	ThisForm.get_ds_moeda.Refresh
+	Return(.T.)
+EndIf
+
+m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','cmoes',This.Value,'Moedas',.T.)
+If .Not.m.loLista.plAchouRegistro
+	m.loLista.mAddColuna('cmoes','XXXXXX','Código')
+	m.loLista.mAddColuna('dmoes','','Descrição')
+	m.loLista.Show()
+EndIf
+If LastKey() <> 27 And Used('CrMoedas')
+	ThisForm.get_cd_moeda.Value = Evaluate('CrMoedas.cmoes')
+	ThisForm.get_ds_moeda.Value = Evaluate('CrMoedas.dmoes')
+Else
+	ThisForm.get_cd_moeda.Value = ''
+	ThisForm.get_ds_moeda.Value = ''
+EndIf
+ThisForm.get_cd_moeda.Refresh
+ThisForm.get_ds_moeda.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.get_ds_moeda
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Empty(This.Value)
+	ThisForm.get_cd_moeda.Value = ''
+	ThisForm.get_cd_moeda.Refresh
+	Return(.T.)
+EndIf
+
+m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','dmoes',This.Value,'Moedas',.T.)
+If .Not.m.loLista.plAchouRegistro
+	m.loLista.mAddColuna('dmoes','','Descrição')
+	m.loLista.mAddColuna('cmoes','XXXXXX','Código')
+	m.loLista.Show()
+EndIf
+If LastKey() <> 27 And Used('CrMoedas')
+	ThisForm.get_cd_moeda.Value = Evaluate('CrMoedas.cmoes')
+	ThisForm.get_ds_moeda.Value = Evaluate('CrMoedas.dmoes')
+Else
+	ThisForm.get_cd_moeda.Value = ''
+	ThisForm.get_ds_moeda.Value = ''
+EndIf
+ThisForm.get_cd_moeda.Refresh
+ThisForm.get_ds_moeda.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_moeda.value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select Selecao
+Replace All marcas With 0
+Go Top
+ThisForm.Grade.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.get_cd_grupo
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Empty(This.Value)
+	ThisForm.get_ds_grupo.Value = ''
+	ThisForm.get_ds_grupo.Refresh
+	Return(.T.)
+EndIf
+
+m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','cgrus',This.Value,'Grupos',.T.)
+If .Not.m.loLista.plAchouRegistro
+	m.loLista.mAddColuna('cgrus','XXXXXX','Código')
+	m.loLista.mAddColuna('dgrus','','Descrição')
+	m.loLista.Show()
+EndIf
+
+If LastKey() <> 27 And Used('CrGrupos')
+	ThisForm.get_cd_grupo.Value = Evaluate('CrGrupos.cgrus')
+	ThisForm.get_ds_grupo.Value = Evaluate('CrGrupos.dgrus')
+Else
+	ThisForm.get_cd_grupo.Value = ''
+	ThisForm.get_ds_grupo.Value = ''
+EndIf
+ThisForm.get_cd_grupo.Refresh
+ThisForm.get_ds_grupo.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.Grade.column1.fwcheckbox1
+* Classe: fwcheckbox (Base: checkbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+lGrupo = .F.
+If Selecao.marcas = 1 And Empty(Selecao.contas)
+	Grupo = Selecao.grupos
+	Scan While grupos = Grupo
+		Replace Selecao.marcas With 1
+		lGrupo = .T.
+	EndScan
+EndIf
+If lGrupo
+	Select Selecao
+	Go Top
+	Locate For Selecao.grupos = Grupo And Empty(Selecao.Contas)
+	Replace Selecao.marcas With 0
+EndIf
+Select Selecao
+Go Top
+ThisForm.Grade.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.Grade.column2.Ingrid1
+* Classe: ingrid (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.Grade.column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+ThisForm.Grade.Column1.fwcheckbox1.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.F.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select Selecao
+Go Top
+Do While !Eof()
+	Replace Selecao.marcas With 1
+	lcGrpSel = Selecao.grupos
+	lcCntSel = Selecao.contas
+	If !Empty(lcCntSel)
+		Select Selecao
+		Go Top
+		Locate For Selecao.grupos = lcGrpSel And Empty(Selecao.contas)
+		Replace Selecao.marcas With 0
+		Select Selecao
+		Go Top
+		Locate For Selecao.grupos = lcGrpSel And Selecao.contas = lcCntSel
+	EndIf
+	Select Selecao
+	Skip
+EndDo
+Select Selecao
+Go Top
+ThisForm.Grade.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.optRfestoque
+* Classe: fwoption (Base: optiongroup)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.getDataSaldo.Value = IIf(This.Value = 1,{},IIf(Empty(ThisForm.getDataSaldo.Value),Date(),ThisForm.getDataSaldo.Value))
+ThisForm.getDataSaldo.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.get_ds_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_empresa.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.get_ds_grupo
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Empty(This.Value)
+	ThisForm.get_cd_grupo.Value = ''
+	ThisForm.get_cd_grupo.Refresh
+	Return(.T.)
+EndIf
+
+m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','dgrus',This.Value,'Grupos',.T.)
+If .Not.m.loLista.plAchouRegistro
+	m.loLista.mAddColuna('dgrus','','Descrição')
+	m.loLista.mAddColuna('cgrus','XXXXXX','Código')
+	m.loLista.Show()
+EndIf
+
+If LastKey() <> 27 And Used('CrGrupos')
+	ThisForm.get_cd_grupo.Value = Evaluate('CrGrupos.cgrus')
+	ThisForm.get_ds_grupo.Value = Evaluate('CrGrupos.dgrus')
+Else
+	ThisForm.get_cd_grupo.Value = ''
+	ThisForm.get_ds_grupo.Value = ''
+EndIf
+ThisForm.get_cd_grupo.Refresh
+ThisForm.get_ds_grupo.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_grupo.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.get_cd_empresa
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.get_cd_empresa,ThisForm.get_ds_empresa)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.get_cd_grupo_calc
+* Classe: textbox (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Empty(This.Value)
+	ThisForm.get_ds_grupo_calc.Value = ''
+	ThisForm.get_ds_grupo_calc.Refresh
+	Return(.T.)
+EndIf
+
+m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','cgrus',This.Value,'Grupos',.T.)
+If .Not.m.loLista.plAchouRegistro
+	m.loLista.mAddColuna('cgrus','XXXXXX','Código')
+	m.loLista.mAddColuna('dgrus','','Descrição')
+	m.loLista.Show()
+EndIf
+
+If LastKey() <> 27 And Used('CrGrupos')
+	ThisForm.get_cd_grupo_calc.Value = Evaluate('CrGrupos.cgrus')
+	ThisForm.get_ds_grupo_calc.Value = Evaluate('CrGrupos.dgrus')
+Else
+	ThisForm.get_cd_grupo_calc.Value = ''
+	ThisForm.get_ds_grupo_calc.Value = ''
+EndIf
+ThisForm.get_cd_grupo_calc.Refresh
+ThisForm.get_ds_grupo_calc.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.get_ds_grupo_calc
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Empty(This.Value)
+	ThisForm.get_cd_grupo_calc.Value = ''
+	ThisForm.Get_cd_grupo_calc.Refresh
+	Return(.T.)
+EndIf
+
+m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','dgrus',This.Value,'Grupos',.T.)
+If .Not.m.loLista.plAchouRegistro
+	m.loLista.mAddColuna('dgrus','','Descrição')
+	m.loLista.mAddColuna('cgrus','XXXXXX','Código')
+	m.loLista.Show()
+EndIf
+
+If LastKey() <> 27 And Used('CrGrupos')
+	ThisForm.get_cd_grupo_Calc.Value = Evaluate('CrGrupos.cgrus')
+	ThisForm.get_ds_grupo_Calc.Value = Evaluate('CrGrupos.dgrus')
+Else
+	ThisForm.get_cd_grupo_Calc.Value = ''
+	ThisForm.get_ds_grupo_Calc.Value = ''
+EndIf
+ThisForm.get_cd_grupo_Calc.Refresh
+ThisForm.get_ds_grupo_Calc.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(ThisForm.get_cd_grupo_Calc.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGREEQR.opt_calcusto
+* Classe: fwoption (Base: optiongroup)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.Say1.Visible = (This.Value = 2)
+ThisForm.get_cd_grupo_calc.Visible = (This.Value = 2)
+ThisForm.get_ds_grupo_calc.Visible = (This.Value = 2)
+ThisForm.get_cd_grupo_calc.Value = IIf(This.Value = 1,'',ThisForm.get_cd_grupo_calc.Value)
+ThisForm.get_ds_grupo_calc.Value = IIf(This.Value = 1,'',ThisForm.get_ds_grupo_calc.Value)
+ThisForm.get_cd_grupo_calc.Refresh
+ThisForm.get_ds_grupo_calc.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGREEQR
+RESERVED3 (ClassInfo): linventario
+podatamgr
+tipo
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 28
+================================================================================
