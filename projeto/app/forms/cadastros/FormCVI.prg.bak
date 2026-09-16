@@ -1937,7 +1937,7 @@ DEFINE CLASS FormCVI AS FormBase
     * Busca DISTINCT usuarios com Indivs='R' e Supervs/Setors em branco
     *--------------------------------------------------------------------------
     PROCEDURE AbrirLookupSupervs()
-        LOCAL loc_oPg2, loc_lReadOnly, loc_oBusca, loc_oErro, loc_nRet, loc_cSQL
+        LOCAL loc_oPg2, loc_lReadOnly, loc_oBusca, loc_oErro, loc_nRet, loc_cSQL, loc_lProsseguir
         loc_oBusca   = .NULL.
         loc_lReadOnly = .F.
 
@@ -1949,6 +1949,7 @@ DEFINE CLASS FormCVI AS FormBase
             RETURN
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             *-- Montar cursor dinamico de responsaveis (Indivs='R', sem Supervs/Setors proprios)
             loc_cSQL = "SELECT DISTINCT a.Usuars, b.NComps " + ;
@@ -1967,24 +1968,26 @@ DEFINE CLASS FormCVI AS FormBase
 
             IF loc_nRet <= 0 OR !USED("cursor_4c_BuscaSup")
                 MsgAviso("Nenhum respons" + CHR(225) + "vel encontrado.", "Respons" + CHR(225) + "vel")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- FormBuscaAuxiliar MODO 2: sem params Init, cursor pre-existente
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaSup"
-                loc_oBusca.mAddColuna("Usuars", "XXXXXXXXXX", "Usu" + CHR(225) + "rio")
-                loc_oBusca.mAddColuna("NComps", "X(40)",     "Nome Completo")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou
-                    loc_oPg2.txt_4c_Supervs.Value = ALLTRIM(loc_oBusca.this_cValorSelecionado)
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaSup"
+                    loc_oBusca.mAddColuna("Usuars", "XXXXXXXXXX", "Usu" + CHR(225) + "rio")
+                    loc_oBusca.mAddColuna("NComps", "X(40)",     "Nome Completo")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou
+                        loc_oPg2.txt_4c_Supervs.Value = ALLTRIM(loc_oBusca.this_cValorSelecionado)
+                    ENDIF
+                    IF USED("cursor_4c_BuscaSup")
+                        USE IN cursor_4c_BuscaSup
+                    ENDIF
+                    loc_oBusca.Release()
+                    loc_oBusca = .NULL.
                 ENDIF
-                IF USED("cursor_4c_BuscaSup")
-                    USE IN cursor_4c_BuscaSup
-                ENDIF
-                loc_oBusca.Release()
-                loc_oBusca = .NULL.
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao abrir lookup de Respons" + CHR(225) + "vel:" + ;

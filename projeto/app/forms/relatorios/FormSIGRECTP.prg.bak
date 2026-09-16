@@ -924,18 +924,23 @@ DEFINE CLASS FormSIGRECTP AS FormBase
     ENDPROC
 
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_cFrxPath, loc_oErro
+        LOCAL loc_cFrxPath, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.ValidarFiltros()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            THIS.ExecutarReportForm("relsigrectp", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
+            IF loc_lProsseguir
+                THIS.ExecutarReportForm("relsigrectp", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -948,18 +953,23 @@ DEFINE CLASS FormSIGRECTP AS FormBase
     *   Equivalente ao btnReport.Click com Value=2 (Imprime) do legado.
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
-        LOCAL loc_cFrxPath, loc_oErro
+        LOCAL loc_cFrxPath, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.ValidarFiltros()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            THIS.ExecutarReportForm("relsigrectp", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
+            IF loc_lProsseguir
+                THIS.ExecutarReportForm("relsigrectp", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -971,28 +981,35 @@ DEFINE CLASS FormSIGRECTP AS FormBase
     * BtnExcelClick - Exporta dados do cursor para arquivo XLS
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcelClick()
-        LOCAL loc_cArquivo, loc_cCursor, loc_oErro
+        LOCAL loc_cArquivo, loc_cCursor, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.ValidarFiltros()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            loc_cCursor = THIS.this_oRelatorio.this_cCursorDados
-            IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
-                MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
-                RETURN
+            IF loc_lProsseguir
+                loc_cCursor = THIS.this_oRelatorio.this_cCursorDados
+                IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
+                    MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cArquivo = PUTFILE("Salvar como...", "SigReCtp", "XLS")
-            IF !EMPTY(loc_cArquivo)
-                SELECT (loc_cCursor)
-                COPY TO (loc_cArquivo) TYPE XLS
-                MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
-                    loc_cArquivo, "Excel")
+            IF loc_lProsseguir
+                loc_cArquivo = PUTFILE("Salvar como...", "SigReCtp", "XLS")
+                IF !EMPTY(loc_cArquivo)
+                    SELECT (loc_cCursor)
+                    COPY TO (loc_cArquivo) TYPE XLS
+                    MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
+                        loc_cArquivo, "Excel")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -1327,67 +1344,73 @@ DEFINE CLASS FormSIGRECTP AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE ValidarCPros()
-        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg    = THIS.pgf_4c_Paginas.Page1
             loc_cValor = ALLTRIM(loc_oPg.txt_4c_CPros.Value)
             IF EMPTY(loc_cValor)
                 loc_oPg.txt_4c_DPros.Value = ""
                 THIS.AtualizarEstadoCamposDescricao()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL = "SELECT RTRIM(CPros) AS CPros, RTRIM(DPros) AS DPros" + ;
-                " FROM SigCdPro WHERE RTRIM(CPros) = " + EscaparSQL(loc_cValor)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CProsVal")
-            IF loc_nResult > 0
-                SELECT cursor_4c_CProsVal
-                IF !EOF()
-                    loc_oPg.txt_4c_DPros.Value = ALLTRIM(cursor_4c_CProsVal.DPros)
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT RTRIM(CPros) AS CPros, RTRIM(DPros) AS DPros" + ;
+                    " FROM SigCdPro WHERE RTRIM(CPros) = " + EscaparSQL(loc_cValor)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CProsVal")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_CProsVal
+                    IF !EOF()
+                        loc_oPg.txt_4c_DPros.Value = ALLTRIM(cursor_4c_CProsVal.DPros)
+                    ELSE
+                        loc_oPg.txt_4c_DPros.Value = ""
+                        THIS.AbrirBuscaCPros()
+                    ENDIF
                 ELSE
                     loc_oPg.txt_4c_DPros.Value = ""
                     THIS.AbrirBuscaCPros()
                 ENDIF
-            ELSE
-                loc_oPg.txt_4c_DPros.Value = ""
-                THIS.AbrirBuscaCPros()
+                IF USED("cursor_4c_CProsVal")
+                    USE IN cursor_4c_CProsVal
+                ENDIF
+                THIS.AtualizarEstadoCamposDescricao()
             ENDIF
-            IF USED("cursor_4c_CProsVal")
-                USE IN cursor_4c_CProsVal
-            ENDIF
-            THIS.AtualizarEstadoCamposDescricao()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
     PROTECTED PROCEDURE ValidarDPros()
-        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg    = THIS.pgf_4c_Paginas.Page1
             loc_cValor = ALLTRIM(loc_oPg.txt_4c_DPros.Value)
             IF EMPTY(loc_cValor)
                 loc_oPg.txt_4c_CPros.Value = ""
                 THIS.AtualizarEstadoCamposDescricao()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL = "SELECT RTRIM(CPros) AS CPros, RTRIM(DPros) AS DPros" + ;
-                " FROM SigCdPro WHERE DPros LIKE " + EscaparSQL(loc_cValor + "%")
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DProsVal")
-            IF loc_nResult > 0
-                SELECT cursor_4c_DProsVal
-                IF !EOF()
-                    loc_oPg.txt_4c_CPros.Value = ALLTRIM(cursor_4c_DProsVal.CPros)
-                    loc_oPg.txt_4c_DPros.Value = ALLTRIM(cursor_4c_DProsVal.DPros)
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT RTRIM(CPros) AS CPros, RTRIM(DPros) AS DPros" + ;
+                    " FROM SigCdPro WHERE DPros LIKE " + EscaparSQL(loc_cValor + "%")
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DProsVal")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_DProsVal
+                    IF !EOF()
+                        loc_oPg.txt_4c_CPros.Value = ALLTRIM(cursor_4c_DProsVal.CPros)
+                        loc_oPg.txt_4c_DPros.Value = ALLTRIM(cursor_4c_DProsVal.DPros)
+                    ELSE
+                        THIS.AbrirBuscaDPros()
+                    ENDIF
                 ELSE
                     THIS.AbrirBuscaDPros()
                 ENDIF
-            ELSE
-                THIS.AbrirBuscaDPros()
+                IF USED("cursor_4c_DProsVal")
+                    USE IN cursor_4c_DProsVal
+                ENDIF
+                THIS.AtualizarEstadoCamposDescricao()
             ENDIF
-            IF USED("cursor_4c_DProsVal")
-                USE IN cursor_4c_DProsVal
-            ENDIF
-            THIS.AtualizarEstadoCamposDescricao()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -1468,67 +1491,73 @@ DEFINE CLASS FormSIGRECTP AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE ValidarIClis()
-        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg    = THIS.pgf_4c_Paginas.Page1
             loc_cValor = ALLTRIM(loc_oPg.txt_4c_IClis.Value)
             IF EMPTY(loc_cValor)
                 loc_oPg.txt_4c_RClis.Value = ""
                 THIS.AtualizarEstadoCamposDescricao()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL = "SELECT RTRIM(IClis) AS IClis, RTRIM(RClis) AS RClis" + ;
-                " FROM SigCdCli WHERE RTRIM(IClis) = " + EscaparSQL(loc_cValor)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_IClisVal")
-            IF loc_nResult > 0
-                SELECT cursor_4c_IClisVal
-                IF !EOF()
-                    loc_oPg.txt_4c_RClis.Value = ALLTRIM(cursor_4c_IClisVal.RClis)
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT RTRIM(IClis) AS IClis, RTRIM(RClis) AS RClis" + ;
+                    " FROM SigCdCli WHERE RTRIM(IClis) = " + EscaparSQL(loc_cValor)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_IClisVal")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_IClisVal
+                    IF !EOF()
+                        loc_oPg.txt_4c_RClis.Value = ALLTRIM(cursor_4c_IClisVal.RClis)
+                    ELSE
+                        loc_oPg.txt_4c_RClis.Value = ""
+                        THIS.AbrirBuscaIClis()
+                    ENDIF
                 ELSE
                     loc_oPg.txt_4c_RClis.Value = ""
                     THIS.AbrirBuscaIClis()
                 ENDIF
-            ELSE
-                loc_oPg.txt_4c_RClis.Value = ""
-                THIS.AbrirBuscaIClis()
+                IF USED("cursor_4c_IClisVal")
+                    USE IN cursor_4c_IClisVal
+                ENDIF
+                THIS.AtualizarEstadoCamposDescricao()
             ENDIF
-            IF USED("cursor_4c_IClisVal")
-                USE IN cursor_4c_IClisVal
-            ENDIF
-            THIS.AtualizarEstadoCamposDescricao()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
     PROTECTED PROCEDURE ValidarRClis()
-        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg    = THIS.pgf_4c_Paginas.Page1
             loc_cValor = ALLTRIM(loc_oPg.txt_4c_RClis.Value)
             IF EMPTY(loc_cValor)
                 loc_oPg.txt_4c_IClis.Value = ""
                 THIS.AtualizarEstadoCamposDescricao()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL = "SELECT RTRIM(IClis) AS IClis, RTRIM(RClis) AS RClis" + ;
-                " FROM SigCdCli WHERE RClis LIKE " + EscaparSQL(loc_cValor + "%")
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_RClisVal")
-            IF loc_nResult > 0
-                SELECT cursor_4c_RClisVal
-                IF !EOF()
-                    loc_oPg.txt_4c_IClis.Value = ALLTRIM(cursor_4c_RClisVal.IClis)
-                    loc_oPg.txt_4c_RClis.Value = ALLTRIM(cursor_4c_RClisVal.RClis)
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT RTRIM(IClis) AS IClis, RTRIM(RClis) AS RClis" + ;
+                    " FROM SigCdCli WHERE RClis LIKE " + EscaparSQL(loc_cValor + "%")
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_RClisVal")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_RClisVal
+                    IF !EOF()
+                        loc_oPg.txt_4c_IClis.Value = ALLTRIM(cursor_4c_RClisVal.IClis)
+                        loc_oPg.txt_4c_RClis.Value = ALLTRIM(cursor_4c_RClisVal.RClis)
+                    ELSE
+                        THIS.AbrirBuscaRClis()
+                    ENDIF
                 ELSE
                     THIS.AbrirBuscaRClis()
                 ENDIF
-            ELSE
-                THIS.AbrirBuscaRClis()
+                IF USED("cursor_4c_RClisVal")
+                    USE IN cursor_4c_RClisVal
+                ENDIF
+                THIS.AtualizarEstadoCamposDescricao()
             ENDIF
-            IF USED("cursor_4c_RClisVal")
-                USE IN cursor_4c_RClisVal
-            ENDIF
-            THIS.AtualizarEstadoCamposDescricao()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

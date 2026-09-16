@@ -1802,27 +1802,32 @@ DEFINE CLASS Formsigreinr AS FormBase
     *==========================================================================
 
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ValidarFiltros()
                 MsgAviso(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Campo Obrigat" + CHR(243) + "rio")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro no Processamento")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro no Processamento")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            IF !THIS.this_oRelatorio.Visualizar()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
-                    "Erro na Visualiza" + CHR(231) + CHR(227) + "o")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.Visualizar()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
+                        "Erro na Visualiza" + CHR(231) + CHR(227) + "o")
+                    ENDIF
+                ELSE
+                    THIS.this_oRelatorio.RegistrarAuditoria("VISUALIZAR")
                 ENDIF
-            ELSE
-                THIS.this_oRelatorio.RegistrarAuditoria("VISUALIZAR")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -1832,26 +1837,31 @@ DEFINE CLASS Formsigreinr AS FormBase
     ENDPROC
 
     PROCEDURE BtnImprimirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ValidarFiltros()
                 MsgAviso(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Campo Obrigat" + CHR(243) + "rio")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro no Processamento")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro no Processamento")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            IF !THIS.this_oRelatorio.Imprimir(.T.)
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro na Impress" + CHR(227) + "o")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.Imprimir(.T.)
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro na Impress" + CHR(227) + "o")
+                    ENDIF
+                ELSE
+                    THIS.this_oRelatorio.RegistrarAuditoria("IMPRIMIR")
                 ENDIF
-            ELSE
-                THIS.this_oRelatorio.RegistrarAuditoria("IMPRIMIR")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -1861,26 +1871,31 @@ DEFINE CLASS Formsigreinr AS FormBase
     ENDPROC
 
     PROCEDURE BtnGerarExcelClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ValidarFiltros()
                 MsgAviso(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Campo Obrigat" + CHR(243) + "rio")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro no Processamento")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro no Processamento")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            IF !THIS.this_oRelatorio.Imprimir(.F.)
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao Gerar Documento")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.Imprimir(.F.)
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao Gerar Documento")
+                    ENDIF
+                ELSE
+                    THIS.this_oRelatorio.RegistrarAuditoria("EXCEL")
                 ENDIF
-            ELSE
-                THIS.this_oRelatorio.RegistrarAuditoria("EXCEL")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

@@ -393,19 +393,22 @@ DEFINE CLASS FormSigReFtp AS FormBase
     *   inverter a marca do registro corrente no grid, refletindo no checkbox.
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_lAtual
+        LOCAL loc_lAtual, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_SelSigReFtp") OR EOF("cursor_4c_SelSigReFtp")
                 MsgAviso("Nenhum processo selecionado no grid.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_SelSigReFtp
-            loc_lAtual = lMarca
-            REPLACE lMarca WITH !loc_lAtual IN cursor_4c_SelSigReFtp
-            IF PEMSTATUS(THIS.cnt_4c_Corpo, "grd_4c_Dados", 5)
-                THIS.cnt_4c_Corpo.grd_4c_Dados.Refresh()
+            IF loc_lProsseguir
+                SELECT cursor_4c_SelSigReFtp
+                loc_lAtual = lMarca
+                REPLACE lMarca WITH !loc_lAtual IN cursor_4c_SelSigReFtp
+                IF PEMSTATUS(THIS.cnt_4c_Corpo, "grd_4c_Dados", 5)
+                    THIS.cnt_4c_Corpo.grd_4c_Dados.Refresh()
+                ENDIF
+                THIS.Refresh()
             ENDIF
-            THIS.Refresh()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em BtnAlterarClick")
         ENDTRY

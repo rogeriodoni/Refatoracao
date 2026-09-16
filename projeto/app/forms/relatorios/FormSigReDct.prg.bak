@@ -543,25 +543,30 @@ DEFINE CLASS FormSigReDct AS FormBase
     * BtnExcelClick - Exporta dados do cursor de relatorio para arquivo XLS
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcelClick()
-        LOCAL loc_cArquivo, loc_cCursor
+        LOCAL loc_cArquivo, loc_cCursor, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCursor = THIS.this_oRelatorio.this_cCursorDados
-            IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
-                MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
-                RETURN
+            IF loc_lProsseguir
+                loc_cCursor = THIS.this_oRelatorio.this_cCursorDados
+                IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
+                    MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cArquivo = PUTFILE("Salvar como...", "SigReDct", "XLS")
-            IF !EMPTY(loc_cArquivo)
-                SELECT (loc_cCursor)
-                COPY TO (loc_cArquivo) TYPE XLS
-                MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + loc_cArquivo, "Excel")
+            IF loc_lProsseguir
+                loc_cArquivo = PUTFILE("Salvar como...", "SigReDct", "XLS")
+                IF !EMPTY(loc_cArquivo)
+                    SELECT (loc_cCursor)
+                    COPY TO (loc_cArquivo) TYPE XLS
+                    MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + loc_cArquivo, "Excel")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

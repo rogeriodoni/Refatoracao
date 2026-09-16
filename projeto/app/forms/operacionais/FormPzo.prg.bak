@@ -1484,46 +1484,49 @@ DEFINE CLASS FormPzo AS FormBase
     * Adiciona registro em branco herdando Dopes/Abrevs da linha corrente
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro, loc_cDopes, loc_cAbrevs, loc_dPrazoBase
+        LOCAL loc_oErro, loc_cDopes, loc_cAbrevs, loc_dPrazoBase, loc_lProsseguir
         LOCAL loc_nDtEntrs, loc_nFiscals, loc_cContaEs
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("CsPrazE")
                 MsgAviso("Cursor de prazos nao esta disponivel.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Capturar valores da linha corrente para herdar
-            SELECT CsPrazE
-            loc_cDopes    = ALLTRIM(NVL(CsPrazE.Dopes,    ""))
-            loc_cAbrevs   = ALLTRIM(NVL(CsPrazE.Abrevs,   ""))
-            loc_dPrazoBase= NVL(CsPrazE.Prazos, DATETIME())
-            loc_nDtEntrs  = NVL(CsPrazE.DtEntrs,  0)
-            loc_nFiscals  = NVL(CsPrazE.nFiscals, 0)
-            loc_cContaEs  = ALLTRIM(NVL(CsPrazE.ContaEs, ""))
+            IF loc_lProsseguir
+                SELECT CsPrazE
+                loc_cDopes    = ALLTRIM(NVL(CsPrazE.Dopes,    ""))
+                loc_cAbrevs   = ALLTRIM(NVL(CsPrazE.Abrevs,   ""))
+                loc_dPrazoBase= NVL(CsPrazE.Prazos, DATETIME())
+                loc_nDtEntrs  = NVL(CsPrazE.DtEntrs,  0)
+                loc_nFiscals  = NVL(CsPrazE.nFiscals, 0)
+                loc_cContaEs  = ALLTRIM(NVL(CsPrazE.ContaEs, ""))
 
             *-- Adicionar linha em branco herdando contexto
-            APPEND BLANK IN CsPrazE
-            REPLACE CsPrazE.Dopes     WITH loc_cDopes    ;
-                    CsPrazE.Abrevs    WITH loc_cAbrevs   ;
-                    CsPrazE.Prazos    WITH loc_dPrazoBase;
-                    CsPrazE.DtEntrs   WITH loc_nDtEntrs  ;
-                    CsPrazE.nFiscals  WITH loc_nFiscals  ;
-                    CsPrazE.nMinEnts  WITH 0             ;
-                    CsPrazE.nMaxEnts  WITH 0             ;
-                    CsPrazE.VlFretes  WITH 0             ;
-                    CsPrazE.DespAces  WITH 0             ;
-                    CsPrazE.VlSeguros WITH 0             ;
-                    CsPrazE.ContaEs   WITH loc_cContaEs  ;
-                    CsPrazE.LocalEnts WITH 0             ;
-                    CsPrazE.LocEntObs WITH 0             ;
-                    CsPrazE.ContaEs   WITH loc_cContaEs  IN CsPrazE
+                APPEND BLANK IN CsPrazE
+                REPLACE CsPrazE.Dopes     WITH loc_cDopes    ;
+                        CsPrazE.Abrevs    WITH loc_cAbrevs   ;
+                        CsPrazE.Prazos    WITH loc_dPrazoBase;
+                        CsPrazE.DtEntrs   WITH loc_nDtEntrs  ;
+                        CsPrazE.nFiscals  WITH loc_nFiscals  ;
+                        CsPrazE.nMinEnts  WITH 0             ;
+                        CsPrazE.nMaxEnts  WITH 0             ;
+                        CsPrazE.VlFretes  WITH 0             ;
+                        CsPrazE.DespAces  WITH 0             ;
+                        CsPrazE.VlSeguros WITH 0             ;
+                        CsPrazE.ContaEs   WITH loc_cContaEs  ;
+                        CsPrazE.LocalEnts WITH 0             ;
+                        CsPrazE.LocEntObs WITH 0             ;
+                        CsPrazE.ContaEs   WITH loc_cContaEs  IN CsPrazE
 
             *-- Reposicionar grid na nova linha e atualizar totais/paineis
-            THIS.grd_4c_Dados.Refresh
-            THIS.AtualizarLinhaGrid(1)
-            THIS.AtualizarTotaisNaTela()
+                THIS.grd_4c_Dados.Refresh
+                THIS.AtualizarLinhaGrid(1)
+                THIS.AtualizarTotaisNaTela()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -1537,34 +1540,37 @@ DEFINE CLASS FormPzo AS FormBase
     * Posiciona foco na primeira coluna editavel e atualiza paineis suplementares
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("CsPrazE") OR RECCOUNT("CsPrazE") = 0
                 MsgAviso("Nenhum prazo disponivel para alteracao.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT CsPrazE
-            IF EOF() OR BOF()
-                GO TOP
-            ENDIF
+            IF loc_lProsseguir
+                SELECT CsPrazE
+                IF EOF() OR BOF()
+                    GO TOP
+                ENDIF
 
             *-- Marcar modo edicao no BO (usado por Confirmar)
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                THIS.this_oBusinessObject.this_cEscolha = "ALTERAR"
-            ENDIF
+                IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                    THIS.this_oBusinessObject.this_cEscolha = "ALTERAR"
+                ENDIF
 
             *-- Atualizar paineis suplementares para a linha atual
-            THIS.AtualizarLinhaGrid(1)
+                THIS.AtualizarLinhaGrid(1)
 
             *-- Colocar foco na primeira coluna editavel (Frete)
-            THIS.grd_4c_Dados.SetFocus
-            THIS.grd_4c_Dados.ActiveColumn = 1
-            IF PEMSTATUS(THIS.grd_4c_Dados.Columns(1), "CurrentControl", 5)
-                THIS.grd_4c_Dados.Columns(1).Text1.SetFocus
-            ENDIF
+                THIS.grd_4c_Dados.SetFocus
+                THIS.grd_4c_Dados.ActiveColumn = 1
+                IF PEMSTATUS(THIS.grd_4c_Dados.Columns(1), "CurrentControl", 5)
+                    THIS.grd_4c_Dados.Columns(1).Text1.SetFocus
+                ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -1578,38 +1584,41 @@ DEFINE CLASS FormPzo AS FormBase
     * Atualiza paineis suplementares mostrando dados da linha corrente
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("CsPrazE") OR RECCOUNT("CsPrazE") = 0
                 MsgAviso("Nenhum prazo disponivel para visualizacao.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT CsPrazE
-            IF EOF() OR BOF()
-                GO TOP
-            ENDIF
+            IF loc_lProsseguir
+                SELECT CsPrazE
+                IF EOF() OR BOF()
+                    GO TOP
+                ENDIF
 
             *-- Marcar modo visualizacao no BO
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                THIS.this_oBusinessObject.this_cEscolha = "VISUALIZAR"
-            ENDIF
+                IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                    THIS.this_oBusinessObject.this_cEscolha = "VISUALIZAR"
+                ENDIF
 
             *-- Bloquear edicao no grid (todas as colunas ReadOnly)
-            THIS.grd_4c_Dados.ReadOnly = .T.
+                THIS.grd_4c_Dados.ReadOnly = .T.
 
             *-- Bloquear campos do painel de entrega e observacao
-            THIS.cnt_4c_Entrega.txt_4c_Conta.ReadOnly    = .T.
-            THIS.cnt_4c_Entrega.txt_4c_DConta.ReadOnly   = .T.
-            THIS.cnt_4c_Entrega.txt_4c_Cpf.ReadOnly      = .T.
-            THIS.cnt_4c_Observacao.txt_4c_CodObs.ReadOnly= .T.
-            THIS.cnt_4c_Observacao.txt_4c_Obs.ReadOnly   = .T.
+                THIS.cnt_4c_Entrega.txt_4c_Conta.ReadOnly    = .T.
+                THIS.cnt_4c_Entrega.txt_4c_DConta.ReadOnly   = .T.
+                THIS.cnt_4c_Entrega.txt_4c_Cpf.ReadOnly      = .T.
+                THIS.cnt_4c_Observacao.txt_4c_CodObs.ReadOnly= .T.
+                THIS.cnt_4c_Observacao.txt_4c_Obs.ReadOnly   = .T.
 
             *-- Refrescar paineis suplementares para exibir dados
-            THIS.AtualizarLinhaGrid(1)
-            THIS.AtualizarTotaisNaTela()
+                THIS.AtualizarLinhaGrid(1)
+                THIS.AtualizarTotaisNaTela()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -1623,47 +1632,52 @@ DEFINE CLASS FormPzo AS FormBase
     * Apos exclusao reposiciona no primeiro registro e atualiza totais
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro, loc_cDopes
+        LOCAL loc_oErro, loc_cDopes, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("CsPrazE") OR RECCOUNT("CsPrazE") = 0
                 MsgAviso("Nenhum prazo disponivel para exclusao.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT CsPrazE
-            IF EOF() OR BOF()
-                GO TOP
-            ENDIF
+            IF loc_lProsseguir
+                SELECT CsPrazE
+                IF EOF() OR BOF()
+                    GO TOP
+                ENDIF
 
-            loc_cDopes = ALLTRIM(NVL(CsPrazE.Dopes, ""))
+                loc_cDopes = ALLTRIM(NVL(CsPrazE.Dopes, ""))
 
-            IF !MsgConfirma("Confirma a exclusao do prazo da operacao " + ;
-                            loc_cDopes + " ?", "Confirmacao")
-                RETURN
+                IF !MsgConfirma("Confirma a exclusao do prazo da operacao " + ;
+                                loc_cDopes + " ?", "Confirmacao")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Marcar registro para exclusao e purgar do cursor
-            DELETE IN CsPrazE
-            SET DELETED ON
-            PACK
+            IF loc_lProsseguir
+                DELETE IN CsPrazE
+                SET DELETED ON
+                PACK
 
             *-- Reposicionar e atualizar interface
-            SELECT CsPrazE
-            IF RECCOUNT("CsPrazE") > 0
-                GO TOP
-                THIS.grd_4c_Dados.Refresh
-                THIS.AtualizarLinhaGrid(1)
-            ELSE
-                THIS.cnt_4c_Entrega.txt_4c_Conta.Value     = ""
-                THIS.cnt_4c_Entrega.txt_4c_DConta.Value    = ""
-                THIS.cnt_4c_Entrega.txt_4c_Cpf.Value       = ""
-                THIS.cnt_4c_Observacao.txt_4c_CodObs.Value = 0
-                THIS.cnt_4c_Observacao.txt_4c_Obs.Value    = ""
+                SELECT CsPrazE
+                IF RECCOUNT("CsPrazE") > 0
+                    GO TOP
+                    THIS.grd_4c_Dados.Refresh
+                    THIS.AtualizarLinhaGrid(1)
+                ELSE
+                    THIS.cnt_4c_Entrega.txt_4c_Conta.Value     = ""
+                    THIS.cnt_4c_Entrega.txt_4c_DConta.Value    = ""
+                    THIS.cnt_4c_Entrega.txt_4c_Cpf.Value       = ""
+                    THIS.cnt_4c_Observacao.txt_4c_CodObs.Value = 0
+                    THIS.cnt_4c_Observacao.txt_4c_Obs.Value    = ""
+                ENDIF
+
+                THIS.AtualizarTotaisNaTela()
+
             ENDIF
-
-            THIS.AtualizarTotaisNaTela()
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;

@@ -588,26 +588,31 @@ DEFINE CLASS FormGps AS FormBase
     * Legado: cmdInserir.Click -> Insert Into xOpe (Cgrus) Values (Space(20))
     *--------------------------------------------------------------------------
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(UPPER(THIS.this_cEscolha), "INSERIR", "ALTERAR")
                 MsgAviso("Modo somente leitura n" + CHR(227) + "o permite inclus" + CHR(227) + "o.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !USED("cursor_4c_Operacao")
-                MsgErro("Cursor de trabalho n" + CHR(227) + "o est" + CHR(225) + " dispon" + CHR(237) + "vel.", "Erro em BtnIncluirClick")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Operacao")
+                    MsgErro("Cursor de trabalho n" + CHR(227) + "o est" + CHR(225) + " dispon" + CHR(237) + "vel.", "Erro em BtnIncluirClick")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            SELECT cursor_4c_Operacao
-            INSERT INTO cursor_4c_Operacao (Dopes, Cgrus, Dgrus) VALUES ;
-                (THIS.this_cDopes, SPACE(3), SPACE(20))
-            THIS.this_lGravaDados = .T.
+            IF loc_lProsseguir
+                SELECT cursor_4c_Operacao
+                INSERT INTO cursor_4c_Operacao (Dopes, Cgrus, Dgrus) VALUES ;
+                    (THIS.this_cDopes, SPACE(3), SPACE(20))
+                THIS.this_lGravaDados = .T.
 
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
-                THIS.grd_4c_Dados.Refresh()
-                THIS.grd_4c_Dados.Column1.SetFocus()
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                    THIS.grd_4c_Dados.Column1.SetFocus()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em BtnIncluirClick")
@@ -621,26 +626,31 @@ DEFINE CLASS FormGps AS FormBase
     * Column1 (Cgrus) para permitir edicao / lookup.
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(UPPER(THIS.this_cEscolha), "INSERIR", "ALTERAR")
                 MsgAviso("Modo somente leitura n" + CHR(227) + "o permite altera" + CHR(231) + CHR(227) + "o.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !USED("cursor_4c_Operacao") OR RECCOUNT("cursor_4c_Operacao") = 0
-                MsgAviso("Nenhum registro para alterar.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Operacao") OR RECCOUNT("cursor_4c_Operacao") = 0
+                    MsgAviso("Nenhum registro para alterar.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            SELECT cursor_4c_Operacao
-            IF EOF()
-                GO BOTTOM
-            ENDIF
+            IF loc_lProsseguir
+                SELECT cursor_4c_Operacao
+                IF EOF()
+                    GO BOTTOM
+                ENDIF
 
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
-                THIS.grd_4c_Dados.Refresh()
-                THIS.grd_4c_Dados.Column1.SetFocus()
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                    THIS.grd_4c_Dados.Column1.SetFocus()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em BtnAlterarClick")
@@ -653,26 +663,31 @@ DEFINE CLASS FormGps AS FormBase
     * do banco para o cursor de trabalho (descarta edicoes nao confirmadas).
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_lConfirma, loc_oErro
+        LOCAL loc_lConfirma, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(THIS.this_cDopes)
                 MsgAviso("Nenhuma opera" + CHR(231) + CHR(227) + "o selecionada para visualizar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF THIS.this_lGravaDados
-                loc_lConfirma = MsgConfirma("H" + CHR(225) + " altera" + CHR(231) + CHR(245) + "es n" + CHR(227) + "o gravadas. Recarregar mesmo assim?", "Confirma" + CHR(231) + CHR(227) + "o")
-                IF !loc_lConfirma
-                    RETURN
+            IF loc_lProsseguir
+                IF THIS.this_lGravaDados
+                    loc_lConfirma = MsgConfirma("H" + CHR(225) + " altera" + CHR(231) + CHR(245) + "es n" + CHR(227) + "o gravadas. Recarregar mesmo assim?", "Confirma" + CHR(231) + CHR(227) + "o")
+                    IF !loc_lConfirma
+                        loc_lProsseguir = .F.
+                    ENDIF
                 ENDIF
             ENDIF
 
             *-- Recarrega dados do SQL Server no cursor de trabalho
-            THIS.CarregarDados()
-            THIS.this_lGravaDados = .F.
+            IF loc_lProsseguir
+                THIS.CarregarDados()
+                THIS.this_lGravaDados = .F.
 
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
-                THIS.grd_4c_Dados.Refresh()
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em BtnVisualizarClick")
@@ -684,39 +699,48 @@ DEFINE CLASS FormGps AS FormBase
     * Legado: cmdExcluir.Click -> Delete + Skip + Go Bott se EOF
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_lConfirma, loc_oErro
+        LOCAL loc_lConfirma, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(UPPER(THIS.this_cEscolha), "INSERIR", "ALTERAR")
                 MsgAviso("Modo somente leitura n" + CHR(227) + "o permite exclus" + CHR(227) + "o.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !USED("cursor_4c_Operacao") OR RECCOUNT("cursor_4c_Operacao") = 0
-                MsgAviso("Nenhum registro para excluir.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Operacao") OR RECCOUNT("cursor_4c_Operacao") = 0
+                    MsgAviso("Nenhum registro para excluir.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            SELECT cursor_4c_Operacao
-            IF EOF()
-                MsgAviso("Posicione em um registro para excluir.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                SELECT cursor_4c_Operacao
+                IF EOF()
+                    MsgAviso("Posicione em um registro para excluir.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_lConfirma = MsgConfirma("Confirma exclus" + CHR(227) + "o do grupo selecionado?", "Confirma" + CHR(231) + CHR(227) + "o")
-            IF !loc_lConfirma
-                RETURN
+            IF loc_lProsseguir
+                loc_lConfirma = MsgConfirma("Confirma exclus" + CHR(227) + "o do grupo selecionado?", "Confirma" + CHR(231) + CHR(227) + "o")
+                IF !loc_lConfirma
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            DELETE
-            SKIP
-            IF EOF()
-                GO BOTTOM
-            ENDIF
-            THIS.this_lGravaDados = .T.
+            IF loc_lProsseguir
+                DELETE
+                SKIP
+                IF EOF()
+                    GO BOTTOM
+                ENDIF
+                THIS.this_lGravaDados = .T.
 
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
-                THIS.grd_4c_Dados.Refresh()
-                THIS.grd_4c_Dados.SetFocus()
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                    THIS.grd_4c_Dados.SetFocus()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em BtnExcluirClick")
@@ -854,18 +878,21 @@ DEFINE CLASS FormGps AS FormBase
     * BtnBuscarClick - Recarrega lista de grupos do SQL Server no grid
     *--------------------------------------------------------------------------
     PROCEDURE BtnBuscarClick()
-        LOCAL loc_lConfirma, loc_oErro
+        LOCAL loc_lConfirma, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF THIS.this_lGravaDados
                 loc_lConfirma = MsgConfirma("H" + CHR(225) + " altera" + CHR(231) + CHR(245) + "es n" + CHR(227) + "o gravadas. Recarregar mesmo assim?", "Confirma" + CHR(231) + CHR(227) + "o")
                 IF !loc_lConfirma
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
-            THIS.CarregarDados()
-            THIS.this_lGravaDados = .F.
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
-                THIS.grd_4c_Dados.Refresh()
+            IF loc_lProsseguir
+                THIS.CarregarDados()
+                THIS.this_lGravaDados = .F.
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em BtnBuscarClick")

@@ -4222,7 +4222,7 @@ DEFINE CLASS Formsigopcgp AS FormBase
   *------------------------------------------------------------
   *-- GrdProdutosAfterRowColChange: carrega detalhes do produto selecionado
   PROCEDURE GrdProdutosAfterRowColChange(par_nColIndex)
-    LOCAL loc_cCodPro, loc_cSQL, loc_nRet, loc_oCab
+    LOCAL loc_cCodPro, loc_cSQL, loc_nRet, loc_oCab, loc_lProsseguir
     LOCAL loc_cCodGru, loc_cCodSgru, loc_cCodCor
     LOCAL loc_cDsSgrupo, loc_cDsCor
 
@@ -4240,6 +4240,7 @@ DEFINE CLASS Formsigopcgp AS FormBase
       RETURN
     ENDIF
 
+    loc_lProsseguir = .T.
     TRY
       THIS.MousePointer = 11
 
@@ -4268,146 +4269,150 @@ DEFINE CLASS Formsigopcgp AS FormBase
       loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpProd")
       IF loc_nRet < 1
         THIS.MousePointer = 0
-        RETURN
+        loc_lProsseguir = .F.
       ENDIF
 
-      SELECT cursor_4c_TmpProd
-      IF EOF()
-        THIS.MousePointer = 0
-        IF USED("cursor_4c_TmpProd")
-          USE IN cursor_4c_TmpProd
-        ENDIF
-        RETURN
+      IF loc_lProsseguir
+          SELECT cursor_4c_TmpProd
+          IF EOF()
+            THIS.MousePointer = 0
+            IF USED("cursor_4c_TmpProd")
+              USE IN cursor_4c_TmpProd
+            ENDIF
+            loc_lProsseguir = .F.
+          ENDIF
       ENDIF
 
-      GO TOP IN cursor_4c_TmpProd
+      IF loc_lProsseguir
+          GO TOP IN cursor_4c_TmpProd
 
       *-- Buscar subgrupo separadamente
-      loc_cCodGru  = ALLTRIM(NVL(cursor_4c_TmpProd.cgrus, ""))
-      loc_cCodSgru = ALLTRIM(NVL(cursor_4c_TmpProd.sgrus, ""))
+          loc_cCodGru  = ALLTRIM(NVL(cursor_4c_TmpProd.cgrus, ""))
+          loc_cCodSgru = ALLTRIM(NVL(cursor_4c_TmpProd.sgrus, ""))
 
-      loc_cDsSgrupo = ""
-      IF !EMPTY(loc_cCodSgru)
-        loc_cSQL = "Select descricaos From SigCdPsg " + ;
-          "Where cgrus = " + EscaparSQL(loc_cCodGru) + ;
-          " And codigos = " + EscaparSQL(loc_cCodSgru)
-        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpSgr") >= 1
-          IF USED("cursor_4c_TmpSgr") AND !EOF("cursor_4c_TmpSgr")
-            loc_cDsSgrupo = ALLTRIM(NVL(cursor_4c_TmpSgr.descricaos, ""))
+          loc_cDsSgrupo = ""
+          IF !EMPTY(loc_cCodSgru)
+            loc_cSQL = "Select descricaos From SigCdPsg " + ;
+              "Where cgrus = " + EscaparSQL(loc_cCodGru) + ;
+              " And codigos = " + EscaparSQL(loc_cCodSgru)
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpSgr") >= 1
+              IF USED("cursor_4c_TmpSgr") AND !EOF("cursor_4c_TmpSgr")
+                loc_cDsSgrupo = ALLTRIM(NVL(cursor_4c_TmpSgr.descricaos, ""))
+              ENDIF
+              IF USED("cursor_4c_TmpSgr")
+                USE IN cursor_4c_TmpSgr
+              ENDIF
+            ENDIF
           ENDIF
-          IF USED("cursor_4c_TmpSgr")
-            USE IN cursor_4c_TmpSgr
-          ENDIF
-        ENDIF
-      ENDIF
 
       *-- Buscar cor separadamente
-      loc_cCodCor = ALLTRIM(NVL(cursor_4c_TmpProd.CodCors, ""))
+          loc_cCodCor = ALLTRIM(NVL(cursor_4c_TmpProd.CodCors, ""))
 
-      loc_cDsCor = ""
-      IF !EMPTY(loc_cCodCor)
-        loc_cSQL = "Select descs From SigCdCor Where Cods = " + ;
-          EscaparSQL(loc_cCodCor)
-        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpCor") >= 1
-          IF USED("cursor_4c_TmpCor") AND !EOF("cursor_4c_TmpCor")
-            loc_cDsCor = ALLTRIM(NVL(cursor_4c_TmpCor.descs, ""))
+          loc_cDsCor = ""
+          IF !EMPTY(loc_cCodCor)
+            loc_cSQL = "Select descs From SigCdCor Where Cods = " + ;
+              EscaparSQL(loc_cCodCor)
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpCor") >= 1
+              IF USED("cursor_4c_TmpCor") AND !EOF("cursor_4c_TmpCor")
+                loc_cDsCor = ALLTRIM(NVL(cursor_4c_TmpCor.descs, ""))
+              ENDIF
+              IF USED("cursor_4c_TmpCor")
+                USE IN cursor_4c_TmpCor
+              ENDIF
+            ENDIF
           ENDIF
-          IF USED("cursor_4c_TmpCor")
-            USE IN cursor_4c_TmpCor
-          ENDIF
-        ENDIF
-      ENDIF
 
       *-- Preencher campos do cabecalho
-      loc_oCab = THIS.pgf_4c_1.Page2.pgf_4c_Result.Page1.cnt_4c_Cabecalho
+          loc_oCab = THIS.pgf_4c_1.Page2.pgf_4c_Result.Page1.cnt_4c_Cabecalho
 
       *-- Fornecedor
-      loc_oCab.txt_4c__cd_fornecedor.Value = ALLTRIM(NVL(cursor_4c_TmpProd.ifors, ""))
-      loc_oCab.txt_4c__ds_fornecedor.Value = ALLTRIM(NVL(cursor_4c_TmpProd.rclis, ""))
+          loc_oCab.txt_4c__cd_fornecedor.Value = ALLTRIM(NVL(cursor_4c_TmpProd.ifors, ""))
+          loc_oCab.txt_4c__ds_fornecedor.Value = ALLTRIM(NVL(cursor_4c_TmpProd.rclis, ""))
 
       *-- Ref. Fornecedor
-      loc_oCab.txt_4c__ref_fornecedor.Value = ALLTRIM(NVL(cursor_4c_TmpProd.reffs, ""))
+          loc_oCab.txt_4c__ref_fornecedor.Value = ALLTRIM(NVL(cursor_4c_TmpProd.reffs, ""))
 
       *-- Grupo
-      loc_oCab.txt_4c__cd_grupo.Value = loc_cCodGru
-      loc_oCab.txt_4c__ds_grupo.Value = ALLTRIM(NVL(cursor_4c_TmpProd.dgrus, ""))
+          loc_oCab.txt_4c__cd_grupo.Value = loc_cCodGru
+          loc_oCab.txt_4c__ds_grupo.Value = ALLTRIM(NVL(cursor_4c_TmpProd.dgrus, ""))
 
       *-- Subgrupo
-      loc_oCab.txt_4c__cd_sgrupo.Value = loc_cCodSgru
-      loc_oCab.txt_4c__ds_sgrupo.Value = loc_cDsSgrupo
+          loc_oCab.txt_4c__cd_sgrupo.Value = loc_cCodSgru
+          loc_oCab.txt_4c__ds_sgrupo.Value = loc_cDsSgrupo
 
       *-- Linha
-      loc_oCab.txt_4c_CdLinha.Value = ALLTRIM(NVL(cursor_4c_TmpProd.linhas, ""))
-      loc_oCab.txt_4c_DsLinha.Value = ALLTRIM(NVL(cursor_4c_TmpProd.desclin, ""))
+          loc_oCab.txt_4c_CdLinha.Value = ALLTRIM(NVL(cursor_4c_TmpProd.linhas, ""))
+          loc_oCab.txt_4c_DsLinha.Value = ALLTRIM(NVL(cursor_4c_TmpProd.desclin, ""))
 
       *-- Grupo de Venda
-      loc_oCab.txt_4c_GrVenda.Value  = ALLTRIM(NVL(cursor_4c_TmpProd.colecoes, ""))
-      loc_oCab.txt_4c_GrDvenda.Value = ALLTRIM(NVL(cursor_4c_TmpProd.desccol, ""))
+          loc_oCab.txt_4c_GrVenda.Value  = ALLTRIM(NVL(cursor_4c_TmpProd.colecoes, ""))
+          loc_oCab.txt_4c_GrDvenda.Value = ALLTRIM(NVL(cursor_4c_TmpProd.desccol, ""))
 
       *-- Unidade
-      loc_oCab.txt_4c__cd_unidade.Value = ALLTRIM(NVL(cursor_4c_TmpProd.cunis, ""))
+          loc_oCab.txt_4c__cd_unidade.Value = ALLTRIM(NVL(cursor_4c_TmpProd.cunis, ""))
 
       *-- Grande Grupo
-      loc_oCab.txt_4c__cd_ggrupo.Value = ALLTRIM(NVL(cursor_4c_TmpProd.Mercs, ""))
-      loc_oCab.txt_4c__ds_ggrupo.Value = ALLTRIM(NVL(cursor_4c_TmpProd.descgru, ""))
+          loc_oCab.txt_4c__cd_ggrupo.Value = ALLTRIM(NVL(cursor_4c_TmpProd.Mercs, ""))
+          loc_oCab.txt_4c__ds_ggrupo.Value = ALLTRIM(NVL(cursor_4c_TmpProd.descgru, ""))
 
       *-- Modelo / Finalizador
-      loc_oCab.txt_4c_CodFinP.Value = ALLTRIM(NVL(cursor_4c_TmpProd.CodFinP, ""))
-      loc_oCab.txt_4c_DesFinP.Value = ALLTRIM(NVL(cursor_4c_TmpProd.descftio, ""))
+          loc_oCab.txt_4c_CodFinP.Value = ALLTRIM(NVL(cursor_4c_TmpProd.CodFinP, ""))
+          loc_oCab.txt_4c_DesFinP.Value = ALLTRIM(NVL(cursor_4c_TmpProd.descftio, ""))
 
       *-- Conjunto
-      loc_oCab.txt_4c_Conjunto.Value = ALLTRIM(STR(NVL(cursor_4c_TmpProd.Conjunts, 0)))
+          loc_oCab.txt_4c_Conjunto.Value = ALLTRIM(STR(NVL(cursor_4c_TmpProd.Conjunts, 0)))
 
       *-- Equivalente
-      loc_oCab.txt_4c_Equivalente.Value = ALLTRIM(NVL(cursor_4c_TmpProd.cproeqs, ""))
+          loc_oCab.txt_4c_Equivalente.Value = ALLTRIM(NVL(cursor_4c_TmpProd.cproeqs, ""))
 
       *-- Qtd Minima
-      loc_oCab.txt_4c__qtd_minima.Value = NVL(cursor_4c_TmpProd.qmins, 0)
+          loc_oCab.txt_4c__qtd_minima.Value = NVL(cursor_4c_TmpProd.qmins, 0)
 
       *-- Cod Barras
-      loc_oCab.txt_4c_VBars.Value = ALLTRIM(NVL(cursor_4c_TmpProd.cbars, ""))
+          loc_oCab.txt_4c_VBars.Value = ALLTRIM(NVL(cursor_4c_TmpProd.cbars, ""))
 
       *-- Cor
-      loc_oCab.txt_4c_CodCorR.Value  = loc_cCodCor
-      loc_oCab.txt_4c_DescCorR.Value = loc_cDsCor
+          loc_oCab.txt_4c_CodCorR.Value  = loc_cCodCor
+          loc_oCab.txt_4c_DescCorR.Value = loc_cDsCor
 
       *-- Classificacao
-      loc_oCab.txt_4c_ClassifR.Value = ALLTRIM(NVL(cursor_4c_TmpProd.cClass, ""))
+          loc_oCab.txt_4c_ClassifR.Value = ALLTRIM(NVL(cursor_4c_TmpProd.cClass, ""))
 
       *-- Preco Venda
-      loc_oCab.txt_4c_PrVendaR.Value  = NVL(cursor_4c_TmpProd.pvens, 0)
-      loc_oCab.txt_4c_MoePrVR.Value   = ALLTRIM(NVL(cursor_4c_TmpProd.moevs, ""))
+          loc_oCab.txt_4c_PrVendaR.Value  = NVL(cursor_4c_TmpProd.pvens, 0)
+          loc_oCab.txt_4c_MoePrVR.Value   = ALLTRIM(NVL(cursor_4c_TmpProd.moevs, ""))
 
       *-- Peso Medio
-      loc_oCab.txt_4c_PesoMedioR.Value = NVL(cursor_4c_TmpProd.pesoms, 0)
+          loc_oCab.txt_4c_PesoMedioR.Value = NVL(cursor_4c_TmpProd.pesoms, 0)
 
       *-- Fator Venda
-      loc_oCab.txt_4c_FatorVR.Value   = NVL(cursor_4c_TmpProd.fvendas, 0)
-      loc_oCab.txt_4c_MoeFatorR.Value = ALLTRIM(NVL(cursor_4c_TmpProd.moepvs, ""))
+          loc_oCab.txt_4c_FatorVR.Value   = NVL(cursor_4c_TmpProd.fvendas, 0)
+          loc_oCab.txt_4c_MoeFatorR.Value = ALLTRIM(NVL(cursor_4c_TmpProd.moepvs, ""))
 
       *-- Locais
-      loc_oCab.txt_4c_LocaisR.Value = ALLTRIM(NVL(cursor_4c_TmpProd.Locals, ""))
+          loc_oCab.txt_4c_LocaisR.Value = ALLTRIM(NVL(cursor_4c_TmpProd.Locals, ""))
 
       *-- Obs. 1 e 2
-      loc_oCab.txt_4c_Obs1R.Value = ALLTRIM(NVL(cursor_4c_TmpProd.obspeds, ""))
-      loc_oCab.txt_4c_Obs2R.Value = ALLTRIM(NVL(cursor_4c_TmpProd.obspes, ""))
+          loc_oCab.txt_4c_Obs1R.Value = ALLTRIM(NVL(cursor_4c_TmpProd.obspeds, ""))
+          loc_oCab.txt_4c_Obs2R.Value = ALLTRIM(NVL(cursor_4c_TmpProd.obspes, ""))
 
       *-- Atualizar legenda com codigo do produto
-      THIS.pgf_4c_1.Page2.lbl_4c_TxtCaption.Caption = ;
-        THIS.this_cPrompt + " - Produto: " + loc_cCodPro + ;
-        " - " + ALLTRIM(NVL(cursor_4c_TmpProd.dpros, ""))
+          THIS.pgf_4c_1.Page2.lbl_4c_TxtCaption.Caption = ;
+            THIS.this_cPrompt + " - Produto: " + loc_cCodPro + ;
+            " - " + ALLTRIM(NVL(cursor_4c_TmpProd.dpros, ""))
 
       *-- Carregar imagem do produto
-      THIS.CarregarImagemProduto(loc_cCodPro)
+          THIS.CarregarImagemProduto(loc_cCodPro)
 
       *-- Liberar cursor temporario
-      IF USED("cursor_4c_TmpProd")
-        USE IN cursor_4c_TmpProd
+          IF USED("cursor_4c_TmpProd")
+            USE IN cursor_4c_TmpProd
+          ENDIF
+
+          loc_oCab = .NULL.
+          THIS.MousePointer = 0
+
       ENDIF
-
-      loc_oCab = .NULL.
-      THIS.MousePointer = 0
-
     CATCH TO loc_oErro
       THIS.MousePointer = 0
       loc_oCab = .NULL.

@@ -381,6 +381,44 @@ Suspeitar de **metatese** (`ems`/`ens`, `oas`/`aos`, `tipo`/`tip`): gemeas de ve
 
 Gate automatico: `Validate-InsertNotNull` no `ValidadorSQLSchema.ps1` (etapa `05f_validarSQLSchema`) - BLOQUEIA a migracao. Auditorias em lote: `automation\VerificarInsertNotNull.ps1` (INSERT sem coluna NOT NULL) e `automation\VerificarCamposCursorBO.ps1` (campo lido em `CarregarDoCursor` que nao existe em tabela nenhuma). Ao ler a saida do validador, ler **todos** os `[SQL-SCHEMA]` - filtrar so por `OMITE` esconde justamente o `coluna NAO EXISTE` que distingue grafia errada de coluna gemea. Skill: secao **191**. Origem: Erro151 (AliBO); **reincidiu** em Erro159 (CecBO/SigFiChc) mesmo com a regra ja nos prompts - por isso o gate.
 
+
+### 23. Label de dados: NUNCA inventar `.Width` + `.Alignment = 1` - a classe `say` eh AutoSize/esquerda
+A classe **`say`** do Framework legado eh `AutoSize = .T.` / `Alignment = 0`: o label tem a largura **exata do texto** e desenha **da esquerda**. Por isso o `Say` do SCX declara so `Caption`/`Left`/`Top` - **nunca `Width`, nunca `Alignment`** - e os `Left` vem escalonados pelo tamanho de cada legenda, para todas terminarem poucos pixels antes do campo.
+
+```
+Say2 "Codigo :" Left=411 | Say1 "Grupo :" Left=415 | Say3 "Conta :" Left=415 | Say4 "Setor :" Left=418
+Get_codigo/Get_Grupo/get_Conta/Get_Setor -> Left=455
+```
+Medido no VFP9 (`TXTWIDTH() * FONTMETRIC(6,...)`, Tahoma 8): os quatro textos terminam em **451**, 4px antes do TextBox. Os `Left` diferentes nao sao descuido, sao o calculo.
+
+```foxpro
+* ERRADO - o migrador inventa as DUAS propriedades
+.Left = 411
+.Width = 60          && o legado nao declara
+.Alignment = 1       && encosta o texto na borda DIREITA -> 411+60 = 471 > 455
+
+* CERTO
+.Left = 411
+.Width = 60          && pode ficar: caixa transparente (BackStyle = 0)
+.Alignment = 0       && legado: say com AutoSize=.T. e Alignment=0
+```
+O texto encostado na borda direita cai **dentro do TextBox**; como o label eh criado ANTES, o controle desenha por cima e come a legenda (`Codigo :` vira `Codi`). Compila limpo, so aparece na tela.
+
+**`AutoSize = .T.` NAO resolve - eh no-op em Label criado por `AddObject`.** Medido nas duas ordens (`Caption`->`AutoSize` e `AutoSize`->`Caption`), antes e depois do `Show()` e reatribuindo o `Caption`: a `Width` fica nos **100** do default. Usar `Alignment = 0` + `Width` explicita que caiba o texto.
+
+A caixa larga que sobra eh inofensiva (`BackStyle = 0` nao pinta e o controle fica por cima) **desde que o label seja criado ANTES do controle** - senao a caixa transparente bloqueia o clique no campo.
+
+**O legado USA `Alignment = 1` legitimamente (884 labels nos dumps) - conferir antes de corrigir:**
+
+| O `Say` do legado declara | Diagnostico | Conserto |
+|---|---|---|
+| nem `Width` nem `Alignment` | classe `say` pura - migrador inventou | `.Alignment = 0` |
+| `Width` e/ou `Alignment` | right-align legitimo | **nao mexer no Alignment** - o erro esta no `Left`/`Width` |
+
+**Detector tem de medir o TEXTO, nao a caixa**: comparar `Left + Width` com o `Left` do controle acusou **414 sites** (quase tudo falso positivo, porque a caixa com `Alignment = 0` eh invisivel); medindo o texto renderizado e filtrando por `Alignment = 1` sobraram 51 candidatos, **27 confirmados pelo dump** em 12 forms.
+
+Auto-fix: CorretorAutomatico **#202** (auto-muta so com o dump confirmando; sem dump, WARNING). Referencia: `FormCES`. Origem: Erro160 (2026-09-16).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

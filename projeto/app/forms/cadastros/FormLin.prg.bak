@@ -573,23 +573,26 @@ DEFINE CLASS FormLin AS FormBase
     * BtnSalvarClick - Salva o registro atual (logica completa na Fase 7)
     *==========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
 
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.FormParaBO()
+            IF loc_lProsseguir
+                THIS.FormParaBO()
 
-            IF THIS.this_oBusinessObject.Salvar()
-                MsgInfo("Registro salvo com sucesso!", "Confirma" + CHR(231) + CHR(227) + "o")
-                THIS.this_cModoAtual = "LISTA"
-                THIS.AlternarPagina(1)
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao salvar o registro.", "FormLin.BtnSalvarClick")
+                IF THIS.this_oBusinessObject.Salvar()
+                    MsgInfo("Registro salvo com sucesso!", "Confirma" + CHR(231) + CHR(227) + "o")
+                    THIS.this_cModoAtual = "LISTA"
+                    THIS.AlternarPagina(1)
+                    loc_lResultado = .T.
+                ELSE
+                    MsgErro("Erro ao salvar o registro.", "FormLin.BtnSalvarClick")
+                ENDIF
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.BtnSalvarClick")
@@ -1477,47 +1480,52 @@ DEFINE CLASS FormLin AS FormBase
     * ValidarOperacao - Lookup em SigCdOpe para campo Pedido de Estoque Minimo
     *==========================================================================
     PROCEDURE ValidarOperacao(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cDopes, loc_oBusca
+        LOCAL loc_cDopes, loc_oBusca, loc_lProsseguir
         loc_cDopes = ""
 
+        loc_lProsseguir = .T.
         TRY
             loc_cDopes = ALLTRIM(THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1.txt_4c_Pedidos.Value)
             IF EMPTY(loc_cDopes)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdOpe", "cursor_4c_BuscaOpe", "Dopes", loc_cDopes, ;
-                "Selecionar Opera" + CHR(231) + CHR(227) + "o")
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdOpe", "cursor_4c_BuscaOpe", "Dopes", loc_cDopes, ;
+                    "Selecionar Opera" + CHR(231) + CHR(227) + "o")
 
-            IF VARTYPE(loc_oBusca) = "O"
-                IF !loc_oBusca.this_lAchouRegistro
-                    loc_oBusca.mAddColuna("Dopes",  "", "Opera" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.mAddColuna("NDopes", "", "C" + CHR(243) + "digo")
-                    loc_oBusca.Show()
-
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaOpe")
-                        SELECT cursor_4c_BuscaOpe
-                        THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1.txt_4c_Pedidos.Value = ;
-                            ALLTRIM(cursor_4c_BuscaOpe.Dopes)
+                IF VARTYPE(loc_oBusca) = "O"
+                    IF !loc_oBusca.this_lAchouRegistro
+                        loc_oBusca.mAddColuna("Dopes",  "", "Opera" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.mAddColuna("NDopes", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.Show()
+    
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaOpe")
+                            SELECT cursor_4c_BuscaOpe
+                            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1.txt_4c_Pedidos.Value = ;
+                                ALLTRIM(cursor_4c_BuscaOpe.Dopes)
+                        ELSE
+                            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1.txt_4c_Pedidos.Value = ""
+                        ENDIF
                     ELSE
-                        THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1.txt_4c_Pedidos.Value = ""
+                        IF USED("cursor_4c_BuscaOpe")
+                            SELECT cursor_4c_BuscaOpe
+                            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1.txt_4c_Pedidos.Value = ;
+                                ALLTRIM(cursor_4c_BuscaOpe.Dopes)
+                        ENDIF
                     ENDIF
-                ELSE
-                    IF USED("cursor_4c_BuscaOpe")
-                        SELECT cursor_4c_BuscaOpe
-                        THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1.txt_4c_Pedidos.Value = ;
-                            ALLTRIM(cursor_4c_BuscaOpe.Dopes)
-                    ENDIF
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.ValidarOperacao")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaOpe")
-            USE IN cursor_4c_BuscaOpe
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaOpe")
+                USE IN cursor_4c_BuscaOpe
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -2006,31 +2014,34 @@ DEFINE CLASS FormLin AS FormBase
     * FaseBtnInserirClick - Insere nova linha vazia na grade de Fases
     *==========================================================================
     PROCEDURE FaseBtnInserirClick()
-        LOCAL loc_oGrd, loc_nNovaOrdem, loc_cLinhas
+        LOCAL loc_oGrd, loc_nNovaOrdem, loc_cLinhas, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_Fases")
-                THIS.InicializarCursoresDetalhe()
-            ENDIF
-            loc_cLinhas   = ALLTRIM(THIS.this_oBusinessObject.this_cLinhas)
-            loc_oGrd      = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
-            SELECT cursor_4c_Fases
-            IF RECCOUNT() = 0
-                loc_nNovaOrdem = 10
-            ELSE
-                GO BOTTOM
-                loc_nNovaOrdem = cursor_4c_Fases.Ordems + 10
-            ENDIF
-            INSERT INTO cursor_4c_Fases ;
-                (Linhas, Ordems, Ordem2, Grupos, Descrs, Agregas, ;
-                 Contas, Cgrus, Ndias, UniPrdts, Usuars, Mercs, Obs) ;
-                VALUES (loc_cLinhas, loc_nNovaOrdem, loc_nNovaOrdem * 10, "", "", ;
-                .F., "", "", 0, "", "", "", "")
-            IF VARTYPE(loc_oGrd) = "O"
-                GO BOTTOM IN cursor_4c_Fases
-                loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Fases")
+                    THIS.InicializarCursoresDetalhe()
+                ENDIF
+                loc_cLinhas   = ALLTRIM(THIS.this_oBusinessObject.this_cLinhas)
+                loc_oGrd      = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
+                SELECT cursor_4c_Fases
+                IF RECCOUNT() = 0
+                    loc_nNovaOrdem = 10
+                ELSE
+                    GO BOTTOM
+                    loc_nNovaOrdem = cursor_4c_Fases.Ordems + 10
+                ENDIF
+                INSERT INTO cursor_4c_Fases ;
+                    (Linhas, Ordems, Ordem2, Grupos, Descrs, Agregas, ;
+                     Contas, Cgrus, Ndias, UniPrdts, Usuars, Mercs, Obs) ;
+                    VALUES (loc_cLinhas, loc_nNovaOrdem, loc_nNovaOrdem * 10, "", "", ;
+                    .F., "", "", 0, "", "", "", "")
+                IF VARTYPE(loc_oGrd) = "O"
+                    GO BOTTOM IN cursor_4c_Fases
+                    loc_oGrd.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.FaseBtnInserirClick")
@@ -2041,27 +2052,34 @@ DEFINE CLASS FormLin AS FormBase
     * FaseBtnExcluirClick - Exclui linha selecionada da grade de Fases
     *==========================================================================
     PROCEDURE FaseBtnExcluirClick()
-        LOCAL loc_oGrd, loc_lResultado
+        LOCAL loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_Fases") OR RECCOUNT("cursor_4c_Fases") = 0
-                MsgAviso("Nenhuma fase selecionada para excluir.", "Excluir Fase")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Fases") OR RECCOUNT("cursor_4c_Fases") = 0
+                    MsgAviso("Nenhuma fase selecionada para excluir.", "Excluir Fase")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF !MsgConfirma("Confirma a exclus" + CHR(227) + "o desta fase?", "Excluir Fase")
-                RETURN
+            IF loc_lProsseguir
+                IF !MsgConfirma("Confirma a exclus" + CHR(227) + "o desta fase?", "Excluir Fase")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
-            SELECT cursor_4c_Fases
-            DELETE
-            PACK
-            IF VARTYPE(loc_oGrd) = "O"
-                loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
+                SELECT cursor_4c_Fases
+                DELETE
+                PACK
+                IF VARTYPE(loc_oGrd) = "O"
+                    loc_oGrd.Refresh()
+                ENDIF
+                loc_lResultado = .T.
             ENDIF
-            loc_lResultado = .T.
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.FaseBtnExcluirClick")
         ENDTRY
@@ -2072,31 +2090,36 @@ DEFINE CLASS FormLin AS FormBase
     * FaseBtnAlternativaClick - Cria fase alternativa (mesmo Ordems, Ordem2 sequencial)
     *==========================================================================
     PROCEDURE FaseBtnAlternativaClick()
-        LOCAL loc_oGrd, loc_nOrdem, loc_nCount, loc_cLinhas, loc_lResultado
+        LOCAL loc_oGrd, loc_nOrdem, loc_nCount, loc_cLinhas, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_Fases") OR RECCOUNT("cursor_4c_Fases") = 0
-                MsgAviso("Selecione uma fase para criar alternativa.", "Fase Alternativa")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Fases") OR RECCOUNT("cursor_4c_Fases") = 0
+                    MsgAviso("Selecione uma fase para criar alternativa.", "Fase Alternativa")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cLinhas = ALLTRIM(THIS.this_oBusinessObject.this_cLinhas)
-            loc_oGrd    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
-            SELECT cursor_4c_Fases
-            loc_nOrdem = cursor_4c_Fases.Ordems
-            COUNT FOR Ordems = loc_nOrdem TO loc_nCount
-            INSERT INTO cursor_4c_Fases ;
-                (Linhas, Ordems, Ordem2, Grupos, Descrs, Agregas, ;
-                 Contas, Cgrus, Ndias, UniPrdts, Usuars, Mercs, Obs) ;
-                VALUES (loc_cLinhas, loc_nOrdem, (loc_nOrdem * 10) + loc_nCount, "", "", ;
-                .F., "", "", 0, "", "", "", "")
-            IF VARTYPE(loc_oGrd) = "O"
-                GO BOTTOM IN cursor_4c_Fases
-                loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_cLinhas = ALLTRIM(THIS.this_oBusinessObject.this_cLinhas)
+                loc_oGrd    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
+                SELECT cursor_4c_Fases
+                loc_nOrdem = cursor_4c_Fases.Ordems
+                COUNT FOR Ordems = loc_nOrdem TO loc_nCount
+                INSERT INTO cursor_4c_Fases ;
+                    (Linhas, Ordems, Ordem2, Grupos, Descrs, Agregas, ;
+                     Contas, Cgrus, Ndias, UniPrdts, Usuars, Mercs, Obs) ;
+                    VALUES (loc_cLinhas, loc_nOrdem, (loc_nOrdem * 10) + loc_nCount, "", "", ;
+                    .F., "", "", 0, "", "", "", "")
+                IF VARTYPE(loc_oGrd) = "O"
+                    GO BOTTOM IN cursor_4c_Fases
+                    loc_oGrd.Refresh()
+                ENDIF
+                loc_lResultado = .T.
             ENDIF
-            loc_lResultado = .T.
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.FaseBtnAlternativaClick")
         ENDTRY
@@ -2123,33 +2146,40 @@ DEFINE CLASS FormLin AS FormBase
     * GradFaseKeyPress - Dispatcher F4 para lookups da grade de Fases
     *==========================================================================
     PROCEDURE GradFaseKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oGrd, loc_nCol
+        LOCAL loc_oGrd, loc_nCol, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF par_nKeyCode <> 28  && F4
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+            IF loc_lProsseguir
+                IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
-            IF VARTYPE(loc_oGrd) <> "O"
-                RETURN
+            IF loc_lProsseguir
+                loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
+                IF VARTYPE(loc_oGrd) <> "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_nCol = loc_oGrd.ActiveColumn
-            DO CASE
-                CASE loc_nCol = 2
-                    THIS.FaseLookupFase()
-                CASE loc_nCol = 5
-                    THIS.FaseLookupConta()
-                CASE loc_nCol = 6
-                    THIS.FaseLookupGrpProd()
-                CASE loc_nCol = 8
-                    THIS.FaseLookupUniProd()
-                CASE loc_nCol = 9
-                    THIS.FaseLookupUsuario()
-                CASE loc_nCol = 10
-                    THIS.FaseLookupGGrupo()
-            ENDCASE
+            IF loc_lProsseguir
+                loc_nCol = loc_oGrd.ActiveColumn
+                DO CASE
+                    CASE loc_nCol = 2
+                        THIS.FaseLookupFase()
+                    CASE loc_nCol = 5
+                        THIS.FaseLookupConta()
+                    CASE loc_nCol = 6
+                        THIS.FaseLookupGrpProd()
+                    CASE loc_nCol = 8
+                        THIS.FaseLookupUniProd()
+                    CASE loc_nCol = 9
+                        THIS.FaseLookupUsuario()
+                    CASE loc_nCol = 10
+                        THIS.FaseLookupGGrupo()
+                ENDCASE
+            ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.GradFaseKeyPress")
         ENDTRY
@@ -2195,27 +2225,32 @@ DEFINE CLASS FormLin AS FormBase
     * FaseAgregarClick - Garante no maximo 1 linha com Agregar marcada
     *==========================================================================
     PROCEDURE FaseAgregarClick()
-        LOCAL loc_oGrd, loc_nRecNo
+        LOCAL loc_oGrd, loc_nRecNo, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_Fases") OR EOF("cursor_4c_Fases")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Fases") OR EOF("cursor_4c_Fases")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            SELECT cursor_4c_Fases
-            IF cursor_4c_Fases.Agregas
-                loc_nRecNo = RECNO("cursor_4c_Fases")
-                SCAN
-                    IF RECNO() <> loc_nRecNo
-                        REPLACE Agregas WITH .F.
-                    ENDIF
-                ENDSCAN
-                GO loc_nRecNo IN cursor_4c_Fases
-            ENDIF
-            loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
-            IF VARTYPE(loc_oGrd) = "O"
-                loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                SELECT cursor_4c_Fases
+                IF cursor_4c_Fases.Agregas
+                    loc_nRecNo = RECNO("cursor_4c_Fases")
+                    SCAN
+                        IF RECNO() <> loc_nRecNo
+                            REPLACE Agregas WITH .F.
+                        ENDIF
+                    ENDSCAN
+                    GO loc_nRecNo IN cursor_4c_Fases
+                ENDIF
+                loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
+                IF VARTYPE(loc_oGrd) = "O"
+                    loc_oGrd.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.FaseAgregarClick")
@@ -2226,37 +2261,42 @@ DEFINE CLASS FormLin AS FormBase
     * FaseLookupFase - Lookup de Fase em SigCdGcr (codigos/descrs)
     *==========================================================================
     PROCEDURE FaseLookupFase()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
             IF !USED("cursor_4c_Fases") OR EOF("cursor_4c_Fases")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdGcr", "cursor_4c_BuscaGcr", "codigos", "", ;
-                "Selecionar Fase")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr")
-                    SELECT cursor_4c_BuscaGcr
-                    SELECT cursor_4c_Fases
-                    REPLACE Grupos WITH ALLTRIM(cursor_4c_BuscaGcr.codigos)
-                    REPLACE Descrs WITH ALLTRIM(cursor_4c_BuscaGcr.descrs)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdGcr", "cursor_4c_BuscaGcr", "codigos", "", ;
+                    "Selecionar Fase")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr")
+                        SELECT cursor_4c_BuscaGcr
+                        SELECT cursor_4c_Fases
+                        REPLACE Grupos WITH ALLTRIM(cursor_4c_BuscaGcr.codigos)
+                        REPLACE Descrs WITH ALLTRIM(cursor_4c_BuscaGcr.descrs)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.FaseLookupFase")
         ENDTRY
-        IF USED("cursor_4c_BuscaGcr")
-            USE IN cursor_4c_BuscaGcr
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaGcr")
+                USE IN cursor_4c_BuscaGcr
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2265,37 +2305,42 @@ DEFINE CLASS FormLin AS FormBase
     * FaseLookupConta - Lookup de Conta em SIGCDCLI (iclis/rclis)
     *==========================================================================
     PROCEDURE FaseLookupConta()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
             IF !USED("cursor_4c_Fases") OR EOF("cursor_4c_Fases")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SIGCDCLI", "cursor_4c_BuscaCli", "iclis", "", ;
-                "Selecionar Conta", .F., .F., ;
-                "emps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa))
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("iclis", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("rclis", "", "Nome")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCli")
-                    SELECT cursor_4c_BuscaCli
-                    SELECT cursor_4c_Fases
-                    REPLACE Contas WITH ALLTRIM(cursor_4c_BuscaCli.iclis)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SIGCDCLI", "cursor_4c_BuscaCli", "iclis", "", ;
+                    "Selecionar Conta", .F., .F., ;
+                    "emps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa))
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("iclis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("rclis", "", "Nome")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCli")
+                        SELECT cursor_4c_BuscaCli
+                        SELECT cursor_4c_Fases
+                        REPLACE Contas WITH ALLTRIM(cursor_4c_BuscaCli.iclis)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.FaseLookupConta")
         ENDTRY
-        IF USED("cursor_4c_BuscaCli")
-            USE IN cursor_4c_BuscaCli
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaCli")
+                USE IN cursor_4c_BuscaCli
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2304,36 +2349,41 @@ DEFINE CLASS FormLin AS FormBase
     * FaseLookupGrpProd - Lookup de Grupo de Producao em SigCdGrp (cgrus/dgrus)
     *==========================================================================
     PROCEDURE FaseLookupGrpProd()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
             IF !USED("cursor_4c_Fases") OR EOF("cursor_4c_Fases")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdGrp", "cursor_4c_BuscaGrp", "cgrus", "", ;
-                "Selecionar Grupo de Produ" + CHR(231) + CHR(227) + "o")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("cgrus", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("dgrus", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrp")
-                    SELECT cursor_4c_BuscaGrp
-                    SELECT cursor_4c_Fases
-                    REPLACE Cgrus WITH ALLTRIM(cursor_4c_BuscaGrp.cgrus)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdGrp", "cursor_4c_BuscaGrp", "cgrus", "", ;
+                    "Selecionar Grupo de Produ" + CHR(231) + CHR(227) + "o")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("cgrus", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dgrus", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrp")
+                        SELECT cursor_4c_BuscaGrp
+                        SELECT cursor_4c_Fases
+                        REPLACE Cgrus WITH ALLTRIM(cursor_4c_BuscaGrp.cgrus)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.FaseLookupGrpProd")
         ENDTRY
-        IF USED("cursor_4c_BuscaGrp")
-            USE IN cursor_4c_BuscaGrp
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaGrp")
+                USE IN cursor_4c_BuscaGrp
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2342,43 +2392,50 @@ DEFINE CLASS FormLin AS FormBase
     * FaseLookupUniProd - Lookup de Unidade de Producao em SigCdUpd (filtrado por Grupos)
     *==========================================================================
     PROCEDURE FaseLookupUniProd()
-        LOCAL loc_oBusca, loc_oGrd, loc_cGrupos, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_cGrupos, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
             IF !USED("cursor_4c_Fases") OR EOF("cursor_4c_Fases")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Fases
-            loc_cGrupos = ALLTRIM(cursor_4c_Fases.Grupos)
-            IF EMPTY(loc_cGrupos)
-                MsgAviso("Selecione uma Fase (coluna Fase) antes de buscar a Unidade de Produ" + ;
-                    CHR(231) + CHR(227) + "o.", "Unidade de Produ" + CHR(231) + CHR(227) + "o")
-                RETURN
-            ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdUpd", "cursor_4c_BuscaUpd", "uniprdts", "", ;
-                "Selecionar Unidade de Produ" + CHR(231) + CHR(227) + "o", ;
-                .F., .F., "codigos = " + EscaparSQL(loc_cGrupos))
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("uniprdts", "", "Unidade de Produ" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUpd")
-                    SELECT cursor_4c_BuscaUpd
-                    SELECT cursor_4c_Fases
-                    REPLACE UniPrdts WITH ALLTRIM(cursor_4c_BuscaUpd.uniprdts)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
-                    ENDIF
-                    loc_lResultado = .T.
+            IF loc_lProsseguir
+                SELECT cursor_4c_Fases
+                loc_cGrupos = ALLTRIM(cursor_4c_Fases.Grupos)
+                IF EMPTY(loc_cGrupos)
+                    MsgAviso("Selecione uma Fase (coluna Fase) antes de buscar a Unidade de Produ" + ;
+                        CHR(231) + CHR(227) + "o.", "Unidade de Produ" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
                 ENDIF
-                loc_oBusca.Release()
+            ENDIF
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdUpd", "cursor_4c_BuscaUpd", "uniprdts", "", ;
+                    "Selecionar Unidade de Produ" + CHR(231) + CHR(227) + "o", ;
+                    .F., .F., "codigos = " + EscaparSQL(loc_cGrupos))
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("uniprdts", "", "Unidade de Produ" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUpd")
+                        SELECT cursor_4c_BuscaUpd
+                        SELECT cursor_4c_Fases
+                        REPLACE UniPrdts WITH ALLTRIM(cursor_4c_BuscaUpd.uniprdts)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
+                    ENDIF
+                    loc_oBusca.Release()
+                ENDIF
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.FaseLookupUniProd")
         ENDTRY
-        IF USED("cursor_4c_BuscaUpd")
-            USE IN cursor_4c_BuscaUpd
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaUpd")
+                USE IN cursor_4c_BuscaUpd
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2387,36 +2444,41 @@ DEFINE CLASS FormLin AS FormBase
     * FaseLookupUsuario - Lookup de Usuario em sigcdusu (usuarios/ncomps)
     *==========================================================================
     PROCEDURE FaseLookupUsuario()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
             IF !USED("cursor_4c_Fases") OR EOF("cursor_4c_Fases")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "sigcdusu", "cursor_4c_BuscaUsu", "usuarios", "", ;
-                "Selecionar Usu" + CHR(225) + "rio")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("usuarios", "", "Login")
-                loc_oBusca.mAddColuna("ncomps",   "", "Nome")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUsu")
-                    SELECT cursor_4c_BuscaUsu
-                    SELECT cursor_4c_Fases
-                    REPLACE Usuars WITH ALLTRIM(cursor_4c_BuscaUsu.usuarios)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "sigcdusu", "cursor_4c_BuscaUsu", "usuarios", "", ;
+                    "Selecionar Usu" + CHR(225) + "rio")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("usuarios", "", "Login")
+                    loc_oBusca.mAddColuna("ncomps",   "", "Nome")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUsu")
+                        SELECT cursor_4c_BuscaUsu
+                        SELECT cursor_4c_Fases
+                        REPLACE Usuars WITH ALLTRIM(cursor_4c_BuscaUsu.usuarios)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.FaseLookupUsuario")
         ENDTRY
-        IF USED("cursor_4c_BuscaUsu")
-            USE IN cursor_4c_BuscaUsu
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaUsu")
+                USE IN cursor_4c_BuscaUsu
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2425,36 +2487,41 @@ DEFINE CLASS FormLin AS FormBase
     * FaseLookupGGrupo - Lookup de Grande Grupo em SigCdGpr (codigos/descs)
     *==========================================================================
     PROCEDURE FaseLookupGGrupo()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Fases
             IF !USED("cursor_4c_Fases") OR EOF("cursor_4c_Fases")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdGpr", "cursor_4c_BuscaGpr", "codigos", "", ;
-                "Selecionar Grande Grupo")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGpr")
-                    SELECT cursor_4c_BuscaGpr
-                    SELECT cursor_4c_Fases
-                    REPLACE Mercs WITH ALLTRIM(cursor_4c_BuscaGpr.codigos)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdGpr", "cursor_4c_BuscaGpr", "codigos", "", ;
+                    "Selecionar Grande Grupo")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGpr")
+                        SELECT cursor_4c_BuscaGpr
+                        SELECT cursor_4c_Fases
+                        REPLACE Mercs WITH ALLTRIM(cursor_4c_BuscaGpr.codigos)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.FaseLookupGGrupo")
         ENDTRY
-        IF USED("cursor_4c_BuscaGpr")
-            USE IN cursor_4c_BuscaGpr
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaGpr")
+                USE IN cursor_4c_BuscaGpr
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2463,26 +2530,29 @@ DEFINE CLASS FormLin AS FormBase
     * CompoBtnInserirClick - Insere nova linha vazia na grade de Composicao
     *==========================================================================
     PROCEDURE CompoBtnInserirClick()
-        LOCAL loc_oGrd, loc_cLinhas, loc_lResultado
+        LOCAL loc_oGrd, loc_cLinhas, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_Composicao")
-                THIS.InicializarCursoresDetalhe()
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Composicao")
+                    THIS.InicializarCursoresDetalhe()
+                ENDIF
+                loc_cLinhas = ALLTRIM(THIS.this_oBusinessObject.this_cLinhas)
+                loc_oGrd    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Composicao
+                SELECT cursor_4c_Composicao
+                INSERT INTO cursor_4c_Composicao ;
+                    (Linhas, Mats, Dcompos, UniCompos, Pcompos, Qtds, Totas, Moeds, ObsCompos, Etiqs) ;
+                    VALUES (loc_cLinhas, "", "", "", 0, 0, 0, "", "", "")
+                IF VARTYPE(loc_oGrd) = "O"
+                    GO BOTTOM IN cursor_4c_Composicao
+                    loc_oGrd.Refresh()
+                ENDIF
+                loc_lResultado = .T.
             ENDIF
-            loc_cLinhas = ALLTRIM(THIS.this_oBusinessObject.this_cLinhas)
-            loc_oGrd    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Composicao
-            SELECT cursor_4c_Composicao
-            INSERT INTO cursor_4c_Composicao ;
-                (Linhas, Mats, Dcompos, UniCompos, Pcompos, Qtds, Totas, Moeds, ObsCompos, Etiqs) ;
-                VALUES (loc_cLinhas, "", "", "", 0, 0, 0, "", "", "")
-            IF VARTYPE(loc_oGrd) = "O"
-                GO BOTTOM IN cursor_4c_Composicao
-                loc_oGrd.Refresh()
-            ENDIF
-            loc_lResultado = .T.
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompoBtnInserirClick")
         ENDTRY
@@ -2493,29 +2563,36 @@ DEFINE CLASS FormLin AS FormBase
     * CompoBtnExcluirClick - Exclui linha selecionada da grade de Composicao
     *==========================================================================
     PROCEDURE CompoBtnExcluirClick()
-        LOCAL loc_oGrd, loc_lResultado
+        LOCAL loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_Composicao") OR RECCOUNT("cursor_4c_Composicao") = 0
-                MsgAviso("Nenhum item selecionado para excluir.", ;
-                    "Excluir Composi" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Composicao") OR RECCOUNT("cursor_4c_Composicao") = 0
+                    MsgAviso("Nenhum item selecionado para excluir.", ;
+                        "Excluir Composi" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF !MsgConfirma("Confirma a exclus" + CHR(227) + "o deste item da composi" + ;
-                CHR(231) + CHR(227) + "o?", "Excluir Composi" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF !MsgConfirma("Confirma a exclus" + CHR(227) + "o deste item da composi" + ;
+                    CHR(231) + CHR(227) + "o?", "Excluir Composi" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Composicao
-            SELECT cursor_4c_Composicao
-            DELETE
-            PACK
-            IF VARTYPE(loc_oGrd) = "O"
-                loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Composicao
+                SELECT cursor_4c_Composicao
+                DELETE
+                PACK
+                IF VARTYPE(loc_oGrd) = "O"
+                    loc_oGrd.Refresh()
+                ENDIF
+                loc_lResultado = .T.
             ENDIF
-            loc_lResultado = .T.
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompoBtnExcluirClick")
         ENDTRY
@@ -2542,27 +2619,34 @@ DEFINE CLASS FormLin AS FormBase
     * GrdCompoKeyPress - Dispatcher F4 para lookups da grade de Composicao
     *==========================================================================
     PROCEDURE GrdCompoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oGrd, loc_nCol
+        LOCAL loc_oGrd, loc_nCol, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF par_nKeyCode <> 28  && F4
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+            IF loc_lProsseguir
+                IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Composicao
-            IF VARTYPE(loc_oGrd) <> "O"
-                RETURN
+            IF loc_lProsseguir
+                loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Composicao
+                IF VARTYPE(loc_oGrd) <> "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_nCol = loc_oGrd.ActiveColumn
-            DO CASE
-                CASE loc_nCol = 1
-                    THIS.CompoLookupCaract()
-                CASE loc_nCol = 3
-                    THIS.CompoLookupUni()
-                CASE loc_nCol = 7
-                    THIS.CompoLookupMoeda()
-            ENDCASE
+            IF loc_lProsseguir
+                loc_nCol = loc_oGrd.ActiveColumn
+                DO CASE
+                    CASE loc_nCol = 1
+                        THIS.CompoLookupCaract()
+                    CASE loc_nCol = 3
+                        THIS.CompoLookupUni()
+                    CASE loc_nCol = 7
+                        THIS.CompoLookupMoeda()
+                ENDCASE
+            ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.GrdCompoKeyPress")
         ENDTRY
@@ -2572,43 +2656,48 @@ DEFINE CLASS FormLin AS FormBase
     * CompoLookupCaract - Lookup de Produto/Materia-Prima em SigCdPro (cpros/dpros)
     *==========================================================================
     PROCEDURE CompoLookupCaract()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Composicao
             IF !USED("cursor_4c_Composicao") OR EOF("cursor_4c_Composicao")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdPro", "cursor_4c_BuscaPro", "cpros", "", ;
-                "Selecionar Mat" + CHR(233) + "ria-Prima")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("cpros", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaPro")
-                    SELECT cursor_4c_BuscaPro
-                    LOCAL loc_cCpros, loc_cDpros
-                    loc_cCpros = ALLTRIM(cursor_4c_BuscaPro.cpros)
-                    loc_cDpros = ALLTRIM(cursor_4c_BuscaPro.dpros)
-                    SELECT cursor_4c_Composicao
-                    REPLACE Mats   WITH loc_cCpros
-                    REPLACE Dcompos WITH LEFT(loc_cDpros, 30)
-                    IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3, "txt_4c_CompoDesc", 5)
-                        THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.txt_4c_CompoDesc.Value = loc_cDpros
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdPro", "cursor_4c_BuscaPro", "cpros", "", ;
+                    "Selecionar Mat" + CHR(233) + "ria-Prima")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("cpros", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaPro")
+                        SELECT cursor_4c_BuscaPro
+                        LOCAL loc_cCpros, loc_cDpros
+                        loc_cCpros = ALLTRIM(cursor_4c_BuscaPro.cpros)
+                        loc_cDpros = ALLTRIM(cursor_4c_BuscaPro.dpros)
+                        SELECT cursor_4c_Composicao
+                        REPLACE Mats   WITH loc_cCpros
+                        REPLACE Dcompos WITH LEFT(loc_cDpros, 30)
+                        IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3, "txt_4c_CompoDesc", 5)
+                            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.txt_4c_CompoDesc.Value = loc_cDpros
+                        ENDIF
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
-                    ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompoLookupCaract")
         ENDTRY
-        IF USED("cursor_4c_BuscaPro")
-            USE IN cursor_4c_BuscaPro
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaPro")
+                USE IN cursor_4c_BuscaPro
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2617,36 +2706,41 @@ DEFINE CLASS FormLin AS FormBase
     * CompoLookupUni - Lookup de Unidade em SigCdUni (cunis/dunis)
     *==========================================================================
     PROCEDURE CompoLookupUni()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Composicao
             IF !USED("cursor_4c_Composicao") OR EOF("cursor_4c_Composicao")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdUni", "cursor_4c_BuscaUni", "cunis", "", ;
-                "Selecionar Unidade")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("cunis", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("dunis", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUni")
-                    SELECT cursor_4c_BuscaUni
-                    SELECT cursor_4c_Composicao
-                    REPLACE UniCompos WITH ALLTRIM(cursor_4c_BuscaUni.cunis)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdUni", "cursor_4c_BuscaUni", "cunis", "", ;
+                    "Selecionar Unidade")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("cunis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dunis", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUni")
+                        SELECT cursor_4c_BuscaUni
+                        SELECT cursor_4c_Composicao
+                        REPLACE UniCompos WITH ALLTRIM(cursor_4c_BuscaUni.cunis)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompoLookupUni")
         ENDTRY
-        IF USED("cursor_4c_BuscaUni")
-            USE IN cursor_4c_BuscaUni
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaUni")
+                USE IN cursor_4c_BuscaUni
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2655,36 +2749,41 @@ DEFINE CLASS FormLin AS FormBase
     * CompoLookupMoeda - Lookup de Moeda em SigCdMoe (cmoes/dmoes)
     *==========================================================================
     PROCEDURE CompoLookupMoeda()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Composicao
             IF !USED("cursor_4c_Composicao") OR EOF("cursor_4c_Composicao")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdMoe", "cursor_4c_BuscaMoe", "cmoes", "", ;
-                "Selecionar Moeda")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("cmoes", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("dmoes", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaMoe")
-                    SELECT cursor_4c_BuscaMoe
-                    SELECT cursor_4c_Composicao
-                    REPLACE Moeds WITH ALLTRIM(cursor_4c_BuscaMoe.cmoes)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdMoe", "cursor_4c_BuscaMoe", "cmoes", "", ;
+                    "Selecionar Moeda")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("cmoes", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dmoes", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaMoe")
+                        SELECT cursor_4c_BuscaMoe
+                        SELECT cursor_4c_Composicao
+                        REPLACE Moeds WITH ALLTRIM(cursor_4c_BuscaMoe.cmoes)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompoLookupMoeda")
         ENDTRY
-        IF USED("cursor_4c_BuscaMoe")
-            USE IN cursor_4c_BuscaMoe
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaMoe")
+                USE IN cursor_4c_BuscaMoe
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2693,25 +2792,28 @@ DEFINE CLASS FormLin AS FormBase
     * CompObrigBtnInserirClick - Insere nova linha na grade de Composicao Obrigatoria
     *==========================================================================
     PROCEDURE CompObrigBtnInserirClick()
-        LOCAL loc_oGrd, loc_cLinhas, loc_lResultado
+        LOCAL loc_oGrd, loc_cLinhas, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_CompObrig")
-                THIS.InicializarCursoresDetalhe()
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_CompObrig")
+                    THIS.InicializarCursoresDetalhe()
+                ENDIF
+                loc_cLinhas = ALLTRIM(THIS.this_oBusinessObject.this_cLinhas)
+                loc_oGrd    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_CompObrig
+                SELECT cursor_4c_CompObrig
+                INSERT INTO cursor_4c_CompObrig (Linhas, Mat1s, Cgrus, Mercs, Mat2s) ;
+                    VALUES (loc_cLinhas, "", "", "", "")
+                IF VARTYPE(loc_oGrd) = "O"
+                    GO BOTTOM IN cursor_4c_CompObrig
+                    loc_oGrd.Refresh()
+                ENDIF
+                loc_lResultado = .T.
             ENDIF
-            loc_cLinhas = ALLTRIM(THIS.this_oBusinessObject.this_cLinhas)
-            loc_oGrd    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_CompObrig
-            SELECT cursor_4c_CompObrig
-            INSERT INTO cursor_4c_CompObrig (Linhas, Mat1s, Cgrus, Mercs, Mat2s) ;
-                VALUES (loc_cLinhas, "", "", "", "")
-            IF VARTYPE(loc_oGrd) = "O"
-                GO BOTTOM IN cursor_4c_CompObrig
-                loc_oGrd.Refresh()
-            ENDIF
-            loc_lResultado = .T.
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompObrigBtnInserirClick")
         ENDTRY
@@ -2722,29 +2824,36 @@ DEFINE CLASS FormLin AS FormBase
     * CompObrigBtnExcluirClick - Exclui linha da grade de Composicao Obrigatoria
     *==========================================================================
     PROCEDURE CompObrigBtnExcluirClick()
-        LOCAL loc_oGrd, loc_lResultado
+        LOCAL loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_CompObrig") OR RECCOUNT("cursor_4c_CompObrig") = 0
-                MsgAviso("Nenhum item selecionado para excluir.", ;
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_CompObrig") OR RECCOUNT("cursor_4c_CompObrig") = 0
+                    MsgAviso("Nenhum item selecionado para excluir.", ;
+                        "Excluir Comp. Obrigat" + CHR(243) + "ria")
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+            IF loc_lProsseguir
+                IF !MsgConfirma("Confirma a exclus" + CHR(227) + "o deste item?", ;
                     "Excluir Comp. Obrigat" + CHR(243) + "ria")
-                RETURN
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF !MsgConfirma("Confirma a exclus" + CHR(227) + "o deste item?", ;
-                "Excluir Comp. Obrigat" + CHR(243) + "ria")
-                RETURN
+            IF loc_lProsseguir
+                loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_CompObrig
+                SELECT cursor_4c_CompObrig
+                DELETE
+                PACK
+                IF VARTYPE(loc_oGrd) = "O"
+                    loc_oGrd.Refresh()
+                ENDIF
+                loc_lResultado = .T.
             ENDIF
-            loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_CompObrig
-            SELECT cursor_4c_CompObrig
-            DELETE
-            PACK
-            IF VARTYPE(loc_oGrd) = "O"
-                loc_oGrd.Refresh()
-            ENDIF
-            loc_lResultado = .T.
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompObrigBtnExcluirClick")
         ENDTRY
@@ -2755,29 +2864,36 @@ DEFINE CLASS FormLin AS FormBase
     * GrdProKeyPress - Dispatcher F4 para lookups da grade de Composicao Obrigatoria
     *==========================================================================
     PROCEDURE GrdProKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oGrd, loc_nCol
+        LOCAL loc_oGrd, loc_nCol, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF par_nKeyCode <> 28  && F4
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+            IF loc_lProsseguir
+                IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_CompObrig
-            IF VARTYPE(loc_oGrd) <> "O"
-                RETURN
+            IF loc_lProsseguir
+                loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_CompObrig
+                IF VARTYPE(loc_oGrd) <> "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_nCol = loc_oGrd.ActiveColumn
-            DO CASE
-                CASE loc_nCol = 1
-                    THIS.CompObrigLookupCompA()
-                CASE loc_nCol = 2
-                    THIS.CompObrigLookupGGrupo()
-                CASE loc_nCol = 3
-                    THIS.CompObrigLookupGrupo()
-                CASE loc_nCol = 4
-                    THIS.CompObrigLookupCompB()
-            ENDCASE
+            IF loc_lProsseguir
+                loc_nCol = loc_oGrd.ActiveColumn
+                DO CASE
+                    CASE loc_nCol = 1
+                        THIS.CompObrigLookupCompA()
+                    CASE loc_nCol = 2
+                        THIS.CompObrigLookupGGrupo()
+                    CASE loc_nCol = 3
+                        THIS.CompObrigLookupGrupo()
+                    CASE loc_nCol = 4
+                        THIS.CompObrigLookupCompB()
+                ENDCASE
+            ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.GrdProKeyPress")
         ENDTRY
@@ -2787,36 +2903,41 @@ DEFINE CLASS FormLin AS FormBase
     * CompObrigLookupCompA - Lookup de Produto A em SigCdPro (cpros/dpros)
     *==========================================================================
     PROCEDURE CompObrigLookupCompA()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_CompObrig
             IF !USED("cursor_4c_CompObrig") OR EOF("cursor_4c_CompObrig")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdPro", "cursor_4c_BuscaPro", "cpros", "", ;
-                "Selecionar Produto A")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("cpros", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaPro")
-                    SELECT cursor_4c_BuscaPro
-                    SELECT cursor_4c_CompObrig
-                    REPLACE Mat1s WITH ALLTRIM(cursor_4c_BuscaPro.cpros)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdPro", "cursor_4c_BuscaPro", "cpros", "", ;
+                    "Selecionar Produto A")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("cpros", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaPro")
+                        SELECT cursor_4c_BuscaPro
+                        SELECT cursor_4c_CompObrig
+                        REPLACE Mat1s WITH ALLTRIM(cursor_4c_BuscaPro.cpros)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompObrigLookupCompA")
         ENDTRY
-        IF USED("cursor_4c_BuscaPro")
-            USE IN cursor_4c_BuscaPro
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaPro")
+                USE IN cursor_4c_BuscaPro
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2825,36 +2946,41 @@ DEFINE CLASS FormLin AS FormBase
     * CompObrigLookupGGrupo - Lookup de Grande Grupo em SigCdGpr (codigos/descs)
     *==========================================================================
     PROCEDURE CompObrigLookupGGrupo()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_CompObrig
             IF !USED("cursor_4c_CompObrig") OR EOF("cursor_4c_CompObrig")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdGpr", "cursor_4c_BuscaGpr", "codigos", "", ;
-                "Selecionar Grande Grupo")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGpr")
-                    SELECT cursor_4c_BuscaGpr
-                    SELECT cursor_4c_CompObrig
-                    REPLACE Cgrus WITH ALLTRIM(cursor_4c_BuscaGpr.codigos)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdGpr", "cursor_4c_BuscaGpr", "codigos", "", ;
+                    "Selecionar Grande Grupo")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGpr")
+                        SELECT cursor_4c_BuscaGpr
+                        SELECT cursor_4c_CompObrig
+                        REPLACE Cgrus WITH ALLTRIM(cursor_4c_BuscaGpr.codigos)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompObrigLookupGGrupo")
         ENDTRY
-        IF USED("cursor_4c_BuscaGpr")
-            USE IN cursor_4c_BuscaGpr
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaGpr")
+                USE IN cursor_4c_BuscaGpr
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2863,36 +2989,41 @@ DEFINE CLASS FormLin AS FormBase
     * CompObrigLookupGrupo - Lookup de Grupo de Producao em SigCdGrp (cgrus/dgrus)
     *==========================================================================
     PROCEDURE CompObrigLookupGrupo()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_CompObrig
             IF !USED("cursor_4c_CompObrig") OR EOF("cursor_4c_CompObrig")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdGrp", "cursor_4c_BuscaGrp", "cgrus", "", ;
-                "Selecionar Grupo de Produ" + CHR(231) + CHR(227) + "o")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("cgrus", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("dgrus", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrp")
-                    SELECT cursor_4c_BuscaGrp
-                    SELECT cursor_4c_CompObrig
-                    REPLACE Mercs WITH ALLTRIM(cursor_4c_BuscaGrp.cgrus)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdGrp", "cursor_4c_BuscaGrp", "cgrus", "", ;
+                    "Selecionar Grupo de Produ" + CHR(231) + CHR(227) + "o")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("cgrus", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dgrus", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrp")
+                        SELECT cursor_4c_BuscaGrp
+                        SELECT cursor_4c_CompObrig
+                        REPLACE Mercs WITH ALLTRIM(cursor_4c_BuscaGrp.cgrus)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompObrigLookupGrupo")
         ENDTRY
-        IF USED("cursor_4c_BuscaGrp")
-            USE IN cursor_4c_BuscaGrp
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaGrp")
+                USE IN cursor_4c_BuscaGrp
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC
@@ -2901,36 +3032,41 @@ DEFINE CLASS FormLin AS FormBase
     * CompObrigLookupCompB - Lookup de Produto B em SigCdPro (cpros/dpros)
     *==========================================================================
     PROCEDURE CompObrigLookupCompB()
-        LOCAL loc_oBusca, loc_oGrd, loc_lResultado
+        LOCAL loc_oBusca, loc_oGrd, loc_lResultado, loc_lProsseguir
         loc_lResultado = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_CompObrig
             IF !USED("cursor_4c_CompObrig") OR EOF("cursor_4c_CompObrig")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdPro", "cursor_4c_BuscaPro", "cpros", "", ;
-                "Selecionar Produto B")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("cpros", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaPro")
-                    SELECT cursor_4c_BuscaPro
-                    SELECT cursor_4c_CompObrig
-                    REPLACE Mat2s WITH ALLTRIM(cursor_4c_BuscaPro.cpros)
-                    IF VARTYPE(loc_oGrd) = "O"
-                        loc_oGrd.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdPro", "cursor_4c_BuscaPro", "cpros", "", ;
+                    "Selecionar Produto B")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("cpros", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaPro")
+                        SELECT cursor_4c_BuscaPro
+                        SELECT cursor_4c_CompObrig
+                        REPLACE Mat2s WITH ALLTRIM(cursor_4c_BuscaPro.cpros)
+                        IF VARTYPE(loc_oGrd) = "O"
+                            loc_oGrd.Refresh()
+                        ENDIF
+                        loc_lResultado = .T.
                     ENDIF
-                    loc_lResultado = .T.
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MsgErro("Erro: " + loException.Message, "FormLin.CompObrigLookupCompB")
         ENDTRY
-        IF USED("cursor_4c_BuscaPro")
-            USE IN cursor_4c_BuscaPro
+        IF loc_lProsseguir
+            IF USED("cursor_4c_BuscaPro")
+                USE IN cursor_4c_BuscaPro
+            ENDIF
         ENDIF
         RETURN loc_lResultado
     ENDPROC

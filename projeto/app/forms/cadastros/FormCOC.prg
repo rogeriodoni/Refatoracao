@@ -511,7 +511,7 @@ DEFINE CLASS FormCOC AS FormBase
             .FontItalic = .F.
             .ForeColor  = RGB(90, 90, 90)
             .BackStyle  = 0
-            .Alignment  = 1
+            .Alignment  = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .AutoSize   = .F.
             .Visible    = .T.
         ENDWITH
@@ -686,7 +686,7 @@ DEFINE CLASS FormCOC AS FormBase
             .Caption    = "Movimento :"
             .Top        = 241
             .Left       = 227
-            .Width      = 63
+            .Width      = 69    && texto mede 59px
             .Height     = 17
             .FontName   = "Tahoma"
             .FontSize   = 8
@@ -694,7 +694,7 @@ DEFINE CLASS FormCOC AS FormBase
             .FontItalic = .F.
             .ForeColor  = RGB(90, 90, 90)
             .BackStyle  = 0
-            .Alignment  = 1
+            .Alignment  = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .AutoSize   = .F.
             .Visible    = .T.
         ENDWITH
@@ -804,7 +804,7 @@ DEFINE CLASS FormCOC AS FormBase
             .Caption    = "Op" + CHR(231) + CHR(227) + "o :"
             .Top        = 293
             .Left       = 248
-            .Width      = 41
+            .Width      = 48    && texto mede 38px
             .Height     = 17
             .FontName   = "Tahoma"
             .FontSize   = 8
@@ -812,7 +812,7 @@ DEFINE CLASS FormCOC AS FormBase
             .FontItalic = .F.
             .ForeColor  = RGB(90, 90, 90)
             .BackStyle  = 0
-            .Alignment  = 1
+            .Alignment  = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .AutoSize   = .F.
             .Visible    = .T.
         ENDWITH

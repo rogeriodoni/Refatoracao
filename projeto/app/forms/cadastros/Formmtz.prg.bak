@@ -2106,23 +2106,26 @@ DEFINE CLASS Formmtz AS FormBase
     *-- =========================================================================
 
     PROCEDURE BtnInserirLinhaClick()
-        LOCAL loc_cCodigo, loc_oGrid
+        LOCAL loc_cCodigo, loc_oGrid, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF THIS.this_cModoAtual # "INCLUIR" AND THIS.this_cModoAtual # "ALTERAR"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cCodigo = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Codigo.Value)
+            IF loc_lProsseguir
+                loc_cCodigo = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Codigo.Value)
 
-            IF THIS.this_oBusinessObject.InserirLinhaDetalhe(loc_cCodigo)
-                loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Dados
-                IF VARTYPE(loc_oGrid) = "O"
-                    loc_oGrid.Refresh()
-                    loc_oGrid.Column1.SetFocus()
+                IF THIS.this_oBusinessObject.InserirLinhaDetalhe(loc_cCodigo)
+                    loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Dados
+                    IF VARTYPE(loc_oGrid) = "O"
+                        loc_oGrid.Refresh()
+                        loc_oGrid.Column1.SetFocus()
+                    ENDIF
                 ENDIF
-            ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formmtz.BtnInserirLinhaClick")
         ENDTRY
@@ -2134,21 +2137,24 @@ DEFINE CLASS Formmtz AS FormBase
     *-- =========================================================================
 
     PROCEDURE BtnExcluirLinhaClick()
-        LOCAL loc_oGrid
+        LOCAL loc_oGrid, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF THIS.this_cModoAtual # "INCLUIR" AND THIS.this_cModoAtual # "ALTERAR"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF THIS.this_oBusinessObject.ExcluirLinhaDetalhe()
-                loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Dados
-                IF VARTYPE(loc_oGrid) = "O"
-                    loc_oGrid.SetFocus()
-                    loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                IF THIS.this_oBusinessObject.ExcluirLinhaDetalhe()
+                    loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Dados
+                    IF VARTYPE(loc_oGrid) = "O"
+                        loc_oGrid.SetFocus()
+                        loc_oGrid.Refresh()
+                    ENDIF
                 ENDIF
-            ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formmtz.BtnExcluirLinhaClick")
         ENDTRY

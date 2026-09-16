@@ -1363,7 +1363,7 @@ DEFINE CLASS FormMoe AS FormBase
     *   INSERT/ALTER: disfpres padrao 'S' se vazio (tratado no FormParaBO)
     *==========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_oPg2, loc_cCodigo, loc_nOrdem, loc_lSucesso
+        LOCAL loc_oPg2, loc_cCodigo, loc_nOrdem, loc_lSucesso, loc_lProsseguir
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
         *-- Validacoes ANTES do TRY (RETURN fora de TRY e correto)
@@ -1378,6 +1378,7 @@ DEFINE CLASS FormMoe AS FormBase
 
             *-- Verificar duplicidade
             loc_lSucesso = .F.
+            loc_lProsseguir = .T.
             TRY
                 LOCAL loc_nDup
                 loc_nDup = SQLEXEC(gnConnHandle, ;
@@ -1390,18 +1391,25 @@ DEFINE CLASS FormMoe AS FormBase
                     MsgAviso("Moeda j" + CHR(225) + " cadastrada !!!", ;
                         "Aten" + CHR(231) + CHR(227) + "o")
                     loc_oPg2.txt_4c_Moeda.SetFocus
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                IF USED("cursor_4c_DupCheck")
-                    USE IN cursor_4c_DupCheck
+                IF loc_lProsseguir
+                    IF USED("cursor_4c_DupCheck")
+                        USE IN cursor_4c_DupCheck
+                    ENDIF
                 ENDIF
             CATCH TO loc_oErro
                 MsgErro("Erro ao verificar duplicidade: " + loc_oErro.Message, "Erro")
                 IF USED("cursor_4c_DupCheck")
                     USE IN cursor_4c_DupCheck
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDTRY
+
+            *-- RETURN aqui e legal: esta FORA do TRY (regra #1)
+            IF !loc_lProsseguir
+                RETURN
+            ENDIF
 
             *-- Verificar nordrels entre 0-5
             loc_nOrdem = loc_oPg2.obj_4c_SpnNordrels.Value
@@ -1412,18 +1420,20 @@ DEFINE CLASS FormMoe AS FormBase
                 RETURN
             ENDIF
         ENDIF
-
-        THIS.FormParaBO()
-
-        TRY
-            IF THIS.this_oBusinessObject.Salvar()
-                MsgInfo("Moeda salva com sucesso!", "Sucesso")
-                THIS.this_cModoAtual = "LISTA"
-                THIS.AlternarPagina(1)
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro("Erro ao salvar: " + loc_oErro.Message, "Erro")
-        ENDTRY
+        IF loc_lProsseguir
+    
+            THIS.FormParaBO()
+    
+            TRY
+                IF THIS.this_oBusinessObject.Salvar()
+                    MsgInfo("Moeda salva com sucesso!", "Sucesso")
+                    THIS.this_cModoAtual = "LISTA"
+                    THIS.AlternarPagina(1)
+                ENDIF
+            CATCH TO loc_oErro
+                MsgErro("Erro ao salvar: " + loc_oErro.Message, "Erro")
+            ENDTRY
+        ENDIF
     ENDPROC
 
     *==========================================================================

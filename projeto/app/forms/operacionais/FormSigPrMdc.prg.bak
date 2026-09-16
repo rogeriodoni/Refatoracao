@@ -643,17 +643,20 @@ DEFINE CLASS FormSigPrMdc AS FormBase
     * CmdExportaClick - Importar pares de contas de arquivo XLS
     *--------------------------------------------------------------------------
     PROCEDURE CmdExportaClick()
-        LOCAL loc_cArquivo
+        LOCAL loc_cArquivo, loc_lProsseguir
         loc_cArquivo = ""
+        loc_lProsseguir = .T.
         TRY
             loc_cArquivo = GETFILE("XLS")
             IF EMPTY(loc_cArquivo)
                 MsgAviso("Arquivo para Importa" + CHR(231) + CHR(227) + ;
                     "o n" + CHR(227) + "o informado!!!", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF THIS.this_oBusinessObject.ImportarDeXLS(loc_cArquivo)
-                THIS.grd_4c_Dados.Refresh()
+            IF loc_lProsseguir
+                IF THIS.this_oBusinessObject.ImportarDeXLS(loc_cArquivo)
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao Importar")
@@ -664,62 +667,67 @@ DEFINE CLASS FormSigPrMdc AS FormBase
     * CmdProcessarClick - Processar troca de contas em todas as tabelas
     *--------------------------------------------------------------------------
     PROCEDURE CmdProcessarClick()
-        LOCAL loc_lSucesso, loc_cMensagem, loc_lApagarContaAntiga, loc_lTrocarReps
+        LOCAL loc_lSucesso, loc_cMensagem, loc_lApagarContaAntiga, loc_lTrocarReps, loc_lProsseguir
         loc_lSucesso           = .F.
         loc_cMensagem          = ""
         loc_lApagarContaAntiga = .F.
         loc_lTrocarReps        = .F.
+        loc_lProsseguir = .T.
         TRY
             *-- Validar pares antes de processar
             IF NOT THIS.this_oBusinessObject.ValidarParesContas(@loc_cMensagem)
                 MsgAviso(loc_cMensagem, "Aten" + CHR(231) + CHR(227) + "o")
                 THIS.grd_4c_Dados.SetFocus()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Confirmar com usuario
-            IF NOT MsgConfirma("Confirma a Troca das Contas ?", ;
-                "Confirma" + CHR(231) + CHR(227) + "o do Processamento!!!")
-                THIS.cnt_4c_Botoes.cmd_4c_BtnSair.SetFocus()
-                RETURN
+            IF loc_lProsseguir
+                IF NOT MsgConfirma("Confirma a Troca das Contas ?", ;
+                    "Confirma" + CHR(231) + CHR(227) + "o do Processamento!!!")
+                    THIS.cnt_4c_Botoes.cmd_4c_BtnSair.SetFocus()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_lTrocarReps        = (THIS.chk_4c_ChkReps.Value   = 1)
-            loc_lApagarContaAntiga = (THIS.chk_4c_Chk_DelCT.Value = 1)
+            IF loc_lProsseguir
+                loc_lTrocarReps        = (THIS.chk_4c_ChkReps.Value   = 1)
+                loc_lApagarContaAntiga = (THIS.chk_4c_Chk_DelCT.Value = 1)
 
-            IF loc_lTrocarReps
-                *-- Troca apenas ContaVens em SigCdCli (representantes)
-                loc_lSucesso = THIS.this_oBusinessObject.TrocarContaRepresentantes()
-            ELSE
-                *-- Processamento completo via catalogo ArqDBF
-                THIS.cnt_4c_Resultado.Visible = .T.
-                THIS.cnt_4c_Resultado.cnt_4c_Barra.shp_4c_Barra.Width   = 0
-                THIS.cnt_4c_Resultado.cnt_4c_Barra.lbl_4c_Porcento.Caption = "0 %"
-                THIS.cnt_4c_Resultado.Refresh()
-                loc_lSucesso = THIS.this_oBusinessObject.ProcessarMudancaContas( ;
-                    loc_lApagarContaAntiga, THIS)
-                THIS.cnt_4c_Resultado.Visible = .F.
-                THIS.Refresh()
-            ENDIF
+                IF loc_lTrocarReps
+                    *-- Troca apenas ContaVens em SigCdCli (representantes)
+                    loc_lSucesso = THIS.this_oBusinessObject.TrocarContaRepresentantes()
+                ELSE
+                    *-- Processamento completo via catalogo ArqDBF
+                    THIS.cnt_4c_Resultado.Visible = .T.
+                    THIS.cnt_4c_Resultado.cnt_4c_Barra.shp_4c_Barra.Width   = 0
+                    THIS.cnt_4c_Resultado.cnt_4c_Barra.lbl_4c_Porcento.Caption = "0 %"
+                    THIS.cnt_4c_Resultado.Refresh()
+                    loc_lSucesso = THIS.this_oBusinessObject.ProcessarMudancaContas( ;
+                        loc_lApagarContaAntiga, THIS)
+                    THIS.cnt_4c_Resultado.Visible = .F.
+                    THIS.Refresh()
+                ENDIF
 
             *-- Informar resultado
-            IF loc_lSucesso
-                MsgAviso("Todas as Contas Foram Alteradas!!!", ;
-                    "Processamento Encerrado!!!")
-            ELSE
-                MsgAviso("As Contas N" + CHR(227) + "o Foram Alteradas!!!", ;
-                    "Processamento Encerrado!!!")
-            ENDIF
+                IF loc_lSucesso
+                    MsgAviso("Todas as Contas Foram Alteradas!!!", ;
+                        "Processamento Encerrado!!!")
+                ELSE
+                    MsgAviso("As Contas N" + CHR(227) + "o Foram Alteradas!!!", ;
+                        "Processamento Encerrado!!!")
+                ENDIF
 
             *-- Reiniciar cursor para nova rodada
-            IF USED("cursor_4c_Contas")
-                SELECT cursor_4c_Contas
-                SET ORDER TO
-                ZAP
-                APPEND BLANK
-            ENDIF
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
-                THIS.grd_4c_Dados.Refresh()
+                IF USED("cursor_4c_Contas")
+                    SELECT cursor_4c_Contas
+                    SET ORDER TO
+                    ZAP
+                    APPEND BLANK
+                ENDIF
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro no Processamento")
@@ -951,17 +959,21 @@ DEFINE CLASS FormSigPrMdc AS FormBase
     * Form OPERACIONAL: grid eh sempre editavel, nao ha modo separado ALTERAR.
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF NOT USED("cursor_4c_Contas") OR RECCOUNT("cursor_4c_Contas") = 0
                 MsgAviso("N" + CHR(227) + "o existem pares de contas para alterar.", ;
                     "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
-                THIS.grd_4c_Dados.SetFocus()
-                THIS.grd_4c_Dados.ActiveColumn = 1
-                IF VARTYPE(THIS.grd_4c_Dados.Column1.Text1) = "O"
-                    THIS.grd_4c_Dados.Column1.Text1.SetFocus()
+            IF loc_lProsseguir
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.SetFocus()
+                    THIS.grd_4c_Dados.ActiveColumn = 1
+                    IF VARTYPE(THIS.grd_4c_Dados.Column1.Text1) = "O"
+                        THIS.grd_4c_Dados.Column1.Text1.SetFocus()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -975,36 +987,41 @@ DEFINE CLASS FormSigPrMdc AS FormBase
     * Form OPERACIONAL: nao ha modo VISUALIZAR separado; consulta on-demand.
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_cContaAnt, loc_cContaNov, loc_cDescAnt, loc_cDescNov, loc_cMsg
+        LOCAL loc_cContaAnt, loc_cContaNov, loc_cDescAnt, loc_cDescNov, loc_cMsg, loc_lProsseguir
         loc_cContaAnt = ""
         loc_cContaNov = ""
         loc_cDescAnt  = ""
         loc_cDescNov  = ""
+        loc_lProsseguir = .T.
         TRY
             IF NOT USED("cursor_4c_Contas") OR EOF("cursor_4c_Contas")
                 MsgAviso("N" + CHR(227) + "o existem pares de contas para visualizar.", ;
                     "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Contas
-            loc_cContaAnt = ALLTRIM(NVL(cursor_4c_Contas.ContaAnt, ""))
-            loc_cContaNov = ALLTRIM(NVL(cursor_4c_Contas.ContaNov, ""))
-            IF EMPTY(loc_cContaAnt) AND EMPTY(loc_cContaNov)
-                MsgAviso("Linha corrente n" + CHR(227) + "o tem contas preenchidas.", ;
-                    "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                SELECT cursor_4c_Contas
+                loc_cContaAnt = ALLTRIM(NVL(cursor_4c_Contas.ContaAnt, ""))
+                loc_cContaNov = ALLTRIM(NVL(cursor_4c_Contas.ContaNov, ""))
+                IF EMPTY(loc_cContaAnt) AND EMPTY(loc_cContaNov)
+                    MsgAviso("Linha corrente n" + CHR(227) + "o tem contas preenchidas.", ;
+                        "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF NOT EMPTY(loc_cContaAnt)
-                loc_cDescAnt = THIS.this_oBusinessObject.BuscarDescricaoConta(loc_cContaAnt)
+            IF loc_lProsseguir
+                IF NOT EMPTY(loc_cContaAnt)
+                    loc_cDescAnt = THIS.this_oBusinessObject.BuscarDescricaoConta(loc_cContaAnt)
+                ENDIF
+                IF NOT EMPTY(loc_cContaNov)
+                    loc_cDescNov = THIS.this_oBusinessObject.BuscarDescricaoConta(loc_cContaNov)
+                ENDIF
+                loc_cMsg = "Conta Antiga: " + loc_cContaAnt + CHR(13) + ;
+                           "Descri" + CHR(231) + CHR(227) + "o.: " + loc_cDescAnt + CHR(13) + CHR(13) + ;
+                           "Conta Nova..: " + loc_cContaNov + CHR(13) + ;
+                           "Descri" + CHR(231) + CHR(227) + "o.: " + loc_cDescNov
+                MsgInfo(loc_cMsg, "Visualizar Par de Contas")
             ENDIF
-            IF NOT EMPTY(loc_cContaNov)
-                loc_cDescNov = THIS.this_oBusinessObject.BuscarDescricaoConta(loc_cContaNov)
-            ENDIF
-            loc_cMsg = "Conta Antiga: " + loc_cContaAnt + CHR(13) + ;
-                       "Descri" + CHR(231) + CHR(227) + "o.: " + loc_cDescAnt + CHR(13) + CHR(13) + ;
-                       "Conta Nova..: " + loc_cContaNov + CHR(13) + ;
-                       "Descri" + CHR(231) + CHR(227) + "o.: " + loc_cDescNov
-            MsgInfo(loc_cMsg, "Visualizar Par de Contas")
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao Visualizar")
         ENDTRY

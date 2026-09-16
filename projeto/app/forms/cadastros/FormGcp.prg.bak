@@ -619,7 +619,7 @@ DEFINE CLASS FormGcp AS FormBase
     * Equivale a cmdInserir.Click do legado
     *==========================================================================
     PROCEDURE BtnInserirClick()
-        LOCAL loc_oPg1, loc_nBlqCts
+        LOCAL loc_oPg1, loc_nBlqCts, loc_lProsseguir
         loc_oPg1    = THIS.pgf_4c_Paginas.Page1
         loc_nBlqCts = THIS.this_oBusinessObject.this_nBlqCtsAtual
 
@@ -627,6 +627,7 @@ DEFINE CLASS FormGcp AS FormBase
             RETURN
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             *-- Verificar se ja ha linha em branco (nao inserir multiplas linhas vazias)
             SELECT TmpGcOpe
@@ -636,19 +637,21 @@ DEFINE CLASS FormGcp AS FormBase
                 IF THIS.Visible
                     loc_oPg1.grd_4c_Dados.Column1.SetFocus
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Inserir nova linha com valores padrao em branco
-            THIS.this_lHouveIns = .T.
-            INSERT INTO TmpGcOpe ;
-                (CidChaves, Dopes, Grupos, Contas, OriDes, BlqCts) ;
-                VALUES ("", THIS.this_cDopesAtual, " ", " ", " ", loc_nBlqCts)
+            IF loc_lProsseguir
+                THIS.this_lHouveIns = .T.
+                INSERT INTO TmpGcOpe ;
+                    (CidChaves, Dopes, Grupos, Contas, OriDes, BlqCts) ;
+                    VALUES ("", THIS.this_cDopesAtual, " ", " ", " ", loc_nBlqCts)
 
-            SELECT TmpGcOpe
-            loc_oPg1.grd_4c_Dados.Refresh()
-            IF THIS.Visible
-                loc_oPg1.grd_4c_Dados.Column1.SetFocus
+                SELECT TmpGcOpe
+                loc_oPg1.grd_4c_Dados.Refresh()
+                IF THIS.Visible
+                    loc_oPg1.grd_4c_Dados.Column1.SetFocus
+                ENDIF
             ENDIF
         CATCH TO loException
             MostrarErro(loException, "FormGcp.BtnInserirClick")
@@ -1062,7 +1065,7 @@ DEFINE CLASS FormGcp AS FormBase
     * (mantido para compatibilidade com o padrao CRUD do sistema novo)
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oPg1, loc_nBlqCts
+        LOCAL loc_oPg1, loc_nBlqCts, loc_lProsseguir
         loc_oPg1    = THIS.pgf_4c_Paginas.Page1
         loc_nBlqCts = THIS.this_oBusinessObject.this_nBlqCtsAtual
 
@@ -1078,25 +1081,28 @@ DEFINE CLASS FormGcp AS FormBase
             RETURN
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             *-- Evitar linha em branco duplicada
             SELECT TmpGcOpe
             LOCATE FOR EMPTY(ALLTRIM(Grupos))
             IF !EOF()
                 loc_oPg1.grd_4c_Dados.Refresh()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.this_lHouveIns = .T.
-            INSERT INTO TmpGcOpe ;
-                (CidChaves, Dopes, Grupos, Contas, OriDes, BlqCts) ;
-                VALUES ("", THIS.this_cDopesAtual, " ", " ", " ", loc_nBlqCts)
+            IF loc_lProsseguir
+                THIS.this_lHouveIns = .T.
+                INSERT INTO TmpGcOpe ;
+                    (CidChaves, Dopes, Grupos, Contas, OriDes, BlqCts) ;
+                    VALUES ("", THIS.this_cDopesAtual, " ", " ", " ", loc_nBlqCts)
 
-            SELECT TmpGcOpe
-            loc_oPg1.grd_4c_Dados.Refresh()
+                SELECT TmpGcOpe
+                loc_oPg1.grd_4c_Dados.Refresh()
             *-- SetFocus apenas quando o form esta visivel (evita Show() implicito em testes)
-            IF THIS.Visible
-                loc_oPg1.grd_4c_Dados.Column1.SetFocus
+                IF THIS.Visible
+                    loc_oPg1.grd_4c_Dados.Column1.SetFocus
+                ENDIF
             ENDIF
         CATCH TO loException
             MostrarErro(loException, "FormGcp.BtnIncluirClick")

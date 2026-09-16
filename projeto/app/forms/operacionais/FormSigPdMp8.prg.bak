@@ -1077,7 +1077,7 @@ DEFINE CLASS FormSigPdMp8 AS FormBase
     *   - Apos selecao: atualiza celula, Fixos e Descs; Refresh do grid
     *==========================================================================
     PROCEDURE ValidarNcf()
-        LOCAL loc_cValor, loc_cSQL, loc_oErro, loc_oBusca
+        LOCAL loc_cValor, loc_cSQL, loc_oErro, loc_oBusca, loc_lProsseguir
         LOCAL loc_cCods, loc_cDescs, loc_nFixos
         loc_oBusca = .NULL.
 
@@ -1091,84 +1091,87 @@ DEFINE CLASS FormSigPdMp8 AS FormBase
             RETURN
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
                 MsgErro("Sem conex" + CHR(227) + "o com o servidor. Reinicialize o processo.", ;
                         "FormSigPdMp8.ValidarNcf")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cSQL = "SELECT Cods, Descs, Fixos FROM SigCdNcf WHERE (Emps = " + ;
-                       EscaparSQL(go_4c_Sistema.cCodEmpresa) + " OR Emps = ' ')"
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT Cods, Descs, Fixos FROM SigCdNcf WHERE (Emps = " + ;
+                           EscaparSQL(go_4c_Sistema.cCodEmpresa) + " OR Emps = ' ')"
 
-            IF USED("cursor_4c_NcfTemp")
-                TABLEREVERT(.T., "cursor_4c_NcfTemp")
-                USE IN cursor_4c_NcfTemp
-            ENDIF
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_NcfTemp") > 0 AND USED("cursor_4c_NcfTemp")
-                SELECT cursor_4c_NcfTemp
-                INDEX ON UPPER(ALLTRIM(Cods)) TAG Cods
-
-                IF SEEK(UPPER(ALLTRIM(loc_cValor)))
-                    *-- Encontrado: capturar valores e atualizar xNensiN
-                    loc_cCods  = ALLTRIM(cursor_4c_NcfTemp.Cods)
-                    loc_cDescs = ALLTRIM(cursor_4c_NcfTemp.Descs)
-                    loc_nFixos = NVL(cursor_4c_NcfTemp.Fixos, 0)
-
-                    IF USED("xNensiN")
-                        SELECT xNensiN
-                        REPLACE Fixos WITH loc_nFixos, Descs WITH loc_cDescs
-                    ENDIF
-
+                IF USED("cursor_4c_NcfTemp")
+                    TABLEREVERT(.T., "cursor_4c_NcfTemp")
                     USE IN cursor_4c_NcfTemp
-                ELSE
-                    *-- Nao encontrado: abrir FormBuscaAuxiliar para selecao
-                    USE IN cursor_4c_NcfTemp
+                ENDIF
 
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                        "SigCdNcf", ;
-                        "cursor_4c_NcfBusca", ;
-                        "Cods", ;
-                        loc_cValor, ;
-                        "N" + CHR(227) + "o Conformidade")
-                    loc_oBusca.mAddColuna("Cods",  "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Show()
-
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_NcfBusca")
-                        SELECT cursor_4c_NcfBusca
-                        loc_cCods  = ALLTRIM(cursor_4c_NcfBusca.Cods)
-                        loc_cDescs = ALLTRIM(cursor_4c_NcfBusca.Descs)
-                        loc_nFixos = NVL(cursor_4c_NcfBusca.Fixos, 0)
-
-                        THIS.grd_4c_Inc.Column1.Text1.Value = loc_cCods
-
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_NcfTemp") > 0 AND USED("cursor_4c_NcfTemp")
+                    SELECT cursor_4c_NcfTemp
+                    INDEX ON UPPER(ALLTRIM(Cods)) TAG Cods
+    
+                    IF SEEK(UPPER(ALLTRIM(loc_cValor)))
+                        *-- Encontrado: capturar valores e atualizar xNensiN
+                        loc_cCods  = ALLTRIM(cursor_4c_NcfTemp.Cods)
+                        loc_cDescs = ALLTRIM(cursor_4c_NcfTemp.Descs)
+                        loc_nFixos = NVL(cursor_4c_NcfTemp.Fixos, 0)
+    
                         IF USED("xNensiN")
                             SELECT xNensiN
                             REPLACE Fixos WITH loc_nFixos, Descs WITH loc_cDescs
                         ENDIF
+    
+                        USE IN cursor_4c_NcfTemp
                     ELSE
-                        THIS.grd_4c_Inc.Column1.Text1.Value = ""
+                        *-- Nao encontrado: abrir FormBuscaAuxiliar para selecao
+                        USE IN cursor_4c_NcfTemp
+    
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                            "SigCdNcf", ;
+                            "cursor_4c_NcfBusca", ;
+                            "Cods", ;
+                            loc_cValor, ;
+                            "N" + CHR(227) + "o Conformidade")
+                        loc_oBusca.mAddColuna("Cods",  "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.Show()
+    
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_NcfBusca")
+                            SELECT cursor_4c_NcfBusca
+                            loc_cCods  = ALLTRIM(cursor_4c_NcfBusca.Cods)
+                            loc_cDescs = ALLTRIM(cursor_4c_NcfBusca.Descs)
+                            loc_nFixos = NVL(cursor_4c_NcfBusca.Fixos, 0)
+    
+                            THIS.grd_4c_Inc.Column1.Text1.Value = loc_cCods
+    
+                            IF USED("xNensiN")
+                                SELECT xNensiN
+                                REPLACE Fixos WITH loc_nFixos, Descs WITH loc_cDescs
+                            ENDIF
+                        ELSE
+                            THIS.grd_4c_Inc.Column1.Text1.Value = ""
+                        ENDIF
+    
+                        IF USED("cursor_4c_NcfBusca")
+                            USE IN cursor_4c_NcfBusca
+                        ENDIF
+    
+                        loc_oBusca.Release()
+                        loc_oBusca = .NULL.
                     ENDIF
-
-                    IF USED("cursor_4c_NcfBusca")
-                        USE IN cursor_4c_NcfBusca
-                    ENDIF
-
-                    loc_oBusca.Release()
-                    loc_oBusca = .NULL.
+    
+                ELSE
+                    MsgErro("Falha ao acessar SigCdNcf. Reinicialize o processo.", ;
+                            "FormSigPdMp8.ValidarNcf")
                 ENDIF
 
-            ELSE
-                MsgErro("Falha ao acessar SigCdNcf. Reinicialize o processo.", ;
-                        "FormSigPdMp8.ValidarNcf")
-            ENDIF
+                IF PEMSTATUS(THIS, "grd_4c_Inc", 5)
+                    THIS.grd_4c_Inc.Refresh
+                ENDIF
 
-            IF PEMSTATUS(THIS, "grd_4c_Inc", 5)
-                THIS.grd_4c_Inc.Refresh
             ENDIF
-
         CATCH TO loc_oErro
             MsgErro("Erro ao validar N" + CHR(227) + "o-Conformidade: " + loc_oErro.Message, ;
                     "FormSigPdMp8.ValidarNcf")

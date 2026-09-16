@@ -2678,28 +2678,32 @@ DEFINE CLASS FormSigPrGlp AS FormBase
     * (lReserva, lAutomatico, nNumeroDaOp) e datas obtidas do form pai.
     *==========================================================================
     PROCEDURE FormParaBO
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            WITH THIS.this_oBusinessObject
-                .this_lReserva    = THIS.this_lReserva
-                .this_lAutomatico = THIS.this_lAutomatico
-                .this_nNumeroDaOp = THIS.this_nNumeroDaOp
-                .this_nEmphPdr    = THIS.this_nEmphPdr
-                .this_dData       = THIS.this_dData
-
-                *-- Datas de previsao/geracao obtidas do form avo (se existir)
-                IF VARTYPE(THIS.poFormPai) = "O"
-                    TRY
-                        IF VARTYPE(THIS.poFormPai.poFormPai) = "O"
-                            .this_dPrevisao = THIS.poFormPai.poFormPai.cnt_4c_Previsao.txt_4c_GetPrevisao.Value
-                            .this_dGeracao  = THIS.poFormPai.poFormPai.cnt_4c_Previsao.txt_4c_GetGeracao.Value
-                        ENDIF
-                    CATCH
-                    ENDTRY
-                ENDIF
-            ENDWITH
+            IF loc_lProsseguir
+                WITH THIS.this_oBusinessObject
+                    .this_lReserva    = THIS.this_lReserva
+                    .this_lAutomatico = THIS.this_lAutomatico
+                    .this_nNumeroDaOp = THIS.this_nNumeroDaOp
+                    .this_nEmphPdr    = THIS.this_nEmphPdr
+                    .this_dData       = THIS.this_dData
+    
+                    *-- Datas de previsao/geracao obtidas do form avo (se existir)
+                    IF VARTYPE(THIS.poFormPai) = "O"
+                        TRY
+                            IF VARTYPE(THIS.poFormPai.poFormPai) = "O"
+                                .this_dPrevisao = THIS.poFormPai.poFormPai.cnt_4c_Previsao.txt_4c_GetPrevisao.Value
+                                .this_dGeracao  = THIS.poFormPai.poFormPai.cnt_4c_Previsao.txt_4c_GetGeracao.Value
+                            ENDIF
+                        CATCH
+                        ENDTRY
+                    ENDIF
+                ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

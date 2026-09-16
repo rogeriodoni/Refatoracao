@@ -828,9 +828,10 @@ DEFINE CLASS Formsigrectc AS FormBase
     *   Equivalente ao fwBuscaInt original em 'crfpagam' (indexado por 'Cartao')
     *--------------------------------------------------------------------------
     PROCEDURE AbrirBuscaFpags()
-        LOCAL loc_oPag, loc_cValor, loc_oBusca, loc_oErro
+        LOCAL loc_oPag, loc_cValor, loc_oBusca, loc_oErro, loc_lProsseguir
         loc_oPag   = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPag.txt_4c_Fpags.Value)
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Cartoes") AND VARTYPE(THIS.this_oRelatorio) = "O"
                 THIS.this_oRelatorio.CarregarCartoes()
@@ -843,21 +844,23 @@ DEFINE CLASS Formsigrectc AS FormBase
                     LOCATE FOR UPPER(ALLTRIM(dcarts)) = UPPER(loc_cValor)
                     IF FOUND()
                         loc_oPag.txt_4c_Fpags.Value = ALLTRIM(dcarts)
-                        RETURN
+                        loc_lProsseguir = .F.
                     ENDIF
                 ENDIF
 
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.this_cCursorDestino = "cursor_4c_Cartoes"
-                    loc_oBusca.this_cTitulo        = "Selecionar Cart" + CHR(227) + "o"
-                    loc_oBusca.mAddColuna("dcarts", "", "Cart" + CHR(227) + "o")
-                    loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_Cartoes")
-                        SELECT cursor_4c_Cartoes
-                        loc_oPag.txt_4c_Fpags.Value = ALLTRIM(dcarts)
+                IF loc_lProsseguir
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oBusca) = "O"
+                        loc_oBusca.this_cCursorDestino = "cursor_4c_Cartoes"
+                        loc_oBusca.this_cTitulo        = "Selecionar Cart" + CHR(227) + "o"
+                        loc_oBusca.mAddColuna("dcarts", "", "Cart" + CHR(227) + "o")
+                        loc_oBusca.Show()
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_Cartoes")
+                            SELECT cursor_4c_Cartoes
+                            loc_oPag.txt_4c_Fpags.Value = ALLTRIM(dcarts)
+                        ENDIF
+                        loc_oBusca.Release()
                     ENDIF
-                    loc_oBusca.Release()
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

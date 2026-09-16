@@ -533,27 +533,30 @@ DEFINE CLASS FormSigPdM12 AS FormBase
     * garantir que os dados exibidos refletem o estado atual.
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro, loc_nRecno
+        LOCAL loc_oErro, loc_nRecno, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("xNensiR") OR RECCOUNT("xNensiR") = 0
                 MsgAviso("Nenhum retrabalho dispon" + CHR(237) + "vel para visualiza" + CHR(231) + CHR(227) + "o.", ;
                          "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT xNensiR
-            loc_nRecno = RECNO("xNensiR")
+            IF loc_lProsseguir
+                SELECT xNensiR
+                loc_nRecno = RECNO("xNensiR")
 
-            IF loc_nRecno > 0 AND loc_nRecno <= RECCOUNT("xNensiR")
-                GO loc_nRecno IN xNensiR
-            ELSE
-                GO TOP IN xNensiR
+                IF loc_nRecno > 0 AND loc_nRecno <= RECCOUNT("xNensiR")
+                    GO loc_nRecno IN xNensiR
+                ELSE
+                    GO TOP IN xNensiR
+                ENDIF
+
+                THIS.grd_4c_Dados.Refresh()
+                THIS.txt_4c_Rclis.Refresh()
+
             ENDIF
-
-            THIS.grd_4c_Dados.Refresh()
-            THIS.txt_4c_Rclis.Refresh()
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao visualizar retrabalho")
         ENDTRY

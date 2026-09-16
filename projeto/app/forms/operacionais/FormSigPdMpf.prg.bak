@@ -786,34 +786,39 @@ DEFINE CLASS FormSigPdMpf AS FormBase
     * limite temporal.
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oCnt, loc_oErro
+        LOCAL loc_oCnt, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.cnt_4c_Filtros) != "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !MsgConfirma("Limpar todos os filtros desta consulta?", ;
-                            "Confirma" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF !MsgConfirma("Limpar todos os filtros desta consulta?", ;
+                                "Confirma" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oCnt = THIS.cnt_4c_Filtros
+            IF loc_lProsseguir
+                loc_oCnt = THIS.cnt_4c_Filtros
 
-            loc_oCnt.txt_4c_NmOperacao.Value = ""
-            loc_oCnt.txt_4c_Grupo.Value      = ""
-            loc_oCnt.txt_4c_DGrupo.Value     = ""
-            loc_oCnt.txt_4c_Conta.Value      = ""
-            loc_oCnt.txt_4c_DConta.Value     = ""
-            loc_oCnt.obj_4c_OptConta.Value   = 3
+                loc_oCnt.txt_4c_NmOperacao.Value = ""
+                loc_oCnt.txt_4c_Grupo.Value      = ""
+                loc_oCnt.txt_4c_DGrupo.Value     = ""
+                loc_oCnt.txt_4c_Conta.Value      = ""
+                loc_oCnt.txt_4c_DConta.Value     = ""
+                loc_oCnt.obj_4c_OptConta.Value   = 3
 
             *-- Mantem periodo padrao (hoje-hoje) para evitar consulta sem limite
-            loc_oCnt.txt_4c_DtInicial.Value  = DATE()
-            loc_oCnt.txt_4c_DtFinal.Value    = DATE()
+                loc_oCnt.txt_4c_DtInicial.Value  = DATE()
+                loc_oCnt.txt_4c_DtFinal.Value    = DATE()
 
             *-- Sincroniza BO e re-aplica regras de habilitacao (When do legado)
-            THIS.FormParaBO()
-            loc_oCnt.txt_4c_DGrupo.Enabled = .T.
-            loc_oCnt.txt_4c_DConta.Enabled = .F.
+                THIS.FormParaBO()
+                loc_oCnt.txt_4c_DGrupo.Enabled = .T.
+                loc_oCnt.txt_4c_DConta.Enabled = .F.
 
-            loc_oCnt.txt_4c_DtInicial.SetFocus()
+                loc_oCnt.txt_4c_DtInicial.SetFocus()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

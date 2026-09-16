@@ -639,25 +639,28 @@ DEFINE CLASS FormFpm AS FormBase
     * Define ControlSource de cada coluna apos CarregarDados
     *--------------------------------------------------------------------------
     PROCEDURE VincularGrid()
-        LOCAL loc_oGrid, loc_oErro
+        LOCAL loc_oGrid, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_FpagI")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
-            loc_oGrid.ColumnCount  = 4
-            loc_oGrid.RecordSource = "cursor_4c_FpagI"
-            WITH loc_oGrid
-                .Column1.ControlSource = "cursor_4c_FpagI.nParcs"
-                .Column2.ControlSource = "cursor_4c_FpagI.ValMins"
-                .Column3.ControlSource = "cursor_4c_FpagI.ValMaxs"
-                .Column4.ControlSource = "cursor_4c_FpagI.Emps"
-            ENDWITH
-            loc_oGrid.Column1.Header1.Caption = "Parcelas"
-            loc_oGrid.Column2.Header1.Caption = "Valor M" + CHR(237) + "nimo"
-            loc_oGrid.Column3.Header1.Caption = "Valor M" + CHR(225) + "ximo"
-            loc_oGrid.Column4.Header1.Caption = "Emp"
-            loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
+                loc_oGrid.ColumnCount  = 4
+                loc_oGrid.RecordSource = "cursor_4c_FpagI"
+                WITH loc_oGrid
+                    .Column1.ControlSource = "cursor_4c_FpagI.nParcs"
+                    .Column2.ControlSource = "cursor_4c_FpagI.ValMins"
+                    .Column3.ControlSource = "cursor_4c_FpagI.ValMaxs"
+                    .Column4.ControlSource = "cursor_4c_FpagI.Emps"
+                ENDWITH
+                loc_oGrid.Column1.Header1.Caption = "Parcelas"
+                loc_oGrid.Column2.Header1.Caption = "Valor M" + CHR(237) + "nimo"
+                loc_oGrid.Column3.Header1.Caption = "Valor M" + CHR(225) + "ximo"
+                loc_oGrid.Column4.Header1.Caption = "Emp"
+                loc_oGrid.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -698,16 +701,19 @@ DEFINE CLASS FormFpm AS FormBase
     * Original: Insert Into xFPagI (fPags) Values (crTSigfPag.fpags)
     *--------------------------------------------------------------------------
     PROCEDURE BtnInserirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_FpagI")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_FpagI
-            INSERT INTO cursor_4c_FpagI (Fpags) VALUES (THIS.this_cFpags)
-            THIS.GravaDados = .T.
-            THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Column1.SetFocus
-            THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Refresh()
+            IF loc_lProsseguir
+                SELECT cursor_4c_FpagI
+                INSERT INTO cursor_4c_FpagI (Fpags) VALUES (THIS.this_cFpags)
+                THIS.GravaDados = .T.
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Column1.SetFocus
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -720,17 +726,20 @@ DEFINE CLASS FormFpm AS FormBase
     * Original: Delete (marca exclusao no cursor local)
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_FpagI") OR EOF("cursor_4c_FpagI")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_FpagI
-            IF !EOF()
-                DELETE
+            IF loc_lProsseguir
+                SELECT cursor_4c_FpagI
+                IF !EOF()
+                    DELETE
+                ENDIF
+                THIS.GravaDados = .T.
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Refresh()
             ENDIF
-            THIS.GravaDados = .T.
-            THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Refresh()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -928,7 +937,8 @@ DEFINE CLASS FormFpm AS FormBase
     * ReadOnly por coluna aplicada em GrdDadosAfterRowColChange.
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oGrid, loc_nParcs, loc_nValMaxs, loc_oErro
+        LOCAL loc_oGrid, loc_nParcs, loc_nValMaxs, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF THIS.pgf_4c_Paginas.ActivePage != 1
                 THIS.AlternarPagina(1)
@@ -936,30 +946,32 @@ DEFINE CLASS FormFpm AS FormBase
             loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
             IF !USED("cursor_4c_FpagI") OR EOF("cursor_4c_FpagI")
                 loc_oGrid.SetFocus
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_FpagI
-            loc_nParcs   = NVL(cursor_4c_FpagI.nParcs, 0)
-            loc_nValMaxs = NVL(cursor_4c_FpagI.ValMaxs, 0)
-            THIS.this_lRedirigindo = .T.
-            loc_oGrid.Column1.ReadOnly = (loc_nValMaxs <> 0)
-            loc_oGrid.Column2.ReadOnly = (loc_nParcs = 0)
-            loc_oGrid.Column3.ReadOnly = (loc_nParcs <> 0)
-            loc_oGrid.Column4.ReadOnly = (loc_nParcs <> 0)
-            THIS.this_lRedirigindo = .F.
-            loc_oGrid.SetFocus
-            IF !loc_oGrid.Column1.ReadOnly
-                loc_oGrid.ActivateCell(RECNO("cursor_4c_FpagI"), 1)
-            ELSE
-                IF !loc_oGrid.Column2.ReadOnly
-                    loc_oGrid.ActivateCell(RECNO("cursor_4c_FpagI"), 2)
+            IF loc_lProsseguir
+                SELECT cursor_4c_FpagI
+                loc_nParcs   = NVL(cursor_4c_FpagI.nParcs, 0)
+                loc_nValMaxs = NVL(cursor_4c_FpagI.ValMaxs, 0)
+                THIS.this_lRedirigindo = .T.
+                loc_oGrid.Column1.ReadOnly = (loc_nValMaxs <> 0)
+                loc_oGrid.Column2.ReadOnly = (loc_nParcs = 0)
+                loc_oGrid.Column3.ReadOnly = (loc_nParcs <> 0)
+                loc_oGrid.Column4.ReadOnly = (loc_nParcs <> 0)
+                THIS.this_lRedirigindo = .F.
+                loc_oGrid.SetFocus
+                IF !loc_oGrid.Column1.ReadOnly
+                    loc_oGrid.ActivateCell(RECNO("cursor_4c_FpagI"), 1)
                 ELSE
-                    IF !loc_oGrid.Column3.ReadOnly
-                        loc_oGrid.ActivateCell(RECNO("cursor_4c_FpagI"), 3)
+                    IF !loc_oGrid.Column2.ReadOnly
+                        loc_oGrid.ActivateCell(RECNO("cursor_4c_FpagI"), 2)
+                    ELSE
+                        IF !loc_oGrid.Column3.ReadOnly
+                            loc_oGrid.ActivateCell(RECNO("cursor_4c_FpagI"), 3)
+                        ENDIF
                     ENDIF
                 ENDIF
+                loc_oGrid.Refresh()
             ENDIF
-            loc_oGrid.Refresh()
         CATCH TO loc_oErro
             THIS.this_lRedirigindo = .F.
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -1229,21 +1241,24 @@ DEFINE CLASS FormFpm AS FormBase
     * as edicoes correntes no banco (SigOpFpi) e mantem o form aberto.
     *--------------------------------------------------------------------------
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_lValido, loc_lSucesso, loc_oErro
+        LOCAL loc_lValido, loc_lSucesso, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.GravaDados
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.FormParaBO()
-            loc_lValido = THIS.ValidarParcelas()
-            IF loc_lValido
-                loc_lSucesso = THIS.this_oBusinessObject.SalvarAlteracoes(THIS.this_cFpags)
-                IF loc_lSucesso
-                    THIS.GravaDados = .F.
-                    MsgInfo("Altera" + CHR(231) + CHR(245) + "es salvas com sucesso.", "Salvar")
-                ELSE
-                    MsgAviso("Falha ao salvar as altera" + CHR(231) + CHR(245) + "es.", ;
-                        "Salvar")
+            IF loc_lProsseguir
+                THIS.FormParaBO()
+                loc_lValido = THIS.ValidarParcelas()
+                IF loc_lValido
+                    loc_lSucesso = THIS.this_oBusinessObject.SalvarAlteracoes(THIS.this_cFpags)
+                    IF loc_lSucesso
+                        THIS.GravaDados = .F.
+                        MsgInfo("Altera" + CHR(231) + CHR(245) + "es salvas com sucesso.", "Salvar")
+                    ELSE
+                        MsgAviso("Falha ao salvar as altera" + CHR(231) + CHR(245) + "es.", ;
+                            "Salvar")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

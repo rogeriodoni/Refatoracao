@@ -3333,8 +3333,9 @@ DEFINE CLASS FormTbv AS FormBase
     * ao entrar em ALTERAR/VISUALIZAR/EXCLUIR e por LimparCampos() (INCLUIR).
     *--------------------------------------------------------------------------
     PROCEDURE CarregarConfiguracaoDesconto()
-        LOCAL loc_oPgConf, loc_oPgDesc, loc_oGradei, loc_oGradeiDesc, loc_oGradec, loc_cCodigo
+        LOCAL loc_oPgConf, loc_oPgDesc, loc_oGradei, loc_oGradeiDesc, loc_oGradec, loc_cCodigo, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             loc_oPgConf = THIS.pgf_4c_Paginas.Page2.cnt_4c_PgConfDesconto
             loc_oPgDesc = THIS.pgf_4c_Paginas.Page2.cnt_4c_PgDesconto
@@ -3350,73 +3351,75 @@ DEFINE CLASS FormTbv AS FormBase
                 loc_oPgConf.lbl_4c_Lb_desconto.Caption = "Tipo de Desconto"
                 loc_oGradeiDesc.RecordSource    = ""
                 loc_oGradec.RecordSource        = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.this_oBusinessObject.CarregarComposicaoDesconto(loc_cCodigo)
-            THIS.this_oBusinessObject.CarregarComissoesDesconto(loc_cCodigo)
-            THIS.this_oBusinessObject.CarregarFaixasDesconto(loc_cCodigo)
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.CarregarComposicaoDesconto(loc_cCodigo)
+                THIS.this_oBusinessObject.CarregarComissoesDesconto(loc_cCodigo)
+                THIS.this_oBusinessObject.CarregarFaixasDesconto(loc_cCodigo)
 
-            loc_oGradei.RecordSource        = "cursor_4c_Tdt"
-            loc_oGradei.Column1.ControlSource = "cursor_4c_Tdt.tipos"
-            loc_oGradei.Column2.ControlSource = "cursor_4c_Tdt.codtips"
-            loc_oGradei.Column3.ControlSource = "cursor_4c_Tdt.tipods"
-            loc_oGradei.SetAll("DynamicBackColor", "IIF(cursor_4c_Tdt.regs = 1, RGB(128,128,128), RGB(255,255,255))", "Column")
-            loc_oGradei.SetAll("DynamicForeColor", "IIF(cursor_4c_Tdt.regs = 1, RGB(255,255,255), RGB(0,0,0))", "Column")
-            loc_oGradei.Refresh()
+                loc_oGradei.RecordSource        = "cursor_4c_Tdt"
+                loc_oGradei.Column1.ControlSource = "cursor_4c_Tdt.tipos"
+                loc_oGradei.Column2.ControlSource = "cursor_4c_Tdt.codtips"
+                loc_oGradei.Column3.ControlSource = "cursor_4c_Tdt.tipods"
+                loc_oGradei.SetAll("DynamicBackColor", "IIF(cursor_4c_Tdt.regs = 1, RGB(128,128,128), RGB(255,255,255))", "Column")
+                loc_oGradei.SetAll("DynamicForeColor", "IIF(cursor_4c_Tdt.regs = 1, RGB(255,255,255), RGB(0,0,0))", "Column")
+                loc_oGradei.Refresh()
 
             *-- grd_4c_Gradei (pgDesconto) - MESMA cursor_4c_Tdt, colunas
             *-- adicionais de valor/fator/exclui/faixa/inicial/final
-            loc_oGradeiDesc.RecordSource        = "cursor_4c_Tdt"
-            loc_oGradeiDesc.Column1.ControlSource = "cursor_4c_Tdt.tipos"
-            loc_oGradeiDesc.Column2.ControlSource = "cursor_4c_Tdt.codtips"
-            loc_oGradeiDesc.Column3.ControlSource = "cursor_4c_Tdt.descos"
-            loc_oGradeiDesc.Column4.ControlSource = "cursor_4c_Tdt.dfators"
-            loc_oGradeiDesc.Column5.ControlSource = "cursor_4c_Tdt.texclus"
-            loc_oGradeiDesc.Column6.ControlSource = "cursor_4c_Tdt.faixas"
-            loc_oGradeiDesc.Column7.ControlSource = "cursor_4c_Tdt.finicias"
-            loc_oGradeiDesc.Column8.ControlSource = "cursor_4c_Tdt.ffinals"
-            loc_oGradeiDesc.SetAll("DynamicBackColor", "IIF(cursor_4c_Tdt.regs = 1, RGB(128,128,128), RGB(255,255,255))", "Column")
-            loc_oGradeiDesc.SetAll("DynamicForeColor", "IIF(cursor_4c_Tdt.regs = 1, RGB(255,255,255), RGB(0,0,0))", "Column")
+                loc_oGradeiDesc.RecordSource        = "cursor_4c_Tdt"
+                loc_oGradeiDesc.Column1.ControlSource = "cursor_4c_Tdt.tipos"
+                loc_oGradeiDesc.Column2.ControlSource = "cursor_4c_Tdt.codtips"
+                loc_oGradeiDesc.Column3.ControlSource = "cursor_4c_Tdt.descos"
+                loc_oGradeiDesc.Column4.ControlSource = "cursor_4c_Tdt.dfators"
+                loc_oGradeiDesc.Column5.ControlSource = "cursor_4c_Tdt.texclus"
+                loc_oGradeiDesc.Column6.ControlSource = "cursor_4c_Tdt.faixas"
+                loc_oGradeiDesc.Column7.ControlSource = "cursor_4c_Tdt.finicias"
+                loc_oGradeiDesc.Column8.ControlSource = "cursor_4c_Tdt.ffinals"
+                loc_oGradeiDesc.SetAll("DynamicBackColor", "IIF(cursor_4c_Tdt.regs = 1, RGB(128,128,128), RGB(255,255,255))", "Column")
+                loc_oGradeiDesc.SetAll("DynamicForeColor", "IIF(cursor_4c_Tdt.regs = 1, RGB(255,255,255), RGB(0,0,0))", "Column")
             *-- Reaplica cabecalhos apos RecordSource (Problema 48/Pattern #180 -
             *-- VFP pode resetar Header1.Caption ao reatribuir RecordSource)
-            loc_oGradeiDesc.Column1.Header1.Caption = "Tipo"
-            loc_oGradeiDesc.Column2.Header1.Caption = "C" + CHR(243) + "digo "
-            loc_oGradeiDesc.Column3.Header1.Caption = "Valor"
-            loc_oGradeiDesc.Column4.Header1.Caption = "Fator"
-            loc_oGradeiDesc.Column5.Header1.Caption = "E"
-            loc_oGradeiDesc.Column6.Header1.Caption = "Faixa"
-            loc_oGradeiDesc.Column7.Header1.Caption = "Inicial"
-            loc_oGradeiDesc.Column8.Header1.Caption = "Final"
-            loc_oGradeiDesc.Refresh()
+                loc_oGradeiDesc.Column1.Header1.Caption = "Tipo"
+                loc_oGradeiDesc.Column2.Header1.Caption = "C" + CHR(243) + "digo "
+                loc_oGradeiDesc.Column3.Header1.Caption = "Valor"
+                loc_oGradeiDesc.Column4.Header1.Caption = "Fator"
+                loc_oGradeiDesc.Column5.Header1.Caption = "E"
+                loc_oGradeiDesc.Column6.Header1.Caption = "Faixa"
+                loc_oGradeiDesc.Column7.Header1.Caption = "Inicial"
+                loc_oGradeiDesc.Column8.Header1.Caption = "Final"
+                loc_oGradeiDesc.Refresh()
 
-            IF USED("cursor_4c_Tdt") AND !EOF("cursor_4c_Tdt")
-                SELECT cursor_4c_Tdt
-                REPLACE ALL regs WITH 0 IN cursor_4c_Tdt
-                REPLACE regs WITH 1 IN cursor_4c_Tdt
-                GO TOP IN cursor_4c_Tdt
-            ENDIF
+                IF USED("cursor_4c_Tdt") AND !EOF("cursor_4c_Tdt")
+                    SELECT cursor_4c_Tdt
+                    REPLACE ALL regs WITH 0 IN cursor_4c_Tdt
+                    REPLACE regs WITH 1 IN cursor_4c_Tdt
+                    GO TOP IN cursor_4c_Tdt
+                ENDIF
 
             *-- grd_4c_Gradec (comissoes) - filtrado pela linha corrente de
             *-- cursor_4c_Tdt via MontarComissoesDesconto()
-            loc_oGradec.ColumnCount = 6
-            loc_oGradec.RecordSource        = "cursor_4c_Tdi"
-            loc_oGradec.Column1.ControlSource = "cursor_4c_Tdi.grupos"
-            loc_oGradec.Column2.ControlSource = "cursor_4c_Tdi.contas"
-            loc_oGradec.Column3.ControlSource = "cursor_4c_Tdi.pintegrals"
-            loc_oGradec.Column4.ControlSource = "cursor_4c_Tdi.pdivididas"
-            loc_oGradec.Column5.ControlSource = "cursor_4c_Tdi.patendes"
-            loc_oGradec.Column6.ControlSource = "cursor_4c_Tdi.moedas"
+                loc_oGradec.ColumnCount = 6
+                loc_oGradec.RecordSource        = "cursor_4c_Tdi"
+                loc_oGradec.Column1.ControlSource = "cursor_4c_Tdi.grupos"
+                loc_oGradec.Column2.ControlSource = "cursor_4c_Tdi.contas"
+                loc_oGradec.Column3.ControlSource = "cursor_4c_Tdi.pintegrals"
+                loc_oGradec.Column4.ControlSource = "cursor_4c_Tdi.pdivididas"
+                loc_oGradec.Column5.ControlSource = "cursor_4c_Tdi.patendes"
+                loc_oGradec.Column6.ControlSource = "cursor_4c_Tdi.moedas"
             *-- Reaplica cabecalhos apos RecordSource (Problema 48/Pattern #180)
-            loc_oGradec.Column1.Header1.Caption = "Grupo"
-            loc_oGradec.Column2.Header1.Caption = "Conta"
-            loc_oGradec.Column3.Header1.Caption = "Integral"
-            loc_oGradec.Column4.Header1.Caption = "Dividida"
-            loc_oGradec.Column5.Header1.Caption = "Atendim"
-            loc_oGradec.Column6.Header1.Caption = "Moe"
+                loc_oGradec.Column1.Header1.Caption = "Grupo"
+                loc_oGradec.Column2.Header1.Caption = "Conta"
+                loc_oGradec.Column3.Header1.Caption = "Integral"
+                loc_oGradec.Column4.Header1.Caption = "Dividida"
+                loc_oGradec.Column5.Header1.Caption = "Atendim"
+                loc_oGradec.Column6.Header1.Caption = "Moe"
 
-            THIS.MontarConfiguracaoDesconto()
-            THIS.MontarComissoesDesconto()
+                THIS.MontarConfiguracaoDesconto()
+                THIS.MontarComissoesDesconto()
+            ENDIF
         CATCH TO loException
             MostrarErro(loException, "FormTbv.CarregarConfiguracaoDesconto")
         ENDTRY

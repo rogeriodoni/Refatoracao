@@ -1226,9 +1226,10 @@ DEFINE CLASS FormOpd AS FormBase
     * Reutiliza cursor_4c_BuscaOpe se ja existir (criado em ValidarDopes)
     *===========================================================================
     PROTECTED PROCEDURE AbrirBuscaDopes()
-        LOCAL loc_oPagina2, loc_cSQL, loc_nRes, loc_oBusca
+        LOCAL loc_oPagina2, loc_cSQL, loc_nRes, loc_oBusca, loc_lProsseguir
         loc_oPagina2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_BuscaOpe")
                 loc_cSQL = "SELECT Ndopes, Dopes FROM SigCdOpe ORDER BY Dopes"
@@ -1236,33 +1237,37 @@ DEFINE CLASS FormOpd AS FormBase
                 IF loc_nRes < 0
                     MostrarErro("Erro ao buscar opera" + CHR(231) + CHR(245) + "es:" + CHR(13) + ;
                         CapturarErroSQL(), "FormOpd.AbrirBuscaDopes")
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaOpe"
-                loc_oBusca.this_cTitulo = "Opera" + CHR(231) + CHR(245) + "es"
-                loc_oBusca.mAddColuna("Ndopes", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Dopes", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaOpe")
-                    SELECT cursor_4c_BuscaOpe
-                    loc_oPagina2.txt_4c_Nopes.Value = cursor_4c_BuscaOpe.Ndopes
-                    loc_oPagina2.txt_4c_Dopes.Value = ALLTRIM(cursor_4c_BuscaOpe.Dopes)
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaOpe"
+                    loc_oBusca.this_cTitulo = "Opera" + CHR(231) + CHR(245) + "es"
+                    loc_oBusca.mAddColuna("Ndopes", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Dopes", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+    
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaOpe")
+                        SELECT cursor_4c_BuscaOpe
+                        loc_oPagina2.txt_4c_Nopes.Value = cursor_4c_BuscaOpe.Ndopes
+                        loc_oPagina2.txt_4c_Dopes.Value = ALLTRIM(cursor_4c_BuscaOpe.Dopes)
+                    ENDIF
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
-            ENDIF
 
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao abrir busca:" + CHR(13) + loException.Message, ;
                 "FormOpd.AbrirBuscaDopes")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaOpe")
-            USE IN cursor_4c_BuscaOpe
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaOpe")
+                USE IN cursor_4c_BuscaOpe
+            ENDIF
         ENDIF
     ENDPROC
 

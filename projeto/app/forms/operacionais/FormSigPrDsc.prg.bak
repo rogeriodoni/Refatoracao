@@ -871,30 +871,33 @@ DEFINE CLASS FormSigPrDsc AS FormBase
     ENDPROC
 
     PROCEDURE BtnExcluirClick
-        LOCAL loc_lConfirma, loc_oErro
+        LOCAL loc_lConfirma, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Produtos") OR RECCOUNT("cursor_4c_Produtos") = 0
                 MsgAviso("Nenhum produto selecionado para remover.", ;
                         "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_lConfirma = MsgConfirma( ;
-                "Remover o produto atual da lista de tradu" + CHR(231) + CHR(245) + "es?" + CHR(13) + ;
-                "(A tabela SigCdPro n" + CHR(227) + "o ser" + CHR(225) + " alterada at" + CHR(233) + " que voc" + CHR(234) + " clique em Atualizar)", ;
-                "Confirma" + CHR(231) + CHR(227) + "o")
+            IF loc_lProsseguir
+                loc_lConfirma = MsgConfirma( ;
+                    "Remover o produto atual da lista de tradu" + CHR(231) + CHR(245) + "es?" + CHR(13) + ;
+                    "(A tabela SigCdPro n" + CHR(227) + "o ser" + CHR(225) + " alterada at" + CHR(233) + " que voc" + CHR(234) + " clique em Atualizar)", ;
+                    "Confirma" + CHR(231) + CHR(227) + "o")
 
-            IF loc_lConfirma
-                LOCAL loc_nRestantes
-                SELECT cursor_4c_Produtos
-                DELETE
-                SET DELETED ON
-                THIS.grd_4c_Dados.Refresh()
-
-                *-- Conta registros nao-deletados restantes (COUNT nao aceita IN <alias> em VFP9)
-                SELECT cursor_4c_Produtos
-                COUNT FOR NOT DELETED() TO loc_nRestantes
-                THIS.cmd_4c_Atualizar.Enabled = (loc_nRestantes > 0)
+                IF loc_lConfirma
+                    LOCAL loc_nRestantes
+                    SELECT cursor_4c_Produtos
+                    DELETE
+                    SET DELETED ON
+                    THIS.grd_4c_Dados.Refresh()
+    
+                    *-- Conta registros nao-deletados restantes (COUNT nao aceita IN <alias> em VFP9)
+                    SELECT cursor_4c_Produtos
+                    COUNT FOR NOT DELETED() TO loc_nRestantes
+                    THIS.cmd_4c_Atualizar.Enabled = (loc_nRestantes > 0)
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")

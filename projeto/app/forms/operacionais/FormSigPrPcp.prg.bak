@@ -853,19 +853,22 @@ DEFINE CLASS FormSigPrPcp AS FormBase
     * na coluna Priors da grade principal, posicionando no topo da lista.
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Selecao") OR RECCOUNT("cursor_4c_Selecao") = 0
                 MsgAviso("N" + CHR(227) + "o existem opera" + CHR(231) + CHR(245) + ;
                          "es para priorizar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Selecao
-            GO TOP
-            THIS.grd_4c_Dados.Refresh()
-            THIS.GrdDadosAfterRowColChange(1)
-            THIS.grd_4c_Dados.SetFocus()
-            THIS.grd_4c_Dados.ActivateCell(1, 1)
+            IF loc_lProsseguir
+                SELECT cursor_4c_Selecao
+                GO TOP
+                THIS.grd_4c_Dados.Refresh()
+                THIS.GrdDadosAfterRowColChange(1)
+                THIS.grd_4c_Dados.SetFocus()
+                THIS.grd_4c_Dados.ActivateCell(1, 1)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
                     "Erro BtnIncluir")
@@ -877,23 +880,26 @@ DEFINE CLASS FormSigPrPcp AS FormBase
     * Mapeamento OPERACIONAL: "alterar" = editar a coluna Priors da linha corrente
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro, loc_nLinha
+        LOCAL loc_oErro, loc_nLinha, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Selecao") OR RECCOUNT("cursor_4c_Selecao") = 0
                 MsgAviso("N" + CHR(227) + "o existem opera" + CHR(231) + CHR(245) + ;
                          "es para alterar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Selecao
-            IF EOF() OR BOF()
-                GO TOP
+            IF loc_lProsseguir
+                SELECT cursor_4c_Selecao
+                IF EOF() OR BOF()
+                    GO TOP
+                ENDIF
+                loc_nLinha = THIS.grd_4c_Dados.RelativeRow
+                IF loc_nLinha < 1
+                    loc_nLinha = 1
+                ENDIF
+                THIS.grd_4c_Dados.SetFocus()
+                THIS.grd_4c_Dados.ActivateCell(loc_nLinha, 1)
             ENDIF
-            loc_nLinha = THIS.grd_4c_Dados.RelativeRow
-            IF loc_nLinha < 1
-                loc_nLinha = 1
-            ENDIF
-            THIS.grd_4c_Dados.SetFocus()
-            THIS.grd_4c_Dados.ActivateCell(loc_nLinha, 1)
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
                     "Erro BtnAlterar")
@@ -905,76 +911,79 @@ DEFINE CLASS FormSigPrPcp AS FormBase
     * Mapeamento OPERACIONAL: "visualizar" = refresh completo (reprocessa PCP)
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !MsgConfirma("Recarregar todos os dados descarta as altera" + ;
                             CHR(231) + CHR(245) + "es n" + CHR(227) + "o gravadas." + ;
                             CHR(13) + "Confirma?")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.LockScreen = .T.
+            IF loc_lProsseguir
+                THIS.LockScreen = .T.
 
             *-- Encerrar relacao e cursores para reprocessar
-            IF USED("cursor_4c_Selecao")
-                SELECT cursor_4c_Selecao
-                SET RELATION TO
-                USE IN cursor_4c_Selecao
-            ENDIF
-            IF USED("cursor_4c_PcpDados")
-                USE IN cursor_4c_PcpDados
-            ENDIF
+                IF USED("cursor_4c_Selecao")
+                    SELECT cursor_4c_Selecao
+                    SET RELATION TO
+                    USE IN cursor_4c_Selecao
+                ENDIF
+                IF USED("cursor_4c_PcpDados")
+                    USE IN cursor_4c_PcpDados
+                ENDIF
 
             *-- Recriar cursor base
-            SET NULL ON
-            CREATE CURSOR cursor_4c_PcpDados ( ;
-                Priors    N(6)    NULL, ;
-                Nenvs     N(10)   NULL, ;
-                Nops      N(10)   NULL, ;
-                Emps      C(3)    NULL, ;
-                Dopes     C(20)   NULL, ;
-                Numes     N(6)    NULL, ;
-                Contas    C(10)   NULL, ;
-                Rclis     C(40)   NULL, ;
-                PrazoEnts T       NULL, ;
-                Cpros     C(14)   NULL, ;
-                Qtds      N(9,3)  NULL, ;
-                aPriors   N(6)    NULL  ;
-            )
-            SET NULL OFF
-
-            IF THIS.this_oBusinessObject.Processar("cursor_4c_PcpDados")
-                *-- Recriar cursor de selecao consolidado
                 SET NULL ON
-                SELECT DISTINCT Emps, Dopes, Numes, Contas, Rclis, ;
-                                PrazoEnts, Priors, aPriors ;
-                    FROM cursor_4c_PcpDados ;
-                    INTO CURSOR cursor_4c_Selecao READWRITE
+                CREATE CURSOR cursor_4c_PcpDados ( ;
+                    Priors    N(6)    NULL, ;
+                    Nenvs     N(10)   NULL, ;
+                    Nops      N(10)   NULL, ;
+                    Emps      C(3)    NULL, ;
+                    Dopes     C(20)   NULL, ;
+                    Numes     N(6)    NULL, ;
+                    Contas    C(10)   NULL, ;
+                    Rclis     C(40)   NULL, ;
+                    PrazoEnts T       NULL, ;
+                    Cpros     C(14)   NULL, ;
+                    Qtds      N(9,3)  NULL, ;
+                    aPriors   N(6)    NULL  ;
+                )
                 SET NULL OFF
 
-                *-- Reindexar
-                SELECT cursor_4c_Selecao
-                INDEX ON Emps + Dopes + STR(Numes,6) TAG EmpdopNum
-                INDEX ON DTOS(PrazoEnts) + Emps + Dopes + STR(Numes,6) TAG Entrega
-                INDEX ON Contas TAG Cliente
-                INDEX ON STR(Priors,6) + Emps + Dopes + STR(Numes,6) TAG Prioridade
-                SET ORDER TO Entrega
+                IF THIS.this_oBusinessObject.Processar("cursor_4c_PcpDados")
+                    *-- Recriar cursor de selecao consolidado
+                    SET NULL ON
+                    SELECT DISTINCT Emps, Dopes, Numes, Contas, Rclis, ;
+                                    PrazoEnts, Priors, aPriors ;
+                        FROM cursor_4c_PcpDados ;
+                        INTO CURSOR cursor_4c_Selecao READWRITE
+                    SET NULL OFF
+    
+                    *-- Reindexar
+                    SELECT cursor_4c_Selecao
+                    INDEX ON Emps + Dopes + STR(Numes,6) TAG EmpdopNum
+                    INDEX ON DTOS(PrazoEnts) + Emps + Dopes + STR(Numes,6) TAG Entrega
+                    INDEX ON Contas TAG Cliente
+                    INDEX ON STR(Priors,6) + Emps + Dopes + STR(Numes,6) TAG Prioridade
+                    SET ORDER TO Entrega
+    
+                    SELECT cursor_4c_PcpDados
+                    INDEX ON Emps + Dopes + STR(Numes,6) TAG EmpdopNum
+                    GO TOP
+    
+                    SELECT cursor_4c_Selecao
+                    GO TOP
+                    SET RELATION TO Emps + Dopes + STR(Numes,6) INTO cursor_4c_PcpDados
+    
+                    *-- Revincular grids aos cursores recriados
+                    THIS.CarregarGrades()
+                    MsgInfo("Dados recarregados com sucesso.", "Visualizar")
+                ELSE
+                    MsgErro("Falha ao reprocessar dados PCP.", "Erro Visualizar")
+                ENDIF
 
-                SELECT cursor_4c_PcpDados
-                INDEX ON Emps + Dopes + STR(Numes,6) TAG EmpdopNum
-                GO TOP
-
-                SELECT cursor_4c_Selecao
-                GO TOP
-                SET RELATION TO Emps + Dopes + STR(Numes,6) INTO cursor_4c_PcpDados
-
-                *-- Revincular grids aos cursores recriados
-                THIS.CarregarGrades()
-                MsgInfo("Dados recarregados com sucesso.", "Visualizar")
-            ELSE
-                MsgErro("Falha ao reprocessar dados PCP.", "Erro Visualizar")
+                THIS.LockScreen = .F.
             ENDIF
-
-            THIS.LockScreen = .F.
         CATCH TO loc_oErro
             THIS.LockScreen = .F.
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
@@ -987,30 +996,39 @@ DEFINE CLASS FormSigPrPcp AS FormBase
     * Mapeamento OPERACIONAL: "excluir" = remover a prioridade (voltar ao default)
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Selecao") OR RECCOUNT("cursor_4c_Selecao") = 0
                 MsgAviso("N" + CHR(227) + "o existem opera" + CHR(231) + CHR(245) + ;
                          "es para atualizar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Selecao
-            IF EOF() OR BOF()
-                MsgAviso("Selecione uma linha na grade antes de zerar a prioridade.", ;
-                         "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                SELECT cursor_4c_Selecao
+                IF EOF() OR BOF()
+                    MsgAviso("Selecione uma linha na grade antes de zerar a prioridade.", ;
+                             "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF NVL(cursor_4c_Selecao.Priors, 0) = 0
-                MsgAviso("A prioridade desta opera" + CHR(231) + CHR(227) + ;
-                         "o j" + CHR(225) + " est" + CHR(225) + " zerada.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                IF NVL(cursor_4c_Selecao.Priors, 0) = 0
+                    MsgAviso("A prioridade desta opera" + CHR(231) + CHR(227) + ;
+                             "o j" + CHR(225) + " est" + CHR(225) + " zerada.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF !MsgConfirma("Zerar prioridade da opera" + CHR(231) + CHR(227) + "o selecionada?")
-                RETURN
+            IF loc_lProsseguir
+                IF !MsgConfirma("Zerar prioridade da opera" + CHR(231) + CHR(227) + "o selecionada?")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            REPLACE cursor_4c_Selecao.Priors WITH 0
-            THIS.grd_4c_Dados.Refresh()
-            THIS.GrdDadosAfterRowColChange(1)
+            IF loc_lProsseguir
+                REPLACE cursor_4c_Selecao.Priors WITH 0
+                THIS.grd_4c_Dados.Refresh()
+                THIS.GrdDadosAfterRowColChange(1)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
                     "Erro BtnExcluir")
@@ -1094,17 +1112,20 @@ DEFINE CLASS FormSigPrPcp AS FormBase
     * Mapeamento OPERACIONAL: "buscar" = posicionar no inicio da lista
     *==========================================================================
     PROCEDURE BtnBuscarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Selecao") OR RECCOUNT("cursor_4c_Selecao") = 0
                 MsgAviso("N" + CHR(227) + "o existem opera" + CHR(231) + CHR(245) + "es para exibir.")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Selecao
-            GO TOP
-            THIS.grd_4c_Dados.Refresh()
-            THIS.GrdDadosAfterRowColChange(1)
-            THIS.grd_4c_Dados.SetFocus()
+            IF loc_lProsseguir
+                SELECT cursor_4c_Selecao
+                GO TOP
+                THIS.grd_4c_Dados.Refresh()
+                THIS.GrdDadosAfterRowColChange(1)
+                THIS.grd_4c_Dados.SetFocus()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
                     "Erro BtnBuscar")

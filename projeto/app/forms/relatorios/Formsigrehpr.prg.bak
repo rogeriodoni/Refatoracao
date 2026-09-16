@@ -981,29 +981,32 @@ DEFINE CLASS Formsigrehpr AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarCdGrEstoque()
-        LOCAL loc_cCodigo, loc_nResult
+        LOCAL loc_cCodigo, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cCodigo = ALLTRIM(THIS.txt_4c_CdGrEstoque.Value)
             IF EMPTY(loc_cCodigo)
                 THIS.txt_4c_DsGrEstoque.Value = ""
                 THIS.txt_4c_CdEstoque.Value   = ""
                 THIS.txt_4c_DsEstoque.Value   = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
-                EscaparSQL(loc_cCodigo), ;
-                "cursor_4c_SigrehprGcrVl")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprGcrVl")
-                SELECT cursor_4c_SigrehprGcrVl
-                THIS.txt_4c_CdGrEstoque.Value = ALLTRIM(cursor_4c_SigrehprGcrVl.codigos)
-                THIS.txt_4c_DsGrEstoque.Value = ALLTRIM(cursor_4c_SigrehprGcrVl.descrs)
-            ELSE
-                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
-                THIS.AbrirBuscaGrEstoque()
-            ENDIF
-            IF USED("cursor_4c_SigrehprGcrVl")
-                USE IN cursor_4c_SigrehprGcrVl
+            IF loc_lProsseguir
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
+                    EscaparSQL(loc_cCodigo), ;
+                    "cursor_4c_SigrehprGcrVl")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprGcrVl")
+                    SELECT cursor_4c_SigrehprGcrVl
+                    THIS.txt_4c_CdGrEstoque.Value = ALLTRIM(cursor_4c_SigrehprGcrVl.codigos)
+                    THIS.txt_4c_DsGrEstoque.Value = ALLTRIM(cursor_4c_SigrehprGcrVl.descrs)
+                ELSE
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
+                    THIS.AbrirBuscaGrEstoque()
+                ENDIF
+                IF USED("cursor_4c_SigrehprGcrVl")
+                    USE IN cursor_4c_SigrehprGcrVl
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1071,32 +1074,35 @@ DEFINE CLASS Formsigrehpr AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarCdEstoque()
-        LOCAL loc_cCodigo, loc_cGrupo, loc_cFiltro, loc_nResult
+        LOCAL loc_cCodigo, loc_cGrupo, loc_cFiltro, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cCodigo = ALLTRIM(THIS.txt_4c_CdEstoque.Value)
             IF EMPTY(loc_cCodigo)
                 THIS.txt_4c_DsEstoque.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cGrupo  = ALLTRIM(THIS.txt_4c_CdGrEstoque.Value)
-            loc_cFiltro = ""
-            IF !EMPTY(loc_cGrupo)
-                loc_cFiltro = " AND grupos = " + EscaparSQL(PADR(loc_cGrupo, 10))
-            ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE iclis = " + ;
-                EscaparSQL(loc_cCodigo) + loc_cFiltro, ;
-                "cursor_4c_SigrehprCliVl")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprCliVl")
-                SELECT cursor_4c_SigrehprCliVl
-                THIS.txt_4c_CdEstoque.Value = ALLTRIM(cursor_4c_SigrehprCliVl.iclis)
-                THIS.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_SigrehprCliVl.rclis)
-            ELSE
-                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
-                THIS.AbrirBuscaEstoque()
-            ENDIF
-            IF USED("cursor_4c_SigrehprCliVl")
-                USE IN cursor_4c_SigrehprCliVl
+            IF loc_lProsseguir
+                loc_cGrupo  = ALLTRIM(THIS.txt_4c_CdGrEstoque.Value)
+                loc_cFiltro = ""
+                IF !EMPTY(loc_cGrupo)
+                    loc_cFiltro = " AND grupos = " + EscaparSQL(PADR(loc_cGrupo, 10))
+                ENDIF
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE iclis = " + ;
+                    EscaparSQL(loc_cCodigo) + loc_cFiltro, ;
+                    "cursor_4c_SigrehprCliVl")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprCliVl")
+                    SELECT cursor_4c_SigrehprCliVl
+                    THIS.txt_4c_CdEstoque.Value = ALLTRIM(cursor_4c_SigrehprCliVl.iclis)
+                    THIS.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_SigrehprCliVl.rclis)
+                ELSE
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
+                    THIS.AbrirBuscaEstoque()
+                ENDIF
+                IF USED("cursor_4c_SigrehprCliVl")
+                    USE IN cursor_4c_SigrehprCliVl
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1165,27 +1171,30 @@ DEFINE CLASS Formsigrehpr AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarCdCodigo()
-        LOCAL loc_cCodigo, loc_nResult
+        LOCAL loc_cCodigo, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cCodigo = ALLTRIM(THIS.txt_4c_CdCodigo.Value)
             IF EMPTY(loc_cCodigo)
                 THIS.txt_4c_DsCodigo.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT TOP 1 cpros, dpros FROM SigCdPro WHERE cpros = " + ;
-                EscaparSQL(loc_cCodigo), ;
-                "cursor_4c_SigrehprProVl")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprProVl")
-                SELECT cursor_4c_SigrehprProVl
-                THIS.txt_4c_CdCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl.cpros)
-                THIS.txt_4c_DsCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl.dpros)
-            ELSE
-                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
-                THIS.AbrirBuscaCodigo()
-            ENDIF
-            IF USED("cursor_4c_SigrehprProVl")
-                USE IN cursor_4c_SigrehprProVl
+            IF loc_lProsseguir
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT TOP 1 cpros, dpros FROM SigCdPro WHERE cpros = " + ;
+                    EscaparSQL(loc_cCodigo), ;
+                    "cursor_4c_SigrehprProVl")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprProVl")
+                    SELECT cursor_4c_SigrehprProVl
+                    THIS.txt_4c_CdCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl.cpros)
+                    THIS.txt_4c_DsCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl.dpros)
+                ELSE
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
+                    THIS.AbrirBuscaCodigo()
+                ENDIF
+                IF USED("cursor_4c_SigrehprProVl")
+                    USE IN cursor_4c_SigrehprProVl
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1250,94 +1259,99 @@ DEFINE CLASS Formsigrehpr AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarCdBarra()
-        LOCAL loc_cCdBarra, loc_nResult, loc_cCpros
+        LOCAL loc_cCdBarra, loc_nResult, loc_cCpros, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cCdBarra = ALLTRIM(STR(THIS.txt_4c_CdBarra.Value, 14))
 
             IF EMPTY(loc_cCdBarra) OR THIS.txt_4c_CdBarra.Value = 0
                 THIS.txt_4c_CdCodigo.Value = ""
                 THIS.txt_4c_DsCodigo.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- 1. Buscar em SigOpEtq por cbars
-            loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT TOP 1 cpros FROM SigOpEtq WHERE cbars = " + ;
-                ALLTRIM(STR(THIS.txt_4c_CdBarra.Value, 14)), ;
-                "cursor_4c_SigrehprEtqVl")
-            IF loc_nResult < 1
-                MsgErro("Falha na conex" + CHR(227) + "o ao validar c" + CHR(243) + ;
-                        "digo de barras.", "ValidarCdBarra")
-                RETURN
-            ENDIF
-
-            SELECT cursor_4c_SigrehprEtqVl
-            GO TOP
-            IF !EOF("cursor_4c_SigrehprEtqVl")
-                *-- Encontrado em SigOpEtq: buscar produto pelo cpros
-                loc_cCpros = ALLTRIM(cursor_4c_SigrehprEtqVl.cpros)
-                IF USED("cursor_4c_SigrehprEtqVl")
-                    USE IN cursor_4c_SigrehprEtqVl
-                ENDIF
+            IF loc_lProsseguir
                 loc_nResult = SQLEXEC(gnConnHandle, ;
-                    "SELECT TOP 1 cpros, dpros FROM SigCdPro WHERE cpros = " + ;
-                    EscaparSQL(loc_cCpros), ;
-                    "cursor_4c_SigrehprProVl2")
-                IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprProVl2")
-                    SELECT cursor_4c_SigrehprProVl2
-                    THIS.txt_4c_CdCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl2.cpros)
-                    THIS.txt_4c_DsCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl2.dpros)
-                ENDIF
-                IF USED("cursor_4c_SigrehprProVl2")
-                    USE IN cursor_4c_SigrehprProVl2
-                ENDIF
-            ELSE
-                *-- Nao encontrado em SigOpEtq: buscar em SigCdPro por cbars
-                IF USED("cursor_4c_SigrehprEtqVl")
-                    USE IN cursor_4c_SigrehprEtqVl
-                ENDIF
-                loc_nResult = SQLEXEC(gnConnHandle, ;
-                    "SELECT TOP 1 cpros FROM SigCdPro WHERE cbars = " + ;
+                    "SELECT TOP 1 cpros FROM SigOpEtq WHERE cbars = " + ;
                     ALLTRIM(STR(THIS.txt_4c_CdBarra.Value, 14)), ;
-                    "cursor_4c_SigrehprPrvVl")
+                    "cursor_4c_SigrehprEtqVl")
                 IF loc_nResult < 1
                     MsgErro("Falha na conex" + CHR(227) + "o ao validar c" + CHR(243) + ;
                             "digo de barras.", "ValidarCdBarra")
-                ELSE
-                    SELECT cursor_4c_SigrehprPrvVl
-                    GO TOP
-                    IF EOF("cursor_4c_SigrehprPrvVl")
-                        MsgAviso("C" + CHR(243) + "digo de Barra n" + CHR(227) + ;
-                                 "o cadastrado!", "C" + CHR(243) + "digo de Barras")
-                        THIS.txt_4c_CdCodigo.Value = ""
-                        THIS.txt_4c_DsCodigo.Value = ""
-                    ELSE
-                        IF USED("cursor_4c_SigrehprPrvVl")
-                            USE IN cursor_4c_SigrehprPrvVl
-                        ENDIF
-                        loc_nResult = SQLEXEC(gnConnHandle, ;
-                            "SELECT TOP 1 cpros, dpros FROM SigCdPro WHERE cbars = " + ;
-                            ALLTRIM(STR(THIS.txt_4c_CdBarra.Value, 14)), ;
-                            "cursor_4c_SigrehprProVl3")
-                        IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprProVl3")
-                            SELECT cursor_4c_SigrehprProVl3
-                            THIS.txt_4c_CdCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl3.cpros)
-                            THIS.txt_4c_DsCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl3.dpros)
-                        ENDIF
-                        IF USED("cursor_4c_SigrehprProVl3")
-                            USE IN cursor_4c_SigrehprProVl3
-                        ENDIF
-                    ENDIF
-                    IF USED("cursor_4c_SigrehprPrvVl")
-                        USE IN cursor_4c_SigrehprPrvVl
-                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
-            IF USED("cursor_4c_SigrehprEtqVl")
-                USE IN cursor_4c_SigrehprEtqVl
-            ENDIF
+            IF loc_lProsseguir
+                SELECT cursor_4c_SigrehprEtqVl
+                GO TOP
+                IF !EOF("cursor_4c_SigrehprEtqVl")
+                    *-- Encontrado em SigOpEtq: buscar produto pelo cpros
+                    loc_cCpros = ALLTRIM(cursor_4c_SigrehprEtqVl.cpros)
+                    IF USED("cursor_4c_SigrehprEtqVl")
+                        USE IN cursor_4c_SigrehprEtqVl
+                    ENDIF
+                    loc_nResult = SQLEXEC(gnConnHandle, ;
+                        "SELECT TOP 1 cpros, dpros FROM SigCdPro WHERE cpros = " + ;
+                        EscaparSQL(loc_cCpros), ;
+                        "cursor_4c_SigrehprProVl2")
+                    IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprProVl2")
+                        SELECT cursor_4c_SigrehprProVl2
+                        THIS.txt_4c_CdCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl2.cpros)
+                        THIS.txt_4c_DsCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl2.dpros)
+                    ENDIF
+                    IF USED("cursor_4c_SigrehprProVl2")
+                        USE IN cursor_4c_SigrehprProVl2
+                    ENDIF
+                ELSE
+                    *-- Nao encontrado em SigOpEtq: buscar em SigCdPro por cbars
+                    IF USED("cursor_4c_SigrehprEtqVl")
+                        USE IN cursor_4c_SigrehprEtqVl
+                    ENDIF
+                    loc_nResult = SQLEXEC(gnConnHandle, ;
+                        "SELECT TOP 1 cpros FROM SigCdPro WHERE cbars = " + ;
+                        ALLTRIM(STR(THIS.txt_4c_CdBarra.Value, 14)), ;
+                        "cursor_4c_SigrehprPrvVl")
+                    IF loc_nResult < 1
+                        MsgErro("Falha na conex" + CHR(227) + "o ao validar c" + CHR(243) + ;
+                                "digo de barras.", "ValidarCdBarra")
+                    ELSE
+                        SELECT cursor_4c_SigrehprPrvVl
+                        GO TOP
+                        IF EOF("cursor_4c_SigrehprPrvVl")
+                            MsgAviso("C" + CHR(243) + "digo de Barra n" + CHR(227) + ;
+                                     "o cadastrado!", "C" + CHR(243) + "digo de Barras")
+                            THIS.txt_4c_CdCodigo.Value = ""
+                            THIS.txt_4c_DsCodigo.Value = ""
+                        ELSE
+                            IF USED("cursor_4c_SigrehprPrvVl")
+                                USE IN cursor_4c_SigrehprPrvVl
+                            ENDIF
+                            loc_nResult = SQLEXEC(gnConnHandle, ;
+                                "SELECT TOP 1 cpros, dpros FROM SigCdPro WHERE cbars = " + ;
+                                ALLTRIM(STR(THIS.txt_4c_CdBarra.Value, 14)), ;
+                                "cursor_4c_SigrehprProVl3")
+                            IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprProVl3")
+                                SELECT cursor_4c_SigrehprProVl3
+                                THIS.txt_4c_CdCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl3.cpros)
+                                THIS.txt_4c_DsCodigo.Value = ALLTRIM(cursor_4c_SigrehprProVl3.dpros)
+                            ENDIF
+                            IF USED("cursor_4c_SigrehprProVl3")
+                                USE IN cursor_4c_SigrehprProVl3
+                            ENDIF
+                        ENDIF
+                        IF USED("cursor_4c_SigrehprPrvVl")
+                            USE IN cursor_4c_SigrehprPrvVl
+                        ENDIF
+                    ENDIF
+                ENDIF
 
+                IF USED("cursor_4c_SigrehprEtqVl")
+                    USE IN cursor_4c_SigrehprEtqVl
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -1354,27 +1368,30 @@ DEFINE CLASS Formsigrehpr AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarEmpresa()
-        LOCAL loc_cCodigo, loc_nResult
+        LOCAL loc_cCodigo, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cCodigo = ALLTRIM(THIS.txt_4c_CdEmpresa.Value)
             IF EMPTY(loc_cCodigo)
                 THIS.txt_4c_DsEmpresa.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT TOP 1 cemps, razas FROM SigCdEmp WHERE cemps = " + ;
-                EscaparSQL(loc_cCodigo), ;
-                "cursor_4c_SigrehprEmpVl")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprEmpVl")
-                SELECT cursor_4c_SigrehprEmpVl
-                THIS.txt_4c_CdEmpresa.Value = ALLTRIM(cursor_4c_SigrehprEmpVl.cemps)
-                THIS.txt_4c_DsEmpresa.Value = ALLTRIM(cursor_4c_SigrehprEmpVl.razas)
-            ELSE
-                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
-                THIS.AbrirBuscaEmpresa()
-            ENDIF
-            IF USED("cursor_4c_SigrehprEmpVl")
-                USE IN cursor_4c_SigrehprEmpVl
+            IF loc_lProsseguir
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT TOP 1 cemps, razas FROM SigCdEmp WHERE cemps = " + ;
+                    EscaparSQL(loc_cCodigo), ;
+                    "cursor_4c_SigrehprEmpVl")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_SigrehprEmpVl")
+                    SELECT cursor_4c_SigrehprEmpVl
+                    THIS.txt_4c_CdEmpresa.Value = ALLTRIM(cursor_4c_SigrehprEmpVl.cemps)
+                    THIS.txt_4c_DsEmpresa.Value = ALLTRIM(cursor_4c_SigrehprEmpVl.razas)
+                ELSE
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
+                    THIS.AbrirBuscaEmpresa()
+                ENDIF
+                IF USED("cursor_4c_SigrehprEmpVl")
+                    USE IN cursor_4c_SigrehprEmpVl
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")

@@ -655,32 +655,35 @@ DEFINE CLASS FormFPP AS FormBase
     *   Detecta alteracoes (Valid do legado): marca this_lGravaDados = .T.
     *==========================================================================
     PROCEDURE GrdAfterRowColChange(par_nColIndex)
-        LOCAL loc_oGrid, loc_lNparcsVazio, loc_oErro
+        LOCAL loc_oGrid, loc_lNparcsVazio, loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid = THIS.grd_4c_Dados
 
             IF !USED("xFPagi") OR EOF("xFPagi")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_lNparcsVazio = EMPTY(xFPagi.nparcs)
+            IF loc_lProsseguir
+                loc_lNparcsVazio = EMPTY(xFPagi.nparcs)
 
             *-- Column1 (nparcs): sempre editavel
-            loc_oGrid.Column1.ReadOnly = .F.
+                loc_oGrid.Column1.ReadOnly = .F.
 
             *-- Column2 (Descs): editavel somente se nparcs preenchido E parcDes = 0
-            loc_oGrid.Column2.ReadOnly = loc_lNparcsVazio OR (xFPagi.parcDes <> 0)
+                loc_oGrid.Column2.ReadOnly = loc_lNparcsVazio OR (xFPagi.parcDes <> 0)
 
             *-- Column3 (ValMins): editavel somente se nparcs preenchido
-            loc_oGrid.Column3.ReadOnly = loc_lNparcsVazio
+                loc_oGrid.Column3.ReadOnly = loc_lNparcsVazio
 
             *-- Column4 (parcDes): editavel somente se nparcs preenchido E Descs = 0
-            loc_oGrid.Column4.ReadOnly = loc_lNparcsVazio OR (xFPagi.Descs <> 0)
+                loc_oGrid.Column4.ReadOnly = loc_lNparcsVazio OR (xFPagi.Descs <> 0)
 
             *-- Column5 (ValMaxs): editavel somente se nparcs preenchido
-            loc_oGrid.Column5.ReadOnly = loc_lNparcsVazio
+                loc_oGrid.Column5.ReadOnly = loc_lNparcsVazio
 
+            ENDIF
         CATCH TO loc_oErro
             *-- Erro silencioso - nao interromper navegacao do grid
         ENDTRY
@@ -718,36 +721,41 @@ DEFINE CLASS FormFPP AS FormBase
     * sempre editavel; Column2/Column3/Column4/Column5 dependem de nparcs).
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oGrid, loc_oErro
+        LOCAL loc_oGrid, loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("xFPagi")
                 MsgAviso("Nenhum registro carregado para altera" + CHR(231) + CHR(227) + "o.", ;
                         "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT xFPagi
-            IF RECCOUNT("xFPagi") = 0 OR EOF("xFPagi")
-                MsgAviso("Nenhum registro para alterar. Use Inserir para adicionar linhas.", ;
-                        "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                SELECT xFPagi
+                IF RECCOUNT("xFPagi") = 0 OR EOF("xFPagi")
+                    MsgAviso("Nenhum registro para alterar. Use Inserir para adicionar linhas.", ;
+                            "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_oGrid = THIS.grd_4c_Dados
+            IF loc_lProsseguir
+                loc_oGrid = THIS.grd_4c_Dados
 
             *-- Reaplicar regras de editabilidade da linha corrente
-            THIS.GrdAfterRowColChange(1)
+                THIS.GrdAfterRowColChange(1)
 
             *-- Posicionar foco no primeiro campo editavel:
             *-- Column1 (nparcs) sempre editavel
-            loc_oGrid.SetFocus()
-            loc_oGrid.ActivateCell(RECNO("xFPagi"), 1)
-            loc_oGrid.Column1.SetFocus()
+                loc_oGrid.SetFocus()
+                loc_oGrid.ActivateCell(RECNO("xFPagi"), 1)
+                loc_oGrid.Column1.SetFocus()
 
             *-- Marcar que usuario iniciou intencao de alteracao
             *-- (a flag efetiva de gravacao so eh setada em GrdValorAlterado)
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -762,8 +770,9 @@ DEFINE CLASS FormFPP AS FormBase
     * descartando qualquer edicao local nao salva no cursor xFPagi.
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_lRecarregar, loc_oErro
+        LOCAL loc_lRecarregar, loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             loc_lRecarregar = .T.
 
@@ -777,22 +786,24 @@ DEFINE CLASS FormFPP AS FormBase
             ENDIF
 
             IF !loc_lRecarregar
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Recarregar cursor xFPagi do banco via BO
-            IF THIS.this_oBusinessObject.CarregarDados(THIS.this_cFpags)
-                THIS.this_lGravaDados = .F.
-                THIS.grd_4c_Dados.Refresh()
-                IF USED("xFPagi") AND RECCOUNT("xFPagi") > 0
-                    SELECT xFPagi
-                    GO TOP
-                    THIS.GrdAfterRowColChange(1)
+            IF loc_lProsseguir
+                IF THIS.this_oBusinessObject.CarregarDados(THIS.this_cFpags)
+                    THIS.this_lGravaDados = .F.
+                    THIS.grd_4c_Dados.Refresh()
+                    IF USED("xFPagi") AND RECCOUNT("xFPagi") > 0
+                        SELECT xFPagi
+                        GO TOP
+                        THIS.GrdAfterRowColChange(1)
+                    ENDIF
+                ELSE
+                    MsgErro("Erro ao recarregar descontos de parcelas.", "Erro")
                 ENDIF
-            ELSE
-                MsgErro("Erro ao recarregar descontos de parcelas.", "Erro")
-            ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;

@@ -517,14 +517,24 @@ DEFINE CLASS sigprilaBO AS BusinessBase
                     loc_nQtde = IIF(!EOF("crQtdLista"), NVL(crQtdLista.nQtde, 0), 0)
 
                     *-- INSERT SigCdLpc
-                    loc_cSQL = "INSERT INTO SigCdLpc (lPrecos, Codigos, Formulas, Ncomiss, Nvencs, Tipos, Emps, CidChaves, nQtdes)" + ;
+                    *-- Legado: Append Blank + Replace com estas mesmas colunas. As demais
+                    *-- (fPags, Contas, Flags, AplicTabds, Descos, Tabds) ficavam em
+                    *-- branco/zero do Append Blank, mas sao NOT NULL sem DEFAULT no banco.
+                    loc_cSQL = "INSERT INTO SigCdLpc (lPrecos, Codigos, Formulas, Ncomiss, Nvencs, Tipos, Emps, CidChaves, nQtdes," + ;
+                        " fPags, Contas, Flags, AplicTabds, Descos, Tabds)" + ;
                         " VALUES (" + ;
                         EscaparSQL(loc_cPlCodLista) + "," + ;
                         FormatarNumeroSQL(fGerUniqueKey("SigCdLpc"), 0) + "," + ;
                         "2,2,2,' '," + ;
                         EscaparSQL(loc_cPlEmps) + "," + ;
                         EscaparSQL(fUniqueIds()) + "," + ;
-                        FormatarNumeroSQL(loc_nQtde, 0) + ")"
+                        FormatarNumeroSQL(loc_nQtde, 0) + "," + ;
+                        EscaparSQL("") + "," + ;
+                        EscaparSQL("") + "," + ;
+                        "0," + ;
+                        FormatarNumeroSQL(0, 0) + "," + ;
+                        FormatarNumeroSQL(0, 2) + "," + ;
+                        EscaparSQL("") + ")"
                     IF SQLEXEC(gnConnHandle, loc_cSQL, "") < 1
                         MsgErro("Falha na Conex" + CHR(227) + "o (INSERT SigCdLpc)", "Erro")
                         SELECT crNomeLista
@@ -556,8 +566,12 @@ DEFINE CLASS sigprilaBO AS BusinessBase
                         loc_loBarraPro.Update(.T., "Produto: " + ALLTRIM(crSigCdPro.cPros) + " - " + ALLTRIM(crSigCdPro.dPros))
 
                         *-- INSERT SigCdLpi
+                        *-- Legado: Append Blank + Replace com estas mesmas colunas.
+                        *-- Comiss/FlagUTabs/Ordems/cControles vinham em branco/zero do
+                        *-- Append Blank e sao NOT NULL sem DEFAULT no banco.
                         loc_cSQL = "INSERT INTO SigCdLpi" + ;
-                            " (cGrus, cPros, dPros, MoeVs, pCuss, Ean13, Reffs, lPrecos, pVens, PrecoDe, Vencis, Vencfs, CidChaves)" + ;
+                            " (cGrus, cPros, dPros, MoeVs, pCuss, Ean13, Reffs, lPrecos, pVens, PrecoDe, Vencis, Vencfs, CidChaves," + ;
+                            " Comiss, FlagUTabs, Ordems, cControles)" + ;
                             " VALUES (" + ;
                             EscaparSQL(NVL(crSigCdPro.cGrus, "")) + "," + ;
                             EscaparSQL(NVL(crSigCdPro.cPros, "")) + "," + ;
@@ -571,7 +585,11 @@ DEFINE CLASS sigprilaBO AS BusinessBase
                             FormatarNumeroSQL(IIF(VARTYPE(crTmpPlanilha.PrecoDe) = "N", crTmpPlanilha.PrecoDe, VAL(crTmpPlanilha.PrecoDe)), 5) + "," + ;
                             IIF(!EMPTY(crTmpPlanilha.DataIni), FormatarDataSQL(crTmpPlanilha.DataIni), "NULL") + "," + ;
                             IIF(!EMPTY(crTmpPlanilha.DataFim), FormatarDataSQL(crTmpPlanilha.DataFim), "NULL") + "," + ;
-                            EscaparSQL(fUniqueIds()) + ")"
+                            EscaparSQL(fUniqueIds()) + "," + ;
+                            FormatarNumeroSQL(0, 2) + "," + ;
+                            "0," + ;
+                            EscaparSQL("") + "," + ;
+                            EscaparSQL("") + ")"
                         IF SQLEXEC(gnConnHandle, loc_cSQL, "") < 1
                             MsgErro("Falha na Conex" + CHR(227) + "o (INSERT SigCdLpi)", "Erro")
                             loc_loBarraPro.Complete(.T.)

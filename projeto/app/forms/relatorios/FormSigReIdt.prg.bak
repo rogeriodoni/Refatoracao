@@ -576,15 +576,19 @@ DEFINE CLASS FormSigReIdt AS FormBase
     * Logica original: PROCEDURE visualizacao (Report Form ... Preview NoConsole)
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Visualizar")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.this_oRelatorio.Visualizar()
+            IF loc_lProsseguir
+                THIS.this_oRelatorio.Visualizar()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -597,15 +601,19 @@ DEFINE CLASS FormSigReIdt AS FormBase
     * Logica original: PROCEDURE impressao (Report Form ... To Printer Prompt NoConsole)
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Imprimir")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.this_oRelatorio.Imprimir()
+            IF loc_lProsseguir
+                THIS.this_oRelatorio.Imprimir()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -618,15 +626,19 @@ DEFINE CLASS FormSigReIdt AS FormBase
     * Logica original: PROCEDURE documento (Report Form ... To Printer NoConsole)
     *--------------------------------------------------------------------------
     PROCEDURE BtnDocumentoClick()
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Documento")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.this_oRelatorio.Documento()
+            IF loc_lProsseguir
+                THIS.this_oRelatorio.Documento()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;

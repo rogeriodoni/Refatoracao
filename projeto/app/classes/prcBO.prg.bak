@@ -463,11 +463,19 @@ DEFINE CLASS prcBO AS BusinessBase
                        " AND parametros = " + EscaparSQL(loc_cParam)
             SQLEXEC(gnConnHandle, loc_cSQL)
 
-            loc_cSQL = "INSERT INTO SigCdPrg (programas, parametros, descricaos)" + ;
+            *-- Legado: Insert Into crSigCdPrg (Descricaos, Parametros, Programas, pkChaves)
+            *--         Values (lcDes, lcPar, lcPrg, fUniqueIds())
+            *-- barraforms/barrapict nao sao tocadas pelo legado (vinham em branco do
+            *-- registro do cursor), mas sao NOT NULL sem DEFAULT no banco.
+            loc_cSQL = "INSERT INTO SigCdPrg (programas, parametros, descricaos," + ;
+                       " pkchaves, barraforms, barrapict)" + ;
                        " VALUES (" + ;
                        EscaparSQL(loc_cProg)                   + ", " + ;
                        EscaparSQL(loc_cParam)                  + ", " + ;
-                       EscaparSQL(ALLTRIM(par_cProcessos))     + ")"
+                       EscaparSQL(ALLTRIM(par_cProcessos))     + ", " + ;
+                       EscaparSQL(fUniqueIds())                + ", " + ;
+                       EscaparSQL("")                          + ", " + ;
+                       EscaparSQL("")                          + ")"
 
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
 

@@ -557,29 +557,34 @@ DEFINE CLASS FormSigReEvd AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarGrupo()
-        LOCAL loc_oPg, loc_cCodigo
+        LOCAL loc_oPg, loc_cCodigo, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Grupo.Value)
             IF EMPTY(loc_cCodigo)
                 THIS.AtualizarEstadoCampos()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Grupos
-            LOCATE FOR ALLTRIM(Codigos) = loc_cCodigo
-            IF FOUND()
-                loc_oPg.txt_4c_Grupo.Value = ALLTRIM(Codigos)
-            ELSE
-                MsgAviso("Grupo n" + CHR(227) + "o encontrado.", "Grupo")
-                loc_oPg.txt_4c_Grupo.Value  = ""
-                loc_oPg.txt_4c_Conta.Value  = ""
-                loc_oPg.txt_4c_Dconta.Value = ""
-                THIS.AbrirLookupGrupo()
+            IF loc_lProsseguir
+                SELECT cursor_4c_Grupos
+                LOCATE FOR ALLTRIM(Codigos) = loc_cCodigo
+                IF FOUND()
+                    loc_oPg.txt_4c_Grupo.Value = ALLTRIM(Codigos)
+                ELSE
+                    MsgAviso("Grupo n" + CHR(227) + "o encontrado.", "Grupo")
+                    loc_oPg.txt_4c_Grupo.Value  = ""
+                    loc_oPg.txt_4c_Conta.Value  = ""
+                    loc_oPg.txt_4c_Dconta.Value = ""
+                    THIS.AbrirLookupGrupo()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-        THIS.AtualizarEstadoCampos()
+        IF loc_lProsseguir
+            THIS.AtualizarEstadoCampos()
+        ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupGrupo()
@@ -617,33 +622,40 @@ DEFINE CLASS FormSigReEvd AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarConta()
-        LOCAL loc_oPg, loc_cCodigo
+        LOCAL loc_oPg, loc_cCodigo, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             IF EMPTY(ALLTRIM(loc_oPg.txt_4c_Grupo.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Conta.Value)
-            IF EMPTY(loc_cCodigo)
-                loc_oPg.txt_4c_Dconta.Value = ""
-                THIS.AtualizarEstadoCampos()
-                RETURN
+            IF loc_lProsseguir
+                loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Conta.Value)
+                IF EMPTY(loc_cCodigo)
+                    loc_oPg.txt_4c_Dconta.Value = ""
+                    THIS.AtualizarEstadoCampos()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            SELECT cursor_4c_Clientes
-            LOCATE FOR ALLTRIM(IClis) = loc_cCodigo
-            IF FOUND()
-                loc_oPg.txt_4c_Conta.Value  = ALLTRIM(IClis)
-                loc_oPg.txt_4c_Dconta.Value = ALLTRIM(RClis)
-            ELSE
-                MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Conta")
-                loc_oPg.txt_4c_Conta.Value  = ""
-                loc_oPg.txt_4c_Dconta.Value = ""
-                THIS.AbrirLookupConta()
+            IF loc_lProsseguir
+                SELECT cursor_4c_Clientes
+                LOCATE FOR ALLTRIM(IClis) = loc_cCodigo
+                IF FOUND()
+                    loc_oPg.txt_4c_Conta.Value  = ALLTRIM(IClis)
+                    loc_oPg.txt_4c_Dconta.Value = ALLTRIM(RClis)
+                ELSE
+                    MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Conta")
+                    loc_oPg.txt_4c_Conta.Value  = ""
+                    loc_oPg.txt_4c_Dconta.Value = ""
+                    THIS.AbrirLookupConta()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-        THIS.AtualizarEstadoCampos()
+        IF loc_lProsseguir
+            THIS.AtualizarEstadoCampos()
+        ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupConta()
@@ -685,35 +697,44 @@ DEFINE CLASS FormSigReEvd AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarDconta()
-        LOCAL loc_oPg, loc_cNome
+        LOCAL loc_oPg, loc_cNome, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             IF EMPTY(ALLTRIM(loc_oPg.txt_4c_Grupo.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !EMPTY(ALLTRIM(loc_oPg.txt_4c_Conta.Value))
-                RETURN
+            IF loc_lProsseguir
+                IF !EMPTY(ALLTRIM(loc_oPg.txt_4c_Conta.Value))
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cNome = ALLTRIM(loc_oPg.txt_4c_Dconta.Value)
-            IF EMPTY(loc_cNome)
-                THIS.AtualizarEstadoCampos()
-                RETURN
+            IF loc_lProsseguir
+                loc_cNome = ALLTRIM(loc_oPg.txt_4c_Dconta.Value)
+                IF EMPTY(loc_cNome)
+                    THIS.AtualizarEstadoCampos()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            SELECT cursor_4c_Clientes
-            LOCATE FOR ALLTRIM(RClis) = loc_cNome
-            IF FOUND()
-                loc_oPg.txt_4c_Dconta.Value = ALLTRIM(RClis)
-                loc_oPg.txt_4c_Conta.Value  = ALLTRIM(IClis)
-            ELSE
-                MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Conta")
-                loc_oPg.txt_4c_Conta.Value  = ""
-                loc_oPg.txt_4c_Dconta.Value = ""
-                THIS.AbrirLookupDconta()
+            IF loc_lProsseguir
+                SELECT cursor_4c_Clientes
+                LOCATE FOR ALLTRIM(RClis) = loc_cNome
+                IF FOUND()
+                    loc_oPg.txt_4c_Dconta.Value = ALLTRIM(RClis)
+                    loc_oPg.txt_4c_Conta.Value  = ALLTRIM(IClis)
+                ELSE
+                    MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Conta")
+                    loc_oPg.txt_4c_Conta.Value  = ""
+                    loc_oPg.txt_4c_Dconta.Value = ""
+                    THIS.AbrirLookupDconta()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-        THIS.AtualizarEstadoCampos()
+        IF loc_lProsseguir
+            THIS.AtualizarEstadoCampos()
+        ENDIF
     ENDPROC
 
     PROCEDURE AbrirLookupDconta()

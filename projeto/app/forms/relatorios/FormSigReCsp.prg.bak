@@ -827,9 +827,10 @@ DEFINE CLASS FormSigReCsp AS FormBase
     *   limpa RecordSource do grid e navega para a Page2 (Filtros).
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_cCursor, loc_oGrid, loc_lTemDados
+        LOCAL loc_cCursor, loc_oGrid, loc_lTemDados, loc_lProsseguir
         loc_lTemDados = .F.
 
+        loc_lProsseguir = .T.
         TRY
             *-- Verificar se ha dados para excluir
             IF VARTYPE(THIS.this_oRelatorio) = "O"
@@ -843,30 +844,34 @@ DEFINE CLASS FormSigReCsp AS FormBase
             IF !loc_lTemDados
                 MsgAviso("N" + CHR(227) + "o existem resultados para limpar.", ;
                     "Limpar Resultados")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Confirmar com o usuario
-            IF !MsgConfirma("Deseja realmente limpar os resultados da pesquisa?", ;
-               "Confirma" + CHR(231) + CHR(227) + "o")
-                RETURN
-            ENDIF
-
-            *-- Limpar RecordSource antes de fechar o cursor
-            IF TYPE("THIS.pgf_4c_Paginas") = "O"
-                loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
-                IF VARTYPE(loc_oGrid) = "O"
-                    loc_oGrid.RecordSource = ""
+            IF loc_lProsseguir
+                IF !MsgConfirma("Deseja realmente limpar os resultados da pesquisa?", ;
+                   "Confirma" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            *-- Limpar RecordSource antes de fechar o cursor
+            IF loc_lProsseguir
+                IF TYPE("THIS.pgf_4c_Paginas") = "O"
+                    loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
+                    IF VARTYPE(loc_oGrid) = "O"
+                        loc_oGrid.RecordSource = ""
+                    ENDIF
+                ENDIF
+
             *-- Fechar cursor de resultados
-            IF !EMPTY(loc_cCursor) AND USED(loc_cCursor)
-                USE IN (loc_cCursor)
-            ENDIF
+                IF !EMPTY(loc_cCursor) AND USED(loc_cCursor)
+                    USE IN (loc_cCursor)
+                ENDIF
 
             *-- Voltar para Page2 (Filtros)
-            THIS.AlternarPagina(2)
+                THIS.AlternarPagina(2)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -1449,8 +1454,9 @@ DEFINE CLASS FormSigReCsp AS FormBase
     *   Se unico resultado: preenche codigo. Se multiplos: abre FormBuscaAuxiliar.
     *--------------------------------------------------------------------------
     PROCEDURE ValidarDescEmpresa()
-        LOCAL loc_cDesc, loc_cSQL, loc_nResult
+        LOCAL loc_cDesc, loc_cSQL, loc_nResult, loc_lProsseguir
         loc_cDesc = ""
+        loc_lProsseguir = .T.
         IF VARTYPE(THIS.txt_4c_DEmpresa) = "O"
             loc_cDesc = ALLTRIM(THIS.txt_4c_DEmpresa.Value)
         ENDIF
@@ -1477,7 +1483,7 @@ DEFINE CLASS FormSigReCsp AS FormBase
                     CASE RECCOUNT("cursor_4c_EmpValD") > 1
                         USE IN cursor_4c_EmpValD
                         THIS.AbrirBuscaEmpresa()
-                        RETURN
+                        loc_lProsseguir = .F.
                     OTHERWISE
                         IF VARTYPE(THIS.txt_4c_Empresa) = "O"
                             THIS.txt_4c_Empresa.Value = ""
@@ -1486,8 +1492,10 @@ DEFINE CLASS FormSigReCsp AS FormBase
                             THIS.txt_4c_DEmpresa.Value = ""
                         ENDIF
                 ENDCASE
-                IF USED("cursor_4c_EmpValD")
-                    USE IN cursor_4c_EmpValD
+                IF loc_lProsseguir
+                    IF USED("cursor_4c_EmpValD")
+                        USE IN cursor_4c_EmpValD
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

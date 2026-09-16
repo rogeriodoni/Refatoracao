@@ -2253,44 +2253,47 @@ DEFINE CLASS FormNfl AS FormBase
 
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupSeries()
-        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
+        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oCtrl = THIS.pgf_4c_Paginas.Page2.txt_4c_Series
             IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cVal = ALLTRIM(loc_oCtrl.Value)
-            IF !EMPTY(loc_cVal)
-                loc_cSQL = "SELECT cods, descs FROM SigCdSer WHERE UPPER(cods) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY cods"
-            ELSE
-                loc_cSQL = "SELECT cods, descs FROM SigCdSer ORDER BY cods"
-            ENDIF
-            SET NULL ON
-            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaSer")
-            IF !USED("cursor_4c_BuscaSer") OR RECCOUNT("cursor_4c_BuscaSer") = 0
+            IF loc_lProsseguir
+                loc_cVal = ALLTRIM(loc_oCtrl.Value)
+                IF !EMPTY(loc_cVal)
+                    loc_cSQL = "SELECT cods, descs FROM SigCdSer WHERE UPPER(cods) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY cods"
+                ELSE
+                    loc_cSQL = "SELECT cods, descs FROM SigCdSer ORDER BY cods"
+                ENDIF
+                SET NULL ON
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaSer")
+                IF !USED("cursor_4c_BuscaSer") OR RECCOUNT("cursor_4c_BuscaSer") = 0
+                    IF USED("cursor_4c_BuscaSer")
+                        USE IN cursor_4c_BuscaSer
+                    ENDIF
+                    SQLEXEC(gnConnHandle, "SELECT cods, descs FROM SigCdSer ORDER BY cods", "cursor_4c_BuscaSer")
+                ENDIF
+                IF !USED("cursor_4c_BuscaSer")
+                    CREATE CURSOR cursor_4c_BuscaSer (cods c(3), descs c(50))
+                ENDIF
+                SET NULL OFF
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaSer"
+                    loc_oBusca.DefinirCursor("cursor_4c_BuscaSer", "cods", "descs", "S" + CHR(233) + "ries")
+                    loc_oBusca.mAddColuna("cods",  "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Mostrar()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaSer")
+                        SELECT cursor_4c_BuscaSer
+                        loc_oCtrl.Value = ALLTRIM(cods)
+                    ENDIF
+                ENDIF
                 IF USED("cursor_4c_BuscaSer")
                     USE IN cursor_4c_BuscaSer
                 ENDIF
-                SQLEXEC(gnConnHandle, "SELECT cods, descs FROM SigCdSer ORDER BY cods", "cursor_4c_BuscaSer")
-            ENDIF
-            IF !USED("cursor_4c_BuscaSer")
-                CREATE CURSOR cursor_4c_BuscaSer (cods c(3), descs c(50))
-            ENDIF
-            SET NULL OFF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaSer"
-                loc_oBusca.DefinirCursor("cursor_4c_BuscaSer", "cods", "descs", "S" + CHR(233) + "ries")
-                loc_oBusca.mAddColuna("cods",  "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Mostrar()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaSer")
-                    SELECT cursor_4c_BuscaSer
-                    loc_oCtrl.Value = ALLTRIM(cods)
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_BuscaSer")
-                USE IN cursor_4c_BuscaSer
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupSeries")
@@ -2445,44 +2448,47 @@ DEFINE CLASS FormNfl AS FormBase
 
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupEmpPad()
-        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
+        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oCtrl = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page10.txt_4c_EmpPad
             IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cVal = ALLTRIM(loc_oCtrl.Value)
-            IF !EMPTY(loc_cVal)
-                loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp WHERE UPPER(CEmps) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY CEmps"
-            ELSE
-                loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps"
-            ENDIF
-            SET NULL ON
-            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmpPad")
-            IF !USED("cursor_4c_BuscaEmpPad") OR RECCOUNT("cursor_4c_BuscaEmpPad") = 0
+            IF loc_lProsseguir
+                loc_cVal = ALLTRIM(loc_oCtrl.Value)
+                IF !EMPTY(loc_cVal)
+                    loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp WHERE UPPER(CEmps) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY CEmps"
+                ELSE
+                    loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps"
+                ENDIF
+                SET NULL ON
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmpPad")
+                IF !USED("cursor_4c_BuscaEmpPad") OR RECCOUNT("cursor_4c_BuscaEmpPad") = 0
+                    IF USED("cursor_4c_BuscaEmpPad")
+                        USE IN cursor_4c_BuscaEmpPad
+                    ENDIF
+                    SQLEXEC(gnConnHandle, "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps", "cursor_4c_BuscaEmpPad")
+                ENDIF
+                IF !USED("cursor_4c_BuscaEmpPad")
+                    CREATE CURSOR cursor_4c_BuscaEmpPad (CEmps c(2), Razas c(60))
+                ENDIF
+                SET NULL OFF
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmpPad"
+                    loc_oBusca.DefinirCursor("cursor_4c_BuscaEmpPad", "CEmps", "Razas", "Empresa Padr" + CHR(227) + "o")
+                    loc_oBusca.mAddColuna("CEmps", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
+                    loc_oBusca.Mostrar()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmpPad")
+                        SELECT cursor_4c_BuscaEmpPad
+                        loc_oCtrl.Value = ALLTRIM(CEmps)
+                    ENDIF
+                ENDIF
                 IF USED("cursor_4c_BuscaEmpPad")
                     USE IN cursor_4c_BuscaEmpPad
                 ENDIF
-                SQLEXEC(gnConnHandle, "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps", "cursor_4c_BuscaEmpPad")
-            ENDIF
-            IF !USED("cursor_4c_BuscaEmpPad")
-                CREATE CURSOR cursor_4c_BuscaEmpPad (CEmps c(2), Razas c(60))
-            ENDIF
-            SET NULL OFF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmpPad"
-                loc_oBusca.DefinirCursor("cursor_4c_BuscaEmpPad", "CEmps", "Razas", "Empresa Padr" + CHR(227) + "o")
-                loc_oBusca.mAddColuna("CEmps", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
-                loc_oBusca.Mostrar()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmpPad")
-                    SELECT cursor_4c_BuscaEmpPad
-                    loc_oCtrl.Value = ALLTRIM(CEmps)
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_BuscaEmpPad")
-                USE IN cursor_4c_BuscaEmpPad
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupEmpPad")
@@ -2527,44 +2533,47 @@ DEFINE CLASS FormNfl AS FormBase
 
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupUnPesos()
-        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
+        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oCtrl = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page6.txt_4c_UnPesos
             IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cVal = ALLTRIM(loc_oCtrl.Value)
-            IF !EMPTY(loc_cVal)
-                loc_cSQL = "SELECT CUnis, DUnis FROM SigCdUni WHERE UPPER(CUnis) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY CUnis"
-            ELSE
-                loc_cSQL = "SELECT CUnis, DUnis FROM SigCdUni ORDER BY CUnis"
-            ENDIF
-            SET NULL ON
-            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaUni")
-            IF !USED("cursor_4c_BuscaUni") OR RECCOUNT("cursor_4c_BuscaUni") = 0
+            IF loc_lProsseguir
+                loc_cVal = ALLTRIM(loc_oCtrl.Value)
+                IF !EMPTY(loc_cVal)
+                    loc_cSQL = "SELECT CUnis, DUnis FROM SigCdUni WHERE UPPER(CUnis) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY CUnis"
+                ELSE
+                    loc_cSQL = "SELECT CUnis, DUnis FROM SigCdUni ORDER BY CUnis"
+                ENDIF
+                SET NULL ON
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaUni")
+                IF !USED("cursor_4c_BuscaUni") OR RECCOUNT("cursor_4c_BuscaUni") = 0
+                    IF USED("cursor_4c_BuscaUni")
+                        USE IN cursor_4c_BuscaUni
+                    ENDIF
+                    SQLEXEC(gnConnHandle, "SELECT CUnis, DUnis FROM SigCdUni ORDER BY CUnis", "cursor_4c_BuscaUni")
+                ENDIF
+                IF !USED("cursor_4c_BuscaUni")
+                    CREATE CURSOR cursor_4c_BuscaUni (CUnis c(6), DUnis c(30))
+                ENDIF
+                SET NULL OFF
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaUni"
+                    loc_oBusca.DefinirCursor("cursor_4c_BuscaUni", "CUnis", "DUnis", "Unidades de Medida")
+                    loc_oBusca.mAddColuna("CUnis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("DUnis", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Mostrar()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUni")
+                        SELECT cursor_4c_BuscaUni
+                        loc_oCtrl.Value = ALLTRIM(CUnis)
+                    ENDIF
+                ENDIF
                 IF USED("cursor_4c_BuscaUni")
                     USE IN cursor_4c_BuscaUni
                 ENDIF
-                SQLEXEC(gnConnHandle, "SELECT CUnis, DUnis FROM SigCdUni ORDER BY CUnis", "cursor_4c_BuscaUni")
-            ENDIF
-            IF !USED("cursor_4c_BuscaUni")
-                CREATE CURSOR cursor_4c_BuscaUni (CUnis c(6), DUnis c(30))
-            ENDIF
-            SET NULL OFF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaUni"
-                loc_oBusca.DefinirCursor("cursor_4c_BuscaUni", "CUnis", "DUnis", "Unidades de Medida")
-                loc_oBusca.mAddColuna("CUnis", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("DUnis", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Mostrar()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUni")
-                    SELECT cursor_4c_BuscaUni
-                    loc_oCtrl.Value = ALLTRIM(CUnis)
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_BuscaUni")
-                USE IN cursor_4c_BuscaUni
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupUnPesos")
@@ -2573,45 +2582,48 @@ DEFINE CLASS FormNfl AS FormBase
 
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupClsFis(par_cNomeCampo)
-        LOCAL loc_oRdp, loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
+        LOCAL loc_oRdp, loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oRdp  = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page7
             loc_oCtrl = THIS.ObterControle(loc_oRdp, par_cNomeCampo)
             IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cVal = ALLTRIM(loc_oCtrl.Value)
-            IF !EMPTY(loc_cVal)
-                loc_cSQL = "SELECT codigos, descricaos FROM SigCdClf WHERE UPPER(codigos) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY codigos"
-            ELSE
-                loc_cSQL = "SELECT codigos, descricaos FROM SigCdClf ORDER BY codigos"
-            ENDIF
-            SET NULL ON
-            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaClf")
-            IF !USED("cursor_4c_BuscaClf") OR RECCOUNT("cursor_4c_BuscaClf") = 0
+            IF loc_lProsseguir
+                loc_cVal = ALLTRIM(loc_oCtrl.Value)
+                IF !EMPTY(loc_cVal)
+                    loc_cSQL = "SELECT codigos, descricaos FROM SigCdClf WHERE UPPER(codigos) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY codigos"
+                ELSE
+                    loc_cSQL = "SELECT codigos, descricaos FROM SigCdClf ORDER BY codigos"
+                ENDIF
+                SET NULL ON
+                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaClf")
+                IF !USED("cursor_4c_BuscaClf") OR RECCOUNT("cursor_4c_BuscaClf") = 0
+                    IF USED("cursor_4c_BuscaClf")
+                        USE IN cursor_4c_BuscaClf
+                    ENDIF
+                    SQLEXEC(gnConnHandle, "SELECT codigos, descricaos FROM SigCdClf ORDER BY codigos", "cursor_4c_BuscaClf")
+                ENDIF
+                IF !USED("cursor_4c_BuscaClf")
+                    CREATE CURSOR cursor_4c_BuscaClf (codigos c(10), descricaos c(60))
+                ENDIF
+                SET NULL OFF
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaClf"
+                    loc_oBusca.DefinirCursor("cursor_4c_BuscaClf", "codigos", "descricaos", "Classifica" + CHR(231) + CHR(227) + "o Fiscal")
+                    loc_oBusca.mAddColuna("codigos",    "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Mostrar()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaClf")
+                        SELECT cursor_4c_BuscaClf
+                        loc_oCtrl.Value = ALLTRIM(codigos)
+                    ENDIF
+                ENDIF
                 IF USED("cursor_4c_BuscaClf")
                     USE IN cursor_4c_BuscaClf
                 ENDIF
-                SQLEXEC(gnConnHandle, "SELECT codigos, descricaos FROM SigCdClf ORDER BY codigos", "cursor_4c_BuscaClf")
-            ENDIF
-            IF !USED("cursor_4c_BuscaClf")
-                CREATE CURSOR cursor_4c_BuscaClf (codigos c(10), descricaos c(60))
-            ENDIF
-            SET NULL OFF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaClf"
-                loc_oBusca.DefinirCursor("cursor_4c_BuscaClf", "codigos", "descricaos", "Classifica" + CHR(231) + CHR(227) + "o Fiscal")
-                loc_oBusca.mAddColuna("codigos",    "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Mostrar()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaClf")
-                    SELECT cursor_4c_BuscaClf
-                    loc_oCtrl.Value = ALLTRIM(codigos)
-                ENDIF
-            ENDIF
-            IF USED("cursor_4c_BuscaClf")
-                USE IN cursor_4c_BuscaClf
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupClsFis")

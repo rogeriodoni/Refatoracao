@@ -1174,45 +1174,48 @@ DEFINE CLASS FormRPT AS FormBase
     * Sub-controles da Page2 criados nas Fases 5-6; PEMSTATUS garante seguranca
     *==========================================================================
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oSubPg1
+        LOCAL loc_oSubPg1, loc_lProsseguir
         loc_oSubPg1 = .NULL.
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "pgf_4c_Dados", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oSubPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
+            IF loc_lProsseguir
+                loc_oSubPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
 
-            IF PEMSTATUS(loc_oSubPg1, "txt_4c_NmReport", 5)
-                loc_oSubPg1.txt_4c_NmReport.Value = ;
-                    ALLTRIM(THIS.this_oBusinessObject.this_cNmReport)
+                IF PEMSTATUS(loc_oSubPg1, "txt_4c_NmReport", 5)
+                    loc_oSubPg1.txt_4c_NmReport.Value = ;
+                        ALLTRIM(THIS.this_oBusinessObject.this_cNmReport)
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "edt_4c_Descricao", 5)
+                    loc_oSubPg1.edt_4c_Descricao.Value = ;
+                        ALLTRIM(THIS.this_oBusinessObject.this_cDescr)
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "chk_4c_Ativo", 5)
+                    loc_oSubPg1.chk_4c_Ativo.Value = THIS.this_oBusinessObject.this_lAtivo
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtCriacao", 5)
+                    loc_oSubPg1.txt_4c_DtCriacao.Value = ;
+                        DTOC(THIS.this_oBusinessObject.this_dDtCriacao)
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtAlteracao", 5)
+                    loc_oSubPg1.txt_4c_DtAlteracao.Value = ;
+                        DTOC(THIS.this_oBusinessObject.this_dDtAlteracao)
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "obj_4c_OleRTF_SqlCMD", 5)
+                    loc_oSubPg1.obj_4c_OleRTF_SqlCMD.OBJECT.Text = ;
+                        ALLTRIM(THIS.this_oBusinessObject.this_cSqlQuery)
+                ENDIF
+
             ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "edt_4c_Descricao", 5)
-                loc_oSubPg1.edt_4c_Descricao.Value = ;
-                    ALLTRIM(THIS.this_oBusinessObject.this_cDescr)
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "chk_4c_Ativo", 5)
-                loc_oSubPg1.chk_4c_Ativo.Value = THIS.this_oBusinessObject.this_lAtivo
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtCriacao", 5)
-                loc_oSubPg1.txt_4c_DtCriacao.Value = ;
-                    DTOC(THIS.this_oBusinessObject.this_dDtCriacao)
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtAlteracao", 5)
-                loc_oSubPg1.txt_4c_DtAlteracao.Value = ;
-                    DTOC(THIS.this_oBusinessObject.this_dDtAlteracao)
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "obj_4c_OleRTF_SqlCMD", 5)
-                loc_oSubPg1.obj_4c_OleRTF_SqlCMD.OBJECT.Text = ;
-                    ALLTRIM(THIS.this_oBusinessObject.this_cSqlQuery)
-            ENDIF
-
         CATCH TO loc_oErro
             MsgErro("Erro ao preencher campos:" + CHR(13) + loc_oErro.Message, "FormRPT.BOParaForm")
         ENDTRY
@@ -1222,45 +1225,48 @@ DEFINE CLASS FormRPT AS FormBase
     * HabilitarCampos - Habilita ou desabilita campos de edicao na Page2
     *==========================================================================
     PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_oSubPg1
+        LOCAL loc_oSubPg1, loc_lProsseguir
         loc_oSubPg1 = .NULL.
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "pgf_4c_Dados", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oSubPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
+            IF loc_lProsseguir
+                loc_oSubPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
 
-            IF PEMSTATUS(loc_oSubPg1, "txt_4c_NmReport", 5)
-                loc_oSubPg1.txt_4c_NmReport.ReadOnly    = !par_lHabilitar
-                loc_oSubPg1.txt_4c_NmReport.BackColor   = IIF(par_lHabilitar, RGB(255,255,255), RGB(240,240,240))
-            ENDIF
+                IF PEMSTATUS(loc_oSubPg1, "txt_4c_NmReport", 5)
+                    loc_oSubPg1.txt_4c_NmReport.ReadOnly    = !par_lHabilitar
+                    loc_oSubPg1.txt_4c_NmReport.BackColor   = IIF(par_lHabilitar, RGB(255,255,255), RGB(240,240,240))
+                ENDIF
 
-            IF PEMSTATUS(loc_oSubPg1, "edt_4c_Descricao", 5)
-                loc_oSubPg1.edt_4c_Descricao.ReadOnly   = !par_lHabilitar
-                loc_oSubPg1.edt_4c_Descricao.BackColor  = IIF(par_lHabilitar, RGB(255,255,255), RGB(240,240,240))
-            ENDIF
+                IF PEMSTATUS(loc_oSubPg1, "edt_4c_Descricao", 5)
+                    loc_oSubPg1.edt_4c_Descricao.ReadOnly   = !par_lHabilitar
+                    loc_oSubPg1.edt_4c_Descricao.BackColor  = IIF(par_lHabilitar, RGB(255,255,255), RGB(240,240,240))
+                ENDIF
 
-            IF PEMSTATUS(loc_oSubPg1, "chk_4c_Ativo", 5)
-                loc_oSubPg1.chk_4c_Ativo.Enabled = par_lHabilitar OR ;
-                    (THIS.this_cModoAtual = "EXCLUIR")
-            ENDIF
+                IF PEMSTATUS(loc_oSubPg1, "chk_4c_Ativo", 5)
+                    loc_oSubPg1.chk_4c_Ativo.Enabled = par_lHabilitar OR ;
+                        (THIS.this_cModoAtual = "EXCLUIR")
+                ENDIF
 
-            IF PEMSTATUS(loc_oSubPg1, "obj_4c_OleRTF_SqlCMD", 5)
-                loc_oSubPg1.obj_4c_OleRTF_SqlCMD.OBJECT.Enabled = par_lHabilitar
-            ENDIF
+                IF PEMSTATUS(loc_oSubPg1, "obj_4c_OleRTF_SqlCMD", 5)
+                    loc_oSubPg1.obj_4c_OleRTF_SqlCMD.OBJECT.Enabled = par_lHabilitar
+                ENDIF
 
             *-- Botao Confirmar: habilitado em edicao OU em exclusao
-            LOCAL loc_oSubPg, loc_oCnt
-            loc_oSubPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-            IF PEMSTATUS(loc_oSubPg, "cnt_4c_Salva", 5)
-                IF PEMSTATUS(loc_oSubPg.cnt_4c_Salva, "cmd_4c_Confirmar", 5)
-                    loc_oSubPg.cnt_4c_Salva.cmd_4c_Confirmar.Enabled = ;
-                        par_lHabilitar OR (THIS.this_cModoAtual = "EXCLUIR")
+                LOCAL loc_oSubPg, loc_oCnt
+                loc_oSubPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
+                IF PEMSTATUS(loc_oSubPg, "cnt_4c_Salva", 5)
+                    IF PEMSTATUS(loc_oSubPg.cnt_4c_Salva, "cmd_4c_Confirmar", 5)
+                        loc_oSubPg.cnt_4c_Salva.cmd_4c_Confirmar.Enabled = ;
+                            par_lHabilitar OR (THIS.this_cModoAtual = "EXCLUIR")
+                    ENDIF
                 ENDIF
-            ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao habilitar campos:" + CHR(13) + loc_oErro.Message, "FormRPT.HabilitarCampos")
         ENDTRY
@@ -1270,52 +1276,55 @@ DEFINE CLASS FormRPT AS FormBase
     * LimparCampos - Limpa campos da Page2
     *==========================================================================
     PROTECTED PROCEDURE LimparCampos()
-        LOCAL loc_oSubPg1
+        LOCAL loc_oSubPg1, loc_lProsseguir
         loc_oSubPg1 = .NULL.
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "pgf_4c_Dados", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oSubPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
+            IF loc_lProsseguir
+                loc_oSubPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
 
-            IF PEMSTATUS(loc_oSubPg1, "txt_4c_NmReport", 5)
-                loc_oSubPg1.txt_4c_NmReport.Value = ""
+                IF PEMSTATUS(loc_oSubPg1, "txt_4c_NmReport", 5)
+                    loc_oSubPg1.txt_4c_NmReport.Value = ""
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "edt_4c_Descricao", 5)
+                    loc_oSubPg1.edt_4c_Descricao.Value = ""
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "chk_4c_Ativo", 5)
+                    loc_oSubPg1.chk_4c_Ativo.Value = 1
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtCriacao", 5)
+                    loc_oSubPg1.txt_4c_DtCriacao.Value = ""
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtAlteracao", 5)
+                    loc_oSubPg1.txt_4c_DtAlteracao.Value = ""
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "obj_4c_OleRTF_SqlCMD", 5)
+                    loc_oSubPg1.obj_4c_OleRTF_SqlCMD.OBJECT.Text = ""
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtInicial", 5)
+                    loc_oSubPg1.txt_4c_DtInicial.Value = DTOC(DATE())
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtFinal", 5)
+                    loc_oSubPg1.txt_4c_DtFinal.Value = DTOC(DATE())
+                ENDIF
+
+                IF PEMSTATUS(loc_oSubPg1, "lbl_4c_SqlAlterado", 5)
+                    loc_oSubPg1.lbl_4c_SqlAlterado.ForeColor = RGB(0, 0, 0)
+                ENDIF
+
             ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "edt_4c_Descricao", 5)
-                loc_oSubPg1.edt_4c_Descricao.Value = ""
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "chk_4c_Ativo", 5)
-                loc_oSubPg1.chk_4c_Ativo.Value = 1
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtCriacao", 5)
-                loc_oSubPg1.txt_4c_DtCriacao.Value = ""
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtAlteracao", 5)
-                loc_oSubPg1.txt_4c_DtAlteracao.Value = ""
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "obj_4c_OleRTF_SqlCMD", 5)
-                loc_oSubPg1.obj_4c_OleRTF_SqlCMD.OBJECT.Text = ""
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtInicial", 5)
-                loc_oSubPg1.txt_4c_DtInicial.Value = DTOC(DATE())
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "txt_4c_DtFinal", 5)
-                loc_oSubPg1.txt_4c_DtFinal.Value = DTOC(DATE())
-            ENDIF
-
-            IF PEMSTATUS(loc_oSubPg1, "lbl_4c_SqlAlterado", 5)
-                loc_oSubPg1.lbl_4c_SqlAlterado.ForeColor = RGB(0, 0, 0)
-            ENDIF
-
         CATCH TO loc_oErro
             MsgErro("Erro ao limpar campos:" + CHR(13) + loc_oErro.Message, "FormRPT.LimparCampos")
         ENDTRY
@@ -1616,31 +1625,36 @@ DEFINE CLASS FormRPT AS FormBase
     * Chamado apos CarregarLista() para manter combo sincronizado
     *==========================================================================
     PROTECTED PROCEDURE PopularComboReports()
-        LOCAL loc_oCbo, loc_cNmReport
+        LOCAL loc_oCbo, loc_cNmReport, loc_lProsseguir
         loc_oCbo = .NULL.
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "pgf_4c_Dados", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1, "cbo_4c_NmReports", 5)
-                RETURN
-            ENDIF
-
-            loc_oCbo = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1.cbo_4c_NmReports
-            loc_oCbo.Clear()
-            loc_oCbo.AddItem("")
-
-            IF USED("cursor_4c_Dados") AND RECCOUNT("cursor_4c_Dados") > 0
-                SELECT cursor_4c_Dados
-                SCAN
-                    loc_cNmReport = ALLTRIM(cursor_4c_Dados.NmReport)
-                    IF !EMPTY(loc_cNmReport)
-                        loc_oCbo.AddItem(loc_cNmReport)
-                    ENDIF
-                ENDSCAN
+            IF loc_lProsseguir
+                IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1, "cbo_4c_NmReports", 5)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_oCbo = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1.cbo_4c_NmReports
+                loc_oCbo.Clear()
+                loc_oCbo.AddItem("")
+
+                IF USED("cursor_4c_Dados") AND RECCOUNT("cursor_4c_Dados") > 0
+                    SELECT cursor_4c_Dados
+                    SCAN
+                        loc_cNmReport = ALLTRIM(cursor_4c_Dados.NmReport)
+                        IF !EMPTY(loc_cNmReport)
+                            loc_oCbo.AddItem(loc_cNmReport)
+                        ENDIF
+                    ENDSCAN
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao popular combo:" + CHR(13) + loc_oErro.Message, "FormRPT.PopularComboReports")
         ENDTRY
@@ -2678,7 +2692,7 @@ DEFINE CLASS FormRPT AS FormBase
     * Monta Page Header, Detail, Summary, Group e Page Footer a partir dos cursores
     *==========================================================================
     PROCEDURE BtnGerarLayoutClick()
-        LOCAL loc_lSucesso, loc_cArqFRX
+        LOCAL loc_lSucesso, loc_cArqFRX, loc_lProsseguir
         LOCAL loc_loReport, loc_loPageHeader, loc_loDetail, loc_loSummary
         LOCAL loc_loGroup, loc_loGroupFooter, loc_loPageFooter, loc_loObject, loc_loVariable
         LOCAL loc_lcFontName, loc_lnFontSize, loc_lcFontStyle, loc_lnFontStyle
@@ -2687,291 +2701,296 @@ DEFINE CLASS FormRPT AS FormBase
         LOCAL loc_lcField, loc_lcPicture
         loc_lSucesso = .F.
 
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.this_oBusinessObject.this_cNmReport))
                 MsgAviso("Salve o report antes de gerar o layout.")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_PropsTitulo") OR !USED("cursor_4c_PropsCampos")
-                MsgAviso("Cursores de layout n" + CHR(227) + "o inicializados.")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_PropsTitulo") OR !USED("cursor_4c_PropsCampos")
+                    MsgAviso("Cursores de layout n" + CHR(227) + "o inicializados.")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Caminho do FRX temporario
-            IF !DIRECTORY(THIS.this_oBusinessObject.this_cDirTmp)
-                MD (THIS.this_oBusinessObject.this_cDirTmp)
-            ENDIF
-            loc_cArqFRX = FULLPATH(THIS.this_oBusinessObject.this_cDirTmp + ;
-                UPPER(ALLTRIM(THIS.this_oBusinessObject.this_cNmReport)) + ".FRX")
-            THIS.this_oBusinessObject.this_cArqReport = loc_cArqFRX
+            IF loc_lProsseguir
+                IF !DIRECTORY(THIS.this_oBusinessObject.this_cDirTmp)
+                    MD (THIS.this_oBusinessObject.this_cDirTmp)
+                ENDIF
+                loc_cArqFRX = FULLPATH(THIS.this_oBusinessObject.this_cDirTmp + ;
+                    UPPER(ALLTRIM(THIS.this_oBusinessObject.this_cNmReport)) + ".FRX")
+                THIS.this_oBusinessObject.this_cArqReport = loc_cArqFRX
 
             *-- Contar campos com total (necessita Summary band)
-            SELECT cursor_4c_PropsCampos
-            loc_lnSummaryBand = 0
-            SCAN
-                IF cursor_4c_PropsCampos.CkTotal = 1
-                    loc_lnSummaryBand = loc_lnSummaryBand + 1
-                ENDIF
-            ENDSCAN
+                SELECT cursor_4c_PropsCampos
+                loc_lnSummaryBand = 0
+                SCAN
+                    IF cursor_4c_PropsCampos.CkTotal = 1
+                        loc_lnSummaryBand = loc_lnSummaryBand + 1
+                    ENDIF
+                ENDSCAN
 
             *-- Instanciar SFReportFile
-            SET CLASSLIB TO (gc_4c_CaminhoFramework + "ReportOBJ\SFRepObj.vcx") ADDITIVE
-            loc_loReport = CREATEOBJECT("SFReportFile")
-            loc_loReport.cReportFile = loc_cArqFRX
-            SELECT cursor_4c_PropsTitulo
-            loc_loReport.Orientation = cursor_4c_PropsTitulo.Orientation - 1
-            loc_loReport.PaperSize   = cursor_4c_PropsTitulo.PaperSize
-            loc_loReport.cCOMMENT    = "ORIENTATION"
+                SET CLASSLIB TO (gc_4c_CaminhoFramework + "ReportOBJ\SFRepObj.vcx") ADDITIVE
+                loc_loReport = CREATEOBJECT("SFReportFile")
+                loc_loReport.cReportFile = loc_cArqFRX
+                SELECT cursor_4c_PropsTitulo
+                loc_loReport.Orientation = cursor_4c_PropsTitulo.Orientation - 1
+                loc_loReport.PaperSize   = cursor_4c_PropsTitulo.PaperSize
+                loc_loReport.cCOMMENT    = "ORIENTATION"
 
-            loc_loPageHeader          = loc_loReport.GetReportBand("Page Header")
-            loc_loPageHeader.cCOMMENT = "PAGE_HEADER"
+                loc_loPageHeader          = loc_loReport.GetReportBand("Page Header")
+                loc_loPageHeader.cCOMMENT = "PAGE_HEADER"
 
-            loc_loDetail          = loc_loReport.GetReportBand("Detail")
-            loc_loDetail.nHeight  = 1
-            loc_loDetail.cCOMMENT = "DETAIL"
+                loc_loDetail          = loc_loReport.GetReportBand("Detail")
+                loc_loDetail.nHeight  = 1
+                loc_loDetail.cCOMMENT = "DETAIL"
 
-            IF loc_lnSummaryBand > 0
-                loc_loReport.lSummaryBand = .T.
-                loc_loSummary             = loc_loReport.GetReportBand("Summary")
-                loc_loSummary.nHeight     = 3
-                loc_loSummary.cCOMMENT    = "SUMMARY"
-            ENDIF
+                IF loc_lnSummaryBand > 0
+                    loc_loReport.lSummaryBand = .T.
+                    loc_loSummary             = loc_loReport.GetReportBand("Summary")
+                    loc_loSummary.nHeight     = 3
+                    loc_loSummary.cCOMMENT    = "SUMMARY"
+                ENDIF
 
             *-- Banda de grupo (se NmCampo preenchido)
-            SELECT cursor_4c_PropsGrp
-            IF !ISNULL(cursor_4c_PropsGrp.NmCampo) AND !EMPTY(ALLTRIM(cursor_4c_PropsGrp.NmCampo))
-                loc_loReport.CreateGroupBand()
-                loc_loGroup                      = loc_loReport.GetReportBand("Group Header", 1)
-                loc_loGroup.cExpression          = ALLTRIM(cursor_4c_PropsGrp.NmCampo)
-                loc_loGroup.nHeight              = 3
-                loc_loGroup.lPrintOnEachPage     = .T.
-                loc_loGroup.nNewPageWhenLessThan = 4
-                loc_loGroup.cCOMMENT             = "GROUP_HEADER"
-
-                loc_lcFontName  = ""
-                loc_lnFontSize  = 0
-                loc_lcFontStyle = ""
-                loc_lnFontStyle = 0
-                THIS.DetalharFonte(ALLTRIM(cursor_4c_PropsGrp.LblFonte), @loc_lcFontName, @loc_lnFontSize, @loc_lcFontStyle, @loc_lnFontStyle)
-
-                loc_loObject             = loc_loGroup.AddItem("Field")
-                loc_loObject.nVPosition  = 1
-                loc_loObject.cExpression = "[" + ALLTRIM(cursor_4c_PropsGrp.LblCaption) + "]"
-                loc_loObject.cfontname   = loc_lcFontName
-                loc_loObject.nFontSize   = loc_lnFontSize
-                loc_loObject.cAlignment  = cursor_4c_PropsGrp.LblAlinhar
-                loc_loObject.lFontBold   = ("B" $ loc_lcFontStyle)
-                loc_loObject.lFontItalic = ("I" $ loc_lcFontStyle)
-                loc_loObject.nForeColor  = cursor_4c_PropsGrp.LblBtCor
-                loc_loObject.nWidth      = cursor_4c_PropsGrp.LblTamCmp
-                loc_loObject.nHeight     = (FONTMETRIC(1, loc_lcFontName, loc_lnFontSize, loc_lcFontStyle) / 10) * 2
-                loc_loObject.cCOMMENT    = "GROUP_HEADER_LABEL " + ALLTRIM(cursor_4c_PropsGrp.NmCampo) + CHR(13) + ;
-                    "LblAlinhar " + ALLTRIM(cursor_4c_PropsGrp.LblAlinhar)          + CHR(13) + ;
-                    "LblTamCmp "  + ALLTRIM(STR(cursor_4c_PropsGrp.LblTamCmp))      + CHR(13) + ;
-                    "LblTipoCmp " + ALLTRIM(cursor_4c_PropsGrp.LblTipoCmp)          + CHR(13) + ;
-                    "LblCaption " + ALLTRIM(cursor_4c_PropsGrp.LblCaption)
-
-                loc_loObject             = loc_loGroup.AddItem("Field")
-                loc_loObject.nVPosition  = 1
-                loc_loObject.nHPosition  = cursor_4c_PropsGrp.LblTamCmp + 5
-                loc_loObject.cExpression = cursor_4c_PropsGrp.NmCampo
-                loc_loObject.cfontname   = loc_lcFontName
-                loc_loObject.nFontSize   = loc_lnFontSize
-                loc_loObject.cAlignment  = cursor_4c_PropsGrp.LblAlinhar
-                loc_loObject.lFontBold   = ("B" $ loc_lcFontStyle)
-                loc_loObject.lFontItalic = ("I" $ loc_lcFontStyle)
-                loc_loObject.nForeColor  = cursor_4c_PropsGrp.LblBtCor
-                loc_loObject.nWidth      = cursor_4c_PropsGrp.LblTamCmp
-                loc_loObject.nHeight     = (FONTMETRIC(1, loc_lcFontName, loc_lnFontSize, loc_lcFontStyle) / 10)
-                loc_loObject.cCOMMENT    = "GROUP_HEADER_FIELD " + ALLTRIM(cursor_4c_PropsGrp.NmCampo)
-
-                loc_loGroupFooter          = loc_loReport.GetReportBand("Group Footer", 1)
-                loc_loGroupFooter.nHeight  = 2
-                loc_loGroupFooter.cCOMMENT = "GROUP_FOOTER " + ALLTRIM(cursor_4c_PropsGrp.NmCampo)
-            ENDIF
+                SELECT cursor_4c_PropsGrp
+                IF !ISNULL(cursor_4c_PropsGrp.NmCampo) AND !EMPTY(ALLTRIM(cursor_4c_PropsGrp.NmCampo))
+                    loc_loReport.CreateGroupBand()
+                    loc_loGroup                      = loc_loReport.GetReportBand("Group Header", 1)
+                    loc_loGroup.cExpression          = ALLTRIM(cursor_4c_PropsGrp.NmCampo)
+                    loc_loGroup.nHeight              = 3
+                    loc_loGroup.lPrintOnEachPage     = .T.
+                    loc_loGroup.nNewPageWhenLessThan = 4
+                    loc_loGroup.cCOMMENT             = "GROUP_HEADER"
+    
+                    loc_lcFontName  = ""
+                    loc_lnFontSize  = 0
+                    loc_lcFontStyle = ""
+                    loc_lnFontStyle = 0
+                    THIS.DetalharFonte(ALLTRIM(cursor_4c_PropsGrp.LblFonte), @loc_lcFontName, @loc_lnFontSize, @loc_lcFontStyle, @loc_lnFontStyle)
+    
+                    loc_loObject             = loc_loGroup.AddItem("Field")
+                    loc_loObject.nVPosition  = 1
+                    loc_loObject.cExpression = "[" + ALLTRIM(cursor_4c_PropsGrp.LblCaption) + "]"
+                    loc_loObject.cfontname   = loc_lcFontName
+                    loc_loObject.nFontSize   = loc_lnFontSize
+                    loc_loObject.cAlignment  = cursor_4c_PropsGrp.LblAlinhar
+                    loc_loObject.lFontBold   = ("B" $ loc_lcFontStyle)
+                    loc_loObject.lFontItalic = ("I" $ loc_lcFontStyle)
+                    loc_loObject.nForeColor  = cursor_4c_PropsGrp.LblBtCor
+                    loc_loObject.nWidth      = cursor_4c_PropsGrp.LblTamCmp
+                    loc_loObject.nHeight     = (FONTMETRIC(1, loc_lcFontName, loc_lnFontSize, loc_lcFontStyle) / 10) * 2
+                    loc_loObject.cCOMMENT    = "GROUP_HEADER_LABEL " + ALLTRIM(cursor_4c_PropsGrp.NmCampo) + CHR(13) + ;
+                        "LblAlinhar " + ALLTRIM(cursor_4c_PropsGrp.LblAlinhar)          + CHR(13) + ;
+                        "LblTamCmp "  + ALLTRIM(STR(cursor_4c_PropsGrp.LblTamCmp))      + CHR(13) + ;
+                        "LblTipoCmp " + ALLTRIM(cursor_4c_PropsGrp.LblTipoCmp)          + CHR(13) + ;
+                        "LblCaption " + ALLTRIM(cursor_4c_PropsGrp.LblCaption)
+    
+                    loc_loObject             = loc_loGroup.AddItem("Field")
+                    loc_loObject.nVPosition  = 1
+                    loc_loObject.nHPosition  = cursor_4c_PropsGrp.LblTamCmp + 5
+                    loc_loObject.cExpression = cursor_4c_PropsGrp.NmCampo
+                    loc_loObject.cfontname   = loc_lcFontName
+                    loc_loObject.nFontSize   = loc_lnFontSize
+                    loc_loObject.cAlignment  = cursor_4c_PropsGrp.LblAlinhar
+                    loc_loObject.lFontBold   = ("B" $ loc_lcFontStyle)
+                    loc_loObject.lFontItalic = ("I" $ loc_lcFontStyle)
+                    loc_loObject.nForeColor  = cursor_4c_PropsGrp.LblBtCor
+                    loc_loObject.nWidth      = cursor_4c_PropsGrp.LblTamCmp
+                    loc_loObject.nHeight     = (FONTMETRIC(1, loc_lcFontName, loc_lnFontSize, loc_lcFontStyle) / 10)
+                    loc_loObject.cCOMMENT    = "GROUP_HEADER_FIELD " + ALLTRIM(cursor_4c_PropsGrp.NmCampo)
+    
+                    loc_loGroupFooter          = loc_loReport.GetReportBand("Group Footer", 1)
+                    loc_loGroupFooter.nHeight  = 2
+                    loc_loGroupFooter.cCOMMENT = "GROUP_FOOTER " + ALLTRIM(cursor_4c_PropsGrp.NmCampo)
+                ENDIF
 
             *-- lnFACTOR = 10000 unidades/inch / 96 px/inch
-            loc_lnFACTOR   = 104.166
-            loc_lnWidthMAX = IIF(loc_loReport.Orientation = 1, 116933, 82683)
-            loc_lnVPos     = 0
-            loc_lnWidth    = 0
+                loc_lnFACTOR   = 104.166
+                loc_lnWidthMAX = IIF(loc_loReport.Orientation = 1, 116933, 82683)
+                loc_lnVPos     = 0
+                loc_lnWidth    = 0
 
             *-- Iterar campos marcados para saida (CkOutRPT=1)
-            SELECT cursor_4c_PropsCampos
-            GO TOP
-            SCAN FOR cursor_4c_PropsCampos.CkOutRPT = 1
-                loc_lcField      = ALLTRIM(cursor_4c_PropsCampos.NmCampo)
-                loc_lcPicture    = IIF(cursor_4c_PropsCampos.LblTipoCmp $ "NFIBY", "9,999,999.99", "")
-                loc_lnFieldWidth = cursor_4c_PropsCampos.LblTamCmp
-
-                loc_lnFactorWidth = (loc_lnWidth + loc_lnFieldWidth) * loc_lnFACTOR
-                IF loc_lnFactorWidth > loc_lnWidthMAX
-                    loc_lnWidth = 0
-                    loc_lnVPos  = loc_lnVPos + 1
-                ENDIF
-                loc_lnHPos = loc_lnWidth
-
-                loc_lcFontName  = ""
-                loc_lnFontSize  = 0
-                loc_lcFontStyle = ""
-                loc_lnFontStyle = 0
-                THIS.DetalharFonte(ALLTRIM(cursor_4c_PropsCampos.LblFonte), @loc_lcFontName, @loc_lnFontSize, @loc_lcFontStyle, @loc_lnFontStyle)
-
-                *-- Cabecalho da coluna no Page Header
-                loc_loObject             = loc_loPageHeader.AddItem("Field")
-                loc_loObject.cExpression = "[" + ALLTRIM(cursor_4c_PropsCampos.LblCaption) + "]"
-                loc_loObject.cfontname   = loc_lcFontName
-                loc_loObject.nFontSize   = loc_lnFontSize
-                loc_loObject.cAlignment  = cursor_4c_PropsCampos.LblAlinhar
-                loc_loObject.lFontBold   = ("B" $ loc_lcFontStyle)
-                loc_loObject.lFontItalic = ("I" $ loc_lcFontStyle)
-                loc_loObject.nForeColor  = cursor_4c_PropsCampos.LblBtCor
-                loc_loObject.nWidth      = cursor_4c_PropsCampos.LblTamCmp
-                loc_loObject.nHeight     = (FONTMETRIC(1, loc_lcFontName, loc_lnFontSize, loc_lcFontStyle) / 10)
-                loc_loObject.nVPosition  = loc_lnVPos + 7
-                loc_loObject.nHPosition  = loc_lnHPos
-                loc_loObject.cCOMMENT    = "HEADING "    + cursor_4c_PropsCampos.NmCampo                       + CHR(13) + ;
-                    "TpCampo "    + cursor_4c_PropsCampos.TpCampo                               + CHR(13) + ;
-                    "CkOutRPT "   + ALLTRIM(STR(cursor_4c_PropsCampos.CkOutRPT))                + CHR(13) + ;
-                    "CkFiltro "   + ALLTRIM(STR(cursor_4c_PropsCampos.CkFiltro))                + CHR(13) + ;
-                    "CkSubTot "   + ALLTRIM(STR(cursor_4c_PropsCampos.CkSubTot))                + CHR(13) + ;
-                    "CkTotal "    + ALLTRIM(STR(cursor_4c_PropsCampos.CkTotal))                 + CHR(13) + ;
-                    "LblAlinhar " + ALLTRIM(cursor_4c_PropsCampos.LblAlinhar)                   + CHR(13) + ;
-                    "LblTamCmp "  + ALLTRIM(STR(cursor_4c_PropsCampos.LblTamCmp))              + CHR(13) + ;
-                    "LblTipoCmp " + ALLTRIM(cursor_4c_PropsCampos.LblTipoCmp)                  + CHR(13) + ;
-                    "LblCaption " + ALLTRIM(cursor_4c_PropsCampos.LblCaption)
-
-                *-- Campo no detalhe
-                loc_loObject             = loc_loDetail.AddItem("Field")
-                loc_loObject.cExpression = loc_lcField
-                loc_loObject.cfontname   = loc_lcFontName
-                loc_loObject.nFontSize   = loc_lnFontSize
-                loc_loObject.cAlignment  = cursor_4c_PropsCampos.LblAlinhar
-                loc_loObject.lFontBold   = ("B" $ loc_lcFontStyle)
-                loc_loObject.lFontItalic = ("I" $ loc_lcFontStyle)
-                loc_loObject.nForeColor  = cursor_4c_PropsCampos.LblBtCor
-                loc_loObject.nHeight     = (FONTMETRIC(1, loc_lcFontName, loc_lnFontSize, loc_lcFontStyle) / 10)
-                loc_loObject.nWidth      = loc_lnFieldWidth
-                loc_loObject.nVPosition  = loc_lnVPos
-                loc_loObject.nHPosition  = loc_lnHPos
-                loc_loObject.cPicture    = loc_lcPicture
-                loc_loObject.cCOMMENT    = "FIELD " + loc_loObject.cExpression
-
-                IF cursor_4c_PropsCampos.CkSubTot = 1 AND TYPE("loc_loGroupFooter") = "O"
-                    loc_loObject                = loc_loGroupFooter.AddItem("Field")
-                    loc_loObject.cExpression    = loc_lcField
-                    loc_loObject.nWidth         = loc_lnFieldWidth + 2
-                    loc_loObject.nVPosition     = loc_lnVPos + 1
-                    loc_loObject.nHPosition     = loc_lnHPos - 2
-                    loc_loObject.cAlignment     = cursor_4c_PropsCampos.LblAlinhar
-                    loc_loObject.nResetOnGroup  = 1
-                    loc_loObject.cTotalType     = "Sum"
-                    loc_loObject.lFontBold      = .T.
-                    loc_loObject.cDataType      = "N"
-                    loc_loObject.cCOMMENT       = "CAMPO_SUBTOTAL " + loc_loObject.cExpression
-                ENDIF
-
-                IF cursor_4c_PropsCampos.CkTotal = 1 AND loc_lnSummaryBand > 0
-                    loc_loObject             = loc_loSummary.AddItem("Field")
-                    loc_loObject.cExpression = loc_lcField
-                    loc_loObject.nWidth      = loc_lnFieldWidth + 2
-                    loc_loObject.nVPosition  = loc_lnVPos + 2
-                    loc_loObject.nHPosition  = loc_lnHPos - 2
+                SELECT cursor_4c_PropsCampos
+                GO TOP
+                SCAN FOR cursor_4c_PropsCampos.CkOutRPT = 1
+                    loc_lcField      = ALLTRIM(cursor_4c_PropsCampos.NmCampo)
+                    loc_lcPicture    = IIF(cursor_4c_PropsCampos.LblTipoCmp $ "NFIBY", "9,999,999.99", "")
+                    loc_lnFieldWidth = cursor_4c_PropsCampos.LblTamCmp
+    
+                    loc_lnFactorWidth = (loc_lnWidth + loc_lnFieldWidth) * loc_lnFACTOR
+                    IF loc_lnFactorWidth > loc_lnWidthMAX
+                        loc_lnWidth = 0
+                        loc_lnVPos  = loc_lnVPos + 1
+                    ENDIF
+                    loc_lnHPos = loc_lnWidth
+    
+                    loc_lcFontName  = ""
+                    loc_lnFontSize  = 0
+                    loc_lcFontStyle = ""
+                    loc_lnFontStyle = 0
+                    THIS.DetalharFonte(ALLTRIM(cursor_4c_PropsCampos.LblFonte), @loc_lcFontName, @loc_lnFontSize, @loc_lcFontStyle, @loc_lnFontStyle)
+    
+                    *-- Cabecalho da coluna no Page Header
+                    loc_loObject             = loc_loPageHeader.AddItem("Field")
+                    loc_loObject.cExpression = "[" + ALLTRIM(cursor_4c_PropsCampos.LblCaption) + "]"
+                    loc_loObject.cfontname   = loc_lcFontName
+                    loc_loObject.nFontSize   = loc_lnFontSize
                     loc_loObject.cAlignment  = cursor_4c_PropsCampos.LblAlinhar
-                    loc_loObject.cTotalType  = "Sum"
-                    loc_loObject.cDataType   = "N"
-                    loc_loObject.cCOMMENT    = "CAMPO_TOTAL " + loc_loObject.cExpression
+                    loc_loObject.lFontBold   = ("B" $ loc_lcFontStyle)
+                    loc_loObject.lFontItalic = ("I" $ loc_lcFontStyle)
+                    loc_loObject.nForeColor  = cursor_4c_PropsCampos.LblBtCor
+                    loc_loObject.nWidth      = cursor_4c_PropsCampos.LblTamCmp
+                    loc_loObject.nHeight     = (FONTMETRIC(1, loc_lcFontName, loc_lnFontSize, loc_lcFontStyle) / 10)
+                    loc_loObject.nVPosition  = loc_lnVPos + 7
+                    loc_loObject.nHPosition  = loc_lnHPos
+                    loc_loObject.cCOMMENT    = "HEADING "    + cursor_4c_PropsCampos.NmCampo                       + CHR(13) + ;
+                        "TpCampo "    + cursor_4c_PropsCampos.TpCampo                               + CHR(13) + ;
+                        "CkOutRPT "   + ALLTRIM(STR(cursor_4c_PropsCampos.CkOutRPT))                + CHR(13) + ;
+                        "CkFiltro "   + ALLTRIM(STR(cursor_4c_PropsCampos.CkFiltro))                + CHR(13) + ;
+                        "CkSubTot "   + ALLTRIM(STR(cursor_4c_PropsCampos.CkSubTot))                + CHR(13) + ;
+                        "CkTotal "    + ALLTRIM(STR(cursor_4c_PropsCampos.CkTotal))                 + CHR(13) + ;
+                        "LblAlinhar " + ALLTRIM(cursor_4c_PropsCampos.LblAlinhar)                   + CHR(13) + ;
+                        "LblTamCmp "  + ALLTRIM(STR(cursor_4c_PropsCampos.LblTamCmp))              + CHR(13) + ;
+                        "LblTipoCmp " + ALLTRIM(cursor_4c_PropsCampos.LblTipoCmp)                  + CHR(13) + ;
+                        "LblCaption " + ALLTRIM(cursor_4c_PropsCampos.LblCaption)
+    
+                    *-- Campo no detalhe
+                    loc_loObject             = loc_loDetail.AddItem("Field")
+                    loc_loObject.cExpression = loc_lcField
+                    loc_loObject.cfontname   = loc_lcFontName
+                    loc_loObject.nFontSize   = loc_lnFontSize
+                    loc_loObject.cAlignment  = cursor_4c_PropsCampos.LblAlinhar
+                    loc_loObject.lFontBold   = ("B" $ loc_lcFontStyle)
+                    loc_loObject.lFontItalic = ("I" $ loc_lcFontStyle)
+                    loc_loObject.nForeColor  = cursor_4c_PropsCampos.LblBtCor
+                    loc_loObject.nHeight     = (FONTMETRIC(1, loc_lcFontName, loc_lnFontSize, loc_lcFontStyle) / 10)
+                    loc_loObject.nWidth      = loc_lnFieldWidth
+                    loc_loObject.nVPosition  = loc_lnVPos
+                    loc_loObject.nHPosition  = loc_lnHPos
+                    loc_loObject.cPicture    = loc_lcPicture
+                    loc_loObject.cCOMMENT    = "FIELD " + loc_loObject.cExpression
+    
+                    IF cursor_4c_PropsCampos.CkSubTot = 1 AND TYPE("loc_loGroupFooter") = "O"
+                        loc_loObject                = loc_loGroupFooter.AddItem("Field")
+                        loc_loObject.cExpression    = loc_lcField
+                        loc_loObject.nWidth         = loc_lnFieldWidth + 2
+                        loc_loObject.nVPosition     = loc_lnVPos + 1
+                        loc_loObject.nHPosition     = loc_lnHPos - 2
+                        loc_loObject.cAlignment     = cursor_4c_PropsCampos.LblAlinhar
+                        loc_loObject.nResetOnGroup  = 1
+                        loc_loObject.cTotalType     = "Sum"
+                        loc_loObject.lFontBold      = .T.
+                        loc_loObject.cDataType      = "N"
+                        loc_loObject.cCOMMENT       = "CAMPO_SUBTOTAL " + loc_loObject.cExpression
+                    ENDIF
+    
+                    IF cursor_4c_PropsCampos.CkTotal = 1 AND loc_lnSummaryBand > 0
+                        loc_loObject             = loc_loSummary.AddItem("Field")
+                        loc_loObject.cExpression = loc_lcField
+                        loc_loObject.nWidth      = loc_lnFieldWidth + 2
+                        loc_loObject.nVPosition  = loc_lnVPos + 2
+                        loc_loObject.nHPosition  = loc_lnHPos - 2
+                        loc_loObject.cAlignment  = cursor_4c_PropsCampos.LblAlinhar
+                        loc_loObject.cTotalType  = "Sum"
+                        loc_loObject.cDataType   = "N"
+                        loc_loObject.cCOMMENT    = "CAMPO_TOTAL " + loc_loObject.cExpression
+                    ENDIF
+    
+                    loc_lnWidth = loc_lnHPos + loc_lnFieldWidth + 1
+                ENDSCAN
+
+                loc_lnWidth = loc_lnWidth - 1
+                loc_lnWidth = IIF(loc_lnWidth < 0, 0, loc_lnWidth)
+                IF loc_lnVPos > 0
+                    loc_lnWidth = INT(loc_lnWidthMAX / loc_lnFACTOR)
                 ENDIF
-
-                loc_lnWidth = loc_lnHPos + loc_lnFieldWidth + 1
-            ENDSCAN
-
-            loc_lnWidth = loc_lnWidth - 1
-            loc_lnWidth = IIF(loc_lnWidth < 0, 0, loc_lnWidth)
-            IF loc_lnVPos > 0
-                loc_lnWidth = INT(loc_lnWidthMAX / loc_lnFACTOR)
-            ENDIF
 
             *-- Linha separadora no Page Header
-            loc_loObject            = loc_loPageHeader.AddItem("Line")
-            loc_loObject.nWidth     = loc_lnWidth
-            loc_loObject.nVPosition = loc_lnVPos + 6
-            loc_loObject.nHPosition = 0
-            loc_loObject.cCOMMENT   = "LINE"
+                loc_loObject            = loc_loPageHeader.AddItem("Line")
+                loc_loObject.nWidth     = loc_lnWidth
+                loc_loObject.nVPosition = loc_lnVPos + 6
+                loc_loObject.nHPosition = 0
+                loc_loObject.cCOMMENT   = "LINE"
 
             *-- Summary: linha + rotulo + contagem
-            IF loc_lnSummaryBand > 0
-                loc_loObject            = loc_loSummary.AddItem("Line")
-                loc_loObject.nWidth     = loc_lnWidth
-                loc_loObject.nVPosition = 1
-                loc_loObject.nHPosition = 0
-                loc_loObject.cCOMMENT   = "SUMMARY_LINE"
-
-                loc_loObject             = loc_loSummary.AddItem("Text")
-                loc_loObject.cExpression = "Total:"
-                loc_loObject.nVPosition  = 2
-                loc_loObject.nHPosition  = 0
-                loc_loObject.lFontBold   = .T.
-                loc_loObject.cCOMMENT    = "SUMMARY_LABEL Total:"
-
-                loc_loObject             = loc_loSummary.AddItem("Field")
-                loc_loObject.cExpression = [Ltrim(Str(lnCount)) + " registro" + Iif(lnCount = 1, "", "s")]
-                loc_loObject.nWidth      = 21
-                loc_loObject.nVPosition  = 2
-                loc_loObject.nHPosition  = 8
-                loc_loObject.lFontBold   = .T.
-                loc_loObject.cCOMMENT    = "SUMMARY_FIELD"
-            ENDIF
+                IF loc_lnSummaryBand > 0
+                    loc_loObject            = loc_loSummary.AddItem("Line")
+                    loc_loObject.nWidth     = loc_lnWidth
+                    loc_loObject.nVPosition = 1
+                    loc_loObject.nHPosition = 0
+                    loc_loObject.cCOMMENT   = "SUMMARY_LINE"
+    
+                    loc_loObject             = loc_loSummary.AddItem("Text")
+                    loc_loObject.cExpression = "Total:"
+                    loc_loObject.nVPosition  = 2
+                    loc_loObject.nHPosition  = 0
+                    loc_loObject.lFontBold   = .T.
+                    loc_loObject.cCOMMENT    = "SUMMARY_LABEL Total:"
+    
+                    loc_loObject             = loc_loSummary.AddItem("Field")
+                    loc_loObject.cExpression = [Ltrim(Str(lnCount)) + " registro" + Iif(lnCount = 1, "", "s")]
+                    loc_loObject.nWidth      = 21
+                    loc_loObject.nVPosition  = 2
+                    loc_loObject.nHPosition  = 8
+                    loc_loObject.lFontBold   = .T.
+                    loc_loObject.cCOMMENT    = "SUMMARY_FIELD"
+                ENDIF
 
             *-- Page Footer
-            loc_loPageFooter          = loc_loReport.GetReportBand("Page Footer")
-            loc_loPageFooter.nHeight  = 2
+                loc_loPageFooter          = loc_loReport.GetReportBand("Page Footer")
+                loc_loPageFooter.nHeight  = 2
 
-            loc_loObject            = loc_loPageFooter.AddItem("Line")
-            loc_loObject.nWidth     = loc_lnWidth
-            loc_loObject.nVPosition = 0
+                loc_loObject            = loc_loPageFooter.AddItem("Line")
+                loc_loObject.nWidth     = loc_lnWidth
+                loc_loObject.nVPosition = 0
 
-            loc_loObject             = loc_loPageFooter.AddItem("Field")
-            loc_loObject.cExpression = "go_4c_Sistema.cEmpresa"
-            loc_loObject.nWidth      = 50
-            loc_loObject.nHPosition  = 0
-            loc_loObject.nVPosition  = 0.5
-            loc_loObject.lFontBold   = .T.
-            loc_loObject.cCOMMENT    = "NOME SISTEMA"
+                loc_loObject             = loc_loPageFooter.AddItem("Field")
+                loc_loObject.cExpression = "go_4c_Sistema.cEmpresa"
+                loc_loObject.nWidth      = 50
+                loc_loObject.nHPosition  = 0
+                loc_loObject.nVPosition  = 0.5
+                loc_loObject.lFontBold   = .T.
+                loc_loObject.cCOMMENT    = "NOME SISTEMA"
 
-            loc_loObject             = loc_loPageFooter.AddItem("Field")
-            loc_loObject.cExpression = "this.Name"
-            loc_loObject.nWidth      = 20
-            loc_loObject.nVPosition  = 0.5
-            loc_loObject.nHPosition  = loc_lnWidth - 20
-            loc_loObject.cAlignment  = "Right"
-            loc_loObject.lFontBold   = .T.
-            loc_loObject.cCOMMENT    = "NOME REPORT"
+                loc_loObject             = loc_loPageFooter.AddItem("Field")
+                loc_loObject.cExpression = "this.Name"
+                loc_loObject.nWidth      = 20
+                loc_loObject.nVPosition  = 0.5
+                loc_loObject.nHPosition  = loc_lnWidth - 20
+                loc_loObject.cAlignment  = "Right"
+                loc_loObject.lFontBold   = .T.
+                loc_loObject.cCOMMENT    = "NOME REPORT"
 
-            loc_loObject            = loc_loPageFooter.AddItem("Line")
-            loc_loObject.nWidth     = loc_lnWidth
-            loc_loObject.nVPosition = 1
+                loc_loObject            = loc_loPageFooter.AddItem("Line")
+                loc_loObject.nWidth     = loc_lnWidth
+                loc_loObject.nVPosition = 1
 
             *-- Variavel de contagem de registros
-            loc_loVariable               = loc_loReport.CreateVariable()
-            loc_loVariable.cName         = "lnCount"
-            loc_loVariable.cValue        = 1
-            loc_loVariable.cInitialValue = 0
-            loc_loVariable.cTotalType    = "Sum"
-            loc_loVariable.cCOMMENT      = "VARIABLE"
+                loc_loVariable               = loc_loReport.CreateVariable()
+                loc_loVariable.cName         = "lnCount"
+                loc_loVariable.cValue        = 1
+                loc_loVariable.cInitialValue = 0
+                loc_loVariable.cTotalType    = "Sum"
+                loc_loVariable.cCOMMENT      = "VARIABLE"
 
-            loc_loReport.Save()
+                loc_loReport.Save()
 
             *-- Mesclar cabecalho/rodape padrao do template
-            THIS.MesclarComTemplate(loc_cArqFRX, cursor_4c_PropsTitulo.Orientation)
+                THIS.MesclarComTemplate(loc_cArqFRX, cursor_4c_PropsTitulo.Orientation)
 
             *-- Salvar FRX no SQL Server (SIGCDRLD)
-            IF !EMPTY(ALLTRIM(THIS.this_oBusinessObject.this_cRPT_ID))
-                THIS.SalvarFRXParaSQL(THIS.this_oBusinessObject.this_cRPT_ID, loc_cArqFRX)
-            ENDIF
+                IF !EMPTY(ALLTRIM(THIS.this_oBusinessObject.this_cRPT_ID))
+                    THIS.SalvarFRXParaSQL(THIS.this_oBusinessObject.this_cRPT_ID, loc_cArqFRX)
+                ENDIF
 
-            MsgInfo("Layout gerado com sucesso!")
-            loc_lSucesso = .T.
+                MsgInfo("Layout gerado com sucesso!")
+                loc_lSucesso = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao gerar layout:" + CHR(13) + loc_oErro.Message, "FormRPT.BtnGerarLayoutClick")
         ENDTRY
@@ -2985,12 +3004,13 @@ DEFINE CLASS FormRPT AS FormBase
     * e acrescenta os records ao FRX gerado
     *==========================================================================
     PROTECTED PROCEDURE MesclarComTemplate(par_cArqFRX, par_nOrientacao)
-        LOCAL loc_lSucesso, loc_cTemplate, loc_cOldSafety
+        LOCAL loc_lSucesso, loc_cTemplate, loc_cOldSafety, loc_lProsseguir
         LOCAL loc_lcFontName, loc_lnFontSize, loc_lcFontStyle, loc_lnFontStyle
         LOCAL loc_lnRed, loc_lnGreen, loc_lnBlue
         loc_lSucesso  = .F.
         loc_cOldSafety = SET("SAFETY")
 
+        loc_lProsseguir = .T.
         TRY
             SET SAFETY OFF
 
@@ -3002,83 +3022,87 @@ DEFINE CLASS FormRPT AS FormBase
 
             IF !FILE(loc_cTemplate)
                 MsgAviso("Template n" + CHR(227) + "o encontrado: " + loc_cTemplate)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Abrir FRX gerado e template
-            IF USED("TmpFRX_Main")
-                USE IN TmpFRX_Main
-            ENDIF
-            USE (par_cArqFRX) IN 0 ALIAS TmpFRX_Main
-
-            IF USED("TmpCabPadrao")
-                USE IN TmpCabPadrao
-            ENDIF
-            USE (loc_cTemplate) IN 0 ALIAS TmpCabPadrao
-
-            IF FILE("TmpRelat.DBF")
-                IF USED("TmpRelat")
-                    USE IN TmpRelat
+            IF loc_lProsseguir
+                IF USED("TmpFRX_Main")
+                    USE IN TmpFRX_Main
                 ENDIF
-                DELETE FILE TmpRelat.*
-            ENDIF
+                USE (par_cArqFRX) IN 0 ALIAS TmpFRX_Main
 
-            SELECT * FROM TmpCabPadrao WHERE OBJTYPE NOT IN (1, 9) INTO TABLE TmpRelat READWRITE
+                IF USED("TmpCabPadrao")
+                    USE IN TmpCabPadrao
+                ENDIF
+                USE (loc_cTemplate) IN 0 ALIAS TmpCabPadrao
+
+                IF FILE("TmpRelat.DBF")
+                    IF USED("TmpRelat")
+                        USE IN TmpRelat
+                    ENDIF
+                    DELETE FILE TmpRelat.*
+                ENDIF
+
+                SELECT * FROM TmpCabPadrao WHERE OBJTYPE NOT IN (1, 9) INTO TABLE TmpRelat READWRITE
 
             *-- Atualizar PAGE_HEADER_TITULO com titulo e fonte do cursor
-            SELECT TmpRelat
-            GO TOP
-            LOCATE FOR ALLTRIM(COMMENT) = "PAGE_HEADER_TITULO"
-            IF !EOF()
-                SELECT cursor_4c_PropsTitulo
-                loc_lcFontName  = ""
-                loc_lnFontSize  = 0
-                loc_lcFontStyle = ""
-                loc_lnFontStyle = 0
-                THIS.DetalharFonte(ALLTRIM(NVL(cursor_4c_PropsTitulo.LblFonte, "Tahoma,10,N")), ;
-                    @loc_lcFontName, @loc_lnFontSize, @loc_lcFontStyle, @loc_lnFontStyle)
-
                 SELECT TmpRelat
-                REPLACE Expr     WITH "'" + ALLTRIM(NVL(cursor_4c_PropsTitulo.LblCaption, "")) + "'"
-                REPLACE COMMENT  WITH "PAGE_HEADER_TITULO " + Expr                                 + CHR(13) + ;
-                    "LblAlinhar " + ALLTRIM(NVL(cursor_4c_PropsTitulo.LblAlinhar, "Left"))     + CHR(13) + ;
-                    "LblTamCmp "  + ALLTRIM(STR(NVL(cursor_4c_PropsTitulo.LblTamCmp, 90)))    + CHR(13) + ;
-                    "LblTipoCmp " + ALLTRIM(NVL(cursor_4c_PropsTitulo.LblTipoCmp, "C"))        + CHR(13) + ;
-                    "LblCaption " + ALLTRIM(NVL(cursor_4c_PropsTitulo.LblCaption, ""))
-                REPLACE fontface  WITH loc_lcFontName
-                REPLACE FontSize  WITH loc_lnFontSize
-                REPLACE FontStyle WITH IIF("BI" $ loc_lcFontStyle, 3, ;
-                    IIF("B" $ loc_lcFontStyle, 1, IIF("I" $ loc_lcFontStyle, 2, 0)))
-
-                SELECT cursor_4c_PropsTitulo
-                loc_lnRed   = MOD(NVL(cursor_4c_PropsTitulo.LblBtCor, 0), 256)
-                loc_lnGreen = MOD(INT(NVL(cursor_4c_PropsTitulo.LblBtCor, 0) / 256), 256)
-                loc_lnBlue  = MOD(INT(NVL(cursor_4c_PropsTitulo.LblBtCor, 0) / 65536), 256)
-                SELECT TmpRelat
-                REPLACE PenRed WITH loc_lnRed, PenGreen WITH loc_lnGreen, PenBlue WITH loc_lnBlue
                 GO TOP
-            ENDIF
+                LOCATE FOR ALLTRIM(COMMENT) = "PAGE_HEADER_TITULO"
+                IF !EOF()
+                    SELECT cursor_4c_PropsTitulo
+                    loc_lcFontName  = ""
+                    loc_lnFontSize  = 0
+                    loc_lcFontStyle = ""
+                    loc_lnFontStyle = 0
+                    THIS.DetalharFonte(ALLTRIM(NVL(cursor_4c_PropsTitulo.LblFonte, "Tahoma,10,N")), ;
+                        @loc_lcFontName, @loc_lnFontSize, @loc_lcFontStyle, @loc_lnFontStyle)
+    
+                    SELECT TmpRelat
+                    REPLACE Expr     WITH "'" + ALLTRIM(NVL(cursor_4c_PropsTitulo.LblCaption, "")) + "'"
+                    REPLACE COMMENT  WITH "PAGE_HEADER_TITULO " + Expr                                 + CHR(13) + ;
+                        "LblAlinhar " + ALLTRIM(NVL(cursor_4c_PropsTitulo.LblAlinhar, "Left"))     + CHR(13) + ;
+                        "LblTamCmp "  + ALLTRIM(STR(NVL(cursor_4c_PropsTitulo.LblTamCmp, 90)))    + CHR(13) + ;
+                        "LblTipoCmp " + ALLTRIM(NVL(cursor_4c_PropsTitulo.LblTipoCmp, "C"))        + CHR(13) + ;
+                        "LblCaption " + ALLTRIM(NVL(cursor_4c_PropsTitulo.LblCaption, ""))
+                    REPLACE fontface  WITH loc_lcFontName
+                    REPLACE FontSize  WITH loc_lnFontSize
+                    REPLACE FontStyle WITH IIF("BI" $ loc_lcFontStyle, 3, ;
+                        IIF("B" $ loc_lcFontStyle, 1, IIF("I" $ loc_lcFontStyle, 2, 0)))
+    
+                    SELECT cursor_4c_PropsTitulo
+                    loc_lnRed   = MOD(NVL(cursor_4c_PropsTitulo.LblBtCor, 0), 256)
+                    loc_lnGreen = MOD(INT(NVL(cursor_4c_PropsTitulo.LblBtCor, 0) / 256), 256)
+                    loc_lnBlue  = MOD(INT(NVL(cursor_4c_PropsTitulo.LblBtCor, 0) / 65536), 256)
+                    SELECT TmpRelat
+                    REPLACE PenRed WITH loc_lnRed, PenGreen WITH loc_lnGreen, PenBlue WITH loc_lnBlue
+                    GO TOP
+                ENDIF
 
             *-- Incorporar records do template ao FRX gerado
-            SELECT TmpFRX_Main
-            APPEND FROM TmpRelat
+                SELECT TmpFRX_Main
+                APPEND FROM TmpRelat
 
-            USE IN TmpFRX_Main
-            USE IN TmpCabPadrao
-            USE IN TmpRelat
-            IF FILE("TmpRelat.DBF")
-                DELETE FILE TmpRelat.*
+                USE IN TmpFRX_Main
+                USE IN TmpCabPadrao
+                USE IN TmpRelat
+                IF FILE("TmpRelat.DBF")
+                    DELETE FILE TmpRelat.*
+                ENDIF
+
+                loc_lSucesso = .T.
             ENDIF
-
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro("Erro ao mesclar template:" + CHR(13) + loc_oErro.Message, "FormRPT.MesclarComTemplate")
         ENDTRY
-
-        IF UPPER(loc_cOldSafety) = "ON"
-            SET SAFETY ON
-        ELSE
-            SET SAFETY OFF
+        IF loc_lProsseguir
+    
+            IF UPPER(loc_cOldSafety) = "ON"
+                SET SAFETY ON
+            ELSE
+                SET SAFETY OFF
+            ENDIF
         ENDIF
 
         RETURN loc_lSucesso
@@ -3346,11 +3370,12 @@ DEFINE CLASS FormRPT AS FormBase
     * e escaneia os records pelo campo COMMENT para classificar
     *==========================================================================
     PROCEDURE CarregarCursoresLayoutDoReport(par_cRPT_ID)
-        LOCAL loc_lSucesso, loc_cArqFRX, loc_oMntRPT
+        LOCAL loc_lSucesso, loc_cArqFRX, loc_oMntRPT, loc_lProsseguir
         LOCAL loc_lnOBJTYPE, loc_lnOBJCODE, loc_lcLblCaption, loc_lcExpr
         LOCAL loc_lcNmCampo, loc_lcTpCampo, loc_lcTipoCmp, loc_oPg2
         loc_lSucesso = .F.
 
+        loc_lProsseguir = .T.
         TRY
             loc_cArqFRX = FULLPATH(THIS.this_oBusinessObject.this_cDirTmp + ;
                 UPPER(ALLTRIM(THIS.this_oBusinessObject.this_cNmReport)) + ".FRX")
@@ -3361,118 +3386,120 @@ DEFINE CLASS FormRPT AS FormBase
             loc_oMntRPT = CREATEOBJECT("Manutencao_RPT")
             IF !loc_oMntRPT.Carregar_RPT(gnConnHandle, par_cRPT_ID, loc_cArqFRX)
                 MsgAviso("N" + CHR(227) + "o foi poss" + CHR(237) + "vel carregar o layout do report.")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Resetar cursores com defaults
-            THIS.CriarCursoresLayout()
+            IF loc_lProsseguir
+                THIS.CriarCursoresLayout()
 
             *-- Abrir FRX e escanear records
-            IF USED("cursor_4c_TmpFRX")
-                USE IN cursor_4c_TmpFRX
-            ENDIF
-            USE (loc_cArqFRX) IN 0 ALIAS cursor_4c_TmpFRX
+                IF USED("cursor_4c_TmpFRX")
+                    USE IN cursor_4c_TmpFRX
+                ENDIF
+                USE (loc_cArqFRX) IN 0 ALIAS cursor_4c_TmpFRX
 
-            SELECT cursor_4c_TmpFRX
-            GO TOP
-            SCAN
-                loc_lnOBJTYPE = NVL(cursor_4c_TmpFRX.OBJTYPE, 0)
-                loc_lnOBJCODE = NVL(cursor_4c_TmpFRX.OBJCODE, 0)
-
-                DO CASE
-                CASE loc_lnOBJTYPE = 1 AND loc_lnOBJCODE = 53
-                    *-- Report definition: extrair Orientation e PaperSize
-                    loc_lcExpr = NVL(cursor_4c_TmpFRX.EXPR, "")
-                    SELECT cursor_4c_PropsTitulo
-                    REPLACE Orientation WITH VAL(STRTRAN(GETWORDNUM(loc_lcExpr, 1), "ORIENTATION=", "")) + 1
-                    REPLACE PaperSize   WITH VAL(STRTRAN(GETWORDNUM(loc_lcExpr, 2), "PAPERSIZE=", ""))
-                    SELECT cursor_4c_TmpFRX
-
-                CASE loc_lnOBJTYPE = 8 AND ("PAGE_HEADER_TITULO" $ NVL(cursor_4c_TmpFRX.COMMENT, ""))
-                    loc_lcLblCaption = ALLTRIM(NVL(cursor_4c_TmpFRX.EXPR, ""))
-                    SELECT cursor_4c_PropsTitulo
-                    REPLACE LblCaption WITH IIF(EMPTY(loc_lcLblCaption), "", &loc_lcLblCaption.)
-                    REPLACE LblFonte   WITH ALLTRIM(NVL(cursor_4c_TmpFRX.FONTFACE, "")) + "," + ;
-                        ALLTRIM(STR(NVL(cursor_4c_TmpFRX.FONTSIZE, 8))) + "," + ;
-                        THIS.RetornarFontStyle(NVL(cursor_4c_TmpFRX.FONTSTYLE, 0))
-                    REPLACE LblBtCor   WITH RGB(NVL(cursor_4c_TmpFRX.PENRED, 0), NVL(cursor_4c_TmpFRX.PENGREEN, 0), NVL(cursor_4c_TmpFRX.PENBLUE, 0))
-                    REPLACE LblAlinhar WITH ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 2), 2), "Left"))
-                    REPLACE LblTamCmp  WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 3), 2), "0")))
-                    REPLACE LblTipoCmp WITH ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 4), 2), "C"))
-                    REPLACE ArrayID    WITH RECNO("cursor_4c_TmpFRX")
-                    SELECT cursor_4c_TmpFRX
-
-                CASE loc_lnOBJTYPE = 8 AND ("HEADING " $ NVL(cursor_4c_TmpFRX.COMMENT, ""))
-                    loc_lcNmCampo    = GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 1), 2)
-                    loc_lcTpCampo    = GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 2), 2)
-                    loc_lcTipoCmp    = ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 9), 2), "C"))
-                    loc_lcLblCaption = ALLTRIM(NVL(cursor_4c_TmpFRX.EXPR, ""))
-
-                    SELECT cursor_4c_PropsCampos
-                    LOCATE FOR cursor_4c_PropsCampos.NmCampo = loc_lcNmCampo
-                    IF EOF("cursor_4c_PropsCampos")
-                        APPEND BLANK
-                    ENDIF
-                    REPLACE NmCampo    WITH loc_lcNmCampo
-                    REPLACE TpCampo    WITH loc_lcTpCampo
-                    REPLACE CkOutRPT   WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 3), 2), "0")))
-                    REPLACE CkFiltro   WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 4), 2), "0")))
-                    REPLACE CkSubTot   WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 5), 2), "0")))
-                    REPLACE CkTotal    WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 6), 2), "0")))
-                    REPLACE LblCaption WITH IIF(EMPTY(loc_lcLblCaption), "", &loc_lcLblCaption.)
-                    REPLACE LblFonte   WITH ALLTRIM(NVL(cursor_4c_TmpFRX.FONTFACE, "")) + "," + ;
-                        ALLTRIM(STR(NVL(cursor_4c_TmpFRX.FONTSIZE, 8))) + "," + ;
-                        THIS.RetornarFontStyle(NVL(cursor_4c_TmpFRX.FONTSTYLE, 0))
-                    REPLACE LblBtCor   WITH RGB(NVL(cursor_4c_TmpFRX.PENRED, 0), NVL(cursor_4c_TmpFRX.PENGREEN, 0), NVL(cursor_4c_TmpFRX.PENBLUE, 0))
-                    REPLACE LblAlinhar WITH ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 7), 2), "Left"))
-                    REPLACE LblTamCmp  WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 8), 2), "0")))
-                    REPLACE LblTipoCmp WITH loc_lcTipoCmp
-                    REPLACE ArrayID    WITH RECNO("cursor_4c_TmpFRX")
-
-                    IF !(loc_lcTipoCmp $ "NU")
-                        SELECT cursor_4c_LstCampos
-                        LOCATE FOR cursor_4c_LstCampos.NmCampo = loc_lcNmCampo
-                        IF EOF("cursor_4c_LstCampos")
+                SELECT cursor_4c_TmpFRX
+                GO TOP
+                SCAN
+                    loc_lnOBJTYPE = NVL(cursor_4c_TmpFRX.OBJTYPE, 0)
+                    loc_lnOBJCODE = NVL(cursor_4c_TmpFRX.OBJCODE, 0)
+    
+                    DO CASE
+                    CASE loc_lnOBJTYPE = 1 AND loc_lnOBJCODE = 53
+                        *-- Report definition: extrair Orientation e PaperSize
+                        loc_lcExpr = NVL(cursor_4c_TmpFRX.EXPR, "")
+                        SELECT cursor_4c_PropsTitulo
+                        REPLACE Orientation WITH VAL(STRTRAN(GETWORDNUM(loc_lcExpr, 1), "ORIENTATION=", "")) + 1
+                        REPLACE PaperSize   WITH VAL(STRTRAN(GETWORDNUM(loc_lcExpr, 2), "PAPERSIZE=", ""))
+                        SELECT cursor_4c_TmpFRX
+    
+                    CASE loc_lnOBJTYPE = 8 AND ("PAGE_HEADER_TITULO" $ NVL(cursor_4c_TmpFRX.COMMENT, ""))
+                        loc_lcLblCaption = ALLTRIM(NVL(cursor_4c_TmpFRX.EXPR, ""))
+                        SELECT cursor_4c_PropsTitulo
+                        REPLACE LblCaption WITH IIF(EMPTY(loc_lcLblCaption), "", &loc_lcLblCaption.)
+                        REPLACE LblFonte   WITH ALLTRIM(NVL(cursor_4c_TmpFRX.FONTFACE, "")) + "," + ;
+                            ALLTRIM(STR(NVL(cursor_4c_TmpFRX.FONTSIZE, 8))) + "," + ;
+                            THIS.RetornarFontStyle(NVL(cursor_4c_TmpFRX.FONTSTYLE, 0))
+                        REPLACE LblBtCor   WITH RGB(NVL(cursor_4c_TmpFRX.PENRED, 0), NVL(cursor_4c_TmpFRX.PENGREEN, 0), NVL(cursor_4c_TmpFRX.PENBLUE, 0))
+                        REPLACE LblAlinhar WITH ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 2), 2), "Left"))
+                        REPLACE LblTamCmp  WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 3), 2), "0")))
+                        REPLACE LblTipoCmp WITH ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 4), 2), "C"))
+                        REPLACE ArrayID    WITH RECNO("cursor_4c_TmpFRX")
+                        SELECT cursor_4c_TmpFRX
+    
+                    CASE loc_lnOBJTYPE = 8 AND ("HEADING " $ NVL(cursor_4c_TmpFRX.COMMENT, ""))
+                        loc_lcNmCampo    = GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 1), 2)
+                        loc_lcTpCampo    = GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 2), 2)
+                        loc_lcTipoCmp    = ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 9), 2), "C"))
+                        loc_lcLblCaption = ALLTRIM(NVL(cursor_4c_TmpFRX.EXPR, ""))
+    
+                        SELECT cursor_4c_PropsCampos
+                        LOCATE FOR cursor_4c_PropsCampos.NmCampo = loc_lcNmCampo
+                        IF EOF("cursor_4c_PropsCampos")
                             APPEND BLANK
-                            REPLACE NmCampo WITH loc_lcNmCampo, TpCampo WITH loc_lcTpCampo
                         ENDIF
-                    ENDIF
-                    SELECT cursor_4c_TmpFRX
+                        REPLACE NmCampo    WITH loc_lcNmCampo
+                        REPLACE TpCampo    WITH loc_lcTpCampo
+                        REPLACE CkOutRPT   WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 3), 2), "0")))
+                        REPLACE CkFiltro   WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 4), 2), "0")))
+                        REPLACE CkSubTot   WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 5), 2), "0")))
+                        REPLACE CkTotal    WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 6), 2), "0")))
+                        REPLACE LblCaption WITH IIF(EMPTY(loc_lcLblCaption), "", &loc_lcLblCaption.)
+                        REPLACE LblFonte   WITH ALLTRIM(NVL(cursor_4c_TmpFRX.FONTFACE, "")) + "," + ;
+                            ALLTRIM(STR(NVL(cursor_4c_TmpFRX.FONTSIZE, 8))) + "," + ;
+                            THIS.RetornarFontStyle(NVL(cursor_4c_TmpFRX.FONTSTYLE, 0))
+                        REPLACE LblBtCor   WITH RGB(NVL(cursor_4c_TmpFRX.PENRED, 0), NVL(cursor_4c_TmpFRX.PENGREEN, 0), NVL(cursor_4c_TmpFRX.PENBLUE, 0))
+                        REPLACE LblAlinhar WITH ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 7), 2), "Left"))
+                        REPLACE LblTamCmp  WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 8), 2), "0")))
+                        REPLACE LblTipoCmp WITH loc_lcTipoCmp
+                        REPLACE ArrayID    WITH RECNO("cursor_4c_TmpFRX")
+    
+                        IF !(loc_lcTipoCmp $ "NU")
+                            SELECT cursor_4c_LstCampos
+                            LOCATE FOR cursor_4c_LstCampos.NmCampo = loc_lcNmCampo
+                            IF EOF("cursor_4c_LstCampos")
+                                APPEND BLANK
+                                REPLACE NmCampo WITH loc_lcNmCampo, TpCampo WITH loc_lcTpCampo
+                            ENDIF
+                        ENDIF
+                        SELECT cursor_4c_TmpFRX
+    
+                    CASE loc_lnOBJTYPE = 8 AND ("GROUP_HEADER_LABEL" $ NVL(cursor_4c_TmpFRX.COMMENT, ""))
+                        loc_lcLblCaption = ALLTRIM(NVL(cursor_4c_TmpFRX.EXPR, ""))
+                        SELECT cursor_4c_PropsGrp
+                        REPLACE NmCampo    WITH GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 1), 2)
+                        REPLACE LblCaption WITH IIF(EMPTY(loc_lcLblCaption), "", &loc_lcLblCaption.)
+                        REPLACE LblFonte   WITH ALLTRIM(NVL(cursor_4c_TmpFRX.FONTFACE, "")) + "," + ;
+                            ALLTRIM(STR(NVL(cursor_4c_TmpFRX.FONTSIZE, 8))) + "," + ;
+                            THIS.RetornarFontStyle(NVL(cursor_4c_TmpFRX.FONTSTYLE, 0))
+                        REPLACE LblBtCor   WITH RGB(NVL(cursor_4c_TmpFRX.PENRED, 0), NVL(cursor_4c_TmpFRX.PENGREEN, 0), NVL(cursor_4c_TmpFRX.PENBLUE, 0))
+                        REPLACE LblAlinhar WITH ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 2), 2), "Left"))
+                        REPLACE LblTamCmp  WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 3), 2), "0")))
+                        REPLACE LblTipoCmp WITH ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 4), 2), "C"))
+                        REPLACE ArrayID    WITH RECNO("cursor_4c_TmpFRX")
+                        SELECT cursor_4c_TmpFRX
+    
+                    ENDCASE
+                ENDSCAN
 
-                CASE loc_lnOBJTYPE = 8 AND ("GROUP_HEADER_LABEL" $ NVL(cursor_4c_TmpFRX.COMMENT, ""))
-                    loc_lcLblCaption = ALLTRIM(NVL(cursor_4c_TmpFRX.EXPR, ""))
-                    SELECT cursor_4c_PropsGrp
-                    REPLACE NmCampo    WITH GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 1), 2)
-                    REPLACE LblCaption WITH IIF(EMPTY(loc_lcLblCaption), "", &loc_lcLblCaption.)
-                    REPLACE LblFonte   WITH ALLTRIM(NVL(cursor_4c_TmpFRX.FONTFACE, "")) + "," + ;
-                        ALLTRIM(STR(NVL(cursor_4c_TmpFRX.FONTSIZE, 8))) + "," + ;
-                        THIS.RetornarFontStyle(NVL(cursor_4c_TmpFRX.FONTSTYLE, 0))
-                    REPLACE LblBtCor   WITH RGB(NVL(cursor_4c_TmpFRX.PENRED, 0), NVL(cursor_4c_TmpFRX.PENGREEN, 0), NVL(cursor_4c_TmpFRX.PENBLUE, 0))
-                    REPLACE LblAlinhar WITH ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 2), 2), "Left"))
-                    REPLACE LblTamCmp  WITH VAL(ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 3), 2), "0")))
-                    REPLACE LblTipoCmp WITH ALLTRIM(NVL(GETWORDNUM(MLINE(cursor_4c_TmpFRX.COMMENT, 4), 2), "C"))
-                    REPLACE ArrayID    WITH RECNO("cursor_4c_TmpFRX")
-                    SELECT cursor_4c_TmpFRX
-
-                ENDCASE
-            ENDSCAN
-
-            USE IN cursor_4c_TmpFRX
+                USE IN cursor_4c_TmpFRX
 
             *-- Sincronizar controles visuais da Sub-Page2 com valores carregados
-            loc_oPg2 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2
-            SELECT cursor_4c_PropsTitulo
-            loc_oPg2.opt_4c_Orientacao.Value    = cursor_4c_PropsTitulo.Orientation
-            loc_oPg2.cbo_4c_TamPapel.ListIndex  = cursor_4c_PropsTitulo.PaperSize
-            loc_oPg2.lbl_4c_NmRelatorio.Caption = ALLTRIM(THIS.this_oBusinessObject.this_cNmReport)
-            IF cursor_4c_PropsTitulo.Orientation = 1
-                loc_oPg2.img_4c_Orientacao.Picture = gc_4c_CaminhoIcones + "Rpt_Orientacao_Retrato_26.JPG"
-            ELSE
-                loc_oPg2.img_4c_Orientacao.Picture = gc_4c_CaminhoIcones + "Rpt_Orientacao_Paisagem_26.JPG"
-            ENDIF
-            THIS.this_nOrientacao = cursor_4c_PropsTitulo.Orientation
+                loc_oPg2 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2
+                SELECT cursor_4c_PropsTitulo
+                loc_oPg2.opt_4c_Orientacao.Value    = cursor_4c_PropsTitulo.Orientation
+                loc_oPg2.cbo_4c_TamPapel.ListIndex  = cursor_4c_PropsTitulo.PaperSize
+                loc_oPg2.lbl_4c_NmRelatorio.Caption = ALLTRIM(THIS.this_oBusinessObject.this_cNmReport)
+                IF cursor_4c_PropsTitulo.Orientation = 1
+                    loc_oPg2.img_4c_Orientacao.Picture = gc_4c_CaminhoIcones + "Rpt_Orientacao_Retrato_26.JPG"
+                ELSE
+                    loc_oPg2.img_4c_Orientacao.Picture = gc_4c_CaminhoIcones + "Rpt_Orientacao_Paisagem_26.JPG"
+                ENDIF
+                THIS.this_nOrientacao = cursor_4c_PropsTitulo.Orientation
 
-            loc_lSucesso = .T.
+                loc_lSucesso = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao carregar layout:" + CHR(13) + loc_oErro.Message, "FormRPT.CarregarCursoresLayoutDoReport")
         ENDTRY

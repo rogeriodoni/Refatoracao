@@ -147,8 +147,12 @@ DEFINE CLASS SIGPGCNBBO AS BusinessBase
 
             loc_cProdutos = THIS.this_cProdutos
 
+            *-- Legado insere no cursor com EXATAMENTE estas 10 colunas; Emps, Numes,
+            *-- EmpDs, NumeDs e EmpDopNums vinham em branco/zero do registro do cursor,
+            *-- mas sao NOT NULL sem DEFAULT no banco.
             loc_cSQL = "INSERT INTO SigPcOol " + ;
-                       "(dopes, nopers, usuars, tipos, processos, produtos, DataS, cidchaves, dopeds, edndests)" + ;
+                       "(dopes, nopers, usuars, tipos, processos, produtos, DataS, cidchaves, dopeds, edndests," + ;
+                       " emps, numes, empds, numeds, empdopnums)" + ;
                        " VALUES (" + ;
                        EscaparSQL(THIS.this_cDopes) + ", " + ;
                        FormatarNumeroSQL(THIS.this_nNopers) + ", " + ;
@@ -159,7 +163,12 @@ DEFINE CLASS SIGPGCNBBO AS BusinessBase
                        "GETDATE(), " + ;
                        EscaparSQL(THIS.this_cCidChaves) + ", " + ;
                        EscaparSQL(THIS.this_cDopeds) + ", " + ;
-                       EscaparSQL(THIS.this_cEdndests) + ")"
+                       EscaparSQL(THIS.this_cEdndests) + ", " + ;
+                       EscaparSQL("") + ", " + ;
+                       FormatarNumeroSQL(0, 0) + ", " + ;
+                       EscaparSQL("") + ", " + ;
+                       FormatarNumeroSQL(0, 0) + ", " + ;
+                       EscaparSQL("") + ")"
 
             IF SQLEXEC(gnConnHandle, loc_cSQL) >= 1
                 THIS.RegistrarAuditoria("INSERT")

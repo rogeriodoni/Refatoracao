@@ -1037,7 +1037,7 @@ DEFINE CLASS Formsigrecor AS FormBase
     * Replica comportamento de get_Cd_GrEstoque.Valid (modo 'C') do legado.
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCdGrEstoque()
-        LOCAL loc_oPagina, loc_cCod, loc_cSQL, loc_nResult, loc_oErro
+        LOCAL loc_oPagina, loc_cCod, loc_cSQL, loc_nResult, loc_oErro, loc_lProsseguir
         loc_oPagina = THIS.pgf_4c_Paginas.Page1
         loc_cCod    = ALLTRIM(loc_oPagina.txt_4c__Cd_GrEstoque.Value)
         IF EMPTY(loc_cCod)
@@ -1046,6 +1046,7 @@ DEFINE CLASS Formsigrecor AS FormBase
             loc_oPagina.txt_4c__ds_estoque.Value   = ""
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr" + ;
                        " WHERE codigos = " + EscaparSQL(loc_cCod)
@@ -1059,9 +1060,11 @@ DEFINE CLASS Formsigrecor AS FormBase
                     loc_oPagina.txt_4c__Ds_GrEstoque.Value = ""
                     USE IN cursor_4c_GrVal
                     THIS.AbrirBuscaCdGrEstoque()
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_GrVal
+                IF loc_lProsseguir
+                    USE IN cursor_4c_GrVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarCdGrEstoque")
@@ -1090,7 +1093,7 @@ DEFINE CLASS Formsigrecor AS FormBase
     * Replica comportamento de get_cd_estoque.Valid (modo 'C') do legado.
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCdEstoque()
-        LOCAL loc_oPagina, loc_cCod, loc_cGrupo, loc_cSQL, loc_nResult, loc_oErro
+        LOCAL loc_oPagina, loc_cCod, loc_cGrupo, loc_cSQL, loc_nResult, loc_oErro, loc_lProsseguir
         loc_oPagina = THIS.pgf_4c_Paginas.Page1
         loc_cCod   = ALLTRIM(loc_oPagina.txt_4c__cd_estoque.Value)
         loc_cGrupo = ALLTRIM(loc_oPagina.txt_4c__Cd_GrEstoque.Value)
@@ -1098,6 +1101,7 @@ DEFINE CLASS Formsigrecor AS FormBase
             loc_oPagina.txt_4c__ds_estoque.Value = ""
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr" + ;
                        " WHERE codigos = " + EscaparSQL(loc_cCod)
@@ -1111,9 +1115,11 @@ DEFINE CLASS Formsigrecor AS FormBase
                     loc_oPagina.txt_4c__ds_estoque.Value = ""
                     USE IN cursor_4c_CntVal
                     THIS.AbrirBuscaCdEstoque()
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_CntVal
+                IF loc_lProsseguir
+                    USE IN cursor_4c_CntVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarCdEstoque")
@@ -1333,13 +1339,14 @@ DEFINE CLASS Formsigrecor AS FormBase
     * Replica comportamento de get_cd_moeda.Valid do legado (via fwBuscaExt).
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCdMoeda()
-        LOCAL loc_oPagina, loc_cCod, loc_cSQL, loc_nResult, loc_oErro
+        LOCAL loc_oPagina, loc_cCod, loc_cSQL, loc_nResult, loc_oErro, loc_lProsseguir
         loc_oPagina = THIS.pgf_4c_Paginas.Page1
         loc_cCod    = ALLTRIM(loc_oPagina.txt_4c__cd_moeda.Value)
         IF EMPTY(loc_cCod)
             loc_oPagina.txt_4c__ds_moeda.Value = ""
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL    = "SELECT cmoes, dmoes FROM SigCdMoe WHERE RTRIM(cmoes) = " + ;
                           EscaparSQL(loc_cCod)
@@ -1354,9 +1361,11 @@ DEFINE CLASS Formsigrecor AS FormBase
                     loc_oPagina.txt_4c__ds_moeda.Value = ""
                     USE IN cursor_4c_MoeVal
                     THIS.AbrirBuscaCdMoeda()
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_MoeVal
+                IF loc_lProsseguir
+                    USE IN cursor_4c_MoeVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarCdMoeda")

@@ -387,24 +387,27 @@ DEFINE CLASS FormDCC AS FormBase
     * Wrapper canonico CRUD para OPERACIONAL: delega ao BO e refresca grid
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oGrid, loc_oErro
+        LOCAL loc_oGrid, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.this_lModoEdicao
                 MsgAviso("Modo somente leitura ??? inclus" + CHR(227) + "o n" + CHR(227) + "o permitida.", "Inclus" + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                IF THIS.this_oBusinessObject.Inserir()
-                    IF VARTYPE(THIS.pgf_4c_Principal) = "O"
-                        IF PEMSTATUS(THIS.pgf_4c_Principal.Page1, "grd_4c_Dados", 5)
-                            loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
-                            loc_oGrid.ReadOnly = .F.
-                            loc_oGrid.Refresh()
-                            loc_oGrid.SetFocus()
-                            loc_oGrid.Column1.SetFocus()
+            IF loc_lProsseguir
+                IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                    IF THIS.this_oBusinessObject.Inserir()
+                        IF VARTYPE(THIS.pgf_4c_Principal) = "O"
+                            IF PEMSTATUS(THIS.pgf_4c_Principal.Page1, "grd_4c_Dados", 5)
+                                loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
+                                loc_oGrid.ReadOnly = .F.
+                                loc_oGrid.Refresh()
+                                loc_oGrid.SetFocus()
+                                loc_oGrid.Column1.SetFocus()
+                            ENDIF
                         ENDIF
+                        THIS.AtualizarTotal()
                     ENDIF
-                    THIS.AtualizarTotal()
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -420,30 +423,35 @@ DEFINE CLASS FormDCC AS FormBase
     * respondendo a Enter/Tab/F4 para lookup.
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oGrid, loc_oErro
+        LOCAL loc_oGrid, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.this_lModoEdicao
                 MsgAviso("Modo somente leitura ??? altera" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o permitida.", "Altera" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("xEestDsc") OR RECCOUNT("xEestDsc") = 0
-                MsgAviso("Nenhum registro para alterar. Utilize Inserir para adicionar uma linha.", "Altera" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("xEestDsc") OR RECCOUNT("xEestDsc") = 0
+                    MsgAviso("Nenhum registro para alterar. Utilize Inserir para adicionar uma linha.", "Altera" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF EOF("xEestDsc")
-                SELECT xEestDsc
-                GO TOP
-            ENDIF
-            IF VARTYPE(THIS.pgf_4c_Principal) = "O"
-                IF PEMSTATUS(THIS.pgf_4c_Principal.Page1, "grd_4c_Dados", 5)
-                    loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
-                    loc_oGrid.ReadOnly = .F.
-                    loc_oGrid.Column1.ReadOnly = .F.
-                    loc_oGrid.Column3.ReadOnly = .F.
-                    loc_oGrid.Column4.ReadOnly = .F.
-                    loc_oGrid.Refresh()
-                    loc_oGrid.SetFocus()
-                    loc_oGrid.Column1.SetFocus()
+            IF loc_lProsseguir
+                IF EOF("xEestDsc")
+                    SELECT xEestDsc
+                    GO TOP
+                ENDIF
+                IF VARTYPE(THIS.pgf_4c_Principal) = "O"
+                    IF PEMSTATUS(THIS.pgf_4c_Principal.Page1, "grd_4c_Dados", 5)
+                        loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
+                        loc_oGrid.ReadOnly = .F.
+                        loc_oGrid.Column1.ReadOnly = .F.
+                        loc_oGrid.Column3.ReadOnly = .F.
+                        loc_oGrid.Column4.ReadOnly = .F.
+                        loc_oGrid.Refresh()
+                        loc_oGrid.SetFocus()
+                        loc_oGrid.Column1.SetFocus()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -457,32 +465,35 @@ DEFINE CLASS FormDCC AS FormBase
     * linhas de desconto sem alterar. Restauracao para edicao via BtnAlterarClick.
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oGrid, loc_oErro
+        LOCAL loc_oGrid, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("xEestDsc") OR RECCOUNT("xEestDsc") = 0
                 MsgAviso("Nenhum registro para visualizar.", "Visualiza" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT xEestDsc
-            GO TOP
-            IF VARTYPE(THIS.pgf_4c_Principal) = "O"
-                IF PEMSTATUS(THIS.pgf_4c_Principal.Page1, "grd_4c_Dados", 5)
-                    loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
-                    loc_oGrid.ReadOnly = .T.
-                    loc_oGrid.Column1.ReadOnly = .T.
-                    loc_oGrid.Column3.ReadOnly = .T.
-                    loc_oGrid.Column4.ReadOnly = .T.
-                    loc_oGrid.Refresh()
-                    loc_oGrid.SetFocus()
+            IF loc_lProsseguir
+                SELECT xEestDsc
+                GO TOP
+                IF VARTYPE(THIS.pgf_4c_Principal) = "O"
+                    IF PEMSTATUS(THIS.pgf_4c_Principal.Page1, "grd_4c_Dados", 5)
+                        loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
+                        loc_oGrid.ReadOnly = .T.
+                        loc_oGrid.Column1.ReadOnly = .T.
+                        loc_oGrid.Column3.ReadOnly = .T.
+                        loc_oGrid.Column4.ReadOnly = .T.
+                        loc_oGrid.Refresh()
+                        loc_oGrid.SetFocus()
+                    ENDIF
                 ENDIF
+                IF PEMSTATUS(THIS, "cmd_4c_Inserir", 5)
+                    THIS.cmd_4c_Inserir.Enabled = .F.
+                ENDIF
+                IF PEMSTATUS(THIS, "cmd_4c_Excluir", 5)
+                    THIS.cmd_4c_Excluir.Enabled = .F.
+                ENDIF
+                THIS.AtualizarTotal()
             ENDIF
-            IF PEMSTATUS(THIS, "cmd_4c_Inserir", 5)
-                THIS.cmd_4c_Inserir.Enabled = .F.
-            ENDIF
-            IF PEMSTATUS(THIS, "cmd_4c_Excluir", 5)
-                THIS.cmd_4c_Excluir.Enabled = .F.
-            ENDIF
-            THIS.AtualizarTotal()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + "Procedure: " + loc_oErro.Procedure, "Erro em BtnVisualizarClick")
         ENDTRY
@@ -494,28 +505,35 @@ DEFINE CLASS FormDCC AS FormBase
     * Wrapper canonico CRUD para OPERACIONAL: MsgConfirma + delega ao BO
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oGrid, loc_oErro
+        LOCAL loc_oGrid, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.this_lModoEdicao
                 MsgAviso("Modo somente leitura ??? exclus" + CHR(227) + "o n" + CHR(227) + "o permitida.", "Exclus" + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("xEestDsc") OR RECCOUNT("xEestDsc") = 0 OR EOF("xEestDsc")
-                MsgAviso("Nenhum registro selecionado para exclus" + CHR(227) + "o.", "Exclus" + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("xEestDsc") OR RECCOUNT("xEestDsc") = 0 OR EOF("xEestDsc")
+                    MsgAviso("Nenhum registro selecionado para exclus" + CHR(227) + "o.", "Exclus" + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF !MsgConfirma("Confirma a exclus" + CHR(227) + "o da linha corrente?", "Exclus" + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF !MsgConfirma("Confirma a exclus" + CHR(227) + "o da linha corrente?", "Exclus" + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                IF THIS.this_oBusinessObject.ExcluirLinhaAtual()
-                    IF VARTYPE(THIS.pgf_4c_Principal) = "O"
-                        IF PEMSTATUS(THIS.pgf_4c_Principal.Page1, "grd_4c_Dados", 5)
-                            loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
-                            loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                    IF THIS.this_oBusinessObject.ExcluirLinhaAtual()
+                        IF VARTYPE(THIS.pgf_4c_Principal) = "O"
+                            IF PEMSTATUS(THIS.pgf_4c_Principal.Page1, "grd_4c_Dados", 5)
+                                loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
+                                loc_oGrid.Refresh()
+                            ENDIF
                         ENDIF
+                        THIS.AtualizarTotal()
                     ENDIF
-                    THIS.AtualizarTotal()
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -732,10 +750,11 @@ DEFINE CLASS FormDCC AS FormBase
     * Equivalente ao Column1.Text1.Valid original (sem trigger a cada tecla)
     *==========================================================================
     PROCEDURE GrdMotivoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cValor, loc_oGrid, loc_oErro
+        LOCAL loc_cValor, loc_oGrid, loc_oErro, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid  = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
             loc_cValor = ALLTRIM(NVL(loc_oGrid.Column1.Text1.Value, ""))
@@ -745,25 +764,27 @@ DEFINE CLASS FormDCC AS FormBase
                     THIS.this_oBusinessObject.LimparDescricao()
                     loc_oGrid.Refresh()
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Recarrega motivos se cursor nao disponivel (ex: sessao nova)
-            IF (!USED("cursor_4c_TmpMdsc") OR RECCOUNT("cursor_4c_TmpMdsc") = 0) AND VARTYPE(THIS.this_oBusinessObject) = "O"
-                IF USED("TprMvCab")
-                    THIS.this_oBusinessObject.BuscarMotivos(;
-                        ALLTRIM(TratarNulo(TprMvCab.ContaDs, "C")), ;
-                        IIF(EMPTY(TratarNulo(TprMvCab.Datas, "D")), DATE(), TratarNulo(TprMvCab.Datas, "D")), ;
-                        ALLTRIM(TratarNulo(TprMvCab.Dopes, "C")), ;
-                        THIS.this_cEmpresa)
+            IF loc_lProsseguir
+                IF (!USED("cursor_4c_TmpMdsc") OR RECCOUNT("cursor_4c_TmpMdsc") = 0) AND VARTYPE(THIS.this_oBusinessObject) = "O"
+                    IF USED("TprMvCab")
+                        THIS.this_oBusinessObject.BuscarMotivos(;
+                            ALLTRIM(TratarNulo(TprMvCab.ContaDs, "C")), ;
+                            IIF(EMPTY(TratarNulo(TprMvCab.Datas, "D")), DATE(), TratarNulo(TprMvCab.Datas, "D")), ;
+                            ALLTRIM(TratarNulo(TprMvCab.Dopes, "C")), ;
+                            THIS.this_cEmpresa)
+                    ENDIF
                 ENDIF
-            ENDIF
 
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                IF THIS.this_oBusinessObject.ValidarMotivo(loc_cValor)
-                    loc_oGrid.Refresh()
-                ELSE
-                    THIS.AbrirLookupMotivo(loc_cValor)
+                IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                    IF THIS.this_oBusinessObject.ValidarMotivo(loc_cValor)
+                        loc_oGrid.Refresh()
+                    ELSE
+                        THIS.AbrirLookupMotivo(loc_cValor)
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -777,33 +798,36 @@ DEFINE CLASS FormDCC AS FormBase
     * par_cValor - valor digitado (usado como filtro inicial no picker)
     *==========================================================================
     PROCEDURE AbrirLookupMotivo(par_cValor)
-        LOCAL loc_oLookup, loc_oGrid, loc_cCodSel, loc_oErro
+        LOCAL loc_oLookup, loc_oGrid, loc_cCodSel, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_TmpMdsc") OR RECCOUNT("cursor_4c_TmpMdsc") = 0
                 MsgAviso("Nenhum motivo de desconto dispon" + CHR(237) + "vel para pesquisa.", "Lookup")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Usa cursor pre-populado por BuscarMotivos (cTabela="" = sem SELECT interno)
-            loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "", "cursor_4c_TmpMdsc", "Codigos", m.par_cValor, ;
-                "Motivo de Desconto", .T., .T., "")
+            IF loc_lProsseguir
+                loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "", "cursor_4c_TmpMdsc", "Codigos", m.par_cValor, ;
+                    "Motivo de Desconto", .T., .T., "")
 
-            IF VARTYPE(loc_oLookup) = "O"
-                loc_oLookup.mAddColuna("Codigos", "XXXXXXXXXXXXXXXXXXXX", "C" + CHR(243) + "digo")
-                loc_oLookup.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oLookup.Show()
-
-                IF loc_oLookup.this_lSelecionou
-                    IF USED("cursor_4c_TmpMdsc") AND !EOF("cursor_4c_TmpMdsc")
-                        loc_cCodSel = ALLTRIM(cursor_4c_TmpMdsc.Codigos)
-                        IF USED("xEestDsc") AND VARTYPE(THIS.this_oBusinessObject) = "O"
-                            REPLACE MotDscs WITH loc_cCodSel IN xEestDsc
-                            THIS.this_oBusinessObject.ValidarMotivo(loc_cCodSel)
-                        ENDIF
-                        loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
-                        IF VARTYPE(loc_oGrid) = "O"
-                            loc_oGrid.Refresh()
+                IF VARTYPE(loc_oLookup) = "O"
+                    loc_oLookup.mAddColuna("Codigos", "XXXXXXXXXXXXXXXXXXXX", "C" + CHR(243) + "digo")
+                    loc_oLookup.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oLookup.Show()
+    
+                    IF loc_oLookup.this_lSelecionou
+                        IF USED("cursor_4c_TmpMdsc") AND !EOF("cursor_4c_TmpMdsc")
+                            loc_cCodSel = ALLTRIM(cursor_4c_TmpMdsc.Codigos)
+                            IF USED("xEestDsc") AND VARTYPE(THIS.this_oBusinessObject) = "O"
+                                REPLACE MotDscs WITH loc_cCodSel IN xEestDsc
+                                THIS.this_oBusinessObject.ValidarMotivo(loc_cCodSel)
+                            ENDIF
+                            loc_oGrid = THIS.pgf_4c_Principal.Page1.grd_4c_Dados
+                            IF VARTYPE(loc_oGrid) = "O"
+                                loc_oGrid.Refresh()
+                            ENDIF
                         ENDIF
                     ENDIF
                 ENDIF

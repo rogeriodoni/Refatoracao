@@ -1336,9 +1336,10 @@ DEFINE CLASS FormCHM AS FormBase
     * Legado: validacoes de banco duplicado + local obrigatorio antes de salvar
     *--------------------------------------------------------------------------
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_cBanco, loc_cLocal, loc_oPagina
+        LOCAL loc_cBanco, loc_cLocal, loc_oPagina, loc_lProsseguir
 
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
+        loc_lProsseguir = .T.
 
         *-- Validacoes FORA do TRY (Problema 16)
         TRY
@@ -1346,8 +1347,13 @@ DEFINE CLASS FormCHM AS FormBase
             loc_cLocal = ALLTRIM(loc_oPagina.txt_4c_Fwget17.Value)
         CATCH TO loException
             MsgErro("Erro ao ler campos do formul" + CHR(225) + "rio: " + loException.Message, "Erro")
-            RETURN
+            loc_lProsseguir = .F.
         ENDTRY
+
+        *-- RETURN aqui e legal: esta FORA do TRY (regra #1)
+        IF !loc_lProsseguir
+            RETURN
+        ENDIF
 
         IF EMPTY(loc_cBanco)
             MsgAviso("Preencher o Banco.", "Aten" + CHR(231) + CHR(227) + "o")

@@ -1189,116 +1189,121 @@ DEFINE CLASS Formsigtosen AS FormBase
     * Par: par_cUsuario - Login do usuario para filtrar seus atalhos
     *==========================================================================
     PROTECTED PROCEDURE ConstruirBarraAtalhos(par_cUsuario)
-        LOCAL loc_lnNbotao, loc_lcMacro, loc_cSQL
+        LOCAL loc_lnNbotao, loc_lcMacro, loc_cSQL, loc_lProsseguir
         LOCAL loc_cArqIcone, loc_cExtIcone, loc_nTamIcone, loc_cDirTmp, loc_nDock
 
+        loc_lProsseguir = .T.
         TRY
             IF TYPE("goSistema") <> "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF TYPE("goSistema.BarraAtalho") = "O"
-                goSistema.BarraAtalho.Release()
-            ENDIF
+            IF loc_lProsseguir
+                IF TYPE("goSistema.BarraAtalho") = "O"
+                    goSistema.BarraAtalho.Release()
+                ENDIF
 
-            loc_lnNbotao = 0
-            loc_cDirTmp  = ADDBS(SYS(2023))
-            loc_nDock    = IIF(BETWEEN(THIS.this_oBusinessObject.this_nDock, 0, 4), ;
-                              THIS.this_oBusinessObject.this_nDock, 0) - 1
+                loc_lnNbotao = 0
+                loc_cDirTmp  = ADDBS(SYS(2023))
+                loc_nDock    = IIF(BETWEEN(THIS.this_oBusinessObject.this_nDock, 0, 4), ;
+                                  THIS.this_oBusinessObject.this_nDock, 0) - 1
 
-            goSistema.BarraAtalho = CREATEOBJECT("fwBarraBtns")
-            goSistema.BarraAtalho.Dock(loc_nDock)
+                goSistema.BarraAtalho = CREATEOBJECT("fwBarraBtns")
+                goSistema.BarraAtalho.Dock(loc_nDock)
 
             *-- Carrega atalhos do usuario e de seus grupos
-            loc_cSQL = "select a.programas,a.parametros,a.barraforms," + ;
-                       " b.descricaos,b.barrapict" + ;
-                       " from SigCdAcB a" + ;
-                       " left join sigcdprg b" + ;
-                       " on b.programas+b.parametros=a.programas+a.parametros" + ;
-                       " where a.usuarios='" + ALLTRIM(par_cUsuario) + "'" + ;
-                       " and a.selbarras=1" + ;
-                       " union all" + ;
-                       " select a.programas,a.parametros,a.barraforms," + ;
-                       " b.descricaos,b.barrapict" + ;
-                       " from SigCdAcB a" + ;
-                       " left join sigcdprg b" + ;
-                       " on b.programas+b.parametros=a.programas+a.parametros" + ;
-                       " where a.selbarras=1" + ;
-                       " and a.grupos in" + ;
-                       " (select c.grupos from SigCdAcG c" + ;
-                       " where c.usuarios='" + ALLTRIM(par_cUsuario) + "')"
+                loc_cSQL = "select a.programas,a.parametros,a.barraforms," + ;
+                           " b.descricaos,b.barrapict" + ;
+                           " from SigCdAcB a" + ;
+                           " left join sigcdprg b" + ;
+                           " on b.programas+b.parametros=a.programas+a.parametros" + ;
+                           " where a.usuarios='" + ALLTRIM(par_cUsuario) + "'" + ;
+                           " and a.selbarras=1" + ;
+                           " union all" + ;
+                           " select a.programas,a.parametros,a.barraforms," + ;
+                           " b.descricaos,b.barrapict" + ;
+                           " from SigCdAcB a" + ;
+                           " left join sigcdprg b" + ;
+                           " on b.programas+b.parametros=a.programas+a.parametros" + ;
+                           " where a.selbarras=1" + ;
+                           " and a.grupos in" + ;
+                           " (select c.grupos from SigCdAcG c" + ;
+                           " where c.usuarios='" + ALLTRIM(par_cUsuario) + "')"
 
-            IF USED("crTmpAcBarra1")
-                USE IN ("crTmpAcBarra1")
-            ENDIF
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "crTmpAcBarra1") > 0
-                IF USED("crAcBarra1")
-                    USE IN ("crAcBarra1")
+                IF USED("crTmpAcBarra1")
+                    USE IN ("crTmpAcBarra1")
                 ENDIF
-                SELECT DISTINCT a.programas, a.parametros, a.barraforms, ;
-                       PADR(NVL(a.descricaos, ""), 100) AS descricaos, ;
-                       PADR(NVL(a.barrapict, ""), 50) AS barrapict ;
-                  FROM crTmpAcBarra1 a ;
-                 ORDER BY 1, 2 ;
-                  INTO CURSOR crAcBarra1 READWRITE
+
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "crTmpAcBarra1") > 0
+                    IF USED("crAcBarra1")
+                        USE IN ("crAcBarra1")
+                    ENDIF
+                    SELECT DISTINCT a.programas, a.parametros, a.barraforms, ;
+                           PADR(NVL(a.descricaos, ""), 100) AS descricaos, ;
+                           PADR(NVL(a.barrapict, ""), 50) AS barrapict ;
+                      FROM crTmpAcBarra1 a ;
+                     ORDER BY 1, 2 ;
+                      INTO CURSOR crAcBarra1 READWRITE
+                ENDIF
+
+                IF NOT USED("crAcBarra1")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF NOT USED("crAcBarra1")
-                RETURN
-            ENDIF
+            IF loc_lProsseguir
+                SELECT crAcBarra1
+                SET ORDER TO ("") IN crAcBarra1
+                LOCATE
 
-            SELECT crAcBarra1
-            SET ORDER TO ("") IN crAcBarra1
-            LOCATE
-
-            SCAN WHILE gnConnHandle > 0
-                loc_cArqIcone = ""
-                loc_nTamIcone = 0
-
-                IF NOT EMPTY(ALLTRIM(crAcBarra1.barrapict))
-                    loc_cExtIcone = JUSTEXT(ALLTRIM(crAcBarra1.barrapict))
-                    IF EMPTY(loc_cExtIcone)
-                        loc_cExtIcone = "ico"
-                    ENDIF
-
-                    loc_cSQL = "select a.marqicones from SigSyIco a" + ;
-                               " where a.carqicones='" + ;
-                               ALLTRIM(crAcBarra1.barrapict) + "'"
-                    IF USED("crTmpIcone1")
-                        USE IN ("crTmpIcone1")
-                    ENDIF
-                    IF SQLEXEC(gnConnHandle, loc_cSQL, "crTmpIcone1") > 0
-                        SELECT ("crTmpIcone1")
-                        LOCATE
-                        IF NOT EOF("crTmpIcone1") AND ;
-                           NOT ISNULL(crTmpIcone1.marqicones) AND ;
-                           NOT EMPTY(crTmpIcone1.marqicones)
-                            loc_cArqIcone = loc_cDirTmp + ;
-                                goSistema.Sys2015Tmp + SYS(2015) + ;
-                                "." + loc_cExtIcone
-                            loc_nTamIcone = STRTOFILE(crTmpIcone1.marqicones, loc_cArqIcone)
-                            IF loc_nTamIcone = 0
-                                loc_cArqIcone = ""
-                            ENDIF
+                SCAN WHILE gnConnHandle > 0
+                    loc_cArqIcone = ""
+                    loc_nTamIcone = 0
+    
+                    IF NOT EMPTY(ALLTRIM(crAcBarra1.barrapict))
+                        loc_cExtIcone = JUSTEXT(ALLTRIM(crAcBarra1.barrapict))
+                        IF EMPTY(loc_cExtIcone)
+                            loc_cExtIcone = "ico"
                         ENDIF
+    
+                        loc_cSQL = "select a.marqicones from SigSyIco a" + ;
+                                   " where a.carqicones='" + ;
+                                   ALLTRIM(crAcBarra1.barrapict) + "'"
                         IF USED("crTmpIcone1")
                             USE IN ("crTmpIcone1")
                         ENDIF
+                        IF SQLEXEC(gnConnHandle, loc_cSQL, "crTmpIcone1") > 0
+                            SELECT ("crTmpIcone1")
+                            LOCATE
+                            IF NOT EOF("crTmpIcone1") AND ;
+                               NOT ISNULL(crTmpIcone1.marqicones) AND ;
+                               NOT EMPTY(crTmpIcone1.marqicones)
+                                loc_cArqIcone = loc_cDirTmp + ;
+                                    goSistema.Sys2015Tmp + SYS(2015) + ;
+                                    "." + loc_cExtIcone
+                                loc_nTamIcone = STRTOFILE(crTmpIcone1.marqicones, loc_cArqIcone)
+                                IF loc_nTamIcone = 0
+                                    loc_cArqIcone = ""
+                                ENDIF
+                            ENDIF
+                            IF USED("crTmpIcone1")
+                                USE IN ("crTmpIcone1")
+                            ENDIF
+                        ENDIF
                     ENDIF
-                ENDIF
+    
+                    loc_lnNbotao = loc_lnNbotao + 1
+                    loc_lcMacro  = "botao" + ALLTRIM(STR(loc_lnNbotao, 20, 0))
+                    goSistema.BarraAtalho.AddObject(loc_lcMacro, "bot" + CHR(227) + "o_da_barra")
+                    goSistema.BarraAtalho.&loc_lcMacro..ToolTipText = ;
+                        ALLTRIM(crAcBarra1.descricaos)
+                    goSistema.BarraAtalho.&loc_lcMacro..Picture     = loc_cArqIcone
+                    goSistema.BarraAtalho.&loc_lcMacro..FormExec    = ;
+                        ALLTRIM(crAcBarra1.barraforms)
+                    goSistema.BarraAtalho.&loc_lcMacro..Visible     = .T.
+                ENDSCAN
 
-                loc_lnNbotao = loc_lnNbotao + 1
-                loc_lcMacro  = "botao" + ALLTRIM(STR(loc_lnNbotao, 20, 0))
-                goSistema.BarraAtalho.AddObject(loc_lcMacro, "bot" + CHR(227) + "o_da_barra")
-                goSistema.BarraAtalho.&loc_lcMacro..ToolTipText = ;
-                    ALLTRIM(crAcBarra1.descricaos)
-                goSistema.BarraAtalho.&loc_lcMacro..Picture     = loc_cArqIcone
-                goSistema.BarraAtalho.&loc_lcMacro..FormExec    = ;
-                    ALLTRIM(crAcBarra1.barraforms)
-                goSistema.BarraAtalho.&loc_lcMacro..Visible     = .T.
-            ENDSCAN
-
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro na Barra de Atalhos")
         ENDTRY

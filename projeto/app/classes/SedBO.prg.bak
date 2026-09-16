@@ -70,7 +70,7 @@ DEFINE CLASS SedBO AS BusinessBase
             THIS.this_cFaixaFins  = TratarNulo(FaixaFins,   "C")
             THIS.this_nNumEtiqs   = TratarNulo(nNumEtiqs,   "N")
             THIS.this_cEmpDopNums = TratarNulo(EmpDopNums,  "C")
-            THIS.this_nImpress    = TratarNulo(nImpress,    "N")
+            THIS.this_nImpress    = TratarNulo(Impress,     "N")
             THIS.this_dDtIncs     = TratarNulo(DtIncs,      "D")
             THIS.this_dDtUsos     = TratarNulo(DtUsos,      "D")
             RETURN .T.
@@ -191,7 +191,7 @@ DEFINE CLASS SedBO AS BusinessBase
                     loc_cBarEtiq   = THIS.CalcularBarraSedex(loc_cServico + loc_cSeqPadded + loc_cPais)
 
                     loc_cSQL = "INSERT INTO SigCdSed " + ;
-                               "(cEmps, DtIncs, nNumEtiqs, FaixaInis, FaixaFins, cBarSedexs, EmpDopNums, nImpress) " + ;
+                               "(cEmps, DtIncs, nNumEtiqs, FaixaInis, FaixaFins, cBarSedexs, EmpDopNums, Impress) " + ;
                                "VALUES (" + ;
                                EscaparSQL(par_cEmps) + ", GETDATE(), " + ;
                                FormatarNumeroSQL(loc_nX, 0) + ", " + ;
@@ -320,7 +320,7 @@ DEFINE CLASS SedBO AS BusinessBase
             TEXT TO loc_cSQL TEXTMERGE NOSHOW
                 INSERT INTO SigCdSed
                     (cBarSedexs, cEmps, DtIncs, DtUsos, EmpDopNums,
-                     FaixaFins, FaixaInis, nNumEtiqs, nImpress)
+                     FaixaFins, FaixaInis, nNumEtiqs, Impress)
                 VALUES (
                     <<EscaparSQL(THIS.this_cBarSedexs)>>,
                     <<EscaparSQL(THIS.this_cEmps)>>,
@@ -373,7 +373,7 @@ DEFINE CLASS SedBO AS BusinessBase
                     FaixaFins  = <<EscaparSQL(THIS.this_cFaixaFins)>>,
                     FaixaInis  = <<EscaparSQL(THIS.this_cFaixaInis)>>,
                     nNumEtiqs  = <<FormatarNumeroSQL(THIS.this_nNumEtiqs, 0)>>,
-                    nImpress   = <<FormatarNumeroSQL(THIS.this_nImpress, 0)>>
+                    Impress    = <<FormatarNumeroSQL(THIS.this_nImpress, 0)>>
                 WHERE cBarSedexs = <<EscaparSQL(THIS.this_cBarSedexs)>>
             ENDTEXT
 

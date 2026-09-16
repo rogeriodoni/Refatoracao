@@ -1091,7 +1091,7 @@ DEFINE CLASS FormDepartamento AS FormBase
     * Legado: valida codigo+descricao, ChkRegister, optAutos unicidade
     *--------------------------------------------------------------------------
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_oPagina, loc_cCodigo, loc_cDescricao
+        LOCAL loc_oPagina, loc_cCodigo, loc_cDescricao, loc_lProsseguir
         loc_oPagina   = THIS.pgf_4c_Paginas.Page2
         loc_cCodigo   = ALLTRIM(loc_oPagina.txt_4c_Codigos.Value)
         loc_cDescricao = ALLTRIM(loc_oPagina.txt_4c_Descricaos.Value)
@@ -1130,6 +1130,7 @@ DEFINE CLASS FormDepartamento AS FormBase
             RETURN
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             *-- Verificar unicidade do codigo (apenas no INSERT)
             IF THIS.this_cModoAtual = "INCLUIR"
@@ -1144,41 +1145,49 @@ DEFINE CLASS FormDepartamento AS FormBase
                         ENDIF
                         MsgAviso("C" + CHR(243) + "digo do Departamento j" + CHR(225) + " Cadastrado!", "Valida" + CHR(231) + CHR(227) + "o")
                         loc_oPagina.txt_4c_Codigos.SetFocus
-                        RETURN
+                        loc_lProsseguir = .F.
                     ENDIF
                 ENDIF
-                IF USED("cursor_4c_ChkCod")
-                    USE IN cursor_4c_ChkCod
+                IF loc_lProsseguir
+                    IF USED("cursor_4c_ChkCod")
+                        USE IN cursor_4c_ChkCod
+                    ENDIF
                 ENDIF
             ENDIF
 
             *-- Verificar unicidade do registro automatico (optAutos.Value=1 = N" + CHR(227) + "o = autos=1)
-            IF loc_oPagina.opt_4c_Autos.Value = 1
-                LOCAL loc_cSQLAuto, loc_nAuto
-                loc_cSQLAuto = "SELECT COUNT(*) AS nAutos FROM SigCdDpt WHERE autos = 1 AND codigos <> " + EscaparSQL(loc_cCodigo)
-                loc_nAuto = SQLEXEC(gnConnHandle, loc_cSQLAuto, "cursor_4c_ChkAuto")
-                IF loc_nAuto >= 0 AND RECCOUNT("cursor_4c_ChkAuto") > 0
-                    SELECT cursor_4c_ChkAuto
-                    IF cursor_4c_ChkAuto.nAutos > 0
+            IF loc_lProsseguir
+                IF loc_oPagina.opt_4c_Autos.Value = 1
+                    LOCAL loc_cSQLAuto, loc_nAuto
+                    loc_cSQLAuto = "SELECT COUNT(*) AS nAutos FROM SigCdDpt WHERE autos = 1 AND codigos <> " + EscaparSQL(loc_cCodigo)
+                    loc_nAuto = SQLEXEC(gnConnHandle, loc_cSQLAuto, "cursor_4c_ChkAuto")
+                    IF loc_nAuto >= 0 AND RECCOUNT("cursor_4c_ChkAuto") > 0
+                        SELECT cursor_4c_ChkAuto
+                        IF cursor_4c_ChkAuto.nAutos > 0
+                            IF USED("cursor_4c_ChkAuto")
+                                USE IN cursor_4c_ChkAuto
+                            ENDIF
+                            MsgAviso("J" + CHR(225) + " existe registro com c" + CHR(243) + "digo autom" + CHR(225) + "tico!", "Aviso")
+                            loc_oPagina.opt_4c_Autos.SetFocus
+                            loc_lProsseguir = .F.
+                        ENDIF
+                    ENDIF
+                    IF loc_lProsseguir
                         IF USED("cursor_4c_ChkAuto")
                             USE IN cursor_4c_ChkAuto
                         ENDIF
-                        MsgAviso("J" + CHR(225) + " existe registro com c" + CHR(243) + "digo autom" + CHR(225) + "tico!", "Aviso")
-                        loc_oPagina.opt_4c_Autos.SetFocus
-                        RETURN
                     ENDIF
-                ENDIF
-                IF USED("cursor_4c_ChkAuto")
-                    USE IN cursor_4c_ChkAuto
                 ENDIF
             ENDIF
 
             *-- Transferir Form -> BO e salvar
-            THIS.FormParaBO()
-            IF THIS.this_oBusinessObject.Salvar()
-                MsgSucesso("Departamento salvo com sucesso!")
-                THIS.AlternarPagina(1)
-                THIS.this_cModoAtual = "LISTA"
+            IF loc_lProsseguir
+                THIS.FormParaBO()
+                IF THIS.this_oBusinessObject.Salvar()
+                    MsgSucesso("Departamento salvo com sucesso!")
+                    THIS.AlternarPagina(1)
+                    THIS.this_cModoAtual = "LISTA"
+                ENDIF
             ENDIF
         CATCH TO loException
             MostrarErro("Erro em FormDepartamento.BtnSalvarClick:" + CHR(13) + loException.Message, "Erro")

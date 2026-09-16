@@ -2168,38 +2168,43 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
     * Replica o reprocessamento de xPesa por amarra para cada linha de xOpi.
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF NOT USED("xOpi")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Apenas permitido em modo INSERIR (regra do legado para Column5.Check1.When)
-            IF THIS.this_cEscolha <> "INSERIR"
-                MsgAviso("Inclus" + CHR(227) + "o permitida apenas em modo Inserir.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF THIS.this_cEscolha <> "INSERIR"
+                    MsgAviso("Inclus" + CHR(227) + "o permitida apenas em modo Inserir.", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Marca todos os itens nao-obrigatorios como Indiv = .T.
-            SELECT xOpi
-            GO TOP
-            SCAN
-                IF NOT xOpi.Obrigs
-                    REPLACE Indiv WITH .T. IN xOpi
-                ENDIF
-            ENDSCAN
+            IF loc_lProsseguir
+                SELECT xOpi
+                GO TOP
+                SCAN
+                    IF NOT xOpi.Obrigs
+                        REPLACE Indiv WITH .T. IN xOpi
+                    ENDIF
+                ENDSCAN
 
             *-- Atualiza TAG do header Column5 para refletir estado "marcado"
-            IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
-                IF PEMSTATUS(THIS.grd_4c_Dados.Column5, "Header1", 5)
-                    THIS.grd_4c_Dados.Column5.Header1.Tag = "X"
+                IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+                    IF PEMSTATUS(THIS.grd_4c_Dados.Column5, "Header1", 5)
+                        THIS.grd_4c_Dados.Column5.Header1.Tag = "X"
+                    ENDIF
+                    THIS.grd_4c_Dados.Refresh()
                 ENDIF
-                THIS.grd_4c_Dados.Refresh()
-            ENDIF
 
             *-- Reprocessa pesagem (xPesa) baseado nas marcacoes (logica do header click)
-            THIS.ReprocessarPesagemPorAmarra()
+                THIS.ReprocessarPesagemPorAmarra()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -2212,44 +2217,49 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
     * marcacao: altera modo de emissao para PM em massa.
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF NOT USED("xOpi")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Apenas permitido em modo INSERIR (regra do legado Column7.Check1.When)
-            IF THIS.this_cEscolha <> "INSERIR"
-                MsgAviso("Altera" + CHR(231) + CHR(227) + "o de PM permitida apenas em modo Inserir.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF THIS.this_cEscolha <> "INSERIR"
+                    MsgAviso("Altera" + CHR(231) + CHR(227) + "o de PM permitida apenas em modo Inserir.", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Marca Divs=.T. para todos os itens nao-obrigatorios e nao-individuais
-            SELECT xOpi
-            GO TOP
-            SCAN
-                IF NOT xOpi.Obrigs AND NOT xOpi.Indiv
-                    REPLACE Divs WITH .T. IN xOpi
-                ENDIF
-            ENDSCAN
-
-            *-- Propaga Divs para xPesa (mesma logica de Column7.Header1.Click)
-            IF USED("xPesa")
+            IF loc_lProsseguir
                 SELECT xOpi
                 GO TOP
                 SCAN
-                    UPDATE xPesa SET Divs = (xOpi.Divs) WHERE Amarra = xOpi.Amarra
+                    IF NOT xOpi.Obrigs AND NOT xOpi.Indiv
+                        REPLACE Divs WITH .T. IN xOpi
+                    ENDIF
                 ENDSCAN
-            ENDIF
+
+            *-- Propaga Divs para xPesa (mesma logica de Column7.Header1.Click)
+                IF USED("xPesa")
+                    SELECT xOpi
+                    GO TOP
+                    SCAN
+                        UPDATE xPesa SET Divs = (xOpi.Divs) WHERE Amarra = xOpi.Amarra
+                    ENDSCAN
+                ENDIF
 
             *-- Atualiza TAG do header Column7 para refletir estado "marcado"
-            IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
-                IF PEMSTATUS(THIS.grd_4c_Dados.Column7, "Header1", 5)
-                    THIS.grd_4c_Dados.Column7.Header1.Tag = "X"
+                IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+                    IF PEMSTATUS(THIS.grd_4c_Dados.Column7, "Header1", 5)
+                        THIS.grd_4c_Dados.Column7.Header1.Tag = "X"
+                    ENDIF
+                    THIS.grd_4c_Dados.Refresh()
                 ENDIF
-                THIS.grd_4c_Dados.Refresh()
-            ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -2293,52 +2303,59 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
     * do legado quando estavam marcados (limpa tudo).
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro, loc_cMsg
+        LOCAL loc_oErro, loc_cMsg, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF NOT USED("xOpi")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Apenas permitido em modo INSERIR (limpar marcacoes)
-            IF THIS.this_cEscolha <> "INSERIR"
-                MsgAviso("Exclus" + CHR(227) + "o de marca" + CHR(231) + CHR(245) + "es permitida apenas em modo Inserir.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF THIS.this_cEscolha <> "INSERIR"
+                    MsgAviso("Exclus" + CHR(227) + "o de marca" + CHR(231) + CHR(245) + "es permitida apenas em modo Inserir.", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_cMsg = "Descartar todas as marca" + CHR(231) + CHR(245) + "es de Indiv e PM?"
-            IF NOT MsgConfirma(loc_cMsg, "Confirma" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                loc_cMsg = "Descartar todas as marca" + CHR(231) + CHR(245) + "es de Indiv e PM?"
+                IF NOT MsgConfirma(loc_cMsg, "Confirma" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Desmarca Indiv e Divs em todos os itens nao-obrigatorios
-            SELECT xOpi
-            GO TOP
-            SCAN
-                IF NOT xOpi.Obrigs
-                    REPLACE Indiv WITH .F., Divs WITH .F. IN xOpi
-                ENDIF
-            ENDSCAN
-
-            *-- Propaga limpeza para xPesa
-            IF USED("xPesa")
-                SELECT xPesa
+            IF loc_lProsseguir
+                SELECT xOpi
                 GO TOP
                 SCAN
-                    REPLACE Divs WITH .F. IN xPesa
+                    IF NOT xOpi.Obrigs
+                        REPLACE Indiv WITH .F., Divs WITH .F. IN xOpi
+                    ENDIF
                 ENDSCAN
-            ENDIF
+
+            *-- Propaga limpeza para xPesa
+                IF USED("xPesa")
+                    SELECT xPesa
+                    GO TOP
+                    SCAN
+                        REPLACE Divs WITH .F. IN xPesa
+                    ENDSCAN
+                ENDIF
 
             *-- Limpa TAGs dos headers
-            IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
-                IF PEMSTATUS(THIS.grd_4c_Dados.Column5, "Header1", 5)
-                    THIS.grd_4c_Dados.Column5.Header1.Tag = ""
+                IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+                    IF PEMSTATUS(THIS.grd_4c_Dados.Column5, "Header1", 5)
+                        THIS.grd_4c_Dados.Column5.Header1.Tag = ""
+                    ENDIF
+                    IF PEMSTATUS(THIS.grd_4c_Dados.Column7, "Header1", 5)
+                        THIS.grd_4c_Dados.Column7.Header1.Tag = ""
+                    ENDIF
+                    THIS.grd_4c_Dados.Refresh()
                 ENDIF
-                IF PEMSTATUS(THIS.grd_4c_Dados.Column7, "Header1", 5)
-                    THIS.grd_4c_Dados.Column7.Header1.Tag = ""
-                ENDIF
-                THIS.grd_4c_Dados.Refresh()
-            ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

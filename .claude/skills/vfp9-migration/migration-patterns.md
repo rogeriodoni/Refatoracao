@@ -11278,4 +11278,109 @@ ser **identica** a do original, na mesma ordem. Esse teste reprovou 24 arquivos 
 passada — cada um deles um bug real do transformador — e todos foram revertidos
 automaticamente em vez de irem para o commit.
 
-- Origem: Erro159 (2026-09-16).
+- Origem: Erro159 (2026-09-16).n
+---
+
+## 206. Label com `Alignment = 1` e `Width` Inventados Entra Debaixo do Campo (Erro160 2026-09-16)
+
+A classe **`say`** do Framework legado eh `AutoSize = .T.` / `Alignment = 0`:
+
+```
+* PROPRIEDADES DE: say   (docs/FRAMEWORK_class_codigo_fonte.txt)
+  AutoSize = .T.
+  Fontname = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Height = 15
+  Width = 27
+  ForeColor = 90,90,90
+```
+
+O label tem a largura **exata do texto** e desenha **da esquerda**. Por isso os `Say` do SCX
+declaram so `Caption`/`Left`/`Top` — **nunca `Width`, nunca `Alignment`** — e os `Left` vem
+escalonados pelo tamanho de cada legenda, de modo que todas terminem poucos pixels antes do
+campo de entrada:
+
+```
+Say2 "Codigo :"  Left = 411          Get_codigo  Left = 455
+Say1 "Grupo :"   Left = 415          Get_Grupo   Left = 455
+Say3 "Conta :"   Left = 415          get_Conta   Left = 455
+Say4 "Setor :"   Left = 418          Get_Setor   Left = 455
+```
+
+Medido no VFP9 com `TXTWIDTH() * FOnTMETRIC(6, ...)`, Tahoma 8: os quatro textos terminam
+em **451** — quatro pixels antes do TextBox. Os `Left` diferentes nao sao descuido, sao o
+calculo.
+
+O migrador nao conhece a classe base e inventa **duas** propriedades que o legado nao tem:
+
+```foxpro
+* ERRADO - como saiu da migracao do FormCES
+loc_oPagina.AddObject("lbl_4c_Codigo", "Label")
+WITH loc_oPagina.lbl_4c_Codigo
+    .Caption   = "C" + CHR(243) + "digo :"
+    .Left      = 411
+    .Width     = 60        && inventado - o legado nao declara
+    .Alignment = 1         && inventado - encosta o texto na borda DIREITA
+EnDWITH
+
+* CERTO
+    .Left      = 411
+    .Width     = 60        && pode ficar: a caixa eh transparente (BackStyle = 0)
+    .Alignment = 0         && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
+```
+
+Com a caixa inventada, o texto passa a ser encostado na **borda direita** dela — que cai
+**dentro do TextBox** (411 + 60 = 471 > 455). Como os labels sao criados **antes** dos
+controles, o TextBox desenha por cima e come o fim da legenda: `Codigo :` aparece como
+`Codi`, `Grupo :` como `Gru`. O `.prg` compila limpo e o erro so aparece na tela.
+
+### `AutoSize = .T.` nAO resolve — eh no-op em controle criado por `AddObject`
+
+A correcao "obvia" (reproduzir o legado ligando o AutoSize) **nao funciona**. Medido:
+
+```foxpro
+loc_oF.AddObject("L", "Label")
+WITH loc_oF.L
+    .Fontname = "Tahoma"
+    .FontSize = 8
+    .Caption  = "C" + CHR(243) + "digo :"
+    .AutoSize = .T.
+EnDWITH
+? loc_oF.L.Width      && 100 - o default do Label, nao os 40 do texto
+```
+
+Testado nas duas ordens (`Caption` -> `AutoSize` e `AutoSize` -> `Caption`), antes e depois
+do `Show()`, e reatribuindo o `Caption` com o AutoSize ja ligado: a `Width` fica nos **100**
+do default em todos os casos. Entao o conserto eh `Alignment = 0` com uma `Width` explicita
+que caiba o texto — **nunca** confiar no AutoSize em runtime.
+
+### A caixa larga sobrando eh inofensiva (com uma condicao)
+
+Depois de `Alignment = 0` a caixa continua invadindo o campo, mas **nao aparece**: `BackStyle = 0`
+nao pinta nada e o texto acaba antes. A condicao eh a **ordem de criacao** — o label tem de
+ser criado AnTES do controle, para o controle ficar por cima no z-order. Se for criado
+depois, a caixa transparente fica na frente e **bloqueia o clique** no campo. nos 27 sites do
+sweep todos os labels vinham antes; o Pattern #202 so alarga a `Width` nesse caso.
+
+### O legado USA `Alignment = 1` legitimamente — conferir antes de corrigir
+
+Varrendo os dumps: **884 labels do legado declaram `Alignment`**. Right-align existe e eh
+valido. O que distingue o bug eh o dump:
+
+| O Say do legado declara | Diagnostico | Conserto |
+|---|---|---|
+| nem `Width` nem `Alignment` | classe `say` pura — migrador inventou os dois | `.Alignment = 0` |
+| `Width` e/ou `Alignment` | right-align legitimo | **nao mexer no Alignment** — a divergencia esta no `Left`/`Width` |
+
+no sweep do Erro160, dos 51 candidatos geometricos: **27 confirmados** pelo dump (12 forms) e
+**22** em que o legado declarava `Width` — nesses o `Left` eh que estava errado (`Formccr`
+`LblCarac`: legado `Left = 404`, migrado `Left = 600`), outro bug.
+
+**Medir o TEXTO, nao a caixa.** O primeiro detector comparou `Left + Width` com o `Left` do
+controle e acusou **414 sites**; como a caixa com `Alignment = 0` eh invisivel, quase tudo
+era falso positivo. Medindo o texto renderizado e filtrando por `Alignment = 1`, sobraram 51
+candidatos e 27 bugs reais.
+
+Auto-fix: CorretorAutomatico **#202** (auto-muta so com o dump confirmando; sem dump, WARnInG).
+Referencia: `FormCES`. Origem: Erro160 (2026-09-16, "Cadastro de Classificacao de Estoque").

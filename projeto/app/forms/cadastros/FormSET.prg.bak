@@ -1255,11 +1255,12 @@ DEFINE CLASS FormSET AS FormBase
     *===========================================================================
     PROCEDURE ValidarLocalizacaoGrid()
         LOCAL loc_oPg2, loc_cLocais, loc_nRecAtual, loc_lAchou
-        LOCAL loc_cSetorAtual, loc_lDuplic, loc_cDesc
+        LOCAL loc_cSetorAtual, loc_lDuplic, loc_cDesc, loc_lProsseguir
         loc_oPg2    = THIS.pgf_4c_Paginas.Page2
         loc_lAchou  = .F.
         loc_lDuplic = .F.
         loc_cDesc   = ""
+        loc_lProsseguir = .T.
 
         IF !PEMSTATUS(loc_oPg2, "grd_4c_Localizacoes", 5)
             RETURN
@@ -1283,8 +1284,13 @@ DEFINE CLASS FormSET AS FormBase
         CATCH TO loException
             MostrarErro("Erro ao validar localiza" + CHR(231) + CHR(227) + "o:" + ;
                 CHR(13) + loException.Message, "FormSET.ValidarLocalizacaoGrid")
-            RETURN
+            loc_lProsseguir = .F.
         ENDTRY
+
+        *-- RETURN aqui e legal: esta FORA do TRY (regra #1)
+        IF !loc_lProsseguir
+            RETURN
+        ENDIF
 
         IF !loc_lAchou
             SELECT cursor_4c_Localizacoes

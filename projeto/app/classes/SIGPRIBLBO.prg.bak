@@ -205,6 +205,10 @@ DEFINE CLASS SIGPRIBLBO AS BusinessBase
                 loc_lContinuar = .F.
             ENDIF
             IF loc_lContinuar
+                *-- Carimbo dividido, convencao do legado (lcHoras = Time(), lcUsuars = Usuar):
+                *-- dDatas guarda a DATA, cHoras a HORA e cUsuarios o usuario - e assim que
+                *-- esta a unica linha existente da tabela (30/07/1999 / 16:07:13 / HILTON).
+                *-- cEmps fica em branco nessa mesma linha: nao eh usada aqui.
                 loc_cSQL = "INSERT INTO SigCnFBl (" + ;
                            " FPags, cIdChaves, cLocals, cTxtCds, cNomeImps," + ;
                            " cFontePdrs, nTamFontes, cTamFolha," + ;
@@ -214,7 +218,8 @@ DEFINE CLASS SIGPRIBLBO AS BusinessBase
                            " nLnCgcClis, nClCgcClis, nLnEndCobs, nClEndCobs," + ;
                            " nLnBaiCobs, nClBaiCobs, nLnCidCobs, nClCidCobs," + ;
                            " nLnEstCobs, nClEstCobs, nLnCepCobs, nClCepCobs," + ;
-                           " nLnTxtCds, nClTxtCds" + ;
+                           " nLnTxtCds, nClTxtCds," + ;
+                           " cEmps, cHoras, cUsuarios, nTxtLins, nTxtCols, dDatas" + ;
                            ") VALUES (" + ;
                            EscaparSQL(PADR(THIS.this_cFPags, 12)) + ", " + ;
                            EscaparSQL(THIS.this_cIdChaves) + ", " + ;
@@ -249,7 +254,13 @@ DEFINE CLASS SIGPRIBLBO AS BusinessBase
                            FormatarNumeroSQL(THIS.this_nLnCepCobs, 2) + ", " + ;
                            FormatarNumeroSQL(THIS.this_nClCepCobs, 2) + ", " + ;
                            FormatarNumeroSQL(THIS.this_nLnTxtCds, 2) + ", " + ;
-                           FormatarNumeroSQL(THIS.this_nClTxtCds, 2) + ;
+                           FormatarNumeroSQL(THIS.this_nClTxtCds, 2) + ", " + ;
+                           EscaparSQL("") + ", " + ;
+                           EscaparSQL(LEFT(TIME(), 8)) + ", " + ;
+                           EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 20)) + ", " + ;
+                           FormatarNumeroSQL(0, 0) + ", " + ;
+                           FormatarNumeroSQL(0, 0) + ", " + ;
+                           FormatarDataSQL(DATE()) + ;
                            ")"
                 loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
                 IF loc_nRet > 0
@@ -278,9 +289,14 @@ DEFINE CLASS SIGPRIBLBO AS BusinessBase
                 loc_lContinuar = .F.
             ENDIF
             IF loc_lContinuar
+                *-- Re-carimba data/hora/usuario da ultima alteracao (mesmo trio do
+                *-- Inserir): dDatas guarda a DATA, cHoras a HORA e cUsuarios o usuario.
                 loc_cSQL = "UPDATE SigCnFBl SET" + ;
                            " cLocals = " + EscaparSQL(THIS.this_cLocals) + "," + ;
-                           " cTxtCds = " + EscaparSQL(THIS.this_cTxtCds) + ;
+                           " cTxtCds = " + EscaparSQL(THIS.this_cTxtCds) + "," + ;
+                           " dDatas = " + FormatarDataSQL(DATE()) + "," + ;
+                           " cHoras = " + EscaparSQL(LEFT(TIME(), 8)) + "," + ;
+                           " cUsuarios = " + EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 20)) + ;
                            " WHERE FPags = " + EscaparSQL(PADR(THIS.this_cFPags, 12))
                 loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
                 IF loc_nRet > 0

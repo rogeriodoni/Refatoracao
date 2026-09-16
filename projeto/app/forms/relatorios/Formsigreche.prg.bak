@@ -435,26 +435,31 @@ DEFINE CLASS Formsigreche AS FormBase
     * BTNEXCELCLICK - Botao 3: Exportar para Excel
     *==========================================================================
     PROCEDURE BtnExcelClick()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_lProsseguir
         loc_lSucesso = .F.
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ValidarDados()
                 MsgAviso(THIS.this_oRelatorio.ObterMensagemErro(), "Excel")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Excel")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Excel")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            IF USED("cursor_4c_Relatorio")
-                LOCAL loc_cArqXls
-                loc_cArqXls = SYS(2023) + "\SigReChe_" + STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                COPY TO (loc_cArqXls) TYPE XL5
-                MsgInfo("Arquivo Excel gerado em: " + loc_cArqXls, "Excel")
-                loc_lSucesso = .T.
+            IF loc_lProsseguir
+                IF USED("cursor_4c_Relatorio")
+                    LOCAL loc_cArqXls
+                    loc_cArqXls = SYS(2023) + "\SigReChe_" + STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                    COPY TO (loc_cArqXls) TYPE XL5
+                    MsgInfo("Arquivo Excel gerado em: " + loc_cArqXls, "Excel")
+                    loc_lSucesso = .T.
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnExcelClick")

@@ -477,7 +477,7 @@ DEFINE CLASS FormCES AS FormBase
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .Visible   = .T.
         ENDWITH
 
@@ -510,7 +510,7 @@ DEFINE CLASS FormCES AS FormBase
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .Visible   = .T.
         ENDWITH
 
@@ -548,7 +548,7 @@ DEFINE CLASS FormCES AS FormBase
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .Visible   = .T.
         ENDWITH
 
@@ -586,7 +586,7 @@ DEFINE CLASS FormCES AS FormBase
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .Visible   = .T.
         ENDWITH
 

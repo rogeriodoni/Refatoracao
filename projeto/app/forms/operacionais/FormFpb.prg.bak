@@ -773,23 +773,26 @@ DEFINE CLASS FormFpb AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico + LPARAMETERS obrigatorio
     *--------------------------------------------------------------------------
     PROCEDURE GrdDadosAfterRowColChange(par_nColIndex)
-        LOCAL loc_oGrd, loc_nNovaCol, loc_oErro
+        LOCAL loc_oGrd, loc_nNovaCol, loc_oErro, loc_lProsseguir4c
+        loc_lProsseguir4c = .T.
         TRY
             THIS.GravaDados = .T.
 
             IF THIS.this_lRedirigindo
-                RETURN
+                loc_lProsseguir4c = .F.
             ENDIF
 
-            loc_oGrd = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
-            IF VARTYPE(loc_oGrd) = "O"
-                loc_nNovaCol = loc_oGrd.ActiveColumn
-                IF loc_nNovaCol >= 2 AND ;
-                   USED("cursor_4c_BINs") AND !EOF("cursor_4c_BINs")
-                    IF EMPTY(ALLTRIM(cursor_4c_BINs.codbins))
-                        THIS.this_lRedirigindo = .T.
-                        loc_oGrd.Column1.SetFocus()
-                        THIS.this_lRedirigindo = .F.
+            IF loc_lProsseguir4c
+                loc_oGrd = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
+                IF VARTYPE(loc_oGrd) = "O"
+                    loc_nNovaCol = loc_oGrd.ActiveColumn
+                    IF loc_nNovaCol >= 2 AND ;
+                       USED("cursor_4c_BINs") AND !EOF("cursor_4c_BINs")
+                        IF EMPTY(ALLTRIM(cursor_4c_BINs.codbins))
+                            THIS.this_lRedirigindo = .T.
+                            loc_oGrd.Column1.SetFocus()
+                            THIS.this_lRedirigindo = .F.
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF
@@ -867,24 +870,27 @@ DEFINE CLASS FormFpb AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oPag, loc_oGrd, loc_oErro
+        LOCAL loc_oPag, loc_oGrd, loc_oErro, loc_lProsseguir4c
+        loc_lProsseguir4c = .T.
         TRY
             IF USED("cursor_4c_BINs")
                 SELECT cursor_4c_BINs
                 IF RECCOUNT() = 0 OR EOF()
                     MsgAviso("Nenhum BIN selecionado para altera" + CHR(231) + CHR(227) + "o.", ;
                         "Aten" + CHR(231) + CHR(227) + "o")
-                    RETURN
+                    loc_lProsseguir4c = .F.
                 ENDIF
 
-                loc_oPag = THIS.pgf_4c_Paginas.Page1
-                loc_oGrd = loc_oPag.grd_4c_Dados
-                IF VARTYPE(loc_oGrd) = "O"
-                    loc_oGrd.Refresh()
-                    loc_oGrd.Column2.SetFocus()
-                    THIS.GravaDados = .T.
+                IF loc_lProsseguir4c
+                    loc_oPag = THIS.pgf_4c_Paginas.Page1
+                    loc_oGrd = loc_oPag.grd_4c_Dados
+                    IF VARTYPE(loc_oGrd) = "O"
+                        loc_oGrd.Refresh()
+                        loc_oGrd.Column2.SetFocus()
+                        THIS.GravaDados = .T.
+                    ENDIF
+                    THIS.this_cModoAtual = "ALTERAR"
                 ENDIF
-                THIS.this_cModoAtual = "ALTERAR"
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -899,18 +905,21 @@ DEFINE CLASS FormFpb AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir4c
+        loc_lProsseguir4c = .T.
         TRY
             IF USED("cursor_4c_BINs")
                 SELECT cursor_4c_BINs
                 IF RECCOUNT() = 0 OR EOF()
                     MsgAviso("Nenhum BIN selecionado para visualiza" + CHR(231) + CHR(227) + "o.", ;
                         "Aten" + CHR(231) + CHR(227) + "o")
-                    RETURN
+                    loc_lProsseguir4c = .F.
                 ENDIF
 
-                THIS.AlternarPagina(2)
-                THIS.this_cModoAtual = "VISUALIZAR"
+                IF loc_lProsseguir4c
+                    THIS.AlternarPagina(2)
+                    THIS.this_cModoAtual = "VISUALIZAR"
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

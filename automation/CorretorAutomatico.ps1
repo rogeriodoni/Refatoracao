@@ -14590,6 +14590,263 @@ function Corrigir-MaxLengthCopiadoDoWidth {
     return $Linhas
 }
 
+function Corrigir-LabelAlignmentSobreControle {
+    # Pattern #202 (Erro160, 2026-09-16, FormCES) - AUTO-FIX com guard do legado.
+    #
+    # A classe "say" do Framework legado eh AutoSize = .T. / Alignment = 0: o
+    # label tem a largura EXATA do texto e desenha da esquerda para a direita.
+    # Por isso os Say do SCX declaram so Caption/Left/Top - nunca Width, nunca
+    # Alignment - e os Left vem escalonados pelo tamanho de cada texto, de modo
+    # que todos terminem alguns pixels antes do campo de entrada.
+    #
+    # O migrador nao sabe disso e inventa um par de propriedades:
+    #     .Width     = 60
+    #     .Alignment = 1      && direita
+    # Com a caixa inventada, o texto passa a ser encostado na BORDA DIREITA da
+    # caixa, que fica DENTRO do TextBox. Como os labels sao criados ANTES dos
+    # controles, o TextBox desenha por cima e come o fim da legenda: no FormCES
+    # "Codigo :" virou "Codi" e "Grupo :" virou "Gru".
+    #
+    # ATENCAO - o legado USA Alignment = 1 legitimamente (884 labels nos dumps).
+    # Por isso a mutacao so acontece quando o dump do legado CONFIRMA que o Say
+    # correspondente nao declara nem Width nem Alignment. Sem TaskDir, ou com o
+    # legado declarando um dos dois, o pattern so emite WARNING: ali a
+    # divergencia costuma estar no Left/Width (outro bug), nao no alinhamento.
+    #
+    # Sweep 2026-09-16 (Erro160): 27 sites em 12 forms confirmados pelo legado
+    # (FormDES 8, FormFBI 3, FormCOC 3, FormAli 3, FormReg 2, FormMPL 2 e
+    # FormCCJ/FormCeg/FormCor/FormCtg/FormENR/Formrst 1 cada) + 4 no FormCES.
+    # Outros 22 candidatos ficaram em WARNING porque o legado declara Width.
+    param(
+        [string[]]$Linhas,
+        [string]$Arquivo = "",
+        [string]$TaskDir = ""
+    )
+
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+    if ((Split-Path $Arquivo -Leaf) -notmatch '^(?i)Form.*\.prg$') { return $Linhas }
+
+    $entrada = @('TextBox','ComboBox','EditBox','Spinner','CheckBox','OptionGroup')
+
+    # ---- parse dos controles do arquivo migrado -------------------------------
+    $ctrls = @{}; $ordem = @(); $alvo = $null
+    for ($n = 0; $n -lt $Linhas.Count; $n++) {
+        $l = $Linhas[$n]
+        if ($l -match '^\s*\*') { continue }
+        if ($l -match '^\s*([A-Za-z0-9_\.\(\)]+)\.AddObject\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"') {
+            $path = $matches[1] + '.' + $matches[2]
+            if (-not $ctrls.ContainsKey($path)) {
+                $ctrls[$path] = @{ Pai = $matches[1]; Nome = $matches[2]; Classe = $matches[3]; Linha = $n; Props = @{}; PropLn = @{} }
+                $ordem += $path
+            }
+            continue
+        }
+        if ($l -match '^\s*WITH\s+([A-Za-z0-9_\.\(\)]+)\s*$') { $alvo = $matches[1]; continue }
+        if ($l -match '^\s*ENDWITH')                          { $alvo = $null;       continue }
+        if ($alvo -and $l -match '^\s*\.([A-Za-z]+)\s*=\s*(.+?)\s*(&&.*)?$') {
+            if ($ctrls.ContainsKey($alvo)) { $ctrls[$alvo].Props[$matches[1]] = $matches[2]; $ctrls[$alvo].PropLn[$matches[1]] = $n }
+            continue
+        }
+        if ($l -match '^\s*([A-Za-z0-9_\.\(\)]+\.[A-Za-z0-9_]+)\.([A-Za-z]+)\s*=\s*(.+?)\s*(&&.*)?$') {
+            if ($ctrls.ContainsKey($matches[1])) { $ctrls[$matches[1]].Props[$matches[2]] = $matches[3]; $ctrls[$matches[1]].PropLn[$matches[2]] = $n }
+        }
+    }
+    if ($ordem.Count -eq 0) { return $Linhas }
+
+    # O sweep retroativo (CorrigirTodosFormularios.ps1) nao passa TaskDir; sem o
+    # dump o pattern so avisaria. Entao, quando ele falta, descobrimos a task
+    # pelo analise.json (form.formClass). O mapa eh montado uma vez por sessao.
+    if ([string]::IsNullOrEmpty($TaskDir)) {
+        $TaskDir = Get-TaskDirDoForm -Arquivo $Arquivo
+    }
+
+    # ---- blocos do dump legado (so se houver task) -----------------------------
+    $legado = @{}
+    if (-not [string]::IsNullOrEmpty($TaskDir) -and (Test-Path $TaskDir)) {
+        $dump = Get-ChildItem $TaskDir -Filter '*_form_codigo_fonte.txt' -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($dump) {
+            $cur = $null
+            foreach ($l in (Get-Content -LiteralPath $dump.FullName)) {
+                if ($l -match '^\* PROPRIEDADES DE:') { $cur = @{}; continue }
+                if ($null -eq $cur) { continue }
+                if ($l -match '^\s{2}([A-Za-z]+)\s*=\s*(.+?)\s*$') { $cur[$matches[1]] = $matches[2] }
+                if ($l -match '^\s{2}Name\s*=\s*"([^"]+)"') {
+                    $k = ConvertTo-ChaveCaption (ConvertTo-TextoCaption ($cur['Caption']))
+                    if (-not [string]::IsNullOrEmpty($k) -and -not $legado.ContainsKey($k)) { $legado[$k] = $cur.Clone() }
+                    $cur = $null
+                }
+            }
+        }
+    }
+
+    # ---- medicao do texto (para nao clipar ao passar a desenhar da esquerda) ---
+    $medir = $true
+    try { Add-Type -AssemblyName System.Drawing -ErrorAction Stop } catch { $medir = $false }
+
+    $lista = [System.Collections.ArrayList]@($Linhas)
+
+    foreach ($p in $ordem) {
+        $c = $ctrls[$p]
+        if ($c.Classe -ne 'Label') { continue }
+        if ($c.Props['Alignment'] -ne '1') { continue }
+        $ll = ConvertTo-InteiroOuNulo $c.Props['Left']
+        $lw = ConvertTo-InteiroOuNulo $c.Props['Width']
+        $lt = ConvertTo-InteiroOuNulo $c.Props['Top']
+        if ($null -eq $ll -or $null -eq $lw -or $null -eq $lt) { continue }
+        $lh = ConvertTo-InteiroOuNulo $c.Props['Height']
+        if ($null -eq $lh) { $lh = 17 }
+
+        # controle de entrada a direita cujo espaco o texto invade
+        $vit = $null
+        foreach ($q in $ordem) {
+            $d = $ctrls[$q]
+            if ($d.Pai -ne $c.Pai) { continue }
+            if ($entrada -notcontains $d.Classe) { continue }
+            $dl = ConvertTo-InteiroOuNulo $d.Props['Left']
+            $dt = ConvertTo-InteiroOuNulo $d.Props['Top']
+            if ($null -eq $dl -or $null -eq $dt) { continue }
+            $dh = ConvertTo-InteiroOuNulo $d.Props['Height']
+            if ($null -eq $dh) { $dh = 23 }
+            if ($dl -le $ll) { continue }
+            if (($ll + $lw) -le $dl) { continue }
+            if (($lt + $lh) -le $dt -or ($dt + $dh) -le $lt) { continue }
+            $vit = $d
+            break
+        }
+        if ($null -eq $vit) { continue }
+
+        $cap  = ConvertTo-TextoCaption $c.Props['Caption']
+        $lnAl = $c.PropLn['Alignment']
+        $vitL = ConvertTo-InteiroOuNulo $vit.Props['Left']
+
+        $say = $null
+        if ($legado.Count -gt 0 -and -not [string]::IsNullOrEmpty($cap)) { $say = $legado[(ConvertTo-ChaveCaption $cap)] }
+
+        if ($null -eq $say) {
+            Write-Host "[Pattern #202 WARN] $($c.Nome) (linha $($lnAl + 1)): Alignment = 1 + Width = $lw empurra '$cap' para dentro de $($vit.Nome) (Left = $vitL); Say do legado nao localizado" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-201-LABEL-ALIGNMENT-SOBRE-CONTROLE" -Linha ($lnAl + 1) `
+                -Original ".Alignment = 1 / .Width = $lw em $($c.Nome)" -Corrigido "(nao mutado - legado nao conferido)" `
+                -Descricao ("Pattern #202 WARNING: o label '$cap' tem Alignment = 1 com Width = $lw, o que encosta o texto na " +
+                    "borda direita da caixa - e essa borda cai DENTRO de $($vit.Nome) (Left = $vitL). Como o label eh criado " +
+                    "antes, o controle desenha por cima e corta o fim da legenda. NAO foi mutado porque o Say correspondente " +
+                    "nao foi encontrado no dump do legado (TaskDir ausente ou Caption divergente). Conferir em " +
+                    "tasks\<task>\*_form_codigo_fonte.txt: se o Say NAO declara Width nem Alignment, ele eh da classe 'say' " +
+                    "(AutoSize = .T., Alignment = 0) e o conserto eh .Alignment = 0; se declara, o right-align eh legitimo e " +
+                    "a divergencia esta no Left/Width. Origem: Erro160 (2026-09-16, FormCES).")
+            continue
+        }
+
+        if ($say.ContainsKey('Width') -or $say.ContainsKey('Alignment')) {
+            Write-Host "[Pattern #202] $($c.Nome): legado declara Width/Alignment - right-align legitimo, nao tocado (conferir Left/Width)" -ForegroundColor DarkGray
+            continue
+        }
+
+        # legado = say puro (AutoSize / esquerda) -> AUTO-FIX
+        $ind = ''
+        if ($lista[$lnAl] -match '^(\s*)') { $ind = $matches[1] }
+        $lista[$lnAl] = $ind + '.Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)'
+
+        # Com o texto voltando a desenhar da esquerda, a caixa precisa cabe-lo.
+        # So ALARGA, e so quando o label eh criado ANTES do controle - senao a
+        # caixa transparente ficaria por cima e bloquearia o clique no campo.
+        $obsW = ''
+        if ($medir -and $c.PropLn.ContainsKey('Width') -and $c.Linha -lt $vit.Linha) {
+            try {
+                $fn = 'Tahoma'
+                if ($c.Props['FontName'] -match '"([^"]+)"') { $fn = $matches[1] }
+                $fs = ConvertTo-InteiroOuNulo $c.Props['FontSize']
+                if ($null -eq $fs) { $fs = 8 }
+                $st = [System.Drawing.FontStyle]::Regular
+                if ($c.Props['FontBold'] -match '\.T\.') { $st = [System.Drawing.FontStyle]::Bold }
+                $fo  = New-Object System.Drawing.Font($fn, [float]$fs, $st, [System.Drawing.GraphicsUnit]::Point)
+                $bmp = New-Object System.Drawing.Bitmap 1, 1
+                $g   = [System.Drawing.Graphics]::FromImage($bmp)
+                $tw  = [math]::Ceiling($g.MeasureString($cap, $fo).Width)
+                $g.Dispose(); $bmp.Dispose(); $fo.Dispose()
+                if ($lw -lt $tw + 10) {
+                    $lnW  = $c.PropLn['Width']
+                    $indW = ''
+                    if ($lista[$lnW] -match '^(\s*)') { $indW = $matches[1] }
+                    $lista[$lnW] = $indW + ".Width     = $($tw + 10)    && texto mede ~$($tw)px"
+                    $obsW = " + Width $lw -> $($tw + 10)"
+                }
+            } catch { }
+        }
+
+        Add-Correcao -Tipo "LABEL_ALIGNMENT_SOBRE_CONTROLE" -Linha ($lnAl + 1) `
+            -Original ".Alignment = 1 em $($c.Nome) ('$cap')" -Corrigido ".Alignment = 0$obsW" `
+            -Descricao ("Pattern #202: a classe 'say' do Framework legado eh AutoSize = .T. / Alignment = 0 - o label tem a " +
+                "largura exata do texto e desenha da esquerda. Por isso o Say do SCX so declara Caption/Left/Top, e os Left " +
+                "vem escalonados pelo tamanho de cada texto para que todos terminem pouco antes do campo. O migrador inventou " +
+                ".Width = $lw + .Alignment = 1, o que encosta o texto na borda direita da caixa - e essa borda cai DENTRO de " +
+                "$($vit.Nome) (Left = $vitL). Como o label eh criado ANTES do controle, o controle desenha por cima e corta o " +
+                "fim da legenda ('Codigo :' virou 'Codi' no FormCES). Confirmado contra o dump: o Say correspondente nao " +
+                "declara Width nem Alignment. Origem: Erro160 (2026-09-16, FormCES 'Cadastro de Classificacao de Estoque'; " +
+                "o sweep pegou 27 sites em 12 forms).")
+        Write-Host "[Pattern #202] $($c.Nome) Alignment 1 -> 0$obsW (linha $($lnAl + 1))" -ForegroundColor Green
+    }
+
+    return $lista.ToArray()
+}
+
+function Get-TaskDirDoForm {
+    # helper do Pattern #202 - acha a task (a mais recente) que gerou este form,
+    # casando o nome do arquivo com form.formClass do analise.json. O mapa custa
+    # uma varredura de tasks\*\analise.json, entao fica em cache de sessao.
+    param([string]$Arquivo)
+
+    if ($null -eq $script:MapaFormTask) {
+        $script:MapaFormTask = @{}
+        $raizTasks = 'C:\4c\tasks'
+        if (Test-Path $raizTasks) {
+            foreach ($t in (Get-ChildItem $raizTasks -Directory -ErrorAction SilentlyContinue | Sort-Object Name)) {
+                $j = Join-Path $t.FullName 'analise.json'
+                if (-not (Test-Path $j)) { continue }
+                try { $o = Get-Content $j -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop } catch { continue }
+                if ($o.form -and $o.form.formClass) {
+                    # ordem crescente: a task MAIS RECENTE sobrescreve
+                    $script:MapaFormTask[$o.form.formClass.ToLower()] = $t.FullName
+                }
+            }
+        }
+    }
+
+    $chave = [System.IO.Path]::GetFileNameWithoutExtension($Arquivo).ToLower()
+    if ($script:MapaFormTask.ContainsKey($chave)) { return $script:MapaFormTask[$chave] }
+    return ''
+}
+
+function ConvertTo-InteiroOuNulo {
+    # helper do Pattern #202 - valor literal inteiro do .prg, ou $null
+    param([string]$Valor)
+    if ($Valor -match '^-?\d+$') { return [int]$Valor }
+    return $null
+}
+
+function ConvertTo-TextoCaption {
+    # helper do Pattern #202 - resolve '"C" + CHR(243) + "digo :"' -> 'Codigo :'
+    # Devolve $null quando a expressao nao eh literal (variavel, funcao, etc).
+    param([string]$Expr)
+    if ([string]::IsNullOrEmpty($Expr)) { return $null }
+    $sb = New-Object System.Text.StringBuilder
+    foreach ($p in ($Expr.Trim() -split '\s*\+\s*')) {
+        if     ($p -match '^"([^"]*)"$')            { [void]$sb.Append($matches[1]) }
+        elseif ($p -match "^'([^']*)'$")            { [void]$sb.Append($matches[1]) }
+        elseif ($p -match '^CHR\(\s*(\d+)\s*\)$')   { [void]$sb.Append([char][int]$matches[1]) }
+        elseif ($p -match '^SPACE\(\s*(\d+)\s*\)$') { [void]$sb.Append(' ' * [int]$matches[1]) }
+        else { return $null }
+    }
+    return $sb.ToString()
+}
+
+function ConvertTo-ChaveCaption {
+    # helper do Pattern #202 - normaliza o caption para casar migrado x legado
+    # (o dump grava os acentos em outra pagina de codigo, entao so A-Z0-9 conta)
+    param([string]$Texto)
+    if ($null -eq $Texto) { return '' }
+    return (($Texto -replace '[^A-Za-z0-9]', '').ToLower())
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -14851,6 +15108,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-TtodEmValorQuePodeSerDate -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-ColumnAddObjectSemCurrentControl -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-MaxLengthCopiadoDoWidth -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-LabelAlignmentSobreControle -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
 
     }
 

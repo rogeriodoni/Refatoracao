@@ -828,16 +828,19 @@ DEFINE CLASS FormSIGREEUN AS FormBase
     ENDPROC
 
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_cFrxPath
+        LOCAL loc_cFrxPath, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.ExecutarReportForm("SigReEun", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
+            IF loc_lProsseguir
+                THIS.ExecutarReportForm("SigReEun", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -849,16 +852,19 @@ DEFINE CLASS FormSIGREEUN AS FormBase
     * BtnImprimirClick - Envia relatorio para impressora com dialogo
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
-        LOCAL loc_cFrxPath
+        LOCAL loc_cFrxPath, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.ExecutarReportForm("SigReEun", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
+            IF loc_lProsseguir
+                THIS.ExecutarReportForm("SigReEun", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -870,26 +876,31 @@ DEFINE CLASS FormSIGREEUN AS FormBase
     * BtnExcelClick - Exporta cursor dbRelatorio para arquivo XLS
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcelClick()
-        LOCAL loc_cArquivo, loc_cCursor
+        LOCAL loc_cArquivo, loc_cCursor, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCursor = "dbRelatorio"
-            IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
-                MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
-                RETURN
+            IF loc_lProsseguir
+                loc_cCursor = "dbRelatorio"
+                IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
+                    MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cArquivo = PUTFILE("Salvar como...", "SigReEun", "XLS")
-            IF !EMPTY(loc_cArquivo)
-                SELECT (loc_cCursor)
-                COPY TO (loc_cArquivo) TYPE XLS
-                MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
-                    loc_cArquivo, "Excel")
+            IF loc_lProsseguir
+                loc_cArquivo = PUTFILE("Salvar como...", "SigReEun", "XLS")
+                IF !EMPTY(loc_cArquivo)
+                    SELECT (loc_cCursor)
+                    COPY TO (loc_cArquivo) TYPE XLS
+                    MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
+                        loc_cArquivo, "Excel")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

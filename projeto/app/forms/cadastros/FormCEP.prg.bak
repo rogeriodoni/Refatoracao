@@ -1195,56 +1195,61 @@ DEFINE CLASS FormCEP AS FormBase
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
-        LOCAL loc_cEstado, loc_oBusca
-        loc_cEstado = ""
+        LOCAL loc_cEstado, loc_oBusca, loc_lProsseguir, loc_oErro
+        loc_cEstado     = ""
+        loc_lProsseguir = .T.
 
         TRY
             IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "txt_4c_Estados", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cEstado = UPPER(ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_Estados.Value))
+            IF loc_lProsseguir
+                loc_cEstado = UPPER(ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_Estados.Value))
 
-            IF loc_cEstado == UPPER(ALLTRIM(THIS.this_cUltimoEstadoValidado))
-                RETURN
+                IF loc_cEstado == UPPER(ALLTRIM(THIS.this_cUltimoEstadoValidado))
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            THIS.this_cUltimoEstadoValidado = loc_cEstado
-
-            IF EMPTY(loc_cEstado)
-                THIS.this_cUfFiltro = ""
-                THIS.CarregarLista()
-            ELSE
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCdUfs", "cursor_4c_BuscaUf", "Estados", loc_cEstado, ;
-                    "Selecionar UF")
-
-                IF VARTYPE(loc_oBusca) = "O"
-                    IF !loc_oBusca.this_lAchouRegistro
-                        loc_oBusca.mAddColuna("Estados", "", "UF")
-                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.Show()
-                    ENDIF
-
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUf")
-                        SELECT cursor_4c_BuscaUf
-                        loc_cEstado = ALLTRIM(cursor_4c_BuscaUf.Estados)
-                    ENDIF
-
-                    loc_oBusca.Release()
-                ENDIF
-
-                IF USED("cursor_4c_BuscaUf")
-                    USE IN cursor_4c_BuscaUf
-                ENDIF
+            IF loc_lProsseguir
+                THIS.this_cUltimoEstadoValidado = loc_cEstado
 
                 IF EMPTY(loc_cEstado)
-                    THIS.pgf_4c_Paginas.Page1.txt_4c_Estados.Value = ""
                     THIS.this_cUfFiltro = ""
-                ELSE
-                    THIS.pgf_4c_Paginas.Page1.txt_4c_Estados.Value = loc_cEstado
-                    THIS.this_cUfFiltro = loc_cEstado
                     THIS.CarregarLista()
+                ELSE
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                        "SigCdUfs", "cursor_4c_BuscaUf", "Estados", loc_cEstado, ;
+                        "Selecionar UF")
+
+                    IF VARTYPE(loc_oBusca) = "O"
+                        IF !loc_oBusca.this_lAchouRegistro
+                            loc_oBusca.mAddColuna("Estados", "", "UF")
+                            loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                            loc_oBusca.Show()
+                        ENDIF
+
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUf")
+                            SELECT cursor_4c_BuscaUf
+                            loc_cEstado = ALLTRIM(cursor_4c_BuscaUf.Estados)
+                        ENDIF
+
+                        loc_oBusca.Release()
+                    ENDIF
+
+                    IF USED("cursor_4c_BuscaUf")
+                        USE IN cursor_4c_BuscaUf
+                    ENDIF
+
+                    IF EMPTY(loc_cEstado)
+                        THIS.pgf_4c_Paginas.Page1.txt_4c_Estados.Value = ""
+                        THIS.this_cUfFiltro = ""
+                    ELSE
+                        THIS.pgf_4c_Paginas.Page1.txt_4c_Estados.Value = loc_cEstado
+                        THIS.this_cUfFiltro = loc_cEstado
+                        THIS.CarregarLista()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

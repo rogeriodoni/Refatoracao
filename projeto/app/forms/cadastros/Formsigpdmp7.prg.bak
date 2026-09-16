@@ -1787,56 +1787,65 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
     * Tambem bloqueia alteracao de data quando ja existem envelopes (TmpOperacao)
     *--------------------------------------------------------------------------
     PROCEDURE ValidarDataMov()
-        LOCAL loc_oPg2, loc_dData, loc_lBloqueado, loc_nContEnv
+        LOCAL loc_oPg2, loc_dData, loc_lBloqueado, loc_nContEnv, loc_lProsseguir
         loc_lBloqueado = .F.
 
+        loc_lProsseguir = .T.
         TRY
             loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
             IF !PEMSTATUS(loc_oPg2, "cnt_4c_Dados", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !PEMSTATUS(loc_oPg2.cnt_4c_Dados, "txt_4c_Dt_data", 5)
-                RETURN
-            ENDIF
-
-            loc_dData = loc_oPg2.cnt_4c_Dados.txt_4c_Dt_data.Value
-
-            IF !INLIST(THIS.this_cPcEscolha, "INSERIR", "ALTERAR")
-                RETURN
+            IF loc_lProsseguir
+                IF !PEMSTATUS(loc_oPg2.cnt_4c_Dados, "txt_4c_Dt_data", 5)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF EMPTY(loc_dData)
-                MsgAviso("Informe uma data v" + CHR(225) + "lida.", "")
-                loc_oPg2.cnt_4c_Dados.txt_4c_Dt_data.Value = DATE()
-                RETURN
+            IF loc_lProsseguir
+                loc_dData = loc_oPg2.cnt_4c_Dados.txt_4c_Dt_data.Value
+
+                IF !INLIST(THIS.this_cPcEscolha, "INSERIR", "ALTERAR")
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                IF EMPTY(loc_dData)
+                    MsgAviso("Informe uma data v" + CHR(225) + "lida.", "")
+                    loc_oPg2.cnt_4c_Dados.txt_4c_Dt_data.Value = DATE()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Verifica se ja existem envelopes/ops lancados (TmpOperacao)
             *-- Legado: Count to _LnCont For Codigos > 0
-            IF USED("TmpOperacao")
-                SELECT TmpOperacao
-                COUNT TO loc_nContEnv FOR Codigos > 0
-                IF loc_nContEnv > 0
-                    MsgAviso("A Data s" + CHR(243) + "mente pode ser alterada antes de Informar Envelopes/Ops", "")
-                    loc_lBloqueado = .T.
-                ENDIF
-            ENDIF
-
-            *-- Verifica bloqueio de periodo no BO
-            IF !loc_lBloqueado
-                IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                    IF THIS.this_oBusinessObject.VerificarPeriodoBloqueado(loc_dData)
-                        MsgAviso("Per" + CHR(237) + "odo Bloqueado!!!", "")
+            IF loc_lProsseguir
+                IF USED("TmpOperacao")
+                    SELECT TmpOperacao
+                    COUNT TO loc_nContEnv FOR Codigos > 0
+                    IF loc_nContEnv > 0
+                        MsgAviso("A Data s" + CHR(243) + "mente pode ser alterada antes de Informar Envelopes/Ops", "")
                         loc_lBloqueado = .T.
                     ENDIF
                 ENDIF
-            ENDIF
 
-            IF loc_lBloqueado
-                loc_oPg2.cnt_4c_Dados.txt_4c_Dt_data.Value = DATE()
-            ENDIF
+            *-- Verifica bloqueio de periodo no BO
+                IF !loc_lBloqueado
+                    IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                        IF THIS.this_oBusinessObject.VerificarPeriodoBloqueado(loc_dData)
+                            MsgAviso("Per" + CHR(237) + "odo Bloqueado!!!", "")
+                            loc_lBloqueado = .T.
+                        ENDIF
+                    ENDIF
+                ENDIF
 
+                IF loc_lBloqueado
+                    loc_oPg2.cnt_4c_Dados.txt_4c_Dt_data.Value = DATE()
+                ENDIF
+
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao validar data:" + CHR(13) + loException.Message, "Erro")
         ENDTRY

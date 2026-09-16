@@ -123,14 +123,21 @@ DEFINE CLASS EVEBO AS BusinessBase
 
         TRY
             TEXT TO loc_cSQL TEXTMERGE NOSHOW
-                INSERT INTO SigCdEve (Codigo, Nome, Evento, Status, Grupo, Conta)
+                -- pkChaves: legado faz "Replace pkChaves With fUniqueIds()" no INSERIR.
+                -- GrupoCC/ContaCC sao colunas DISTINTAS de Grupo/Conta (gemeas), NOT NULL
+                -- sem DEFAULT e nunca tocadas pelo legado: gravar em branco.
+                INSERT INTO SigCdEve (Codigo, Nome, Evento, Status, Grupo, Conta,
+                                      pkChaves, GrupoCC, ContaCC)
                 VALUES (
                     <<EscaparSQL(THIS.this_cCodigo)>>,
                     <<EscaparSQL(THIS.this_cNome)>>,
                     <<EscaparSQL(THIS.this_cEvento)>>,
                     <<EscaparSQL(THIS.this_cStatus)>>,
                     <<EscaparSQL(THIS.this_cGrupo)>>,
-                    <<EscaparSQL(THIS.this_cConta)>>
+                    <<EscaparSQL(THIS.this_cConta)>>,
+                    <<EscaparSQL(fUniqueIds())>>,
+                    <<EscaparSQL("")>>,
+                    <<EscaparSQL("")>>
                 )
             ENDTEXT
 

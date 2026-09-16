@@ -1301,14 +1301,14 @@ DEFINE CLASS FormFBI AS FormBase
         WITH loc_oPagina.lbl_4c_Label10
             .Top       = 423
             .Left      = 576
-            .Width     = 52
+            .Width     = 57    && texto mede 47px
             .Height    = 17
             .Caption   = "Cruzado :"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .AutoSize  = .F.
             .Visible   = .T.
         ENDWITH
@@ -1332,14 +1332,14 @@ DEFINE CLASS FormFBI AS FormBase
         WITH loc_oPagina.lbl_4c_Label6
             .Top       = 442
             .Left      = 493
-            .Width     = 135
+            .Width     = 140    && texto mede 130px
             .Height    = 17
             .Caption   = "Pertochek / Check-Pronto :"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .AutoSize  = .F.
             .Visible   = .T.
         ENDWITH
@@ -1363,14 +1363,14 @@ DEFINE CLASS FormFBI AS FormBase
         WITH loc_oPagina.lbl_4c_Label14
             .Top       = 461
             .Left      = 573
-            .Width     = 55
+            .Width     = 63    && texto mede 53px
             .Height    = 17
             .Caption   = "Autentica :"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .AutoSize  = .F.
             .Visible   = .T.
         ENDWITH

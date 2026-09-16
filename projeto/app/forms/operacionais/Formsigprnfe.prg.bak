@@ -1915,7 +1915,7 @@ DEFINE CLASS Formsigprnfe AS FormBase
         * Visualizar detalhes tecnicos (chave, protocolo, status)
         * da nota fiscal apontada. Consulta SigMvNfi diretamente
         * para exibir dados que nao aparecem no grid principal.
-        LOCAL loc_cChave, loc_cSQL, loc_oErro, loc_cMsg
+        LOCAL loc_cChave, loc_cSQL, loc_oErro, loc_cMsg, loc_lProsseguir
         LOCAL loc_cChv, loc_cProt, loc_cStat, loc_cXml
         IF !USED("csOperacoes") OR RECCOUNT("csOperacoes") = 0
             MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " notas na fila para visualizar.")
@@ -1929,31 +1929,34 @@ DEFINE CLASS Formsigprnfe AS FormBase
                      PADL(ALLTRIM(TRANSFORM(csOperacoes.Numes)), 6, "0")
         loc_cSQL = "SELECT TOP 1 nfechv, nfexml, prots, stats FROM SigMvNfi WHERE empdopnums = " + ;
                    EscaparSQL(loc_cChave)
+        loc_lProsseguir = .T.
         TRY
             IF USED("cursor_4c_VisNfe")
                 USE IN cursor_4c_VisNfe
             ENDIF
             IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_VisNfe") < 1
                 MsgErro("Falha ao consultar SigMvNfi para a nota selecionada.", "Visualizar")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF RECCOUNT("cursor_4c_VisNfe") = 0
-                MsgAviso("Nota fiscal ainda n" + CHR(227) + "o transmitida (sem registro em SigMvNfi).")
-            ELSE
-                loc_cChv  = ALLTRIM(NVL(cursor_4c_VisNfe.nfechv, "N/D"))
-                loc_cProt = ALLTRIM(NVL(cursor_4c_VisNfe.prots, "N/D"))
-                loc_cStat = ALLTRIM(NVL(cursor_4c_VisNfe.stats, "N/D"))
-                loc_cXml  = IIF(EMPTY(NVL(cursor_4c_VisNfe.nfexml, "")), "N" + CHR(227) + "o", "Sim")
-                loc_cMsg = "Nota: " + ALLTRIM(csOperacoes.Notas) + CHR(13) + ;
-                           "S" + CHR(233) + "rie: " + ALLTRIM(csOperacoes.Series) + CHR(13) + ;
-                           "Chave: " + loc_cChv + CHR(13) + ;
-                           "Protocolo: " + loc_cProt + CHR(13) + ;
-                           "Status: " + loc_cStat + CHR(13) + ;
-                           "XML dispon" + CHR(237) + "vel: " + loc_cXml
-                MsgInfo(loc_cMsg)
-            ENDIF
-            IF USED("cursor_4c_VisNfe")
-                USE IN cursor_4c_VisNfe
+            IF loc_lProsseguir
+                IF RECCOUNT("cursor_4c_VisNfe") = 0
+                    MsgAviso("Nota fiscal ainda n" + CHR(227) + "o transmitida (sem registro em SigMvNfi).")
+                ELSE
+                    loc_cChv  = ALLTRIM(NVL(cursor_4c_VisNfe.nfechv, "N/D"))
+                    loc_cProt = ALLTRIM(NVL(cursor_4c_VisNfe.prots, "N/D"))
+                    loc_cStat = ALLTRIM(NVL(cursor_4c_VisNfe.stats, "N/D"))
+                    loc_cXml  = IIF(EMPTY(NVL(cursor_4c_VisNfe.nfexml, "")), "N" + CHR(227) + "o", "Sim")
+                    loc_cMsg = "Nota: " + ALLTRIM(csOperacoes.Notas) + CHR(13) + ;
+                               "S" + CHR(233) + "rie: " + ALLTRIM(csOperacoes.Series) + CHR(13) + ;
+                               "Chave: " + loc_cChv + CHR(13) + ;
+                               "Protocolo: " + loc_cProt + CHR(13) + ;
+                               "Status: " + loc_cStat + CHR(13) + ;
+                               "XML dispon" + CHR(237) + "vel: " + loc_cXml
+                    MsgInfo(loc_cMsg)
+                ENDIF
+                IF USED("cursor_4c_VisNfe")
+                    USE IN cursor_4c_VisNfe
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;

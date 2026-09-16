@@ -3198,7 +3198,7 @@ DEFINE CLASS Formprc AS FormBase
     * BtnSalvarClick - Valida e persiste dados
     *==========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_lResultado, loc_oPg2, loc_cProcessos, loc_nCodFiscal
+        LOCAL loc_lResultado, loc_oPg2, loc_cProcessos, loc_nCodFiscal, loc_lProsseguir
         LOCAL loc_nResult, loc_cSQL, loc_lFiscalOk, loc_lSucesso
         loc_lSucesso = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -3221,6 +3221,7 @@ DEFINE CLASS Formprc AS FormBase
 
         *-- Valida unicidade do processo no INCLUIR
         IF THIS.this_cModoAtual = "INCLUIR"
+            loc_lProsseguir = .T.
             TRY
                 IF USED("cursor_4c_ChkProc")
                     USE IN cursor_4c_ChkProc
@@ -3236,72 +3237,76 @@ DEFINE CLASS Formprc AS FormBase
                     IF PEMSTATUS(loc_oPg2, "txt_4c_Processos", 5)
                         loc_oPg2.txt_4c_Processos.SetFocus()
                     ENDIF
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                IF USED("cursor_4c_ChkProc")
-                    USE IN cursor_4c_ChkProc
+                IF loc_lProsseguir
+                    IF USED("cursor_4c_ChkProc")
+                        USE IN cursor_4c_ChkProc
+                    ENDIF
                 ENDIF
             CATCH TO loc_oErro
                 MsgErro("Erro ao verificar processo:" + CHR(13) + loc_oErro.Message, "Erro")
-                RETURN
+                loc_lProsseguir = .F.
             ENDTRY
         ENDIF
-
-        *-- Valida fiscal: se fiscal=1 deve haver pelo menos 1 linha com Fiscais=1
-        IF PEMSTATUS(loc_oPg2, "obj_4c_OptFiscal", 5)
-            IF loc_oPg2.obj_4c_OptFiscal.Value = 1
-                loc_lFiscalOk = .F.
-                IF USED("csDestinos")
-                    SELECT csDestinos
-                    SCAN
-                        IF csDestinos.Fiscais = 1
-                            loc_lFiscalOk = .T.
-                            EXIT
-                        ENDIF
-                    ENDSCAN
-                ENDIF
-                IF !loc_lFiscalOk
-                    MsgAviso("Fiscal habilitado mas nenhuma linha de destino tem Fiscal marcado!", ;
-                             "Aten" + CHR(231) + CHR(227) + "o")
-                    RETURN
+        IF loc_lProsseguir
+    
+            *-- Valida fiscal: se fiscal=1 deve haver pelo menos 1 linha com Fiscais=1
+            IF PEMSTATUS(loc_oPg2, "obj_4c_OptFiscal", 5)
+                IF loc_oPg2.obj_4c_OptFiscal.Value = 1
+                    loc_lFiscalOk = .F.
+                    IF USED("csDestinos")
+                        SELECT csDestinos
+                        SCAN
+                            IF csDestinos.Fiscais = 1
+                                loc_lFiscalOk = .T.
+                                EXIT
+                            ENDIF
+                        ENDSCAN
+                    ENDIF
+                    IF !loc_lFiscalOk
+                        MsgAviso("Fiscal habilitado mas nenhuma linha de destino tem Fiscal marcado!", ;
+                                 "Aten" + CHR(231) + CHR(227) + "o")
+                        RETURN
+                    ENDIF
                 ENDIF
             ENDIF
+    
+            *-- Sincroniza opcoes da linha atual para csDestinos antes de salvar
+            THIS.SincronizarOpcoesParaItem()
+    
+            TRY
+                THIS.FormParaBO()
+    
+                IF THIS.this_cModoAtual = "INCLUIR"
+                    loc_lSucesso = THIS.this_oBusinessObject.Salvar()
+                ELSE
+                    loc_lSucesso = THIS.this_oBusinessObject.Salvar()
+                ENDIF
+    
+                IF loc_lSucesso
+                    *-- Salva itens filhos
+                    THIS.this_oBusinessObject.SalvarItens( ;
+                        THIS.this_oBusinessObject.this_cProcessos, ;
+                        THIS.this_oBusinessObject.this_nCodigos)
+    
+                    *-- Atualiza SigCdPrg
+                    THIS.this_oBusinessObject.AtualizarSigCdPrg( ;
+                        THIS.this_oBusinessObject.this_cProcessos, ;
+                        THIS.this_oBusinessObject.this_nCodigos)
+    
+                    MsgInfo("Registro salvo com sucesso!", "Salvo")
+                    THIS.this_cModoAtual = "LISTA"
+                    THIS.AlternarPagina(1)
+                    loc_lSucesso = .T.
+                ELSE
+                    MsgErro("Erro ao salvar processo!", "Salvar")
+                ENDIF
+            CATCH TO loc_oErro
+                MsgErro("Erro em BtnSalvarClick:" + CHR(13) + loc_oErro.Message + ;
+                        CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
+            ENDTRY
         ENDIF
-
-        *-- Sincroniza opcoes da linha atual para csDestinos antes de salvar
-        THIS.SincronizarOpcoesParaItem()
-
-        TRY
-            THIS.FormParaBO()
-
-            IF THIS.this_cModoAtual = "INCLUIR"
-                loc_lSucesso = THIS.this_oBusinessObject.Salvar()
-            ELSE
-                loc_lSucesso = THIS.this_oBusinessObject.Salvar()
-            ENDIF
-
-            IF loc_lSucesso
-                *-- Salva itens filhos
-                THIS.this_oBusinessObject.SalvarItens( ;
-                    THIS.this_oBusinessObject.this_cProcessos, ;
-                    THIS.this_oBusinessObject.this_nCodigos)
-
-                *-- Atualiza SigCdPrg
-                THIS.this_oBusinessObject.AtualizarSigCdPrg( ;
-                    THIS.this_oBusinessObject.this_cProcessos, ;
-                    THIS.this_oBusinessObject.this_nCodigos)
-
-                MsgInfo("Registro salvo com sucesso!", "Salvo")
-                THIS.this_cModoAtual = "LISTA"
-                THIS.AlternarPagina(1)
-                loc_lSucesso = .T.
-            ELSE
-                MsgErro("Erro ao salvar processo!", "Salvar")
-            ENDIF
-        CATCH TO loc_oErro
-            MsgErro("Erro em BtnSalvarClick:" + CHR(13) + loc_oErro.Message + ;
-                    CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
-        ENDTRY
     ENDPROC
 
     *==========================================================================
@@ -3550,7 +3555,8 @@ DEFINE CLASS Formprc AS FormBase
     * AbrirLookupDrives - Busca Local/Drive (SigCdLoc.cods) -> csDestinos.Drives
     *==========================================================================
     PROTECTED PROCEDURE AbrirLookupDrives()
-        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado
+        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos
             IF USED("cursor_4c_BuscaDrives")
@@ -3561,25 +3567,27 @@ DEFINE CLASS Formprc AS FormBase
                 "cursor_4c_BuscaDrives")
             IF loc_nResult < 0
                 MsgErro("Erro ao buscar Locais/Drives.", "Erro")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaDrives"
-            loc_oBusca.DefinirCursor("cursor_4c_BuscaDrives", "cods", "drives", ;
-                "Buscar Local/Drive")
-            loc_oBusca.Mostrar()
-            IF loc_oBusca.this_lSelecionou
-                loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
-                IF USED("csDestinos") AND !EOF("csDestinos")
-                    SELECT csDestinos
-                    REPLACE csDestinos.Drives WITH loc_cSelecionado
-                    loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaDrives"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaDrives", "cods", "drives", ;
+                    "Buscar Local/Drive")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou
+                    loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                    IF USED("csDestinos") AND !EOF("csDestinos")
+                        SELECT csDestinos
+                        REPLACE csDestinos.Drives WITH loc_cSelecionado
+                        loc_oGrid.Refresh()
+                    ENDIF
                 ENDIF
+                IF USED("cursor_4c_BuscaDrives")
+                    USE IN cursor_4c_BuscaDrives
+                ENDIF
+                loc_oBusca.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaDrives")
-                USE IN cursor_4c_BuscaDrives
-            ENDIF
-            loc_oBusca.Release()
         CATCH TO loc_oErro
             MsgErro("Erro em AbrirLookupDrives:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
@@ -3589,7 +3597,8 @@ DEFINE CLASS Formprc AS FormBase
     * AbrirLookupOperacaoDestino - Busca Operacao (SigCdOpe.Dopes) -> csDestinos.DopeDs
     *==========================================================================
     PROTECTED PROCEDURE AbrirLookupOperacaoDestino()
-        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado
+        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos
             IF USED("cursor_4c_BuscaOpeDs")
@@ -3600,25 +3609,27 @@ DEFINE CLASS Formprc AS FormBase
                 "cursor_4c_BuscaOpeDs")
             IF loc_nResult < 0
                 MsgErro("Erro ao buscar Opera" + CHR(231) + CHR(245) + "es.", "Erro")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaOpeDs"
-            loc_oBusca.DefinirCursor("cursor_4c_BuscaOpeDs", "Dopes", "Dopes", ;
-                "Buscar Opera" + CHR(231) + CHR(227) + "o Destino")
-            loc_oBusca.Mostrar()
-            IF loc_oBusca.this_lSelecionou
-                loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
-                IF USED("csDestinos") AND !EOF("csDestinos")
-                    SELECT csDestinos
-                    REPLACE csDestinos.DopeDs WITH loc_cSelecionado
-                    loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaOpeDs"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaOpeDs", "Dopes", "Dopes", ;
+                    "Buscar Opera" + CHR(231) + CHR(227) + "o Destino")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou
+                    loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                    IF USED("csDestinos") AND !EOF("csDestinos")
+                        SELECT csDestinos
+                        REPLACE csDestinos.DopeDs WITH loc_cSelecionado
+                        loc_oGrid.Refresh()
+                    ENDIF
                 ENDIF
+                IF USED("cursor_4c_BuscaOpeDs")
+                    USE IN cursor_4c_BuscaOpeDs
+                ENDIF
+                loc_oBusca.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaOpeDs")
-                USE IN cursor_4c_BuscaOpeDs
-            ENDIF
-            loc_oBusca.Release()
         CATCH TO loc_oErro
             MsgErro("Erro em AbrirLookupOperacaoDestino:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
@@ -3628,7 +3639,8 @@ DEFINE CLASS Formprc AS FormBase
     * AbrirLookupGrandeGrupoDestino - Busca Grande Grupo (SigCdGpr.codigos) -> csDestinos.GdeGrupos
     *==========================================================================
     PROTECTED PROCEDURE AbrirLookupGrandeGrupoDestino()
-        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado
+        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos
             IF USED("cursor_4c_BuscaGdeGrp")
@@ -3639,25 +3651,27 @@ DEFINE CLASS Formprc AS FormBase
                 "cursor_4c_BuscaGdeGrp")
             IF loc_nResult < 0
                 MsgErro("Erro ao buscar Grandes Grupos.", "Erro")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGdeGrp"
-            loc_oBusca.DefinirCursor("cursor_4c_BuscaGdeGrp", "codigos", "descs", ;
-                "Buscar Grande Grupo")
-            loc_oBusca.Mostrar()
-            IF loc_oBusca.this_lSelecionou
-                loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
-                IF USED("csDestinos") AND !EOF("csDestinos")
-                    SELECT csDestinos
-                    REPLACE csDestinos.GdeGrupos WITH loc_cSelecionado
-                    loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGdeGrp"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaGdeGrp", "codigos", "descs", ;
+                    "Buscar Grande Grupo")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou
+                    loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                    IF USED("csDestinos") AND !EOF("csDestinos")
+                        SELECT csDestinos
+                        REPLACE csDestinos.GdeGrupos WITH loc_cSelecionado
+                        loc_oGrid.Refresh()
+                    ENDIF
                 ENDIF
+                IF USED("cursor_4c_BuscaGdeGrp")
+                    USE IN cursor_4c_BuscaGdeGrp
+                ENDIF
+                loc_oBusca.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaGdeGrp")
-                USE IN cursor_4c_BuscaGdeGrp
-            ENDIF
-            loc_oBusca.Release()
         CATCH TO loc_oErro
             MsgErro("Erro em AbrirLookupGrandeGrupoDestino:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
@@ -3667,7 +3681,8 @@ DEFINE CLASS Formprc AS FormBase
     * AbrirLookupEmpresaDestino - Busca Empresa (SigCdEmp.Cemps) -> csDestinos.Emps
     *==========================================================================
     PROTECTED PROCEDURE AbrirLookupEmpresaDestino()
-        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado
+        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos
             IF USED("cursor_4c_BuscaEmpOr")
@@ -3678,25 +3693,27 @@ DEFINE CLASS Formprc AS FormBase
                 "cursor_4c_BuscaEmpOr")
             IF loc_nResult < 0
                 MsgErro("Erro ao buscar Empresas.", "Erro")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmpOr"
-            loc_oBusca.DefinirCursor("cursor_4c_BuscaEmpOr", "Cemps", "Razas", ;
-                "Buscar Empresa Origem")
-            loc_oBusca.Mostrar()
-            IF loc_oBusca.this_lSelecionou
-                loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
-                IF USED("csDestinos") AND !EOF("csDestinos")
-                    SELECT csDestinos
-                    REPLACE csDestinos.Emps WITH loc_cSelecionado
-                    loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmpOr"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaEmpOr", "Cemps", "Razas", ;
+                    "Buscar Empresa Origem")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou
+                    loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                    IF USED("csDestinos") AND !EOF("csDestinos")
+                        SELECT csDestinos
+                        REPLACE csDestinos.Emps WITH loc_cSelecionado
+                        loc_oGrid.Refresh()
+                    ENDIF
                 ENDIF
+                IF USED("cursor_4c_BuscaEmpOr")
+                    USE IN cursor_4c_BuscaEmpOr
+                ENDIF
+                loc_oBusca.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaEmpOr")
-                USE IN cursor_4c_BuscaEmpOr
-            ENDIF
-            loc_oBusca.Release()
         CATCH TO loc_oErro
             MsgErro("Erro em AbrirLookupEmpresaDestino:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
@@ -3706,7 +3723,8 @@ DEFINE CLASS Formprc AS FormBase
     * AbrirLookupOperacaoOrigem - Busca Operacao (SigCdOpe.Dopes) -> csDestinos.Dopes
     *==========================================================================
     PROTECTED PROCEDURE AbrirLookupOperacaoOrigem()
-        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado
+        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos
             IF USED("cursor_4c_BuscaOpeOr")
@@ -3717,25 +3735,27 @@ DEFINE CLASS Formprc AS FormBase
                 "cursor_4c_BuscaOpeOr")
             IF loc_nResult < 0
                 MsgErro("Erro ao buscar Opera" + CHR(231) + CHR(245) + "es.", "Erro")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaOpeOr"
-            loc_oBusca.DefinirCursor("cursor_4c_BuscaOpeOr", "Dopes", "Dopes", ;
-                "Buscar Opera" + CHR(231) + CHR(227) + "o Origem")
-            loc_oBusca.Mostrar()
-            IF loc_oBusca.this_lSelecionou
-                loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
-                IF USED("csDestinos") AND !EOF("csDestinos")
-                    SELECT csDestinos
-                    REPLACE csDestinos.Dopes WITH loc_cSelecionado
-                    loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaOpeOr"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaOpeOr", "Dopes", "Dopes", ;
+                    "Buscar Opera" + CHR(231) + CHR(227) + "o Origem")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou
+                    loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                    IF USED("csDestinos") AND !EOF("csDestinos")
+                        SELECT csDestinos
+                        REPLACE csDestinos.Dopes WITH loc_cSelecionado
+                        loc_oGrid.Refresh()
+                    ENDIF
                 ENDIF
+                IF USED("cursor_4c_BuscaOpeOr")
+                    USE IN cursor_4c_BuscaOpeOr
+                ENDIF
+                loc_oBusca.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaOpeOr")
-                USE IN cursor_4c_BuscaOpeOr
-            ENDIF
-            loc_oBusca.Release()
         CATCH TO loc_oErro
             MsgErro("Erro em AbrirLookupOperacaoOrigem:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
@@ -3745,7 +3765,8 @@ DEFINE CLASS Formprc AS FormBase
     * AbrirLookupUnidadeDestino - Busca Unidade (SigCdUni.CUnis) -> csDestinos.CUnis
     *==========================================================================
     PROTECTED PROCEDURE AbrirLookupUnidadeDestino()
-        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado
+        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos
             IF USED("cursor_4c_BuscaUni")
@@ -3756,25 +3777,27 @@ DEFINE CLASS Formprc AS FormBase
                 "cursor_4c_BuscaUni")
             IF loc_nResult < 0
                 MsgErro("Erro ao buscar Unidades.", "Erro")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaUni"
-            loc_oBusca.DefinirCursor("cursor_4c_BuscaUni", "CUnis", "DUnis", ;
-                "Buscar Unidade")
-            loc_oBusca.Mostrar()
-            IF loc_oBusca.this_lSelecionou
-                loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
-                IF USED("csDestinos") AND !EOF("csDestinos")
-                    SELECT csDestinos
-                    REPLACE csDestinos.CUnis WITH loc_cSelecionado
-                    loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaUni"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaUni", "CUnis", "DUnis", ;
+                    "Buscar Unidade")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou
+                    loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                    IF USED("csDestinos") AND !EOF("csDestinos")
+                        SELECT csDestinos
+                        REPLACE csDestinos.CUnis WITH loc_cSelecionado
+                        loc_oGrid.Refresh()
+                    ENDIF
                 ENDIF
+                IF USED("cursor_4c_BuscaUni")
+                    USE IN cursor_4c_BuscaUni
+                ENDIF
+                loc_oBusca.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaUni")
-                USE IN cursor_4c_BuscaUni
-            ENDIF
-            loc_oBusca.Release()
         CATCH TO loc_oErro
             MsgErro("Erro em AbrirLookupUnidadeDestino:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
@@ -3784,7 +3807,8 @@ DEFINE CLASS Formprc AS FormBase
     * AbrirLookupGrandeGrupoG - Busca Grande Grupo (SigCdGpr.codigos) -> csDestinoG.Mercs
     *==========================================================================
     PROTECTED PROCEDURE AbrirLookupGrandeGrupoG()
-        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado
+        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_DestinoG
             IF USED("cursor_4c_BuscaGdeGrpG")
@@ -3795,25 +3819,27 @@ DEFINE CLASS Formprc AS FormBase
                 "cursor_4c_BuscaGdeGrpG")
             IF loc_nResult < 0
                 MsgErro("Erro ao buscar Grandes Grupos.", "Erro")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGdeGrpG"
-            loc_oBusca.DefinirCursor("cursor_4c_BuscaGdeGrpG", "codigos", "descs", ;
-                "Buscar Grande Grupo")
-            loc_oBusca.Mostrar()
-            IF loc_oBusca.this_lSelecionou
-                loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
-                IF USED("csDestinoG") AND !EOF("csDestinoG")
-                    SELECT csDestinoG
-                    REPLACE csDestinoG.Mercs WITH loc_cSelecionado
-                    loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGdeGrpG"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaGdeGrpG", "codigos", "descs", ;
+                    "Buscar Grande Grupo")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou
+                    loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                    IF USED("csDestinoG") AND !EOF("csDestinoG")
+                        SELECT csDestinoG
+                        REPLACE csDestinoG.Mercs WITH loc_cSelecionado
+                        loc_oGrid.Refresh()
+                    ENDIF
                 ENDIF
+                IF USED("cursor_4c_BuscaGdeGrpG")
+                    USE IN cursor_4c_BuscaGdeGrpG
+                ENDIF
+                loc_oBusca.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaGdeGrpG")
-                USE IN cursor_4c_BuscaGdeGrpG
-            ENDIF
-            loc_oBusca.Release()
         CATCH TO loc_oErro
             MsgErro("Erro em AbrirLookupGrandeGrupoG:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
@@ -3823,7 +3849,8 @@ DEFINE CLASS Formprc AS FormBase
     * AbrirLookupUnidadeG - Busca Unidade (SigCdUni.CUnis) -> csDestinoG.CUnis
     *==========================================================================
     PROTECTED PROCEDURE AbrirLookupUnidadeG()
-        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado
+        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_DestinoG
             IF USED("cursor_4c_BuscaUniG")
@@ -3834,25 +3861,27 @@ DEFINE CLASS Formprc AS FormBase
                 "cursor_4c_BuscaUniG")
             IF loc_nResult < 0
                 MsgErro("Erro ao buscar Unidades.", "Erro")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaUniG"
-            loc_oBusca.DefinirCursor("cursor_4c_BuscaUniG", "CUnis", "DUnis", ;
-                "Buscar Unidade")
-            loc_oBusca.Mostrar()
-            IF loc_oBusca.this_lSelecionou
-                loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
-                IF USED("csDestinoG") AND !EOF("csDestinoG")
-                    SELECT csDestinoG
-                    REPLACE csDestinoG.CUnis WITH loc_cSelecionado
-                    loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaUniG"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaUniG", "CUnis", "DUnis", ;
+                    "Buscar Unidade")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou
+                    loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                    IF USED("csDestinoG") AND !EOF("csDestinoG")
+                        SELECT csDestinoG
+                        REPLACE csDestinoG.CUnis WITH loc_cSelecionado
+                        loc_oGrid.Refresh()
+                    ENDIF
                 ENDIF
+                IF USED("cursor_4c_BuscaUniG")
+                    USE IN cursor_4c_BuscaUniG
+                ENDIF
+                loc_oBusca.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaUniG")
-                USE IN cursor_4c_BuscaUniG
-            ENDIF
-            loc_oBusca.Release()
         CATCH TO loc_oErro
             MsgErro("Erro em AbrirLookupUnidadeG:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
@@ -3862,7 +3891,8 @@ DEFINE CLASS Formprc AS FormBase
     * AbrirLookupGrupoG - Busca Grupo de Produto (SigCdGrp.cgrus) -> csDestinoG.Cgrus
     *==========================================================================
     PROTECTED PROCEDURE AbrirLookupGrupoG()
-        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado
+        LOCAL loc_oBusca, loc_oGrid, loc_nResult, loc_cSelecionado, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oGrid = THIS.pgf_4c_Paginas.Page2.grd_4c_DestinoG
             IF USED("cursor_4c_BuscaGrpG")
@@ -3873,25 +3903,27 @@ DEFINE CLASS Formprc AS FormBase
                 "cursor_4c_BuscaGrpG")
             IF loc_nResult < 0
                 MsgErro("Erro ao buscar Grupos de Produto.", "Erro")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGrpG"
-            loc_oBusca.DefinirCursor("cursor_4c_BuscaGrpG", "cgrus", "dgrus", ;
-                "Buscar Grupo de Produto")
-            loc_oBusca.Mostrar()
-            IF loc_oBusca.this_lSelecionou
-                loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
-                IF USED("csDestinoG") AND !EOF("csDestinoG")
-                    SELECT csDestinoG
-                    REPLACE csDestinoG.Cgrus WITH loc_cSelecionado
-                    loc_oGrid.Refresh()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGrpG"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaGrpG", "cgrus", "dgrus", ;
+                    "Buscar Grupo de Produto")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou
+                    loc_cSelecionado = ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                    IF USED("csDestinoG") AND !EOF("csDestinoG")
+                        SELECT csDestinoG
+                        REPLACE csDestinoG.Cgrus WITH loc_cSelecionado
+                        loc_oGrid.Refresh()
+                    ENDIF
                 ENDIF
+                IF USED("cursor_4c_BuscaGrpG")
+                    USE IN cursor_4c_BuscaGrpG
+                ENDIF
+                loc_oBusca.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaGrpG")
-                USE IN cursor_4c_BuscaGrpG
-            ENDIF
-            loc_oBusca.Release()
         CATCH TO loc_oErro
             MsgErro("Erro em AbrirLookupGrupoG:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY

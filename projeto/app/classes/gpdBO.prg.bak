@@ -28,7 +28,7 @@ DEFINE CLASS gpdBO AS BusinessBase
 
     *-- Estoque
     this_lCestoqs             = .F.  && cestoqs numeric(1,0)
-    this_lTipestos            = .F.  && tipestos numeric(1,0)
+    this_lTipestos            = .F.  && tipoestos numeric(1,0)
     this_lInvents             = .F.  && invents numeric(1,0)
     this_lCalcsalds           = .F.  && calcsalds numeric(1,0)
     this_lTpmovs              = .F.  && tpmovs numeric(1,0)
@@ -59,7 +59,7 @@ DEFINE CLASS gpdBO AS BusinessBase
     this_lAtucomps            = .F.  && atucomps numeric(1,0)
     this_lRepauts             = .F.  && repauts numeric(1,0)
     this_lMontagens           = .F.  && montagens numeric(1,0)
-    this_lNtipjoals           = .F.  && ntipjoals numeric(1,0)
+    this_lNtipjoals           = .F.  && ntipojoals numeric(1,0)
     this_cBases               = ""   && bases char(1)
     this_cEtipads             = ""   && etipads char(1)
     this_cDcats               = ""   && dcats char(15)
@@ -129,8 +129,8 @@ DEFINE CLASS gpdBO AS BusinessBase
     this_nPctdctleis          = 0    && pctdctleis numeric(4,2)
 
     *-- Precos / Custos
-    this_nMargens             = 0    && margens numeric(9,6)
-    this_nPmargens            = 0    && pmargens numeric(9,6)
+    this_nMargens             = 0    && margems numeric(9,6)
+    this_nPmargens            = 0    && pmargems numeric(9,6)
     this_nArreds              = 0    && arreds numeric(6,2)
     this_nArredcs             = 0    && arredcs numeric(6,2)
     this_nCoefs               = 0    && coefs numeric(7,4)
@@ -143,11 +143,11 @@ DEFINE CLASS gpdBO AS BusinessBase
     this_nPvens               = 0    && pvens numeric(11,2)
     this_nPvideals            = 0    && pvideals numeric(11,2)
     this_nMarkaplics          = 0    && markaplics numeric(9,6)
-    this_nPadmargens          = 0    && padmargens numeric(9,6)
+    this_nPadmargens          = 0    && padmargems numeric(9,6)
     this_lAjpvens             = .F.  && ajpvens numeric(1,0)
     this_lTpcalcps            = .F.  && tpcalcps numeric(1,0)
     this_lDwvendas            = .F.  && dwvendas numeric(1,0)
-    this_lSugestoas           = .F.  && sugestoas numeric(1,0)
+    this_lSugestoas           = .F.  && sugestaos numeric(1,0)
     this_lIcustos             = .F.  && icustos numeric(1,0)
     this_lCvestims            = .F.  && cvestims numeric(1,0)
     this_lFabrproprs          = .F.  && fabrproprs numeric(1,0)
@@ -316,7 +316,7 @@ DEFINE CLASS gpdBO AS BusinessBase
         THIS.this_cGrufins           = ALLTRIM(grufins)
         THIS.this_lGeratubs          = (geratubs = 1)
         THIS.this_lCestoqs           = (cestoqs = 1)
-        THIS.this_lTipestos          = (tipestos = 1)
+        THIS.this_lTipestos          = (tipoestos = 1)
         THIS.this_lInvents           = (invents = 1)
         THIS.this_lCalcsalds         = (calcsalds = 1)
         THIS.this_lTpmovs            = (tpmovs = 1)
@@ -345,7 +345,7 @@ DEFINE CLASS gpdBO AS BusinessBase
         THIS.this_lAtucomps          = (atucomps = 1)
         THIS.this_lRepauts           = (repauts = 1)
         THIS.this_lMontagens         = (montagens = 1)
-        THIS.this_lNtipjoals         = (ntipjoals = 1)
+        THIS.this_lNtipjoals         = (ntipojoals = 1)
         THIS.this_cBases             = ALLTRIM(bases)
         THIS.this_cEtipads           = ALLTRIM(etipads)
         THIS.this_cDcats             = ALLTRIM(dcats)
@@ -407,8 +407,8 @@ DEFINE CLASS gpdBO AS BusinessBase
         THIS.this_lOmoedas           = (omoedas = 1)
         THIS.this_lOmoevs            = (omoevs = 1)
         THIS.this_nPctdctleis        = pctdctleis
-        THIS.this_nMargens           = margens
-        THIS.this_nPmargens          = pmargens
+        THIS.this_nMargens           = margems
+        THIS.this_nPmargens          = pmargems
         THIS.this_nArreds            = arreds
         THIS.this_nArredcs           = arredcs
         THIS.this_nCoefs             = coefs
@@ -421,11 +421,11 @@ DEFINE CLASS gpdBO AS BusinessBase
         THIS.this_nPvens             = pvens
         THIS.this_nPvideals          = pvideals
         THIS.this_nMarkaplics        = markaplics
-        THIS.this_nPadmargens        = padmargens
+        THIS.this_nPadmargens        = padmargems
         THIS.this_lAjpvens           = (ajpvens = 1)
         THIS.this_lTpcalcps          = (tpcalcps = 1)
         THIS.this_lDwvendas          = (dwvendas = 1)
-        THIS.this_lSugestoas         = (sugestoas = 1)
+        THIS.this_lSugestoas         = (sugestaos = 1)
         THIS.this_lIcustos           = (icustos = 1)
         THIS.this_lCvestims          = (cvestims = 1)
         THIS.this_lFabrproprs        = (fabrproprs = 1)
@@ -503,10 +503,10 @@ DEFINE CLASS gpdBO AS BusinessBase
             loc_cSQL = "INSERT INTO SigCdGrp (" + ;
                 "cgrus, dgrus, mercs, idecpros, codcols, codprods, diggprs, ids, cgrus2, datatrans, " + ;
                 "concmvs, grucmvs, conestps, gruestps, contabxps, grupobxps, grctobccs, grufins, geratubs, " + ;
-                "cestoqs, tipestos, invents, calcsalds, tpmovs, pesoms, bpesos, pesos, montagrds, " + ;
+                "cestoqs, tipoestos, invents, calcsalds, tpmovs, pesoms, bpesos, pesos, montagrds, " + ;
                 "avalests, avalest2gs, avalest2s, avalestigs, avalestis, avalestngs, unificas, " + ;
                 "cores, tams, embs, servicos, semiacabs, mtprimas, entregas, fornecs, caracteris, etidups, " + ;
-                "codservs, atucomps, repauts, montagens, ntipjoals, bases, etipads, dcats, cunips, " + ;
+                "codservs, atucomps, repauts, montagens, ntipojoals, bases, etipads, dcats, cunips, " + ;
                 "compos, digimaxs, ordcompos, casas, montadescs, mkpobrigs, mncompos, pvcompos, " + ;
                 "retiras, traduz, chkforcomp, ftecsubs, mfictecs, localobrig, " + ;
                 "obrigfiscs, nchkdims, nchkimps, nchkpess, nchktems, nfixfigs, nchkcerts, ngenerics, " + ;
@@ -515,9 +515,9 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "obralt, obrlarg, obrdiam, obrespes, obrcompr, " + ;
                 "clfiscals, origmercs, sittricms, tptribs, icms, ipifabs, ipiimpors, comiss, " + ;
                 "cjicms, impops, impcps, omoecs, omoecusfs, omoedas, omoevs, pctdctleis, " + ;
-                "margens, pmargens, arreds, arredcs, coefs, pcustvens, custofs, fcustos, markupa, pcuss, " + ;
-                "premios, pvens, pvideals, markaplics, padmargens, " + ;
-                "ajpvens, tpcalcps, dwvendas, sugestoas, icustos, cvestims, fabrproprs, dsccompras, " + ;
+                "margems, pmargems, arreds, arredcs, coefs, pcustvens, custofs, fcustos, markupa, pcuss, " + ;
+                "premios, pvens, pvideals, markaplics, padmargems, " + ;
+                "ajpvens, tpcalcps, dwvendas, sugestaos, icustos, cvestims, fabrproprs, dsccompras, " + ;
                 "moecusts, cmoeds, moemrkaps, padmoecs, padmoepcs, padmoedas, padmoevs, padmoetcs, " + ;
                 "dscfatuals, dscfcustos, dscfideals, dscpcuss, dscpvens, dscpvideals, dscpvideal, " + ;
                 "padcclas, padcolec, padfinps, padlinha, padfase, " + ;
@@ -673,7 +673,7 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "grufins = " + EscaparSQL(THIS.this_cGrufins) + ", " + ;
                 "geratubs = " + STR(IIF(THIS.this_lGeratubs,1,0),1) + ", " + ;
                 "cestoqs = " + STR(IIF(THIS.this_lCestoqs,1,0),1) + ", " + ;
-                "tipestos = " + STR(IIF(THIS.this_lTipestos,1,0),1) + ", " + ;
+                "tipoestos = " + STR(IIF(THIS.this_lTipestos,1,0),1) + ", " + ;
                 "invents = " + STR(IIF(THIS.this_lInvents,1,0),1) + ", " + ;
                 "calcsalds = " + STR(IIF(THIS.this_lCalcsalds,1,0),1) + ", " + ;
                 "tpmovs = " + STR(IIF(THIS.this_lTpmovs,1,0),1) + ", " + ;
@@ -702,7 +702,7 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "atucomps = " + STR(IIF(THIS.this_lAtucomps,1,0),1) + ", " + ;
                 "repauts = " + STR(IIF(THIS.this_lRepauts,1,0),1) + ", " + ;
                 "montagens = " + STR(IIF(THIS.this_lMontagens,1,0),1) + ", " + ;
-                "ntipjoals = " + STR(IIF(THIS.this_lNtipjoals,1,0),1) + ", " + ;
+                "ntipojoals = " + STR(IIF(THIS.this_lNtipjoals,1,0),1) + ", " + ;
                 "bases = " + EscaparSQL(THIS.this_cBases) + ", " + ;
                 "etipads = " + EscaparSQL(THIS.this_cEtipads) + ", " + ;
                 "dcats = " + EscaparSQL(THIS.this_cDcats) + ", " + ;
@@ -766,8 +766,8 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "omoedas = " + STR(IIF(THIS.this_lOmoedas,1,0),1) + ", " + ;
                 "omoevs = " + STR(IIF(THIS.this_lOmoevs,1,0),1) + ", " + ;
                 "pctdctleis = " + FormatarNumeroSQL(THIS.this_nPctdctleis) + ", " + ;
-                "margens = " + FormatarNumeroSQL(THIS.this_nMargens) + ", " + ;
-                "pmargens = " + FormatarNumeroSQL(THIS.this_nPmargens) + ", " + ;
+                "margems = " + FormatarNumeroSQL(THIS.this_nMargens) + ", " + ;
+                "pmargems = " + FormatarNumeroSQL(THIS.this_nPmargens) + ", " + ;
                 "arreds = " + FormatarNumeroSQL(THIS.this_nArreds) + ", " + ;
                 "arredcs = " + FormatarNumeroSQL(THIS.this_nArredcs) + ", " + ;
                 "coefs = " + FormatarNumeroSQL(THIS.this_nCoefs) + ", " + ;
@@ -780,11 +780,11 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "pvens = " + FormatarNumeroSQL(THIS.this_nPvens) + ", " + ;
                 "pvideals = " + FormatarNumeroSQL(THIS.this_nPvideals) + ", " + ;
                 "markaplics = " + FormatarNumeroSQL(THIS.this_nMarkaplics) + ", " + ;
-                "padmargens = " + FormatarNumeroSQL(THIS.this_nPadmargens) + ", " + ;
+                "padmargems = " + FormatarNumeroSQL(THIS.this_nPadmargens) + ", " + ;
                 "ajpvens = " + STR(IIF(THIS.this_lAjpvens,1,0),1) + ", " + ;
                 "tpcalcps = " + STR(IIF(THIS.this_lTpcalcps,1,0),1) + ", " + ;
                 "dwvendas = " + STR(IIF(THIS.this_lDwvendas,1,0),1) + ", " + ;
-                "sugestoas = " + STR(IIF(THIS.this_lSugestoas,1,0),1) + ", " + ;
+                "sugestaos = " + STR(IIF(THIS.this_lSugestoas,1,0),1) + ", " + ;
                 "icustos = " + STR(IIF(THIS.this_lIcustos,1,0),1) + ", " + ;
                 "cvestims = " + STR(IIF(THIS.this_lCvestims,1,0),1) + ", " + ;
                 "fabrproprs = " + STR(IIF(THIS.this_lFabrproprs,1,0),1) + ", " + ;

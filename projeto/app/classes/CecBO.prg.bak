@@ -36,6 +36,9 @@ DEFINE CLASS CecBO AS BusinessBase
     this_cUsuProxys   = ""   && char(64) Usuario Proxy
     this_cSenProxys   = ""   && char(20) Senha Proxy
 
+    *-- Chave primaria fisica da tabela (gerada por fUniqueIds() no INSERT)
+    this_cIdChaves    = ""   && char(20) cIdChaves (PK de SigFiChc, NOT NULL)
+
     *-- Campo de exibicao (JOIN com SigCdEmp)
     this_cRazas       = ""   && char(40) Razao Social (SigCdEmp.Razas, somente leitura)
 
@@ -94,8 +97,8 @@ DEFINE CLASS CecBO AS BusinessBase
 
         TRY
             loc_cSQL = "SELECT a.Emps, a.Tipos, a.Ctr, a.Rde, a.RdeLja," + ;
-                       " a.Logon, a.Senha, a.VlrMin, a.VlrFixo, a.cipchps, a.nPortachps," + ;
-                       " a.cTipos, a.cUsuProxys, a.cSenProxys, b.Razas" + ;
+                       " a.Logon, a.nSenha, a.Senha, a.VlrMin, a.VlrFixo, a.cipchps, a.nPortachps," + ;
+                       " a.Versao, a.cTipos, a.cUsuProxys, a.cSenProxys, a.cIdChaves, b.Razas" + ;
                        " FROM SigFiChc a" + ;
                        " INNER JOIN SigCdEmp b ON a.Emps = b.Cemps" + ;
                        " WHERE a.Emps = " + EscaparSQL(par_cEmps) + ;
@@ -165,14 +168,17 @@ DEFINE CLASS CecBO AS BusinessBase
             THIS.this_cRde        = TratarNulo(Rde,         "C")
             THIS.this_cRdeLja     = TratarNulo(RdeLja,      "C")
             THIS.this_cLogon      = TratarNulo(Logon,       "C")
+            THIS.this_cNSenha     = TratarNulo(nSenha,      "C")
             THIS.this_cSenha      = TratarNulo(Senha,       "C")
             THIS.this_nVlrMin     = TratarNulo(VlrMin,      "N")
             THIS.this_nVlrFixo    = TratarNulo(VlrFixo,     "N")
             THIS.this_cCipchps    = TratarNulo(cipchps,     "C")
             THIS.this_nPortachps  = TratarNulo(nPortachps,  "N")
+            THIS.this_cVersao     = TratarNulo(Versao,      "C")
             THIS.this_cCTipos     = TratarNulo(cTipos,      "C")
             THIS.this_cUsuProxys  = TratarNulo(cUsuProxys,  "C")
             THIS.this_cSenProxys  = TratarNulo(cSenProxys,  "C")
+            THIS.this_cIdChaves   = TratarNulo(cIdChaves,   "C")
             THIS.this_cRazas      = TratarNulo(Razas,       "C")
             loc_lSucesso = .T.
         ENDIF
@@ -188,22 +194,31 @@ DEFINE CLASS CecBO AS BusinessBase
         loc_lSucesso = .F.
 
         TRY
+            *-- cIdChaves e a PK fisica da tabela e NAO pode ser nula.
+            *-- Legado: "Replace cIdChaves With fUniqueIds()" no Confirmar (INSERIR)
+            THIS.this_cIdChaves = PADR(fUniqueIds(), 20)
+
+            *-- nSenha e Versao sao NOT NULL no schema e o legado nunca os preenche
+            *-- (vinham em branco do APPEND BLANK do cursor). Gravar string vazia.
             loc_cSQL = "INSERT INTO SigFiChc" + ;
-                       " (Emps, Tipos, Ctr, Rde, RdeLja," + ;
-                       " Logon, Senha, VlrMin, VlrFixo, cipchps, nPortachps," + ;
-                       " cTipos, cUsuProxys, cSenProxys)" + ;
+                       " (cIdChaves, Emps, Tipos, Ctr, Rde, RdeLja," + ;
+                       " Logon, nSenha, Senha, VlrMin, VlrFixo, cipchps, nPortachps," + ;
+                       " Versao, cTipos, cUsuProxys, cSenProxys)" + ;
                        " VALUES (" + ;
+                       EscaparSQL(THIS.this_cIdChaves) + "," + ;
                        EscaparSQL(THIS.this_cEmps) + "," + ;
                        EscaparSQL(THIS.this_cTipos) + "," + ;
                        EscaparSQL(THIS.this_cCtr) + "," + ;
                        EscaparSQL(THIS.this_cRde) + "," + ;
                        EscaparSQL(THIS.this_cRdeLja) + "," + ;
                        EscaparSQL(THIS.this_cLogon) + "," + ;
+                       EscaparSQL(THIS.this_cNSenha) + "," + ;
                        EscaparSQL(THIS.this_cSenha) + "," + ;
                        FormatarNumeroSQL(THIS.this_nVlrMin) + "," + ;
                        FormatarNumeroSQL(THIS.this_nVlrFixo) + "," + ;
                        EscaparSQL(THIS.this_cCipchps) + "," + ;
                        FormatarNumeroSQL(THIS.this_nPortachps) + "," + ;
+                       EscaparSQL(THIS.this_cVersao) + "," + ;
                        EscaparSQL(THIS.this_cCTipos) + "," + ;
                        EscaparSQL(THIS.this_cUsuProxys) + "," + ;
                        EscaparSQL(THIS.this_cSenProxys) + ;

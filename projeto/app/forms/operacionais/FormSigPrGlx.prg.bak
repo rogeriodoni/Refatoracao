@@ -3014,8 +3014,9 @@ DEFINE CLASS FormSigPrGlx AS FormBase
     * BtnVoltarPage2Click - Valida totais e retorna para Page1
     *--------------------------------------------------------------------------
     PROCEDURE BtnVoltarPage2Click()
-        LOCAL loc_nOldRecno, loc_nSumEst, loc_nSumFabrs
+        LOCAL loc_nOldRecno, loc_nSumEst, loc_nSumFabrs, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF USED("TmpFinal") AND USED("TmpFinalg") AND !EOF("TmpFinalg")
                 loc_nOldRecno = IIF(RECCOUNT("TmpFinal") > 0, RECNO("TmpFinal"), 0)
@@ -3029,15 +3030,17 @@ DEFINE CLASS FormSigPrGlx AS FormBase
 
                 IF loc_nSumEst != TmpFinalg.Estoque OR loc_nSumFabrs != TmpFinalg.Fabrs
                     MsgAviso("Os totais de estoque/produ" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o conferem com o item selecionado.")
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
-            THIS.AlternarPagina(1)
-            THIS.AtualizarTotaisPage1()
+            IF loc_lProsseguir
+                THIS.AlternarPagina(1)
+                THIS.AtualizarTotaisPage1()
 
-            IF PEMSTATUS(THIS.pgf_4c_1.Page1, "grd_4c_GradeItens", 5)
-                THIS.pgf_4c_1.Page1.grd_4c_GradeItens.Refresh()
+                IF PEMSTATUS(THIS.pgf_4c_1.Page1, "grd_4c_GradeItens", 5)
+                    THIS.pgf_4c_1.Page1.grd_4c_GradeItens.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em BtnVoltarPage2Click: " + loc_oErro.Message, "Erro")
@@ -3702,8 +3705,9 @@ DEFINE CLASS FormSigPrGlx AS FormBase
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
 
-        LOCAL loc_nSaldoTotal, loc_cCpro, loc_cCor, loc_cTam
+        LOCAL loc_nSaldoTotal, loc_cCpro, loc_cCor, loc_cTam, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("TmpFinalg") OR EOF("TmpFinalg")
                 MsgAviso("Selecione uma refer" + CHR(234) + "ncia na grade antes de zerar a sele" + ;
@@ -3714,27 +3718,29 @@ DEFINE CLASS FormSigPrGlx AS FormBase
             ELSE
                 IF !MsgConfirma("Zerar sele" + CHR(231) + CHR(227) + "o de estoque/produ" + ;
                     CHR(231) + CHR(227) + "o da refer" + CHR(234) + "ncia corrente?")
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
 
-                loc_cCpro     = ALLTRIM(TmpFinalg.Cpros)
-                loc_cCor      = ALLTRIM(TmpFinalg.CodCors)
-                loc_cTam      = ALLTRIM(TmpFinalg.CodTams)
-                loc_nSaldoTotal = TmpFinalg.Saldo
+                IF loc_lProsseguir
+                    loc_cCpro     = ALLTRIM(TmpFinalg.Cpros)
+                    loc_cCor      = ALLTRIM(TmpFinalg.CodCors)
+                    loc_cTam      = ALLTRIM(TmpFinalg.CodTams)
+                    loc_nSaldoTotal = TmpFinalg.Saldo
 
-                SELECT TmpFinalg
-                REPLACE Estoque WITH 0, Fabrs WITH 0, Produzir WITH loc_nSaldoTotal, ;
-                    Produzir2 WITH 0, UsuLibs WITH " " IN TmpFinalg
+                    SELECT TmpFinalg
+                    REPLACE Estoque WITH 0, Fabrs WITH 0, Produzir WITH loc_nSaldoTotal, ;
+                        Produzir2 WITH 0, UsuLibs WITH " " IN TmpFinalg
 
-                IF USED("TmpSaldo")
-                    IF SEEK(loc_cCpro + loc_cCor + loc_cTam, "TmpSaldo")
-                        REPLACE TmpSaldo.Disps WITH TmpSaldo.Saldo IN TmpSaldo
+                    IF USED("TmpSaldo")
+                        IF SEEK(loc_cCpro + loc_cCor + loc_cTam, "TmpSaldo")
+                            REPLACE TmpSaldo.Disps WITH TmpSaldo.Saldo IN TmpSaldo
+                        ENDIF
                     ENDIF
-                ENDIF
 
-                THIS.AtualizarTotaisPage1()
-                IF PEMSTATUS(THIS.pgf_4c_1.Page1, "grd_4c_GradeItens", 5)
-                    THIS.pgf_4c_1.Page1.grd_4c_GradeItens.Refresh
+                    THIS.AtualizarTotaisPage1()
+                    IF PEMSTATUS(THIS.pgf_4c_1.Page1, "grd_4c_GradeItens", 5)
+                        THIS.pgf_4c_1.Page1.grd_4c_GradeItens.Refresh
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
