@@ -1563,6 +1563,46 @@ ENDPROC
 
 **CHECKLIST**: Declarar `LOCAL loc_lResultado`, inicializar `.F.`, substituir TODOS os RETURNs por atribuicoes, RETURN apenas FORA.
 
+### O caso MAIS COMUM e o `RETURN` BARE de guarda (sem valor) - mesmo erro
+
+Vale para RETURN BARE e com valor, no bloco TRY, no CATCH e no FINALLY (medido no VFP9).
+`EXIT` e `LOOP` dentro do TRY sao SEGUROS. Guarda de early-exit so quebra quando a condicao
+e atingida (validacao falha, campo vazio, SQLEXEC falha) - por isso o caminho feliz passa no
+teste e o usuario descobre ao errar um campo. NAO basta trocar o RETURN por atribuicao:
+sem envolver o resto do bloco, o codigo segue executando e grava errado EM SILENCIO.
+
+```foxpro
+*-- ERRADO - guarda com RETURN bare dentro do TRY:
+PROCEDURE ValidarEstadosLista()
+    TRY
+        IF EMPTY(loc_cEstado)
+            RETURN          && ERRO CRITICO - dispara em runtime
+        ENDIF
+        THIS.CarregarLista()
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "X")
+    ENDTRY
+ENDPROC
+
+*-- CORRETO - flag + IF aninhado; nenhum RETURN dentro do TRY:
+PROCEDURE ValidarEstadosLista()
+    LOCAL loc_lProsseguir
+    loc_lProsseguir = .T.
+
+    TRY
+        IF EMPTY(loc_cEstado)
+            loc_lProsseguir = .F.
+        ENDIF
+
+        IF loc_lProsseguir
+            THIS.CarregarLista()
+        ENDIF
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "X")
+    ENDTRY
+ENDPROC
+```
+
 ## REGRA CRITICA: Strings SQL longas DEVEM ser quebradas com continuation
 
 VFP9 tem limite de ~8000 chars por linha logica. Strings SQL com muitos campos DEVEM ser quebradas com ``+;``:
@@ -3137,7 +3177,7 @@ metodos e eventos do codigo original. REGRAS OBRIGATORIAS:
 
 ## Regras VFP Criticas
 - NUNCA usar literais acentuados - usar CHR(): a=225, c=231, ao=227, e=233, etc.
-- NUNCA usar RETURN dentro de TRY/CATCH - usar variavel loc_lSucesso
+- NUNCA RETURN dentro de TRY/CATCH - inclui o RETURN BARE de guarda (sem valor), e vale no bloco TRY, no CATCH e no FINALLY. Fix: flag `loc_lProsseguir = .F.` no lugar do RETURN + envolver o resto do bloco em `IF loc_lProsseguir ... ENDIF` + RETURN unico DEPOIS do ENDTRY. So trocar o RETURN por atribuicao SEM envolver o resto descarta o early-exit e grava errado em silencio. `EXIT`/`LOOP` dentro do TRY sao seguros
 - NUNCA usar .Release() em objetos Custom/BO - apenas em objetos Form
 - BINDEVENT funciona apenas com metodos PUBLIC (sem PROTECTED)
 - **TesteAutomatico.prg chama metodos direto no oForm (nao so BINDEVENT)**: CarregarLista/AlternarPagina/AjustarBotoesPorModo/BtnIncluirClick/BtnCancelarClick sao chamados como `THIS.oForm.Metodo()` de FORA da classe. PEMSTATUS(oForm,"Metodo",5) retorna .T. mesmo se o metodo for PROTECTED (so verifica existencia, nao escopo) - o teste entra no branch e a chamada real falha com "Property METODO is not found." em runtime. Esses metodos DEVEM ser PUBLIC (sem PROTECTED).
@@ -3445,7 +3485,7 @@ Se disponivel, contem analise profunda dos metodos originais. REGRAS:
 
 ## Regras VFP Criticas
 - NUNCA usar literais acentuados - usar CHR(): a=225, c=231, ao=227, e=233, etc.
-- NUNCA usar RETURN dentro de TRY/CATCH - usar variavel loc_lSucesso
+- NUNCA RETURN dentro de TRY/CATCH - inclui o RETURN BARE de guarda (sem valor), e vale no bloco TRY, no CATCH e no FINALLY. Fix: flag `loc_lProsseguir = .F.` no lugar do RETURN + envolver o resto do bloco em `IF loc_lProsseguir ... ENDIF` + RETURN unico DEPOIS do ENDTRY. So trocar o RETURN por atribuicao SEM envolver o resto descarta o early-exit e grava errado em silencio. `EXIT`/`LOOP` dentro do TRY sao seguros
 - BINDEVENT funciona apenas com metodos PUBLIC (sem PROTECTED)
 - **TesteAutomatico.prg chama metodos direto no oForm (nao so BINDEVENT)**: CarregarLista/AlternarPagina/AjustarBotoesPorModo/BtnIncluirClick/BtnCancelarClick sao chamados como `THIS.oForm.Metodo()` de FORA da classe. PEMSTATUS(oForm,"Metodo",5) retorna .T. mesmo se o metodo for PROTECTED (so verifica existencia, nao escopo) - o teste entra no branch e a chamada real falha com "Property METODO is not found." em runtime. Esses metodos DEVEM ser PUBLIC (sem PROTECTED).
 - **BINDEVENT "Valid" NAO FUNCIONA em TextBox**: Usar "KeyPress" (ENTER=13/TAB=9) para simular Valid. NUNCA usar LostFocus para chamar MontaGrade/CarregarDados/SQLEXEC - LostFocus dispara SEMPRE (inclusive por SetFocus de outro controle) causando RECURSAO INFINITA. Ex: `BINDEVENT(txt, "KeyPress", THIS, "TxtCampoKeyPress")` e no handler: `IF par_nKeyCode = 13 OR par_nKeyCode = 9 ... ENDIF`
@@ -3718,7 +3758,7 @@ ENDPROC
 
 ## Regras VFP Criticas
 - CHR() para acentos (a=225, c=231, ao=227, e=233, i=237, o=243)
-- NUNCA RETURN dentro de TRY/CATCH
+- NUNCA RETURN dentro de TRY/CATCH - inclui o RETURN BARE de guarda (sem valor), e vale no bloco TRY, no CATCH e no FINALLY. Fix: flag `loc_lProsseguir = .F.` no lugar do RETURN + envolver o resto do bloco em `IF loc_lProsseguir ... ENDIF` + RETURN unico DEPOIS do ENDTRY. So trocar o RETURN por atribuicao SEM envolver o resto descarta o early-exit e grava errado em silencio. `EXIT`/`LOOP` dentro do TRY sao seguros
 - BINDEVENT metodos PUBLIC (sem PROTECTED)
 - **TesteAutomatico.prg chama CarregarLista/AlternarPagina/AjustarBotoesPorModo/BtnIncluirClick/BtnCancelarClick direto no oForm (nao so BINDEVENT)**: esses metodos DEVEM ser PUBLIC - PEMSTATUS retorna .T. mesmo se PROTECTED (so verifica existencia), a chamada real falha com "Property METODO is not found."
 - **BINDEVENT "Valid" NAO FUNCIONA em TextBox**: Usar "KeyPress" (ENTER=13/TAB=9) para simular Valid. NUNCA usar LostFocus para chamar MontaGrade/CarregarDados/SQLEXEC - LostFocus dispara SEMPRE (inclusive por SetFocus de outro controle) causando RECURSAO INFINITA. Ex: `BINDEVENT(txt, "KeyPress", THIS, "TxtCampoKeyPress")` e no handler: `IF par_nKeyCode = 13 OR par_nKeyCode = 9 ... ENDIF`
@@ -3922,7 +3962,7 @@ visuais EXATAS do original. Mas NAO modifique controles ja existentes.
 2. **C:\4c\projeto\app\forms\${formSubDir}\${formClass}.prg** - Preencher Btn*Click, Validar*, Lookup*, CarregarLista, FormParaBO, BOParaForm
 
 ## Regras VFP Criticas
-- NUNCA RETURN dentro de TRY/CATCH - usar variavel loc_lSucesso
+- NUNCA RETURN dentro de TRY/CATCH - inclui o RETURN BARE de guarda (sem valor), e vale no bloco TRY, no CATCH e no FINALLY. Fix: flag `loc_lProsseguir = .F.` no lugar do RETURN + envolver o resto do bloco em `IF loc_lProsseguir ... ENDIF` + RETURN unico DEPOIS do ENDTRY. So trocar o RETURN por atribuicao SEM envolver o resto descarta o early-exit e grava errado em silencio. `EXIT`/`LOOP` dentro do TRY sao seguros
 - **TesteAutomatico.prg chama metodos direto no oForm (nao so BINDEVENT)**: CarregarLista/AlternarPagina/AjustarBotoesPorModo/BtnIncluirClick/BtnCancelarClick sao PUBLIC obrigatorio - PEMSTATUS retorna .T. mesmo se PROTECTED (so verifica existencia), a chamada real de fora da classe falha com "Property METODO is not found."
 - SQLEXEC em cursor temporario + ZAP + APPEND FROM DBF() (protecao Grid)
 - SET NULL ON antes de CREATE CURSOR

@@ -11074,3 +11074,129 @@ so o corpo. Ver tambem a secao sobre transcrever a formula de calculo.
 
 - Nao automavel (sem pattern no CorretorAutomatico).
 - Origem: Erro158 (2026-09-10, FormCco/CcoBO — task357).
+
+## 205. `RETURN` BARE Dentro de TRY Tambem Estoura — o Pattern #1 Nao Via (Erro159 2026-09-16)
+
+O sintoma chegou como bug de tela: no `FormCEP`, digitar a UT no filtro "Filtrar Pela UF"
+abria a caixa `FormCEP.ValidarEstadosLista` / *RETURN/RETRY statement not allowed in
+TRY/CATCH.* O `.prg` **compila limpo** — o erro so existe em RUNTIME.
+
+### O que foi medido no VFP9 (nao deduzido)
+
+Harness rodado no `vfp9.exe` real, um caso por metodo:
+
+| Caso | Resultado |
+|------|-----------|
+| `RETURN` bare no bloco **TRY** | **ESTOURA** |
+| `RETURN <valor>` no bloco TRY | **ESTOURA** |
+| `RETURN` em procedure solta *e* em metodo de classe | **ESTOURA** nos dois |
+| `RETURN` com clausula `FINALLY` presente | **ESTOURA** |
+| `RETURN` dentro do bloco **CATCH** | **ESTOURA** |
+| `RETURN` dentro do bloco **FINALLY** | **ESTOURA** |
+| `RETURN` **depois** do `ENDTRY` | OK |
+| `EXIT` / `LOOP` dentro do TRY | OK |
+
+Ou seja: a regra nao tem excecao por contexto. Vale no TRY, no CATCH e no FINALLY,
+com e sem valor. So e seguro **fora** do `ENDTRY`.
+
+### Por que passou por todos os gates
+
+O `Corrigir-ReturnNoTryCatch` (pattern #1) existia desde o inicio do projeto, mas com
+dois defeitos:
+
+1. **O regex exigia valor**: `'^\s*RETURN\s+(.+)$'` — o `\s+(.+)` obriga algo depois do
+   RETURN. O **`RETURN` bare nunca casava**. E o bare e a forma dominante: no sweep de
+   2026-09-16, **761 dos 763 sites** do projeto eram bare (110 arquivos).
+
+2. **A "correcao" quebrava a semantica**: trocava `RETURN <valor>` por `<var> = <valor>`
+   e seguia em frente, **descartando o early-exit** — o resto do TRY continuava
+   executando. Isso troca um erro visivel por gravacao errada silenciosa, que e pior.
+
+Como a guarda so e atingida no caminho de ERRO (validacao falha, campo vazio, SQLEXEC
+falha), o caminho feliz passa em todo teste automatizado e o usuario descobre ao errar
+um campo. Foi exatamente o roteiro do Erro159.
+
+### ERRADO
+
+```foxpro
+PROCEDURE ValidarEstadosLista
+    LOCAL loc_cEstado
+    TRY
+        IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "txt_4c_Estados", 5)
+            RETURN                      && ESTOURA em runtime
+        ENDIF
+
+        loc_cEstado = UPPER(ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_Estados.Value))
+
+        IF loc_cEstado == UPPER(ALLTRIM(THIS.this_cUltimoEstadoValidado))
+            RETURN                      && ESTOURA em runtime
+        ENDIF
+
+        THIS.CarregarLista()
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "FormCEP.ValidarEstadosLista")
+    ENDTRY
+ENDPROC
+```
+
+### CERTO — flag + `IF` aninhado
+
+```foxpro
+PROCEDURE ValidarEstadosLista
+    LOCAL loc_cEstado, loc_lProsseguir, loc_oErro
+    loc_cEstado     = ""
+    loc_lProsseguir = .T.
+
+    TRY
+        IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "txt_4c_Estados", 5)
+            loc_lProsseguir = .F.
+        ENDIF
+
+        IF loc_lProsseguir
+            loc_cEstado = UPPER(ALLTRIM(THIS.pgf_4c_Paginas.Page1.txt_4c_Estados.Value))
+
+            IF loc_cEstado == UPPER(ALLTRIM(THIS.this_cUltimoEstadoValidado))
+                loc_lProsseguir = .F.
+            ENDIF
+        ENDIF
+
+        IF loc_lProsseguir
+            THIS.CarregarLista()
+        ENDIF
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "FormCEP.ValidarEstadosLista")
+    ENDTRY
+ENDPROC
+```
+
+**Uma flag por metodo basta**, mesmo com varias guardas: cada guarda so a derruba, e cada
+trecho subsequente fica sob `IF loc_lProsseguir`. O `RETURN` do metodo, quando existe, vem
+depois do `ENDTRY`.
+
+### A armadilha do atalho
+
+Nao basta apagar o `RETURN` nem troca-lo por atribuicao: **sem envolver o codigo seguinte
+em `IF loc_lProsseguir`**, o metodo continua executando o que a guarda existia para
+impedir. O guard `IF EMPTY(loc_cEstado) RETURN` protege a consulta que vem depois; sem o
+envelope, a consulta roda com o campo vazio.
+
+### Referencias
+
+- Auditoria offline (conta os sites de um arquivo, TRY + CATCH + FINALLY, bare e com valor):
+
+```powershell
+$d=0; $blk=@{}
+Get-Content <arquivo.prg> | ForEach-Object -Begin {$n=0} -Process {
+    $n++; $s=$_.Trim()
+    if ($s -match '(?i)^TRY$')        { $d++; $blk[$d]='TRY'; return }
+    if ($s -match '(?i)^ENDTRY\b')    { if($d -gt 0){$blk.Remove($d); $d--}; return }
+    if ($d -gt 0 -and $s -match '(?i)^CATCH(\s|$)')   { $blk[$d]='CATCH';   return }
+    if ($d -gt 0 -and $s -match '(?i)^FINALLY(\s|$)') { $blk[$d]='FINALLY'; return }
+    if ($d -gt 0 -and $s -match '(?i)^RETURN(\s|$)')  { "L${n} (bloco $($blk[$d])): $s" }
+}
+```
+
+- CorretorAutomatico **#1** — reescrito em 2026-09-16: passou a enxergar o `RETURN` bare e
+  o CATCH/FINALLY, e virou **WARNING** (`WARN-001-RETURN-NO-TRY`). Deixou de auto-corrigir
+  de proposito: a reestruturacao exige entender o escopo do bloco e nao se faz por regex.
+- Origem: Erro159 (2026-09-16, `FormCEP.ValidarEstadosLista` ao filtrar pela UF).

@@ -108,67 +108,118 @@ function Add-Correcao {
 function Corrigir-ReturnNoTryCatch {
     <#
     .SYNOPSIS
-    Detecta e corrige RETURN dentro de TRY/CATCH
+    Pattern #1 - Detecta RETURN dentro de TRY / CATCH / FINALLY (WARNING, nao auto-fix)
 
     .DESCRIPTION
-    RETURN dentro de TRY/CATCH causa "RETURN/RETRY statement not allowed in TRY/CATCH"
-    SoluÃ§Ã£o: Declarar variÃ¡vel local, atribuir valor, e RETURN apenas fora do TRY/CATCH
+    MEDIDO NO VFP9 (Erro159, 2026-09-16): qualquer RETURN executado dentro de um bloco
+    TRY...ENDTRY dispara "RETURN/RETRY statement not allowed in TRY/CATCH." O teste cobriu
+    procedure solta, metodo de classe, RETURN com valor, TRY com FINALLY e TRY aninhado --
+    todos estouram. Vale igualmente no bloco TRY, no CATCH e no FINALLY. So e seguro
+    DEPOIS do ENDTRY. EXIT / LOOP dentro do TRY sao OK (medidos, nao disparam).
+
+    HISTORICO - dois defeitos desta funcao, corrigidos em 2026-09-16:
+
+      (a) O regex antigo era '^\s*RETURN\s+(.+)$', que EXIGE valor apos o RETURN.
+          O `RETURN` BARE -- de longe a forma dominante (761 de 763 sites medidos no
+          projeto) -- passava invisivel. Foi assim que o Erro159 chegou ao usuario:
+          FormCEP.ValidarEstadosLista tinha dois `RETURN` bare de guarda dentro do TRY
+          e o form so quebrava ao filtrar pela UF.
+
+      (b) A "correcao" antiga trocava `RETURN <valor>` por `<var> = <valor>`, o que
+          DESCARTA o early-exit: o codigo seguia executando o resto do TRY. Isso troca
+          um erro visivel por um comportamento errado silencioso -- pior que o bug.
+
+    Por isso o pattern agora AVISA e nao reescreve. O fix correto e reestruturacao com
+    flag, que exige entender o escopo do bloco e nao se faz por regex:
+
+        * ERRADO
+        TRY
+            IF !THIS.ValidarCampos()
+                RETURN
+            ENDIF
+            THIS.Gravar()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "X")
+        ENDTRY
+
+        * CERTO - flag + IF aninhado; RETURN so DEPOIS do ENDTRY
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
+        TRY
+            IF !THIS.ValidarCampos()
+                loc_lProsseguir = .F.
+            ENDIF
+            IF loc_lProsseguir
+                THIS.Gravar()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "X")
+        ENDTRY
+
+    Origem: Erro159 (2026-09-16, FormCEP.ValidarEstadosLista ao filtrar pela UF).
     #>
     param([string[]]$Linhas)
 
-    $resultado = @()
-    $dentroTry = $false
     $nivelTry = 0
-    $variavelAdicionada = @{}  # Rastreia procedures onde jÃ¡ adicionamos variÃ¡vel
+    $blocoAtual = @{}      # nivel -> "TRY" | "CATCH" | "FINALLY"
+    $procAtual = "(nivel de arquivo)"
+    $sites = @()
 
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
         $linha = $Linhas[$i]
-        $linhaOriginal = $linha
 
-        # Detecta inÃ­cio de TRY
-        if ($linha -match '^\s*TRY\s*$') {
-            $dentroTry = $true
+        # Rastreia o PROCEDURE/FUNCTION corrente so para enriquecer a mensagem
+        if ($linha -match '(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+([A-Za-z_][A-Za-z0-9_]*)') {
+            $procAtual = $Matches[3]
+        }
+
+        if ($linha -match '(?i)^\s*TRY\s*$') {
             $nivelTry++
+            $blocoAtual[$nivelTry] = "TRY"
+            continue
         }
 
-        # Detecta fim de TRY (ENDTRY)
-        if ($linha -match '^\s*ENDTRY\s*$') {
-            $nivelTry--
-            if ($nivelTry -le 0) {
-                $dentroTry = $false
-                $nivelTry = 0
+        if ($linha -match '(?i)^\s*ENDTRY\b') {
+            if ($nivelTry -gt 0) {
+                $blocoAtual.Remove($nivelTry)
+                $nivelTry--
             }
+            continue
         }
 
-        # Se estiver dentro de TRY e encontrar RETURN
-        if ($dentroTry -and $linha -match '^\s*RETURN\s+(.+)$') {
-            $valorRetorno = $Matches[1]
+        if ($nivelTry -gt 0 -and $linha -match '(?i)^\s*CATCH(\s|$)') {
+            $blocoAtual[$nivelTry] = "CATCH"
+            continue
+        }
 
-            # Determinar variavel correta: verificar LOCAL declaration do procedimento atual
-            $varTarget = "loc_lResultado"
-            # Procurar para tras ate o PROCEDURE mais recente
-            for ($k = $i - 1; $k -ge 0; $k--) {
-                if ($Linhas[$k] -match '(?i)^\s*(PROTECTED\s+)?PROCEDURE\b') { break }
-                if ($Linhas[$k] -match '(?i)LOCAL\b.*\bloc_lSucesso\b') {
-                    $varTarget = "loc_lSucesso"
-                    break
-                }
+        if ($nivelTry -gt 0 -and $linha -match '(?i)^\s*FINALLY(\s|$)') {
+            $blocoAtual[$nivelTry] = "FINALLY"
+            continue
+        }
+
+        # RETURN bare OU com valor -- ambos estouram
+        if ($nivelTry -gt 0 -and $linha -match '(?i)^\s*RETURN(\s|$)') {
+            $sites += [PSCustomObject]@{
+                Linha  = $i + 1
+                Bloco  = $blocoAtual[$nivelTry]
+                Proc   = $procAtual
+                Texto  = $linha.Trim()
             }
-
-            # Substitui RETURN por atribuiÃ§Ã£o direta Ã  variavel correta
-            $novaLinha = $linha -replace 'RETURN\s+(.+)', "$varTarget = `$1"
-            $novaLinha = $novaLinha -replace '\s*&&.*$', ''  # Remove comentÃ¡rios
-
-            Add-Correcao -Tipo "RETURN_NO_TRY" -Linha ($i + 1) -Original $linhaOriginal.Trim() -Corrigido $novaLinha.Trim() -Descricao "RETURN dentro de TRY substituido por atribuicao"
-
-            $resultado += $novaLinha
-        }
-        else {
-            $resultado += $linha
         }
     }
 
-    return $resultado
+    if ($sites.Count -gt 0) {
+        $lista = ($sites | ForEach-Object { "L$($_.Linha) em $($_.Proc) (bloco $($_.Bloco))" }) -join "; "
+
+        Add-Correcao -Tipo "WARN-001-RETURN-NO-TRY" -Linha $sites[0].Linha `
+            -Original $sites[0].Texto -Corrigido "" `
+            -Descricao "Pattern #1 WARNING: $($sites.Count) RETURN dentro de TRY/CATCH/FINALLY. Medido no VFP9: TODO RETURN executado dentro de TRY...ENDTRY dispara 'RETURN/RETRY statement not allowed in TRY/CATCH' em RUNTIME (o .prg compila limpo) -- vale para RETURN bare e com valor, no TRY, no CATCH e no FINALLY, com ou sem clausula FINALLY, em procedure solta e em metodo de classe. Guarda de early-exit so quebra quando a condicao e atingida (validacao falha, campo vazio, SQLEXEC falha), por isso o caminho feliz passa nos testes. FIX MANUAL (nao automavel por regex, exige entender o escopo): declarar LOCAL loc_lProsseguir = .T.; trocar cada RETURN por loc_lProsseguir = .F.; envolver o codigo seguinte em IF loc_lProsseguir ... ENDIF; deixar o RETURN unico DEPOIS do ENDTRY. NUNCA trocar 'RETURN <valor>' por '<var> = <valor>' sem envolver o resto do bloco -- isso descarta o early-exit e troca um erro visivel por gravacao errada silenciosa. EXIT e LOOP dentro do TRY sao seguros (medidos). Sites: $lista. Origem: Erro159 (2026-09-16, FormCEP.ValidarEstadosLista ao filtrar pela UF)."
+
+        Write-Host "[Pattern #1] WARNING: $($sites.Count) RETURN dentro de TRY/CATCH/FINALLY - reestruturar com flag (RETURN so apos ENDTRY). $lista" -ForegroundColor Yellow
+    }
+
+    # Nao reescreve nada: a correcao correta exige reestruturacao de escopo.
+    return $Linhas
 }
 
 function Corrigir-InicializarFormDuplicado {
