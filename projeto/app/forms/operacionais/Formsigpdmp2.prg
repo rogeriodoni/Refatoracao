@@ -2617,38 +2617,43 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
     * Replica: get_moeda.Valid do legado (fwBuscaExt -> SigCdMoe)
     *==========================================================================
     PROCEDURE AbrirLookupMoeda(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oForm, loc_cValor, loc_oErro
+        LOCAL loc_oForm, loc_cValor, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF par_nKeyCode = 115 OR par_nKeyCode = 13 OR par_nKeyCode = 9
                 IF !PEMSTATUS(THIS, "cnt_4c_Servico", 5)
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                loc_cValor = ALLTRIM(NVL(THIS.cnt_4c_Servico.txt_4c_GetMoeda.Value, ""))
-                loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCdMoe", "crListaRemota", "CMOES", loc_cValor, ;
-                    "Sele" + CHR(231) + CHR(227) + "o")
-                IF ISNULL(loc_oForm)
-                    RETURN
+                IF loc_lProsseguir
+                    loc_cValor = ALLTRIM(NVL(THIS.cnt_4c_Servico.txt_4c_GetMoeda.Value, ""))
+                    loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                        "SigCdMoe", "crListaRemota", "CMOES", loc_cValor, ;
+                        "Sele" + CHR(231) + CHR(227) + "o")
+                    IF ISNULL(loc_oForm)
+                        loc_lProsseguir = .F.
+                    ENDIF
                 ENDIF
-                IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
-                    THIS.cnt_4c_Servico.txt_4c_GetMoeda.Value = ALLTRIM(crListaRemota.CMOES)
-                    THIS.cnt_4c_Servico.txt_4c_GetMoeda.Refresh()
-                ELSE
-                    IF !loc_oForm.this_lAchouRegistro
-                    loc_oForm.mAddColuna("CMOES", "", "C" + CHR(243) + "digo")
-                    loc_oForm.mAddColuna("DMOES", "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oForm.Show()
-                    IF loc_oForm.this_lSelecionou ;
-                            AND PEMSTATUS(THIS.cnt_4c_Servico, "txt_4c_GetMoeda", 5)
+                IF loc_lProsseguir
+                    IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
                         THIS.cnt_4c_Servico.txt_4c_GetMoeda.Value = ALLTRIM(crListaRemota.CMOES)
                         THIS.cnt_4c_Servico.txt_4c_GetMoeda.Refresh()
+                    ELSE
+                        IF !loc_oForm.this_lAchouRegistro
+                        loc_oForm.mAddColuna("CMOES", "", "C" + CHR(243) + "digo")
+                        loc_oForm.mAddColuna("DMOES", "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oForm.Show()
+                        IF loc_oForm.this_lSelecionou ;
+                                AND PEMSTATUS(THIS.cnt_4c_Servico, "txt_4c_GetMoeda", 5)
+                            THIS.cnt_4c_Servico.txt_4c_GetMoeda.Value = ALLTRIM(crListaRemota.CMOES)
+                            THIS.cnt_4c_Servico.txt_4c_GetMoeda.Refresh()
+                        ENDIF
+                        ENDIF
                     ENDIF
+                    IF USED("crListaRemota")
+                        USE IN crListaRemota
                     ENDIF
+                    loc_oForm.Release()
                 ENDIF
-                IF USED("crListaRemota")
-                    USE IN crListaRemota
-                ENDIF
-                loc_oForm.Release()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro lookup Moeda")

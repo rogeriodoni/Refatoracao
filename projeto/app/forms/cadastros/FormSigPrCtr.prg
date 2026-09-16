@@ -2338,7 +2338,7 @@ DEFINE CLASS FormSigPrCtr AS FormBase
     * CmdOperacaoClick - Abre movimentacao para o registro selecionado no grdEstoque
     *--------------------------------------------------------------------------
     PROCEDURE CmdOperacaoClick()
-        LOCAL loc_cDopes, loc_cNumes, loc_cEmps, loc_cSQL, loc_nResult, loc_oErro
+        LOCAL loc_cDopes, loc_cNumes, loc_cEmps, loc_cSQL, loc_nResult, loc_oErro, loc_lProsseguir
 
         IF !USED("cursor_4c_Pendentes") OR EOF("cursor_4c_Pendentes") OR ;
            RECCOUNT("cursor_4c_Pendentes") = 0
@@ -2346,6 +2346,7 @@ DEFINE CLASS FormSigPrCtr AS FormBase
             RETURN
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             SELECT cursor_4c_Pendentes
             loc_cEmps  = ALLTRIM(cursor_4c_Pendentes.Emps)
@@ -2354,38 +2355,40 @@ DEFINE CLASS FormSigPrCtr AS FormBase
 
             IF EMPTY(loc_cEmps) OR EMPTY(loc_cDopes) OR EMPTY(loc_cNumes)
                 MsgAviso("Selecione um registro v" + CHR(225) + "lido na grade.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cSQL = "SELECT Dopes FROM SigCdOpe WHERE LTRIM(RTRIM(Dopes)) = " + ;
-                       EscaparSQL(loc_cDopes)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpOpe")
-
-            IF loc_nResult >= 0 AND USED("cursor_4c_TmpOpe") AND ;
-               RECCOUNT("cursor_4c_TmpOpe") > 0
-                IF USED("cursor_4c_TmpOpe")
-                    USE IN cursor_4c_TmpOpe
-                ENDIF
-                DO FORM FormSigMvExp WITH loc_cDopes, "C", loc_cNumes, loc_cEmps, .T.
-            ELSE
-                IF USED("cursor_4c_TmpOpe")
-                    USE IN cursor_4c_TmpOpe
-                ENDIF
-                loc_cSQL = "SELECT Dopps FROM SigCdOpd WHERE LTRIM(RTRIM(Dopps)) = " + ;
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT Dopes FROM SigCdOpe WHERE LTRIM(RTRIM(Dopes)) = " + ;
                            EscaparSQL(loc_cDopes)
-                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpOpd")
-                IF loc_nResult >= 0 AND USED("cursor_4c_TmpOpd") AND ;
-                   RECCOUNT("cursor_4c_TmpOpd") > 0
-                    IF USED("cursor_4c_TmpOpd")
-                        USE IN cursor_4c_TmpOpd
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpOpe")
+
+                IF loc_nResult >= 0 AND USED("cursor_4c_TmpOpe") AND ;
+                   RECCOUNT("cursor_4c_TmpOpe") > 0
+                    IF USED("cursor_4c_TmpOpe")
+                        USE IN cursor_4c_TmpOpe
                     ENDIF
                     DO FORM FormSigMvExp WITH loc_cDopes, "C", loc_cNumes, loc_cEmps, .T.
                 ELSE
-                    IF USED("cursor_4c_TmpOpd")
-                        USE IN cursor_4c_TmpOpd
+                    IF USED("cursor_4c_TmpOpe")
+                        USE IN cursor_4c_TmpOpe
                     ENDIF
-                    MsgAviso("Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
-                             "o encontrada no cadastro.", "Aviso")
+                    loc_cSQL = "SELECT Dopps FROM SigCdOpd WHERE LTRIM(RTRIM(Dopps)) = " + ;
+                               EscaparSQL(loc_cDopes)
+                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpOpd")
+                    IF loc_nResult >= 0 AND USED("cursor_4c_TmpOpd") AND ;
+                       RECCOUNT("cursor_4c_TmpOpd") > 0
+                        IF USED("cursor_4c_TmpOpd")
+                            USE IN cursor_4c_TmpOpd
+                        ENDIF
+                        DO FORM FormSigMvExp WITH loc_cDopes, "C", loc_cNumes, loc_cEmps, .T.
+                    ELSE
+                        IF USED("cursor_4c_TmpOpd")
+                            USE IN cursor_4c_TmpOpd
+                        ENDIF
+                        MsgAviso("Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
+                                 "o encontrada no cadastro.", "Aviso")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -3691,51 +3694,58 @@ DEFINE CLASS FormSigPrCtr AS FormBase
     * ImgFigJpgDblClick - Abre zoom da foto do produto (SigOpZom)
     *--------------------------------------------------------------------------
     PROCEDURE ImgFigJpgDblClick()
-        LOCAL loc_oPg2P2, loc_cCpros, loc_cSQL, loc_nResult
+        LOCAL loc_oPg2P2, loc_cCpros, loc_cSQL, loc_nResult, loc_lProsseguir
         LOCAL loc_cFigJpgs, loc_cArqTemp, loc_cFoto, loc_cCaption, loc_oErro
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Movimentos") OR RECCOUNT("cursor_4c_Movimentos") = 0
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCpros = ALLTRIM(NVL(cursor_4c_Movimentos.Cpros, ""))
-            IF EMPTY(loc_cCpros)
-                RETURN
+            IF loc_lProsseguir
+                loc_cCpros = ALLTRIM(NVL(cursor_4c_Movimentos.Cpros, ""))
+                IF EMPTY(loc_cCpros)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cSQL = "SELECT a.cpros, a.FigJpgs FROM SigCdPro a WHERE a.cpros = " + ;
-                       EscaparSQL(loc_cCpros)
-            IF USED("cursor_4c_TmpPro")
-                USE IN cursor_4c_TmpPro
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT a.cpros, a.FigJpgs FROM SigCdPro a WHERE a.cpros = " + ;
+                           EscaparSQL(loc_cCpros)
+                IF USED("cursor_4c_TmpPro")
+                    USE IN cursor_4c_TmpPro
+                ENDIF
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpPro")
+                IF loc_nResult < 0 OR !USED("cursor_4c_TmpPro") OR RECCOUNT("cursor_4c_TmpPro") = 0
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpPro")
-            IF loc_nResult < 0 OR !USED("cursor_4c_TmpPro") OR RECCOUNT("cursor_4c_TmpPro") = 0
-                RETURN
-            ENDIF
-            SELECT cursor_4c_TmpPro
-            GO TOP
-            loc_cFigJpgs = NVL(cursor_4c_TmpPro.FigJpgs, "")
-            IF USED("cursor_4c_TmpPro")
-                USE IN cursor_4c_TmpPro
-            ENDIF
-            IF !EMPTY(loc_cFigJpgs) AND !ISNULL(loc_cFigJpgs)
-                loc_cArqTemp = SYS(2023) + "\" + SYS(2015) + ".jpg"
-                loc_cFoto = STRCONV(;
-                    STRTRAN(STRTRAN(STRTRAN(loc_cFigJpgs, ;
-                        "data:image/png;base64,", ""), ;
-                        "data:image/jpeg;base64,", ""), ;
-                        "data:image/jpg;base64,", ""), 14)
-                STRTOFILE(loc_cFoto, loc_cArqTemp)
-                IF FILE(loc_cArqTemp)
-                    loc_cCaption = "Produto : " + loc_cCpros + " - " + ;
-                                   ALLTRIM(NVL(cursor_4c_Movimentos.Dpros, ""))
-                    IF FILE(gc_4c_CaminhoForms + "operacionais\FormSigOpZom.prg") OR ;
-                       FILE(gc_4c_CaminhoForms + "FormSigOpZom.prg")
-                        DO FORM (gc_4c_CaminhoForms + "operacionais\FormSigOpZom.prg") ;
-                            WITH loc_cArqTemp, loc_cCaption, " "
-                    ELSE
-                        DECLARE INTEGER ShellExecute IN shell32.dll ;
-                            INTEGER hWnd, STRING lpOperation, STRING lpFile, ;
-                            STRING lpParameters, STRING lpDirectory, INTEGER nShowCmd
-                        ShellExecute(0, "open", loc_cArqTemp, "", "", 1)
+            IF loc_lProsseguir
+                SELECT cursor_4c_TmpPro
+                GO TOP
+                loc_cFigJpgs = NVL(cursor_4c_TmpPro.FigJpgs, "")
+                IF USED("cursor_4c_TmpPro")
+                    USE IN cursor_4c_TmpPro
+                ENDIF
+                IF !EMPTY(loc_cFigJpgs) AND !ISNULL(loc_cFigJpgs)
+                    loc_cArqTemp = SYS(2023) + "\" + SYS(2015) + ".jpg"
+                    loc_cFoto = STRCONV(;
+                        STRTRAN(STRTRAN(STRTRAN(loc_cFigJpgs, ;
+                            "data:image/png;base64,", ""), ;
+                            "data:image/jpeg;base64,", ""), ;
+                            "data:image/jpg;base64,", ""), 14)
+                    STRTOFILE(loc_cFoto, loc_cArqTemp)
+                    IF FILE(loc_cArqTemp)
+                        loc_cCaption = "Produto : " + loc_cCpros + " - " + ;
+                                       ALLTRIM(NVL(cursor_4c_Movimentos.Dpros, ""))
+                        IF FILE(gc_4c_CaminhoForms + "operacionais\FormSigOpZom.prg") OR ;
+                           FILE(gc_4c_CaminhoForms + "FormSigOpZom.prg")
+                            DO FORM (gc_4c_CaminhoForms + "operacionais\FormSigOpZom.prg") ;
+                                WITH loc_cArqTemp, loc_cCaption, " "
+                        ELSE
+                            DECLARE INTEGER ShellExecute IN shell32.dll ;
+                                INTEGER hWnd, STRING lpOperation, STRING lpFile, ;
+                                STRING lpParameters, STRING lpDirectory, INTEGER nShowCmd
+                            ShellExecute(0, "open", loc_cArqTemp, "", "", 1)
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF
@@ -3748,27 +3758,34 @@ DEFINE CLASS FormSigPrCtr AS FormBase
     * GrdDisponivelDblClick - Duplo clique em Col01 abre pesquisa global produto
     *--------------------------------------------------------------------------
     PROCEDURE GrdDisponivelDblClick()
-        LOCAL loc_oPg2P2, loc_cCpros, loc_oErro
+        LOCAL loc_oPg2P2, loc_cCpros, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg2P2 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2
             IF PEMSTATUS(loc_oPg2P2, "grd_4c_Disponivel", 5)
                 IF loc_oPg2P2.grd_4c_Disponivel.ActiveColumn # 1
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
-            IF !USED("cursor_4c_Movimentos") OR RECCOUNT("cursor_4c_Movimentos") = 0
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Movimentos") OR RECCOUNT("cursor_4c_Movimentos") = 0
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cCpros = ALLTRIM(NVL(cursor_4c_Movimentos.Cpros, ""))
-            IF EMPTY(loc_cCpros)
-                RETURN
+            IF loc_lProsseguir
+                loc_cCpros = ALLTRIM(NVL(cursor_4c_Movimentos.Cpros, ""))
+                IF EMPTY(loc_cCpros)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF FILE(gc_4c_CaminhoForms + "operacionais\FormSigOpCgp.prg") OR ;
-               FILE(gc_4c_CaminhoForms + "FormSigOpCgp.prg")
-                DO FORM (gc_4c_CaminhoForms + "operacionais\FormSigOpCgp.prg")
-            ELSE
-                MsgInfo("Produto: " + loc_cCpros + CHR(13) + ;
-                        ALLTRIM(NVL(cursor_4c_Movimentos.Dpros, "")), "Produto")
+            IF loc_lProsseguir
+                IF FILE(gc_4c_CaminhoForms + "operacionais\FormSigOpCgp.prg") OR ;
+                   FILE(gc_4c_CaminhoForms + "FormSigOpCgp.prg")
+                    DO FORM (gc_4c_CaminhoForms + "operacionais\FormSigOpCgp.prg")
+                ELSE
+                    MsgInfo("Produto: " + loc_cCpros + CHR(13) + ;
+                            ALLTRIM(NVL(cursor_4c_Movimentos.Dpros, "")), "Produto")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em FormSigPrCtr.GrdDisponivelDblClick:" + CHR(13) + loc_oErro.Message, "Erro")

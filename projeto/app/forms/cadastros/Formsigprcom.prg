@@ -2358,42 +2358,47 @@ DEFINE CLASS Formsigprcom AS FormBase
     * BtnExcluirGradeClick - Exclui todas as linhas da empresa corrente no cursor
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirGradeClick()
-        LOCAL loc_cEmps
+        LOCAL loc_cEmps, loc_lProsseguir
         loc_cEmps = ""
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Max") OR RECCOUNT("cursor_4c_Max") = 0
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !MsgConfirma("Excluir todos os m" + CHR(225) + "ximos desta empresa?", ;
-                    "Confirmar Exclus" + CHR(227) + "o")
-                RETURN
-            ENDIF
-
-            SELECT cursor_4c_Max
-            IF !EOF() AND !BOF()
-                loc_cEmps = ALLTRIM(TratarNulo(cursor_4c_Max.emps, "C"))
-            ENDIF
-
-            IF EMPTY(loc_cEmps)
-                loc_cEmps = ALLTRIM(go_4c_Sistema.cCodEmpresa)
-            ENDIF
-
-            SELECT cursor_4c_Max
-            GO TOP
-            SCAN
-                IF ALLTRIM(cursor_4c_Max.emps) = loc_cEmps
-                    DELETE
+            IF loc_lProsseguir
+                IF !MsgConfirma("Excluir todos os m" + CHR(225) + "ximos desta empresa?", ;
+                        "Confirmar Exclus" + CHR(227) + "o")
+                    loc_lProsseguir = .F.
                 ENDIF
-            ENDSCAN
-            PACK
-
-            IF RECCOUNT("cursor_4c_Max") = 0
-                THIS.GradeINovaLinha()
             ENDIF
 
-            THIS.pgf_4c_Paginas.Page2.grd_4c_Gradei.Refresh()
+            IF loc_lProsseguir
+                SELECT cursor_4c_Max
+                IF !EOF() AND !BOF()
+                    loc_cEmps = ALLTRIM(TratarNulo(cursor_4c_Max.emps, "C"))
+                ENDIF
+
+                IF EMPTY(loc_cEmps)
+                    loc_cEmps = ALLTRIM(go_4c_Sistema.cCodEmpresa)
+                ENDIF
+
+                SELECT cursor_4c_Max
+                GO TOP
+                SCAN
+                    IF ALLTRIM(cursor_4c_Max.emps) = loc_cEmps
+                        DELETE
+                    ENDIF
+                ENDSCAN
+                PACK
+
+                IF RECCOUNT("cursor_4c_Max") = 0
+                    THIS.GradeINovaLinha()
+                ENDIF
+
+                THIS.pgf_4c_Paginas.Page2.grd_4c_Gradei.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em BtnExcluirGradeClick: " + loc_oErro.Message, "Erro")
         ENDTRY

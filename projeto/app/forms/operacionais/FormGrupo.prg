@@ -471,30 +471,33 @@ DEFINE CLASS FormGrupo AS FormBase
     * e posiciona foco no primeiro registro para permitir alteracao
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Ope") OR RECCOUNT("cursor_4c_Ope") = 0
                 MsgAviso("N" + CHR(227) + "o h" + CHR(225) + ;
                          " grupos carregados para alterar." + CHR(13) + ;
                          "Utilize Incluir ou Carregar Grande Grupo.", ;
                          "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Habilita edicao (Cgrus editavel + campo Grande Grupo)
-            THIS.grd_4c_Dados.Column1.ReadOnly = .F.
-            THIS.grd_4c_Dados.Column1.Enabled  = .T.
-            THIS.txt_4c_GdeGrps.Enabled        = .T.
-            THIS.this_oBusinessObject.this_lGravaDados = .T.
+            IF loc_lProsseguir
+                THIS.grd_4c_Dados.Column1.ReadOnly = .F.
+                THIS.grd_4c_Dados.Column1.Enabled  = .T.
+                THIS.txt_4c_GdeGrps.Enabled        = .T.
+                THIS.this_oBusinessObject.this_lGravaDados = .T.
 
             *-- Posiciona no primeiro registro para edicao
-            SELECT cursor_4c_Ope
-            GO TOP IN cursor_4c_Ope
-            THIS.grd_4c_Dados.Refresh()
-            THIS.grd_4c_Dados.SetFocus
-            THIS.grd_4c_Dados.Column1.SetFocus
+                SELECT cursor_4c_Ope
+                GO TOP IN cursor_4c_Ope
+                THIS.grd_4c_Dados.Refresh()
+                THIS.grd_4c_Dados.SetFocus
+                THIS.grd_4c_Dados.Column1.SetFocus
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -509,25 +512,28 @@ DEFINE CLASS FormGrupo AS FormBase
     * mantendo navegacao livre entre os registros ja gravados
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Ope") OR RECCOUNT("cursor_4c_Ope") = 0
                 MsgAviso("N" + CHR(227) + "o h" + CHR(225) + ;
                          " grupos carregados para visualizar.", ;
                          "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Bloqueia edicao (Cgrus read-only + desabilita auxiliares)
-            THIS.grd_4c_Dados.Column1.ReadOnly = .T.
-            THIS.txt_4c_GdeGrps.Enabled        = .F.
+            IF loc_lProsseguir
+                THIS.grd_4c_Dados.Column1.ReadOnly = .T.
+                THIS.txt_4c_GdeGrps.Enabled        = .F.
 
-            SELECT cursor_4c_Ope
-            GO TOP IN cursor_4c_Ope
-            THIS.grd_4c_Dados.Refresh()
-            THIS.grd_4c_Dados.SetFocus
+                SELECT cursor_4c_Ope
+                GO TOP IN cursor_4c_Ope
+                THIS.grd_4c_Dados.Refresh()
+                THIS.grd_4c_Dados.SetFocus
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -766,17 +772,20 @@ DEFINE CLASS FormGrupo AS FormBase
     * SigCdGpr: Codigos (char, codigo), Descs (descricao)
     *==========================================================================
     PROCEDURE ValidarGdeGrps()
-        LOCAL loc_cCodigo, loc_oErro
+        LOCAL loc_cCodigo, loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             loc_cCodigo = ALLTRIM(THIS.txt_4c_GdeGrps.Value)
 
             IF EMPTY(loc_cCodigo)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.AbrirBuscaGdeGrps()
+            IF loc_lProsseguir
+                THIS.AbrirBuscaGdeGrps()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -839,8 +848,9 @@ DEFINE CLASS FormGrupo AS FormBase
     * Delega logica ao GrupoBO.CarregarGrandeGrupo()
     *==========================================================================
     PROCEDURE BtnCarregarClick()
-        LOCAL loc_cGde, loc_oErro
+        LOCAL loc_cGde, loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             loc_cGde = ALLTRIM(THIS.txt_4c_GdeGrps.Value)
 
@@ -848,14 +858,16 @@ DEFINE CLASS FormGrupo AS FormBase
                 MsgAviso("Preencha o Grande Grupo Antes de Processar!", ;
                          "Aten" + CHR(231) + CHR(227) + "o")
                 THIS.txt_4c_GdeGrps.SetFocus
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF THIS.this_oBusinessObject.CarregarGrandeGrupo(loc_cGde)
-                THIS.grd_4c_Dados.Refresh()
-                THIS.grd_4c_Dados.Column1.SetFocus
-            ENDIF
+            IF loc_lProsseguir
+                IF THIS.this_oBusinessObject.CarregarGrandeGrupo(loc_cGde)
+                    THIS.grd_4c_Dados.Refresh()
+                    THIS.grd_4c_Dados.Column1.SetFocus
+                ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -975,18 +987,21 @@ DEFINE CLASS FormGrupo AS FormBase
     * BtnEncerrarClick - Fecha o form; pede confirmacao se houver alteracoes nao salvas
     *==========================================================================
     PROCEDURE BtnEncerrarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF THIS.this_oBusinessObject.this_lGravaDados
                 IF !MsgConfirma("H" + CHR(225) + " altera" + CHR(231) + CHR(245) + ;
                                 "es n" + CHR(227) + "o salvas. Fechar sem salvar?", ;
                                 "Aten" + CHR(231) + CHR(227) + "o")
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
-            THIS.Release()
+            IF loc_lProsseguir
+                THIS.Release()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;

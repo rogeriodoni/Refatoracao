@@ -636,22 +636,25 @@ DEFINE CLASS FormSIGPRCPR AS FormBase
     * Mapeamento semantico: em form OPERACIONAL, "incluir" = adicionar leitura
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("TmpBaixa") OR RECCOUNT("TmpBaixa") = 0
                 MsgAviso("N" + CHR(227) + "o existem etiquetas para confer" + CHR(234) + "ncia.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF VARTYPE(THIS.txt_4c_Leitura) = "O"
-                THIS.txt_4c_Leitura.Visible = .T.
-                THIS.txt_4c_Leitura.Enabled = .T.
-                THIS.txt_4c_Leitura.Value   = 0
-                THIS.txt_4c_Leitura.SetFocus()
-            ENDIF
+            IF loc_lProsseguir
+                IF VARTYPE(THIS.txt_4c_Leitura) = "O"
+                    THIS.txt_4c_Leitura.Visible = .T.
+                    THIS.txt_4c_Leitura.Enabled = .T.
+                    THIS.txt_4c_Leitura.Value   = 0
+                    THIS.txt_4c_Leitura.SetFocus()
+                ENDIF
 
-            IF VARTYPE(THIS.lbl_4c_Leitura) = "O"
-                THIS.lbl_4c_Leitura.Visible = .T.
+                IF VARTYPE(THIS.lbl_4c_Leitura) = "O"
+                    THIS.lbl_4c_Leitura.Visible = .T.
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BtnIncluir")
@@ -664,20 +667,25 @@ DEFINE CLASS FormSIGPRCPR AS FormBase
     * Delega a logica real para ConferirAutomatico() do BO (mesma que CmdConferirAuto)
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("TmpBaixa") OR RECCOUNT("TmpBaixa") = 0
                 MsgAviso("N" + CHR(227) + "o existem etiquetas para confer" + CHR(234) + "ncia.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !MsgConfirma("Marcar TODAS as etiquetas como lidas?")
-                RETURN
+            IF loc_lProsseguir
+                IF !MsgConfirma("Marcar TODAS as etiquetas como lidas?")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            THIS.this_oBusinessObject.ConferirAutomatico()
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
-                THIS.grd_4c_Dados.Refresh()
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.ConferirAutomatico()
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BtnAlterar")
@@ -716,22 +724,27 @@ DEFINE CLASS FormSIGPRCPR AS FormBase
     * Operacao inversa de BtnAlterarClick / ConferirAutomatico
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("TmpBaixa") OR RECCOUNT("TmpBaixa") = 0
                 MsgAviso("N" + CHR(227) + "o existem etiquetas para limpar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !MsgConfirma("Limpar TODAS as leituras marcadas?")
-                RETURN
+            IF loc_lProsseguir
+                IF !MsgConfirma("Limpar TODAS as leituras marcadas?")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            SELECT TmpBaixa
-            REPLACE ALL QtdeLido WITH 0
+            IF loc_lProsseguir
+                SELECT TmpBaixa
+                REPLACE ALL QtdeLido WITH 0
 
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
-                THIS.grd_4c_Dados.Refresh()
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BtnExcluir")

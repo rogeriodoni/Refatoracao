@@ -2326,7 +2326,7 @@ DEFINE CLASS Formsigatcrp AS FormBase
     * ABRIRBUSCAEMP - picker por Cemps em SigCdEmp
     *--------------------------------------------------------------------------
     PROCEDURE AbrirBuscaEmp()
-        LOCAL loc_oBusca, loc_cValor, loc_cSQL, loc_nResult, loc_cTitulo
+        LOCAL loc_oBusca, loc_cValor, loc_cSQL, loc_nResult, loc_cTitulo, loc_lProsseguir
         loc_cValor  = ALLTRIM(THIS.txt_4c_Emp.Value)
         loc_cTitulo = "Sele" + CHR(231) + CHR(227) + "o de Empresa"
 
@@ -2334,6 +2334,7 @@ DEFINE CLASS Formsigatcrp AS FormBase
             USE IN cursor_4c_BuscaEmp
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(loc_cValor)
                 loc_cSQL = "SELECT Cemps, Razas FROM SigCdEmp ORDER BY Cemps"
@@ -2358,35 +2359,39 @@ DEFINE CLASS Formsigatcrp AS FormBase
 
             IF loc_nResult < 1 OR !USED("cursor_4c_BuscaEmp") OR RECCOUNT("cursor_4c_BuscaEmp") = 0
                 MsgAviso("Nenhuma empresa encontrada.", "Empresa")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Cria picker sem SQL automatica (sem par_cTabela)
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmp"
-                loc_oBusca.this_cTitulo        = loc_cTitulo
-                loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo
-                loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo
-                loc_oBusca.mAddColuna("Cemps", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
-                    SELECT cursor_4c_BuscaEmp
-                    THIS.txt_4c_Emp.Value  = ALLTRIM(cursor_4c_BuscaEmp.Cemps)
-                    THIS.txt_4c_Demp.Value = ALLTRIM(cursor_4c_BuscaEmp.Razas)
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmp"
+                    loc_oBusca.this_cTitulo        = loc_cTitulo
+                    loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo
+                    loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo
+                    loc_oBusca.mAddColuna("Cemps", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
+                        SELECT cursor_4c_BuscaEmp
+                        THIS.txt_4c_Emp.Value  = ALLTRIM(cursor_4c_BuscaEmp.Cemps)
+                        THIS.txt_4c_Demp.Value = ALLTRIM(cursor_4c_BuscaEmp.Razas)
+                    ENDIF
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaEmp")
-            USE IN cursor_4c_BuscaEmp
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaEmp")
+                USE IN cursor_4c_BuscaEmp
+            ENDIF
+            THIS.txt_4c_Emp.Refresh
+            THIS.txt_4c_Demp.Refresh
         ENDIF
-        THIS.txt_4c_Emp.Refresh
-        THIS.txt_4c_Demp.Refresh
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2443,7 +2448,7 @@ DEFINE CLASS Formsigatcrp AS FormBase
     * ABRIRBUSCADEMP - picker por Razas em SigCdEmp
     *--------------------------------------------------------------------------
     PROCEDURE AbrirBuscaDemp()
-        LOCAL loc_oBusca, loc_cValor, loc_cSQL, loc_nResult, loc_cTitulo
+        LOCAL loc_oBusca, loc_cValor, loc_cSQL, loc_nResult, loc_cTitulo, loc_lProsseguir
         loc_cValor  = ALLTRIM(THIS.txt_4c_Demp.Value)
         loc_cTitulo = "Sele" + CHR(231) + CHR(227) + "o de Empresa"
 
@@ -2451,6 +2456,7 @@ DEFINE CLASS Formsigatcrp AS FormBase
             USE IN cursor_4c_BuscaEmp
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(loc_cValor)
                 loc_cSQL = "SELECT Cemps, Razas FROM SigCdEmp ORDER BY Razas"
@@ -2474,34 +2480,38 @@ DEFINE CLASS Formsigatcrp AS FormBase
 
             IF loc_nResult < 1 OR !USED("cursor_4c_BuscaEmp") OR RECCOUNT("cursor_4c_BuscaEmp") = 0
                 MsgAviso("Nenhuma empresa encontrada.", "Empresa")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmp"
-                loc_oBusca.this_cTitulo        = loc_cTitulo
-                loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo
-                loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo
-                loc_oBusca.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
-                loc_oBusca.mAddColuna("Cemps", "", "C" + CHR(243) + "digo")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
-                    SELECT cursor_4c_BuscaEmp
-                    THIS.txt_4c_Emp.Value  = ALLTRIM(cursor_4c_BuscaEmp.Cemps)
-                    THIS.txt_4c_Demp.Value = ALLTRIM(cursor_4c_BuscaEmp.Razas)
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmp"
+                    loc_oBusca.this_cTitulo        = loc_cTitulo
+                    loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo
+                    loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo
+                    loc_oBusca.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
+                    loc_oBusca.mAddColuna("Cemps", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
+                        SELECT cursor_4c_BuscaEmp
+                        THIS.txt_4c_Emp.Value  = ALLTRIM(cursor_4c_BuscaEmp.Cemps)
+                        THIS.txt_4c_Demp.Value = ALLTRIM(cursor_4c_BuscaEmp.Razas)
+                    ENDIF
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaEmp")
-            USE IN cursor_4c_BuscaEmp
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaEmp")
+                USE IN cursor_4c_BuscaEmp
+            ENDIF
+            THIS.txt_4c_Emp.Refresh
+            THIS.txt_4c_Demp.Refresh
         ENDIF
-        THIS.txt_4c_Emp.Refresh
-        THIS.txt_4c_Demp.Refresh
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2657,7 +2667,7 @@ DEFINE CLASS Formsigatcrp AS FormBase
     * ABRIRBUSCAGER - picker por IClis/RClis em SigCdCli
     *--------------------------------------------------------------------------
     PROCEDURE AbrirBuscaGer()
-        LOCAL loc_oBusca, loc_cValor, loc_cSQL, loc_nResult, loc_cTitulo
+        LOCAL loc_oBusca, loc_cValor, loc_cSQL, loc_nResult, loc_cTitulo, loc_lProsseguir
         loc_cValor  = ALLTRIM(THIS.txt_4c_CodGer.Value)
         IF EMPTY(loc_cValor)
             loc_cValor = ALLTRIM(THIS.txt_4c_NomGer.Value)
@@ -2668,6 +2678,7 @@ DEFINE CLASS Formsigatcrp AS FormBase
             USE IN cursor_4c_BuscaGer
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(loc_cValor)
                 loc_cSQL = "SELECT IClis, RClis FROM SigCdCli ORDER BY IClis"
@@ -2691,34 +2702,38 @@ DEFINE CLASS Formsigatcrp AS FormBase
 
             IF loc_nResult < 1 OR !USED("cursor_4c_BuscaGer") OR RECCOUNT("cursor_4c_BuscaGer") = 0
                 MsgAviso("Nenhum gerente encontrado.", "Gerente")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGer"
-                loc_oBusca.this_cTitulo        = loc_cTitulo
-                loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo
-                loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo
-                loc_oBusca.mAddColuna("IClis", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("RClis", "", "Nome")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGer")
-                    SELECT cursor_4c_BuscaGer
-                    THIS.txt_4c_CodGer.Value = ALLTRIM(cursor_4c_BuscaGer.IClis)
-                    THIS.txt_4c_NomGer.Value = ALLTRIM(cursor_4c_BuscaGer.RClis)
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGer"
+                    loc_oBusca.this_cTitulo        = loc_cTitulo
+                    loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo
+                    loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo
+                    loc_oBusca.mAddColuna("IClis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("RClis", "", "Nome")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGer")
+                        SELECT cursor_4c_BuscaGer
+                        THIS.txt_4c_CodGer.Value = ALLTRIM(cursor_4c_BuscaGer.IClis)
+                        THIS.txt_4c_NomGer.Value = ALLTRIM(cursor_4c_BuscaGer.RClis)
+                    ENDIF
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaGer")
-            USE IN cursor_4c_BuscaGer
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaGer")
+                USE IN cursor_4c_BuscaGer
+            ENDIF
+            THIS.txt_4c_CodGer.Refresh
+            THIS.txt_4c_NomGer.Refresh
         ENDIF
-        THIS.txt_4c_CodGer.Refresh
-        THIS.txt_4c_NomGer.Refresh
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2820,7 +2835,7 @@ DEFINE CLASS Formsigatcrp AS FormBase
     * ABRIRBUSCAVEN - picker por IClis/RClis em SigCdCli
     *--------------------------------------------------------------------------
     PROCEDURE AbrirBuscaVen()
-        LOCAL loc_oBusca, loc_cValor, loc_cSQL, loc_nResult, loc_cTitulo
+        LOCAL loc_oBusca, loc_cValor, loc_cSQL, loc_nResult, loc_cTitulo, loc_lProsseguir
         loc_cValor  = ALLTRIM(THIS.txt_4c_CodVen.Value)
         IF EMPTY(loc_cValor)
             loc_cValor = ALLTRIM(THIS.txt_4c_NomVen.Value)
@@ -2831,6 +2846,7 @@ DEFINE CLASS Formsigatcrp AS FormBase
             USE IN cursor_4c_BuscaVen
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(loc_cValor)
                 loc_cSQL = "SELECT IClis, RClis FROM SigCdCli ORDER BY IClis"
@@ -2854,34 +2870,38 @@ DEFINE CLASS Formsigatcrp AS FormBase
 
             IF loc_nResult < 1 OR !USED("cursor_4c_BuscaVen") OR RECCOUNT("cursor_4c_BuscaVen") = 0
                 MsgAviso("Nenhum vendedor encontrado.", "Vendedor")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaVen"
-                loc_oBusca.this_cTitulo        = loc_cTitulo
-                loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo
-                loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo
-                loc_oBusca.mAddColuna("IClis", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("RClis", "", "Nome")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaVen")
-                    SELECT cursor_4c_BuscaVen
-                    THIS.txt_4c_CodVen.Value = ALLTRIM(cursor_4c_BuscaVen.IClis)
-                    THIS.txt_4c_NomVen.Value = ALLTRIM(cursor_4c_BuscaVen.RClis)
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaVen"
+                    loc_oBusca.this_cTitulo        = loc_cTitulo
+                    loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = loc_cTitulo
+                    loc_oBusca.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = loc_cTitulo
+                    loc_oBusca.mAddColuna("IClis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("RClis", "", "Nome")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaVen")
+                        SELECT cursor_4c_BuscaVen
+                        THIS.txt_4c_CodVen.Value = ALLTRIM(cursor_4c_BuscaVen.IClis)
+                        THIS.txt_4c_NomVen.Value = ALLTRIM(cursor_4c_BuscaVen.RClis)
+                    ENDIF
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaVen")
-            USE IN cursor_4c_BuscaVen
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaVen")
+                USE IN cursor_4c_BuscaVen
+            ENDIF
+            THIS.txt_4c_CodVen.Refresh
+            THIS.txt_4c_NomVen.Refresh
         ENDIF
-        THIS.txt_4c_CodVen.Refresh
-        THIS.txt_4c_NomVen.Refresh
     ENDPROC
 
     *--------------------------------------------------------------------------

@@ -693,7 +693,7 @@ DEFINE CLASS FormSigPrGmi AS FormBase
     *==========================================================================
     PROCEDURE TxtCdEmpresaKeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cCod
+        LOCAL loc_nResultado, loc_cSQL, loc_cCod, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -702,6 +702,7 @@ DEFINE CLASS FormSigPrGmi AS FormBase
             THIS.AbrirBuscaEmpresa("C", loc_cCod)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 Cemps, Razas FROM SigCdEmp WHERE Cemps = " + ;
                 EscaparSQL(PADR(loc_cCod, 3))
@@ -715,11 +716,15 @@ DEFINE CLASS FormSigPrGmi AS FormBase
                     THIS.txt_4c_CdEmpresa.Value = ALLTRIM(NVL(cursor_4c_EmpTmp.Cemps, ""))
                     THIS.txt_4c_DsEmpresa.Value = ALLTRIM(NVL(cursor_4c_EmpTmp.Razas, ""))
                     USE IN cursor_4c_EmpTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_EmpTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_EmpTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaEmpresa("C", loc_cCod)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaEmpresa("C", loc_cCod)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro TxtCdEmpresaKeyPress")
         ENDTRY
@@ -787,7 +792,7 @@ DEFINE CLASS FormSigPrGmi AS FormBase
     *==========================================================================
     PROCEDURE TxtCdGrEstoqueKeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cCod
+        LOCAL loc_nResultado, loc_cSQL, loc_cCod, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -796,6 +801,7 @@ DEFINE CLASS FormSigPrGmi AS FormBase
             THIS.AbrirBuscaGrEstoque("C", loc_cCod)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
                 EscaparSQL(PADR(loc_cCod, 10))
@@ -809,11 +815,15 @@ DEFINE CLASS FormSigPrGmi AS FormBase
                     THIS.txt_4c_CdGrEstoque.Value = ALLTRIM(NVL(cursor_4c_GrTmp.codigos, ""))
                     THIS.txt_4c_DsGrEstoque.Value = ALLTRIM(NVL(cursor_4c_GrTmp.descrs, ""))
                     USE IN cursor_4c_GrTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_GrTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_GrTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaGrEstoque("C", loc_cCod)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaGrEstoque("C", loc_cCod)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro TxtCdGrEstoqueKeyPress")
         ENDTRY
@@ -882,7 +892,7 @@ DEFINE CLASS FormSigPrGmi AS FormBase
     *==========================================================================
     PROCEDURE TxtCdEstoqueKeyPress
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cCod, loc_cGrp
+        LOCAL loc_nResultado, loc_cSQL, loc_cCod, loc_cGrp, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -892,6 +902,7 @@ DEFINE CLASS FormSigPrGmi AS FormBase
             THIS.AbrirBuscaEstoque("C", loc_cGrp, loc_cCod)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = " + ;
                 EscaparSQL(PADR(loc_cCod, 10))
@@ -908,11 +919,15 @@ DEFINE CLASS FormSigPrGmi AS FormBase
                     THIS.txt_4c_CdEstoque.Value = ALLTRIM(NVL(cursor_4c_EstTmp.IClis, ""))
                     THIS.txt_4c_DsEstoque.Value = ALLTRIM(NVL(cursor_4c_EstTmp.RClis, ""))
                     USE IN cursor_4c_EstTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_EstTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_EstTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaEstoque("C", loc_cGrp, loc_cCod)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaEstoque("C", loc_cGrp, loc_cCod)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro TxtCdEstoqueKeyPress")
         ENDTRY

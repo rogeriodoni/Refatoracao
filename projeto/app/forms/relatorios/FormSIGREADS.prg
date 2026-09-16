@@ -1375,28 +1375,31 @@ DEFINE CLASS FormSIGREADS AS FormBase
     * ValidarEmpresa - Valida codigo e preenche razao social via SigCdEmp
     *--------------------------------------------------------------------------
     PROCEDURE ValidarEmpresa()
-        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina
+        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_Empresa.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPagina.txt_4c_Dempresa.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL = "SELECT TOP 1 cEmps, Razas FROM SigCdEmp WHERE cEmps = " + ;
-                       EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigrEmpVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_SigrEmpVal")
-                SELECT cursor_4c_SigrEmpVal
-                loc_oPagina.txt_4c_Empresa.Value  = ALLTRIM(cursor_4c_SigrEmpVal.cEmps)
-                loc_oPagina.txt_4c_Dempresa.Value = ALLTRIM(cursor_4c_SigrEmpVal.Razas)
-            ELSE
-                *-- Miss no match exato: abrir picker direto (LIKE prefix usa valor digitado)
-                *-- MsgAviso removido (2026-07-02, Erro20) ? evitar mensagem redundante antes do picker
-                THIS.AbrirBuscaEmpresa()
-            ENDIF
-            IF USED("cursor_4c_SigrEmpVal")
-                USE IN cursor_4c_SigrEmpVal
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT TOP 1 cEmps, Razas FROM SigCdEmp WHERE cEmps = " + ;
+                           EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigrEmpVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_SigrEmpVal")
+                    SELECT cursor_4c_SigrEmpVal
+                    loc_oPagina.txt_4c_Empresa.Value  = ALLTRIM(cursor_4c_SigrEmpVal.cEmps)
+                    loc_oPagina.txt_4c_Dempresa.Value = ALLTRIM(cursor_4c_SigrEmpVal.Razas)
+                ELSE
+                    *-- Miss no match exato: abrir picker direto (LIKE prefix usa valor digitado)
+                    *-- MsgAviso removido (2026-07-02, Erro20) ? evitar mensagem redundante antes do picker
+                    THIS.AbrirBuscaEmpresa()
+                ENDIF
+                IF USED("cursor_4c_SigrEmpVal")
+                    USE IN cursor_4c_SigrEmpVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1454,28 +1457,31 @@ DEFINE CLASS FormSIGREADS AS FormBase
     * ValidarVended - Valida codigo de vendedor via SigCdCli (Iclis/Rclis)
     *--------------------------------------------------------------------------
     PROCEDURE ValidarVended()
-        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina
+        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_Vended.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPagina.txt_4c_Dvend.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL = "SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE Iclis = " + ;
-                       EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigrVendVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_SigrVendVal")
-                SELECT cursor_4c_SigrVendVal
-                loc_oPagina.txt_4c_Vended.Value = ALLTRIM(cursor_4c_SigrVendVal.Iclis)
-                loc_oPagina.txt_4c_Dvend.Value  = ALLTRIM(cursor_4c_SigrVendVal.Rclis)
-            ELSE
-                *-- Miss no match exato: abrir picker direto (LIKE prefix usa valor digitado)
-                *-- MsgAviso removido (2026-07-02, Erro20) ? evitar mensagem redundante antes do picker
-                THIS.AbrirBuscaVended()
-            ENDIF
-            IF USED("cursor_4c_SigrVendVal")
-                USE IN cursor_4c_SigrVendVal
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT TOP 1 Iclis, Rclis FROM SigCdCli WHERE Iclis = " + ;
+                           EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigrVendVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_SigrVendVal")
+                    SELECT cursor_4c_SigrVendVal
+                    loc_oPagina.txt_4c_Vended.Value = ALLTRIM(cursor_4c_SigrVendVal.Iclis)
+                    loc_oPagina.txt_4c_Dvend.Value  = ALLTRIM(cursor_4c_SigrVendVal.Rclis)
+                ELSE
+                    *-- Miss no match exato: abrir picker direto (LIKE prefix usa valor digitado)
+                    *-- MsgAviso removido (2026-07-02, Erro20) ? evitar mensagem redundante antes do picker
+                    THIS.AbrirBuscaVended()
+                ENDIF
+                IF USED("cursor_4c_SigrVendVal")
+                    USE IN cursor_4c_SigrVendVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1612,28 +1618,31 @@ DEFINE CLASS FormSIGREADS AS FormBase
     * ValidarCmoeda - Valida codigo de moeda e preenche descricao via SigCdMoe
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCmoeda()
-        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina
+        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_Cmoeda.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPagina.txt_4c_Dmoeda.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL = "SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + ;
-                       EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigrMoeVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_SigrMoeVal")
-                SELECT cursor_4c_SigrMoeVal
-                loc_oPagina.txt_4c_Cmoeda.Value = ALLTRIM(cursor_4c_SigrMoeVal.CMoes)
-                loc_oPagina.txt_4c_Dmoeda.Value = ALLTRIM(cursor_4c_SigrMoeVal.DMoes)
-            ELSE
-                *-- Miss no match exato: abrir picker direto (LIKE prefix usa valor digitado)
-                *-- MsgAviso removido (2026-07-02, Erro20) ? evitar mensagem redundante antes do picker
-                THIS.AbrirBuscaMoeda()
-            ENDIF
-            IF USED("cursor_4c_SigrMoeVal")
-                USE IN cursor_4c_SigrMoeVal
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + ;
+                           EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigrMoeVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_SigrMoeVal")
+                    SELECT cursor_4c_SigrMoeVal
+                    loc_oPagina.txt_4c_Cmoeda.Value = ALLTRIM(cursor_4c_SigrMoeVal.CMoes)
+                    loc_oPagina.txt_4c_Dmoeda.Value = ALLTRIM(cursor_4c_SigrMoeVal.DMoes)
+                ELSE
+                    *-- Miss no match exato: abrir picker direto (LIKE prefix usa valor digitado)
+                    *-- MsgAviso removido (2026-07-02, Erro20) ? evitar mensagem redundante antes do picker
+                    THIS.AbrirBuscaMoeda()
+                ENDIF
+                IF USED("cursor_4c_SigrMoeVal")
+                    USE IN cursor_4c_SigrMoeVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1816,27 +1825,35 @@ DEFINE CLASS FormSIGREADS AS FormBase
     *   Implementacao: prepara dados e exporta o cursor csRelatorio para XLS.
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcelClick()
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados() ;
                AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
                         "Relat" + CHR(243) + "rio")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("csRelatorio") OR RECCOUNT("csRelatorio") = 0
-                MsgAviso("Nenhum dado encontrado para os filtros selecionados.", ;
-                         "Excel")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("csRelatorio") OR RECCOUNT("csRelatorio") = 0
+                    MsgAviso("Nenhum dado encontrado para os filtros selecionados.", ;
+                             "Excel")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            LOCAL loc_cArquivo
-            loc_cArquivo = PUTFILE("Salvar como...", "RelatorioDescontos", "xls")
-            IF EMPTY(loc_cArquivo)
-                RETURN
+            IF loc_lProsseguir
+                LOCAL loc_cArquivo
+                loc_cArquivo = PUTFILE("Salvar como...", "RelatorioDescontos", "xls")
+                IF EMPTY(loc_cArquivo)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            COPY TO (loc_cArquivo) TYPE XL5
-            MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + loc_cArquivo, "Excel")
-            THIS.this_oRelatorio.RegistrarAuditoria("EXCEL")
+            IF loc_lProsseguir
+                COPY TO (loc_cArquivo) TYPE XL5
+                MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + loc_cArquivo, "Excel")
+                THIS.this_oRelatorio.RegistrarAuditoria("EXCEL")
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -1908,27 +1925,30 @@ DEFINE CLASS FormSIGREADS AS FormBase
     *   Usado para restaurar filtros apos reprocessamento ou preset
     *--------------------------------------------------------------------------
     PROCEDURE BOParaForm()
-        LOCAL loc_oPagina
+        LOCAL loc_oPagina, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O" OR ;
                VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oPagina = THIS.pgf_4c_Paginas.Page1
+            IF loc_lProsseguir
+                loc_oPagina = THIS.pgf_4c_Paginas.Page1
 
-            loc_oPagina.txt_4c_Empresa.Value   = ALLTRIM(THIS.this_oRelatorio.this_cEmpresa)
-            loc_oPagina.txt_4c_Dempresa.Value  = ALLTRIM(THIS.this_oRelatorio.this_cDEmpresa)
-            loc_oPagina.txt_4c_Vended.Value    = ALLTRIM(THIS.this_oRelatorio.this_cVendedor)
-            loc_oPagina.txt_4c_Dvend.Value     = ALLTRIM(THIS.this_oRelatorio.this_cDVendedor)
-            loc_oPagina.txt_4c_Operacao.Value  = ALLTRIM(THIS.this_oRelatorio.this_cNmOperacao)
-            loc_oPagina.txt_4c_DtInicial.Value = THIS.this_oRelatorio.this_dDtInicial
-            loc_oPagina.txt_4c_DtFinal.Value   = THIS.this_oRelatorio.this_dDtFinal
-            loc_oPagina.txt_4c_Cmoeda.Value    = ALLTRIM(THIS.this_oRelatorio.this_cMoeda)
-            loc_oPagina.txt_4c_Dmoeda.Value    = ALLTRIM(THIS.this_oRelatorio.this_cDMoeda)
-            loc_oPagina.txt_4c_Margem.Value    = THIS.this_oRelatorio.this_nMargem
-            loc_oPagina.obj_4c_TipoVars.Value  = THIS.this_oRelatorio.this_nTipoVars
-            loc_oPagina.obj_4c_TipoRel.Value   = THIS.this_oRelatorio.this_nTipoRel
-            loc_oPagina.obj_4c_Obs.Value       = THIS.this_oRelatorio.this_nObs
+                loc_oPagina.txt_4c_Empresa.Value   = ALLTRIM(THIS.this_oRelatorio.this_cEmpresa)
+                loc_oPagina.txt_4c_Dempresa.Value  = ALLTRIM(THIS.this_oRelatorio.this_cDEmpresa)
+                loc_oPagina.txt_4c_Vended.Value    = ALLTRIM(THIS.this_oRelatorio.this_cVendedor)
+                loc_oPagina.txt_4c_Dvend.Value     = ALLTRIM(THIS.this_oRelatorio.this_cDVendedor)
+                loc_oPagina.txt_4c_Operacao.Value  = ALLTRIM(THIS.this_oRelatorio.this_cNmOperacao)
+                loc_oPagina.txt_4c_DtInicial.Value = THIS.this_oRelatorio.this_dDtInicial
+                loc_oPagina.txt_4c_DtFinal.Value   = THIS.this_oRelatorio.this_dDtFinal
+                loc_oPagina.txt_4c_Cmoeda.Value    = ALLTRIM(THIS.this_oRelatorio.this_cMoeda)
+                loc_oPagina.txt_4c_Dmoeda.Value    = ALLTRIM(THIS.this_oRelatorio.this_cDMoeda)
+                loc_oPagina.txt_4c_Margem.Value    = THIS.this_oRelatorio.this_nMargem
+                loc_oPagina.obj_4c_TipoVars.Value  = THIS.this_oRelatorio.this_nTipoVars
+                loc_oPagina.obj_4c_TipoRel.Value   = THIS.this_oRelatorio.this_nTipoRel
+                loc_oPagina.obj_4c_Obs.Value       = THIS.this_oRelatorio.this_nObs
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

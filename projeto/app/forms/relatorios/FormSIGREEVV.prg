@@ -676,31 +676,38 @@ DEFINE CLASS FormSIGREEVV AS FormBase
     * Se nao encontrado: abre lookup.
     *--------------------------------------------------------------------------
     PROCEDURE ValidarTabela()
-        LOCAL loc_oPag, loc_cValor, loc_nResult, loc_oErro
+        LOCAL loc_oPag, loc_cValor, loc_nResult, loc_oErro, loc_lProsseguir
         loc_oPag   = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPag.txt_4c_Tabela.Value)
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(loc_cValor)
                 loc_oPag.txt_4c_DTabela.Value = ""
                 THIS.this_oRelatorio.this_nPercentual = 0
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT Codigos, Descrs, Descos FROM SigOpTdz WHERE Codigos = " + ;
-                EscaparSQL(loc_cValor), ;
-                "cursor_4c_ValTab")
-            IF loc_nResult > 0
-                SELECT cursor_4c_ValTab
-                IF !EOF()
-                    loc_oPag.txt_4c_Tabela.Value  = ALLTRIM(cursor_4c_ValTab.Codigos)
-                    loc_oPag.txt_4c_DTabela.Value = ALLTRIM(cursor_4c_ValTab.Descrs)
-                    THIS.this_oRelatorio.this_nPercentual = cursor_4c_ValTab.Descos
-                    USE IN cursor_4c_ValTab
-                    RETURN
+            IF loc_lProsseguir
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT Codigos, Descrs, Descos FROM SigOpTdz WHERE Codigos = " + ;
+                    EscaparSQL(loc_cValor), ;
+                    "cursor_4c_ValTab")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_ValTab
+                    IF !EOF()
+                        loc_oPag.txt_4c_Tabela.Value  = ALLTRIM(cursor_4c_ValTab.Codigos)
+                        loc_oPag.txt_4c_DTabela.Value = ALLTRIM(cursor_4c_ValTab.Descrs)
+                        THIS.this_oRelatorio.this_nPercentual = cursor_4c_ValTab.Descos
+                        USE IN cursor_4c_ValTab
+                        loc_lProsseguir = .F.
+                    ENDIF
+                    IF loc_lProsseguir
+                        USE IN cursor_4c_ValTab
+                    ENDIF
                 ENDIF
-                USE IN cursor_4c_ValTab
             ENDIF
-            THIS.AbrirBuscaTabela()
+            IF loc_lProsseguir
+                THIS.AbrirBuscaTabela()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarTabela")
         ENDTRY
@@ -828,29 +835,36 @@ DEFINE CLASS FormSIGREEVV AS FormBase
     * Se encontrado: preenche descricao. Se nao encontrado: abre lookup.
     *--------------------------------------------------------------------------
     PROCEDURE ValidarGrupo()
-        LOCAL loc_oPag, loc_cValor, loc_nResult, loc_oErro
+        LOCAL loc_oPag, loc_cValor, loc_nResult, loc_oErro, loc_lProsseguir
         loc_oPag   = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPag.txt_4c_Grupo.Value)
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(loc_cValor)
                 loc_oPag.txt_4c_DGrupo.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
-                EscaparSQL(loc_cValor), ;
-                "cursor_4c_ValGrupo")
-            IF loc_nResult > 0
-                SELECT cursor_4c_ValGrupo
-                IF !EOF()
-                    loc_oPag.txt_4c_Grupo.Value  = ALLTRIM(cursor_4c_ValGrupo.codigos)
-                    loc_oPag.txt_4c_DGrupo.Value = ALLTRIM(cursor_4c_ValGrupo.descrs)
-                    USE IN cursor_4c_ValGrupo
-                    RETURN
+            IF loc_lProsseguir
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
+                    EscaparSQL(loc_cValor), ;
+                    "cursor_4c_ValGrupo")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_ValGrupo
+                    IF !EOF()
+                        loc_oPag.txt_4c_Grupo.Value  = ALLTRIM(cursor_4c_ValGrupo.codigos)
+                        loc_oPag.txt_4c_DGrupo.Value = ALLTRIM(cursor_4c_ValGrupo.descrs)
+                        USE IN cursor_4c_ValGrupo
+                        loc_lProsseguir = .F.
+                    ENDIF
+                    IF loc_lProsseguir
+                        USE IN cursor_4c_ValGrupo
+                    ENDIF
                 ENDIF
-                USE IN cursor_4c_ValGrupo
             ENDIF
-            THIS.AbrirBuscaGrupo()
+            IF loc_lProsseguir
+                THIS.AbrirBuscaGrupo()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarGrupo")
         ENDTRY
@@ -920,29 +934,36 @@ DEFINE CLASS FormSIGREEVV AS FormBase
     * Se encontrado: preenche descricao. Se nao encontrado: abre lookup.
     *--------------------------------------------------------------------------
     PROCEDURE ValidarConta()
-        LOCAL loc_oPag, loc_cValor, loc_nResult, loc_oErro
+        LOCAL loc_oPag, loc_cValor, loc_nResult, loc_oErro, loc_lProsseguir
         loc_oPag   = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPag.txt_4c_Conta.Value)
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(loc_cValor)
                 loc_oPag.txt_4c_DConta.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT contas, descs FROM SigReCtb WHERE contas = " + ;
-                EscaparSQL(loc_cValor), ;
-                "cursor_4c_ValConta")
-            IF loc_nResult > 0
-                SELECT cursor_4c_ValConta
-                IF !EOF()
-                    loc_oPag.txt_4c_Conta.Value  = ALLTRIM(cursor_4c_ValConta.contas)
-                    loc_oPag.txt_4c_DConta.Value = ALLTRIM(cursor_4c_ValConta.descs)
-                    USE IN cursor_4c_ValConta
-                    RETURN
+            IF loc_lProsseguir
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT contas, descs FROM SigReCtb WHERE contas = " + ;
+                    EscaparSQL(loc_cValor), ;
+                    "cursor_4c_ValConta")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_ValConta
+                    IF !EOF()
+                        loc_oPag.txt_4c_Conta.Value  = ALLTRIM(cursor_4c_ValConta.contas)
+                        loc_oPag.txt_4c_DConta.Value = ALLTRIM(cursor_4c_ValConta.descs)
+                        USE IN cursor_4c_ValConta
+                        loc_lProsseguir = .F.
+                    ENDIF
+                    IF loc_lProsseguir
+                        USE IN cursor_4c_ValConta
+                    ENDIF
                 ENDIF
-                USE IN cursor_4c_ValConta
             ENDIF
-            THIS.AbrirBuscaConta()
+            IF loc_lProsseguir
+                THIS.AbrirBuscaConta()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarConta")
         ENDTRY
@@ -1125,31 +1146,38 @@ DEFINE CLASS FormSIGREEVV AS FormBase
     * 3. Faz COPY TO ... TYPE XL5 do cursor
     *--------------------------------------------------------------------------
     PROCEDURE BotaoExcelClick()
-        LOCAL loc_cArquivo, loc_cAlias, loc_oErro
+        LOCAL loc_cArquivo, loc_cAlias, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.this_oRelatorio.PrepararDados()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
                     "Erro ao preparar dados para exporta" + CHR(231) + CHR(227) + "o")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cAlias = THIS.this_oRelatorio.this_cCursorDados
-            IF !USED(loc_cAlias)
-                MsgAviso("Nenhum dado dispon" + CHR(237) + "vel para exporta" + ;
-                    CHR(231) + CHR(227) + "o.", "Excel")
-                RETURN
+            IF loc_lProsseguir
+                loc_cAlias = THIS.this_oRelatorio.this_cCursorDados
+                IF !USED(loc_cAlias)
+                    MsgAviso("Nenhum dado dispon" + CHR(237) + "vel para exporta" + ;
+                        CHR(231) + CHR(227) + "o.", "Excel")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_cArquivo = PUTFILE("Salvar como:", "EstoqueValorVenda.xls", "xls")
-            IF EMPTY(loc_cArquivo)
-                RETURN
+            IF loc_lProsseguir
+                loc_cArquivo = PUTFILE("Salvar como:", "EstoqueValorVenda.xls", "xls")
+                IF EMPTY(loc_cArquivo)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            SELECT (loc_cAlias)
-            COPY TO (loc_cArquivo) TYPE XL5
-            MsgInfo("Arquivo exportado com sucesso para:" + CHR(13) + loc_cArquivo, "Excel")
+            IF loc_lProsseguir
+                SELECT (loc_cAlias)
+                COPY TO (loc_cArquivo) TYPE XL5
+                MsgInfo("Arquivo exportado com sucesso para:" + CHR(13) + loc_cArquivo, "Excel")
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BotaoExcelClick")
         ENDTRY

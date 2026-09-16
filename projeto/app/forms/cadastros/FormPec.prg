@@ -991,9 +991,10 @@ DEFINE CLASS FormPec AS FormBase
     * BtnSalvarClick - Valida e salva registro (INCLUIR ou ALTERAR)
     *==========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_oPag2, loc_lSucesso, loc_oErro
+        LOCAL loc_oPag2, loc_lSucesso, loc_oErro, loc_lProsseguir
         loc_lSucesso = .F.
 
+        loc_lProsseguir = .T.
         TRY
             loc_oPag2 = THIS.pgf_4c_Paginas.Page2
 
@@ -1001,37 +1002,43 @@ DEFINE CLASS FormPec AS FormBase
             IF EMPTY(ALLTRIM(loc_oPag2.txt_4c_Relatorio.Value))
                 MsgAviso("O Nome do Relat" + CHR(243) + "rio deve ser preenchido!", "Validar")
                 loc_oPag2.txt_4c_Relatorio.SetFocus()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF EMPTY(ALLTRIM(loc_oPag2.txt_4c_Empresa.Value))
-                MsgAviso("A Empresa deve ser preenchida!", "Validar")
-                loc_oPag2.txt_4c_Empresa.SetFocus()
-                RETURN
-            ENDIF
-
-            THIS.FormParaBO()
-
-            IF THIS.this_cModoAtual = "INCLUIR"
-                loc_lSucesso = THIS.this_oBusinessObject.Salvar()
-                IF loc_lSucesso
-                    MsgInfo("Registro inclu" + CHR(237) + "do com sucesso!", "Incluir")
-                ENDIF
-            ELSE
-                loc_lSucesso = THIS.this_oBusinessObject.Salvar()
-                IF loc_lSucesso
-                    MsgInfo("Registro atualizado com sucesso!", "Alterar")
+            IF loc_lProsseguir
+                IF EMPTY(ALLTRIM(loc_oPag2.txt_4c_Empresa.Value))
+                    MsgAviso("A Empresa deve ser preenchida!", "Validar")
+                    loc_oPag2.txt_4c_Empresa.SetFocus()
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                THIS.FormParaBO()
+
+                IF THIS.this_cModoAtual = "INCLUIR"
+                    loc_lSucesso = THIS.this_oBusinessObject.Salvar()
+                    IF loc_lSucesso
+                        MsgInfo("Registro inclu" + CHR(237) + "do com sucesso!", "Incluir")
+                    ENDIF
+                ELSE
+                    loc_lSucesso = THIS.this_oBusinessObject.Salvar()
+                    IF loc_lSucesso
+                        MsgInfo("Registro atualizado com sucesso!", "Alterar")
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em FormPec.BtnSalvarClick: " + loc_oErro.Message, "Erro")
         ENDTRY
-
-        IF loc_lSucesso
-            THIS.this_cModoAtual = "LISTA"
-            THIS.AlternarPagina(1)
-            THIS.CarregarLista()
+        IF loc_lProsseguir
+    
+            IF loc_lSucesso
+                THIS.this_cModoAtual = "LISTA"
+                THIS.AlternarPagina(1)
+                THIS.CarregarLista()
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -1078,20 +1085,24 @@ DEFINE CLASS FormPec AS FormBase
     * BtnVisualizarClick - Carrega registro selecionado em modo leitura
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados")
                 MsgAviso("Selecione um registro na lista.", "Visualizar")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Dados
-            THIS.this_cPkChaveAtual = ALLTRIM(cursor_4c_Dados.pkchaves)
+            IF loc_lProsseguir
+                SELECT cursor_4c_Dados
+                THIS.this_cPkChaveAtual = ALLTRIM(cursor_4c_Dados.pkchaves)
 
-            IF THIS.this_oBusinessObject.CarregarPorCodigo(THIS.this_cPkChaveAtual)
-                THIS.this_oBusinessObject.CarregarItensParaDestinos(THIS.this_cPkChaveAtual)
-                THIS.BOParaForm()
-                THIS.this_cModoAtual = "VISUALIZAR"
-                THIS.HabilitarCampos(.F.)
-                THIS.AlternarPagina(2)
+                IF THIS.this_oBusinessObject.CarregarPorCodigo(THIS.this_cPkChaveAtual)
+                    THIS.this_oBusinessObject.CarregarItensParaDestinos(THIS.this_cPkChaveAtual)
+                    THIS.BOParaForm()
+                    THIS.this_cModoAtual = "VISUALIZAR"
+                    THIS.HabilitarCampos(.F.)
+                    THIS.AlternarPagina(2)
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em FormPec.BtnVisualizarClick: " + loc_oErro.Message, "Erro")
@@ -1102,23 +1113,27 @@ DEFINE CLASS FormPec AS FormBase
     * BtnAlterarClick - Carrega registro selecionado para edicao
     *==========================================================================
     PROCEDURE BtnAlterarClick()
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados")
                 MsgAviso("Selecione um registro na lista.", "Alterar")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Dados
-            THIS.this_cPkChaveAtual = ALLTRIM(cursor_4c_Dados.pkchaves)
+            IF loc_lProsseguir
+                SELECT cursor_4c_Dados
+                THIS.this_cPkChaveAtual = ALLTRIM(cursor_4c_Dados.pkchaves)
 
-            IF THIS.this_oBusinessObject.CarregarPorCodigo(THIS.this_cPkChaveAtual)
-                THIS.this_oBusinessObject.EditarRegistro()
-                *-- Sincroniza SigCdPeI com novos grupos/contas antes de carregar
-                THIS.this_oBusinessObject.AtualizarGrupos(THIS.this_cPkChaveAtual)
-                THIS.this_oBusinessObject.CarregarItensParaDestinos(THIS.this_cPkChaveAtual)
-                THIS.BOParaForm()
-                THIS.this_cModoAtual = "ALTERAR"
-                THIS.HabilitarCampos(.T.)
-                THIS.AlternarPagina(2)
+                IF THIS.this_oBusinessObject.CarregarPorCodigo(THIS.this_cPkChaveAtual)
+                    THIS.this_oBusinessObject.EditarRegistro()
+                    *-- Sincroniza SigCdPeI com novos grupos/contas antes de carregar
+                    THIS.this_oBusinessObject.AtualizarGrupos(THIS.this_cPkChaveAtual)
+                    THIS.this_oBusinessObject.CarregarItensParaDestinos(THIS.this_cPkChaveAtual)
+                    THIS.BOParaForm()
+                    THIS.this_cModoAtual = "ALTERAR"
+                    THIS.HabilitarCampos(.T.)
+                    THIS.AlternarPagina(2)
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em FormPec.BtnAlterarClick: " + loc_oErro.Message, "Erro")
@@ -1129,22 +1144,25 @@ DEFINE CLASS FormPec AS FormBase
     * BtnExcluirClick - Confirma e exclui registro selecionado
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_cDescricao
+        LOCAL loc_cDescricao, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados")
                 MsgAviso("Selecione um registro na lista.", "Excluir")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Dados
-            THIS.this_cPkChaveAtual = ALLTRIM(cursor_4c_Dados.pkchaves)
-            loc_cDescricao = ALLTRIM(cursor_4c_Dados.descs)
+            IF loc_lProsseguir
+                SELECT cursor_4c_Dados
+                THIS.this_cPkChaveAtual = ALLTRIM(cursor_4c_Dados.pkchaves)
+                loc_cDescricao = ALLTRIM(cursor_4c_Dados.descs)
 
-            IF MsgConfirma("Confirma exclus" + CHR(227) + "o de:" + CHR(13) + ;
-                           loc_cDescricao + "?", "Excluir")
-                IF THIS.this_oBusinessObject.CarregarPorCodigo(THIS.this_cPkChaveAtual)
-                    IF THIS.this_oBusinessObject.Excluir()
-                        MsgInfo("Registro exclu" + CHR(237) + "do com sucesso!", "Excluir")
-                        THIS.CarregarLista()
+                IF MsgConfirma("Confirma exclus" + CHR(227) + "o de:" + CHR(13) + ;
+                               loc_cDescricao + "?", "Excluir")
+                    IF THIS.this_oBusinessObject.CarregarPorCodigo(THIS.this_cPkChaveAtual)
+                        IF THIS.this_oBusinessObject.Excluir()
+                            MsgInfo("Registro exclu" + CHR(237) + "do com sucesso!", "Excluir")
+                            THIS.CarregarLista()
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF
@@ -1347,66 +1365,71 @@ DEFINE CLASS FormPec AS FormBase
     * CmdExpandirClick - Expande grupo selecionado em grdGrupos para grdDestinos
     *==========================================================================
     PROCEDURE CmdExpandirClick()
-        LOCAL loc_cGrupo, loc_cContas, loc_cDescConta, loc_cGrupoCod
+        LOCAL loc_cGrupo, loc_cContas, loc_cDescConta, loc_cGrupoCod, loc_lProsseguir
         LOCAL loc_nProx, loc_oErro
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Grupos") OR EOF("cursor_4c_Grupos")
                 MsgAviso("Selecione um Grupo na lista.", "Expandir")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Grupos
-            loc_cGrupo = ALLTRIM(cursor_4c_Grupos.Codigos)
+            IF loc_lProsseguir
+                SELECT cursor_4c_Grupos
+                loc_cGrupo = ALLTRIM(cursor_4c_Grupos.Codigos)
 
-            IF EMPTY(loc_cGrupo)
-                MsgAviso("Selecione um Grupo na lista.", "Expandir")
-                RETURN
-            ENDIF
-
-            IF THIS.this_oBusinessObject.BuscarExpansaoGrupo(loc_cGrupo)
-                IF USED("cursor_4c_ExpGrupo") AND RECCOUNT("cursor_4c_ExpGrupo") > 0
-                    SELECT cursor_4c_ExpGrupo
-                    GO TOP
-                    SCAN
-                        loc_cContas    = ALLTRIM(cursor_4c_ExpGrupo.iclis)
-                        loc_cDescConta = ALLTRIM(cursor_4c_ExpGrupo.rclis)
-                        loc_cGrupoCod  = ALLTRIM(cursor_4c_ExpGrupo.codigos)
-
-                        SELECT csDestinos
-                        LOCATE FOR UPPER(ALLTRIM(ContaG)) = UPPER(loc_cContas)
-
-                        IF !FOUND()
-                            SELECT MAX(Ordems) AS nProx FROM csDestinos ;
-                                INTO CURSOR crsProxOrd READWRITE
-                            loc_nProx = NVL(nProx, 0) + 1
-                            IF USED("crsProxOrd")
-                                USE IN crsProxOrd
-                            ENDIF
-
-                            INSERT INTO csDestinos ;
-                                (fkChaves, Marcas, Grupos, Codigos, Opers, Ordems, ContaG, DescontaG) ;
-                                VALUES ('', 0, loc_cGrupoCod, '', '+', loc_nProx, ;
-                                        loc_cContas, loc_cDescConta)
-                        ENDIF
-
-                        SELECT cursor_4c_ExpGrupo
-                    ENDSCAN
-
-                    SELECT csDestinos
-                    SET ORDER TO Ordems
-                    GO TOP
-
-                    THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos.Refresh()
-
-                    IF USED("cursor_4c_ExpGrupo")
-                        USE IN cursor_4c_ExpGrupo
-                    ENDIF
-                ELSE
-                    MsgAviso("Nenhuma conta encontrada para o grupo selecionado.", "Expandir")
+                IF EMPTY(loc_cGrupo)
+                    MsgAviso("Selecione um Grupo na lista.", "Expandir")
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                IF THIS.this_oBusinessObject.BuscarExpansaoGrupo(loc_cGrupo)
+                    IF USED("cursor_4c_ExpGrupo") AND RECCOUNT("cursor_4c_ExpGrupo") > 0
+                        SELECT cursor_4c_ExpGrupo
+                        GO TOP
+                        SCAN
+                            loc_cContas    = ALLTRIM(cursor_4c_ExpGrupo.iclis)
+                            loc_cDescConta = ALLTRIM(cursor_4c_ExpGrupo.rclis)
+                            loc_cGrupoCod  = ALLTRIM(cursor_4c_ExpGrupo.codigos)
+    
+                            SELECT csDestinos
+                            LOCATE FOR UPPER(ALLTRIM(ContaG)) = UPPER(loc_cContas)
+    
+                            IF !FOUND()
+                                SELECT MAX(Ordems) AS nProx FROM csDestinos ;
+                                    INTO CURSOR crsProxOrd READWRITE
+                                loc_nProx = NVL(nProx, 0) + 1
+                                IF USED("crsProxOrd")
+                                    USE IN crsProxOrd
+                                ENDIF
+    
+                                INSERT INTO csDestinos ;
+                                    (fkChaves, Marcas, Grupos, Codigos, Opers, Ordems, ContaG, DescontaG) ;
+                                    VALUES ('', 0, loc_cGrupoCod, '', '+', loc_nProx, ;
+                                            loc_cContas, loc_cDescConta)
+                            ENDIF
+    
+                            SELECT cursor_4c_ExpGrupo
+                        ENDSCAN
+    
+                        SELECT csDestinos
+                        SET ORDER TO Ordems
+                        GO TOP
+    
+                        THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos.Refresh()
+    
+                        IF USED("cursor_4c_ExpGrupo")
+                            USE IN cursor_4c_ExpGrupo
+                        ENDIF
+                    ELSE
+                        MsgAviso("Nenhuma conta encontrada para o grupo selecionado.", "Expandir")
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em FormPec.CmdExpandirClick: " + loc_oErro.Message, "Erro")
         ENDTRY
@@ -1461,23 +1484,26 @@ DEFINE CLASS FormPec AS FormBase
     * BtnMoverCimaClick - Move item atual uma posicao acima na ordem
     *==========================================================================
     PROCEDURE BtnMoverCimaClick()
-        LOCAL loc_nOrdAtual, loc_nOrdAnterior, loc_oErro
+        LOCAL loc_nOrdAtual, loc_nOrdAnterior, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("csDestinos") OR EOF("csDestinos") OR BOF("csDestinos")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT csDestinos
-            SET ORDER TO Ordems
-            loc_nOrdAtual = csDestinos.Ordems
-            SKIP -1
-            IF !BOF()
-                loc_nOrdAnterior = csDestinos.Ordems
-                REPLACE Ordems WITH loc_nOrdAtual
-                SKIP 1
-                REPLACE Ordems WITH loc_nOrdAnterior
+            IF loc_lProsseguir
+                SELECT csDestinos
                 SET ORDER TO Ordems
-                SEEK loc_nOrdAnterior
-                THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos.Refresh()
+                loc_nOrdAtual = csDestinos.Ordems
+                SKIP -1
+                IF !BOF()
+                    loc_nOrdAnterior = csDestinos.Ordems
+                    REPLACE Ordems WITH loc_nOrdAtual
+                    SKIP 1
+                    REPLACE Ordems WITH loc_nOrdAnterior
+                    SET ORDER TO Ordems
+                    SEEK loc_nOrdAnterior
+                    THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em FormPec.BtnMoverCimaClick: " + loc_oErro.Message, "Erro")
@@ -1488,23 +1514,26 @@ DEFINE CLASS FormPec AS FormBase
     * BtnMoverBaixoClick - Move item atual uma posicao abaixo na ordem
     *==========================================================================
     PROCEDURE BtnMoverBaixoClick()
-        LOCAL loc_nOrdAtual, loc_nOrdProx, loc_oErro
+        LOCAL loc_nOrdAtual, loc_nOrdProx, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("csDestinos") OR EOF("csDestinos")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT csDestinos
-            SET ORDER TO Ordems
-            loc_nOrdAtual = csDestinos.Ordems
-            SKIP 1
-            IF !EOF()
-                loc_nOrdProx = csDestinos.Ordems
-                REPLACE Ordems WITH loc_nOrdAtual
-                SKIP -1
-                REPLACE Ordems WITH loc_nOrdProx
+            IF loc_lProsseguir
+                SELECT csDestinos
                 SET ORDER TO Ordems
-                SEEK loc_nOrdProx
-                THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos.Refresh()
+                loc_nOrdAtual = csDestinos.Ordems
+                SKIP 1
+                IF !EOF()
+                    loc_nOrdProx = csDestinos.Ordems
+                    REPLACE Ordems WITH loc_nOrdAtual
+                    SKIP -1
+                    REPLACE Ordems WITH loc_nOrdProx
+                    SET ORDER TO Ordems
+                    SEEK loc_nOrdProx
+                    THIS.pgf_4c_Paginas.Page2.grd_4c_Destinos.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em FormPec.BtnMoverBaixoClick: " + loc_oErro.Message, "Erro")

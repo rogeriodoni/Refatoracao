@@ -3,7 +3,7 @@
 * Testa versao 2 do ExtratorPropriedades (sem RETURN de array)
 *====================================================================
 
-LOCAL loc_cArquivo, loc_oExtrator, i, loc_lSucesso
+LOCAL loc_cArquivo, loc_oExtrator, i, loc_lSucesso, loc_lProsseguir
 
 *-- Limpa .fxp
 IF FILE("ExtratorPropriedades_v2.fxp")
@@ -21,6 +21,7 @@ loc_cArquivo = "c:\4c\tasks\task1\SIGCDCOR_form_codigo_fonte.txt"
 ? ""
 
 *-- Testa extrator
+loc_lProsseguir = .T.
 TRY
     loc_oExtrator = CREATEOBJECT("ExtratorPropriedades")
     ? "Extrator criado com sucesso"
@@ -35,28 +36,30 @@ TRY
 
     IF !loc_lSucesso OR loc_oExtrator.nResultados = 0
         ? "ERRO: Nenhuma propriedade encontrada"
-        RETURN
+        loc_lProsseguir = .F.
     ENDIF
 
     *-- Acessa array diretamente da propriedade do objeto
-    ? "Array aResultados:"
-    ? "  Dimensoes: " + ALLTRIM(STR(ALEN(loc_oExtrator.aResultados, 1))) + " linhas x " + ;
-                         ALLTRIM(STR(ALEN(loc_oExtrator.aResultados, 2))) + " colunas"
-    ? ""
-
-    ? "Primeiras 10 propriedades encontradas:"
-    ? "----------------------------------------"
-
-    FOR i = 1 TO MIN(10, loc_oExtrator.nResultados)
-        ? ALLTRIM(STR(i)) + ". Objeto: " + loc_oExtrator.aResultados[i, 1]
-        ? "   Propriedade: " + loc_oExtrator.aResultados[i, 2]
-        ? "   Valor: " + loc_oExtrator.aResultados[i, 3]
-        ? "   Linha: " + ALLTRIM(STR(loc_oExtrator.aResultados[i, 4]))
+    IF loc_lProsseguir
+        ? "Array aResultados:"
+        ? "  Dimensoes: " + ALLTRIM(STR(ALEN(loc_oExtrator.aResultados, 1))) + " linhas x " + ;
+                             ALLTRIM(STR(ALEN(loc_oExtrator.aResultados, 2))) + " colunas"
         ? ""
-    ENDFOR
 
-    ? "Teste concluido com sucesso!"
+        ? "Primeiras 10 propriedades encontradas:"
+        ? "----------------------------------------"
 
+        FOR i = 1 TO MIN(10, loc_oExtrator.nResultados)
+            ? ALLTRIM(STR(i)) + ". Objeto: " + loc_oExtrator.aResultados[i, 1]
+            ? "   Propriedade: " + loc_oExtrator.aResultados[i, 2]
+            ? "   Valor: " + loc_oExtrator.aResultados[i, 3]
+            ? "   Linha: " + ALLTRIM(STR(loc_oExtrator.aResultados[i, 4]))
+            ? ""
+        ENDFOR
+
+        ? "Teste concluido com sucesso!"
+
+    ENDIF
 CATCH TO loEx
     ? "ERRO: " + loEx.Message
     ? "Linha: " + ALLTRIM(STR(loEx.LineNo))

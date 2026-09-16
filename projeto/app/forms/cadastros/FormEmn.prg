@@ -662,39 +662,42 @@ DEFINE CLASS FormEmn AS FormBase
     * BtnBuscarClick - Abre FormBuscaAuxiliar para localizar produto
     *==========================================================================
     PROCEDURE BtnBuscarClick()
-        LOCAL loc_oBusca, loc_cCPros
+        LOCAL loc_oBusca, loc_cCPros, loc_lProsseguir4c
         loc_cCPros = ""
 
+        loc_lProsseguir4c = .T.
         TRY
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdPro", "cursor_4c_BuscaProd", "cpros", "", ;
                 "Buscar Produto")
 
             IF VARTYPE(loc_oBusca) <> "O"
-                RETURN
+                loc_lProsseguir4c = .F.
             ENDIF
 
-            IF !loc_oBusca.this_lAchouRegistro
-                loc_oBusca.mAddColuna("cpros", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-            ENDIF
+            IF loc_lProsseguir4c
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("cpros", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dpros", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
 
-            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaProd")
-                loc_cCPros = ALLTRIM(cursor_4c_BuscaProd.cpros)
-            ENDIF
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaProd")
+                    loc_cCPros = ALLTRIM(cursor_4c_BuscaProd.cpros)
+                ENDIF
 
-            IF USED("cursor_4c_BuscaProd")
-                USE IN cursor_4c_BuscaProd
-            ENDIF
+                IF USED("cursor_4c_BuscaProd")
+                    USE IN cursor_4c_BuscaProd
+                ENDIF
 
-            loc_oBusca.Release()
+                loc_oBusca.Release()
 
-            IF !EMPTY(loc_cCPros)
-                *-- Recarrega lista filtrando pelo produto selecionado
-                IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                    IF THIS.this_oBusinessObject.Buscar(loc_cCPros)
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+                IF !EMPTY(loc_cCPros)
+                    *-- Recarrega lista filtrando pelo produto selecionado
+                    IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                        IF THIS.this_oBusinessObject.Buscar(loc_cCPros)
+                            THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF

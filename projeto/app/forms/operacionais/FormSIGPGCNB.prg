@@ -1459,25 +1459,28 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
     ENDPROC
 
     PROCEDURE ImpBoleto(par_lImprimir)
-        LOCAL loc_lSucesso, loc_oErro
+        LOCAL loc_lSucesso, loc_oErro, loc_lProsseguir
         loc_lSucesso = .F.
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Filtro2Rel") OR RECCOUNT("cursor_4c_Filtro2Rel") = 0
                 MsgAviso("Nenhum dado dispon" + CHR(237) + "vel para impress" + CHR(227) + "o de boleto")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Filtro2Rel
-            GO TOP
+            IF loc_lProsseguir
+                SELECT cursor_4c_Filtro2Rel
+                GO TOP
 
-            IF par_lImprimir
-                THIS.ExecutarReportForm("sigrecnb", "PREVIEW")
-            ELSE
-                THIS.ExecutarReportForm("sigrecnb", "PREVIEW")
+                IF par_lImprimir
+                    THIS.ExecutarReportForm("sigrecnb", "PREVIEW")
+                ELSE
+                    THIS.ExecutarReportForm("sigrecnb", "PREVIEW")
+                ENDIF
+
+                loc_lSucesso = .T.
             ENDIF
-
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ImpBoleto")
         ENDTRY
@@ -1593,17 +1596,20 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
     * Delega para ClickRelatorio que chama GerarCNAB("V") - preview do CNAB
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Filtro") OR RECCOUNT("cursor_4c_Filtro") = 0
                 MsgAviso("Nenhuma opera" + CHR(231) + CHR(227) + "o dispon" + CHR(237) + ;
                          "vel para visualiza" + CHR(231) + CHR(227) + "o." + CHR(13) + ;
                          "Execute o processamento primeiro.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.ClickRelatorio()
+            IF loc_lProsseguir
+                THIS.ClickRelatorio()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BtnVisualizarClick")
         ENDTRY
@@ -1615,17 +1621,20 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
     * Delega para ClickDesmarcarOper que zera marca em cursor_4c_Filtro
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Filtro") OR RECCOUNT("cursor_4c_Filtro") = 0
                 MsgAviso("Nenhuma opera" + CHR(231) + CHR(227) + "o para desmarcar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF MsgConfirma("Desmarcar todas as opera" + CHR(231) + CHR(245) + "es selecionadas?", ;
-                           "Confirma" + CHR(231) + CHR(227) + "o")
-                THIS.ClickDesmarcarOper()
+            IF loc_lProsseguir
+                IF MsgConfirma("Desmarcar todas as opera" + CHR(231) + CHR(245) + "es selecionadas?", ;
+                               "Confirma" + CHR(231) + CHR(227) + "o")
+                    THIS.ClickDesmarcarOper()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BtnExcluirClick")
@@ -3664,17 +3673,20 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
     * Form OPERACIONAL: "Salvar" = gerar arquivo CNAB para os registros marcados
     *==========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Filtro") OR RECCOUNT("cursor_4c_Filtro") = 0
                 MsgAviso("Nenhuma opera" + CHR(231) + CHR(227) + "o dispon" + CHR(237) + ;
                          "vel para gera" + CHR(231) + CHR(227) + "o." + CHR(13) + ;
                          "Execute o processamento primeiro.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.ClickGerarCNAB()
+            IF loc_lProsseguir
+                THIS.ClickGerarCNAB()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BtnSalvarClick")
         ENDTRY

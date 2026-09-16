@@ -736,29 +736,36 @@ DEFINE CLASS FormSIGREHCP AS FormBase
     *   Equivalente ao btnReport.DocExcel do framework legado
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcelClick()
-        LOCAL loc_cArquivo, loc_cCursor
+        LOCAL loc_cArquivo, loc_cCursor, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.ValidarFiltros()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.FormParaRelatorio()
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            IF loc_lProsseguir
+                THIS.FormParaRelatorio()
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            loc_cCursor = "cursor_4c_Rehcp"
-            IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
-                MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
-                RETURN
+            IF loc_lProsseguir
+                loc_cCursor = "cursor_4c_Rehcp"
+                IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
+                    MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cArquivo = PUTFILE("Salvar como...", "SigRehcp", "XLS")
-            IF !EMPTY(loc_cArquivo)
-                SELECT (loc_cCursor)
-                COPY TO (loc_cArquivo) TYPE XLS
-                MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
-                    loc_cArquivo, "Excel")
+            IF loc_lProsseguir
+                loc_cArquivo = PUTFILE("Salvar como...", "SigRehcp", "XLS")
+                IF !EMPTY(loc_cArquivo)
+                    SELECT (loc_cCursor)
+                    COPY TO (loc_cArquivo) TYPE XLS
+                    MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
+                        loc_cArquivo, "Excel")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

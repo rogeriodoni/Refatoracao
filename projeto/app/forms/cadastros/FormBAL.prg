@@ -3660,33 +3660,40 @@ DEFINE CLASS FormBAL AS FormBase
     * BtnFechaClick - Encerra inventario selecionado
     *--------------------------------------------------------------------------
     PROCEDURE BtnFechaClick()
-        LOCAL loc_cCidchaves, loc_lConfirma
+        LOCAL loc_cCidchaves, loc_lConfirma, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             loc_cCidchaves = THIS.ObterCidchavesSelecionado()
             IF EMPTY(loc_cCidchaves)
                 MsgAviso("Selecione um invent" + CHR(225) + "rio para encerrar.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCidchaves)
-                MsgAviso("Erro ao carregar invent" + CHR(225) + "rio.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF !THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCidchaves)
+                    MsgAviso("Erro ao carregar invent" + CHR(225) + "rio.", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF THIS.this_oBusinessObject.this_lEncerras
-                MsgAviso("Invent" + CHR(225) + "rio j" + CHR(225) + " est" + CHR(225) + " encerrado.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF THIS.this_oBusinessObject.this_lEncerras
+                    MsgAviso("Invent" + CHR(225) + "rio j" + CHR(225) + " est" + CHR(225) + " encerrado.", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_lConfirma = MsgConfirma("Deseja encerrar o Invent" + CHR(225) + "rio " + ;
-                            TRANSFORM(THIS.this_oBusinessObject.this_nCodigos) + "?", ;
-                            "Confirmar Encerramento")
+            IF loc_lProsseguir
+                loc_lConfirma = MsgConfirma("Deseja encerrar o Invent" + CHR(225) + "rio " + ;
+                                TRANSFORM(THIS.this_oBusinessObject.this_nCodigos) + "?", ;
+                                "Confirmar Encerramento")
 
-            IF loc_lConfirma
-                IF THIS.this_oBusinessObject.AtualizarEncerramento(.T., DATE())
-                    MsgInfo("Invent" + CHR(225) + "rio encerrado com sucesso!", "Sucesso")
-                    THIS.CarregarLista()
+                IF loc_lConfirma
+                    IF THIS.this_oBusinessObject.AtualizarEncerramento(.T., DATE())
+                        MsgInfo("Invent" + CHR(225) + "rio encerrado com sucesso!", "Sucesso")
+                        THIS.CarregarLista()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -3698,29 +3705,36 @@ DEFINE CLASS FormBAL AS FormBase
     * BtnLeituraClick - Abre pagina de leitura para inventario selecionado
     *--------------------------------------------------------------------------
     PROCEDURE BtnLeituraClick()
-        LOCAL loc_cCidchaves
+        LOCAL loc_cCidchaves, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             loc_cCidchaves = THIS.ObterCidchavesSelecionado()
             IF EMPTY(loc_cCidchaves)
                 MsgAviso("Selecione um invent" + CHR(225) + "rio para iniciar a leitura.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCidchaves)
-                MsgAviso("Erro ao carregar invent" + CHR(225) + "rio.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF !THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCidchaves)
+                    MsgAviso("Erro ao carregar invent" + CHR(225) + "rio.", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF THIS.this_oBusinessObject.this_lEncerras
-                MsgAviso("Invent" + CHR(225) + "rio encerrado. N" + CHR(227) + "o " + ;
-                         CHR(233) + " poss" + CHR(237) + "vel realizar leituras.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF THIS.this_oBusinessObject.this_lEncerras
+                    MsgAviso("Invent" + CHR(225) + "rio encerrado. N" + CHR(227) + "o " + ;
+                             CHR(233) + " poss" + CHR(237) + "vel realizar leituras.", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            THIS.this_cModoAtual = "LEITURA"
-            THIS.InicializarLeitura()
-            THIS.AlternarPagina(3)
+            IF loc_lProsseguir
+                THIS.this_cModoAtual = "LEITURA"
+                THIS.InicializarLeitura()
+                THIS.AlternarPagina(3)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormBAL.BtnLeituraClick")
         ENDTRY
@@ -3742,24 +3756,29 @@ DEFINE CLASS FormBAL AS FormBase
     * BtnExportaClick - Exporta dados do inventario para Excel
     *--------------------------------------------------------------------------
     PROCEDURE BtnExportaClick()
-        LOCAL loc_cCidchaves, loc_cArquivo
+        LOCAL loc_cCidchaves, loc_cArquivo, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             loc_cCidchaves = THIS.ObterCidchavesSelecionado()
             IF EMPTY(loc_cCidchaves)
                 MsgAviso("Selecione um invent" + CHR(225) + "rio para exportar.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !USED("cursor_4c_Dados")
-                MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " dados para exportar.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_Dados")
+                    MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " dados para exportar.", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_cArquivo = GETFILE("XLS", "Exportar Invent" + CHR(225) + "rio", "Salvar", 0, "Exportar")
-            IF !EMPTY(loc_cArquivo)
-                COPY TO (loc_cArquivo) TYPE XL5
-                MsgInfo("Arquivo exportado com sucesso!", "Exportar")
+            IF loc_lProsseguir
+                loc_cArquivo = GETFILE("XLS", "Exportar Invent" + CHR(225) + "rio", "Salvar", 0, "Exportar")
+                IF !EMPTY(loc_cArquivo)
+                    COPY TO (loc_cArquivo) TYPE XL5
+                    MsgInfo("Arquivo exportado com sucesso!", "Exportar")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormBAL.BtnExportaClick")
@@ -3770,16 +3789,19 @@ DEFINE CLASS FormBAL AS FormBase
     * BtnInventarioClick - Imprime etiquetas do inventario selecionado
     *--------------------------------------------------------------------------
     PROCEDURE BtnInventarioClick()
-        LOCAL loc_cCidchaves
+        LOCAL loc_cCidchaves, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             loc_cCidchaves = THIS.ObterCidchavesSelecionado()
             IF EMPTY(loc_cCidchaves)
                 MsgAviso("Selecione um invent" + CHR(225) + "rio.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            MsgInfo("Fun" + CHR(231) + CHR(227) + "o de etiquetas em desenvolvimento.", "Informa" + CHR(231) + CHR(227) + "o")
+            IF loc_lProsseguir
+                MsgInfo("Fun" + CHR(231) + CHR(227) + "o de etiquetas em desenvolvimento.", "Informa" + CHR(231) + CHR(227) + "o")
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormBAL.BtnInventarioClick")
         ENDTRY
@@ -3856,8 +3878,9 @@ DEFINE CLASS FormBAL AS FormBase
     * BtnConfirmarClick - Salva parametros do inventario
     *--------------------------------------------------------------------------
     PROCEDURE BtnConfirmarClick()
-        LOCAL loc_lResultado, loc_cGrupos, loc_cContas
+        LOCAL loc_lResultado, loc_cGrupos, loc_cContas, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             loc_cGrupos = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.Value)
 
@@ -3865,38 +3888,44 @@ DEFINE CLASS FormBAL AS FormBase
             IF EMPTY(loc_cGrupos)
                 MsgAviso("Grupo de Estoque obrigat" + CHR(243) + "rio.", "Valida" + CHR(231) + CHR(227) + "o")
                 THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.SetFocus()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !THIS.this_oBusinessObject.ValidarGrupoEstoque(loc_cGrupos)
-                MsgAviso("Grupo de Estoque Inv" + CHR(225) + "lido!!!", "Valida" + CHR(231) + CHR(227) + "o")
-                THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.SetFocus()
-                RETURN
+            IF loc_lProsseguir
+                IF !THIS.this_oBusinessObject.ValidarGrupoEstoque(loc_cGrupos)
+                    MsgAviso("Grupo de Estoque Inv" + CHR(225) + "lido!!!", "Valida" + CHR(231) + CHR(227) + "o")
+                    THIS.pgf_4c_Paginas.Page2.txt_4c_Grupo.SetFocus()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Validar conta (opcional mas se preenchida deve ser valida)
-            loc_cContas = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Conta.Value)
-            IF !EMPTY(loc_cContas) AND !THIS.this_oBusinessObject.ValidarConta(loc_cContas)
-                MsgAviso("Conta de Estoque Inv" + CHR(225) + "lida!!!", "Valida" + CHR(231) + CHR(227) + "o")
-                THIS.pgf_4c_Paginas.Page2.txt_4c_Conta.SetFocus()
-                RETURN
+            IF loc_lProsseguir
+                loc_cContas = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Conta.Value)
+                IF !EMPTY(loc_cContas) AND !THIS.this_oBusinessObject.ValidarConta(loc_cContas)
+                    MsgAviso("Conta de Estoque Inv" + CHR(225) + "lida!!!", "Valida" + CHR(231) + CHR(227) + "o")
+                    THIS.pgf_4c_Paginas.Page2.txt_4c_Conta.SetFocus()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Transferir campos para BO
-            THIS.FormParaBO()
+            IF loc_lProsseguir
+                THIS.FormParaBO()
 
             *-- Salvar XML das grades de grupos
-            THIS.this_oBusinessObject.this_cMfilggrp  = THIS.ObterMfilGGrupo()
-            THIS.this_oBusinessObject.this_cMfilgrupo = THIS.ObterMfilGrupo()
+                THIS.this_oBusinessObject.this_cMfilggrp  = THIS.ObterMfilGGrupo()
+                THIS.this_oBusinessObject.this_cMfilgrupo = THIS.ObterMfilGrupo()
 
             *-- Salvar registro
-            loc_lResultado = THIS.this_oBusinessObject.Salvar()
+                loc_lResultado = THIS.this_oBusinessObject.Salvar()
 
-            IF loc_lResultado
-                MsgInfo("Invent" + CHR(225) + "rio salvo com sucesso!", "Sucesso")
-                THIS.this_cModoAtual = "LISTA"
-                THIS.CarregarLista()
-                THIS.AlternarPagina(1)
+                IF loc_lResultado
+                    MsgInfo("Invent" + CHR(225) + "rio salvo com sucesso!", "Sucesso")
+                    THIS.this_cModoAtual = "LISTA"
+                    THIS.CarregarLista()
+                    THIS.AlternarPagina(1)
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormBAL.BtnConfirmarClick")
@@ -3983,11 +4012,12 @@ DEFINE CLASS FormBAL AS FormBase
     * BtnGravarClick - Salva item de leitura em SigIvTrH
     *--------------------------------------------------------------------------
     PROCEDURE BtnGravarClick()
-        LOCAL loc_cSQL, loc_nRes, loc_lSucesso
+        LOCAL loc_cSQL, loc_nRes, loc_lSucesso, loc_lProsseguir
         LOCAL loc_cProd, loc_cCodCor, loc_cCodTam, loc_nQtd, loc_nQtd2
         LOCAL loc_cLocal, loc_cObs, loc_nLidos, loc_cEmps, loc_nCodigos
         loc_lSucesso = .F.
 
+        loc_lProsseguir = .T.
         TRY
             loc_cProd    = ALLTRIM(THIS.pgf_4c_Paginas.Page3.txt_4c_Prod.Value)
             loc_cCodCor  = ALLTRIM(THIS.pgf_4c_Paginas.Page3.txt_4c_Cor.Value)
@@ -4001,67 +4031,73 @@ DEFINE CLASS FormBAL AS FormBase
 
             IF EMPTY(loc_cProd)
                 MsgAviso("Produto n" + CHR(227) + "o informado.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF loc_nQtd <= 0
-                MsgAviso("Quantidade deve ser maior que zero.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF loc_nQtd <= 0
+                    MsgAviso("Quantidade deve ser maior que zero.", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Gerar UUID para cidchaves da leitura
-            LOCAL loc_cCidchaves, loc_nResUuid
-            loc_cCidchaves = ""
-            loc_nResUuid = SQLEXEC(gnConnHandle, "SELECT LEFT(NEWID(), 20) AS novo_uuid", "cursor_4c_UuidH")
-            IF loc_nResUuid >= 0 AND RECCOUNT("cursor_4c_UuidH") > 0
-                SELECT cursor_4c_UuidH
-                loc_cCidchaves = ALLTRIM(cursor_4c_UuidH.novo_uuid)
-            ENDIF
-            IF USED("cursor_4c_UuidH")
-                USE IN cursor_4c_UuidH
-            ENDIF
+            IF loc_lProsseguir
+                LOCAL loc_cCidchaves, loc_nResUuid
+                loc_cCidchaves = ""
+                loc_nResUuid = SQLEXEC(gnConnHandle, "SELECT LEFT(NEWID(), 20) AS novo_uuid", "cursor_4c_UuidH")
+                IF loc_nResUuid >= 0 AND RECCOUNT("cursor_4c_UuidH") > 0
+                    SELECT cursor_4c_UuidH
+                    loc_cCidchaves = ALLTRIM(cursor_4c_UuidH.novo_uuid)
+                ENDIF
+                IF USED("cursor_4c_UuidH")
+                    USE IN cursor_4c_UuidH
+                ENDIF
 
-            IF EMPTY(loc_cCidchaves)
-                MsgErro("Erro ao gerar chave " + CHR(250) + "nica para leitura.", "Erro")
-                RETURN
+                IF EMPTY(loc_cCidchaves)
+                    MsgErro("Erro ao gerar chave " + CHR(250) + "nica para leitura.", "Erro")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Obter cbars do produto (codigo de barras)
-            LOCAL loc_cCbars, loc_nResCb
-            loc_cCbars = ""
-            loc_nResCb = SQLEXEC(gnConnHandle, "SELECT TOP 1 cbars FROM SigCdPro WHERE cpros = " + ;
-                         EscaparSQL(loc_cProd), "cursor_4c_CBars")
-            IF loc_nResCb >= 0 AND RECCOUNT("cursor_4c_CBars") > 0
-                SELECT cursor_4c_CBars
-                loc_cCbars = ALLTRIM(cursor_4c_CBars.cbars)
-            ENDIF
-            IF USED("cursor_4c_CBars")
-                USE IN cursor_4c_CBars
-            ENDIF
+            IF loc_lProsseguir
+                LOCAL loc_cCbars, loc_nResCb
+                loc_cCbars = ""
+                loc_nResCb = SQLEXEC(gnConnHandle, "SELECT TOP 1 cbars FROM SigCdPro WHERE cpros = " + ;
+                             EscaparSQL(loc_cProd), "cursor_4c_CBars")
+                IF loc_nResCb >= 0 AND RECCOUNT("cursor_4c_CBars") > 0
+                    SELECT cursor_4c_CBars
+                    loc_cCbars = ALLTRIM(cursor_4c_CBars.cbars)
+                ENDIF
+                IF USED("cursor_4c_CBars")
+                    USE IN cursor_4c_CBars
+                ENDIF
 
-            loc_cSQL = "INSERT INTO SigIvTrH (cidchaves, emps, codigos, cbars, cpros," + ;
-                       " codcors, codtams, qtds, pesreals, localis, obs)" + ;
-                       " VALUES (" + ;
-                       EscaparSQL(loc_cCidchaves) + "," + ;
-                       EscaparSQL(loc_cEmps) + "," + ;
-                       FormatarNumeroSQL(loc_nCodigos) + "," + ;
-                       EscaparSQL(loc_cCbars) + "," + ;
-                       EscaparSQL(loc_cProd) + "," + ;
-                       EscaparSQL(loc_cCodCor) + "," + ;
-                       EscaparSQL(loc_cCodTam) + "," + ;
-                       FormatarNumeroSQL(loc_nQtd) + "," + ;
-                       FormatarNumeroSQL(loc_nQtd2) + "," + ;
-                       EscaparSQL(loc_cLocal) + "," + ;
-                       EscaparSQL(loc_cObs) + ;
-                       ")"
+                loc_cSQL = "INSERT INTO SigIvTrH (cidchaves, emps, codigos, cbars, cpros," + ;
+                           " codcors, codtams, qtds, pesreals, localis, obs)" + ;
+                           " VALUES (" + ;
+                           EscaparSQL(loc_cCidchaves) + "," + ;
+                           EscaparSQL(loc_cEmps) + "," + ;
+                           FormatarNumeroSQL(loc_nCodigos) + "," + ;
+                           EscaparSQL(loc_cCbars) + "," + ;
+                           EscaparSQL(loc_cProd) + "," + ;
+                           EscaparSQL(loc_cCodCor) + "," + ;
+                           EscaparSQL(loc_cCodTam) + "," + ;
+                           FormatarNumeroSQL(loc_nQtd) + "," + ;
+                           FormatarNumeroSQL(loc_nQtd2) + "," + ;
+                           EscaparSQL(loc_cLocal) + "," + ;
+                           EscaparSQL(loc_cObs) + ;
+                           ")"
 
-            loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL)
-            IF loc_nRes >= 0
-                loc_lSucesso = .T.
-                THIS.LimparCamposLeitura()
-                THIS.CarregarGradeLeitura()
-            ELSE
-                MsgErro("Erro ao gravar leitura:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL)
+                IF loc_nRes >= 0
+                    loc_lSucesso = .T.
+                    THIS.LimparCamposLeitura()
+                    THIS.CarregarGradeLeitura()
+                ELSE
+                    MsgErro("Erro ao gravar leitura:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormBAL.BtnGravarClick")
@@ -4191,29 +4227,32 @@ DEFINE CLASS FormBAL AS FormBase
     * BtnExcluirLeituraClick - Exclui registro de leitura selecionado na grade
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirLeituraClick()
-        LOCAL loc_cCidchaves, loc_cSQL, loc_nRes, loc_lConfirma
+        LOCAL loc_cCidchaves, loc_cSQL, loc_nRes, loc_lConfirma, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Historico") OR RECCOUNT("cursor_4c_Historico") = 0
                 MsgAviso("Selecione uma leitura para excluir.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Historico
-            loc_cCidchaves = ALLTRIM(cursor_4c_Historico.cbars)
+            IF loc_lProsseguir
+                SELECT cursor_4c_Historico
+                loc_cCidchaves = ALLTRIM(cursor_4c_Historico.cbars)
 
-            loc_lConfirma = MsgConfirma("Deseja excluir esta leitura?", "Confirmar Exclus" + CHR(227) + "o")
+                loc_lConfirma = MsgConfirma("Deseja excluir esta leitura?", "Confirmar Exclus" + CHR(227) + "o")
 
-            IF loc_lConfirma
-                loc_cSQL = "DELETE FROM SigIvTrH WHERE cbars = " + EscaparSQL(loc_cCidchaves) + ;
-                           " AND emps = " + EscaparSQL(ALLTRIM(THIS.this_oBusinessObject.this_cEmps)) + ;
-                           " AND codigos = " + FormatarNumeroSQL(THIS.this_oBusinessObject.this_nCodigos)
-
-                loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL)
-                IF loc_nRes >= 0
-                    THIS.CarregarGradeLeitura()
-                ELSE
-                    MsgErro("Erro ao excluir leitura:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                IF loc_lConfirma
+                    loc_cSQL = "DELETE FROM SigIvTrH WHERE cbars = " + EscaparSQL(loc_cCidchaves) + ;
+                               " AND emps = " + EscaparSQL(ALLTRIM(THIS.this_oBusinessObject.this_cEmps)) + ;
+                               " AND codigos = " + FormatarNumeroSQL(THIS.this_oBusinessObject.this_nCodigos)
+    
+                    loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL)
+                    IF loc_nRes >= 0
+                        THIS.CarregarGradeLeitura()
+                    ELSE
+                        MsgErro("Erro ao excluir leitura:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

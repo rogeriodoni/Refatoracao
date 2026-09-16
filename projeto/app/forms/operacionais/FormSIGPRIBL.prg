@@ -541,7 +541,7 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
     * CmdImprimirClick - Confirma e imprime boletos bancarios
     *--------------------------------------------------------------------------
     PROCEDURE CmdImprimirClick()
-        LOCAL loc_lConfirmado, loc_lTemImpressora, loc_lSucesso
+        LOCAL loc_lConfirmado, loc_lTemImpressora, loc_lSucesso, loc_lProsseguir
         LOCAL loc_cChave1, loc_nParcel, loc_nConta, loc_lTaOk
         LOCAL loc_cSQL, loc_nRet, loc_cFonteP, loc_cFonteG
         LOCAL loc_nTamFolha, loc_oErro, loc_laPrinters(1)
@@ -552,172 +552,306 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
         ENDIF
 
         THIS.LockScreen = .T.
+        loc_lProsseguir = .T.
         TRY
             *-- Salva cLocals e cTxtCds editados de volta em SigCnFBl
             IF !USED("cursor_4c_Config") OR RECCOUNT("cursor_4c_Config") = 0
                 MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento v" + ;
                          CHR(225) + "lida antes de imprimir.", "Aviso")
                 THIS.LockScreen = .F.
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Config
-            REPLACE cLocals WITH THIS.txt_4c_Locals.Value
-            REPLACE cTxtCds WITH THIS.obj_4c_GetTxtCds.Value
+            IF loc_lProsseguir
+                SELECT cursor_4c_Config
+                REPLACE cLocals WITH THIS.txt_4c_Locals.Value
+                REPLACE cTxtCds WITH THIS.obj_4c_GetTxtCds.Value
 
-            loc_cSQL = "UPDATE SigCnFBl SET" + ;
-                       " cLocals = " + EscaparSQL(THIS.txt_4c_Locals.Value) + "," + ;
-                       " cTxtCds = " + EscaparSQL(THIS.obj_4c_GetTxtCds.Value) + ;
-                       " WHERE FPags = " + EscaparSQL(PADR(THIS.this_cFPagsSel, 12))
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-            IF loc_nRet <= 0
-                MsgAviso("Falha ao salvar. Favor reinicializar o processo.", "Falha na Conex" + CHR(227) + "o")
-                THIS.LockScreen = .F.
-                RETURN
+                loc_cSQL = "UPDATE SigCnFBl SET" + ;
+                           " cLocals = " + EscaparSQL(THIS.txt_4c_Locals.Value) + "," + ;
+                           " cTxtCds = " + EscaparSQL(THIS.obj_4c_GetTxtCds.Value) + ;
+                           " WHERE FPags = " + EscaparSQL(PADR(THIS.this_cFPagsSel, 12))
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
+                IF loc_nRet <= 0
+                    MsgAviso("Falha ao salvar. Favor reinicializar o processo.", "Falha na Conex" + CHR(227) + "o")
+                    THIS.LockScreen = .F.
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Verifica se ha impressora de boleto configurada
-            loc_lTemImpressora = .F.
-            IF APRINTERS(loc_laPrinters) > 0
-                LOCAL loc_i
-                SELECT cursor_4c_Config
-                FOR loc_i = 1 TO ALEN(loc_laPrinters, 1)
-                    IF UPPER(ALLTRIM(loc_laPrinters[loc_i, 1])) == UPPER(ALLTRIM(cursor_4c_Config.cNomeImps))
-                        loc_lTemImpressora = .T.
-                        EXIT
-                    ENDIF
-                ENDFOR
-            ENDIF
+            IF loc_lProsseguir
+                loc_lTemImpressora = .F.
+                IF APRINTERS(loc_laPrinters) > 0
+                    LOCAL loc_i
+                    SELECT cursor_4c_Config
+                    FOR loc_i = 1 TO ALEN(loc_laPrinters, 1)
+                        IF UPPER(ALLTRIM(loc_laPrinters[loc_i, 1])) == UPPER(ALLTRIM(cursor_4c_Config.cNomeImps))
+                            loc_lTemImpressora = .T.
+                            EXIT
+                        ENDIF
+                    ENDFOR
+                ENDIF
 
-            IF !loc_lTemImpressora
-                MsgAviso("Nenhuma Impressora de Boleto Configurada ou Instalada.", "Aviso")
-                THIS.LockScreen = .F.
-                RETURN
+                IF !loc_lTemImpressora
+                    MsgAviso("Nenhuma Impressora de Boleto Configurada ou Instalada.", "Aviso")
+                    THIS.LockScreen = .F.
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Carrega movimentos a imprimir
-            IF !EMPTY(THIS.this_cChave1)
-                SELECT TprMvCab
-                ZAP
-                INSERT INTO TprMvCab (Emps, Dopes, Numes) VALUES ;
-                    (SUBSTR(THIS.this_cChave1, 1, 3), ;
-                     SUBSTR(THIS.this_cChave1, 4, 20), ;
-                     INT(VAL(SUBSTR(THIS.this_cChave1, 24, 6))))
-            ENDIF
+            IF loc_lProsseguir
+                IF !EMPTY(THIS.this_cChave1)
+                    SELECT TprMvCab
+                    ZAP
+                    INSERT INTO TprMvCab (Emps, Dopes, Numes) VALUES ;
+                        (SUBSTR(THIS.this_cChave1, 1, 3), ;
+                         SUBSTR(THIS.this_cChave1, 4, 20), ;
+                         INT(VAL(SUBSTR(THIS.this_cChave1, 24, 6))))
+                ENDIF
 
             *-- Cria cursor de dados do boleto (uma linha por parcela impressa)
-            IF USED("Crdados")
-                USE IN Crdados
-            ENDIF
-            SET NULL ON
-            CREATE CURSOR Crdados ( ;
-                clocal  C(100), ;
-                vencs   C(12), ;
-                datdoc  D, ;
-                numdoc  C(8), ;
-                valor   N(14,2), ;
-                razaos  C(50), ;
-                cpfs    C(20), ;
-                endcobs C(80), ;
-                baicobs C(20), ;
-                cidcobs C(20), ;
-                estcobs C(2), ;
-                cepcobs C(9), ;
-                texto   M ;
-            )
-            SET NULL OFF
+                IF USED("Crdados")
+                    USE IN Crdados
+                ENDIF
+                SET NULL ON
+                CREATE CURSOR Crdados ( ;
+                    clocal  C(100), ;
+                    vencs   C(12), ;
+                    datdoc  D, ;
+                    numdoc  C(8), ;
+                    valor   N(14,2), ;
+                    razaos  C(50), ;
+                    cpfs    C(20), ;
+                    endcobs C(80), ;
+                    baicobs C(20), ;
+                    cidcobs C(20), ;
+                    estcobs C(2), ;
+                    cepcobs C(9), ;
+                    texto   M ;
+                )
+                SET NULL OFF
 
             *-- Monta fontes de impressao a partir da configuracao
-            SELECT cursor_4c_Config
-            IF EMPTY(ALLTRIM(NVL(cursor_4c_Config.cFontePdrs, "")))
-                loc_cFonteP = ""
-                loc_cFonteG = ""
-            ELSE
-                IF NVL(cursor_4c_Config.nTamFontes, 0) = 0
-                    loc_cFonteP = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "',9"
-                    loc_cFonteG = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "',11"
+                SELECT cursor_4c_Config
+                IF EMPTY(ALLTRIM(NVL(cursor_4c_Config.cFontePdrs, "")))
+                    loc_cFonteP = ""
+                    loc_cFonteG = ""
                 ELSE
-                    loc_cFonteP = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "'," + ;
-                                  ALLTRIM(STR(cursor_4c_Config.nTamFontes, 3))
-                    loc_cFonteG = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "'," + ;
-                                  ALLTRIM(STR(cursor_4c_Config.nTamFontes + 2, 3))
+                    IF NVL(cursor_4c_Config.nTamFontes, 0) = 0
+                        loc_cFonteP = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "',9"
+                        loc_cFonteG = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "',11"
+                    ELSE
+                        loc_cFonteP = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "'," + ;
+                                      ALLTRIM(STR(cursor_4c_Config.nTamFontes, 3))
+                        loc_cFonteG = "Font '" + ALLTRIM(cursor_4c_Config.cFontePdrs) + "'," + ;
+                                      ALLTRIM(STR(cursor_4c_Config.nTamFontes + 2, 3))
+                    ENDIF
                 ENDIF
-            ENDIF
-            loc_nTamFolha = VAL(ALLTRIM(SUBSTR(cursor_4c_Config.cTamFolha, ;
-                                (AT("/", cursor_4c_Config.cTamFolha, 1) + 1), ;
-                                (AT("/", cursor_4c_Config.cTamFolha, 2) - AT("/", cursor_4c_Config.cTamFolha, 1) - 1))))
+                loc_nTamFolha = VAL(ALLTRIM(SUBSTR(cursor_4c_Config.cTamFolha, ;
+                                    (AT("/", cursor_4c_Config.cTamFolha, 1) + 1), ;
+                                    (AT("/", cursor_4c_Config.cTamFolha, 2) - AT("/", cursor_4c_Config.cTamFolha, 1) - 1))))
 
             *-- Itera movimentos e gera dados de impressao
-            SELECT TprMvCab
-            GO TOP
-            SCAN
-                loc_cChave1 = TprMvCab.Emps + TprMvCab.Dopes + STR(TprMvCab.Numes, 6)
-                loc_nParcel = NVL(TprMvCab.Parcs, 0)
-                IF VARTYPE(loc_nParcel) != "N"
-                    loc_nParcel = 0
-                ENDIF
-
-                *-- Busca cabecalho do movimento
-                loc_cSQL = "SELECT TOP 1 Emps, Dopes, Numes, Contaos, Contads, Nfiscals" + ;
-                           " FROM SigMvCab WHERE Emps + Dopes + CAST(Numes AS CHAR(6)) = " + ;
-                           EscaparSQL(loc_cChave1)
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MvCab")
-                IF loc_nRet <= 0 OR !USED("cursor_4c_MvCab") OR RECCOUNT("cursor_4c_MvCab") = 0
-                    MsgAviso("Esta Opera" + CHR(231) + CHR(227) + "o N" + CHR(227) + ;
-                             "o Encontrou Movimenta" + CHR(231) + CHR(227) + "o.", "Aten" + CHR(231) + CHR(227) + "o")
-                    IF USED("cursor_4c_MvCab")
-                        USE IN cursor_4c_MvCab
+                SELECT TprMvCab
+                GO TOP
+                SCAN
+                    loc_cChave1 = TprMvCab.Emps + TprMvCab.Dopes + STR(TprMvCab.Numes, 6)
+                    loc_nParcel = NVL(TprMvCab.Parcs, 0)
+                    IF VARTYPE(loc_nParcel) != "N"
+                        loc_nParcel = 0
                     ENDIF
-                    LOOP
-                ENDIF
-
-                *-- Busca parcelas do movimento
-                loc_cSQL = "SELECT Emps, Dopes, Numes, Parcs, Fpags, Vencs, Datas, Valos" + ;
-                           " FROM SigMvPar WHERE Emps + Dopes + CAST(Numes AS CHAR(6)) = " + ;
-                           EscaparSQL(loc_cChave1) + " ORDER BY Parcs"
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MvPar")
-                IF loc_nRet <= 0 OR !USED("cursor_4c_MvPar") OR RECCOUNT("cursor_4c_MvPar") = 0
-                    MsgAviso("Nenhuma Forma de Pagamento Encontrada Nessa Opera" + CHR(231) + CHR(227) + "o.", "Aten" + CHR(231) + CHR(227) + "o")
-                    IF USED("cursor_4c_MvPar")
-                        USE IN cursor_4c_MvPar
+    
+                    *-- Busca cabecalho do movimento
+                    loc_cSQL = "SELECT TOP 1 Emps, Dopes, Numes, Contaos, Contads, Nfiscals" + ;
+                               " FROM SigMvCab WHERE Emps + Dopes + CAST(Numes AS CHAR(6)) = " + ;
+                               EscaparSQL(loc_cChave1)
+                    loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MvCab")
+                    IF loc_nRet <= 0 OR !USED("cursor_4c_MvCab") OR RECCOUNT("cursor_4c_MvCab") = 0
+                        MsgAviso("Esta Opera" + CHR(231) + CHR(227) + "o N" + CHR(227) + ;
+                                 "o Encontrou Movimenta" + CHR(231) + CHR(227) + "o.", "Aten" + CHR(231) + CHR(227) + "o")
+                        IF USED("cursor_4c_MvCab")
+                            USE IN cursor_4c_MvCab
+                        ENDIF
+                        LOOP
                     ENDIF
-                    IF USED("cursor_4c_MvCab")
-                        USE IN cursor_4c_MvCab
+    
+                    *-- Busca parcelas do movimento
+                    loc_cSQL = "SELECT Emps, Dopes, Numes, Parcs, Fpags, Vencs, Datas, Valos" + ;
+                               " FROM SigMvPar WHERE Emps + Dopes + CAST(Numes AS CHAR(6)) = " + ;
+                               EscaparSQL(loc_cChave1) + " ORDER BY Parcs"
+                    loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MvPar")
+                    IF loc_nRet <= 0 OR !USED("cursor_4c_MvPar") OR RECCOUNT("cursor_4c_MvPar") = 0
+                        MsgAviso("Nenhuma Forma de Pagamento Encontrada Nessa Opera" + CHR(231) + CHR(227) + "o.", "Aten" + CHR(231) + CHR(227) + "o")
+                        IF USED("cursor_4c_MvPar")
+                            USE IN cursor_4c_MvPar
+                        ENDIF
+                        IF USED("cursor_4c_MvCab")
+                            USE IN cursor_4c_MvCab
+                        ENDIF
+                        LOOP
                     ENDIF
-                    LOOP
-                ENDIF
-
-                *-- Busca nota fiscal do movimento
-                loc_cSQL = "SELECT TOP 1 NFis, Emps, Dopes, Numes" + ;
-                           " FROM SigMvNfi WHERE Emps + Dopes + CAST(Numes AS CHAR(6)) = " + ;
-                           EscaparSQL(loc_cChave1)
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MvNfi")
-                IF loc_nRet <= 0 OR !USED("cursor_4c_MvNfi") OR RECCOUNT("cursor_4c_MvNfi") = 0
-                    MsgAviso("Esta Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
-                             "o possui Nota Fiscal Cadastrada.", "Aten" + CHR(231) + CHR(227) + "o")
-                    IF USED("cursor_4c_MvNfi")
-                        USE IN cursor_4c_MvNfi
+    
+                    *-- Busca nota fiscal do movimento
+                    loc_cSQL = "SELECT TOP 1 NFis, Emps, Dopes, Numes" + ;
+                               " FROM SigMvNfi WHERE Emps + Dopes + CAST(Numes AS CHAR(6)) = " + ;
+                               EscaparSQL(loc_cChave1)
+                    loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MvNfi")
+                    IF loc_nRet <= 0 OR !USED("cursor_4c_MvNfi") OR RECCOUNT("cursor_4c_MvNfi") = 0
+                        MsgAviso("Esta Opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + ;
+                                 "o possui Nota Fiscal Cadastrada.", "Aten" + CHR(231) + CHR(227) + "o")
+                        IF USED("cursor_4c_MvNfi")
+                            USE IN cursor_4c_MvNfi
+                        ENDIF
+                        IF USED("cursor_4c_MvPar")
+                            USE IN cursor_4c_MvPar
+                        ENDIF
+                        IF USED("cursor_4c_MvCab")
+                            USE IN cursor_4c_MvCab
+                        ENDIF
+                        LOOP
                     ENDIF
-                    IF USED("cursor_4c_MvPar")
-                        USE IN cursor_4c_MvPar
+    
+                    *-- Busca dados do cliente (conta de origem ou destino conforme tipo NF)
+                    SELECT cursor_4c_MvCab
+                    LOCAL loc_cContaCli
+                    loc_cContaCli = IIF(NVL(cursor_4c_MvCab.Nfiscals, 0) = 1, ;
+                                        cursor_4c_MvCab.Contaos, cursor_4c_MvCab.Contads)
+                    loc_cSQL = "SELECT TOP 1 Iclis, Razaos, Cpfs," + ;
+                               " Endes, EndCobs, Bairs, BaiCobs, Cidas, CidCobs," + ;
+                               " Estas, EstCobs, Ceps, CepCobs" + ;
+                               " FROM SigCdCli WHERE Iclis = " + EscaparSQL(loc_cContaCli)
+                    loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Cli")
+                    IF loc_nRet <= 0 OR !USED("cursor_4c_Cli") OR RECCOUNT("cursor_4c_Cli") = 0
+                        IF USED("cursor_4c_Cli")
+                            USE IN cursor_4c_Cli
+                        ENDIF
+                        IF USED("cursor_4c_MvNfi")
+                            USE IN cursor_4c_MvNfi
+                        ENDIF
+                        IF USED("cursor_4c_MvPar")
+                            USE IN cursor_4c_MvPar
+                        ENDIF
+                        IF USED("cursor_4c_MvCab")
+                            USE IN cursor_4c_MvCab
+                        ENDIF
+                        LOOP
                     ENDIF
-                    IF USED("cursor_4c_MvCab")
-                        USE IN cursor_4c_MvCab
-                    ENDIF
-                    LOOP
-                ENDIF
-
-                *-- Busca dados do cliente (conta de origem ou destino conforme tipo NF)
-                SELECT cursor_4c_MvCab
-                LOCAL loc_cContaCli
-                loc_cContaCli = IIF(NVL(cursor_4c_MvCab.Nfiscals, 0) = 1, ;
-                                    cursor_4c_MvCab.Contaos, cursor_4c_MvCab.Contads)
-                loc_cSQL = "SELECT TOP 1 Iclis, Razaos, Cpfs," + ;
-                           " Endes, EndCobs, Bairs, BaiCobs, Cidas, CidCobs," + ;
-                           " Estas, EstCobs, Ceps, CepCobs" + ;
-                           " FROM SigCdCli WHERE Iclis = " + EscaparSQL(loc_cContaCli)
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Cli")
-                IF loc_nRet <= 0 OR !USED("cursor_4c_Cli") OR RECCOUNT("cursor_4c_Cli") = 0
+    
+                    *-- Itera parcelas e insere dados para impressao
+                    SELECT cursor_4c_MvPar
+                    GO TOP
+                    SCAN
+                        loc_lTaOk = .T.
+                        IF loc_nParcel > 0
+                            IF cursor_4c_MvPar.Parcs != loc_nParcel
+                                loc_lTaOk = .F.
+                            ENDIF
+                        ENDIF
+    
+                        IF loc_lTaOk
+                            *-- Verifica forma de pagamento habilita boleto
+                            loc_cSQL = "SELECT TOP 1 Fpags, ImpBols, ImpNotas" + ;
+                                       " FROM SigOpFp WHERE Fpags = " + ;
+                                       EscaparSQL(cursor_4c_MvPar.Fpags)
+                            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_OpFp")
+    
+                            IF loc_nRet > 0 AND USED("cursor_4c_OpFp") AND ;
+                               RECCOUNT("cursor_4c_OpFp") > 0 AND cursor_4c_OpFp.ImpBols
+    
+                                *-- Cria cursor TmpImprime e indice de ordenacao
+                                IF USED("TmpImprime")
+                                    USE IN TmpImprime
+                                ENDIF
+                                CREATE CURSOR TmpImprime ( ;
+                                    Linha    N(6,2), ;
+                                    Coluna   N(6,2), ;
+                                    Conteudo C(100), ;
+                                    Style    C(3), ;
+                                    fontname C(64), ;
+                                    fontsize I, ;
+                                    linesize N(6,2), ;
+                                    nheight  N(6,2) ;
+                                )
+                                INDEX ON (Linha * 1000000000) + (Coluna * 100) TAG Ordem
+    
+                                LOCAL loc_xVenc
+                                SELECT cursor_4c_OpFp
+                                IF NVL(cursor_4c_OpFp.ImpNotas, 0) = 1
+                                    SELECT cursor_4c_MvPar
+                                    loc_xVenc = DTOC(cursor_4c_MvPar.Vencs)
+                                ELSE
+                                    SELECT cursor_4c_MvPar
+                                    loc_xVenc = ALLTRIM(NVL(cursor_4c_MvPar.FPags, ""))
+                                ENDIF
+    
+                                SELECT cursor_4c_MvNfi
+                                LOCAL loc_cNumDoc
+                                loc_cNumDoc = ALLTRIM(NVL(cursor_4c_MvNfi.NFis, "")) + "-" + ;
+                                              ALLTRIM(STR(NVL(cursor_4c_MvPar.Parcs, 0), 1))
+    
+                                SELECT cursor_4c_Cli
+                                LOCAL loc_cEndCob, loc_cBaiCob, loc_cCidCob, loc_cEstCob, loc_cCepCob
+                                loc_cEndCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.EndCobs, ""))), ;
+                                                  cursor_4c_Cli.EndCobs, cursor_4c_Cli.Endes)
+                                loc_cBaiCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.BaiCobs, ""))), ;
+                                                  cursor_4c_Cli.BaiCobs, cursor_4c_Cli.Bairs)
+                                loc_cCidCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.CidCobs, ""))), ;
+                                                  cursor_4c_Cli.CidCobs, cursor_4c_Cli.Cidas)
+                                loc_cEstCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.EstCobs, ""))), ;
+                                                  cursor_4c_Cli.EstCobs, cursor_4c_Cli.Estas)
+                                loc_cCepCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.CepCobs, ""))), ;
+                                                  cursor_4c_Cli.CepCobs, cursor_4c_Cli.Ceps)
+    
+                                SELECT cursor_4c_MvPar
+                                SELECT Crdados
+                                ZAP
+                                SELECT cursor_4c_Config
+                                INSERT INTO Crdados VALUES ( ;
+                                    cursor_4c_Config.cLocals, ;
+                                    m.loc_xVenc, ;
+                                    cursor_4c_MvPar.Datas, ;
+                                    m.loc_cNumDoc, ;
+                                    cursor_4c_MvPar.Valos, ;
+                                    cursor_4c_Cli.Razaos, ;
+                                    cursor_4c_Cli.Cpfs, ;
+                                    m.loc_cEndCob, ;
+                                    m.loc_cBaiCob, ;
+                                    m.loc_cCidCob, ;
+                                    m.loc_cEstCob, ;
+                                    m.loc_cCepCob, ;
+                                    THIS.obj_4c_GetTxtCds.Value ;
+                                )
+    
+                                *-- Preenche TmpImprime com posicoes configuradas
+                                SELECT cursor_4c_Config
+                                THIS.GrDetalhe(cursor_4c_Config.nLnLocals,  cursor_4c_Config.nClLocals,  "Crdados.clocal",  "", 60, 1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnDtVencs, cursor_4c_Config.nClDtVencs, "Crdados.Vencs",   "", 9,  1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnDtDocs,  cursor_4c_Config.nClDtDocs,  "Dtoc(Crdados.Datdoc)", "", 9, 1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnNrDocs,  cursor_4c_Config.nClNrDocs,  "Crdados.numdoc",  "", 9,  1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnVlDocs,  cursor_4c_Config.nClVlDocs,  "Transform(CrDados.Valor,'@Z 999,999,999.99')", "", 15, 1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnRazClis, cursor_4c_Config.nClRazClis, "AllTrim(Crdados.Razaos)",  "", 50, 1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnCgcClis, cursor_4c_Config.nClCgcClis, "AllTrim(Crdados.Cpfs)",    "", 20, 1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnEndCobs, cursor_4c_Config.nClEndCobs, "AllTrim(Crdados.EndCobs)", "", 80, 1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnBaiCobs, cursor_4c_Config.nClBaiCobs, "AllTrim(Crdados.BaiCobs)", "", 20, 1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnCidCobs, cursor_4c_Config.nClCidCobs, "AllTrim(Crdados.CidCobs)", "", 20, 1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnEstCobs, cursor_4c_Config.nClEstCobs, "AllTrim(Crdados.EstCobs)", "", 2,  1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnCepCobs, cursor_4c_Config.nClCepCobs, "AllTrim(Crdados.CepCobs)", "", 9,  1)
+                                THIS.GrDetalhe(cursor_4c_Config.nLnTxtCds,  cursor_4c_Config.nClTxtCds,  "Crdados.texto",   "", 60, 6)
+    
+                                *-- Chama rotina de impressao matricial SigPrIbl.prg
+                                DO SigPrIbl WITH "tmpimprime", ;
+                                    ALLTRIM(cursor_4c_Config.cNomeImps), ;
+                                    "to printer noconsole", ;
+                                    0, loc_nTamFolha, 0, 0, "crdados", 17
+                            ENDIF
+                            IF USED("cursor_4c_OpFp")
+                                USE IN cursor_4c_OpFp
+                            ENDIF
+                        ENDIF
+                    ENDSCAN
+    
                     IF USED("cursor_4c_Cli")
                         USE IN cursor_4c_Cli
                     ENDIF
@@ -730,142 +864,15 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
                     IF USED("cursor_4c_MvCab")
                         USE IN cursor_4c_MvCab
                     ENDIF
-                    LOOP
-                ENDIF
-
-                *-- Itera parcelas e insere dados para impressao
-                SELECT cursor_4c_MvPar
-                GO TOP
-                SCAN
-                    loc_lTaOk = .T.
-                    IF loc_nParcel > 0
-                        IF cursor_4c_MvPar.Parcs != loc_nParcel
-                            loc_lTaOk = .F.
-                        ENDIF
-                    ENDIF
-
-                    IF loc_lTaOk
-                        *-- Verifica forma de pagamento habilita boleto
-                        loc_cSQL = "SELECT TOP 1 Fpags, ImpBols, ImpNotas" + ;
-                                   " FROM SigOpFp WHERE Fpags = " + ;
-                                   EscaparSQL(cursor_4c_MvPar.Fpags)
-                        loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_OpFp")
-
-                        IF loc_nRet > 0 AND USED("cursor_4c_OpFp") AND ;
-                           RECCOUNT("cursor_4c_OpFp") > 0 AND cursor_4c_OpFp.ImpBols
-
-                            *-- Cria cursor TmpImprime e indice de ordenacao
-                            IF USED("TmpImprime")
-                                USE IN TmpImprime
-                            ENDIF
-                            CREATE CURSOR TmpImprime ( ;
-                                Linha    N(6,2), ;
-                                Coluna   N(6,2), ;
-                                Conteudo C(100), ;
-                                Style    C(3), ;
-                                fontname C(64), ;
-                                fontsize I, ;
-                                linesize N(6,2), ;
-                                nheight  N(6,2) ;
-                            )
-                            INDEX ON (Linha * 1000000000) + (Coluna * 100) TAG Ordem
-
-                            LOCAL loc_xVenc
-                            SELECT cursor_4c_OpFp
-                            IF NVL(cursor_4c_OpFp.ImpNotas, 0) = 1
-                                SELECT cursor_4c_MvPar
-                                loc_xVenc = DTOC(cursor_4c_MvPar.Vencs)
-                            ELSE
-                                SELECT cursor_4c_MvPar
-                                loc_xVenc = ALLTRIM(NVL(cursor_4c_MvPar.FPags, ""))
-                            ENDIF
-
-                            SELECT cursor_4c_MvNfi
-                            LOCAL loc_cNumDoc
-                            loc_cNumDoc = ALLTRIM(NVL(cursor_4c_MvNfi.NFis, "")) + "-" + ;
-                                          ALLTRIM(STR(NVL(cursor_4c_MvPar.Parcs, 0), 1))
-
-                            SELECT cursor_4c_Cli
-                            LOCAL loc_cEndCob, loc_cBaiCob, loc_cCidCob, loc_cEstCob, loc_cCepCob
-                            loc_cEndCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.EndCobs, ""))), ;
-                                              cursor_4c_Cli.EndCobs, cursor_4c_Cli.Endes)
-                            loc_cBaiCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.BaiCobs, ""))), ;
-                                              cursor_4c_Cli.BaiCobs, cursor_4c_Cli.Bairs)
-                            loc_cCidCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.CidCobs, ""))), ;
-                                              cursor_4c_Cli.CidCobs, cursor_4c_Cli.Cidas)
-                            loc_cEstCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.EstCobs, ""))), ;
-                                              cursor_4c_Cli.EstCobs, cursor_4c_Cli.Estas)
-                            loc_cCepCob = IIF(!EMPTY(ALLTRIM(NVL(cursor_4c_Cli.CepCobs, ""))), ;
-                                              cursor_4c_Cli.CepCobs, cursor_4c_Cli.Ceps)
-
-                            SELECT cursor_4c_MvPar
-                            SELECT Crdados
-                            ZAP
-                            SELECT cursor_4c_Config
-                            INSERT INTO Crdados VALUES ( ;
-                                cursor_4c_Config.cLocals, ;
-                                m.loc_xVenc, ;
-                                cursor_4c_MvPar.Datas, ;
-                                m.loc_cNumDoc, ;
-                                cursor_4c_MvPar.Valos, ;
-                                cursor_4c_Cli.Razaos, ;
-                                cursor_4c_Cli.Cpfs, ;
-                                m.loc_cEndCob, ;
-                                m.loc_cBaiCob, ;
-                                m.loc_cCidCob, ;
-                                m.loc_cEstCob, ;
-                                m.loc_cCepCob, ;
-                                THIS.obj_4c_GetTxtCds.Value ;
-                            )
-
-                            *-- Preenche TmpImprime com posicoes configuradas
-                            SELECT cursor_4c_Config
-                            THIS.GrDetalhe(cursor_4c_Config.nLnLocals,  cursor_4c_Config.nClLocals,  "Crdados.clocal",  "", 60, 1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnDtVencs, cursor_4c_Config.nClDtVencs, "Crdados.Vencs",   "", 9,  1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnDtDocs,  cursor_4c_Config.nClDtDocs,  "Dtoc(Crdados.Datdoc)", "", 9, 1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnNrDocs,  cursor_4c_Config.nClNrDocs,  "Crdados.numdoc",  "", 9,  1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnVlDocs,  cursor_4c_Config.nClVlDocs,  "Transform(CrDados.Valor,'@Z 999,999,999.99')", "", 15, 1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnRazClis, cursor_4c_Config.nClRazClis, "AllTrim(Crdados.Razaos)",  "", 50, 1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnCgcClis, cursor_4c_Config.nClCgcClis, "AllTrim(Crdados.Cpfs)",    "", 20, 1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnEndCobs, cursor_4c_Config.nClEndCobs, "AllTrim(Crdados.EndCobs)", "", 80, 1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnBaiCobs, cursor_4c_Config.nClBaiCobs, "AllTrim(Crdados.BaiCobs)", "", 20, 1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnCidCobs, cursor_4c_Config.nClCidCobs, "AllTrim(Crdados.CidCobs)", "", 20, 1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnEstCobs, cursor_4c_Config.nClEstCobs, "AllTrim(Crdados.EstCobs)", "", 2,  1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnCepCobs, cursor_4c_Config.nClCepCobs, "AllTrim(Crdados.CepCobs)", "", 9,  1)
-                            THIS.GrDetalhe(cursor_4c_Config.nLnTxtCds,  cursor_4c_Config.nClTxtCds,  "Crdados.texto",   "", 60, 6)
-
-                            *-- Chama rotina de impressao matricial SigPrIbl.prg
-                            DO SigPrIbl WITH "tmpimprime", ;
-                                ALLTRIM(cursor_4c_Config.cNomeImps), ;
-                                "to printer noconsole", ;
-                                0, loc_nTamFolha, 0, 0, "crdados", 17
-                        ENDIF
-                        IF USED("cursor_4c_OpFp")
-                            USE IN cursor_4c_OpFp
-                        ENDIF
-                    ENDIF
                 ENDSCAN
 
-                IF USED("cursor_4c_Cli")
-                    USE IN cursor_4c_Cli
-                ENDIF
-                IF USED("cursor_4c_MvNfi")
-                    USE IN cursor_4c_MvNfi
-                ENDIF
-                IF USED("cursor_4c_MvPar")
-                    USE IN cursor_4c_MvPar
-                ENDIF
-                IF USED("cursor_4c_MvCab")
-                    USE IN cursor_4c_MvCab
-                ENDIF
-            ENDSCAN
-
             *-- Reativa form pai e fecha
-            THIS.LockScreen = .F.
-            IF VARTYPE(THIS.this_xNform1) = "O" AND !ISNULL(THIS.this_xNform1)
-                THIS.this_xNform1.Enabled = .T.
+                THIS.LockScreen = .F.
+                IF VARTYPE(THIS.this_xNform1) = "O" AND !ISNULL(THIS.this_xNform1)
+                    THIS.this_xNform1.Enabled = .T.
+                ENDIF
+                THIS.Release()
             ENDIF
-            THIS.Release()
         CATCH TO loc_oErro
             THIS.LockScreen = .F.
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro ao Imprimir")
@@ -929,7 +936,8 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
     * impressora matricial via SigPrIbl.
     *--------------------------------------------------------------------------
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.obj_4c_CmdGImprimir.Buttons(1).Enabled
                 MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento v" + ;
@@ -937,9 +945,11 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
                 IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
                     THIS.txt_4c_FPags.SetFocus()
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.CmdImprimirClick()
+            IF loc_lProsseguir
+                THIS.CmdImprimirClick()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em Incluir")
         ENDTRY
@@ -952,18 +962,21 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
     * e Texto do Cedente. Se nenhum FPags esta selecionado, avisa o usuario.
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(THIS.this_cFPagsSel)
                 MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento antes de alterar.", "Aviso")
                 IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
                     THIS.txt_4c_FPags.SetFocus()
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.AtualizaBoleto(THIS.this_cFPagsSel)
-            IF PEMSTATUS(THIS, "txt_4c_Locals", 5) AND THIS.txt_4c_Locals.Enabled
-                THIS.txt_4c_Locals.SetFocus()
+            IF loc_lProsseguir
+                THIS.AtualizaBoleto(THIS.this_cFPagsSel)
+                IF PEMSTATUS(THIS, "txt_4c_Locals", 5) AND THIS.txt_4c_Locals.Enabled
+                    THIS.txt_4c_Locals.SetFocus()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em Alterar")
@@ -992,26 +1005,31 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
     * Imprimir. Nao afeta dados persistidos em SigCnFBl.
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(THIS.this_cFPagsSel)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !MsgConfirma("Deseja limpar a Condi" + CHR(231) + CHR(227) + "o de Pagamento selecionada?")
-                RETURN
+            IF loc_lProsseguir
+                IF !MsgConfirma("Deseja limpar a Condi" + CHR(231) + CHR(227) + "o de Pagamento selecionada?")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
-                THIS.txt_4c_FPags.Value = ""
-            ENDIF
-            IF PEMSTATUS(THIS, "txt_4c_Locals", 5)
-                THIS.txt_4c_Locals.Value = ""
-            ENDIF
-            IF PEMSTATUS(THIS, "obj_4c_GetTxtCds", 5)
-                THIS.obj_4c_GetTxtCds.Value = ""
-            ENDIF
-            THIS.AtualizaBoleto("")
-            IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
-                THIS.txt_4c_FPags.SetFocus()
+            IF loc_lProsseguir
+                IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
+                    THIS.txt_4c_FPags.Value = ""
+                ENDIF
+                IF PEMSTATUS(THIS, "txt_4c_Locals", 5)
+                    THIS.txt_4c_Locals.Value = ""
+                ENDIF
+                IF PEMSTATUS(THIS, "obj_4c_GetTxtCds", 5)
+                    THIS.obj_4c_GetTxtCds.Value = ""
+                ENDIF
+                THIS.AtualizaBoleto("")
+                IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
+                    THIS.txt_4c_FPags.SetFocus()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em Excluir")
@@ -1075,25 +1093,28 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
     * BtnSalvarClick - Salva alteracoes de Local e Texto Cedente em SigCnFBl
     *--------------------------------------------------------------------------
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_cSQL, loc_nRet, loc_oErro
+        LOCAL loc_cSQL, loc_nRet, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Config") OR RECCOUNT("cursor_4c_Config") = 0
                 MsgAviso("Selecione uma Condi" + CHR(231) + CHR(227) + "o de Pagamento antes de salvar.", "Aviso")
                 IF PEMSTATUS(THIS, "txt_4c_FPags", 5)
                     THIS.txt_4c_FPags.SetFocus()
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cSQL = "UPDATE SigCnFBl SET" + ;
-                       " cLocals = " + EscaparSQL(THIS.txt_4c_Locals.Value) + "," + ;
-                       " cTxtCds = " + EscaparSQL(THIS.obj_4c_GetTxtCds.Value) + ;
-                       " WHERE FPags = " + EscaparSQL(PADR(THIS.this_cFPagsSel, 12))
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-            IF loc_nRet > 0
-                MsgInfo("Dados salvos com sucesso.", "Salvo")
-            ELSE
-                MsgAviso("Falha ao salvar. Verifique a conex" + CHR(227) + "o.", "Aviso")
+            IF loc_lProsseguir
+                loc_cSQL = "UPDATE SigCnFBl SET" + ;
+                           " cLocals = " + EscaparSQL(THIS.txt_4c_Locals.Value) + "," + ;
+                           " cTxtCds = " + EscaparSQL(THIS.obj_4c_GetTxtCds.Value) + ;
+                           " WHERE FPags = " + EscaparSQL(PADR(THIS.this_cFPagsSel, 12))
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
+                IF loc_nRet > 0
+                    MsgInfo("Dados salvos com sucesso.", "Salvo")
+                ELSE
+                    MsgAviso("Falha ao salvar. Verifique a conex" + CHR(227) + "o.", "Aviso")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro ao Salvar")

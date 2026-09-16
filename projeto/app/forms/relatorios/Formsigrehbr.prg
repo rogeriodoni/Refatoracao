@@ -422,92 +422,97 @@ DEFINE CLASS Formsigrehbr AS FormBase
     *   Equivalente ao bloco 'processamento' do form legado SIGREHBR.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE FormParaRelatorio()
-        LOCAL loc_oPg, loc_oErro
+        LOCAL loc_oPg, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+            IF loc_lProsseguir
+                IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oPg = THIS.pgf_4c_Paginas.Page1
-            WITH THIS.this_oRelatorio
-                IF PEMSTATUS(loc_oPg, "txt_4c_DtInicial", 5)
-                    .this_dDtInicial = loc_oPg.txt_4c_DtInicial.Value
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DtFinal", 5)
-                    .this_dDtFinal = loc_oPg.txt_4c_DtFinal.Value
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdGrEstoque", 5)
-                    .this_cCdGrEstoque = ALLTRIM(loc_oPg.txt_4c_CdGrEstoque.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsGrEstoque", 5)
-                    .this_cDsGrEstoque = ALLTRIM(loc_oPg.txt_4c_DsGrEstoque.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdEstoque", 5)
-                    .this_cCdEstoque = ALLTRIM(loc_oPg.txt_4c_CdEstoque.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsEstoque", 5)
-                    .this_cDsEstoque = ALLTRIM(loc_oPg.txt_4c_DsEstoque.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_IFors", 5)
-                    .this_cIFors = ALLTRIM(loc_oPg.txt_4c_IFors.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DFors", 5)
-                    .this_cDFors = ALLTRIM(loc_oPg.txt_4c_DFors.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdEmpresa", 5)
-                    .this_cCdEmpresa = ALLTRIM(loc_oPg.txt_4c_CdEmpresa.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsEmpresa", 5)
-                    .this_cDsEmpresa = ALLTRIM(loc_oPg.txt_4c_DsEmpresa.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CGgps", 5)
-                    .this_cCGgps = ALLTRIM(loc_oPg.txt_4c_CGgps.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DGgps", 5)
-                    .this_cDGgps = ALLTRIM(loc_oPg.txt_4c_DGgps.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdGPro", 5)
-                    .this_cCdGPro = ALLTRIM(loc_oPg.txt_4c_CdGPro.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsGPro", 5)
-                    .this_cDsGPro = ALLTRIM(loc_oPg.txt_4c_DsGPro.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdSgrupo", 5)
-                    .this_cCdSgrupo = ALLTRIM(loc_oPg.txt_4c_CdSgrupo.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsSgrupo", 5)
-                    .this_cDsSgrupo = ALLTRIM(loc_oPg.txt_4c_DsSgrupo.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdCodigo", 5)
-                    .this_cCdCodigo = ALLTRIM(loc_oPg.txt_4c_CdCodigo.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsCodigo", 5)
-                    .this_cDsCodigo = ALLTRIM(loc_oPg.txt_4c_DsCodigo.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CBars", 5)
-                    .this_cCBars = ALLTRIM(loc_oPg.txt_4c_CBars.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_Reduzs", 5)
-                    .this_cReduzs = ALLTRIM(loc_oPg.txt_4c_Reduzs.Value)
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "chk_4c_Check1", 5)
-                    .this_nCheck1 = loc_oPg.chk_4c_Check1.Value
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "chk_4c_Check2", 5)
-                    .this_nCheck2 = loc_oPg.chk_4c_Check2.Value
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "chk_4c_Check3", 5)
-                    .this_nCheck3 = loc_oPg.chk_4c_Check3.Value
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "chk_4c_Check4", 5)
-                    .this_nCheck4 = loc_oPg.chk_4c_Check4.Value
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "chk_4c_Check5", 5)
-                    .this_nCheck5 = loc_oPg.chk_4c_Check5.Value
-                ENDIF
-            ENDWITH
+            IF loc_lProsseguir
+                loc_oPg = THIS.pgf_4c_Paginas.Page1
+                WITH THIS.this_oRelatorio
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DtInicial", 5)
+                        .this_dDtInicial = loc_oPg.txt_4c_DtInicial.Value
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DtFinal", 5)
+                        .this_dDtFinal = loc_oPg.txt_4c_DtFinal.Value
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdGrEstoque", 5)
+                        .this_cCdGrEstoque = ALLTRIM(loc_oPg.txt_4c_CdGrEstoque.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsGrEstoque", 5)
+                        .this_cDsGrEstoque = ALLTRIM(loc_oPg.txt_4c_DsGrEstoque.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdEstoque", 5)
+                        .this_cCdEstoque = ALLTRIM(loc_oPg.txt_4c_CdEstoque.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsEstoque", 5)
+                        .this_cDsEstoque = ALLTRIM(loc_oPg.txt_4c_DsEstoque.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_IFors", 5)
+                        .this_cIFors = ALLTRIM(loc_oPg.txt_4c_IFors.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DFors", 5)
+                        .this_cDFors = ALLTRIM(loc_oPg.txt_4c_DFors.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdEmpresa", 5)
+                        .this_cCdEmpresa = ALLTRIM(loc_oPg.txt_4c_CdEmpresa.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsEmpresa", 5)
+                        .this_cDsEmpresa = ALLTRIM(loc_oPg.txt_4c_DsEmpresa.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CGgps", 5)
+                        .this_cCGgps = ALLTRIM(loc_oPg.txt_4c_CGgps.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DGgps", 5)
+                        .this_cDGgps = ALLTRIM(loc_oPg.txt_4c_DGgps.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdGPro", 5)
+                        .this_cCdGPro = ALLTRIM(loc_oPg.txt_4c_CdGPro.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsGPro", 5)
+                        .this_cDsGPro = ALLTRIM(loc_oPg.txt_4c_DsGPro.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdSgrupo", 5)
+                        .this_cCdSgrupo = ALLTRIM(loc_oPg.txt_4c_CdSgrupo.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsSgrupo", 5)
+                        .this_cDsSgrupo = ALLTRIM(loc_oPg.txt_4c_DsSgrupo.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdCodigo", 5)
+                        .this_cCdCodigo = ALLTRIM(loc_oPg.txt_4c_CdCodigo.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsCodigo", 5)
+                        .this_cDsCodigo = ALLTRIM(loc_oPg.txt_4c_DsCodigo.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CBars", 5)
+                        .this_cCBars = ALLTRIM(loc_oPg.txt_4c_CBars.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Reduzs", 5)
+                        .this_cReduzs = ALLTRIM(loc_oPg.txt_4c_Reduzs.Value)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "chk_4c_Check1", 5)
+                        .this_nCheck1 = loc_oPg.chk_4c_Check1.Value
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "chk_4c_Check2", 5)
+                        .this_nCheck2 = loc_oPg.chk_4c_Check2.Value
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "chk_4c_Check3", 5)
+                        .this_nCheck3 = loc_oPg.chk_4c_Check3.Value
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "chk_4c_Check4", 5)
+                        .this_nCheck4 = loc_oPg.chk_4c_Check4.Value
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "chk_4c_Check5", 5)
+                        .this_nCheck5 = loc_oPg.chk_4c_Check5.Value
+                    ENDIF
+                ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -780,93 +785,98 @@ DEFINE CLASS Formsigrehbr AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg, loc_oErro
+        LOCAL loc_oPg, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+            IF loc_lProsseguir
+                IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oPg = THIS.pgf_4c_Paginas.Page1
-            WITH THIS.this_oRelatorio
-                IF PEMSTATUS(loc_oPg, "txt_4c_DtInicial", 5)
-                    loc_oPg.txt_4c_DtInicial.Value = .this_dDtInicial
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DtFinal", 5)
-                    loc_oPg.txt_4c_DtFinal.Value = .this_dDtFinal
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdGrEstoque", 5)
-                    loc_oPg.txt_4c_CdGrEstoque.Value = .this_cCdGrEstoque
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsGrEstoque", 5)
-                    loc_oPg.txt_4c_DsGrEstoque.Value = .this_cDsGrEstoque
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdEstoque", 5)
-                    loc_oPg.txt_4c_CdEstoque.Value = .this_cCdEstoque
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsEstoque", 5)
-                    loc_oPg.txt_4c_DsEstoque.Value = .this_cDsEstoque
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_IFors", 5)
-                    loc_oPg.txt_4c_IFors.Value = .this_cIFors
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DFors", 5)
-                    loc_oPg.txt_4c_DFors.Value = .this_cDFors
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdEmpresa", 5)
-                    loc_oPg.txt_4c_CdEmpresa.Value = .this_cCdEmpresa
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsEmpresa", 5)
-                    loc_oPg.txt_4c_DsEmpresa.Value = .this_cDsEmpresa
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CGgps", 5)
-                    loc_oPg.txt_4c_CGgps.Value = .this_cCGgps
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DGgps", 5)
-                    loc_oPg.txt_4c_DGgps.Value = .this_cDGgps
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdGPro", 5)
-                    loc_oPg.txt_4c_CdGPro.Value = .this_cCdGPro
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsGPro", 5)
-                    loc_oPg.txt_4c_DsGPro.Value = .this_cDsGPro
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdSgrupo", 5)
-                    loc_oPg.txt_4c_CdSgrupo.Value = .this_cCdSgrupo
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsSgrupo", 5)
-                    loc_oPg.txt_4c_DsSgrupo.Value = .this_cDsSgrupo
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CdCodigo", 5)
-                    loc_oPg.txt_4c_CdCodigo.Value = .this_cCdCodigo
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_DsCodigo", 5)
-                    loc_oPg.txt_4c_DsCodigo.Value = .this_cDsCodigo
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_CBars", 5)
-                    loc_oPg.txt_4c_CBars.Value = .this_cCBars
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_Reduzs", 5)
-                    loc_oPg.txt_4c_Reduzs.Value = .this_cReduzs
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "chk_4c_Check1", 5)
-                    loc_oPg.chk_4c_Check1.Value = .this_nCheck1
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "chk_4c_Check2", 5)
-                    loc_oPg.chk_4c_Check2.Value = .this_nCheck2
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "chk_4c_Check3", 5)
-                    loc_oPg.chk_4c_Check3.Value = .this_nCheck3
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "chk_4c_Check4", 5)
-                    loc_oPg.chk_4c_Check4.Value = .this_nCheck4
-                ENDIF
-                IF PEMSTATUS(loc_oPg, "chk_4c_Check5", 5)
-                    loc_oPg.chk_4c_Check5.Value = .this_nCheck5
-                ENDIF
-            ENDWITH
-            THIS.AtualizarEstadoControles()
+            IF loc_lProsseguir
+                loc_oPg = THIS.pgf_4c_Paginas.Page1
+                WITH THIS.this_oRelatorio
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DtInicial", 5)
+                        loc_oPg.txt_4c_DtInicial.Value = .this_dDtInicial
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DtFinal", 5)
+                        loc_oPg.txt_4c_DtFinal.Value = .this_dDtFinal
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdGrEstoque", 5)
+                        loc_oPg.txt_4c_CdGrEstoque.Value = .this_cCdGrEstoque
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsGrEstoque", 5)
+                        loc_oPg.txt_4c_DsGrEstoque.Value = .this_cDsGrEstoque
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdEstoque", 5)
+                        loc_oPg.txt_4c_CdEstoque.Value = .this_cCdEstoque
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsEstoque", 5)
+                        loc_oPg.txt_4c_DsEstoque.Value = .this_cDsEstoque
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_IFors", 5)
+                        loc_oPg.txt_4c_IFors.Value = .this_cIFors
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DFors", 5)
+                        loc_oPg.txt_4c_DFors.Value = .this_cDFors
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdEmpresa", 5)
+                        loc_oPg.txt_4c_CdEmpresa.Value = .this_cCdEmpresa
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsEmpresa", 5)
+                        loc_oPg.txt_4c_DsEmpresa.Value = .this_cDsEmpresa
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CGgps", 5)
+                        loc_oPg.txt_4c_CGgps.Value = .this_cCGgps
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DGgps", 5)
+                        loc_oPg.txt_4c_DGgps.Value = .this_cDGgps
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdGPro", 5)
+                        loc_oPg.txt_4c_CdGPro.Value = .this_cCdGPro
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsGPro", 5)
+                        loc_oPg.txt_4c_DsGPro.Value = .this_cDsGPro
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdSgrupo", 5)
+                        loc_oPg.txt_4c_CdSgrupo.Value = .this_cCdSgrupo
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsSgrupo", 5)
+                        loc_oPg.txt_4c_DsSgrupo.Value = .this_cDsSgrupo
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CdCodigo", 5)
+                        loc_oPg.txt_4c_CdCodigo.Value = .this_cCdCodigo
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DsCodigo", 5)
+                        loc_oPg.txt_4c_DsCodigo.Value = .this_cDsCodigo
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_CBars", 5)
+                        loc_oPg.txt_4c_CBars.Value = .this_cCBars
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Reduzs", 5)
+                        loc_oPg.txt_4c_Reduzs.Value = .this_cReduzs
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "chk_4c_Check1", 5)
+                        loc_oPg.chk_4c_Check1.Value = .this_nCheck1
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "chk_4c_Check2", 5)
+                        loc_oPg.chk_4c_Check2.Value = .this_nCheck2
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "chk_4c_Check3", 5)
+                        loc_oPg.chk_4c_Check3.Value = .this_nCheck3
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "chk_4c_Check4", 5)
+                        loc_oPg.chk_4c_Check4.Value = .this_nCheck4
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "chk_4c_Check5", 5)
+                        loc_oPg.chk_4c_Check5.Value = .this_nCheck5
+                    ENDIF
+                ENDWITH
+                THIS.AtualizarEstadoControles()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

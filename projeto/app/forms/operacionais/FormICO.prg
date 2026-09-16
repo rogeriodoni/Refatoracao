@@ -388,67 +388,72 @@ DEFINE CLASS FormICO AS FormBase
     * BtnIncluirClick - Inclui novo icone via seletor de arquivo (cmdInserir.Click do legado)
     *--------------------------------------------------------------------------
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_cArqIcone, loc_oErro
+        LOCAL loc_cArqIcone, loc_oErro, loc_lProsseguir
         loc_cArqIcone = ""
+        loc_lProsseguir = .T.
         TRY
             loc_cArqIcone = GETPICT("ico;gif;jpg;bmp;pic", "", "OK")
 
             IF EMPTY(loc_cArqIcone)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !FILE(loc_cArqIcone)
-                MsgAviso("Nome do arquivo inv" + CHR(225) + "lido.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                IF !FILE(loc_cArqIcone)
+                    MsgAviso("Nome do arquivo inv" + CHR(225) + "lido.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            THIS.LockScreen = .T.
+            IF loc_lProsseguir
+                THIS.LockScreen = .T.
 
-            LOCAL loc_cDirTmp, loc_cArqTemp, loc_cNomeArq
-            loc_cDirTmp  = ADDBS(SYS(2023))
-            loc_cArqTemp = loc_cDirTmp + "ArqIcone" + SYS(2015) + ".ico"
-            loc_cNomeArq = LOWER(JUSTFNAME(loc_cArqIcone))
+                LOCAL loc_cDirTmp, loc_cArqTemp, loc_cNomeArq
+                loc_cDirTmp  = ADDBS(SYS(2023))
+                loc_cArqTemp = loc_cDirTmp + "ArqIcone" + SYS(2015) + ".ico"
+                loc_cNomeArq = LOWER(JUSTFNAME(loc_cArqIcone))
 
-            LOCAL loc_lExiste
-            loc_lExiste = .F.
-            IF USED("crTmpcdico")
+                LOCAL loc_lExiste
+                loc_lExiste = .F.
+                IF USED("crTmpcdico")
+                    SELECT crTmpcdico
+                    LOCATE FOR ALLTRIM(carqicones) == loc_cNomeArq
+                    loc_lExiste = FOUND()
+                ENDIF
+
+                IF !loc_lExiste
+                    SELECT crTmpcdico
+                    APPEND BLANK
+                ELSE
+                    SELECT crTmpcdico
+                ENDIF
+
+                REPLACE carqicones WITH loc_cNomeArq
+                REPLACE marqicones WITH FILETOSTR(loc_cArqIcone)
+                REPLACE ctmpicones WITH loc_cArqTemp
+
+                LOCAL loc_nBytes
+                loc_nBytes = STRTOFILE(crTmpcdico.marqicones, loc_cArqTemp)
+
+                THIS.this_oBusinessObject.this_cCarqIcones = loc_cNomeArq
+                THIS.this_oBusinessObject.this_cMarqIcones = crTmpcdico.marqicones
+
+                LOCAL loc_lSucesso
+                IF !loc_lExiste
+                    loc_lSucesso = THIS.this_oBusinessObject.Inserir()
+                ELSE
+                    loc_lSucesso = THIS.this_oBusinessObject.Atualizar()
+                ENDIF
+
+                THIS.grd_4c_Dados.Refresh()
                 SELECT crTmpcdico
-                LOCATE FOR ALLTRIM(carqicones) == loc_cNomeArq
-                loc_lExiste = FOUND()
+                GO TOP
+                LOCATE FOR carqicones == loc_cNomeArq
+                THIS.AtualizarPreview()
+                THIS.Refresh()
+                THIS.LockScreen = .F.
+                THIS.grd_4c_Dados.SetFocus()
             ENDIF
-
-            IF !loc_lExiste
-                SELECT crTmpcdico
-                APPEND BLANK
-            ELSE
-                SELECT crTmpcdico
-            ENDIF
-
-            REPLACE carqicones WITH loc_cNomeArq
-            REPLACE marqicones WITH FILETOSTR(loc_cArqIcone)
-            REPLACE ctmpicones WITH loc_cArqTemp
-
-            LOCAL loc_nBytes
-            loc_nBytes = STRTOFILE(crTmpcdico.marqicones, loc_cArqTemp)
-
-            THIS.this_oBusinessObject.this_cCarqIcones = loc_cNomeArq
-            THIS.this_oBusinessObject.this_cMarqIcones = crTmpcdico.marqicones
-
-            LOCAL loc_lSucesso
-            IF !loc_lExiste
-                loc_lSucesso = THIS.this_oBusinessObject.Inserir()
-            ELSE
-                loc_lSucesso = THIS.this_oBusinessObject.Atualizar()
-            ENDIF
-
-            THIS.grd_4c_Dados.Refresh()
-            SELECT crTmpcdico
-            GO TOP
-            LOCATE FOR carqicones == loc_cNomeArq
-            THIS.AtualizarPreview()
-            THIS.Refresh()
-            THIS.LockScreen = .F.
-            THIS.grd_4c_Dados.SetFocus()
         CATCH TO loc_oErro
             THIS.LockScreen = .F.
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -462,50 +467,59 @@ DEFINE CLASS FormICO AS FormBase
     * BtnExcluirClick - Exclui icone selecionado (cmdExcluir.Click do legado)
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crTmpcdico") OR RECCOUNT("crTmpcdico") = 0
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT crTmpcdico
-            LOCAL loc_cRegistro
-            loc_cRegistro = ALLTRIM(crTmpcdico.carqicones)
-
-            IF EMPTY(loc_cRegistro)
-                RETURN
-            ENDIF
-
-            IF !MsgConfirma("Tem certeza que deseja Excluir?", "Excluir")
-                RETURN
-            ENDIF
-
-            THIS.LockScreen = .T.
-
-            IF THIS.this_oBusinessObject.VerificarUsoIcone(loc_cRegistro)
-                MsgAviso("Existem " + CHR(237) + "tens cadastrados que est" + CHR(227) + ;
-                    "o utilizando esse Registro!", ;
-                    "Exclus" + CHR(227) + "o n" + CHR(227) + "o permitida")
-                THIS.LockScreen = .F.
-                RETURN
-            ENDIF
-
-            THIS.this_oBusinessObject.this_cCarqIcones = loc_cRegistro
-            IF THIS.this_oBusinessObject.Excluir()
-                DELETE FROM crTmpcdico WHERE ALLTRIM(carqicones) = loc_cRegistro
-                THIS.grd_4c_Dados.Refresh()
+            IF loc_lProsseguir
                 SELECT crTmpcdico
-                GO TOP
-                LOCATE FOR carqicones > loc_cRegistro
-                IF EOF()
-                    GO BOTTOM
+                LOCAL loc_cRegistro
+                loc_cRegistro = ALLTRIM(crTmpcdico.carqicones)
+
+                IF EMPTY(loc_cRegistro)
+                    loc_lProsseguir = .F.
                 ENDIF
-                THIS.AtualizarPreview()
-                THIS.Refresh()
-                THIS.grd_4c_Dados.SetFocus()
             ENDIF
 
-            THIS.LockScreen = .F.
+            IF loc_lProsseguir
+                IF !MsgConfirma("Tem certeza que deseja Excluir?", "Excluir")
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                THIS.LockScreen = .T.
+
+                IF THIS.this_oBusinessObject.VerificarUsoIcone(loc_cRegistro)
+                    MsgAviso("Existem " + CHR(237) + "tens cadastrados que est" + CHR(227) + ;
+                        "o utilizando esse Registro!", ;
+                        "Exclus" + CHR(227) + "o n" + CHR(227) + "o permitida")
+                    THIS.LockScreen = .F.
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.this_cCarqIcones = loc_cRegistro
+                IF THIS.this_oBusinessObject.Excluir()
+                    DELETE FROM crTmpcdico WHERE ALLTRIM(carqicones) = loc_cRegistro
+                    THIS.grd_4c_Dados.Refresh()
+                    SELECT crTmpcdico
+                    GO TOP
+                    LOCATE FOR carqicones > loc_cRegistro
+                    IF EOF()
+                        GO BOTTOM
+                    ENDIF
+                    THIS.AtualizarPreview()
+                    THIS.Refresh()
+                    THIS.grd_4c_Dados.SetFocus()
+                ENDIF
+
+                THIS.LockScreen = .F.
+            ENDIF
         CATCH TO loc_oErro
             THIS.LockScreen = .F.
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -529,66 +543,77 @@ DEFINE CLASS FormICO AS FormBase
     * fluxo de Incluir quando SEEK() encontra o registro (chama Atualizar()).
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_cArqIcone, loc_oErro
+        LOCAL loc_cArqIcone, loc_oErro, loc_lProsseguir
         loc_cArqIcone = ""
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crTmpcdico") OR RECCOUNT("crTmpcdico") = 0
                 MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " " + CHR(237) + ;
                     "cones cadastrados para alterar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT crTmpcdico
-            LOCAL loc_cNomeAtual
-            loc_cNomeAtual = ALLTRIM(crTmpcdico.carqicones)
+            IF loc_lProsseguir
+                SELECT crTmpcdico
+                LOCAL loc_cNomeAtual
+                loc_cNomeAtual = ALLTRIM(crTmpcdico.carqicones)
 
-            IF EMPTY(loc_cNomeAtual)
-                MsgAviso("Selecione um " + CHR(237) + "cone na lista para alterar.", "Aviso")
-                RETURN
+                IF EMPTY(loc_cNomeAtual)
+                    MsgAviso("Selecione um " + CHR(237) + "cone na lista para alterar.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_cArqIcone = GETPICT("ico;gif;jpg;bmp;pic", "", "OK")
+            IF loc_lProsseguir
+                loc_cArqIcone = GETPICT("ico;gif;jpg;bmp;pic", "", "OK")
 
-            IF EMPTY(loc_cArqIcone)
-                RETURN
+                IF EMPTY(loc_cArqIcone)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF !FILE(loc_cArqIcone)
-                MsgAviso("Nome do arquivo inv" + CHR(225) + "lido.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                IF !FILE(loc_cArqIcone)
+                    MsgAviso("Nome do arquivo inv" + CHR(225) + "lido.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF !MsgConfirma("Substituir o conte" + CHR(250) + "do do " + CHR(237) + ;
-                    "cone selecionado?", "Alterar")
-                RETURN
+            IF loc_lProsseguir
+                IF !MsgConfirma("Substituir o conte" + CHR(250) + "do do " + CHR(237) + ;
+                        "cone selecionado?", "Alterar")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            THIS.LockScreen = .T.
+            IF loc_lProsseguir
+                THIS.LockScreen = .T.
 
-            LOCAL loc_cDirTmp, loc_cArqTemp, loc_mConteudo
-            loc_cDirTmp   = ADDBS(SYS(2023))
-            loc_cArqTemp  = loc_cDirTmp + "ArqIcone" + SYS(2015) + ".ico"
-            loc_mConteudo = FILETOSTR(loc_cArqIcone)
+                LOCAL loc_cDirTmp, loc_cArqTemp, loc_mConteudo
+                loc_cDirTmp   = ADDBS(SYS(2023))
+                loc_cArqTemp  = loc_cDirTmp + "ArqIcone" + SYS(2015) + ".ico"
+                loc_mConteudo = FILETOSTR(loc_cArqIcone)
 
-            SELECT crTmpcdico
-            REPLACE marqicones WITH loc_mConteudo
-            REPLACE ctmpicones WITH loc_cArqTemp
+                SELECT crTmpcdico
+                REPLACE marqicones WITH loc_mConteudo
+                REPLACE ctmpicones WITH loc_cArqTemp
 
-            STRTOFILE(loc_mConteudo, loc_cArqTemp)
+                STRTOFILE(loc_mConteudo, loc_cArqTemp)
 
-            THIS.this_oBusinessObject.this_cCarqIcones = loc_cNomeAtual
-            THIS.this_oBusinessObject.this_cMarqIcones = loc_mConteudo
+                THIS.this_oBusinessObject.this_cCarqIcones = loc_cNomeAtual
+                THIS.this_oBusinessObject.this_cMarqIcones = loc_mConteudo
 
-            LOCAL loc_lSucesso
-            loc_lSucesso = THIS.this_oBusinessObject.Atualizar()
+                LOCAL loc_lSucesso
+                loc_lSucesso = THIS.this_oBusinessObject.Atualizar()
 
-            THIS.grd_4c_Dados.Refresh()
-            SELECT crTmpcdico
-            LOCATE FOR ALLTRIM(carqicones) == loc_cNomeAtual
-            THIS.AtualizarPreview()
-            THIS.Refresh()
-            THIS.LockScreen = .F.
-            THIS.grd_4c_Dados.SetFocus()
+                THIS.grd_4c_Dados.Refresh()
+                SELECT crTmpcdico
+                LOCATE FOR ALLTRIM(carqicones) == loc_cNomeAtual
+                THIS.AtualizarPreview()
+                THIS.Refresh()
+                THIS.LockScreen = .F.
+                THIS.grd_4c_Dados.SetFocus()
+            ENDIF
         CATCH TO loc_oErro
             THIS.LockScreen = .F.
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -605,39 +630,44 @@ DEFINE CLASS FormICO AS FormBase
     * quando invocado explicitamente pelo usuario.
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crTmpcdico") OR RECCOUNT("crTmpcdico") = 0
                 MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " " + CHR(237) + ;
                     "cones cadastrados para visualizar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT crTmpcdico
-            LOCAL loc_cNome
-            loc_cNome = ALLTRIM(crTmpcdico.carqicones)
+            IF loc_lProsseguir
+                SELECT crTmpcdico
+                LOCAL loc_cNome
+                loc_cNome = ALLTRIM(crTmpcdico.carqicones)
 
-            IF EMPTY(loc_cNome)
-                MsgAviso("Selecione um " + CHR(237) + "cone na lista para visualizar.", "Aviso")
-                RETURN
-            ENDIF
-
-            *-- Se o arquivo temporario foi removido, regenerar a partir do MEMO
-            LOCAL loc_cArqTemp
-            loc_cArqTemp = ALLTRIM(crTmpcdico.ctmpicones)
-            IF EMPTY(loc_cArqTemp) OR !FILE(loc_cArqTemp)
-                loc_cArqTemp = ADDBS(SYS(2023)) + "ArqIcone" + SYS(2015) + ".ico"
-                IF !EMPTY(crTmpcdico.marqicones)
-                    STRTOFILE(crTmpcdico.marqicones, loc_cArqTemp)
-                    REPLACE ctmpicones WITH loc_cArqTemp
-                ELSE
-                    loc_cArqTemp = ""
+                IF EMPTY(loc_cNome)
+                    MsgAviso("Selecione um " + CHR(237) + "cone na lista para visualizar.", "Aviso")
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
-            THIS.AtualizarPreview()
-            THIS.Refresh()
-            THIS.grd_4c_Dados.SetFocus()
+            *-- Se o arquivo temporario foi removido, regenerar a partir do MEMO
+            IF loc_lProsseguir
+                LOCAL loc_cArqTemp
+                loc_cArqTemp = ALLTRIM(crTmpcdico.ctmpicones)
+                IF EMPTY(loc_cArqTemp) OR !FILE(loc_cArqTemp)
+                    loc_cArqTemp = ADDBS(SYS(2023)) + "ArqIcone" + SYS(2015) + ".ico"
+                    IF !EMPTY(crTmpcdico.marqicones)
+                        STRTOFILE(crTmpcdico.marqicones, loc_cArqTemp)
+                        REPLACE ctmpicones WITH loc_cArqTemp
+                    ELSE
+                        loc_cArqTemp = ""
+                    ENDIF
+                ENDIF
+
+                THIS.AtualizarPreview()
+                THIS.Refresh()
+                THIS.grd_4c_Dados.SetFocus()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;

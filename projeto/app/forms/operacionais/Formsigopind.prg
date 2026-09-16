@@ -2883,308 +2883,320 @@ DEFINE CLASS Formsigopind AS FormBase
     * Cmb_Concilia. Equivale ao cmd_consulta.Click do legado (234 linhas).
     *==========================================================================
     PROCEDURE BtnConsultarSaldoClick()
+        LOCAL loc_oErro
+
+        *-- Corpo extraido para ExecutarConsultaSaldo(): os RETURN de guarda
+        *-- dele abortam o metodo como sempre fizeram, e la estao FORA do TRY.
+        *-- RETURN dentro de TRY estoura em runtime (regra #1 / Erro159).
+        TRY
+            THIS.ExecutarConsultaSaldo()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro em BtnConsultarSaldoClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExecutarConsultaSaldo - corpo da consulta de saldo, extraido de
+    * BtnConsultarSaldoClick para tirar os RETURN de dentro do TRY (regra #1).
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExecutarConsultaSaldo()
         LOCAL loc_cCliente, loc_cGrupo, loc_cMoeda, loc_cGCM
         LOCAL loc_dDataI, loc_dDataF, loc_cDataI, loc_cDataF
         LOCAL loc_cSQL, loc_nRet, loc_lMatrizes, loc_nSal
         LOCAL loc_oPagHist, loc_oGrd, loc_oErro
+        IF !USED("cursor_4c_Saldos") OR RECCOUNT("cursor_4c_Saldos") = 0
+            MsgAviso("Nenhum Registro Selecionado. Verifique Per" + CHR(237) + ;
+                     "odo Informado...", "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
 
-        TRY
-            IF !USED("cursor_4c_Saldos") OR RECCOUNT("cursor_4c_Saldos") = 0
-                MsgAviso("Nenhum Registro Selecionado. Verifique Per" + CHR(237) + ;
-                         "odo Informado...", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+        SELECT cursor_4c_Saldos
+        IF EOF()
+            GO TOP
+        ENDIF
+
+        loc_cCliente = TRIM(cursor_4c_Saldos.Contas)
+        loc_cGrupo   = TRIM(cursor_4c_Saldos.Grupos)
+        loc_cMoeda   = TRIM(cursor_4c_Saldos.Moedas)
+
+        IF EMPTY(loc_cCliente)
+            MsgAviso("Nenhuma Conta/Saldo foi escolhida para consulta!", ;
+                     "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+
+        THIS.this_cCliente   = loc_cCliente
+        THIS.this_cGrupoOper = loc_cGrupo
+        THIS.this_cOperacao  = "CONSULTA"
+
+        *-- Copiar filtros para Page2
+        loc_oPagHist = THIS.pgf_4c_1.Page2
+        loc_oPagHist.txt_4c_GrupoHist.Value = THIS.pgf_4c_1.Page1.txt_4c_Grupo.Value
+        loc_oPagHist.txt_4c_Moeda.Value     = loc_cMoeda
+        loc_oPagHist.txt_4c_Hconta.Value    = loc_cCliente
+        loc_oPagHist.txt_4c_Hdconta.Value   = TRIM(cursor_4c_Saldos.Rclis)
+        loc_oPagHist.Refresh()
+
+        *-- Preparar datas do periodo (inicio e fim)
+        loc_dDataI = THIS.pgf_4c_1.Page1.txt_4c_Dt_inicial.Value
+        loc_dDataF = THIS.pgf_4c_1.Page1.txt_4c_Dt_final.Value
+        IF EMPTY(loc_dDataI) OR loc_dDataI < CTOD("01/01/1900")
+            loc_dDataI = CTOD("01/01/1900")
+        ENDIF
+        IF EMPTY(loc_dDataF) OR loc_dDataF < CTOD("01/01/1900")
+            loc_dDataF = CTOD("01/01/1900")
+        ENDIF
+
+        *-- Formatar datas para SQL (datetime range)
+        loc_cDataI = "'" + TRANSFORM(DTOS(loc_dDataI), "@R 9999-99-99") + " 00:00:00'"
+        loc_cDataF = "'" + TRANSFORM(DTOS(loc_dDataF), "@R 9999-99-99") + " 23:59:59'"
+
+        *-- Limpar cursor anterior se existir
+        IF USED("CrSigMvCcr")
+            IF PEMSTATUS(THIS.pgf_4c_1.Page2, "grd_4c_Lancamento", 5)
+                THIS.pgf_4c_1.Page2.grd_4c_Lancamento.RecordSource = ""
             ENDIF
+            USE IN CrSigMvCcr
+        ENDIF
 
-            SELECT cursor_4c_Saldos
-            IF EOF()
-                GO TOP
-            ENDIF
+        *-- Criar cursor de matrizes (grupo/conta/moeda a processar)
+        SET NULL ON
+        CREATE CURSOR cursor_4c_Matrizes (Grupos C(10), Contas C(10), Moedas C(3))
+        SET NULL OFF
+        INSERT INTO cursor_4c_Matrizes (Grupos, Contas, Moedas) ;
+            VALUES (loc_cGrupo, loc_cCliente, loc_cMoeda)
 
-            loc_cCliente = TRIM(cursor_4c_Saldos.Contas)
-            loc_cGrupo   = TRIM(cursor_4c_Saldos.Grupos)
-            loc_cMoeda   = TRIM(cursor_4c_Saldos.Moedas)
+        *-- Verificar se a conta pertence a grupo de cobranca (Matriz/Filial)
+        loc_lMatrizes = .F.
+        IF TRIM(cursor_4c_Saldos.Matriz) # " " AND !EMPTY(cursor_4c_Saldos.Matriz)
+            loc_lMatrizes = MsgConfirma( ;
+                "Esta Conta Pertence a Um Grupo de Cobran" + CHR(231) + "a." + CHR(13) + ;
+                "Deseja Processar Todas Contas do Grupo?", ;
+                "Empresa " + IIF(cursor_4c_Saldos.Matriz = "M", "Matriz", "Filial"))
+        ENDIF
+        THIS.this_lMatrizes = loc_lMatrizes
 
-            IF EMPTY(loc_cCliente)
-                MsgAviso("Nenhuma Conta/Saldo foi escolhida para consulta!", ;
-                         "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
-            ENDIF
-
-            THIS.this_cCliente   = loc_cCliente
-            THIS.this_cGrupoOper = loc_cGrupo
-            THIS.this_cOperacao  = "CONSULTA"
-
-            *-- Copiar filtros para Page2
-            loc_oPagHist = THIS.pgf_4c_1.Page2
-            loc_oPagHist.txt_4c_GrupoHist.Value = THIS.pgf_4c_1.Page1.txt_4c_Grupo.Value
-            loc_oPagHist.txt_4c_Moeda.Value     = loc_cMoeda
-            loc_oPagHist.txt_4c_Hconta.Value    = loc_cCliente
-            loc_oPagHist.txt_4c_Hdconta.Value   = TRIM(cursor_4c_Saldos.Rclis)
-            loc_oPagHist.Refresh()
-
-            *-- Preparar datas do periodo (inicio e fim)
-            loc_dDataI = THIS.pgf_4c_1.Page1.txt_4c_Dt_inicial.Value
-            loc_dDataF = THIS.pgf_4c_1.Page1.txt_4c_Dt_final.Value
-            IF EMPTY(loc_dDataI) OR loc_dDataI < CTOD("01/01/1900")
-                loc_dDataI = CTOD("01/01/1900")
-            ENDIF
-            IF EMPTY(loc_dDataF) OR loc_dDataF < CTOD("01/01/1900")
-                loc_dDataF = CTOD("01/01/1900")
-            ENDIF
-
-            *-- Formatar datas para SQL (datetime range)
-            loc_cDataI = "'" + TRANSFORM(DTOS(loc_dDataI), "@R 9999-99-99") + " 00:00:00'"
-            loc_cDataF = "'" + TRANSFORM(DTOS(loc_dDataF), "@R 9999-99-99") + " 23:59:59'"
-
-            *-- Limpar cursor anterior se existir
-            IF USED("CrSigMvCcr")
-                IF PEMSTATUS(THIS.pgf_4c_1.Page2, "grd_4c_Lancamento", 5)
-                    THIS.pgf_4c_1.Page2.grd_4c_Lancamento.RecordSource = ""
-                ENDIF
-                USE IN CrSigMvCcr
-            ENDIF
-
-            *-- Criar cursor de matrizes (grupo/conta/moeda a processar)
-            SET NULL ON
-            CREATE CURSOR cursor_4c_Matrizes (Grupos C(10), Contas C(10), Moedas C(3))
-            SET NULL OFF
-            INSERT INTO cursor_4c_Matrizes (Grupos, Contas, Moedas) ;
-                VALUES (loc_cGrupo, loc_cCliente, loc_cMoeda)
-
-            *-- Verificar se a conta pertence a grupo de cobranca (Matriz/Filial)
-            loc_lMatrizes = .F.
-            IF TRIM(cursor_4c_Saldos.Matriz) # " " AND !EMPTY(cursor_4c_Saldos.Matriz)
-                loc_lMatrizes = MsgConfirma( ;
-                    "Esta Conta Pertence a Um Grupo de Cobran" + CHR(231) + "a." + CHR(13) + ;
-                    "Deseja Processar Todas Contas do Grupo?", ;
-                    "Empresa " + IIF(cursor_4c_Saldos.Matriz = "M", "Matriz", "Filial"))
-            ENDIF
-            THIS.this_lMatrizes = loc_lMatrizes
-
-            IF loc_lMatrizes
-                IF cursor_4c_Saldos.Matriz = "M"
-                    loc_cSQL = "SELECT IClis, Grupos FROM SigCdCli " + ;
-                               "WHERE ContaMats = " + EscaparSQL(loc_cCliente) + ;
-                               " AND IClis <> " + EscaparSQL(loc_cCliente)
-                ELSE
-                    loc_cSQL = "SELECT IClis, Grupos FROM SigCdCli " + ;
-                               "WHERE ContaMats = " + EscaparSQL(TRIM(cursor_4c_Saldos.ContaMats)) + ;
-                               " AND IClis <> " + EscaparSQL(loc_cCliente)
-                ENDIF
-
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMat") < 1
-                    MsgErro("Favor Reinicializar o Processo!", "Falha na Conex" + CHR(227) + "o (TmpMat)")
-                    RETURN
-                ENDIF
-                SELECT cursor_4c_TmpMat
-                SCAN
-                    INSERT INTO cursor_4c_Matrizes (Grupos, Contas, Moedas) ;
-                        VALUES (cursor_4c_TmpMat.Grupos, cursor_4c_TmpMat.IClis, loc_cMoeda)
-                ENDSCAN
-                IF USED("cursor_4c_TmpMat")
-                    USE IN cursor_4c_TmpMat
-                ENDIF
-            ENDIF
-
-            *-- Criar cursor base vazio com estrutura de SigMvCcr + campos extras
-            loc_cSQL = "SELECT ' ' AS Tipo, a.Saldos AS SaldosP, a.* " + ;
-                       "FROM SigMvCcr a " + ;
-                       "WHERE 0 = 1"
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMccr") < 1
-                MsgErro("Favor Reinicializar o Processo!", ;
-                        "Falha na Conex" + CHR(227) + "o (TmpMccr)")
-                RETURN
-            ENDIF
-
-            *-- Para cada conta/grupo/moeda, buscar lancamentos de SigMvCcr e SigMvCpv
-            SELECT cursor_4c_Matrizes
-            SCAN
-                loc_cGCM = cursor_4c_Matrizes.Grupos + ;
-                           cursor_4c_Matrizes.Contas + ;
-                           cursor_4c_Matrizes.Moedas
-
-                *-- Lancamentos realizados (SigMvCcr)
-                loc_cSQL = "SELECT 'R' AS Tipo, a.Saldos AS SaldosP, a.* " + ;
-                           "FROM SigMvCcr a " + ;
-                           "WHERE a.GruConMoes = " + EscaparSQL(loc_cGCM) + ;
-                           " AND a.Datas BETWEEN " + loc_cDataI + " AND " + loc_cDataF
-
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMcc1") < 1
-                    MsgErro("Favor Reinicializar o Processo!", ;
-                            "Falha na Conex" + CHR(227) + "o (TmpMcc1)")
-                    RETURN
-                ENDIF
-
-                *-- Previsoes (SigMvCpv)
-                loc_cSQL = "SELECT 'P' AS Tipo, b.Saldos AS SaldosP, b.* " + ;
-                           "FROM SigMvCpv b " + ;
-                           "WHERE b.GruConMoes = " + EscaparSQL(loc_cGCM) + ;
-                           " AND b.Datas BETWEEN " + loc_cDataI + " AND " + loc_cDataF
-
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMcpv") < 1
-                    MsgErro("Favor Reinicializar o Processo!", ;
-                            "Falha na Conex" + CHR(227) + "o (TmpMcpv)")
-                    RETURN
-                ENDIF
-
-                *-- Inserir lancamentos realizados no cursor base
-                SELECT cursor_4c_TmpMcc1
-                SCAN
-                    SCATTER MEMVAR MEMO
-                    INSERT INTO cursor_4c_TmpMccr FROM MEMVAR
-                ENDSCAN
-
-                *-- Inserir previsoes no cursor base
-                SELECT cursor_4c_TmpMcpv
-                SCAN
-                    SCATTER MEMVAR MEMO
-                    INSERT INTO cursor_4c_TmpMccr FROM MEMVAR
-                ENDSCAN
-            ENDSCAN
-
-            *-- Limpar cursores temporarios
-            IF USED("cursor_4c_TmpMcc1")
-                USE IN cursor_4c_TmpMcc1
-            ENDIF
-            IF USED("cursor_4c_TmpMcpv")
-                USE IN cursor_4c_TmpMcpv
-            ENDIF
-            IF USED("cursor_4c_Matrizes")
-                USE IN cursor_4c_Matrizes
-            ENDIF
-
-            *-- Ordenar e criar cursor final CrSigMvCcr com campo Prorrogados
-            GO TOP IN cursor_4c_TmpMccr
-
-            SELECT *, .F. AS Prorrogados FROM cursor_4c_TmpMccr ;
-                INTO CURSOR cursor_4c_TmpOrdenado ;
-                ORDER BY Grupos, Contas, Moedas, Datas, Nopers
-
-            SELECT cursor_4c_TmpOrdenado
-            USE DBF("cursor_4c_TmpOrdenado") IN 0 ALIAS CrSigMvCcr AGAIN
-            USE IN cursor_4c_TmpOrdenado
-
-            USE IN cursor_4c_TmpMccr
-
-            *-- Se Matrizes: consolidar contas e recalcular saldos
-            IF THIS.this_lMatrizes
-                LOCAL loc_cMat
-                loc_cMat = PADR(IIF(cursor_4c_Saldos.Matriz = "M", ;
-                                    loc_cCliente, ;
-                                    TRIM(cursor_4c_Saldos.ContaMats)), 10)
-                UPDATE CrSigMvCcr ;
-                    SET Contas = loc_cMat, ;
-                        GruConMoes = CrSigMvCcr.Grupos + loc_cMat + CrSigMvCcr.Moedas
-            ENDIF
-
-            *-- Marcar titulos Prorrogados (verificar SigOpMvv)
-            SELECT CrSigMvCcr
-            SCAN
-                loc_cSQL = "SELECT * FROM SigOpMvv " + ;
-                           "WHERE EmpDopNcs = " + EscaparSQL(CrSigMvCcr.EmpDopNcs)
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpMvv") < 1
-                    MsgErro("Favor Reinicializar o Processo!", ;
-                            "Falha na Conex" + CHR(227) + "o (LocalOpMvv)")
-                    RETURN
-                ENDIF
-                IF RECCOUNT("cursor_4c_LocalOpMvv") > 0
-                    REPLACE Prorrogados WITH .T. IN CrSigMvCcr
-                ENDIF
-            ENDSCAN
-            IF USED("cursor_4c_LocalOpMvv")
-                USE IN cursor_4c_LocalOpMvv
-            ENDIF
-
-            *-- Criar indices para navegacao e filtros
-            SELECT CrSigMvCcr
-            INDEX ON Datas TAG Vencs
-            INDEX ON Valors TAG Valor
-            INDEX ON Hists TAG Historico
-            INDEX ON GruConMoes + DTOS(Datas) + CidChaves TAG GruConMoe FOR Tipo = "R"
-            INDEX ON GruConMoes + DTOS(DataConcs) + CidChaves TAG GruConMoec FOR Concs
-            INDEX ON GruConMoes + DTOS(Datas) + CidChaves TAG GruConMoen FOR !Concs
-            INDEX ON GruConMoes + DTOS(Datas) + CidChaves TAG GruConMoeP
-            SET ORDER TO GruConMoe
-            GO BOTTOM
-
-            IF RECCOUNT() > 0
-                *-- Se Matrizes: recalcular saldos acumulados
-                IF THIS.this_lMatrizes
-                    SELECT CrSigMvCcr
-                    GO TOP
-                    loc_nSal = 0
-                    SCAN
-                        IF CrSigMvCcr.Opers = "D"
-                            loc_nSal = loc_nSal + ABS(CrSigMvCcr.Valors)
-                        ELSE
-                            loc_nSal = loc_nSal - ABS(CrSigMvCcr.Valors)
-                        ENDIF
-                        REPLACE Saldos WITH loc_nSal
-                    ENDSCAN
-                ENDIF
-
-                *-- Configurar grd_4c_Lancamento com novo cursor
-                IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
-                    loc_oGrd = loc_oPagHist.grd_4c_Lancamento
-                    loc_oGrd.RecordSource = "CrSigMvCcr"
-
-                    *-- Reconfirmar TODOS os ControlSources apos RecordSource
-                    loc_oGrd.Column1.ControlSource  = "CrSigMvCcr.Datas"
-                    loc_oGrd.Column2.ControlSource  = "CrSigMvCcr.Hists"
-                    loc_oGrd.Column3.ControlSource  = "CrSigMvCcr.Valors"
-                    loc_oGrd.Column4.ControlSource  = "CrSigMvCcr.Opers"
-                    loc_oGrd.Column5.ControlSource  = "CrSigMvCcr.Emps"
-                    loc_oGrd.Column6.ControlSource  = "CrSigMvCcr.Saldos"
-                    loc_oGrd.Column7.ControlSource  = "CrSigMvCcr.Docus"
-                    loc_oGrd.Column8.ControlSource  = "CrSigMvCcr.NFs"
-                    loc_oGrd.Column9.ControlSource  = "CrSigMvCcr.Titulos"
-                    loc_oGrd.Column10.ControlSource = "CrSigMvCcr.Tipo"
-
-                    *-- DynamicForeColor: Cancelado=Vermelho, Conciliado=Azul, Baixado=Verde, Prorrogado=Laranja, Normal=Preto
-                    LOCAL loc_i, loc_cForeExpr, loc_cBackExpr
-                    loc_cForeExpr = "IIF(CrSigMvCcr.TitCancs=1,RGB(255,0,0)," + ;
-                                    "IIF(CrSigMvCcr.Concs,RGB(0,0,255)," + ;
-                                    "IIF(CrSigMvCcr.Pagos='0',RGB(0,128,0)," + ;
-                                    "IIF(CrSigMvCcr.Prorrogados,RGB(255,128,0)," + ;
-                                    "RGB(0,0,0)))))"
-                    loc_cBackExpr = "IIF(CrSigMvCcr.Tipo='P',RGB(245,251,136)," + ;
-                                    "IIF(!EMPTY(CrSigMvCcr.DtAudits),RGB(220,255,220)," + ;
-                                    "RGB(255,255,255)))"
-                    FOR loc_i = 1 TO loc_oGrd.ColumnCount
-                        loc_oGrd.Columns(loc_i).DynamicForeColor = loc_cForeExpr
-                        loc_oGrd.Columns(loc_i).DynamicBackColor = loc_cBackExpr
-                    ENDFOR
-
-                    loc_oGrd.Refresh()
-                    loc_oGrd.SetFocus()
-                ENDIF
-
-                *-- Configurar Cmb_Concilia com opcoes de filtro
-                WITH loc_oPagHist.cmb_4c_Concilia
-                    .Clear()
-                    .AddItem("Lan" + CHR(231) + "amentos Realizados")
-                    .AddItem("S" + CHR(243) + " Conciliados")
-                    .AddItem("N" + CHR(227) + "o Conciliados")
-                    .AddItem("Saldo Di" + CHR(225) + "rio - Todos")
-                    .AddItem("Saldo Di" + CHR(225) + "rio - Conciliados")
-                    .AddItem("Saldo Di" + CHR(225) + "rio - N" + CHR(227) + "o Conciliados")
-                    .AddItem("Realizado e Previs" + CHR(227) + "o")
-                    .Value = "Lan" + CHR(231) + "amentos Realizados"
-                ENDWITH
-
-                *-- Habilitar Page2 e navegar para ela
-                loc_oPagHist.Enabled = .T.
-                THIS.pgf_4c_1.ActivePage = 2
+        IF loc_lMatrizes
+            IF cursor_4c_Saldos.Matriz = "M"
+                loc_cSQL = "SELECT IClis, Grupos FROM SigCdCli " + ;
+                           "WHERE ContaMats = " + EscaparSQL(loc_cCliente) + ;
+                           " AND IClis <> " + EscaparSQL(loc_cCliente)
             ELSE
-                MsgAviso("Nenhum Registro Selecionado. Verifique Per" + CHR(237) + ;
-                         "odo Informado...", "Aten" + CHR(231) + CHR(227) + "o")
-                THIS.pgf_4c_1.Page1.grd_4c_Saldos.SetFocus()
+                loc_cSQL = "SELECT IClis, Grupos FROM SigCdCli " + ;
+                           "WHERE ContaMats = " + EscaparSQL(TRIM(cursor_4c_Saldos.ContaMats)) + ;
+                           " AND IClis <> " + EscaparSQL(loc_cCliente)
             ENDIF
 
-        CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "Erro em BtnConsultarSaldoClick")
-        ENDTRY
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMat") < 1
+                MsgErro("Favor Reinicializar o Processo!", "Falha na Conex" + CHR(227) + "o (TmpMat)")
+                RETURN
+            ENDIF
+            SELECT cursor_4c_TmpMat
+            SCAN
+                INSERT INTO cursor_4c_Matrizes (Grupos, Contas, Moedas) ;
+                    VALUES (cursor_4c_TmpMat.Grupos, cursor_4c_TmpMat.IClis, loc_cMoeda)
+            ENDSCAN
+            IF USED("cursor_4c_TmpMat")
+                USE IN cursor_4c_TmpMat
+            ENDIF
+        ENDIF
+
+        *-- Criar cursor base vazio com estrutura de SigMvCcr + campos extras
+        loc_cSQL = "SELECT ' ' AS Tipo, a.Saldos AS SaldosP, a.* " + ;
+                   "FROM SigMvCcr a " + ;
+                   "WHERE 0 = 1"
+
+        IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMccr") < 1
+            MsgErro("Favor Reinicializar o Processo!", ;
+                    "Falha na Conex" + CHR(227) + "o (TmpMccr)")
+            RETURN
+        ENDIF
+
+        *-- Para cada conta/grupo/moeda, buscar lancamentos de SigMvCcr e SigMvCpv
+        SELECT cursor_4c_Matrizes
+        SCAN
+            loc_cGCM = cursor_4c_Matrizes.Grupos + ;
+                       cursor_4c_Matrizes.Contas + ;
+                       cursor_4c_Matrizes.Moedas
+
+            *-- Lancamentos realizados (SigMvCcr)
+            loc_cSQL = "SELECT 'R' AS Tipo, a.Saldos AS SaldosP, a.* " + ;
+                       "FROM SigMvCcr a " + ;
+                       "WHERE a.GruConMoes = " + EscaparSQL(loc_cGCM) + ;
+                       " AND a.Datas BETWEEN " + loc_cDataI + " AND " + loc_cDataF
+
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMcc1") < 1
+                MsgErro("Favor Reinicializar o Processo!", ;
+                        "Falha na Conex" + CHR(227) + "o (TmpMcc1)")
+                RETURN
+            ENDIF
+
+            *-- Previsoes (SigMvCpv)
+            loc_cSQL = "SELECT 'P' AS Tipo, b.Saldos AS SaldosP, b.* " + ;
+                       "FROM SigMvCpv b " + ;
+                       "WHERE b.GruConMoes = " + EscaparSQL(loc_cGCM) + ;
+                       " AND b.Datas BETWEEN " + loc_cDataI + " AND " + loc_cDataF
+
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMcpv") < 1
+                MsgErro("Favor Reinicializar o Processo!", ;
+                        "Falha na Conex" + CHR(227) + "o (TmpMcpv)")
+                RETURN
+            ENDIF
+
+            *-- Inserir lancamentos realizados no cursor base
+            SELECT cursor_4c_TmpMcc1
+            SCAN
+                SCATTER MEMVAR MEMO
+                INSERT INTO cursor_4c_TmpMccr FROM MEMVAR
+            ENDSCAN
+
+            *-- Inserir previsoes no cursor base
+            SELECT cursor_4c_TmpMcpv
+            SCAN
+                SCATTER MEMVAR MEMO
+                INSERT INTO cursor_4c_TmpMccr FROM MEMVAR
+            ENDSCAN
+        ENDSCAN
+
+        *-- Limpar cursores temporarios
+        IF USED("cursor_4c_TmpMcc1")
+            USE IN cursor_4c_TmpMcc1
+        ENDIF
+        IF USED("cursor_4c_TmpMcpv")
+            USE IN cursor_4c_TmpMcpv
+        ENDIF
+        IF USED("cursor_4c_Matrizes")
+            USE IN cursor_4c_Matrizes
+        ENDIF
+
+        *-- Ordenar e criar cursor final CrSigMvCcr com campo Prorrogados
+        GO TOP IN cursor_4c_TmpMccr
+
+        SELECT *, .F. AS Prorrogados FROM cursor_4c_TmpMccr ;
+            INTO CURSOR cursor_4c_TmpOrdenado ;
+            ORDER BY Grupos, Contas, Moedas, Datas, Nopers
+
+        SELECT cursor_4c_TmpOrdenado
+        USE DBF("cursor_4c_TmpOrdenado") IN 0 ALIAS CrSigMvCcr AGAIN
+        USE IN cursor_4c_TmpOrdenado
+
+        USE IN cursor_4c_TmpMccr
+
+        *-- Se Matrizes: consolidar contas e recalcular saldos
+        IF THIS.this_lMatrizes
+            LOCAL loc_cMat
+            loc_cMat = PADR(IIF(cursor_4c_Saldos.Matriz = "M", ;
+                                loc_cCliente, ;
+                                TRIM(cursor_4c_Saldos.ContaMats)), 10)
+            UPDATE CrSigMvCcr ;
+                SET Contas = loc_cMat, ;
+                    GruConMoes = CrSigMvCcr.Grupos + loc_cMat + CrSigMvCcr.Moedas
+        ENDIF
+
+        *-- Marcar titulos Prorrogados (verificar SigOpMvv)
+        SELECT CrSigMvCcr
+        SCAN
+            loc_cSQL = "SELECT * FROM SigOpMvv " + ;
+                       "WHERE EmpDopNcs = " + EscaparSQL(CrSigMvCcr.EmpDopNcs)
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpMvv") < 1
+                MsgErro("Favor Reinicializar o Processo!", ;
+                        "Falha na Conex" + CHR(227) + "o (LocalOpMvv)")
+                RETURN
+            ENDIF
+            IF RECCOUNT("cursor_4c_LocalOpMvv") > 0
+                REPLACE Prorrogados WITH .T. IN CrSigMvCcr
+            ENDIF
+        ENDSCAN
+        IF USED("cursor_4c_LocalOpMvv")
+            USE IN cursor_4c_LocalOpMvv
+        ENDIF
+
+        *-- Criar indices para navegacao e filtros
+        SELECT CrSigMvCcr
+        INDEX ON Datas TAG Vencs
+        INDEX ON Valors TAG Valor
+        INDEX ON Hists TAG Historico
+        INDEX ON GruConMoes + DTOS(Datas) + CidChaves TAG GruConMoe FOR Tipo = "R"
+        INDEX ON GruConMoes + DTOS(DataConcs) + CidChaves TAG GruConMoec FOR Concs
+        INDEX ON GruConMoes + DTOS(Datas) + CidChaves TAG GruConMoen FOR !Concs
+        INDEX ON GruConMoes + DTOS(Datas) + CidChaves TAG GruConMoeP
+        SET ORDER TO GruConMoe
+        GO BOTTOM
+
+        IF RECCOUNT() > 0
+            *-- Se Matrizes: recalcular saldos acumulados
+            IF THIS.this_lMatrizes
+                SELECT CrSigMvCcr
+                GO TOP
+                loc_nSal = 0
+                SCAN
+                    IF CrSigMvCcr.Opers = "D"
+                        loc_nSal = loc_nSal + ABS(CrSigMvCcr.Valors)
+                    ELSE
+                        loc_nSal = loc_nSal - ABS(CrSigMvCcr.Valors)
+                    ENDIF
+                    REPLACE Saldos WITH loc_nSal
+                ENDSCAN
+            ENDIF
+
+            *-- Configurar grd_4c_Lancamento com novo cursor
+            IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
+                loc_oGrd = loc_oPagHist.grd_4c_Lancamento
+                loc_oGrd.RecordSource = "CrSigMvCcr"
+
+                *-- Reconfirmar TODOS os ControlSources apos RecordSource
+                loc_oGrd.Column1.ControlSource  = "CrSigMvCcr.Datas"
+                loc_oGrd.Column2.ControlSource  = "CrSigMvCcr.Hists"
+                loc_oGrd.Column3.ControlSource  = "CrSigMvCcr.Valors"
+                loc_oGrd.Column4.ControlSource  = "CrSigMvCcr.Opers"
+                loc_oGrd.Column5.ControlSource  = "CrSigMvCcr.Emps"
+                loc_oGrd.Column6.ControlSource  = "CrSigMvCcr.Saldos"
+                loc_oGrd.Column7.ControlSource  = "CrSigMvCcr.Docus"
+                loc_oGrd.Column8.ControlSource  = "CrSigMvCcr.NFs"
+                loc_oGrd.Column9.ControlSource  = "CrSigMvCcr.Titulos"
+                loc_oGrd.Column10.ControlSource = "CrSigMvCcr.Tipo"
+
+                *-- DynamicForeColor: Cancelado=Vermelho, Conciliado=Azul, Baixado=Verde, Prorrogado=Laranja, Normal=Preto
+                LOCAL loc_i, loc_cForeExpr, loc_cBackExpr
+                loc_cForeExpr = "IIF(CrSigMvCcr.TitCancs=1,RGB(255,0,0)," + ;
+                                "IIF(CrSigMvCcr.Concs,RGB(0,0,255)," + ;
+                                "IIF(CrSigMvCcr.Pagos='0',RGB(0,128,0)," + ;
+                                "IIF(CrSigMvCcr.Prorrogados,RGB(255,128,0)," + ;
+                                "RGB(0,0,0)))))"
+                loc_cBackExpr = "IIF(CrSigMvCcr.Tipo='P',RGB(245,251,136)," + ;
+                                "IIF(!EMPTY(CrSigMvCcr.DtAudits),RGB(220,255,220)," + ;
+                                "RGB(255,255,255)))"
+                FOR loc_i = 1 TO loc_oGrd.ColumnCount
+                    loc_oGrd.Columns(loc_i).DynamicForeColor = loc_cForeExpr
+                    loc_oGrd.Columns(loc_i).DynamicBackColor = loc_cBackExpr
+                ENDFOR
+
+                loc_oGrd.Refresh()
+                loc_oGrd.SetFocus()
+            ENDIF
+
+            *-- Configurar Cmb_Concilia com opcoes de filtro
+            WITH loc_oPagHist.cmb_4c_Concilia
+                .Clear()
+                .AddItem("Lan" + CHR(231) + "amentos Realizados")
+                .AddItem("S" + CHR(243) + " Conciliados")
+                .AddItem("N" + CHR(227) + "o Conciliados")
+                .AddItem("Saldo Di" + CHR(225) + "rio - Todos")
+                .AddItem("Saldo Di" + CHR(225) + "rio - Conciliados")
+                .AddItem("Saldo Di" + CHR(225) + "rio - N" + CHR(227) + "o Conciliados")
+                .AddItem("Realizado e Previs" + CHR(227) + "o")
+                .Value = "Lan" + CHR(231) + "amentos Realizados"
+            ENDWITH
+
+            *-- Habilitar Page2 e navegar para ela
+            loc_oPagHist.Enabled = .T.
+            THIS.pgf_4c_1.ActivePage = 2
+        ELSE
+            MsgAviso("Nenhum Registro Selecionado. Verifique Per" + CHR(237) + ;
+                     "odo Informado...", "Aten" + CHR(231) + CHR(227) + "o")
+            THIS.pgf_4c_1.Page1.grd_4c_Saldos.SetFocus()
+        ENDIF
+
     ENDPROC
 
     *-- Grid KeyPress: ENTER?Consultar, F5?Procurar, F6?Imprimir
@@ -4217,62 +4229,67 @@ DEFINE CLASS Formsigopind AS FormBase
     *           3=SaldoDiario-Todos, 4=SaldoDiario-Conc, 5=SaldoDiario-NaoConc,
     *           6=Realizado+Previsao
     PROCEDURE CmbConciliaHistChange()
-        LOCAL loc_oErro, loc_oPagHist, loc_oGrd, loc_nItem, loc_cTag, loc_cFor
+        LOCAL loc_oErro, loc_oPagHist, loc_oGrd, loc_nItem, loc_cTag, loc_cFor, loc_lProsseguir4c
+        loc_lProsseguir4c = .T.
         TRY
             IF !USED("CrSigMvCcr") OR RECCOUNT("CrSigMvCcr") = 0
-                RETURN
+                loc_lProsseguir4c = .F.
             ENDIF
 
-            loc_oPagHist = THIS.pgf_4c_1.Page2
-            IF !PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
-                RETURN
+            IF loc_lProsseguir4c
+                loc_oPagHist = THIS.pgf_4c_1.Page2
+                IF !PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
+                    loc_lProsseguir4c = .F.
+                ENDIF
             ENDIF
-            loc_oGrd = loc_oPagHist.grd_4c_Lancamento
+            IF loc_lProsseguir4c
+                loc_oGrd = loc_oPagHist.grd_4c_Lancamento
 
-            loc_nItem = loc_oPagHist.cmb_4c_Concilia.ListIndex
+                loc_nItem = loc_oPagHist.cmb_4c_Concilia.ListIndex
 
-            SELECT CrSigMvCcr
-            DO CASE
-                CASE loc_nItem = 0  && Lancamentos Realizados
-                    SET ORDER TO GruConMoe
-                    SET FILTER TO Tipo = "R"
-                CASE loc_nItem = 1  && So Conciliados
-                    SET ORDER TO GruConMoec
-                    SET FILTER TO Concs
-                CASE loc_nItem = 2  && Nao Conciliados
-                    SET ORDER TO GruConMoen
-                    SET FILTER TO !Concs
-                CASE loc_nItem = 3  && Saldo Diario - Todos
-                    SET ORDER TO GruConMoe
-                    SET FILTER TO
-                CASE loc_nItem = 4  && Saldo Diario - Conciliados
-                    SET ORDER TO GruConMoec
-                    SET FILTER TO Concs
-                CASE loc_nItem = 5  && Saldo Diario - Nao Conciliados
-                    SET ORDER TO GruConMoen
-                    SET FILTER TO !Concs
-                CASE loc_nItem = 6  && Realizado e Previsao
-                    SET ORDER TO GruConMoeP
-                    SET FILTER TO
-                OTHERWISE
-                    SET ORDER TO GruConMoe
-                    SET FILTER TO
-            ENDCASE
-            GO TOP
+                SELECT CrSigMvCcr
+                DO CASE
+                    CASE loc_nItem = 0  && Lancamentos Realizados
+                        SET ORDER TO GruConMoe
+                        SET FILTER TO Tipo = "R"
+                    CASE loc_nItem = 1  && So Conciliados
+                        SET ORDER TO GruConMoec
+                        SET FILTER TO Concs
+                    CASE loc_nItem = 2  && Nao Conciliados
+                        SET ORDER TO GruConMoen
+                        SET FILTER TO !Concs
+                    CASE loc_nItem = 3  && Saldo Diario - Todos
+                        SET ORDER TO GruConMoe
+                        SET FILTER TO
+                    CASE loc_nItem = 4  && Saldo Diario - Conciliados
+                        SET ORDER TO GruConMoec
+                        SET FILTER TO Concs
+                    CASE loc_nItem = 5  && Saldo Diario - Nao Conciliados
+                        SET ORDER TO GruConMoen
+                        SET FILTER TO !Concs
+                    CASE loc_nItem = 6  && Realizado e Previsao
+                        SET ORDER TO GruConMoeP
+                        SET FILTER TO
+                    OTHERWISE
+                        SET ORDER TO GruConMoe
+                        SET FILTER TO
+                ENDCASE
+                GO TOP
 
             *-- Reatribuir RecordSource e reconfirmar todos ControlSources
-            loc_oGrd.RecordSource = "CrSigMvCcr"
-            loc_oGrd.Column1.ControlSource  = "CrSigMvCcr.Datas"
-            loc_oGrd.Column2.ControlSource  = "CrSigMvCcr.Hists"
-            loc_oGrd.Column3.ControlSource  = "CrSigMvCcr.Valors"
-            loc_oGrd.Column4.ControlSource  = "CrSigMvCcr.Opers"
-            loc_oGrd.Column5.ControlSource  = "CrSigMvCcr.Emps"
-            loc_oGrd.Column6.ControlSource  = "CrSigMvCcr.Saldos"
-            loc_oGrd.Column7.ControlSource  = "CrSigMvCcr.Docus"
-            loc_oGrd.Column8.ControlSource  = "CrSigMvCcr.NFs"
-            loc_oGrd.Column9.ControlSource  = "CrSigMvCcr.Titulos"
-            loc_oGrd.Column10.ControlSource = "CrSigMvCcr.Tipo"
-            loc_oGrd.Refresh()
+                loc_oGrd.RecordSource = "CrSigMvCcr"
+                loc_oGrd.Column1.ControlSource  = "CrSigMvCcr.Datas"
+                loc_oGrd.Column2.ControlSource  = "CrSigMvCcr.Hists"
+                loc_oGrd.Column3.ControlSource  = "CrSigMvCcr.Valors"
+                loc_oGrd.Column4.ControlSource  = "CrSigMvCcr.Opers"
+                loc_oGrd.Column5.ControlSource  = "CrSigMvCcr.Emps"
+                loc_oGrd.Column6.ControlSource  = "CrSigMvCcr.Saldos"
+                loc_oGrd.Column7.ControlSource  = "CrSigMvCcr.Docus"
+                loc_oGrd.Column8.ControlSource  = "CrSigMvCcr.NFs"
+                loc_oGrd.Column9.ControlSource  = "CrSigMvCcr.Titulos"
+                loc_oGrd.Column10.ControlSource = "CrSigMvCcr.Tipo"
+                loc_oGrd.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em CmbConciliaHistChange")
         ENDTRY
@@ -4858,226 +4875,241 @@ DEFINE CLASS Formsigopind AS FormBase
     * Equivale ao Chk_Concilia.Click (152 linhas) do legado
     *==========================================================================
     PROCEDURE BtnConciliaHistClick()
-        LOCAL loc_oErro, loc_oPagHist, loc_lOk, loc_cSQL, loc_lPValue
+        LOCAL loc_oErro, loc_oPagHist, loc_lOk, loc_cSQL, loc_lPValue, loc_lProsseguir4c
         LOCAL loc_cUpdate, loc_cTipo, loc_cCidChaves, loc_cDataSQL, loc_cInsert
         LOCAL loc_nResultIns, loc_nResultUpd, loc_dData
         PRIVATE llData, llConc
 
+        loc_lProsseguir4c = .T.
         TRY
             loc_oPagHist = THIS.pgf_4c_1.Page2
 
             *-- Ignorar se checkbox desabilitado ou lancamento provisorio
             IF !PEMSTATUS(loc_oPagHist, "chk_4c_Chk_Concilia", 5)
-                RETURN
+                loc_lProsseguir4c = .F.
             ENDIF
-            IF !loc_oPagHist.chk_4c_Chk_Concilia.Enabled
-                RETURN
+            IF loc_lProsseguir4c
+                IF !loc_oPagHist.chk_4c_Chk_Concilia.Enabled
+                    loc_lProsseguir4c = .F.
+                ENDIF
             ENDIF
-            IF USED("CrSigMvCcr") AND CrSigMvCcr.Tipo = "P"
-                RETURN
-            ENDIF
-
-            loc_lPValue = (loc_oPagHist.chk_4c_Chk_Concilia.Value = 1)
-
-            THIS.DesabContainer()
-
-            IF !USED("CrSigMvCcr") OR EOF("CrSigMvCcr") OR BOF("CrSigMvCcr")
-                RETURN
+            IF loc_lProsseguir4c
+                IF USED("CrSigMvCcr") AND CrSigMvCcr.Tipo = "P"
+                    loc_lProsseguir4c = .F.
+                ENDIF
             ENDIF
 
-            SELECT CrSigMvCcr
-            loc_lOk = .T.
+            IF loc_lProsseguir4c
+                loc_lPValue = (loc_oPagHist.chk_4c_Chk_Concilia.Value = 1)
+
+                THIS.DesabContainer()
+
+                IF !USED("CrSigMvCcr") OR EOF("CrSigMvCcr") OR BOF("CrSigMvCcr")
+                    loc_lProsseguir4c = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir4c
+                SELECT CrSigMvCcr
+                loc_lOk = .T.
 
             *-- Verificar se conciliacao feita por outro usuario e sem permissao master
-            IF CrSigMvCcr.Concs AND TRIM(CrSigMvCcr.UsuConcs) # TRIM(gc_4c_UsuarioLogado)
-                IF !fChecaAcesso("SIGOPIND", "CONCMASTER")
-                    MsgAviso("Concilia" + CHR(231) + CHR(227) + "o N" + CHR(227) + ;
-                             "o Pode Ser Desfeita Por Este Usu" + CHR(225) + "rio!!!" + ;
-                             CHR(13) + "Ela Foi Executada Por " + ;
-                             ALLTRIM(CrSigMvCcr.UsuConcs) + "!!!", "")
-                    loc_oPagHist.chk_4c_Chk_Concilia.Value = 1
-                    loc_lOk = .F.
+                IF CrSigMvCcr.Concs AND TRIM(CrSigMvCcr.UsuConcs) # TRIM(gc_4c_UsuarioLogado)
+                    IF !fChecaAcesso("SIGOPIND", "CONCMASTER")
+                        MsgAviso("Concilia" + CHR(231) + CHR(227) + "o N" + CHR(227) + ;
+                                 "o Pode Ser Desfeita Por Este Usu" + CHR(225) + "rio!!!" + ;
+                                 CHR(13) + "Ela Foi Executada Por " + ;
+                                 ALLTRIM(CrSigMvCcr.UsuConcs) + "!!!", "")
+                        loc_oPagHist.chk_4c_Chk_Concilia.Value = 1
+                        loc_lOk = .F.
+                    ENDIF
                 ENDIF
-            ENDIF
 
             *-- Verificar data da conciliacao informada
-            IF PEMSTATUS(loc_oPagHist, "txt_4c_DataConcilia", 5) AND loc_lOk
-                IF EMPTY(loc_oPagHist.txt_4c_DataConcilia.Value)
-                    MsgAviso("Data da Concilia" + CHR(231) + CHR(227) + ;
-                             "o N" + CHR(227) + "o Informada...", "")
-                    loc_oPagHist.txt_4c_DataConcilia.SetFocus()
-                    loc_lOk = .F.
+                IF PEMSTATUS(loc_oPagHist, "txt_4c_DataConcilia", 5) AND loc_lOk
+                    IF EMPTY(loc_oPagHist.txt_4c_DataConcilia.Value)
+                        MsgAviso("Data da Concilia" + CHR(231) + CHR(227) + ;
+                                 "o N" + CHR(227) + "o Informada...", "")
+                        loc_oPagHist.txt_4c_DataConcilia.SetFocus()
+                        loc_lOk = .F.
+                    ENDIF
                 ENDIF
-            ENDIF
 
             *-- Verificar bloqueio de periodo (SigSyBlq)
-            IF loc_lOk AND gnConnHandle > 0
-                loc_cSQL = "SELECT * FROM SigSyBlq"
-                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpBloq2") >= 1
-                    IF RECCOUNT("cursor_4c_TmpBloq2") > 0
-                        SELECT cursor_4c_TmpBloq2
-                        GO TOP
-                        IF cursor_4c_TmpBloq2.ChkConcs = 1 AND ;
-                           PEMSTATUS(loc_oPagHist, "txt_4c_DataConcilia", 5) AND ;
-                           fVerificaBloqueio(loc_oPagHist.txt_4c_DataConcilia.Value, gnConnHandle) >= 0
-                            MsgAviso("Per" + CHR(237) + "odo Bloqueado !!!", "")
-                            loc_lOk = .F.
+                IF loc_lOk AND gnConnHandle > 0
+                    loc_cSQL = "SELECT * FROM SigSyBlq"
+                    IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpBloq2") >= 1
+                        IF RECCOUNT("cursor_4c_TmpBloq2") > 0
+                            SELECT cursor_4c_TmpBloq2
+                            GO TOP
+                            IF cursor_4c_TmpBloq2.ChkConcs = 1 AND ;
+                               PEMSTATUS(loc_oPagHist, "txt_4c_DataConcilia", 5) AND ;
+                               fVerificaBloqueio(loc_oPagHist.txt_4c_DataConcilia.Value, gnConnHandle) >= 0
+                                MsgAviso("Per" + CHR(237) + "odo Bloqueado !!!", "")
+                                loc_lOk = .F.
+                            ENDIF
+                        ENDIF
+                        IF USED("cursor_4c_TmpBloq2")
+                            USE IN cursor_4c_TmpBloq2
                         ENDIF
                     ENDIF
-                    IF USED("cursor_4c_TmpBloq2")
-                        USE IN cursor_4c_TmpBloq2
-                    ENDIF
-                ENDIF
-            ENDIF
-
-            SELECT CrSigMvCcr
-
-            *-- Verificar data conciliacao >= data lancamento (somente ao conciliar)
-            IF !CrSigMvCcr.Concs AND loc_lOk AND PEMSTATUS(loc_oPagHist, "txt_4c_DataConcilia", 5)
-                IF loc_oPagHist.txt_4c_DataConcilia.Value < CrSigMvCcr.Datas
-                    MsgAviso("A Data da Concilia" + CHR(231) + CHR(227) + "o N" + CHR(227) + ;
-                             "o Pode Ser Menor Que a Do Lan" + CHR(231) + "amento!!!", "")
-                    loc_oPagHist.chk_4c_Chk_Concilia.Value = 0
-                    loc_lOk = .F.
-                ENDIF
-            ENDIF
-
-            *-- Confirmar desconciliacao
-            IF CrSigMvCcr.Concs AND loc_lOk
-                IF !MsgConfirma("Confirma a Desconcilia" + CHR(231) + CHR(227) + ;
-                                "o do Lan" + CHR(231) + "amento?", ;
-                                "Confirma" + CHR(231) + CHR(227) + "o")
-                    loc_oPagHist.chk_4c_Chk_Concilia.Value = 1
-                    loc_lOk = .F.
-                ENDIF
-            ENDIF
-
-            IF !loc_lOk
-                IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
-                    loc_oPagHist.grd_4c_Lancamento.Refresh()
-                    loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
-                ENDIF
-                RETURN
-            ENDIF
-
-            *-- Verificar estado atual no banco (evitar race condition)
-            loc_cSQL = "SELECT DataConcs, Concs, UsuConcs, CidChaves FROM SigMvCcr " + ;
-                       "WHERE CidChaves = " + EscaparSQL(CrSigMvCcr.CidChaves)
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMccr3") > 0 AND ;
-               RECCOUNT("cursor_4c_TmpMccr3") > 0
-
-                SELECT cursor_4c_TmpMccr3
-                IF loc_lPValue
-                    IF cursor_4c_TmpMccr3.Concs
-                        MsgAviso("Lan" + CHR(231) + "amento j" + CHR(225) + ;
-                                 " conciliado Por " + ALLTRIM(cursor_4c_TmpMccr3.UsuConcs) + ;
-                                 "!!!", "")
-                        loc_oPagHist.chk_4c_Chk_Concilia.Value = 1
-                        IF USED("cursor_4c_TmpMccr3")
-                            USE IN cursor_4c_TmpMccr3
-                        ENDIF
-                        IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
-                            loc_oPagHist.grd_4c_Lancamento.Refresh()
-                            loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
-                        ENDIF
-                        RETURN
-                    ENDIF
-                ELSE
-                    IF !cursor_4c_TmpMccr3.Concs
-                        MsgAviso("Lan" + CHR(231) + "amento j" + CHR(225) + ;
-                                 " desconciliado !!!", "")
-                        loc_oPagHist.chk_4c_Chk_Concilia.Value = 1
-                        IF USED("cursor_4c_TmpMccr3")
-                            USE IN cursor_4c_TmpMccr3
-                        ENDIF
-                        IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
-                            loc_oPagHist.grd_4c_Lancamento.Refresh()
-                            loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
-                        ENDIF
-                        RETURN
-                    ENDIF
-                ENDIF
-
-                loc_cCidChaves = TRIM(cursor_4c_TmpMccr3.CidChaves)
-                IF USED("cursor_4c_TmpMccr3")
-                    USE IN cursor_4c_TmpMccr3
                 ENDIF
 
                 SELECT CrSigMvCcr
 
-                *-- Montar data para SQL Server
-                loc_dData = IIF(PEMSTATUS(loc_oPagHist, "txt_4c_DataConcilia", 5), ;
-                                loc_oPagHist.txt_4c_DataConcilia.Value, DATE())
-                loc_cDataSQL = TRANSFORM(YEAR(loc_dData), "9999") + "-" + ;
-                               PADL(TRANSFORM(MONTH(loc_dData)), 2, "0") + "-" + ;
-                               PADL(TRANSFORM(DAY(loc_dData)), 2, "0") + " 23:59:59"
-
-                IF loc_lPValue
-                    loc_cTipo   = "Conciliado"
-                    loc_cUpdate = "UPDATE SigMvCcr SET DataConcs = '" + loc_cDataSQL + ;
-                                  "', Concs = 1, UsuConcs = " + ;
-                                  EscaparSQL(gc_4c_UsuarioLogado) + ;
-                                  " WHERE CidChaves = " + EscaparSQL(loc_cCidChaves)
-                ELSE
-                    loc_cTipo   = "DesConciliado"
-                    loc_cUpdate = "UPDATE SigMvCcr SET DataConcs = NULL, " + ;
-                                  "Concs = 0, UsuConcs = ' ' " + ;
-                                  " WHERE CidChaves = " + EscaparSQL(loc_cCidChaves)
+            *-- Verificar data conciliacao >= data lancamento (somente ao conciliar)
+                IF !CrSigMvCcr.Concs AND loc_lOk AND PEMSTATUS(loc_oPagHist, "txt_4c_DataConcilia", 5)
+                    IF loc_oPagHist.txt_4c_DataConcilia.Value < CrSigMvCcr.Datas
+                        MsgAviso("A Data da Concilia" + CHR(231) + CHR(227) + "o N" + CHR(227) + ;
+                                 "o Pode Ser Menor Que a Do Lan" + CHR(231) + "amento!!!", "")
+                        loc_oPagHist.chk_4c_Chk_Concilia.Value = 0
+                        loc_lOk = .F.
+                    ENDIF
                 ENDIF
 
-                *-- Inserir log em SigCqOch
-                loc_cInsert = "INSERT INTO SigCqOch " + ;
-                              "(Nopers, Datars, TpLancs, Datas, Usuars, CidChaves) " + ;
-                              "VALUES (" + STR(CrSigMvCcr.Nopers) + ", GETDATE(), " + ;
-                              EscaparSQL(loc_cTipo) + ", " + ;
-                              IIF(loc_lPValue, "'" + loc_cDataSQL + "'", "NULL") + ", " + ;
-                              EscaparSQL(gc_4c_UsuarioLogado) + ", NEWID())"
+            *-- Confirmar desconciliacao
+                IF CrSigMvCcr.Concs AND loc_lOk
+                    IF !MsgConfirma("Confirma a Desconcilia" + CHR(231) + CHR(227) + ;
+                                    "o do Lan" + CHR(231) + "amento?", ;
+                                    "Confirma" + CHR(231) + CHR(227) + "o")
+                        loc_oPagHist.chk_4c_Chk_Concilia.Value = 1
+                        loc_lOk = .F.
+                    ENDIF
+                ENDIF
 
-                loc_nResultIns = SQLEXEC(gnConnHandle, loc_cInsert)
-                IF loc_nResultIns > 0
-                    loc_nResultUpd = SQLEXEC(gnConnHandle, loc_cUpdate)
-                    IF loc_nResultUpd > 0
-                        *-- Atualizar cursor local CrSigMvCcr
-                        SELECT CrSigMvCcr
-                        IF loc_lPValue
-                            REPLACE Concs     WITH .T., ;
-                                    UsuConcs  WITH gc_4c_UsuarioLogado, ;
-                                    DataConcs WITH loc_dData
-                        ELSE
-                            REPLACE Concs     WITH .F., ;
-                                    UsuConcs  WITH " ", ;
-                                    DataConcs WITH CTOD("  /  /  ")
+                IF !loc_lOk
+                    IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
+                        loc_oPagHist.grd_4c_Lancamento.Refresh()
+                        loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
+                    ENDIF
+                    loc_lProsseguir4c = .F.
+                ENDIF
+            ENDIF
+
+            *-- Verificar estado atual no banco (evitar race condition)
+            IF loc_lProsseguir4c
+                loc_cSQL = "SELECT DataConcs, Concs, UsuConcs, CidChaves FROM SigMvCcr " + ;
+                           "WHERE CidChaves = " + EscaparSQL(CrSigMvCcr.CidChaves)
+
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMccr3") > 0 AND ;
+                   RECCOUNT("cursor_4c_TmpMccr3") > 0
+    
+                    SELECT cursor_4c_TmpMccr3
+                    IF loc_lPValue
+                        IF cursor_4c_TmpMccr3.Concs
+                            MsgAviso("Lan" + CHR(231) + "amento j" + CHR(225) + ;
+                                     " conciliado Por " + ALLTRIM(cursor_4c_TmpMccr3.UsuConcs) + ;
+                                     "!!!", "")
+                            loc_oPagHist.chk_4c_Chk_Concilia.Value = 1
+                            IF USED("cursor_4c_TmpMccr3")
+                                USE IN cursor_4c_TmpMccr3
+                            ENDIF
+                            IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
+                                loc_oPagHist.grd_4c_Lancamento.Refresh()
+                                loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
+                            ENDIF
+                            loc_lProsseguir4c = .F.
                         ENDIF
                     ELSE
-                        MsgErro("Falha ao atualizar SigMvCcr.", ;
-                                "Erro em Concilia" + CHR(231) + CHR(227) + "o")
+                        IF !cursor_4c_TmpMccr3.Concs
+                            MsgAviso("Lan" + CHR(231) + "amento j" + CHR(225) + ;
+                                     " desconciliado !!!", "")
+                            loc_oPagHist.chk_4c_Chk_Concilia.Value = 1
+                            IF USED("cursor_4c_TmpMccr3")
+                                USE IN cursor_4c_TmpMccr3
+                            ENDIF
+                            IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
+                                loc_oPagHist.grd_4c_Lancamento.Refresh()
+                                loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
+                            ENDIF
+                            loc_lProsseguir4c = .F.
+                        ENDIF
                     ENDIF
+    
+                   IF loc_lProsseguir4c
+                        loc_cCidChaves = TRIM(cursor_4c_TmpMccr3.CidChaves)
+                        IF USED("cursor_4c_TmpMccr3")
+                            USE IN cursor_4c_TmpMccr3
+                        ENDIF
+    
+                        SELECT CrSigMvCcr
+    
+                    *-- Montar data para SQL Server
+                        loc_dData = IIF(PEMSTATUS(loc_oPagHist, "txt_4c_DataConcilia", 5), ;
+                                        loc_oPagHist.txt_4c_DataConcilia.Value, DATE())
+                        loc_cDataSQL = TRANSFORM(YEAR(loc_dData), "9999") + "-" + ;
+                                       PADL(TRANSFORM(MONTH(loc_dData)), 2, "0") + "-" + ;
+                                       PADL(TRANSFORM(DAY(loc_dData)), 2, "0") + " 23:59:59"
+    
+                        IF loc_lPValue
+                            loc_cTipo   = "Conciliado"
+                            loc_cUpdate = "UPDATE SigMvCcr SET DataConcs = '" + loc_cDataSQL + ;
+                                          "', Concs = 1, UsuConcs = " + ;
+                                          EscaparSQL(gc_4c_UsuarioLogado) + ;
+                                          " WHERE CidChaves = " + EscaparSQL(loc_cCidChaves)
+                        ELSE
+                            loc_cTipo   = "DesConciliado"
+                            loc_cUpdate = "UPDATE SigMvCcr SET DataConcs = NULL, " + ;
+                                          "Concs = 0, UsuConcs = ' ' " + ;
+                                          " WHERE CidChaves = " + EscaparSQL(loc_cCidChaves)
+                        ENDIF
+    
+                    *-- Inserir log em SigCqOch
+                        loc_cInsert = "INSERT INTO SigCqOch " + ;
+                                      "(Nopers, Datars, TpLancs, Datas, Usuars, CidChaves) " + ;
+                                      "VALUES (" + STR(CrSigMvCcr.Nopers) + ", GETDATE(), " + ;
+                                      EscaparSQL(loc_cTipo) + ", " + ;
+                                      IIF(loc_lPValue, "'" + loc_cDataSQL + "'", "NULL") + ", " + ;
+                                      EscaparSQL(gc_4c_UsuarioLogado) + ", NEWID())"
+    
+                        loc_nResultIns = SQLEXEC(gnConnHandle, loc_cInsert)
+                        IF loc_nResultIns > 0
+                            loc_nResultUpd = SQLEXEC(gnConnHandle, loc_cUpdate)
+                            IF loc_nResultUpd > 0
+                                *-- Atualizar cursor local CrSigMvCcr
+                                SELECT CrSigMvCcr
+                                IF loc_lPValue
+                                    REPLACE Concs     WITH .T., ;
+                                            UsuConcs  WITH gc_4c_UsuarioLogado, ;
+                                            DataConcs WITH loc_dData
+                                ELSE
+                                    REPLACE Concs     WITH .F., ;
+                                            UsuConcs  WITH " ", ;
+                                            DataConcs WITH CTOD("  /  /  ")
+                                ENDIF
+                            ELSE
+                                MsgErro("Falha ao atualizar SigMvCcr.", ;
+                                        "Erro em Concilia" + CHR(231) + CHR(227) + "o")
+                            ENDIF
+                        ELSE
+                            MsgErro("Falha ao registrar log de concilia" + CHR(231) + ;
+                                    CHR(227) + "o.", "Erro em SigCqOch")
+                        ENDIF
+                   ENDIF
                 ELSE
-                    MsgErro("Falha ao registrar log de concilia" + CHR(231) + ;
-                            CHR(227) + "o.", "Erro em SigCqOch")
+                    IF USED("cursor_4c_TmpMccr3")
+                        USE IN cursor_4c_TmpMccr3
+                    ENDIF
+                    MsgErro("Favor Reinicializar o Processo!", ;
+                            "Falha na Conex" + CHR(227) + "o (SigMvCcr)")
                 ENDIF
-            ELSE
-                IF USED("cursor_4c_TmpMccr3")
-                    USE IN cursor_4c_TmpMccr3
-                ENDIF
-                MsgErro("Favor Reinicializar o Processo!", ;
-                        "Falha na Conex" + CHR(227) + "o (SigMvCcr)")
             ENDIF
 
             *-- Atualizar UI
-            IF USED("CrSigMvCcr") AND !EOF("CrSigMvCcr")
-                loc_oPagHist.chk_4c_Chk_Concilia.Value = IIF(CrSigMvCcr.Concs, 1, 0)
-                loc_oPagHist.chk_4c_Chk_Concilia.Refresh()
-            ENDIF
-            IF PEMSTATUS(loc_oPagHist, "txt_4c_DataConcilia", 5)
-                loc_oPagHist.txt_4c_DataConcilia.Refresh()
-            ENDIF
-            IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
-                loc_oPagHist.grd_4c_Lancamento.Refresh()
-                loc_oPagHist.grd_4c_Lancamento.SetFocus()
-            ENDIF
+            IF loc_lProsseguir4c
+                IF USED("CrSigMvCcr") AND !EOF("CrSigMvCcr")
+                    loc_oPagHist.chk_4c_Chk_Concilia.Value = IIF(CrSigMvCcr.Concs, 1, 0)
+                    loc_oPagHist.chk_4c_Chk_Concilia.Refresh()
+                ENDIF
+                IF PEMSTATUS(loc_oPagHist, "txt_4c_DataConcilia", 5)
+                    loc_oPagHist.txt_4c_DataConcilia.Refresh()
+                ENDIF
+                IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
+                    loc_oPagHist.grd_4c_Lancamento.Refresh()
+                    loc_oPagHist.grd_4c_Lancamento.SetFocus()
+                ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em BtnConciliaHistClick")
         ENDTRY
@@ -5089,179 +5121,194 @@ DEFINE CLASS Formsigopind AS FormBase
     * Equivale ao Chk_Auditoria.Click (100 linhas) do legado
     *==========================================================================
     PROCEDURE BtnAuditoriaHistClick()
-        LOCAL loc_oErro, loc_oPagHist, loc_lTval, loc_cSQL, loc_cUpdate, loc_cTipo
+        LOCAL loc_oErro, loc_oPagHist, loc_lTval, loc_cSQL, loc_cUpdate, loc_cTipo, loc_lProsseguir4c
         LOCAL loc_cCidChaves, loc_cDataSQL, loc_cInsert, loc_nErro
         LOCAL loc_dDataAudit
         PRIVATE llData
 
+        loc_lProsseguir4c = .T.
         TRY
             loc_oPagHist = THIS.pgf_4c_1.Page2
 
             *-- Ignorar se checkbox desabilitado ou lancamento provisorio
             IF !PEMSTATUS(loc_oPagHist, "chk_4c_Chk_Auditoria", 5)
-                RETURN
+                loc_lProsseguir4c = .F.
             ENDIF
-            IF !loc_oPagHist.chk_4c_Chk_Auditoria.Enabled
-                RETURN
+            IF loc_lProsseguir4c
+                IF !loc_oPagHist.chk_4c_Chk_Auditoria.Enabled
+                    loc_lProsseguir4c = .F.
+                ENDIF
             ENDIF
-            IF USED("CrSigMvCcr") AND CrSigMvCcr.Tipo = "P"
-                RETURN
-            ENDIF
-
-            THIS.DesabContainer()
-
-            IF !USED("CrSigMvCcr") OR EOF("CrSigMvCcr") OR BOF("CrSigMvCcr")
-                RETURN
+            IF loc_lProsseguir4c
+                IF USED("CrSigMvCcr") AND CrSigMvCcr.Tipo = "P"
+                    loc_lProsseguir4c = .F.
+                ENDIF
             ENDIF
 
-            loc_lTval = (loc_oPagHist.chk_4c_Chk_Auditoria.Value = 1)
+            IF loc_lProsseguir4c
+                THIS.DesabContainer()
 
-            SELECT CrSigMvCcr
+                IF !USED("CrSigMvCcr") OR EOF("CrSigMvCcr") OR BOF("CrSigMvCcr")
+                    loc_lProsseguir4c = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir4c
+                loc_lTval = (loc_oPagHist.chk_4c_Chk_Auditoria.Value = 1)
+
+                SELECT CrSigMvCcr
 
             *-- Verificar se auditoria feita por outro usuario sem permissao master
-            IF !EMPTY(CrSigMvCcr.Auditors) AND ;
-               (TRIM(CrSigMvCcr.Auditors) # TRIM(gc_4c_UsuarioLogado))
-                IF !fChecaAcesso("SIGOPIND", "AUDMASTER")
-                    MsgAviso("Auditoria N" + CHR(227) + "o Pode Ser Desfeita Por Este Usu" + ;
-                             CHR(225) + "rio!!!" + CHR(13) + ;
-                             "Ela Foi Executada Por " + ALLTRIM(CrSigMvCcr.Auditors) + ;
-                             "!!!", "")
-                    loc_oPagHist.chk_4c_Chk_Auditoria.Value = 1
-                    IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
-                        loc_oPagHist.grd_4c_Lancamento.Refresh()
-                        loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
+                IF !EMPTY(CrSigMvCcr.Auditors) AND ;
+                   (TRIM(CrSigMvCcr.Auditors) # TRIM(gc_4c_UsuarioLogado))
+                    IF !fChecaAcesso("SIGOPIND", "AUDMASTER")
+                        MsgAviso("Auditoria N" + CHR(227) + "o Pode Ser Desfeita Por Este Usu" + ;
+                                 CHR(225) + "rio!!!" + CHR(13) + ;
+                                 "Ela Foi Executada Por " + ALLTRIM(CrSigMvCcr.Auditors) + ;
+                                 "!!!", "")
+                        loc_oPagHist.chk_4c_Chk_Auditoria.Value = 1
+                        IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
+                            loc_oPagHist.grd_4c_Lancamento.Refresh()
+                            loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
+                        ENDIF
+                        loc_lProsseguir4c = .F.
                     ENDIF
-                    RETURN
                 ENDIF
             ENDIF
 
             *-- Sincronizar Chk_Concilia se acesso habilitado
-            IF fChecaAcesso("SIGOPIND", "CONCILIA") AND ;
-               PEMSTATUS(loc_oPagHist, "chk_4c_Chk_Concilia", 5)
-                IF USED("CrSigMvCcr") AND !EOF("CrSigMvCcr")
-                    loc_oPagHist.chk_4c_Chk_Concilia.Value = IIF(CrSigMvCcr.Concs, 1, 0)
+            IF loc_lProsseguir4c
+                IF fChecaAcesso("SIGOPIND", "CONCILIA") AND ;
+                   PEMSTATUS(loc_oPagHist, "chk_4c_Chk_Concilia", 5)
+                    IF USED("CrSigMvCcr") AND !EOF("CrSigMvCcr")
+                        loc_oPagHist.chk_4c_Chk_Concilia.Value = IIF(CrSigMvCcr.Concs, 1, 0)
+                    ENDIF
                 ENDIF
-            ENDIF
 
             *-- Calcular data de auditoria (hoje 23:59:59)
-            loc_dDataAudit = DATE()
-            loc_cDataSQL   = TRANSFORM(YEAR(loc_dDataAudit), "9999") + "-" + ;
-                             PADL(TRANSFORM(MONTH(loc_dDataAudit)), 2, "0") + "-" + ;
-                             PADL(TRANSFORM(DAY(loc_dDataAudit)), 2, "0") + " 23:59:59"
+                loc_dDataAudit = DATE()
+                loc_cDataSQL   = TRANSFORM(YEAR(loc_dDataAudit), "9999") + "-" + ;
+                                 PADL(TRANSFORM(MONTH(loc_dDataAudit)), 2, "0") + "-" + ;
+                                 PADL(TRANSFORM(DAY(loc_dDataAudit)), 2, "0") + " 23:59:59"
 
             *-- Verificar estado atual no banco
-            LOCAL loc_cCta
-            loc_cCta = IIF(!EMPTY(TRIM(loc_oPagHist.txt_4c_CtaCob.Value)), ;
-                           PADR(TRIM(loc_oPagHist.txt_4c_CtaCob.Value), 10), ;
-                           CrSigMvCcr.Contas)
+                LOCAL loc_cCta
+                loc_cCta = IIF(!EMPTY(TRIM(loc_oPagHist.txt_4c_CtaCob.Value)), ;
+                               PADR(TRIM(loc_oPagHist.txt_4c_CtaCob.Value), 10), ;
+                               CrSigMvCcr.Contas)
 
-            loc_cSQL = "SELECT DtAudits, Auditors, CidChaves FROM SigMvCcr " + ;
-                       "WHERE GruConMoes = " + ;
-                       EscaparSQL(CrSigMvCcr.Grupos + loc_cCta + CrSigMvCcr.Moedas) + ;
-                       " AND Nopers = " + STR(CrSigMvCcr.Nopers) + ;
-                       " AND Opers = " + EscaparSQL(CrSigMvCcr.Opers)
+                loc_cSQL = "SELECT DtAudits, Auditors, CidChaves FROM SigMvCcr " + ;
+                           "WHERE GruConMoes = " + ;
+                           EscaparSQL(CrSigMvCcr.Grupos + loc_cCta + CrSigMvCcr.Moedas) + ;
+                           " AND Nopers = " + STR(CrSigMvCcr.Nopers) + ;
+                           " AND Opers = " + EscaparSQL(CrSigMvCcr.Opers)
 
-            loc_nErro = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMccr4")
-            IF loc_nErro > 0
-                SELECT cursor_4c_TmpMccr4
-
-                *-- Verificar estado atual de auditoria
-                IF loc_lTval
-                    IF !EMPTY(TRIM(cursor_4c_TmpMccr4.Auditors))
-                        MsgAviso("Lan" + CHR(231) + "amento j" + CHR(225) + " Auditado Por " + ;
-                                 ALLTRIM(cursor_4c_TmpMccr4.Auditors) + "!!!", "")
-                        loc_oPagHist.chk_4c_Chk_Auditoria.Value = 1
-                        IF USED("cursor_4c_TmpMccr4")
-                            USE IN cursor_4c_TmpMccr4
-                        ENDIF
-                        IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
-                            loc_oPagHist.grd_4c_Lancamento.Refresh()
-                            loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
-                        ENDIF
-                        RETURN
-                    ENDIF
-                ELSE
-                    IF EMPTY(TRIM(cursor_4c_TmpMccr4.Auditors))
-                        MsgAviso("Lan" + CHR(231) + "amento n" + CHR(227) + "o Auditado !!!", "")
-                        loc_oPagHist.chk_4c_Chk_Auditoria.Value = 1
-                        IF USED("cursor_4c_TmpMccr4")
-                            USE IN cursor_4c_TmpMccr4
-                        ENDIF
-                        IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
-                            loc_oPagHist.grd_4c_Lancamento.Refresh()
-                            loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
-                        ENDIF
-                        RETURN
-                    ENDIF
-                ENDIF
-
-                loc_cCidChaves = TRIM(cursor_4c_TmpMccr4.CidChaves)
-                IF USED("cursor_4c_TmpMccr4")
-                    USE IN cursor_4c_TmpMccr4
-                ENDIF
-
-                IF loc_lTval
-                    loc_cTipo   = "Auditado"
-                    loc_cUpdate = "UPDATE SigMvCcr SET DtAudits = '" + loc_cDataSQL + ;
-                                  "', Auditors = " + EscaparSQL(gc_4c_UsuarioLogado) + ;
-                                  " WHERE CidChaves = " + EscaparSQL(loc_cCidChaves)
-                ELSE
-                    loc_cTipo   = "DesAuditado"
-                    loc_cUpdate = "UPDATE SigMvCcr SET DtAudits = NULL, " + ;
-                                  "Auditors = '          ' " + ;
-                                  " WHERE CidChaves = " + EscaparSQL(loc_cCidChaves)
-                ENDIF
-
-                *-- Inserir log em SigCqOch
-                SELECT CrSigMvCcr
-                loc_cInsert = "INSERT INTO SigCqOch " + ;
-                              "(Nopers, Datars, TpLancs, Datas, Usuars, CidChaves, DtLancs) " + ;
-                              "VALUES (" + STR(CrSigMvCcr.Nopers) + ", GETDATE(), " + ;
-                              EscaparSQL(loc_cTipo) + ", " + ;
-                              IIF(loc_lTval, "'" + loc_cDataSQL + "'", "NULL") + ", " + ;
-                              EscaparSQL(gc_4c_UsuarioLogado) + ", NEWID(), " + ;
-                              FormatarDataSQL(CrSigMvCcr.Datas) + ")"
-
-                IF SQLEXEC(gnConnHandle, loc_cInsert) > 0
-                    loc_nErro = SQLEXEC(gnConnHandle, loc_cUpdate)
-                    IF loc_nErro > 0
-                        *-- Atualizar cursor local CrSigMvCcr
-                        SELECT CrSigMvCcr
-                        IF loc_lTval
-                            REPLACE DtAudits WITH DATETIME(), ;
-                                    Auditors WITH gc_4c_UsuarioLogado
-                        ELSE
-                            REPLACE DtAudits WITH {}, ;
-                                    Auditors WITH " "
+                loc_nErro = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpMccr4")
+                IF loc_nErro > 0
+                    SELECT cursor_4c_TmpMccr4
+    
+                    *-- Verificar estado atual de auditoria
+                    IF loc_lTval
+                        IF !EMPTY(TRIM(cursor_4c_TmpMccr4.Auditors))
+                            MsgAviso("Lan" + CHR(231) + "amento j" + CHR(225) + " Auditado Por " + ;
+                                     ALLTRIM(cursor_4c_TmpMccr4.Auditors) + "!!!", "")
+                            loc_oPagHist.chk_4c_Chk_Auditoria.Value = 1
+                            IF USED("cursor_4c_TmpMccr4")
+                                USE IN cursor_4c_TmpMccr4
+                            ENDIF
+                            IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
+                                loc_oPagHist.grd_4c_Lancamento.Refresh()
+                                loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
+                            ENDIF
+                            loc_lProsseguir4c = .F.
                         ENDIF
                     ELSE
-                        MsgErro("Falha ao atualizar SigMvCcr.", ;
-                                "Erro em Auditoria")
+                        IF EMPTY(TRIM(cursor_4c_TmpMccr4.Auditors))
+                            MsgAviso("Lan" + CHR(231) + "amento n" + CHR(227) + "o Auditado !!!", "")
+                            loc_oPagHist.chk_4c_Chk_Auditoria.Value = 1
+                            IF USED("cursor_4c_TmpMccr4")
+                                USE IN cursor_4c_TmpMccr4
+                            ENDIF
+                            IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
+                                loc_oPagHist.grd_4c_Lancamento.Refresh()
+                                loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
+                            ENDIF
+                            loc_lProsseguir4c = .F.
+                        ENDIF
+                    ENDIF
+    
+                    IF loc_lProsseguir4c
+                        loc_cCidChaves = TRIM(cursor_4c_TmpMccr4.CidChaves)
+                        IF USED("cursor_4c_TmpMccr4")
+                            USE IN cursor_4c_TmpMccr4
+                        ENDIF
+    
+                        IF loc_lTval
+                            loc_cTipo   = "Auditado"
+                            loc_cUpdate = "UPDATE SigMvCcr SET DtAudits = '" + loc_cDataSQL + ;
+                                          "', Auditors = " + EscaparSQL(gc_4c_UsuarioLogado) + ;
+                                          " WHERE CidChaves = " + EscaparSQL(loc_cCidChaves)
+                        ELSE
+                            loc_cTipo   = "DesAuditado"
+                            loc_cUpdate = "UPDATE SigMvCcr SET DtAudits = NULL, " + ;
+                                          "Auditors = '          ' " + ;
+                                          " WHERE CidChaves = " + EscaparSQL(loc_cCidChaves)
+                        ENDIF
+    
+                    *-- Inserir log em SigCqOch
+                        SELECT CrSigMvCcr
+                        loc_cInsert = "INSERT INTO SigCqOch " + ;
+                                      "(Nopers, Datars, TpLancs, Datas, Usuars, CidChaves, DtLancs) " + ;
+                                      "VALUES (" + STR(CrSigMvCcr.Nopers) + ", GETDATE(), " + ;
+                                      EscaparSQL(loc_cTipo) + ", " + ;
+                                      IIF(loc_lTval, "'" + loc_cDataSQL + "'", "NULL") + ", " + ;
+                                      EscaparSQL(gc_4c_UsuarioLogado) + ", NEWID(), " + ;
+                                      FormatarDataSQL(CrSigMvCcr.Datas) + ")"
+    
+                        IF SQLEXEC(gnConnHandle, loc_cInsert) > 0
+                            loc_nErro = SQLEXEC(gnConnHandle, loc_cUpdate)
+                            IF loc_nErro > 0
+                                *-- Atualizar cursor local CrSigMvCcr
+                                SELECT CrSigMvCcr
+                                IF loc_lTval
+                                    REPLACE DtAudits WITH DATETIME(), ;
+                                            Auditors WITH gc_4c_UsuarioLogado
+                                ELSE
+                                    REPLACE DtAudits WITH {}, ;
+                                            Auditors WITH " "
+                                ENDIF
+                            ELSE
+                                MsgErro("Falha ao atualizar SigMvCcr.", ;
+                                        "Erro em Auditoria")
+                            ENDIF
+                        ELSE
+                            MsgErro("Falha ao registrar log de auditoria.", ;
+                                    "Erro em SigCqOch")
+                        ENDIF
                     ENDIF
                 ELSE
-                    MsgErro("Falha ao registrar log de auditoria.", ;
-                            "Erro em SigCqOch")
+                    IF USED("cursor_4c_TmpMccr4")
+                        USE IN cursor_4c_TmpMccr4
+                    ENDIF
+                    MsgErro("Favor Reinicializar o Processo!", ;
+                            "Falha na Conex" + CHR(227) + "o (SigMvCcr Auditoria)")
                 ENDIF
-            ELSE
-                IF USED("cursor_4c_TmpMccr4")
-                    USE IN cursor_4c_TmpMccr4
-                ENDIF
-                MsgErro("Favor Reinicializar o Processo!", ;
-                        "Falha na Conex" + CHR(227) + "o (SigMvCcr Auditoria)")
             ENDIF
 
             *-- Atualizar UI
-            IF PEMSTATUS(loc_oPagHist, "txt_4c_DtAudits", 5)
-                loc_oPagHist.txt_4c_DtAudits.Refresh()
-            ENDIF
-            IF PEMSTATUS(loc_oPagHist, "txt_4c_Auditors", 5)
-                loc_oPagHist.txt_4c_Auditors.Refresh()
-            ENDIF
-            IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
-                loc_oPagHist.grd_4c_Lancamento.Refresh()
-                loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
-            ENDIF
+            IF loc_lProsseguir4c
+                IF PEMSTATUS(loc_oPagHist, "txt_4c_DtAudits", 5)
+                    loc_oPagHist.txt_4c_DtAudits.Refresh()
+                ENDIF
+                IF PEMSTATUS(loc_oPagHist, "txt_4c_Auditors", 5)
+                    loc_oPagHist.txt_4c_Auditors.Refresh()
+                ENDIF
+                IF PEMSTATUS(loc_oPagHist, "grd_4c_Lancamento", 5)
+                    loc_oPagHist.grd_4c_Lancamento.Refresh()
+                    loc_oPagHist.grd_4c_Lancamento.Column1.SetFocus()
+                ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em BtnAuditoriaHistClick")
         ENDTRY

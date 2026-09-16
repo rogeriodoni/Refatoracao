@@ -829,23 +829,28 @@ DEFINE CLASS FormFop AS FormBase
     * CmdRepetirClick - Exibe area de quantidade para duplicar linha corrente
     *==========================================================================
     PROCEDURE CmdRepetirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crSigPrFnc")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT crSigPrFnc
-            IF EOF() OR EMPTY(iFors)
-                MsgAviso("Selecione um registro para ser repetido.", ;
-                         "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                SELECT crSigPrFnc
+                IF EOF() OR EMPTY(iFors)
+                    MsgAviso("Selecione um registro para ser repetido.", ;
+                             "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            THIS.lbl_4c_LblQtde.Visible = .T.
-            THIS.txt_4c_Qtde.Visible    = .T.
-            THIS.shp_4c_ShpQtde.Visible = .T.
-            THIS.txt_4c_Qtde.Value      = 0
-            THIS.txt_4c_Qtde.SetFocus()
+            IF loc_lProsseguir
+                THIS.lbl_4c_LblQtde.Visible = .T.
+                THIS.txt_4c_Qtde.Visible    = .T.
+                THIS.shp_4c_ShpQtde.Visible = .T.
+                THIS.txt_4c_Qtde.Value      = 0
+                THIS.txt_4c_Qtde.SetFocus()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -1270,17 +1275,20 @@ DEFINE CLASS FormFop AS FormBase
     * na linha corrente para permitir digitacao.
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.this_lModoEdicao
                 MsgAviso("Form aberto em modo de visualiza" + CHR(231) + CHR(227) + "o. " + ;
                          "Reabra a partir do form pai em modo Incluir ou Alterar.", ;
                          "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF USED("crSigPrFnc") AND !EOF("crSigPrFnc")
-                THIS.grd_4c_Dados.Column1.SetFocus()
+            IF loc_lProsseguir
+                IF USED("crSigPrFnc") AND !EOF("crSigPrFnc")
+                    THIS.grd_4c_Dados.Column1.SetFocus()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -1295,20 +1303,25 @@ DEFINE CLASS FormFop AS FormBase
     * o grid a partir do banco (util para refletir mudancas concorrentes).
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF EMPTY(THIS.this_cCpros)
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(THIS.this_cCpros)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            THIS.this_oBusinessObject.BuscarPorProduto(THIS.this_cCpros)
-            IF USED("crSigPrFnc")
-                THIS.grd_4c_Dados.ColumnCount  = 10
-                THIS.grd_4c_Dados.RecordSource = "crSigPrFnc"
-                THIS.grd_4c_Dados.Refresh()
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.BuscarPorProduto(THIS.this_cCpros)
+                IF USED("crSigPrFnc")
+                    THIS.grd_4c_Dados.ColumnCount  = 10
+                    THIS.grd_4c_Dados.RecordSource = "crSigPrFnc"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -1351,20 +1364,23 @@ DEFINE CLASS FormFop AS FormBase
     * estado real (inclusive chaves geradas pelo SQL Server).
     *==========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.this_lModoEdicao
                 MsgAviso("Form aberto em modo de visualiza" + CHR(231) + CHR(227) + "o. " + ;
                          "N" + CHR(227) + "o " + CHR(233) + " poss" + CHR(237) + "vel salvar.", ;
                          "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF THIS.this_oBusinessObject.ValidarCursor(THIS.this_cPcEscolha)
-                IF THIS.this_oBusinessObject.SalvarAlteracoes(THIS.this_cCpros)
-                    MsgInfo("Fornecedores salvos com sucesso.")
-                    THIS.CarregarLista()
+            IF loc_lProsseguir
+                IF THIS.this_oBusinessObject.ValidarCursor(THIS.this_cPcEscolha)
+                    IF THIS.this_oBusinessObject.SalvarAlteracoes(THIS.this_cCpros)
+                        MsgInfo("Fornecedores salvos com sucesso.")
+                        THIS.CarregarLista()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -1404,20 +1420,25 @@ DEFINE CLASS FormFop AS FormBase
     * Equivalente ao InicializarForm de carga de dados (sem recriar controles).
     *==========================================================================
     PROCEDURE CarregarLista()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF EMPTY(THIS.this_cCpros)
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(THIS.this_cCpros)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            THIS.this_oBusinessObject.BuscarPorProduto(THIS.this_cCpros)
-            IF USED("crSigPrFnc")
-                THIS.grd_4c_Dados.ColumnCount  = 10
-                THIS.grd_4c_Dados.RecordSource = "crSigPrFnc"
-                THIS.grd_4c_Dados.Refresh()
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.BuscarPorProduto(THIS.this_cCpros)
+                IF USED("crSigPrFnc")
+                    THIS.grd_4c_Dados.ColumnCount  = 10
+                    THIS.grd_4c_Dados.RecordSource = "crSigPrFnc"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

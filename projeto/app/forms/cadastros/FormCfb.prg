@@ -2142,40 +2142,45 @@ DEFINE CLASS FormCfb AS FormBase
     *--------------------------------------------------------------------------
     PROCEDURE Text29LostFocus
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_oPg2, loc_cNome, loc_nQtd, loc_aPrinters, loc_nI, loc_lEncontrado
+        LOCAL loc_oPg2, loc_cNome, loc_nQtd, loc_aPrinters, loc_nI, loc_lEncontrado, loc_lProsseguir
         LOCAL loc_cImpressora
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_Text29", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cNome = ALLTRIM(loc_oPg2.txt_4c_Text29.Value)
+            IF loc_lProsseguir
+                loc_cNome = ALLTRIM(loc_oPg2.txt_4c_Text29.Value)
 
-            IF EMPTY(loc_cNome)
-                RETURN
+                IF EMPTY(loc_cNome)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Verificar se impressora informada existe na lista do sistema
-            loc_nQtd      = APRINTERS(loc_aPrinters)
-            loc_lEncontrado = .F.
+            IF loc_lProsseguir
+                loc_nQtd      = APRINTERS(loc_aPrinters)
+                loc_lEncontrado = .F.
 
-            IF loc_nQtd > 0
-                FOR loc_nI = 1 TO loc_nQtd
-                    IF UPPER(ALLTRIM(loc_aPrinters[loc_nI, 1])) == UPPER(loc_cNome)
-                        loc_lEncontrado = .T.
-                        EXIT
+                IF loc_nQtd > 0
+                    FOR loc_nI = 1 TO loc_nQtd
+                        IF UPPER(ALLTRIM(loc_aPrinters[loc_nI, 1])) == UPPER(loc_cNome)
+                            loc_lEncontrado = .T.
+                            EXIT
+                        ENDIF
+                    ENDFOR
+                ENDIF
+
+                IF !loc_lEncontrado
+                    *-- Impressora invalida: abrir seletor de impressoras
+                    loc_cImpressora = GetPrinter()
+                    IF !EMPTY(loc_cImpressora)
+                        loc_oPg2.txt_4c_Text29.Value = loc_cImpressora
+                        THIS.this_oBusinessObject.this_cCNomeImps = loc_cImpressora
                     ENDIF
-                ENDFOR
-            ENDIF
-
-            IF !loc_lEncontrado
-                *-- Impressora invalida: abrir seletor de impressoras
-                loc_cImpressora = GetPrinter()
-                IF !EMPTY(loc_cImpressora)
-                    loc_oPg2.txt_4c_Text29.Value = loc_cImpressora
-                    THIS.this_oBusinessObject.this_cCNomeImps = loc_cImpressora
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -2189,51 +2194,56 @@ DEFINE CLASS FormCfb AS FormBase
     *--------------------------------------------------------------------------
     PROCEDURE Text30LostFocus
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_oPg2, loc_cFonte, loc_nI, loc_nQtd, loc_aFontes, loc_lEncontrado
+        LOCAL loc_oPg2, loc_cFonte, loc_nI, loc_nQtd, loc_aFontes, loc_lEncontrado, loc_lProsseguir
         LOCAL loc_cResultado, loc_nPos1, loc_nPos2, loc_nTam
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_Text30", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cFonte = ALLTRIM(loc_oPg2.txt_4c_Text30.Value)
+            IF loc_lProsseguir
+                loc_cFonte = ALLTRIM(loc_oPg2.txt_4c_Text30.Value)
 
-            IF EMPTY(loc_cFonte)
-                RETURN
+                IF EMPTY(loc_cFonte)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Verificar se fonte informada existe na lista do sistema
-            loc_nQtd      = AFONT(loc_aFontes)
-            loc_lEncontrado = .F.
+            IF loc_lProsseguir
+                loc_nQtd      = AFONT(loc_aFontes)
+                loc_lEncontrado = .F.
 
-            IF loc_nQtd > 0
-                FOR loc_nI = 1 TO loc_nQtd
-                    IF UPPER(ALLTRIM(loc_aFontes[loc_nI])) == UPPER(loc_cFonte)
-                        loc_lEncontrado = .T.
-                        EXIT
-                    ENDIF
-                ENDFOR
-            ENDIF
+                IF loc_nQtd > 0
+                    FOR loc_nI = 1 TO loc_nQtd
+                        IF UPPER(ALLTRIM(loc_aFontes[loc_nI])) == UPPER(loc_cFonte)
+                            loc_lEncontrado = .T.
+                            EXIT
+                        ENDIF
+                    ENDFOR
+                ENDIF
 
-            IF !loc_lEncontrado
-                *-- Fonte invalida: abrir seletor de fontes
-                loc_cResultado = GetFont()
-                IF !EMPTY(loc_cResultado)
-                    *-- GetFont() retorna "FontName,Size,Style"
-                    loc_nPos1 = AT(",", loc_cResultado, 1)
-                    loc_nPos2 = AT(",", loc_cResultado, 2)
-                    IF loc_nPos1 > 0
-                        loc_cFonte = LEFT(loc_cResultado, loc_nPos1 - 1)
-                        loc_oPg2.txt_4c_Text30.Value = loc_cFonte
-                        THIS.this_oBusinessObject.this_cCFontePdrs = loc_cFonte
-                        *-- Atualizar tamanho da fonte em Text31
-                        IF loc_nPos2 > loc_nPos1 AND PEMSTATUS(loc_oPg2, "txt_4c_Text31", 5)
-                            loc_nTam = VAL(SUBSTR(loc_cResultado, loc_nPos1 + 1, ;
-                                loc_nPos2 - loc_nPos1 - 1))
-                            loc_oPg2.txt_4c_Text31.Value = loc_nTam
-                            THIS.this_oBusinessObject.this_nNTamFontes = loc_nTam
+                IF !loc_lEncontrado
+                    *-- Fonte invalida: abrir seletor de fontes
+                    loc_cResultado = GetFont()
+                    IF !EMPTY(loc_cResultado)
+                        *-- GetFont() retorna "FontName,Size,Style"
+                        loc_nPos1 = AT(",", loc_cResultado, 1)
+                        loc_nPos2 = AT(",", loc_cResultado, 2)
+                        IF loc_nPos1 > 0
+                            loc_cFonte = LEFT(loc_cResultado, loc_nPos1 - 1)
+                            loc_oPg2.txt_4c_Text30.Value = loc_cFonte
+                            THIS.this_oBusinessObject.this_cCFontePdrs = loc_cFonte
+                            *-- Atualizar tamanho da fonte em Text31
+                            IF loc_nPos2 > loc_nPos1 AND PEMSTATUS(loc_oPg2, "txt_4c_Text31", 5)
+                                loc_nTam = VAL(SUBSTR(loc_cResultado, loc_nPos1 + 1, ;
+                                    loc_nPos2 - loc_nPos1 - 1))
+                                loc_oPg2.txt_4c_Text31.Value = loc_nTam
+                                THIS.this_oBusinessObject.this_nNTamFontes = loc_nTam
+                            ENDIF
                         ENDIF
                     ENDIF
                 ENDIF
@@ -2373,39 +2383,46 @@ DEFINE CLASS FormCfb AS FormBase
     * Se nao existir registro em SIGCNFBL, prepara para INSERT
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_cFPags, loc_cDescrs, loc_lTemDados
+        LOCAL loc_cFPags, loc_cDescrs, loc_lTemDados, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados")
                 MsgAviso("Selecione uma condi" + CHR(231) + CHR(227) + "o de pagamento.", "")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Dados
-            loc_cFPags   = ALLTRIM(cursor_4c_Dados.FPags)
-            loc_cDescrs  = ALLTRIM(cursor_4c_Dados.Descrs)
-            loc_lTemDados = !EMPTY(ALLTRIM(NVL(cursor_4c_Dados.TemDados, "")))
+            IF loc_lProsseguir
+                SELECT cursor_4c_Dados
+                loc_cFPags   = ALLTRIM(cursor_4c_Dados.FPags)
+                loc_cDescrs  = ALLTRIM(cursor_4c_Dados.Descrs)
+                loc_lTemDados = !EMPTY(ALLTRIM(NVL(cursor_4c_Dados.TemDados, "")))
 
-            IF loc_lTemDados
-                *-- Registro existe -> Atualizar
-                IF !THIS.this_oBusinessObject.CarregarPorCodigo(loc_cFPags)
-                    MsgErro("Erro ao carregar configura" + CHR(231) + CHR(227) + "o de boleto.", "Erro")
-                    RETURN
+                IF loc_lTemDados
+                    *-- Registro existe -> Atualizar
+                    IF !THIS.this_oBusinessObject.CarregarPorCodigo(loc_cFPags)
+                        MsgErro("Erro ao carregar configura" + CHR(231) + CHR(227) + "o de boleto.", "Erro")
+                        loc_lProsseguir = .F.
+                    ENDIF
+                    IF loc_lProsseguir
+                        THIS.this_oBusinessObject.EditarRegistro()
+                    ENDIF
+                ELSE
+                    *-- Registro nao existe -> Inserir (neste caso o legado permitia via Alterar)
+                    THIS.this_oBusinessObject.NovoRegistro()
+                    THIS.this_oBusinessObject.this_cFPags   = loc_cFPags
+                    THIS.this_oBusinessObject.this_cDescrs  = loc_cDescrs
                 ENDIF
-                THIS.this_oBusinessObject.EditarRegistro()
-            ELSE
-                *-- Registro nao existe -> Inserir (neste caso o legado permitia via Alterar)
-                THIS.this_oBusinessObject.NovoRegistro()
-                THIS.this_oBusinessObject.this_cFPags   = loc_cFPags
-                THIS.this_oBusinessObject.this_cDescrs  = loc_cDescrs
             ENDIF
 
-            THIS.this_oBusinessObject.this_cDescrs = loc_cDescrs
-            THIS.this_cModoAtual = "ALTERAR"
-            THIS.BOParaForm()
-            THIS.HabilitarCampos(.T.)
-            THIS.AjustarBotoesPorModo()
-            THIS.pgf_4c_Paginas.ActivePage = 2
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.this_cDescrs = loc_cDescrs
+                THIS.this_cModoAtual = "ALTERAR"
+                THIS.BOParaForm()
+                THIS.HabilitarCampos(.T.)
+                THIS.AjustarBotoesPorModo()
+                THIS.pgf_4c_Paginas.ActivePage = 2
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormCfb.BtnAlterarClick")
         ENDTRY
@@ -2415,36 +2432,43 @@ DEFINE CLASS FormCfb AS FormBase
     * BtnVisualizarClick - Carrega configuracao em modo somente leitura
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_cFPags, loc_cDescrs, loc_lTemDados
+        LOCAL loc_cFPags, loc_cDescrs, loc_lTemDados, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados")
                 MsgAviso("Selecione uma condi" + CHR(231) + CHR(227) + "o de pagamento.", "")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Dados
-            loc_cFPags   = ALLTRIM(cursor_4c_Dados.FPags)
-            loc_cDescrs  = ALLTRIM(cursor_4c_Dados.Descrs)
-            loc_lTemDados = !EMPTY(ALLTRIM(NVL(cursor_4c_Dados.TemDados, "")))
+            IF loc_lProsseguir
+                SELECT cursor_4c_Dados
+                loc_cFPags   = ALLTRIM(cursor_4c_Dados.FPags)
+                loc_cDescrs  = ALLTRIM(cursor_4c_Dados.Descrs)
+                loc_lTemDados = !EMPTY(ALLTRIM(NVL(cursor_4c_Dados.TemDados, "")))
 
-            IF !loc_lTemDados
-                MsgAviso("Esta condi" + CHR(231) + CHR(227) + "o de pagamento ainda n" + ;
-                    CHR(227) + "o foi configurada.", "")
-                RETURN
+                IF !loc_lTemDados
+                    MsgAviso("Esta condi" + CHR(231) + CHR(227) + "o de pagamento ainda n" + ;
+                        CHR(227) + "o foi configurada.", "")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF !THIS.this_oBusinessObject.CarregarPorCodigo(loc_cFPags)
-                MsgErro("Erro ao carregar configura" + CHR(231) + CHR(227) + "o de boleto.", "Erro")
-                RETURN
+            IF loc_lProsseguir
+                IF !THIS.this_oBusinessObject.CarregarPorCodigo(loc_cFPags)
+                    MsgErro("Erro ao carregar configura" + CHR(231) + CHR(227) + "o de boleto.", "Erro")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            THIS.this_oBusinessObject.this_cDescrs = loc_cDescrs
-            THIS.this_cModoAtual = "VISUALIZAR"
-            THIS.BOParaForm()
-            THIS.HabilitarCampos(.F.)
-            THIS.AjustarBotoesPorModo()
-            THIS.pgf_4c_Paginas.ActivePage = 2
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.this_cDescrs = loc_cDescrs
+                THIS.this_cModoAtual = "VISUALIZAR"
+                THIS.BOParaForm()
+                THIS.HabilitarCampos(.F.)
+                THIS.AjustarBotoesPorModo()
+                THIS.pgf_4c_Paginas.ActivePage = 2
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormCfb.BtnVisualizarClick")
         ENDTRY
@@ -2454,37 +2478,44 @@ DEFINE CLASS FormCfb AS FormBase
     * BtnExcluirClick - Remove configuracao de boleto da condicao selecionada
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_cFPags, loc_lTemDados, loc_lConfirma
+        LOCAL loc_cFPags, loc_lTemDados, loc_lConfirma, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados")
                 MsgAviso("Selecione uma condi" + CHR(231) + CHR(227) + "o de pagamento.", "")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Dados
-            loc_cFPags   = ALLTRIM(cursor_4c_Dados.FPags)
-            loc_lTemDados = !EMPTY(ALLTRIM(NVL(cursor_4c_Dados.TemDados, "")))
+            IF loc_lProsseguir
+                SELECT cursor_4c_Dados
+                loc_cFPags   = ALLTRIM(cursor_4c_Dados.FPags)
+                loc_lTemDados = !EMPTY(ALLTRIM(NVL(cursor_4c_Dados.TemDados, "")))
 
-            IF !loc_lTemDados
-                MsgAviso("Esta condi" + CHR(231) + CHR(227) + "o de pagamento n" + CHR(227) + ;
-                    "o possui configura" + CHR(231) + CHR(227) + "o de boleto.", "")
-                RETURN
+                IF !loc_lTemDados
+                    MsgAviso("Esta condi" + CHR(231) + CHR(227) + "o de pagamento n" + CHR(227) + ;
+                        "o possui configura" + CHR(231) + CHR(227) + "o de boleto.", "")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_lConfirma = MsgConfirma("Confirma a exclus" + CHR(227) + "o da configura" + ;
-                CHR(231) + CHR(227) + "o de boleto para a condi" + CHR(231) + CHR(227) + ;
-                "o [" + loc_cFPags + "]?", "Confirmar Exclus" + CHR(227) + "o")
+            IF loc_lProsseguir
+                loc_lConfirma = MsgConfirma("Confirma a exclus" + CHR(227) + "o da configura" + ;
+                    CHR(231) + CHR(227) + "o de boleto para a condi" + CHR(231) + CHR(227) + ;
+                    "o [" + loc_cFPags + "]?", "Confirmar Exclus" + CHR(227) + "o")
 
-            IF !loc_lConfirma
-                RETURN
+                IF !loc_lConfirma
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            THIS.this_oBusinessObject.this_cFPags = loc_cFPags
-            IF THIS.this_oBusinessObject.Excluir()
-                MsgInfo("Configura" + CHR(231) + CHR(227) + "o exclu" + CHR(237) + ;
-                    "da com sucesso!")
-                THIS.CarregarLista()
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.this_cFPags = loc_cFPags
+                IF THIS.this_oBusinessObject.Excluir()
+                    MsgInfo("Configura" + CHR(231) + CHR(227) + "o exclu" + CHR(237) + ;
+                        "da com sucesso!")
+                    THIS.CarregarLista()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormCfb.BtnExcluirClick")

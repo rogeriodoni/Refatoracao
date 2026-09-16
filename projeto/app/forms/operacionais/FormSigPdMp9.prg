@@ -2074,24 +2074,29 @@ DEFINE CLASS FormSigPdMp9 AS FormBase
     * Form OPERACIONAL: Incluir adiciona linha em xPesa para nova pesagem
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oPaiForm) <> "O" OR ;
                !INLIST(ALLTRIM(THIS.this_oPaiForm.pcEscolha), "INSERIR", "ALTERAR")
                 MsgAviso("Inclus" + CHR(227) + "o de pe" + CHR(231) + "a permitida apenas em modo Inserir/Alterar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("xPesa")
-                MsgAviso("Cursor de pesagem n" + CHR(227) + "o dispon" + CHR(237) + "vel.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("xPesa")
+                    MsgAviso("Cursor de pesagem n" + CHR(227) + "o dispon" + CHR(237) + "vel.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            SELECT xPesa
-            APPEND BLANK
-            REPLACE Peso WITH 0, Qtds WITH 1
-            THIS.this_lAlterou = .T.
-            IF VARTYPE(THIS.grd_4c_Itens) = "O"
-                THIS.grd_4c_Itens.Refresh()
-                THIS.grd_4c_Itens.SetFocus()
+            IF loc_lProsseguir
+                SELECT xPesa
+                APPEND BLANK
+                REPLACE Peso WITH 0, Qtds WITH 1
+                THIS.this_lAlterou = .T.
+                IF VARTYPE(THIS.grd_4c_Itens) = "O"
+                    THIS.grd_4c_Itens.Refresh()
+                    THIS.grd_4c_Itens.SetFocus()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao incluir pe" + CHR(231) + "a")
@@ -2103,26 +2108,31 @@ DEFINE CLASS FormSigPdMp9 AS FormBase
     * Form OPERACIONAL: Alterar = editar peso da pe" + CHR(231) + "a corrente
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oPaiForm) <> "O" OR ;
                !INLIST(ALLTRIM(THIS.this_oPaiForm.pcEscolha), "INSERIR", "ALTERAR")
                 MsgAviso("Altera" + CHR(231) + CHR(227) + "o permitida apenas em modo Inserir/Alterar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("xPesa") OR RECCOUNT("xPesa") = 0
-                MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " pe" + CHR(231) + "as para alterar.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("xPesa") OR RECCOUNT("xPesa") = 0
+                    MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " pe" + CHR(231) + "as para alterar.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            SELECT xPesa
-            IF EOF() OR BOF()
-                GO TOP
-            ENDIF
-            THIS.this_lAlterou = .T.
-            IF VARTYPE(THIS.grd_4c_Itens) = "O"
-                THIS.grd_4c_Itens.SetFocus()
-                IF PEMSTATUS(THIS.grd_4c_Itens, "Column6", 5)
-                    THIS.grd_4c_Itens.Column6.SetFocus()
+            IF loc_lProsseguir
+                SELECT xPesa
+                IF EOF() OR BOF()
+                    GO TOP
+                ENDIF
+                THIS.this_lAlterou = .T.
+                IF VARTYPE(THIS.grd_4c_Itens) = "O"
+                    THIS.grd_4c_Itens.SetFocus()
+                    IF PEMSTATUS(THIS.grd_4c_Itens, "Column6", 5)
+                        THIS.grd_4c_Itens.Column6.SetFocus()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -2135,30 +2145,37 @@ DEFINE CLASS FormSigPdMp9 AS FormBase
     * Form OPERACIONAL: Visualizar abre SigCdPro com produto corrente
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro, loc_nRecno, loc_cCpros
+        LOCAL loc_oErro, loc_nRecno, loc_cCpros, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("xPesa") OR RECCOUNT("xPesa") = 0
                 MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " pe" + CHR(231) + "a para visualizar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !fChecaAcesso(THIS.this_cProgAcesso, "CUSTOP")
-                MsgAviso("Sem permiss" + CHR(227) + "o para visualizar custo.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                IF !fChecaAcesso(THIS.this_cProgAcesso, "CUSTOP")
+                    MsgAviso("Sem permiss" + CHR(227) + "o para visualizar custo.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            SELECT xPesa
-            loc_nRecno = RECNO()
-            loc_cCpros = ALLTRIM(NVL(Cpros, ""))
-            IF EMPTY(loc_cCpros)
-                MsgAviso("Pe" + CHR(231) + "a sem produto associado.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                SELECT xPesa
+                loc_nRecno = RECNO()
+                loc_cCpros = ALLTRIM(NVL(Cpros, ""))
+                IF EMPTY(loc_cCpros)
+                    MsgAviso("Pe" + CHR(231) + "a sem produto associado.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            DO FORM SigCdPro WITH "PESAGEM", loc_cCpros
-            SELECT xPesa
-            IF loc_nRecno > 0 AND loc_nRecno <= RECCOUNT()
-                GO loc_nRecno
-            ENDIF
-            IF VARTYPE(THIS.grd_4c_Itens) = "O"
-                THIS.grd_4c_Itens.Refresh()
+            IF loc_lProsseguir
+                DO FORM SigCdPro WITH "PESAGEM", loc_cCpros
+                SELECT xPesa
+                IF loc_nRecno > 0 AND loc_nRecno <= RECCOUNT()
+                    GO loc_nRecno
+                ENDIF
+                IF VARTYPE(THIS.grd_4c_Itens) = "O"
+                    THIS.grd_4c_Itens.Refresh()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao visualizar pe" + CHR(231) + "a")
@@ -2170,35 +2187,42 @@ DEFINE CLASS FormSigPdMp9 AS FormBase
     * Form OPERACIONAL: Excluir zera Peso e PesoFixs da linha corrente
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro, loc_lConfirma
+        LOCAL loc_oErro, loc_lConfirma, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oPaiForm) <> "O" OR ;
                !INLIST(ALLTRIM(THIS.this_oPaiForm.pcEscolha), "INSERIR", "ALTERAR")
                 MsgAviso("Exclus" + CHR(227) + "o permitida apenas em modo Inserir/Alterar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("xPesa") OR RECCOUNT("xPesa") = 0
-                MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " pe" + CHR(231) + "a para excluir.", "Aviso")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("xPesa") OR RECCOUNT("xPesa") = 0
+                    MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " pe" + CHR(231) + "a para excluir.", "Aviso")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            SELECT xPesa
-            IF EOF() OR BOF()
-                GO TOP
+            IF loc_lProsseguir
+                SELECT xPesa
+                IF EOF() OR BOF()
+                    GO TOP
+                ENDIF
+                loc_lConfirma = MsgConfirma("Confirma desfazer a pesagem desta pe" + CHR(231) + "a?", "Confirma" + CHR(231) + CHR(227) + "o")
+                IF !loc_lConfirma
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_lConfirma = MsgConfirma("Confirma desfazer a pesagem desta pe" + CHR(231) + "a?", "Confirma" + CHR(231) + CHR(227) + "o")
-            IF !loc_lConfirma
-                RETURN
-            ENDIF
-            SELECT xPesa
-            REPLACE Peso WITH 0
-            IF TYPE("xPesa.PesoFixs") <> "U"
-                REPLACE PesoFixs WITH 0
-            ENDIF
-            THIS.this_lAlterou = .T.
-            THIS.this_nOldValue = 0
-            IF VARTYPE(THIS.grd_4c_Itens) = "O"
-                THIS.grd_4c_Itens.Refresh()
-                THIS.grd_4c_Itens.SetFocus()
+            IF loc_lProsseguir
+                SELECT xPesa
+                REPLACE Peso WITH 0
+                IF TYPE("xPesa.PesoFixs") <> "U"
+                    REPLACE PesoFixs WITH 0
+                ENDIF
+                THIS.this_lAlterou = .T.
+                THIS.this_nOldValue = 0
+                IF VARTYPE(THIS.grd_4c_Itens) = "O"
+                    THIS.grd_4c_Itens.Refresh()
+                    THIS.grd_4c_Itens.SetFocus()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao excluir pesagem")

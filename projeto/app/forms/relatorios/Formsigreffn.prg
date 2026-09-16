@@ -1450,34 +1450,39 @@ DEFINE CLASS Formsigreffn AS FormBase
     * FormParaRelatorio - Transfere valores dos filtros para o BO
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE FormParaRelatorio()
-        LOCAL loc_oPag, loc_oErro
+        LOCAL loc_oPag, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+            IF loc_lProsseguir
+                IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oPag = THIS.pgf_4c_Paginas.Page1
+            IF loc_lProsseguir
+                loc_oPag = THIS.pgf_4c_Paginas.Page1
 
-            WITH THIS.this_oRelatorio
-                .this_dDtInicial      = loc_oPag.txt_4c__dt_inicial.Value
-                .this_dDtFinal        = loc_oPag.txt_4c__dt_final.Value
-                .this_cCdMoeda        = ALLTRIM(loc_oPag.txt_4c__cd_moeda.Value)
-                .this_cDsMoeda        = ALLTRIM(loc_oPag.txt_4c__ds_moeda.Value)
-                .this_nVlCotacao      = loc_oPag.txt_4c_cotacao.Value
-                .this_cCdMoedl        = ALLTRIM(loc_oPag.txt_4c_cd_moedl.Value)
-                .this_cDsMoedl        = ALLTRIM(loc_oPag.txt_4c_ds_moedl.Value)
-                .this_nTotalizaContas = loc_oPag.chk_4c_TotalizaContas.Value
-                .this_nConciliado     = loc_oPag.chk_4c_Conciliado.Value
-                .this_nOpcao          = loc_oPag.obj_4c_Opt_opcao.Value
-                .this_nTipoImp        = loc_oPag.obj_4c_Opt_tipo.Value
-                .this_nListaAtra      = loc_oPag.obj_4c_Opt_lista_atra.Value
-                .this_nConsidAtra     = loc_oPag.obj_4c_Opt_consid_atra.Value
-                .this_nPrev           = loc_oPag.obj_4c_Opt_prev.Value
-                .this_nSitua          = loc_oPag.obj_4c_Opt_situa.Value
-                .this_nSaldo          = loc_oPag.obj_4c_Opt_saldo.Value
-            ENDWITH
+                WITH THIS.this_oRelatorio
+                    .this_dDtInicial      = loc_oPag.txt_4c__dt_inicial.Value
+                    .this_dDtFinal        = loc_oPag.txt_4c__dt_final.Value
+                    .this_cCdMoeda        = ALLTRIM(loc_oPag.txt_4c__cd_moeda.Value)
+                    .this_cDsMoeda        = ALLTRIM(loc_oPag.txt_4c__ds_moeda.Value)
+                    .this_nVlCotacao      = loc_oPag.txt_4c_cotacao.Value
+                    .this_cCdMoedl        = ALLTRIM(loc_oPag.txt_4c_cd_moedl.Value)
+                    .this_cDsMoedl        = ALLTRIM(loc_oPag.txt_4c_ds_moedl.Value)
+                    .this_nTotalizaContas = loc_oPag.chk_4c_TotalizaContas.Value
+                    .this_nConciliado     = loc_oPag.chk_4c_Conciliado.Value
+                    .this_nOpcao          = loc_oPag.obj_4c_Opt_opcao.Value
+                    .this_nTipoImp        = loc_oPag.obj_4c_Opt_tipo.Value
+                    .this_nListaAtra      = loc_oPag.obj_4c_Opt_lista_atra.Value
+                    .this_nConsidAtra     = loc_oPag.obj_4c_Opt_consid_atra.Value
+                    .this_nPrev           = loc_oPag.obj_4c_Opt_prev.Value
+                    .this_nSitua          = loc_oPag.obj_4c_Opt_situa.Value
+                    .this_nSaldo          = loc_oPag.obj_4c_Opt_saldo.Value
+                ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormParaRelatorio")
         ENDTRY
@@ -1719,7 +1724,8 @@ DEFINE CLASS Formsigreffn AS FormBase
     *   Preenche descri" + CHR(231) + CHR(227) + "o e atualiza cota" + CHR(231) + CHR(227) + "o quando codigo encontrado
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCdMoeda(par_oPag)
-        LOCAL loc_cCodigo, loc_oForm, loc_oErro
+        LOCAL loc_cCodigo, loc_oForm, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cCodigo = ALLTRIM(par_oPag.txt_4c__cd_moeda.Value)
             IF EMPTY(loc_cCodigo)
@@ -1727,48 +1733,54 @@ DEFINE CLASS Formsigreffn AS FormBase
                 par_oPag.txt_4c__ds_moeda.Value    = ""
                 par_oPag.txt_4c__ds_moeda.ReadOnly = .F.
                 par_oPag.txt_4c_cotacao.Value      = 0
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
-                RETURN
+            IF loc_lProsseguir
+                IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdMoe", "cursor_4c_BuscaMoe", "CMoes", loc_cCodigo, ;
-                "Sele" + CHR(231) + CHR(227) + "o de Moeda")
-            IF VARTYPE(loc_oForm) != "O"
-                RETURN
+            IF loc_lProsseguir
+                loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdMoe", "cursor_4c_BuscaMoe", "CMoes", loc_cCodigo, ;
+                    "Sele" + CHR(231) + CHR(227) + "o de Moeda")
+                IF VARTYPE(loc_oForm) != "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF !loc_oForm.this_lAchouRegistro
-                loc_oForm.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
-                loc_oForm.mAddColuna("DMoes", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oForm.Show()
-            ENDIF
-            IF loc_oForm.this_lSelecionou
-                IF USED("cursor_4c_BuscaMoe")
-                    SELECT cursor_4c_BuscaMoe
-                    GO TOP
-                    IF !EOF()
-                        par_oPag.txt_4c__cd_moeda.Value    = ALLTRIM(cursor_4c_BuscaMoe.CMoes)
-                        par_oPag.txt_4c__ds_moeda.Value    = ALLTRIM(cursor_4c_BuscaMoe.DMoes)
-                        par_oPag.txt_4c__ds_moeda.ReadOnly = .T.
-                        *-- Atualiza cotacao automaticamente
-                        IF VARTYPE(THIS.this_oRelatorio) = "O"
-                            par_oPag.txt_4c_cotacao.Value = ;
-                                THIS.this_oRelatorio.BuscarCotacaoAtual( ;
-                                    ALLTRIM(cursor_4c_BuscaMoe.CMoes))
+            IF loc_lProsseguir
+                IF !loc_oForm.this_lAchouRegistro
+                    loc_oForm.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
+                    loc_oForm.mAddColuna("DMoes", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oForm.Show()
+                ENDIF
+                IF loc_oForm.this_lSelecionou
+                    IF USED("cursor_4c_BuscaMoe")
+                        SELECT cursor_4c_BuscaMoe
+                        GO TOP
+                        IF !EOF()
+                            par_oPag.txt_4c__cd_moeda.Value    = ALLTRIM(cursor_4c_BuscaMoe.CMoes)
+                            par_oPag.txt_4c__ds_moeda.Value    = ALLTRIM(cursor_4c_BuscaMoe.DMoes)
+                            par_oPag.txt_4c__ds_moeda.ReadOnly = .T.
+                            *-- Atualiza cotacao automaticamente
+                            IF VARTYPE(THIS.this_oRelatorio) = "O"
+                                par_oPag.txt_4c_cotacao.Value = ;
+                                    THIS.this_oRelatorio.BuscarCotacaoAtual( ;
+                                        ALLTRIM(cursor_4c_BuscaMoe.CMoes))
+                            ENDIF
                         ENDIF
                     ENDIF
+                ELSE
+                    par_oPag.txt_4c__cd_moeda.Value    = ""
+                    par_oPag.txt_4c__ds_moeda.Value    = ""
+                    par_oPag.txt_4c__ds_moeda.ReadOnly = .F.
+                    par_oPag.txt_4c_cotacao.Value      = 0
                 ENDIF
-            ELSE
-                par_oPag.txt_4c__cd_moeda.Value    = ""
-                par_oPag.txt_4c__ds_moeda.Value    = ""
-                par_oPag.txt_4c__ds_moeda.ReadOnly = .F.
-                par_oPag.txt_4c_cotacao.Value      = 0
+                IF USED("cursor_4c_BuscaMoe")
+                    USE IN cursor_4c_BuscaMoe
+                ENDIF
+                loc_oForm.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaMoe")
-                USE IN cursor_4c_BuscaMoe
-            ENDIF
-            loc_oForm.Release()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarCdMoeda")
             IF USED("cursor_4c_BuscaMoe")
@@ -1781,53 +1793,60 @@ DEFINE CLASS Formsigreffn AS FormBase
     * ValidarDsMoeda - Lookup reverso por descri" + CHR(231) + CHR(227) + "o de moeda referencia
     *--------------------------------------------------------------------------
     PROCEDURE ValidarDsMoeda(par_oPag)
-        LOCAL loc_cDesc, loc_oForm, loc_oErro
+        LOCAL loc_cDesc, loc_oForm, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cDesc = ALLTRIM(par_oPag.txt_4c__ds_moeda.Value)
             IF EMPTY(loc_cDesc)
                 par_oPag.txt_4c__cd_moeda.Value = ""
                 par_oPag.txt_4c__ds_moeda.Value = ""
                 par_oPag.txt_4c_cotacao.Value   = 0
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
-                RETURN
+            IF loc_lProsseguir
+                IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdMoe", "cursor_4c_BuscaMoeD", "DMoes", loc_cDesc, ;
-                "Sele" + CHR(231) + CHR(227) + "o de Moeda")
-            IF VARTYPE(loc_oForm) != "O"
-                RETURN
+            IF loc_lProsseguir
+                loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdMoe", "cursor_4c_BuscaMoeD", "DMoes", loc_cDesc, ;
+                    "Sele" + CHR(231) + CHR(227) + "o de Moeda")
+                IF VARTYPE(loc_oForm) != "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF !loc_oForm.this_lAchouRegistro
-                loc_oForm.mAddColuna("DMoes", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oForm.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
-                loc_oForm.Show()
-            ENDIF
-            IF loc_oForm.this_lSelecionou
-                IF USED("cursor_4c_BuscaMoeD")
-                    SELECT cursor_4c_BuscaMoeD
-                    GO TOP
-                    IF !EOF()
-                        par_oPag.txt_4c__cd_moeda.Value    = ALLTRIM(cursor_4c_BuscaMoeD.CMoes)
-                        par_oPag.txt_4c__ds_moeda.Value    = ALLTRIM(cursor_4c_BuscaMoeD.DMoes)
-                        par_oPag.txt_4c__ds_moeda.ReadOnly = .T.
-                        IF VARTYPE(THIS.this_oRelatorio) = "O"
-                            par_oPag.txt_4c_cotacao.Value = ;
-                                THIS.this_oRelatorio.BuscarCotacaoAtual( ;
-                                    ALLTRIM(cursor_4c_BuscaMoeD.CMoes))
+            IF loc_lProsseguir
+                IF !loc_oForm.this_lAchouRegistro
+                    loc_oForm.mAddColuna("DMoes", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oForm.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
+                    loc_oForm.Show()
+                ENDIF
+                IF loc_oForm.this_lSelecionou
+                    IF USED("cursor_4c_BuscaMoeD")
+                        SELECT cursor_4c_BuscaMoeD
+                        GO TOP
+                        IF !EOF()
+                            par_oPag.txt_4c__cd_moeda.Value    = ALLTRIM(cursor_4c_BuscaMoeD.CMoes)
+                            par_oPag.txt_4c__ds_moeda.Value    = ALLTRIM(cursor_4c_BuscaMoeD.DMoes)
+                            par_oPag.txt_4c__ds_moeda.ReadOnly = .T.
+                            IF VARTYPE(THIS.this_oRelatorio) = "O"
+                                par_oPag.txt_4c_cotacao.Value = ;
+                                    THIS.this_oRelatorio.BuscarCotacaoAtual( ;
+                                        ALLTRIM(cursor_4c_BuscaMoeD.CMoes))
+                            ENDIF
                         ENDIF
                     ENDIF
+                ELSE
+                    par_oPag.txt_4c__cd_moeda.Value = ""
+                    par_oPag.txt_4c__ds_moeda.Value = ""
+                    par_oPag.txt_4c_cotacao.Value   = 0
                 ENDIF
-            ELSE
-                par_oPag.txt_4c__cd_moeda.Value = ""
-                par_oPag.txt_4c__ds_moeda.Value = ""
-                par_oPag.txt_4c_cotacao.Value   = 0
+                IF USED("cursor_4c_BuscaMoeD")
+                    USE IN cursor_4c_BuscaMoeD
+                ENDIF
+                loc_oForm.Release()
             ENDIF
-            IF USED("cursor_4c_BuscaMoeD")
-                USE IN cursor_4c_BuscaMoeD
-            ENDIF
-            loc_oForm.Release()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarDsMoeda")
             IF USED("cursor_4c_BuscaMoeD")
@@ -1840,48 +1859,55 @@ DEFINE CLASS Formsigreffn AS FormBase
     * ValidarCdMoedl - Valida codigo de moeda de lan" + CHR(231) + "amento (SigCdMoe)
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCdMoedl(par_oPag)
-        LOCAL loc_cCodigo, loc_oForm, loc_oErro
+        LOCAL loc_cCodigo, loc_oForm, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cCodigo = ALLTRIM(par_oPag.txt_4c_cd_moedl.Value)
             IF EMPTY(loc_cCodigo)
                 par_oPag.txt_4c_cd_moedl.Value    = ""
                 par_oPag.txt_4c_ds_moedl.Value    = ""
                 par_oPag.txt_4c_ds_moedl.ReadOnly = .F.
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
-                RETURN
-            ENDIF
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdMoe", "cursor_4c_BuscaMoeL", "CMoes", loc_cCodigo, ;
-                "Sele" + CHR(231) + CHR(227) + "o de Moeda Lan" + CHR(231) + "amento")
-            IF VARTYPE(loc_oForm) != "O"
-                RETURN
-            ENDIF
-            IF !loc_oForm.this_lAchouRegistro
-                loc_oForm.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
-                loc_oForm.mAddColuna("DMoes", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oForm.Show()
-            ENDIF
-            IF loc_oForm.this_lSelecionou
-                IF USED("cursor_4c_BuscaMoeL")
-                    SELECT cursor_4c_BuscaMoeL
-                    GO TOP
-                    IF !EOF()
-                        par_oPag.txt_4c_cd_moedl.Value    = ALLTRIM(cursor_4c_BuscaMoeL.CMoes)
-                        par_oPag.txt_4c_ds_moedl.Value    = ALLTRIM(cursor_4c_BuscaMoeL.DMoes)
-                        par_oPag.txt_4c_ds_moedl.ReadOnly = .T.
-                    ENDIF
+            IF loc_lProsseguir
+                IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+                    loc_lProsseguir = .F.
                 ENDIF
-            ELSE
-                par_oPag.txt_4c_cd_moedl.Value    = ""
-                par_oPag.txt_4c_ds_moedl.Value    = ""
-                par_oPag.txt_4c_ds_moedl.ReadOnly = .F.
             ENDIF
-            IF USED("cursor_4c_BuscaMoeL")
-                USE IN cursor_4c_BuscaMoeL
+            IF loc_lProsseguir
+                loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdMoe", "cursor_4c_BuscaMoeL", "CMoes", loc_cCodigo, ;
+                    "Sele" + CHR(231) + CHR(227) + "o de Moeda Lan" + CHR(231) + "amento")
+                IF VARTYPE(loc_oForm) != "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oForm.Release()
+            IF loc_lProsseguir
+                IF !loc_oForm.this_lAchouRegistro
+                    loc_oForm.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
+                    loc_oForm.mAddColuna("DMoes", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oForm.Show()
+                ENDIF
+                IF loc_oForm.this_lSelecionou
+                    IF USED("cursor_4c_BuscaMoeL")
+                        SELECT cursor_4c_BuscaMoeL
+                        GO TOP
+                        IF !EOF()
+                            par_oPag.txt_4c_cd_moedl.Value    = ALLTRIM(cursor_4c_BuscaMoeL.CMoes)
+                            par_oPag.txt_4c_ds_moedl.Value    = ALLTRIM(cursor_4c_BuscaMoeL.DMoes)
+                            par_oPag.txt_4c_ds_moedl.ReadOnly = .T.
+                        ENDIF
+                    ENDIF
+                ELSE
+                    par_oPag.txt_4c_cd_moedl.Value    = ""
+                    par_oPag.txt_4c_ds_moedl.Value    = ""
+                    par_oPag.txt_4c_ds_moedl.ReadOnly = .F.
+                ENDIF
+                IF USED("cursor_4c_BuscaMoeL")
+                    USE IN cursor_4c_BuscaMoeL
+                ENDIF
+                loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarCdMoedl")
             IF USED("cursor_4c_BuscaMoeL")
@@ -1894,46 +1920,53 @@ DEFINE CLASS Formsigreffn AS FormBase
     * ValidarDsMoedl - Lookup reverso por descri" + CHR(231) + CHR(227) + "o de moeda lan" + CHR(231) + "amento
     *--------------------------------------------------------------------------
     PROCEDURE ValidarDsMoedl(par_oPag)
-        LOCAL loc_cDesc, loc_oForm, loc_oErro
+        LOCAL loc_cDesc, loc_oForm, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cDesc = ALLTRIM(par_oPag.txt_4c_ds_moedl.Value)
             IF EMPTY(loc_cDesc)
                 par_oPag.txt_4c_cd_moedl.Value = ""
                 par_oPag.txt_4c_ds_moedl.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
-                RETURN
-            ENDIF
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdMoe", "cursor_4c_BuscaMoeLD", "DMoes", loc_cDesc, ;
-                "Sele" + CHR(231) + CHR(227) + "o de Moeda Lan" + CHR(231) + "amento")
-            IF VARTYPE(loc_oForm) != "O"
-                RETURN
-            ENDIF
-            IF !loc_oForm.this_lAchouRegistro
-                loc_oForm.mAddColuna("DMoes", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oForm.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
-                loc_oForm.Show()
-            ENDIF
-            IF loc_oForm.this_lSelecionou
-                IF USED("cursor_4c_BuscaMoeLD")
-                    SELECT cursor_4c_BuscaMoeLD
-                    GO TOP
-                    IF !EOF()
-                        par_oPag.txt_4c_cd_moedl.Value    = ALLTRIM(cursor_4c_BuscaMoeLD.CMoes)
-                        par_oPag.txt_4c_ds_moedl.Value    = ALLTRIM(cursor_4c_BuscaMoeLD.DMoes)
-                        par_oPag.txt_4c_ds_moedl.ReadOnly = .T.
-                    ENDIF
+            IF loc_lProsseguir
+                IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+                    loc_lProsseguir = .F.
                 ENDIF
-            ELSE
-                par_oPag.txt_4c_cd_moedl.Value = ""
-                par_oPag.txt_4c_ds_moedl.Value = ""
             ENDIF
-            IF USED("cursor_4c_BuscaMoeLD")
-                USE IN cursor_4c_BuscaMoeLD
+            IF loc_lProsseguir
+                loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdMoe", "cursor_4c_BuscaMoeLD", "DMoes", loc_cDesc, ;
+                    "Sele" + CHR(231) + CHR(227) + "o de Moeda Lan" + CHR(231) + "amento")
+                IF VARTYPE(loc_oForm) != "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oForm.Release()
+            IF loc_lProsseguir
+                IF !loc_oForm.this_lAchouRegistro
+                    loc_oForm.mAddColuna("DMoes", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oForm.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
+                    loc_oForm.Show()
+                ENDIF
+                IF loc_oForm.this_lSelecionou
+                    IF USED("cursor_4c_BuscaMoeLD")
+                        SELECT cursor_4c_BuscaMoeLD
+                        GO TOP
+                        IF !EOF()
+                            par_oPag.txt_4c_cd_moedl.Value    = ALLTRIM(cursor_4c_BuscaMoeLD.CMoes)
+                            par_oPag.txt_4c_ds_moedl.Value    = ALLTRIM(cursor_4c_BuscaMoeLD.DMoes)
+                            par_oPag.txt_4c_ds_moedl.ReadOnly = .T.
+                        ENDIF
+                    ENDIF
+                ELSE
+                    par_oPag.txt_4c_cd_moedl.Value = ""
+                    par_oPag.txt_4c_ds_moedl.Value = ""
+                ENDIF
+                IF USED("cursor_4c_BuscaMoeLD")
+                    USE IN cursor_4c_BuscaMoeLD
+                ENDIF
+                loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarDsMoedl")
             IF USED("cursor_4c_BuscaMoeLD")
@@ -2009,36 +2042,41 @@ DEFINE CLASS Formsigreffn AS FormBase
     * BOParaForm - Transfere valores do BO de volta para os campos do form
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPag, loc_oErro
+        LOCAL loc_oPag, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+            IF loc_lProsseguir
+                IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_oPag = THIS.pgf_4c_Paginas.Page1
-            WITH THIS.this_oRelatorio
-                loc_oPag.txt_4c__dt_inicial.Value        = .this_dDtInicial
-                loc_oPag.txt_4c__dt_final.Value          = .this_dDtFinal
-                loc_oPag.txt_4c__cd_moeda.Value          = .this_cCdMoeda
-                loc_oPag.txt_4c__ds_moeda.Value          = .this_cDsMoeda
-                loc_oPag.txt_4c_cotacao.Value            = .this_nVlCotacao
-                loc_oPag.txt_4c_cd_moedl.Value           = .this_cCdMoedl
-                loc_oPag.txt_4c_ds_moedl.Value           = .this_cDsMoedl
-                loc_oPag.chk_4c_TotalizaContas.Value     = .this_nTotalizaContas
-                loc_oPag.chk_4c_Conciliado.Value         = .this_nConciliado
-                loc_oPag.obj_4c_Opt_opcao.Value          = .this_nOpcao
-                loc_oPag.obj_4c_Opt_tipo.Value           = .this_nTipoImp
-                loc_oPag.obj_4c_Opt_lista_atra.Value     = .this_nListaAtra
-                loc_oPag.obj_4c_Opt_consid_atra.Value    = .this_nConsidAtra
-                loc_oPag.obj_4c_Opt_prev.Value           = .this_nPrev
-                loc_oPag.obj_4c_Opt_situa.Value          = .this_nSitua
-                loc_oPag.obj_4c_Opt_saldo.Value          = .this_nSaldo
-            ENDWITH
-            loc_oPag.txt_4c__ds_moeda.ReadOnly      = !EMPTY(ALLTRIM(loc_oPag.txt_4c__cd_moeda.Value))
-            loc_oPag.txt_4c_ds_moedl.ReadOnly       = !EMPTY(ALLTRIM(loc_oPag.txt_4c_cd_moedl.Value))
-            loc_oPag.obj_4c_Opt_consid_atra.Enabled = (loc_oPag.obj_4c_Opt_lista_atra.Value = 1)
+            IF loc_lProsseguir
+                loc_oPag = THIS.pgf_4c_Paginas.Page1
+                WITH THIS.this_oRelatorio
+                    loc_oPag.txt_4c__dt_inicial.Value        = .this_dDtInicial
+                    loc_oPag.txt_4c__dt_final.Value          = .this_dDtFinal
+                    loc_oPag.txt_4c__cd_moeda.Value          = .this_cCdMoeda
+                    loc_oPag.txt_4c__ds_moeda.Value          = .this_cDsMoeda
+                    loc_oPag.txt_4c_cotacao.Value            = .this_nVlCotacao
+                    loc_oPag.txt_4c_cd_moedl.Value           = .this_cCdMoedl
+                    loc_oPag.txt_4c_ds_moedl.Value           = .this_cDsMoedl
+                    loc_oPag.chk_4c_TotalizaContas.Value     = .this_nTotalizaContas
+                    loc_oPag.chk_4c_Conciliado.Value         = .this_nConciliado
+                    loc_oPag.obj_4c_Opt_opcao.Value          = .this_nOpcao
+                    loc_oPag.obj_4c_Opt_tipo.Value           = .this_nTipoImp
+                    loc_oPag.obj_4c_Opt_lista_atra.Value     = .this_nListaAtra
+                    loc_oPag.obj_4c_Opt_consid_atra.Value    = .this_nConsidAtra
+                    loc_oPag.obj_4c_Opt_prev.Value           = .this_nPrev
+                    loc_oPag.obj_4c_Opt_situa.Value          = .this_nSitua
+                    loc_oPag.obj_4c_Opt_saldo.Value          = .this_nSaldo
+                ENDWITH
+                loc_oPag.txt_4c__ds_moeda.ReadOnly      = !EMPTY(ALLTRIM(loc_oPag.txt_4c__cd_moeda.Value))
+                loc_oPag.txt_4c_ds_moedl.ReadOnly       = !EMPTY(ALLTRIM(loc_oPag.txt_4c_cd_moedl.Value))
+                loc_oPag.obj_4c_Opt_consid_atra.Enabled = (loc_oPag.obj_4c_Opt_lista_atra.Value = 1)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BOParaForm")
         ENDTRY

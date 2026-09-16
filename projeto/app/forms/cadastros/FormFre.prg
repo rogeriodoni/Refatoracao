@@ -1096,6 +1096,7 @@ DEFINE CLASS FormFre AS FormBase
     *===========================================================================
     PROCEDURE ValidarCidade
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1103,29 +1104,34 @@ DEFINE CLASS FormFre AS FormBase
         loc_cCidade = ""
         loc_oPag2   = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPag2, "txt_4c_Cidade", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cCidade = ALLTRIM(loc_oPag2.txt_4c_Cidade.Value)
+            IF loc_lProsseguir
+                loc_cCidade = ALLTRIM(loc_oPag2.txt_4c_Cidade.Value)
 
-            IF EMPTY(loc_cCidade) OR !USED("TmpCep") OR RECCOUNT("TmpCep") = 0
-                RETURN
+                IF EMPTY(loc_cCidade) OR !USED("TmpCep") OR RECCOUNT("TmpCep") = 0
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Lookup em TmpCep pre-carregado (FormBuscaAuxiliar Modo 2 - cursor local)
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "TmpCep"
-                loc_oBusca.this_cTitulo        = "Cadastro de Cidades"
-                loc_oBusca.mAddColuna("Cidades", "", "Cidade")
-                loc_oBusca.Show()
-
-                IF loc_oBusca.this_lSelecionou AND USED("TmpCep")
-                    loc_oPag2.txt_4c_Cidade.Value = ALLTRIM(TmpCep.Cidades)
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "TmpCep"
+                    loc_oBusca.this_cTitulo        = "Cadastro de Cidades"
+                    loc_oBusca.mAddColuna("Cidades", "", "Cidade")
+                    loc_oBusca.Show()
+    
+                    IF loc_oBusca.this_lSelecionou AND USED("TmpCep")
+                        loc_oPag2.txt_4c_Cidade.Value = ALLTRIM(TmpCep.Cidades)
+                    ENDIF
+                    loc_oBusca.Release()
                 ENDIF
-                loc_oBusca.Release()
             ENDIF
         CATCH TO loException
             MostrarErro(loException, "FormFre.ValidarCidade")

@@ -225,119 +225,122 @@ DEFINE CLASS AnalisadorComportamento AS Custom
     * CarregarSchema - Le schema.sql (UTF-16) e extrai tabelas/colunas
     *====================================================================
     PROTECTED PROCEDURE CarregarSchema(par_cArquivoSchema)
-        LOCAL loc_cConteudo, loc_cASCII
+        LOCAL loc_cConteudo, loc_cASCII, loc_lProsseguir
         LOCAL loc_cLinha, loc_cTabelaAtual, loc_cColunas
         LOCAL loc_nI, loc_nLinhas, loc_lDentroTabela
         LOCAL loc_nPos1, loc_nPos2, loc_cNome, loc_nFim, loc_cColuna
         LOCAL loc_cPrimeiro
         LOCAL ARRAY loc_aLinhasSchema[1]
 
+        loc_lProsseguir = .T.
         TRY
             loc_cConteudo = FILETOSTR(par_cArquivoSchema)
 
             IF EMPTY(loc_cConteudo)
                 ? "AVISO: Schema vazio ou nao lido: " + par_cArquivoSchema
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Remover BOM (FF FE) se presente
-            IF LEFT(loc_cConteudo, 2) = CHR(255) + CHR(254)
-                loc_cConteudo = SUBSTR(loc_cConteudo, 3)
-            ENDIF
-
-            *-- Remover bytes nulos (UTF-16 -> ASCII)
-            loc_cASCII = CHRTRAN(loc_cConteudo, CHR(0), "")
-
-            *-- Liberar memoria do conteudo original
-            loc_cConteudo = ""
-
-            *-- Split em linhas
-            loc_nLinhas = ALINES(loc_aLinhasSchema, loc_cASCII)
-
-            *-- Liberar memoria
-            loc_cASCII = ""
-
-            ? "  Schema carregado: " + TRANSFORM(loc_nLinhas) + " linhas"
-
-            *-- Parsear CREATE TABLE statements
-            loc_lDentroTabela = .F.
-            loc_cTabelaAtual = ""
-            loc_cColunas = ""
-            LOCAL loc_cColTipos
-            loc_cColTipos = ""
-
-            FOR loc_nI = 1 TO loc_nLinhas
-                loc_cLinha = ALLTRIM(loc_aLinhasSchema[loc_nI])
-
-                *-- Skip de linhas vazias e comentarios (maioria do schema)
-                IF EMPTY(loc_cLinha) OR LEFT(loc_cLinha, 2) = "--" OR LEFT(loc_cLinha, 2) = "/*"
-                    LOOP
+            IF loc_lProsseguir
+                IF LEFT(loc_cConteudo, 2) = CHR(255) + CHR(254)
+                    loc_cConteudo = SUBSTR(loc_cConteudo, 3)
                 ENDIF
 
-                loc_cPrimeiro = LEFT(loc_cLinha, 1)
+            *-- Remover bytes nulos (UTF-16 -> ASCII)
+                loc_cASCII = CHRTRAN(loc_cConteudo, CHR(0), "")
 
-                IF !loc_lDentroTabela
-                    *-- Fora de tabela: so interessa CREATE TABLE
-                    IF ATC("CREATE TABLE", loc_cLinha) > 0
-                        loc_nPos1 = ATC("[dbo].[", loc_cLinha)
-                        IF loc_nPos1 > 0
-                            loc_nPos1 = loc_nPos1 + 6
-                            loc_nPos2 = AT("]", loc_cLinha, 3)
-                            IF loc_nPos2 > loc_nPos1
-                                loc_cNome = SUBSTR(loc_cLinha, loc_nPos1 + 1, loc_nPos2 - loc_nPos1 - 1)
-                                loc_cTabelaAtual = loc_cNome
-                                loc_cColunas = ""
-                                loc_cColTipos = ""
-                                loc_lDentroTabela = .T.
-                            ENDIF
-                        ENDIF
+            *-- Liberar memoria do conteudo original
+                loc_cConteudo = ""
+
+            *-- Split em linhas
+                loc_nLinhas = ALINES(loc_aLinhasSchema, loc_cASCII)
+
+            *-- Liberar memoria
+                loc_cASCII = ""
+
+                ? "  Schema carregado: " + TRANSFORM(loc_nLinhas) + " linhas"
+
+            *-- Parsear CREATE TABLE statements
+                loc_lDentroTabela = .F.
+                loc_cTabelaAtual = ""
+                loc_cColunas = ""
+                LOCAL loc_cColTipos
+                loc_cColTipos = ""
+
+                FOR loc_nI = 1 TO loc_nLinhas
+                    loc_cLinha = ALLTRIM(loc_aLinhasSchema[loc_nI])
+    
+                    *-- Skip de linhas vazias e comentarios (maioria do schema)
+                    IF EMPTY(loc_cLinha) OR LEFT(loc_cLinha, 2) = "--" OR LEFT(loc_cLinha, 2) = "/*"
+                        LOOP
                     ENDIF
-                ELSE
-                    *-- Dentro de tabela: extrair colunas ou detectar fim
-                    IF loc_cPrimeiro = "["
-                        loc_nFim = AT("]", loc_cLinha)
-                        IF loc_nFim > 1
-                            loc_cColuna = SUBSTR(loc_cLinha, 2, loc_nFim - 2)
-                            IF !EMPTY(loc_cColunas)
-                                loc_cColunas = loc_cColunas + ","
-                            ENDIF
-                            loc_cColunas = loc_cColunas + LOWER(ALLTRIM(loc_cColuna))
-
-                            *-- Extrair tipo da coluna: formato [coluna] [tipo]
-                            *-- Segundo par de colchetes contem o tipo
-                            LOCAL loc_nTipoIni, loc_nTipoFim, loc_cTipoCol
-                            loc_nTipoIni = AT("[", loc_cLinha, 2)
-                            loc_nTipoFim = AT("]", loc_cLinha, 2)
-                            IF loc_nTipoIni > 0 AND loc_nTipoFim > loc_nTipoIni
-                                loc_cTipoCol = LOWER(SUBSTR(loc_cLinha, loc_nTipoIni + 1, loc_nTipoFim - loc_nTipoIni - 1))
-                                *-- Somente BIT e DATETIME causam bugs de migracao
-                                IF loc_cTipoCol = "bit" OR loc_cTipoCol = "datetime"
-                                    IF !EMPTY(loc_cColTipos)
-                                        loc_cColTipos = loc_cColTipos + ","
-                                    ENDIF
-                                    loc_cColTipos = loc_cColTipos + LOWER(ALLTRIM(loc_cColuna)) + ":" + loc_cTipoCol
+    
+                    loc_cPrimeiro = LEFT(loc_cLinha, 1)
+    
+                    IF !loc_lDentroTabela
+                        *-- Fora de tabela: so interessa CREATE TABLE
+                        IF ATC("CREATE TABLE", loc_cLinha) > 0
+                            loc_nPos1 = ATC("[dbo].[", loc_cLinha)
+                            IF loc_nPos1 > 0
+                                loc_nPos1 = loc_nPos1 + 6
+                                loc_nPos2 = AT("]", loc_cLinha, 3)
+                                IF loc_nPos2 > loc_nPos1
+                                    loc_cNome = SUBSTR(loc_cLinha, loc_nPos1 + 1, loc_nPos2 - loc_nPos1 - 1)
+                                    loc_cTabelaAtual = loc_cNome
+                                    loc_cColunas = ""
+                                    loc_cColTipos = ""
+                                    loc_lDentroTabela = .T.
                                 ENDIF
                             ENDIF
                         ENDIF
                     ELSE
-                        IF ATC("CONSTRAINT", loc_cLinha) > 0 OR ;
-                           (loc_cPrimeiro = ")" AND ATC("ON", loc_cLinha) > 0)
-                            IF !EMPTY(loc_cTabelaAtual) AND !EMPTY(loc_cColunas)
-                                THIS.this_nSchema = THIS.this_nSchema + 1
-                                DIMENSION THIS.this_aSchema[THIS.this_nSchema, 3]
-                                THIS.this_aSchema[THIS.this_nSchema, 1] = LOWER(loc_cTabelaAtual)
-                                THIS.this_aSchema[THIS.this_nSchema, 2] = loc_cColunas
-                                THIS.this_aSchema[THIS.this_nSchema, 3] = loc_cColTipos
+                        *-- Dentro de tabela: extrair colunas ou detectar fim
+                        IF loc_cPrimeiro = "["
+                            loc_nFim = AT("]", loc_cLinha)
+                            IF loc_nFim > 1
+                                loc_cColuna = SUBSTR(loc_cLinha, 2, loc_nFim - 2)
+                                IF !EMPTY(loc_cColunas)
+                                    loc_cColunas = loc_cColunas + ","
+                                ENDIF
+                                loc_cColunas = loc_cColunas + LOWER(ALLTRIM(loc_cColuna))
+    
+                                *-- Extrair tipo da coluna: formato [coluna] [tipo]
+                                *-- Segundo par de colchetes contem o tipo
+                                LOCAL loc_nTipoIni, loc_nTipoFim, loc_cTipoCol
+                                loc_nTipoIni = AT("[", loc_cLinha, 2)
+                                loc_nTipoFim = AT("]", loc_cLinha, 2)
+                                IF loc_nTipoIni > 0 AND loc_nTipoFim > loc_nTipoIni
+                                    loc_cTipoCol = LOWER(SUBSTR(loc_cLinha, loc_nTipoIni + 1, loc_nTipoFim - loc_nTipoIni - 1))
+                                    *-- Somente BIT e DATETIME causam bugs de migracao
+                                    IF loc_cTipoCol = "bit" OR loc_cTipoCol = "datetime"
+                                        IF !EMPTY(loc_cColTipos)
+                                            loc_cColTipos = loc_cColTipos + ","
+                                        ENDIF
+                                        loc_cColTipos = loc_cColTipos + LOWER(ALLTRIM(loc_cColuna)) + ":" + loc_cTipoCol
+                                    ENDIF
+                                ENDIF
                             ENDIF
-                            loc_lDentroTabela = .F.
-                            loc_cTabelaAtual = ""
+                        ELSE
+                            IF ATC("CONSTRAINT", loc_cLinha) > 0 OR ;
+                               (loc_cPrimeiro = ")" AND ATC("ON", loc_cLinha) > 0)
+                                IF !EMPTY(loc_cTabelaAtual) AND !EMPTY(loc_cColunas)
+                                    THIS.this_nSchema = THIS.this_nSchema + 1
+                                    DIMENSION THIS.this_aSchema[THIS.this_nSchema, 3]
+                                    THIS.this_aSchema[THIS.this_nSchema, 1] = LOWER(loc_cTabelaAtual)
+                                    THIS.this_aSchema[THIS.this_nSchema, 2] = loc_cColunas
+                                    THIS.this_aSchema[THIS.this_nSchema, 3] = loc_cColTipos
+                                ENDIF
+                                loc_lDentroTabela = .F.
+                                loc_cTabelaAtual = ""
+                            ENDIF
                         ENDIF
                     ENDIF
-                ENDIF
-            ENDFOR
+                ENDFOR
 
-            ? "  Tabelas no schema: " + TRANSFORM(THIS.this_nSchema)
+                ? "  Tabelas no schema: " + TRANSFORM(THIS.this_nSchema)
 
+            ENDIF
         CATCH TO loException
             ? "AVISO em CarregarSchema(): Linha " + TRANSFORM(loException.LineNo) + " - " + loException.Message
         ENDTRY

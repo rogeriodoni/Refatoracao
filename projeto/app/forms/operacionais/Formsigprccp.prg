@@ -1751,18 +1751,21 @@ DEFINE CLASS Formsigprccp AS FormBase
     *   estado inicial e devolve o foco ao primeiro filtro (Fornecedor).
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF USED("cursor_4c_Produtos") AND RECCOUNT("cursor_4c_Produtos") > 0
                 IF !MsgConfirma("Existem dados processados. Descartar e iniciar novo rec" + ;
                                 CHR(225) + "lculo?", ;
                                 "Confirma" + CHR(231) + CHR(227) + "o")
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
             *-- Reset completo do form (limpa filtros, zera cursor, reseta UI)
-            THIS.ConfigurarPaginaLista()
+            IF loc_lProsseguir
+                THIS.ConfigurarPaginaLista()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
                     "Erro BtnIncluirClick")
@@ -1795,25 +1798,30 @@ DEFINE CLASS Formsigprccp AS FormBase
     *   ImgProduto no legado).
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Produtos") OR RECCOUNT("cursor_4c_Produtos") = 0
                 MsgAviso("Nenhum produto processado. Execute o rec" + CHR(225) + ;
                          "lculo antes de visualizar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Produtos
-            IF EOF() OR EMPTY(cursor_4c_Produtos.CPros)
-                MsgAviso("Selecione um produto no grid para visualizar.", "Aviso")
-                THIS.grd_4c_Produto.SetFocus()
-                RETURN
+            IF loc_lProsseguir
+                SELECT cursor_4c_Produtos
+                IF EOF() OR EMPTY(cursor_4c_Produtos.CPros)
+                    MsgAviso("Selecione um produto no grid para visualizar.", "Aviso")
+                    THIS.grd_4c_Produto.SetFocus()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Renderiza figura do produto corrente (mesma logica do AfterRowColChange)
-            THIS.GrdAfterRowColChange(1)
-            THIS.img_4c_Produto.Visible = .T.
-            THIS.img_4c_Produto.Refresh()
+            IF loc_lProsseguir
+                THIS.GrdAfterRowColChange(1)
+                THIS.img_4c_Produto.Visible = .T.
+                THIS.img_4c_Produto.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
                     "Erro BtnVisualizarClick")
@@ -1828,53 +1836,64 @@ DEFINE CLASS Formsigprccp AS FormBase
     *   marcada. Assim o usuario refina o conjunto antes de gravar via Atualizar.
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_nMarcados, loc_cCodPro, loc_oErro
+        LOCAL loc_nMarcados, loc_cCodPro, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Produtos") OR RECCOUNT("cursor_4c_Produtos") = 0
                 MsgAviso("Nenhum produto processado para remover.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Produtos
-            COUNT FOR lMarca = 1 TO loc_nMarcados
+            IF loc_lProsseguir
+                SELECT cursor_4c_Produtos
+                COUNT FOR lMarca = 1 TO loc_nMarcados
 
-            IF loc_nMarcados > 0
-                IF !MsgConfirma("Remover " + TRANSFORM(loc_nMarcados) + ;
-                                " produto(s) marcado(s) do rec" + CHR(225) + ;
-                                "lculo?", ;
-                                "Confirma" + CHR(231) + CHR(227) + "o")
-                    RETURN
+                IF loc_nMarcados > 0
+                    IF !MsgConfirma("Remover " + TRANSFORM(loc_nMarcados) + ;
+                                    " produto(s) marcado(s) do rec" + CHR(225) + ;
+                                    "lculo?", ;
+                                    "Confirma" + CHR(231) + CHR(227) + "o")
+                        loc_lProsseguir = .F.
+                    ENDIF
+                    IF loc_lProsseguir
+                        SELECT cursor_4c_Produtos
+                        DELETE FOR lMarca = 1
+                        PACK
+                    ENDIF
+                ELSE
+                    IF EOF() OR EMPTY(cursor_4c_Produtos.CPros)
+                        MsgAviso("Selecione um produto no grid ou marque na primeira coluna.", ;
+                                 "Aviso")
+                        THIS.grd_4c_Produto.SetFocus()
+                        loc_lProsseguir = .F.
+                    ENDIF
+                    IF loc_lProsseguir
+                        loc_cCodPro = ALLTRIM(cursor_4c_Produtos.CPros)
+                        IF !MsgConfirma("Remover o produto " + loc_cCodPro + ;
+                                        " do rec" + CHR(225) + "lculo?", ;
+                                        "Confirma" + CHR(231) + CHR(227) + "o")
+                            loc_lProsseguir = .F.
+                        ENDIF
+                    ENDIF
+                    IF loc_lProsseguir
+                        SELECT cursor_4c_Produtos
+                        DELETE
+                        PACK
+                    ENDIF
                 ENDIF
-                SELECT cursor_4c_Produtos
-                DELETE FOR lMarca = 1
-                PACK
-            ELSE
-                IF EOF() OR EMPTY(cursor_4c_Produtos.CPros)
-                    MsgAviso("Selecione um produto no grid ou marque na primeira coluna.", ;
-                             "Aviso")
-                    THIS.grd_4c_Produto.SetFocus()
-                    RETURN
-                ENDIF
-                loc_cCodPro = ALLTRIM(cursor_4c_Produtos.CPros)
-                IF !MsgConfirma("Remover o produto " + loc_cCodPro + ;
-                                " do rec" + CHR(225) + "lculo?", ;
-                                "Confirma" + CHR(231) + CHR(227) + "o")
-                    RETURN
-                ENDIF
-                SELECT cursor_4c_Produtos
-                DELETE
-                PACK
             ENDIF
 
             *-- Se cursor ficou vazio, desabilita Atualizar/Imprimir
-            IF RECCOUNT("cursor_4c_Produtos") = 0
-                THIS.cmg_4c_Botoes.Buttons(2).Enabled = .F.
-                THIS.cmd_4c_Imprimir.Enabled          = .F.
-                THIS.img_4c_Produto.Visible           = .F.
-                THIS.img_4c_Produto.Picture           = ""
-            ENDIF
+            IF loc_lProsseguir
+                IF RECCOUNT("cursor_4c_Produtos") = 0
+                    THIS.cmg_4c_Botoes.Buttons(2).Enabled = .F.
+                    THIS.cmd_4c_Imprimir.Enabled          = .F.
+                    THIS.img_4c_Produto.Visible           = .F.
+                    THIS.img_4c_Produto.Picture           = ""
+                ENDIF
 
-            THIS.grd_4c_Produto.Refresh()
+                THIS.grd_4c_Produto.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), ;
                     "Erro BtnExcluirClick")
@@ -1991,32 +2010,37 @@ DEFINE CLASS Formsigprccp AS FormBase
     *==========================================================================
     PROCEDURE GrdAfterRowColChange(par_nColIndex)
     *==========================================================================
-        LOCAL loc_cArquivo, loc_cCodPro, loc_cSQL, loc_cFoto, loc_oErro
+        LOCAL loc_cArquivo, loc_cCodPro, loc_cSQL, loc_cFoto, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Produtos") OR EOF("cursor_4c_Produtos")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cArquivo = SYS(2023) + "\TempCj.jpg"
-            SELECT cursor_4c_Produtos
-            loc_cCodPro = ALLTRIM(cursor_4c_Produtos.CPros)
-            loc_cSQL    = "SELECT FigJpgs FROM SigCdPro WHERE Cpros = " + EscaparSQL(loc_cCodPro)
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpFig") < 1
-                THIS.img_4c_Produto.Visible = .F.
-                RETURN
+            IF loc_lProsseguir
+                loc_cArquivo = SYS(2023) + "\TempCj.jpg"
+                SELECT cursor_4c_Produtos
+                loc_cCodPro = ALLTRIM(cursor_4c_Produtos.CPros)
+                loc_cSQL    = "SELECT FigJpgs FROM SigCdPro WHERE Cpros = " + EscaparSQL(loc_cCodPro)
+                IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpFig") < 1
+                    THIS.img_4c_Produto.Visible = .F.
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            SELECT cursor_4c_TmpFig
-            THIS.img_4c_Produto.Visible  = .F.
-            THIS.img_4c_Produto.Picture  = ""
-            IF !ISNULL(cursor_4c_TmpFig.FigJpgs) AND !EMPTY(cursor_4c_TmpFig.FigJpgs)
-                loc_cFoto = STRCONV(STRTRAN(STRTRAN(STRTRAN(cursor_4c_TmpFig.FigJpgs, ;
-                    "data:image/png;base64,", ""), "data:image/jpeg;base64,", ""), ;
-                    "data:image/jpg;base64,", ""), 14)
-                STRTOFILE(loc_cFoto, loc_cArquivo)
-                THIS.img_4c_Produto.Picture = loc_cArquivo
-                THIS.img_4c_Produto.Visible = .T.
-            ENDIF
-            IF USED("cursor_4c_TmpFig")
-                USE IN cursor_4c_TmpFig
+            IF loc_lProsseguir
+                SELECT cursor_4c_TmpFig
+                THIS.img_4c_Produto.Visible  = .F.
+                THIS.img_4c_Produto.Picture  = ""
+                IF !ISNULL(cursor_4c_TmpFig.FigJpgs) AND !EMPTY(cursor_4c_TmpFig.FigJpgs)
+                    loc_cFoto = STRCONV(STRTRAN(STRTRAN(STRTRAN(cursor_4c_TmpFig.FigJpgs, ;
+                        "data:image/png;base64,", ""), "data:image/jpeg;base64,", ""), ;
+                        "data:image/jpg;base64,", ""), 14)
+                    STRTOFILE(loc_cFoto, loc_cArquivo)
+                    THIS.img_4c_Produto.Picture = loc_cArquivo
+                    THIS.img_4c_Produto.Visible = .T.
+                ENDIF
+                IF USED("cursor_4c_TmpFig")
+                    USE IN cursor_4c_TmpFig
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpFig")
@@ -2028,28 +2052,35 @@ DEFINE CLASS Formsigprccp AS FormBase
 
     *-- ==== LOOKUP: Fornecedor ====
     PROCEDURE TxtCFornecKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cVal, loc_oErro
+        LOCAL loc_cVal, loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cVal = ALLTRIM(THIS.txt_4c_CFornecs.Value)
             IF EMPTY(loc_cVal)
                 THIS.txt_4c_DFornecs.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = " + ;
-                       EscaparSQL(loc_cVal), "cursor_4c_TmpFor") > 0
-                SELECT cursor_4c_TmpFor
-                IF !EOF("cursor_4c_TmpFor")
-                    THIS.txt_4c_CFornecs.Value = ALLTRIM(cursor_4c_TmpFor.IClis)
-                    THIS.txt_4c_DFornecs.Value = ALLTRIM(cursor_4c_TmpFor.RClis)
-                    USE IN cursor_4c_TmpFor
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = " + ;
+                           EscaparSQL(loc_cVal), "cursor_4c_TmpFor") > 0
+                    SELECT cursor_4c_TmpFor
+                    IF !EOF("cursor_4c_TmpFor")
+                        THIS.txt_4c_CFornecs.Value = ALLTRIM(cursor_4c_TmpFor.IClis)
+                        THIS.txt_4c_DFornecs.Value = ALLTRIM(cursor_4c_TmpFor.RClis)
+                        USE IN cursor_4c_TmpFor
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpFor
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpFor
             ENDIF
-            THIS.AbrirBuscaFornecedor()
+            IF loc_lProsseguir
+                THIS.AbrirBuscaFornecedor()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpFor")
                 USE IN cursor_4c_TmpFor
@@ -2095,25 +2126,32 @@ DEFINE CLASS Formsigprccp AS FormBase
 
     *-- ==== LOOKUP: Grande Grupo ====
     PROCEDURE TxtMercIKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_MercI.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Codigos, Descs FROM SigCdGpr WHERE Codigos = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_MercI.Value)), "cursor_4c_TmpGGr") > 0
-                SELECT cursor_4c_TmpGGr
-                IF !EOF("cursor_4c_TmpGGr")
-                    THIS.txt_4c_MercI.Value = ALLTRIM(cursor_4c_TmpGGr.Codigos)
-                    USE IN cursor_4c_TmpGGr
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Codigos, Descs FROM SigCdGpr WHERE Codigos = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_MercI.Value)), "cursor_4c_TmpGGr") > 0
+                    SELECT cursor_4c_TmpGGr
+                    IF !EOF("cursor_4c_TmpGGr")
+                        THIS.txt_4c_MercI.Value = ALLTRIM(cursor_4c_TmpGGr.Codigos)
+                        USE IN cursor_4c_TmpGGr
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpGGr
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpGGr
             ENDIF
-            THIS.AbrirBuscaGrandeGrupo(.T.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaGrandeGrupo(.T.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpGGr")
                 USE IN cursor_4c_TmpGGr
@@ -2123,25 +2161,32 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROCEDURE TxtMercFKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_MercF.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Codigos, Descs FROM SigCdGpr WHERE Codigos = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_MercF.Value)), "cursor_4c_TmpGGr") > 0
-                SELECT cursor_4c_TmpGGr
-                IF !EOF("cursor_4c_TmpGGr")
-                    THIS.txt_4c_MercF.Value = ALLTRIM(cursor_4c_TmpGGr.Codigos)
-                    USE IN cursor_4c_TmpGGr
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Codigos, Descs FROM SigCdGpr WHERE Codigos = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_MercF.Value)), "cursor_4c_TmpGGr") > 0
+                    SELECT cursor_4c_TmpGGr
+                    IF !EOF("cursor_4c_TmpGGr")
+                        THIS.txt_4c_MercF.Value = ALLTRIM(cursor_4c_TmpGGr.Codigos)
+                        USE IN cursor_4c_TmpGGr
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpGGr
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpGGr
             ENDIF
-            THIS.AbrirBuscaGrandeGrupo(.F.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaGrandeGrupo(.F.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpGGr")
                 USE IN cursor_4c_TmpGGr
@@ -2190,25 +2235,32 @@ DEFINE CLASS Formsigprccp AS FormBase
 
     *-- ==== LOOKUP: Grupo ====
     PROCEDURE TxtCGruiKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_CGrui.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CGrus, DGrus FROM SigCdGrp WHERE CGrus = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_CGrui.Value)), "cursor_4c_TmpGrp") > 0
-                SELECT cursor_4c_TmpGrp
-                IF !EOF("cursor_4c_TmpGrp")
-                    THIS.txt_4c_CGrui.Value = ALLTRIM(cursor_4c_TmpGrp.CGrus)
-                    USE IN cursor_4c_TmpGrp
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CGrus, DGrus FROM SigCdGrp WHERE CGrus = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_CGrui.Value)), "cursor_4c_TmpGrp") > 0
+                    SELECT cursor_4c_TmpGrp
+                    IF !EOF("cursor_4c_TmpGrp")
+                        THIS.txt_4c_CGrui.Value = ALLTRIM(cursor_4c_TmpGrp.CGrus)
+                        USE IN cursor_4c_TmpGrp
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpGrp
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpGrp
             ENDIF
-            THIS.AbrirBuscaGrupo(.T.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaGrupo(.T.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpGrp")
                 USE IN cursor_4c_TmpGrp
@@ -2218,25 +2270,32 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROCEDURE TxtCGrufKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_CGruf.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CGrus, DGrus FROM SigCdGrp WHERE CGrus = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_CGruf.Value)), "cursor_4c_TmpGrp") > 0
-                SELECT cursor_4c_TmpGrp
-                IF !EOF("cursor_4c_TmpGrp")
-                    THIS.txt_4c_CGruf.Value = ALLTRIM(cursor_4c_TmpGrp.CGrus)
-                    USE IN cursor_4c_TmpGrp
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CGrus, DGrus FROM SigCdGrp WHERE CGrus = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_CGruf.Value)), "cursor_4c_TmpGrp") > 0
+                    SELECT cursor_4c_TmpGrp
+                    IF !EOF("cursor_4c_TmpGrp")
+                        THIS.txt_4c_CGruf.Value = ALLTRIM(cursor_4c_TmpGrp.CGrus)
+                        USE IN cursor_4c_TmpGrp
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpGrp
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpGrp
             ENDIF
-            THIS.AbrirBuscaGrupo(.F.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaGrupo(.F.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpGrp")
                 USE IN cursor_4c_TmpGrp
@@ -2285,25 +2344,32 @@ DEFINE CLASS Formsigprccp AS FormBase
 
     *-- ==== LOOKUP: Subgrupo ====
     PROCEDURE TxtSgruIKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_SgruI.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Codigos, Descricaos FROM SigCdPsg WHERE Codigos = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_SgruI.Value)), "cursor_4c_TmpSgr") > 0
-                SELECT cursor_4c_TmpSgr
-                IF !EOF("cursor_4c_TmpSgr")
-                    THIS.txt_4c_SgruI.Value = ALLTRIM(cursor_4c_TmpSgr.Codigos)
-                    USE IN cursor_4c_TmpSgr
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Codigos, Descricaos FROM SigCdPsg WHERE Codigos = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_SgruI.Value)), "cursor_4c_TmpSgr") > 0
+                    SELECT cursor_4c_TmpSgr
+                    IF !EOF("cursor_4c_TmpSgr")
+                        THIS.txt_4c_SgruI.Value = ALLTRIM(cursor_4c_TmpSgr.Codigos)
+                        USE IN cursor_4c_TmpSgr
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpSgr
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpSgr
             ENDIF
-            THIS.AbrirBuscaSubgrupo(.T.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaSubgrupo(.T.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpSgr")
                 USE IN cursor_4c_TmpSgr
@@ -2313,25 +2379,32 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROCEDURE TxtSgruFKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_SgruF.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Codigos, Descricaos FROM SigCdPsg WHERE Codigos = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_SgruF.Value)), "cursor_4c_TmpSgr") > 0
-                SELECT cursor_4c_TmpSgr
-                IF !EOF("cursor_4c_TmpSgr")
-                    THIS.txt_4c_SgruF.Value = ALLTRIM(cursor_4c_TmpSgr.Codigos)
-                    USE IN cursor_4c_TmpSgr
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Codigos, Descricaos FROM SigCdPsg WHERE Codigos = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_SgruF.Value)), "cursor_4c_TmpSgr") > 0
+                    SELECT cursor_4c_TmpSgr
+                    IF !EOF("cursor_4c_TmpSgr")
+                        THIS.txt_4c_SgruF.Value = ALLTRIM(cursor_4c_TmpSgr.Codigos)
+                        USE IN cursor_4c_TmpSgr
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpSgr
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpSgr
             ENDIF
-            THIS.AbrirBuscaSubgrupo(.F.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaSubgrupo(.F.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpSgr")
                 USE IN cursor_4c_TmpSgr
@@ -2380,25 +2453,32 @@ DEFINE CLASS Formsigprccp AS FormBase
 
     *-- ==== LOOKUP: Unidade ====
     PROCEDURE TxtCUniiKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_CUnii.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CUnis, DUnis FROM SigCdUni WHERE CUnis = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_CUnii.Value)), "cursor_4c_TmpUni") > 0
-                SELECT cursor_4c_TmpUni
-                IF !EOF("cursor_4c_TmpUni")
-                    THIS.txt_4c_CUnii.Value = ALLTRIM(cursor_4c_TmpUni.CUnis)
-                    USE IN cursor_4c_TmpUni
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CUnis, DUnis FROM SigCdUni WHERE CUnis = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_CUnii.Value)), "cursor_4c_TmpUni") > 0
+                    SELECT cursor_4c_TmpUni
+                    IF !EOF("cursor_4c_TmpUni")
+                        THIS.txt_4c_CUnii.Value = ALLTRIM(cursor_4c_TmpUni.CUnis)
+                        USE IN cursor_4c_TmpUni
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpUni
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpUni
             ENDIF
-            THIS.AbrirBuscaUnidade(.T.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaUnidade(.T.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpUni")
                 USE IN cursor_4c_TmpUni
@@ -2408,25 +2488,32 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROCEDURE TxtCUnifKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_CUnif.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CUnis, DUnis FROM SigCdUni WHERE CUnis = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_CUnif.Value)), "cursor_4c_TmpUni") > 0
-                SELECT cursor_4c_TmpUni
-                IF !EOF("cursor_4c_TmpUni")
-                    THIS.txt_4c_CUnif.Value = ALLTRIM(cursor_4c_TmpUni.CUnis)
-                    USE IN cursor_4c_TmpUni
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CUnis, DUnis FROM SigCdUni WHERE CUnis = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_CUnif.Value)), "cursor_4c_TmpUni") > 0
+                    SELECT cursor_4c_TmpUni
+                    IF !EOF("cursor_4c_TmpUni")
+                        THIS.txt_4c_CUnif.Value = ALLTRIM(cursor_4c_TmpUni.CUnis)
+                        USE IN cursor_4c_TmpUni
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpUni
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpUni
             ENDIF
-            THIS.AbrirBuscaUnidade(.F.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaUnidade(.F.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpUni")
                 USE IN cursor_4c_TmpUni
@@ -2475,25 +2562,32 @@ DEFINE CLASS Formsigprccp AS FormBase
 
     *-- ==== LOOKUP: Linha ====
     PROCEDURE TxtLiniKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_Lini.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Linhas, Descs FROM SigCdLin WHERE Linhas = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_Lini.Value)), "cursor_4c_TmpLin") > 0
-                SELECT cursor_4c_TmpLin
-                IF !EOF("cursor_4c_TmpLin")
-                    THIS.txt_4c_Lini.Value = ALLTRIM(cursor_4c_TmpLin.Linhas)
-                    USE IN cursor_4c_TmpLin
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Linhas, Descs FROM SigCdLin WHERE Linhas = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_Lini.Value)), "cursor_4c_TmpLin") > 0
+                    SELECT cursor_4c_TmpLin
+                    IF !EOF("cursor_4c_TmpLin")
+                        THIS.txt_4c_Lini.Value = ALLTRIM(cursor_4c_TmpLin.Linhas)
+                        USE IN cursor_4c_TmpLin
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpLin
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpLin
             ENDIF
-            THIS.AbrirBuscaLinha(.T.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaLinha(.T.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpLin")
                 USE IN cursor_4c_TmpLin
@@ -2503,25 +2597,32 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROCEDURE TxtLinfKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_Linf.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Linhas, Descs FROM SigCdLin WHERE Linhas = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_Linf.Value)), "cursor_4c_TmpLin") > 0
-                SELECT cursor_4c_TmpLin
-                IF !EOF("cursor_4c_TmpLin")
-                    THIS.txt_4c_Linf.Value = ALLTRIM(cursor_4c_TmpLin.Linhas)
-                    USE IN cursor_4c_TmpLin
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Linhas, Descs FROM SigCdLin WHERE Linhas = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_Linf.Value)), "cursor_4c_TmpLin") > 0
+                    SELECT cursor_4c_TmpLin
+                    IF !EOF("cursor_4c_TmpLin")
+                        THIS.txt_4c_Linf.Value = ALLTRIM(cursor_4c_TmpLin.Linhas)
+                        USE IN cursor_4c_TmpLin
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpLin
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpLin
             ENDIF
-            THIS.AbrirBuscaLinha(.F.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaLinha(.F.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpLin")
                 USE IN cursor_4c_TmpLin
@@ -2570,25 +2671,32 @@ DEFINE CLASS Formsigprccp AS FormBase
 
     *-- ==== LOOKUP: Colecao ====
     PROCEDURE TxtColiKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_Coli.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Colecoes, Descs FROM SigCdCol WHERE Colecoes = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_Coli.Value)), "cursor_4c_TmpCol") > 0
-                SELECT cursor_4c_TmpCol
-                IF !EOF("cursor_4c_TmpCol")
-                    THIS.txt_4c_Coli.Value = ALLTRIM(cursor_4c_TmpCol.Colecoes)
-                    USE IN cursor_4c_TmpCol
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Colecoes, Descs FROM SigCdCol WHERE Colecoes = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_Coli.Value)), "cursor_4c_TmpCol") > 0
+                    SELECT cursor_4c_TmpCol
+                    IF !EOF("cursor_4c_TmpCol")
+                        THIS.txt_4c_Coli.Value = ALLTRIM(cursor_4c_TmpCol.Colecoes)
+                        USE IN cursor_4c_TmpCol
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpCol
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpCol
             ENDIF
-            THIS.AbrirBuscaColecao(.T.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaColecao(.T.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpCol")
                 USE IN cursor_4c_TmpCol
@@ -2598,25 +2706,32 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROCEDURE TxtColfKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_Colf.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Colecoes, Descs FROM SigCdCol WHERE Colecoes = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_Colf.Value)), "cursor_4c_TmpCol") > 0
-                SELECT cursor_4c_TmpCol
-                IF !EOF("cursor_4c_TmpCol")
-                    THIS.txt_4c_Colf.Value = ALLTRIM(cursor_4c_TmpCol.Colecoes)
-                    USE IN cursor_4c_TmpCol
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Colecoes, Descs FROM SigCdCol WHERE Colecoes = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_Colf.Value)), "cursor_4c_TmpCol") > 0
+                    SELECT cursor_4c_TmpCol
+                    IF !EOF("cursor_4c_TmpCol")
+                        THIS.txt_4c_Colf.Value = ALLTRIM(cursor_4c_TmpCol.Colecoes)
+                        USE IN cursor_4c_TmpCol
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpCol
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpCol
             ENDIF
-            THIS.AbrirBuscaColecao(.F.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaColecao(.F.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpCol")
                 USE IN cursor_4c_TmpCol
@@ -2665,25 +2780,32 @@ DEFINE CLASS Formsigprccp AS FormBase
 
     *-- ==== LOOKUP: Moeda ====
     PROCEDURE TxtMoedaiKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_Moedai.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_Moedai.Value)), "cursor_4c_TmpMoe") > 0
-                SELECT cursor_4c_TmpMoe
-                IF !EOF("cursor_4c_TmpMoe")
-                    THIS.txt_4c_Moedai.Value = ALLTRIM(cursor_4c_TmpMoe.CMoes)
-                    USE IN cursor_4c_TmpMoe
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_Moedai.Value)), "cursor_4c_TmpMoe") > 0
+                    SELECT cursor_4c_TmpMoe
+                    IF !EOF("cursor_4c_TmpMoe")
+                        THIS.txt_4c_Moedai.Value = ALLTRIM(cursor_4c_TmpMoe.CMoes)
+                        USE IN cursor_4c_TmpMoe
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpMoe
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpMoe
             ENDIF
-            THIS.AbrirBuscaMoeda(.T.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaMoeda(.T.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpMoe")
                 USE IN cursor_4c_TmpMoe
@@ -2693,25 +2815,32 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROCEDURE TxtMoedafKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_Moedaf.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_Moedaf.Value)), "cursor_4c_TmpMoe") > 0
-                SELECT cursor_4c_TmpMoe
-                IF !EOF("cursor_4c_TmpMoe")
-                    THIS.txt_4c_Moedaf.Value = ALLTRIM(cursor_4c_TmpMoe.CMoes)
-                    USE IN cursor_4c_TmpMoe
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_Moedaf.Value)), "cursor_4c_TmpMoe") > 0
+                    SELECT cursor_4c_TmpMoe
+                    IF !EOF("cursor_4c_TmpMoe")
+                        THIS.txt_4c_Moedaf.Value = ALLTRIM(cursor_4c_TmpMoe.CMoes)
+                        USE IN cursor_4c_TmpMoe
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpMoe
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpMoe
             ENDIF
-            THIS.AbrirBuscaMoeda(.F.)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaMoeda(.F.)
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpMoe")
                 USE IN cursor_4c_TmpMoe
@@ -2760,25 +2889,32 @@ DEFINE CLASS Formsigprccp AS FormBase
 
     *-- ==== LOOKUP: Feitio (Codigo MKP) ====
     PROCEDURE TxtFeitioKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_Feitio.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Cods, Descs FROM SigPrFti WHERE Cods = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_Feitio.Value)), "cursor_4c_TmpFti") > 0
-                SELECT cursor_4c_TmpFti
-                IF !EOF("cursor_4c_TmpFti")
-                    THIS.txt_4c_Feitio.Value = ALLTRIM(cursor_4c_TmpFti.Cods)
-                    USE IN cursor_4c_TmpFti
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Cods, Descs FROM SigPrFti WHERE Cods = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_Feitio.Value)), "cursor_4c_TmpFti") > 0
+                    SELECT cursor_4c_TmpFti
+                    IF !EOF("cursor_4c_TmpFti")
+                        THIS.txt_4c_Feitio.Value = ALLTRIM(cursor_4c_TmpFti.Cods)
+                        USE IN cursor_4c_TmpFti
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpFti
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpFti
             ENDIF
-            THIS.AbrirBuscaFeitio()
+            IF loc_lProsseguir
+                THIS.AbrirBuscaFeitio()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpFti")
                 USE IN cursor_4c_TmpFti
@@ -2823,25 +2959,32 @@ DEFINE CLASS Formsigprccp AS FormBase
 
     *-- ==== LOOKUP: Novo MKP ====
     PROCEDURE TxtNewMkpKeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
         IF !INLIST(par_nKeyCode, 9, 13, 115)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.txt_4c_NewMkp.Value))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Cods, Descs FROM SigPrFti WHERE Cods = " + ;
-                       EscaparSQL(ALLTRIM(THIS.txt_4c_NewMkp.Value)) + " AND Tipos = 1", "cursor_4c_TmpNMkp") > 0
-                SELECT cursor_4c_TmpNMkp
-                IF !EOF("cursor_4c_TmpNMkp")
-                    THIS.txt_4c_NewMkp.Value = ALLTRIM(cursor_4c_TmpNMkp.Cods)
-                    USE IN cursor_4c_TmpNMkp
-                    RETURN
+            IF loc_lProsseguir
+                IF SQLEXEC(gnConnHandle, "SELECT TOP 1 Cods, Descs FROM SigPrFti WHERE Cods = " + ;
+                           EscaparSQL(ALLTRIM(THIS.txt_4c_NewMkp.Value)) + " AND Tipos = 1", "cursor_4c_TmpNMkp") > 0
+                    SELECT cursor_4c_TmpNMkp
+                    IF !EOF("cursor_4c_TmpNMkp")
+                        THIS.txt_4c_NewMkp.Value = ALLTRIM(cursor_4c_TmpNMkp.Cods)
+                        USE IN cursor_4c_TmpNMkp
+                        loc_lProsseguir = .F.
+                    ENDIF
+                           IF loc_lProsseguir
+                        USE IN cursor_4c_TmpNMkp
+                           ENDIF
                 ENDIF
-                USE IN cursor_4c_TmpNMkp
             ENDIF
-            THIS.AbrirBuscaNewMkp()
+            IF loc_lProsseguir
+                THIS.AbrirBuscaNewMkp()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_TmpNMkp")
                 USE IN cursor_4c_TmpNMkp

@@ -633,7 +633,8 @@ DEFINE CLASS Formsigrefc2 AS FormBase
     * Carrega operacao e conserto do SigCdPam para exibir na Page2.
     *--------------------------------------------------------------------------
     PROCEDURE LimparCampos()
-        LOCAL loc_oPg1, loc_oPg2, loc_oBO, loc_cCod, loc_cSQL, loc_nRes, loc_oErro
+        LOCAL loc_oPg1, loc_oPg2, loc_oBO, loc_cCod, loc_cSQL, loc_nRes, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg1 = THIS.pgf_4c_Paginas.Page1
             loc_oPg2 = THIS.pgf_4c_Paginas.Page2
@@ -646,51 +647,53 @@ DEFINE CLASS Formsigrefc2 AS FormBase
                 loc_oPg1.txt_4c_DtInicial.Value  = DATE()
                 loc_oPg1.txt_4c_DtFinal.Value    = DATE()
                 loc_oPg1.opt_4c_TpRel.Value      = 1
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oPg1.txt_4c_CdEmpresa.Value  = loc_oBO.this_cCodEmpresa
-            loc_oPg1.txt_4c_NomEmpresa.Value = loc_oBO.this_cNomEmpresa
-            loc_oPg1.txt_4c_DtInicial.Value  = loc_oBO.this_dDtInicial
-            loc_oPg1.txt_4c_DtFinal.Value    = loc_oBO.this_dDtFinal
-            loc_oPg1.opt_4c_TpRel.Value      = loc_oBO.this_nTipoRelatorio
+            IF loc_lProsseguir
+                loc_oPg1.txt_4c_CdEmpresa.Value  = loc_oBO.this_cCodEmpresa
+                loc_oPg1.txt_4c_NomEmpresa.Value = loc_oBO.this_cNomEmpresa
+                loc_oPg1.txt_4c_DtInicial.Value  = loc_oBO.this_dDtInicial
+                loc_oPg1.txt_4c_DtFinal.Value    = loc_oBO.this_dDtFinal
+                loc_oPg1.opt_4c_TpRel.Value      = loc_oBO.this_nTipoRelatorio
 
             *-- Busca nome da empresa se codigo preenchido mas nome vazio
-            loc_cCod = ALLTRIM(loc_oPg1.txt_4c_CdEmpresa.Value)
-            IF gnConnHandle > 0 AND !EMPTY(loc_cCod) AND ;
-               EMPTY(ALLTRIM(loc_oPg1.txt_4c_NomEmpresa.Value))
-                loc_cSQL = "SELECT TOP 1 Razas FROM SigCdEmp " + ;
-                           "WHERE Cemps = " + EscaparSQL(loc_cCod)
-                loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Refc2EmpLc")
-                IF loc_nRes > 0 AND RECCOUNT("cursor_4c_Refc2EmpLc") > 0
-                    SELECT cursor_4c_Refc2EmpLc
-                    IF !EOF()
-                        loc_oPg1.txt_4c_NomEmpresa.Value = ALLTRIM(Razas)
+                loc_cCod = ALLTRIM(loc_oPg1.txt_4c_CdEmpresa.Value)
+                IF gnConnHandle > 0 AND !EMPTY(loc_cCod) AND ;
+                   EMPTY(ALLTRIM(loc_oPg1.txt_4c_NomEmpresa.Value))
+                    loc_cSQL = "SELECT TOP 1 Razas FROM SigCdEmp " + ;
+                               "WHERE Cemps = " + EscaparSQL(loc_cCod)
+                    loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Refc2EmpLc")
+                    IF loc_nRes > 0 AND RECCOUNT("cursor_4c_Refc2EmpLc") > 0
+                        SELECT cursor_4c_Refc2EmpLc
+                        IF !EOF()
+                            loc_oPg1.txt_4c_NomEmpresa.Value = ALLTRIM(Razas)
+                        ENDIF
+                    ENDIF
+                    IF USED("cursor_4c_Refc2EmpLc")
+                        USE IN cursor_4c_Refc2EmpLc
                     ENDIF
                 ENDIF
-                IF USED("cursor_4c_Refc2EmpLc")
-                    USE IN cursor_4c_Refc2EmpLc
-                ENDIF
-            ENDIF
 
             *-- Carrega operacao e conserto do SigCdPam para Page2 (configuracao)
-            IF gnConnHandle > 0
-                loc_cSQL = "SELECT TOP 1 Dopes, OpcOnsers FROM SigCdPam"
-                loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Refc2PamLc")
-                IF loc_nRes > 0 AND RECCOUNT("cursor_4c_Refc2PamLc") > 0
-                    SELECT cursor_4c_Refc2PamLc
-                    IF !EOF()
-                        loc_oPg2.txt_4c_DesOperacao.Value = ALLTRIM(Dopes)
-                        loc_oPg2.txt_4c_DesConserto.Value = ALLTRIM(OpcOnsers)
+                IF gnConnHandle > 0
+                    loc_cSQL = "SELECT TOP 1 Dopes, OpcOnsers FROM SigCdPam"
+                    loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Refc2PamLc")
+                    IF loc_nRes > 0 AND RECCOUNT("cursor_4c_Refc2PamLc") > 0
+                        SELECT cursor_4c_Refc2PamLc
+                        IF !EOF()
+                            loc_oPg2.txt_4c_DesOperacao.Value = ALLTRIM(Dopes)
+                            loc_oPg2.txt_4c_DesConserto.Value = ALLTRIM(OpcOnsers)
+                        ENDIF
+                    ENDIF
+                    IF USED("cursor_4c_Refc2PamLc")
+                        USE IN cursor_4c_Refc2PamLc
                     ENDIF
                 ENDIF
-                IF USED("cursor_4c_Refc2PamLc")
-                    USE IN cursor_4c_Refc2PamLc
-                ENDIF
+
+                loc_oPg1.txt_4c_CdEmpresa.SetFocus()
+
             ENDIF
-
-            loc_oPg1.txt_4c_CdEmpresa.SetFocus()
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "LimparCampos")
         ENDTRY
@@ -751,35 +754,38 @@ DEFINE CLASS Formsigrefc2 AS FormBase
     * Chamado ao pressionar ENTER/TAB no campo codigo empresa
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCdEmpresa()
-        LOCAL loc_oPg1, loc_cCod, loc_cSQL, loc_nRes, loc_oErro
+        LOCAL loc_oPg1, loc_cCod, loc_cSQL, loc_nRes, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg1 = THIS.pgf_4c_Paginas.Page1
             loc_cCod = ALLTRIM(loc_oPg1.txt_4c_CdEmpresa.Value)
 
             IF EMPTY(loc_cCod)
                 loc_oPg1.txt_4c_NomEmpresa.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cSQL = "SELECT TOP 1 Cemps, Razas FROM SigCdEmp " + ;
-                       "WHERE Cemps = " + EscaparSQL(loc_cCod)
-            loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Refc2EmpV")
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT TOP 1 Cemps, Razas FROM SigCdEmp " + ;
+                           "WHERE Cemps = " + EscaparSQL(loc_cCod)
+                loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Refc2EmpV")
 
-            IF loc_nRes > 0 AND RECCOUNT("cursor_4c_Refc2EmpV") > 0
-                SELECT cursor_4c_Refc2EmpV
-                IF !EOF()
-                    loc_oPg1.txt_4c_CdEmpresa.Value  = ALLTRIM(Cemps)
-                    loc_oPg1.txt_4c_NomEmpresa.Value = ALLTRIM(Razas)
+                IF loc_nRes > 0 AND RECCOUNT("cursor_4c_Refc2EmpV") > 0
+                    SELECT cursor_4c_Refc2EmpV
+                    IF !EOF()
+                        loc_oPg1.txt_4c_CdEmpresa.Value  = ALLTRIM(Cemps)
+                        loc_oPg1.txt_4c_NomEmpresa.Value = ALLTRIM(Razas)
+                    ENDIF
+                ELSE
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
+                    THIS.AbrirBuscaEmpresa()
                 ENDIF
-            ELSE
-                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
-                THIS.AbrirBuscaEmpresa()
-            ENDIF
 
-            IF USED("cursor_4c_Refc2EmpV")
-                USE IN cursor_4c_Refc2EmpV
-            ENDIF
+                IF USED("cursor_4c_Refc2EmpV")
+                    USE IN cursor_4c_Refc2EmpV
+                ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarCdEmpresa")
         ENDTRY
@@ -805,7 +811,8 @@ DEFINE CLASS Formsigrefc2 AS FormBase
     * Busca parcial: se unica ? preenche; se multipla ? abre lookup; se nenhuma ? avisa e abre lookup.
     *--------------------------------------------------------------------------
     PROCEDURE ValidarNomEmpresa()
-        LOCAL loc_oPg1, loc_cNom, loc_cSQL, loc_nRes, loc_oErro
+        LOCAL loc_oPg1, loc_cNom, loc_cSQL, loc_nRes, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg1 = THIS.pgf_4c_Paginas.Page1
             loc_cNom = ALLTRIM(loc_oPg1.txt_4c_NomEmpresa.Value)
@@ -813,38 +820,40 @@ DEFINE CLASS Formsigrefc2 AS FormBase
             IF EMPTY(loc_cNom)
                 loc_oPg1.txt_4c_CdEmpresa.Value  = ""
                 loc_oPg1.txt_4c_NomEmpresa.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Busca empresa pela razao social (correspondencia parcial - TOP 2 para detectar duplicidade)
-            loc_cSQL = "SELECT TOP 2 Cemps, Razas FROM SigCdEmp " + ;
-                       "WHERE Razas LIKE " + EscaparSQL("%" + loc_cNom + "%") + ;
-                       " ORDER BY Cemps"
-            loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Refc2NomV")
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT TOP 2 Cemps, Razas FROM SigCdEmp " + ;
+                           "WHERE Razas LIKE " + EscaparSQL("%" + loc_cNom + "%") + ;
+                           " ORDER BY Cemps"
+                loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Refc2NomV")
 
-            IF loc_nRes > 0 AND RECCOUNT("cursor_4c_Refc2NomV") = 1
-                *-- Encontrou exatamente uma - preenche automaticamente
-                SELECT cursor_4c_Refc2NomV
-                IF !EOF()
-                    loc_oPg1.txt_4c_CdEmpresa.Value  = ALLTRIM(Cemps)
-                    loc_oPg1.txt_4c_NomEmpresa.Value = ALLTRIM(Razas)
+                IF loc_nRes > 0 AND RECCOUNT("cursor_4c_Refc2NomV") = 1
+                    *-- Encontrou exatamente uma - preenche automaticamente
+                    SELECT cursor_4c_Refc2NomV
+                    IF !EOF()
+                        loc_oPg1.txt_4c_CdEmpresa.Value  = ALLTRIM(Cemps)
+                        loc_oPg1.txt_4c_NomEmpresa.Value = ALLTRIM(Razas)
+                    ENDIF
+                    IF USED("cursor_4c_Refc2NomV")
+                        USE IN cursor_4c_Refc2NomV
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_Refc2NomV")
+                        USE IN cursor_4c_Refc2NomV
+                    ENDIF
+                    IF loc_nRes <= 0 OR RECCOUNT("cursor_4c_Refc2NomV") = 0
+                        MsgAviso("Empresa n" + CHR(227) + "o encontrada.", "Aviso")
+                        loc_oPg1.txt_4c_CdEmpresa.Value  = ""
+                        loc_oPg1.txt_4c_NomEmpresa.Value = ""
+                    ENDIF
+                    *-- Multiplas ou nenhuma - abre lookup para selecao manual
+                    THIS.AbrirBuscaEmpresa()
                 ENDIF
-                IF USED("cursor_4c_Refc2NomV")
-                    USE IN cursor_4c_Refc2NomV
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_Refc2NomV")
-                    USE IN cursor_4c_Refc2NomV
-                ENDIF
-                IF loc_nRes <= 0 OR RECCOUNT("cursor_4c_Refc2NomV") = 0
-                    MsgAviso("Empresa n" + CHR(227) + "o encontrada.", "Aviso")
-                    loc_oPg1.txt_4c_CdEmpresa.Value  = ""
-                    loc_oPg1.txt_4c_NomEmpresa.Value = ""
-                ENDIF
-                *-- Multiplas ou nenhuma - abre lookup para selecao manual
-                THIS.AbrirBuscaEmpresa()
+
             ENDIF
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarNomEmpresa")
         ENDTRY

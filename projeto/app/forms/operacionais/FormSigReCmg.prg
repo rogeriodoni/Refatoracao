@@ -1378,33 +1378,38 @@ DEFINE CLASS FormSigReCmg AS FormBase
     * com a chave atualmente selecionada no combo.
     *==========================================================================
     PROCEDURE BtnBuscarClick()
-        LOCAL loc_nIndex, loc_oErro
+        LOCAL loc_nIndex, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF NOT PEMSTATUS(THIS, "cnt_4c_Grf2", 5) OR ;
                NOT PEMSTATUS(THIS.cnt_4c_Grf2, "cbo_4c_CmbChave1", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_nIndex = THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex
-            IF loc_nIndex < 1
-                MsgAviso("Selecione um cliente no combo para gerar o gr" + ;
-                         CHR(225) + "fico.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                loc_nIndex = THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex
+                IF loc_nIndex < 1
+                    MsgAviso("Selecione um cliente no combo para gerar o gr" + ;
+                             CHR(225) + "fico.", "Aten" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            THIS.LockScreen = .T.
-            THIS.cnt_4c_Aguarde.Visible = .T.
-            THIS.Refresh()
-            THIS.HabilitarCampos(.F.)
+            IF loc_lProsseguir
+                THIS.LockScreen = .T.
+                THIS.cnt_4c_Aguarde.Visible = .T.
+                THIS.Refresh()
+                THIS.HabilitarCampos(.F.)
 
-            THIS.GerarGrafico(loc_nIndex)
+                THIS.GerarGrafico(loc_nIndex)
 
-            THIS.cnt_4c_Aguarde.Visible = .F.
-            THIS.HabilitarCampos(.T.)
-            THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.SetFocus
-            THIS.Refresh()
-            THIS.LockScreen = .F.
+                THIS.cnt_4c_Aguarde.Visible = .F.
+                THIS.HabilitarCampos(.T.)
+                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.SetFocus
+                THIS.Refresh()
+                THIS.LockScreen = .F.
 
+            ENDIF
         CATCH TO loc_oErro
             THIS.LockScreen = .F.
             THIS.cnt_4c_Aguarde.Visible = .F.
@@ -1518,62 +1523,67 @@ DEFINE CLASS FormSigReCmg AS FormBase
     * BtnAnterior/BtnProximo, mas permitindo salto direto para qualquer posicao.
     *==========================================================================
     PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_cChave1, loc_cChave2, loc_cQtVal, loc_nQtVal, loc_cStrgeixoY, loc_oErro
+        LOCAL loc_cChave1, loc_cChave2, loc_cQtVal, loc_nQtVal, loc_cStrgeixoY, loc_oErro, loc_lProsseguir
         LOCAL loc_nDestino
 
+        loc_lProsseguir = .T.
         TRY
             *-- Valida e normaliza a posicao destino (1 a 3 = posicoes validas)
             IF VARTYPE(par_nPagina) != "N" OR !BETWEEN(par_nPagina, 1, 3)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_nDestino = par_nPagina
+            IF loc_lProsseguir
+                loc_nDestino = par_nPagina
 
             *-- Combo de clientes precisa estar populado (pre-condicao do refresh)
-            IF EMPTY(THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListCount) OR ;
-               THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex < 1
-                RETURN
+                IF EMPTY(THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListCount) OR ;
+                   THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex < 1
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            THIS.LockScreen = .T.
+            IF loc_lProsseguir
+                THIS.LockScreen = .T.
 
             *-- Atualiza posicao do grafico e sincroniza BO
-            THIS.pnNumGrf = loc_nDestino
-            IF VARTYPE(THIS.this_oBusinessObject) = "O"
-                THIS.this_oBusinessObject.this_nNumGrafico = THIS.pnNumGrf
-            ENDIF
+                THIS.pnNumGrf = loc_nDestino
+                IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                    THIS.this_oBusinessObject.this_nNumGrafico = THIS.pnNumGrf
+                ENDIF
 
             *-- Atualiza estado dos botoes de navegacao
-            THIS.obj_4c_CmdGgrafico.Buttons(1).Enabled = (THIS.pnNumGrf > 1)
-            THIS.obj_4c_CmdGgrafico.Buttons(2).Enabled = (THIS.pnNumGrf < 3)
+                THIS.obj_4c_CmdGgrafico.Buttons(1).Enabled = (THIS.pnNumGrf > 1)
+                THIS.obj_4c_CmdGgrafico.Buttons(2).Enabled = (THIS.pnNumGrf < 3)
 
             *-- Determinar modo Valor/Quantidade a partir do form pai
-            IF VARTYPE(THIS.poForm1) = "O" AND THIS.poForm1 != THIS
-                loc_cQtVal = PADR(IIF(THIS.poForm1.Opt_SelRel.Value = 1, "Valor", "Quantidade"), 10)
-                loc_nQtVal = THIS.poForm1.Opt_SelRel.Value
-            ELSE
-                loc_cQtVal = PADR("Valor", 10)
-                loc_nQtVal = 1
-            ENDIF
+                IF VARTYPE(THIS.poForm1) = "O" AND THIS.poForm1 != THIS
+                    loc_cQtVal = PADR(IIF(THIS.poForm1.Opt_SelRel.Value = 1, "Valor", "Quantidade"), 10)
+                    loc_nQtVal = THIS.poForm1.Opt_SelRel.Value
+                ELSE
+                    loc_cQtVal = PADR("Valor", 10)
+                    loc_nQtVal = 1
+                ENDIF
 
-            loc_cStrgeixoY = "Opera" + CHR(231) + CHR(245) + "es Ranking   " + loc_cQtVal
-            loc_cChave1    = THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.List(;
-                             THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex)
-            loc_cChave2    = THIS.this_oBusinessObject.ObterChaveGrafico(;
-                             loc_cChave1, THIS.pnNumGrf, loc_cStrgeixoY)
+                loc_cStrgeixoY = "Opera" + CHR(231) + CHR(245) + "es Ranking   " + loc_cQtVal
+                loc_cChave1    = THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.List(;
+                                 THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.ListIndex)
+                loc_cChave2    = THIS.this_oBusinessObject.ObterChaveGrafico(;
+                                 loc_cChave1, THIS.pnNumGrf, loc_cStrgeixoY)
 
-            IF USED("CrGrafico1")
-                SELECT CrGrafico1
-                LOCATE FOR CrGrafico1.cChave1s = PADR(loc_cChave2, 100)
-            ENDIF
+                IF USED("CrGrafico1")
+                    SELECT CrGrafico1
+                    LOCATE FOR CrGrafico1.cChave1s = PADR(loc_cChave2, 100)
+                ENDIF
 
             *-- Atualiza exibicao do grafico OLE na nova posicao
-            THIS.ConfigurarOleGrafico(loc_cChave1, loc_cStrgeixoY, loc_nQtVal)
-            THIS.cnt_4c_Grf1.obj_4c_OleGrafico1.Refresh
+                THIS.ConfigurarOleGrafico(loc_cChave1, loc_cStrgeixoY, loc_nQtVal)
+                THIS.cnt_4c_Grf1.obj_4c_OleGrafico1.Refresh
 
-            THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.SetFocus
-            THIS.Refresh()
-            THIS.LockScreen = .F.
+                THIS.cnt_4c_Grf2.cbo_4c_CmbChave1.SetFocus
+                THIS.Refresh()
+                THIS.LockScreen = .F.
 
+            ENDIF
         CATCH TO loc_oErro
             THIS.LockScreen = .F.
             MsgErro(loc_oErro.Message, "Erro AlternarPagina")

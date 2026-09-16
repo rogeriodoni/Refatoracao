@@ -2210,85 +2210,88 @@ DEFINE CLASS FormProduto AS FormBase
     * Chamado de BOParaForm ao exibir registro existente
     *===========================================================================
     PROTECTED PROCEDURE CarregarDescricoesFiscais()
-        LOCAL loc_oPg, loc_cCod, loc_nRet, loException
+        LOCAL loc_oPg, loc_cCod, loc_nRet, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Clfiscal", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Classificacao Fiscal (SigCdClf: codigos/descricaos)
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Clfiscal.Value)
-            IF !EMPTY(loc_cCod)
-                loc_nRet = SQLEXEC(gnConnHandle, ;
-                    "SELECT descricaos FROM SigCdClf WHERE codigos = " + EscaparSQL(loc_cCod), ;
-                    "cursor_4c_LkpFiscDesc")
-                IF loc_nRet > 0 AND USED("cursor_4c_LkpFiscDesc") AND !EOF("cursor_4c_LkpFiscDesc")
-                    loc_oPg.txt_4c_Dclfiscal.Value = ALLTRIM(cursor_4c_LkpFiscDesc.descricaos)
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Clfiscal.Value)
+                IF !EMPTY(loc_cCod)
+                    loc_nRet = SQLEXEC(gnConnHandle, ;
+                        "SELECT descricaos FROM SigCdClf WHERE codigos = " + EscaparSQL(loc_cCod), ;
+                        "cursor_4c_LkpFiscDesc")
+                    IF loc_nRet > 0 AND USED("cursor_4c_LkpFiscDesc") AND !EOF("cursor_4c_LkpFiscDesc")
+                        loc_oPg.txt_4c_Dclfiscal.Value = ALLTRIM(cursor_4c_LkpFiscDesc.descricaos)
+                    ENDIF
+                    IF USED("cursor_4c_LkpFiscDesc")
+                        USE IN cursor_4c_LkpFiscDesc
+                    ENDIF
                 ENDIF
-                IF USED("cursor_4c_LkpFiscDesc")
-                    USE IN cursor_4c_LkpFiscDesc
-                ENDIF
-            ENDIF
 
             *-- Origem Mercadoria (SIGCDORG: codigos/descricaos)
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Origmerc.Value)
-            IF !EMPTY(loc_cCod)
-                loc_nRet = SQLEXEC(gnConnHandle, ;
-                    "SELECT descricaos FROM SIGCDORG WHERE codigos = " + EscaparSQL(loc_cCod), ;
-                    "cursor_4c_LkpFiscDesc")
-                IF loc_nRet > 0 AND USED("cursor_4c_LkpFiscDesc") AND !EOF("cursor_4c_LkpFiscDesc")
-                    loc_oPg.txt_4c_Dorigmerc.Value = ALLTRIM(cursor_4c_LkpFiscDesc.descricaos)
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Origmerc.Value)
+                IF !EMPTY(loc_cCod)
+                    loc_nRet = SQLEXEC(gnConnHandle, ;
+                        "SELECT descricaos FROM SIGCDORG WHERE codigos = " + EscaparSQL(loc_cCod), ;
+                        "cursor_4c_LkpFiscDesc")
+                    IF loc_nRet > 0 AND USED("cursor_4c_LkpFiscDesc") AND !EOF("cursor_4c_LkpFiscDesc")
+                        loc_oPg.txt_4c_Dorigmerc.Value = ALLTRIM(cursor_4c_LkpFiscDesc.descricaos)
+                    ENDIF
+                    IF USED("cursor_4c_LkpFiscDesc")
+                        USE IN cursor_4c_LkpFiscDesc
+                    ENDIF
                 ENDIF
-                IF USED("cursor_4c_LkpFiscDesc")
-                    USE IN cursor_4c_LkpFiscDesc
-                ENDIF
-            ENDIF
 
             *-- Situacao Tributaria ICMS (SIGCDICM: codigos/descricaos)
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Sittricm.Value)
-            IF !EMPTY(loc_cCod)
-                loc_nRet = SQLEXEC(gnConnHandle, ;
-                    "SELECT descricaos FROM SIGCDICM WHERE codigos = " + EscaparSQL(loc_cCod), ;
-                    "cursor_4c_LkpFiscDesc")
-                IF loc_nRet > 0 AND USED("cursor_4c_LkpFiscDesc") AND !EOF("cursor_4c_LkpFiscDesc")
-                    loc_oPg.txt_4c_Dsittricm.Value = ALLTRIM(cursor_4c_LkpFiscDesc.descricaos)
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Sittricm.Value)
+                IF !EMPTY(loc_cCod)
+                    loc_nRet = SQLEXEC(gnConnHandle, ;
+                        "SELECT descricaos FROM SIGCDICM WHERE codigos = " + EscaparSQL(loc_cCod), ;
+                        "cursor_4c_LkpFiscDesc")
+                    IF loc_nRet > 0 AND USED("cursor_4c_LkpFiscDesc") AND !EOF("cursor_4c_LkpFiscDesc")
+                        loc_oPg.txt_4c_Dsittricm.Value = ALLTRIM(cursor_4c_LkpFiscDesc.descricaos)
+                    ENDIF
+                    IF USED("cursor_4c_LkpFiscDesc")
+                        USE IN cursor_4c_LkpFiscDesc
+                    ENDIF
                 ENDIF
-                IF USED("cursor_4c_LkpFiscDesc")
-                    USE IN cursor_4c_LkpFiscDesc
-                ENDIF
-            ENDIF
 
             *-- Metal (SigCdMtl: codigos/descs WHERE tipos='M')
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Metal.Value)
-            IF !EMPTY(loc_cCod)
-                loc_nRet = SQLEXEC(gnConnHandle, ;
-                    "SELECT descs FROM SigCdMtl WHERE codigos = " + EscaparSQL(loc_cCod) + ;
-                    " AND tipos = 'M'", ;
-                    "cursor_4c_LkpFiscDesc")
-                IF loc_nRet > 0 AND USED("cursor_4c_LkpFiscDesc") AND !EOF("cursor_4c_LkpFiscDesc")
-                    loc_oPg.txt_4c_DesMetal.Value = ALLTRIM(cursor_4c_LkpFiscDesc.descs)
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Metal.Value)
+                IF !EMPTY(loc_cCod)
+                    loc_nRet = SQLEXEC(gnConnHandle, ;
+                        "SELECT descs FROM SigCdMtl WHERE codigos = " + EscaparSQL(loc_cCod) + ;
+                        " AND tipos = 'M'", ;
+                        "cursor_4c_LkpFiscDesc")
+                    IF loc_nRet > 0 AND USED("cursor_4c_LkpFiscDesc") AND !EOF("cursor_4c_LkpFiscDesc")
+                        loc_oPg.txt_4c_DesMetal.Value = ALLTRIM(cursor_4c_LkpFiscDesc.descs)
+                    ENDIF
+                    IF USED("cursor_4c_LkpFiscDesc")
+                        USE IN cursor_4c_LkpFiscDesc
+                    ENDIF
                 ENDIF
-                IF USED("cursor_4c_LkpFiscDesc")
-                    USE IN cursor_4c_LkpFiscDesc
-                ENDIF
-            ENDIF
 
             *-- Teor (SigCdMtl: codigos/descs WHERE tipos<>'M')
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Teor.Value)
-            IF !EMPTY(loc_cCod)
-                loc_nRet = SQLEXEC(gnConnHandle, ;
-                    "SELECT descs FROM SigCdMtl WHERE codigos = " + EscaparSQL(loc_cCod) + ;
-                    " AND tipos <> 'M'", ;
-                    "cursor_4c_LkpFiscDesc")
-                IF loc_nRet > 0 AND USED("cursor_4c_LkpFiscDesc") AND !EOF("cursor_4c_LkpFiscDesc")
-                    loc_oPg.txt_4c_DesTeor.Value = ALLTRIM(cursor_4c_LkpFiscDesc.descs)
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Teor.Value)
+                IF !EMPTY(loc_cCod)
+                    loc_nRet = SQLEXEC(gnConnHandle, ;
+                        "SELECT descs FROM SigCdMtl WHERE codigos = " + EscaparSQL(loc_cCod) + ;
+                        " AND tipos <> 'M'", ;
+                        "cursor_4c_LkpFiscDesc")
+                    IF loc_nRet > 0 AND USED("cursor_4c_LkpFiscDesc") AND !EOF("cursor_4c_LkpFiscDesc")
+                        loc_oPg.txt_4c_DesTeor.Value = ALLTRIM(cursor_4c_LkpFiscDesc.descs)
+                    ENDIF
+                    IF USED("cursor_4c_LkpFiscDesc")
+                        USE IN cursor_4c_LkpFiscDesc
+                    ENDIF
                 ENDIF
-                IF USED("cursor_4c_LkpFiscDesc")
-                    USE IN cursor_4c_LkpFiscDesc
-                ENDIF
-            ENDIF
 
+            ENDIF
         CATCH TO loException
             IF USED("cursor_4c_LkpFiscDesc")
                 USE IN cursor_4c_LkpFiscDesc
@@ -6410,43 +6413,46 @@ DEFINE CLASS FormProduto AS FormBase
     *===========================================================================
 
     PROCEDURE GrdCustoAfterRowColChange(par_nColIndex)
-        LOCAL loc_oPg, loc_nRet, loException
+        LOCAL loc_oPg, loc_nRet, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2
             IF !USED("cursor_4c_GrdCompo") OR EOF("cursor_4c_GrdCompo")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !EMPTY(cursor_4c_GrdCompo.cpros)
-                loc_nRet = SQLEXEC(gnConnHandle, ;
-                    "SELECT dpros FROM SigCdPro WHERE cpros = '" + ;
-                    EscaparSQL(ALLTRIM(cursor_4c_GrdCompo.cpros)) + "", ;
-                    "cursor_4c_DescCusto")
-                IF loc_nRet > 0 AND USED("cursor_4c_DescCusto") AND !EOF("cursor_4c_DescCusto")
+            IF loc_lProsseguir
+                IF !EMPTY(cursor_4c_GrdCompo.cpros)
+                    loc_nRet = SQLEXEC(gnConnHandle, ;
+                        "SELECT dpros FROM SigCdPro WHERE cpros = '" + ;
+                        EscaparSQL(ALLTRIM(cursor_4c_GrdCompo.cpros)) + "", ;
+                        "cursor_4c_DescCusto")
+                    IF loc_nRet > 0 AND USED("cursor_4c_DescCusto") AND !EOF("cursor_4c_DescCusto")
+                        IF PEMSTATUS(loc_oPg, "txt_4c_Desc", 5)
+                            loc_oPg.txt_4c_Desc.Value = ALLTRIM(cursor_4c_DescCusto.dpros)
+                        ENDIF
+                        USE IN cursor_4c_DescCusto
+                    ENDIF
+                ELSE
                     IF PEMSTATUS(loc_oPg, "txt_4c_Desc", 5)
-                        loc_oPg.txt_4c_Desc.Value = ALLTRIM(cursor_4c_DescCusto.dpros)
+                        loc_oPg.txt_4c_Desc.Value = ""
                     ENDIF
-                    USE IN cursor_4c_DescCusto
                 ENDIF
-            ELSE
-                IF PEMSTATUS(loc_oPg, "txt_4c_Desc", 5)
-                    loc_oPg.txt_4c_Desc.Value = ""
-                ENDIF
-            ENDIF
-            IF !EMPTY(cursor_4c_GrdCompo.cpros)
-                loc_nRet = SQLEXEC(gnConnHandle, ;
-                    "SELECT b.dgrus FROM SigCdPro a " + ;
-                    "INNER JOIN SigCdGrp b ON a.cgrus = b.cgrus " + ;
-                    "WHERE a.cpros = " + EscaparSQL(ALLTRIM(cursor_4c_GrdCompo.cpros)) + "", ;
-                    "cursor_4c_GruCusto")
-                IF loc_nRet > 0 AND USED("cursor_4c_GruCusto") AND !EOF("cursor_4c_GruCusto")
+                IF !EMPTY(cursor_4c_GrdCompo.cpros)
+                    loc_nRet = SQLEXEC(gnConnHandle, ;
+                        "SELECT b.dgrus FROM SigCdPro a " + ;
+                        "INNER JOIN SigCdGrp b ON a.cgrus = b.cgrus " + ;
+                        "WHERE a.cpros = " + EscaparSQL(ALLTRIM(cursor_4c_GrdCompo.cpros)) + "", ;
+                        "cursor_4c_GruCusto")
+                    IF loc_nRet > 0 AND USED("cursor_4c_GruCusto") AND !EOF("cursor_4c_GruCusto")
+                        IF PEMSTATUS(loc_oPg, "txt_4c_DGruCompos", 5)
+                            loc_oPg.txt_4c_DGruCompos.Value = ALLTRIM(cursor_4c_GruCusto.dgrus)
+                        ENDIF
+                        USE IN cursor_4c_GruCusto
+                    ENDIF
+                ELSE
                     IF PEMSTATUS(loc_oPg, "txt_4c_DGruCompos", 5)
-                        loc_oPg.txt_4c_DGruCompos.Value = ALLTRIM(cursor_4c_GruCusto.dgrus)
+                        loc_oPg.txt_4c_DGruCompos.Value = ""
                     ENDIF
-                    USE IN cursor_4c_GruCusto
-                ENDIF
-            ELSE
-                IF PEMSTATUS(loc_oPg, "txt_4c_DGruCompos", 5)
-                    loc_oPg.txt_4c_DGruCompos.Value = ""
                 ENDIF
             ENDIF
         CATCH TO loException
@@ -6474,13 +6480,16 @@ DEFINE CLASS FormProduto AS FormBase
     ENDPROC
 
     PROCEDURE CmdCustoInserirClick()
-        LOCAL loException
+        LOCAL loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_GrdCompo")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_GrdCompo
-            APPEND BLANK
+            IF loc_lProsseguir
+                SELECT cursor_4c_GrdCompo
+                APPEND BLANK
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao inserir item de custo:" + CHR(13) + loException.Message, ;
                 "FormProduto.CmdCustoInserirClick")
@@ -6488,18 +6497,21 @@ DEFINE CLASS FormProduto AS FormBase
     ENDPROC
 
     PROCEDURE CmdCustoExcluirClick()
-        LOCAL loc_lConfirma, loException
+        LOCAL loc_lConfirma, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_GrdCompo") OR EOF("cursor_4c_GrdCompo")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_lConfirma = MsgConfirma("Confirma a exclus" + CHR(227) + "o deste item de custo?")
-            IF loc_lConfirma
-                SELECT cursor_4c_GrdCompo
-                DELETE
-                IF !EOF()
-                    SKIP
-                    SKIP -1
+            IF loc_lProsseguir
+                loc_lConfirma = MsgConfirma("Confirma a exclus" + CHR(227) + "o deste item de custo?")
+                IF loc_lConfirma
+                    SELECT cursor_4c_GrdCompo
+                    DELETE
+                    IF !EOF()
+                        SKIP
+                        SKIP -1
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loException
@@ -8210,72 +8222,75 @@ DEFINE CLASS FormProduto AS FormBase
     * Chamado de BOParaForm quando produto e carregado para edicao/visualizacao
     *===========================================================================
     PROTECTED PROCEDURE CarregarFaseP()
-        LOCAL loc_cCpros, loc_nRet, loc_oPg, loException
+        LOCAL loc_cCpros, loc_nRet, loc_oPg, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cCpros = ALLTRIM(THIS.this_oBusinessObject.this_cCpros)
             IF EMPTY(loc_cCpros) OR TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
+            IF loc_lProsseguir
+                loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
 
             *-- Carregar GradFase de SigCdPrf
-            IF USED("cursor_4c_GradFase")
-                USE IN cursor_4c_GradFase
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT cidchaves, ordems, grupos, minutos, uniprdts, matprdts, obs" + ;
-                " FROM SigCdPrf WHERE produtos = " + EscaparSQL(loc_cCpros) + ;
-                " ORDER BY ordems", "cursor_4c_GradFase")
-            IF loc_nRet <= 0
-                SET NULL ON
-                CREATE CURSOR cursor_4c_GradFase ( ;
-                    cidchaves C(20), ordems N(2,0), grupos C(10), ;
-                    minutos   N(9,1), uniprdts C(10), matprdts C(15), obs M)
-                SET NULL OFF
-            ENDIF
-            IF PEMSTATUS(loc_oPg, "grd_4c_GradFase", 5)
-                loc_oPg.grd_4c_GradFase.ColumnCount = 5
-                loc_oPg.grd_4c_GradFase.RecordSource = "cursor_4c_GradFase"
-                loc_oPg.grd_4c_GradFase.Column1.ControlSource = "cursor_4c_GradFase.ordems"
-                loc_oPg.grd_4c_GradFase.Column2.ControlSource = "cursor_4c_GradFase.grupos"
-                loc_oPg.grd_4c_GradFase.Column3.ControlSource = "cursor_4c_GradFase.minutos"
-                loc_oPg.grd_4c_GradFase.Column4.ControlSource = "cursor_4c_GradFase.uniprdts"
-                loc_oPg.grd_4c_GradFase.Column5.ControlSource = "cursor_4c_GradFase.matprdts"
-                loc_oPg.grd_4c_GradFase.Column1.Header1.Caption = "Ordem"
-                loc_oPg.grd_4c_GradFase.Column2.Header1.Caption = "Fase"
-                loc_oPg.grd_4c_GradFase.Column3.Header1.Caption = "Utiliza" + CHR(231) + CHR(227) + "o"
-                loc_oPg.grd_4c_GradFase.Column4.Header1.Caption = "Uni. Produtiva"
-                loc_oPg.grd_4c_GradFase.Column5.Header1.Caption = "Material"
-                loc_oPg.grd_4c_GradFase.Refresh()
-            ENDIF
+                IF USED("cursor_4c_GradFase")
+                    USE IN cursor_4c_GradFase
+                ENDIF
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT cidchaves, ordems, grupos, minutos, uniprdts, matprdts, obs" + ;
+                    " FROM SigCdPrf WHERE produtos = " + EscaparSQL(loc_cCpros) + ;
+                    " ORDER BY ordems", "cursor_4c_GradFase")
+                IF loc_nRet <= 0
+                    SET NULL ON
+                    CREATE CURSOR cursor_4c_GradFase ( ;
+                        cidchaves C(20), ordems N(2,0), grupos C(10), ;
+                        minutos   N(9,1), uniprdts C(10), matprdts C(15), obs M)
+                    SET NULL OFF
+                ENDIF
+                IF PEMSTATUS(loc_oPg, "grd_4c_GradFase", 5)
+                    loc_oPg.grd_4c_GradFase.ColumnCount = 5
+                    loc_oPg.grd_4c_GradFase.RecordSource = "cursor_4c_GradFase"
+                    loc_oPg.grd_4c_GradFase.Column1.ControlSource = "cursor_4c_GradFase.ordems"
+                    loc_oPg.grd_4c_GradFase.Column2.ControlSource = "cursor_4c_GradFase.grupos"
+                    loc_oPg.grd_4c_GradFase.Column3.ControlSource = "cursor_4c_GradFase.minutos"
+                    loc_oPg.grd_4c_GradFase.Column4.ControlSource = "cursor_4c_GradFase.uniprdts"
+                    loc_oPg.grd_4c_GradFase.Column5.ControlSource = "cursor_4c_GradFase.matprdts"
+                    loc_oPg.grd_4c_GradFase.Column1.Header1.Caption = "Ordem"
+                    loc_oPg.grd_4c_GradFase.Column2.Header1.Caption = "Fase"
+                    loc_oPg.grd_4c_GradFase.Column3.Header1.Caption = "Utiliza" + CHR(231) + CHR(227) + "o"
+                    loc_oPg.grd_4c_GradFase.Column4.Header1.Caption = "Uni. Produtiva"
+                    loc_oPg.grd_4c_GradFase.Column5.Header1.Caption = "Material"
+                    loc_oPg.grd_4c_GradFase.Refresh()
+                ENDIF
 
             *-- Carregar grdMatrizes de SigPrMtz + SigCdPro (descricao do produto matriz)
-            IF USED("cursor_4c_GrdMatrizes")
-                USE IN cursor_4c_GrdMatrizes
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT m.cidchaves, m.cmats, m.qtds, ISNULL(p.dpros,'') AS dpros" + ;
-                " FROM SigPrMtz m LEFT JOIN SigCdPro p ON p.cpros = m.cmats" + ;
-                " WHERE m.cpros = " + EscaparSQL(loc_cCpros) + ;
-                " ORDER BY m.cmats", "cursor_4c_GrdMatrizes")
-            IF loc_nRet <= 0
-                SET NULL ON
-                CREATE CURSOR cursor_4c_GrdMatrizes ( ;
-                    cidchaves C(20), cmats C(14), qtds N(3,0), dpros C(65))
-                SET NULL OFF
-            ENDIF
-            IF PEMSTATUS(loc_oPg, "grd_4c_GrdMatrizes", 5)
-                loc_oPg.grd_4c_GrdMatrizes.ColumnCount = 3
-                loc_oPg.grd_4c_GrdMatrizes.RecordSource = "cursor_4c_GrdMatrizes"
-                loc_oPg.grd_4c_GrdMatrizes.Column1.ControlSource = "cursor_4c_GrdMatrizes.cmats"
-                loc_oPg.grd_4c_GrdMatrizes.Column2.ControlSource = "cursor_4c_GrdMatrizes.qtds"
-                loc_oPg.grd_4c_GrdMatrizes.Column3.ControlSource = "cursor_4c_GrdMatrizes.dpros"
-                loc_oPg.grd_4c_GrdMatrizes.Column1.Header1.Caption = "Matriz"
-                loc_oPg.grd_4c_GrdMatrizes.Column2.Header1.Caption = "Qtde"
-                loc_oPg.grd_4c_GrdMatrizes.Column3.Header1.Caption = "Local"
-                loc_oPg.grd_4c_GrdMatrizes.Refresh()
-            ENDIF
+                IF USED("cursor_4c_GrdMatrizes")
+                    USE IN cursor_4c_GrdMatrizes
+                ENDIF
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT m.cidchaves, m.cmats, m.qtds, ISNULL(p.dpros,'') AS dpros" + ;
+                    " FROM SigPrMtz m LEFT JOIN SigCdPro p ON p.cpros = m.cmats" + ;
+                    " WHERE m.cpros = " + EscaparSQL(loc_cCpros) + ;
+                    " ORDER BY m.cmats", "cursor_4c_GrdMatrizes")
+                IF loc_nRet <= 0
+                    SET NULL ON
+                    CREATE CURSOR cursor_4c_GrdMatrizes ( ;
+                        cidchaves C(20), cmats C(14), qtds N(3,0), dpros C(65))
+                    SET NULL OFF
+                ENDIF
+                IF PEMSTATUS(loc_oPg, "grd_4c_GrdMatrizes", 5)
+                    loc_oPg.grd_4c_GrdMatrizes.ColumnCount = 3
+                    loc_oPg.grd_4c_GrdMatrizes.RecordSource = "cursor_4c_GrdMatrizes"
+                    loc_oPg.grd_4c_GrdMatrizes.Column1.ControlSource = "cursor_4c_GrdMatrizes.cmats"
+                    loc_oPg.grd_4c_GrdMatrizes.Column2.ControlSource = "cursor_4c_GrdMatrizes.qtds"
+                    loc_oPg.grd_4c_GrdMatrizes.Column3.ControlSource = "cursor_4c_GrdMatrizes.dpros"
+                    loc_oPg.grd_4c_GrdMatrizes.Column1.Header1.Caption = "Matriz"
+                    loc_oPg.grd_4c_GrdMatrizes.Column2.Header1.Caption = "Qtde"
+                    loc_oPg.grd_4c_GrdMatrizes.Column3.Header1.Caption = "Local"
+                    loc_oPg.grd_4c_GrdMatrizes.Refresh()
+                ENDIF
 
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao carregar FaseP:" + CHR(13) + loException.Message + ;
                 CHR(13) + "Linha: " + TRANSFORM(loException.LineNo), ;
@@ -8303,67 +8318,70 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *===========================================================================
     PROCEDURE GrdFaseAfterRowColChange(par_nColIndex)
-        LOCAL loc_oPg, loc_lcArquivo, loc_nRet, loException
+        LOCAL loc_oPg, loc_lcArquivo, loc_nRet, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
             IF !PEMSTATUS(loc_oPg, "img_4c_ImgFig", 5) OR !USED("cursor_4c_GradFase")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            CLEAR RESOURCES
-            loc_oPg.img_4c_ImgFig.Picture = ""
-            loc_oPg.img_4c_ImgFig.Visible = .F.
-            loc_oPg.txt_4c_Desc.Value     = ""
-            loc_oPg.edt_4c_Obs.Value      = ""
+            IF loc_lProsseguir
+                CLEAR RESOURCES
+                loc_oPg.img_4c_ImgFig.Picture = ""
+                loc_oPg.img_4c_ImgFig.Visible = .F.
+                loc_oPg.txt_4c_Desc.Value     = ""
+                loc_oPg.edt_4c_Obs.Value      = ""
 
-            IF !EOF("cursor_4c_GradFase") AND !BOF("cursor_4c_GradFase")
-                LOCAL loc_cGrupos, loc_cCidchaves
-                SELECT cursor_4c_GradFase
-                loc_cGrupos    = ALLTRIM(cursor_4c_GradFase.grupos)
-                loc_cCidchaves = ALLTRIM(cursor_4c_GradFase.cidchaves)
-
-                *-- Carregar descricao do grupo/fase (SigCdGcr)
-                IF !EMPTY(loc_cGrupos)
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT descrs FROM SigCdGcr WHERE codigos = '" + ;
-                        EscaparSQL(loc_cGrupos) + "", "cursor_4c_FaseGcrDesc")
-                    IF loc_nRet > 0 AND USED("cursor_4c_FaseGcrDesc") AND !EOF("cursor_4c_FaseGcrDesc")
-                        SELECT cursor_4c_FaseGcrDesc
-                        loc_oPg.txt_4c_Desc.Value = ALLTRIM(cursor_4c_FaseGcrDesc.descrs)
-                    ENDIF
-                    IF USED("cursor_4c_FaseGcrDesc")
-                        USE IN cursor_4c_FaseGcrDesc
-                    ENDIF
-                ENDIF
-
-                *-- Obs vem do cursor (ja carregado em CarregarFaseP / gravado por BeforeRowColChange)
-                SELECT cursor_4c_GradFase
-                IF !ISNULL(cursor_4c_GradFase.obs)
-                    loc_oPg.edt_4c_Obs.Value = cursor_4c_GradFase.obs
-                ENDIF
-
-                *-- Figura carregada do banco (campo figprocs - binario nao armazenado no cursor)
-                IF !EMPTY(loc_cCidchaves)
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT figprocs FROM SigCdPrf WHERE cidchaves = '" + ;
-                        EscaparSQL(loc_cCidchaves) + "", "cursor_4c_FasePrfFig")
-                    IF loc_nRet > 0 AND USED("cursor_4c_FasePrfFig") AND !EOF("cursor_4c_FasePrfFig")
-                        SELECT cursor_4c_FasePrfFig
-                        IF !ISNULL(cursor_4c_FasePrfFig.figprocs) AND ;
-                                !EMPTY(cursor_4c_FasePrfFig.figprocs)
-                            loc_lcArquivo = SYS(2023) + "\" + SYS(2015) + ".jpg"
-                            IF STRTOFILE(cursor_4c_FasePrfFig.figprocs, loc_lcArquivo) > 0
-                                loc_oPg.img_4c_ImgFig.Visible = .T.
-                                loc_oPg.img_4c_ImgFig.Picture = loc_lcArquivo
-                            ENDIF
+                IF !EOF("cursor_4c_GradFase") AND !BOF("cursor_4c_GradFase")
+                    LOCAL loc_cGrupos, loc_cCidchaves
+                    SELECT cursor_4c_GradFase
+                    loc_cGrupos    = ALLTRIM(cursor_4c_GradFase.grupos)
+                    loc_cCidchaves = ALLTRIM(cursor_4c_GradFase.cidchaves)
+    
+                    *-- Carregar descricao do grupo/fase (SigCdGcr)
+                    IF !EMPTY(loc_cGrupos)
+                        loc_nRet = SQLEXEC(gnConnHandle, ;
+                            "SELECT descrs FROM SigCdGcr WHERE codigos = '" + ;
+                            EscaparSQL(loc_cGrupos) + "", "cursor_4c_FaseGcrDesc")
+                        IF loc_nRet > 0 AND USED("cursor_4c_FaseGcrDesc") AND !EOF("cursor_4c_FaseGcrDesc")
+                            SELECT cursor_4c_FaseGcrDesc
+                            loc_oPg.txt_4c_Desc.Value = ALLTRIM(cursor_4c_FaseGcrDesc.descrs)
+                        ENDIF
+                        IF USED("cursor_4c_FaseGcrDesc")
+                            USE IN cursor_4c_FaseGcrDesc
                         ENDIF
                     ENDIF
-                    IF USED("cursor_4c_FasePrfFig")
-                        USE IN cursor_4c_FasePrfFig
+    
+                    *-- Obs vem do cursor (ja carregado em CarregarFaseP / gravado por BeforeRowColChange)
+                    SELECT cursor_4c_GradFase
+                    IF !ISNULL(cursor_4c_GradFase.obs)
+                        loc_oPg.edt_4c_Obs.Value = cursor_4c_GradFase.obs
+                    ENDIF
+    
+                    *-- Figura carregada do banco (campo figprocs - binario nao armazenado no cursor)
+                    IF !EMPTY(loc_cCidchaves)
+                        loc_nRet = SQLEXEC(gnConnHandle, ;
+                            "SELECT figprocs FROM SigCdPrf WHERE cidchaves = '" + ;
+                            EscaparSQL(loc_cCidchaves) + "", "cursor_4c_FasePrfFig")
+                        IF loc_nRet > 0 AND USED("cursor_4c_FasePrfFig") AND !EOF("cursor_4c_FasePrfFig")
+                            SELECT cursor_4c_FasePrfFig
+                            IF !ISNULL(cursor_4c_FasePrfFig.figprocs) AND ;
+                                    !EMPTY(cursor_4c_FasePrfFig.figprocs)
+                                loc_lcArquivo = SYS(2023) + "\" + SYS(2015) + ".jpg"
+                                IF STRTOFILE(cursor_4c_FasePrfFig.figprocs, loc_lcArquivo) > 0
+                                    loc_oPg.img_4c_ImgFig.Visible = .T.
+                                    loc_oPg.img_4c_ImgFig.Picture = loc_lcArquivo
+                                ENDIF
+                            ENDIF
+                        ENDIF
+                        IF USED("cursor_4c_FasePrfFig")
+                            USE IN cursor_4c_FasePrfFig
+                        ENDIF
                     ENDIF
                 ENDIF
-            ENDIF
 
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao atualizar linha de fase:" + CHR(13) + loException.Message, ;
                 "FormProduto.GrdFaseAfterRowColChange")
@@ -8601,34 +8619,39 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *===========================================================================
     PROCEDURE BtnInserirFaseClick()
-        LOCAL loc_oPg, loc_nProxOrdem, loException
+        LOCAL loc_oPg, loc_nProxOrdem, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
-            IF !USED("cursor_4c_GradFase")
-                RETURN
-            ENDIF
-
-            SELECT cursor_4c_GradFase
-            IF EOF("cursor_4c_GradFase") OR BOF("cursor_4c_GradFase") OR ;
-                    RECCOUNT("cursor_4c_GradFase") = 0
-                loc_nProxOrdem = 1
-            ELSE
-                GO BOTTOM IN cursor_4c_GradFase
-                loc_nProxOrdem = cursor_4c_GradFase.ordems + 1
+            IF loc_lProsseguir
+                loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
+                IF !USED("cursor_4c_GradFase")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            INSERT INTO cursor_4c_GradFase (cidchaves, ordems, grupos, minutos, uniprdts, matprdts, obs) ;
-                VALUES (SYS(2015), loc_nProxOrdem, "", 0, "", "", "")
+            IF loc_lProsseguir
+                SELECT cursor_4c_GradFase
+                IF EOF("cursor_4c_GradFase") OR BOF("cursor_4c_GradFase") OR ;
+                        RECCOUNT("cursor_4c_GradFase") = 0
+                    loc_nProxOrdem = 1
+                ELSE
+                    GO BOTTOM IN cursor_4c_GradFase
+                    loc_nProxOrdem = cursor_4c_GradFase.ordems + 1
+                ENDIF
 
-            IF PEMSTATUS(loc_oPg, "grd_4c_GradFase", 5)
-                loc_oPg.grd_4c_GradFase.Refresh()
-                GO BOTTOM IN cursor_4c_GradFase
-                loc_oPg.grd_4c_GradFase.Column2.SetFocus()
+                INSERT INTO cursor_4c_GradFase (cidchaves, ordems, grupos, minutos, uniprdts, matprdts, obs) ;
+                    VALUES (SYS(2015), loc_nProxOrdem, "", 0, "", "", "")
+
+                IF PEMSTATUS(loc_oPg, "grd_4c_GradFase", 5)
+                    loc_oPg.grd_4c_GradFase.Refresh()
+                    GO BOTTOM IN cursor_4c_GradFase
+                    loc_oPg.grd_4c_GradFase.Column2.SetFocus()
+                ENDIF
+
             ENDIF
-
         CATCH TO loException
             MostrarErro("Erro ao inserir fase:" + CHR(13) + loException.Message, ;
                 "FormProduto.BtnInserirFaseClick")
@@ -8640,32 +8663,39 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *===========================================================================
     PROCEDURE BtnExcluirFaseClick()
-        LOCAL loc_oPg, loException
+        LOCAL loc_oPg, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_GradFase") OR EOF("cursor_4c_GradFase")
-                RETURN
-            ENDIF
-
-            SELECT cursor_4c_GradFase
-            IF !MsgConfirma("Excluir esta fase de produ" + CHR(231) + CHR(227) + "o?")
-                RETURN
-            ENDIF
-            DELETE IN cursor_4c_GradFase
-            IF !EOF("cursor_4c_GradFase")
-                SKIP IN cursor_4c_GradFase
-            ENDIF
-            IF EOF("cursor_4c_GradFase") AND RECCOUNT("cursor_4c_GradFase") > 0
-                GO BOTTOM IN cursor_4c_GradFase
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_GradFase") OR EOF("cursor_4c_GradFase")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
-            IF PEMSTATUS(loc_oPg, "grd_4c_GradFase", 5)
-                loc_oPg.grd_4c_GradFase.Refresh()
+            IF loc_lProsseguir
+                SELECT cursor_4c_GradFase
+                IF !MsgConfirma("Excluir esta fase de produ" + CHR(231) + CHR(227) + "o?")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
+            IF loc_lProsseguir
+                DELETE IN cursor_4c_GradFase
+                IF !EOF("cursor_4c_GradFase")
+                    SKIP IN cursor_4c_GradFase
+                ENDIF
+                IF EOF("cursor_4c_GradFase") AND RECCOUNT("cursor_4c_GradFase") > 0
+                    GO BOTTOM IN cursor_4c_GradFase
+                ENDIF
 
+                loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
+                IF PEMSTATUS(loc_oPg, "grd_4c_GradFase", 5)
+                    loc_oPg.grd_4c_GradFase.Refresh()
+                ENDIF
+
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao excluir fase:" + CHR(13) + loException.Message, ;
                 "FormProduto.BtnExcluirFaseClick")
@@ -8677,33 +8707,38 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *===========================================================================
     PROCEDURE BtnAlternativaFaseClick()
-        LOCAL loc_oPg, loc_nOrdemAtual, loc_nProxOrdem, loException
+        LOCAL loc_oPg, loc_nOrdemAtual, loc_nProxOrdem, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
-            IF !USED("cursor_4c_GradFase")
-                RETURN
-            ENDIF
-
-            SELECT cursor_4c_GradFase
-            IF EOF("cursor_4c_GradFase") OR RECCOUNT("cursor_4c_GradFase") = 0
-                loc_nOrdemAtual = 0
-            ELSE
-                loc_nOrdemAtual = cursor_4c_GradFase.ordems
-            ENDIF
-            loc_nProxOrdem = loc_nOrdemAtual + 1
-
-            INSERT INTO cursor_4c_GradFase (cidchaves, ordems, grupos, minutos, uniprdts, matprdts, obs) ;
-                VALUES (SYS(2015), loc_nProxOrdem, "", 0, "", "", "")
-
-            IF PEMSTATUS(loc_oPg, "grd_4c_GradFase", 5)
-                loc_oPg.grd_4c_GradFase.Refresh()
-                GO BOTTOM IN cursor_4c_GradFase
-                loc_oPg.grd_4c_GradFase.Column2.SetFocus()
+            IF loc_lProsseguir
+                loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
+                IF !USED("cursor_4c_GradFase")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                SELECT cursor_4c_GradFase
+                IF EOF("cursor_4c_GradFase") OR RECCOUNT("cursor_4c_GradFase") = 0
+                    loc_nOrdemAtual = 0
+                ELSE
+                    loc_nOrdemAtual = cursor_4c_GradFase.ordems
+                ENDIF
+                loc_nProxOrdem = loc_nOrdemAtual + 1
+
+                INSERT INTO cursor_4c_GradFase (cidchaves, ordems, grupos, minutos, uniprdts, matprdts, obs) ;
+                    VALUES (SYS(2015), loc_nProxOrdem, "", 0, "", "", "")
+
+                IF PEMSTATUS(loc_oPg, "grd_4c_GradFase", 5)
+                    loc_oPg.grd_4c_GradFase.Refresh()
+                    GO BOTTOM IN cursor_4c_GradFase
+                    loc_oPg.grd_4c_GradFase.Column2.SetFocus()
+                ENDIF
+
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao inserir fase alternativa:" + CHR(13) + loException.Message, ;
                 "FormProduto.BtnAlternativaFaseClick")
@@ -8715,15 +8750,18 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *===========================================================================
     PROCEDURE CmdFichaFasePClick()
-        LOCAL loc_cCpros, loException
+        LOCAL loc_cCpros, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cCpros = ALLTRIM(THIS.this_oBusinessObject.this_cCpros)
             IF EMPTY(loc_cCpros)
                 MsgAviso("Selecione um produto para abrir a Ficha T" + CHR(233) + "cnica.", ;
                     "Ficha T" + CHR(233) + "cnica")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            MsgInfo("Ficha T" + CHR(233) + "cnica: " + loc_cCpros)
+            IF loc_lProsseguir
+                MsgInfo("Ficha T" + CHR(233) + "cnica: " + loc_cCpros)
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao abrir Ficha T" + CHR(233) + "cnica:" + CHR(13) + ;
                 loException.Message, "FormProduto.CmdFichaFasePClick")
@@ -8735,32 +8773,39 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *===========================================================================
     PROCEDURE CmdFiguraFasePClick()
-        LOCAL loc_lcFigura, loc_lcArquivo, loc_oPg, loException
+        LOCAL loc_lcFigura, loc_lcArquivo, loc_oPg, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_GradFase") OR EOF("cursor_4c_GradFase")
-                MsgAviso("Selecione uma fase na grade para associar a imagem.", "Imagem")
-                RETURN
-            ENDIF
-
-            loc_lcFigura = ALLTRIM(GETPICT("Formato Jpeg:JPG;Formato Bitmap:BMP", ;
-                "Nome do Arquivo:", "Selecionar"))
-            IF EMPTY(loc_lcFigura) OR !FILE(loc_lcFigura)
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_GradFase") OR EOF("cursor_4c_GradFase")
+                    MsgAviso("Selecione uma fase na grade para associar a imagem.", "Imagem")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_lcArquivo = SYS(2023) + "\" + SYS(2015) + ".jpg"
-            COPY FILE (loc_lcFigura) TO (loc_lcArquivo)
-
-            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
-            IF PEMSTATUS(loc_oPg, "img_4c_ImgFig", 5)
-                CLEAR RESOURCES
-                loc_oPg.img_4c_ImgFig.Picture = loc_lcArquivo
-                loc_oPg.img_4c_ImgFig.Visible = .T.
+            IF loc_lProsseguir
+                loc_lcFigura = ALLTRIM(GETPICT("Formato Jpeg:JPG;Formato Bitmap:BMP", ;
+                    "Nome do Arquivo:", "Selecionar"))
+                IF EMPTY(loc_lcFigura) OR !FILE(loc_lcFigura)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_lcArquivo = SYS(2023) + "\" + SYS(2015) + ".jpg"
+                COPY FILE (loc_lcFigura) TO (loc_lcArquivo)
+
+                loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
+                IF PEMSTATUS(loc_oPg, "img_4c_ImgFig", 5)
+                    CLEAR RESOURCES
+                    loc_oPg.img_4c_ImgFig.Picture = loc_lcArquivo
+                    loc_oPg.img_4c_ImgFig.Visible = .T.
+                ENDIF
+
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao capturar imagem:" + CHR(13) + loException.Message, ;
                 "FormProduto.CmdFiguraFasePClick")
@@ -8772,32 +8817,39 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *===========================================================================
     PROCEDURE CmdFigCamFasePClick()
-        LOCAL loc_lcFigura, loc_lcArquivo, loc_oPg, loException
+        LOCAL loc_lcFigura, loc_lcArquivo, loc_oPg, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_GradFase") OR EOF("cursor_4c_GradFase")
-                MsgAviso("Selecione uma fase na grade para associar a imagem.", "Imagem WebCam")
-                RETURN
-            ENDIF
-
-            loc_lcFigura = ""
-            DO FORM SigImage TO loc_lcFigura
-            IF EMPTY(loc_lcFigura) OR !FILE(loc_lcFigura)
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_GradFase") OR EOF("cursor_4c_GradFase")
+                    MsgAviso("Selecione uma fase na grade para associar a imagem.", "Imagem WebCam")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_lcArquivo = SYS(2023) + "\" + SYS(2015) + ".jpg"
-            COPY FILE (loc_lcFigura) TO (loc_lcArquivo)
-
-            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
-            IF PEMSTATUS(loc_oPg, "img_4c_ImgFig", 5)
-                CLEAR RESOURCES
-                loc_oPg.img_4c_ImgFig.Picture = loc_lcArquivo
-                loc_oPg.img_4c_ImgFig.Visible = .T.
+            IF loc_lProsseguir
+                loc_lcFigura = ""
+                DO FORM SigImage TO loc_lcFigura
+                IF EMPTY(loc_lcFigura) OR !FILE(loc_lcFigura)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_lcArquivo = SYS(2023) + "\" + SYS(2015) + ".jpg"
+                COPY FILE (loc_lcFigura) TO (loc_lcArquivo)
+
+                loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
+                IF PEMSTATUS(loc_oPg, "img_4c_ImgFig", 5)
+                    CLEAR RESOURCES
+                    loc_oPg.img_4c_ImgFig.Picture = loc_lcArquivo
+                    loc_oPg.img_4c_ImgFig.Visible = .T.
+                ENDIF
+
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao capturar imagem via WebCam:" + CHR(13) + loException.Message, ;
                 "FormProduto.CmdFigCamFasePClick")
@@ -9175,42 +9227,45 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *===========================================================================
     PROCEDURE GrdMatrizesAfterRowColChange(par_nColIndex)
-        LOCAL loc_oPg, loc_lcArquivo, loc_nRet, loException
+        LOCAL loc_oPg, loc_lcArquivo, loc_nRet, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
             IF !PEMSTATUS(loc_oPg, "img_4c_ImgBorracha", 5) OR !USED("cursor_4c_GrdMatrizes")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            CLEAR RESOURCES
-            loc_oPg.img_4c_ImgBorracha.Picture = ""
-            loc_oPg.img_4c_ImgBorracha.Visible = .F.
+            IF loc_lProsseguir
+                CLEAR RESOURCES
+                loc_oPg.img_4c_ImgBorracha.Picture = ""
+                loc_oPg.img_4c_ImgBorracha.Visible = .F.
 
-            IF !EOF("cursor_4c_GrdMatrizes") AND !BOF("cursor_4c_GrdMatrizes")
-                SELECT cursor_4c_GrdMatrizes
-                LOCAL loc_cCmats
-                loc_cCmats = ALLTRIM(cursor_4c_GrdMatrizes.cmats)
-                IF !EMPTY(loc_cCmats)
-                    loc_nRet = SQLEXEC(gnConnHandle, ;
-                        "SELECT figprocs FROM SigCdPro WHERE cpros = '" + ;
-                        EscaparSQL(loc_cCmats) + "", "cursor_4c_MtzImgPro")
-                    IF loc_nRet > 0 AND USED("cursor_4c_MtzImgPro") AND !EOF("cursor_4c_MtzImgPro")
-                        SELECT cursor_4c_MtzImgPro
-                        IF !ISNULL(cursor_4c_MtzImgPro.figprocs) AND ;
-                                !EMPTY(cursor_4c_MtzImgPro.figprocs)
-                            loc_lcArquivo = SYS(2023) + "\" + SYS(2015) + ".jpg"
-                            IF STRTOFILE(cursor_4c_MtzImgPro.figprocs, loc_lcArquivo) > 0
-                                loc_oPg.img_4c_ImgBorracha.Visible = .T.
-                                loc_oPg.img_4c_ImgBorracha.Picture = loc_lcArquivo
+                IF !EOF("cursor_4c_GrdMatrizes") AND !BOF("cursor_4c_GrdMatrizes")
+                    SELECT cursor_4c_GrdMatrizes
+                    LOCAL loc_cCmats
+                    loc_cCmats = ALLTRIM(cursor_4c_GrdMatrizes.cmats)
+                    IF !EMPTY(loc_cCmats)
+                        loc_nRet = SQLEXEC(gnConnHandle, ;
+                            "SELECT figprocs FROM SigCdPro WHERE cpros = '" + ;
+                            EscaparSQL(loc_cCmats) + "", "cursor_4c_MtzImgPro")
+                        IF loc_nRet > 0 AND USED("cursor_4c_MtzImgPro") AND !EOF("cursor_4c_MtzImgPro")
+                            SELECT cursor_4c_MtzImgPro
+                            IF !ISNULL(cursor_4c_MtzImgPro.figprocs) AND ;
+                                    !EMPTY(cursor_4c_MtzImgPro.figprocs)
+                                loc_lcArquivo = SYS(2023) + "\" + SYS(2015) + ".jpg"
+                                IF STRTOFILE(cursor_4c_MtzImgPro.figprocs, loc_lcArquivo) > 0
+                                    loc_oPg.img_4c_ImgBorracha.Visible = .T.
+                                    loc_oPg.img_4c_ImgBorracha.Picture = loc_lcArquivo
+                                ENDIF
                             ENDIF
                         ENDIF
-                    ENDIF
-                    IF USED("cursor_4c_MtzImgPro")
-                        USE IN cursor_4c_MtzImgPro
+                        IF USED("cursor_4c_MtzImgPro")
+                            USE IN cursor_4c_MtzImgPro
+                        ENDIF
                     ENDIF
                 ENDIF
-            ENDIF
 
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao atualizar imagem de matriz:" + CHR(13) + loException.Message, ;
                 "FormProduto.GrdMatrizesAfterRowColChange")
@@ -9222,26 +9277,31 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *===========================================================================
     PROCEDURE BtnInserirMtzClick()
-        LOCAL loc_oPg, loException
+        LOCAL loc_oPg, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_GrdMatrizes")
-                RETURN
-            ENDIF
-
-            INSERT INTO cursor_4c_GrdMatrizes (cidchaves, cmats, qtds, dpros) ;
-                VALUES (SYS(2015), "", 0, "")
-
-            GO BOTTOM IN cursor_4c_GrdMatrizes
-
-            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
-            IF PEMSTATUS(loc_oPg, "grd_4c_GrdMatrizes", 5)
-                loc_oPg.grd_4c_GrdMatrizes.Refresh()
-                loc_oPg.grd_4c_GrdMatrizes.Column1.SetFocus()
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_GrdMatrizes")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                INSERT INTO cursor_4c_GrdMatrizes (cidchaves, cmats, qtds, dpros) ;
+                    VALUES (SYS(2015), "", 0, "")
+
+                GO BOTTOM IN cursor_4c_GrdMatrizes
+
+                loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
+                IF PEMSTATUS(loc_oPg, "grd_4c_GrdMatrizes", 5)
+                    loc_oPg.grd_4c_GrdMatrizes.Refresh()
+                    loc_oPg.grd_4c_GrdMatrizes.Column1.SetFocus()
+                ENDIF
+
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao inserir matriz:" + CHR(13) + loException.Message, ;
                 "FormProduto.BtnInserirMtzClick")
@@ -9253,32 +9313,39 @@ DEFINE CLASS FormProduto AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *===========================================================================
     PROCEDURE BtnExcluirMtzClick()
-        LOCAL loc_oPg, loException
+        LOCAL loc_oPg, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !USED("cursor_4c_GrdMatrizes") OR EOF("cursor_4c_GrdMatrizes")
-                RETURN
-            ENDIF
-
-            SELECT cursor_4c_GrdMatrizes
-            IF !MsgConfirma("Excluir este registro de matriz?")
-                RETURN
-            ENDIF
-            DELETE IN cursor_4c_GrdMatrizes
-            IF !EOF("cursor_4c_GrdMatrizes")
-                SKIP IN cursor_4c_GrdMatrizes
-            ENDIF
-            IF EOF("cursor_4c_GrdMatrizes") AND RECCOUNT("cursor_4c_GrdMatrizes") > 0
-                GO BOTTOM IN cursor_4c_GrdMatrizes
+            IF loc_lProsseguir
+                IF !USED("cursor_4c_GrdMatrizes") OR EOF("cursor_4c_GrdMatrizes")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
-            IF PEMSTATUS(loc_oPg, "grd_4c_GrdMatrizes", 5)
-                loc_oPg.grd_4c_GrdMatrizes.Refresh()
+            IF loc_lProsseguir
+                SELECT cursor_4c_GrdMatrizes
+                IF !MsgConfirma("Excluir este registro de matriz?")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
+            IF loc_lProsseguir
+                DELETE IN cursor_4c_GrdMatrizes
+                IF !EOF("cursor_4c_GrdMatrizes")
+                    SKIP IN cursor_4c_GrdMatrizes
+                ENDIF
+                IF EOF("cursor_4c_GrdMatrizes") AND RECCOUNT("cursor_4c_GrdMatrizes") > 0
+                    GO BOTTOM IN cursor_4c_GrdMatrizes
+                ENDIF
 
+                loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page4
+                IF PEMSTATUS(loc_oPg, "grd_4c_GrdMatrizes", 5)
+                    loc_oPg.grd_4c_GrdMatrizes.Refresh()
+                ENDIF
+
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao excluir matriz:" + CHR(13) + loException.Message, ;
                 "FormProduto.BtnExcluirMtzClick")
@@ -9292,37 +9359,43 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Classificacao Fiscal (clfiscals): Valid
     PROCEDURE ValidarClfiscal(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cCod, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Clfiscal", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Clfiscal.Value)
-            IF EMPTY(loc_cCod)
-                IF PEMSTATUS(loc_oPg, "txt_4c_Dclfiscal", 5)
-                    loc_oPg.txt_4c_Dclfiscal.Value = ""
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Clfiscal.Value)
+                IF EMPTY(loc_cCod)
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Dclfiscal", 5)
+                        loc_oPg.txt_4c_Dclfiscal.Value = ""
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT codigos, descricaos FROM SigCdClf WHERE codigos = " + EscaparSQL(loc_cCod), ;
-                "cursor_4c_ClfBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_ClfBusca") AND !EOF("cursor_4c_ClfBusca")
-                IF PEMSTATUS(loc_oPg, "txt_4c_Dclfiscal", 5)
-                    loc_oPg.txt_4c_Dclfiscal.Value = ALLTRIM(cursor_4c_ClfBusca.descricaos)
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT codigos, descricaos FROM SigCdClf WHERE codigos = " + EscaparSQL(loc_cCod), ;
+                    "cursor_4c_ClfBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_ClfBusca") AND !EOF("cursor_4c_ClfBusca")
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Dclfiscal", 5)
+                        loc_oPg.txt_4c_Dclfiscal.Value = ALLTRIM(cursor_4c_ClfBusca.descricaos)
+                    ENDIF
+                    IF USED("cursor_4c_ClfBusca")
+                        USE IN cursor_4c_ClfBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_ClfBusca")
+                        USE IN cursor_4c_ClfBusca
+                    ENDIF
+                    THIS.AbrirBuscaClfiscal()
                 ENDIF
-                IF USED("cursor_4c_ClfBusca")
-                    USE IN cursor_4c_ClfBusca
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_ClfBusca")
-                    USE IN cursor_4c_ClfBusca
-                ENDIF
-                THIS.AbrirBuscaClfiscal()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_ClfBusca")
@@ -9352,39 +9425,45 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Classificacao Fiscal descricao: Valid (busca por descricao)
     PROCEDURE ValidarDclfiscal(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cDesc, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Dclfiscal", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cDesc = ALLTRIM(loc_oPg.txt_4c_Dclfiscal.Value)
-            IF EMPTY(loc_cDesc)
-                THIS.AbrirBuscaClfiscal()
-                RETURN
+            IF loc_lProsseguir
+                loc_cDesc = ALLTRIM(loc_oPg.txt_4c_Dclfiscal.Value)
+                IF EMPTY(loc_cDesc)
+                    THIS.AbrirBuscaClfiscal()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT codigos, descricaos FROM SigCdClf ORDER BY descricaos", ;
-                "cursor_4c_ClfBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_ClfBusca")
-                LOCATE FOR LIKE(UPPER(ALLTRIM(loc_cDesc)) + "*", UPPER(ALLTRIM(cursor_4c_ClfBusca.descricaos)))
-            ENDIF
-            IF loc_nRet > 0 AND USED("cursor_4c_ClfBusca") AND !EOF("cursor_4c_ClfBusca")
-                IF PEMSTATUS(loc_oPg, "txt_4c_Clfiscal", 5)
-                    loc_oPg.txt_4c_Clfiscal.Value = ALLTRIM(cursor_4c_ClfBusca.codigos)
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT codigos, descricaos FROM SigCdClf ORDER BY descricaos", ;
+                    "cursor_4c_ClfBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_ClfBusca")
+                    LOCATE FOR LIKE(UPPER(ALLTRIM(loc_cDesc)) + "*", UPPER(ALLTRIM(cursor_4c_ClfBusca.descricaos)))
                 ENDIF
-                loc_oPg.txt_4c_Dclfiscal.Value = ALLTRIM(cursor_4c_ClfBusca.descricaos)
-                IF USED("cursor_4c_ClfBusca")
-                    USE IN cursor_4c_ClfBusca
+                IF loc_nRet > 0 AND USED("cursor_4c_ClfBusca") AND !EOF("cursor_4c_ClfBusca")
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Clfiscal", 5)
+                        loc_oPg.txt_4c_Clfiscal.Value = ALLTRIM(cursor_4c_ClfBusca.codigos)
+                    ENDIF
+                    loc_oPg.txt_4c_Dclfiscal.Value = ALLTRIM(cursor_4c_ClfBusca.descricaos)
+                    IF USED("cursor_4c_ClfBusca")
+                        USE IN cursor_4c_ClfBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_ClfBusca")
+                        USE IN cursor_4c_ClfBusca
+                    ENDIF
+                    THIS.AbrirBuscaClfiscal()
                 ENDIF
-            ELSE
-                IF USED("cursor_4c_ClfBusca")
-                    USE IN cursor_4c_ClfBusca
-                ENDIF
-                THIS.AbrirBuscaClfiscal()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_ClfBusca")
@@ -9403,37 +9482,43 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Origem Mercadoria (origmercs): Valid
     PROCEDURE ValidarOrigmerc(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cCod, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Origmerc", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Origmerc.Value)
-            IF EMPTY(loc_cCod)
-                IF PEMSTATUS(loc_oPg, "txt_4c_Dorigmerc", 5)
-                    loc_oPg.txt_4c_Dorigmerc.Value = ""
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Origmerc.Value)
+                IF EMPTY(loc_cCod)
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Dorigmerc", 5)
+                        loc_oPg.txt_4c_Dorigmerc.Value = ""
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT codigos, descricaos FROM SIGCDORG WHERE codigos = " + EscaparSQL(loc_cCod), ;
-                "cursor_4c_OrgBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_OrgBusca") AND !EOF("cursor_4c_OrgBusca")
-                IF PEMSTATUS(loc_oPg, "txt_4c_Dorigmerc", 5)
-                    loc_oPg.txt_4c_Dorigmerc.Value = ALLTRIM(cursor_4c_OrgBusca.descricaos)
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT codigos, descricaos FROM SIGCDORG WHERE codigos = " + EscaparSQL(loc_cCod), ;
+                    "cursor_4c_OrgBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_OrgBusca") AND !EOF("cursor_4c_OrgBusca")
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Dorigmerc", 5)
+                        loc_oPg.txt_4c_Dorigmerc.Value = ALLTRIM(cursor_4c_OrgBusca.descricaos)
+                    ENDIF
+                    IF USED("cursor_4c_OrgBusca")
+                        USE IN cursor_4c_OrgBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_OrgBusca")
+                        USE IN cursor_4c_OrgBusca
+                    ENDIF
+                    THIS.AbrirBuscaOrigmerc()
                 ENDIF
-                IF USED("cursor_4c_OrgBusca")
-                    USE IN cursor_4c_OrgBusca
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_OrgBusca")
-                    USE IN cursor_4c_OrgBusca
-                ENDIF
-                THIS.AbrirBuscaOrigmerc()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_OrgBusca")
@@ -9463,39 +9548,45 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Origem Mercadoria descricao: Valid
     PROCEDURE ValidarDorigmerc(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cDesc, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Dorigmerc", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cDesc = ALLTRIM(loc_oPg.txt_4c_Dorigmerc.Value)
-            IF EMPTY(loc_cDesc)
-                THIS.AbrirBuscaOrigmerc()
-                RETURN
+            IF loc_lProsseguir
+                loc_cDesc = ALLTRIM(loc_oPg.txt_4c_Dorigmerc.Value)
+                IF EMPTY(loc_cDesc)
+                    THIS.AbrirBuscaOrigmerc()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT codigos, descricaos FROM SIGCDORG ORDER BY descricaos", ;
-                "cursor_4c_OrgBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_OrgBusca")
-                LOCATE FOR LIKE(UPPER(ALLTRIM(loc_cDesc)) + "*", UPPER(ALLTRIM(cursor_4c_OrgBusca.descricaos)))
-            ENDIF
-            IF loc_nRet > 0 AND USED("cursor_4c_OrgBusca") AND !EOF("cursor_4c_OrgBusca")
-                IF PEMSTATUS(loc_oPg, "txt_4c_Origmerc", 5)
-                    loc_oPg.txt_4c_Origmerc.Value = ALLTRIM(cursor_4c_OrgBusca.codigos)
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT codigos, descricaos FROM SIGCDORG ORDER BY descricaos", ;
+                    "cursor_4c_OrgBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_OrgBusca")
+                    LOCATE FOR LIKE(UPPER(ALLTRIM(loc_cDesc)) + "*", UPPER(ALLTRIM(cursor_4c_OrgBusca.descricaos)))
                 ENDIF
-                loc_oPg.txt_4c_Dorigmerc.Value = ALLTRIM(cursor_4c_OrgBusca.descricaos)
-                IF USED("cursor_4c_OrgBusca")
-                    USE IN cursor_4c_OrgBusca
+                IF loc_nRet > 0 AND USED("cursor_4c_OrgBusca") AND !EOF("cursor_4c_OrgBusca")
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Origmerc", 5)
+                        loc_oPg.txt_4c_Origmerc.Value = ALLTRIM(cursor_4c_OrgBusca.codigos)
+                    ENDIF
+                    loc_oPg.txt_4c_Dorigmerc.Value = ALLTRIM(cursor_4c_OrgBusca.descricaos)
+                    IF USED("cursor_4c_OrgBusca")
+                        USE IN cursor_4c_OrgBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_OrgBusca")
+                        USE IN cursor_4c_OrgBusca
+                    ENDIF
+                    THIS.AbrirBuscaOrigmerc()
                 ENDIF
-            ELSE
-                IF USED("cursor_4c_OrgBusca")
-                    USE IN cursor_4c_OrgBusca
-                ENDIF
-                THIS.AbrirBuscaOrigmerc()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_OrgBusca")
@@ -9514,37 +9605,43 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Situacao Tributaria ICMS (sittricms): Valid
     PROCEDURE ValidarSittricm(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cCod, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Sittricm", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Sittricm.Value)
-            IF EMPTY(loc_cCod)
-                IF PEMSTATUS(loc_oPg, "txt_4c_Dsittricm", 5)
-                    loc_oPg.txt_4c_Dsittricm.Value = ""
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Sittricm.Value)
+                IF EMPTY(loc_cCod)
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Dsittricm", 5)
+                        loc_oPg.txt_4c_Dsittricm.Value = ""
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT codigos, descricaos FROM SIGCDICM WHERE codigos = " + EscaparSQL(loc_cCod), ;
-                "cursor_4c_IcmBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_IcmBusca") AND !EOF("cursor_4c_IcmBusca")
-                IF PEMSTATUS(loc_oPg, "txt_4c_Dsittricm", 5)
-                    loc_oPg.txt_4c_Dsittricm.Value = ALLTRIM(cursor_4c_IcmBusca.descricaos)
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT codigos, descricaos FROM SIGCDICM WHERE codigos = " + EscaparSQL(loc_cCod), ;
+                    "cursor_4c_IcmBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_IcmBusca") AND !EOF("cursor_4c_IcmBusca")
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Dsittricm", 5)
+                        loc_oPg.txt_4c_Dsittricm.Value = ALLTRIM(cursor_4c_IcmBusca.descricaos)
+                    ENDIF
+                    IF USED("cursor_4c_IcmBusca")
+                        USE IN cursor_4c_IcmBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_IcmBusca")
+                        USE IN cursor_4c_IcmBusca
+                    ENDIF
+                    THIS.AbrirBuscaSittricm()
                 ENDIF
-                IF USED("cursor_4c_IcmBusca")
-                    USE IN cursor_4c_IcmBusca
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_IcmBusca")
-                    USE IN cursor_4c_IcmBusca
-                ENDIF
-                THIS.AbrirBuscaSittricm()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_IcmBusca")
@@ -9574,39 +9671,45 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Situacao Tributaria ICMS descricao: Valid
     PROCEDURE ValidarDsittricm(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cDesc, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Dsittricm", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cDesc = ALLTRIM(loc_oPg.txt_4c_Dsittricm.Value)
-            IF EMPTY(loc_cDesc)
-                THIS.AbrirBuscaSittricm()
-                RETURN
+            IF loc_lProsseguir
+                loc_cDesc = ALLTRIM(loc_oPg.txt_4c_Dsittricm.Value)
+                IF EMPTY(loc_cDesc)
+                    THIS.AbrirBuscaSittricm()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT codigos, descricaos FROM SIGCDICM ORDER BY descricaos", ;
-                "cursor_4c_IcmBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_IcmBusca")
-                LOCATE FOR LIKE(UPPER(ALLTRIM(loc_cDesc)) + "*", UPPER(ALLTRIM(cursor_4c_IcmBusca.descricaos)))
-            ENDIF
-            IF loc_nRet > 0 AND USED("cursor_4c_IcmBusca") AND !EOF("cursor_4c_IcmBusca")
-                IF PEMSTATUS(loc_oPg, "txt_4c_Sittricm", 5)
-                    loc_oPg.txt_4c_Sittricm.Value = ALLTRIM(cursor_4c_IcmBusca.codigos)
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT codigos, descricaos FROM SIGCDICM ORDER BY descricaos", ;
+                    "cursor_4c_IcmBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_IcmBusca")
+                    LOCATE FOR LIKE(UPPER(ALLTRIM(loc_cDesc)) + "*", UPPER(ALLTRIM(cursor_4c_IcmBusca.descricaos)))
                 ENDIF
-                loc_oPg.txt_4c_Dsittricm.Value = ALLTRIM(cursor_4c_IcmBusca.descricaos)
-                IF USED("cursor_4c_IcmBusca")
-                    USE IN cursor_4c_IcmBusca
+                IF loc_nRet > 0 AND USED("cursor_4c_IcmBusca") AND !EOF("cursor_4c_IcmBusca")
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Sittricm", 5)
+                        loc_oPg.txt_4c_Sittricm.Value = ALLTRIM(cursor_4c_IcmBusca.codigos)
+                    ENDIF
+                    loc_oPg.txt_4c_Dsittricm.Value = ALLTRIM(cursor_4c_IcmBusca.descricaos)
+                    IF USED("cursor_4c_IcmBusca")
+                        USE IN cursor_4c_IcmBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_IcmBusca")
+                        USE IN cursor_4c_IcmBusca
+                    ENDIF
+                    THIS.AbrirBuscaSittricm()
                 ENDIF
-            ELSE
-                IF USED("cursor_4c_IcmBusca")
-                    USE IN cursor_4c_IcmBusca
-                ENDIF
-                THIS.AbrirBuscaSittricm()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_IcmBusca")
@@ -9625,37 +9728,43 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Codigo Servico Fiscal: Valid (lookup SIGCDICM, copia para Sittricm)
     PROCEDURE ValidarCodServsFiscal(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cCod, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Codigo", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Codigo.Value)
-            IF EMPTY(loc_cCod)
-                RETURN
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Codigo.Value)
+                IF EMPTY(loc_cCod)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT codigos, descricaos FROM SIGCDICM WHERE codigos = " + EscaparSQL(loc_cCod), ;
-                "cursor_4c_IcmServBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_IcmServBusca") AND !EOF("cursor_4c_IcmServBusca")
-                IF PEMSTATUS(loc_oPg, "txt_4c_Sittricm", 5)
-                    loc_oPg.txt_4c_Sittricm.Value  = ALLTRIM(cursor_4c_IcmServBusca.codigos)
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT codigos, descricaos FROM SIGCDICM WHERE codigos = " + EscaparSQL(loc_cCod), ;
+                    "cursor_4c_IcmServBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_IcmServBusca") AND !EOF("cursor_4c_IcmServBusca")
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Sittricm", 5)
+                        loc_oPg.txt_4c_Sittricm.Value  = ALLTRIM(cursor_4c_IcmServBusca.codigos)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg, "txt_4c_Dsittricm", 5)
+                        loc_oPg.txt_4c_Dsittricm.Value = ALLTRIM(cursor_4c_IcmServBusca.descricaos)
+                    ENDIF
+                    IF USED("cursor_4c_IcmServBusca")
+                        USE IN cursor_4c_IcmServBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_IcmServBusca")
+                        USE IN cursor_4c_IcmServBusca
+                    ENDIF
+                    THIS.AbrirBuscaCodServsFiscal()
                 ENDIF
-                IF PEMSTATUS(loc_oPg, "txt_4c_Dsittricm", 5)
-                    loc_oPg.txt_4c_Dsittricm.Value = ALLTRIM(cursor_4c_IcmServBusca.descricaos)
-                ENDIF
-                IF USED("cursor_4c_IcmServBusca")
-                    USE IN cursor_4c_IcmServBusca
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_IcmServBusca")
-                    USE IN cursor_4c_IcmServBusca
-                ENDIF
-                THIS.AbrirBuscaCodServsFiscal()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_IcmServBusca")
@@ -9674,31 +9783,37 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Tipo de Tributacao (tptribs): Valid
     PROCEDURE ValidarTpTrib(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cCod, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_TpTrib", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_TpTrib.Value)
-            IF EMPTY(loc_cCod)
-                RETURN
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_TpTrib.Value)
+                IF EMPTY(loc_cCod)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT tipos, descs FROM SigPrTri WHERE tipos = " + EscaparSQL(loc_cCod), ;
-                "cursor_4c_TpTribBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_TpTribBusca") AND !EOF("cursor_4c_TpTribBusca")
-                IF USED("cursor_4c_TpTribBusca")
-                    USE IN cursor_4c_TpTribBusca
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT tipos, descs FROM SigPrTri WHERE tipos = " + EscaparSQL(loc_cCod), ;
+                    "cursor_4c_TpTribBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_TpTribBusca") AND !EOF("cursor_4c_TpTribBusca")
+                    IF USED("cursor_4c_TpTribBusca")
+                        USE IN cursor_4c_TpTribBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_TpTribBusca")
+                        USE IN cursor_4c_TpTribBusca
+                    ENDIF
+                    THIS.AbrirBuscaTpTrib()
                 ENDIF
-            ELSE
-                IF USED("cursor_4c_TpTribBusca")
-                    USE IN cursor_4c_TpTribBusca
-                ENDIF
-                THIS.AbrirBuscaTpTrib()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_TpTribBusca")
@@ -9753,34 +9868,40 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Aliquota IPI (nAliqipis): Valid - verifica contra padrao da clf fiscal
     PROCEDURE ValidarAliqIPI(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cClf, loc_nAliq, loc_nAliqRef, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_AliqIPI", 5) OR !PEMSTATUS(loc_oPg, "txt_4c_Clfiscal", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_nAliq = loc_oPg.txt_4c_AliqIPI.Value
-            loc_cClf  = ALLTRIM(loc_oPg.txt_4c_Clfiscal.Value)
-            IF EMPTY(loc_cClf) OR loc_nAliq = 0
-                RETURN
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT aipis FROM SigCdClf WHERE codigos = " + EscaparSQL(loc_cClf), ;
-                "cursor_4c_ClfAliq")
-            IF loc_nRet > 0 AND USED("cursor_4c_ClfAliq") AND !EOF("cursor_4c_ClfAliq")
-                loc_nAliqRef = cursor_4c_ClfAliq.aipis
-                IF loc_nAliqRef > 0 AND ABS(loc_nAliq - loc_nAliqRef) > 0.001
-                    MsgAviso("Al" + CHR(237) + "quota IPI informada (" + ;
-                        TRANSFORM(loc_nAliq) + "%) difere da padr" + CHR(227) + ;
-                        "o da classifica" + CHR(231) + CHR(227) + "o fiscal (" + ;
-                        TRANSFORM(loc_nAliqRef) + "%).")
+            IF loc_lProsseguir
+                loc_nAliq = loc_oPg.txt_4c_AliqIPI.Value
+                loc_cClf  = ALLTRIM(loc_oPg.txt_4c_Clfiscal.Value)
+                IF EMPTY(loc_cClf) OR loc_nAliq = 0
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
-            IF USED("cursor_4c_ClfAliq")
-                USE IN cursor_4c_ClfAliq
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT aipis FROM SigCdClf WHERE codigos = " + EscaparSQL(loc_cClf), ;
+                    "cursor_4c_ClfAliq")
+                IF loc_nRet > 0 AND USED("cursor_4c_ClfAliq") AND !EOF("cursor_4c_ClfAliq")
+                    loc_nAliqRef = cursor_4c_ClfAliq.aipis
+                    IF loc_nAliqRef > 0 AND ABS(loc_nAliq - loc_nAliqRef) > 0.001
+                        MsgAviso("Al" + CHR(237) + "quota IPI informada (" + ;
+                            TRANSFORM(loc_nAliq) + "%) difere da padr" + CHR(227) + ;
+                            "o da classifica" + CHR(231) + CHR(227) + "o fiscal (" + ;
+                            TRANSFORM(loc_nAliqRef) + "%).")
+                    ENDIF
+                ENDIF
+                IF USED("cursor_4c_ClfAliq")
+                    USE IN cursor_4c_ClfAliq
+                ENDIF
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_ClfAliq")
@@ -9832,29 +9953,34 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Botao Descricao Fiscal: Click - gera descricao fiscal via fGerDescFis
     PROCEDURE CmdBtnDescFisClick()
-        LOCAL loc_oPg, loc_cCpros, loc_cDescFis, loc_oPg1, loException
+        LOCAL loc_oPg, loc_cCpros, loc_cDescFis, loc_oPg1, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oPg    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
-            loc_cCpros = ALLTRIM(THIS.this_oBusinessObject.this_cCpros)
-            IF EMPTY(loc_cCpros)
-                loc_oPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
-                IF PEMSTATUS(loc_oPg1, "txt_4c_Cpros", 5)
-                    loc_cCpros = ALLTRIM(loc_oPg1.txt_4c_Cpros.Value)
+            IF loc_lProsseguir
+                loc_oPg    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
+                loc_cCpros = ALLTRIM(THIS.this_oBusinessObject.this_cCpros)
+                IF EMPTY(loc_cCpros)
+                    loc_oPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
+                    IF PEMSTATUS(loc_oPg1, "txt_4c_Cpros", 5)
+                        loc_cCpros = ALLTRIM(loc_oPg1.txt_4c_Cpros.Value)
+                    ENDIF
+                ENDIF
+                IF EMPTY(loc_cCpros)
+                    MsgAviso("Salve o produto antes de gerar a descri" + CHR(231) + CHR(227) + "o fiscal.")
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
-            IF EMPTY(loc_cCpros)
-                MsgAviso("Salve o produto antes de gerar a descri" + CHR(231) + CHR(227) + "o fiscal.")
-                RETURN
-            ENDIF
-            loc_cDescFis = fGerDescFis(0, loc_cCpros, go_4c_Sistema.cCodEmpresa, .F.)
-            IF !EMPTY(ALLTRIM(loc_cDescFis))
-                IF PEMSTATUS(loc_oPg, "obj_4c_Mgetdescfi", 5)
-                    loc_oPg.obj_4c_Mgetdescfi.Value = loc_cDescFis
+            IF loc_lProsseguir
+                loc_cDescFis = fGerDescFis(0, loc_cCpros, go_4c_Sistema.cCodEmpresa, .F.)
+                IF !EMPTY(ALLTRIM(loc_cDescFis))
+                    IF PEMSTATUS(loc_oPg, "obj_4c_Mgetdescfi", 5)
+                        loc_oPg.obj_4c_Mgetdescfi.Value = loc_cDescFis
+                    ENDIF
+                    THIS.this_oBusinessObject.this_mDescfis = loc_cDescFis
                 ENDIF
-                THIS.this_oBusinessObject.this_mDescfis = loc_cDescFis
             ENDIF
         CATCH TO loException
             MostrarErro("Erro ao gerar descri" + CHR(231) + CHR(227) + "o fiscal:" + ;
@@ -9864,38 +9990,44 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Metal (metals): Valid - lookup SigCdMtl WHERE tipos='M'
     PROCEDURE ValidarMetal(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cCod, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Metal", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Metal.Value)
-            IF EMPTY(loc_cCod)
-                IF PEMSTATUS(loc_oPg, "txt_4c_DesMetal", 5)
-                    loc_oPg.txt_4c_DesMetal.Value = ""
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Metal.Value)
+                IF EMPTY(loc_cCod)
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DesMetal", 5)
+                        loc_oPg.txt_4c_DesMetal.Value = ""
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT codigos, descs FROM SigCdMtl WHERE codigos = " + EscaparSQL(loc_cCod) + ;
-                " AND tipos = 'M'", ;
-                "cursor_4c_MetalBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_MetalBusca") AND !EOF("cursor_4c_MetalBusca")
-                IF PEMSTATUS(loc_oPg, "txt_4c_DesMetal", 5)
-                    loc_oPg.txt_4c_DesMetal.Value = ALLTRIM(cursor_4c_MetalBusca.descs)
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT codigos, descs FROM SigCdMtl WHERE codigos = " + EscaparSQL(loc_cCod) + ;
+                    " AND tipos = 'M'", ;
+                    "cursor_4c_MetalBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_MetalBusca") AND !EOF("cursor_4c_MetalBusca")
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DesMetal", 5)
+                        loc_oPg.txt_4c_DesMetal.Value = ALLTRIM(cursor_4c_MetalBusca.descs)
+                    ENDIF
+                    IF USED("cursor_4c_MetalBusca")
+                        USE IN cursor_4c_MetalBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_MetalBusca")
+                        USE IN cursor_4c_MetalBusca
+                    ENDIF
+                    THIS.AbrirBuscaMetal()
                 ENDIF
-                IF USED("cursor_4c_MetalBusca")
-                    USE IN cursor_4c_MetalBusca
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_MetalBusca")
-                    USE IN cursor_4c_MetalBusca
-                ENDIF
-                THIS.AbrirBuscaMetal()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_MetalBusca")
@@ -9914,38 +10046,44 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Teor (teors): Valid - lookup SigCdMtl WHERE tipos<>'M'
     PROCEDURE ValidarTeor(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cCod, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Teor", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Teor.Value)
-            IF EMPTY(loc_cCod)
-                IF PEMSTATUS(loc_oPg, "txt_4c_DesTeor", 5)
-                    loc_oPg.txt_4c_DesTeor.Value = ""
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Teor.Value)
+                IF EMPTY(loc_cCod)
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DesTeor", 5)
+                        loc_oPg.txt_4c_DesTeor.Value = ""
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT codigos, descs FROM SigCdMtl WHERE codigos = " + EscaparSQL(loc_cCod) + ;
-                " AND tipos <> 'M'", ;
-                "cursor_4c_TeorBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_TeorBusca") AND !EOF("cursor_4c_TeorBusca")
-                IF PEMSTATUS(loc_oPg, "txt_4c_DesTeor", 5)
-                    loc_oPg.txt_4c_DesTeor.Value = ALLTRIM(cursor_4c_TeorBusca.descs)
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT codigos, descs FROM SigCdMtl WHERE codigos = " + EscaparSQL(loc_cCod) + ;
+                    " AND tipos <> 'M'", ;
+                    "cursor_4c_TeorBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_TeorBusca") AND !EOF("cursor_4c_TeorBusca")
+                    IF PEMSTATUS(loc_oPg, "txt_4c_DesTeor", 5)
+                        loc_oPg.txt_4c_DesTeor.Value = ALLTRIM(cursor_4c_TeorBusca.descs)
+                    ENDIF
+                    IF USED("cursor_4c_TeorBusca")
+                        USE IN cursor_4c_TeorBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_TeorBusca")
+                        USE IN cursor_4c_TeorBusca
+                    ENDIF
+                    THIS.AbrirBuscaTeor()
                 ENDIF
-                IF USED("cursor_4c_TeorBusca")
-                    USE IN cursor_4c_TeorBusca
-                ENDIF
-            ELSE
-                IF USED("cursor_4c_TeorBusca")
-                    USE IN cursor_4c_TeorBusca
-                ENDIF
-                THIS.AbrirBuscaTeor()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_TeorBusca")
@@ -9964,31 +10102,37 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Moeda Valor (moedas): Valid - lookup SigCdMoe
     PROCEDURE ValidarMvalorFiscal(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cCod, loc_nRet, loException
+        loc_lProsseguir = .T.
         TRY
             loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
             IF !PEMSTATUS(loc_oPg, "txt_4c_Mvalor", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg.txt_4c_Mvalor.Value)
-            IF EMPTY(loc_cCod)
-                RETURN
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg.txt_4c_Mvalor.Value)
+                IF EMPTY(loc_cCod)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT cmoes, dmoes FROM SigCdMoe WHERE cmoes = " + EscaparSQL(loc_cCod), ;
-                "cursor_4c_MoeFiscalBusca")
-            IF loc_nRet > 0 AND USED("cursor_4c_MoeFiscalBusca") AND !EOF("cursor_4c_MoeFiscalBusca")
-                IF USED("cursor_4c_MoeFiscalBusca")
-                    USE IN cursor_4c_MoeFiscalBusca
+            IF loc_lProsseguir
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT cmoes, dmoes FROM SigCdMoe WHERE cmoes = " + EscaparSQL(loc_cCod), ;
+                    "cursor_4c_MoeFiscalBusca")
+                IF loc_nRet > 0 AND USED("cursor_4c_MoeFiscalBusca") AND !EOF("cursor_4c_MoeFiscalBusca")
+                    IF USED("cursor_4c_MoeFiscalBusca")
+                        USE IN cursor_4c_MoeFiscalBusca
+                    ENDIF
+                ELSE
+                    IF USED("cursor_4c_MoeFiscalBusca")
+                        USE IN cursor_4c_MoeFiscalBusca
+                    ENDIF
+                    THIS.AbrirBuscaMvalorFiscal()
                 ENDIF
-            ELSE
-                IF USED("cursor_4c_MoeFiscalBusca")
-                    USE IN cursor_4c_MoeFiscalBusca
-                ENDIF
-                THIS.AbrirBuscaMvalorFiscal()
             ENDIF
         CATCH TO loException
             IF USED("cursor_4c_MoeFiscalBusca")
@@ -10007,26 +10151,34 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Centro de Custo: Grupo (gruccus): Valid
     PROCEDURE TxtGruccusValid()
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cGrp, loException
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
-            IF !PEMSTATUS(loc_oPg, "txt_4c__gruccus", 5)
-                RETURN
-            ENDIF
-            loc_cGrp = ALLTRIM(loc_oPg.txt_4c__gruccus.Value)
-            IF EMPTY(loc_cGrp)
-                IF PEMSTATUS(loc_oPg, "txt_4c__dgruccus", 5)
-                    loc_oPg.txt_4c__dgruccus.Value = ""
+            IF loc_lProsseguir
+                loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
+                IF !PEMSTATUS(loc_oPg, "txt_4c__gruccus", 5)
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            fAcessoContab(Usuar, "C", loc_cGrp)
+            IF loc_lProsseguir
+                loc_cGrp = ALLTRIM(loc_oPg.txt_4c__gruccus.Value)
+                IF EMPTY(loc_cGrp)
+                    IF PEMSTATUS(loc_oPg, "txt_4c__dgruccus", 5)
+                        loc_oPg.txt_4c__dgruccus.Value = ""
+                    ENDIF
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+            IF loc_lProsseguir
+                fAcessoContab(Usuar, "C", loc_cGrp)
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao validar Grupo CC:" + CHR(13) + loException.Message, ;
                 "FormProduto.TxtGruccusValid")
@@ -10085,24 +10237,30 @@ DEFINE CLASS FormProduto AS FormBase
 
     *-- Centro de Custo: Conta (contaccus): Valid
     PROCEDURE TxtContaccusValid()
+        LOCAL loc_lProsseguir
         IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
             RETURN
         ENDIF
         LOCAL loc_oPg, loc_cGrp, loc_cCta, loException
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oPg  = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
-            loc_cGrp = ALLTRIM(loc_oPg.txt_4c__gruccus.Value)
-            loc_cCta = ALLTRIM(loc_oPg.txt_4c__contaccus.Value)
-            IF EMPTY(loc_cCta)
-                IF PEMSTATUS(loc_oPg, "txt_4c__dcontaccus", 5)
-                    loc_oPg.txt_4c__dcontaccus.Value = ""
+            IF loc_lProsseguir
+                loc_oPg  = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page3
+                loc_cGrp = ALLTRIM(loc_oPg.txt_4c__gruccus.Value)
+                loc_cCta = ALLTRIM(loc_oPg.txt_4c__contaccus.Value)
+                IF EMPTY(loc_cCta)
+                    IF PEMSTATUS(loc_oPg, "txt_4c__dcontaccus", 5)
+                        loc_oPg.txt_4c__dcontaccus.Value = ""
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            fAcessoContas(Usuar, loc_cGrp, "C", loc_cCta)
+            IF loc_lProsseguir
+                fAcessoContas(Usuar, loc_cGrp, "C", loc_cCta)
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao validar Conta CC:" + CHR(13) + loException.Message, ;
                 "FormProduto.TxtContaccusValid")
@@ -11005,7 +11163,8 @@ DEFINE CLASS FormProduto AS FormBase
     ENDPROC
 
     PROCEDURE AbrirBuscaTarefaDesigner()
-        LOCAL loc_oBusca, loc_nRet, loException
+        LOCAL loc_oBusca, loc_nRet, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crTarefas")
                 CREATE CURSOR crTarefas (CodCads C(10), DesCads C(40))
@@ -11015,22 +11174,24 @@ DEFINE CLASS FormProduto AS FormBase
                     "crTarefas")
                 IF loc_nRet <= 0 OR EOF("crTarefas")
                     MsgAviso("Sem tarefas cadastradas para selecionar.")
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.this_cCursorDestino = "crTarefas"
-                loc_oBusca.DefinirCursor("crTarefas", "CodCads", "DesCads", ;
-                    "Selecionar Tarefa")
-                loc_oBusca.Mostrar()
-                IF !EMPTY(loc_oBusca.cCodigoSelecionado) AND ;
-                    USED("cursor_4c_GrdDesigner") AND !EOF("cursor_4c_GrdDesigner")
-                    SELECT cursor_4c_GrdDesigner
-                    REPLACE cursor_4c_GrdDesigner.codcads WITH ;
-                        ALLTRIM(loc_oBusca.cCodigoSelecionado)
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.this_cCursorDestino = "crTarefas"
+                    loc_oBusca.DefinirCursor("crTarefas", "CodCads", "DesCads", ;
+                        "Selecionar Tarefa")
+                    loc_oBusca.Mostrar()
+                    IF !EMPTY(loc_oBusca.cCodigoSelecionado) AND ;
+                        USED("cursor_4c_GrdDesigner") AND !EOF("cursor_4c_GrdDesigner")
+                        SELECT cursor_4c_GrdDesigner
+                        REPLACE cursor_4c_GrdDesigner.codcads WITH ;
+                            ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                    ENDIF
+                    loc_oBusca = .NULL.
                 ENDIF
-                loc_oBusca = .NULL.
             ENDIF
         CATCH TO loException
             MostrarErro("Erro ao buscar Tarefa:" + CHR(13) + loException.Message, ;
@@ -11432,43 +11593,46 @@ DEFINE CLASS FormProduto AS FormBase
     * Chamado de BOParaForm ao carregar registro existente.
     *===========================================================================
     PROTECTED PROCEDURE CarregarServicos()
-        LOCAL loc_cCpros, loc_nRet, loc_oPg, loc_oGrid, loException
+        LOCAL loc_cCpros, loc_nRet, loc_oPg, loc_oGrid, loException, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cCpros = ALLTRIM(THIS.this_oBusinessObject.this_cCpros)
             IF EMPTY(loc_cCpros) OR (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page8
+            IF loc_lProsseguir
+                loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page8
 
             *-- Carregar todos os servicos com Marcas=0/1 via LEFT JOIN em SigSerPr
-            IF USED("cursor_4c_GrdServico")
-                USE IN cursor_4c_GrdServico
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, ;
-                "SELECT CASE WHEN s.cods IS NOT NULL THEN 1 ELSE 0 END AS Marcas," + ;
-                " p.cods, p.descs, p.qtdias" + ;
-                " FROM SigPrSer p" + ;
-                " LEFT JOIN SigSerPr s ON s.cods = p.cods AND s.cpros = " + EscaparSQL(loc_cCpros) + ;
-                " ORDER BY p.descs", ;
-                "cursor_4c_GrdServico")
-            IF loc_nRet <= 0
-                SET NULL ON
-                CREATE CURSOR cursor_4c_GrdServico (Marcas N(1,0), Cods C(3), Descs C(30), qtdias N(3,0))
-                SET NULL OFF
-            ENDIF
+                IF USED("cursor_4c_GrdServico")
+                    USE IN cursor_4c_GrdServico
+                ENDIF
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "SELECT CASE WHEN s.cods IS NOT NULL THEN 1 ELSE 0 END AS Marcas," + ;
+                    " p.cods, p.descs, p.qtdias" + ;
+                    " FROM SigPrSer p" + ;
+                    " LEFT JOIN SigSerPr s ON s.cods = p.cods AND s.cpros = " + EscaparSQL(loc_cCpros) + ;
+                    " ORDER BY p.descs", ;
+                    "cursor_4c_GrdServico")
+                IF loc_nRet <= 0
+                    SET NULL ON
+                    CREATE CURSOR cursor_4c_GrdServico (Marcas N(1,0), Cods C(3), Descs C(30), qtdias N(3,0))
+                    SET NULL OFF
+                ENDIF
 
             *-- Reassociar RecordSource e ControlSources apos recarregar cursor
-            IF PEMSTATUS(loc_oPg, "grd_4c_Dados", 5)
-                loc_oGrid = loc_oPg.grd_4c_Dados
-                loc_oGrid.ColumnCount = 3
-                loc_oGrid.RecordSource          = "cursor_4c_GrdServico"
-                loc_oGrid.Column1.ControlSource = "cursor_4c_GrdServico.Descs"
-                loc_oGrid.Column2.ControlSource = "cursor_4c_GrdServico.Cods"
-                loc_oGrid.Column3.ControlSource = "cursor_4c_GrdServico.Marcas"
-                loc_oGrid.Refresh()
-            ENDIF
+                IF PEMSTATUS(loc_oPg, "grd_4c_Dados", 5)
+                    loc_oGrid = loc_oPg.grd_4c_Dados
+                    loc_oGrid.ColumnCount = 3
+                    loc_oGrid.RecordSource          = "cursor_4c_GrdServico"
+                    loc_oGrid.Column1.ControlSource = "cursor_4c_GrdServico.Descs"
+                    loc_oGrid.Column2.ControlSource = "cursor_4c_GrdServico.Cods"
+                    loc_oGrid.Column3.ControlSource = "cursor_4c_GrdServico.Marcas"
+                    loc_oGrid.Refresh()
+                ENDIF
 
+            ENDIF
         CATCH TO loException
             MostrarErro("Erro ao carregar Servi" + CHR(231) + "os:" + CHR(13) + ;
                 loException.Message + CHR(13) + "Linha: " + TRANSFORM(loException.LineNo), ;

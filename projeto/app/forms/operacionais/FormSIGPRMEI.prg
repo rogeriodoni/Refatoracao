@@ -537,7 +537,8 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
     * arquivos aguardam processamento ? util para diagnostico antes de processar.
     *--------------------------------------------------------------------------
     PROCEDURE BtnBuscarClick()
-        LOCAL loc_laDirs[1], loc_lnArq, loc_cDir, loc_cMsg, loc_oBO, loc_oErro
+        LOCAL loc_laDirs[1], loc_lnArq, loc_cDir, loc_cMsg, loc_oBO, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oBO  = THIS.this_oBusinessObject
             loc_cDir = ALLTRIM(loc_oBO.this_cDirLivros)
@@ -546,26 +547,28 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
                 MsgAviso("Diret" + CHR(243) + "rio de entrada n" + CHR(227) + "o configurado." + CHR(13) + ;
                     "Verifique as configura" + CHR(231) + CHR(245) + "es de SigCdPam.", ;
                     "Buscar Pedidos")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF RIGHT(loc_cDir, 1) <> "\"
-                loc_cDir = loc_cDir + "\"
-            ENDIF
+            IF loc_lProsseguir
+                IF RIGHT(loc_cDir, 1) <> "\"
+                    loc_cDir = loc_cDir + "\"
+                ENDIF
 
-            loc_lnArq = ADIR(loc_laDirs, loc_cDir + "*.XML")
+                loc_lnArq = ADIR(loc_laDirs, loc_cDir + "*.XML")
 
-            IF loc_lnArq = 0
-                loc_cMsg = "Nenhum pedido em fila de processamento." + CHR(13) + CHR(13) + ;
-                    "Diret" + CHR(243) + "rio: " + loc_cDir + CHR(13) + CHR(13) + ;
-                    "Total processado na sess" + CHR(227) + "o: " + TRANSFORM(loc_oBO.this_nArqProcessados)
-                MsgInfo(loc_cMsg, "Buscar Pedidos")
-            ELSE
-                loc_cMsg = TRANSFORM(loc_lnArq) + " pedido(s) web aguardando processamento." + CHR(13) + CHR(13) + ;
-                    "Diret" + CHR(243) + "rio: " + loc_cDir + CHR(13) + CHR(13) + ;
-                    "Total processado na sess" + CHR(227) + "o: " + TRANSFORM(loc_oBO.this_nArqProcessados) + CHR(13) + CHR(13) + ;
-                    "Clique em Processar para importar os pedidos."
-                MsgInfo(loc_cMsg, "Buscar Pedidos")
+                IF loc_lnArq = 0
+                    loc_cMsg = "Nenhum pedido em fila de processamento." + CHR(13) + CHR(13) + ;
+                        "Diret" + CHR(243) + "rio: " + loc_cDir + CHR(13) + CHR(13) + ;
+                        "Total processado na sess" + CHR(227) + "o: " + TRANSFORM(loc_oBO.this_nArqProcessados)
+                    MsgInfo(loc_cMsg, "Buscar Pedidos")
+                ELSE
+                    loc_cMsg = TRANSFORM(loc_lnArq) + " pedido(s) web aguardando processamento." + CHR(13) + CHR(13) + ;
+                        "Diret" + CHR(243) + "rio: " + loc_cDir + CHR(13) + CHR(13) + ;
+                        "Total processado na sess" + CHR(227) + "o: " + TRANSFORM(loc_oBO.this_nArqProcessados) + CHR(13) + CHR(13) + ;
+                        "Clique em Processar para importar os pedidos."
+                    MsgInfo(loc_cMsg, "Buscar Pedidos")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;

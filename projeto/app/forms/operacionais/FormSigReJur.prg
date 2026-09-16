@@ -1383,23 +1383,26 @@ DEFINE CLASS FormSigReJur AS FormBase
     * sao as colunas editaveis quando AlteraJuros=.T.
     *==========================================================================
     PROTECTED PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.this_lAlteraJuros
                 IF VARTYPE(THIS.cmd_4c_Confirma) = "O"
                     THIS.cmd_4c_Confirma.SetFocus
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF VARTYPE(THIS.grd_4c_Dados) = "O"
-                IF USED("crTmpJuros") AND RECCOUNT("crTmpJuros") > 0
-                    SELECT crTmpJuros
-                    IF EOF()
-                        GO TOP
+            IF loc_lProsseguir
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    IF USED("crTmpJuros") AND RECCOUNT("crTmpJuros") > 0
+                        SELECT crTmpJuros
+                        IF EOF()
+                            GO TOP
+                        ENDIF
                     ENDIF
+                    THIS.grd_4c_Dados.SetFocus
                 ENDIF
-                THIS.grd_4c_Dados.SetFocus
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao ativar modo altera" + CHR(231) + CHR(227) + "o:" + CHR(13) + ;

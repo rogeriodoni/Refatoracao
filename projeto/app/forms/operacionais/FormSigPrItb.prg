@@ -966,7 +966,7 @@ DEFINE CLASS FormSigPrItb AS FormBase
     * Tentativa de match exato primeiro; se falhar, abre picker
     *==========================================================================
     PROCEDURE AbrirLookupEmpresaCod()
-        LOCAL loc_oBusca, loc_cCodigo, loc_cDescricao, loc_cValor, loc_cSQL, loc_oErro
+        LOCAL loc_oBusca, loc_cCodigo, loc_cDescricao, loc_cValor, loc_cSQL, loc_oErro, loc_lProsseguir
         loc_cCodigo    = ""
         loc_cDescricao = ""
 
@@ -976,6 +976,7 @@ DEFINE CLASS FormSigPrItb AS FormBase
 
         loc_cValor = ALLTRIM(NVL(THIS.cnt_4c_Mvt1.txt_4c_Emp1.Value, ""))
 
+        loc_lProsseguir = .T.
         TRY
             *-- Tenta match exato por Cemps
             IF !EMPTY(loc_cValor)
@@ -988,39 +989,43 @@ DEFINE CLASS FormSigPrItb AS FormBase
                         IF USED("cursor_4c_BuscaEmpCod")
                             USE IN cursor_4c_BuscaEmpCod
                         ENDIF
-                        RETURN
+                        loc_lProsseguir = .F.
                     ENDIF
-                    IF USED("cursor_4c_BuscaEmpCod")
-                        USE IN cursor_4c_BuscaEmpCod
+                    IF loc_lProsseguir
+                        IF USED("cursor_4c_BuscaEmpCod")
+                            USE IN cursor_4c_BuscaEmpCod
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF
 
             *-- Match exato falhou: abre picker
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdEmp", ;
-                "cursor_4c_BuscaEmpCod", ;
-                "Cemps", ;
-                loc_cValor, ;
-                "Sele" + CHR(231) + CHR(227) + "o de Empresa")
-            loc_oBusca.mAddColuna("Cemps", "XXX", "C" + CHR(243) + "digo")
-            loc_oBusca.mAddColuna("Razas", "",    "Descri" + CHR(231) + CHR(227) + "o")
-            loc_oBusca.Show()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdEmp", ;
+                    "cursor_4c_BuscaEmpCod", ;
+                    "Cemps", ;
+                    loc_cValor, ;
+                    "Sele" + CHR(231) + CHR(227) + "o de Empresa")
+                loc_oBusca.mAddColuna("Cemps", "XXX", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("Razas", "",    "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oBusca.Show()
 
-            IF loc_oBusca.this_lSelecionou
-                IF USED("cursor_4c_BuscaEmpCod")
-                    loc_cCodigo    = ALLTRIM(cursor_4c_BuscaEmpCod.Cemps)
-                    loc_cDescricao = ALLTRIM(cursor_4c_BuscaEmpCod.Razas)
-                    THIS.cnt_4c_Mvt1.txt_4c_Emp1.Value   = loc_cCodigo
-                    THIS.cnt_4c_Mvt1.txt_4c_Dsemp1.Value = loc_cDescricao
+                IF loc_oBusca.this_lSelecionou
+                    IF USED("cursor_4c_BuscaEmpCod")
+                        loc_cCodigo    = ALLTRIM(cursor_4c_BuscaEmpCod.Cemps)
+                        loc_cDescricao = ALLTRIM(cursor_4c_BuscaEmpCod.Razas)
+                        THIS.cnt_4c_Mvt1.txt_4c_Emp1.Value   = loc_cCodigo
+                        THIS.cnt_4c_Mvt1.txt_4c_Dsemp1.Value = loc_cDescricao
+                    ENDIF
                 ENDIF
-            ENDIF
 
-            IF USED("cursor_4c_BuscaEmpCod")
-                USE IN cursor_4c_BuscaEmpCod
-            ENDIF
-            loc_oBusca.Release()
+                IF USED("cursor_4c_BuscaEmpCod")
+                    USE IN cursor_4c_BuscaEmpCod
+                ENDIF
+                loc_oBusca.Release()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao buscar empresa: " + loc_oErro.Message, "Erro")
             IF USED("cursor_4c_BuscaEmpCod")
@@ -1036,7 +1041,7 @@ DEFINE CLASS FormSigPrItb AS FormBase
     * Tentativa de match unico starts-with; se ambiguo/vazio, abre picker
     *==========================================================================
     PROCEDURE AbrirLookupEmpresaNome()
-        LOCAL loc_oBusca, loc_cCodigo, loc_cDescricao, loc_cValor, loc_cSQL, loc_oErro
+        LOCAL loc_oBusca, loc_cCodigo, loc_cDescricao, loc_cValor, loc_cSQL, loc_oErro, loc_lProsseguir
         loc_cCodigo    = ""
         loc_cDescricao = ""
 
@@ -1051,6 +1056,7 @@ DEFINE CLASS FormSigPrItb AS FormBase
 
         loc_cValor = ALLTRIM(NVL(THIS.cnt_4c_Mvt1.txt_4c_Dsemp1.Value, ""))
 
+        loc_lProsseguir = .T.
         TRY
             *-- Tenta match unico por Razas (starts-with) - TOP 2 para detectar ambiguidade
             IF !EMPTY(loc_cValor)
@@ -1065,39 +1071,43 @@ DEFINE CLASS FormSigPrItb AS FormBase
                         IF USED("cursor_4c_BuscaEmpNome")
                             USE IN cursor_4c_BuscaEmpNome
                         ENDIF
-                        RETURN
+                        loc_lProsseguir = .F.
                     ENDIF
-                    IF USED("cursor_4c_BuscaEmpNome")
-                        USE IN cursor_4c_BuscaEmpNome
+                    IF loc_lProsseguir
+                        IF USED("cursor_4c_BuscaEmpNome")
+                            USE IN cursor_4c_BuscaEmpNome
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF
 
             *-- Match unico falhou ou campo vazio: abre picker por nome
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdEmp", ;
-                "cursor_4c_BuscaEmpNome", ;
-                "Razas", ;
-                loc_cValor, ;
-                "Sele" + CHR(231) + CHR(227) + "o de Empresa")
-            loc_oBusca.mAddColuna("Cemps", "XXX", "C" + CHR(243) + "digo")
-            loc_oBusca.mAddColuna("Razas", "",    "Descri" + CHR(231) + CHR(227) + "o")
-            loc_oBusca.Show()
+            IF loc_lProsseguir
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdEmp", ;
+                    "cursor_4c_BuscaEmpNome", ;
+                    "Razas", ;
+                    loc_cValor, ;
+                    "Sele" + CHR(231) + CHR(227) + "o de Empresa")
+                loc_oBusca.mAddColuna("Cemps", "XXX", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("Razas", "",    "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oBusca.Show()
 
-            IF loc_oBusca.this_lSelecionou
-                IF USED("cursor_4c_BuscaEmpNome")
-                    loc_cCodigo    = ALLTRIM(cursor_4c_BuscaEmpNome.Cemps)
-                    loc_cDescricao = ALLTRIM(cursor_4c_BuscaEmpNome.Razas)
-                    THIS.cnt_4c_Mvt1.txt_4c_Emp1.Value   = loc_cCodigo
-                    THIS.cnt_4c_Mvt1.txt_4c_Dsemp1.Value = loc_cDescricao
+                IF loc_oBusca.this_lSelecionou
+                    IF USED("cursor_4c_BuscaEmpNome")
+                        loc_cCodigo    = ALLTRIM(cursor_4c_BuscaEmpNome.Cemps)
+                        loc_cDescricao = ALLTRIM(cursor_4c_BuscaEmpNome.Razas)
+                        THIS.cnt_4c_Mvt1.txt_4c_Emp1.Value   = loc_cCodigo
+                        THIS.cnt_4c_Mvt1.txt_4c_Dsemp1.Value = loc_cDescricao
+                    ENDIF
                 ENDIF
-            ENDIF
 
-            IF USED("cursor_4c_BuscaEmpNome")
-                USE IN cursor_4c_BuscaEmpNome
-            ENDIF
-            loc_oBusca.Release()
+                IF USED("cursor_4c_BuscaEmpNome")
+                    USE IN cursor_4c_BuscaEmpNome
+                ENDIF
+                loc_oBusca.Release()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao buscar empresa: " + loc_oErro.Message, "Erro")
             IF USED("cursor_4c_BuscaEmpNome")

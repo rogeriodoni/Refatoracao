@@ -2025,7 +2025,7 @@ DEFINE CLASS FormTop AS FormBase
     * PUBLIC (sem PROTECTED) - obrigatorio para funcionar com BINDEVENT (CLAUDE.md #3)
     *===========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_oPagina, loc_nCodigo, loc_cDescricao, loc_nChk
+        LOCAL loc_oPagina, loc_nCodigo, loc_cDescricao, loc_nChk, loc_lProsseguir
 
         loc_oPagina    = THIS.pgf_4c_Paginas.Page2
         loc_nCodigo    = loc_oPagina.txt_4c_Codigos.Value
@@ -2054,6 +2054,7 @@ DEFINE CLASS FormTop AS FormBase
             ENDIF
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             *-- Verificar duplicidade do codigo (apenas no INCLUIR) - espelha ChkRegister('SigCdTom',...)
             IF THIS.this_cModoAtual = "INCLUIR"
@@ -2067,20 +2068,24 @@ DEFINE CLASS FormTop AS FormBase
                         ENDIF
                         MsgAviso("C" + CHR(243) + "digo do Tipo de Opera" + CHR(231) + CHR(227) + "o j" + CHR(225) + " Cadastrado!", "Valida" + CHR(231) + CHR(227) + "o")
                         loc_oPagina.txt_4c_Codigos.SetFocus
-                        RETURN
+                        loc_lProsseguir = .F.
                     ENDIF
                 ENDIF
-                IF USED("cursor_4c_ChkCod")
-                    USE IN cursor_4c_ChkCod
+                IF loc_lProsseguir
+                    IF USED("cursor_4c_ChkCod")
+                        USE IN cursor_4c_ChkCod
+                    ENDIF
                 ENDIF
             ENDIF
 
-            THIS.FormParaBO()
-            IF THIS.this_oBusinessObject.Salvar()
-                MsgSucesso("Tipo de Opera" + CHR(231) + CHR(227) + "o salvo com sucesso!")
-                THIS.AlternarPagina(1)
-                THIS.this_cModoAtual = "LISTA"
-                THIS.AjustarBotoesPorModo()
+            IF loc_lProsseguir
+                THIS.FormParaBO()
+                IF THIS.this_oBusinessObject.Salvar()
+                    MsgSucesso("Tipo de Opera" + CHR(231) + CHR(227) + "o salvo com sucesso!")
+                    THIS.AlternarPagina(1)
+                    THIS.this_cModoAtual = "LISTA"
+                    THIS.AjustarBotoesPorModo()
+                ENDIF
             ENDIF
         CATCH TO loException
             MostrarErro("Erro em FormTop.BtnSalvarClick:" + CHR(13) + loException.Message, "Erro")

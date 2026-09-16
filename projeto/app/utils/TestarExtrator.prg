@@ -3,7 +3,7 @@
 * Script de teste para debugar ExtratorPropriedades
 *====================================================================
 
-LOCAL loc_cArquivo, loc_oExtrator, loc_aResultado, i
+LOCAL loc_cArquivo, loc_oExtrator, loc_aResultado, i, loc_lProsseguir
 
 *-- Limpa .fxp
 IF FILE("ExtratorPropriedades.fxp")
@@ -21,6 +21,7 @@ loc_cArquivo = "c:\4c\tasks\task1\SIGCDCOR_form_codigo_fonte.txt"
 ? ""
 
 *-- Testa extrator
+loc_lProsseguir = .T.
 TRY
     loc_oExtrator = CREATEOBJECT("ExtratorPropriedades")
     ? "Extrator criado com sucesso"
@@ -32,34 +33,38 @@ TRY
 
     IF ISNULL(loc_aResultado)
         ? "ERRO: ExtrairDeArquivo retornou NULL"
-        RETURN
+        loc_lProsseguir = .F.
     ENDIF
 
-    IF VARTYPE(loc_aResultado) != "A"
-        ? "ERRO: Retorno nao eh array, tipo = " + VARTYPE(loc_aResultado)
-        RETURN
+    IF loc_lProsseguir
+        IF VARTYPE(loc_aResultado) != "A"
+            ? "ERRO: Retorno nao eh array, tipo = " + VARTYPE(loc_aResultado)
+            loc_lProsseguir = .F.
+        ENDIF
     ENDIF
 
-    ? ""
-    ? "Array retornado:"
-    ? "  Dimensoes: " + ALLTRIM(STR(ALEN(loc_aResultado, 1))) + " linhas x " + ALLTRIM(STR(ALEN(loc_aResultado, 2))) + " colunas"
-    ? ""
+    IF loc_lProsseguir
+        ? ""
+        ? "Array retornado:"
+        ? "  Dimensoes: " + ALLTRIM(STR(ALEN(loc_aResultado, 1))) + " linhas x " + ALLTRIM(STR(ALEN(loc_aResultado, 2))) + " colunas"
+        ? ""
 
-    IF ALEN(loc_aResultado, 1) > 0
-        ? "Primeiras 10 propriedades encontradas:"
-        ? "----------------------------------------"
+        IF ALEN(loc_aResultado, 1) > 0
+            ? "Primeiras 10 propriedades encontradas:"
+            ? "----------------------------------------"
+    
+            FOR i = 1 TO MIN(10, ALEN(loc_aResultado, 1))
+                ? ALLTRIM(STR(i)) + ". Objeto: " + loc_aResultado[i, 1]
+                ? "   Propriedade: " + loc_aResultado[i, 2]
+                ? "   Valor: " + loc_aResultado[i, 3]
+                ? "   Linha: " + ALLTRIM(STR(loc_aResultado[i, 4]))
+                ? ""
+            ENDFOR
+        ENDIF
 
-        FOR i = 1 TO MIN(10, ALEN(loc_aResultado, 1))
-            ? ALLTRIM(STR(i)) + ". Objeto: " + loc_aResultado[i, 1]
-            ? "   Propriedade: " + loc_aResultado[i, 2]
-            ? "   Valor: " + loc_aResultado[i, 3]
-            ? "   Linha: " + ALLTRIM(STR(loc_aResultado[i, 4]))
-            ? ""
-        ENDFOR
+        ? "Teste concluido com sucesso!"
+
     ENDIF
-
-    ? "Teste concluido com sucesso!"
-
 CATCH TO loEx
     ? "ERRO: " + loEx.Message
     ? "Linha: " + ALLTRIM(STR(loEx.LineNo))

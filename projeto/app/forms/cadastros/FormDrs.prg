@@ -1100,74 +1100,77 @@ DEFINE CLASS FormDrs AS FormBase
     * CarregarDados - Popula controles com valores do registro (via LocalCadRs)
     *===========================================================================
     PROCEDURE CarregarDados()
-        LOCAL loc_oCnt, loc_cObjName, loc_cCampo, loc_cTipos, loc_cVal, loc_nIdx
+        LOCAL loc_oCnt, loc_cObjName, loc_cCampo, loc_cTipos, loc_cVal, loc_nIdx, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.this_lMontouObjetos
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oCnt = THIS.pgf_4c_Paginas.Page2.cnt_4c_Campos
+            IF loc_lProsseguir
+                loc_oCnt = THIS.pgf_4c_Paginas.Page2.cnt_4c_Campos
 
-            IF !USED("LocalCadRs")
-                THIS.this_oBusinessObject.ApanhaRespostas()
-            ENDIF
-
-            FOR loc_nIdx = 1 TO THIS.this_nNroControles
-                loc_cObjName = THIS.laControles[loc_nIdx, 1]
-                loc_cCampo   = THIS.laControles[loc_nIdx, 3]
-
-                SELECT crSigSyCit
-                LOCATE FOR ALLTRIM(Campos) = loc_cCampo
-                IF !EOF("crSigSyCit")
-                    loc_cTipos = ALLTRIM(crSigSyCit.Tipos)
-                ELSE
-                    loc_cTipos = "M"
+                IF !USED("LocalCadRs")
+                    THIS.this_oBusinessObject.ApanhaRespostas()
                 ENDIF
 
-                IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR(loc_cCampo, 10), "LocalCadRs", "CodCampos")
-                    loc_cVal = ALLTRIM(LocalCadRs.Resps)
-                ELSE
-                    loc_cVal = ""
-                ENDIF
-
-                IF TYPE("loc_oCnt.&loc_cObjName.") = "O"
-                    DO CASE
-                        CASE loc_cTipos = "D"
-                            loc_oCnt.&loc_cObjName..Value = IIF(EMPTY(loc_cVal), CTOD(""), CTOD(loc_cVal))
-                        CASE loc_cTipos = "N"
-                            loc_oCnt.&loc_cObjName..Value = VAL(loc_cVal)
-                        OTHERWISE
-                            loc_oCnt.&loc_cObjName..Value = loc_cVal
-                    ENDCASE
-                ENDIF
-            ENDFOR
+                FOR loc_nIdx = 1 TO THIS.this_nNroControles
+                    loc_cObjName = THIS.laControles[loc_nIdx, 1]
+                    loc_cCampo   = THIS.laControles[loc_nIdx, 3]
+    
+                    SELECT crSigSyCit
+                    LOCATE FOR ALLTRIM(Campos) = loc_cCampo
+                    IF !EOF("crSigSyCit")
+                        loc_cTipos = ALLTRIM(crSigSyCit.Tipos)
+                    ELSE
+                        loc_cTipos = "M"
+                    ENDIF
+    
+                    IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR(loc_cCampo, 10), "LocalCadRs", "CodCampos")
+                        loc_cVal = ALLTRIM(LocalCadRs.Resps)
+                    ELSE
+                        loc_cVal = ""
+                    ENDIF
+    
+                    IF TYPE("loc_oCnt.&loc_cObjName.") = "O"
+                        DO CASE
+                            CASE loc_cTipos = "D"
+                                loc_oCnt.&loc_cObjName..Value = IIF(EMPTY(loc_cVal), CTOD(""), CTOD(loc_cVal))
+                            CASE loc_cTipos = "N"
+                                loc_oCnt.&loc_cObjName..Value = VAL(loc_cVal)
+                            OTHERWISE
+                                loc_oCnt.&loc_cObjName..Value = loc_cVal
+                        ENDCASE
+                    ENDIF
+                ENDFOR
 
             *-- Campos fixos
-            IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR("Emps", 10), "LocalCadRs", "CodCampos")
-                IF TYPE("loc_oCnt.txt_4c_FEmps") = "O"
-                    loc_oCnt.txt_4c_FEmps.Value = ALLTRIM(LocalCadRs.Resps)
+                IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR("Emps", 10), "LocalCadRs", "CodCampos")
+                    IF TYPE("loc_oCnt.txt_4c_FEmps") = "O"
+                        loc_oCnt.txt_4c_FEmps.Value = ALLTRIM(LocalCadRs.Resps)
+                    ENDIF
                 ENDIF
-            ENDIF
-            IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR("Dopes", 10), "LocalCadRs", "CodCampos")
-                IF TYPE("loc_oCnt.txt_4c_FDopes") = "O"
-                    loc_oCnt.txt_4c_FDopes.Value = ALLTRIM(LocalCadRs.Resps)
+                IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR("Dopes", 10), "LocalCadRs", "CodCampos")
+                    IF TYPE("loc_oCnt.txt_4c_FDopes") = "O"
+                        loc_oCnt.txt_4c_FDopes.Value = ALLTRIM(LocalCadRs.Resps)
+                    ENDIF
                 ENDIF
-            ENDIF
-            IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR("Numes", 10), "LocalCadRs", "CodCampos")
-                IF TYPE("loc_oCnt.txt_4c_FNumes") = "O"
-                    loc_oCnt.txt_4c_FNumes.Value = ALLTRIM(LocalCadRs.Resps)
+                IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR("Numes", 10), "LocalCadRs", "CodCampos")
+                    IF TYPE("loc_oCnt.txt_4c_FNumes") = "O"
+                        loc_oCnt.txt_4c_FNumes.Value = ALLTRIM(LocalCadRs.Resps)
+                    ENDIF
                 ENDIF
-            ENDIF
-            IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR("Aprova", 10), "LocalCadRs", "CodCampos")
-                IF TYPE("loc_oCnt.txt_4c_FAprova") = "O"
-                    loc_oCnt.txt_4c_FAprova.Value = ALLTRIM(LocalCadRs.Resps)
+                IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR("Aprova", 10), "LocalCadRs", "CodCampos")
+                    IF TYPE("loc_oCnt.txt_4c_FAprova") = "O"
+                        loc_oCnt.txt_4c_FAprova.Value = ALLTRIM(LocalCadRs.Resps)
+                    ENDIF
                 ENDIF
-            ENDIF
-            IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR("Datas", 10), "LocalCadRs", "CodCampos")
-                IF TYPE("loc_oCnt.txt_4c_FDatas") = "O"
-                    loc_oCnt.txt_4c_FDatas.Value = ALLTRIM(LocalCadRs.Resps)
+                IF SEEK(STR(THIS.this_nCodAtual, 6) + PADR("Datas", 10), "LocalCadRs", "CodCampos")
+                    IF TYPE("loc_oCnt.txt_4c_FDatas") = "O"
+                        loc_oCnt.txt_4c_FDatas.Value = ALLTRIM(LocalCadRs.Resps)
+                    ENDIF
                 ENDIF
-            ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
                 "FormDrs.CarregarDados")
@@ -1377,28 +1380,33 @@ DEFINE CLASS FormDrs AS FormBase
     * BtnAlterarClick - Edita registro selecionado no grid
     *===========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_nCods
+        LOCAL loc_nCods, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crSigSyCrs") OR EOF("crSigSyCrs")
                 MsgAviso("Nenhum registro selecionado.", "Fichas T" + CHR(233) + "cnicas")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF crSigSyCrs.ChkApro OR crSigSyCrs.ChkSubn
-                MsgAviso("Registro aprovado ou baixado n" + CHR(227) + ;
-                    "o pode ser alterado.", "Fichas T" + CHR(233) + "cnicas")
-                RETURN
+            IF loc_lProsseguir
+                IF crSigSyCrs.ChkApro OR crSigSyCrs.ChkSubn
+                    MsgAviso("Registro aprovado ou baixado n" + CHR(227) + ;
+                        "o pode ser alterado.", "Fichas T" + CHR(233) + "cnicas")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_nCods = crSigSyCrs.Cods
-            THIS.this_nCodAtual = loc_nCods
-            THIS.this_oBusinessObject.CarregarPorCodigo(loc_nCods)
-            THIS.this_oBusinessObject.this_lNovoRegistro = .F.
-            THIS.this_oBusinessObject.this_lEmEdicao     = .T.
-            THIS.this_oBusinessObject.InicializarCursores()
-            THIS.MontarObjetos("ALTERAR")
-            THIS.CarregarDados()
-            THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.Value = loc_nCods
-            THIS.pgf_4c_Paginas.ActivePage = 2
+            IF loc_lProsseguir
+                loc_nCods = crSigSyCrs.Cods
+                THIS.this_nCodAtual = loc_nCods
+                THIS.this_oBusinessObject.CarregarPorCodigo(loc_nCods)
+                THIS.this_oBusinessObject.this_lNovoRegistro = .F.
+                THIS.this_oBusinessObject.this_lEmEdicao     = .T.
+                THIS.this_oBusinessObject.InicializarCursores()
+                THIS.MontarObjetos("ALTERAR")
+                THIS.CarregarDados()
+                THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.Value = loc_nCods
+                THIS.pgf_4c_Paginas.ActivePage = 2
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormDrs.BtnAlterarClick")
         ENDTRY
@@ -1408,27 +1416,32 @@ DEFINE CLASS FormDrs AS FormBase
     * BtnExcluirClick - Exclui registro selecionado apos confirmacao
     *===========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_nCods, loc_lConfirma
+        LOCAL loc_nCods, loc_lConfirma, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crSigSyCrs") OR EOF("crSigSyCrs")
                 MsgAviso("Nenhum registro selecionado.", "Fichas T" + CHR(233) + "cnicas")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF crSigSyCrs.ChkApro OR crSigSyCrs.ChkSubn
-                MsgAviso("Registro aprovado ou baixado n" + CHR(227) + "o pode ser exclu" + ;
-                    CHR(237) + "do.", "Fichas T" + CHR(233) + "cnicas")
-                RETURN
+            IF loc_lProsseguir
+                IF crSigSyCrs.ChkApro OR crSigSyCrs.ChkSubn
+                    MsgAviso("Registro aprovado ou baixado n" + CHR(227) + "o pode ser exclu" + ;
+                        CHR(237) + "do.", "Fichas T" + CHR(233) + "cnicas")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_lConfirma = MsgConfirma("Confirma a exclus" + CHR(227) + "o do registro " + ;
-                ALLTRIM(STR(crSigSyCrs.Cods)) + "?", "Excluir Ficha")
-            IF loc_lConfirma
-                loc_nCods = crSigSyCrs.Cods
-                THIS.this_oBusinessObject.this_nCods = loc_nCods
-                THIS.this_oBusinessObject.this_cTits = THIS.this_cTits
-                IF THIS.this_oBusinessObject.Excluir()
-                    THIS.this_oBusinessObject.ApanhaRespostas()
-                    THIS.CarregarLista()
+            IF loc_lProsseguir
+                loc_lConfirma = MsgConfirma("Confirma a exclus" + CHR(227) + "o do registro " + ;
+                    ALLTRIM(STR(crSigSyCrs.Cods)) + "?", "Excluir Ficha")
+                IF loc_lConfirma
+                    loc_nCods = crSigSyCrs.Cods
+                    THIS.this_oBusinessObject.this_nCods = loc_nCods
+                    THIS.this_oBusinessObject.this_cTits = THIS.this_cTits
+                    IF THIS.this_oBusinessObject.Excluir()
+                        THIS.this_oBusinessObject.ApanhaRespostas()
+                        THIS.CarregarLista()
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -1440,21 +1453,24 @@ DEFINE CLASS FormDrs AS FormBase
     * BtnBuscarClick - Exibe registro selecionado em modo leitura (CONSULTAR)
     *===========================================================================
     PROCEDURE BtnBuscarClick()
-        LOCAL loc_nCods
+        LOCAL loc_nCods, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crSigSyCrs") OR EOF("crSigSyCrs")
                 MsgAviso("Nenhum registro selecionado.", "Fichas T" + CHR(233) + "cnicas")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_nCods = crSigSyCrs.Cods
-            THIS.this_nCodAtual = loc_nCods
-            THIS.this_oBusinessObject.CarregarPorCodigo(loc_nCods)
-            THIS.this_oBusinessObject.this_lNovoRegistro = .F.
-            THIS.MontarObjetos("CONSULTAR")
-            THIS.CarregarDados()
-            THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.Value = loc_nCods
-            THIS.pgf_4c_Paginas.ActivePage = 2
+            IF loc_lProsseguir
+                loc_nCods = crSigSyCrs.Cods
+                THIS.this_nCodAtual = loc_nCods
+                THIS.this_oBusinessObject.CarregarPorCodigo(loc_nCods)
+                THIS.this_oBusinessObject.this_lNovoRegistro = .F.
+                THIS.MontarObjetos("CONSULTAR")
+                THIS.CarregarDados()
+                THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.Value = loc_nCods
+                THIS.pgf_4c_Paginas.ActivePage = 2
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormDrs.BtnBuscarClick")
         ENDTRY
@@ -1464,108 +1480,123 @@ DEFINE CLASS FormDrs AS FormBase
     * BtnSalvarClick - Valida, grava em crGrvCadRs e persiste via BO
     *===========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_nIdx, loc_cObjName, loc_oCnt, loc_lValido
+        LOCAL loc_nIdx, loc_cObjName, loc_oCnt, loc_lValido, loc_lProsseguir
         LOCAL loc_cEmps, loc_cDopes, loc_cNumes, loc_lSoDigitos, loc_nChr
         LOCAL loc_cEDN, loc_nResult
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INSERIR", "ALTERAR")
                 THIS.BtnCancelarClick()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oCnt    = THIS.pgf_4c_Paginas.Page2.cnt_4c_Campos
-            loc_lValido = .T.
+            IF loc_lProsseguir
+                loc_oCnt    = THIS.pgf_4c_Paginas.Page2.cnt_4c_Campos
+                loc_lValido = .T.
 
             *-- Validar campos obrigatorios
-            FOR loc_nIdx = 1 TO THIS.this_nNroControles
-                IF THIS.laControles[loc_nIdx, 2] = 1
-                    loc_cObjName = THIS.laControles[loc_nIdx, 1]
-                    IF TYPE("loc_oCnt.&loc_cObjName.") = "O"
-                        IF EMPTY(loc_oCnt.&loc_cObjName..Value)
-                            MsgAviso("Campo de preenchimento obrigat" + CHR(243) + "rio n" + ;
-                                CHR(227) + "o preenchido.", "Fichas T" + CHR(233) + "cnicas")
-                            loc_oCnt.&loc_cObjName..SetFocus()
-                            loc_lValido = .F.
-                            EXIT
+                FOR loc_nIdx = 1 TO THIS.this_nNroControles
+                    IF THIS.laControles[loc_nIdx, 2] = 1
+                        loc_cObjName = THIS.laControles[loc_nIdx, 1]
+                        IF TYPE("loc_oCnt.&loc_cObjName.") = "O"
+                            IF EMPTY(loc_oCnt.&loc_cObjName..Value)
+                                MsgAviso("Campo de preenchimento obrigat" + CHR(243) + "rio n" + ;
+                                    CHR(227) + "o preenchido.", "Fichas T" + CHR(233) + "cnicas")
+                                loc_oCnt.&loc_cObjName..SetFocus()
+                                loc_lValido = .F.
+                                EXIT
+                            ENDIF
                         ENDIF
                     ENDIF
-                ENDIF
-            ENDFOR
+                ENDFOR
 
-            IF !loc_lValido
-                RETURN
+                IF !loc_lValido
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Validar Numes (somente digitos, se preenchido)
-            loc_cNumes = IIF(TYPE("loc_oCnt.txt_4c_FNumes") = "O", ALLTRIM(loc_oCnt.txt_4c_FNumes.Value), "")
-            IF !EMPTY(loc_cNumes)
-                loc_lSoDigitos = .T.
-                FOR loc_nChr = 1 TO LEN(loc_cNumes)
-                    IF !ISDIGIT(SUBSTR(loc_cNumes, loc_nChr, 1))
-                        loc_lSoDigitos = .F.
-                        EXIT
+            IF loc_lProsseguir
+                loc_cNumes = IIF(TYPE("loc_oCnt.txt_4c_FNumes") = "O", ALLTRIM(loc_oCnt.txt_4c_FNumes.Value), "")
+                IF !EMPTY(loc_cNumes)
+                    loc_lSoDigitos = .T.
+                    FOR loc_nChr = 1 TO LEN(loc_cNumes)
+                        IF !ISDIGIT(SUBSTR(loc_cNumes, loc_nChr, 1))
+                            loc_lSoDigitos = .F.
+                            EXIT
+                        ENDIF
+                    ENDFOR
+                    IF !loc_lSoDigitos
+                        MsgAviso("O N" + CHR(250) + "mero da Opera" + CHR(231) + CHR(227) + ;
+                            "o digitado n" + CHR(227) + "o " + CHR(233) + " v" + CHR(225) + "lido.", ;
+                            "Fichas T" + CHR(233) + "cnicas")
+                        loc_lProsseguir = .F.
                     ENDIF
-                ENDFOR
-                IF !loc_lSoDigitos
-                    MsgAviso("O N" + CHR(250) + "mero da Opera" + CHR(231) + CHR(227) + ;
-                        "o digitado n" + CHR(227) + "o " + CHR(233) + " v" + CHR(225) + "lido.", ;
-                        "Fichas T" + CHR(233) + "cnicas")
-                    RETURN
                 ENDIF
             ENDIF
 
             *-- Obter valores dos campos header
-            loc_cEmps  = IIF(TYPE("loc_oCnt.txt_4c_FEmps")  = "O", ALLTRIM(loc_oCnt.txt_4c_FEmps.Value),  "")
-            loc_cDopes = IIF(TYPE("loc_oCnt.txt_4c_FDopes") = "O", ALLTRIM(loc_oCnt.txt_4c_FDopes.Value), "")
-            loc_cNumes = IIF(TYPE("loc_oCnt.txt_4c_FNumes") = "O", ALLTRIM(loc_oCnt.txt_4c_FNumes.Value), "")
+            IF loc_lProsseguir
+                loc_cEmps  = IIF(TYPE("loc_oCnt.txt_4c_FEmps")  = "O", ALLTRIM(loc_oCnt.txt_4c_FEmps.Value),  "")
+                loc_cDopes = IIF(TYPE("loc_oCnt.txt_4c_FDopes") = "O", ALLTRIM(loc_oCnt.txt_4c_FDopes.Value), "")
+                loc_cNumes = IIF(TYPE("loc_oCnt.txt_4c_FNumes") = "O", ALLTRIM(loc_oCnt.txt_4c_FNumes.Value), "")
 
             *-- Empresa obrigatoria quando Dopes e Numes informados
-            IF EMPTY(loc_cEmps) AND !EMPTY(loc_cDopes) AND !EMPTY(loc_cNumes)
-                MsgAviso(CHR(201) + " necess" + CHR(225) + "rio preencher a Empresa ao informar" + ;
-                    " a Opera" + CHR(231) + CHR(227) + "o e o N" + CHR(250) + "mero.", ;
-                    "Fichas T" + CHR(233) + "cnicas")
-                RETURN
+                IF EMPTY(loc_cEmps) AND !EMPTY(loc_cDopes) AND !EMPTY(loc_cNumes)
+                    MsgAviso(CHR(201) + " necess" + CHR(225) + "rio preencher a Empresa ao informar" + ;
+                        " a Opera" + CHR(231) + CHR(227) + "o e o N" + CHR(250) + "mero.", ;
+                        "Fichas T" + CHR(233) + "cnicas")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Se Emps+Dopes+Numes preenchidos: deve estar aprovado + validar SigMvCab
-            IF !EMPTY(loc_cEmps) AND !EMPTY(loc_cDopes) AND !EMPTY(loc_cNumes)
-                IF !THIS.this_oBusinessObject.this_lChkApro
-                    MsgAviso("Baixa n" + CHR(227) + "o Aprovada!", "Fichas T" + CHR(233) + "cnicas")
-                    RETURN
-                ENDIF
-                loc_cEDN    = PADR(loc_cEmps, 3) + PADR(loc_cDopes, 20) + PADL(loc_cNumes, 6)
-                loc_nResult = SQLEXEC(gnConnHandle, ;
-                    "SELECT TOP 1 EmpDopNums FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(loc_cEDN), ;
-                    "cursor_4c_ValidaEDN")
-                IF loc_nResult > 0
-                    IF EOF("cursor_4c_ValidaEDN")
-                        MsgAviso("A Opera" + CHR(231) + CHR(227) + "o com o N" + CHR(250) + ;
-                            "mero digitado n" + CHR(227) + "o foi encontrada na Empresa.", ;
-                            "Fichas T" + CHR(233) + "cnicas")
-                        USE IN cursor_4c_ValidaEDN
-                        RETURN
+            IF loc_lProsseguir
+                IF !EMPTY(loc_cEmps) AND !EMPTY(loc_cDopes) AND !EMPTY(loc_cNumes)
+                    IF !THIS.this_oBusinessObject.this_lChkApro
+                        MsgAviso("Baixa n" + CHR(227) + "o Aprovada!", "Fichas T" + CHR(233) + "cnicas")
+                        loc_lProsseguir = .F.
                     ENDIF
-                    USE IN cursor_4c_ValidaEDN
-                ELSE
-                    MsgErro("Erro ao validar SigMvCab:" + CHR(13) + CapturarErroSQL(), ;
-                        "FormDrs.BtnSalvarClick")
-                    RETURN
+                    IF loc_lProsseguir
+                        loc_cEDN    = PADR(loc_cEmps, 3) + PADR(loc_cDopes, 20) + PADL(loc_cNumes, 6)
+                        loc_nResult = SQLEXEC(gnConnHandle, ;
+                            "SELECT TOP 1 EmpDopNums FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(loc_cEDN), ;
+                            "cursor_4c_ValidaEDN")
+                        IF loc_nResult > 0
+                            IF EOF("cursor_4c_ValidaEDN")
+                                MsgAviso("A Opera" + CHR(231) + CHR(227) + "o com o N" + CHR(250) + ;
+                                    "mero digitado n" + CHR(227) + "o foi encontrada na Empresa.", ;
+                                    "Fichas T" + CHR(233) + "cnicas")
+                                USE IN cursor_4c_ValidaEDN
+                                loc_lProsseguir = .F.
+                            ENDIF
+                            IF loc_lProsseguir
+                                USE IN cursor_4c_ValidaEDN
+                            ENDIF
+                        ELSE
+                            MsgErro("Erro ao validar SigMvCab:" + CHR(13) + CapturarErroSQL(), ;
+                                "FormDrs.BtnSalvarClick")
+                            loc_lProsseguir = .F.
+                        ENDIF
+                    ENDIF
                 ENDIF
             ENDIF
 
             *-- Gravar controles em crGrvCadRs e persistir via BO
-            IF THIS.GravarDados()
-                THIS.this_oBusinessObject.this_nCods = THIS.this_nCodAtual
-                THIS.this_oBusinessObject.this_cTits = THIS.this_cTits
-                IF THIS.this_oBusinessObject.Salvar()
-                    THIS.this_oBusinessObject.ApanhaRespostas()
-                    THIS.DesmontarObjetos()
-                    THIS.pgf_4c_Paginas.ActivePage = 1
-                    THIS.this_cModoAtual = "LISTA"
-                    THIS.CarregarLista()
+            IF loc_lProsseguir
+                IF THIS.GravarDados()
+                    THIS.this_oBusinessObject.this_nCods = THIS.this_nCodAtual
+                    THIS.this_oBusinessObject.this_cTits = THIS.this_cTits
+                    IF THIS.this_oBusinessObject.Salvar()
+                        THIS.this_oBusinessObject.ApanhaRespostas()
+                        THIS.DesmontarObjetos()
+                        THIS.pgf_4c_Paginas.ActivePage = 1
+                        THIS.this_cModoAtual = "LISTA"
+                        THIS.CarregarLista()
+                    ENDIF
                 ENDIF
-            ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
                 "FormDrs.BtnSalvarClick")
@@ -1589,39 +1620,42 @@ DEFINE CLASS FormDrs AS FormBase
     * BtnAprovarClick - Aprova ou Desaprova o registro selecionado
     *===========================================================================
     PROCEDURE BtnAprovarClick()
-        LOCAL loc_oAprovar, loc_lConfirma
+        LOCAL loc_oAprovar, loc_lConfirma, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crSigSyCrs") OR EOF("crSigSyCrs")
                 MsgAviso("Nenhum registro selecionado.", "Fichas T" + CHR(233) + "cnicas")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oAprovar = THIS.pgf_4c_Paginas.Page1.cnt_4c_Workflow.cmd_4c_Aprovar
+            IF loc_lProsseguir
+                loc_oAprovar = THIS.pgf_4c_Paginas.Page1.cnt_4c_Workflow.cmd_4c_Aprovar
 
-            IF !crSigSyCrs.ChkApro
-                loc_lConfirma = MsgConfirma("Confirma Aprova" + CHR(231) + CHR(227) + "o?", ;
-                    "Fichas T" + CHR(233) + "cnicas")
-                IF loc_lConfirma
-                    THIS.this_oBusinessObject.this_nCods = crSigSyCrs.Cods
-                    IF THIS.this_oBusinessObject.Aprovar(ALLTRIM(gc_4c_UsuarioLogado))
-                        SELECT crSigSyCrs
-                        REPLACE crSigSyCrs.ChkApro WITH .T.
-                        loc_oAprovar.Caption = "Desaprovar"
-                        THIS.AtualizarBotoesWorkflow()
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+                IF !crSigSyCrs.ChkApro
+                    loc_lConfirma = MsgConfirma("Confirma Aprova" + CHR(231) + CHR(227) + "o?", ;
+                        "Fichas T" + CHR(233) + "cnicas")
+                    IF loc_lConfirma
+                        THIS.this_oBusinessObject.this_nCods = crSigSyCrs.Cods
+                        IF THIS.this_oBusinessObject.Aprovar(ALLTRIM(gc_4c_UsuarioLogado))
+                            SELECT crSigSyCrs
+                            REPLACE crSigSyCrs.ChkApro WITH .T.
+                            loc_oAprovar.Caption = "Desaprovar"
+                            THIS.AtualizarBotoesWorkflow()
+                            THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+                        ENDIF
                     ENDIF
-                ENDIF
-            ELSE
-                loc_lConfirma = MsgConfirma("Confirma Desaprova" + CHR(231) + CHR(227) + "o?", ;
-                    "Fichas T" + CHR(233) + "cnicas")
-                IF loc_lConfirma
-                    THIS.this_oBusinessObject.this_nCods = crSigSyCrs.Cods
-                    IF THIS.this_oBusinessObject.Desaprovar()
-                        SELECT crSigSyCrs
-                        REPLACE crSigSyCrs.ChkApro WITH .F.
-                        loc_oAprovar.Caption = "Aprovar"
-                        THIS.AtualizarBotoesWorkflow()
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+                ELSE
+                    loc_lConfirma = MsgConfirma("Confirma Desaprova" + CHR(231) + CHR(227) + "o?", ;
+                        "Fichas T" + CHR(233) + "cnicas")
+                    IF loc_lConfirma
+                        THIS.this_oBusinessObject.this_nCods = crSigSyCrs.Cods
+                        IF THIS.this_oBusinessObject.Desaprovar()
+                            SELECT crSigSyCrs
+                            REPLACE crSigSyCrs.ChkApro WITH .F.
+                            loc_oAprovar.Caption = "Aprovar"
+                            THIS.AtualizarBotoesWorkflow()
+                            THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF
@@ -1634,44 +1668,49 @@ DEFINE CLASS FormDrs AS FormBase
     * BtnBaixarClick - Baixa (abre Page2 em ALTERAR) ou Cancela Baixa
     *===========================================================================
     PROCEDURE BtnBaixarClick()
-        LOCAL loc_oBaixar, loc_lConfirma, loc_nCods
+        LOCAL loc_oBaixar, loc_lConfirma, loc_nCods, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crSigSyCrs") OR EOF("crSigSyCrs")
                 MsgAviso("Nenhum registro selecionado.", "Fichas T" + CHR(233) + "cnicas")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_oBaixar = THIS.pgf_4c_Paginas.Page1.cnt_4c_Workflow.cmd_4c_Baixar
+            IF loc_lProsseguir
+                loc_oBaixar = THIS.pgf_4c_Paginas.Page1.cnt_4c_Workflow.cmd_4c_Baixar
 
-            IF !crSigSyCrs.ChkSubn
-                *-- Baixar: exige aprovacao previa
-                IF !crSigSyCrs.ChkApro
-                    MsgAviso("Baixa n" + CHR(227) + "o Aprovada!", "Fichas T" + CHR(233) + "cnicas")
-                    RETURN
-                ENDIF
-                *-- Abre Page2 em modo ALTERAR para preencher Emps/Dopes/Numes
-                loc_nCods = crSigSyCrs.Cods
-                THIS.this_nCodAtual = loc_nCods
-                THIS.this_oBusinessObject.CarregarPorCodigo(loc_nCods)
-                THIS.this_oBusinessObject.this_lNovoRegistro = .F.
-                THIS.this_oBusinessObject.this_lEmEdicao     = .T.
-                THIS.this_oBusinessObject.InicializarCursores()
-                THIS.MontarObjetos("ALTERAR")
-                THIS.CarregarDados()
-                THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.Value = loc_nCods
-                THIS.pgf_4c_Paginas.ActivePage = 2
-                THIS.this_cModoAtual = "ALTERAR"
-            ELSE
-                *-- Cancelar Baixa
-                loc_lConfirma = MsgConfirma("Confirma Cancelamento da Baixa?", ;
-                    "Fichas T" + CHR(233) + "cnicas")
-                IF loc_lConfirma
-                    IF THIS.this_oBusinessObject.CancelarBaixa(crSigSyCrs.Cods)
-                        SELECT crSigSyCrs
-                        REPLACE crSigSyCrs.ChkSubn WITH .F.
-                        loc_oBaixar.Caption = "Baixar"
-                        THIS.AtualizarBotoesWorkflow()
-                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+                IF !crSigSyCrs.ChkSubn
+                    *-- Baixar: exige aprovacao previa
+                    IF !crSigSyCrs.ChkApro
+                        MsgAviso("Baixa n" + CHR(227) + "o Aprovada!", "Fichas T" + CHR(233) + "cnicas")
+                        loc_lProsseguir = .F.
+                    ENDIF
+                    *-- Abre Page2 em modo ALTERAR para preencher Emps/Dopes/Numes
+                    IF loc_lProsseguir
+                        loc_nCods = crSigSyCrs.Cods
+                        THIS.this_nCodAtual = loc_nCods
+                        THIS.this_oBusinessObject.CarregarPorCodigo(loc_nCods)
+                        THIS.this_oBusinessObject.this_lNovoRegistro = .F.
+                        THIS.this_oBusinessObject.this_lEmEdicao     = .T.
+                        THIS.this_oBusinessObject.InicializarCursores()
+                        THIS.MontarObjetos("ALTERAR")
+                        THIS.CarregarDados()
+                        THIS.pgf_4c_Paginas.Page2.txt_4c_Cods.Value = loc_nCods
+                        THIS.pgf_4c_Paginas.ActivePage = 2
+                        THIS.this_cModoAtual = "ALTERAR"
+                    ENDIF
+                ELSE
+                    *-- Cancelar Baixa
+                    loc_lConfirma = MsgConfirma("Confirma Cancelamento da Baixa?", ;
+                        "Fichas T" + CHR(233) + "cnicas")
+                    IF loc_lConfirma
+                        IF THIS.this_oBusinessObject.CancelarBaixa(crSigSyCrs.Cods)
+                            SELECT crSigSyCrs
+                            REPLACE crSigSyCrs.ChkSubn WITH .F.
+                            loc_oBaixar.Caption = "Baixar"
+                            THIS.AtualizarBotoesWorkflow()
+                            THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF

@@ -11200,3 +11200,82 @@ Get-Content <arquivo.prg> | ForEach-Object -Begin {$n=0} -Process {
   o CATCH/FINALLY, e virou **WARNING** (`WARN-001-RETURN-NO-TRY`). Deixou de auto-corrigir
   de proposito: a reestruturacao exige entender o escopo do bloco e nao se faz por regex.
 - Origem: Erro159 (2026-09-16, `FormCEP.ValidarEstadosLista` ao filtrar pela UF).
+
+### Sweep de 2026-09-16 — os 763 sites foram eliminados
+
+O projeto ficou com **zero** `RETURN` dentro de TRY/CATCH/FINALLY (763 sites, 110 arquivos,
+110/110 compilando limpo no VFP9). O que o sweep ensinou, para quem repetir a operacao:
+
+**A transformacao PLANA.** Com varios guards no mesmo TRY, aninhar um envelope dentro do
+outro produz N niveis de indentacao. Fechar o envelope a cada guard e reabrir no trecho
+seguinte mantem **no maximo um nivel extra**, com qualquer numero de guards:
+
+```foxpro
+IF guard1                   && 1o guard nao precisa de envelope
+    loc_lProsseguir = .F.
+ENDIF
+IF loc_lProsseguir          && envelope 1
+    <trecho A>
+    IF guard2
+        loc_lProsseguir = .F.
+    ENDIF
+ENDIF
+IF loc_lProsseguir          && envelope 2
+    <trecho B>
+ENDIF
+```
+
+**O envelope tem de passar do ENDTRY.** O `RETURN` abortava o METODO, nao so o TRY. Em 43
+dos 763 casos havia codigo com efeito depois do `ENDTRY` — no `FormCtg.BtnSalvarClick` era
+`THIS.FormParaBO()` seguido do `Salvar()`. Envelope parando no `ENDTRY` faz o guard deixar
+de impedir exatamente o que existia para impedir: o form volta a gravar. Quando o trecho
+pos-`ENDTRY` e grande, o equivalente mais limpo e devolver o RETURN logo depois do `ENDTRY`,
+onde ele e legal:
+
+```foxpro
+CATCH TO loc_oErro
+    MsgErro(...)
+    loc_lProsseguir = .F.
+ENDTRY
+
+*-- RETURN aqui e legal: esta FORA do TRY
+IF !loc_lProsseguir
+    RETURN
+ENDIF
+```
+
+**Quando o metodo e grande demais, extrair vence reestruturar.** No
+`Formsigopind.BtnConsultarSaldoClick` (300 linhas, 8 RETURNs, 3 dentro de `SCAN` aninhado),
+a mudanca minima e mover o corpo do TRY para um metodo proprio: os RETURN voltam a ficar
+fora de qualquer TRY e **nenhuma linha de logica muda**.
+
+```foxpro
+PROCEDURE BtnConsultarSaldoClick()
+    LOCAL loc_oErro
+    TRY
+        THIS.ExecutarConsultaSaldo()     && os RETURN vivem aqui dentro, e sao legais
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "Erro em BtnConsultarSaldoClick")
+    ENDTRY
+ENDPROC
+```
+
+**Cuidados que custaram retrabalho** (todos pegos por verificacao, nenhum foi para o commit):
+
+| Armadilha | Sintoma |
+|---|---|
+| ler com `Get-Content` e gravar com `WriteAllText` | **corrompe os acentos**: `Ã³` vira `ÃƒÂ³`. Ler/gravar BYTES com cp1252 |
+| `awk`/`sed` do Git Bash reescrevendo o arquivo | converte **CRLF -> LF** no arquivo inteiro |
+| `loc_lProsseguir` **ja existir** no arquivo | `FormEmn` tinha 32 usos proprios: detectar colisao e usar `loc_lProsseguir4c` |
+| `LOCAL` novo inserido antes do `LPARAMETERS` | `LPARAMETERS` tem de ser a 1a linha executavel |
+| `DO FORM (...) ;` + `WITH a, b` na linha seguinte | o parser le o `WITH` como abertura de bloco e **desbalanceia o arquivo** — pular linhas de continuacao (a anterior termina em `;`) |
+| envelope comecando logo apos o `ENDTRY` | se o TRY estava dentro de um `IF`, engole o `ENDIF` dele: so comecar depois que os blocos externos fecharem |
+
+**Verificacao que vale mais que a compilacao.** Compilar prova sintaxe, nao semantica. O
+gate que realmente protegeu foi comparar o **esqueleto**: removidos os andaimes (a flag, os
+`IF <flag>`/`ENDIF` pareados, os `RETURN` de guarda), a sequencia de linhas de codigo tem de
+ser **identica** a do original, na mesma ordem. Esse teste reprovou 24 arquivos na primeira
+passada — cada um deles um bug real do transformador — e todos foram revertidos
+automaticamente em vez de irem para o commit.
+
+- Origem: Erro159 (2026-09-16).

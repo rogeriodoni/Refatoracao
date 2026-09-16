@@ -974,10 +974,11 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
     * Consulta SigOpEtq + SigEtPos e lookup em SigCdPro, SigCdOpe, SigOpPic
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE PrepararDbImpressaoOP(par_cChaveNs)
-        LOCAL loc_cSQL, loc_nRet
+        LOCAL loc_cSQL, loc_nRet, loc_lProsseguir
         LOCAL loc_cCPros, loc_cDopeOs, loc_cDPros, loc_cCGrus, loc_cSGrus
         LOCAL loc_lColecoes, loc_cClassis, loc_cAro, loc_nNops, loc_cAbrevs
 
+        loc_lProsseguir = .T.
         TRY
             IF USED("cursor_4c_LocalEti")
                 TABLEREVERT(.T., "cursor_4c_LocalEti")
@@ -995,103 +996,105 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
             loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEti")
 
             IF loc_nRet <= 0
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_LocalEti
-            SCAN
-                loc_cCPros  = ALLTRIM(cursor_4c_LocalEti.CPros)
-                loc_cDopeOs = ALLTRIM(cursor_4c_LocalEti.DopeOs)
-                loc_nNops   = cursor_4c_LocalEti.Nops
-
-                IF USED("cursor_4c_LocalPro")
-                    TABLEREVERT(.T., "cursor_4c_LocalPro")
-                    USE IN cursor_4c_LocalPro
-                ENDIF
-                loc_cSQL = "SELECT Cpros,CGrus,SGrus,DPros,Colecoes FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCPros)
-                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro")
-
-                IF USED("cursor_4c_LocalOpe")
-                    TABLEREVERT(.T., "cursor_4c_LocalOpe")
-                    USE IN cursor_4c_LocalOpe
-                ENDIF
-                loc_cSQL = "SELECT Abrevs FROM SigCdOpe WHERE Dopes = " + EscaparSQL(loc_cDopeOs)
-                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpe")
-
-                IF NOT EOF("cursor_4c_LocalPro")
-                    SELECT cursor_4c_LocalPro
-                    loc_cCGrus    = ALLTRIM(NVL(CGrus, ""))
-                    loc_cSGrus    = ALLTRIM(NVL(SGrus, ""))
-                    loc_cDPros    = ALLTRIM(NVL(DPros, ""))
-                    loc_lColecoes = NOT EMPTY(NVL(Colecoes, ""))
-                ELSE
-                    loc_cCGrus    = ""
-                    loc_cSGrus    = ""
-                    loc_cDPros    = ""
-                    loc_lColecoes = .F.
-                ENDIF
-
-                IF USED("cursor_4c_LocalOpi")
-                    TABLEREVERT(.T., "cursor_4c_LocalOpi")
-                    USE IN cursor_4c_LocalOpi
-                ENDIF
-                loc_cSQL = "SELECT Notas,CodTams,CodCors,Numes,dopes FROM SigOpPic WHERE Nops = " + FormatarNumeroSQL(loc_nNops)
-                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpi")
-
-                loc_cAro = ""
-
-                IF NOT EOF("cursor_4c_LocalOpi")
-                    SELECT cursor_4c_LocalOpi
-                    LOCAL loc_lNaoN, loc_nNumeOs, loc_cDopesOi
-                    loc_lNaoN   = NOT EMPTY(NVL(notas, ""))
-                    loc_nNumeOs = NVL(Numes, 0)
-                    loc_cDopesOi = ALLTRIM(NVL(dopes, ""))
-
-                    loc_cClassis = PADC(IIF(loc_lColecoes AND loc_cSGrus <> PADR("N", 6), ;
-                                            "Fundi" + CHR(231) + CHR(227) + "o", ;
-                                            IIF(loc_lNaoN, "Os", "Alian" + CHR(231) + "a")), 10)
-
-                    IF loc_cClassis = PADC("Os", 10)
-                        IF USED("cursor_4c_CsSelecao")
-                            USE IN cursor_4c_CsSelecao
-                        ENDIF
-                        SELECT DISTINCT CodTams FROM cursor_4c_LocalOpi ;
-                            INTO CURSOR cursor_4c_CsSelecao READWRITE ;
-                            ORDER BY CodTams
-                        SELECT cursor_4c_CsSelecao
-                        SCAN
-                            loc_cAro = loc_cAro + ALLTRIM(NVL(CodTams, "")) + "/"
-                        ENDSCAN
-                        IF USED("cursor_4c_CsSelecao")
-                            USE IN cursor_4c_CsSelecao
-                        ENDIF
-                    ENDIF
-
-                    IF NOT EOF("cursor_4c_LocalOpe")
-                        SELECT cursor_4c_LocalOpe
-                        loc_cAbrevs = ALLTRIM(NVL(Abrevs, ""))
-                    ELSE
-                        loc_cAbrevs = ""
-                    ENDIF
-
-                    SELECT cursor_4c_LocalEti
-                    INSERT INTO dbImpressao (CPros, DPros, Qtds, QtdeEtiq, Pedido, Obs, Nops, Notas, Aros, Pesos) ;
-                        VALUES (loc_cCPros, loc_cDPros, 1, ;
-                                NVL(cursor_4c_LocalEti.Qtds, 0), ;
-                                loc_cAbrevs + " : " + ALLTRIM(STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)), ;
-                                ALLTRIM(NVL(cursor_4c_LocalEti.Obs, "")), ;
-                                loc_nNops, ;
-                                PADR(IIF(loc_lNaoN, ALLTRIM(NVL(cursor_4c_LocalOpi.notas, "")), ""), 6), ;
-                                PADR(loc_cAro, 50), ;
-                                NVL(cursor_4c_LocalEti.Pesos, 0))
-
-                    RELEASE loc_lNaoN, loc_nNumeOs, loc_cDopesOi, loc_cClassis
-                ENDIF
-
-                RELEASE loc_cCPros, loc_cDopeOs, loc_cDPros, loc_cCGrus, loc_cSGrus
-                RELEASE loc_lColecoes, loc_cAro, loc_nNops, loc_cAbrevs
+            IF loc_lProsseguir
                 SELECT cursor_4c_LocalEti
-            ENDSCAN
+                SCAN
+                    loc_cCPros  = ALLTRIM(cursor_4c_LocalEti.CPros)
+                    loc_cDopeOs = ALLTRIM(cursor_4c_LocalEti.DopeOs)
+                    loc_nNops   = cursor_4c_LocalEti.Nops
+    
+                    IF USED("cursor_4c_LocalPro")
+                        TABLEREVERT(.T., "cursor_4c_LocalPro")
+                        USE IN cursor_4c_LocalPro
+                    ENDIF
+                    loc_cSQL = "SELECT Cpros,CGrus,SGrus,DPros,Colecoes FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCPros)
+                    SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro")
+    
+                    IF USED("cursor_4c_LocalOpe")
+                        TABLEREVERT(.T., "cursor_4c_LocalOpe")
+                        USE IN cursor_4c_LocalOpe
+                    ENDIF
+                    loc_cSQL = "SELECT Abrevs FROM SigCdOpe WHERE Dopes = " + EscaparSQL(loc_cDopeOs)
+                    SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpe")
+    
+                    IF NOT EOF("cursor_4c_LocalPro")
+                        SELECT cursor_4c_LocalPro
+                        loc_cCGrus    = ALLTRIM(NVL(CGrus, ""))
+                        loc_cSGrus    = ALLTRIM(NVL(SGrus, ""))
+                        loc_cDPros    = ALLTRIM(NVL(DPros, ""))
+                        loc_lColecoes = NOT EMPTY(NVL(Colecoes, ""))
+                    ELSE
+                        loc_cCGrus    = ""
+                        loc_cSGrus    = ""
+                        loc_cDPros    = ""
+                        loc_lColecoes = .F.
+                    ENDIF
+    
+                    IF USED("cursor_4c_LocalOpi")
+                        TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                        USE IN cursor_4c_LocalOpi
+                    ENDIF
+                    loc_cSQL = "SELECT Notas,CodTams,CodCors,Numes,dopes FROM SigOpPic WHERE Nops = " + FormatarNumeroSQL(loc_nNops)
+                    SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpi")
+    
+                    loc_cAro = ""
+    
+                    IF NOT EOF("cursor_4c_LocalOpi")
+                        SELECT cursor_4c_LocalOpi
+                        LOCAL loc_lNaoN, loc_nNumeOs, loc_cDopesOi
+                        loc_lNaoN   = NOT EMPTY(NVL(notas, ""))
+                        loc_nNumeOs = NVL(Numes, 0)
+                        loc_cDopesOi = ALLTRIM(NVL(dopes, ""))
+    
+                        loc_cClassis = PADC(IIF(loc_lColecoes AND loc_cSGrus <> PADR("N", 6), ;
+                                                "Fundi" + CHR(231) + CHR(227) + "o", ;
+                                                IIF(loc_lNaoN, "Os", "Alian" + CHR(231) + "a")), 10)
+    
+                        IF loc_cClassis = PADC("Os", 10)
+                            IF USED("cursor_4c_CsSelecao")
+                                USE IN cursor_4c_CsSelecao
+                            ENDIF
+                            SELECT DISTINCT CodTams FROM cursor_4c_LocalOpi ;
+                                INTO CURSOR cursor_4c_CsSelecao READWRITE ;
+                                ORDER BY CodTams
+                            SELECT cursor_4c_CsSelecao
+                            SCAN
+                                loc_cAro = loc_cAro + ALLTRIM(NVL(CodTams, "")) + "/"
+                            ENDSCAN
+                            IF USED("cursor_4c_CsSelecao")
+                                USE IN cursor_4c_CsSelecao
+                            ENDIF
+                        ENDIF
+    
+                        IF NOT EOF("cursor_4c_LocalOpe")
+                            SELECT cursor_4c_LocalOpe
+                            loc_cAbrevs = ALLTRIM(NVL(Abrevs, ""))
+                        ELSE
+                            loc_cAbrevs = ""
+                        ENDIF
+    
+                        SELECT cursor_4c_LocalEti
+                        INSERT INTO dbImpressao (CPros, DPros, Qtds, QtdeEtiq, Pedido, Obs, Nops, Notas, Aros, Pesos) ;
+                            VALUES (loc_cCPros, loc_cDPros, 1, ;
+                                    NVL(cursor_4c_LocalEti.Qtds, 0), ;
+                                    loc_cAbrevs + " : " + ALLTRIM(STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)), ;
+                                    ALLTRIM(NVL(cursor_4c_LocalEti.Obs, "")), ;
+                                    loc_nNops, ;
+                                    PADR(IIF(loc_lNaoN, ALLTRIM(NVL(cursor_4c_LocalOpi.notas, "")), ""), 6), ;
+                                    PADR(loc_cAro, 50), ;
+                                    NVL(cursor_4c_LocalEti.Pesos, 0))
+    
+                        RELEASE loc_lNaoN, loc_nNumeOs, loc_cDopesOi, loc_cClassis
+                    ENDIF
+    
+                    RELEASE loc_cCPros, loc_cDopeOs, loc_cDPros, loc_cCGrus, loc_cSGrus
+                    RELEASE loc_lColecoes, loc_cAro, loc_nNops, loc_cAbrevs
+                    SELECT cursor_4c_LocalEti
+                ENDSCAN
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -1103,9 +1106,10 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
     * Se ChkUnis=1 e Etiqs=1, inclui etiquetas extras de SigEtPos
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE PrepararDbImpressaoPadrao(par_nTipoEtq, par_cChaveNs)
-        LOCAL loc_cSQL, loc_nRet
+        LOCAL loc_cSQL, loc_nRet, loc_lProsseguir
         LOCAL loc_cCPros, loc_cDPros, loc_nCBars, loc_nNops, loc_cAbrevs
 
+        loc_lProsseguir = .T.
         TRY
             IF USED("cursor_4c_LocalEti")
                 TABLEREVERT(.T., "cursor_4c_LocalEti")
@@ -1118,85 +1122,83 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
             loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEti")
 
             IF loc_nRet <= 0
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_LocalEti
-            SCAN
-                loc_cCPros = ALLTRIM(cursor_4c_LocalEti.CPros)
-                loc_nCBars = cursor_4c_LocalEti.Cbars
-                loc_nNops  = cursor_4c_LocalEti.Nops
-
-                IF USED("cursor_4c_LocalPro")
-                    TABLEREVERT(.T., "cursor_4c_LocalPro")
-                    USE IN cursor_4c_LocalPro
-                ENDIF
-                loc_cSQL = "SELECT CGrus, SGrus, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCPros)
-                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro")
-                IF NOT EOF("cursor_4c_LocalPro")
-                    SELECT cursor_4c_LocalPro
-                    loc_cDPros = ALLTRIM(NVL(DPros, ""))
-                ELSE
-                    loc_cDPros = ""
-                ENDIF
-
-                IF USED("cursor_4c_LocalOpe")
-                    TABLEREVERT(.T., "cursor_4c_LocalOpe")
-                    USE IN cursor_4c_LocalOpe
-                ENDIF
-                loc_cSQL = "SELECT Abrevs, globalizas FROM SigCdOpe WHERE Dopes = " + EscaparSQL(ALLTRIM(cursor_4c_LocalEti.Dopes))
-                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpe")
-
-                IF USED("cursor_4c_LocalOpeO")
-                    TABLEREVERT(.T., "cursor_4c_LocalOpeO")
-                    USE IN cursor_4c_LocalOpeO
-                ENDIF
-                loc_cSQL = "SELECT Abrevs, globalizas FROM SigCdOpe WHERE Dopes = " + EscaparSQL(ALLTRIM(cursor_4c_LocalEti.DopeOs))
-                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpeO")
-
-                IF NOT EOF("cursor_4c_LocalOpe")
-                    SELECT cursor_4c_LocalOpe
-                    loc_cAbrevs = ALLTRIM(NVL(Abrevs, ""))
-                ELSE
-                    loc_cAbrevs = ""
-                ENDIF
-
+            IF loc_lProsseguir
                 SELECT cursor_4c_LocalEti
-                INSERT INTO dbImpressao (CPros, DPros, Qtds, QtdeEtiq, Pedido, Obs) ;
-                    VALUES (STR(loc_nCBars, 14), loc_cDPros, 1, ;
-                            NVL(cursor_4c_LocalEti.Qtds, 0), ;
-                            loc_cAbrevs + " : " + ALLTRIM(STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)), ;
-                            ALLTRIM(NVL(cursor_4c_LocalEti.Obs, "")))
-
-                IF INLIST(par_nTipoEtq, 14, 39, 109, 113)
-                    IF USED("cursor_4c_LocalOpi")
-                        TABLEREVERT(.T., "cursor_4c_LocalOpi")
-                        USE IN cursor_4c_LocalOpi
+                SCAN
+                    loc_cCPros = ALLTRIM(cursor_4c_LocalEti.CPros)
+                    loc_nCBars = cursor_4c_LocalEti.Cbars
+                    loc_nNops  = cursor_4c_LocalEti.Nops
+    
+                    IF USED("cursor_4c_LocalPro")
+                        TABLEREVERT(.T., "cursor_4c_LocalPro")
+                        USE IN cursor_4c_LocalPro
                     ENDIF
-                    loc_cSQL = "SELECT Emps, Dopes, Numes, EmpDs FROM SigOpPic WHERE Nops = " + FormatarNumeroSQL(loc_nNops)
-                    SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpi")
-
-                    IF NOT EOF("cursor_4c_LocalOpi")
-                        SELECT cursor_4c_LocalOpi
-
-                        LOCAL loc_cEdnL
-                        loc_cEdnL = ALLTRIM(cursor_4c_LocalEti.Empos) + ;
-                                    ALLTRIM(cursor_4c_LocalEti.DopeOs) + ;
-                                    STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)
-
-                        IF USED("cursor_4c_LocalEest")
-                            TABLEREVERT(.T., "cursor_4c_LocalEest")
-                            USE IN cursor_4c_LocalEest
+                    loc_cSQL = "SELECT CGrus, SGrus, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCPros)
+                    SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPro")
+                    IF NOT EOF("cursor_4c_LocalPro")
+                        SELECT cursor_4c_LocalPro
+                        loc_cDPros = ALLTRIM(NVL(DPros, ""))
+                    ELSE
+                        loc_cDPros = ""
+                    ENDIF
+    
+                    IF USED("cursor_4c_LocalOpe")
+                        TABLEREVERT(.T., "cursor_4c_LocalOpe")
+                        USE IN cursor_4c_LocalOpe
+                    ENDIF
+                    loc_cSQL = "SELECT Abrevs, globalizas FROM SigCdOpe WHERE Dopes = " + EscaparSQL(ALLTRIM(cursor_4c_LocalEti.Dopes))
+                    SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpe")
+    
+                    IF USED("cursor_4c_LocalOpeO")
+                        TABLEREVERT(.T., "cursor_4c_LocalOpeO")
+                        USE IN cursor_4c_LocalOpeO
+                    ENDIF
+                    loc_cSQL = "SELECT Abrevs, globalizas FROM SigCdOpe WHERE Dopes = " + EscaparSQL(ALLTRIM(cursor_4c_LocalEti.DopeOs))
+                    SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpeO")
+    
+                    IF NOT EOF("cursor_4c_LocalOpe")
+                        SELECT cursor_4c_LocalOpe
+                        loc_cAbrevs = ALLTRIM(NVL(Abrevs, ""))
+                    ELSE
+                        loc_cAbrevs = ""
+                    ENDIF
+    
+                    SELECT cursor_4c_LocalEti
+                    INSERT INTO dbImpressao (CPros, DPros, Qtds, QtdeEtiq, Pedido, Obs) ;
+                        VALUES (STR(loc_nCBars, 14), loc_cDPros, 1, ;
+                                NVL(cursor_4c_LocalEti.Qtds, 0), ;
+                                loc_cAbrevs + " : " + ALLTRIM(STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)), ;
+                                ALLTRIM(NVL(cursor_4c_LocalEti.Obs, "")))
+    
+                    IF INLIST(par_nTipoEtq, 14, 39, 109, 113)
+                        IF USED("cursor_4c_LocalOpi")
+                            TABLEREVERT(.T., "cursor_4c_LocalOpi")
+                            USE IN cursor_4c_LocalOpi
                         ENDIF
-                        loc_cSQL = "SELECT ContaOs, ContaDs FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(loc_cEdnL)
-                        SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEest")
-
-                        LOCAL loc_lGlobaliza, loc_cContaL
-                        IF NOT EOF("cursor_4c_LocalOpeO")
-                            SELECT cursor_4c_LocalOpeO
-                            IF VARTYPE(globalizas) = "L"
-                                loc_lGlobaliza = globalizas
-                            ELSE
+                        loc_cSQL = "SELECT Emps, Dopes, Numes, EmpDs FROM SigOpPic WHERE Nops = " + FormatarNumeroSQL(loc_nNops)
+                        SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalOpi")
+    
+                        IF NOT EOF("cursor_4c_LocalOpi")
+                            SELECT cursor_4c_LocalOpi
+    
+                            LOCAL loc_cEdnL
+                            loc_cEdnL = ALLTRIM(cursor_4c_LocalEti.Empos) + ;
+                                        ALLTRIM(cursor_4c_LocalEti.DopeOs) + ;
+                                        STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)
+    
+                            IF USED("cursor_4c_LocalEest")
+                                TABLEREVERT(.T., "cursor_4c_LocalEest")
+                                USE IN cursor_4c_LocalEest
+                            ENDIF
+                            loc_cSQL = "SELECT ContaOs, ContaDs FROM SigMvCab WHERE EmpDopNums = " + EscaparSQL(loc_cEdnL)
+                            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEest")
+    
+                            LOCAL loc_lGlobaliza, loc_cContaL
+                            IF NOT EOF("cursor_4c_LocalOpeO")
+                                SELECT cursor_4c_LocalOpeO
                                 IF VARTYPE(globalizas) = "L"
                                     loc_lGlobaliza = globalizas
                                 ELSE
@@ -1302,7 +1304,11 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                                                                                                                                                                         IF VARTYPE(globalizas) = "L"
                                                                                                                                                                             loc_lGlobaliza = globalizas
                                                                                                                                                                         ELSE
-                                                                                                                                                                            loc_lGlobaliza = (NVL(globalizas, 0) = 1)
+                                                                                                                                                                            IF VARTYPE(globalizas) = "L"
+                                                                                                                                                                                loc_lGlobaliza = globalizas
+                                                                                                                                                                            ELSE
+                                                                                                                                                                                loc_lGlobaliza = (NVL(globalizas, 0) = 1)
+                                                                                                                                                                            ENDIF
                                                                                                                                                                         ENDIF
                                                                                                                                                                     ENDIF
                                                                                                                                                                 ENDIF
@@ -1338,65 +1344,65 @@ DEFINE CLASS SigPdM10BO AS BusinessBase
                                         ENDIF
                                     ENDIF
                                 ENDIF
+                            ELSE
+                                loc_lGlobaliza = .F.
                             ENDIF
-                        ELSE
-                            loc_lGlobaliza = .F.
-                        ENDIF
-
-                        IF NOT EOF("cursor_4c_LocalEest")
-                            SELECT cursor_4c_LocalEest
-                            loc_cContaL = IIF(loc_lGlobaliza, ;
-                                              ALLTRIM(NVL(ContaOs, "")), ;
-                                              ALLTRIM(NVL(ContaDs, "")))
-                        ELSE
-                            loc_cContaL = ""
-                        ENDIF
-
-                        IF INLIST(par_nTipoEtq, 109, 113)
-                            IF USED("cursor_4c_LocalCli")
-                                TABLEREVERT(.T., "cursor_4c_LocalCli")
-                                USE IN cursor_4c_LocalCli
+    
+                            IF NOT EOF("cursor_4c_LocalEest")
+                                SELECT cursor_4c_LocalEest
+                                loc_cContaL = IIF(loc_lGlobaliza, ;
+                                                  ALLTRIM(NVL(ContaOs, "")), ;
+                                                  ALLTRIM(NVL(ContaDs, "")))
+                            ELSE
+                                loc_cContaL = ""
                             ENDIF
-                            loc_cSQL = "SELECT Rclis FROM SigCdCli WHERE Iclis = " + EscaparSQL(loc_cContaL)
-                            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalCli")
-                            IF NOT EOF("cursor_4c_LocalCli")
-                                SELECT cursor_4c_LocalCli
-                                loc_cContaL = ALLTRIM(NVL(Rclis, ""))
+    
+                            IF INLIST(par_nTipoEtq, 109, 113)
+                                IF USED("cursor_4c_LocalCli")
+                                    TABLEREVERT(.T., "cursor_4c_LocalCli")
+                                    USE IN cursor_4c_LocalCli
+                                ENDIF
+                                loc_cSQL = "SELECT Rclis FROM SigCdCli WHERE Iclis = " + EscaparSQL(loc_cContaL)
+                                SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalCli")
+                                IF NOT EOF("cursor_4c_LocalCli")
+                                    SELECT cursor_4c_LocalCli
+                                    loc_cContaL = ALLTRIM(NVL(Rclis, ""))
+                                ENDIF
                             ENDIF
+    
+                            SELECT cursor_4c_LocalEti
+                            IF par_nTipoEtq <> 14
+                                REPLACE Pedido WITH loc_cContaL + ;
+                                    IIF(INLIST(par_nTipoEtq, 39), "/" + ALLTRIM(STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)), "") ;
+                                    IN dbImpressao
+                            ELSE
+                                REPLACE Contas WITH loc_cContaL IN dbImpressao
+                            ENDIF
+    
+                            RELEASE loc_cEdnL, loc_lGlobaliza, loc_cContaL
                         ENDIF
-
-                        SELECT cursor_4c_LocalEti
-                        IF par_nTipoEtq <> 14
-                            REPLACE Pedido WITH loc_cContaL + ;
-                                IIF(INLIST(par_nTipoEtq, 39), "/" + ALLTRIM(STR(NVL(cursor_4c_LocalEti.NumeOs, 0), 6)), "") ;
-                                IN dbImpressao
-                        ELSE
-                            REPLACE Contas WITH loc_cContaL IN dbImpressao
-                        ENDIF
-
-                        RELEASE loc_cEdnL, loc_lGlobaliza, loc_cContaL
                     ENDIF
-                ENDIF
+    
+                    RELEASE loc_cCPros, loc_cDPros, loc_nCBars, loc_nNops, loc_cAbrevs
+                    SELECT cursor_4c_LocalEti
+                ENDSCAN
 
-                RELEASE loc_cCPros, loc_cDPros, loc_nCBars, loc_nNops, loc_cAbrevs
-                SELECT cursor_4c_LocalEti
-            ENDSCAN
-
-            IF THIS.this_nChkUnis = 1 AND THIS.this_nEtiqs = 1
-                IF USED("cursor_4c_LocalEtiPos")
-                    TABLEREVERT(.T., "cursor_4c_LocalEtiPos")
-                    USE IN cursor_4c_LocalEtiPos
-                ENDIF
-                loc_cSQL = "SELECT Cpros,Cbars,Qtds,ObsEtiqs,Emps,Numes,Dopes FROM SigEtPos" + ;
-                           " WHERE EmpDopNums = " + EscaparSQL(par_cChaveNs)
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEtiPos")
-
-                IF loc_nRet > 0
-                    SELECT cursor_4c_LocalEtiPos
-                    SCAN
-                        INSERT INTO dbImpressao (CPros, Qtds) ;
-                            VALUES (cursor_4c_LocalEtiPos.CPros, cursor_4c_LocalEtiPos.Qtds)
-                    ENDSCAN
+                IF THIS.this_nChkUnis = 1 AND THIS.this_nEtiqs = 1
+                    IF USED("cursor_4c_LocalEtiPos")
+                        TABLEREVERT(.T., "cursor_4c_LocalEtiPos")
+                        USE IN cursor_4c_LocalEtiPos
+                    ENDIF
+                    loc_cSQL = "SELECT Cpros,Cbars,Qtds,ObsEtiqs,Emps,Numes,Dopes FROM SigEtPos" + ;
+                               " WHERE EmpDopNums = " + EscaparSQL(par_cChaveNs)
+                    loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalEtiPos")
+    
+                    IF loc_nRet > 0
+                        SELECT cursor_4c_LocalEtiPos
+                        SCAN
+                            INSERT INTO dbImpressao (CPros, Qtds) ;
+                                VALUES (cursor_4c_LocalEtiPos.CPros, cursor_4c_LocalEtiPos.Qtds)
+                        ENDSCAN
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

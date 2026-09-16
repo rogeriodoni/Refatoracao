@@ -646,31 +646,34 @@ DEFINE CLASS sigprnfeBO AS BusinessBase
     * ChecarDirs - Configura caminhos das pastas NF-e a partir de this_cArquivos
     *==========================================================================
     PROCEDURE ChecarDirs()
-        LOCAL loc_cBase, loc_oErro
+        LOCAL loc_cBase, loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_cBase = ALLTRIM(THIS.this_cArquivos)
             IF EMPTY(loc_cBase)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF RIGHT(loc_cBase, 1) # "\"
-                loc_cBase = loc_cBase + "\"
+            IF loc_lProsseguir
+                IF RIGHT(loc_cBase, 1) # "\"
+                    loc_cBase = loc_cBase + "\"
+                ENDIF
+                THIS.this_cPathNFe      = loc_cBase
+                THIS.this_cPEnvio       = loc_cBase + "envio\"
+                THIS.this_cPEnviado     = loc_cBase + "enviados\"
+                THIS.this_cPEnvioEmLote = loc_cBase + "emLote\"
+                THIS.this_cPErro        = loc_cBase + "erros\"
+                THIS.this_cPRetorno     = loc_cBase + "retorno\"
+                THIS.this_cPValidar     = loc_cBase + "avalidar\"
+                THIS.this_cPBKenviados  = loc_cBase + "bkp_enviados\"
+                THIS.this_cPEmProc      = loc_cBase + "emprocessamento\"
+                THIS.this_cPAssinado    = loc_cBase + "assinados\"
+                THIS.this_cPValidado    = loc_cBase + "validados\"
+                THIS.this_cPAutorizados = loc_cBase + "autorizados\"
+                THIS.this_cPPdf         = loc_cBase + "pdfs\"
+                THIS.this_cPBkp         = loc_cBase + "backup\"
+                THIS.this_cPTxt         = IIF(THIS.this_nTipos = 1, "nfe-", "nfe-e-")
+                THIS.this_cChr          = CHR(13) + CHR(10)
             ENDIF
-            THIS.this_cPathNFe      = loc_cBase
-            THIS.this_cPEnvio       = loc_cBase + "envio\"
-            THIS.this_cPEnviado     = loc_cBase + "enviados\"
-            THIS.this_cPEnvioEmLote = loc_cBase + "emLote\"
-            THIS.this_cPErro        = loc_cBase + "erros\"
-            THIS.this_cPRetorno     = loc_cBase + "retorno\"
-            THIS.this_cPValidar     = loc_cBase + "avalidar\"
-            THIS.this_cPBKenviados  = loc_cBase + "bkp_enviados\"
-            THIS.this_cPEmProc      = loc_cBase + "emprocessamento\"
-            THIS.this_cPAssinado    = loc_cBase + "assinados\"
-            THIS.this_cPValidado    = loc_cBase + "validados\"
-            THIS.this_cPAutorizados = loc_cBase + "autorizados\"
-            THIS.this_cPPdf         = loc_cBase + "pdfs\"
-            THIS.this_cPBkp         = loc_cBase + "backup\"
-            THIS.this_cPTxt         = IIF(THIS.this_nTipos = 1, "nfe-", "nfe-e-")
-            THIS.this_cChr          = CHR(13) + CHR(10)
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro ChecarDirs")
         ENDTRY

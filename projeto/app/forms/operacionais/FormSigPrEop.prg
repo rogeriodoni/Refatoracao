@@ -601,21 +601,24 @@ DEFINE CLASS FormSigPrEop AS FormBase
     * do legado quando Value=1). Reusa BO.MarcarDesmarcarTodos + sincroniza UI.
     *--------------------------------------------------------------------------
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Operacoes") OR RECCOUNT("cursor_4c_Operacoes") = 0
                 MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " opera" + ;
                         CHR(231) + CHR(245) + "es para incluir na sele" + ;
                         CHR(231) + CHR(227) + "o.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.this_oBusinessObject.MarcarDesmarcarTodos(1, "cursor_4c_Operacoes")
-            IF VARTYPE(THIS.chk_4c_Ck_Marca) = "O"
-                THIS.chk_4c_Ck_Marca.Value = 1
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.MarcarDesmarcarTodos(1, "cursor_4c_Operacoes")
+                IF VARTYPE(THIS.chk_4c_Ck_Marca) = "O"
+                    THIS.chk_4c_Ck_Marca.Value = 1
+                ENDIF
+                THIS.grd_4c_Dados.Refresh()
+                THIS.txt_4c_Operacao.Refresh()
+                THIS.txt_4c_Numes.Refresh()
             ENDIF
-            THIS.grd_4c_Dados.Refresh()
-            THIS.txt_4c_Operacao.Refresh()
-            THIS.txt_4c_Numes.Refresh()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro BtnIncluirClick")
@@ -629,17 +632,20 @@ DEFINE CLASS FormSigPrEop AS FormBase
     * chk_4c_Check1.KeyPress ENTER/SPACE do legado). Reusa BO.AlternarSelecao.
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Operacoes") OR RECCOUNT("cursor_4c_Operacoes") = 0
                 MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " opera" + ;
                         CHR(231) + CHR(227) + "o corrente para alterar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.this_oBusinessObject.AlternarSelecao("cursor_4c_Operacoes")
-            THIS.grd_4c_Dados.Refresh()
-            THIS.txt_4c_Operacao.Refresh()
-            THIS.txt_4c_Numes.Refresh()
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.AlternarSelecao("cursor_4c_Operacoes")
+                THIS.grd_4c_Dados.Refresh()
+                THIS.txt_4c_Operacao.Refresh()
+                THIS.txt_4c_Numes.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro BtnAlterarClick")
@@ -653,19 +659,22 @@ DEFINE CLASS FormSigPrEop AS FormBase
     * (equivalente a AlternarPagina em forms CRUD - refresh completo da lista).
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Operacoes") OR RECCOUNT("cursor_4c_Operacoes") = 0
                 MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " opera" + ;
                         CHR(231) + CHR(245) + "es para visualizar.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT cursor_4c_Operacoes
-            GO TOP IN cursor_4c_Operacoes
-            THIS.grd_4c_Dados.Refresh()
-            THIS.grd_4c_Dados.SetFocus()
-            THIS.txt_4c_Operacao.Refresh()
-            THIS.txt_4c_Numes.Refresh()
+            IF loc_lProsseguir
+                SELECT cursor_4c_Operacoes
+                GO TOP IN cursor_4c_Operacoes
+                THIS.grd_4c_Dados.Refresh()
+                THIS.grd_4c_Dados.SetFocus()
+                THIS.txt_4c_Operacao.Refresh()
+                THIS.txt_4c_Numes.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro BtnVisualizarClick")
@@ -679,27 +688,32 @@ DEFINE CLASS FormSigPrEop AS FormBase
     * Reusa BO.MarcarDesmarcarTodos(0) + sincroniza UI.
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_oErro, loc_lConfirmar
+        LOCAL loc_oErro, loc_lConfirmar, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Operacoes") OR RECCOUNT("cursor_4c_Operacoes") = 0
                 MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " opera" + ;
                         CHR(231) + CHR(245) + "es para excluir da sele" + ;
                         CHR(231) + CHR(227) + "o.", "Aviso")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_lConfirmar = MsgConfirma("Confirma excluir todas as opera" + ;
-                CHR(231) + CHR(245) + "es da sele" + CHR(231) + CHR(227) + ;
-                "o corrente?", "Confirma" + CHR(231) + CHR(227) + "o")
-            IF !loc_lConfirmar
-                RETURN
+            IF loc_lProsseguir
+                loc_lConfirmar = MsgConfirma("Confirma excluir todas as opera" + ;
+                    CHR(231) + CHR(245) + "es da sele" + CHR(231) + CHR(227) + ;
+                    "o corrente?", "Confirma" + CHR(231) + CHR(227) + "o")
+                IF !loc_lConfirmar
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            THIS.this_oBusinessObject.MarcarDesmarcarTodos(0, "cursor_4c_Operacoes")
-            IF VARTYPE(THIS.chk_4c_Ck_Marca) = "O"
-                THIS.chk_4c_Ck_Marca.Value = 0
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.MarcarDesmarcarTodos(0, "cursor_4c_Operacoes")
+                IF VARTYPE(THIS.chk_4c_Ck_Marca) = "O"
+                    THIS.chk_4c_Ck_Marca.Value = 0
+                ENDIF
+                THIS.grd_4c_Dados.Refresh()
+                THIS.txt_4c_Operacao.Refresh()
+                THIS.txt_4c_Numes.Refresh()
             ENDIF
-            THIS.grd_4c_Dados.Refresh()
-            THIS.txt_4c_Operacao.Refresh()
-            THIS.txt_4c_Numes.Refresh()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro BtnExcluirClick")

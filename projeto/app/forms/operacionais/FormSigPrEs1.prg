@@ -1465,7 +1465,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarCdEmpresa
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cCod
+        LOCAL loc_nResultado, loc_cSQL, loc_cCod, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1478,6 +1478,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.cnt_4c_Container1.txt_4c_DsEmpresa.Value = ""
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 Cemps, Razas FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cCod)
             IF USED("cursor_4c_EmpTmp")
@@ -1490,11 +1491,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_CdEmpresa.Value  = ALLTRIM(NVL(cursor_4c_EmpTmp.Cemps, ""))
                     THIS.cnt_4c_Container1.txt_4c_DsEmpresa.Value  = ALLTRIM(NVL(cursor_4c_EmpTmp.Razas, ""))
                     USE IN cursor_4c_EmpTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_EmpTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_EmpTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaEmpresa("C")
+            IF loc_lProsseguir
+                THIS.AbrirBuscaEmpresa("C")
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarCdEmpresa")
         ENDTRY
@@ -1505,7 +1510,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarDsEmpresa
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cDs
+        LOCAL loc_nResultado, loc_cSQL, loc_cDs, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1518,6 +1523,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.cnt_4c_Container1.txt_4c_CdEmpresa.Value = ""
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 Cemps, Razas FROM SigCdEmp WHERE RTRIM(Razas) LIKE " + ;
                 EscaparSQL(loc_cDs + "%")
@@ -1531,11 +1537,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_CdEmpresa.Value = ALLTRIM(NVL(cursor_4c_EmpTmp.Cemps, ""))
                     THIS.cnt_4c_Container1.txt_4c_DsEmpresa.Value = ALLTRIM(NVL(cursor_4c_EmpTmp.Razas, ""))
                     USE IN cursor_4c_EmpTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_EmpTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_EmpTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaEmpresa("D")
+            IF loc_lProsseguir
+                THIS.AbrirBuscaEmpresa("D")
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarDsEmpresa")
         ENDTRY
@@ -1547,7 +1557,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarNmOperacao
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cOpe
+        LOCAL loc_nResultado, loc_cSQL, loc_cOpe, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1559,6 +1569,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
         IF EMPTY(loc_cOpe)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 Dopes FROM SigCdOpe WHERE Dopes = " + EscaparSQL(PADR(loc_cOpe, 20))
             IF USED("cursor_4c_OpeTmp")
@@ -1570,11 +1581,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                 IF !EOF("cursor_4c_OpeTmp")
                     THIS.cnt_4c_Container1.txt_4c_NmOperacao.Value = ALLTRIM(NVL(cursor_4c_OpeTmp.Dopes, ""))
                     USE IN cursor_4c_OpeTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_OpeTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_OpeTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaOperacao(loc_cOpe)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaOperacao(loc_cOpe)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarNmOperacao")
         ENDTRY
@@ -1586,7 +1601,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarCdGrupo
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cGrp, loc_oBusca
+        LOCAL loc_nResultado, loc_cSQL, loc_cGrp, loc_oBusca, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1595,6 +1610,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.AbrirBuscaGrupoContabil("C", loc_cGrp)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
                 EscaparSQL(PADR(loc_cGrp, 10))
@@ -1608,11 +1624,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_Grupo.Value    = ALLTRIM(NVL(cursor_4c_GrpTmp.codigos, ""))
                     THIS.cnt_4c_Container1.txt_4c_DsGrupo.Value  = ALLTRIM(NVL(cursor_4c_GrpTmp.descrs, ""))
                     USE IN cursor_4c_GrpTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_GrpTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_GrpTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaGrupoContabil("C", loc_cGrp)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaGrupoContabil("C", loc_cGrp)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarCdGrupo")
         ENDTRY
@@ -1623,7 +1643,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarDsGrupo
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cDs, loc_oBusca
+        LOCAL loc_nResultado, loc_cSQL, loc_cDs, loc_oBusca, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1632,6 +1652,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.AbrirBuscaGrupoContabil("D", loc_cDs)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE RTRIM(descrs) LIKE " + ;
                 EscaparSQL(loc_cDs + "%")
@@ -1645,11 +1666,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_Grupo.Value   = ALLTRIM(NVL(cursor_4c_GrpTmp.codigos, ""))
                     THIS.cnt_4c_Container1.txt_4c_DsGrupo.Value = ALLTRIM(NVL(cursor_4c_GrpTmp.descrs, ""))
                     USE IN cursor_4c_GrpTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_GrpTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_GrpTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaGrupoContabil("D", loc_cDs)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaGrupoContabil("D", loc_cDs)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarDsGrupo")
         ENDTRY
@@ -1706,7 +1731,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarCdConta
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cCta, loc_cGrp
+        LOCAL loc_nResultado, loc_cSQL, loc_cCta, loc_cGrp, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1716,6 +1741,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.AbrirBuscaConta("C", loc_cGrp, loc_cCta)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 IClis, RClis, Cpfs FROM SigCdCli WHERE IClis = " + ;
                 EscaparSQL(PADR(loc_cCta, 10))
@@ -1733,11 +1759,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_DsConta.Value = ALLTRIM(NVL(cursor_4c_CtaTmp.RClis, ""))
                     THIS.cnt_4c_Container1.txt_4c_Cpf.Value     = ALLTRIM(NVL(cursor_4c_CtaTmp.Cpfs, ""))
                     USE IN cursor_4c_CtaTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_CtaTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_CtaTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaConta("C", loc_cGrp, loc_cCta)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaConta("C", loc_cGrp, loc_cCta)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarCdConta")
         ENDTRY
@@ -1748,7 +1778,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarDsConta
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cDs, loc_cGrp
+        LOCAL loc_nResultado, loc_cSQL, loc_cDs, loc_cGrp, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1758,6 +1788,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.AbrirBuscaConta("D", loc_cGrp, loc_cDs)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 IClis, RClis, Cpfs FROM SigCdCli WHERE RTRIM(RClis) LIKE " + ;
                 EscaparSQL(loc_cDs + "%")
@@ -1775,11 +1806,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_DsConta.Value = ALLTRIM(NVL(cursor_4c_CtaTmp.RClis, ""))
                     THIS.cnt_4c_Container1.txt_4c_Cpf.Value     = ALLTRIM(NVL(cursor_4c_CtaTmp.Cpfs, ""))
                     USE IN cursor_4c_CtaTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_CtaTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_CtaTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaConta("D", loc_cGrp, loc_cDs)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaConta("D", loc_cGrp, loc_cDs)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarDsConta")
         ENDTRY
@@ -1791,7 +1826,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarCpf
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_oCpfRet, loc_cCpf
+        LOCAL loc_oCpfRet, loc_cCpf, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9
             RETURN
         ENDIF
@@ -1801,6 +1836,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.cnt_4c_Container1.txt_4c_DsConta.Value = ""
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_oCpfRet = THIS.this_oBusinessObject.ValidarCpfCnpj(loc_cCpf)
             IF !loc_oCpfRet.lValido
@@ -1810,12 +1846,14 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_Conta.Value   = ""
                     THIS.cnt_4c_Container1.txt_4c_DsConta.Value = ""
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !EMPTY(loc_oCpfRet.cConta)
-                THIS.cnt_4c_Container1.txt_4c_Conta.Value   = ALLTRIM(loc_oCpfRet.cConta)
-                THIS.cnt_4c_Container1.txt_4c_DsConta.Value = ALLTRIM(loc_oCpfRet.cDsConta)
-                THIS.cnt_4c_Container1.txt_4c_Cpf.Value     = ALLTRIM(loc_oCpfRet.cCpf)
+            IF loc_lProsseguir
+                IF !EMPTY(loc_oCpfRet.cConta)
+                    THIS.cnt_4c_Container1.txt_4c_Conta.Value   = ALLTRIM(loc_oCpfRet.cConta)
+                    THIS.cnt_4c_Container1.txt_4c_DsConta.Value = ALLTRIM(loc_oCpfRet.cDsConta)
+                    THIS.cnt_4c_Container1.txt_4c_Cpf.Value     = ALLTRIM(loc_oCpfRet.cCpf)
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarCpf")
@@ -1827,7 +1865,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarCdResps
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cCod, loc_cGrpPad
+        LOCAL loc_nResultado, loc_cSQL, loc_cCod, loc_cGrpPad, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1838,6 +1876,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.AbrirBuscaResponsavel("C", loc_cCod)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE IClis = " + ;
                 EscaparSQL(PADR(loc_cCod, 10))
@@ -1854,11 +1893,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_Resps.Value   = ALLTRIM(NVL(cursor_4c_RespTmp.IClis, ""))
                     THIS.cnt_4c_Container1.txt_4c_DsResps.Value = ALLTRIM(NVL(cursor_4c_RespTmp.RClis, ""))
                     USE IN cursor_4c_RespTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_RespTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_RespTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaResponsavel("C", loc_cCod)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaResponsavel("C", loc_cCod)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarCdResps")
         ENDTRY
@@ -1869,7 +1912,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarDsResps
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cDs, loc_cGrpPad
+        LOCAL loc_nResultado, loc_cSQL, loc_cDs, loc_cGrpPad, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1880,6 +1923,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.AbrirBuscaResponsavel("D", loc_cDs)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 IClis, RClis FROM SigCdCli WHERE RTRIM(RClis) LIKE " + ;
                 EscaparSQL(loc_cDs + "%")
@@ -1896,11 +1940,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_Resps.Value   = ALLTRIM(NVL(cursor_4c_RespTmp.IClis, ""))
                     THIS.cnt_4c_Container1.txt_4c_DsResps.Value = ALLTRIM(NVL(cursor_4c_RespTmp.RClis, ""))
                     USE IN cursor_4c_RespTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_RespTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_RespTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaResponsavel("D", loc_cDs)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaResponsavel("D", loc_cDs)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarDsResps")
         ENDTRY
@@ -1911,7 +1959,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarCdMoeda
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cCod
+        LOCAL loc_nResultado, loc_cSQL, loc_cCod, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1920,6 +1968,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.AbrirBuscaMoeda("C", loc_cCod)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE CMoes = " + EscaparSQL(loc_cCod)
             IF USED("cursor_4c_MoeTmp")
@@ -1932,11 +1981,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_CdMoeda.Value = ALLTRIM(NVL(cursor_4c_MoeTmp.CMoes, ""))
                     THIS.cnt_4c_Container1.txt_4c_DsMoeda.Value = ALLTRIM(NVL(cursor_4c_MoeTmp.DMoes, ""))
                     USE IN cursor_4c_MoeTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_MoeTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_MoeTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaMoeda("C", loc_cCod)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaMoeda("C", loc_cCod)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarCdMoeda")
         ENDTRY
@@ -1947,7 +2000,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROCEDURE ValidarDsMoeda
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_nResultado, loc_cSQL, loc_cDs
+        LOCAL loc_nResultado, loc_cSQL, loc_cDs, loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
@@ -1956,6 +2009,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             THIS.AbrirBuscaMoeda("D", loc_cDs)
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 CMoes, DMoes FROM SigCdMoe WHERE RTRIM(DMoes) LIKE " + ;
                 EscaparSQL(loc_cDs + "%")
@@ -1969,11 +2023,15 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_CdMoeda.Value = ALLTRIM(NVL(cursor_4c_MoeTmp.CMoes, ""))
                     THIS.cnt_4c_Container1.txt_4c_DsMoeda.Value = ALLTRIM(NVL(cursor_4c_MoeTmp.DMoes, ""))
                     USE IN cursor_4c_MoeTmp
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_MoeTmp
+                IF loc_lProsseguir
+                    USE IN cursor_4c_MoeTmp
+                ENDIF
             ENDIF
-            THIS.AbrirBuscaMoeda("D", loc_cDs)
+            IF loc_lProsseguir
+                THIS.AbrirBuscaMoeda("D", loc_cDs)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ValidarDsMoeda")
         ENDTRY

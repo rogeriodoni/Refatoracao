@@ -10880,24 +10880,27 @@ DEFINE CLASS FormGpd AS FormBase
     * CarregarSigCdPsgCad - Carrega cursor_4c_SigCdPsg com sub-grupos do grupo
     *==========================================================================
     PROCEDURE CarregarSigCdPsgCad(par_cCgrus)
-        LOCAL loc_cSql, loc_nRet
+        LOCAL loc_cSql, loc_nRet, loc_lProsseguir
         IF !USED("cursor_4c_SigCdPsg")
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             SELECT cursor_4c_SigCdPsg
             ZAP
             IF EMPTY(ALLTRIM(par_cCgrus))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSql = "SELECT cgrus, codigos, descricaos, cidchaves, cgrucods, " + ;
-                       "marckupa, pesoprods " + ;
-                       "FROM SigCdPsg " + ;
-                       "WHERE cgrus = " + EscaparSQL(ALLTRIM(par_cCgrus)) + ;
-                       " ORDER BY codigos"
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigCdPsg")
-            IF loc_nRet < 0
-                MsgErro("Erro ao carregar sub-grupos.", "Erro")
+            IF loc_lProsseguir
+                loc_cSql = "SELECT cgrus, codigos, descricaos, cidchaves, cgrucods, " + ;
+                           "marckupa, pesoprods " + ;
+                           "FROM SigCdPsg " + ;
+                           "WHERE cgrus = " + EscaparSQL(ALLTRIM(par_cCgrus)) + ;
+                           " ORDER BY codigos"
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_SigCdPsg")
+                IF loc_nRet < 0
+                    MsgErro("Erro ao carregar sub-grupos.", "Erro")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -10958,6 +10961,7 @@ DEFINE CLASS FormGpd AS FormBase
     * Verifica se existem produtos vinculados antes de excluir
     *==========================================================================
     PROCEDURE PsgCadExcluirClick()
+        LOCAL loc_lProsseguir
         IF !USED("cursor_4c_SigCdPsg")
             RETURN
         ENDIF
@@ -10974,6 +10978,7 @@ DEFINE CLASS FormGpd AS FormBase
             PACK
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_nRet = SQLEXEC(gnConnHandle, ;
                 "SELECT COUNT(*) AS qtd FROM SigCdPro " + ;
@@ -10991,14 +10996,16 @@ DEFINE CLASS FormGpd AS FormBase
                         ALLTRIM(STR(loc_nCount)) + " produto(s) vinculado(s). " + ;
                         "N" + CHR(227) + "o " + CHR(233) + " poss" + CHR(237) + ;
                         "vel excluir.", "Sub-Grupo")
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
-            loc_lExcluir = MsgConfirma("Excluir sub-grupo '" + loc_cCod + "'?", "Confirmar")
-            IF loc_lExcluir
-                SELECT cursor_4c_SigCdPsg
-                DELETE
-                PACK
+            IF loc_lProsseguir
+                loc_lExcluir = MsgConfirma("Excluir sub-grupo '" + loc_cCod + "'?", "Confirmar")
+                IF loc_lExcluir
+                    SELECT cursor_4c_SigCdPsg
+                    DELETE
+                    PACK
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -11136,47 +11143,50 @@ DEFINE CLASS FormGpd AS FormBase
     * Chamado em BOParaForm() ao carregar registro
     *==========================================================================
     PROTECTED PROCEDURE CarregarCrGrpMonta()
-        LOCAL loc_lResultado, loc_cSQL, loc_nResult
+        LOCAL loc_lResultado, loc_cSQL, loc_nResult, loc_lProsseguir
         loc_lResultado = .F.
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crGrpMonta")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            ZAP IN crGrpMonta
+            IF loc_lProsseguir
+                ZAP IN crGrpMonta
 
             *-- Grupos fixos de montagem
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("SEQUENCIAL", 10), "N" + CHR(218) + "MERO SEQUENCIAL")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("/", 10), "BARRA DIVISORA")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR(".", 10), "PONTO DIVISOR")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("SUBGRUPO", 10), "SUBGRUPOS")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("REF.FORNEC", 10), "REF. FORNECEDOR")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("CONJUNTO", 10), "CONJUNTO")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("MODELO", 10), "MODELO")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("COR", 10), "COR PADR" + CHR(195) + "O")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("OBS.COMPO.", 10), "OBS.COMPONENTE")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("IDENTIFIC.", 10), "IDENTIFICADOR")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("COMPO1", 10), "COMPOSI" + CHR(199) + CHR(195) + "O 1")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("COMPO2", 10), "COMPOSI" + CHR(199) + CHR(195) + "O 2")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("COMPO3", 10), "COMPOSI" + CHR(199) + CHR(195) + "O 3")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("GRUPOVENDA", 10), "GRUPO DE VENDA")
-            INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("LINHA", 10), "LINHA")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("SEQUENCIAL", 10), "N" + CHR(218) + "MERO SEQUENCIAL")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("/", 10), "BARRA DIVISORA")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR(".", 10), "PONTO DIVISOR")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("SUBGRUPO", 10), "SUBGRUPOS")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("REF.FORNEC", 10), "REF. FORNECEDOR")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("CONJUNTO", 10), "CONJUNTO")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("MODELO", 10), "MODELO")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("COR", 10), "COR PADR" + CHR(195) + "O")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("OBS.COMPO.", 10), "OBS.COMPONENTE")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("IDENTIFIC.", 10), "IDENTIFICADOR")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("COMPO1", 10), "COMPOSI" + CHR(199) + CHR(195) + "O 1")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("COMPO2", 10), "COMPOSI" + CHR(199) + CHR(195) + "O 2")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("COMPO3", 10), "COMPOSI" + CHR(199) + CHR(195) + "O 3")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("GRUPOVENDA", 10), "GRUPO DE VENDA")
+                INSERT INTO crGrpMonta (Grupos, Descs) VALUES (PADR("LINHA", 10), "LINHA")
 
             *-- Grupos dinamicos de SigCdGrp
-            loc_cSQL = "SELECT CGrus, DGrus FROM SigCdGrp"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GruposMonta")
-            IF loc_nResult > 0 AND USED("cursor_4c_GruposMonta")
-                SELECT cursor_4c_GruposMonta
-                SCAN
-                    INSERT INTO crGrpMonta (Grupos, Descs) ;
-                        VALUES (PADR(ALLTRIM(cursor_4c_GruposMonta.CGrus), 10), ;
-                                LEFT(ALLTRIM(cursor_4c_GruposMonta.DGrus), 20))
-                ENDSCAN
-                USE IN cursor_4c_GruposMonta
-            ENDIF
+                loc_cSQL = "SELECT CGrus, DGrus FROM SigCdGrp"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GruposMonta")
+                IF loc_nResult > 0 AND USED("cursor_4c_GruposMonta")
+                    SELECT cursor_4c_GruposMonta
+                    SCAN
+                        INSERT INTO crGrpMonta (Grupos, Descs) ;
+                            VALUES (PADR(ALLTRIM(cursor_4c_GruposMonta.CGrus), 10), ;
+                                    LEFT(ALLTRIM(cursor_4c_GruposMonta.DGrus), 20))
+                    ENDSCAN
+                    USE IN cursor_4c_GruposMonta
+                ENDIF
 
-            loc_lResultado = .T.
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao carregar grupos de montagem:" + CHR(13) + ;
                 loc_oErro.Message, "FormGpd.CarregarCrGrpMonta")
@@ -11190,51 +11200,54 @@ DEFINE CLASS FormGpd AS FormBase
     * Chamado em BOParaForm() apos carregar registro
     *==========================================================================
     PROTECTED PROCEDURE CarregarCrMontagem(par_cCgrus, par_nCodprods)
-        LOCAL loc_lResultado, loc_cSQL, loc_nResult
+        LOCAL loc_lResultado, loc_cSQL, loc_nResult, loc_lProsseguir
         loc_lResultado = .F.
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crMontagem")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            ZAP IN crMontagem
+            IF loc_lProsseguir
+                ZAP IN crMontagem
 
             *-- Carregar de SigCdGgc apenas se CodProds=6 (Identificador+Composicao)
-            IF par_nCodprods = 6 AND !EMPTY(par_cCgrus)
-                loc_cSQL = "SELECT grupos, posicoes, digitos FROM SigCdGgc " + ;
-                           "WHERE cgrus = " + EscaparSQL(par_cCgrus) + ;
-                           " ORDER BY posicoes, grupos, digitos"
-                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GgcLoad")
-                IF loc_nResult > 0 AND USED("cursor_4c_GgcLoad")
-                    SELECT cursor_4c_GgcLoad
-                    SCAN
-                        INSERT INTO crMontagem (Grupos, Posicoes, Digitos) ;
-                            VALUES (cursor_4c_GgcLoad.grupos, ;
-                                    cursor_4c_GgcLoad.posicoes, ;
-                                    cursor_4c_GgcLoad.digitos)
-                    ENDSCAN
-                    USE IN cursor_4c_GgcLoad
+                IF par_nCodprods = 6 AND !EMPTY(par_cCgrus)
+                    loc_cSQL = "SELECT grupos, posicoes, digitos FROM SigCdGgc " + ;
+                               "WHERE cgrus = " + EscaparSQL(par_cCgrus) + ;
+                               " ORDER BY posicoes, grupos, digitos"
+                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GgcLoad")
+                    IF loc_nResult > 0 AND USED("cursor_4c_GgcLoad")
+                        SELECT cursor_4c_GgcLoad
+                        SCAN
+                            INSERT INTO crMontagem (Grupos, Posicoes, Digitos) ;
+                                VALUES (cursor_4c_GgcLoad.grupos, ;
+                                        cursor_4c_GgcLoad.posicoes, ;
+                                        cursor_4c_GgcLoad.digitos)
+                        ENDSCAN
+                        USE IN cursor_4c_GgcLoad
+                    ENDIF
                 ENDIF
-            ENDIF
 
             *-- Sempre garantir ao menos uma linha em branco para edicao
-            IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                IF RECCOUNT("crMontagem") = 0 OR ;
-                   (!EOF("crMontagem") AND !EMPTY(crMontagem.Grupos))
-                    INSERT INTO crMontagem (Grupos) VALUES ("")
+                IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+                    IF RECCOUNT("crMontagem") = 0 OR ;
+                       (!EOF("crMontagem") AND !EMPTY(crMontagem.Grupos))
+                        INSERT INTO crMontagem (Grupos) VALUES ("")
+                    ENDIF
+                    GO BOTTOM IN crMontagem
                 ENDIF
-                GO BOTTOM IN crMontagem
-            ENDIF
 
             *-- Atualizar grid se existir
-            LOCAL loc_oPg8
-            loc_oPg8 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page8
-            IF PEMSTATUS(loc_oPg8, "grd_4c_Codificacao", 5)
-                loc_oPg8.grd_4c_Codificacao.Refresh
-            ENDIF
+                LOCAL loc_oPg8
+                loc_oPg8 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page8
+                IF PEMSTATUS(loc_oPg8, "grd_4c_Codificacao", 5)
+                    loc_oPg8.grd_4c_Codificacao.Refresh
+                ENDIF
 
-            loc_lResultado = .T.
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao carregar montagem:" + CHR(13) + ;
                 loc_oErro.Message, "FormGpd.CarregarCrMontagem")
@@ -11926,20 +11939,23 @@ DEFINE CLASS FormGpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE ComposGridCol1LostFocus()
-        LOCAL loc_oPg9, loc_nValor, loc_nValorFinal
+        LOCAL loc_oPg9, loc_nValor, loc_nValorFinal, loc_lProsseguir
         loc_oPg9 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page9
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crSigcdcpo")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_nValor      = 0
-            loc_nValorFinal = 0
-            IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
-                loc_nValor      = loc_oPg9.grd_4c_Compos.Column1.Text1.Value
-                loc_nValorFinal = loc_nValor + loc_nValor * 0.5
-                IF crSigcdcpo.fxfins = 0
-                    loc_oPg9.grd_4c_Compos.Column2.Text1.Value = loc_nValorFinal
+            IF loc_lProsseguir
+                loc_nValor      = 0
+                loc_nValorFinal = 0
+                IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
+                    loc_nValor      = loc_oPg9.grd_4c_Compos.Column1.Text1.Value
+                    loc_nValorFinal = loc_nValor + loc_nValor * 0.5
+                    IF crSigcdcpo.fxfins = 0
+                        loc_oPg9.grd_4c_Compos.Column2.Text1.Value = loc_nValorFinal
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -12012,33 +12028,36 @@ DEFINE CLASS FormGpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE ComposGridCol2LostFocus()
-        LOCAL loc_lResultado, loc_nValI, loc_nValF, loc_cVltp, loc_nReg
+        LOCAL loc_lResultado, loc_nValI, loc_nValF, loc_cVltp, loc_nReg, loc_lProsseguir
         loc_lResultado = .T.
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crSigcdcpo")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_nValI = crSigcdcpo.fxinis
-            loc_nValF = crSigcdcpo.fxfins
-            loc_cVltp = ALLTRIM(crSigcdcpo.vltps)
-            loc_nReg  = RECNO("crSigcdcpo")
+            IF loc_lProsseguir
+                loc_nValI = crSigcdcpo.fxinis
+                loc_nValF = crSigcdcpo.fxfins
+                loc_cVltp = ALLTRIM(crSigcdcpo.vltps)
+                loc_nReg  = RECNO("crSigcdcpo")
 
-            SELECT * FROM crSigcdcpo ;
-                WHERE (fxinis <= loc_nValF AND fxfins > loc_nValF ;
-                    AND ALLTRIM(vltps) = loc_cVltp AND RECNO() <> loc_nReg) ;
-                OR (fxinis BETWEEN loc_nValI AND loc_nValF ;
-                    AND ALLTRIM(vltps) = loc_cVltp AND RECNO() <> loc_nReg) ;
-                OR (fxfins BETWEEN loc_nValI AND loc_nValF ;
-                    AND ALLTRIM(vltps) = loc_cVltp AND RECNO() <> loc_nReg) ;
-                INTO CURSOR crComposFfTmp
-            SELECT crComposFfTmp
-            GO TOP IN crComposFfTmp
-            IF !EOF("crComposFfTmp")
-                MsgAviso("Este valor de faixa final est" + CHR(225) + " sobreposto com outro intervalo.")
-            ENDIF
-            IF USED("crComposFfTmp")
-                USE IN crComposFfTmp
+                SELECT * FROM crSigcdcpo ;
+                    WHERE (fxinis <= loc_nValF AND fxfins > loc_nValF ;
+                        AND ALLTRIM(vltps) = loc_cVltp AND RECNO() <> loc_nReg) ;
+                    OR (fxinis BETWEEN loc_nValI AND loc_nValF ;
+                        AND ALLTRIM(vltps) = loc_cVltp AND RECNO() <> loc_nReg) ;
+                    OR (fxfins BETWEEN loc_nValI AND loc_nValF ;
+                        AND ALLTRIM(vltps) = loc_cVltp AND RECNO() <> loc_nReg) ;
+                    INTO CURSOR crComposFfTmp
+                SELECT crComposFfTmp
+                GO TOP IN crComposFfTmp
+                IF !EOF("crComposFfTmp")
+                    MsgAviso("Este valor de faixa final est" + CHR(225) + " sobreposto com outro intervalo.")
+                ENDIF
+                IF USED("crComposFfTmp")
+                    USE IN crComposFfTmp
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao validar faixa final:" + CHR(13) + loc_oErro.Message, ;
@@ -12401,23 +12420,26 @@ DEFINE CLASS FormGpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE TxtTiposLostFocus()
-        LOCAL loc_oPg9, loc_cTipo, loc_cCgrus
+        LOCAL loc_oPg9, loc_cTipo, loc_cCgrus, loc_lProsseguir
         loc_oPg9  = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page9
         loc_cTipo = ""
         loc_cCgrus = ALLTRIM(THIS.this_oBusinessObject.this_cCgrus)
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crSigcdcpo")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltTipo", 5)
-                loc_cTipo = ALLTRIM(loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltTipo.Value)
-            ENDIF
-            SELECT crSigcdcpo
-            REPLACE ALL grupos WITH loc_cCgrus IN crSigcdcpo
-            REPLACE ALL tipos  WITH loc_cTipo  IN crSigcdcpo
-            IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
-                loc_oPg9.grd_4c_Compos.Column4.SetFocus
+            IF loc_lProsseguir
+                IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltTipo", 5)
+                    loc_cTipo = ALLTRIM(loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltTipo.Value)
+                ENDIF
+                SELECT crSigcdcpo
+                REPLACE ALL grupos WITH loc_cCgrus IN crSigcdcpo
+                REPLACE ALL tipos  WITH loc_cTipo  IN crSigcdcpo
+                IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
+                    loc_oPg9.grd_4c_Compos.Column4.SetFocus
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao propagar tipo:" + CHR(13) + loc_oErro.Message, ;
@@ -12540,54 +12562,63 @@ DEFINE CLASS FormGpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE BtnComposInserirClick()
-        LOCAL loc_oPg9, loc_cTipo, loc_cPreco, loc_cCgrus
+        LOCAL loc_oPg9, loc_cTipo, loc_cPreco, loc_cCgrus, loc_lProsseguir
         loc_oPg9  = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page9
         loc_cTipo  = ""
         loc_cPreco = ""
         loc_cCgrus = ALLTRIM(THIS.this_oBusinessObject.this_cCgrus)
 
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !USED("crSigcdcpo")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("crSigcdcpo")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltPreco", 5)
-                loc_cPreco = ALLTRIM(loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltPreco.Value)
-            ENDIF
-            IF EMPTY(loc_cPreco)
-                MsgAviso("Informe o Tipo Pre" + CHR(231) + "o !!!")
+            IF loc_lProsseguir
                 IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltPreco", 5)
-                    loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltPreco.SetFocus
+                    loc_cPreco = ALLTRIM(loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltPreco.Value)
                 ENDIF
-                RETURN
+                IF EMPTY(loc_cPreco)
+                    MsgAviso("Informe o Tipo Pre" + CHR(231) + "o !!!")
+                    IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltPreco", 5)
+                        loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltPreco.SetFocus
+                    ENDIF
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltTipo", 5)
-                loc_cTipo = ALLTRIM(loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltTipo.Value)
-            ENDIF
-            IF EMPTY(loc_cTipo)
-                MsgAviso("Informe o tipo antes de inserir registros !!!")
+            IF loc_lProsseguir
                 IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltTipo", 5)
-                    loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltTipo.SetFocus
+                    loc_cTipo = ALLTRIM(loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltTipo.Value)
                 ENDIF
-                RETURN
+                IF EMPTY(loc_cTipo)
+                    MsgAviso("Informe o tipo antes de inserir registros !!!")
+                    IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltTipo", 5)
+                        loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltTipo.SetFocus
+                    ENDIF
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            SELECT crSigcdcpo
-            INSERT INTO crSigcdcpo ;
-                (grupos,    tipos,    vltps, valors,    fxinis, fxfins, compos, cidchaves) ;
-                VALUES ;
-                (loc_cCgrus, loc_cTipo, "",  loc_cPreco, 0,      0,      "",    "")
+            IF loc_lProsseguir
+                SELECT crSigcdcpo
+                INSERT INTO crSigcdcpo ;
+                    (grupos,    tipos,    vltps, valors,    fxinis, fxfins, compos, cidchaves) ;
+                    VALUES ;
+                    (loc_cCgrus, loc_cTipo, "",  loc_cPreco, 0,      0,      "",    "")
 
-            GO BOTTOM IN crSigcdcpo
+                GO BOTTOM IN crSigcdcpo
 
-            IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
-                loc_oPg9.grd_4c_Compos.Refresh
-                loc_oPg9.grd_4c_Compos.Column4.SetFocus
+                IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
+                    loc_oPg9.grd_4c_Compos.Refresh
+                    loc_oPg9.grd_4c_Compos.Column4.SetFocus
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao inserir composi" + CHR(231) + CHR(227) + "o:" + ;
@@ -12600,32 +12631,39 @@ DEFINE CLASS FormGpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE BtnComposExcluirClick()
-        LOCAL loc_oPg9, loc_cCompos
+        LOCAL loc_oPg9, loc_cCompos, loc_lProsseguir
         loc_oPg9   = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page9
         loc_cCompos = ""
 
+        loc_lProsseguir = .T.
         TRY
             IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !USED("crSigcdcpo")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("crSigcdcpo")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            SELECT crSigcdcpo
-            IF EOF("crSigcdcpo")
-                RETURN
+            IF loc_lProsseguir
+                SELECT crSigcdcpo
+                IF EOF("crSigcdcpo")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cCompos = ALLTRIM(crSigcdcpo.compos)
+            IF loc_lProsseguir
+                loc_cCompos = ALLTRIM(crSigcdcpo.compos)
 
-            IF MsgConfirma("Deseja excluir a Compos '" + loc_cCompos + "' ?", ;
-                "Confirmar Exclus" + CHR(227) + "o")
-                DELETE FROM crSigcdcpo WHERE ALLTRIM(compos) = loc_cCompos
-                GO TOP IN crSigcdcpo
-                IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
-                    loc_oPg9.grd_4c_Compos.Refresh
-                    loc_oPg9.grd_4c_Compos.Column4.SetFocus
+                IF MsgConfirma("Deseja excluir a Compos '" + loc_cCompos + "' ?", ;
+                    "Confirmar Exclus" + CHR(227) + "o")
+                    DELETE FROM crSigcdcpo WHERE ALLTRIM(compos) = loc_cCompos
+                    GO TOP IN crSigcdcpo
+                    IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
+                        loc_oPg9.grd_4c_Compos.Refresh
+                        loc_oPg9.grd_4c_Compos.Column4.SetFocus
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -12640,96 +12678,99 @@ DEFINE CLASS FormGpd AS FormBase
     * PUBLIC: BINDEVENT requer metodo publico
     *==========================================================================
     PROCEDURE CmdCopiarComposClick()
-        LOCAL loc_lResultado, loc_cSql, loc_nRet, loc_oBusca, loc_cGrupoSel
+        LOCAL loc_lResultado, loc_cSql, loc_nRet, loc_oBusca, loc_cGrupoSel, loc_lProsseguir
         LOCAL loc_oPg9, loc_cCgrus
         loc_lResultado = .T.
         loc_oPg9   = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page9
         loc_cCgrus = ALLTRIM(THIS.this_oBusinessObject.this_cCgrus)
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("crSigcdcpo")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Listar grupos com composicao definida
-            loc_cSql = "SELECT DISTINCT a.grupos, b.dgrus " + ;
-                "FROM sigcdcpo a " + ;
-                "INNER JOIN sigcdgrp b ON b.cgrus = a.grupos"
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "crGruposCompos")
-            IF loc_nRet < 1
-                MsgErro("Falha ao carregar grupos com composi" + CHR(231) + CHR(227) + "o.", ;
-                    "FormGpd.CmdCopiarComposClick")
-                loc_lResultado = .F.
-            ENDIF
-
-            IF loc_lResultado AND USED("crGruposCompos")
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle)
-                IF VARTYPE(loc_oBusca) = "O"
-                    GO TOP IN crGruposCompos
-                    loc_oBusca.DefinirCursor("crGruposCompos", "grupos", "dgrus", ;
-                        "Sele" + CHR(231) + CHR(227) + "o de Grupo")
-                    loc_oBusca.Mostrar()
-                    loc_cGrupoSel = ""
-                    IF loc_oBusca.this_lSelecionou AND USED("crGruposCompos")
-                        SELECT crGruposCompos
-                        loc_cGrupoSel = ALLTRIM(crGruposCompos.grupos)
-                    ENDIF
-                    loc_oBusca.Release()
-                ENDIF
-            ENDIF
-
-            IF loc_lResultado AND !EMPTY(loc_cGrupoSel)
-                *-- Carregar composicoes do grupo selecionado
-                loc_cSql = "SELECT * FROM sigcdcpo WHERE grupos = " + EscaparSQL(loc_cGrupoSel)
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "crSigcdcpoCopia")
+            IF loc_lProsseguir
+                loc_cSql = "SELECT DISTINCT a.grupos, b.dgrus " + ;
+                    "FROM sigcdcpo a " + ;
+                    "INNER JOIN sigcdgrp b ON b.cgrus = a.grupos"
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "crGruposCompos")
                 IF loc_nRet < 1
-                    MsgErro("Falha ao carregar composi" + CHR(231) + CHR(245) + "es do grupo selecionado.", ;
+                    MsgErro("Falha ao carregar grupos com composi" + CHR(231) + CHR(227) + "o.", ;
                         "FormGpd.CmdCopiarComposClick")
                     loc_lResultado = .F.
                 ENDIF
 
-                IF loc_lResultado AND USED("crSigcdcpoCopia")
-                    *-- Obter tipo/preco do grupo copiado
-                    LOCAL loc_cSql2, loc_nRet2
-                    loc_cSql2 = "SELECT DISTINCT tipos, valors FROM sigcdcpo WHERE grupos = " + ;
-                        EscaparSQL(loc_cGrupoSel)
-                    loc_nRet2 = SQLEXEC(gnConnHandle, loc_cSql2, "crTipoCopia")
-                    IF loc_nRet2 > 0 AND USED("crTipoCopia") AND !EOF("crTipoCopia")
-                        *-- Atualizar filtros com tipo/preco do grupo copiado
-                        IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltTipo", 5)
-                            loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltTipo.Value = ;
-                                ALLTRIM(crTipoCopia.tipos)
+                IF loc_lResultado AND USED("crGruposCompos")
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle)
+                    IF VARTYPE(loc_oBusca) = "O"
+                        GO TOP IN crGruposCompos
+                        loc_oBusca.DefinirCursor("crGruposCompos", "grupos", "dgrus", ;
+                            "Sele" + CHR(231) + CHR(227) + "o de Grupo")
+                        loc_oBusca.Mostrar()
+                        loc_cGrupoSel = ""
+                        IF loc_oBusca.this_lSelecionou AND USED("crGruposCompos")
+                            SELECT crGruposCompos
+                            loc_cGrupoSel = ALLTRIM(crGruposCompos.grupos)
                         ENDIF
-                        IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltPreco", 5)
-                            loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltPreco.Value = ;
-                                ALLTRIM(crTipoCopia.valors)
-                        ENDIF
+                        loc_oBusca.Release()
                     ENDIF
-                    IF USED("crTipoCopia")
-                        USE IN crTipoCopia
-                    ENDIF
+                ENDIF
 
-                    *-- Copiar linhas de faixa para crSigcdcpo atual (sem compos)
-                    SELECT crSigcdcpo
-                    ZAP
-                    SELECT crSigcdcpoCopia
-                    SCAN
+                IF loc_lResultado AND !EMPTY(loc_cGrupoSel)
+                    *-- Carregar composicoes do grupo selecionado
+                    loc_cSql = "SELECT * FROM sigcdcpo WHERE grupos = " + EscaparSQL(loc_cGrupoSel)
+                    loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "crSigcdcpoCopia")
+                    IF loc_nRet < 1
+                        MsgErro("Falha ao carregar composi" + CHR(231) + CHR(245) + "es do grupo selecionado.", ;
+                            "FormGpd.CmdCopiarComposClick")
+                        loc_lResultado = .F.
+                    ENDIF
+    
+                    IF loc_lResultado AND USED("crSigcdcpoCopia")
+                        *-- Obter tipo/preco do grupo copiado
+                        LOCAL loc_cSql2, loc_nRet2
+                        loc_cSql2 = "SELECT DISTINCT tipos, valors FROM sigcdcpo WHERE grupos = " + ;
+                            EscaparSQL(loc_cGrupoSel)
+                        loc_nRet2 = SQLEXEC(gnConnHandle, loc_cSql2, "crTipoCopia")
+                        IF loc_nRet2 > 0 AND USED("crTipoCopia") AND !EOF("crTipoCopia")
+                            *-- Atualizar filtros com tipo/preco do grupo copiado
+                            IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltTipo", 5)
+                                loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltTipo.Value = ;
+                                    ALLTRIM(crTipoCopia.tipos)
+                            ENDIF
+                            IF PEMSTATUS(loc_oPg9.cnt_4c_FiltroCompos, "txt_4c_FiltPreco", 5)
+                                loc_oPg9.cnt_4c_FiltroCompos.txt_4c_FiltPreco.Value = ;
+                                    ALLTRIM(crTipoCopia.valors)
+                            ENDIF
+                        ENDIF
+                        IF USED("crTipoCopia")
+                            USE IN crTipoCopia
+                        ENDIF
+    
+                        *-- Copiar linhas de faixa para crSigcdcpo atual (sem compos)
                         SELECT crSigcdcpo
-                        INSERT INTO crSigcdcpo ;
-                            (grupos, tipos, vltps, valors, fxinis, fxfins, compos, cidchaves) ;
-                            VALUES ;
-                            (loc_cCgrus, ;
-                             ALLTRIM(crSigcdcpoCopia.tipos), ;
-                             ALLTRIM(crSigcdcpoCopia.vltps), ;
-                             ALLTRIM(crSigcdcpoCopia.valors), ;
-                             crSigcdcpoCopia.fxinis, ;
-                             crSigcdcpoCopia.fxfins, ;
-                             "", "")
+                        ZAP
                         SELECT crSigcdcpoCopia
-                    ENDSCAN
-                    IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
-                        loc_oPg9.grd_4c_Compos.Refresh
-                        GO TOP IN crSigcdcpo
+                        SCAN
+                            SELECT crSigcdcpo
+                            INSERT INTO crSigcdcpo ;
+                                (grupos, tipos, vltps, valors, fxinis, fxfins, compos, cidchaves) ;
+                                VALUES ;
+                                (loc_cCgrus, ;
+                                 ALLTRIM(crSigcdcpoCopia.tipos), ;
+                                 ALLTRIM(crSigcdcpoCopia.vltps), ;
+                                 ALLTRIM(crSigcdcpoCopia.valors), ;
+                                 crSigcdcpoCopia.fxinis, ;
+                                 crSigcdcpoCopia.fxfins, ;
+                                 "", "")
+                            SELECT crSigcdcpoCopia
+                        ENDSCAN
+                        IF PEMSTATUS(loc_oPg9, "grd_4c_Compos", 5)
+                            loc_oPg9.grd_4c_Compos.Refresh
+                            GO TOP IN crSigcdcpo
+                        ENDIF
                     ENDIF
                 ENDIF
             ENDIF
@@ -12737,12 +12778,14 @@ DEFINE CLASS FormGpd AS FormBase
             MsgErro("Erro ao copiar composi" + CHR(231) + CHR(227) + "o:" + ;
                 CHR(13) + loc_oErro.Message, "FormGpd.CmdCopiarComposClick")
         ENDTRY
-
-        IF USED("crGruposCompos")
-            USE IN crGruposCompos
-        ENDIF
-        IF USED("crSigcdcpoCopia")
-            USE IN crSigcdcpoCopia
+        IF loc_lProsseguir
+    
+            IF USED("crGruposCompos")
+                USE IN crGruposCompos
+            ENDIF
+            IF USED("crSigcdcpoCopia")
+                USE IN crSigcdcpoCopia
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -12751,22 +12794,25 @@ DEFINE CLASS FormGpd AS FormBase
     * par_cCgrus: codigo do grupo (SigCdGrp.cgrus)
     *==========================================================================
     PROCEDURE CarregarSigcdcpo(par_cCgrus)
-        LOCAL loc_cSql, loc_nRet
+        LOCAL loc_cSql, loc_nRet, loc_lProsseguir
         IF !USED("crSigcdcpo")
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             SELECT crSigcdcpo
             ZAP
             IF EMPTY(ALLTRIM(par_cCgrus))
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSql = "SELECT cidchaves, compos, fxfins, fxinis, grupos, tipos, valors, vltps " + ;
-                "FROM sigcdcpo WHERE grupos = " + EscaparSQL(ALLTRIM(par_cCgrus))
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "crSigcdcpo")
-            IF loc_nRet < 0
-                MsgErro("Falha ao carregar composi" + CHR(231) + CHR(245) + "es.", ;
-                    "FormGpd.CarregarSigcdcpo")
+            IF loc_lProsseguir
+                loc_cSql = "SELECT cidchaves, compos, fxfins, fxinis, grupos, tipos, valors, vltps " + ;
+                    "FROM sigcdcpo WHERE grupos = " + EscaparSQL(ALLTRIM(par_cCgrus))
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSql, "crSigcdcpo")
+                IF loc_nRet < 0
+                    MsgErro("Falha ao carregar composi" + CHR(231) + CHR(245) + "es.", ;
+                        "FormGpd.CarregarSigcdcpo")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao carregar composi" + CHR(231) + CHR(245) + "es:" + ;

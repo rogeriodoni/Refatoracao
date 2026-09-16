@@ -1810,8 +1810,9 @@ DEFINE CLASS Formsigmvccr AS FormBase
     * BtnSalvarClick - Confirmar inclusao ou alteracao
     *--------------------------------------------------------------------------
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_lSalvou, loc_oPagina
+        LOCAL loc_lSalvou, loc_oPagina, loc_lProsseguir
         loc_lSalvou = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
@@ -1819,109 +1820,139 @@ DEFINE CLASS Formsigmvccr AS FormBase
             IF EMPTY(loc_oPagina.txt_4c_Data.Value)
                 MsgAviso("Data inv" + CHR(225) + "lida.", "Salvar")
                 loc_oPagina.txt_4c_Data.SetFocus
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF EMPTY(loc_oPagina.txt_4c_Oper.Value) OR ;
-               !INLIST(UPPER(ALLTRIM(loc_oPagina.txt_4c_Oper.Value)), "D", "C")
-                MsgAviso("Opera" + CHR(231) + CHR(227) + "o inv" + CHR(225) + "lida! Use D ou C.", "Salvar")
-                loc_oPagina.txt_4c_Oper.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_oPagina.txt_4c_Oper.Value) OR ;
+                   !INLIST(UPPER(ALLTRIM(loc_oPagina.txt_4c_Oper.Value)), "D", "C")
+                    MsgAviso("Opera" + CHR(231) + CHR(227) + "o inv" + CHR(225) + "lida! Use D ou C.", "Salvar")
+                    loc_oPagina.txt_4c_Oper.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF EMPTY(loc_oPagina.txt_4c_Grupo.Value)
-                MsgAviso("Grupo inv" + CHR(225) + "lido.", "Salvar")
-                loc_oPagina.txt_4c_Grupo.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_oPagina.txt_4c_Grupo.Value)
+                    MsgAviso("Grupo inv" + CHR(225) + "lido.", "Salvar")
+                    loc_oPagina.txt_4c_Grupo.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF EMPTY(loc_oPagina.txt_4c_Conta.Value)
-                MsgAviso("Conta inv" + CHR(225) + "lida.", "Salvar")
-                loc_oPagina.txt_4c_Conta.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_oPagina.txt_4c_Conta.Value)
+                    MsgAviso("Conta inv" + CHR(225) + "lida.", "Salvar")
+                    loc_oPagina.txt_4c_Conta.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF EMPTY(loc_oPagina.txt_4c_Moeda.Value)
-                MsgAviso("Moeda inv" + CHR(225) + "lida.", "Salvar")
-                loc_oPagina.txt_4c_Moeda.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_oPagina.txt_4c_Moeda.Value)
+                    MsgAviso("Moeda inv" + CHR(225) + "lida.", "Salvar")
+                    loc_oPagina.txt_4c_Moeda.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF loc_oPagina.txt_4c_Valor.Value = 0
-                MsgAviso("Valor inv" + CHR(225) + "lido.", "Salvar")
-                loc_oPagina.txt_4c_Valor.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF loc_oPagina.txt_4c_Valor.Value = 0
+                    MsgAviso("Valor inv" + CHR(225) + "lido.", "Salvar")
+                    loc_oPagina.txt_4c_Valor.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF EMPTY(loc_oPagina.txt_4c_SOper.Value) OR ;
-               !INLIST(UPPER(ALLTRIM(loc_oPagina.txt_4c_SOper.Value)), "D", "C")
-                MsgAviso("Opera" + CHR(231) + CHR(227) + "o de contrapartida inv" + CHR(225) + "lida! Use D ou C.", "Salvar")
-                loc_oPagina.txt_4c_SOper.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_oPagina.txt_4c_SOper.Value) OR ;
+                   !INLIST(UPPER(ALLTRIM(loc_oPagina.txt_4c_SOper.Value)), "D", "C")
+                    MsgAviso("Opera" + CHR(231) + CHR(227) + "o de contrapartida inv" + CHR(225) + "lida! Use D ou C.", "Salvar")
+                    loc_oPagina.txt_4c_SOper.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF EMPTY(loc_oPagina.txt_4c_SGrupo.Value)
-                MsgAviso("Grupo de contrapartida inv" + CHR(225) + "lido.", "Salvar")
-                loc_oPagina.txt_4c_SGrupo.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_oPagina.txt_4c_SGrupo.Value)
+                    MsgAviso("Grupo de contrapartida inv" + CHR(225) + "lido.", "Salvar")
+                    loc_oPagina.txt_4c_SGrupo.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF EMPTY(loc_oPagina.txt_4c_SConta.Value)
-                MsgAviso("Conta de contrapartida inv" + CHR(225) + "lida.", "Salvar")
-                loc_oPagina.txt_4c_SConta.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_oPagina.txt_4c_SConta.Value)
+                    MsgAviso("Conta de contrapartida inv" + CHR(225) + "lida.", "Salvar")
+                    loc_oPagina.txt_4c_SConta.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF EMPTY(loc_oPagina.txt_4c_SMoeda.Value)
-                MsgAviso("Moeda de contrapartida inv" + CHR(225) + "lida.", "Salvar")
-                loc_oPagina.txt_4c_SMoeda.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_oPagina.txt_4c_SMoeda.Value)
+                    MsgAviso("Moeda de contrapartida inv" + CHR(225) + "lida.", "Salvar")
+                    loc_oPagina.txt_4c_SMoeda.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF loc_oPagina.txt_4c_SValor.Value = 0
-                MsgAviso("Valor de contrapartida inv" + CHR(225) + "lido.", "Salvar")
-                loc_oPagina.txt_4c_SValor.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF loc_oPagina.txt_4c_SValor.Value = 0
+                    MsgAviso("Valor de contrapartida inv" + CHR(225) + "lido.", "Salvar")
+                    loc_oPagina.txt_4c_SValor.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Vencimento obrigatorio se Contapgs = Sim (Value = 1)
-            IF loc_oPagina.opt_4c_OpcaoConta.Value = 1
-                IF EMPTY(loc_oPagina.txt_4c_Venc.Value)
-                    MsgAviso("Vencimento obrigat" + CHR(243) + "rio para contas a pagar.", "Salvar")
-                    loc_oPagina.txt_4c_Venc.SetFocus
-                    RETURN
-                ENDIF
-                IF loc_oPagina.txt_4c_Venc.Value < loc_oPagina.txt_4c_Data.Value
-                    MsgAviso("Vencimento n" + CHR(227) + "o pode ser menor que a data de lan" + CHR(231) + "amento.", "Salvar")
-                    loc_oPagina.txt_4c_Venc.SetFocus
-                    RETURN
+            IF loc_lProsseguir
+                IF loc_oPagina.opt_4c_OpcaoConta.Value = 1
+                    IF EMPTY(loc_oPagina.txt_4c_Venc.Value)
+                        MsgAviso("Vencimento obrigat" + CHR(243) + "rio para contas a pagar.", "Salvar")
+                        loc_oPagina.txt_4c_Venc.SetFocus
+                        loc_lProsseguir = .F.
+                    ENDIF
+                    IF loc_lProsseguir
+                        IF loc_oPagina.txt_4c_Venc.Value < loc_oPagina.txt_4c_Data.Value
+                            MsgAviso("Vencimento n" + CHR(227) + "o pode ser menor que a data de lan" + CHR(231) + "amento.", "Salvar")
+                            loc_oPagina.txt_4c_Venc.SetFocus
+                            loc_lProsseguir = .F.
+                        ENDIF
+                    ENDIF
                 ENDIF
             ENDIF
 
             *-- Mesma moeda: cotacoes devem ser iguais
-            IF ALLTRIM(loc_oPagina.txt_4c_Moeda.Value) = ALLTRIM(loc_oPagina.txt_4c_SMoeda.Value)
-                IF loc_oPagina.txt_4c_Cotacao.Value <> loc_oPagina.txt_4c_SCotacao.Value
-                    MsgAviso("Cota" + CHR(231) + CHR(227) + "o inconsistente para mesma moeda!", "Salvar")
-                    loc_oPagina.txt_4c_Moeda.SetFocus
-                    RETURN
+            IF loc_lProsseguir
+                IF ALLTRIM(loc_oPagina.txt_4c_Moeda.Value) = ALLTRIM(loc_oPagina.txt_4c_SMoeda.Value)
+                    IF loc_oPagina.txt_4c_Cotacao.Value <> loc_oPagina.txt_4c_SCotacao.Value
+                        MsgAviso("Cota" + CHR(231) + CHR(227) + "o inconsistente para mesma moeda!", "Salvar")
+                        loc_oPagina.txt_4c_Moeda.SetFocus
+                        loc_lProsseguir = .F.
+                    ENDIF
                 ENDIF
             ENDIF
 
             *-- Lancamento para a mesma conta e grupo: invalido
-            IF ALLTRIM(loc_oPagina.txt_4c_Grupo.Value) + ALLTRIM(loc_oPagina.txt_4c_Conta.Value) + ;
-               ALLTRIM(loc_oPagina.txt_4c_Moeda.Value) = ;
-               ALLTRIM(loc_oPagina.txt_4c_SGrupo.Value) + ALLTRIM(loc_oPagina.txt_4c_SConta.Value) + ;
-               ALLTRIM(loc_oPagina.txt_4c_SMoeda.Value)
-                MsgAviso("Lan" + CHR(231) + "amento inconsistente! Grupos+Contas+Moedas iguais.", "Salvar")
-                loc_oPagina.txt_4c_Moeda.SetFocus
-                RETURN
+            IF loc_lProsseguir
+                IF ALLTRIM(loc_oPagina.txt_4c_Grupo.Value) + ALLTRIM(loc_oPagina.txt_4c_Conta.Value) + ;
+                   ALLTRIM(loc_oPagina.txt_4c_Moeda.Value) = ;
+                   ALLTRIM(loc_oPagina.txt_4c_SGrupo.Value) + ALLTRIM(loc_oPagina.txt_4c_SConta.Value) + ;
+                   ALLTRIM(loc_oPagina.txt_4c_SMoeda.Value)
+                    MsgAviso("Lan" + CHR(231) + "amento inconsistente! Grupos+Contas+Moedas iguais.", "Salvar")
+                    loc_oPagina.txt_4c_Moeda.SetFocus
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF THIS.FormParaBO()
-                IF THIS.this_oBusinessObject.Salvar()
-                    loc_lSalvou = .T.
-                    MsgSucesso("Registro salvo com sucesso!")
-                    THIS.AlternarPagina(1)
+            IF loc_lProsseguir
+                IF THIS.FormParaBO()
+                    IF THIS.this_oBusinessObject.Salvar()
+                        loc_lSalvou = .T.
+                        MsgSucesso("Registro salvo com sucesso!")
+                        THIS.AlternarPagina(1)
+                    ENDIF
                 ENDIF
             ENDIF
         CATCH TO loc_oErro

@@ -683,23 +683,28 @@ DEFINE CLASS FormSIGREIDC AS FormBase
     ENDPROC
 
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_cFrxPath
+        LOCAL loc_cFrxPath, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ValidarFiltros()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            THIS.ExecutarReportForm("SigReIdc", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
-            THIS.this_oRelatorio.LimparArquivosTemporarios()
+            IF loc_lProsseguir
+                THIS.ExecutarReportForm("SigReIdc", "PREVIEW", THIS.this_oRelatorio.this_cCursorDados)
+                THIS.this_oRelatorio.LimparArquivosTemporarios()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -711,23 +716,28 @@ DEFINE CLASS FormSIGREIDC AS FormBase
     * BtnImprimirClick - Imprime relat" + CHR(243) + "rio na impressora com di" + CHR(225) + "logo de sele" + CHR(231) + CHR(227) + "o
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
-        LOCAL loc_cFrxPath
+        LOCAL loc_cFrxPath, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ValidarFiltros()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            THIS.ExecutarReportForm("SigReIdc", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
-            THIS.this_oRelatorio.LimparArquivosTemporarios()
+            IF loc_lProsseguir
+                THIS.ExecutarReportForm("SigReIdc", "PRINTER_PROMPT", THIS.this_oRelatorio.this_cCursorDados)
+                THIS.this_oRelatorio.LimparArquivosTemporarios()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -739,34 +749,41 @@ DEFINE CLASS FormSIGREIDC AS FormBase
     * BtnExcelClick - Exporta dados do cursor cIde para arquivo XLS
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcelClick()
-        LOCAL loc_cArquivo
+        LOCAL loc_cArquivo, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.ValidarFiltros()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            IF !USED("cIde") OR RECCOUNT("cIde") = 0
-                MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
+            IF loc_lProsseguir
+                IF !USED("cIde") OR RECCOUNT("cIde") = 0
+                    MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
+                    THIS.this_oRelatorio.LimparArquivosTemporarios()
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+            IF loc_lProsseguir
+                loc_cArquivo = PUTFILE("Salvar como...", "SigReIdc", "XLS")
+                IF !EMPTY(loc_cArquivo)
+                    SELECT cIde
+                    COPY TO (loc_cArquivo) TYPE XLS
+                    MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
+                        loc_cArquivo, "Excel")
+                ENDIF
                 THIS.this_oRelatorio.LimparArquivosTemporarios()
-                RETURN
             ENDIF
-            loc_cArquivo = PUTFILE("Salvar como...", "SigReIdc", "XLS")
-            IF !EMPTY(loc_cArquivo)
-                SELECT cIde
-                COPY TO (loc_cArquivo) TYPE XLS
-                MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
-                    loc_cArquivo, "Excel")
-            ENDIF
-            THIS.this_oRelatorio.LimparArquivosTemporarios()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;

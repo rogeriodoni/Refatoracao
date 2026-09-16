@@ -2140,47 +2140,50 @@ DEFINE CLASS FormCliente AS FormBase
     * par_lPorDescr: .T. = busca por descricao, .F. = busca por codigo
     *============================================================
     PROCEDURE AbrirLookupGrupoFiltro(par_lPorDescr)
-        LOCAL loc_oFiltros, loc_oLookup, loc_cValorAtual
+        LOCAL loc_oFiltros, loc_oLookup, loc_cValorAtual, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) OR ;
                !PEMSTATUS(THIS.cnt_4c_ViewLista, "cnt_4c_ListaFiltros", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_oFiltros = THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros
+            IF loc_lProsseguir
+                loc_oFiltros = THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros
 
-            IF par_lPorDescr
-                loc_cValorAtual = ALLTRIM(NVL(loc_oFiltros.txt_4c_FiltroGrupoDesc.Value, ""))
-                loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCdGcr", "cursor_4c_GrupoFiltro", "Descrs", loc_cValorAtual, ;
-                    "Grupo de Contas", .F., .T., "")
-            ELSE
-                loc_cValorAtual = ALLTRIM(NVL(loc_oFiltros.txt_4c_FiltroGrupo.Value, ""))
-                loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCdGcr", "cursor_4c_GrupoFiltro", "Codigos", loc_cValorAtual, ;
-                    "Grupo de Contas", .F., .T., "")
-            ENDIF
-
-            IF VARTYPE(loc_oLookup) = "O"
-                loc_oLookup.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                loc_oLookup.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oLookup.Show()
-
-                IF loc_oLookup.this_lSelecionou AND USED("cursor_4c_GrupoFiltro")
-                    SELECT cursor_4c_GrupoFiltro
-                    loc_oFiltros.txt_4c_FiltroGrupo.Value     = ALLTRIM(NVL(cursor_4c_GrupoFiltro.Codigos, ""))
-                    loc_oFiltros.txt_4c_FiltroGrupoDesc.Value = ALLTRIM(NVL(cursor_4c_GrupoFiltro.Descrs, ""))
-                    THIS.this_cGrupo = PADR(ALLTRIM(cursor_4c_GrupoFiltro.Codigos), 10)
-                    USE IN cursor_4c_GrupoFiltro
-                    THIS.RefreshGridClientes()
+                IF par_lPorDescr
+                    loc_cValorAtual = ALLTRIM(NVL(loc_oFiltros.txt_4c_FiltroGrupoDesc.Value, ""))
+                    loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                        "SigCdGcr", "cursor_4c_GrupoFiltro", "Descrs", loc_cValorAtual, ;
+                        "Grupo de Contas", .F., .T., "")
                 ELSE
-                    IF USED("cursor_4c_GrupoFiltro")
-                        USE IN cursor_4c_GrupoFiltro
-                    ENDIF
+                    loc_cValorAtual = ALLTRIM(NVL(loc_oFiltros.txt_4c_FiltroGrupo.Value, ""))
+                    loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                        "SigCdGcr", "cursor_4c_GrupoFiltro", "Codigos", loc_cValorAtual, ;
+                        "Grupo de Contas", .F., .T., "")
                 ENDIF
-                loc_oLookup.Release()
-                loc_oLookup = .NULL.
-            ENDIF
 
+                IF VARTYPE(loc_oLookup) = "O"
+                    loc_oLookup.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oLookup.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oLookup.Show()
+    
+                    IF loc_oLookup.this_lSelecionou AND USED("cursor_4c_GrupoFiltro")
+                        SELECT cursor_4c_GrupoFiltro
+                        loc_oFiltros.txt_4c_FiltroGrupo.Value     = ALLTRIM(NVL(cursor_4c_GrupoFiltro.Codigos, ""))
+                        loc_oFiltros.txt_4c_FiltroGrupoDesc.Value = ALLTRIM(NVL(cursor_4c_GrupoFiltro.Descrs, ""))
+                        THIS.this_cGrupo = PADR(ALLTRIM(cursor_4c_GrupoFiltro.Codigos), 10)
+                        USE IN cursor_4c_GrupoFiltro
+                        THIS.RefreshGridClientes()
+                    ELSE
+                        IF USED("cursor_4c_GrupoFiltro")
+                            USE IN cursor_4c_GrupoFiltro
+                        ENDIF
+                    ENDIF
+                    loc_oLookup.Release()
+                    loc_oLookup = .NULL.
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErr
             IF USED("cursor_4c_GrupoFiltro")
                 USE IN cursor_4c_GrupoFiltro
@@ -2194,40 +2197,43 @@ DEFINE CLASS FormCliente AS FormBase
     * e bind grid columns. Chamado toda vez que entra em Lista.
     *============================================================
     PROCEDURE RefreshGridClientes
-        LOCAL loc_oErro, loc_oGrd, loc_cGrupo
+        LOCAL loc_oErro, loc_oGrd, loc_cGrupo, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) OR ;
                !PEMSTATUS(THIS.cnt_4c_ViewLista, "grd_4c_Clientes", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
             *-- Requery com filtro grupo (pega do textbox ou padrao)
-            loc_cGrupo = ALLTRIM(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value)
-            IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
-                loc_cGrupo = ALLTRIM(crSigCdPam.GrPadClis)
-                THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value = loc_cGrupo
-                THIS.this_cGrupo = PADR(loc_cGrupo, 10)
-            ENDIF
+            IF loc_lProsseguir
+                loc_cGrupo = ALLTRIM(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value)
+                IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
+                    loc_cGrupo = ALLTRIM(crSigCdPam.GrPadClis)
+                    THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value = loc_cGrupo
+                    THIS.this_cGrupo = PADR(loc_cGrupo, 10)
+                ENDIF
 
-            IF !ISNULL(THIS.poDataMgr) AND VARTYPE(THIS.poDataMgr) = "O" AND !EMPTY(loc_cGrupo)
-                THIS.poDataMgr.ReQuery("crSigCdCli", "Grupos", PADR(loc_cGrupo, 10))
-            ENDIF
+                IF !ISNULL(THIS.poDataMgr) AND VARTYPE(THIS.poDataMgr) = "O" AND !EMPTY(loc_cGrupo)
+                    THIS.poDataMgr.ReQuery("crSigCdCli", "Grupos", PADR(loc_cGrupo, 10))
+                ENDIF
 
             *-- Bind grid a crSigCdCli (uma vez ou toda vez, VFP aceita)
-            loc_oGrd = THIS.cnt_4c_ViewLista.grd_4c_Clientes
-            IF USED("crSigCdCli")
-                loc_oGrd.RecordSource = "crSigCdCli"
-                loc_oGrd.Column1.ControlSource = "crSigCdCli.iclis"
-                loc_oGrd.Column2.ControlSource = "crSigCdCli.rclis"
-                loc_oGrd.Column3.ControlSource = "crSigCdCli.cpfs"
-                loc_oGrd.Column4.ControlSource = "crSigCdCli.situas"
-                loc_oGrd.Column5.ControlSource = "crSigCdCli.ultcomps"
-                loc_oGrd.Column6.ControlSource = "crSigCdCli.dtalts"
-                loc_oGrd.Column7.ControlSource = "crSigCdCli.usualts"
-                loc_oGrd.Column8.ControlSource = "crSigCdCli.ddds"
-                loc_oGrd.Column9.ControlSource = "crSigCdCli.tel1s"
+                loc_oGrd = THIS.cnt_4c_ViewLista.grd_4c_Clientes
+                IF USED("crSigCdCli")
+                    loc_oGrd.RecordSource = "crSigCdCli"
+                    loc_oGrd.Column1.ControlSource = "crSigCdCli.iclis"
+                    loc_oGrd.Column2.ControlSource = "crSigCdCli.rclis"
+                    loc_oGrd.Column3.ControlSource = "crSigCdCli.cpfs"
+                    loc_oGrd.Column4.ControlSource = "crSigCdCli.situas"
+                    loc_oGrd.Column5.ControlSource = "crSigCdCli.ultcomps"
+                    loc_oGrd.Column6.ControlSource = "crSigCdCli.dtalts"
+                    loc_oGrd.Column7.ControlSource = "crSigCdCli.usualts"
+                    loc_oGrd.Column8.ControlSource = "crSigCdCli.ddds"
+                    loc_oGrd.Column9.ControlSource = "crSigCdCli.tel1s"
+                ENDIF
+                loc_oGrd.Refresh()
             ENDIF
-            loc_oGrd.Refresh()
         CATCH TO loc_oErro
             *-- Silent: se cursor/wrapper ainda nao pronto, apenas nao popula
         ENDTRY
@@ -2554,10 +2560,11 @@ DEFINE CLASS FormCliente AS FormBase
     * BtnAlterarClick - Recarregar cliente em modo de alteracao
     *============================================================
     PROCEDURE BtnAlterarClick
-        LOCAL loc_cCodigoCli, loc_lRet, loc_oErro
+        LOCAL loc_cCodigoCli, loc_lRet, loc_oErro, loc_lProsseguir
         IF !THIS.ValidarPreAcao("ALTERAR")
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             *-- Ler codigo do cliente da linha corrente do grid
             loc_cCodigoCli = ""
@@ -2567,30 +2574,32 @@ DEFINE CLASS FormCliente AS FormBase
 
             IF EMPTY(loc_cCodigoCli)
                 MsgAviso("Nenhum cliente selecionado para altera" + CHR(231) + CHR(227) + "o.")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.pcEscolha       = "ALTERAR"
-            THIS.this_cModoAtual = "ALTERAR"
-            THIS.plaltcd         = .T.
-            THIS.this_cCli       = PADR(loc_cCodigoCli, 10)
-            THIS.IrParaDados()
+            IF loc_lProsseguir
+                THIS.pcEscolha       = "ALTERAR"
+                THIS.this_cModoAtual = "ALTERAR"
+                THIS.plaltcd         = .T.
+                THIS.this_cCli       = PADR(loc_cCodigoCli, 10)
+                THIS.IrParaDados()
 
-            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                TRY
-                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
-                        THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
-                CATCH
-                    loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
-                ENDTRY
-                IF loc_lRet
-                    THIS.cnt_4c_Conta.Refresh()
-                    IF PEMSTATUS(THIS, "cmg_4c_Sair", 5)
-                        THIS.cmg_4c_Sair.Buttons(1).Enabled = .T.
+                IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
+                    TRY
+                        loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                            THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
+                    CATCH
+                        loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
+                    ENDTRY
+                    IF loc_lRet
+                        THIS.cnt_4c_Conta.Refresh()
+                        IF PEMSTATUS(THIS, "cmg_4c_Sair", 5)
+                            THIS.cmg_4c_Sair.Buttons(1).Enabled = .T.
+                        ENDIF
+                    ELSE
+                        MsgErro("Erro ao carregar dados para altera" + CHR(231) + CHR(227) + "o.", "Erro")
+                        THIS.IrParaLista()
                     ENDIF
-                ELSE
-                    MsgErro("Erro ao carregar dados para altera" + CHR(231) + CHR(227) + "o.", "Erro")
-                    THIS.IrParaLista()
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -2605,10 +2614,11 @@ DEFINE CLASS FormCliente AS FormBase
     * BtnVisualizarClick - Modo somente leitura (desabilita gravacao)
     *============================================================
     PROCEDURE BtnVisualizarClick
-        LOCAL loc_cCodigoCli, loc_lRet, loc_oErro
+        LOCAL loc_cCodigoCli, loc_lRet, loc_oErro, loc_lProsseguir
         IF !THIS.ValidarPreAcao("VISUALIZAR")
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cCodigoCli = ""
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
@@ -2624,24 +2634,26 @@ DEFINE CLASS FormCliente AS FormBase
 
             IF EMPTY(loc_cCodigoCli)
                 MsgAviso("Nenhum cliente selecionado para visualiza" + CHR(231) + CHR(227) + "o.")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.this_cModoAtual = "VISUALIZAR"
-            THIS.pcEscolha       = "VISUALIZAR"
+            IF loc_lProsseguir
+                THIS.this_cModoAtual = "VISUALIZAR"
+                THIS.pcEscolha       = "VISUALIZAR"
 
-            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, PADR(loc_cCodigoCli, 10), "1", ;
-                    THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
-                IF loc_lRet
-                    THIS.cnt_4c_Conta.Visible = .T.
-                    THIS.cnt_4c_Conta.Refresh()
+                IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
+                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, PADR(loc_cCodigoCli, 10), "1", ;
+                        THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
+                    IF loc_lRet
+                        THIS.cnt_4c_Conta.Visible = .T.
+                        THIS.cnt_4c_Conta.Refresh()
+                    ENDIF
                 ENDIF
-            ENDIF
 
             *-- Desabilitar botao OK em modo de visualizacao (impede gravacao acidental)
-            IF PEMSTATUS(THIS, "cmg_4c_Sair", 5)
-                THIS.cmg_4c_Sair.Buttons(1).Enabled = .F.
+                IF PEMSTATUS(THIS, "cmg_4c_Sair", 5)
+                    THIS.cmg_4c_Sair.Buttons(1).Enabled = .F.
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -2655,10 +2667,11 @@ DEFINE CLASS FormCliente AS FormBase
     * BtnExcluirClick - Confirmar e excluir cliente atual
     *============================================================
     PROCEDURE BtnExcluirClick
-        LOCAL loc_cCodigoCli, loc_lConfirma, loc_lSucesso, loc_cSQL, loc_oErro
+        LOCAL loc_cCodigoCli, loc_lConfirma, loc_lSucesso, loc_cSQL, loc_oErro, loc_lProsseguir
         IF !THIS.ValidarPreAcao("EXCLUIR")
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cCodigoCli = ""
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
@@ -2674,29 +2687,33 @@ DEFINE CLASS FormCliente AS FormBase
 
             IF EMPTY(loc_cCodigoCli)
                 MsgAviso("Nenhum cliente selecionado para exclus" + CHR(227) + "o.")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_lConfirma = MsgConfirma("Confirma a exclus" + CHR(227) + "o do cliente " + ;
-                loc_cCodigoCli + "?" + CHR(13) + ;
-                "Esta opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o pode ser desfeita.", ;
-                "Exclus" + CHR(227) + "o de Cliente")
+            IF loc_lProsseguir
+                loc_lConfirma = MsgConfirma("Confirma a exclus" + CHR(227) + "o do cliente " + ;
+                    loc_cCodigoCli + "?" + CHR(13) + ;
+                    "Esta opera" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o pode ser desfeita.", ;
+                    "Exclus" + CHR(227) + "o de Cliente")
 
-            IF !loc_lConfirma
-                RETURN
+                IF !loc_lConfirma
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Executar exclusao via BO
-            THIS.this_oBusinessObject.this_cIclis = loc_cCodigoCli
-            loc_lSucesso = THIS.this_oBusinessObject.Excluir()
+            IF loc_lProsseguir
+                THIS.this_oBusinessObject.this_cIclis = loc_cCodigoCli
+                loc_lSucesso = THIS.this_oBusinessObject.Excluir()
 
-            IF loc_lSucesso
-                THIS.RetCodCliente = " "
-                THIS.Release()
-            ELSE
-                MsgErro("Erro ao excluir o cliente." + CHR(13) + ;
-                    THIS.this_oBusinessObject.this_cMensagemErro, ;
-                    "Erro na Exclus" + CHR(227) + "o")
+                IF loc_lSucesso
+                    THIS.RetCodCliente = " "
+                    THIS.Release()
+                ELSE
+                    MsgErro("Erro ao excluir o cliente." + CHR(13) + ;
+                        THIS.this_oBusinessObject.this_cMensagemErro, ;
+                        "Erro na Exclus" + CHR(227) + "o")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

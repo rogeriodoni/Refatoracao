@@ -1861,7 +1861,7 @@ DEFINE CLASS FormSigPrChr AS FormBase
 
     *-- Botao Cheque: imprime fisicamente cheques marcados em impressora de cheque
     PROCEDURE BtnImpchqClick()
-        LOCAL loc_cCursor, loc_oErro, loc_cBancos
+        LOCAL loc_cCursor, loc_oErro, loc_cBancos, loc_lProsseguir
         loc_cCursor = THIS.this_oBusinessObject.this_cCursorCheques
 
         IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
@@ -1869,6 +1869,7 @@ DEFINE CLASS FormSigPrChr AS FormBase
             RETURN
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             IF USED("cursor_4c_TmpBanco")
                 USE IN cursor_4c_TmpBanco
@@ -1882,38 +1883,42 @@ DEFINE CLASS FormSigPrChr AS FormBase
             IF EOF("cursor_4c_TmpBanco")
                 MsgAviso("Nenhum cheque selecionado para impress" + CHR(227) + "o.", "Cheque")
                 USE IN cursor_4c_TmpBanco
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF RECCOUNT("cursor_4c_TmpBanco") > 1
-                MsgAviso("Todos os cheques selecionados devem ser do mesmo banco.", ;
-                    "Aten" + CHR(231) + CHR(227) + "o")
+            IF loc_lProsseguir
+                IF RECCOUNT("cursor_4c_TmpBanco") > 1
+                    MsgAviso("Todos os cheques selecionados devem ser do mesmo banco.", ;
+                        "Aten" + CHR(231) + CHR(227) + "o")
+                    USE IN cursor_4c_TmpBanco
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                loc_cBancos = ALLTRIM(cursor_4c_TmpBanco.Bancos)
                 USE IN cursor_4c_TmpBanco
-                RETURN
+
+                IF USED("cursor_4c_ImpTemp")
+                    USE IN cursor_4c_ImpTemp
+                ENDIF
+
+                SELECT Bancos, Agencias, NContas, NCheques, cIdChaves, ;
+                       Valors, Datas, NEmitidos, NCancelas, Favos ;
+                  FROM (loc_cCursor) ;
+                 WHERE NMarca1s = 1 ;
+                 ORDER BY Bancos, NCheques ;
+                  INTO CURSOR cursor_4c_ImpTemp READWRITE
+
+                THIS.this_oBusinessObject.ImprimirCheques(loc_cBancos)
+
+                IF USED("cursor_4c_ImpTemp")
+                    USE IN cursor_4c_ImpTemp
+                ENDIF
+
+                THIS.ExibirCheques(.F.)
+
             ENDIF
-
-            loc_cBancos = ALLTRIM(cursor_4c_TmpBanco.Bancos)
-            USE IN cursor_4c_TmpBanco
-
-            IF USED("cursor_4c_ImpTemp")
-                USE IN cursor_4c_ImpTemp
-            ENDIF
-
-            SELECT Bancos, Agencias, NContas, NCheques, cIdChaves, ;
-                   Valors, Datas, NEmitidos, NCancelas, Favos ;
-              FROM (loc_cCursor) ;
-             WHERE NMarca1s = 1 ;
-             ORDER BY Bancos, NCheques ;
-              INTO CURSOR cursor_4c_ImpTemp READWRITE
-
-            THIS.this_oBusinessObject.ImprimirCheques(loc_cBancos)
-
-            IF USED("cursor_4c_ImpTemp")
-                USE IN cursor_4c_ImpTemp
-            ENDIF
-
-            THIS.ExibirCheques(.F.)
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao imprimir cheque")
         ENDTRY

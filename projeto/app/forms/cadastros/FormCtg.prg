@@ -821,7 +821,7 @@ DEFINE CLASS FormCtg AS FormBase
     * Logica do legado: Grupo_Salva.Salva.Click
     *===========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_oPagina, loc_cCodigo, loc_cDescricao, loc_nResult
+        LOCAL loc_oPagina, loc_cCodigo, loc_cDescricao, loc_nResult, loc_lProsseguir
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
         IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
@@ -860,6 +860,7 @@ DEFINE CLASS FormCtg AS FormBase
 
         *-- INCLUIR: verificar se codigo ja existe (logica do legado)
         IF THIS.this_cModoAtual = "INCLUIR"
+            loc_lProsseguir = .T.
             TRY
                 loc_nResult = SQLEXEC(gnConnHandle, ;
                     "SELECT Cods FROM SigCdCtg WHERE Cods = " + EscaparSQL(loc_cCodigo), ;
@@ -874,11 +875,13 @@ DEFINE CLASS FormCtg AS FormBase
                         IF PEMSTATUS(loc_oPagina, "txt_4c_Codigo", 5)
                             loc_oPagina.txt_4c_Codigo.SetFocus()
                         ENDIF
-                        RETURN
+                        loc_lProsseguir = .F.
                     ENDIF
                 ENDIF
-                IF USED("cursor_4c_CtgDupChk")
-                    USE IN cursor_4c_CtgDupChk
+                IF loc_lProsseguir
+                    IF USED("cursor_4c_CtgDupChk")
+                        USE IN cursor_4c_CtgDupChk
+                    ENDIF
                 ENDIF
             CATCH TO loException
                 MostrarErro("Erro ao verificar duplicidade:" + CHR(13) + loException.Message, ;
@@ -886,21 +889,23 @@ DEFINE CLASS FormCtg AS FormBase
                 IF USED("cursor_4c_CtgDupChk")
                     USE IN cursor_4c_CtgDupChk
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDTRY
         ENDIF
-
-        THIS.FormParaBO()
-
-        TRY
-            IF THIS.this_oBusinessObject.Salvar()
-                MsgInfo("Categoria salva com sucesso!", "Sucesso")
-                THIS.AlternarPagina(1)
-            ENDIF
-        CATCH TO loException
-            MostrarErro("Erro ao salvar categoria:" + CHR(13) + loException.Message, ;
-                "FormCtg.BtnSalvarClick")
-        ENDTRY
+        IF loc_lProsseguir
+    
+            THIS.FormParaBO()
+    
+            TRY
+                IF THIS.this_oBusinessObject.Salvar()
+                    MsgInfo("Categoria salva com sucesso!", "Sucesso")
+                    THIS.AlternarPagina(1)
+                ENDIF
+            CATCH TO loException
+                MostrarErro("Erro ao salvar categoria:" + CHR(13) + loException.Message, ;
+                    "FormCtg.BtnSalvarClick")
+            ENDTRY
+        ENDIF
     ENDPROC
 
     *===========================================================================

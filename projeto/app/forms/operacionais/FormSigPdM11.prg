@@ -938,69 +938,74 @@ DEFINE CLASS FormSigPdM11 AS FormBase
     * Verifica em crSigCdSvc; se nao encontrado, abre lookup filtrado
     *==========================================================================
     PROCEDURE ValidarCategoria()
-        LOCAL loc_cValor, loc_lEncontrado, loc_cGrupo, loc_cConta
+        LOCAL loc_cValor, loc_lEncontrado, loc_cGrupo, loc_cConta, loc_lProsseguir
         LOCAL loc_oBusca, loc_oErro
 
+        loc_lProsseguir = .T.
         TRY
             IF NOT USED("xNensiS") OR EOF("xNensiS")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT xNensiS
-            loc_cValor = ALLTRIM(NVL(xNensiS.Cats,    ""))
-            loc_cGrupo = ALLTRIM(NVL(xNensiS.Grupofs, ""))
-            loc_cConta = ALLTRIM(NVL(xNensiS.Contafs, ""))
+            IF loc_lProsseguir
+                SELECT xNensiS
+                loc_cValor = ALLTRIM(NVL(xNensiS.Cats,    ""))
+                loc_cGrupo = ALLTRIM(NVL(xNensiS.Grupofs, ""))
+                loc_cConta = ALLTRIM(NVL(xNensiS.Contafs, ""))
 
-            IF EMPTY(loc_cValor)
-                RETURN
-            ENDIF
-
-            loc_lEncontrado = .F.
-
-            IF USED("crSigCdSvc")
-                LOCAL loc_nWa
-                loc_nWa = SELECT()
-                SELECT crSigCdSvc
-                SET ORDER TO CaGruCo
-                DO CASE
-                CASE SEEK(xNensiS.Cats + xNensiS.Grupofs + xNensiS.Contafs)
-                    loc_lEncontrado = .T.
-                CASE SEEK(xNensiS.Cats + xNensiS.Grupofs + SPACE(10))
-                    loc_lEncontrado = .T.
-                CASE SEEK(xNensiS.Cats + SPACE(20))
-                    loc_lEncontrado = .T.
-                ENDCASE
-                SELECT (loc_nWa)
+                IF EMPTY(loc_cValor)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF !loc_lEncontrado AND USED("crSigCdSvc")
-                SELECT * FROM crSigCdSvc ;
-                    WHERE (RTRIM(Grupos)+RTRIM(Contas) = RTRIM(m.loc_cGrupo)+RTRIM(m.loc_cConta)) ;
-                    OR  (RTRIM(Grupos) = RTRIM(m.loc_cGrupo) AND LTRIM(RTRIM(Contas)) = "") ;
-                    OR  (LTRIM(RTRIM(Grupos)) = "") ;
-                    INTO CURSOR cursor_4c_BuscaCat READWRITE
+            IF loc_lProsseguir
+                loc_lEncontrado = .F.
 
-                IF USED("cursor_4c_BuscaCat") AND RECCOUNT("cursor_4c_BuscaCat") > 0
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                    IF VARTYPE(loc_oBusca) = "O"
-                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCat"
-                        loc_oBusca.this_cTitulo = "Sele" + CHR(231) + CHR(227) + "o de Categoria"
-                        loc_oBusca.mAddColuna("CCats",  "", "C" + CHR(243) + "digo")
-                        loc_oBusca.mAddColuna("CDescs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.Show()
-                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCat")
-                            SELECT xNensiS
-                            REPLACE xNensiS.Cats WITH ALLTRIM(cursor_4c_BuscaCat.CCats)
+                IF USED("crSigCdSvc")
+                    LOCAL loc_nWa
+                    loc_nWa = SELECT()
+                    SELECT crSigCdSvc
+                    SET ORDER TO CaGruCo
+                    DO CASE
+                    CASE SEEK(xNensiS.Cats + xNensiS.Grupofs + xNensiS.Contafs)
+                        loc_lEncontrado = .T.
+                    CASE SEEK(xNensiS.Cats + xNensiS.Grupofs + SPACE(10))
+                        loc_lEncontrado = .T.
+                    CASE SEEK(xNensiS.Cats + SPACE(20))
+                        loc_lEncontrado = .T.
+                    ENDCASE
+                    SELECT (loc_nWa)
+                ENDIF
+
+                IF !loc_lEncontrado AND USED("crSigCdSvc")
+                    SELECT * FROM crSigCdSvc ;
+                        WHERE (RTRIM(Grupos)+RTRIM(Contas) = RTRIM(m.loc_cGrupo)+RTRIM(m.loc_cConta)) ;
+                        OR  (RTRIM(Grupos) = RTRIM(m.loc_cGrupo) AND LTRIM(RTRIM(Contas)) = "") ;
+                        OR  (LTRIM(RTRIM(Grupos)) = "") ;
+                        INTO CURSOR cursor_4c_BuscaCat READWRITE
+    
+                    IF USED("cursor_4c_BuscaCat") AND RECCOUNT("cursor_4c_BuscaCat") > 0
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                        IF VARTYPE(loc_oBusca) = "O"
+                            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCat"
+                            loc_oBusca.this_cTitulo = "Sele" + CHR(231) + CHR(227) + "o de Categoria"
+                            loc_oBusca.mAddColuna("CCats",  "", "C" + CHR(243) + "digo")
+                            loc_oBusca.mAddColuna("CDescs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                            loc_oBusca.Show()
+                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCat")
+                                SELECT xNensiS
+                                REPLACE xNensiS.Cats WITH ALLTRIM(cursor_4c_BuscaCat.CCats)
+                            ENDIF
+                            loc_oBusca.Release()
                         ENDIF
-                        loc_oBusca.Release()
+                    ENDIF
+                    IF USED("cursor_4c_BuscaCat")
+                        USE IN cursor_4c_BuscaCat
                     ENDIF
                 ENDIF
-                IF USED("cursor_4c_BuscaCat")
-                    USE IN cursor_4c_BuscaCat
-                ENDIF
-            ENDIF
 
-            THIS.this_oBusinessObject.GravarItens(.F.)
-            THIS.txt_4c_DescCat.Refresh()
+                THIS.this_oBusinessObject.GravarItens(.F.)
+                THIS.txt_4c_DescCat.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em ValidarCategoria")
         ENDTRY
@@ -1012,86 +1017,91 @@ DEFINE CLASS FormSigPdM11 AS FormBase
     * opt=2: Grupo ja trata a conta (coluna 6 assume controle)
     *==========================================================================
     PROCEDURE ValidarConta()
-        LOCAL loc_cValor, loc_lEncontrado, loc_nNenvs
+        LOCAL loc_cValor, loc_lEncontrado, loc_nNenvs, loc_lProsseguir
         LOCAL loc_oBusca, loc_oErro
 
+        loc_lProsseguir = .T.
         TRY
             IF NOT USED("xNensiS") OR EOF("xNensiS")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT xNensiS
-            loc_cValor = ALLTRIM(NVL(xNensiS.Contafs, ""))
-            loc_nNenvs = NVL(xNensiS.Nenvs, 0)
+            IF loc_lProsseguir
+                SELECT xNensiS
+                loc_cValor = ALLTRIM(NVL(xNensiS.Contafs, ""))
+                loc_nNenvs = NVL(xNensiS.Nenvs, 0)
 
-            IF EMPTY(loc_cValor)
-                RETURN
+                IF EMPTY(loc_cValor)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF THIS.opt_4c_OptMov.Value = 1 AND USED("CsContas")
-                SELECT * FROM CsContas ;
-                    WHERE Nenvs = loc_nNenvs ;
-                    INTO CURSOR cursor_4c_BuscaConta READWRITE
-
-                IF USED("cursor_4c_BuscaConta") AND RECCOUNT("cursor_4c_BuscaConta") > 0
-                    SELECT cursor_4c_BuscaConta
-                    INDEX ON Contas TAG Contas
-
-                    loc_lEncontrado = SEEK(loc_cValor, "cursor_4c_BuscaConta", "Contas")
+            IF loc_lProsseguir
+                IF THIS.opt_4c_OptMov.Value = 1 AND USED("CsContas")
+                    SELECT * FROM CsContas ;
+                        WHERE Nenvs = loc_nNenvs ;
+                        INTO CURSOR cursor_4c_BuscaConta READWRITE
+    
+                    IF USED("cursor_4c_BuscaConta") AND RECCOUNT("cursor_4c_BuscaConta") > 0
+                        SELECT cursor_4c_BuscaConta
+                        INDEX ON Contas TAG Contas
+    
+                        loc_lEncontrado = SEEK(loc_cValor, "cursor_4c_BuscaConta", "Contas")
+                        IF !loc_lEncontrado
+                            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                            IF VARTYPE(loc_oBusca) = "O"
+                                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaConta"
+                                loc_oBusca.this_cTitulo = "Cadastro de Contas"
+                                loc_oBusca.mAddColuna("Contas", "", "Conta")
+                                loc_oBusca.mAddColuna("Grupos", "", "Grupo")
+                                loc_oBusca.Show()
+                                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaConta")
+                                    SELECT xNensiS
+                                    REPLACE xNensiS.Contafs WITH ALLTRIM(cursor_4c_BuscaConta.Contas), ;
+                                            xNensiS.Grupofs WITH ALLTRIM(cursor_4c_BuscaConta.Grupos)
+                                ENDIF
+                                loc_oBusca.Release()
+                            ENDIF
+                        ELSE
+                            SELECT xNensiS
+                            REPLACE xNensiS.Contafs WITH ALLTRIM(cursor_4c_BuscaConta.Contas), ;
+                                    xNensiS.Grupofs WITH ALLTRIM(cursor_4c_BuscaConta.Grupos)
+                        ENDIF
+                    ENDIF
+                    IF USED("cursor_4c_BuscaConta")
+                        USE IN cursor_4c_BuscaConta
+                    ENDIF
+    
+                    THIS.this_oBusinessObject.GravarItens(.F.)
+                    THIS.txt_4c_DescCat.Refresh()
+                ELSE
+                    IF THIS.opt_4c_OptMov.Value = 2 AND USED("TmpCli")
+                    *-- opt=2: lookup em TmpCli (cursor de clientes/contas do form pai)
+                    loc_lEncontrado = SEEK(loc_cValor, "TmpCli", "BalCodigo")
                     IF !loc_lEncontrado
                         loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
                         IF VARTYPE(loc_oBusca) = "O"
-                            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaConta"
+                            loc_oBusca.this_cCursorDestino = "TmpCli"
                             loc_oBusca.this_cTitulo = "Cadastro de Contas"
-                            loc_oBusca.mAddColuna("Contas", "", "Conta")
+                            loc_oBusca.mAddColuna("IClis",  "", "C" + CHR(243) + "digo")
+                            loc_oBusca.mAddColuna("RClis",  "", "Descri" + CHR(231) + CHR(227) + "o")
                             loc_oBusca.mAddColuna("Grupos", "", "Grupo")
                             loc_oBusca.Show()
-                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaConta")
+                            IF loc_oBusca.this_lSelecionou AND USED("TmpCli")
                                 SELECT xNensiS
-                                REPLACE xNensiS.Contafs WITH ALLTRIM(cursor_4c_BuscaConta.Contas), ;
-                                        xNensiS.Grupofs WITH ALLTRIM(cursor_4c_BuscaConta.Grupos)
+                                REPLACE xNensiS.Contafs WITH ALLTRIM(TmpCli.IClis), ;
+                                        xNensiS.Grupofs WITH ALLTRIM(TmpCli.Grupos)
                             ENDIF
                             loc_oBusca.Release()
                         ENDIF
                     ELSE
                         SELECT xNensiS
-                        REPLACE xNensiS.Contafs WITH ALLTRIM(cursor_4c_BuscaConta.Contas), ;
-                                xNensiS.Grupofs WITH ALLTRIM(cursor_4c_BuscaConta.Grupos)
+                        REPLACE xNensiS.Contafs WITH ALLTRIM(TmpCli.IClis), ;
+                                xNensiS.Grupofs WITH ALLTRIM(TmpCli.Grupos)
                     ENDIF
-                ENDIF
-                IF USED("cursor_4c_BuscaConta")
-                    USE IN cursor_4c_BuscaConta
-                ENDIF
-
-                THIS.this_oBusinessObject.GravarItens(.F.)
-                THIS.txt_4c_DescCat.Refresh()
-            ELSE
-                IF THIS.opt_4c_OptMov.Value = 2 AND USED("TmpCli")
-                *-- opt=2: lookup em TmpCli (cursor de clientes/contas do form pai)
-                loc_lEncontrado = SEEK(loc_cValor, "TmpCli", "BalCodigo")
-                IF !loc_lEncontrado
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                    IF VARTYPE(loc_oBusca) = "O"
-                        loc_oBusca.this_cCursorDestino = "TmpCli"
-                        loc_oBusca.this_cTitulo = "Cadastro de Contas"
-                        loc_oBusca.mAddColuna("IClis",  "", "C" + CHR(243) + "digo")
-                        loc_oBusca.mAddColuna("RClis",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.mAddColuna("Grupos", "", "Grupo")
-                        loc_oBusca.Show()
-                        IF loc_oBusca.this_lSelecionou AND USED("TmpCli")
-                            SELECT xNensiS
-                            REPLACE xNensiS.Contafs WITH ALLTRIM(TmpCli.IClis), ;
-                                    xNensiS.Grupofs WITH ALLTRIM(TmpCli.Grupos)
-                        ENDIF
-                        loc_oBusca.Release()
+    
+                    THIS.this_oBusinessObject.GravarItens(.F.)
+                    THIS.txt_4c_DescCat.Refresh()
                     ENDIF
-                ELSE
-                    SELECT xNensiS
-                    REPLACE xNensiS.Contafs WITH ALLTRIM(TmpCli.IClis), ;
-                            xNensiS.Grupofs WITH ALLTRIM(TmpCli.Grupos)
-                ENDIF
-
-                THIS.this_oBusinessObject.GravarItens(.F.)
-                THIS.txt_4c_DescCat.Refresh()
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -1105,51 +1115,58 @@ DEFINE CLASS FormSigPdM11 AS FormBase
     * Lookup em TmpGccr indexado por BalCodigo
     *==========================================================================
     PROCEDURE ValidarGrupo()
-        LOCAL loc_cValor, loc_lEncontrado
+        LOCAL loc_cValor, loc_lEncontrado, loc_lProsseguir
         LOCAL loc_oBusca, loc_oErro
 
+        loc_lProsseguir = .T.
         TRY
             IF NOT USED("xNensiS") OR EOF("xNensiS")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF THIS.opt_4c_OptMov.Value <> 2
-                RETURN
-            ENDIF
-
-            SELECT xNensiS
-            loc_cValor = ALLTRIM(NVL(xNensiS.Grupofs, ""))
-            IF EMPTY(loc_cValor)
-                RETURN
-            ENDIF
-
-            loc_lEncontrado = .F.
-            IF USED("TmpGccr")
-                loc_lEncontrado = SEEK(loc_cValor, "TmpGccr", "BalCodigo")
-            ENDIF
-
-            IF !loc_lEncontrado AND USED("TmpGccr")
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.this_cCursorDestino = "TmpGccr"
-                    loc_oBusca.this_cTitulo = "Cadastro de Grupos"
-                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("TmpGccr")
-                        SELECT xNensiS
-                        REPLACE xNensiS.Grupofs WITH ALLTRIM(TmpGccr.Codigos)
-                    ENDIF
-                    loc_oBusca.Release()
+            IF loc_lProsseguir
+                IF THIS.opt_4c_OptMov.Value <> 2
+                    loc_lProsseguir = .F.
                 ENDIF
-            ELSE
-                IF loc_lEncontrado AND USED("TmpGccr")
+            ENDIF
+
+            IF loc_lProsseguir
                 SELECT xNensiS
-                REPLACE xNensiS.Grupofs WITH ALLTRIM(TmpGccr.Codigos)
+                loc_cValor = ALLTRIM(NVL(xNensiS.Grupofs, ""))
+                IF EMPTY(loc_cValor)
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
-            THIS.this_oBusinessObject.GravarItens(.F.)
-            THIS.txt_4c_DescCat.Refresh()
+            IF loc_lProsseguir
+                loc_lEncontrado = .F.
+                IF USED("TmpGccr")
+                    loc_lEncontrado = SEEK(loc_cValor, "TmpGccr", "BalCodigo")
+                ENDIF
+
+                IF !loc_lEncontrado AND USED("TmpGccr")
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oBusca) = "O"
+                        loc_oBusca.this_cCursorDestino = "TmpGccr"
+                        loc_oBusca.this_cTitulo = "Cadastro de Grupos"
+                        loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.Show()
+                        IF loc_oBusca.this_lSelecionou AND USED("TmpGccr")
+                            SELECT xNensiS
+                            REPLACE xNensiS.Grupofs WITH ALLTRIM(TmpGccr.Codigos)
+                        ENDIF
+                        loc_oBusca.Release()
+                    ENDIF
+                ELSE
+                    IF loc_lEncontrado AND USED("TmpGccr")
+                    SELECT xNensiS
+                    REPLACE xNensiS.Grupofs WITH ALLTRIM(TmpGccr.Codigos)
+                    ENDIF
+                ENDIF
+
+                THIS.this_oBusinessObject.GravarItens(.F.)
+                THIS.txt_4c_DescCat.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em ValidarGrupo")
         ENDTRY
@@ -1160,59 +1177,64 @@ DEFINE CLASS FormSigPdM11 AS FormBase
     * Lookup em SigPrCrt via SQLEXEC
     *==========================================================================
     PROCEDURE ValidarRetrabalho()
-        LOCAL loc_cValor, loc_lEncontrado, loc_cSQL, loc_nResult
+        LOCAL loc_cValor, loc_lEncontrado, loc_cSQL, loc_nResult, loc_lProsseguir
         LOCAL loc_oBusca, loc_oErro
 
+        loc_lProsseguir = .T.
         TRY
             IF NOT USED("xNensiS") OR EOF("xNensiS")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            SELECT xNensiS
-            loc_cValor = ALLTRIM(NVL(xNensiS.cRetrabs, ""))
-            IF EMPTY(loc_cValor)
-                RETURN
-            ENDIF
-
-            loc_cSQL = "SELECT Cods, Descrs FROM SigPrCrt " + ;
-                       "WHERE Emps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa) + ;
-                       "  OR LTRIM(RTRIM(Emps)) = ''"
-
-            IF USED("cursor_4c_BuscaRetrab")
-                USE IN cursor_4c_BuscaRetrab
-            ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaRetrab")
-
-            IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaRetrab") > 0
-                SELECT cursor_4c_BuscaRetrab
-                INDEX ON Cods TAG Cods
-                loc_lEncontrado = SEEK(loc_cValor, "cursor_4c_BuscaRetrab", "Cods")
-                IF !loc_lEncontrado
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                    IF VARTYPE(loc_oBusca) = "O"
-                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaRetrab"
-                        loc_oBusca.this_cTitulo = "Retrabalhos"
-                        loc_oBusca.mAddColuna("Cods",   "", "C" + CHR(243) + "digo")
-                        loc_oBusca.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.Show()
-                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaRetrab")
-                            SELECT xNensiS
-                            REPLACE xNensiS.cRetrabs WITH ALLTRIM(cursor_4c_BuscaRetrab.Cods)
-                        ENDIF
-                        loc_oBusca.Release()
-                    ENDIF
-                ENDIF
-            ELSE
-                MsgAviso("Retrabalho n" + CHR(227) + "o encontrado.", "Aviso")
+            IF loc_lProsseguir
                 SELECT xNensiS
-                REPLACE xNensiS.cRetrabs WITH ""
+                loc_cValor = ALLTRIM(NVL(xNensiS.cRetrabs, ""))
+                IF EMPTY(loc_cValor)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF USED("cursor_4c_BuscaRetrab")
-                USE IN cursor_4c_BuscaRetrab
-            ENDIF
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT Cods, Descrs FROM SigPrCrt " + ;
+                           "WHERE Emps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa) + ;
+                           "  OR LTRIM(RTRIM(Emps)) = ''"
 
-            THIS.this_oBusinessObject.GravarItens(.F.)
-            THIS.txt_4c_DescCat.Refresh()
+                IF USED("cursor_4c_BuscaRetrab")
+                    USE IN cursor_4c_BuscaRetrab
+                ENDIF
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaRetrab")
+
+                IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaRetrab") > 0
+                    SELECT cursor_4c_BuscaRetrab
+                    INDEX ON Cods TAG Cods
+                    loc_lEncontrado = SEEK(loc_cValor, "cursor_4c_BuscaRetrab", "Cods")
+                    IF !loc_lEncontrado
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                        IF VARTYPE(loc_oBusca) = "O"
+                            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaRetrab"
+                            loc_oBusca.this_cTitulo = "Retrabalhos"
+                            loc_oBusca.mAddColuna("Cods",   "", "C" + CHR(243) + "digo")
+                            loc_oBusca.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                            loc_oBusca.Show()
+                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaRetrab")
+                                SELECT xNensiS
+                                REPLACE xNensiS.cRetrabs WITH ALLTRIM(cursor_4c_BuscaRetrab.Cods)
+                            ENDIF
+                            loc_oBusca.Release()
+                        ENDIF
+                    ENDIF
+                ELSE
+                    MsgAviso("Retrabalho n" + CHR(227) + "o encontrado.", "Aviso")
+                    SELECT xNensiS
+                    REPLACE xNensiS.cRetrabs WITH ""
+                ENDIF
+
+                IF USED("cursor_4c_BuscaRetrab")
+                    USE IN cursor_4c_BuscaRetrab
+                ENDIF
+
+                THIS.this_oBusinessObject.GravarItens(.F.)
+                THIS.txt_4c_DescCat.Refresh()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em ValidarRetrabalho")
         ENDTRY

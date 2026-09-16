@@ -3335,7 +3335,7 @@ DEFINE CLASS Formlch AS FormBase
     * BtnExcluirChequeClick - exclui cheque selecionado no grd_4c_Cheques
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirChequeClick()
-        LOCAL loc_cSQL, loc_nResult, loc_nNums
+        LOCAL loc_cSQL, loc_nResult, loc_nNums, loc_lProsseguir
 
         IF !USED("cursor_4c_ChequesM") OR EOF("cursor_4c_ChequesM")
             MsgAviso("Selecione um cheque na lista.", "")
@@ -3346,28 +3346,31 @@ DEFINE CLASS Formlch AS FormBase
             RETURN
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             SELECT cursor_4c_ChequesM
 
             IF THIS.this_oBusinessObject.this_nNumLotes <= 0
                 MsgAviso("Salve o lote antes de excluir cheques.", "")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cSQL = "DELETE FROM SIGCHE WHERE numos = " + ;
-                FormatarNumeroSQL(THIS.this_oBusinessObject.this_nNumLotes) + ;
-                " AND bancos = " + EscaparSQL(ALLTRIM(cursor_4c_ChequesM.bancos)) + ;
-                " AND agencias = " + EscaparSQL(ALLTRIM(cursor_4c_ChequesM.agencias)) + ;
-                " AND ncontas = " + EscaparSQL(ALLTRIM(cursor_4c_ChequesM.ncontas)) + ;
-                " AND ncheques = " + EscaparSQL(ALLTRIM(cursor_4c_ChequesM.ncheques))
+            IF loc_lProsseguir
+                loc_cSQL = "DELETE FROM SIGCHE WHERE numos = " + ;
+                    FormatarNumeroSQL(THIS.this_oBusinessObject.this_nNumLotes) + ;
+                    " AND bancos = " + EscaparSQL(ALLTRIM(cursor_4c_ChequesM.bancos)) + ;
+                    " AND agencias = " + EscaparSQL(ALLTRIM(cursor_4c_ChequesM.agencias)) + ;
+                    " AND ncontas = " + EscaparSQL(ALLTRIM(cursor_4c_ChequesM.ncontas)) + ;
+                    " AND ncheques = " + EscaparSQL(ALLTRIM(cursor_4c_ChequesM.ncheques))
 
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
 
-            IF loc_nResult < 0
-                MsgErro("Erro ao excluir cheque:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-            ELSE
-                MsgInfo("Cheque exclu" + CHR(237) + "do com sucesso!", "")
-                THIS.CarregarGrade()
+                IF loc_nResult < 0
+                    MsgErro("Erro ao excluir cheque:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                ELSE
+                    MsgInfo("Cheque exclu" + CHR(237) + "do com sucesso!", "")
+                    THIS.CarregarGrade()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formlch.BtnExcluirChequeClick")

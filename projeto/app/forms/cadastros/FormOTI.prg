@@ -3622,30 +3622,33 @@ DEFINE CLASS FormOTI AS FormBase
     *==========================================================================
     PROCEDURE OpcRealprevChanged()
     *==========================================================================
-        LOCAL loc_oPg2, loc_nTipo, loc_lHabilitar
+        LOCAL loc_oPg2, loc_nTipo, loc_lHabilitar, loc_lProsseguir
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "obj_4c_Opc_realprev", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_nTipo      = loc_oPg2.obj_4c_Opc_realprev.Value
-            loc_lHabilitar = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            IF loc_lProsseguir
+                loc_nTipo      = loc_oPg2.obj_4c_Opc_realprev.Value
+                loc_lHabilitar = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
 
-            IF PEMSTATUS(loc_oPg2, "txt_4c_DopCanc", 5)
-                loc_oPg2.txt_4c_DopCanc.Enabled = loc_lHabilitar AND (loc_nTipo = 1)
-                IF loc_nTipo # 1
-                    loc_oPg2.txt_4c_DopCanc.Value = ""
+                IF PEMSTATUS(loc_oPg2, "txt_4c_DopCanc", 5)
+                    loc_oPg2.txt_4c_DopCanc.Enabled = loc_lHabilitar AND (loc_nTipo = 1)
+                    IF loc_nTipo # 1
+                        loc_oPg2.txt_4c_DopCanc.Value = ""
+                    ENDIF
                 ENDIF
-            ENDIF
-            IF PEMSTATUS(loc_oPg2, "txt_4c_DopReal", 5)
-                loc_oPg2.txt_4c_DopReal.Enabled = loc_lHabilitar AND (loc_nTipo = 2)
-                IF loc_nTipo # 2
-                    loc_oPg2.txt_4c_DopReal.Value = ""
+                IF PEMSTATUS(loc_oPg2, "txt_4c_DopReal", 5)
+                    loc_oPg2.txt_4c_DopReal.Enabled = loc_lHabilitar AND (loc_nTipo = 2)
+                    IF loc_nTipo # 2
+                        loc_oPg2.txt_4c_DopReal.Value = ""
+                    ENDIF
                 ENDIF
-            ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.OpcRealprevChanged")
         ENDTRY
@@ -3654,28 +3657,31 @@ DEFINE CLASS FormOTI AS FormBase
     *==========================================================================
     PROCEDURE ChkInativarChanged()
     *==========================================================================
-        LOCAL loc_oPg2
+        LOCAL loc_oPg2, loc_lProsseguir
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "chk_4c_Chk_Inativar", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF loc_oPg2.chk_4c_Chk_Inativar.Value
-                IF PEMSTATUS(loc_oPg2, "obj_4c_Opc_realprev", 5)
-                    loc_oPg2.obj_4c_Opc_realprev.Value = 1
+            IF loc_lProsseguir
+                IF loc_oPg2.chk_4c_Chk_Inativar.Value
+                    IF PEMSTATUS(loc_oPg2, "obj_4c_Opc_realprev", 5)
+                        loc_oPg2.obj_4c_Opc_realprev.Value = 1
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_DopCanc", 5)
+                        loc_oPg2.txt_4c_DopCanc.Value   = ""
+                        loc_oPg2.txt_4c_DopCanc.Enabled = .F.
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_DopReal", 5)
+                        loc_oPg2.txt_4c_DopReal.Value   = ""
+                        loc_oPg2.txt_4c_DopReal.Enabled = .F.
+                    ENDIF
                 ENDIF
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DopCanc", 5)
-                    loc_oPg2.txt_4c_DopCanc.Value   = ""
-                    loc_oPg2.txt_4c_DopCanc.Enabled = .F.
-                ENDIF
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DopReal", 5)
-                    loc_oPg2.txt_4c_DopReal.Value   = ""
-                    loc_oPg2.txt_4c_DopReal.Enabled = .F.
-                ENDIF
-            ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ChkInativarChanged")
         ENDTRY
@@ -3684,148 +3690,171 @@ DEFINE CLASS FormOTI AS FormBase
     *==========================================================================
     PROCEDURE ValidarOpdepo(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
-        LOCAL loc_oPg2, loc_cOpdepo, loc_oBusca, loc_cSQL, loc_nResult
+        LOCAL loc_oPg2, loc_cOpdepo, loc_oBusca, loc_cSQL, loc_nResult, loc_lProsseguir
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_Opdepo", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cOpdepo = ALLTRIM(loc_oPg2.txt_4c_Opdepo.Value)
-            IF EMPTY(loc_cOpdepo)
-                RETURN
+            IF loc_lProsseguir
+                loc_cOpdepo = ALLTRIM(loc_oPg2.txt_4c_Opdepo.Value)
+                IF EMPTY(loc_cOpdepo)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Testa match exato
-            loc_cSQL    = "SELECT TOP 1 Operacaos FROM SigCdOpt WHERE Operacaos = " + EscaparSQL(loc_cOpdepo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaOpt")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_BuscaOpt")
-                RETURN
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 Operacaos FROM SigCdOpt WHERE Operacaos = " + EscaparSQL(loc_cOpdepo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaOpt")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_BuscaOpt")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Sem match exato - abre picker com todos registros
-            IF USED("cursor_4c_BuscaOpt")
-                USE IN cursor_4c_BuscaOpt
-            ENDIF
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", ;
-                "SELECT Operacaos, Descrs FROM SigCdOpt ORDER BY Operacaos", ;
-                "cursor_4c_BuscaOpt")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Operacaos", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descrs",    "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaOpt")
-                    loc_oPg2.txt_4c_Opdepo.Value = ALLTRIM(cursor_4c_BuscaOpt.Operacaos)
-                ELSE
-                    loc_oPg2.txt_4c_Opdepo.Value = ""
+            IF loc_lProsseguir
+                IF USED("cursor_4c_BuscaOpt")
+                    USE IN cursor_4c_BuscaOpt
                 ENDIF
-                loc_oBusca.Release()
-            ENDIF
+                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", ;
+                    "SELECT Operacaos, Descrs FROM SigCdOpt ORDER BY Operacaos", ;
+                    "cursor_4c_BuscaOpt")
+                IF VARTYPE(loc_oBusca) = "O"
+                    loc_oBusca.mAddColuna("Operacaos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descrs",    "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaOpt")
+                        loc_oPg2.txt_4c_Opdepo.Value = ALLTRIM(cursor_4c_BuscaOpt.Operacaos)
+                    ELSE
+                        loc_oPg2.txt_4c_Opdepo.Value = ""
+                    ENDIF
+                    loc_oBusca.Release()
+                ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarOpdepo")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaOpt")
-            USE IN cursor_4c_BuscaOpt
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaOpt")
+                USE IN cursor_4c_BuscaOpt
+            ENDIF
         ENDIF
     ENDPROC
 
     *==========================================================================
     PROCEDURE ValidarDopReal(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
-        LOCAL loc_oPg2, loc_cDopReal, loc_cSQL, loc_nResult, loc_oBusca
+        LOCAL loc_oPg2, loc_cDopReal, loc_cSQL, loc_nResult, loc_oBusca, loc_lProsseguir
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_DopReal", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cDopReal = ALLTRIM(loc_oPg2.txt_4c_DopReal.Value)
-            IF EMPTY(loc_cDopReal)
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT Dopes FROM SigOpOpe WHERE RealPrevs <> 2"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpOpeR")
-
-            IF loc_nResult > 0
-                SELECT cursor_4c_TmpOpeR
-                LOCATE FOR ALLTRIM(cursor_4c_TmpOpeR.Dopes) == ALLTRIM(loc_cDopReal)
-                IF FOUND("cursor_4c_TmpOpeR")
-                    loc_oPg2.txt_4c_DopReal.Value = ALLTRIM(cursor_4c_TmpOpeR.Dopes)
-                ELSE
-                    GO TOP IN cursor_4c_TmpOpeR
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                    IF VARTYPE(loc_oBusca) = "O"
-                        loc_oBusca.this_cCursorDestino = "cursor_4c_TmpOpeR"
-                        loc_oBusca.mAddColuna("Dopes", "", "Opera" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.Show()
-                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_TmpOpeR")
-                            loc_oPg2.txt_4c_DopReal.Value = ALLTRIM(cursor_4c_TmpOpeR.Dopes)
-                        ELSE
-                            loc_oPg2.txt_4c_DopReal.Value = ""
-                        ENDIF
-                        loc_oBusca.Release()
-                    ENDIF
+            IF loc_lProsseguir
+                loc_cDopReal = ALLTRIM(loc_oPg2.txt_4c_DopReal.Value)
+                IF EMPTY(loc_cDopReal)
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT Dopes FROM SigOpOpe WHERE RealPrevs <> 2"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpOpeR")
+
+                IF loc_nResult > 0
+                    SELECT cursor_4c_TmpOpeR
+                    LOCATE FOR ALLTRIM(cursor_4c_TmpOpeR.Dopes) == ALLTRIM(loc_cDopReal)
+                    IF FOUND("cursor_4c_TmpOpeR")
+                        loc_oPg2.txt_4c_DopReal.Value = ALLTRIM(cursor_4c_TmpOpeR.Dopes)
+                    ELSE
+                        GO TOP IN cursor_4c_TmpOpeR
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                        IF VARTYPE(loc_oBusca) = "O"
+                            loc_oBusca.this_cCursorDestino = "cursor_4c_TmpOpeR"
+                            loc_oBusca.mAddColuna("Dopes", "", "Opera" + CHR(231) + CHR(227) + "o")
+                            loc_oBusca.Show()
+                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_TmpOpeR")
+                                loc_oPg2.txt_4c_DopReal.Value = ALLTRIM(cursor_4c_TmpOpeR.Dopes)
+                            ELSE
+                                loc_oPg2.txt_4c_DopReal.Value = ""
+                            ENDIF
+                            loc_oBusca.Release()
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarDopReal")
         ENDTRY
-
-        IF USED("cursor_4c_TmpOpeR")
-            USE IN cursor_4c_TmpOpeR
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_TmpOpeR")
+                USE IN cursor_4c_TmpOpeR
+            ENDIF
         ENDIF
     ENDPROC
 
     *==========================================================================
     PROCEDURE ValidarDopCanc(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
-        LOCAL loc_oPg2, loc_cDopCanc, loc_cSQL, loc_nResult, loc_oBusca
+        LOCAL loc_oPg2, loc_cDopCanc, loc_cSQL, loc_nResult, loc_oBusca, loc_lProsseguir
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_DopCanc", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cDopCanc = ALLTRIM(loc_oPg2.txt_4c_DopCanc.Value)
-            IF EMPTY(loc_cDopCanc)
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT Dopes FROM SigOpOpe WHERE OpeCancs = 1"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpCanc")
-
-            IF loc_nResult > 0
-                SELECT cursor_4c_TmpCanc
-                LOCATE FOR ALLTRIM(cursor_4c_TmpCanc.Dopes) == ALLTRIM(loc_cDopCanc)
-                IF FOUND("cursor_4c_TmpCanc")
-                    loc_oPg2.txt_4c_DopCanc.Value = ALLTRIM(cursor_4c_TmpCanc.Dopes)
-                ELSE
-                    GO TOP IN cursor_4c_TmpCanc
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                    IF VARTYPE(loc_oBusca) = "O"
-                        loc_oBusca.this_cCursorDestino = "cursor_4c_TmpCanc"
-                        loc_oBusca.mAddColuna("Dopes", "", "Opera" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.Show()
-                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_TmpCanc")
-                            loc_oPg2.txt_4c_DopCanc.Value = ALLTRIM(cursor_4c_TmpCanc.Dopes)
-                        ELSE
-                            loc_oPg2.txt_4c_DopCanc.Value = ""
-                        ENDIF
-                        loc_oBusca.Release()
-                    ENDIF
+            IF loc_lProsseguir
+                loc_cDopCanc = ALLTRIM(loc_oPg2.txt_4c_DopCanc.Value)
+                IF EMPTY(loc_cDopCanc)
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT Dopes FROM SigOpOpe WHERE OpeCancs = 1"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpCanc")
+
+                IF loc_nResult > 0
+                    SELECT cursor_4c_TmpCanc
+                    LOCATE FOR ALLTRIM(cursor_4c_TmpCanc.Dopes) == ALLTRIM(loc_cDopCanc)
+                    IF FOUND("cursor_4c_TmpCanc")
+                        loc_oPg2.txt_4c_DopCanc.Value = ALLTRIM(cursor_4c_TmpCanc.Dopes)
+                    ELSE
+                        GO TOP IN cursor_4c_TmpCanc
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                        IF VARTYPE(loc_oBusca) = "O"
+                            loc_oBusca.this_cCursorDestino = "cursor_4c_TmpCanc"
+                            loc_oBusca.mAddColuna("Dopes", "", "Opera" + CHR(231) + CHR(227) + "o")
+                            loc_oBusca.Show()
+                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_TmpCanc")
+                                loc_oPg2.txt_4c_DopCanc.Value = ALLTRIM(cursor_4c_TmpCanc.Dopes)
+                            ELSE
+                                loc_oPg2.txt_4c_DopCanc.Value = ""
+                            ENDIF
+                            loc_oBusca.Release()
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarDopCanc")
         ENDTRY
-
-        IF USED("cursor_4c_TmpCanc")
-            USE IN cursor_4c_TmpCanc
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_TmpCanc")
+                USE IN cursor_4c_TmpCanc
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -3870,52 +3899,60 @@ DEFINE CLASS FormOTI AS FormBase
     PROCEDURE ValidarMoeda(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
         LOCAL loc_oPg2, loc_cMoeda, loc_cSQL, loc_nResult, loc_oBusca, loc_oErro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_Moeda", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cMoeda = ALLTRIM(loc_oPg2.txt_4c_Moeda.Value)
-            IF EMPTY(loc_cMoeda)
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT CMoes, DMoes FROM SigCdMoe ORDER BY CMoes"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaMoe")
-            IF loc_nResult > 0
-                SELECT cursor_4c_BuscaMoe
-                LOCATE FOR ALLTRIM(cursor_4c_BuscaMoe.CMoes) == ALLTRIM(loc_cMoeda)
-                IF FOUND("cursor_4c_BuscaMoe")
-                    loc_oPg2.txt_4c_Moeda.Value = ALLTRIM(cursor_4c_BuscaMoe.CMoes)
-                ELSE
-                    GO TOP IN cursor_4c_BuscaMoe
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                    IF VARTYPE(loc_oBusca) = "O"
-                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaMoe"
-                        loc_oBusca.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
-                        loc_oBusca.mAddColuna("DMoes", "", "Moeda")
-                        loc_oBusca.Show()
-                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaMoe")
-                            loc_oPg2.txt_4c_Moeda.Value = ALLTRIM(cursor_4c_BuscaMoe.CMoes)
-                        ELSE
-                            loc_oPg2.txt_4c_Moeda.Value = ""
-                        ENDIF
-                        loc_oBusca.Release()
-                    ENDIF
+            IF loc_lProsseguir
+                loc_cMoeda = ALLTRIM(loc_oPg2.txt_4c_Moeda.Value)
+                IF EMPTY(loc_cMoeda)
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT CMoes, DMoes FROM SigCdMoe ORDER BY CMoes"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaMoe")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_BuscaMoe
+                    LOCATE FOR ALLTRIM(cursor_4c_BuscaMoe.CMoes) == ALLTRIM(loc_cMoeda)
+                    IF FOUND("cursor_4c_BuscaMoe")
+                        loc_oPg2.txt_4c_Moeda.Value = ALLTRIM(cursor_4c_BuscaMoe.CMoes)
+                    ELSE
+                        GO TOP IN cursor_4c_BuscaMoe
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                        IF VARTYPE(loc_oBusca) = "O"
+                            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaMoe"
+                            loc_oBusca.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
+                            loc_oBusca.mAddColuna("DMoes", "", "Moeda")
+                            loc_oBusca.Show()
+                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaMoe")
+                                loc_oPg2.txt_4c_Moeda.Value = ALLTRIM(cursor_4c_BuscaMoe.CMoes)
+                            ELSE
+                                loc_oPg2.txt_4c_Moeda.Value = ""
+                            ENDIF
+                            loc_oBusca.Release()
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarMoeda")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaMoe")
-            USE IN cursor_4c_BuscaMoe
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaMoe")
+                USE IN cursor_4c_BuscaMoe
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -3941,62 +3978,72 @@ DEFINE CLASS FormOTI AS FormBase
     PROCEDURE ValidarGrpCad1s(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
         LOCAL loc_oPg2, loc_cCod, loc_cDesc, loc_cSQL, loc_nResult, loc_oBusca, loc_oErro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_GrpCad1", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg2.txt_4c_GrpCad1.Value)
-            IF EMPTY(loc_cCod)
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad1", 5)
-                    loc_oPg2.txt_4c_DGrpCad1.Value = ""
-                ENDIF
-                RETURN
-            ENDIF
-
-            loc_cDesc = THIS.this_oBusinessObject.BuscarDescricaoGrpCad(loc_cCod)
-            IF !EMPTY(loc_cDesc)
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad1", 5)
-                    loc_oPg2.txt_4c_DGrpCad1.Value = loc_cDesc
-                ENDIF
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT Codigos, Descrs FROM SigCdGcr ORDER BY Codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGcr1")
-            IF loc_nResult > 0
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGcr1"
-                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr1")
-                        loc_oPg2.txt_4c_GrpCad1.Value = ALLTRIM(cursor_4c_BuscaGcr1.Codigos)
-                        IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad1", 5)
-                            loc_oPg2.txt_4c_DGrpCad1.Value = ALLTRIM(cursor_4c_BuscaGcr1.Descrs)
-                        ENDIF
-                    ELSE
-                        loc_oPg2.txt_4c_GrpCad1.Value = ""
-                        IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad1", 5)
-                            loc_oPg2.txt_4c_DGrpCad1.Value = ""
-                        ENDIF
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg2.txt_4c_GrpCad1.Value)
+                IF EMPTY(loc_cCod)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad1", 5)
+                        loc_oPg2.txt_4c_DGrpCad1.Value = ""
                     ENDIF
-                    loc_oBusca.Release()
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cDesc = THIS.this_oBusinessObject.BuscarDescricaoGrpCad(loc_cCod)
+                IF !EMPTY(loc_cDesc)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad1", 5)
+                        loc_oPg2.txt_4c_DGrpCad1.Value = loc_cDesc
+                    ENDIF
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT Codigos, Descrs FROM SigCdGcr ORDER BY Codigos"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGcr1")
+                IF loc_nResult > 0
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oBusca) = "O"
+                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGcr1"
+                        loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.Show()
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr1")
+                            loc_oPg2.txt_4c_GrpCad1.Value = ALLTRIM(cursor_4c_BuscaGcr1.Codigos)
+                            IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad1", 5)
+                                loc_oPg2.txt_4c_DGrpCad1.Value = ALLTRIM(cursor_4c_BuscaGcr1.Descrs)
+                            ENDIF
+                        ELSE
+                            loc_oPg2.txt_4c_GrpCad1.Value = ""
+                            IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad1", 5)
+                                loc_oPg2.txt_4c_DGrpCad1.Value = ""
+                            ENDIF
+                        ENDIF
+                        loc_oBusca.Release()
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarGrpCad1s")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaGcr1")
-            USE IN cursor_4c_BuscaGcr1
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaGcr1")
+                USE IN cursor_4c_BuscaGcr1
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -4004,62 +4051,72 @@ DEFINE CLASS FormOTI AS FormBase
     PROCEDURE ValidarGrpCad2s(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
         LOCAL loc_oPg2, loc_cCod, loc_cDesc, loc_cSQL, loc_nResult, loc_oBusca, loc_oErro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_GrpCad2", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg2.txt_4c_GrpCad2.Value)
-            IF EMPTY(loc_cCod)
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad2", 5)
-                    loc_oPg2.txt_4c_DGrpCad2.Value = ""
-                ENDIF
-                RETURN
-            ENDIF
-
-            loc_cDesc = THIS.this_oBusinessObject.BuscarDescricaoGrpCad(loc_cCod)
-            IF !EMPTY(loc_cDesc)
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad2", 5)
-                    loc_oPg2.txt_4c_DGrpCad2.Value = loc_cDesc
-                ENDIF
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT Codigos, Descrs FROM SigCdGcr ORDER BY Codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGcr2")
-            IF loc_nResult > 0
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGcr2"
-                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr2")
-                        loc_oPg2.txt_4c_GrpCad2.Value = ALLTRIM(cursor_4c_BuscaGcr2.Codigos)
-                        IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad2", 5)
-                            loc_oPg2.txt_4c_DGrpCad2.Value = ALLTRIM(cursor_4c_BuscaGcr2.Descrs)
-                        ENDIF
-                    ELSE
-                        loc_oPg2.txt_4c_GrpCad2.Value = ""
-                        IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad2", 5)
-                            loc_oPg2.txt_4c_DGrpCad2.Value = ""
-                        ENDIF
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg2.txt_4c_GrpCad2.Value)
+                IF EMPTY(loc_cCod)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad2", 5)
+                        loc_oPg2.txt_4c_DGrpCad2.Value = ""
                     ENDIF
-                    loc_oBusca.Release()
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cDesc = THIS.this_oBusinessObject.BuscarDescricaoGrpCad(loc_cCod)
+                IF !EMPTY(loc_cDesc)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad2", 5)
+                        loc_oPg2.txt_4c_DGrpCad2.Value = loc_cDesc
+                    ENDIF
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT Codigos, Descrs FROM SigCdGcr ORDER BY Codigos"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGcr2")
+                IF loc_nResult > 0
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oBusca) = "O"
+                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGcr2"
+                        loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.Show()
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr2")
+                            loc_oPg2.txt_4c_GrpCad2.Value = ALLTRIM(cursor_4c_BuscaGcr2.Codigos)
+                            IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad2", 5)
+                                loc_oPg2.txt_4c_DGrpCad2.Value = ALLTRIM(cursor_4c_BuscaGcr2.Descrs)
+                            ENDIF
+                        ELSE
+                            loc_oPg2.txt_4c_GrpCad2.Value = ""
+                            IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad2", 5)
+                                loc_oPg2.txt_4c_DGrpCad2.Value = ""
+                            ENDIF
+                        ENDIF
+                        loc_oBusca.Release()
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarGrpCad2s")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaGcr2")
-            USE IN cursor_4c_BuscaGcr2
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaGcr2")
+                USE IN cursor_4c_BuscaGcr2
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -4067,62 +4124,72 @@ DEFINE CLASS FormOTI AS FormBase
     PROCEDURE ValidarGrpCad3s(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
         LOCAL loc_oPg2, loc_cCod, loc_cDesc, loc_cSQL, loc_nResult, loc_oBusca, loc_oErro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_GrpCad3", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg2.txt_4c_GrpCad3.Value)
-            IF EMPTY(loc_cCod)
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad3", 5)
-                    loc_oPg2.txt_4c_DGrpCad3.Value = ""
-                ENDIF
-                RETURN
-            ENDIF
-
-            loc_cDesc = THIS.this_oBusinessObject.BuscarDescricaoGrpCad(loc_cCod)
-            IF !EMPTY(loc_cDesc)
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad3", 5)
-                    loc_oPg2.txt_4c_DGrpCad3.Value = loc_cDesc
-                ENDIF
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT Codigos, Descrs FROM SigCdGcr ORDER BY Codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGcr3")
-            IF loc_nResult > 0
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGcr3"
-                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr3")
-                        loc_oPg2.txt_4c_GrpCad3.Value = ALLTRIM(cursor_4c_BuscaGcr3.Codigos)
-                        IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad3", 5)
-                            loc_oPg2.txt_4c_DGrpCad3.Value = ALLTRIM(cursor_4c_BuscaGcr3.Descrs)
-                        ENDIF
-                    ELSE
-                        loc_oPg2.txt_4c_GrpCad3.Value = ""
-                        IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad3", 5)
-                            loc_oPg2.txt_4c_DGrpCad3.Value = ""
-                        ENDIF
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg2.txt_4c_GrpCad3.Value)
+                IF EMPTY(loc_cCod)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad3", 5)
+                        loc_oPg2.txt_4c_DGrpCad3.Value = ""
                     ENDIF
-                    loc_oBusca.Release()
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cDesc = THIS.this_oBusinessObject.BuscarDescricaoGrpCad(loc_cCod)
+                IF !EMPTY(loc_cDesc)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad3", 5)
+                        loc_oPg2.txt_4c_DGrpCad3.Value = loc_cDesc
+                    ENDIF
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT Codigos, Descrs FROM SigCdGcr ORDER BY Codigos"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGcr3")
+                IF loc_nResult > 0
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oBusca) = "O"
+                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGcr3"
+                        loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.Show()
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr3")
+                            loc_oPg2.txt_4c_GrpCad3.Value = ALLTRIM(cursor_4c_BuscaGcr3.Codigos)
+                            IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad3", 5)
+                                loc_oPg2.txt_4c_DGrpCad3.Value = ALLTRIM(cursor_4c_BuscaGcr3.Descrs)
+                            ENDIF
+                        ELSE
+                            loc_oPg2.txt_4c_GrpCad3.Value = ""
+                            IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad3", 5)
+                                loc_oPg2.txt_4c_DGrpCad3.Value = ""
+                            ENDIF
+                        ENDIF
+                        loc_oBusca.Release()
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarGrpCad3s")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaGcr3")
-            USE IN cursor_4c_BuscaGcr3
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaGcr3")
+                USE IN cursor_4c_BuscaGcr3
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -4130,62 +4197,72 @@ DEFINE CLASS FormOTI AS FormBase
     PROCEDURE ValidarGrpCad4s(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
         LOCAL loc_oPg2, loc_cCod, loc_cDesc, loc_cSQL, loc_nResult, loc_oBusca, loc_oErro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_GrpCad4", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg2.txt_4c_GrpCad4.Value)
-            IF EMPTY(loc_cCod)
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad4", 5)
-                    loc_oPg2.txt_4c_DGrpCad4.Value = ""
-                ENDIF
-                RETURN
-            ENDIF
-
-            loc_cDesc = THIS.this_oBusinessObject.BuscarDescricaoGrpCad(loc_cCod)
-            IF !EMPTY(loc_cDesc)
-                IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad4", 5)
-                    loc_oPg2.txt_4c_DGrpCad4.Value = loc_cDesc
-                ENDIF
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT Codigos, Descrs FROM SigCdGcr ORDER BY Codigos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGcr4")
-            IF loc_nResult > 0
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGcr4"
-                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                    loc_oBusca.Show()
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr4")
-                        loc_oPg2.txt_4c_GrpCad4.Value = ALLTRIM(cursor_4c_BuscaGcr4.Codigos)
-                        IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad4", 5)
-                            loc_oPg2.txt_4c_DGrpCad4.Value = ALLTRIM(cursor_4c_BuscaGcr4.Descrs)
-                        ENDIF
-                    ELSE
-                        loc_oPg2.txt_4c_GrpCad4.Value = ""
-                        IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad4", 5)
-                            loc_oPg2.txt_4c_DGrpCad4.Value = ""
-                        ENDIF
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg2.txt_4c_GrpCad4.Value)
+                IF EMPTY(loc_cCod)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad4", 5)
+                        loc_oPg2.txt_4c_DGrpCad4.Value = ""
                     ENDIF
-                    loc_oBusca.Release()
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cDesc = THIS.this_oBusinessObject.BuscarDescricaoGrpCad(loc_cCod)
+                IF !EMPTY(loc_cDesc)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad4", 5)
+                        loc_oPg2.txt_4c_DGrpCad4.Value = loc_cDesc
+                    ENDIF
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT Codigos, Descrs FROM SigCdGcr ORDER BY Codigos"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGcr4")
+                IF loc_nResult > 0
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oBusca) = "O"
+                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGcr4"
+                        loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.Show()
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGcr4")
+                            loc_oPg2.txt_4c_GrpCad4.Value = ALLTRIM(cursor_4c_BuscaGcr4.Codigos)
+                            IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad4", 5)
+                                loc_oPg2.txt_4c_DGrpCad4.Value = ALLTRIM(cursor_4c_BuscaGcr4.Descrs)
+                            ENDIF
+                        ELSE
+                            loc_oPg2.txt_4c_GrpCad4.Value = ""
+                            IF PEMSTATUS(loc_oPg2, "txt_4c_DGrpCad4", 5)
+                                loc_oPg2.txt_4c_DGrpCad4.Value = ""
+                            ENDIF
+                        ENDIF
+                        loc_oBusca.Release()
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarGrpCad4s")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaGcr4")
-            USE IN cursor_4c_BuscaGcr4
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaGcr4")
+                USE IN cursor_4c_BuscaGcr4
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -4193,52 +4270,60 @@ DEFINE CLASS FormOTI AS FormBase
     PROCEDURE ValidarClass1s(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
         LOCAL loc_oPg2, loc_cCod, loc_cSQL, loc_nResult, loc_oBusca, loc_oErro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_Class1", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg2.txt_4c_Class1.Value)
-            IF EMPTY(loc_cCod)
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT Classes, Descrs FROM SigCdCss WHERE LEN(RTRIM(Classes))=1 ORDER BY Classes"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCss1")
-            IF loc_nResult > 0
-                SELECT cursor_4c_BuscaCss1
-                LOCATE FOR ALLTRIM(cursor_4c_BuscaCss1.Classes) == ALLTRIM(loc_cCod)
-                IF FOUND("cursor_4c_BuscaCss1")
-                    loc_oPg2.txt_4c_Class1.Value = ALLTRIM(cursor_4c_BuscaCss1.Classes)
-                ELSE
-                    GO TOP IN cursor_4c_BuscaCss1
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                    IF VARTYPE(loc_oBusca) = "O"
-                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCss1"
-                        loc_oBusca.mAddColuna("Classes", "", "C" + CHR(243) + "digo")
-                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.Show()
-                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCss1")
-                            loc_oPg2.txt_4c_Class1.Value = ALLTRIM(cursor_4c_BuscaCss1.Classes)
-                        ELSE
-                            loc_oPg2.txt_4c_Class1.Value = ""
-                        ENDIF
-                        loc_oBusca.Release()
-                    ENDIF
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg2.txt_4c_Class1.Value)
+                IF EMPTY(loc_cCod)
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT Classes, Descrs FROM SigCdCss WHERE LEN(RTRIM(Classes))=1 ORDER BY Classes"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCss1")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_BuscaCss1
+                    LOCATE FOR ALLTRIM(cursor_4c_BuscaCss1.Classes) == ALLTRIM(loc_cCod)
+                    IF FOUND("cursor_4c_BuscaCss1")
+                        loc_oPg2.txt_4c_Class1.Value = ALLTRIM(cursor_4c_BuscaCss1.Classes)
+                    ELSE
+                        GO TOP IN cursor_4c_BuscaCss1
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                        IF VARTYPE(loc_oBusca) = "O"
+                            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCss1"
+                            loc_oBusca.mAddColuna("Classes", "", "C" + CHR(243) + "digo")
+                            loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                            loc_oBusca.Show()
+                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCss1")
+                                loc_oPg2.txt_4c_Class1.Value = ALLTRIM(cursor_4c_BuscaCss1.Classes)
+                            ELSE
+                                loc_oPg2.txt_4c_Class1.Value = ""
+                            ENDIF
+                            loc_oBusca.Release()
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarClass1s")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaCss1")
-            USE IN cursor_4c_BuscaCss1
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaCss1")
+                USE IN cursor_4c_BuscaCss1
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -4246,52 +4331,60 @@ DEFINE CLASS FormOTI AS FormBase
     PROCEDURE ValidarClass2s(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
         LOCAL loc_oPg2, loc_cCod, loc_cSQL, loc_nResult, loc_oBusca, loc_oErro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_Class2", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg2.txt_4c_Class2.Value)
-            IF EMPTY(loc_cCod)
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT Classes, Descrs FROM SigCdCss WHERE LEN(RTRIM(Classes))=1 ORDER BY Classes"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCss2")
-            IF loc_nResult > 0
-                SELECT cursor_4c_BuscaCss2
-                LOCATE FOR ALLTRIM(cursor_4c_BuscaCss2.Classes) == ALLTRIM(loc_cCod)
-                IF FOUND("cursor_4c_BuscaCss2")
-                    loc_oPg2.txt_4c_Class2.Value = ALLTRIM(cursor_4c_BuscaCss2.Classes)
-                ELSE
-                    GO TOP IN cursor_4c_BuscaCss2
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                    IF VARTYPE(loc_oBusca) = "O"
-                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCss2"
-                        loc_oBusca.mAddColuna("Classes", "", "C" + CHR(243) + "digo")
-                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.Show()
-                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCss2")
-                            loc_oPg2.txt_4c_Class2.Value = ALLTRIM(cursor_4c_BuscaCss2.Classes)
-                        ELSE
-                            loc_oPg2.txt_4c_Class2.Value = ""
-                        ENDIF
-                        loc_oBusca.Release()
-                    ENDIF
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg2.txt_4c_Class2.Value)
+                IF EMPTY(loc_cCod)
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT Classes, Descrs FROM SigCdCss WHERE LEN(RTRIM(Classes))=1 ORDER BY Classes"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCss2")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_BuscaCss2
+                    LOCATE FOR ALLTRIM(cursor_4c_BuscaCss2.Classes) == ALLTRIM(loc_cCod)
+                    IF FOUND("cursor_4c_BuscaCss2")
+                        loc_oPg2.txt_4c_Class2.Value = ALLTRIM(cursor_4c_BuscaCss2.Classes)
+                    ELSE
+                        GO TOP IN cursor_4c_BuscaCss2
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                        IF VARTYPE(loc_oBusca) = "O"
+                            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCss2"
+                            loc_oBusca.mAddColuna("Classes", "", "C" + CHR(243) + "digo")
+                            loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                            loc_oBusca.Show()
+                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCss2")
+                                loc_oPg2.txt_4c_Class2.Value = ALLTRIM(cursor_4c_BuscaCss2.Classes)
+                            ELSE
+                                loc_oPg2.txt_4c_Class2.Value = ""
+                            ENDIF
+                            loc_oBusca.Release()
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarClass2s")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaCss2")
-            USE IN cursor_4c_BuscaCss2
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaCss2")
+                USE IN cursor_4c_BuscaCss2
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -4299,52 +4392,60 @@ DEFINE CLASS FormOTI AS FormBase
     PROCEDURE ValidarClass3s(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
         LOCAL loc_oPg2, loc_cCod, loc_cSQL, loc_nResult, loc_oBusca, loc_oErro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_Class3", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg2.txt_4c_Class3.Value)
-            IF EMPTY(loc_cCod)
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT Classes, Descrs FROM SigCdCss WHERE LEN(RTRIM(Classes))=1 ORDER BY Classes"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCss3")
-            IF loc_nResult > 0
-                SELECT cursor_4c_BuscaCss3
-                LOCATE FOR ALLTRIM(cursor_4c_BuscaCss3.Classes) == ALLTRIM(loc_cCod)
-                IF FOUND("cursor_4c_BuscaCss3")
-                    loc_oPg2.txt_4c_Class3.Value = ALLTRIM(cursor_4c_BuscaCss3.Classes)
-                ELSE
-                    GO TOP IN cursor_4c_BuscaCss3
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                    IF VARTYPE(loc_oBusca) = "O"
-                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCss3"
-                        loc_oBusca.mAddColuna("Classes", "", "C" + CHR(243) + "digo")
-                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.Show()
-                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCss3")
-                            loc_oPg2.txt_4c_Class3.Value = ALLTRIM(cursor_4c_BuscaCss3.Classes)
-                        ELSE
-                            loc_oPg2.txt_4c_Class3.Value = ""
-                        ENDIF
-                        loc_oBusca.Release()
-                    ENDIF
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg2.txt_4c_Class3.Value)
+                IF EMPTY(loc_cCod)
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT Classes, Descrs FROM SigCdCss WHERE LEN(RTRIM(Classes))=1 ORDER BY Classes"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCss3")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_BuscaCss3
+                    LOCATE FOR ALLTRIM(cursor_4c_BuscaCss3.Classes) == ALLTRIM(loc_cCod)
+                    IF FOUND("cursor_4c_BuscaCss3")
+                        loc_oPg2.txt_4c_Class3.Value = ALLTRIM(cursor_4c_BuscaCss3.Classes)
+                    ELSE
+                        GO TOP IN cursor_4c_BuscaCss3
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                        IF VARTYPE(loc_oBusca) = "O"
+                            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCss3"
+                            loc_oBusca.mAddColuna("Classes", "", "C" + CHR(243) + "digo")
+                            loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                            loc_oBusca.Show()
+                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCss3")
+                                loc_oPg2.txt_4c_Class3.Value = ALLTRIM(cursor_4c_BuscaCss3.Classes)
+                            ELSE
+                                loc_oPg2.txt_4c_Class3.Value = ""
+                            ENDIF
+                            loc_oBusca.Release()
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarClass3s")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaCss3")
-            USE IN cursor_4c_BuscaCss3
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaCss3")
+                USE IN cursor_4c_BuscaCss3
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -4352,52 +4453,60 @@ DEFINE CLASS FormOTI AS FormBase
     PROCEDURE ValidarClass4s(par_nKeyCode, par_nShiftAltCtrl)
     *==========================================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
+        LOCAL loc_lProsseguir
         IF par_nKeyCode != 13 AND par_nKeyCode != 9 AND par_nKeyCode != 115
             RETURN
         ENDIF
         LOCAL loc_oPg2, loc_cCod, loc_cSQL, loc_nResult, loc_oBusca, loc_oErro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lProsseguir = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_Class4", 5)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cCod = ALLTRIM(loc_oPg2.txt_4c_Class4.Value)
-            IF EMPTY(loc_cCod)
-                RETURN
-            ENDIF
-
-            loc_cSQL    = "SELECT Classes, Descrs FROM SigCdCss WHERE LEN(RTRIM(Classes))=1 ORDER BY Classes"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCss4")
-            IF loc_nResult > 0
-                SELECT cursor_4c_BuscaCss4
-                LOCATE FOR ALLTRIM(cursor_4c_BuscaCss4.Classes) == ALLTRIM(loc_cCod)
-                IF FOUND("cursor_4c_BuscaCss4")
-                    loc_oPg2.txt_4c_Class4.Value = ALLTRIM(cursor_4c_BuscaCss4.Classes)
-                ELSE
-                    GO TOP IN cursor_4c_BuscaCss4
-                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
-                    IF VARTYPE(loc_oBusca) = "O"
-                        loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCss4"
-                        loc_oBusca.mAddColuna("Classes", "", "C" + CHR(243) + "digo")
-                        loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.Show()
-                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCss4")
-                            loc_oPg2.txt_4c_Class4.Value = ALLTRIM(cursor_4c_BuscaCss4.Classes)
-                        ELSE
-                            loc_oPg2.txt_4c_Class4.Value = ""
-                        ENDIF
-                        loc_oBusca.Release()
-                    ENDIF
+            IF loc_lProsseguir
+                loc_cCod = ALLTRIM(loc_oPg2.txt_4c_Class4.Value)
+                IF EMPTY(loc_cCod)
+                    loc_lProsseguir = .F.
                 ENDIF
             ENDIF
 
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT Classes, Descrs FROM SigCdCss WHERE LEN(RTRIM(Classes))=1 ORDER BY Classes"
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCss4")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_BuscaCss4
+                    LOCATE FOR ALLTRIM(cursor_4c_BuscaCss4.Classes) == ALLTRIM(loc_cCod)
+                    IF FOUND("cursor_4c_BuscaCss4")
+                        loc_oPg2.txt_4c_Class4.Value = ALLTRIM(cursor_4c_BuscaCss4.Classes)
+                    ELSE
+                        GO TOP IN cursor_4c_BuscaCss4
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                        IF VARTYPE(loc_oBusca) = "O"
+                            loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCss4"
+                            loc_oBusca.mAddColuna("Classes", "", "C" + CHR(243) + "digo")
+                            loc_oBusca.mAddColuna("Descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                            loc_oBusca.Show()
+                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCss4")
+                                loc_oPg2.txt_4c_Class4.Value = ALLTRIM(cursor_4c_BuscaCss4.Classes)
+                            ELSE
+                                loc_oPg2.txt_4c_Class4.Value = ""
+                            ENDIF
+                            loc_oBusca.Release()
+                        ENDIF
+                    ENDIF
+                ENDIF
+
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormOTI.ValidarClass4s")
         ENDTRY
-
-        IF USED("cursor_4c_BuscaCss4")
-            USE IN cursor_4c_BuscaCss4
+        IF loc_lProsseguir
+    
+            IF USED("cursor_4c_BuscaCss4")
+                USE IN cursor_4c_BuscaCss4
+            ENDIF
         ENDIF
     ENDPROC
 

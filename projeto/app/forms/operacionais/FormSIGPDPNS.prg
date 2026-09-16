@@ -713,33 +713,38 @@ DEFINE CLASS FormSIGPDPNS AS FormBase
     *   carga inicial) e devolve foco a primeira coluna do grid principal.
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Grade")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Grade
-            IF RECCOUNT("cursor_4c_Grade") = 0
-                MsgAviso("N" + CHR(227) + "o existem pend" + CHR(234) + "ncias para esta opera" + CHR(231) + CHR(227) + "o.", ;
-                        "Pendentes")
-                RETURN
+            IF loc_lProsseguir
+                SELECT cursor_4c_Grade
+                IF RECCOUNT("cursor_4c_Grade") = 0
+                    MsgAviso("N" + CHR(227) + "o existem pend" + CHR(234) + "ncias para esta opera" + CHR(231) + CHR(227) + "o.", ;
+                            "Pendentes")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            GO TOP
+            IF loc_lProsseguir
+                GO TOP
 
-            THIS.grd_4c_Rodape.Column1.Text1.Value = ;
-                "Empresa Destino : " + ALLTRIM(NVL(EmpDs, ""))
-            THIS.grd_4c_Rodape.Column2.Text1.Value = ALLTRIM(NVL(Usuars, ""))
-            THIS.txt_4c_RClis.Value = ALLTRIM(NVL(RClis, ""))
+                THIS.grd_4c_Rodape.Column1.Text1.Value = ;
+                    "Empresa Destino : " + ALLTRIM(NVL(EmpDs, ""))
+                THIS.grd_4c_Rodape.Column2.Text1.Value = ALLTRIM(NVL(Usuars, ""))
+                THIS.txt_4c_RClis.Value = ALLTRIM(NVL(RClis, ""))
 
-            THIS.grd_4c_Dados.Refresh()
-            THIS.grd_4c_Rodape.Refresh()
-            THIS.txt_4c_RClis.Refresh()
+                THIS.grd_4c_Dados.Refresh()
+                THIS.grd_4c_Rodape.Refresh()
+                THIS.txt_4c_RClis.Refresh()
 
-            IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
-                THIS.grd_4c_Dados.Column1.SetFocus()
+                IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
+                    THIS.grd_4c_Dados.Column1.SetFocus()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BtnAlterarClick")
@@ -755,26 +760,29 @@ DEFINE CLASS FormSIGPDPNS AS FormBase
     *   rodape sincronizados com a linha selecionada.
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro, loc_cDetalhe
+        LOCAL loc_oErro, loc_cDetalhe, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("cursor_4c_Grade") OR EOF("cursor_4c_Grade") OR BOF("cursor_4c_Grade")
                 MsgAviso("Selecione um registro para visualizar.", "Visualizar")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_Grade
-            loc_cDetalhe = "Empresa  : " + ALLTRIM(NVL(Emps, "")) + " - " + ALLTRIM(NVL(EmpDs, "")) + CHR(13) + ;
-                           "Opera" + CHR(231) + CHR(227) + "o: " + ALLTRIM(NVL(Dopes, "")) + " " + ;
-                           ALLTRIM(TRANSFORM(NVL(Numes, 0))) + CHR(13) + ;
-                           "Data     : " + DTOC(NVL(Datas, {})) + CHR(13) + ;
-                           "Entrega  : " + DTOC(NVL(PrazoEnts, {})) + CHR(13) + ;
-                           "Grupo    : " + ALLTRIM(NVL(GrupoDs, "")) + CHR(13) + ;
-                           "Conta    : " + ALLTRIM(NVL(ContaDs, "")) + CHR(13) + ;
-                           "Usu" + CHR(225) + "rio  : " + ALLTRIM(NVL(Usuars, "")) + CHR(13) + ;
-                           "Cliente  : " + ALLTRIM(NVL(RClis, "")) + CHR(13) + ;
-                           "Pendente : " + ALLTRIM(TRANSFORM(NVL(Pendentes, 0), "9999999.99"))
-            MsgInfo(loc_cDetalhe, "Detalhe da Pend" + CHR(234) + "ncia")
+            IF loc_lProsseguir
+                SELECT cursor_4c_Grade
+                loc_cDetalhe = "Empresa  : " + ALLTRIM(NVL(Emps, "")) + " - " + ALLTRIM(NVL(EmpDs, "")) + CHR(13) + ;
+                               "Opera" + CHR(231) + CHR(227) + "o: " + ALLTRIM(NVL(Dopes, "")) + " " + ;
+                               ALLTRIM(TRANSFORM(NVL(Numes, 0))) + CHR(13) + ;
+                               "Data     : " + DTOC(NVL(Datas, {})) + CHR(13) + ;
+                               "Entrega  : " + DTOC(NVL(PrazoEnts, {})) + CHR(13) + ;
+                               "Grupo    : " + ALLTRIM(NVL(GrupoDs, "")) + CHR(13) + ;
+                               "Conta    : " + ALLTRIM(NVL(ContaDs, "")) + CHR(13) + ;
+                               "Usu" + CHR(225) + "rio  : " + ALLTRIM(NVL(Usuars, "")) + CHR(13) + ;
+                               "Cliente  : " + ALLTRIM(NVL(RClis, "")) + CHR(13) + ;
+                               "Pendente : " + ALLTRIM(TRANSFORM(NVL(Pendentes, 0), "9999999.99"))
+                MsgInfo(loc_cDetalhe, "Detalhe da Pend" + CHR(234) + "ncia")
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BtnVisualizarClick")
         ENDTRY

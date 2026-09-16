@@ -420,7 +420,7 @@ DEFINE CLASS FormICD AS FormBase
     * ValidarTipo - busca Tipos digitado e preenche Desc; abre lookup se nao achou
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ValidarTipo()
-        LOCAL loc_cTipo, loc_cSQL, loc_oErro
+        LOCAL loc_cTipo, loc_cSQL, loc_oErro, loc_lProsseguir
 
         loc_cTipo = ALLTRIM(THIS.cnt_4c_Container1.txt_4c_Tipo.Value)
         IF EMPTY(loc_cTipo)
@@ -428,6 +428,7 @@ DEFINE CLASS FormICD AS FormBase
             RETURN
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT TOP 1 Tipos, Descs FROM SigPrTri " + ;
                        "WHERE tipos = " + EscaparSQL(loc_cTipo)
@@ -438,18 +439,22 @@ DEFINE CLASS FormICD AS FormBase
                     THIS.cnt_4c_Container1.txt_4c_Desc.Value    = ALLTRIM(Descs)
                     THIS.cnt_4c_Container1.txt_4c_NovaDesc.Value = ALLTRIM(Descs)
                     USE IN cursor_4c_LkpTipo
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
-                USE IN cursor_4c_LkpTipo
+                IF loc_lProsseguir
+                    USE IN cursor_4c_LkpTipo
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                     "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
                     "Procedure: " + loc_oErro.Procedure, "Erro em ValidarTipo")
-            RETURN
+            loc_lProsseguir = .F.
         ENDTRY
-
-        THIS.AbrirLookupTipo()
+        IF loc_lProsseguir
+    
+            THIS.AbrirLookupTipo()
+        ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------

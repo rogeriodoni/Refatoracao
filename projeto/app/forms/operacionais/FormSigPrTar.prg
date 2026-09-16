@@ -334,41 +334,46 @@ DEFINE CLASS FormSigPrTar AS FormBase
     * o cursor compartilhado csTmpPrTar.ObsInsp para permitir insercao.
     *--------------------------------------------------------------------------
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("csTmpPrTar") OR RECCOUNT("csTmpPrTar") = 0
                 MsgAviso("Nenhum registro de tarefa disponivel para inclus" + ;
                         CHR(227) + "o de inspe" + CHR(231) + CHR(227) + "o.", ;
                         "Inclus" + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT csTmpPrTar
+            IF loc_lProsseguir
+                SELECT csTmpPrTar
 
-            IF TYPE("csTmpPrTar.ObsInsp") = "U"
-                MsgAviso("Campo ObsInsp n" + CHR(227) + "o existe no cursor csTmpPrTar.", ;
-                        "Erro Inclus" + CHR(227) + "o")
-                RETURN
+                IF TYPE("csTmpPrTar.ObsInsp") = "U"
+                    MsgAviso("Campo ObsInsp n" + CHR(227) + "o existe no cursor csTmpPrTar.", ;
+                            "Erro Inclus" + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            REPLACE csTmpPrTar.ObsInsp WITH "" IN csTmpPrTar
+            IF loc_lProsseguir
+                REPLACE csTmpPrTar.ObsInsp WITH "" IN csTmpPrTar
 
-            THIS.this_lHouveIncl = .T.
+                THIS.this_lHouveIncl = .T.
 
-            IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                WITH THIS.obj_4c_GetObsInsp
-                    .ReadOnly  = .F.
-                    .BackColor = RGB(255, 255, 255)
-                    .ForeColor = RGB(0, 0, 0)
-                    .Value     = ""
-                    .SetFocus()
-                ENDWITH
+                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
+                    WITH THIS.obj_4c_GetObsInsp
+                        .ReadOnly  = .F.
+                        .BackColor = RGB(255, 255, 255)
+                        .ForeColor = RGB(0, 0, 0)
+                        .Value     = ""
+                        .SetFocus()
+                    ENDWITH
+                ENDIF
+
+                THIS.CarregarDados()
+                THIS.Refresh()
+
             ENDIF
-
-            THIS.CarregarDados()
-            THIS.Refresh()
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro BtnIncluirClick")
@@ -379,34 +384,39 @@ DEFINE CLASS FormSigPrTar AS FormBase
     * BtnAlterarClick - habilita edicao da Inspecao no registro corrente
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("csTmpPrTar") OR RECCOUNT("csTmpPrTar") = 0
                 MsgAviso("Nenhum registro selecionado para altera" + ;
                         CHR(231) + CHR(227) + "o.", ;
                         "Altera" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF TYPE("csTmpPrTar.ObsInsp") = "U"
-                MsgAviso("Campo ObsInsp n" + CHR(227) + "o existe no cursor csTmpPrTar.", ;
-                        "Erro Altera" + CHR(231) + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF TYPE("csTmpPrTar.ObsInsp") = "U"
+                    MsgAviso("Campo ObsInsp n" + CHR(227) + "o existe no cursor csTmpPrTar.", ;
+                            "Erro Altera" + CHR(231) + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                WITH THIS.obj_4c_GetObsInsp
-                    .ReadOnly  = .F.
-                    .BackColor = RGB(255, 255, 255)
-                    .ForeColor = RGB(0, 0, 0)
-                    .ControlSource = "csTmpPrTar.ObsInsp"
-                    .SetFocus()
-                ENDWITH
+            IF loc_lProsseguir
+                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
+                    WITH THIS.obj_4c_GetObsInsp
+                        .ReadOnly  = .F.
+                        .BackColor = RGB(255, 255, 255)
+                        .ForeColor = RGB(0, 0, 0)
+                        .ControlSource = "csTmpPrTar.ObsInsp"
+                        .SetFocus()
+                    ENDWITH
+                ENDIF
+
+                THIS.Refresh()
+
             ENDIF
-
-            THIS.Refresh()
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro BtnAlterarClick")
@@ -417,30 +427,33 @@ DEFINE CLASS FormSigPrTar AS FormBase
     * BtnVisualizarClick - retorna EditBox ao modo read-only (azul)
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("csTmpPrTar") OR RECCOUNT("csTmpPrTar") = 0
                 MsgAviso("Nenhum registro dispon" + CHR(237) + "vel para visualiza" + ;
                         CHR(231) + CHR(227) + "o.", ;
                         "Visualiza" + CHR(231) + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                WITH THIS.obj_4c_GetObsInsp
-                    .ReadOnly           = .T.
-                    .DisabledBackColor  = RGB(255, 255, 255)
-                    .DisabledForeColor  = RGB(36, 84, 155)
-                    IF TYPE("csTmpPrTar.ObsInsp") != "U"
-                        .ControlSource = "csTmpPrTar.ObsInsp"
-                    ENDIF
-                ENDWITH
+            IF loc_lProsseguir
+                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
+                    WITH THIS.obj_4c_GetObsInsp
+                        .ReadOnly           = .T.
+                        .DisabledBackColor  = RGB(255, 255, 255)
+                        .DisabledForeColor  = RGB(36, 84, 155)
+                        IF TYPE("csTmpPrTar.ObsInsp") != "U"
+                            .ControlSource = "csTmpPrTar.ObsInsp"
+                        ENDIF
+                    ENDWITH
+                ENDIF
+
+                THIS.CarregarDados()
+                THIS.Refresh()
+
             ENDIF
-
-            THIS.CarregarDados()
-            THIS.Refresh()
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro BtnVisualizarClick")
@@ -452,49 +465,58 @@ DEFINE CLASS FormSigPrTar AS FormBase
     * (limpa campo ObsInsp no cursor csTmpPrTar apos confirmacao do usuario)
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_lConfirma, loc_oErro
+        LOCAL loc_lConfirma, loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("csTmpPrTar") OR RECCOUNT("csTmpPrTar") = 0
                 MsgAviso("Nenhum registro selecionado para exclus" + ;
                         CHR(227) + "o.", ;
                         "Exclus" + CHR(227) + "o")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF TYPE("csTmpPrTar.ObsInsp") = "U"
-                MsgAviso("Campo ObsInsp n" + CHR(227) + "o existe no cursor csTmpPrTar.", ;
-                        "Erro Exclus" + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                IF TYPE("csTmpPrTar.ObsInsp") = "U"
+                    MsgAviso("Campo ObsInsp n" + CHR(227) + "o existe no cursor csTmpPrTar.", ;
+                            "Erro Exclus" + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            SELECT csTmpPrTar
-            IF EMPTY(csTmpPrTar.ObsInsp)
-                MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " inspe" + CHR(231) + ;
-                        CHR(227) + "o cadastrada para excluir.", ;
-                        "Exclus" + CHR(227) + "o")
-                RETURN
+            IF loc_lProsseguir
+                SELECT csTmpPrTar
+                IF EMPTY(csTmpPrTar.ObsInsp)
+                    MsgAviso("N" + CHR(227) + "o h" + CHR(225) + " inspe" + CHR(231) + ;
+                            CHR(227) + "o cadastrada para excluir.", ;
+                            "Exclus" + CHR(227) + "o")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            loc_lConfirma = MsgConfirma("Confirma exclus" + CHR(227) + "o da inspe" + ;
-                                        CHR(231) + CHR(227) + "o do registro corrente?", ;
-                                        "Confirmar Exclus" + CHR(227) + "o")
+            IF loc_lProsseguir
+                loc_lConfirma = MsgConfirma("Confirma exclus" + CHR(227) + "o da inspe" + ;
+                                            CHR(231) + CHR(227) + "o do registro corrente?", ;
+                                            "Confirmar Exclus" + CHR(227) + "o")
 
-            IF !loc_lConfirma
-                RETURN
+                IF !loc_lConfirma
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            REPLACE csTmpPrTar.ObsInsp WITH "" IN csTmpPrTar
+            IF loc_lProsseguir
+                REPLACE csTmpPrTar.ObsInsp WITH "" IN csTmpPrTar
 
-            THIS.this_lHouveExcl = .T.
+                THIS.this_lHouveExcl = .T.
 
-            IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                THIS.obj_4c_GetObsInsp.Value = ""
+                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
+                    THIS.obj_4c_GetObsInsp.Value = ""
+                ENDIF
+
+                THIS.CarregarDados()
+                THIS.Refresh()
+
             ENDIF
-
-            THIS.CarregarDados()
-            THIS.Refresh()
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro BtnExcluirClick")
@@ -560,26 +582,29 @@ DEFINE CLASS FormSigPrTar AS FormBase
     * read-only e propagar via FormParaBO
     *--------------------------------------------------------------------------
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lProsseguir
 
+        loc_lProsseguir = .T.
         TRY
             IF !USED("csTmpPrTar") OR RECCOUNT("csTmpPrTar") = 0
                 MsgAviso("Nenhum registro dispon" + CHR(237) + "vel para salvar.", "Salvar")
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.FormParaBO()
+            IF loc_lProsseguir
+                THIS.FormParaBO()
 
-            IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
-                WITH THIS.obj_4c_GetObsInsp
-                    .ReadOnly          = .T.
-                    .DisabledBackColor = RGB(255, 255, 255)
-                    .DisabledForeColor = RGB(36, 84, 155)
-                ENDWITH
+                IF PEMSTATUS(THIS, "obj_4c_GetObsInsp", 5)
+                    WITH THIS.obj_4c_GetObsInsp
+                        .ReadOnly          = .T.
+                        .DisabledBackColor = RGB(255, 255, 255)
+                        .DisabledForeColor = RGB(36, 84, 155)
+                    ENDWITH
+                ENDIF
+
+                THIS.Refresh()
+
             ENDIF
-
-            THIS.Refresh()
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro BtnSalvarClick")

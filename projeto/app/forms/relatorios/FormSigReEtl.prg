@@ -1421,28 +1421,31 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarEmpresa()
-        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Empresa.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsEmpresa.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL    = "SELECT TOP 1 cemps, razas FROM SigCdEmp WHERE cemps = " + EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlEmpVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlEmpVal")
-                SELECT cursor_4c_EtlEmpVal
-                loc_oPg.txt_4c_Empresa.Value   = ALLTRIM(cemps)
-                loc_oPg.txt_4c_DsEmpresa.Value = ALLTRIM(razas)
-            ELSE
-                MsgAviso("Empresa n" + CHR(227) + "o encontrada.", "Empresa")
-                loc_oPg.txt_4c_Empresa.Value   = ""
-                loc_oPg.txt_4c_DsEmpresa.Value = ""
-                THIS.AbrirLookupEmpresa()
-            ENDIF
-            IF USED("cursor_4c_EtlEmpVal")
-                USE IN cursor_4c_EtlEmpVal
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 cemps, razas FROM SigCdEmp WHERE cemps = " + EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlEmpVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlEmpVal")
+                    SELECT cursor_4c_EtlEmpVal
+                    loc_oPg.txt_4c_Empresa.Value   = ALLTRIM(cemps)
+                    loc_oPg.txt_4c_DsEmpresa.Value = ALLTRIM(razas)
+                ELSE
+                    MsgAviso("Empresa n" + CHR(227) + "o encontrada.", "Empresa")
+                    loc_oPg.txt_4c_Empresa.Value   = ""
+                    loc_oPg.txt_4c_DsEmpresa.Value = ""
+                    THIS.AbrirLookupEmpresa()
+                ENDIF
+                IF USED("cursor_4c_EtlEmpVal")
+                    USE IN cursor_4c_EtlEmpVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1482,28 +1485,31 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarGrupo()
-        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Grupo.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsGrupo.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL    = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlGrpVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlGrpVal")
-                SELECT cursor_4c_EtlGrpVal
-                loc_oPg.txt_4c_Grupo.Value   = ALLTRIM(codigos)
-                loc_oPg.txt_4c_DsGrupo.Value = ALLTRIM(descrs)
-            ELSE
-                MsgAviso("Grupo n" + CHR(227) + "o encontrado.", "Grupo")
-                loc_oPg.txt_4c_Grupo.Value   = ""
-                loc_oPg.txt_4c_DsGrupo.Value = ""
-                THIS.AbrirLookupGrupo()
-            ENDIF
-            IF USED("cursor_4c_EtlGrpVal")
-                USE IN cursor_4c_EtlGrpVal
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlGrpVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlGrpVal")
+                    SELECT cursor_4c_EtlGrpVal
+                    loc_oPg.txt_4c_Grupo.Value   = ALLTRIM(codigos)
+                    loc_oPg.txt_4c_DsGrupo.Value = ALLTRIM(descrs)
+                ELSE
+                    MsgAviso("Grupo n" + CHR(227) + "o encontrado.", "Grupo")
+                    loc_oPg.txt_4c_Grupo.Value   = ""
+                    loc_oPg.txt_4c_DsGrupo.Value = ""
+                    THIS.AbrirLookupGrupo()
+                ENDIF
+                IF USED("cursor_4c_EtlGrpVal")
+                    USE IN cursor_4c_EtlGrpVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1543,28 +1549,31 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarConta()
-        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Conta.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsConta.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL    = "SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlContVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlContVal")
-                SELECT cursor_4c_EtlContVal
-                loc_oPg.txt_4c_Conta.Value   = ALLTRIM(iclis)
-                loc_oPg.txt_4c_DsConta.Value = ALLTRIM(rclis)
-            ELSE
-                MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Conta")
-                loc_oPg.txt_4c_Conta.Value   = ""
-                loc_oPg.txt_4c_DsConta.Value = ""
-                THIS.AbrirLookupConta()
-            ENDIF
-            IF USED("cursor_4c_EtlContVal")
-                USE IN cursor_4c_EtlContVal
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlContVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlContVal")
+                    SELECT cursor_4c_EtlContVal
+                    loc_oPg.txt_4c_Conta.Value   = ALLTRIM(iclis)
+                    loc_oPg.txt_4c_DsConta.Value = ALLTRIM(rclis)
+                ELSE
+                    MsgAviso("Conta n" + CHR(227) + "o encontrada.", "Conta")
+                    loc_oPg.txt_4c_Conta.Value   = ""
+                    loc_oPg.txt_4c_DsConta.Value = ""
+                    THIS.AbrirLookupConta()
+                ENDIF
+                IF USED("cursor_4c_EtlContVal")
+                    USE IN cursor_4c_EtlContVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1604,28 +1613,31 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarCol()
-        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Col.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsCol.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL    = "SELECT TOP 1 Colecoes, Descs FROM SigCdCol WHERE Colecoes = " + EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlColVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlColVal")
-                SELECT cursor_4c_EtlColVal
-                loc_oPg.txt_4c_Col.Value   = ALLTRIM(Colecoes)
-                loc_oPg.txt_4c_DsCol.Value = ALLTRIM(Descs)
-            ELSE
-                MsgAviso("Cole" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrada.", "Grupo de Venda")
-                loc_oPg.txt_4c_Col.Value   = ""
-                loc_oPg.txt_4c_DsCol.Value = ""
-                THIS.AbrirLookupCol()
-            ENDIF
-            IF USED("cursor_4c_EtlColVal")
-                USE IN cursor_4c_EtlColVal
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 Colecoes, Descs FROM SigCdCol WHERE Colecoes = " + EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlColVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlColVal")
+                    SELECT cursor_4c_EtlColVal
+                    loc_oPg.txt_4c_Col.Value   = ALLTRIM(Colecoes)
+                    loc_oPg.txt_4c_DsCol.Value = ALLTRIM(Descs)
+                ELSE
+                    MsgAviso("Cole" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrada.", "Grupo de Venda")
+                    loc_oPg.txt_4c_Col.Value   = ""
+                    loc_oPg.txt_4c_DsCol.Value = ""
+                    THIS.AbrirLookupCol()
+                ENDIF
+                IF USED("cursor_4c_EtlColVal")
+                    USE IN cursor_4c_EtlColVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1665,31 +1677,34 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarBase()
-        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Base.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsBase.Value = ""
                 loc_oPg.txt_4c_Nvl2.Enabled = .F.
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL    = "SELECT TOP 1 Cods, Descs FROM SigLcNv1 WHERE Cods = " + EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlBaseVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlBaseVal")
-                SELECT cursor_4c_EtlBaseVal
-                loc_oPg.txt_4c_Base.Value   = ALLTRIM(Cods)
-                loc_oPg.txt_4c_DsBase.Value = ALLTRIM(Descs)
-                loc_oPg.txt_4c_Nvl2.Enabled = .T.
-            ELSE
-                MsgAviso("Base n" + CHR(227) + "o encontrada.", "Base")
-                loc_oPg.txt_4c_Base.Value   = ""
-                loc_oPg.txt_4c_DsBase.Value = ""
-                loc_oPg.txt_4c_Nvl2.Enabled = .F.
-                THIS.AbrirLookupBase()
-            ENDIF
-            IF USED("cursor_4c_EtlBaseVal")
-                USE IN cursor_4c_EtlBaseVal
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 Cods, Descs FROM SigLcNv1 WHERE Cods = " + EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlBaseVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlBaseVal")
+                    SELECT cursor_4c_EtlBaseVal
+                    loc_oPg.txt_4c_Base.Value   = ALLTRIM(Cods)
+                    loc_oPg.txt_4c_DsBase.Value = ALLTRIM(Descs)
+                    loc_oPg.txt_4c_Nvl2.Enabled = .T.
+                ELSE
+                    MsgAviso("Base n" + CHR(227) + "o encontrada.", "Base")
+                    loc_oPg.txt_4c_Base.Value   = ""
+                    loc_oPg.txt_4c_DsBase.Value = ""
+                    loc_oPg.txt_4c_Nvl2.Enabled = .F.
+                    THIS.AbrirLookupBase()
+                ENDIF
+                IF USED("cursor_4c_EtlBaseVal")
+                    USE IN cursor_4c_EtlBaseVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1730,8 +1745,9 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarNvl2()
-        LOCAL loc_oPg, loc_cCodigo, loc_cParent, loc_lEncontrou
+        LOCAL loc_oPg, loc_cCodigo, loc_cParent, loc_lEncontrou, loc_lProsseguir
         loc_lEncontrou = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Nvl2.Value)
@@ -1739,37 +1755,41 @@ DEFINE CLASS FormSigReEtl AS FormBase
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsNvl2.Value = ""
                 loc_oPg.txt_4c_Nvl3.Enabled = .F.
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF EMPTY(loc_cParent)
-                MsgAviso("Informe a Base antes do Segundo N" + CHR(237) + "vel.", "")
-                loc_oPg.txt_4c_Nvl2.Value   = ""
-                loc_oPg.txt_4c_DsNvl2.Value = ""
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_cParent)
+                    MsgAviso("Informe a Base antes do Segundo N" + CHR(237) + "vel.", "")
+                    loc_oPg.txt_4c_Nvl2.Value   = ""
+                    loc_oPg.txt_4c_DsNvl2.Value = ""
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF USED("crSigLcNv2")
-                SELECT * FROM crSigLcNv2 ;
-                    WHERE ALLTRIM(crSigLcNv2.Cods) = m.loc_cParent ;
-                    INTO CURSOR cursor_4c_LocalNv2 READWRITE
-                IF !EOF("cursor_4c_LocalNv2")
-                    SELECT cursor_4c_LocalNv2
-                    LOCATE FOR ALLTRIM(Codigo) = loc_cCodigo
-                    IF FOUND()
-                        loc_oPg.txt_4c_Nvl2.Value   = ALLTRIM(Codigo)
-                        loc_oPg.txt_4c_DsNvl2.Value = ALLTRIM(Descs)
-                        loc_oPg.txt_4c_Nvl3.Enabled = .T.
-                        loc_lEncontrou = .T.
+            IF loc_lProsseguir
+                IF USED("crSigLcNv2")
+                    SELECT * FROM crSigLcNv2 ;
+                        WHERE ALLTRIM(crSigLcNv2.Cods) = m.loc_cParent ;
+                        INTO CURSOR cursor_4c_LocalNv2 READWRITE
+                    IF !EOF("cursor_4c_LocalNv2")
+                        SELECT cursor_4c_LocalNv2
+                        LOCATE FOR ALLTRIM(Codigo) = loc_cCodigo
+                        IF FOUND()
+                            loc_oPg.txt_4c_Nvl2.Value   = ALLTRIM(Codigo)
+                            loc_oPg.txt_4c_DsNvl2.Value = ALLTRIM(Descs)
+                            loc_oPg.txt_4c_Nvl3.Enabled = .T.
+                            loc_lEncontrou = .T.
+                        ENDIF
+                    ENDIF
+                    IF USED("cursor_4c_LocalNv2")
+                        USE IN cursor_4c_LocalNv2
                     ENDIF
                 ENDIF
-                IF USED("cursor_4c_LocalNv2")
-                    USE IN cursor_4c_LocalNv2
+                IF !loc_lEncontrou
+                    MsgAviso("N" + CHR(237) + "vel 2 n" + CHR(227) + "o encontrado para a Base informada.", "")
+                    loc_oPg.txt_4c_Nvl2.Value   = ""
+                    loc_oPg.txt_4c_DsNvl2.Value = ""
+                    loc_oPg.txt_4c_Nvl3.Enabled = .F.
                 ENDIF
-            ENDIF
-            IF !loc_lEncontrou
-                MsgAviso("N" + CHR(237) + "vel 2 n" + CHR(227) + "o encontrado para a Base informada.", "")
-                loc_oPg.txt_4c_Nvl2.Value   = ""
-                loc_oPg.txt_4c_DsNvl2.Value = ""
-                loc_oPg.txt_4c_Nvl3.Enabled = .F.
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1781,8 +1801,9 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarNvl3()
-        LOCAL loc_oPg, loc_cCodigo, loc_cParent, loc_lEncontrou
+        LOCAL loc_oPg, loc_cCodigo, loc_cParent, loc_lEncontrou, loc_lProsseguir
         loc_lEncontrou = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Nvl3.Value)
@@ -1790,37 +1811,41 @@ DEFINE CLASS FormSigReEtl AS FormBase
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsNvl3.Value = ""
                 loc_oPg.txt_4c_Nvl4.Enabled = .F.
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF EMPTY(loc_cParent)
-                MsgAviso("Informe o Segundo N" + CHR(237) + "vel antes do Terceiro.", "")
-                loc_oPg.txt_4c_Nvl3.Value   = ""
-                loc_oPg.txt_4c_DsNvl3.Value = ""
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_cParent)
+                    MsgAviso("Informe o Segundo N" + CHR(237) + "vel antes do Terceiro.", "")
+                    loc_oPg.txt_4c_Nvl3.Value   = ""
+                    loc_oPg.txt_4c_DsNvl3.Value = ""
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF USED("crSigLcNv3")
-                SELECT * FROM crSigLcNv3 ;
-                    WHERE ALLTRIM(crSigLcNv3.Cods) = m.loc_cParent ;
-                    INTO CURSOR cursor_4c_LocalNv3 READWRITE
-                IF !EOF("cursor_4c_LocalNv3")
-                    SELECT cursor_4c_LocalNv3
-                    LOCATE FOR ALLTRIM(Codigo) = loc_cCodigo
-                    IF FOUND()
-                        loc_oPg.txt_4c_Nvl3.Value   = ALLTRIM(Codigo)
-                        loc_oPg.txt_4c_DsNvl3.Value = ALLTRIM(Descs)
-                        loc_oPg.txt_4c_Nvl4.Enabled = .T.
-                        loc_lEncontrou = .T.
+            IF loc_lProsseguir
+                IF USED("crSigLcNv3")
+                    SELECT * FROM crSigLcNv3 ;
+                        WHERE ALLTRIM(crSigLcNv3.Cods) = m.loc_cParent ;
+                        INTO CURSOR cursor_4c_LocalNv3 READWRITE
+                    IF !EOF("cursor_4c_LocalNv3")
+                        SELECT cursor_4c_LocalNv3
+                        LOCATE FOR ALLTRIM(Codigo) = loc_cCodigo
+                        IF FOUND()
+                            loc_oPg.txt_4c_Nvl3.Value   = ALLTRIM(Codigo)
+                            loc_oPg.txt_4c_DsNvl3.Value = ALLTRIM(Descs)
+                            loc_oPg.txt_4c_Nvl4.Enabled = .T.
+                            loc_lEncontrou = .T.
+                        ENDIF
+                    ENDIF
+                    IF USED("cursor_4c_LocalNv3")
+                        USE IN cursor_4c_LocalNv3
                     ENDIF
                 ENDIF
-                IF USED("cursor_4c_LocalNv3")
-                    USE IN cursor_4c_LocalNv3
+                IF !loc_lEncontrou
+                    MsgAviso("N" + CHR(237) + "vel 3 n" + CHR(227) + "o encontrado para o N" + CHR(237) + "vel 2 informado.", "")
+                    loc_oPg.txt_4c_Nvl3.Value   = ""
+                    loc_oPg.txt_4c_DsNvl3.Value = ""
+                    loc_oPg.txt_4c_Nvl4.Enabled = .F.
                 ENDIF
-            ENDIF
-            IF !loc_lEncontrou
-                MsgAviso("N" + CHR(237) + "vel 3 n" + CHR(227) + "o encontrado para o N" + CHR(237) + "vel 2 informado.", "")
-                loc_oPg.txt_4c_Nvl3.Value   = ""
-                loc_oPg.txt_4c_DsNvl3.Value = ""
-                loc_oPg.txt_4c_Nvl4.Enabled = .F.
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1832,43 +1857,48 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarNvl4()
-        LOCAL loc_oPg, loc_cCodigo, loc_cParent, loc_lEncontrou
+        LOCAL loc_oPg, loc_cCodigo, loc_cParent, loc_lEncontrou, loc_lProsseguir
         loc_lEncontrou = .F.
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Nvl4.Value)
             loc_cParent = ALLTRIM(loc_oPg.txt_4c_Nvl3.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsNvl4.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF EMPTY(loc_cParent)
-                MsgAviso("Informe o Terceiro N" + CHR(237) + "vel antes do Quarto.", "")
-                loc_oPg.txt_4c_Nvl4.Value   = ""
-                loc_oPg.txt_4c_DsNvl4.Value = ""
-                RETURN
+            IF loc_lProsseguir
+                IF EMPTY(loc_cParent)
+                    MsgAviso("Informe o Terceiro N" + CHR(237) + "vel antes do Quarto.", "")
+                    loc_oPg.txt_4c_Nvl4.Value   = ""
+                    loc_oPg.txt_4c_DsNvl4.Value = ""
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF USED("crSigLcNv4")
-                SELECT * FROM crSigLcNv4 ;
-                    WHERE ALLTRIM(crSigLcNv4.Cods) = m.loc_cParent ;
-                    INTO CURSOR cursor_4c_LocalNv4 READWRITE
-                IF !EOF("cursor_4c_LocalNv4")
-                    SELECT cursor_4c_LocalNv4
-                    LOCATE FOR ALLTRIM(Codigo) = loc_cCodigo
-                    IF FOUND()
-                        loc_oPg.txt_4c_Nvl4.Value   = ALLTRIM(Codigo)
-                        loc_oPg.txt_4c_DsNvl4.Value = ALLTRIM(Descs)
-                        loc_lEncontrou = .T.
+            IF loc_lProsseguir
+                IF USED("crSigLcNv4")
+                    SELECT * FROM crSigLcNv4 ;
+                        WHERE ALLTRIM(crSigLcNv4.Cods) = m.loc_cParent ;
+                        INTO CURSOR cursor_4c_LocalNv4 READWRITE
+                    IF !EOF("cursor_4c_LocalNv4")
+                        SELECT cursor_4c_LocalNv4
+                        LOCATE FOR ALLTRIM(Codigo) = loc_cCodigo
+                        IF FOUND()
+                            loc_oPg.txt_4c_Nvl4.Value   = ALLTRIM(Codigo)
+                            loc_oPg.txt_4c_DsNvl4.Value = ALLTRIM(Descs)
+                            loc_lEncontrou = .T.
+                        ENDIF
+                    ENDIF
+                    IF USED("cursor_4c_LocalNv4")
+                        USE IN cursor_4c_LocalNv4
                     ENDIF
                 ENDIF
-                IF USED("cursor_4c_LocalNv4")
-                    USE IN cursor_4c_LocalNv4
+                IF !loc_lEncontrou
+                    MsgAviso("N" + CHR(237) + "vel 4 n" + CHR(227) + "o encontrado para o N" + CHR(237) + "vel 3 informado.", "")
+                    loc_oPg.txt_4c_Nvl4.Value   = ""
+                    loc_oPg.txt_4c_DsNvl4.Value = ""
                 ENDIF
-            ENDIF
-            IF !loc_lEncontrou
-                MsgAviso("N" + CHR(237) + "vel 4 n" + CHR(227) + "o encontrado para o N" + CHR(237) + "vel 3 informado.", "")
-                loc_oPg.txt_4c_Nvl4.Value   = ""
-                loc_oPg.txt_4c_DsNvl4.Value = ""
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1880,29 +1910,32 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarLocal()
-        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Local.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsLocal.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL    = "SELECT TOP 1 Codigos, Descricaos FROM SigPrLcl WHERE Codigos = " + EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlLocalVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlLocalVal")
-                SELECT cursor_4c_EtlLocalVal
-                loc_oPg.txt_4c_Local.Value   = ALLTRIM(Codigos)
-                loc_oPg.txt_4c_DsLocal.Value = ALLTRIM(Descricaos)
-            ELSE
-                MsgAviso("Localiza" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrada.", ;
-                         "Localiza" + CHR(231) + CHR(227) + "o")
-                loc_oPg.txt_4c_Local.Value   = ""
-                loc_oPg.txt_4c_DsLocal.Value = ""
-                THIS.AbrirLookupLocal()
-            ENDIF
-            IF USED("cursor_4c_EtlLocalVal")
-                USE IN cursor_4c_EtlLocalVal
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 Codigos, Descricaos FROM SigPrLcl WHERE Codigos = " + EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlLocalVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlLocalVal")
+                    SELECT cursor_4c_EtlLocalVal
+                    loc_oPg.txt_4c_Local.Value   = ALLTRIM(Codigos)
+                    loc_oPg.txt_4c_DsLocal.Value = ALLTRIM(Descricaos)
+                ELSE
+                    MsgAviso("Localiza" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrada.", ;
+                             "Localiza" + CHR(231) + CHR(227) + "o")
+                    loc_oPg.txt_4c_Local.Value   = ""
+                    loc_oPg.txt_4c_DsLocal.Value = ""
+                    THIS.AbrirLookupLocal()
+                ENDIF
+                IF USED("cursor_4c_EtlLocalVal")
+                    USE IN cursor_4c_EtlLocalVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1942,28 +1975,31 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarCSGru()
-        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_CSGru.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsSGru.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL    = "SELECT TOP 1 codigos, descs FROM SigCdGpr WHERE codigos = " + EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlGGrpVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlGGrpVal")
-                SELECT cursor_4c_EtlGGrpVal
-                loc_oPg.txt_4c_CSGru.Value  = ALLTRIM(codigos)
-                loc_oPg.txt_4c_DsSGru.Value = ALLTRIM(descs)
-            ELSE
-                MsgAviso("Grande Grupo n" + CHR(227) + "o encontrado.", "Grande Grupo")
-                loc_oPg.txt_4c_CSGru.Value  = ""
-                loc_oPg.txt_4c_DsSGru.Value = ""
-                THIS.AbrirLookupCSGru()
-            ENDIF
-            IF USED("cursor_4c_EtlGGrpVal")
-                USE IN cursor_4c_EtlGGrpVal
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 codigos, descs FROM SigCdGpr WHERE codigos = " + EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlGGrpVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlGGrpVal")
+                    SELECT cursor_4c_EtlGGrpVal
+                    loc_oPg.txt_4c_CSGru.Value  = ALLTRIM(codigos)
+                    loc_oPg.txt_4c_DsSGru.Value = ALLTRIM(descs)
+                ELSE
+                    MsgAviso("Grande Grupo n" + CHR(227) + "o encontrado.", "Grande Grupo")
+                    loc_oPg.txt_4c_CSGru.Value  = ""
+                    loc_oPg.txt_4c_DsSGru.Value = ""
+                    THIS.AbrirLookupCSGru()
+                ENDIF
+                IF USED("cursor_4c_EtlGGrpVal")
+                    USE IN cursor_4c_EtlGGrpVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -2003,28 +2039,31 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarCgru()
-        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Cgru.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_Dgru.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL    = "SELECT TOP 1 CGrus, DGrus FROM SigCdGrp WHERE CGrus = " + EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlCgruVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlCgruVal")
-                SELECT cursor_4c_EtlCgruVal
-                loc_oPg.txt_4c_Cgru.Value = ALLTRIM(CGrus)
-                loc_oPg.txt_4c_Dgru.Value = ALLTRIM(DGrus)
-            ELSE
-                MsgAviso("Grupo de Produto n" + CHR(227) + "o encontrado.", "Grupo de Produto")
-                loc_oPg.txt_4c_Cgru.Value = ""
-                loc_oPg.txt_4c_Dgru.Value = ""
-                THIS.AbrirLookupCgru()
-            ENDIF
-            IF USED("cursor_4c_EtlCgruVal")
-                USE IN cursor_4c_EtlCgruVal
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 CGrus, DGrus FROM SigCdGrp WHERE CGrus = " + EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlCgruVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlCgruVal")
+                    SELECT cursor_4c_EtlCgruVal
+                    loc_oPg.txt_4c_Cgru.Value = ALLTRIM(CGrus)
+                    loc_oPg.txt_4c_Dgru.Value = ALLTRIM(DGrus)
+                ELSE
+                    MsgAviso("Grupo de Produto n" + CHR(227) + "o encontrado.", "Grupo de Produto")
+                    loc_oPg.txt_4c_Cgru.Value = ""
+                    loc_oPg.txt_4c_Dgru.Value = ""
+                    THIS.AbrirLookupCgru()
+                ENDIF
+                IF USED("cursor_4c_EtlCgruVal")
+                    USE IN cursor_4c_EtlCgruVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -2064,35 +2103,38 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarCSubG()
-        LOCAL loc_oPg, loc_cCodigo, loc_cCgruFiltro, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cCgruFiltro, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg         = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo     = ALLTRIM(loc_oPg.txt_4c_CSubG.Value)
             loc_cCgruFiltro = ALLTRIM(loc_oPg.txt_4c_Cgru.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DSubG.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF EMPTY(loc_cCgruFiltro)
-                loc_cSQL = "SELECT TOP 1 Codigos, Descricaos FROM SigCdPsg WHERE Codigos = " + ;
-                           EscaparSQL(loc_cCodigo)
-            ELSE
-                loc_cSQL = "SELECT TOP 1 Codigos, Descricaos FROM SigCdPsg WHERE Codigos = " + ;
-                           EscaparSQL(loc_cCodigo) + " AND CGrus = " + EscaparSQL(loc_cCgruFiltro)
-            ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlSGrpVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlSGrpVal")
-                SELECT cursor_4c_EtlSGrpVal
-                loc_oPg.txt_4c_CSubG.Value = ALLTRIM(Codigos)
-                loc_oPg.txt_4c_DSubG.Value = ALLTRIM(Descricaos)
-            ELSE
-                MsgAviso("Subgrupo n" + CHR(227) + "o encontrado.", "Subgrupo")
-                loc_oPg.txt_4c_CSubG.Value = ""
-                loc_oPg.txt_4c_DSubG.Value = ""
-                THIS.AbrirLookupCSubG()
-            ENDIF
-            IF USED("cursor_4c_EtlSGrpVal")
-                USE IN cursor_4c_EtlSGrpVal
+            IF loc_lProsseguir
+                IF EMPTY(loc_cCgruFiltro)
+                    loc_cSQL = "SELECT TOP 1 Codigos, Descricaos FROM SigCdPsg WHERE Codigos = " + ;
+                               EscaparSQL(loc_cCodigo)
+                ELSE
+                    loc_cSQL = "SELECT TOP 1 Codigos, Descricaos FROM SigCdPsg WHERE Codigos = " + ;
+                               EscaparSQL(loc_cCodigo) + " AND CGrus = " + EscaparSQL(loc_cCgruFiltro)
+                ENDIF
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlSGrpVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlSGrpVal")
+                    SELECT cursor_4c_EtlSGrpVal
+                    loc_oPg.txt_4c_CSubG.Value = ALLTRIM(Codigos)
+                    loc_oPg.txt_4c_DSubG.Value = ALLTRIM(Descricaos)
+                ELSE
+                    MsgAviso("Subgrupo n" + CHR(227) + "o encontrado.", "Subgrupo")
+                    loc_oPg.txt_4c_CSubG.Value = ""
+                    loc_oPg.txt_4c_DSubG.Value = ""
+                    THIS.AbrirLookupCSubG()
+                ENDIF
+                IF USED("cursor_4c_EtlSGrpVal")
+                    USE IN cursor_4c_EtlSGrpVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -2132,28 +2174,31 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarCdProduto()
-        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_CdProduto.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsProduto.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL    = "SELECT TOP 1 CPros, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlProVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlProVal")
-                SELECT cursor_4c_EtlProVal
-                loc_oPg.txt_4c_CdProduto.Value = ALLTRIM(CPros)
-                loc_oPg.txt_4c_DsProduto.Value = ALLTRIM(DPros)
-            ELSE
-                MsgAviso("Produto n" + CHR(227) + "o encontrado.", "Produto")
-                loc_oPg.txt_4c_CdProduto.Value = ""
-                loc_oPg.txt_4c_DsProduto.Value = ""
-                THIS.AbrirLookupCdProduto()
-            ENDIF
-            IF USED("cursor_4c_EtlProVal")
-                USE IN cursor_4c_EtlProVal
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 CPros, DPros FROM SigCdPro WHERE CPros = " + EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlProVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlProVal")
+                    SELECT cursor_4c_EtlProVal
+                    loc_oPg.txt_4c_CdProduto.Value = ALLTRIM(CPros)
+                    loc_oPg.txt_4c_DsProduto.Value = ALLTRIM(DPros)
+                ELSE
+                    MsgAviso("Produto n" + CHR(227) + "o encontrado.", "Produto")
+                    loc_oPg.txt_4c_CdProduto.Value = ""
+                    loc_oPg.txt_4c_DsProduto.Value = ""
+                    THIS.AbrirLookupCdProduto()
+                ENDIF
+                IF USED("cursor_4c_EtlProVal")
+                    USE IN cursor_4c_EtlProVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -2193,28 +2238,31 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE ValidarForn()
-        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult
+        LOCAL loc_oPg, loc_cCodigo, loc_cSQL, loc_nResult, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPg     = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPg.txt_4c_Forn.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPg.txt_4c_DsForn.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL    = "SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlFornVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_EtlFornVal")
-                SELECT cursor_4c_EtlFornVal
-                loc_oPg.txt_4c_Forn.Value   = ALLTRIM(iclis)
-                loc_oPg.txt_4c_DsForn.Value = ALLTRIM(rclis)
-            ELSE
-                MsgAviso("Fornecedor n" + CHR(227) + "o encontrado.", "Fornecedor")
-                loc_oPg.txt_4c_Forn.Value   = ""
-                loc_oPg.txt_4c_DsForn.Value = ""
-                THIS.AbrirLookupForn()
-            ENDIF
-            IF USED("cursor_4c_EtlFornVal")
-                USE IN cursor_4c_EtlFornVal
+            IF loc_lProsseguir
+                loc_cSQL    = "SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EtlFornVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_EtlFornVal")
+                    SELECT cursor_4c_EtlFornVal
+                    loc_oPg.txt_4c_Forn.Value   = ALLTRIM(iclis)
+                    loc_oPg.txt_4c_DsForn.Value = ALLTRIM(rclis)
+                ELSE
+                    MsgAviso("Fornecedor n" + CHR(227) + "o encontrado.", "Fornecedor")
+                    loc_oPg.txt_4c_Forn.Value   = ""
+                    loc_oPg.txt_4c_DsForn.Value = ""
+                    THIS.AbrirLookupForn()
+                ENDIF
+                IF USED("cursor_4c_EtlFornVal")
+                    USE IN cursor_4c_EtlFornVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -2356,30 +2404,39 @@ DEFINE CLASS FormSigReEtl AS FormBase
     ENDPROC
 
     PROCEDURE BtnExcelClick()
-        LOCAL loc_cArquivo
+        LOCAL loc_cArquivo, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.FormParaRelatorio()
-            IF !THIS.this_oRelatorio.PrepararDados()
-                IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
-                MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
-                        "Relat" + CHR(243) + "rio")
+            IF loc_lProsseguir
+                THIS.FormParaRelatorio()
+                IF !THIS.this_oRelatorio.PrepararDados()
+                    IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+                    MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), ;
+                            "Relat" + CHR(243) + "rio")
+                    ENDIF
+                    loc_lProsseguir = .F.
                 ENDIF
-                RETURN
             ENDIF
-            IF !USED("CsImpressao") OR RECCOUNT("CsImpressao") = 0
-                MsgAviso("Nenhum dado encontrado para os filtros selecionados.", "Excel")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("CsImpressao") OR RECCOUNT("CsImpressao") = 0
+                    MsgAviso("Nenhum dado encontrado para os filtros selecionados.", "Excel")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            SELECT CsImpressao
-            loc_cArquivo = PUTFILE("Salvar como...", "EstoqueLocalizacao", "xls")
-            IF EMPTY(loc_cArquivo)
-                RETURN
+            IF loc_lProsseguir
+                SELECT CsImpressao
+                loc_cArquivo = PUTFILE("Salvar como...", "EstoqueLocalizacao", "xls")
+                IF EMPTY(loc_cArquivo)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            COPY TO (loc_cArquivo) TYPE XL5
-            MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + loc_cArquivo, "Excel")
+            IF loc_lProsseguir
+                COPY TO (loc_cArquivo) TYPE XL5
+                MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + loc_cArquivo, "Excel")
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

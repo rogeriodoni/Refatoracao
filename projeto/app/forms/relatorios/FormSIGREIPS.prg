@@ -450,13 +450,14 @@ DEFINE CLASS FormSIGREIPS AS FormBase
     *   Se vazio: limpa desc. Se encontrado: preenche desc. Se invalido: abre busca.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ValidarCodigo()
-        LOCAL loc_cValor, loc_cSQL, loc_nResult
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_lProsseguir
         loc_cValor = ALLTRIM(THIS.txt_4c_Codigo.Value)
         IF EMPTY(loc_cValor)
             THIS.txt_4c_Desc.Value = ""
             THIS.AtualizarEstadoDesc()
             RETURN
         ENDIF
+        loc_lProsseguir = .T.
         TRY
             loc_cSQL = "SELECT Codigos, Descs FROM SigMlItn WHERE Codigos = " + ;
                 EscaparSQL(loc_cValor)
@@ -469,19 +470,23 @@ DEFINE CLASS FormSIGREIPS AS FormBase
                 ELSE
                     USE IN cursor_4c_CodigosVal
                     THIS.AbrirBuscaCodigo()
-                    RETURN
+                    loc_lProsseguir = .F.
                 ENDIF
             ELSE
                 THIS.AbrirBuscaCodigo()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF USED("cursor_4c_CodigosVal")
-                USE IN cursor_4c_CodigosVal
+            IF loc_lProsseguir
+                IF USED("cursor_4c_CodigosVal")
+                    USE IN cursor_4c_CodigosVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
-        THIS.AtualizarEstadoDesc()
+        IF loc_lProsseguir
+            THIS.AtualizarEstadoDesc()
+        ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -602,28 +607,35 @@ DEFINE CLASS FormSIGREIPS AS FormBase
     *   Novo: exporta cursor de dados para XLS via PUTFILE
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcelClick()
-        LOCAL loc_cArquivo, loc_cCursor
+        LOCAL loc_cArquivo, loc_cCursor, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF !THIS.this_oRelatorio.PrepararDados() ;
-               AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
-                MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Erro")
-                RETURN
+            IF loc_lProsseguir
+                IF !THIS.this_oRelatorio.PrepararDados() ;
+                   AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
+                    MsgErro(THIS.this_oRelatorio.this_cMensagemErro, "Erro")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cCursor = THIS.this_oRelatorio.this_cCursorDados
-            IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
-                MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
-                RETURN
+            IF loc_lProsseguir
+                loc_cCursor = THIS.this_oRelatorio.this_cCursorDados
+                IF !USED(loc_cCursor) OR RECCOUNT(loc_cCursor) = 0
+                    MsgAviso("Nenhum dado encontrado para exportar.", "Excel")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            loc_cArquivo = PUTFILE("Salvar como...", "SigReIp3", "XLS")
-            IF !EMPTY(loc_cArquivo)
-                SELECT (loc_cCursor)
-                COPY TO (loc_cArquivo) TYPE XLS
-                MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
-                    loc_cArquivo, "Excel")
+            IF loc_lProsseguir
+                loc_cArquivo = PUTFILE("Salvar como...", "SigReIp3", "XLS")
+                IF !EMPTY(loc_cArquivo)
+                    SELECT (loc_cCursor)
+                    COPY TO (loc_cArquivo) TYPE XLS
+                    MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + ;
+                        loc_cArquivo, "Excel")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;

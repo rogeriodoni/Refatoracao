@@ -172,7 +172,8 @@ QUIT
 * FUNÇÃO: CaptureScreen (via API do Windows)
 *=================================================================================
 FUNCTION CaptureScreen(poForm, pcFileName)
-	LOCAL lnHwnd, lnResult
+	LOCAL lnHwnd, lnResult, loc_lResultado
+	loc_lResultado = .F.
 
 	TRY
 		*-- Obter handle da janela
@@ -194,9 +195,12 @@ FUNCTION CaptureScreen(poForm, pcFileName)
 		*-- Salvar em arquivo texto (screenshot real requer DLL externa)
 		STRTOFILE(loc_cReport, STRTRAN(pcFileName, ".bmp", ".txt"))
 
-		RETURN .T.
+		loc_lResultado = .T.
 
 	CATCH
-		RETURN .F.
+		loc_lResultado = .F.
 	ENDTRY
+
+	*-- RETURN unico, FORA do TRY/CATCH (regra #1)
+	RETURN loc_lResultado
 ENDFUNC

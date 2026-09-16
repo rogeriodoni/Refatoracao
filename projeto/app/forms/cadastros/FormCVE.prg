@@ -1831,34 +1831,39 @@ DEFINE CLASS FormCVE AS FormBase
     * ValidarUsuars - Valida codigo de usuario ao sair do campo
     *==========================================================================
     PROCEDURE ValidarUsuars(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPagina, loc_cValor, loc_cSQL, loc_nResultado
+        LOCAL loc_oPagina, loc_cValor, loc_cSQL, loc_nResultado, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page2
             loc_cValor  = UPPER(ALLTRIM(loc_oPagina.txt_4c_Usuars.Value))
 
             IF EMPTY(loc_cValor)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            loc_cSQL       = "SELECT Usuars, NComps FROM SigCdUsu" + ;
-                             " WHERE Usuars = " + EscaparSQL(loc_cValor)
-            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ValUsu")
+            IF loc_lProsseguir
+                loc_cSQL       = "SELECT Usuars, NComps FROM SigCdUsu" + ;
+                                 " WHERE Usuars = " + EscaparSQL(loc_cValor)
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ValUsu")
 
-            IF loc_nResultado > 0 AND USED("cursor_4c_ValUsu") AND ;
-               RECCOUNT("cursor_4c_ValUsu") > 0
-                loc_oPagina.txt_4c_Usuars.Value = ALLTRIM(cursor_4c_ValUsu.Usuars)
-                THIS.PreencherPeriodoDoUsuario(ALLTRIM(cursor_4c_ValUsu.Usuars))
-            ELSE
+                IF loc_nResultado > 0 AND USED("cursor_4c_ValUsu") AND ;
+                   RECCOUNT("cursor_4c_ValUsu") > 0
+                    loc_oPagina.txt_4c_Usuars.Value = ALLTRIM(cursor_4c_ValUsu.Usuars)
+                    THIS.PreencherPeriodoDoUsuario(ALLTRIM(cursor_4c_ValUsu.Usuars))
+                ELSE
+                    IF USED("cursor_4c_ValUsu")
+                        USE IN cursor_4c_ValUsu
+                    ENDIF
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
+                    THIS.AbrirBuscaUsuars()
+                    loc_lProsseguir = .F.
+                ENDIF
+            ENDIF
+
+            IF loc_lProsseguir
                 IF USED("cursor_4c_ValUsu")
                     USE IN cursor_4c_ValUsu
                 ENDIF
-                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
-                THIS.AbrirBuscaUsuars()
-                RETURN
-            ENDIF
-
-            IF USED("cursor_4c_ValUsu")
-                USE IN cursor_4c_ValUsu
             ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em ValidarUsuars:" + CHR(13) + loc_oErro.Message, "Erro")
@@ -1959,16 +1964,19 @@ DEFINE CLASS FormCVE AS FormBase
     * ValidarSetors - Valida codigo de cargo ao sair do campo
     *==========================================================================
     PROCEDURE ValidarSetors(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPagina, loc_cValor
+        LOCAL loc_oPagina, loc_cValor, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page2
             loc_cValor  = UPPER(ALLTRIM(loc_oPagina.txt_4c_Setors.Value))
 
             IF EMPTY(loc_cValor)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            THIS.AbrirBuscaSetors()
+            IF loc_lProsseguir
+                THIS.AbrirBuscaSetors()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em ValidarSetors:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY

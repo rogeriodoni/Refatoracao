@@ -1937,34 +1937,40 @@ DEFINE CLASS FormEnd AS FormBase
     *   BO <- cursor para chamadas de validacao/persistencia via BO.
     *==================================================================
     PROCEDURE FormParaBO()
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF ISNULL(THIS.this_oBusinessObject)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !USED("crCursorCliEE") OR EOF("crCursorCliEE")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("crCursorCliEE") OR EOF("crCursorCliEE")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            WITH THIS.this_oBusinessObject
-                .this_cIClis     = ALLTRIM(NVL(crCursorCliEE.IClis, ""))
-                .this_nCodigos   = NVL(crCursorCliEE.Codigos, 0)
-                .this_lAtuals    = NVL(crCursorCliEE.Atuals, .F.)
-                .this_cDescrs    = ALLTRIM(NVL(crCursorCliEE.Descrs, ""))
-                .this_cCeps      = ALLTRIM(NVL(crCursorCliEE.Ceps, ""))
-                .this_cPaises    = ALLTRIM(NVL(crCursorCliEE.Paises, ""))
-                .this_cEndes     = ALLTRIM(NVL(crCursorCliEE.Endes, ""))
-                .this_cNums      = ALLTRIM(NVL(crCursorCliEE.Nums, ""))
-                .this_cCompls    = ALLTRIM(NVL(crCursorCliEE.Compls, ""))
-                .this_cBairs     = ALLTRIM(NVL(crCursorCliEE.Bairs, ""))
-                .this_cCidas     = ALLTRIM(NVL(crCursorCliEE.Cidas, ""))
-                .this_cEstas     = ALLTRIM(NVL(crCursorCliEE.Estas, ""))
-                .this_cDdds      = ALLTRIM(NVL(crCursorCliEE.Ddds, ""))
-                .this_cTel1s     = ALLTRIM(NVL(crCursorCliEE.Tel1s, ""))
-                .this_cTel2s     = ALLTRIM(NVL(crCursorCliEE.Tel2s, ""))
-                .this_cContatos  = ALLTRIM(NVL(crCursorCliEE.Contatos, ""))
-                .this_cRefers    = NVL(crCursorCliEE.Refers, "")
-            ENDWITH
+            IF loc_lProsseguir
+                WITH THIS.this_oBusinessObject
+                    .this_cIClis     = ALLTRIM(NVL(crCursorCliEE.IClis, ""))
+                    .this_nCodigos   = NVL(crCursorCliEE.Codigos, 0)
+                    .this_lAtuals    = NVL(crCursorCliEE.Atuals, .F.)
+                    .this_cDescrs    = ALLTRIM(NVL(crCursorCliEE.Descrs, ""))
+                    .this_cCeps      = ALLTRIM(NVL(crCursorCliEE.Ceps, ""))
+                    .this_cPaises    = ALLTRIM(NVL(crCursorCliEE.Paises, ""))
+                    .this_cEndes     = ALLTRIM(NVL(crCursorCliEE.Endes, ""))
+                    .this_cNums      = ALLTRIM(NVL(crCursorCliEE.Nums, ""))
+                    .this_cCompls    = ALLTRIM(NVL(crCursorCliEE.Compls, ""))
+                    .this_cBairs     = ALLTRIM(NVL(crCursorCliEE.Bairs, ""))
+                    .this_cCidas     = ALLTRIM(NVL(crCursorCliEE.Cidas, ""))
+                    .this_cEstas     = ALLTRIM(NVL(crCursorCliEE.Estas, ""))
+                    .this_cDdds      = ALLTRIM(NVL(crCursorCliEE.Ddds, ""))
+                    .this_cTel1s     = ALLTRIM(NVL(crCursorCliEE.Tel1s, ""))
+                    .this_cTel2s     = ALLTRIM(NVL(crCursorCliEE.Tel2s, ""))
+                    .this_cContatos  = ALLTRIM(NVL(crCursorCliEE.Contatos, ""))
+                    .this_cRefers    = NVL(crCursorCliEE.Refers, "")
+                ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
@@ -1979,48 +1985,54 @@ DEFINE CLASS FormEnd AS FormBase
     *   VerificarCepRestrito, CarregarConfigGrupo, etc.).
     *==================================================================
     PROCEDURE BOParaForm()
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF ISNULL(THIS.this_oBusinessObject)
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            IF !USED("crCursorCliEE") OR EOF("crCursorCliEE")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("crCursorCliEE") OR EOF("crCursorCliEE")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
-            WITH THIS.this_oBusinessObject
-                REPLACE Atuals   WITH .this_lAtuals   IN crCursorCliEE
-                REPLACE Descrs   WITH .this_cDescrs   IN crCursorCliEE
-                REPLACE Ceps     WITH .this_cCeps     IN crCursorCliEE
-                REPLACE Paises   WITH .this_cPaises   IN crCursorCliEE
-                REPLACE Endes    WITH .this_cEndes    IN crCursorCliEE
-                REPLACE Nums     WITH .this_cNums     IN crCursorCliEE
-                REPLACE Compls   WITH .this_cCompls   IN crCursorCliEE
-                REPLACE Bairs    WITH .this_cBairs    IN crCursorCliEE
-                REPLACE Cidas    WITH .this_cCidas    IN crCursorCliEE
-                REPLACE Estas    WITH .this_cEstas    IN crCursorCliEE
-                REPLACE Ddds     WITH .this_cDdds     IN crCursorCliEE
-                REPLACE Tel1s    WITH .this_cTel1s    IN crCursorCliEE
-                REPLACE Tel2s    WITH .this_cTel2s    IN crCursorCliEE
-                REPLACE Contatos WITH .this_cContatos IN crCursorCliEE
-                REPLACE Refers   WITH .this_cRefers   IN crCursorCliEE
-            ENDWITH
+            IF loc_lProsseguir
+                WITH THIS.this_oBusinessObject
+                    REPLACE Atuals   WITH .this_lAtuals   IN crCursorCliEE
+                    REPLACE Descrs   WITH .this_cDescrs   IN crCursorCliEE
+                    REPLACE Ceps     WITH .this_cCeps     IN crCursorCliEE
+                    REPLACE Paises   WITH .this_cPaises   IN crCursorCliEE
+                    REPLACE Endes    WITH .this_cEndes    IN crCursorCliEE
+                    REPLACE Nums     WITH .this_cNums     IN crCursorCliEE
+                    REPLACE Compls   WITH .this_cCompls   IN crCursorCliEE
+                    REPLACE Bairs    WITH .this_cBairs    IN crCursorCliEE
+                    REPLACE Cidas    WITH .this_cCidas    IN crCursorCliEE
+                    REPLACE Estas    WITH .this_cEstas    IN crCursorCliEE
+                    REPLACE Ddds     WITH .this_cDdds     IN crCursorCliEE
+                    REPLACE Tel1s    WITH .this_cTel1s    IN crCursorCliEE
+                    REPLACE Tel2s    WITH .this_cTel2s    IN crCursorCliEE
+                    REPLACE Contatos WITH .this_cContatos IN crCursorCliEE
+                    REPLACE Refers   WITH .this_cRefers   IN crCursorCliEE
+                ENDWITH
 
-            WITH THIS
-                .txt_4c_Paises.Refresh()
-                .txt_4c_Ceps.Refresh()
-                .txt_4c_Endes.Refresh()
-                .txt_4c_Nums.Refresh()
-                .txt_4c_Compls.Refresh()
-                .txt_4c_Bairs.Refresh()
-                .txt_4c_Cidas.Refresh()
-                .txt_4c_Estas.Refresh()
-                .txt_4c_Ddds.Refresh()
-                .txt_4c_Tel1s.Refresh()
-                .txt_4c_Tel2s.Refresh()
-                .txt_4c_Contatos.Refresh()
-                .edt_4c_Refers.Refresh()
-            ENDWITH
+                WITH THIS
+                    .txt_4c_Paises.Refresh()
+                    .txt_4c_Ceps.Refresh()
+                    .txt_4c_Endes.Refresh()
+                    .txt_4c_Nums.Refresh()
+                    .txt_4c_Compls.Refresh()
+                    .txt_4c_Bairs.Refresh()
+                    .txt_4c_Cidas.Refresh()
+                    .txt_4c_Estas.Refresh()
+                    .txt_4c_Ddds.Refresh()
+                    .txt_4c_Tel1s.Refresh()
+                    .txt_4c_Tel2s.Refresh()
+                    .txt_4c_Contatos.Refresh()
+                    .edt_4c_Refers.Refresh()
+                ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;

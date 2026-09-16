@@ -757,21 +757,24 @@ DEFINE CLASS FormSIGREAEG AS FormBase
     *   Equivale ao fAcessoEmpresa(Usuar,'C',...) do original
     *--------------------------------------------------------------------------
     PROCEDURE ValidarEmpresa()
-        LOCAL loc_cCodigo, loc_oPagina
+        LOCAL loc_cCodigo, loc_oPagina, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_Empresa.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPagina.txt_4c_DesEmpresa.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF USED("cursor_4c_SigCdEmp") AND ;
-               SEEK(loc_cCodigo, "cursor_4c_SigCdEmp", "cemps")
-                loc_oPagina.txt_4c_Empresa.Value    = ALLTRIM(cursor_4c_SigCdEmp.cemps)
-                loc_oPagina.txt_4c_DesEmpresa.Value = ALLTRIM(cursor_4c_SigCdEmp.razas)
-            ELSE
-                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
-                THIS.AbrirBuscaEmpresa()
+            IF loc_lProsseguir
+                IF USED("cursor_4c_SigCdEmp") AND ;
+                   SEEK(loc_cCodigo, "cursor_4c_SigCdEmp", "cemps")
+                    loc_oPagina.txt_4c_Empresa.Value    = ALLTRIM(cursor_4c_SigCdEmp.cemps)
+                    loc_oPagina.txt_4c_DesEmpresa.Value = ALLTRIM(cursor_4c_SigCdEmp.razas)
+                ELSE
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
+                    THIS.AbrirBuscaEmpresa()
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -820,27 +823,30 @@ DEFINE CLASS FormSIGREAEG AS FormBase
     *   Equivale ao fwBuscaExt com 'C' (codigo) do original get_cd_ggrupo.Valid
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCdGGrupo()
-        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina
+        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_CdGGrupo.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPagina.txt_4c_DsGGrupo.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL = "SELECT TOP 1 codigos, descs FROM SigCdGpr WHERE codigos = " + ;
-                       EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigreaGGrpVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_SigreaGGrpVal")
-                SELECT cursor_4c_SigreaGGrpVal
-                loc_oPagina.txt_4c_CdGGrupo.Value = ALLTRIM(cursor_4c_SigreaGGrpVal.codigos)
-                loc_oPagina.txt_4c_DsGGrupo.Value = ALLTRIM(cursor_4c_SigreaGGrpVal.descs)
-            ELSE
-                *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
-                THIS.AbrirBuscaGGrupo()
-            ENDIF
-            IF USED("cursor_4c_SigreaGGrpVal")
-                USE IN cursor_4c_SigreaGGrpVal
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT TOP 1 codigos, descs FROM SigCdGpr WHERE codigos = " + ;
+                           EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigreaGGrpVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_SigreaGGrpVal")
+                    SELECT cursor_4c_SigreaGGrpVal
+                    loc_oPagina.txt_4c_CdGGrupo.Value = ALLTRIM(cursor_4c_SigreaGGrpVal.codigos)
+                    loc_oPagina.txt_4c_DsGGrupo.Value = ALLTRIM(cursor_4c_SigreaGGrpVal.descs)
+                ELSE
+                    *-- MsgAviso + clear-field removidos (Pattern #114): abrir picker direto preserva valor digitado para LIKE prefix
+                    THIS.AbrirBuscaGGrupo()
+                ENDIF
+                IF USED("cursor_4c_SigreaGGrpVal")
+                    USE IN cursor_4c_SigreaGGrpVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -889,7 +895,8 @@ DEFINE CLASS FormSIGREAEG AS FormBase
     *   Equivale ao fAcessoContab(Usuar,'C',...) do original get_Cd_GrEstoque.Valid
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCdGrEstoque()
-        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina
+        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_CdGrEstoque.Value)
@@ -897,21 +904,23 @@ DEFINE CLASS FormSIGREAEG AS FormBase
                 loc_oPagina.txt_4c_DsGrEstoque.Value = ""
                 loc_oPagina.txt_4c_CdEstoque.Value   = ""
                 loc_oPagina.txt_4c_DsEstoque.Value   = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
-                       EscaparSQL(loc_cCodigo)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigreaGcrVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_SigreaGcrVal")
-                SELECT cursor_4c_SigreaGcrVal
-                loc_oPagina.txt_4c_CdGrEstoque.Value = ALLTRIM(cursor_4c_SigreaGcrVal.codigos)
-                loc_oPagina.txt_4c_DsGrEstoque.Value = ALLTRIM(cursor_4c_SigreaGcrVal.descrs)
-            ELSE
-                *-- Pattern #114: MsgAviso + clear-field removidos - abrir picker direto preserva valor digitado para LIKE prefix
-                THIS.AbrirBuscaGrEstoque()
-            ENDIF
-            IF USED("cursor_4c_SigreaGcrVal")
-                USE IN cursor_4c_SigreaGcrVal
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT TOP 1 codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
+                           EscaparSQL(loc_cCodigo)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigreaGcrVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_SigreaGcrVal")
+                    SELECT cursor_4c_SigreaGcrVal
+                    loc_oPagina.txt_4c_CdGrEstoque.Value = ALLTRIM(cursor_4c_SigreaGcrVal.codigos)
+                    loc_oPagina.txt_4c_DsGrEstoque.Value = ALLTRIM(cursor_4c_SigreaGcrVal.descrs)
+                ELSE
+                    *-- Pattern #114: MsgAviso + clear-field removidos - abrir picker direto preserva valor digitado para LIKE prefix
+                    THIS.AbrirBuscaGrEstoque()
+                ENDIF
+                IF USED("cursor_4c_SigreaGcrVal")
+                    USE IN cursor_4c_SigreaGcrVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -964,32 +973,35 @@ DEFINE CLASS FormSIGREAEG AS FormBase
     *   Se houver GrEstoque selecionado, filtra SigCdCli pelo grupo
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCdEstoque()
-        LOCAL loc_cCodigo, loc_cGrupo, loc_cSQL, loc_nResult, loc_oPagina, loc_cFiltro
+        LOCAL loc_cCodigo, loc_cGrupo, loc_cSQL, loc_nResult, loc_oPagina, loc_cFiltro, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_CdEstoque.Value)
             IF EMPTY(loc_cCodigo)
                 loc_oPagina.txt_4c_DsEstoque.Value = ""
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            loc_cGrupo  = ALLTRIM(loc_oPagina.txt_4c_CdGrEstoque.Value)
-            loc_cFiltro = ""
-            IF !EMPTY(loc_cGrupo)
-                loc_cFiltro = " AND iclis LIKE " + EscaparSQL(loc_cGrupo + "%")
-            ENDIF
-            loc_cSQL = "SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE iclis = " + ;
-                       EscaparSQL(loc_cCodigo) + loc_cFiltro
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigreaCliVal")
-            IF loc_nResult > 0 AND !EOF("cursor_4c_SigreaCliVal")
-                SELECT cursor_4c_SigreaCliVal
-                loc_oPagina.txt_4c_CdEstoque.Value = ALLTRIM(cursor_4c_SigreaCliVal.iclis)
-                loc_oPagina.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_SigreaCliVal.rclis)
-            ELSE
-                *-- Pattern #114: MsgAviso + clear-field removidos - abrir picker direto preserva valor digitado para LIKE prefix
-                THIS.AbrirBuscaEstoque()
-            ENDIF
-            IF USED("cursor_4c_SigreaCliVal")
-                USE IN cursor_4c_SigreaCliVal
+            IF loc_lProsseguir
+                loc_cGrupo  = ALLTRIM(loc_oPagina.txt_4c_CdGrEstoque.Value)
+                loc_cFiltro = ""
+                IF !EMPTY(loc_cGrupo)
+                    loc_cFiltro = " AND iclis LIKE " + EscaparSQL(loc_cGrupo + "%")
+                ENDIF
+                loc_cSQL = "SELECT TOP 1 iclis, rclis FROM SigCdCli WHERE iclis = " + ;
+                           EscaparSQL(loc_cCodigo) + loc_cFiltro
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigreaCliVal")
+                IF loc_nResult > 0 AND !EOF("cursor_4c_SigreaCliVal")
+                    SELECT cursor_4c_SigreaCliVal
+                    loc_oPagina.txt_4c_CdEstoque.Value = ALLTRIM(cursor_4c_SigreaCliVal.iclis)
+                    loc_oPagina.txt_4c_DsEstoque.Value = ALLTRIM(cursor_4c_SigreaCliVal.rclis)
+                ELSE
+                    *-- Pattern #114: MsgAviso + clear-field removidos - abrir picker direto preserva valor digitado para LIKE prefix
+                    THIS.AbrirBuscaEstoque()
+                ENDIF
+                IF USED("cursor_4c_SigreaCliVal")
+                    USE IN cursor_4c_SigreaCliVal
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1223,29 +1235,38 @@ DEFINE CLASS FormSIGREAEG AS FormBase
     *   Prepara dados e exporta CsRelatorio para XLS
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcelClick()
-        LOCAL loc_cArquivo
+        LOCAL loc_cArquivo, loc_lProsseguir
+        loc_lProsseguir = .T.
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            THIS.FormParaRelatorio()
-            IF !THIS.this_oRelatorio.PrepararDados() ;
-               AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
-                MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
-                        "Relat" + CHR(243) + "rio")
-                RETURN
+            IF loc_lProsseguir
+                THIS.FormParaRelatorio()
+                IF !THIS.this_oRelatorio.PrepararDados() ;
+                   AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
+                    MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
+                            "Relat" + CHR(243) + "rio")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            IF !USED("CsRelatorio") OR RECCOUNT("CsRelatorio") = 0
-                MsgAviso("Nenhum dado encontrado para os filtros selecionados.", "Excel")
-                RETURN
+            IF loc_lProsseguir
+                IF !USED("CsRelatorio") OR RECCOUNT("CsRelatorio") = 0
+                    MsgAviso("Nenhum dado encontrado para os filtros selecionados.", "Excel")
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            SELECT CsRelatorio
-            loc_cArquivo = PUTFILE("Salvar como...", "RelAnaliseEstoque", "xls")
-            IF EMPTY(loc_cArquivo)
-                RETURN
+            IF loc_lProsseguir
+                SELECT CsRelatorio
+                loc_cArquivo = PUTFILE("Salvar como...", "RelAnaliseEstoque", "xls")
+                IF EMPTY(loc_cArquivo)
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
-            COPY TO (loc_cArquivo) TYPE XL5
-            MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + loc_cArquivo, "Excel")
+            IF loc_lProsseguir
+                COPY TO (loc_cArquivo) TYPE XL5
+                MsgInfo("Arquivo exportado com sucesso:" + CHR(13) + loc_cArquivo, "Excel")
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

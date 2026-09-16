@@ -479,25 +479,28 @@ DEFINE CLASS Formsigrecrt AS FormBase
     * BTNEXCELCLICK - Botao 3: Exportar dados para Excel
     *==========================================================================
     PROCEDURE BtnExcelClick()
-        LOCAL loc_lSucesso, loc_cArqXls
+        LOCAL loc_lSucesso, loc_cArqXls, loc_lProsseguir
         loc_lSucesso = .F.
+        loc_lProsseguir = .T.
         TRY
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.PrepararDados()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Excel")
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
-            IF USED("CsRelatorio")
-                loc_cArqXls = SYS(2023) + "\SigReCrt_" + STRTRAN(DTOC(DATE()), "/", "") + ".xls"
-                SELECT CsRelatorio
-                COPY TO (loc_cArqXls) TYPE XL5
-                THIS.this_oRelatorio.LimparCursores()
-                MsgInfo("Arquivo Excel gerado em: " + loc_cArqXls, "Excel")
-                loc_lSucesso = .T.
-            ELSE
-                MsgAviso("Nenhum dado dispon" + CHR(237) + "vel para exportar.", "Excel")
+            IF loc_lProsseguir
+                IF USED("CsRelatorio")
+                    loc_cArqXls = SYS(2023) + "\SigReCrt_" + STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                    SELECT CsRelatorio
+                    COPY TO (loc_cArqXls) TYPE XL5
+                    THIS.this_oRelatorio.LimparCursores()
+                    MsgInfo("Arquivo Excel gerado em: " + loc_cArqXls, "Excel")
+                    loc_lSucesso = .T.
+                ELSE
+                    MsgAviso("Nenhum dado dispon" + CHR(237) + "vel para exportar.", "Excel")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnExcelClick")

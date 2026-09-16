@@ -1788,7 +1788,7 @@ DEFINE CLASS FormRAN AS FormBase
     * Legado: Getnlote.Valid - extrai operacao dos 4 primeiros digitos, numero dos 6 ultimos
     *===========================================================================
     PROCEDURE ValidarLote(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPagina, loc_oCnt1, loc_cSQL, loc_nResult
+        LOCAL loc_oPagina, loc_oCnt1, loc_cSQL, loc_nResult, loc_lProsseguir
         LOCAL loc_nNlote, loc_nNdope, loc_nNume
         LOCAL loc_cDopes, loc_nCtrllotes
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
@@ -1809,6 +1809,7 @@ DEFINE CLASS FormRAN AS FormBase
             RETURN
         ENDIF
 
+        loc_lProsseguir = .T.
         TRY
             *-- Extrai codigo numerico da operacao (primeiros 4 digitos do lote)
             loc_nNdope = VAL(LEFT(ALLTRIM(STR(loc_nNlote, 10)), 4))
@@ -1826,41 +1827,45 @@ DEFINE CLASS FormRAN AS FormBase
                 IF USED("cursor_4c_OpeValida")
                     USE IN cursor_4c_OpeValida
                 ENDIF
-                RETURN
+                loc_lProsseguir = .F.
             ENDIF
 
-            SELECT cursor_4c_OpeValida
-            loc_cDopes     = ALLTRIM(cursor_4c_OpeValida.Dopes)
-            loc_nCtrllotes = NVL(cursor_4c_OpeValida.ctrllotes, 0)
-            USE IN cursor_4c_OpeValida
+            IF loc_lProsseguir
+                SELECT cursor_4c_OpeValida
+                loc_cDopes     = ALLTRIM(cursor_4c_OpeValida.Dopes)
+                loc_nCtrllotes = NVL(cursor_4c_OpeValida.ctrllotes, 0)
+                USE IN cursor_4c_OpeValida
 
-            IF loc_nCtrllotes <> 1
-                MsgAviso("Opera" + CHR(231) + CHR(227) + "o " + loc_cDopes + ;
-                    " n" + CHR(227) + "o configurada para gerar N" + CHR(186) + ". Lote!")
-                loc_oCnt1.txt_4c_Nlote.Value = 0
-                THIS.AtualizarMutualExclusao()
-                RETURN
+                IF loc_nCtrllotes <> 1
+                    MsgAviso("Opera" + CHR(231) + CHR(227) + "o " + loc_cDopes + ;
+                        " n" + CHR(227) + "o configurada para gerar N" + CHR(186) + ". Lote!")
+                    loc_oCnt1.txt_4c_Nlote.Value = 0
+                    THIS.AtualizarMutualExclusao()
+                    loc_lProsseguir = .F.
+                ENDIF
             ENDIF
 
             *-- Verifica existencia do lote em SigMvCab
-            loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigMvCab" + ;
-                " WHERE Dopes = " + EscaparSQL(loc_cDopes) + ;
-                "   AND Numes = " + FormatarNumeroSQL(loc_nNume, 0) + ;
-                "   AND emps  = " + EscaparSQL(go_4c_Sistema.cCodEmpresa)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LoteVal")
+            IF loc_lProsseguir
+                loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigMvCab" + ;
+                    " WHERE Dopes = " + EscaparSQL(loc_cDopes) + ;
+                    "   AND Numes = " + FormatarNumeroSQL(loc_nNume, 0) + ;
+                    "   AND emps  = " + EscaparSQL(go_4c_Sistema.cCodEmpresa)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LoteVal")
 
-            IF loc_nResult >= 0 AND USED("cursor_4c_LoteVal")
-                SELECT cursor_4c_LoteVal
-                IF NVL(cursor_4c_LoteVal.qtd, 0) = 0
-                    MsgAviso("Lote N" + CHR(186) + " " + TRANSFORM(loc_nNlote) + " n" + CHR(227) + "o existe!")
+                IF loc_nResult >= 0 AND USED("cursor_4c_LoteVal")
+                    SELECT cursor_4c_LoteVal
+                    IF NVL(cursor_4c_LoteVal.qtd, 0) = 0
+                        MsgAviso("Lote N" + CHR(186) + " " + TRANSFORM(loc_nNlote) + " n" + CHR(227) + "o existe!")
+                        loc_oCnt1.txt_4c_Nlote.Value = 0
+                    ENDIF
+                    USE IN cursor_4c_LoteVal
+                ELSE
+                    MostrarErro("Erro ao validar lote:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
                     loc_oCnt1.txt_4c_Nlote.Value = 0
                 ENDIF
-                USE IN cursor_4c_LoteVal
-            ELSE
-                MostrarErro("Erro ao validar lote:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                loc_oCnt1.txt_4c_Nlote.Value = 0
-            ENDIF
 
+            ENDIF
         CATCH TO loException
             MostrarErro(loException.Message + CHR(13) + "Linha: " + TRANSFORM(loException.LineNo), ;
                 "FormRAN.ValidarLote")
@@ -1871,8 +1876,10 @@ DEFINE CLASS FormRAN AS FormBase
                 USE IN cursor_4c_LoteVal
             ENDIF
         ENDTRY
-
-        THIS.AtualizarMutualExclusao()
+        IF loc_lProsseguir
+    
+            THIS.AtualizarMutualExclusao()
+        ENDIF
     ENDPROC
 
     *===========================================================================
