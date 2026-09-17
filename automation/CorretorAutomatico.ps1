@@ -14789,6 +14789,496 @@ function Corrigir-LabelAlignmentSobreControle {
     return $lista.ToArray()
 }
 
+function Corrigir-FormatMultipleChoicePerdido {
+    # Pattern #203 (Erro161, 2026-09-17, Formcfi) - AUTO-FIX com guard do legado.
+    #
+    # O VFP9 tem um modo de TextBox chamado "multiple choice": Format contendo
+    # a letra M faz o InputMask deixar de ser uma mascara de digitacao e passar
+    # a ser uma LISTA de valores validos separados por virgula. O controle so
+    # aceita os itens da lista; qualquer outro valor eh coagido para o PRIMEIRO
+    # item (ou para branco, quando a lista tem um item vazio).
+    #
+    #     Format = "KM"  InputMask = ",T,S,I,N,F"   -> so branco/T/S/I/N/F
+    #
+    # O migrador nao reconhece esse par: copia o Format trocando o M por "!"
+    # (que so forca maiuscula) e DESCARTA o InputMask - ou omite os dois. O
+    # resultado compila limpo e o campo passa a aceitar QUALQUER caractere. No
+    # Formcfi o campo "Tipo", rotulado "(T / S / I / N / F)", aceitava "A".
+    #
+    # Medido no VFP9 (2026-09-17), com Format = "M" + InputMask = ",T,S,I,N,F":
+    #   [T][S][I][N][F] -> aceitos     [A][X][9][t][s] -> viram branco
+    # Com lista SEM item vazio ("S,N"), o branco eh coagido para o 1o item:
+    #   .Value = "" passa a valer "S". Eh o comportamento do legado tambem.
+    #
+    # A mutacao so acontece com o dump do legado CONFIRMANDO o par Format/
+    # InputMask do controle correspondente - os valores sao TRANSCRITOS dele,
+    # nunca inventados (a lista eh regra de negocio: "A,B" e "0,1" aparecem
+    # tanto quanto "S,N"). Sem dump, ou sem casar o controle, so WARNING.
+    #
+    # Casamento migrado <-> legado: nome normalizado (remove txt_4c_/cbo_4c_/
+    # Get_/get_, underscores e caixa) + conferencia de Left ou Width. Nos 8
+    # sites conhecidos o nome casou 100%: txt_4c_Tpicm<->Get_tpicm,
+    # txt_4c__indicas<->get_indicas, txt_4c_Etiqprod<->Get_etiqprod, etc.
+    #
+    # Sweep 2026-09-17 (Erro161): 8 sites em 2 forms - Formcfi 1 (",T,S,I,N,F")
+    # e Formemp 7 ("S,N" x4, "S,N, ", "A,B", "0,1"). FormCargo ja estava certo
+    # (12 sites, corrigidos no Erro137).
+    param(
+        [string[]]$Linhas,
+        [string]$Arquivo = "",
+        [string]$TaskDir = ""
+    )
+
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+    if ((Split-Path $Arquivo -Leaf) -notmatch '^(?i)Form.*\.prg$') { return $Linhas }
+
+    # ---- parse dos controles do arquivo migrado -------------------------------
+    $ctrls = @{}; $ordem = @(); $alvo = $null
+    for ($n = 0; $n -lt $Linhas.Count; $n++) {
+        $l = $Linhas[$n]
+        if ($l -match '^\s*\*') { continue }
+        if ($l -match '^\s*([A-Za-z0-9_\.\(\)]+)\.AddObject\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"') {
+            $path = $matches[1] + '.' + $matches[2]
+            if (-not $ctrls.ContainsKey($path)) {
+                $ctrls[$path] = @{ Nome = $matches[2]; Classe = $matches[3]; Linha = $n; Props = @{}; PropLn = @{} }
+                $ordem += $path
+            }
+            continue
+        }
+        if ($l -match '^\s*WITH\s+([A-Za-z0-9_\.\(\)]+)\s*$') { $alvo = $matches[1]; continue }
+        if ($l -match '^\s*ENDWITH')                          { $alvo = $null;       continue }
+        if ($alvo -and $l -match '^\s*\.([A-Za-z]+)\s*=\s*(.+?)\s*(&&.*)?$') {
+            if ($ctrls.ContainsKey($alvo)) { $ctrls[$alvo].Props[$matches[1]] = $matches[2]; $ctrls[$alvo].PropLn[$matches[1]] = $n }
+        }
+    }
+    if ($ordem.Count -eq 0) { return $Linhas }
+
+    # So vale a pena ler o dump se existe candidato.
+    #
+    # O criterio eh a AUSENCIA do M no Format - nunca a ausencia do InputMask.
+    # O bug tem duas formas, e a segunda passou batido no 1o sweep:
+    #   (a) Formcfi: Format virou "K!" e o InputMask sumiu.
+    #   (b) FormMoe: o InputMask ("N,S,A,P") ficou e o Format = "M" eh que sumiu.
+    # A (b) eh igualmente quebrada - medido no VFP9 em 2026-09-17: sem o M no
+    # Format o InputMask NAO restringe nada, 'X' e '9' entram do mesmo jeito.
+    # Filtrar por "ja tem InputMask" descartava exatamente esse caso.
+    $candidatos = @()
+    foreach ($p in $ordem) {
+        $c = $ctrls[$p]
+        if ($c.Classe -ne 'TextBox' -and $c.Classe -ne 'ComboBox') { continue }
+        if ($c.Props['Format'] -match '(?i)^"[^"]*M[^"]*"$') { continue }   # idempotencia real
+        $candidatos += $p
+    }
+    if ($candidatos.Count -eq 0) { return $Linhas }
+
+    if ([string]::IsNullOrEmpty($TaskDir)) { $TaskDir = Get-TaskDirDoForm -Arquivo $Arquivo }
+
+    # ---- blocos do dump legado ------------------------------------------------
+    # DOIS indices, porque o nome sozinho nao basta: o legado chama controles de
+    # "Get1"/"Get2" (que nao normalizam para nada) e usa sufixos que o migrado
+    # nao repete (get_congv <-> txt_4c_Congvs). A COLUNA do ControlSource eh a
+    # chave boa - o migrador batiza o controle pela coluna: crSigCdOpt.fazcontas
+    # <-> txt_4c_FazContas, crSigCdOpt.HistClis <-> txt_4c_HistClis.
+    $legado   = @{}   # por nome normalizado
+    $legadoCS = @{}   # pela coluna do ControlSource
+    $mcLegado = @()   # todo controle multiple-choice do legado (para o WARNING final)
+    if (-not [string]::IsNullOrEmpty($TaskDir) -and (Test-Path $TaskDir)) {
+        $dump = Get-ChildItem $TaskDir -Filter '*_form_codigo_fonte.txt' -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($dump) {
+            $cur = $null
+            foreach ($l in (Get-Content -LiteralPath $dump.FullName)) {
+                if ($l -match '^\* PROPRIEDADES DE:') { $cur = @{}; continue }
+                if ($null -eq $cur) { continue }
+                if ($l -match '^\s{2}Name\s*=\s*"([^"]+)"') {
+                    $cur['__Name'] = $matches[1]
+                    $k = ConvertTo-ChaveControleM $matches[1]
+                    if (-not [string]::IsNullOrEmpty($k) -and -not $legado.ContainsKey($k)) { $legado[$k] = $cur }
+                    if ($cur['ControlSource'] -match '(?i)^"[^".]*\.([A-Za-z0-9_]+)"$') {
+                        $kc = ($matches[1] -replace '[^A-Za-z0-9]', '').ToLowerInvariant()
+                        if (-not [string]::IsNullOrEmpty($kc) -and -not $legadoCS.ContainsKey($kc)) { $legadoCS[$kc] = $cur }
+                    }
+                    if ($cur['Format'] -match '(?i)^"[^"]*M[^"]*"$' -and $cur['InputMask'] -match '^".*,.*"$') { $mcLegado += $cur }
+                    $cur = $null
+                    continue
+                }
+                if ($l -match '^\s{2}([A-Za-z]+)\s*=\s*(.+?)\s*$') { $cur[$matches[1]] = $matches[2] }
+            }
+        }
+    }
+
+    $insercoes = @()
+    $casados   = @{}
+
+    foreach ($p in $candidatos) {
+        $c   = $ctrls[$p]
+        $key = ConvertTo-ChaveControleM $c.Nome
+        $leg = $null
+        if (-not [string]::IsNullOrEmpty($key)) {
+            # ControlSource primeiro: eh a chave que o migrador realmente seguiu.
+            #
+            # Tambem com/sem o "s" FINAL: as colunas Fortyus terminam em "s"
+            # (empinds, emiinds, devolvidos, valpend2s) e o migrador batiza o
+            # controle com o nome SEM ele (txt_4c_EmpInd, txt_4c_Devolvido).
+            # Sem essa tentativa, 4 sites do FormOpt ficam de fora.
+            $chaves = @($key)
+            if ($key -match 's$') { $chaves += $key.Substring(0, $key.Length - 1) } else { $chaves += ($key + 's') }
+            foreach ($k in $chaves) {
+                if ($legadoCS.ContainsKey($k)) { $leg = $legadoCS[$k]; break }
+                if ($legado.ContainsKey($k))   { $leg = $legado[$k];   break }
+            }
+        }
+
+        # o legado tem de declarar o par multiple-choice; senao nao eh caso deste pattern
+        if ($null -eq $leg) { continue }
+        if ($leg['Format'] -notmatch '(?i)^"[^"]*M[^"]*"$') { continue }
+        $mskLeg = $leg['InputMask']
+        if ([string]::IsNullOrEmpty($mskLeg) -or $mskLeg -eq '""') { continue }
+        if ($mskLeg -notmatch ',') { continue }
+        $casados[$leg['__Name']] = $true
+
+        $fmtLeg = $leg['Format']
+        $lnRef  = $c.Linha + 1
+
+        # conferencia geometrica: Left OU Width tem de bater com o legado
+        $okGeo = $false
+        foreach ($g in @('Left','Width')) {
+            $a = ConvertTo-InteiroOuNulo $c.Props[$g]
+            $b = ConvertTo-InteiroOuNulo $leg[$g]
+            if ($null -ne $a -and $null -ne $b -and $a -eq $b) { $okGeo = $true }
+        }
+        if (-not $okGeo) {
+            Write-Host "[Pattern #203 WARN] $($c.Nome) (linha $lnRef): legado tem Format=$fmtLeg InputMask=$mskLeg mas Left/Width nao conferem" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-203-FORMAT-MULTIPLE-CHOICE-PERDIDO" -Linha $lnRef -Original "$($c.Nome) sem InputMask" -Corrigido "(nao mutado - geometria divergente)" -Descricao ("Pattern #203 WARNING: o controle do legado com nome equivalente declara Format = $fmtLeg " + "(multiple choice) + InputMask = $mskLeg, mas nem Left nem Width batem com o migrado - o casamento " + "pode ser de outro controle. Conferir a mao em tasks\<task>\*_form_codigo_fonte.txt e transcrever o " + "par Format/InputMask LITERALMENTE. Origem: Erro161 (2026-09-17, Formcfi).")
+            continue
+        }
+
+        # ---- AUTO-FIX: transcreve o par do legado --------------------------------
+        $ind = '            '
+        if ($Linhas[$c.Linha] -match '^(\s*)') { $ind = $matches[1] + '    ' }
+
+        if ($c.PropLn.ContainsKey('Format')) {
+            # ha um Format errado (tipico: "K!") - substitui e injeta o InputMask
+            # junto. Se o migrado JA tinha uma linha de InputMask, ela eh apagada
+            # (Novas vazio) para nao ficar duplicada.
+            $lnF = $c.PropLn['Format']
+            if ($Linhas[$lnF] -match '^(\s*)') { $ind = $matches[1] }
+            $insercoes += @{ Linha = $lnF; Substitui = $true; Novas = @("$ind.Format    = $fmtLeg", "$ind.InputMask = $mskLeg"); Ctrl = $c; FmtAnt = $c.Props['Format']; Fmt = $fmtLeg; Msk = $mskLeg; LnRef = ($lnF + 1) }
+            if ($c.PropLn.ContainsKey('InputMask') -and $c.PropLn['InputMask'] -ne $lnF) {
+                $insercoes += @{ Linha = $c.PropLn['InputMask']; Substitui = $true; Novas = @(); Silencioso = $true }
+            }
+        } elseif ($c.PropLn.ContainsKey('InputMask')) {
+            # Forma (b): o InputMask sobreviveu e o Format = "M" eh que sumiu
+            # (FormMoe). Substitui a linha do InputMask pelo PAR completo - sem
+            # o M no Format a lista nao restringe nada.
+            $lnM = $c.PropLn['InputMask']
+            if ($Linhas[$lnM] -match '^(\s*)') { $ind = $matches[1] }
+            $insercoes += @{ Linha = $lnM; Substitui = $true; Novas = @("$ind.Format    = $fmtLeg", "$ind.InputMask = $mskLeg"); Ctrl = $c; FmtAnt = '(ausente, InputMask sem Format M)'; Fmt = $fmtLeg; Msk = $mskLeg; LnRef = ($lnM + 1) }
+        } else {
+            # nenhum Format - injeta o par depois da ancora (MaxLength > Height > Width).
+            # Guard da meta-regra de Erro69/70: property multi-linha (continuacao
+            # VFP9 com `;`) nao serve de ancora - injetar logo apos a 1a linha
+            # partiria a expressao ao meio. Os tres candidatos sao numericos e na
+            # pratica nunca continuam, mas a checagem custa nada.
+            $anc = $null
+            foreach ($a in @('MaxLength','Height','Width')) {
+                if (-not $c.PropLn.ContainsKey($a)) { continue }
+                if ($Linhas[$c.PropLn[$a]] -match ';\s*(&&.*)?$') { continue }
+                $anc = $c.PropLn[$a]; break
+            }
+            if ($null -eq $anc) { continue }
+            if ($Linhas[$anc] -match '^(\s*)') { $ind = $matches[1] }
+            $insercoes += @{ Linha = $anc; Substitui = $false; Novas = @("$ind.Format    = $fmtLeg", "$ind.InputMask = $mskLeg"); Ctrl = $c; FmtAnt = '(ausente)'; Fmt = $fmtLeg; Msk = $mskLeg; LnRef = ($anc + 1) }
+        }
+    }
+
+    # Controle multiple-choice do legado que nao casou com NENHUM controle do
+    # migrado nao pode sumir em silencio: ou o migrador nao portou o campo, ou
+    # portou com nome que nao deriva nem do Name nem da coluna. Os dois casos
+    # sao trabalho manual - mas so ficam visiveis se o pattern reclamar.
+    #
+    # Casar contra TODOS os controles do form, nao so os candidatos: quem JA
+    # tem Format = "M" saiu da lista de candidatos e, sem isto, seria acusado
+    # de "sem par" a cada sweep - 14 WARNINGs falsos so no FormOpt ja corrigido.
+    # WARNING que dispara em form correto vira ruido e deixa de ser lido.
+    $chavesMigradas = @{}
+    foreach ($p in $ordem) {
+        $cc = $ctrls[$p]
+        if ($cc.Classe -ne 'TextBox' -and $cc.Classe -ne 'ComboBox') { continue }
+        $k = ConvertTo-ChaveControleM $cc.Nome
+        if ([string]::IsNullOrEmpty($k)) { continue }
+        $chavesMigradas[$k] = $true
+        if ($k -match 's$') { $chavesMigradas[$k.Substring(0, $k.Length - 1)] = $true } else { $chavesMigradas[$k + 's'] = $true }
+    }
+
+    foreach ($leg in $mcLegado) {
+        if ($casados.ContainsKey($leg['__Name'])) { continue }
+        $achou = $false
+        foreach ($src in @($leg['__Name'], $(if ($leg['ControlSource'] -match '(?i)^"[^".]*\.([A-Za-z0-9_]+)"$') { $matches[1] } else { '' }))) {
+            if ([string]::IsNullOrEmpty($src)) { continue }
+            $k = ConvertTo-ChaveControleM $src
+            if ([string]::IsNullOrEmpty($k)) { continue }
+            if ($chavesMigradas.ContainsKey($k)) { $achou = $true; break }
+            if ($k -match 's$' -and $chavesMigradas.ContainsKey($k.Substring(0, $k.Length - 1))) { $achou = $true; break }
+        }
+        if ($achou) { continue }
+        $cs = $leg['ControlSource']
+        if ([string]::IsNullOrEmpty($cs)) { $cs = '(sem ControlSource)' }
+        Write-Host "[Pattern #203 WARN] legado $($leg['__Name']) tem Format=$($leg['Format']) InputMask=$($leg['InputMask']) e nao casou com controle do migrado ($cs)" -ForegroundColor Yellow
+        Add-Correcao -Tipo "WARN-203-MULTIPLE-CHOICE-SEM-PAR-NO-MIGRADO" -Linha 0 -Original "legado $($leg['__Name']) ($cs)" -Corrigido "(nao mutado - sem par no migrado)" -Descricao ("Pattern #203 WARNING: o controle $($leg['__Name']) do SCX legado declara Format = $($leg['Format']) " + "(multiple choice) + InputMask = $($leg['InputMask']), mas nenhum controle do form migrado casou com ele - nem pelo " + "nome normalizado nem pela coluna do ControlSource ($cs). Ou o campo nao foi portado (violacao da REGRA " + "FUNDAMENTAL: paridade funcional 100%), ou foi portado com um nome que nao deriva de nenhum dos dois. " + "Conferir a mao e transcrever o par Format/InputMask LITERALMENTE. Origem: Erro161 (2026-09-17).")
+    }
+
+    if ($insercoes.Count -eq 0) { return $Linhas }
+
+    # Reconstroi o arquivo numa passada UNICA, indexando as insercoes por linha.
+    #
+    # NAO usar aritmetica de indice com Sort-Object: `$insercoes | Sort-Object
+    # -Property Linha -Descending` NAO ordena um array de hashtables no PS 5.1
+    # (a chave nao eh vista como property pelo comparador), entao as insercoes
+    # saiam em ordem CRESCENTE com indices ja obsoletos e cada uma empurrava as
+    # seguintes 2 linhas para cima - no Formopt 6 dos 14 pares caiam FORA do
+    # WITH, logo antes do AddObject do controle. Com um mapa linha -> conteudo
+    # e uma passada para frente o problema nao existe.
+    $porLinha = @{}
+    foreach ($ins in $insercoes) { $porLinha[[int]$ins.Linha] = $ins }
+
+    $lista = New-Object System.Collections.Generic.List[string]
+    for ($n = 0; $n -lt $Linhas.Count; $n++) {
+        if (-not $porLinha.ContainsKey($n)) { $lista.Add($Linhas[$n]); continue }
+        $ins = $porLinha[$n]
+        if (-not $ins.Substitui) { $lista.Add($Linhas[$n]) }   # mantem a ancora; substitui descarta o Format errado
+        foreach ($nova in $ins.Novas) { $lista.Add($nova) }
+    }
+
+    foreach ($ins in $insercoes) {
+        if ($ins.Silencioso) { continue }   # entrada so para apagar o InputMask antigo
+        $c = $ins.Ctrl
+        Add-Correcao -Tipo "FORMAT_MULTIPLE_CHOICE_PERDIDO" -Linha $ins.LnRef -Original "$($c.Nome): .Format = $($ins.FmtAnt)" -Corrigido ".Format = $($ins.Fmt) + .InputMask = $($ins.Msk)" -Descricao ("Pattern #203: Format contendo M eh o modo 'multiple choice' do VFP9 - o InputMask deixa de ser " + "mascara de digitacao e passa a ser a LISTA de valores validos separados por virgula; o controle recusa " + "qualquer outro valor. O migrador trocou o M por '!' (que so forca maiuscula) ou omitiu o Format, e " + "DESCARTOU o InputMask - o .prg compila limpo e o campo passa a aceitar QUALQUER caractere (no Formcfi o " + "campo 'Tipo', rotulado '(T / S / I / N / F)', aceitava 'A'). O par foi TRANSCRITO do dump do legado, nunca " + "inventado: a lista eh regra de negocio ('A,B' e '0,1' aparecem tanto quanto 'S,N'). Atencao: lista SEM item " + "vazio coage o branco para o 1o item - eh o comportamento do legado. Origem: Erro161 (2026-09-17, Formcfi; " + "o sweep pegou 8 sites em 2 forms).")
+        Write-Host "[Pattern #203] $($c.Nome): Format $($ins.FmtAnt) -> $($ins.Fmt) + InputMask = $($ins.Msk) (linha $($ins.LnRef))" -ForegroundColor Green
+    }
+
+    return $lista.ToArray()
+}
+
+function ConvertTo-ChaveControleM {
+    # Normaliza o nome de um controle para casar migrado <-> legado.
+    # txt_4c_Tpicm / Get_tpicm -> "tpicm" ; txt_4c__indicas / get_indicas -> "indicas"
+    param([string]$Nome)
+    if ([string]::IsNullOrEmpty($Nome)) { return "" }
+    $n = $Nome -replace '^(?i)(txt|cbo|cmb|edt|spn)_4c_', ''
+    $n = $n -replace '^(?i)(get|txt|cbo|cmb)_*', ''
+    $n = $n -replace '[^A-Za-z0-9]', ''
+    return $n.ToLowerInvariant()
+}
+
+function Corrigir-PictureArquivoInexistente {
+    # Pattern #204 (Erro162, 2026-09-17, FormCliente) - AUTO-FIX com guard do legado.
+    #
+    # O VFP9 aceita `.Picture`/`.Icon`/`.DisabledPicture` apontando para arquivo
+    # que NAO EXISTE: nao ha erro de compilacao, nao ha erro de runtime, o
+    # controle so nao desenha imagem nenhuma. Medido em 2026-09-17: atribuir
+    # "cadastro_visualizar_26.jpg" (inexistente) a um CommandButton nao levanta
+    # excecao e a property fica com o caminho quebrado. O usuario ve um botao
+    # so com texto no meio de outros cinco com icone - e nada no log.
+    #
+    # O migrador inventa o nome do arquivo a partir da acao ("cadastro_incluir",
+    # "geral_imprimir_32", "relatorio_visualizar_60") em vez de transcrever o
+    # que o SCX legado declara, e a grafia real costuma diferir: o inventario
+    # tem "cadastro_vizualizar_60.jpg" (com Z, typo do proprio arquivo) e so
+    # nos tamanhos que existem de fato (o sufixo _26/_60 NAO corresponde ao
+    # tamanho real - todos os icones sao 32x32).
+    #
+    # DE ONDE VEM O ALVO, em ordem:
+    #   1. DUMP DO LEGADO (tasks\<task>\*_form_codigo_fonte.txt), casando o
+    #      controle por Caption e depois por Name. Isto PREVALECE - o palpite
+    #      semantico erra: no FormBAL o botao "Fecha" usa cadastro_salvar_60
+    #      (fechar a contagem = gravar), e no FormSigPrGlp "Disponiveis" usa
+    #      geral_palete_60, nao uma lupa. No sweep do Erro162, 4 de 6 sites do
+    #      FormSigPrGlp teriam recebido icone errado pelo criterio semantico.
+    #   2. MESMA ACAO, OUTRO TAMANHO: "cadastro_cancelar_26" -> o
+    #      "cadastro_cancelar_60" que existe. Trocar so o sufixo eh a mudanca
+    #      minima e nao assume nada sobre a intencao.
+    #   3. Sem nenhum dos dois: WARNING. O pattern NUNCA escolhe icone por
+    #      semelhanca semantica sozinho.
+    #
+    # Sweep 2026-09-17 (Erro162): 54 sites em 20 forms.
+    param(
+        [string[]]$Linhas,
+        [string]$Arquivo = "",
+        [string]$TaskDir = ""
+    )
+
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+    if ((Split-Path $Arquivo -Leaf) -notmatch '^(?i)Form.*\.prg$') { return $Linhas }
+
+    $dirIcones = "C:\4c\vbmp"
+    if (-not (Test-Path $dirIcones)) { return $Linhas }
+
+    # inventario real (case-insensitive)
+    $existe = @{}
+    foreach ($f in (Get-ChildItem $dirIcones -File -ErrorAction SilentlyContinue)) {
+        $existe[$f.Name.ToLowerInvariant()] = $f.Name
+    }
+    if ($existe.Count -eq 0) { return $Linhas }
+
+    # --- sites quebrados -------------------------------------------------------
+    $sites = @()
+    for ($n = 0; $n -lt $Linhas.Count; $n++) {
+        $l = $Linhas[$n]
+        if ($l -match '^\s*\*') { continue }
+        if ($l -notmatch '(?i)CaminhoIcones') { continue }
+        foreach ($m in [regex]::Matches($l, '"([A-Za-z0-9_.\-]+\.(?:jpg|jpeg|bmp|ico|png|gif))"')) {
+            $img = $m.Groups[1].Value
+            if (-not $existe.ContainsKey($img.ToLowerInvariant())) {
+                $sites += @{ Linha = $n; Img = $img }
+            }
+        }
+    }
+    if ($sites.Count -eq 0) { return $Linhas }
+
+    # --- Caption/Name do controle de cada site ---------------------------------
+    # varre uma vez guardando, para cada linha, o Caption do WITH corrente e o
+    # nome do ultimo AddObject.
+    $capDaLinha = @{}; $nomeDaLinha = @{}
+    $nmAtual = ''; $capAtual = ''; $blocoIni = -1; $linhasBloco = @()
+    for ($n = 0; $n -lt $Linhas.Count; $n++) {
+        $l = $Linhas[$n]
+        if ($l -match 'AddObject\(\s*"([^"]+)"') { $nmAtual = $matches[1] }
+        if ($l -match '^\s*WITH\s')  { $capAtual = ''; $linhasBloco = @(); $blocoIni = $n }
+        if ($l -match '^\s*\.Caption\s*=\s*(.+?)\s*$') { $capAtual = $matches[1] }
+        if ($blocoIni -ge 0) { $linhasBloco += $n }
+        if ($l -match '^\s*ENDWITH') {
+            foreach ($b in $linhasBloco) { $capDaLinha[$b] = $capAtual; $nomeDaLinha[$b] = $nmAtual }
+            $blocoIni = -1; $linhasBloco = @()
+        }
+        if (-not $capDaLinha.ContainsKey($n)) { $nomeDaLinha[$n] = $nmAtual }
+    }
+
+    # Sites que atribuem a VARIAVEL nao passam por WITH nenhum e ficariam sem
+    # Caption - era o caso dos 6 do FormSigPrGlp (loc_cImgDisp = ... + depois
+    # .Picture = loc_cImgDisp dentro do WITH do botao). Liga a linha da
+    # atribuicao ao bloco que consome a variavel, para herdar o Caption dele.
+    $varDaLinha = @{}
+    for ($n = 0; $n -lt $Linhas.Count; $n++) {
+        if ($Linhas[$n] -match '^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*.*(?i)CaminhoIcones') {
+            $varDaLinha[$matches[1].ToLowerInvariant()] = $n
+        }
+    }
+    if ($varDaLinha.Count -gt 0) {
+        for ($n = 0; $n -lt $Linhas.Count; $n++) {
+            if ($Linhas[$n] -match '(?i)^\s*\.(?:Disabled|Down)?Picture\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\s*(&&.*)?$') {
+                $v = $matches[1].ToLowerInvariant()
+                if ($varDaLinha.ContainsKey($v) -and $capDaLinha.ContainsKey($n)) {
+                    $ln = $varDaLinha[$v]
+                    if (-not $capDaLinha.ContainsKey($ln) -or [string]::IsNullOrEmpty($capDaLinha[$ln])) {
+                        $capDaLinha[$ln]  = $capDaLinha[$n]
+                        $nomeDaLinha[$ln] = $nomeDaLinha[$n]
+                    }
+                }
+            }
+        }
+    }
+
+    if ([string]::IsNullOrEmpty($TaskDir)) { $TaskDir = Get-TaskDirDoForm -Arquivo $Arquivo }
+
+    # --- tabela do legado: Caption/Name -> Picture -----------------------------
+    $porCap = @{}; $porNome = @{}
+    if (-not [string]::IsNullOrEmpty($TaskDir) -and (Test-Path $TaskDir)) {
+        $dump = Get-ChildItem $TaskDir -Filter '*_form_codigo_fonte.txt' -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($dump) {
+            $cur = $null
+            foreach ($l in (Get-Content -LiteralPath $dump.FullName)) {
+                if ($l -match '^\* PROPRIEDADES DE:') { $cur = @{}; continue }
+                if ($null -eq $cur) { continue }
+                if ($l -match '^\s{2}Name\s*=\s*"([^"]+)"') {
+                    if ($cur['__pic']) {
+                        $kc = ConvertTo-ChaveImagem $cur['Caption']
+                        $kn = ConvertTo-ChaveImagem $matches[1]
+                        if ($kc -and -not $porCap.ContainsKey($kc))  { $porCap[$kc]  = $cur['__pic'] }
+                        if ($kn -and -not $porNome.ContainsKey($kn)) { $porNome[$kn] = $cur['__pic'] }
+                    }
+                    $cur = $null; continue
+                }
+                if ($l -match '(?i)Picture\s*=\s*(.+?)\s*$') {
+                    $p = ($matches[1] -split '\\')[-1]
+                    if ($p -match '(?i)\.(jpg|jpeg|bmp|ico|png|gif)$' -and $p -notmatch '(?i)background') { $cur['__pic'] = $p }
+                }
+                if ($l -match '^\s{2}Caption\s*=\s*(.+?)\s*$') { $cur['Caption'] = $matches[1] }
+            }
+        }
+    }
+
+    $lista = [System.Collections.ArrayList]@($Linhas)
+
+    foreach ($s in $sites) {
+        $n     = $s.Linha
+        $img   = $s.Img
+        $alvo  = ''
+        $fonte = ''
+
+        # 1. legado por Caption, depois por Name (exato e, por fim, por SUFIXO:
+        #    cmd_4c_FaseInserir <-> "inserir", cmd_4c_CompoExcluir <-> "excluir",
+        #    que eh como o migrador renomeia os botoes de grid)
+        $kc = ConvertTo-ChaveImagem $capDaLinha[$n]
+        $kn = ConvertTo-ChaveImagem ($nomeDaLinha[$n] -replace '^(?i)(cmd|txt|img|edt|cbo)_4c_', '')
+        if     ($kc -and $porCap.ContainsKey($kc))  { $alvo = $porCap[$kc];  $fonte = 'legado/caption' }
+        elseif ($kn -and $porNome.ContainsKey($kn)) { $alvo = $porNome[$kn]; $fonte = 'legado/nome' }
+        elseif ($kn.Length -ge 5) {
+            foreach ($k in $porNome.Keys) {
+                if ($k.Length -ge 5 -and ($kn.EndsWith($k) -or $k.EndsWith($kn))) {
+                    $alvo = $porNome[$k]; $fonte = 'legado/nome-sufixo'; break
+                }
+            }
+        }
+
+        # 2. mesma acao, outro sufixo de TAMANHO.
+        #    Dois guards aprendidos na verificacao do Erro162:
+        #    (a) a origem TEM de trazer o sufixo _NN. Sem ele a regra casa
+        #        numero que nao eh tamanho - 'icon.ico' virou 'Icon_117.ico'
+        #        em 4 forms REPORT.
+        #    (b) so vale quando NAO ha tabela do legado para o form. Com dump,
+        #        controle nao casado significa que a resposta certa pode estar
+        #        la e nao foi achada: chutar tamanho ESCONDE o acerto - no
+        #        Formpgr deu geral_boleto_26 onde o legado diz
+        #        geral_calculadora_26. Nesse caso eh WARNING, nao palpite.
+        $temLegado = ($porCap.Count + $porNome.Count) -gt 0
+        if ([string]::IsNullOrEmpty($alvo) -and -not $temLegado -and $img -match '(?i)^(.+)_\d+\.(jpg|jpeg|bmp|ico|png|gif)$') {
+            $base = $matches[1]
+            foreach ($cand in $existe.Values) {
+                if ($cand -match '(?i)^(.+)_\d+\.(jpg|jpeg|bmp|ico|png|gif)$' -and $matches[1] -ieq $base) {
+                    $alvo = $cand; $fonte = 'tamanho'; break
+                }
+            }
+        }
+
+        if ($alvo -and -not $existe.ContainsKey($alvo.ToLowerInvariant())) { $alvo = '' }
+
+        if ([string]::IsNullOrEmpty($alvo)) {
+            Write-Host "[Pattern #204 WARN] linha $($n + 1): imagem '$img' NAO EXISTE em vbmp e nao foi possivel resolver o substituto" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-204-PICTURE-ARQUIVO-INEXISTENTE" -Linha ($n + 1) -Original ".Picture = `"$img`"" -Corrigido "(nao mutado - substituto desconhecido)" -Descricao ("Pattern #204 WARNING: o arquivo de imagem '$img' nao existe em vbmp\. O VFP9 aceita Picture inexistente " + "SEM erro nenhum - o controle simplesmente nao desenha icone, e nada aparece no log. O substituto nao foi " + "resolvido: o dump do legado nao tem o controle correspondente (por Caption nem por Name) e nao existe " + "arquivo com a mesma acao em outro tamanho. Conferir a mao em tasks\<task>\*_form_codigo_fonte.txt e " + "TRANSCREVER o Picture do controle equivalente - NAO escolher icone por semelhanca semantica: no FormBAL o " + "botao 'Fecha' usa cadastro_salvar_60.jpg (fechar a contagem = gravar). Origem: Erro162 (2026-09-17).")
+            continue
+        }
+
+        $lista[$n] = $lista[$n].Replace('"' + $img + '"', '"' + $alvo + '"')
+        Add-Correcao -Tipo "PICTURE_ARQUIVO_INEXISTENTE" -Linha ($n + 1) -Original ".Picture = `"$img`"" -Corrigido ".Picture = `"$alvo`" ($fonte)" -Descricao ("Pattern #204: '$img' nao existe em vbmp\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao " + "desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada " + "no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real " + "diverge: o inventario tem 'cadastro_vizualizar_60.jpg' (com Z, typo do proprio arquivo) e so nos tamanhos " + "que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto " + "resolvido por: $fonte. Origem: Erro162 (2026-09-17, FormCliente 'Cadastro de Clientes'; o sweep pegou 54 " + "sites em 20 forms).")
+        Write-Host "[Pattern #204] linha $($n + 1): $img -> $alvo ($fonte)" -ForegroundColor Green
+    }
+
+    return $lista.ToArray()
+}
+
+function ConvertTo-ChaveImagem {
+    # Normaliza Caption/Name para casar migrado <-> legado.
+    # Resolve CHR(N) do migrado e o hotkey "\<" do legado; remove acento.
+    param([string]$Texto)
+    if ([string]::IsNullOrEmpty($Texto)) { return "" }
+    $t = [regex]::Replace($Texto, 'CHR\((\d+)\)', { [char][int]$args[0].Groups[1].Value })
+    $t = $t -replace '"', '' -replace '\+', '' -replace '\\<', ''
+    $t = $t.Normalize([Text.NormalizationForm]::FormD)
+    $t = -join ($t.ToCharArray() | Where-Object { [Globalization.CharUnicodeInfo]::GetUnicodeCategory($_) -ne [Globalization.UnicodeCategory]::NonSpacingMark })
+    $t = $t -replace '[^A-Za-z0-9]', ''
+    return $t.ToLowerInvariant()
+}
+
 function Get-TaskDirDoForm {
     # helper do Pattern #202 - acha a task (a mais recente) que gerou este form,
     # casando o nome do arquivo com form.formClass do analise.json. O mapa custa
@@ -15109,6 +15599,8 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-ColumnAddObjectSemCurrentControl -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-MaxLengthCopiadoDoWidth -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-LabelAlignmentSobreControle -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
+    $linhas = Corrigir-FormatMultipleChoicePerdido -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
+    $linhas = Corrigir-PictureArquivoInexistente -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
 
     }
 

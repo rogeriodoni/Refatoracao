@@ -5602,7 +5602,8 @@ DEFINE CLASS FormGpd AS FormBase
             .Width         = 17
             .Height        = 23
             .MaxLength     = 1
-            .Format        = "!"
+            .Format    = "M"
+            .InputMask = "P,Q,V"
             .FontName      = "Tahoma"
             .FontSize      = 8
             .SpecialEffect = 1

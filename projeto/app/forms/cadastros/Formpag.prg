@@ -2370,6 +2370,8 @@ DEFINE CLASS Formpag AS FormBase
                 .Width     = 50
                 .Height    = 21
                 .MaxLength = 1
+                .Format    = "M"
+                .InputMask = "N,S"
                 .Visible   = .T.
             ENDWITH
 

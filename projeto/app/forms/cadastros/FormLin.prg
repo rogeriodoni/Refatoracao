@@ -1281,6 +1281,8 @@ DEFINE CLASS FormLin AS FormBase
                 .Width     = 20
                 .Height    = 23
                 .MaxLength = 1
+                .Format    = "M"
+                .InputMask = "1,2"
                 .FontName  = "Tahoma"
                 .FontSize  = 8
                 .Visible   = .T.
@@ -1648,7 +1650,7 @@ DEFINE CLASS FormLin AS FormBase
                 .Width           = 40
                 .Height          = 40
                 .PicturePosition = 4
-                .Picture         = gc_4c_CaminhoIcones + "geral_inserir_26.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "geral_arquivo_26.jpg"
                 .ToolTipText     = "Inserir Fase"
                 .Themes          = .T.
                 .SpecialEffect   = 0
@@ -1663,7 +1665,7 @@ DEFINE CLASS FormLin AS FormBase
                 .Width           = 40
                 .Height          = 40
                 .PicturePosition = 4
-                .Picture         = gc_4c_CaminhoIcones + "geral_excluir_26.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
                 .ToolTipText     = "Excluir Fase"
                 .Themes          = .T.
                 .SpecialEffect   = 0
@@ -1678,7 +1680,7 @@ DEFINE CLASS FormLin AS FormBase
                 .Width           = 40
                 .Height          = 40
                 .PicturePosition = 4
-                .Picture         = gc_4c_CaminhoIcones + "geral_copia_26.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "geral_configuracao_26.jpg"
                 .ToolTipText     = "Fase Alternativa"
                 .Themes          = .T.
                 .SpecialEffect   = 0
@@ -1814,7 +1816,7 @@ DEFINE CLASS FormLin AS FormBase
                 .Width           = 40
                 .Height          = 40
                 .PicturePosition = 4
-                .Picture         = gc_4c_CaminhoIcones + "geral_inserir_26.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "geral_arquivo_26.jpg"
                 .ToolTipText     = "Inserir Composi" + CHR(231) + CHR(227) + "o"
                 .Themes          = .T.
                 .SpecialEffect   = 0
@@ -1829,7 +1831,7 @@ DEFINE CLASS FormLin AS FormBase
                 .Width           = 40
                 .Height          = 40
                 .PicturePosition = 4
-                .Picture         = gc_4c_CaminhoIcones + "geral_excluir_26.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
                 .ToolTipText     = "Excluir Composi" + CHR(231) + CHR(227) + "o"
                 .Themes          = .T.
                 .SpecialEffect   = 0
@@ -1942,7 +1944,7 @@ DEFINE CLASS FormLin AS FormBase
                 .Width           = 40
                 .Height          = 40
                 .PicturePosition = 4
-                .Picture         = gc_4c_CaminhoIcones + "geral_inserir_26.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "geral_arquivo_26.jpg"
                 .ToolTipText     = "Inserir Comp. Obrigat" + CHR(243) + "ria"
                 .Themes          = .T.
                 .SpecialEffect   = 0
@@ -1957,7 +1959,7 @@ DEFINE CLASS FormLin AS FormBase
                 .Width           = 40
                 .Height          = 40
                 .PicturePosition = 4
-                .Picture         = gc_4c_CaminhoIcones + "geral_excluir_26.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
                 .ToolTipText     = "Excluir Comp. Obrigat" + CHR(243) + "ria"
                 .Themes          = .T.
                 .SpecialEffect   = 0

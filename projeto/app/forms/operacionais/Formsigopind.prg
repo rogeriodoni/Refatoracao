@@ -1434,7 +1434,7 @@ DEFINE CLASS Formsigopind AS FormBase
             .Caption = "..."
             .FontName = "Tahoma"
             .FontSize = 8
-            .Picture = gc_4c_CaminhoIcones + "geral_procura_45.jpg"
+            .Picture = gc_4c_CaminhoIcones + "geral_procura_60.jpg"
         ENDWITH
         BINDEVENT(loc_oPagina.cmd_4c_Procura, "Click", THIS, "BtnProcuraHistClick")
 

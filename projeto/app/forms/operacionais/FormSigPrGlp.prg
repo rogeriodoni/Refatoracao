@@ -211,13 +211,13 @@ DEFINE CLASS FormSigPrGlp AS FormBase
         LOCAL loc_cImgProcessar, loc_cImgCancelar, loc_cImgRelatorio
         LOCAL loc_cImgDisp, loc_cImgLinhas, loc_cImgPedras, loc_cImgEstoque
 
-        loc_cImgProcessar  = gc_4c_CaminhoIcones + "geral_executar_60.jpg"
-        loc_cImgCancelar   = gc_4c_CaminhoIcones + "cadastro_encerrar_60.jpg"
+        loc_cImgProcessar  = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
+        loc_cImgCancelar   = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
         loc_cImgRelatorio  = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
-        loc_cImgDisp       = gc_4c_CaminhoIcones + "geral_pesquisar_60.jpg"
-        loc_cImgLinhas     = gc_4c_CaminhoIcones + "geral_lista_60.jpg"
-        loc_cImgPedras     = gc_4c_CaminhoIcones + "geral_adicionar_60.jpg"
-        loc_cImgEstoque    = gc_4c_CaminhoIcones + "geral_estoque_60.jpg"
+        loc_cImgDisp       = gc_4c_CaminhoIcones + "geral_palete_60.jpg"
+        loc_cImgLinhas     = gc_4c_CaminhoIcones + "geral_grafico_pizza_60.jpg"
+        loc_cImgPedras     = gc_4c_CaminhoIcones + "geral_datas_60.jpg"
+        loc_cImgEstoque    = gc_4c_CaminhoIcones + "geral_marcar_60.jpg"
 
         *-- Botao Disponiveis (622,3,75,75)
         THIS.AddObject("cmd_4c_Disponivel", "CommandButton")

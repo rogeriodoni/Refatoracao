@@ -561,7 +561,7 @@ DEFINE CLASS FormMPD AS FormBase
                 .Width    = 75
                 .Height   = 75
                 .Caption  = "Salvar"
-                .Picture  = gc_4c_CaminhoIcones + "cadastro_gravar_60.jpg"
+                .Picture  = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
                 .FontName = "Tahoma"
                 .FontSize = 8
                 .Themes   = .F.

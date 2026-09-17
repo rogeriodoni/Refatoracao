@@ -800,6 +800,8 @@ DEFINE CLASS Formche AS FormBase
             .Left        = 464
             .Width       = 17
             .Height      = 23
+            .Format    = "M"
+            .InputMask = "S,N"
             .Value       = ""
             .FontName    = "Tahoma"
             .FontSize    = 8

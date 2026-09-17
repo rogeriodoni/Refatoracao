@@ -4621,7 +4621,7 @@ DEFINE CLASS FormFea AS FormBase
             par_oCnt.cnt_4c_Conversao.AddObject("cmd_4c_Cotacao", "CommandButton")
             WITH par_oCnt.cnt_4c_Conversao.cmd_4c_Cotacao
                 .Caption         = ""
-                .Picture         = gc_4c_CaminhoIcones + "geral_processar_26.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "geral_cambio_32.jpg"
                 .PicturePosition = 4
                 .Top             = 20
                 .Left            = 202

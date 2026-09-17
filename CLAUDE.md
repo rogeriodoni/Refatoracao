@@ -419,6 +419,49 @@ A caixa larga que sobra eh inofensiva (`BackStyle = 0` nao pinta e o controle fi
 
 Auto-fix: CorretorAutomatico **#202** (auto-muta so com o dump confirmando; sem dump, WARNING). Referencia: `FormCES`. Origem: Erro160 (2026-09-16).
 
+### 24. `Format` com `M` eh multiple choice - o `InputMask` eh a LISTA de valores validos
+`Format` contendo a letra `M` muda o significado do `InputMask`: ele deixa de ser mascara de digitacao e vira a **lista de valores aceitos**, separada por virgula. O migrador troca o `M` por `!` (que so forca maiuscula) e **descarta o InputMask** - compila limpo e o campo passa a aceitar QUALQUER caractere.
+
+```foxpro
+* ERRADO (Formcfi, como saiu da migracao) - campo "Tipo", rotulado "(T / S / I / N / F)", aceitava "A"
+.Format    = "K!"
+* CERTO - transcrito do SCX legado
+.Format    = "KM"
+.InputMask = ",T,S,I,N,F"
+```
+
+Medido no VFP9: `T`/`S`/`I`/`N`/`F` aceitos, `A`/`X`/`9`/`t`/`s` viram branco.
+
+**A lista eh REGRA DE NEGOCIO - so TRANSCREVER.** `"A,B"` e `"0,1"` aparecem tanto quanto `"S,N"`; nao existe lista padrao. **Lista SEM item vazio coage o branco para o 1o item** (`"S,N"` faz `.Value = ""` valer `"S"`, inclusive no `LimparCampos` do Incluir) - eh o comportamento do legado, NAO acrescentar item vazio que o legado nao tem. A entrada vazia, quando existe, vem como virgula inicial (`",T,S,I,N,F"`) ou final (`"S,N, "`).
+
+**Diagnostico**: `KEYBOARD` num harness NAO dirige controle `Format = "M"` - digitacao simulada da falso negativo ate nas variantes que funcionam em producao. Testar por **atribuicao** (`.Value = "A"` e ler de volta).
+
+Auto-fix: CorretorAutomatico **#203** (muta so com o dump confirmando o par). Referencia: `Formcfi`, `FormCargo`. Origem: Erro161 (8 sites em 2 forms).
+
+### 25. `.Picture` inexistente falha em SILENCIO - o icone vem do legado, nunca de palpite
+O VFP9 aceita `.Picture`/`.Icon`/`.DisabledPicture` apontando para arquivo que **nao existe**: sem erro de compilacao, sem erro de runtime, nada no log - o controle so **nao desenha icone**. No `FormCliente` o botao "Visualizar" ficou so com texto no meio de cinco com icone, criados pelo MESMO laco com as MESMAS propriedades.
+
+O migrador **inventa o nome a partir da acao** (`cadastro_incluir.jpg`, `geral_imprimir_32.jpg`) em vez de transcrever o do SCX legado. Duas armadilhas no `vbmp\`:
+1. A grafia tem **typo de fabrica**: o arquivo eh `cadastro_vizualizar_60.jpg`, com **Z**.
+2. O sufixo `_26`/`_60` **NAO eh o tamanho** - todos os icones sao 32x32; trocar de sufixo eh inocuo.
+
+**O alvo vem do DUMP DO LEGADO, nunca de semelhanca semantica** - o palpite erra:
+
+| form | botao | palpite | o que o legado usa |
+|---|---|---|---|
+| `FormBAL` | "Fecha" | icone de sair | **`cadastro_salvar_60.jpg`** (fechar = gravar) |
+| `FormSigPrGlp` | "Disponiveis" | lupa | **`geral_palete_60.jpg`** |
+| `FormCNF` | "Imprimir" | `relatorio_impressora_26` | **`printer.ico`** |
+| `FormLin` | inserir (grid) | `cadastro_inserir_26` | **`geral_arquivo_26.jpg`** |
+
+No `FormSigPrGlp`, **4 dos 6** sites teriam recebido icone errado pelo criterio semantico.
+
+**O mesmo nome inventado pode ter alvos DIFERENTES no mesmo form** (`FormLpr`: `geral_imprimir_32.jpg` vira `geral_impressora_normal_60.jpg` na lista e `relatorio_impressora_26.jpg` na toolbar) - a chave eh **form + linha**, replace global corrompe.
+
+**`IF FILE()` mascara, nao resolve**: o `FormSigPrGlp` envolve cada `.Picture` num guard, e por isso os 6 botoes ficaram sem icone desde a migracao sem ninguem notar. Excecao legitima: `gc_4c_LogoRelatorio` (`logo.bmp`) no `config.prg`.
+
+Auto-fix: CorretorAutomatico **#204**. Referencia: `FormCor` (CRUD) e a toolbar de REPORT (`relatorio_video_26`/`relatorio_impressora_26`/`relatorio_excel_26`/`relatorio_sair_60`). Origem: Erro162 (54 sites em 20 forms).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

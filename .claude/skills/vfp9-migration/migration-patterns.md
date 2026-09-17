@@ -11384,3 +11384,145 @@ candidatos e 27 bugs reais.
 
 Auto-fix: CorretorAutomatico **#202** (auto-muta so com o dump confirmando; sem dump, WARnInG).
 Referencia: `FormCES`. Origem: Erro160 (2026-09-16, "Cadastro de Classificacao de Estoque").
+
+---
+
+## 207. `Format` com `M` eh Multiple Choice — o `InputMask` eh a LISTA de Valores (Erro161 2026-09-17)
+
+O VFP9 tem um modo de TextBox pouco conhecido: **`Format` contendo a letra `M`** faz o
+`InputMask` deixar de ser mascara de digitacao e passar a ser a **LISTA de valores validos**,
+separados por virgula. O controle so aceita os itens da lista.
+
+```
+Format = "KM"   InputMask = ",T,S,I,N,F"    -> so branco / T / S / I / N / F
+Format = "M"    InputMask = "S,N"           -> so S / N
+Format = "M"    InputMask = "A,B"           -> so A / B
+Format = "M"    InputMask = "0,1"           -> so 0 / 1
+```
+
+O migrador nao reconhece o par: copia o `Format` **trocando o `M` por `!`** (que so forca
+maiuscula) e **descarta o `InputMask`** — ou omite os dois. O `.prg` compila limpo e o campo
+passa a aceitar **qualquer caractere**. No `Formcfi` o campo "Tipo", rotulado literalmente
+`(T / S / I / N / F)` ao lado, aceitava `A`.
+
+```foxpro
+* ERRADO - como saiu da migracao (Formcfi)
+.MaxLength = 1
+.Format    = "K!"              && so forca maiuscula, nao restringe nada
+
+* CERTO - transcrito do SCX legado
+.MaxLength = 1
+.Format    = "KM"
+.InputMask = ",T,S,I,N,F"
+```
+
+**Medido no VFP9 (2026-09-17)**, atribuindo valores ao controle com `InputMask = ",T,S,I,N,F"`:
+
+| atribuido | retido | |
+|---|---|---|
+| `T` `S` `I` `N` `F` | o proprio | ACEITO |
+| `A` `X` `9` `t` `s` | branco | RECUSADO |
+
+**A lista eh regra de negocio — TRANSCREVER, nunca inventar.** `"A,B"` e `"0,1"` aparecem
+tanto quanto `"S,N"`; nao existe lista "padrao".
+
+**Lista SEM item vazio coage o branco para o PRIMEIRO item.** Com `InputMask = "S,N"`,
+`.Value = ""` passa a valer `"S"` — inclusive no `LimparCampos` do modo Incluir. Eh o
+comportamento do legado (que tinha `ControlSource` com a mesma mascara), entao **nao
+"consertar"** adicionando um item vazio que o legado nao tem. A entrada vazia, quando existe,
+vem no dump como virgula inicial (`",T,S,I,N,F"`) ou final (`"S,N, "`).
+
+**Minusculas sao recusadas** — e o legado eh igual, entao nao acrescentar `!` ao `Format`.
+
+Cuidado ao diagnosticar: `KEYBOARD` num harness **nao dirige** controle `Format = "M"` (a
+tecla nao chega), entao um teste de digitacao simulada da falso negativo em TODAS as variantes,
+inclusive nas que funcionam em producao. O teste que vale eh por **atribuicao** (`.Value = "A"`
+e ler de volta): se a mascara esta ativa, o VFP coage o valor.
+
+Auto-fix: CorretorAutomatico **#203** (auto-muta so com o dump confirmando o par
+`Format`/`InputMask`; sem dump ou sem casar geometria, WARNING). Casamento migrado x legado
+pelo nome normalizado (`txt_4c_Tpicm` <-> `Get_tpicm`, `txt_4c__indicas` <-> `get_indicas`).
+Referencia: `Formcfi`, `FormCargo`. Origem: Erro161 (2026-09-17, "ICMS - Cupom Fiscal";
+8 sites em 2 forms — `Formcfi` 1 e `Formemp` 7).
+
+---
+
+## 208. `.Picture` Apontando para Arquivo Inexistente Falha em SILENCIO (Erro162 2026-09-17)
+
+O VFP9 aceita `.Picture` / `.Icon` / `.DisabledPicture` apontando para um arquivo que
+**nao existe**: nao ha erro de compilacao, nao ha erro de runtime, nada no log — o controle
+simplesmente **nao desenha imagem nenhuma**.
+
+Medido no VFP9 (2026-09-17), atribuindo a um `CommandButton`:
+
+```
+cadastro_visualizar_26.jpg     FILE()=.F.  Picture retida=[cadastro_visualizar_26.jpg]
+cadastro_vizualizar_60.jpg     FILE()=.T.  Picture retida=[cadastro_vizualizar_60.jpg]
+```
+
+A atribuicao do arquivo inexistente **nao levanta excecao** e a property fica com o caminho
+quebrado. No `FormCliente` isso deixou o botao "Visualizar" so com o texto, no meio de cinco
+botoes com icone, criados pelo MESMO laco com as MESMAS propriedades.
+
+O migrador **inventa o nome do arquivo a partir da acao** (`cadastro_incluir.jpg`,
+`geral_imprimir_32.jpg`, `relatorio_visualizar_60.jpg`) em vez de transcrever o que o SCX
+legado declara. Duas armadilhas no inventario real (`vbmp\`):
+
+1. **A grafia tem typo de fabrica**: o arquivo eh `cadastro_vizualizar_60.jpg`, com **Z**.
+2. **O sufixo `_26`/`_60` NAO eh o tamanho**: todos os icones sao **32x32**. O sufixo eh so
+   parte do nome — `_26` e `_60` renderizam igual, entao usar o que existir eh seguro.
+
+**O icone certo vem do DUMP DO LEGADO, nunca de semelhanca semantica.** O palpite erra:
+
+| form | botao | palpite "obvio" | o que o legado usa |
+|---|---|---|---|
+| `FormBAL` | "Fecha" | um icone de sair | **`cadastro_salvar_60.jpg`** (fechar a contagem = gravar) |
+| `FormSigPrGlp` | "Disponiveis" | uma lupa | **`geral_palete_60.jpg`** |
+| `FormSigPrGlp` | "Total/Linhas" | uma lista | **`geral_grafico_pizza_60.jpg`** |
+| `FormSigPrGlp` | "Requisicoes" | um "+" | **`geral_datas_60.jpg`** |
+| `FormSigPrGlp` | "Estoques" | uma caixa | **`geral_marcar_60.jpg`** |
+| `FormCNF` | "Imprimir" | `relatorio_impressora_26.jpg` | **`printer.ico`** |
+| `FormLin` | inserir (grid) | `cadastro_inserir_26.jpg` | **`geral_arquivo_26.jpg`** |
+
+No `FormSigPrGlp`, **4 dos 6** sites teriam recebido icone errado pelo criterio semantico.
+
+**O mesmo nome inventado pode ter alvos DIFERENTES no mesmo form**: no `FormLpr`,
+`geral_imprimir_32.jpg` vira `geral_impressora_normal_60.jpg` na lista e
+`relatorio_impressora_26.jpg` na toolbar do relatorio. Substituicao global de string corrompe;
+a chave tem de ser **form + linha**.
+
+Ordem de resolucao:
+1. **Dump do legado** (`tasks\<task>\*_form_codigo_fonte.txt`), casando o controle por
+   `Caption`, depois por `Name` exato, depois por **sufixo** do nome — o migrador renomeia os
+   botoes de grid acrescentando prefixo (`cmd_4c_FaseInserir` <-> `inserir`,
+   `cmd_4c_CompoExcluir` <-> `excluir`), e sem o casamento por sufixo os 7 sites do `FormLin`
+   ficam de fora.
+2. **Mesma acao, outro sufixo de tamanho** (`cadastro_cancelar_26` -> o `_60` que existe) —
+   mudanca minima, nao assume nada sobre a intencao. **Com DOIS guards**, ambos aprendidos
+   ao verificar o pattern contra a correcao manual:
+   - **a origem tem de trazer o `_NN`**. Sem isso a regra casa numero que nao eh tamanho:
+     `icon.ico` virou `Icon_117.ico` em 4 forms REPORT.
+   - **so vale quando NAO existe tabela do legado para o form**. Havendo dump, controle nao
+     casado significa que a resposta certa pode estar la e nao foi achada — chutar tamanho
+     ESCONDE o acerto: no `Formpgr` deu `geral_boleto_26.jpg` onde o legado diz
+     `geral_calculadora_26.jpg`.
+3. Sem nenhum dos dois: **WARNING**, decisao manual.
+
+**Verificacao de pattern que troca valor tem de comparar com uma correcao conferida a mao,
+caso a caso.** Rodar o #204 contra os 54 sites ja corrigidos manualmente revelou 2 mutacoes
+ERRADAS e 19 sites que ele nem via — nenhuma das duas coisas aparece so olhando a saida do
+pattern, que em ambos os casos parecia plausivel.
+
+**Guard `IF FILE()` mascara o problema, nao resolve**: o `FormSigPrGlp` envolve cada
+`.Picture` num `IF FILE(loc_cImg)`, o que evita qualquer sintoma — e por isso os 6 botoes
+ficaram sem icone desde a migracao sem ninguem notar.
+
+Auditoria: comparar todo literal `"*.jpg|bmp|ico|png"` em linha com `gc_4c_CaminhoIcones`
+contra o inventario de `vbmp\`. Auto-fix: CorretorAutomatico **#204**.
+Referencia: `FormCor` (CRUD), toolbar de REPORT (`relatorio_video_26` / `relatorio_impressora_26`
+/ `relatorio_excel_26` / `relatorio_sair_60`). Origem: Erro162 (2026-09-17, `FormCliente`
+"Cadastro de Clientes"; o sweep pegou **54 sites em 20 forms**).
+
+**Excecao**: `gc_4c_LogoRelatorio` (`logo.bmp`) fica de fora — o `config.prg` tem um
+`IF NOT FILE()` deliberado que esvazia a variavel para o `Print When` dos FRXs legados
+retornar `.F.`.

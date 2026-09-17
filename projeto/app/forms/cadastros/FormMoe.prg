@@ -638,7 +638,8 @@ DEFINE CLASS FormMoe AS FormBase
             .FontName   = "Tahoma"
             .FontSize   = 8
             .FontItalic = .F.
-            .InputMask  = "N,S"
+            .Format    = "M"
+            .InputMask = "N,S"
             .Visible    = .T.
         ENDWITH
 
@@ -960,7 +961,8 @@ DEFINE CLASS FormMoe AS FormBase
             .FontName   = "Tahoma"
             .FontSize   = 8
             .FontItalic = .F.
-            .InputMask  = "N,S,A,P"
+            .Format    = "M"
+            .InputMask = "N,S,A,P"
             .Visible    = .T.
         ENDWITH
 

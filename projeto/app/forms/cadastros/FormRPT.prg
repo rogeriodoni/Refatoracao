@@ -512,7 +512,7 @@ DEFINE CLASS FormRPT AS FormBase
             .AddObject("cmd_4c_Confirmar", "CommandButton")
             WITH .cmd_4c_Confirmar
                 .Caption         = "Confirmar"
-                .Picture         = gc_4c_CaminhoIcones + "cadastro_confirmar_60.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
                 .Left            = 5
