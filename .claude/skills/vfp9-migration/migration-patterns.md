@@ -11526,3 +11526,64 @@ Referencia: `FormCor` (CRUD), toolbar de REPORT (`relatorio_video_26` / `relator
 **Excecao**: `gc_4c_LogoRelatorio` (`logo.bmp`) fica de fora — o `config.prg` tem um
 `IF NOT FILE()` deliberado que esvazia a variavel para o `Print When` dos FRXs legados
 retornar `.F.`.
+
+---
+
+## 209. `SET PATH TO (a), (b), (c)` Honra SO a PRIMEIRA Expressao (Erro162_Aba1 2026-09-17)
+
+`SET PATH TO` recebe **UMA string** com a lista de diretorios. Escrito com varias
+expressoes entre parenteses separadas por virgula, o VFP9 usa **apenas a primeira** e
+descarta o resto **em silencio** — sem erro de compilacao, sem erro de runtime, nada no log.
+
+Medido no VFP9 (2026-09-17):
+
+```
+SET PATH TO (pA), (pB), (pC)          -> SET("PATH") = "...\START"
+SET PATH TO (pA + "," + pB + "," + pC) -> SET("PATH") = "...\START,...\CLASSES\,...\UTILS\"
+```
+
+```foxpro
+* ERRADO - so gcCaminhoBase entra no PATH
+SET PATH TO (gcCaminhoBase), ;
+            (gcCaminhoClasses), ;
+            (gcCaminhoUtils), ;
+            (gcCaminhoForms), ;
+            (gcCaminhoIcones)
+
+* CERTO - reescrita de EXPRESSAO, sem variavel nova
+SET PATH TO (gcCaminhoBase + "," + gcCaminhoClasses + "," + gcCaminhoUtils + "," + ;
+             gcCaminhoForms + "," + gcCaminhoIcones)
+```
+
+**Eh especifico do `SET PATH`.** Medido na mesma sessao, estes DOIS funcionam com varias
+expressoes entre parenteses:
+
+```
+SET PROCEDURE TO (a),(b),(c)  -> os TRES entram
+SET CLASSLIB  TO (a),(b)      -> os DOIS entram
+```
+
+Nesses dois a virgula separa arquivos de verdade. No `SET PATH` o argumento eh uma string
+unica, entao a virgula fora dos parenteses nao separa nada — ela encerra o comando.
+
+**O sintoma aparece LONGE da causa.** No `config.prg` do projeto isso fez `utils\`,
+`classes\`, `forms\` e `icones\` NUNCA estarem no PATH. Nada quebrou de imediato porque o
+`config.prg` faz `SET PROCEDURE` de todos os BOs e forms com caminho completo. O que quebrou
+foi a resolucao de UDF por nome de `.prg`: os VCX legado Fortyus chamam `IsEmpty()` no p-code
+compilado, o VFP procura `isempty.prg` pelo PATH e estoura
+
+```
+File 'isempty.prg' does not exist.   Procedure: when
+```
+
+ao digitar em qualquer campo com `When` — no `FormCliente`, ao preencher a Razao Social. O
+wrapper `utils\isempty.prg` existia e estava correto o tempo todo; so era inalcancavel.
+
+**Diagnostico**: quando um `.prg` que existe aparece como "does not exist", medir
+`SET("PATH")` ANTES de mexer no arquivo. Duas hipoteses plausiveis que NAO se confirmaram
+aqui (descartadas medindo): `SET PATH` nao eh escopado por data session (sobrevive ao
+`DataSession = 2`), e nenhum codigo do projeto redefine PATH depois do startup.
+
+Auto-fix: CorretorAutomatico **#205** — registrado nas DUAS listas do corretor, inclusive na
+do **modo SEGURO**: o arquivo que originou o bug eh `start\config.prg`, que nao eh form nem
+BO, e registrado so na lista de forms o pattern nunca rodaria nele. Origem: Erro162_Aba1.

@@ -93,6 +93,8 @@ Use flag variable (`loc_lResultado`), RETURN only OUTSIDE TRY/CATCH.
 ### 2. ISEMPTY() does NOT exist
 Use `EMPTY()`. ISEMPTY generates "File 'isempty.prg' does not exist".
 
+**MAS**: essa mensagem tambem aparece sem `ISEMPTY()` nenhum no nosso codigo. Os VCX legado Fortyus (`framework.vcx`/`classresp.vcx`) chamam `IsEmpty()` no p-code COMPILADO, que nao da para editar; por isso existe o wrapper `projeto\app\utils\isempty.prg`, que so redireciona para `EMPTY()`. Se o erro aparecer com o wrapper no lugar, o problema eh o **PATH**, nao o codigo — ver regra **#26** e medir `SET("PATH")` ANTES de mexer em qualquer arquivo.
+
 ### 3. BINDEVENT requires PUBLIC methods
 PROTECTED methods fail silently. Handlers must declare event parameters (AfterRowColChange needs par_nColIndex, KeyPress needs par_nKeyCode + par_nShiftAltCtrl).
 
@@ -461,6 +463,26 @@ No `FormSigPrGlp`, **4 dos 6** sites teriam recebido icone errado pelo criterio 
 **`IF FILE()` mascara, nao resolve**: o `FormSigPrGlp` envolve cada `.Picture` num guard, e por isso os 6 botoes ficaram sem icone desde a migracao sem ninguem notar. Excecao legitima: `gc_4c_LogoRelatorio` (`logo.bmp`) no `config.prg`.
 
 Auto-fix: CorretorAutomatico **#204**. Referencia: `FormCor` (CRUD) e a toolbar de REPORT (`relatorio_video_26`/`relatorio_impressora_26`/`relatorio_excel_26`/`relatorio_sair_60`). Origem: Erro162 (54 sites em 20 forms).
+
+### 26. `SET PATH TO (a), (b), (c)` honra SO a PRIMEIRA expressao
+`SET PATH TO` recebe **UMA string** com a lista de diretorios. Com varias expressoes entre parenteses separadas por virgula, o VFP9 usa **so a primeira** e descarta o resto **em silencio** - sem erro de compilacao, sem erro de runtime, nada no log.
+
+```foxpro
+* ERRADO - so gcCaminhoBase entra no PATH
+SET PATH TO (gcCaminhoBase), (gcCaminhoClasses), (gcCaminhoUtils)
+* CERTO - reescrita de EXPRESSAO, sem variavel nova
+SET PATH TO (gcCaminhoBase + "," + gcCaminhoClasses + "," + gcCaminhoUtils)
+```
+
+Medido no VFP9: com 3 expressoes o `SET("PATH")` fica so com a 1a; concatenado, as 3 entram.
+
+**Especifico do `SET PATH`.** Medido: `SET PROCEDURE TO (a),(b),(c)` e `SET CLASSLIB TO (a),(b)` funcionam e entram TODOS - ali a virgula separa arquivos de verdade. NAO generalizar.
+
+**O sintoma aparece LONGE da causa.** No `config.prg` isso fez `utils\`, `classes\`, `forms\` e `icones\` NUNCA estarem no PATH. Nada quebrou de imediato (o `config.prg` faz `SET PROCEDURE` de tudo com caminho completo), mas a resolucao de UDF por nome de `.prg` parou: os VCX legado chamam `IsEmpty()` no p-code, o VFP procura `isempty.prg` pelo PATH e estoura `File 'isempty.prg' does not exist / Procedure: when` ao digitar em campo com `When`. O wrapper existia e estava certo - so era inalcancavel.
+
+**Diagnostico**: `.prg` que EXISTE aparecendo como "does not exist" -> medir `SET("PATH")` antes de mexer no arquivo. Duas hipoteses plausiveis que NAO se confirmaram (descartadas medindo): `SET PATH` nao eh escopado por data session, e nenhum codigo do projeto redefine PATH depois do startup.
+
+Auto-fix: CorretorAutomatico **#205**, registrado nas DUAS listas (inclusive modo SEGURO - o arquivo de origem eh `start\config.prg`, que nao eh form nem BO). Origem: Erro162_Aba1.
 
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 

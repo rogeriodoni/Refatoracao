@@ -263,15 +263,28 @@ ENDPROC
 * IMPORTANTE: Carrega arquivos DINAMICAMENTE - s?? carrega se existir
 *------------------------------------------------------------------------------
 PROCEDURE ConfigurarAmbiente()
-    LOCAL loc_cArquivo, loc_nArquivos, loc_i
+    LOCAL loc_cArquivo, loc_nArquivos, loc_i, loc_cPath
     LOCAL ARRAY loc_aArquivos[1]
 
-    * Configura path para localizar arquivos
-    SET PATH TO (gcCaminhoBase), ;
-                (gcCaminhoClasses), ;
-                (gcCaminhoUtils), ;
-                (gcCaminhoForms), ;
-                (gcCaminhoIcones)
+    * Configura path para localizar arquivos.
+    *
+    * ATENCAO - `SET PATH TO (a), (b), (c)` NAO funciona: o VFP9 honra APENAS a
+    * PRIMEIRA expressao entre parenteses e descarta as demais em SILENCIO.
+    * Medido em 2026-09-17:
+    *     SET PATH TO (pA), (pB), (pC)      -> SET("PATH") = "...\START"
+    *     SET PATH TO (pA + "," + pB + ...) -> SET("PATH") = "...\START,...\CLASSES\,...\UTILS\"
+    * Com a forma errada o PATH ficava so com \start\ e utils\classes\forms\icones
+    * NUNCA estiveram nele - o que quebrava a resolucao de UDF por nome de .prg:
+    * os VCX legado Fortyus chamam IsEmpty() no p-code, o VFP procurava
+    * isempty.prg pelo PATH e estourava "File 'isempty.prg' does not exist"
+    * ao digitar em qualquer campo com When (Erro162_Aba1).
+    * A lista TEM de ser montada numa string unica e passada entre parenteses.
+    loc_cPath = gcCaminhoBase    + "," + ;
+                gcCaminhoClasses + "," + ;
+                gcCaminhoUtils   + "," + ;
+                gcCaminhoForms   + "," + ;
+                gcCaminhoIcones
+    SET PATH TO (loc_cPath)
 
     * =========================================================================
     * CLASSES BASE (ordem importa - carregar primeiro)

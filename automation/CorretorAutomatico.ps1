@@ -15279,6 +15279,108 @@ function ConvertTo-ChaveImagem {
     return $t.ToLowerInvariant()
 }
 
+function Corrigir-SetPathMultiplasExpressoes {
+    # Pattern #205 (Erro162_Aba1, 2026-09-17, config.prg) - AUTO-FIX.
+    #
+    # `SET PATH TO (a), (b), (c)` NAO funciona no VFP9: ele honra APENAS a
+    # PRIMEIRA expressao entre parenteses e descarta as demais EM SILENCIO -
+    # sem erro de compilacao, sem erro de runtime, sem nada no log.
+    #
+    # Medido no VFP9 (2026-09-17):
+    #   SET PATH TO (pA), (pB), (pC)        -> SET("PATH") = "...\START"
+    #   SET PATH TO (pA + "," + pB + "," + pC)
+    #                                       -> SET("PATH") = "...\START,...\CLASSES\,...\UTILS\"
+    #
+    # No config.prg isso fez com que utils\, classes\, forms\ e icones\ NUNCA
+    # estivessem no PATH. Consequencia visivel: os VCX legado Fortyus chamam
+    # IsEmpty() no p-code compilado, o VFP procura isempty.prg pelo PATH e
+    # estoura "File 'isempty.prg' does not exist" ao digitar em qualquer campo
+    # com When - no FormCliente, ao preencher a Razao Social.
+    #
+    # ATENCAO - eh especifico do SET PATH. Medido na mesma sessao:
+    #   SET PROCEDURE TO (a),(b),(c)  -> os TRES entram (funciona)
+    #   SET CLASSLIB  TO (a),(b)      -> os DOIS entram (funciona)
+    # Nesses dois a virgula separa arquivos de verdade; no SET PATH o argumento
+    # eh UMA string com a lista, entao a virgula fora dos parenteses nao separa
+    # nada - ela simplesmente encerra o comando.
+    #
+    # O conserto eh reescrita de EXPRESSAO, sem variavel nova:
+    #   SET PATH TO (a + "," + b + "," + c)
+    #
+    # So auto-muta quando cada segmento eh um nome simples entre parenteses
+    # (variavel ou propriedade). Qualquer coisa mais complexa vira WARNING.
+    param(
+        [string[]]$Linhas,
+        [string]$Arquivo = ""
+    )
+
+    $lista = New-Object System.Collections.Generic.List[string]
+    $n = 0
+    $mudou = $false
+
+    while ($n -lt $Linhas.Count) {
+        $l = $Linhas[$n]
+
+        if ($l -notmatch '(?i)^\s*SET\s+PATH\s+TO\s+\(') {
+            $lista.Add($l); $n++; continue
+        }
+
+        # junta as linhas de continuacao VFP (terminadas em ";")
+        $ini   = $n
+        $bruto = $l
+        $texto = ($l -replace ';\s*(&&.*)?$', '')
+        while ($bruto -match ';\s*(&&.*)?$' -and ($n + 1) -lt $Linhas.Count) {
+            $n++
+            $bruto = $Linhas[$n]
+            $texto = $texto + ' ' + ($bruto -replace '^\s+', '' -replace ';\s*(&&.*)?$', '')
+        }
+
+        $corpo = $texto -replace '(?i)^\s*SET\s+PATH\s+TO\s+', '' -replace '\s*(&&.*)?$', ''
+        $segs  = $corpo -split '\)\s*,\s*\('
+
+        if ($segs.Count -lt 2) {
+            # so uma expressao: forma correta, nada a fazer
+            for ($k = $ini; $k -le $n; $k++) { $lista.Add($Linhas[$k]) }
+            $n++; continue
+        }
+
+        # normaliza os segmentos: tira o "(" do primeiro e o ")" do ultimo
+        $nomes = @()
+        for ($i = 0; $i -lt $segs.Count; $i++) {
+            $s = $segs[$i].Trim()
+            if ($i -eq 0)                 { $s = $s -replace '^\(', '' }
+            if ($i -eq $segs.Count - 1)   { $s = $s -replace '\)$', '' }
+            $nomes += $s.Trim()
+        }
+
+        $simples = $true
+        foreach ($nm in $nomes) { if ($nm -notmatch '^[A-Za-z_][A-Za-z0-9_\.]*$') { $simples = $false } }
+
+        $ind = ''
+        if ($Linhas[$ini] -match '^(\s*)') { $ind = $matches[1] }
+
+        if (-not $simples) {
+            Write-Host "[Pattern #205 WARN] linha $($ini + 1): SET PATH com varias expressoes entre parenteses - so a 1a vale" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-205-SET-PATH-MULTIPLAS-EXPRESSOES" -Linha ($ini + 1) -Original ($texto.Trim()) -Corrigido "(nao mutado - segmento complexo)" -Descricao ("Pattern #205 WARNING: `SET PATH TO (a), (b), (c)` faz o VFP9 honrar APENAS a PRIMEIRA expressao entre " + "parenteses e descartar as demais EM SILENCIO - os diretorios seguintes nunca entram no PATH. Nao foi " + "mutado porque algum segmento nao eh um nome simples. Reescrever a mao concatenando numa string unica: " + "SET PATH TO (a + `",`" + b + `",`" + c). Atencao: isto eh especifico do SET PATH - SET PROCEDURE e " + "SET CLASSLIB com varias expressoes entre parenteses funcionam normalmente (medido). Origem: " + "Erro162_Aba1 (2026-09-17, config.prg).")
+            for ($k = $ini; $k -le $n; $k++) { $lista.Add($Linhas[$k]) }
+            $n++; continue
+        }
+
+        $expr = ($nomes -join ' + "," + ')
+        $nova = $ind + 'SET PATH TO (' + $expr + ')'
+        $lista.Add($nova)
+        $mudou = $true
+
+        Add-Correcao -Tipo "SET_PATH_MULTIPLAS_EXPRESSOES" -Linha ($ini + 1) -Original ($texto.Trim()) -Corrigido $nova.Trim() -Descricao ("Pattern #205: `SET PATH TO (a), (b), (c)` faz o VFP9 honrar APENAS a PRIMEIRA expressao entre parenteses " + "e descartar as demais EM SILENCIO - sem erro de compilacao, sem erro de runtime, nada no log. Medido em " + "2026-09-17: com 3 expressoes o SET(`"PATH`") ficava so com a 1a; concatenando numa string unica as tres " + "entram. No config.prg do projeto isso fazia utils\\, classes\\, forms\\ e icones\\ NUNCA estarem no PATH, " + "e o sintoma aparecia longe da causa: os VCX legado Fortyus chamam IsEmpty() no p-code, o VFP procurava " + "isempty.prg pelo PATH e estourava `"File 'isempty.prg' does not exist`" ao digitar num campo com When. " + "O conserto eh reescrita de expressao, sem variavel nova. Especifico do SET PATH: SET PROCEDURE e " + "SET CLASSLIB com varias expressoes entre parenteses funcionam (medido). Origem: Erro162_Aba1.")
+        Write-Host "[Pattern #205] linha $($ini + 1): SET PATH com $($nomes.Count) expressoes -> concatenadas numa string unica" -ForegroundColor Green
+
+        $n++
+    }
+
+    if (-not $mudou) { return $Linhas }
+    return $lista.ToArray()
+}
+
 function Get-TaskDirDoForm {
     # helper do Pattern #202 - acha a task (a mais recente) que gerou este form,
     # casando o nome do arquivo com form.formClass do analise.json. O mapa custa
@@ -15418,6 +15520,10 @@ function Invoke-CorrecaoAutomatica {
         $linhas = Corrigir-CountToIn -Linhas $linhas
         $linhas = Corrigir-SelfAssignmentObjeto -Linhas $linhas
         $linhas = Corrigir-TtodEmValorQuePodeSerDate -Linhas $linhas -Arquivo $Arquivo
+        # #205 TEM de estar aqui tambem: o bug que o originou estava no
+        # start\config.prg, que cai no modo SEGURO - registrado so na lista de
+        # forms/BO o pattern nunca rodaria no arquivo que lhe deu origem.
+        $linhas = Corrigir-SetPathMultiplasExpressoes -Linhas $linhas -Arquivo $Arquivo
     }
 
     if ($ehFormOuBO) {
@@ -15601,6 +15707,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-LabelAlignmentSobreControle -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
     $linhas = Corrigir-FormatMultipleChoicePerdido -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
     $linhas = Corrigir-PictureArquivoInexistente -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
+    $linhas = Corrigir-SetPathMultiplasExpressoes -Linhas $linhas -Arquivo $Arquivo
 
     }
 
