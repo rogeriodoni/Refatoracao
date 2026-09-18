@@ -11692,3 +11692,72 @@ Estado em 2026-09-18: 25 chamadas distintas, 23 resolvidas, 2 ausentes de propos
 **Sem auto-fix no CorretorAutomatico**: o defeito nao esta no `.prg` gerado — eh a **ausencia
 de um arquivo** em `utils\`. Nao ha texto para o corretor reescrever, e inventar um pattern que
 dispare em cima disso so produziria WARNING em todo form.
+
+---
+
+## 211. Sobreposicao HERDADA do SCX: o label vizinho nao anda junto (Erro163_Aba1_2 2026-09-18)
+
+O SCX sobrepoe o `Left` de um campo e **nao sobrepoe o do label vizinho**, que fica no
+`Left` da CLASSE. Os dois se cruzam na tela. O migrado estava **fiel** — e eh justamente por
+isso que o defeito passa: **toda validacao migrado-x-legado aprova, porque os dois concordam**.
+
+Linha `Top = 269` do `clsconta.pgframeDados.pgframeDados1`:
+
+| controle | classe (framework.vcx) | SCX legado | faixa final |
+|---|---|---|---|
+| `Say_end9` "UF :" | Left=417 | — | 417..439 |
+| `GetEstado` | Left=**445** | Left=**483** | 483..507 |
+| `getUFIBGE` | Left=**471** | Left=**508** | 508..533 |
+| `Say14` "Contato :" | Left=518 | so FontName/ForeColor | **518**..578 |
+
+O label entra **15px dentro** da caixa do codigo IBGE — na tela sai `35ontato :`.
+
+### Conserto: valor da CLASSE, nunca numero novo
+
+```foxpro
+* ERRADO - "empurra o label um pouco pra direita ate parecer bom"
+.Left = 537        && numero inventado; colide com Get_Contato (565) logo adiante
+
+* CERTO - os Left da propria classe, que sao coerentes entre si
+loc_oPg1.GetEstado.Left = 445    && classe; SCX dizia 483
+loc_oPg1.getUFIBGE.Left = 471    && classe; SCX dizia 508
+```
+
+Resultado medido: `getUFIBGE` termina em 496 e o label so comeca em 518 — 22px livres. De
+quebra fecha o vao de 44px que havia entre "UF :" e o campo, restaurando os ~6px que a classe
+`say` pressupoe (secao **23**). O desvio do SCX **tem de ficar comentado no bloco**.
+
+### Como conferir (tres armadilhas)
+
+1. **`Left`/`Top` sao RELATIVOS ao pai.** Comparar controles de containers diferentes nao
+   significa nada.
+2. **Label sem `.Width` declarada eh AutoSize** (classe `say`): a faixa real dele eh a do
+   **TEXTO**, nao a da caixa. Caixa transparente sobrando eh inofensiva (secao **23**).
+3. **Overlay eh projeto, nao defeito**: barra de botoes por cima da faixa do cabecalho eh o
+   comportamento canonico (secao **11**).
+
+### Controle CONTIDO em outro fica inalcancavel
+
+`Get_Regiao` (596..676) cabe **inteiro** dentro de `Get_Contato` (565..717): o clique sempre
+cai no de cima e o campo nunca eh alcancavel. Sinal de campo **aposentado** no legado — no
+`clsconta` as linhas do `get_regiao` estao COMENTADAS (`*!*`) tanto na rotina de permissao por
+campo (`crFSigAcTel`) quanto no bloco de campo obrigatorio. Ficou soterrado em vez de
+removido. Esconder (`Visible = .F.` no campo **e no label**) torna a ausencia explicita.
+
+Cuidado com a ordem: `TornarControlesVisiveis()` percorre so os filhos DIRETOS do form, entao
+esconder dentro de `ConfigurarPaginaDados` eh seguro — mas confira, porque um metodo que
+varre recursivamente desfaria o `Visible = .F.`.
+
+### Por que NAO virou verificacao automatica
+
+Tentado e **medido**: um script que varre pares cujas faixas se cruzam acusou **7.776 pares em
+296 forms**, sendo **5.466** do tipo "contido". Quase tudo falso positivo, por duas razoes que
+nao da para contornar com regex:
+
+- a mesma **VARIAVEL** de pai (`loc_oCnt`, `loc_oPg1`) eh reatribuida a containers diferentes
+  ao longo do metodo — o parser acha que sao irmaos e nao sao (mesmo risco da secao **11**);
+- overlay legitimo (barra de botoes sobre a faixa, secao **11**) cruza de proposito.
+
+Agrupar por expressao de pai baixou de 12.857 para 7.776 — longe do suficiente. O script foi
+**descartado, nao commitado**: WARNING que dispara em quase todo arquivo eh ruido que enterra o
+sinal de verdade, e ja custou os patterns #166 e #183. Fica como conhecimento, nao como gate.

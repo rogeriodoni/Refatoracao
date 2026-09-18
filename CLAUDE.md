@@ -505,6 +505,26 @@ A 3a linha eh a que se erra: stub devolvendo `0` para imposto grava numero errad
 
 Auditoria: `automation\VerificarFuncoesLegadoVCX.ps1` (le o fonte no `.VCT`; ignora linha comentada, varre so os VCX que o projeto carrega). **Sem auto-fix**: o defeito eh a AUSENCIA de um arquivo, nao texto no `.prg` gerado. Skill: secao **210**. Origem: Erro163_Aba1 (2026-09-18).
 
+### 28. Sobreposicao HERDADA do SCX: comparar migrado x legado NUNCA pega
+O SCX desloca o `Left` de um campo e **nao desloca o label vizinho junto**, que fica no `Left` da CLASSE. Os dois se cruzam na tela. Transcrever o SCX fielmente **reproduz o defeito**, e toda validacao migrado-x-legado aprova — os dois concordam.
+
+No `FormCliente` o SCX move `getUFIBGE` de 471 para 508 e deixa o label `Say14` ("Contato :") no 518 da classe: ele entra **15px dentro** da caixa e a tela mostra `35ontato :`.
+
+| controle | classe (framework.vcx) | SCX | faixa final |
+|---|---|---|---|
+| `Say_end9` "UF :" | 417 | — | 417..439 |
+| `GetEstado` | **445** | **483** | 483..507 |
+| `getUFIBGE` | **471** | **508** | 508..533 |
+| `Say14` "Contato :" | 518 | so fonte/cor | **518**..578 |
+
+**Conserto**: preferir os valores da CLASSE (coerentes entre si) a inventar posicao nova — e registrar o desvio em comentario. Aqui, voltar a 445/471 abre 22px antes do label e ainda fecha o vao de 44px entre "UF :" e o campo (espacamento que a classe `say` pressupoe, #23).
+
+**Ao conferir**: somar `Left + Width` e comparar com o `Left` do vizinho de mesma linha (mesmo `Top`, ±6px) **dentro do MESMO container** — `Left`/`Top` sao relativos ao pai. Label sem `.Width` eh AutoSize: a faixa real eh a do **TEXTO**, nao a da caixa.
+
+**Controle CONTIDO em outro fica inalcancavel**: `Get_Regiao` (596..676) cabe inteiro em `Get_Contato` (565..717) — o clique sempre cai no de cima. No legado esse campo estava **aposentado** (linhas de `Visible`/obrigatoriedade COMENTADAS `*!*` no VCX) e ficou soterrado em vez de removido. Esconder torna isso explicito.
+
+**NAO existe detector automatico** e a tentativa foi medida e descartada: varrer pares que se cruzam acusou **7.776 pares em 296 forms** (5.466 so de "contido"), quase tudo falso positivo, porque a mesma VARIAVEL de pai (`loc_oCnt`, `loc_oPg1`) eh reatribuida a containers diferentes (mesmo risco da #11) e porque overlay de barra de botoes sobre faixa eh projeto, nao defeito. Sem auto-fix: escolher QUEM anda depende do resto do layout. Skill: secao **211**. Origem: Erro163_Aba1_2 (2026-09-18).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

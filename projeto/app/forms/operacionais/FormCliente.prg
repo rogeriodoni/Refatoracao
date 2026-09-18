@@ -1729,12 +1729,36 @@ DEFINE CLASS FormCliente AS FormBase
                 ENDWITH
             ENDIF
 
-            *-- Get_Regiao (TextBox regiao)
+            *-- Get_Regiao (TextBox regiao) - OCULTO (Erro163_Aba1_2)
+            *--
+            *-- Medido: Get_Regiao 596..676 (Top 269) fica INTEIRO dentro de
+            *-- Get_Contato 565..717 (Top 268). O campo eh inalcancavel - o clique
+            *-- sempre cai no Contato, que desenha por cima.
+            *--
+            *-- Nao eh defeito da migracao: a geometria eh a do legado, e la o
+            *-- clsconta tem as tres linhas do get_regiao COMENTADAS (*!*) na
+            *-- rotina de permissao por campo (crFSigAcTel) e no bloco de campo
+            *-- obrigatorio - ou seja, o campo foi aposentado no legado e ficou
+            *-- soterrado em vez de removido. Esconder eh o que torna isso
+            *-- explicito. Decisao do usuario em 2026-09-18.
+            *--
+            *-- Say_end7 ("Regi" + CHR(227) + "o :") vai junto: label sem campo eh
+            *-- pior que nenhum dos dois. Ele fica em Top=250, na linha de cima.
+            *--
+            *-- Seguro aqui: TornarControlesVisiveis() so percorre os filhos
+            *-- DIRETOS do form (cnt_4c_Conta, cmg_4c_Sair...), nao entra na
+            *-- pgframeDados1, e ainda por cima roda ANTES deste metodo.
             IF PEMSTATUS(loc_oPg1, "Get_Regiao", 5)
                 WITH loc_oPg1.Get_Regiao
-                    .Left = 596
-                    .Top  = 269
+                    .Left    = 596
+                    .Top     = 269
+                    .Visible = .F.
+                    .Enabled = .F.
                 ENDWITH
+            ENDIF
+
+            IF PEMSTATUS(loc_oPg1, "Say_end7", 5)
+                loc_oPg1.Say_end7.Visible = .F.
             ENDIF
 
             *-- getDdds (TextBox DDD)
