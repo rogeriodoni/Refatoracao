@@ -113,6 +113,9 @@ PROCEDURE ConectarBancoDados()
 
             *-- Carregar codigo da empresa do banco
             CarregarEmpresa(lnHandle)
+
+            *-- Gerenciador de conexoes NOMEADAS do legado Fortyus (Erro163_Aba1)
+            CriarObjectConnLegado(lcStringConexao)
         ENDIF
 
     CATCH TO loException
@@ -125,6 +128,73 @@ PROCEDURE ConectarBancoDados()
     ENDTRY
 
     RETURN llConectado
+ENDPROC
+
+*------------------------------------------------------------------------------
+* CriarObjectConnLegado - Instancia goSistema.ObjectConn (cOpenConn)
+*
+* Os VCXs legado Fortyus pedem conexao POR NOME, nao por handle:
+*
+*     .poDataMgr = CreateObject('fSqlConector', 'cep')      && fwcep/frmceps.Init
+*     loCon      = CreateObject('fSqlConector', 'sige')
+*     .poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+*
+* e o fSqlConector (classes\sigclcnx.PRG) resolve esse nome assim:
+*
+*     If (Type([goSistema.ObjectConn]) = [O])
+*         This.pnIdConn = goSistema.ObjectConn.Connect(@pNum, pOkc)
+*     EndIf
+*     If (This.pnIdConn > 0) ... Else This.pnIdConn = -1
+*
+* Sem o ObjectConn o pnIdConn ficava -1 e o fwcep exibia
+* 'Impossivel Efetuar Conexao Com o Servidor de Banco de Dados...' (titulo
+* 'CreateObject') - o erro ao digitar o CEP no Cadastro de Cliente.
+*
+* cOpenConn eh a classe legado ORIGINAL, usada sem alteracao: o Init dela
+* conecta, le dbo.SigConn (cIdConns / cStrgConns) e monta o array de conexoes
+* nomeadas. pTrv = 1 faz duas coisas necessarias aqui:
+*   - limita a UMA tentativa de leitura (sem isso o Init insiste por 30s);
+*   - registra a NOSSA string sob o nome default quando ele nao esta na SigConn,
+*     que eh o fallback usado por todo nome nao cadastrado (nome de form, etc).
+*
+* O nome default eh 'sige' porque eh o unico id de conexao que o Framework
+* referencia literalmente (framework.vcx: CreateObject('fSqlConector','sige')).
+*
+* O Init do cOpenConn reescreve os defaults de conexao no handle 0
+* (ConnectTimeOut 60, Transactions 2, ...); os nossos sao reaplicados no fim
+* para nao mudar o comportamento das conexoes criadas pelos BOs.
+*------------------------------------------------------------------------------
+PROCEDURE CriarObjectConnLegado(par_cStringConexao)
+    LOCAL loc_oConn, loc_oErro
+
+    IF TYPE("go_4c_Sistema") <> "O"
+        RETURN
+    ENDIF
+
+    TRY
+        IF !PEMSTATUS(go_4c_Sistema, "ObjectConn", 5)
+            ADDPROPERTY(go_4c_Sistema, "ObjectConn", .NULL.)
+        ENDIF
+
+        loc_oConn = CREATEOBJECT("cOpenConn", par_cStringConexao, "sige", 1)
+
+        IF VARTYPE(loc_oConn) = "O"
+            go_4c_Sistema.ObjectConn = loc_oConn
+        ENDIF
+
+        *-- Restaura os defaults do handle 0 mexidos pelo Init do cOpenConn
+        SQLSETPROP(0, "ConnectTimeOut", 30)
+        SQLSETPROP(0, "DispLogin", 3)
+        SQLSETPROP(0, "DispWarnings", .F.)
+
+    CATCH TO loc_oErro
+        *-- Sem dialog: o sistema funciona sem ObjectConn (so os lookups de CEP
+        *-- por nome de conexao ficam indisponiveis, com a mensagem do proprio
+        *-- VCX). Fica o rastro em log para nao engolir o erro (regra #9).
+        STRTOFILE("[" + TTOC(DATETIME()) + "] CriarObjectConnLegado: " + ;
+                  loc_oErro.Message + CHR(13) + CHR(10), ;
+                  ADDBS(gc_4c_CaminhoBase) + "ObjectConn_Erro.log", 1)
+    ENDTRY
 ENDPROC
 
 *------------------------------------------------------------------------------

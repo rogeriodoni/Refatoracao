@@ -144,6 +144,18 @@ ADDPROPERTY(go_4c_Sistema, "DirImagens", ADDBS(gc_4c_CaminhoFramework) + "Imagen
 ADDPROPERTY(go_4c_Sistema, "ControlaImp", .F.)
 ADDPROPERTY(go_4c_Sistema, "QtdDecimais", 2)
 
+*-- Fortyus VCX compat (Erro163_Aba1): goSistema.ObjectConn eh o gerenciador de
+*-- CONEXOES NOMEADAS do legado (classe cOpenConn, classes\sigclcnx.PRG). O
+*-- fSqlConector consulta-o sempre que recebe um NOME em vez de um handle:
+*--     .poDataMgr = CreateObject('fSqlConector', 'cep')   && fwcep/frmceps.Init
+*--     This.pnIdConn = goSistema.ObjectConn.Connect(@pNum, pOkc)
+*-- Sem a property, Type([goSistema.ObjectConn]) <> 'O', pnIdConn vira -1 e o
+*-- proprio VCX exibe 'Impossivel Efetuar Conexao Com o Servidor de Banco de
+*-- Dados...' (titulo 'CreateObject') - era o erro ao digitar o CEP no Cadastro
+*-- de Cliente. Instanciada em main.prg:ConectarBancoDados (precisa da string de
+*-- conexao); aqui so se reserva o nome.
+ADDPROPERTY(go_4c_Sistema, "ObjectConn", .NULL.)
+
 *------------------------------------------------------------------------------
 * Aliases para compatibilidade com FRX legados
 * NOTA: FRX antigos esperam estas variaveis com nomes especificos
