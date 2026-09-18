@@ -224,6 +224,45 @@ DEFINE CLASS FormCliente AS FormBase
                 THIS.cnt_4c_Conta.pgframeDados.Top = 0
                 THIS.cnt_4c_Conta.cmdgPessoal.cmdPessoal.ToolTipText = "F5 - Dados Pessoais/Comerciais"
 
+                *-- BARRA DE NAVEGACAO ENTRE ABAS (Erro163_Aba1_3)
+                *--
+                *-- O pgframeDados do clsconta NAO mostra tabs: quem troca de aba
+                *-- sao estes tres CommandGroup. A migracao aplicou dezenas de
+                *-- overrides do SCX nos controles das PAGINAS e esqueceu os tres
+                *-- filhos DIRETOS do cntConta - entao eles ficaram no Left/Top da
+                *-- CLASSE, que eh fora da area do container:
+                *--
+                *--   botao         classe      SCX legado    cnt_4c_Conta
+                *--   cmdGCarac     891, 540 -> 633, 397      Width  = 768
+                *--   cmdGFtec      924, 540 -> 672, 397      Height = 450
+                *--   cmdgpessoal   957, 539 -> 711, 397
+                *--
+                *-- Container RECORTA filho fora da area, entao os tres sumiam da
+                *-- tela sem erro nenhum: o usuario entrava na aba de endereco e
+                *-- nao tinha como voltar para a aba 1 - so restava Salvar.
+                *-- O Width/Height de 768x450 esta FIEL ao legado; o que faltava
+                *-- eram estes Left/Top, que o SCX declara e o migrador nao copiou.
+                IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdGCarac", 5)
+                    WITH THIS.cnt_4c_Conta.cmdGCarac
+                        .Left = 633
+                        .Top  = 397
+                    ENDWITH
+                ENDIF
+
+                IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdGFtec", 5)
+                    WITH THIS.cnt_4c_Conta.cmdGFtec
+                        .Left = 672
+                        .Top  = 397
+                    ENDWITH
+                ENDIF
+
+                IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdgPessoal", 5)
+                    WITH THIS.cnt_4c_Conta.cmdgPessoal
+                        .Left = 711
+                        .Top  = 397
+                    ENDWITH
+                ENDIF
+
                 *-- Ajustar navegacao inicial do PageFrame interno (pgframeDados)
                 THIS.ConfigurarPaginaLista()
                 THIS.ConfigurarPaginaDados()
