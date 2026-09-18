@@ -81,11 +81,19 @@ DEFINE CLASS FormCliente AS FormBase
 
         *-- Captura de erro do p-code legado (Erro163_Aba1_2).
         *-- O clsconta eh p-code COMPILADO: erro em Valid/When/Click de la nao tem
-        *-- quem trate e o VFP DERRUBA o form - "a tela fechou de repente", sem
-        *-- mensagem e sem log. Era o sintoma ao sair do campo UF. Este handler
-        *-- registra em projeto\app\ErroLegado.log e mantem a tela viva.
-        *-- CAPTURA + MITIGACAO, nao correcao de causa raiz: ver o cabecalho de
-        *-- utils\RegistrarErroLegado.prg. Removido no Destroy.
+        *-- quem trate. Este handler registra em projeto\app\start\ErroLegado.log
+        *-- (ADDBS(gc_4c_CaminhoBase), junto dos demais diag logs) e deixa a
+        *-- execucao CONTINUAR, para a tela nao morrer com o usuario dentro dela.
+        *--
+        *-- So passou a funcionar depois da regra #29: enquanto o Show() do
+        *-- AbrirFormCliente ficava DENTRO do TRY do menu, o TRY/CATCH vencia o
+        *-- ON ERROR em toda a pilha e este handler NUNCA era chamado - o log
+        *-- ficava vazio e a tela fechava do mesmo jeito. Se um dia o log voltar a
+        *-- ficar vazio com a tela fechando, conferir ANTES se alguem reintroduziu
+        *-- um TRY em volta do Show().
+        *--
+        *-- MITIGACAO, nao correcao de causa raiz: ver o cabecalho de
+        *-- utils\RegistrarErroLegado.prg. Desinstalado no Destroy.
         PUBLIC gn_4c_ErrosLegado
         gn_4c_ErrosLegado = 0
         ON ERROR DO RegistrarErroLegado WITH ERROR(), MESSAGE(), PROGRAM(), LINENO()
@@ -1800,15 +1808,6 @@ DEFINE CLASS FormCliente AS FormBase
                 loc_oPg1.Say_end7.Visible = .F.
             ENDIF
 
-            *-- Rastro no campo UF (Erro163_Aba1_2). Ver LogTrilha().
-            *-- BINDEVENT em LostFocus, NUNCA em Valid: Valid via BINDEVENT nao
-            *-- dispara de forma confiavel em TextBox. E o Valid roda ANTES do
-            *-- LostFocus, entao chegar no LostFocus ja prova que o Valid passou.
-            IF PEMSTATUS(loc_oPg1, "GetEstado", 5)
-                BINDEVENT(loc_oPg1.GetEstado, "GotFocus",  THIS, "UFGotFocus",  1)
-                BINDEVENT(loc_oPg1.GetEstado, "LostFocus", THIS, "UFLostFocus", 1)
-            ENDIF
-
             *-- getDdds (TextBox DDD)
             IF PEMSTATUS(loc_oPg1, "getDdds", 5)
                 WITH loc_oPg1.getDdds
@@ -1964,53 +1963,6 @@ DEFINE CLASS FormCliente AS FormBase
                 "Procedure: " + loc_oErro.Procedure, ;
                 "Erro em ConfigurarPaginaDados")
         ENDTRY
-    ENDPROC
-
-    *============================================================
-    * LogTrilha - Rastro de execucao ao redor do campo UF.
-    *
-    * POR QUE NAO BASTA O ON ERROR (Erro163_Aba1_2, 2a rodada)
-    * -------------------------------------------------------
-    * O handler de utils\RegistrarErroLegado.prg foi testado e FUNCIONA (captura,
-    * grava e deixa seguir; sobrevive ao save/restore de ON ERROR que o
-    * fSqlConector.SqlExecute faz). Mesmo assim, na execucao do usuario de
-    * 18/09 14:28 a tela fechou e o ErroLegado.log NAO foi criado.
-    *
-    * Logo, o que derruba o form NAO eh erro VFP capturavel: ou eh excecao
-    * estruturada / crash de nivel C (a mesma familia do "Unhandled Structured
-    * Exception" que ja apareceu nesta tela no Erro162), ou eh alguem chamando
-    * Release. ON ERROR nao ve nenhum dos dois.
-    *
-    * Este rastro distingue os casos. STRTOFILE grava e fecha na hora, entao a
-    * linha sobrevive mesmo que o processo morra logo depois:
-    *   so "ENTROU no UF"          -> morreu DENTRO do Valid do UF
-    *   "SAIU do UF"               -> o Valid terminou; o problema eh depois
-    *   "QUERYUNLOAD" / "DESTROY"  -> alguem pediu para fechar (nao eh crash)
-    *   nada                       -> nem chegou a entrar no campo
-    *
-    * DIAGNOSTICO, nao correcao. Sai daqui assim que a causa aparecer.
-    *============================================================
-    PROCEDURE LogTrilha(par_cTexto)
-        IF TYPE("gc_4c_CaminhoBase") <> "C"
-            RETURN
-        ENDIF
-        STRTOFILE("[" + TTOC(DATETIME()) + "] " + TRANSFORM(par_cTexto) + CHR(13) + CHR(10), ;
-                  ADDBS(gc_4c_CaminhoBase) + "TrilhaUF.log", 1)
-    ENDPROC
-
-    *-- Handlers do BINDEVENT no campo UF. PUBLIC de proposito (regra #3).
-    PROCEDURE UFGotFocus
-        THIS.LogTrilha("ENTROU no UF (GotFocus)")
-    ENDPROC
-
-    PROCEDURE UFLostFocus
-        *-- So chega aqui se o Valid do UF terminou: Valid roda ANTES do LostFocus
-        THIS.LogTrilha("SAIU do UF (LostFocus) - o Valid terminou sem derrubar")
-    ENDPROC
-
-    PROCEDURE QueryUnload
-        THIS.LogTrilha("QUERYUNLOAD - alguem pediu para FECHAR o form (nao eh crash)")
-        DODEFAULT()
     ENDPROC
 
     *============================================================
@@ -3334,8 +3286,6 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     PROCEDURE Destroy
     *============================================================
-        THIS.LogTrilha("DESTROY do form")
-
         *-- Desinstala a captura de erro do p-code legado instalada no Init.
         *-- Tem de vir ANTES do resto: o handler so vale enquanto esta tela vive,
         *-- nunca para o sistema inteiro (Erro163_Aba1_2).
