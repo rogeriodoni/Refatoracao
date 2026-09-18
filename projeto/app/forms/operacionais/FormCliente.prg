@@ -79,6 +79,17 @@ DEFINE CLASS FormCliente AS FormBase
         THIS.this_cTpBloqCar  = IIF(TYPE("par_cTpBloqCar")  = "C", par_cTpBloqCar,            "0")
         THIS.this_cMudaCpfCgc = IIF(TYPE("par_cMudaCpfCgc") = "C", par_cMudaCpfCgc,           "0")
 
+        *-- Captura de erro do p-code legado (Erro163_Aba1_2).
+        *-- O clsconta eh p-code COMPILADO: erro em Valid/When/Click de la nao tem
+        *-- quem trate e o VFP DERRUBA o form - "a tela fechou de repente", sem
+        *-- mensagem e sem log. Era o sintoma ao sair do campo UF. Este handler
+        *-- registra em projeto\app\ErroLegado.log e mantem a tela viva.
+        *-- CAPTURA + MITIGACAO, nao correcao de causa raiz: ver o cabecalho de
+        *-- utils\RegistrarErroLegado.prg. Removido no Destroy.
+        PUBLIC gn_4c_ErrosLegado
+        gn_4c_ErrosLegado = 0
+        ON ERROR DO RegistrarErroLegado WITH ERROR(), MESSAGE(), PROGRAM(), LINENO()
+
         RETURN DODEFAULT()
     ENDPROC
 
@@ -1684,18 +1695,36 @@ DEFINE CLASS FormCliente AS FormBase
                 ENDWITH
             ENDIF
 
-            *-- GetEstado (TextBox UF/Estado)
+            *-- GetEstado (TextBox UF/Estado) + getUFIBGE (codigo IBGE da UF)
+            *--
+            *-- DESVIO DELIBERADO do SCX legado (Erro163_Aba1_2). Medido na tela:
+            *--   Say_end9 "UF :"   417..439
+            *--   GetEstado         483..507   <- SCX manda Left = 483
+            *--   getUFIBGE         508..533   <- SCX manda Left = 508
+            *--   Say14 "Contato :" 518..578   <- SCX NAO mexe: fica no 518 da classe
+            *-- O label Contato entra 15px DENTRO da caixa do codigo IBGE - eh o
+            *-- "35ontato :" que aparece na tela. A sobreposicao vem do proprio SCX
+            *-- (o migrado estava FIEL): o SCX desloca GetEstado/getUFIBGE para a
+            *-- direita mas nao desloca Say14/Get_Contato junto.
+            *--
+            *-- Aqui se usam os Left da CLASSE clsconta (framework.vcx), que sao
+            *-- coerentes com o resto da linha e NAO sao numero inventado:
+            *--   Say_end9 417..439 | GetEstado 445..469 | getUFIBGE 471..496 |
+            *--   Say14 518..578    -> 22px livres antes do label
+            *-- De quebra fecha o vao de 44px que havia entre "UF :" e o campo,
+            *-- restaurando o espacamento de 6px que a classe say pressupoe (#23).
+            *--
+            *-- Top continua o do SCX (269) - a linha vertical esta correta.
             IF PEMSTATUS(loc_oPg1, "GetEstado", 5)
                 WITH loc_oPg1.GetEstado
-                    .Left = 483
+                    .Left = 445    && classe clsconta; SCX dizia 483 (sobrepunha)
                     .Top  = 269
                 ENDWITH
             ENDIF
 
-            *-- getUFIBGE (TextBox codigo IBGE da UF)
             IF PEMSTATUS(loc_oPg1, "getUFIBGE", 5)
                 WITH loc_oPg1.getUFIBGE
-                    .Left = 508
+                    .Left = 471    && classe clsconta; SCX dizia 508 (sobrepunha)
                     .Top  = 269
                 ENDWITH
             ENDIF
@@ -2078,6 +2107,11 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     PROTECTED FUNCTION ChamarMLeDadosSeguro(par_cGrupo, par_cCli, par_cTpCadCli, par_cTpBloqCar, par_cMudaCpfCgc)
         LOCAL loc_cGrupo, loc_cCli, loc_cEscolhaSalva, loc_lRet, loc_lRestaurar
+
+        *-- Funil unico de todas as chamadas a mLeDados (Incluir/Alterar/Visualizar):
+        *-- reparar a Gradei ANTES, senao o mmontagrade aborta e leva o mLeDados junto.
+        THIS.RepararGradeiColunas()
+
         loc_cGrupo = ALLTRIM(IIF(TYPE("par_cGrupo") = "C", par_cGrupo, ""))
         loc_cCli   = ALLTRIM(IIF(TYPE("par_cCli")   = "C", par_cCli,   ""))
 
@@ -2189,6 +2223,249 @@ DEFINE CLASS FormCliente AS FormBase
                 USE IN cursor_4c_GrupoFiltro
             ENDIF
             MsgErro("Erro no lookup de Grupo:" + CHR(13) + loc_oErr.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *============================================================
+    * RepararGradeiColunas - Erro162_Aba1
+    *
+    * A VCX desenha clsconta.pgframeDados.pgframeDados7.Gradei com
+    * ColumnCount = 3 e um ComboBox "fwcombo1" (classe fwcombo,
+    * framework.vcx) nas Column1 e Column3. Em runtime a grade chega com
+    * ColumnCount = -1 (auto), e ai o mMontaGrade do legado faz:
+    *
+    *     .pgFrameDados7.GradeI.RecordSource = ''          && linha 18
+    *     ...
+    *     RecordSource = 'crSigClLcr'                      && linha 149
+    *     ...
+    *     With .Column1.fwcombo1                           && linha 180
+    *
+    * Com ColumnCount = -1 o VFP RECONSTROI as colunas a partir dos campos
+    * do cursor - viraram 6, com ControlSource em minusculas - e destroi as
+    * colunas desenhadas junto com os fwcombo1. A linha 180 entao estoura
+    * "Property FWCOMBO1 is not found", o mLeDados aborta ANTES do
+    *
+    *     Replace Grupos With crSigCdGcr.Codigos, TpCads ..., DataIncs ...,
+    *             Usuars ..., Emps ..., Consigs ..., Concilias ... In crSigCdCli
+    *
+    * e como eh um Replace SO, os SETE campos ficam em branco. O sintoma
+    * visivel era s?? o Grupo vazio na aba Cadastro ao clicar Incluir.
+    *
+    * Medido no VFP9 (2026-09-17), grid com cursor de 6 campos:
+    *   ColumnCount = 3 explicito -> apos RecordSource=''/RecordSource=cursor
+    *                                CC continua 3 e o combo SOBREVIVE
+    *   ColumnCount = -1          -> CC vira 6 e o combo eh DESTRUIDO
+    *   reparo (CC=3 + AddObject) -> sobrevive a um novo ciclo de RecordSource
+    *
+    * Por isso basta reparar UMA vez, antes do mLeDados: o proprio ciclo de
+    * RecordSource do mMontaGrade nao desfaz mais.
+    *
+    * Propriedades transcritas do dump da VCX (nao inventadas). A VCX NAO
+    * define CurrentControl em coluna nenhuma (0 ocorrencias no ClassResp),
+    * entao aqui tambem nao se define - quem cuida da exibicao eh a classe
+    * fwgrade do legado.
+    *============================================================
+    PROCEDURE RepararGradeiColunas
+        LOCAL loc_oGr, loc_oErro
+        TRY
+            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta) ;
+               AND PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5) ;
+               AND PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados, "pgframeDados7", 5) ;
+               AND PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados.pgframeDados7, "Gradei", 5)
+
+                loc_oGr = THIS.cnt_4c_Conta.pgframeDados.pgframeDados7.Gradei
+
+                *-- ColumnCount EXPLICITO: eh isso que impede o VFP de reconstruir
+                *-- as colunas quando o mMontaGrade atribuir o RecordSource.
+                IF loc_oGr.ColumnCount <> 3
+                    loc_oGr.ColumnCount = 3
+                ENDIF
+
+                IF loc_oGr.ColumnCount >= 3
+                    WITH loc_oGr
+                        .HeaderHeight = 18
+                        .RowHeight    = 22
+                        .Column1.FontSize = 8
+                        .Column1.Width    = 112
+                        .Column1.Sparse   = .F.
+                        .Column1.Header1.Alignment = 2
+                        .Column1.Header1.Caption   = "Grupo"
+                        .Column2.FontName = "Courier New"
+                        .Column2.Width    = 80
+                        .Column2.Header1.Alignment = 2
+                        .Column2.Header1.Caption   = "Limite Cr" + CHR(233) + "dito"
+                        .Column3.Header1.Alignment = 2
+                        .Column3.Header1.Caption   = "Moeda"
+                    ENDWITH
+
+                    IF !PEMSTATUS(loc_oGr.Column1, "fwcombo1", 5)
+                        loc_oGr.Column1.AddObject("fwcombo1", "fwcombo")
+                        WITH loc_oGr.Column1.fwcombo1
+                            .FontName    = "Arial"
+                            .FontSize    = 8
+                            .Left        = 4
+                            .Top         = 27
+                            .Visible     = .F.
+                            .BorderStyle = 0
+                        ENDWITH
+                    ENDIF
+
+                    IF !PEMSTATUS(loc_oGr.Column3, "fwcombo1", 5)
+                        loc_oGr.Column3.AddObject("fwcombo1", "fwcombo")
+                        WITH loc_oGr.Column3.fwcombo1
+                            .FontSize    = 8
+                            .Left        = 10
+                            .Top         = 26
+                            .Visible     = .F.
+                            .BorderStyle = 0
+                        ENDWITH
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao preparar a grade de Limite de Cr" + CHR(233) + "dito:" + CHR(13) + ;
+                loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *============================================================
+    * DiagIncluir - DIAGNOSTICO TEMPORARIO (Erro162_Aba1)
+    *
+    * Registra o estado logo apos o mLeDados do clsconta legado, para
+    * descobrir por que o campo Grupo da aba Cadastro fica vazio no
+    * INCLUIR. Get_Grupo tem ControlSource = "crSigCdCli.grupos", e quem
+    * preenche essa coluna eh um UNICO Replace do legado:
+    *
+    *   Select crSigCdGcr
+    *   Locate For Codigos = lcGrupo
+    *   ...
+    *   Replace Grupos With crSigCdGcr.Codigos, TpCads With ..., DataIncs ...,
+    *           Usuars ..., Emps With _Empr, Consigs ..., Concilias ... In crSigCdCli
+    *
+    * Sendo um Replace so, se ele nao rodar (ou se o Locate nao achar o
+    * grupo) os SETE campos ficam vazios - o Grupo sumido eh so o unico
+    * visivel. Por isso o log cobre os sete, e nao so Grupos.
+    *
+    * REMOVER depois de identificada a causa.
+    *============================================================
+    PROCEDURE DiagIncluir(par_cEtapa, par_oErro)
+        LOCAL loc_nH, loc_cLog, loc_cAliasAnt, loc_oE
+        TRY
+            loc_cAliasAnt = ALIAS()
+            loc_cLog = "=== " + TTOC(DATETIME()) + "  " + TRANSFORM(par_cEtapa) + " ===" + CHR(13) + CHR(10)
+            loc_cLog = loc_cLog + "  pcEscolha=[" + TRANSFORM(THIS.pcEscolha) + "]" + ;
+                       "  this_cGrupo=[" + TRANSFORM(THIS.this_cGrupo) + "]" + CHR(13) + CHR(10)
+
+            IF VARTYPE(par_oErro) = "O"
+                loc_cLog = loc_cLog + "  EXCECAO: " + par_oErro.Message + ;
+                           "  (linha " + TRANSFORM(par_oErro.LineNo) + ;
+                           ", proc " + TRANSFORM(par_oErro.Procedure) + ")" + CHR(13) + CHR(10)
+            ENDIF
+
+            *-- cursor de grupos: o Replace do legado le crSigCdGcr.Codigos
+            IF USED("crSigCdGcr")
+                SELECT crSigCdGcr
+                loc_cLog = loc_cLog + "  crSigCdGcr reccount=" + TRANSFORM(RECCOUNT("crSigCdGcr")) + ;
+                           " recno=" + TRANSFORM(RECNO("crSigCdGcr")) + ;
+                           " eof=" + TRANSFORM(EOF("crSigCdGcr")) + ;
+                           " Codigos=[" + TRANSFORM(crSigCdGcr.Codigos) + "]" + CHR(13) + CHR(10)
+                LOCATE FOR Codigos = PADR(ALLTRIM(THIS.this_cGrupo), 10)
+                loc_cLog = loc_cLog + "  LOCATE Codigos = PADR(grupo,10) -> achou=" + ;
+                           TRANSFORM(!EOF("crSigCdGcr"))
+                IF !EOF("crSigCdGcr")
+                    loc_cLog = loc_cLog + " Codigos=[" + TRANSFORM(crSigCdGcr.Codigos) + "]"
+                ENDIF
+                loc_cLog = loc_cLog + CHR(13) + CHR(10)
+            ELSE
+                loc_cLog = loc_cLog + "  crSigCdGcr NAO ESTA ABERTO" + CHR(13) + CHR(10)
+            ENDIF
+
+            *-- os SETE campos que o Replace unico do legado deveria gravar
+            IF USED("crSigCdCli")
+                SELECT crSigCdCli
+                loc_cLog = loc_cLog + "  crSigCdCli reccount=" + TRANSFORM(RECCOUNT("crSigCdCli")) + ;
+                           " recno=" + TRANSFORM(RECNO("crSigCdCli")) + ;
+                           " eof=" + TRANSFORM(EOF("crSigCdCli")) + CHR(13) + CHR(10)
+                IF RECCOUNT("crSigCdCli") > 0 AND !EOF("crSigCdCli")
+                    loc_cLog = loc_cLog + "    Grupos=["    + TRANSFORM(crSigCdCli.Grupos)    + "]" + ;
+                               " TpCads=["                  + TRANSFORM(crSigCdCli.TpCads)    + "]" + ;
+                               " Usuars=["                  + TRANSFORM(crSigCdCli.Usuars)    + "]" + CHR(13) + CHR(10)
+                    loc_cLog = loc_cLog + "    Emps=["      + TRANSFORM(crSigCdCli.Emps)      + "]" + ;
+                               " Consigs=["                 + TRANSFORM(crSigCdCli.Consigs)   + "]" + ;
+                               " Concilias=["               + TRANSFORM(crSigCdCli.Concilias) + "]" + ;
+                               " DataIncs=["                + TRANSFORM(crSigCdCli.DataIncs)  + "]" + CHR(13) + CHR(10)
+                ENDIF
+            ELSE
+                loc_cLog = loc_cLog + "  crSigCdCli NAO ESTA ABERTO" + CHR(13) + CHR(10)
+            ENDIF
+
+            *-- o que o campo da tela esta exibindo de fato
+            IF PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5)
+                IF PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados, "pgframeDados1", 5)
+                    IF PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados.pgframeDados1, "Get_Grupo", 5)
+                        loc_cLog = loc_cLog + "  Get_Grupo.Value=[" + ;
+                                   TRANSFORM(THIS.cnt_4c_Conta.pgframeDados.pgframeDados1.Get_Grupo.Value) + "]" + ;
+                                   " ControlSource=[" + ;
+                                   THIS.cnt_4c_Conta.pgframeDados.pgframeDados1.Get_Grupo.ControlSource + "]" + ;
+                                   CHR(13) + CHR(10)
+                    ENDIF
+                ENDIF
+            ENDIF
+
+            loc_cLog = loc_cLog + "  _EMPR=[" + TRANSFORM(_EMPR) + "] SET(EXACT)=" + SET("EXACT") + CHR(13) + CHR(10)
+
+            *-- Gradei: e aqui que o mmontagrade estoura ("Property FWCOMBO1 is not
+            *-- found", linha 179). O legado faz, em ordem:
+            *--   linha  18: pgFrameDados7.GradeI.RecordSource = ''
+            *--   linha 149: RecordSource = 'crSigClLcr' + Column1..3.ControlSource
+            *--   linha 180: With .Column1.fwcombo1   <- estoura
+            *-- O erro NAO eh "alias nao encontrado", entao 149 executou. Resta saber
+            *-- se a atribuicao do RecordSource resetou as colunas e levou junto os
+            *-- fwcombo1 que a VCX define em Column1 e Column3.
+            LOCAL loc_oGr, loc_i
+            loc_cLog = loc_cLog + "  crSigClLcr USED=" + TRANSFORM(USED("crSigClLcr"))
+            IF USED("crSigClLcr")
+                loc_cLog = loc_cLog + " reccount=" + TRANSFORM(RECCOUNT("crSigClLcr"))
+            ENDIF
+            loc_cLog = loc_cLog + CHR(13) + CHR(10)
+
+            IF PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5)
+                IF PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados, "pgframeDados7", 5)
+                    IF PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados.pgframeDados7, "Gradei", 5)
+                        loc_oGr = THIS.cnt_4c_Conta.pgframeDados.pgframeDados7.Gradei
+                        loc_cLog = loc_cLog + "  Gradei ColumnCount=" + TRANSFORM(loc_oGr.ColumnCount) + ;
+                                   " RecordSource=[" + loc_oGr.RecordSource + "]" + ;
+                                   " Class=" + loc_oGr.Class + CHR(13) + CHR(10)
+                        FOR loc_i = 1 TO loc_oGr.ColumnCount
+                            loc_cLog = loc_cLog + "    Column" + TRANSFORM(loc_i) + ;
+                                       " fwcombo1=" + TRANSFORM(PEMSTATUS(EVALUATE("loc_oGr.Column" + TRANSFORM(loc_i)), "fwcombo1", 5)) + ;
+                                       " ControlCount=" + TRANSFORM(EVALUATE("loc_oGr.Column" + TRANSFORM(loc_i) + ".ControlCount")) + ;
+                                       " CurrentControl=[" + EVALUATE("loc_oGr.Column" + TRANSFORM(loc_i) + ".CurrentControl") + "]" + ;
+                                       " ControlSource=[" + EVALUATE("loc_oGr.Column" + TRANSFORM(loc_i) + ".ControlSource") + "]" + ;
+                                       CHR(13) + CHR(10)
+                        ENDFOR
+                    ELSE
+                        loc_cLog = loc_cLog + "  Gradei NAO EXISTE" + CHR(13) + CHR(10)
+                    ENDIF
+                ENDIF
+            ENDIF
+
+            IF !EMPTY(loc_cAliasAnt) AND USED(loc_cAliasAnt)
+                SELECT (loc_cAliasAnt)
+            ENDIF
+
+            loc_nH = FOPEN(ADDBS(gc_4c_CaminhoBase) + "FormCliente_DiagIncluir.log", 2)
+            IF loc_nH < 0
+                loc_nH = FCREATE(ADDBS(gc_4c_CaminhoBase) + "FormCliente_DiagIncluir.log")
+            ELSE
+                =FSEEK(loc_nH, 0, 2)
+            ENDIF
+            IF loc_nH > 0
+                =FPUTS(loc_nH, loc_cLog)
+                =FCLOSE(loc_nH)
+            ENDIF
+        CATCH TO loc_oE
+            *-- diagnostico nunca pode derrubar o form
         ENDTRY
     ENDPROC
 
@@ -2580,7 +2857,7 @@ DEFINE CLASS FormCliente AS FormBase
     * BtnIncluirClick - Limpar clsconta para inclusao de novo cliente
     *============================================================
     PROCEDURE BtnIncluirClick
-        LOCAL loc_lRet, loc_oErro
+        LOCAL loc_lRet, loc_oErro, loc_oErroMLe
         IF !THIS.ValidarPreAcao("INCLUIR")
             RETURN
         ENDIF
@@ -2595,8 +2872,15 @@ DEFINE CLASS FormCliente AS FormBase
                 TRY
                     loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, SPACE(10), "1", ;
                         THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
-                CATCH
-                    *-- exception nao-fatal (fwcombo1 etc.) — form usavel
+                    THIS.DiagIncluir("mLeDados OK", .NULL.)
+                CATCH TO loc_oErroMLe
+                    *-- exception nao-fatal (fwcombo1 etc.) — form usavel.
+                    *-- Regra #9: o CATCH NAO pode ser mudo. Ele engolia o erro e o
+                    *-- sintoma aparecia como campo em branco: o mLeDados do clsconta
+                    *-- legado grava Grupos/TpCads/DataIncs/Usuars/Emps/Consigs/
+                    *-- Concilias num UNICO Replace - abortado antes dele, os SETE
+                    *-- campos ficam vazios e vao para o banco assim, sem aviso.
+                    THIS.DiagIncluir("mLeDados LANCOU EXCECAO", loc_oErroMLe)
                     loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
                 ENDTRY
                 IF loc_lRet
@@ -2931,6 +3215,11 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     PROCEDURE Destroy
     *============================================================
+        *-- Desinstala a captura de erro do p-code legado instalada no Init.
+        *-- Tem de vir ANTES do resto: o handler so vale enquanto esta tela vive,
+        *-- nunca para o sistema inteiro (Erro163_Aba1_2).
+        ON ERROR
+
         IF !ISNULL(THIS.this_oBusinessObject)
             THIS.this_oBusinessObject = .NULL.
         ENDIF
