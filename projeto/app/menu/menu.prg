@@ -1363,10 +1363,7 @@ PROCEDURE AbrirFormCor()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormCor")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Cores" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1380,6 +1377,11 @@ PROCEDURE AbrirFormCor()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -1391,9 +1393,7 @@ PROCEDURE AbrirFormGpe()
     TRY
         loForm = CREATEOBJECT("FormGpe")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Grupos Operacionais" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1408,6 +1408,10 @@ PROCEDURE AbrirFormGpe()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -1420,10 +1424,7 @@ PROCEDURE AbrirFormCargo()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormCargo")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Cargos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1437,6 +1438,11 @@ PROCEDURE AbrirFormCargo()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -1449,10 +1455,7 @@ PROCEDURE AbrirFormDepartamento()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormDepartamento")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Departamentos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1466,6 +1469,11 @@ PROCEDURE AbrirFormDepartamento()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -1479,9 +1487,7 @@ PROCEDURE AbrirFormSigReInf()
     TRY
         loForm = CREATEOBJECT("FormSigReInf")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + "o de Nota Fiscal" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1495,6 +1501,10 @@ PROCEDURE AbrirFormSigReInf()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -1507,10 +1517,7 @@ PROCEDURE AbrirFormProduto()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormProduto")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Produtos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1524,6 +1531,11 @@ PROCEDURE AbrirFormProduto()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1537,10 +1549,7 @@ PROCEDURE AbrirFormTam()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTam")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tamanhos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1554,6 +1563,11 @@ PROCEDURE AbrirFormTam()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1567,10 +1581,7 @@ PROCEDURE AbrirFormProcessamentoBloqueioContas()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormProcessamentoBloqueioContas")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Processamento de Bloqueio de Contas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1584,6 +1595,11 @@ PROCEDURE AbrirFormProcessamentoBloqueioContas()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1596,9 +1612,7 @@ PROCEDURE AbrirRelPlanoContas()
     TRY
         loForm = CREATEOBJECT("FormRelPlanoContas")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Plano de Contas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1612,6 +1626,10 @@ PROCEDURE AbrirRelPlanoContas()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1629,10 +1647,7 @@ PROCEDURE AbrirFormsigregli(par_nOrdem, par_oParentForm)
             loForm = CREATEOBJECT("Formsigregli", par_nOrdem, par_oParentForm)
         ENDIF
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + "o de Relat" + CHR(243) + "rios/Etiquetas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1646,6 +1661,11 @@ PROCEDURE AbrirFormsigregli(par_nOrdem, par_oParentForm)
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1659,10 +1679,7 @@ PROCEDURE AbrirFormBloqueioContas()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormBloqueioContas")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Bloqueio de Contas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1676,6 +1693,11 @@ PROCEDURE AbrirFormBloqueioContas()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1688,9 +1710,7 @@ PROCEDURE AbrirFormacu()
     TRY
         loForm = CREATEOBJECT("Formacu")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Usu" + CHR(225) + "rios" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1704,6 +1724,10 @@ PROCEDURE AbrirFormacu()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -1716,10 +1740,7 @@ PROCEDURE AbrirFormacg()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormAcg")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Acesso de Grupos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1733,6 +1754,11 @@ PROCEDURE AbrirFormacg()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -1745,10 +1771,7 @@ PROCEDURE AbrirFormSrv()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormSER")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Servi" + CHR(231) + "os" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1762,6 +1785,11 @@ PROCEDURE AbrirFormSrv()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -1774,10 +1802,7 @@ PROCEDURE AbrirFormpgr()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("Formpgr")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Contas a Pagar/Receber" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1791,6 +1816,11 @@ PROCEDURE AbrirFormpgr()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1803,9 +1833,7 @@ PROCEDURE AbrirFormSIGPGCNB()
     TRY
         loForm = CREATEOBJECT("FormSIGPGCNB")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MsgErro("Erro ao criar formul" + CHR(225) + "rio de Gera" + CHR(231) + CHR(227) + "o CNAB" + CHR(13) + ;
                    "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1813,6 +1841,10 @@ PROCEDURE AbrirFormSIGPGCNB()
     CATCH TO loException
         MsgErro("Erro ao abrir Gera" + CHR(231) + CHR(227) + "o CNAB: " + loException.Message, "Erro")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1826,10 +1858,7 @@ PROCEDURE AbrirFormSIGBLCTA()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormSIGBLCTA")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario (WindowType = 1 na classe ja define como modal)
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Processamento de Bloqueio" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1843,6 +1872,11 @@ PROCEDURE AbrirFormSIGBLCTA()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario (WindowType = 1 na classe ja define como modal)
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1856,10 +1890,7 @@ PROCEDURE AbrirFormsigmvcab()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("Formsigmvcab")
 
-        IF VARTYPE(loForm) = "O"
-            * Exibe o formulario
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Movimenta" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1873,6 +1904,11 @@ PROCEDURE AbrirFormsigmvcab()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        * Exibe o formulario
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1885,9 +1921,7 @@ PROCEDURE AbrirFormsigatcrp()
     TRY
         loForm = CREATEOBJECT("Formsigatcrp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Anal" + CHR(237) + "tico de Atendimentos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1901,6 +1935,10 @@ PROCEDURE AbrirFormsigatcrp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1913,9 +1951,7 @@ PROCEDURE AbrirFormSIGREAUP()
     TRY
         loForm = CREATEOBJECT("FormSIGREAUP")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipos de Autoriza" + CHR(231) + CHR(245) + "es" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1929,6 +1965,10 @@ PROCEDURE AbrirFormSIGREAUP()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1941,9 +1981,7 @@ PROCEDURE AbrirFormsigopind()
     TRY
         loForm = CREATEOBJECT("Formsigopind")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Conta Corrente Individual" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1957,6 +1995,10 @@ PROCEDURE AbrirFormsigopind()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1969,9 +2011,7 @@ PROCEDURE AbrirFormsigrepes()
     TRY
         loForm = CREATEOBJECT("Formsigrepes")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Posi" + CHR(231) + CHR(227) + "o de Estoque" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -1985,6 +2025,10 @@ PROCEDURE AbrirFormsigrepes()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -1997,9 +2041,7 @@ PROCEDURE AbrirFormsigmvccr()
     TRY
         loForm = CREATEOBJECT("Formsigmvccr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario Formsigmvccr" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2013,6 +2055,10 @@ PROCEDURE AbrirFormsigmvccr()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2025,9 +2071,7 @@ PROCEDURE AbrirFormcfo()
     TRY
         loForm = CREATEOBJECT("Formcfo")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de CFOP" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2041,6 +2085,10 @@ PROCEDURE AbrirFormcfo()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -2052,9 +2100,7 @@ PROCEDURE AbrirFormccr()
     TRY
         loForm = CREATEOBJECT("Formccr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Grupos de C/C" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2068,6 +2114,10 @@ PROCEDURE AbrirFormccr()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -2079,9 +2129,7 @@ PROCEDURE AbrirFormACE()
     TRY
         loForm = CREATEOBJECT("FormACE")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Acesso de Empresas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2095,6 +2143,10 @@ PROCEDURE AbrirFormACE()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -2106,9 +2158,7 @@ PROCEDURE AbrirFormUfs()
     TRY
         loForm = CREATEOBJECT("FormUfs")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Estados (UFs)" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2122,6 +2172,10 @@ PROCEDURE AbrirFormUfs()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -2133,9 +2187,7 @@ PROCEDURE AbrirFormsigopdivDivisao()
     TRY
         loForm = CREATEOBJECT("Formsigopdiv", "D")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Separa Industrializa" + ;
                         CHR(231) + CHR(227) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2151,6 +2203,10 @@ PROCEDURE AbrirFormsigopdivDivisao()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -2162,9 +2218,7 @@ PROCEDURE AbrirFormsigopdivReinicia()
     TRY
         loForm = CREATEOBJECT("Formsigopdiv", "R")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Reinicia Industrializa" + ;
                         CHR(231) + CHR(227) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2180,6 +2234,10 @@ PROCEDURE AbrirFormsigopdivReinicia()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -2191,9 +2249,7 @@ PROCEDURE AbrirFormSIGMDETQ()
     TRY
         loForm = CREATEOBJECT("FormSIGMDETQ")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Muda Cor/Tamanho Etiqueta" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2207,6 +2263,10 @@ PROCEDURE AbrirFormSIGMDETQ()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -2218,9 +2278,7 @@ PROCEDURE AbrirFormSigAcCcr()
     TRY
         loForm = CREATEOBJECT("FormSIGACGCT")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Acesso a Conta Corrente" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2234,6 +2292,10 @@ PROCEDURE AbrirFormSigAcCcr()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -2245,9 +2307,7 @@ PROCEDURE AbrirFormSIGREVIS()
     TRY
         loForm = CREATEOBJECT("FormSIGREVIS")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Visitas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2261,6 +2321,10 @@ PROCEDURE AbrirFormSIGREVIS()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -2272,9 +2336,7 @@ PROCEDURE AbrirFormsigrevto()
     TRY
         loForm = CREATEOBJECT("Formsigrevto")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio Total Por Opera" + ;
                         CHR(231) + CHR(227) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2290,6 +2352,10 @@ PROCEDURE AbrirFormsigrevto()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -2301,9 +2367,7 @@ PROCEDURE AbrirFormSigReAac()
     TRY
         loForm = CREATEOBJECT("FormSigReAac")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio do Log de Acessos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2317,6 +2381,10 @@ PROCEDURE AbrirFormSigReAac()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2329,9 +2397,7 @@ PROCEDURE AbrirFormSIGREADS()
     TRY
         loForm = CREATEOBJECT("FormSIGREADS")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Descontos/Acr" + ;
                         CHR(233) + "scimos" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2347,6 +2413,10 @@ PROCEDURE AbrirFormSIGREADS()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2359,9 +2429,7 @@ PROCEDURE AbrirFormSIGREAEG()
     TRY
         loForm = CREATEOBJECT("FormSIGREAEG")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar An" + CHR(225) + "lise de Estoque por Grande Grupo" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2375,6 +2443,10 @@ PROCEDURE AbrirFormSIGREAEG()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2387,9 +2459,7 @@ PROCEDURE AbrirFormSIGREAGV()
     TRY
         loForm = CREATEOBJECT("FormSIGREAGV")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Acompanhamento Por Grupo de Venda" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2403,6 +2473,10 @@ PROCEDURE AbrirFormSIGREAGV()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2415,9 +2489,7 @@ PROCEDURE AbrirFormSigReAiv()
     TRY
         loForm = CREATEOBJECT("FormSigReAiv")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar An" + CHR(225) + "lise Entre Invent" + CHR(225) + "rios" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2431,6 +2503,10 @@ PROCEDURE AbrirFormSigReAiv()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2443,9 +2519,7 @@ PROCEDURE AbrirFormsigreani()
     TRY
         loForm = CREATEOBJECT("Formsigreani")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Aniversariantes" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2459,6 +2533,10 @@ PROCEDURE AbrirFormsigreani()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2471,9 +2549,7 @@ PROCEDURE AbrirFormsigreanr()
     TRY
         loForm = CREATEOBJECT("Formsigreanr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Resultados" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2487,6 +2563,10 @@ PROCEDURE AbrirFormsigreanr()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2499,9 +2579,7 @@ PROCEDURE AbrirFormsigreapp()
     TRY
         loForm = CREATEOBJECT("Formsigreapp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de An" + CHR(225) + "lise a Pagar / Receber" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2515,6 +2593,10 @@ PROCEDURE AbrirFormsigreapp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2527,9 +2609,7 @@ PROCEDURE AbrirFormSIGREAPR()
     TRY
         loForm = CREATEOBJECT("FormSIGREAPR")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Altera" + CHR(231) + ;
                         CHR(245) + "es de Produtos" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2545,6 +2625,10 @@ PROCEDURE AbrirFormSIGREAPR()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2557,9 +2641,7 @@ PROCEDURE AbrirFormSigReAtm()
     TRY
         loForm = CREATEOBJECT("FormSigReAtm")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar An" + CHR(225) + "lise por Tipo de Material" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2573,6 +2655,10 @@ PROCEDURE AbrirFormSigReAtm()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2585,9 +2671,7 @@ PROCEDURE AbrirFormsigreato()
     TRY
         loForm = CREATEOBJECT("Formsigreato")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar An" + CHR(225) + "lise de Estoque por Tipo de Opera" + ;
                         CHR(231) + CHR(227) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2603,6 +2687,10 @@ PROCEDURE AbrirFormsigreato()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2615,9 +2703,7 @@ PROCEDURE AbrirFormsigrebal()
     TRY
         loForm = CREATEOBJECT("Formsigrebal")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Balan" + CHR(231) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2631,6 +2717,10 @@ PROCEDURE AbrirFormsigrebal()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2646,9 +2736,7 @@ PROCEDURE AbrirFormSigReCgc()
     TRY
         loForm = CREATEOBJECT("FormSigReCgc", "", "")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio Gen" + CHR(233) + "rico de Compras" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2662,6 +2750,10 @@ PROCEDURE AbrirFormSigReCgc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2680,9 +2772,7 @@ PROCEDURE AbrirFormsigrecgp(par_oParentForm)
             loForm = CREATEOBJECT("Formsigrecgp")
         ENDIF
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Composi" + ;
                 CHR(231) + CHR(227) + "o de Produtos" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2698,6 +2788,10 @@ PROCEDURE AbrirFormsigrecgp(par_oParentForm)
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2710,9 +2804,7 @@ PROCEDURE AbrirFormsigreche()
     TRY
         loForm = CREATEOBJECT("Formsigreche")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Cheques" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2726,6 +2818,10 @@ PROCEDURE AbrirFormsigreche()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2738,9 +2834,7 @@ PROCEDURE AbrirFormsigrechp()
     TRY
         loForm = CREATEOBJECT("Formsigrechp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Cheques Pendentes" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -2754,6 +2848,10 @@ PROCEDURE AbrirFormsigrechp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2766,9 +2864,7 @@ PROCEDURE AbrirFormsigrecmc()
     TRY
         loForm = CREATEOBJECT("Formsigrecmc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Clientes que " + ;
                 "Mais/Menos/N" + CHR(227) + "o Compram" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2784,6 +2880,10 @@ PROCEDURE AbrirFormsigrecmc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2796,9 +2896,7 @@ PROCEDURE AbrirFormsigrecmm()
     TRY
         loForm = CREATEOBJECT("Formsigrecmm")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Mapa de Comiss" + ;
                         CHR(227) + "o Por Vendedor" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2814,6 +2912,10 @@ PROCEDURE AbrirFormsigrecmm()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2823,9 +2925,7 @@ PROCEDURE AbrirFormSigReCmp()
     TRY
         loForm = CREATEOBJECT("FormSigReCmp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Listagem de Composi" + CHR(231) + CHR(227) + ;
                         "o Por Movimenta" + CHR(231) + CHR(227) + "o/OP" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2841,6 +2941,10 @@ PROCEDURE AbrirFormSigReCmp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2853,9 +2957,7 @@ PROCEDURE AbrirFormSIGRECMV()
     TRY
         loForm = CREATEOBJECT("FormSIGRECMV")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio CMV - Custo M" + ;
                         CHR(233) + "dio de Venda" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2871,6 +2973,10 @@ PROCEDURE AbrirFormSIGRECMV()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2883,9 +2989,7 @@ PROCEDURE AbrirFormSIGRECND()
     TRY
         loForm = CREATEOBJECT("FormSIGRECND")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Posi" + ;
                         CHR(231) + CHR(227) + "o de Lan" + CHR(231) + ;
                         "amentos N" + CHR(227) + "o Conciliados" + CHR(13) + ;
@@ -2903,6 +3007,10 @@ PROCEDURE AbrirFormSIGRECND()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2915,9 +3023,7 @@ PROCEDURE AbrirFormsigrecnt()
     TRY
         loForm = CREATEOBJECT("Formsigrecnt")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Contagem por " + ;
                         "Localiza" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2933,6 +3039,10 @@ PROCEDURE AbrirFormsigrecnt()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2945,9 +3055,7 @@ PROCEDURE AbrirFormsigrecrf()
     TRY
         loForm = CREATEOBJECT("Formsigrecrf")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Contagem por " + ;
                         "Refer" + CHR(234) + "ncia" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2963,6 +3071,10 @@ PROCEDURE AbrirFormsigrecrf()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -2975,9 +3087,7 @@ PROCEDURE AbrirFormsigrecog()
     TRY
         loForm = CREATEOBJECT("Formsigrecog")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Comiss" + CHR(227) + ;
                         "o por Grupo de Produto" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -2993,6 +3103,10 @@ PROCEDURE AbrirFormsigrecog()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3005,9 +3119,7 @@ PROCEDURE AbrirFormsigrecom()
     TRY
         loForm = CREATEOBJECT("Formsigrecom")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Comiss" + CHR(227) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3021,6 +3133,10 @@ PROCEDURE AbrirFormsigrecom()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3033,9 +3149,7 @@ PROCEDURE AbrirFormsigrecop()
     TRY
         loForm = CREATEOBJECT("Formsigrecop")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Comiss" + CHR(245) + "es por Recebimento" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3049,6 +3163,10 @@ PROCEDURE AbrirFormsigrecop()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3061,9 +3179,7 @@ PROCEDURE AbrirFormsigrecor()
     TRY
         loForm = CREATEOBJECT("Formsigrecor")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Comiss" + ;
                         CHR(227) + "o Pendente por Vendedor" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3079,6 +3195,10 @@ PROCEDURE AbrirFormsigrecor()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3091,9 +3211,7 @@ PROCEDURE AbrirFormsigrecpe()
     TRY
         loForm = CREATEOBJECT("Formsigrecpe")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Diverg" + CHR(234) + ;
                         "ncias em Estoques" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3109,6 +3227,10 @@ PROCEDURE AbrirFormsigrecpe()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3121,9 +3243,7 @@ PROCEDURE AbrirFormSIGRECPM()
     TRY
         loForm = CREATEOBJECT("FormSIGRECPM")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Listagem de Composi" + CHR(231) + CHR(227) + ;
                         "o por OP" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3139,6 +3259,10 @@ PROCEDURE AbrirFormSIGRECPM()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3151,9 +3275,7 @@ PROCEDURE AbrirFormsigrecpr()
     TRY
         loForm = CREATEOBJECT("Formsigrecpr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Cheques Prorrogados" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3168,6 +3290,10 @@ PROCEDURE AbrirFormsigrecpr()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3180,9 +3306,7 @@ PROCEDURE AbrirFormsigrecrp()
     TRY
         loForm = CREATEOBJECT("Formsigrecrp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de D" + CHR(233) + ;
                         "bitos/Cr" + CHR(233) + "ditos Pendentes" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3198,6 +3322,10 @@ PROCEDURE AbrirFormsigrecrp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3210,9 +3338,7 @@ PROCEDURE AbrirFormsigrecrt()
     TRY
         loForm = CREATEOBJECT("Formsigrecrt")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Cheques Da Carteira" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3226,6 +3352,10 @@ PROCEDURE AbrirFormsigrecrt()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3235,9 +3365,7 @@ PROCEDURE AbrirFormsigrecsm()
     TRY
         loForm = CREATEOBJECT("Formsigrecsm")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Comiss" + CHR(227) + ;
                         "o por Condi" + CHR(231) + CHR(227) + "o de Pagamento" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3254,6 +3382,10 @@ PROCEDURE AbrirFormsigrecsm()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3266,9 +3398,7 @@ PROCEDURE AbrirFormsigrectc()
     TRY
         loForm = CREATEOBJECT("Formsigrectc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Movimenta" + CHR(231) + CHR(227) + ;
                         "o de Cart" + CHR(245) + "es" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3284,6 +3414,10 @@ PROCEDURE AbrirFormsigrectc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3296,9 +3430,7 @@ PROCEDURE AbrirFormSIGRECTP()
     TRY
         loForm = CREATEOBJECT("FormSIGRECTP")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Cota" + CHR(231) + CHR(227) + ;
                         "o de Compras" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3314,6 +3446,10 @@ PROCEDURE AbrirFormSIGRECTP()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3326,9 +3462,7 @@ PROCEDURE AbrirFormSigReDdp()
     TRY
         loForm = CREATEOBJECT("FormSigReDdp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio Demonstrativo de Balan" + CHR(231) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3342,6 +3476,10 @@ PROCEDURE AbrirFormSigReDdp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -3354,9 +3492,7 @@ PROCEDURE AbrirFormSIGREDES()
     TRY
         loForm = CREATEOBJECT("FormSIGREDES")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Cotas de Desconto" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3370,6 +3506,10 @@ PROCEDURE AbrirFormSIGREDES()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3383,9 +3523,7 @@ PROCEDURE AbrirFormSigReDif()
     TRY
         loForm = CREATEOBJECT("FormSigReDif")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Visualizador de Diferen" + CHR(231) + "as Encontradas" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3400,6 +3538,10 @@ PROCEDURE AbrirFormSigReDif()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3411,9 +3553,7 @@ PROCEDURE AbrirFormsigredoc()
     TRY
         loForm = CREATEOBJECT("Formsigredoc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + "o de Documento" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3427,6 +3567,10 @@ PROCEDURE AbrirFormsigredoc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3438,9 +3582,7 @@ PROCEDURE AbrirFormSigReDpD()
     TRY
         loForm = CREATEOBJECT("FormSigReDpD")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de An" + CHR(225) + ;
                         "lise de Produ" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3456,6 +3598,10 @@ PROCEDURE AbrirFormSigReDpD()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3467,9 +3613,7 @@ PROCEDURE AbrirFormsigredtv()
     TRY
         loForm = CREATEOBJECT("Formsigredtv", 1)
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Demonstrativo de Conta Corrente" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3483,6 +3627,10 @@ PROCEDURE AbrirFormsigredtv()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3494,9 +3642,7 @@ PROCEDURE AbrirFormsigremat()
     TRY
         loForm = CREATEOBJECT("Formsigredtv", 2)
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Mapa de Contas" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3510,6 +3656,10 @@ PROCEDURE AbrirFormsigremat()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3530,9 +3680,7 @@ PROCEDURE AbrirFormSIGREEGG()
     TRY
         loForm = CREATEOBJECT("FormSIGREEGG")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Posi" + CHR(231) + CHR(227) + "o de Estoque por Grande Grupo" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3546,6 +3694,10 @@ PROCEDURE AbrirFormSIGREEGG()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3557,9 +3709,7 @@ PROCEDURE AbrirFormsigreegp()
     TRY
         loForm = CREATEOBJECT("Formsigreegp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Posi" + CHR(231) + CHR(227) + "o de Estoque por Grupo de Produto" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3573,6 +3723,10 @@ PROCEDURE AbrirFormsigreegp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3584,9 +3738,7 @@ PROCEDURE AbrirFormsigreeqe()
     TRY
         loForm = CREATEOBJECT("Formsigreeqe")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Posi" + CHR(231) + CHR(227) + "o de Etiquetas por Empresa" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3600,6 +3752,10 @@ PROCEDURE AbrirFormsigreeqe()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3611,9 +3767,7 @@ PROCEDURE AbrirFormSIGREEQR()
     TRY
         loForm = CREATEOBJECT("FormSIGREEQR")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Posi" + CHR(231) + CHR(227) + "o de Estoque Retroativo" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3627,6 +3781,10 @@ PROCEDURE AbrirFormSIGREEQR()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3636,9 +3794,7 @@ PROCEDURE AbrirFormSigReEsp()
     TRY
         loForm = CREATEOBJECT("FormSigReEsp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Estat" + CHR(237) + "stica de Pedidos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3652,6 +3808,10 @@ PROCEDURE AbrirFormSigReEsp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3663,9 +3823,7 @@ PROCEDURE AbrirFormSigReEtl()
     TRY
         loForm = CREATEOBJECT("FormSigReEtl")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Estoque Por Localiza" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3679,6 +3837,10 @@ PROCEDURE AbrirFormSigReEtl()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3690,9 +3852,7 @@ PROCEDURE AbrirFormSIGREEUN()
     TRY
         loForm = CREATEOBJECT("FormSIGREEUN")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Posi" + CHR(231) + CHR(227) + "o de Estoque por Unidade" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3706,6 +3866,10 @@ PROCEDURE AbrirFormSIGREEUN()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3717,9 +3881,7 @@ PROCEDURE AbrirFormSigReEvd()
     TRY
         loForm = CREATEOBJECT("FormSigReEvd")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Demonstrativo de Envelopes Duplicados" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3733,6 +3895,10 @@ PROCEDURE AbrirFormSigReEvd()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3744,9 +3910,7 @@ PROCEDURE AbrirFormsigrefc2()
     TRY
         loForm = CREATEOBJECT("Formsigrefc2")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Fechamento de Caixa" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3760,6 +3924,10 @@ PROCEDURE AbrirFormsigrefc2()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3771,9 +3939,7 @@ PROCEDURE AbrirFormsigrefcx()
     TRY
         loForm = CREATEOBJECT("Formsigrefcx")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Fechamento de Caixa" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3787,6 +3953,10 @@ PROCEDURE AbrirFormsigrefcx()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3798,9 +3968,7 @@ PROCEDURE AbrirFormsigrefcd()
     TRY
         loForm = CREATEOBJECT("Formsigrefcd")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio Informativo de Vendas Di" + ;
                 CHR(225) + "rias" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3816,6 +3984,10 @@ PROCEDURE AbrirFormsigrefcd()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3827,9 +3999,7 @@ PROCEDURE AbrirFormsigrefec()
     TRY
         loForm = CREATEOBJECT("Formsigrefec")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Fechamento de Caixa" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3843,6 +4013,10 @@ PROCEDURE AbrirFormsigrefec()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3854,9 +4028,7 @@ PROCEDURE AbrirFormsigreffi()
     TRY
         loForm = CREATEOBJECT("Formsigreffi")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Fluxo Financeiro - Anal" + CHR(237) + "tico" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3870,6 +4042,10 @@ PROCEDURE AbrirFormsigreffi()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3881,9 +4057,7 @@ PROCEDURE AbrirFormsigreffn()
     TRY
         loForm = CREATEOBJECT("Formsigreffn")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Fluxo Financeiro - Sint" + CHR(233) + "tico" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3897,6 +4071,10 @@ PROCEDURE AbrirFormsigreffn()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3908,9 +4086,7 @@ PROCEDURE AbrirFormSIGREFUN()
     TRY
         loForm = CREATEOBJECT("FormSIGREFUN")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Rela" + CHR(231) + CHR(227) + "o Tubos Fundi" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -3924,6 +4100,10 @@ PROCEDURE AbrirFormSIGREFUN()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3935,9 +4115,7 @@ PROCEDURE AbrirFormSIGREFXV()
     TRY
         loForm = CREATEOBJECT("FormSIGREFXV")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Posi" + CHR(231) + CHR(227) + ;
                 "o de Estoque por Grupo/Faixa de Valor" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3953,6 +4131,10 @@ PROCEDURE AbrirFormSIGREFXV()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3962,9 +4144,7 @@ PROCEDURE AbrirFormSIGREGDP()
     TRY
         loForm = CREATEOBJECT("FormSIGREGDP")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Emiss" + CHR(227) + ;
                 "o Global de Duplicatas/Boletos" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -3980,6 +4160,10 @@ PROCEDURE AbrirFormSIGREGDP()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -3989,9 +4173,7 @@ PROCEDURE AbrirFormsigregnf()
     TRY
         loForm = CREATEOBJECT("Formsigregnf")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Emiss" + CHR(227) + ;
                 "o Global de Nota Fiscal" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -4007,6 +4189,10 @@ PROCEDURE AbrirFormsigregnf()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4018,9 +4204,7 @@ PROCEDURE AbrirFormsigrehbr()
     TRY
         loForm = CREATEOBJECT("Formsigrehbr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de C" + CHR(243) + ;
                 "digos de Barras Por Estoque" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -4036,6 +4220,10 @@ PROCEDURE AbrirFormsigrehbr()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4048,9 +4236,7 @@ PROCEDURE AbrirFormSIGREHCP()
     TRY
         loForm = CREATEOBJECT("FormSIGREHCP")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Hist" + CHR(243) + ;
                 "rico de Custo de Produtos" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -4066,6 +4252,10 @@ PROCEDURE AbrirFormSIGREHCP()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4077,9 +4267,7 @@ PROCEDURE AbrirFormSigReHev()
     TRY
         loForm = CREATEOBJECT("FormSigReHev")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Hist" + CHR(243) + "rico de Envelopes" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4093,6 +4281,10 @@ PROCEDURE AbrirFormSigReHev()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4105,9 +4297,7 @@ PROCEDURE AbrirFormSIGREHPE()
     TRY
         loForm = CREATEOBJECT("FormSIGREHPE")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Resumo de Cheques Pendentes" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4121,6 +4311,10 @@ PROCEDURE AbrirFormSIGREHPE()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4133,9 +4327,7 @@ PROCEDURE AbrirFormsigrehpr()
     TRY
         loForm = CREATEOBJECT("Formsigrehpr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Hist" + CHR(243) + ;
                        "rico de Produtos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -4150,6 +4342,10 @@ PROCEDURE AbrirFormsigrehpr()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4161,9 +4357,7 @@ PROCEDURE AbrirFormsigrehtc()
     TRY
         loForm = CREATEOBJECT("Formsigrehtc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Cheques Emitidos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4177,6 +4371,10 @@ PROCEDURE AbrirFormsigrehtc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4188,9 +4386,7 @@ PROCEDURE AbrirFormSIGREIDC()
     TRY
         loForm = CREATEOBJECT("FormSIGREIDC")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Identifica" + ;
                         CHR(231) + CHR(227) + "o de Contas" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -4206,6 +4402,10 @@ PROCEDURE AbrirFormSIGREIDC()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4226,9 +4426,7 @@ PROCEDURE AbrirFormSigReIdt(par_pEmp, par_pDop, par_pNum, par_pNumF, par_pDir)
     TRY
         loForm = CREATEOBJECT("FormSigReIdt", "", loc_cEmp, loc_cDop, loc_cNum, loc_nNumF, loc_cDir)
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + ;
                         CHR(227) + "o de Documento de T" + CHR(237) + "tulo" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -4244,6 +4442,10 @@ PROCEDURE AbrirFormSigReIdt(par_pEmp, par_pDop, par_pNum, par_pNumF, par_pDir)
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4255,9 +4457,7 @@ PROCEDURE AbrirFormSigReIfp()
     TRY
         loForm = CREATEOBJECT("FormSigReIfp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio de Falhas / Perdas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4271,6 +4471,10 @@ PROCEDURE AbrirFormSigReIfp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4285,9 +4489,7 @@ PROCEDURE AbrirFormsigreifx()
         loForm = CREATEOBJECT("Formsigreifx", ;
             go_4c_Sistema.cCodEmpresa, "", 0, 0, .F.)
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Impress" + CHR(227) + "o de Documentos Comerciais" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4301,6 +4503,10 @@ PROCEDURE AbrirFormsigreifx()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4317,9 +4523,7 @@ PROCEDURE AbrirFormSigReIiv(par_pEmp, par_pDop, par_nNum, par_nTpImp)
     TRY
         loForm = CREATEOBJECT("FormSigReIiv", par_pEmp, par_pDop, par_nNum, par_nTpImp)
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Impress" + CHR(227) + "o de Invoice" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4333,6 +4537,10 @@ PROCEDURE AbrirFormSigReIiv(par_pEmp, par_pDop, par_nNum, par_nTpImp)
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4351,9 +4559,7 @@ PROCEDURE AbrirFormsigreimc(par_cEmp, par_cSerie, par_dEmisDe, par_dEmisAte, ;
                         par_dEmisDe, par_dEmisAte, par_cEDNs, par_cNotaIni, par_cNotaFim)
         ENDIF
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Impress" + CHR(227) + "o de Cartas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4367,6 +4573,10 @@ PROCEDURE AbrirFormsigreimc(par_cEmp, par_cSerie, par_dEmisDe, par_dEmisAte, ;
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4378,9 +4588,7 @@ PROCEDURE AbrirFormsigreimp()
     TRY
         loForm = CREATEOBJECT("Formsigreimp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar Relat" + CHR(243) + "rio Comparativo de Impostos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4395,6 +4603,10 @@ PROCEDURE AbrirFormsigreimp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4436,9 +4648,7 @@ PROCEDURE AbrirFormsigreinr()
 
     TRY
         loForm = CREATEOBJECT("Formsigreinr", loc_nNumBal)
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Invent" + CHR(225) + "rio" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4451,6 +4661,10 @@ PROCEDURE AbrirFormsigreinr()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4462,9 +4676,7 @@ PROCEDURE AbrirFormSigReInv()
     TRY
         loForm = CREATEOBJECT("FormSigReInv")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Invent" + CHR(225) + "rio de Estoque" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4478,6 +4690,10 @@ PROCEDURE AbrirFormSigReInv()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4489,9 +4705,7 @@ PROCEDURE AbrirFormsigreipe()
     TRY
         loForm = CREATEOBJECT("Formsigreipe")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + "o de Etiquetas" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4505,6 +4719,10 @@ PROCEDURE AbrirFormsigreipe()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4514,9 +4732,7 @@ PROCEDURE AbrirFormSigReIpr()
     TRY
         loForm = CREATEOBJECT("FormSigReIpr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Mailing" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4530,6 +4746,10 @@ PROCEDURE AbrirFormSigReIpr()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4541,9 +4761,7 @@ PROCEDURE AbrirFormSIGREIPS()
     TRY
         loForm = CREATEOBJECT("FormSIGREIPS")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Etiquetas - Mala Direta" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4557,6 +4775,10 @@ PROCEDURE AbrirFormSIGREIPS()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4599,9 +4821,7 @@ PROCEDURE AbrirFormSigReIr1()
 
     TRY
         loForm = CREATEOBJECT("FormSigReIr1", loc_nNumBal)
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Balan" + CHR(231) + ;
                 "o de Invent" + CHR(225) + "rio" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -4615,6 +4835,10 @@ PROCEDURE AbrirFormSigReIr1()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4626,9 +4850,7 @@ PROCEDURE AbrirFormsigpdmp7()
     TRY
         loForm = CREATEOBJECT("Formsigpdmp7")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Movimenta" + CHR(231) + CHR(227) + "o por Funcion" + CHR(225) + "rio" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4642,6 +4864,10 @@ PROCEDURE AbrirFormsigpdmp7()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4655,9 +4881,7 @@ PROCEDURE AbrirFormSigPdMpf()
     TRY
         loForm = CREATEOBJECT("FormSigPdMpf")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Movimenta" + CHR(231) + ;
                         CHR(227) + "o por Funcion" + CHR(225) + "rio" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -4673,6 +4897,10 @@ PROCEDURE AbrirFormSigPdMpf()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4686,9 +4914,7 @@ PROCEDURE AbrirFormSIGPDPNS()
     TRY
         loForm = CREATEOBJECT("FormSIGPDPNS", "")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Pendentes" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4702,6 +4928,10 @@ PROCEDURE AbrirFormSIGPDPNS()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4714,9 +4944,7 @@ PROCEDURE AbrirFormSigPrAop()
     TRY
         loForm = CREATEOBJECT("FormSigPrAop")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Altera" + CHR(231) + CHR(227) + "o de Quantidade da O.P." + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4730,6 +4958,10 @@ PROCEDURE AbrirFormSigPrAop()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4742,9 +4974,7 @@ PROCEDURE AbrirFormSigPrApr()
     TRY
         loForm = CREATEOBJECT("FormSigPrApr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Reajuste de Precifica" + CHR(231) + CHR(227) + "o." + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4758,6 +4988,10 @@ PROCEDURE AbrirFormSigPrApr()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4769,9 +5003,7 @@ PROCEDURE AbrirFormSigPrCcc()
     TRY
         loForm = CREATEOBJECT("FormSigPrCcc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Rec" + CHR(225) + "lculo de Saldos." + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4785,6 +5017,10 @@ PROCEDURE AbrirFormSigPrCcc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4795,14 +5031,16 @@ PROCEDURE AbrirFormSigPrCcp()
     LOCAL loc_oForm, loc_oErro
     TRY
         loc_oForm = CREATEOBJECT("Formsigprccp")
-        IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.Show()
-        ELSE
+        IF VARTYPE(loc_oForm) <> "O"
             MsgErro("Erro ao criar formul" + CHR(225) + "rio de Rec" + CHR(225) + "lculo de Pre" + CHR(231) + "os.", "Erro")
         ENDIF
     CATCH TO loc_oErro
         MsgErro("Erro ao abrir Rec" + CHR(225) + "lculo de Pre" + CHR(231) + "os: " + loc_oErro.Message, "Erro")
     ENDTRY
+
+    IF VARTYPE(loc_oForm) = "O"
+        loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4813,9 +5051,7 @@ PROCEDURE AbrirFormSIGPRCCR()
     LOCAL loc_oForm, loc_oErro
     TRY
         loc_oForm = CREATEOBJECT("FormSIGPRCCR")
-        IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.Show()
-        ELSE
+        IF VARTYPE(loc_oForm) <> "O"
             MsgErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + ;
                     "o de Produtos com Pre" + CHR(231) + "os alterados." + CHR(13) + ;
                     "VARTYPE retornou: " + VARTYPE(loc_oForm), "Erro")
@@ -4827,6 +5063,10 @@ PROCEDURE AbrirFormSIGPRCCR()
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
                 "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loc_oForm) = "O"
+        loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4838,9 +5078,7 @@ PROCEDURE AbrirFormSigPrCfn()
     TRY
         loc_oForm = CREATEOBJECT("FormSigPrCfn")
 
-        IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.Show()
-        ELSE
+        IF VARTYPE(loc_oForm) <> "O"
             MsgErro("Erro ao criar formul" + CHR(225) + "rio de C" + CHR(225) + ;
                     "lculo de Juros." + CHR(13) + ;
                     "VARTYPE retornou: " + VARTYPE(loc_oForm), "Erro")
@@ -4855,6 +5093,10 @@ PROCEDURE AbrirFormSigPrCfn()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loc_oForm) = "O"
+        loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4864,9 +5106,7 @@ PROCEDURE AbrirFormSIGPRCNB()
     LOCAL loc_oForm, loc_oErro
     TRY
         loc_oForm = CREATEOBJECT("FormSIGPRCNB")
-        IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.Show()
-        ELSE
+        IF VARTYPE(loc_oForm) <> "O"
             MsgErro("Erro ao criar formul" + CHR(225) + "rio de Gera" + CHR(231) + ;
                     CHR(227) + "o CNAB Cobran" + CHR(231) + "a." + CHR(13) + ;
                     "VARTYPE retornou: " + VARTYPE(loc_oForm), "Erro")
@@ -4878,6 +5118,10 @@ PROCEDURE AbrirFormSIGPRCNB()
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
                 "Procedure: " + loc_oErro.Procedure, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loc_oForm) = "O"
+        loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -4889,9 +5133,7 @@ PROCEDURE AbrirFormsigprcom()
     TRY
         loForm = CREATEOBJECT("Formsigprcom")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Estoque M" + CHR(225) + "ximo" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4905,6 +5147,10 @@ PROCEDURE AbrirFormsigprcom()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4919,9 +5165,7 @@ PROCEDURE AbrirFormsigprcpd()
     TRY
         loForm = CREATEOBJECT("Formsigprcpd", "", "", DATE(), 0)
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Capacidade Produtiva" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4935,6 +5179,10 @@ PROCEDURE AbrirFormsigprcpd()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4947,9 +5195,7 @@ PROCEDURE AbrirFormsigprdis()
     TRY
         loForm = CREATEOBJECT("Formsigprdis")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Distribui" + CHR(231) + CHR(227) + "o de Produtos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4963,6 +5209,10 @@ PROCEDURE AbrirFormsigprdis()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -4975,9 +5225,7 @@ PROCEDURE AbrirFormSigPrCtr()
     TRY
         loForm = CREATEOBJECT("FormSigPrCtr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Controle de Movimenta" + CHR(231) + CHR(227) + "o por XML" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -4991,6 +5239,10 @@ PROCEDURE AbrirFormSigPrCtr()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5003,9 +5255,7 @@ PROCEDURE AbrirFormSigPrDsc()
     TRY
         loForm = CREATEOBJECT("FormSigPrDsc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Montagem de Descri" + CHR(231) + CHR(227) + "o de Produtos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5019,6 +5269,10 @@ PROCEDURE AbrirFormSigPrDsc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5032,10 +5286,7 @@ PROCEDURE AbrirFormsigpres2()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("Formsigpres2")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formsigpres2" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5049,6 +5300,11 @@ PROCEDURE AbrirFormsigpres2()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5061,9 +5317,7 @@ PROCEDURE AbrirFormSIGPREST()
     TRY
         loForm = CREATEOBJECT("FormSIGPREST")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Gerar Estrutura" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5077,6 +5331,10 @@ PROCEDURE AbrirFormSIGPREST()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5089,9 +5347,7 @@ PROCEDURE AbrirFormSigPrFem()
     TRY
         loForm = CREATEOBJECT("FormSigPrFem")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar An" + CHR(225) + "lise de Produ" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5105,6 +5361,10 @@ PROCEDURE AbrirFormSigPrFem()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5117,9 +5377,7 @@ PROCEDURE AbrirFormSigPrEtq()
     TRY
         loForm = CREATEOBJECT("FormSigPrEtq")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + "o de Etiquetas Selecionadas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5133,6 +5391,10 @@ PROCEDURE AbrirFormSigPrEtq()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5145,9 +5407,7 @@ PROCEDURE AbrirFormSigPrGlo()
     TRY
         loForm = CREATEOBJECT("FormSigPrGlo")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Processamento de O.P." + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5161,6 +5421,10 @@ PROCEDURE AbrirFormSigPrGlo()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5174,9 +5438,7 @@ PROCEDURE AbrirFormSigPrGloT()
         *-- par_pTipo=.T. habilita selecao de Tipo de OP (cnt_4c_TipoOp ativo)
         loForm = CREATEOBJECT("FormSigPrGloT", .F., .F., .F., .T.)
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Processamento Global por Tipo" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5190,6 +5452,10 @@ PROCEDURE AbrirFormSigPrGloT()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5202,9 +5468,7 @@ PROCEDURE AbrirFormSigPrGlx()
     TRY
         loForm = CREATEOBJECT("FormSigPrGlx")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Pr" + CHR(233) + "via da Globaliza" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5218,6 +5482,10 @@ PROCEDURE AbrirFormSigPrGlx()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5230,9 +5498,7 @@ PROCEDURE AbrirFormSigPrCtc()
     TRY
         loForm = CREATEOBJECT("FormSigPrCtc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Cota" + CHR(231) + CHR(245) + "es por Opera" + CHR(231) + CHR(245) + "es" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5246,6 +5512,10 @@ PROCEDURE AbrirFormSigPrCtc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -5257,9 +5527,7 @@ PROCEDURE AbrirFormsigprema()
     TRY
         loForm = CREATEOBJECT("Formsigprema", "", .F.)
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Processamento e Gera" + CHR(231) + CHR(227) + "o de Email" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5273,6 +5541,10 @@ PROCEDURE AbrirFormsigprema()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5285,9 +5557,7 @@ PROCEDURE AbrirFormsigprenv()
     TRY
         loForm = CREATEOBJECT("Formsigprenv")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + "o de Etiquetas de Envelopes" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5301,6 +5571,10 @@ PROCEDURE AbrirFormsigprenv()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5315,9 +5589,7 @@ PROCEDURE AbrirFormSigPrEs1()
     TRY
         loForm = CREATEOBJECT("FormSigPrEs1")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Posi" + CHR(231) + CHR(227) + ;
                 "o Por Movimenta" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -5333,6 +5605,10 @@ PROCEDURE AbrirFormSigPrEs1()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5345,9 +5621,7 @@ PROCEDURE AbrirFormsigprftp()
     TRY
         loForm = CREATEOBJECT("Formsigprftp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Transfer" + CHR(234) + ;
                         "ncia e Recebimento FTP" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -5362,6 +5636,10 @@ PROCEDURE AbrirFormsigprftp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5374,9 +5652,7 @@ PROCEDURE AbrirFormSigPrGf1()
     TRY
         loForm = CREATEOBJECT("FormSigPrGf1")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Falha x Recupera" + ;
                         CHR(231) + CHR(227) + "o por M" + CHR(234) + "s" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -5392,6 +5668,10 @@ PROCEDURE AbrirFormSigPrGf1()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5404,9 +5684,7 @@ PROCEDURE AbrirFormSigPrGmi()
     TRY
         loForm = CREATEOBJECT("FormSigPrGmi")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Gera" + CHR(231) + CHR(227) + "o de Pedido de Estoque M" + CHR(237) + "nimo" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5421,6 +5699,10 @@ PROCEDURE AbrirFormSigPrGmi()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5435,9 +5717,7 @@ PROCEDURE AbrirFormSigPrIbb()
     TRY
         loForm = CREATEOBJECT("FormSIGPRIBL")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Impress" + CHR(227) + ;
                         "o de Boleto Banc" + CHR(225) + "rio" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -5453,6 +5733,10 @@ PROCEDURE AbrirFormSigPrIbb()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5465,9 +5749,7 @@ PROCEDURE AbrirFormsigprico()
     TRY
         loForm = CREATEOBJECT("Formsigprico")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Mapa Visual do Sistema" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5482,6 +5764,10 @@ PROCEDURE AbrirFormsigprico()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5494,9 +5780,7 @@ PROCEDURE AbrirFormSigPrIct()
     TRY
         loForm = CREATEOBJECT("FormSigPrIct")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Integra" + CHR(231) + CHR(227) + "o Cont" + CHR(225) + "bil" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5511,6 +5795,10 @@ PROCEDURE AbrirFormSigPrIct()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5523,9 +5811,7 @@ PROCEDURE AbrirFormsigprila()
     TRY
         loForm = CREATEOBJECT("Formsigprila")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Importa" + CHR(231) + CHR(227) + "o de Planilha" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5540,6 +5826,10 @@ PROCEDURE AbrirFormsigprila()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5552,9 +5842,7 @@ PROCEDURE AbrirFormsigprima()
     TRY
         loForm = CREATEOBJECT("Formsigprima")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Importa" + CHR(231) + CHR(227) + "o de Imagens de Produtos" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5569,6 +5857,10 @@ PROCEDURE AbrirFormsigprima()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5581,9 +5873,7 @@ PROCEDURE AbrirFormSIGPRIMP()
     TRY
         loForm = CREATEOBJECT("FormSIGPRIMP")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Importa" + CHR(231) + CHR(227) + "o de Movimenta" + CHR(231) + CHR(227) + "o de Estoque" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5598,6 +5888,10 @@ PROCEDURE AbrirFormSIGPRIMP()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5610,9 +5904,7 @@ PROCEDURE AbrirFormSIGPRINT()
     TRY
         loForm = CREATEOBJECT("FormSIGPRINT")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Instru" + CHR(231) + CHR(245) + "es de Impress" + CHR(227) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5627,6 +5919,10 @@ PROCEDURE AbrirFormSIGPRINT()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5639,9 +5935,7 @@ PROCEDURE AbrirFormSigPrItb()
     TRY
         loForm = CREATEOBJECT("FormSigPrItb")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Integra" + CHR(231) + CHR(227) + "o Cont" + CHR(225) + "bil Total" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5656,6 +5950,10 @@ PROCEDURE AbrirFormSigPrItb()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5668,9 +5966,7 @@ PROCEDURE AbrirFormSIGPRLNC()
     TRY
         loForm = CREATEOBJECT("FormSIGPRLNC")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Lan" + CHR(231) + "amentos de C/C" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5684,6 +5980,10 @@ PROCEDURE AbrirFormSIGPRLNC()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5696,9 +5996,7 @@ PROCEDURE AbrirFormSigPrMdc()
     TRY
         loForm = CREATEOBJECT("FormSigPrMdc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Muda Conta" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5712,6 +6010,10 @@ PROCEDURE AbrirFormSigPrMdc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5724,9 +6026,7 @@ PROCEDURE AbrirFormsigprmdp()
     TRY
         loForm = CREATEOBJECT("Formsigprmdp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Substitui" + CHR(231) + CHR(227) + "o de Refer" + CHR(234) + "ncias de Produtos" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5740,6 +6040,10 @@ PROCEDURE AbrirFormsigprmdp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5752,9 +6056,7 @@ PROCEDURE AbrirFormSIGPRMEI()
     TRY
         loForm = CREATEOBJECT("FormSIGPRMEI")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Integra" + CHR(231) + CHR(227) + "o SIS E-Commerce" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5768,6 +6070,10 @@ PROCEDURE AbrirFormSIGPRMEI()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5780,9 +6086,7 @@ PROCEDURE AbrirFormSigPrMlu()
     TRY
         loForm = CREATEOBJECT("FormSigPrMlu")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Unifica" + CHR(231) + CHR(227) + "o de Mala Direta" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5796,6 +6100,10 @@ PROCEDURE AbrirFormSigPrMlu()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5808,9 +6116,7 @@ PROCEDURE AbrirFormSIGPRNSE()
     TRY
         loForm = CREATEOBJECT("FormSIGPRNSE")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Integra" + CHR(231) + CHR(227) + "o de NF-e Municipal" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5824,6 +6130,10 @@ PROCEDURE AbrirFormSIGPRNSE()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5836,9 +6146,7 @@ PROCEDURE AbrirFormsigprnfe()
     TRY
         loForm = CREATEOBJECT("Formsigprnfe")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Processamento de NF-e" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5852,6 +6160,10 @@ PROCEDURE AbrirFormsigprnfe()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5864,9 +6176,7 @@ PROCEDURE AbrirFormsigproef()
     TRY
         loForm = CREATEOBJECT("Formsigproef")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Sele" + CHR(231) + CHR(227) + "o de Transa" + CHR(231) + CHR(227) + "o TEF" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5880,6 +6190,10 @@ PROCEDURE AbrirFormsigproef()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -5892,9 +6206,7 @@ PROCEDURE AbrirFormSigPrPcp()
     TRY
         loForm = CREATEOBJECT("FormSigPrPcp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Prioriza" + CHR(231) + CHR(227) + "o de Opera" + CHR(231) + CHR(245) + "es para PCP" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5908,6 +6220,10 @@ PROCEDURE AbrirFormSigPrPcp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -5919,9 +6235,7 @@ PROCEDURE AbrirFormSigPrPpc()
     TRY
         loForm = CREATEOBJECT("FormSigPrPpc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Produtos Por Conta" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5935,6 +6249,10 @@ PROCEDURE AbrirFormSigPrPpc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -5946,9 +6264,7 @@ PROCEDURE AbrirFormsigprpre()
     TRY
         loForm = CREATEOBJECT("Formsigprpre")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Altera" + CHR(231) + CHR(227) + "o de Pre" + CHR(231) + "os" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5962,6 +6278,10 @@ PROCEDURE AbrirFormsigprpre()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -5973,9 +6293,7 @@ PROCEDURE AbrirFormsigprrcu()
     TRY
         loForm = CREATEOBJECT("Formsigprrcu")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Rec" + CHR(225) + "lculo de Custos de Produto" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -5989,6 +6307,10 @@ PROCEDURE AbrirFormsigprrcu()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 PROCEDURE AbrirFormSigPrRet()
@@ -5997,9 +6319,7 @@ PROCEDURE AbrirFormSigPrRet()
     TRY
         loForm = CREATEOBJECT("FormSigPrRet")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Retorno de Estoque/Etiquetas" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6013,6 +6333,10 @@ PROCEDURE AbrirFormSigPrRet()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6024,9 +6348,7 @@ PROCEDURE AbrirFormSigPrRss()
     TRY
         loForm = CREATEOBJECT("FormSigPrRss")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Rec" + CHR(225) + "lculo de Saldos CC" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6040,6 +6362,10 @@ PROCEDURE AbrirFormSigPrRss()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6051,9 +6377,7 @@ PROCEDURE AbrirFormsigprsen()
     TRY
         loForm = CREATEOBJECT("Formsigprsen")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Gerar Senha do Dia" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6067,6 +6391,10 @@ PROCEDURE AbrirFormsigprsen()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6079,9 +6407,7 @@ PROCEDURE AbrirFormSIGPRTRF()
     TRY
         loForm = CREATEOBJECT("FormSIGPRTRF")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Rela" + CHR(231) + CHR(227) + "o de Produtos" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6095,6 +6421,10 @@ PROCEDURE AbrirFormSIGPRTRF()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6107,9 +6437,7 @@ PROCEDURE AbrirFormSIGPRVTX()
     TRY
         loForm = CREATEOBJECT("FormSIGPRVTX")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Importa" + CHR(231) + ;
                         CHR(227) + "o de SKUs (VTX)" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -6125,6 +6453,10 @@ PROCEDURE AbrirFormSIGPRVTX()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6137,9 +6469,7 @@ PROCEDURE AbrirFormACJ()
     TRY
         loForm = CREATEOBJECT("FormACJ")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Acessos de JOB" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6153,6 +6483,10 @@ PROCEDURE AbrirFormACJ()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6165,9 +6499,7 @@ PROCEDURE AbrirFormAli()
     TRY
         loForm = CREATEOBJECT("FormAli")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Al" + CHR(237) + "neas" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6181,6 +6513,10 @@ PROCEDURE AbrirFormAli()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6193,9 +6529,7 @@ PROCEDURE AbrirFormARV()
     TRY
         loForm = CREATEOBJECT("FormARV")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipos de " + CHR(193) + "rvore" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6209,6 +6543,10 @@ PROCEDURE AbrirFormARV()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6221,9 +6559,7 @@ PROCEDURE AbrirFormBAL()
     TRY
         loForm = CREATEOBJECT("FormBAL")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Invent" + CHR(225) + "rio/Balan" + CHR(231) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6237,6 +6573,10 @@ PROCEDURE AbrirFormBAL()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6249,9 +6589,7 @@ PROCEDURE AbrirFormBCC()
     TRY
         loForm = CREATEOBJECT("FormBCC")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormBCC" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6265,6 +6603,10 @@ PROCEDURE AbrirFormBCC()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6277,9 +6619,7 @@ PROCEDURE AbrirFormBch()
     TRY
         loForm = CREATEOBJECT("FormBch")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormBch" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6293,6 +6633,10 @@ PROCEDURE AbrirFormBch()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6305,9 +6649,7 @@ PROCEDURE AbrirFormBlq()
     TRY
         loForm = CREATEOBJECT("FormBlq")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormBlq" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6321,6 +6663,10 @@ PROCEDURE AbrirFormBlq()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6339,9 +6685,7 @@ PROCEDURE AbrirFormCAD(par_cTipoCads, par_nMaxCodCads)
     TRY
         loForm = CREATEOBJECT("FormCAD", loc_cTipo, loc_nMaxCod)
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Cadastros Gerais" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6355,6 +6699,10 @@ PROCEDURE AbrirFormCAD(par_cTipoCads, par_nMaxCodCads)
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6367,9 +6715,7 @@ PROCEDURE AbrirFormCAF()
     TRY
         loForm = CREATEOBJECT("FormCAF")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Cancelamento de OP" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6384,6 +6730,10 @@ PROCEDURE AbrirFormCAF()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6396,9 +6746,7 @@ PROCEDURE AbrirFormCtg()
     TRY
         loForm = CREATEOBJECT("FormCtg")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Categorias" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6412,6 +6760,10 @@ PROCEDURE AbrirFormCtg()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6424,9 +6776,7 @@ PROCEDURE AbrirFormCat()
     TRY
         loForm = CREATEOBJECT("FormCat")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Categorias de Produto" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6440,6 +6790,10 @@ PROCEDURE AbrirFormCat()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6452,9 +6806,7 @@ PROCEDURE AbrirFormCCJ()
     TRY
         loForm = CREATEOBJECT("FormCCJ")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de C" + CHR(225) + ;
                         "lculo de Juros" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -6469,6 +6821,10 @@ PROCEDURE AbrirFormCCJ()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6481,9 +6837,7 @@ PROCEDURE AbrirFormCco()
     TRY
         loForm = CREATEOBJECT("FormCco")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Classifica" + ;
                 CHR(231) + CHR(227) + "o de Contas" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -6498,6 +6852,10 @@ PROCEDURE AbrirFormCco()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 
@@ -6510,9 +6868,7 @@ PROCEDURE AbrirFormCec()
     TRY
         loForm = CREATEOBJECT("FormCec")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Acesso a Consulta Gen" + CHR(233) + "rica" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6526,6 +6882,10 @@ PROCEDURE AbrirFormCec()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6537,9 +6897,7 @@ PROCEDURE AbrirFormCeg()
     TRY
         loForm = CREATEOBJECT("FormCeg")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Prioridade de Estoque" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6553,6 +6911,10 @@ PROCEDURE AbrirFormCeg()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6564,9 +6926,7 @@ PROCEDURE AbrirFormCEP()
     TRY
         loForm = CREATEOBJECT("FormCEP")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de CEP" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6579,6 +6939,10 @@ PROCEDURE AbrirFormCEP()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6590,9 +6954,7 @@ PROCEDURE AbrirFormCES()
     TRY
         loForm = CREATEOBJECT("FormCES")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Classifica" + CHR(231) + CHR(227) + "o de Estoque" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6606,6 +6968,10 @@ PROCEDURE AbrirFormCES()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6617,9 +6983,7 @@ PROCEDURE AbrirFormCfb()
     TRY
         loForm = CREATEOBJECT("FormCfb")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Configura" + CHR(231) + CHR(227) + "o de Boletos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6633,6 +6997,10 @@ PROCEDURE AbrirFormCfb()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6644,9 +7012,7 @@ PROCEDURE AbrirFormcfi()
     TRY
         loForm = CREATEOBJECT("Formcfi")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de ICMS - Cupom Fiscal" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6660,6 +7026,10 @@ PROCEDURE AbrirFormcfi()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6671,9 +7041,7 @@ PROCEDURE AbrirFormche()
     TRY
         loForm = CREATEOBJECT("Formche")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Carteira de Cheques" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6686,6 +7054,10 @@ PROCEDURE AbrirFormche()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6697,9 +7069,7 @@ PROCEDURE AbrirFormCHM()
     TRY
         loForm = CREATEOBJECT("FormCHM")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Configura" + ;
                         CHR(231) + CHR(227) + "o do Cheque Matricial" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -6714,6 +7084,10 @@ PROCEDURE AbrirFormCHM()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6725,9 +7099,7 @@ PROCEDURE AbrirFormCla()
     TRY
         loForm = CREATEOBJECT("FormCla")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Classifica" + ;
                         CHR(231) + CHR(227) + "o de Produto" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -6742,6 +7114,10 @@ PROCEDURE AbrirFormCla()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 PROCEDURE AbrirFormCLC()
@@ -6750,9 +7126,7 @@ PROCEDURE AbrirFormCLC()
     TRY
         loForm = CREATEOBJECT("FormCLC")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Comparativos Entre Locais" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6765,6 +7139,10 @@ PROCEDURE AbrirFormCLC()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6776,9 +7154,7 @@ PROCEDURE AbrirFormClf()
     TRY
         loForm = CREATEOBJECT("FormClf")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Classifica" + ;
                         CHR(231) + CHR(227) + "o Fiscal" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -6793,6 +7169,10 @@ PROCEDURE AbrirFormClf()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6804,9 +7184,7 @@ PROCEDURE AbrirFormcmp()
     TRY
         loForm = CREATEOBJECT("Formcmp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Compra Para" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6819,6 +7197,10 @@ PROCEDURE AbrirFormcmp()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 PROCEDURE AbrirFormCliente()
@@ -6884,9 +7266,7 @@ PROCEDURE AbrirFormcnl()
     TRY
         loForm = CREATEOBJECT("Formcnl")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Contagem por Localiza" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6899,6 +7279,10 @@ PROCEDURE AbrirFormcnl()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 PROCEDURE AbrirFormCNF()
@@ -6907,9 +7291,7 @@ PROCEDURE AbrirFormCNF()
     TRY
         loForm = CREATEOBJECT("FormCNF")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Corre" + CHR(231) + CHR(227) + "o de Notas Fiscais" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6922,6 +7304,10 @@ PROCEDURE AbrirFormCNF()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6933,9 +7319,7 @@ PROCEDURE AbrirFormCNQ()
     TRY
         loForm = CREATEOBJECT("FormCNQ")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Conquilhas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6948,6 +7332,10 @@ PROCEDURE AbrirFormCNQ()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6959,9 +7347,7 @@ PROCEDURE AbrirFormCOC()
     TRY
         loForm = CREATEOBJECT("FormOCO")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Ocorr" + CHR(234) + "ncias de T" + CHR(237) + "tulos" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -6974,6 +7360,10 @@ PROCEDURE AbrirFormCOC()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -6985,9 +7375,7 @@ PROCEDURE AbrirFormCol()
     TRY
         loForm = CREATEOBJECT("FormCol")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Grupos de Venda" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7000,6 +7388,10 @@ PROCEDURE AbrirFormCol()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7012,9 +7404,6 @@ PROCEDURE AbrirFormCOM()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormCOM")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show(1)
-        ENDIF
     CATCH TO loException
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Comiss" + CHR(245) + "es:" + CHR(13) + CHR(13) + ;
                      "Erro: "      + loException.Message  + CHR(13) + ;
@@ -7022,6 +7411,10 @@ PROCEDURE AbrirFormCOM()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show(1)   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7034,9 +7427,7 @@ PROCEDURE AbrirFormCRC()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormCRC")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Caracter" + CHR(237) + "sticas de Contas" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7047,6 +7438,10 @@ PROCEDURE AbrirFormCRC()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7059,9 +7454,7 @@ PROCEDURE AbrirFormcrf()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("Formcrf")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Contagem de Refer" + CHR(234) + "ncia" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7072,6 +7465,10 @@ PROCEDURE AbrirFormcrf()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7084,9 +7481,7 @@ PROCEDURE AbrirFormcrp()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("Formcrp", 0)
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Caracter" + CHR(237) + "sticas de Produtos" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7097,6 +7492,10 @@ PROCEDURE AbrirFormcrp()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7109,9 +7508,7 @@ PROCEDURE AbrirFormcrpContas()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("Formcrp", 1)
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Caracter" + CHR(237) + "sticas de Contas (CRP)" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7122,6 +7519,10 @@ PROCEDURE AbrirFormcrpContas()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7134,9 +7535,7 @@ PROCEDURE AbrirFormcrpMovim()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("Formcrp", 2)
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Caracter" + CHR(237) + "sticas de Movimenta" + CHR(231) + CHR(245) + "es" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7147,6 +7546,10 @@ PROCEDURE AbrirFormcrpMovim()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7158,9 +7561,7 @@ PROCEDURE AbrirFormCrt()
     TRY
         loForm = CREATEOBJECT("FormCrt")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Retrabalhos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7173,6 +7574,10 @@ PROCEDURE AbrirFormCrt()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7184,9 +7589,7 @@ PROCEDURE AbrirFormCsi()
     TRY
         loForm = CREATEOBJECT("FormCsi")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Categoria do Site" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7199,6 +7602,10 @@ PROCEDURE AbrirFormCsi()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7210,9 +7617,7 @@ PROCEDURE AbrirFormCst()
     TRY
         loForm = CREATEOBJECT("FormCst")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Constantes" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7225,6 +7630,10 @@ PROCEDURE AbrirFormCst()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 PROCEDURE AbrirFormCTA()
@@ -7233,9 +7642,7 @@ PROCEDURE AbrirFormCTA()
     TRY
         loForm = CREATEOBJECT("FormCTA")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Cadastro de Contas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7248,6 +7655,10 @@ PROCEDURE AbrirFormCTA()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7260,9 +7671,6 @@ PROCEDURE AbrirFormCVE()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormCVE")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show(1)
-        ENDIF
     CATCH TO loException
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Comiss" + CHR(245) + "es por Cargo:" + CHR(13) + CHR(13) + ;
                      "Erro: "      + loException.Message  + CHR(13) + ;
@@ -7270,6 +7678,10 @@ PROCEDURE AbrirFormCVE()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show(1)   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7282,9 +7694,7 @@ PROCEDURE AbrirFormCVI()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormCVI")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormCVI" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7295,6 +7705,10 @@ PROCEDURE AbrirFormCVI()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7306,9 +7720,7 @@ PROCEDURE AbrirFormDES()
     TRY
         loForm = CREATEOBJECT("FormDES")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormDES" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7321,6 +7733,10 @@ PROCEDURE AbrirFormDES()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7332,9 +7748,7 @@ PROCEDURE AbrirFormDIC()
     TRY
         loForm = CREATEOBJECT("FormDIC")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormDIC" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7347,6 +7761,10 @@ PROCEDURE AbrirFormDIC()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7358,9 +7776,7 @@ PROCEDURE AbrirFormDmo()
     TRY
         loForm = CREATEOBJECT("FormDmo")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Desmontagem de Produtos" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7373,6 +7789,10 @@ PROCEDURE AbrirFormDmo()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7384,9 +7804,7 @@ PROCEDURE AbrirFormDpi()
     TRY
         loForm = CREATEOBJECT("FormDpi")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Departamentos do Site" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7399,6 +7817,10 @@ PROCEDURE AbrirFormDpi()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7410,9 +7832,7 @@ PROCEDURE AbrirFormDrs()
     TRY
         loForm = CREATEOBJECT("FormDrs")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Fichas T" + CHR(233) + "cnicas" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7425,6 +7845,10 @@ PROCEDURE AbrirFormDrs()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7436,9 +7860,7 @@ PROCEDURE AbrirFormDsp()
     TRY
         loForm = CREATEOBJECT("FormDsp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Disponibilidades" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7451,6 +7873,10 @@ PROCEDURE AbrirFormDsp()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7462,9 +7888,7 @@ PROCEDURE AbrirFormDup()
     TRY
         loForm = CREATEOBJECT("FormDup")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de S" + CHR(233) + "ries de Duplicatas" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7477,6 +7901,10 @@ PROCEDURE AbrirFormDup()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7488,9 +7916,7 @@ PROCEDURE AbrirFormema()
     TRY
         loForm = CREATEOBJECT("Formema")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Email" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7503,6 +7929,10 @@ PROCEDURE AbrirFormema()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7514,9 +7944,7 @@ PROCEDURE AbrirFormEmb()
     TRY
         loForm = CREATEOBJECT("FormEmb")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Embalagens" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7529,6 +7957,10 @@ PROCEDURE AbrirFormEmb()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7540,9 +7972,7 @@ PROCEDURE AbrirFormEmn()
     TRY
         loForm = CREATEOBJECT("FormEmn")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Estoque Alvo" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7555,6 +7985,10 @@ PROCEDURE AbrirFormEmn()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7566,9 +8000,7 @@ PROCEDURE AbrirFormemp()
     TRY
         loForm = CREATEOBJECT("Formemp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Empresas" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7581,6 +8013,10 @@ PROCEDURE AbrirFormemp()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7592,9 +8028,7 @@ PROCEDURE AbrirFormENR()
     TRY
         loForm = CREATEOBJECT("FormENR")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormENR", "Erro")
         ENDIF
 
@@ -7606,6 +8040,10 @@ PROCEDURE AbrirFormENR()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7617,9 +8055,7 @@ PROCEDURE AbrirFormepd()
     TRY
         loForm = CREATEOBJECT("Formepd")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario Formepd", "Erro")
         ENDIF
 
@@ -7631,6 +8067,10 @@ PROCEDURE AbrirFormepd()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7642,9 +8082,7 @@ PROCEDURE AbrirFormEsp()
     TRY
         loForm = CREATEOBJECT("FormEsp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormEsp", "Erro")
         ENDIF
 
@@ -7656,6 +8094,10 @@ PROCEDURE AbrirFormEsp()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7667,9 +8109,7 @@ PROCEDURE AbrirFormEVE()
     TRY
         loForm = CREATEOBJECT("FormEVE")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormEVE", "Erro")
         ENDIF
 
@@ -7681,6 +8121,10 @@ PROCEDURE AbrirFormEVE()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7692,9 +8136,7 @@ PROCEDURE AbrirFormEvt()
     TRY
         loForm = CREATEOBJECT("FormEvt")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormEvt", "Erro")
         ENDIF
 
@@ -7706,6 +8148,10 @@ PROCEDURE AbrirFormEvt()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7717,9 +8163,7 @@ PROCEDURE AbrirFormFap()
     TRY
         loForm = CREATEOBJECT("FormFap")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormFap" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7733,6 +8177,10 @@ PROCEDURE AbrirFormFap()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7744,9 +8192,7 @@ PROCEDURE AbrirFormFBI()
     TRY
         loForm = CREATEOBJECT("FormFBI")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormFBI" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7760,6 +8206,10 @@ PROCEDURE AbrirFormFBI()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7771,9 +8221,7 @@ PROCEDURE AbrirFormFct()
     TRY
         loForm = CREATEOBJECT("FormFct")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormFct" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7787,6 +8235,10 @@ PROCEDURE AbrirFormFct()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7796,9 +8248,7 @@ PROCEDURE AbrirFormFea()
     TRY
         loForm = CREATEOBJECT("FormFea")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormFea" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7812,6 +8262,10 @@ PROCEDURE AbrirFormFea()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7823,9 +8277,7 @@ PROCEDURE AbrirFormFNF()
     TRY
         loForm = CREATEOBJECT("FormFNF")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Finalizadoras n" + CHR(227) + "o Fiscal" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7839,6 +8291,10 @@ PROCEDURE AbrirFormFNF()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7850,9 +8306,7 @@ PROCEDURE AbrirFormFTF()
     TRY
         loForm = CREATEOBJECT("FormFTF")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Finalizadoras (Tef)" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7866,6 +8320,10 @@ PROCEDURE AbrirFormFTF()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7877,9 +8335,7 @@ PROCEDURE AbrirFormFti()
     TRY
         loForm = CREATEOBJECT("FormFti")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Feitios" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7893,6 +8349,10 @@ PROCEDURE AbrirFormFti()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7904,9 +8364,7 @@ PROCEDURE AbrirFormFUN()
     TRY
         loForm = CREATEOBJECT("FormFUN")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Fundi" + CHR(231) + CHR(245) + "es" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7920,6 +8378,10 @@ PROCEDURE AbrirFormFUN()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7931,9 +8393,7 @@ PROCEDURE AbrirFormfnl()
     TRY
         loForm = CREATEOBJECT("Formfnl")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario Formfnl", "Erro")
         ENDIF
 
@@ -7945,6 +8405,10 @@ PROCEDURE AbrirFormfnl()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7956,9 +8420,7 @@ PROCEDURE AbrirFormFornecedor()
     TRY
         loForm = CREATEOBJECT("FormFornecedor")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormFornecedor", "Erro")
         ENDIF
 
@@ -7970,6 +8432,10 @@ PROCEDURE AbrirFormFornecedor()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -7981,9 +8447,7 @@ PROCEDURE AbrirFormFpg()
     TRY
         loForm = CREATEOBJECT("FormFpg")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormFpg" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -7996,6 +8460,10 @@ PROCEDURE AbrirFormFpg()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8009,9 +8477,7 @@ PROCEDURE AbrirFormFpo()
     TRY
         loForm = CREATEOBJECT("FormFpo")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormFpo" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8026,6 +8492,10 @@ PROCEDURE AbrirFormFpo()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8037,9 +8507,7 @@ PROCEDURE AbrirFormFpr()
     TRY
         loForm = CREATEOBJECT("FormFpr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormFpr" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8053,6 +8521,10 @@ PROCEDURE AbrirFormFpr()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8064,9 +8536,7 @@ PROCEDURE AbrirFormFre()
     TRY
         loForm = CREATEOBJECT("FormFre")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormFre" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8080,6 +8550,10 @@ PROCEDURE AbrirFormFre()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8091,9 +8565,7 @@ PROCEDURE AbrirFormgem()
     TRY
         loForm = CREATEOBJECT("Formgem")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formgem" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8107,6 +8579,10 @@ PROCEDURE AbrirFormgem()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8118,9 +8594,7 @@ PROCEDURE AbrirFormgpd()
     TRY
         loForm = CREATEOBJECT("FormGpd")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormGpd" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8134,6 +8608,10 @@ PROCEDURE AbrirFormgpd()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8145,9 +8623,7 @@ PROCEDURE AbrirFormgpr()
     TRY
         loForm = CREATEOBJECT("Formgpr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formgpr" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8161,6 +8637,10 @@ PROCEDURE AbrirFormgpr()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8172,9 +8652,7 @@ PROCEDURE AbrirFormGr1()
     TRY
         loForm = CREATEOBJECT("FormGr1")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Gera" + CHR(231) + CHR(227) + "o de Grupos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8188,6 +8666,10 @@ PROCEDURE AbrirFormGr1()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8242,11 +8724,10 @@ PROCEDURE AbrirFormHOR()
             ENDIF
 
             IF !EMPTY(loc_cUniPrdts)
-                *-- 3. Abre FormHOR com os parametros selecionados
+                *-- 3. Cria o FormHOR com os parametros selecionados.
+                *--    O Show() dele fica FORA do TRY - ver o bloco no fim.
                 loc_oForm = CREATEOBJECT("FormHOR", loc_cSetors, loc_cUniPrdts)
-                IF VARTYPE(loc_oForm) = "O"
-                    loc_oForm.Show()
-                ELSE
+                IF VARTYPE(loc_oForm) <> "O"
                     MsgErro("Erro ao criar formul" + CHR(225) + "rio de Carga Hor" + CHR(225) + "ria." + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loc_oForm), "Erro")
                 ENDIF
@@ -8259,7 +8740,16 @@ PROCEDURE AbrirFormHOR()
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
                 "Procedure: " + loc_oErro.Procedure
         MsgErro(lcMsg, "Erro Detalhado")
+        loc_oForm = .NULL.
     ENDTRY
+
+    *-- Regra #29: so o Show() da tela de TRABALHO sai do TRY. Os dois
+    *-- loc_oLookup.Show(1) acima continuam dentro dele de proposito: sao
+    *-- pickers curtos do fluxo de selecao, e erro ali DEVE abortar a abertura
+    *-- inteira - que eh justamente o que o CATCH faz.
+    IF VARTYPE(loc_oForm) = "O"
+        loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8271,9 +8761,7 @@ PROCEDURE AbrirFormICD()
     TRY
         loForm = CREATEOBJECT("FormICD")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Duplica" + CHR(231) + CHR(227) + "o de Tipo de Tributa" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8287,6 +8775,10 @@ PROCEDURE AbrirFormICD()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8299,9 +8791,6 @@ PROCEDURE AbrirFormICM()
     loc_cMensagem = ""
     TRY
         loc_oForm = CREATEOBJECT("FormICM")
-        IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.Show()
-        ENDIF
     CATCH TO loc_oErro
         loc_cMensagem = "Erro ao abrir formul" + CHR(225) + "rio de " + CHR(205) + "ndices de Comiss" + CHR(227) + "o:" + CHR(13) + CHR(13) + ;
                         "Erro: "      + loc_oErro.Message   + CHR(13) + ;
@@ -8309,6 +8798,10 @@ PROCEDURE AbrirFormICM()
                         "Procedure: " + loc_oErro.Procedure
         MostrarErro(loc_cMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loc_oForm) = "O"
+        loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8321,9 +8814,7 @@ PROCEDURE AbrirFormICN()
     loc_cMensagem = ""
     TRY
         loc_oForm = CREATEOBJECT("FormICN")
-        IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.Show()
-        ELSE
+        IF VARTYPE(loc_oForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de " + CHR(205) + "cones de Acesso" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loc_oForm), "Erro")
         ENDIF
@@ -8334,6 +8825,10 @@ PROCEDURE AbrirFormICN()
                         "Procedure: " + loc_oErro.Procedure
         MostrarErro(loc_cMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loc_oForm) = "O"
+        loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8346,9 +8841,7 @@ PROCEDURE AbrirFormICO()
     loc_cMensagem = ""
     TRY
         loc_oForm = CREATEOBJECT("FormICO")
-        IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.Show()
-        ELSE
+        IF VARTYPE(loc_oForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de " + CHR(205) + "cones" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loc_oForm), "Erro")
         ENDIF
@@ -8359,6 +8852,10 @@ PROCEDURE AbrirFormICO()
                         "Procedure: " + loc_oErro.Procedure
         MostrarErro(loc_cMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loc_oForm) = "O"
+        loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8371,9 +8868,7 @@ PROCEDURE AbrirFormIct()
     loc_cMensagem = ""
     TRY
         loc_oForm = CREATEOBJECT("FormIct")
-        IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.Show()
-        ELSE
+        IF VARTYPE(loc_oForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipo de Tributa" + ;
                 CHR(231) + CHR(227) + "o do ICMS" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loc_oForm), "Erro")
@@ -8386,6 +8881,10 @@ PROCEDURE AbrirFormIct()
                         "Procedure: " + loc_oErro.Procedure
         MostrarErro(loc_cMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loc_oForm) = "O"
+        loc_oForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8397,9 +8896,7 @@ PROCEDURE AbrirFormImp()
     TRY
         loForm = CREATEOBJECT("FormImp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormImp" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8413,6 +8910,10 @@ PROCEDURE AbrirFormImp()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8424,9 +8925,7 @@ PROCEDURE AbrirFormInf()
     TRY
         loForm = CREATEOBJECT("FormInf")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormInf" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8441,6 +8940,10 @@ PROCEDURE AbrirFormInf()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8452,9 +8955,7 @@ PROCEDURE AbrirFormint()
     TRY
         loForm = CREATEOBJECT("Formint")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Tratamento de Invent" + CHR(225) + "rio" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8468,6 +8969,10 @@ PROCEDURE AbrirFormint()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8479,9 +8984,7 @@ PROCEDURE AbrirFormJrn()
     TRY
         loForm = CREATEOBJECT("FormJrn")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Jornadas de Trabalho" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8495,6 +8998,10 @@ PROCEDURE AbrirFormJrn()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8508,9 +9015,7 @@ PROCEDURE AbrirFormJUS()
     TRY
         loForm = CREATEOBJECT("FormJUS")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Justificativas do Retrabalho" + ;
                         CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8524,6 +9029,10 @@ PROCEDURE AbrirFormJUS()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8535,9 +9044,7 @@ PROCEDURE AbrirFormlch()
     TRY
         loForm = CREATEOBJECT("Formlch")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formlch" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8550,6 +9057,10 @@ PROCEDURE AbrirFormlch()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8561,9 +9072,7 @@ PROCEDURE AbrirFormlct()
     TRY
         loForm = CREATEOBJECT("Formlct")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formlct" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8576,6 +9085,10 @@ PROCEDURE AbrirFormlct()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8587,9 +9100,7 @@ PROCEDURE AbrirFormLGR()
     TRY
         loForm = CREATEOBJECT("FormLGR")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormLGR" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8602,6 +9113,10 @@ PROCEDURE AbrirFormLGR()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8613,9 +9128,7 @@ PROCEDURE AbrirFormLin()
     TRY
         loForm = CREATEOBJECT("FormLin")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormLin" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8628,6 +9141,10 @@ PROCEDURE AbrirFormLin()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8639,9 +9156,7 @@ PROCEDURE AbrirFormLOC()
     TRY
         loForm = CREATEOBJECT("FormLOC")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormLOC" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8654,6 +9169,10 @@ PROCEDURE AbrirFormLOC()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8665,9 +9184,7 @@ PROCEDURE AbrirFormLpr()
     TRY
         loForm = CREATEOBJECT("FormLpr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormLpr" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8681,6 +9198,10 @@ PROCEDURE AbrirFormLpr()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8692,9 +9213,7 @@ PROCEDURE AbrirFormMda()
     TRY
         loForm = CREATEOBJECT("FormMda")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormMda" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8708,6 +9227,10 @@ PROCEDURE AbrirFormMda()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8719,9 +9242,7 @@ PROCEDURE AbrirFormmod()
     TRY
         loForm = CREATEOBJECT("Formmod")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario Formmod" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8735,6 +9256,10 @@ PROCEDURE AbrirFormmod()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8746,9 +9271,7 @@ PROCEDURE AbrirFormMoe()
     TRY
         loForm = CREATEOBJECT("FormMoe")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormMoe" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8762,6 +9285,10 @@ PROCEDURE AbrirFormMoe()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8773,9 +9300,7 @@ PROCEDURE AbrirFormMrc()
     TRY
         loForm = CREATEOBJECT("FormMrc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormMrc" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8789,6 +9314,10 @@ PROCEDURE AbrirFormMrc()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8800,9 +9329,7 @@ PROCEDURE AbrirFormMPD()
     TRY
         loForm = CREATEOBJECT("FormMPD")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormMPD" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8817,6 +9344,10 @@ PROCEDURE AbrirFormMPD()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8828,9 +9359,7 @@ PROCEDURE AbrirFormMPL()
     TRY
         loForm = CREATEOBJECT("FormMPL")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormMPL" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8844,6 +9373,10 @@ PROCEDURE AbrirFormMPL()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8856,9 +9389,7 @@ PROCEDURE AbrirFormmpp()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("Formmpp", 0)
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
                 "sticas de Produtos" + CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8870,6 +9401,10 @@ PROCEDURE AbrirFormmpp()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8882,9 +9417,7 @@ PROCEDURE AbrirFormmppContas()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("Formmpp", 1)
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
                 "sticas de Contas" + CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8896,6 +9429,10 @@ PROCEDURE AbrirFormmppContas()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8908,9 +9445,7 @@ PROCEDURE AbrirFormmppMovim()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("Formmpp", 2)
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
                 "sticas de Movimenta" + CHR(231) + CHR(245) + "es" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -8923,6 +9458,10 @@ PROCEDURE AbrirFormmppMovim()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8935,9 +9474,7 @@ PROCEDURE AbrirFormMtp()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormMtp")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Modelos de Trabalho de Produ" + CHR(231) + CHR(227) + "o" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8949,6 +9486,10 @@ PROCEDURE AbrirFormMtp()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8960,9 +9501,7 @@ PROCEDURE AbrirFormMtt()
     TRY
         loForm = CREATEOBJECT("FormMtt")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Metal/Teor" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -8974,6 +9513,10 @@ PROCEDURE AbrirFormMtt()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -8986,9 +9529,7 @@ PROCEDURE AbrirFormMTV()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormMTV")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Motivos" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9000,6 +9541,10 @@ PROCEDURE AbrirFormMTV()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9012,9 +9557,7 @@ PROCEDURE AbrirFormmtz()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("Formmtz")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Matrizes de Saldos" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9026,6 +9569,10 @@ PROCEDURE AbrirFormmtz()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9038,9 +9585,7 @@ PROCEDURE AbrirFormMun()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormMun")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Munic" + CHR(237) + "pios" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9052,6 +9597,10 @@ PROCEDURE AbrirFormMun()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9064,9 +9613,7 @@ PROCEDURE AbrirFormNcf()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormNcf")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de N" + CHR(227) + "o-Conformidades" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9078,6 +9625,10 @@ PROCEDURE AbrirFormNcf()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9090,9 +9641,7 @@ PROCEDURE AbrirFormObs()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormObs")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Observa" + CHR(231) + CHR(245) + "es" + ;
                 CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9104,6 +9653,10 @@ PROCEDURE AbrirFormObs()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9116,9 +9669,7 @@ PROCEDURE AbrirFormOcb()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormOcb")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Ocorr" + CHR(234) + ;
                 "ncias do Balan" + CHR(231) + "o" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -9131,6 +9682,10 @@ PROCEDURE AbrirFormOcb()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9143,9 +9698,7 @@ PROCEDURE AbrirFormOcc()
     lcMensagem  = ""
     TRY
         loForm = CREATEOBJECT("FormOcc")
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Ocorr" + CHR(234) + ;
                 "ncias de Corre" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -9158,6 +9711,10 @@ PROCEDURE AbrirFormOcc()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9169,9 +9726,7 @@ PROCEDURE AbrirFormOCS()
     TRY
         loForm = CREATEOBJECT("FormOCS")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormOCS" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9184,6 +9739,10 @@ PROCEDURE AbrirFormOCS()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9195,9 +9754,7 @@ PROCEDURE AbrirFormOET()
     TRY
         loForm = CREATEOBJECT("FormOET")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormOET" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9210,6 +9767,10 @@ PROCEDURE AbrirFormOET()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9221,9 +9782,7 @@ PROCEDURE AbrirFormOpd()
     TRY
         loForm = CREATEOBJECT("FormOpd")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormOpd" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9237,6 +9796,10 @@ PROCEDURE AbrirFormOpd()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9248,15 +9811,17 @@ PROCEDURE AbrirFormPAT()
     TRY
         loForm = CREATEOBJECT("FormPAT")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MsgErro("Erro ao criar FormPAT. VARTYPE retornou: " + VARTYPE(loForm), "AbrirFormPAT")
         ENDIF
 
     CATCH TO loException
         MsgErro(loException.Message + " (Linha:" + TRANSFORM(loException.LineNo) + ")", "AbrirFormPAT")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9306,9 +9871,7 @@ PROCEDURE AbrirFormOps()
     TRY
         loForm = CREATEOBJECT("FormOps")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormOps" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9321,6 +9884,10 @@ PROCEDURE AbrirFormOps()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 PROCEDURE AbrirFormOpt()
@@ -9329,9 +9896,7 @@ PROCEDURE AbrirFormOpt()
     TRY
         loForm = CREATEOBJECT("FormOpt")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormOpt" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9344,6 +9909,10 @@ PROCEDURE AbrirFormOpt()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9355,9 +9924,7 @@ PROCEDURE AbrirFormOrg()
     TRY
         loForm = CREATEOBJECT("FormOrg")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormOrg" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9370,6 +9937,10 @@ PROCEDURE AbrirFormOrg()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9381,9 +9952,7 @@ PROCEDURE AbrirFormOrc()
     TRY
         loForm = CREATEOBJECT("FormOrc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormOrc" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9396,6 +9965,10 @@ PROCEDURE AbrirFormOrc()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9407,9 +9980,7 @@ PROCEDURE AbrirFormorl()
     TRY
         loForm = CREATEOBJECT("Formorl")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formorl" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9422,6 +9993,10 @@ PROCEDURE AbrirFormorl()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 PROCEDURE AbrirFormOTI()
@@ -9430,9 +10005,7 @@ PROCEDURE AbrirFormOTI()
     TRY
         loForm = CREATEOBJECT("FormOTI")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormOTI" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9445,6 +10018,10 @@ PROCEDURE AbrirFormOTI()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9456,9 +10033,7 @@ PROCEDURE AbrirFormpaf()
     TRY
         loForm = CREATEOBJECT("Formpaf")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formpaf" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9471,6 +10046,10 @@ PROCEDURE AbrirFormpaf()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9482,9 +10061,7 @@ PROCEDURE AbrirFormpag()
     TRY
         loForm = CREATEOBJECT("Formpag")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formpag" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9498,6 +10075,10 @@ PROCEDURE AbrirFormpag()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9508,9 +10089,7 @@ PROCEDURE AbrirFormPai()
     TRY
         loForm = CREATEOBJECT("FormPai")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormPai" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9523,6 +10102,10 @@ PROCEDURE AbrirFormPai()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9533,9 +10116,7 @@ PROCEDURE AbrirFormPcp()
     TRY
         loForm = CREATEOBJECT("FormPcp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormPcp" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9548,6 +10129,10 @@ PROCEDURE AbrirFormPcp()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9559,9 +10144,7 @@ PROCEDURE AbrirFormprc()
     TRY
         loForm = CREATEOBJECT("Formprc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formprc" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9574,6 +10157,10 @@ PROCEDURE AbrirFormprc()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9585,9 +10172,7 @@ PROCEDURE AbrirFormPMC()
     TRY
         loForm = CREATEOBJECT("FormPMC")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormPMC" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9600,6 +10185,10 @@ PROCEDURE AbrirFormPMC()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9611,9 +10200,7 @@ PROCEDURE AbrirFormPrl()
     TRY
         loForm = CREATEOBJECT("FormPrl")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormPrl" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9626,6 +10213,10 @@ PROCEDURE AbrirFormPrl()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9637,9 +10228,7 @@ PROCEDURE AbrirFormPrm()
     TRY
         loForm = CREATEOBJECT("FormPrm")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormPrm" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9652,6 +10241,10 @@ PROCEDURE AbrirFormPrm()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9663,9 +10256,7 @@ PROCEDURE AbrirFormRop()
     TRY
         loForm = CREATEOBJECT("FormRop")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MsgErro("Erro ao criar formul" + CHR(225) + "rio FormRop" + CHR(13) + ;
                     "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9678,6 +10269,10 @@ PROCEDURE AbrirFormRop()
                      "Procedure: " + loException.Procedure
         MsgErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9689,9 +10284,7 @@ PROCEDURE AbrirFormPub()
     TRY
         loForm = CREATEOBJECT("FormPub")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormPub" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9704,6 +10297,10 @@ PROCEDURE AbrirFormPub()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9715,9 +10312,7 @@ PROCEDURE AbrirFormRAN()
     TRY
         loForm = CREATEOBJECT("FormRAN")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormRAN" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9730,6 +10325,10 @@ PROCEDURE AbrirFormRAN()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9741,9 +10340,7 @@ PROCEDURE AbrirFormRcc()
     TRY
         loForm = CREATEOBJECT("FormRcc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormRcc" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9756,6 +10353,10 @@ PROCEDURE AbrirFormRcc()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9767,9 +10368,7 @@ PROCEDURE AbrirFormRec()
     TRY
         loForm = CREATEOBJECT("FormRec")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormRec" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9782,6 +10381,10 @@ PROCEDURE AbrirFormRec()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9793,9 +10396,7 @@ PROCEDURE AbrirFormReg()
     TRY
         loForm = CREATEOBJECT("FormReg")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formulario FormReg" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9809,6 +10410,10 @@ PROCEDURE AbrirFormReg()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9820,9 +10425,7 @@ PROCEDURE AbrirFormrgr()
     TRY
         loForm = CREATEOBJECT("Formrgr")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formrgr" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9836,6 +10439,10 @@ PROCEDURE AbrirFormrgr()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9847,9 +10454,7 @@ PROCEDURE AbrirFormRPT()
     TRY
         loForm = CREATEOBJECT("FormRPT")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormRPT" + CHR(13) + ;
                         "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9863,6 +10468,10 @@ PROCEDURE AbrirFormRPT()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9874,9 +10483,7 @@ PROCEDURE AbrirFormRss()
     TRY
         loForm = CREATEOBJECT("FormRss")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Restri" + ;
                 CHR(231) + CHR(227) + "o de Setores" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
@@ -9891,6 +10498,10 @@ PROCEDURE AbrirFormRss()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9902,9 +10513,7 @@ PROCEDURE AbrirFormrst()
     TRY
         loForm = CREATEOBJECT("Formrst")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formrst" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9918,6 +10527,10 @@ PROCEDURE AbrirFormrst()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9929,9 +10542,7 @@ PROCEDURE AbrirFormScl()
     TRY
         loForm = CREATEOBJECT("FormScl")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormScl" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9945,6 +10556,10 @@ PROCEDURE AbrirFormScl()
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9956,9 +10571,7 @@ PROCEDURE AbrirFormSed()
     TRY
         loForm = CREATEOBJECT("FormSed")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Etiquetas de Sedex" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -9972,6 +10585,10 @@ PROCEDURE AbrirFormSed()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -9984,9 +10601,7 @@ PROCEDURE AbrirFormTBI()
     TRY
         loForm = CREATEOBJECT("FormTBI")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tabelas de Refer" + CHR(234) + "ncia" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10000,6 +10615,10 @@ PROCEDURE AbrirFormTBI()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10011,9 +10630,7 @@ PROCEDURE AbrirFormSEG()
     TRY
         loForm = CREATEOBJECT("FormSEG")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Segmentos de Contas" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10028,6 +10645,10 @@ PROCEDURE AbrirFormSEG()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10039,9 +10660,7 @@ PROCEDURE AbrirFormSET()
     TRY
         loForm = CREATEOBJECT("FormSET")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Setores" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10056,6 +10675,10 @@ PROCEDURE AbrirFormSET()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10067,9 +10690,7 @@ PROCEDURE AbrirFormSre()
     TRY
         loForm = CREATEOBJECT("FormSre")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de S" + CHR(233) + "rie de Nota Fiscal" + CHR(13) + ;
                 "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10084,6 +10705,10 @@ PROCEDURE AbrirFormSre()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10099,10 +10724,7 @@ PROCEDURE AbrirFormSrvImpostos()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormSRV")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Servi" + CHR(231) + "os (Impostos)" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10116,6 +10738,11 @@ PROCEDURE AbrirFormSrvImpostos()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10128,10 +10755,7 @@ PROCEDURE AbrirFormSto()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormSto")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Status de Opera" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10145,6 +10769,11 @@ PROCEDURE AbrirFormSto()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10157,10 +10786,7 @@ PROCEDURE AbrirFormTAN()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTAN")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipos de An" + CHR(225) + "lises" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10174,6 +10800,11 @@ PROCEDURE AbrirFormTAN()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10186,10 +10817,7 @@ PROCEDURE AbrirFormTbO()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTbO")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tabelas de Desconto por Opera" + CHR(231) + CHR(245) + "es" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10203,6 +10831,11 @@ PROCEDURE AbrirFormTbO()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10215,10 +10848,7 @@ PROCEDURE AbrirFormTbv()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTbv")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tabelas de Descontos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10232,6 +10862,11 @@ PROCEDURE AbrirFormTbv()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10244,10 +10879,7 @@ PROCEDURE AbrirFormTCL()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTCL")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Classes" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10261,6 +10893,11 @@ PROCEDURE AbrirFormTCL()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10273,10 +10910,7 @@ PROCEDURE AbrirFormTfi()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTfi")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipos de Fatura" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10290,6 +10924,11 @@ PROCEDURE AbrirFormTfi()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10302,10 +10941,7 @@ PROCEDURE AbrirFormTgp()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTgp")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipos de Gera" + CHR(231) + CHR(227) + "o de O.P." + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10319,6 +10955,11 @@ PROCEDURE AbrirFormTgp()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10332,10 +10973,7 @@ PROCEDURE AbrirFormTme()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTme")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Transporte de Movimenta" + CHR(231) + CHR(227) + "o de Estoque" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10349,6 +10987,11 @@ PROCEDURE AbrirFormTme()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10361,10 +11004,7 @@ PROCEDURE AbrirFormTml()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTml")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipos de Material" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10378,6 +11018,11 @@ PROCEDURE AbrirFormTml()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10390,10 +11035,7 @@ PROCEDURE AbrirFormTot()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTot")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipos de Opera" + CHR(231) + CHR(245) + "es de Produ" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10407,6 +11049,11 @@ PROCEDURE AbrirFormTot()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10419,10 +11066,7 @@ PROCEDURE AbrirFormTpa()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTpa")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipos de Acabamento" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10436,6 +11080,11 @@ PROCEDURE AbrirFormTpa()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10448,10 +11097,7 @@ PROCEDURE AbrirFormTpc()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTpc")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipos de Composi" + CHR(231) + CHR(227) + "o" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10465,6 +11111,11 @@ PROCEDURE AbrirFormTpc()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
@@ -10477,10 +11128,7 @@ PROCEDURE AbrirFormTPD()
         * Cria instancia do formulario
         loForm = CREATEOBJECT("FormTPD")
 
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
+        IF VARTYPE(loForm) <> "O"
             MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Tipos de Documentos" + CHR(13) + ;
                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
         ENDIF
@@ -10494,6 +11142,11 @@ PROCEDURE AbrirFormTPD()
 
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+        loForm.Show()   && FORA do TRY (CLAUDE.md #29)
+    ENDIF
 ENDPROC
 
 *------------------------------------------------------------------------------
