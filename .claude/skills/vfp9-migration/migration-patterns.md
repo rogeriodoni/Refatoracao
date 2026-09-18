@@ -11850,3 +11850,72 @@ revisao. Corrigir na fonte vale mais que acusar site a site.
 `COMPILE` pode **nao reescrever** um `.fxp` existente — o `FormCliente.fxp` ficou em 14:17 com
 o `.prg` em 14:35, e o teste rodou codigo velho. **Apagar o `.fxp` antes de compilar e conferir
 o timestamp depois.**
+
+---
+
+## 213. Controle FORA da area do pai eh RECORTADO — some sem erro e sem screenshot (Erro163_Aba1_3 2026-09-18)
+
+Irma da secao **211**, com um agravante decisivo:
+
+| | secao 211 | **esta** |
+|---|---|---|
+| onde o controle fica | **sobreposto** a outro | **fora** da area do pai |
+| na tela | feio, mas VISIVEL | **nao desenha** |
+| detectavel em screenshot | sim | **nao** |
+
+Container **recorta** filho fora da sua area. Nao ha erro, nao ha log, nao ha nada no dump — e **nenhuma ferramenta do pipeline olha para filho fora da area do pai**. Este eh um ponto cego real da validacao visual.
+
+### O caso
+
+Em form **WRAPPER de VCX**, o migrador copia os overrides do SCX dos controles das
+**PAGINAS** e esquece os filhos **DIRETOS** do container, que ficam no `Left`/`Top` da CLASSE:
+
+| botao | classe `clsconta` | SCX legado | `cnt_4c_Conta` |
+|---|---|---|---|
+| `cmdGCarac` | 891, 540 | **633, 397** | `Width = 768` |
+| `cmdGFtec` | 924, 540 | **672, 397** | `Height = 450` |
+| `cmdgpessoal` | 957, 539 | **711, 397** | |
+
+`891 > 768` e `540 > 450` -> os tres sumiram. E o `pgframeDados` do `clsconta` **nao mostra
+tabs**: esses tres CommandGroup **sao** a navegacao entre abas. Sem eles o usuario entrava na
+aba de endereco e **nao tinha como voltar para a aba 1** — restava so Salvar. A unica saida
+era o F5 (`AlternarPagina`), que ninguem tem como adivinhar.
+
+O `768x450` esta **fiel ao legado**; o que faltava eram os `Left`/`Top`, que o SCX declara.
+
+### Como conferir ao migrar um wrapper
+
+No dump do SCX, o numero de pontos diz o nivel:
+
+```
+  cmdGCarac.Left = 633                                  <- UM ponto: filho DIRETO do container
+  pgframeDados.pgframeDados1.GetEstado.Left = 483       <- varios: controle de PAGINA
+```
+
+Aplicar **todas** as de um ponto so. Depois conferir `Left + Width <= pai.Width` e
+`Top + Height <= pai.Height`.
+
+**Ignorar nome generico** (`Command1`, `Option2`, `Text1`, `Header1`, `Column3`...): sao
+membros internos de CommandGroup/OptionGroup/Grid, posicionados pelo VFP, e o `.prg` nunca os
+cita. Sem esse filtro o levantamento salta de 66 para **550** itens.
+
+### Por que NAO virou verificacao automatica
+
+Tentado, medido e descartado — e o motivo eh estrutural, nao de implementacao:
+
+1. Varrendo todos os forms: **66 achados em 53 forms, 100% falso positivo**. A composicao
+   denuncia a causa: `REGISTRY1` (33, controle OLE invisivel), `btnReport` (26), `cntSombra`
+   (5), `Pagina` (2). Os tres ultimos existem no migrado com **outro nome** — o **PILAR 3**
+   manda renomear (`btnReport` -> `cmg_4c_Botoes`, `cntSombra` -> `cnt_4c_Cabecalho`,
+   `Pagina` -> `pgf_4c_Paginas`). Procurar o nome do LEGADO no `.prg` migrado nunca casa.
+2. A tecnica so funciona onde o nome eh **preservado**, e isso so acontece no form wrapper,
+   porque ali os controles nascem do VCX em vez de serem recriados. Forms wrapper com
+   container de layout: **UM** (`FormCliente`; `FormRPT` e `FormSigPdMp9` carregam VCX sem
+   hospedar container de layout).
+3. O proprio detector **reprovou no teste de regressao**: reintroduzido o defeito num
+   `FormCliente` de teste, acusou **zero** — o dump chama-se `sigcdcli_form_codigo_fonte.txt`
+   e o migrado `FormCliente.prg`, entao o casamento dump->prg por nome falhava justamente no
+   unico caso que importa.
+
+Ferramenta para um form so, que erra o proprio caso de teste, nao se paga. Fica como
+conhecimento e item de checklist do wrapper, nao como gate.

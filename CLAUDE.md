@@ -558,6 +558,23 @@ ENDIF
 
 **Nota**: `COMPILE` pode **nao reescrever** um `.fxp` existente — apagar o `.fxp` antes e conferir o timestamp depois, senao o teste roda codigo velho. Skill: secao **212**. Origem: Erro163_Aba1_2.
 
+### 30. Controle FORA da area do pai eh RECORTADO - some sem erro e sem aparecer em screenshot
+Irma da #28, com um agravante: la o controle fica **sobreposto** (feio, mas visivel); aqui fica **fora do container**, que o **recorta**. Nao desenha, nao da erro, nao entra em log e **nao aparece em screenshot nem em validacao de layout** - nenhuma ferramenta do pipeline olha para filho fora da area do pai.
+
+Em form **WRAPPER de VCX** o migrador copia os overrides do SCX dos controles das **PAGINAS** e esquece os filhos **DIRETOS** do container, que ficam no `Left`/`Top` da CLASSE:
+
+| botao (navegacao entre abas) | classe `clsconta` | SCX legado | `cnt_4c_Conta` |
+|---|---|---|---|
+| `cmdGCarac` | 891, 540 | **633, 397** | `Width = 768` |
+| `cmdGFtec` | 924, 540 | **672, 397** | `Height = 450` |
+| `cmdgpessoal` | 957, 539 | **711, 397** | |
+
+`891 > 768` e `540 > 450`: os tres sumiram. O `pgframeDados` do `clsconta` **nao mostra tabs** - esses CommandGroup SAO a navegacao. Sem eles, o usuario entrava na aba de endereco e **nao tinha como voltar para a aba 1**; sobrava so o F5, que ninguem adivinha. O `768x450` esta FIEL ao legado; faltavam os `Left`/`Top`.
+
+**Ao migrar wrapper**: no dump do SCX, as linhas de **UM ponto so** (`^  nome.Left`) sao filhos DIRETOS do container - aplicar TODAS; as de varios pontos sao das paginas. Conferir `Left + Width <= pai.Width` e `Top + Height <= pai.Height`. Ignorar nome generico (`Command1`, `Option2`, `Text1`): sao membros internos de CommandGroup/OptionGroup, posicionados pelo VFP.
+
+**NAO existe detector automatico** - tentado e medido duas vezes: varrendo todos os forms sao **66 achados em 53 forms, 100% falso positivo**, porque o **PILAR 3 manda RENOMEAR** os objetos no migrado (`btnReport` -> `cmg_4c_Botoes`, `cntSombra` -> `cnt_4c_Cabecalho`, `Pagina` -> `pgf_4c_Paginas`) e comparar pelo nome do legado nunca casa. A tecnica so funciona onde o nome eh **preservado**, que eh o form wrapper - e existe **UM** (`FormCliente`; `FormRPT` e `FormSigPdMp9` usam VCX sem container de layout). Script descartado, nao commitado. Skill: secao **213**. Origem: Erro163_Aba1_3 (2026-09-18).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)
