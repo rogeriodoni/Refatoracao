@@ -6822,29 +6822,60 @@ PROCEDURE AbrirFormcmp()
 ENDPROC
 
 PROCEDURE AbrirFormCliente()
-    LOCAL loForm, loException, lcRetorno
+    *==========================================================================
+    * ATENCAO: o Show() fica FORA do TRY. Nao mexer sem ler isto. (Erro163_Aba1_2)
+    *
+    * O FormCliente eh modal (WindowType = 1), entao Show() BLOQUEIA: a tela
+    * inteira - cada Valid, cada Click do clsconta - vive dentro da chamada.
+    * Com o Show() DENTRO do TRY, todo esse tempo estava dentro do bloco, e em
+    * VFP9 o TRY/CATCH tem PRECEDENCIA sobre ON ERROR em qualquer ponto da pilha.
+    * Consequencia medida em 18/09/2026:
+    *   - erro no p-code do clsconta (GetEstado.Valid, campo UF)
+    *   - o ON ERROR de utils\RegistrarErroLegado.prg era IGNORADO -> nada no log
+    *   - o fluxo saltava para o CATCH, abandonando o TRY
+    *   - loForm eh LOCAL: a referencia caia e o form era DESTRUIDO
+    *   - Destroy SEM QueryUnload (queda de referencia, nao Release)
+    *   - o menu sobrevivia, porque o READ EVENTS esta acima
+    * Para o usuario: "a tela de cadastro fecha sozinha e o menu continua".
+    * Confirmado pelo rastro TrilhaUF.log: "ENTROU no UF" seguido direto de
+    * "DESTROY do form", sem "SAIU do UF" e sem "QUERYUNLOAD".
+    *
+    * Com o Show() FORA do TRY, erro no p-code legado passa a cair no ON ERROR
+    * que o FormCliente.Init instala: fica registrado em
+    * projeto\app\start\ErroLegado.log e a execucao CONTINUA - a tela nao morre
+    * mais e o usuario nao perde o que digitou.
+    *
+    * O TRY continua cobrindo a CRIACAO do form, que eh onde faz sentido abortar.
+    *==========================================================================
+    LOCAL loForm, loException, lcMensagem
+
+    loForm = .NULL.
 
     TRY
         *-- Abrir para novo cadastro de cliente (INSERIR mode)
         *-- pCpf="", pGrupo="" (auto-detectado de crSigCdPam), pCep=0,
         *-- pVal=.F., pCli="" (novo), pcTpBloqCar="0", pcMudaCpfCgc="0"
         loForm = CREATEOBJECT("FormCliente", "", "", 0, .F., "", "0", "0")
-
-        IF VARTYPE(loForm) = "O"
-            loForm.Show()
-        ELSE
-            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Cadastro de Cliente" + CHR(13) + ;
-                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
-        ENDIF
-
     CATCH TO loException
-        LOCAL lcMensagem
         lcMensagem = "Erro ao abrir Cadastro de Cliente:" + CHR(13) + CHR(13) + ;
                      "Erro: "      + loException.Message  + CHR(13) + ;
                      "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure
+        *-- Grava ANTES de exibir: se o dialog nao aparecer, o rastro fica
+        IF TYPE("gc_4c_CaminhoBase") = "C"
+            STRTOFILE("[" + TTOC(DATETIME()) + "] AbrirFormCliente CATCH: " + ;
+                      loException.Message + "  (linha " + TRANSFORM(loException.LineNo) + ;
+                      ", proc " + loException.Procedure + ")" + CHR(13) + CHR(10), ;
+                      ADDBS(gc_4c_CaminhoBase) + "ErroLegado.log", 1)
+        ENDIF
         MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"
+        *-- FORA do TRY de proposito - ver o bloco de comentario acima
+        loForm.Show()
+    ENDIF
 ENDPROC
 
 PROCEDURE AbrirFormcnl()
