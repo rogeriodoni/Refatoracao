@@ -525,6 +525,39 @@ No `FormCliente` o SCX move `getUFIBGE` de 471 para 508 e deixa o label `Say14` 
 
 **NAO existe detector automatico** e a tentativa foi medida e descartada: varrer pares que se cruzam acusou **7.776 pares em 296 forms** (5.466 so de "contido"), quase tudo falso positivo, porque a mesma VARIAVEL de pai (`loc_oCnt`, `loc_oPg1`) eh reatribuida a containers diferentes (mesmo risco da #11) e porque overlay de barra de botoes sobre faixa eh projeto, nao defeito. Sem auto-fix: escolher QUEM anda depende do resto do layout. Skill: secao **211**. Origem: Erro163_Aba1_2 (2026-09-18).
 
+### 29. `Show()` de form MODAL dentro de TRY fecha a tela a cada erro de runtime
+Form modal (`WindowType = 1`) faz o `Show()` **bloquear**: a tela inteira — cada `Valid`, cada `Click` — vive dentro da chamada. Com o `Show()` dentro de um `TRY`, **todo o uso da tela esta dentro do bloco**. E em VFP9 o **`TRY/CATCH` tem precedencia sobre `ON ERROR` em qualquer ponto da pilha**.
+
+Medido (2026-09-18, 3 niveis de chamada entre o TRY e o erro):
+
+```
+erro solto                   -> ON ERROR .T.  (e a execucao CONTINUA)
+erro dentro do TRY           -> ON ERROR .F.  | CATCH pegou .T.
+erro 3 niveis abaixo do TRY  -> ON ERROR .F.  | CATCH pegou .T.
+```
+
+A cadeia: erro no `Valid` -> `ON ERROR` **ignorado** (por isso nenhum log aparece) -> salto para o `CATCH` -> TRY abandonado -> `loForm` eh `LOCAL`, a referencia cai -> form **destruido**. Sintoma: *"a tela fecha sozinha e o menu continua"* (o `READ EVENTS` esta acima).
+
+```foxpro
+* CERTO - TRY cobre so a CRIACAO
+loForm = .NULL.
+TRY
+    loForm = CREATEOBJECT("FormX")
+CATCH TO loException
+    MostrarErro(...)
+    loForm = .NULL.
+ENDTRY
+IF VARTYPE(loForm) = "O"
+    loForm.Show()          && FORA do TRY
+ENDIF
+```
+
+**Diagnostico**: `Destroy` **sem** `QueryUnload` eh assinatura de **queda de referencia** (`Release()` passaria pelo `QueryUnload`); menu vivo descarta crash de processo. Rastrear com `STRTOFILE` (grava e fecha na hora, sobrevive a morte do processo) em `GotFocus`/`LostFocus` do campo + `QueryUnload`/`Destroy` do form — **`BINDEVENT` em `LostFocus`, nunca em `Valid`** (regra #3), e como `Valid` roda antes, chegar no `LostFocus` ja prova que ele passou.
+
+**Alcance**: `menu.prg` tinha **317 de 320** `Abrir*` assim, porque o TEMPLATE do `OrquestradorMigracao.ps1` mandava "COPIAR EXATAMENTE" esse padrao. **Corrigido no template.** Sem pattern do CorretorAutomatico: WARNING em 317 de 320 sites eh arquitetura, nao lista de revisao.
+
+**Nota**: `COMPILE` pode **nao reescrever** um `.fxp` existente — apagar o `.fxp` antes e conferir o timestamp depois, senao o teste roda codigo velho. Skill: secao **212**. Origem: Erro163_Aba1_2.
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

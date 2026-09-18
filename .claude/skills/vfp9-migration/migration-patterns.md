@@ -11761,3 +11761,92 @@ nao da para contornar com regex:
 Agrupar por expressao de pai baixou de 12.857 para 7.776 — longe do suficiente. O script foi
 **descartado, nao commitado**: WARNING que dispara em quase todo arquivo eh ruido que enterra o
 sinal de verdade, e ja custou os patterns #166 e #183. Fica como conhecimento, nao como gate.
+
+---
+
+## 212. `Show()` modal dentro do TRY fecha a tela a cada erro (Erro163_Aba1_2 2026-09-18)
+
+Form modal (`WindowType = 1`) faz o `Show()` **bloquear**: a tela inteira — cada `Valid`, cada
+`Click` — vive dentro da chamada. Se o `Show()` estiver dentro de um `TRY`, **todo o uso da
+tela esta dentro do bloco**.
+
+E em VFP9 o **`TRY/CATCH` tem precedencia sobre `ON ERROR` em qualquer ponto da pilha**.
+
+Medido (2026-09-18):
+
+```
+erro solto                     -> ON ERROR disparou .T.   (e a execucao CONTINUA)
+erro dentro do TRY             -> ON ERROR .F.  |  CATCH pegou .T.
+erro 3 niveis abaixo do TRY    -> ON ERROR .F.  |  CATCH pegou .T.
+```
+
+### A cadeia que fecha a tela
+
+1. erro no `Valid` (no caso, p-code do `clsconta`, campo UF)
+2. o `ON ERROR` eh **ignorado** — por isso nenhum log aparecia
+3. salto para o `CATCH` do menu, **abandonando o TRY**
+4. `loForm` eh `LOCAL`: a referencia cai
+5. form **destruido** — `Destroy` **sem** `QueryUnload` (queda de referencia, nao `Release()`)
+6. o menu sobrevive, porque o `READ EVENTS` esta acima
+
+Para o usuario: *"a tela de cadastro fecha sozinha e o menu continua"*.
+
+### Como o rastro provou isso
+
+`Destroy` **sem** `QueryUnload` eh a assinatura de **queda de referencia**; `Release()` passaria
+pelo `QueryUnload`. E o menu continuar vivo descarta crash de processo. Breadcrumb com
+`STRTOFILE` (grava e fecha na hora, sobrevive a morte do processo) em `GotFocus`/`LostFocus`
+do campo + `QueryUnload`/`Destroy` do form:
+
+```
+[14:42:01] ENTROU no UF (GotFocus)
+[14:42:02] DESTROY do form
+```
+
+Sem `SAIU do UF` -> morreu DENTRO do `Valid`. **`BINDEVENT` em `LostFocus`, nunca em `Valid`**
+(que via BINDEVENT nao dispara confiavel em TextBox) — e como `Valid` roda ANTES do
+`LostFocus`, chegar la ja prova que o `Valid` passou inteiro.
+
+### Conserto
+
+```foxpro
+* ERRADO - a tela inteira vive dentro do TRY
+TRY
+    loForm = CREATEOBJECT("FormX")
+    IF VARTYPE(loForm) = "O"
+        loForm.Show()          && bloqueia aqui ate a tela fechar
+    ENDIF
+CATCH TO loException
+    MostrarErro(...)
+ENDTRY
+
+* CERTO - TRY cobre so a CRIACAO
+loForm = .NULL.
+TRY
+    loForm = CREATEOBJECT("FormX")
+CATCH TO loException
+    MostrarErro(...)
+    loForm = .NULL.
+ENDTRY
+IF VARTYPE(loForm) = "O"
+    loForm.Show()              && FORA do TRY
+ENDIF
+```
+
+Com o `Show()` fora, o erro cai no `ON ERROR` (quando o form instala um, como o `FormCliente`
+faz via `utils\RegistrarErroLegado.prg`): fica registrado e **a execucao continua** — a tela
+nao morre e o usuario nao perde o que digitou.
+
+### Alcance
+
+`menu.prg` tem **320** `PROCEDURE Abrir*` com `Show()`; em **317** o `Show()` estava dentro do
+TRY. Nao eh descuido de um caso: o TEMPLATE do `OrquestradorMigracao.ps1` mandava gerar assim,
+com "COPIAR EXATAMENTE". **O conserto foi no template** — e eh por isso que nao virou pattern
+do CorretorAutomatico: WARNING que dispara em 317 de 320 sites eh arquitetura, nao lista de
+revisao. Corrigir na fonte vale mais que acusar site a site.
+
+### Nota de ferramenta
+
+`COMPILE` pode **nao reescrever** um `.fxp` existente — o `FormCliente.fxp` ficou em 14:17 com
+o `.prg` em 14:35, e o teste rodou codigo velho. **Apagar o `.fxp` antes de compilar e conferir
+o timestamp depois.**

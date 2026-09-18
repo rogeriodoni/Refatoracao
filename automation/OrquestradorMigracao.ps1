@@ -1655,31 +1655,32 @@ ENDPROC
 **PADRAO CORRETO para AbrirForm() no menu.prg (COPIAR EXATAMENTE):**
 ```foxpro
 PROCEDURE Abrir${formClass}()
-    LOCAL loForm, loException
+    LOCAL loForm, loException, lcMensagem
 
+    loForm = .NULL.
+
+    *-- O TRY cobre SO a CRIACAO. O Show() fica FORA - ver explicacao abaixo.
     TRY
-        * Cria instancia do formulario
         loForm = CREATEOBJECT("${formClass}")
-
-        IF VARTYPE(loForm) = "O"                  && VARTYPE, NAO ISNULL
-            loForm.Show()                         && SEM parametro
-            *-- NAO chamar loForm.Release() - FormBase cuida disso
-        ELSE
-            MostrarErro("Erro ao criar formulario ${formClass}", "Erro")
-        ENDIF
-
     CATCH TO loException
-        LOCAL lcMensagem
         lcMensagem = "Erro ao abrir formulario ${formClass}:" + CHR(13) + CHR(13) + ;
                      "Erro: " + loException.Message + CHR(13) + ;
                      "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure
-
         MostrarErro(lcMensagem, "Erro Detalhado")
+        loForm = .NULL.
     ENDTRY
+
+    IF VARTYPE(loForm) = "O"                  && VARTYPE, NAO ISNULL
+        loForm.Show()                         && FORA do TRY, SEM parametro
+        *-- NAO chamar loForm.Release() - FormBase cuida disso
+    ENDIF
 ENDPROC
 ```
+**POR QUE o Show() NAO pode ficar dentro do TRY** (Erro163_Aba1_2): form modal (`WindowType = 1`) faz o `Show()` BLOQUEAR - a tela inteira, cada Valid e cada Click, vive dentro da chamada. Em VFP9 o **TRY/CATCH tem PRECEDENCIA sobre ON ERROR em qualquer ponto da pilha** (medido: com 3 niveis de chamada entre o TRY e o erro, o ON ERROR NAO dispara e o CATCH do chamador pega). Entao qualquer erro durante o uso da tela salta para o CATCH, abandona o TRY, o `loForm` LOCAL perde a referencia e o form eh DESTRUIDO - `Destroy` sem `QueryUnload`. Para o usuario: "a tela fecha sozinha e o menu continua". Com o `Show()` fora, o erro cai no `ON ERROR` (quando o form instala um) e a tela SOBREVIVE.
+
 **NUNCA usar**:
+- `loForm.Show()` DENTRO do TRY (fecha a tela a cada erro de runtime)
 - `loForm.Show(1)` (parametro modal)
 - `loForm.Release()` apos Show()
 - `ISNULL(loForm)` ao inves de `VARTYPE(loForm) = "O"`
