@@ -579,7 +579,7 @@ DEFINE CLASS FormENR AS FormBase
             .Caption   = "Bairro :"
             .Top       = 271
             .Left      = 187
-            .Width     = 40
+            .Width     = 45    && texto mede 35px
             .Height    = 17
             .AutoSize  = .F.
             .FontName  = "Tahoma"
@@ -587,7 +587,7 @@ DEFINE CLASS FormENR AS FormBase
             .FontBold  = .F.
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .Visible   = .T.
         ENDWITH
 

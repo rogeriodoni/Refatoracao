@@ -248,7 +248,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Width           = 70
             .Height          = 75
             .Caption         = "Inserir"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_incluir.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .PicturePosition = 1
             .FontName        = "Tahoma"
             .FontSize        = 8
@@ -265,7 +265,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Width           = 70
             .Height          = 75
             .Caption         = "Consultar"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_visualizar.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
             .PicturePosition = 1
             .FontName        = "Tahoma"
             .FontSize        = 8
@@ -282,7 +282,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Width           = 70
             .Height          = 75
             .Caption         = "Alterar"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
             .PicturePosition = 1
             .FontName        = "Tahoma"
             .FontSize        = 8
@@ -299,7 +299,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Width           = 70
             .Height          = 75
             .Caption         = "Excluir"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
             .PicturePosition = 1
             .FontName        = "Tahoma"
             .FontSize        = 8
@@ -316,7 +316,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Width           = 70
             .Height          = 75
             .Caption         = "Procurar"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_buscar.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
             .PicturePosition = 1
             .FontName        = "Tahoma"
             .FontSize        = 8
@@ -347,7 +347,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Width           = 75
             .Height          = 75
             .Caption         = "Encerrar"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
             .PicturePosition = 1
             .FontName        = "Tahoma"
             .FontSize        = 8
@@ -806,7 +806,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Width           = 70
             .Height          = 75
             .Caption         = "Salvar"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
             .PicturePosition = 1
             .FontName        = "Tahoma"
             .FontSize        = 8
@@ -823,7 +823,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Width           = 75
             .Height          = 75
             .Caption         = "Encerrar"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
             .PicturePosition = 1
             .FontName        = "Tahoma"
             .FontSize        = 8

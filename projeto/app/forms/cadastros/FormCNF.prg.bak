@@ -280,7 +280,7 @@ DEFINE CLASS FormCNF AS FormBase
         loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_ImpCarta", "CommandButton")
         WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_ImpCarta
             .Caption         = "Imprimir"
-            .Picture         = gc_4c_CaminhoIcones + "relatorio_imprimir_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "printer.ico"
             .PicturePosition = 13
             .Width           = 75
             .Height          = 75

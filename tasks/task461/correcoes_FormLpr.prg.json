@@ -1,56 +1,49 @@
 ﻿{
-    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormLpr.prg",
-    "timestamp":  "2026-08-19T00:00:05",
+    "arquivo":  "C:\\Users\\roger\\AppData\\Local\\Temp\\claude\\C--4c\\e1da9d21-0caa-4631-b2fa-becc31e17b54\\scratchpad\\t204\\forms\\cadastros\\FormLpr.prg",
+    "timestamp":  "2026-09-17T12:22:46",
     "correcoes":  [
                       {
-                          "Tipo":  "ENCERRAR-CANONICO",
-                          "Linha":  369,
-                          "Original":  "(auto-fix)",
-                          "Corrigido":  "(auto-fix)",
-                          "Descricao":  "cmd_4c_Encerrar.Width=90 -\u003e 75 (padrao FormCor)"
+                          "Tipo":  "BOM_UTF8",
+                          "Linha":  1,
+                          "Original":  "(BOM UTF-8: EF BB BF)",
+                          "Corrigido":  "(removido)",
+                          "Descricao":  "BOM UTF-8 removido - VFP9 nao suporta"
                       },
                       {
-                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
-                          "Linha":  1870,
-                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
-                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
-                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                          "Tipo":  "PICTURE_ARQUIVO_INEXISTENTE",
+                          "Linha":  450,
+                          "Original":  ".Picture = \"geral_confirmar_32.jpg\"",
+                          "Corrigido":  ".Picture = \"geral_processar_60.jpg\" (legado/caption)",
+                          "Descricao":  "Pattern #204: \u0027geral_confirmar_32.jpg\u0027 nao existe em vbmp\\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real diverge: o inventario tem \u0027cadastro_vizualizar_60.jpg\u0027 (com Z, typo do proprio arquivo) e so nos tamanhos que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto resolvido por: legado/caption. Origem: Erro162 (2026-09-17, FormCliente \u0027Cadastro de Clientes\u0027; o sweep pegou 54 sites em 20 forms)."
                       },
                       {
-                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
-                          "Linha":  1917,
-                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
-                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
-                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                          "Tipo":  "PICTURE_ARQUIVO_INEXISTENTE",
+                          "Linha":  477,
+                          "Original":  ".Picture = \"geral_imprimir_32.jpg\"",
+                          "Corrigido":  ".Picture = \"geral_impressora_normal_60.jpg\" (legado/caption)",
+                          "Descricao":  "Pattern #204: \u0027geral_imprimir_32.jpg\u0027 nao existe em vbmp\\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real diverge: o inventario tem \u0027cadastro_vizualizar_60.jpg\u0027 (com Z, typo do proprio arquivo) e so nos tamanhos que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto resolvido por: legado/caption. Origem: Erro162 (2026-09-17, FormCliente \u0027Cadastro de Clientes\u0027; o sweep pegou 54 sites em 20 forms)."
                       },
                       {
-                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
-                          "Linha":  1973,
-                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
-                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
-                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                          "Tipo":  "PICTURE_ARQUIVO_INEXISTENTE",
+                          "Linha":  631,
+                          "Original":  ".Picture = \"geral_excel_32.jpg\"",
+                          "Corrigido":  ".Picture = \"relatorio_excel_26.jpg\" (legado/caption)",
+                          "Descricao":  "Pattern #204: \u0027geral_excel_32.jpg\u0027 nao existe em vbmp\\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real diverge: o inventario tem \u0027cadastro_vizualizar_60.jpg\u0027 (com Z, typo do proprio arquivo) e so nos tamanhos que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto resolvido por: legado/caption. Origem: Erro162 (2026-09-17, FormCliente \u0027Cadastro de Clientes\u0027; o sweep pegou 54 sites em 20 forms)."
                       },
                       {
-                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
-                          "Linha":  3169,
-                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
-                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
-                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                          "Tipo":  "PICTURE_ARQUIVO_INEXISTENTE",
+                          "Linha":  655,
+                          "Original":  ".Picture = \"geral_visualizar_32.jpg\"",
+                          "Corrigido":  ".Picture = \"relatorio_video_26.jpg\" (legado/caption)",
+                          "Descricao":  "Pattern #204: \u0027geral_visualizar_32.jpg\u0027 nao existe em vbmp\\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real diverge: o inventario tem \u0027cadastro_vizualizar_60.jpg\u0027 (com Z, typo do proprio arquivo) e so nos tamanhos que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto resolvido por: legado/caption. Origem: Erro162 (2026-09-17, FormCliente \u0027Cadastro de Clientes\u0027; o sweep pegou 54 sites em 20 forms)."
                       },
                       {
-                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
-                          "Linha":  3261,
-                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
-                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
-                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
-                      },
-                      {
-                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
-                          "Linha":  3342,
-                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
-                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
-                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                          "Tipo":  "PICTURE_ARQUIVO_INEXISTENTE",
+                          "Linha":  679,
+                          "Original":  ".Picture = \"geral_imprimir_32.jpg\"",
+                          "Corrigido":  ".Picture = \"relatorio_impressora_26.jpg\" (legado/caption)",
+                          "Descricao":  "Pattern #204: \u0027geral_imprimir_32.jpg\u0027 nao existe em vbmp\\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real diverge: o inventario tem \u0027cadastro_vizualizar_60.jpg\u0027 (com Z, typo do proprio arquivo) e so nos tamanhos que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto resolvido por: legado/caption. Origem: Erro162 (2026-09-17, FormCliente \u0027Cadastro de Clientes\u0027; o sweep pegou 54 sites em 20 forms)."
                       }
                   ],
-    "totalCorrecoes":  7
+    "totalCorrecoes":  6
 }

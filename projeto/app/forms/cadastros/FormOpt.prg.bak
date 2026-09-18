@@ -751,6 +751,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S,M"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1434,6 +1436,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1475,6 +1479,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1516,6 +1522,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1557,6 +1565,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1598,6 +1608,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1639,6 +1651,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1680,6 +1694,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S, "
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1721,6 +1737,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -1994,6 +2012,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -2035,6 +2055,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -2076,6 +2098,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -2117,6 +2141,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -2158,6 +2184,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -2199,6 +2227,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -2240,6 +2270,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -2281,6 +2313,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S, "
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -2322,6 +2356,8 @@ DEFINE CLASS FormOpt AS FormBase
             .Width     = 18
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "N,S,C"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.

@@ -2770,7 +2770,7 @@ DEFINE CLASS Formpgr AS FormBase
         loc_oPag1.AddObject("cmd_4c_NovoLacto", "CommandButton")
         WITH loc_oPag1.cmd_4c_NovoLacto
             .Caption         = "Novo"
-            .Picture         = gc_4c_CaminhoIcones + "geral_pendencia_32.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_escudo_ok_32.jpg"
             .PicturePosition = 13
             .Width           = 45
             .Height          = 38
@@ -2790,7 +2790,7 @@ DEFINE CLASS Formpgr AS FormBase
         loc_oPag1.AddObject("cmd_4c_PagUnico", "CommandButton")
         WITH loc_oPag1.cmd_4c_PagUnico
             .Caption         = "Pag. " + CHR(218) + "nico"
-            .Picture         = gc_4c_CaminhoIcones + "geral_boleto_32.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_calculadora_26.jpg"
             .PicturePosition = 13
             .Width           = 60
             .Height          = 38
@@ -2830,7 +2830,7 @@ DEFINE CLASS Formpgr AS FormBase
         loc_oPag1.AddObject("cmd_4c_AltCotacao", "CommandButton")
         WITH loc_oPag1.cmd_4c_AltCotacao
             .Caption         = ""
-            .Picture         = gc_4c_CaminhoIcones + "geral_coleta_20.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_coleta_60.jpg"
             .PicturePosition = 2
             .Width           = 20
             .Height          = 20
@@ -3712,7 +3712,7 @@ DEFINE CLASS Formpgr AS FormBase
         loc_oPag2.AddObject("cmd_4c_AltCotacaoPag", "CommandButton")
         WITH loc_oPag2.cmd_4c_AltCotacaoPag
             .Caption         = ""
-            .Picture         = gc_4c_CaminhoIcones + "geral_coleta_20.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_coleta_60.jpg"
             .PicturePosition = 2
             .Width           = 20
             .Height          = 20

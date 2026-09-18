@@ -1,0 +1,84 @@
+﻿{
+    "arquivo":  "C:\\Users\\roger\\AppData\\Local\\Temp\\claude\\C--4c\\e1da9d21-0caa-4631-b2fa-becc31e17b54\\scratchpad\\t204b\\forms\\cadastros\\Formpgr.prg",
+    "timestamp":  "2026-09-17T12:32:47",
+    "correcoes":  [
+                      {
+                          "Tipo":  "CONTAINER_BOTOES_TRANSPARENTE",
+                          "Linha":  212,
+                          "Original":  ".BackStyle = 1",
+                          "Corrigido":  ".BackStyle = 0",
+                          "Descricao":  "Container cnt_4c_Botoes (hospeda botoes CRUD) deve ser transparente - NAO criar caixa cinza ao redor dos botoes"
+                      },
+                      {
+                          "Tipo":  "CONTAINER_BOTOES_TRANSPARENTE",
+                          "Linha":  327,
+                          "Original":  ".BackStyle = 1",
+                          "Corrigido":  ".BackStyle = 0",
+                          "Descricao":  "Container cnt_4c_Saida (hospeda botoes CRUD) deve ser transparente - NAO criar caixa cinza ao redor dos botoes"
+                      },
+                      {
+                          "Tipo":  "CONTAINER_BOTOES_TRANSPARENTE",
+                          "Linha":  639,
+                          "Original":  ".BackStyle = 1",
+                          "Corrigido":  ".BackStyle = 0",
+                          "Descricao":  "Container cnt_4c_BotoesAcao (hospeda botoes CRUD) deve ser transparente - NAO criar caixa cinza ao redor dos botoes"
+                      },
+                      {
+                          "Tipo":  "CNT-OVERLAY-GRID-BACKSTYLE",
+                          "Linha":  212,
+                          "Original":  ".BackStyle = 0",
+                          "Corrigido":  ".BackStyle = 1",
+                          "Descricao":  "Container cnt_4c_botoes sobrepoe Grid com BackStyle=0 (ghost trails) - Pattern #107 forcou BackStyle=1"
+                      },
+                      {
+                          "Tipo":  "CNT-OVERLAY-GRID-BACKSTYLE",
+                          "Linha":  327,
+                          "Original":  ".BackStyle = 0",
+                          "Corrigido":  ".BackStyle = 1",
+                          "Descricao":  "Container cnt_4c_saida sobrepoe Grid com BackStyle=0 (ghost trails) - Pattern #107 forcou BackStyle=1"
+                      },
+                      {
+                          "Tipo":  "CNT-OVERLAY-GRID-BACKSTYLE",
+                          "Linha":  639,
+                          "Original":  ".BackStyle = 0",
+                          "Corrigido":  ".BackStyle = 1",
+                          "Descricao":  "Container cnt_4c_botoesacao sobrepoe Grid com BackStyle=0 (ghost trails) - Pattern #107 forcou BackStyle=1"
+                      },
+                      {
+                          "Tipo":  "WARN-184-REBIND-SEM-CURRENTCONTROL",
+                          "Linha":  4453,
+                          "Original":  "loc_oGrid.RecordSource = \"cursor_4c_Pendencias\"",
+                          "Corrigido":  "(adicionar .Sparse = .F. + .CurrentControl = \u0027check12\u0027 apos o rebind)",
+                          "Descricao":  "Pattern #184 (Erro145-v2): CarregarGradePendencias reatribui RecordSource do grid \u0027grd_4c_contacorrente\u0027 (coluna editavel, CurrentControl = \u0027check12\u0027) sem restaurar .Sparse/.CurrentControl depois. Reatribuir RecordSource reseta Column.Sparse/.CurrentControl/.ReadOnly alem de Width/Header1.Caption (Problema 48 / Pattern #180) — o CheckBox/ComboBox some ou para de aceitar clique. REVISAR MANUAL: apos o bloco de ControlSource/Width adicionar .Sparse = .F. e .CurrentControl = \u0027check12\u0027, e reaplicar Habilitar*Grid(\u003cmodo editavel\u003e) DEPOIS de todas as cargas (nunca antes do rebind — seria descartado)."
+                      },
+                      {
+                          "Tipo":  "PICTURE_ARQUIVO_INEXISTENTE",
+                          "Linha":  2773,
+                          "Original":  ".Picture = \"geral_pendencia_32.jpg\"",
+                          "Corrigido":  ".Picture = \"geral_escudo_ok_32.jpg\" (legado/nome)",
+                          "Descricao":  "Pattern #204: \u0027geral_pendencia_32.jpg\u0027 nao existe em vbmp\\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real diverge: o inventario tem \u0027cadastro_vizualizar_60.jpg\u0027 (com Z, typo do proprio arquivo) e so nos tamanhos que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto resolvido por: legado/nome. Origem: Erro162 (2026-09-17, FormCliente \u0027Cadastro de Clientes\u0027; o sweep pegou 54 sites em 20 forms)."
+                      },
+                      {
+                          "Tipo":  "WARN-204-PICTURE-ARQUIVO-INEXISTENTE",
+                          "Linha":  2793,
+                          "Original":  ".Picture = \"geral_boleto_32.jpg\"",
+                          "Corrigido":  "(nao mutado - substituto desconhecido)",
+                          "Descricao":  "Pattern #204 WARNING: o arquivo de imagem \u0027geral_boleto_32.jpg\u0027 nao existe em vbmp\\. O VFP9 aceita Picture inexistente SEM erro nenhum - o controle simplesmente nao desenha icone, e nada aparece no log. O substituto nao foi resolvido: o dump do legado nao tem o controle correspondente (por Caption nem por Name) e nao existe arquivo com a mesma acao em outro tamanho. Conferir a mao em tasks\\\u003ctask\u003e\\*_form_codigo_fonte.txt e TRANSCREVER o Picture do controle equivalente - NAO escolher icone por semelhanca semantica: no FormBAL o botao \u0027Fecha\u0027 usa cadastro_salvar_60.jpg (fechar a contagem = gravar). Origem: Erro162 (2026-09-17)."
+                      },
+                      {
+                          "Tipo":  "WARN-204-PICTURE-ARQUIVO-INEXISTENTE",
+                          "Linha":  2833,
+                          "Original":  ".Picture = \"geral_coleta_20.jpg\"",
+                          "Corrigido":  "(nao mutado - substituto desconhecido)",
+                          "Descricao":  "Pattern #204 WARNING: o arquivo de imagem \u0027geral_coleta_20.jpg\u0027 nao existe em vbmp\\. O VFP9 aceita Picture inexistente SEM erro nenhum - o controle simplesmente nao desenha icone, e nada aparece no log. O substituto nao foi resolvido: o dump do legado nao tem o controle correspondente (por Caption nem por Name) e nao existe arquivo com a mesma acao em outro tamanho. Conferir a mao em tasks\\\u003ctask\u003e\\*_form_codigo_fonte.txt e TRANSCREVER o Picture do controle equivalente - NAO escolher icone por semelhanca semantica: no FormBAL o botao \u0027Fecha\u0027 usa cadastro_salvar_60.jpg (fechar a contagem = gravar). Origem: Erro162 (2026-09-17)."
+                      },
+                      {
+                          "Tipo":  "WARN-204-PICTURE-ARQUIVO-INEXISTENTE",
+                          "Linha":  3715,
+                          "Original":  ".Picture = \"geral_coleta_20.jpg\"",
+                          "Corrigido":  "(nao mutado - substituto desconhecido)",
+                          "Descricao":  "Pattern #204 WARNING: o arquivo de imagem \u0027geral_coleta_20.jpg\u0027 nao existe em vbmp\\. O VFP9 aceita Picture inexistente SEM erro nenhum - o controle simplesmente nao desenha icone, e nada aparece no log. O substituto nao foi resolvido: o dump do legado nao tem o controle correspondente (por Caption nem por Name) e nao existe arquivo com a mesma acao em outro tamanho. Conferir a mao em tasks\\\u003ctask\u003e\\*_form_codigo_fonte.txt e TRANSCREVER o Picture do controle equivalente - NAO escolher icone por semelhanca semantica: no FormBAL o botao \u0027Fecha\u0027 usa cadastro_salvar_60.jpg (fechar a contagem = gravar). Origem: Erro162 (2026-09-17)."
+                      }
+                  ],
+    "totalCorrecoes":  11
+}

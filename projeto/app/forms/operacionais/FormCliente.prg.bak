@@ -471,7 +471,7 @@ DEFINE CLASS FormCliente AS FormBase
 
         *-- Array: nome_prop|caption|imagem|handler
         loc_aBotoes = "cmd_4c_Incluir|Incluir|cadastro_inserir_26.jpg|BtnIncluirClick;" + ;
-                      "cmd_4c_Visualizar|Visualizar|cadastro_visualizar_26.jpg|BtnVisualizarClick;" + ;
+                      "cmd_4c_Visualizar|Visualizar|cadastro_vizualizar_60.jpg|BtnVisualizarClick;" + ;
                       "cmd_4c_Alterar|Alterar|cadastro_alterar_26.jpg|BtnAlterarClick;" + ;
                       "cmd_4c_Excluir|Excluir|cadastro_excluir_26.jpg|BtnExcluirClick;" + ;
                       "cmd_4c_Buscar|Buscar|cadastro_procurar_26.jpg|BtnBuscarClick;" + ;
@@ -2193,6 +2193,62 @@ DEFINE CLASS FormCliente AS FormBase
     ENDPROC
 
     *============================================================
+    * PreencherDescricaoGrupo - Resolve a descricao do Grupo de Contas
+    * a partir do codigo e joga em txt_4c_FiltroGrupoDesc.
+    *
+    * O par codigo+descricao do legado (classresp.vcx: getDacb.Value =
+    * CrLocal.Descrs) preenche a descricao SEMPRE que o codigo eh
+    * resolvido - nao so quando o usuario escolhe no picker. Sem isto o
+    * grupo padrao (crSigCdPam.GrPadClis), carregado na abertura, aparece
+    * so como codigo e a caixa da descricao fica vazia (Erro162).
+    *
+    * Preserva alias corrente e RECNO de crSigCdGcr: o LOCATE mexe no
+    * ponteiro e o cursor eh global (mIniConta), usado por outros pontos.
+    *============================================================
+    PROCEDURE PreencherDescricaoGrupo(par_cGrupo)
+        LOCAL loc_cAliasAnt, loc_nRecAnt, loc_cDesc, loc_oFiltros, loc_oErr
+        LOCAL loc_lProsseguir
+        loc_lProsseguir = .T.
+        TRY
+            *-- Regra #1: nada de RETURN dentro do TRY (nem bare) - flag + envelope
+            IF !PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) OR ;
+               !PEMSTATUS(THIS.cnt_4c_ViewLista, "cnt_4c_ListaFiltros", 5) OR ;
+               !PEMSTATUS(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros, "txt_4c_FiltroGrupoDesc", 5)
+                loc_lProsseguir = .F.
+            ENDIF
+
+            IF loc_lProsseguir
+                loc_oFiltros = THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros
+                loc_cDesc    = ""
+
+                IF !EMPTY(ALLTRIM(NVL(par_cGrupo, ""))) AND USED("crSigCdGcr")
+                    loc_cAliasAnt = ALIAS()
+                    loc_nRecAnt   = 0
+                    SELECT crSigCdGcr
+                    IF RECCOUNT("crSigCdGcr") > 0
+                        loc_nRecAnt = RECNO("crSigCdGcr")
+                        LOCATE FOR ALLTRIM(Codigos) == ALLTRIM(par_cGrupo)
+                        IF !EOF("crSigCdGcr")
+                            loc_cDesc = ALLTRIM(NVL(crSigCdGcr.Descrs, ""))
+                        ENDIF
+                        IF loc_nRecAnt > 0 AND loc_nRecAnt <= RECCOUNT("crSigCdGcr")
+                            GO loc_nRecAnt IN crSigCdGcr
+                        ENDIF
+                    ENDIF
+                    IF !EMPTY(loc_cAliasAnt) AND USED(loc_cAliasAnt)
+                        SELECT (loc_cAliasAnt)
+                    ENDIF
+                ENDIF
+
+                loc_oFiltros.txt_4c_FiltroGrupoDesc.Value = loc_cDesc
+            ENDIF
+        CATCH TO loc_oErr
+            MsgErro("Erro ao carregar descri" + CHR(231) + CHR(227) + "o do Grupo:" + CHR(13) + ;
+                loc_oErr.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *============================================================
     * RefreshGridClientes - Popula crSigCdCli via poDataMgr.Requery
     * e bind grid columns. Chamado toda vez que entra em Lista.
     *============================================================
@@ -2213,6 +2269,11 @@ DEFINE CLASS FormCliente AS FormBase
                     THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value = loc_cGrupo
                     THIS.this_cGrupo = PADR(loc_cGrupo, 10)
                 ENDIF
+
+                *-- Descricao acompanha o codigo em TODO caminho, nao so no picker: assim
+                *-- os dois campos nunca discordam, inclusive quando o codigo veio do
+                *-- grupo padrao (GrPadClis) ou de par_cGrupo (Erro162).
+                THIS.PreencherDescricaoGrupo(loc_cGrupo)
 
                 IF !ISNULL(THIS.poDataMgr) AND VARTYPE(THIS.poDataMgr) = "O" AND !EMPTY(loc_cGrupo)
                     THIS.poDataMgr.ReQuery("crSigCdCli", "Grupos", PADR(loc_cGrupo, 10))

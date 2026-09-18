@@ -941,8 +941,8 @@ DEFINE CLASS Formsigprnfe AS FormBase
             .Width           = 75
             .Height          = 75
             .Caption         = "\<Selecionar"
-            .Picture         = gc_4c_CaminhoIcones + "geral_buscar_60.jpg"
-            .DisabledPicture = gc_4c_CaminhoIcones + "geral_buscar_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_procura_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "geral_procura_60.jpg"
             .PicturePosition = 7
             .FontName        = "Tahoma"
             .FontBold        = .T.
@@ -965,8 +965,8 @@ DEFINE CLASS Formsigprnfe AS FormBase
             .Width           = 75
             .Height          = 37
             .Caption         = "Limpar"
-            .Picture         = gc_4c_CaminhoIcones + "geral_apagar_26.jpg"
-            .DisabledPicture = gc_4c_CaminhoIcones + "geral_apagar_26.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_limpa_grade_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "geral_limpa_grade_60.jpg"
             .PicturePosition = 13
             .FontName        = "Tahoma"
             .FontBold        = .T.
@@ -1083,8 +1083,8 @@ DEFINE CLASS Formsigprnfe AS FormBase
             .Width           = 75
             .Height          = 55
             .Caption         = "Documentos"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_consultar_26.jpg"
-            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_consultar_26.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_documento_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "geral_documento_60.jpg"
             .PicturePosition = 13
             .FontName        = "Tahoma"
             .FontBold        = .T.

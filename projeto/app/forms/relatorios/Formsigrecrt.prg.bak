@@ -84,7 +84,7 @@ DEFINE CLASS Formsigrecrt AS FormBase
     PROTECTED PROCEDURE ConfigurarPageFrame()
         THIS.Caption     = "Relat" + CHR(243) + "rio de Cheques Da Carteira"
         THIS.Picture     = gc_4c_CaminhoIcones + "new_background.jpg"
-        THIS.Icon        = gc_4c_CaminhoIcones + "icon.ico"
+        THIS.Icon        = gc_4c_CaminhoIcones + "4c.ico"
         THIS.AutoCenter  = .T.
         THIS.BorderStyle = 2
         THIS.WindowType  = 1

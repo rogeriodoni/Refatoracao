@@ -247,7 +247,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Caption   = "Visualizar"
-            .Picture   = gc_4c_CaminhoIcones + "cadastro_consultar_60.jpg"
+            .Picture   = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
             .ForeColor = RGB(90, 90, 90)
             .BackColor = RGB(255, 255, 255)
             .Themes          = .F.

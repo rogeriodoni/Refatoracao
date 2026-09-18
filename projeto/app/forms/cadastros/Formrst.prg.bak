@@ -514,7 +514,7 @@ DEFINE CLASS Formrst AS FormBase
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .F.
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .Visible   = .T.
         ENDWITH
 

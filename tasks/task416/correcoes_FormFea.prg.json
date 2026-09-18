@@ -1,8 +1,21 @@
 ﻿{
-    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormFea.prg",
-    "timestamp":  "2026-08-02T06:32:08",
+    "arquivo":  "C:\\Users\\roger\\AppData\\Local\\Temp\\claude\\C--4c\\e1da9d21-0caa-4631-b2fa-becc31e17b54\\scratchpad\\t204\\forms\\cadastros\\FormFea.prg",
+    "timestamp":  "2026-09-17T12:21:50",
     "correcoes":  [
-
+                      {
+                          "Tipo":  "BOM_UTF8",
+                          "Linha":  1,
+                          "Original":  "(BOM UTF-8: EF BB BF)",
+                          "Corrigido":  "(removido)",
+                          "Descricao":  "BOM UTF-8 removido - VFP9 nao suporta"
+                      },
+                      {
+                          "Tipo":  "PICTURE_ARQUIVO_INEXISTENTE",
+                          "Linha":  4624,
+                          "Original":  ".Picture = \"geral_processar_26.jpg\"",
+                          "Corrigido":  ".Picture = \"geral_cambio_32.jpg\" (legado/nome)",
+                          "Descricao":  "Pattern #204: \u0027geral_processar_26.jpg\u0027 nao existe em vbmp\\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real diverge: o inventario tem \u0027cadastro_vizualizar_60.jpg\u0027 (com Z, typo do proprio arquivo) e so nos tamanhos que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto resolvido por: legado/nome. Origem: Erro162 (2026-09-17, FormCliente \u0027Cadastro de Clientes\u0027; o sweep pegou 54 sites em 20 forms)."
+                      }
                   ],
-    "totalCorrecoes":  0
+    "totalCorrecoes":  2
 }

@@ -1,0 +1,63 @@
+﻿{
+    "arquivo":  "C:\\Users\\roger\\AppData\\Local\\Temp\\claude\\C--4c\\e1da9d21-0caa-4631-b2fa-becc31e17b54\\scratchpad\\t204\\forms\\operacionais\\Formsigprnfe.prg",
+    "timestamp":  "2026-09-17T12:28:10",
+    "correcoes":  [
+                      {
+                          "Tipo":  "BOM_UTF8",
+                          "Linha":  1,
+                          "Original":  "(BOM UTF-8: EF BB BF)",
+                          "Corrigido":  "(removido)",
+                          "Descricao":  "BOM UTF-8 removido - VFP9 nao suporta"
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "PICTURE_ARQUIVO_INEXISTENTE",
+                          "Linha":  944,
+                          "Original":  ".Picture = \"geral_buscar_60.jpg\"",
+                          "Corrigido":  ".Picture = \"geral_procura_60.jpg\" (legado/caption)",
+                          "Descricao":  "Pattern #204: \u0027geral_buscar_60.jpg\u0027 nao existe em vbmp\\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real diverge: o inventario tem \u0027cadastro_vizualizar_60.jpg\u0027 (com Z, typo do proprio arquivo) e so nos tamanhos que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto resolvido por: legado/caption. Origem: Erro162 (2026-09-17, FormCliente \u0027Cadastro de Clientes\u0027; o sweep pegou 54 sites em 20 forms)."
+                      },
+                      {
+                          "Tipo":  "PICTURE_ARQUIVO_INEXISTENTE",
+                          "Linha":  945,
+                          "Original":  ".Picture = \"geral_buscar_60.jpg\"",
+                          "Corrigido":  ".Picture = \"geral_procura_60.jpg\" (legado/caption)",
+                          "Descricao":  "Pattern #204: \u0027geral_buscar_60.jpg\u0027 nao existe em vbmp\\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real diverge: o inventario tem \u0027cadastro_vizualizar_60.jpg\u0027 (com Z, typo do proprio arquivo) e so nos tamanhos que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto resolvido por: legado/caption. Origem: Erro162 (2026-09-17, FormCliente \u0027Cadastro de Clientes\u0027; o sweep pegou 54 sites em 20 forms)."
+                      },
+                      {
+                          "Tipo":  "WARN-204-PICTURE-ARQUIVO-INEXISTENTE",
+                          "Linha":  968,
+                          "Original":  ".Picture = \"geral_apagar_26.jpg\"",
+                          "Corrigido":  "(nao mutado - substituto desconhecido)",
+                          "Descricao":  "Pattern #204 WARNING: o arquivo de imagem \u0027geral_apagar_26.jpg\u0027 nao existe em vbmp\\. O VFP9 aceita Picture inexistente SEM erro nenhum - o controle simplesmente nao desenha icone, e nada aparece no log. O substituto nao foi resolvido: o dump do legado nao tem o controle correspondente (por Caption nem por Name) e nao existe arquivo com a mesma acao em outro tamanho. Conferir a mao em tasks\\\u003ctask\u003e\\*_form_codigo_fonte.txt e TRANSCREVER o Picture do controle equivalente - NAO escolher icone por semelhanca semantica: no FormBAL o botao \u0027Fecha\u0027 usa cadastro_salvar_60.jpg (fechar a contagem = gravar). Origem: Erro162 (2026-09-17)."
+                      },
+                      {
+                          "Tipo":  "WARN-204-PICTURE-ARQUIVO-INEXISTENTE",
+                          "Linha":  969,
+                          "Original":  ".Picture = \"geral_apagar_26.jpg\"",
+                          "Corrigido":  "(nao mutado - substituto desconhecido)",
+                          "Descricao":  "Pattern #204 WARNING: o arquivo de imagem \u0027geral_apagar_26.jpg\u0027 nao existe em vbmp\\. O VFP9 aceita Picture inexistente SEM erro nenhum - o controle simplesmente nao desenha icone, e nada aparece no log. O substituto nao foi resolvido: o dump do legado nao tem o controle correspondente (por Caption nem por Name) e nao existe arquivo com a mesma acao em outro tamanho. Conferir a mao em tasks\\\u003ctask\u003e\\*_form_codigo_fonte.txt e TRANSCREVER o Picture do controle equivalente - NAO escolher icone por semelhanca semantica: no FormBAL o botao \u0027Fecha\u0027 usa cadastro_salvar_60.jpg (fechar a contagem = gravar). Origem: Erro162 (2026-09-17)."
+                      },
+                      {
+                          "Tipo":  "WARN-204-PICTURE-ARQUIVO-INEXISTENTE",
+                          "Linha":  1086,
+                          "Original":  ".Picture = \"cadastro_consultar_26.jpg\"",
+                          "Corrigido":  "(nao mutado - substituto desconhecido)",
+                          "Descricao":  "Pattern #204 WARNING: o arquivo de imagem \u0027cadastro_consultar_26.jpg\u0027 nao existe em vbmp\\. O VFP9 aceita Picture inexistente SEM erro nenhum - o controle simplesmente nao desenha icone, e nada aparece no log. O substituto nao foi resolvido: o dump do legado nao tem o controle correspondente (por Caption nem por Name) e nao existe arquivo com a mesma acao em outro tamanho. Conferir a mao em tasks\\\u003ctask\u003e\\*_form_codigo_fonte.txt e TRANSCREVER o Picture do controle equivalente - NAO escolher icone por semelhanca semantica: no FormBAL o botao \u0027Fecha\u0027 usa cadastro_salvar_60.jpg (fechar a contagem = gravar). Origem: Erro162 (2026-09-17)."
+                      },
+                      {
+                          "Tipo":  "WARN-204-PICTURE-ARQUIVO-INEXISTENTE",
+                          "Linha":  1087,
+                          "Original":  ".Picture = \"cadastro_consultar_26.jpg\"",
+                          "Corrigido":  "(nao mutado - substituto desconhecido)",
+                          "Descricao":  "Pattern #204 WARNING: o arquivo de imagem \u0027cadastro_consultar_26.jpg\u0027 nao existe em vbmp\\. O VFP9 aceita Picture inexistente SEM erro nenhum - o controle simplesmente nao desenha icone, e nada aparece no log. O substituto nao foi resolvido: o dump do legado nao tem o controle correspondente (por Caption nem por Name) e nao existe arquivo com a mesma acao em outro tamanho. Conferir a mao em tasks\\\u003ctask\u003e\\*_form_codigo_fonte.txt e TRANSCREVER o Picture do controle equivalente - NAO escolher icone por semelhanca semantica: no FormBAL o botao \u0027Fecha\u0027 usa cadastro_salvar_60.jpg (fechar a contagem = gravar). Origem: Erro162 (2026-09-17)."
+                      }
+                  ],
+    "totalCorrecoes":  8
+}

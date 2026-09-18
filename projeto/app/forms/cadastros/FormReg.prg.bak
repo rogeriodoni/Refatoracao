@@ -502,7 +502,7 @@ DEFINE CLASS FormReg AS FormBase
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .Visible   = .T.
         ENDWITH
 
@@ -529,13 +529,13 @@ DEFINE CLASS FormReg AS FormBase
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
             .Top       = 115
             .Left      = 210
-            .Width     = 60
+            .Width     = 63    && texto mede 53px
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .Visible   = .T.
         ENDWITH
 

@@ -2819,7 +2819,7 @@ DEFINE CLASS FormFUN AS FormBase
         loc_oCnt.AddObject("cmd_4c_Retornar", "CommandButton")
         WITH loc_oCnt.cmd_4c_Retornar
             .Caption         = "Retornar"
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_26.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
             .Left            = 415

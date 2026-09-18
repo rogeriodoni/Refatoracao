@@ -1905,6 +1905,62 @@ FUNCTION fGerUniqueKey(par_cChave)
 ENDFUNC
 
 *==============================================================================
+* FUNCTION fCanUniqueKey
+* CANCELA (devolve) um numero sequencial reservado por fGerUniqueKey.
+* Par: par_nCodigo - numero que havia sido reservado
+*      par_cChave  - o MESMO prefixo usado na reserva
+* Ret: .T. se devolveu o numero, .F. se nao devolveu (ver abaixo)
+*
+* O legado chama esta funcao quando desiste da inclusao depois de ja ter
+* reservado o codigo - no clsconta, ao detectar CPF/CNPJ duplicado:
+*
+*     lnCodigo = crSigCdCli.NClis
+*     If (ThisForm.pcEscolha = 'INSERIR') And (crSigCdGcr.TpCods = 1)
+*         If (crSigCdGcr.TpEmps = 1)
+*             =fCanUniqueKey(lnCodigo, Alltrim(crSigCdGcr.Codigos) + _Empr)
+*         Else
+*             =fCanUniqueKey(lnCodigo, Alltrim(crSigCdGcr.Codigos))
+*
+* ATENCAO - O FONTE LEGADO DESTA FUNCAO NAO EXISTE NO ACERVO. Nao esta em
+* Framework\*.PRG, nem nos VCX (so as CHAMADAS aparecem no p-code), nem em
+* dump de task nenhum. Esta implementacao eh a INVERSA EXATA do contador que
+* o proprio fGerUniqueKey mantem (array PUBLIC ga_UniqueKeys_4c) e nada mais.
+*
+* Por isso ela eh CONSERVADORA: so devolve o numero quando ele eh o ULTIMO
+* emitido para aquela chave. Se outro registro ja consumiu um numero depois,
+* decrementar reemitiria um valor em uso - entao nesse caso nao faz nada e
+* devolve .F. (o numero fica "queimado", que eh o comportamento seguro).
+*
+* Sem esta funcao o VFP procura 'fcanuniquekey.prg' no PATH e estoura
+* "File 'fcanuniquekey.prg' does not exist" em RUNTIME (regra #13) - o
+* FormCliente a chama em 2 sites, no caminho de CPF/CNPJ duplicado.
+*
+* Origem: Erro162_Aba1 (2026-09-17).
+*==============================================================================
+FUNCTION fCanUniqueKey(par_nCodigo, par_cChave)
+    LOCAL loc_cChave, loc_nCodigo, loc_i, loc_lDevolveu
+    loc_lDevolveu = .F.
+    loc_cChave    = UPPER(ALLTRIM(NVL(par_cChave, "")))
+    loc_nCodigo   = IIF(VARTYPE(par_nCodigo) = "N", par_nCodigo, 0)
+
+    IF !EMPTY(loc_cChave) AND loc_nCodigo > 0 AND TYPE('gnUniqueKeyLen_4c') = 'N'
+        FOR loc_i = 1 TO gnUniqueKeyLen_4c
+            IF UPPER(ALLTRIM(ga_UniqueKeys_4c[loc_i, 1])) = loc_cChave
+                *-- so devolve se for o ultimo emitido; senao o numero ja foi
+                *-- ultrapassado e reemiti-lo geraria duplicata
+                IF ga_UniqueKeys_4c[loc_i, 2] = loc_nCodigo
+                    ga_UniqueKeys_4c[loc_i, 2] = loc_nCodigo - 1
+                    loc_lDevolveu = .T.
+                ENDIF
+                EXIT
+            ENDIF
+        ENDFOR
+    ENDIF
+
+    RETURN loc_lDevolveu
+ENDFUNC
+
+*==============================================================================
 * FUNCTION fGerMascara
 * Formata numero sequencial como mascara de 10 digitos com zeros a esquerda
 * Par: par_nNum - numero inteiro gerado por fGerUniqueKey

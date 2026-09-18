@@ -658,7 +658,7 @@ DEFINE CLASS FormROM AS FormBase
         loc_oPagina.AddObject("cmd_4c_Video", "CommandButton")
         WITH loc_oPagina.cmd_4c_Video
             .Caption         = "Video"
-            .Picture         = gc_4c_CaminhoIcones + "relatorio_visualizar_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
             .PicturePosition = 13
             .Top             = 40
             .Left            = 566
@@ -684,7 +684,7 @@ DEFINE CLASS FormROM AS FormBase
         loc_oPagina.AddObject("cmd_4c_Imprimir", "CommandButton")
         WITH loc_oPagina.cmd_4c_Imprimir
             .Caption         = "Impress" + CHR(227) + "o"
-            .Picture         = gc_4c_CaminhoIcones + "relatorio_imprimir_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
             .PicturePosition = 13
             .Top             = 40
             .Left            = 641

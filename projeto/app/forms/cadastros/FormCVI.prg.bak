@@ -383,7 +383,7 @@ DEFINE CLASS FormCVI AS FormBase
         loc_oPagina.AddObject("cmd_4c_Copia", "CommandButton")
         WITH loc_oPagina.cmd_4c_Copia
             .Caption         = "\<C" + CHR(243) + "pia"
-            .Picture         = gc_4c_CaminhoIcones + "geral_copiar_32.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "b_paper4.bmp"
             .PicturePosition = 1
             .Top             = 92 + 29
             .Left            = 347

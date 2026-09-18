@@ -209,7 +209,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg1.AddObject("cmd_4c_Leitura", "CommandButton")
         WITH loc_oPg1.cmd_4c_Leitura
             .Caption         = "Leitura"
-            .Picture         = gc_4c_CaminhoIcones + "operacional_leitura_26.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_pendencia_60.jpg"
             .PicturePosition = 13
             .Top             = 112
             .Left            = 11
@@ -234,7 +234,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg1.AddObject("cmd_4c_Fecha", "CommandButton")
         WITH loc_oPg1.cmd_4c_Fecha
             .Caption         = "Fecha"
-            .Picture         = gc_4c_CaminhoIcones + "operacional_fechar_26.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
             .PicturePosition = 13
             .Top             = 112
             .Left            = 131
@@ -284,7 +284,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg1.AddObject("cmd_4c_Command1", "CommandButton")
         WITH loc_oPg1.cmd_4c_Command1
             .Caption         = "E" + CHR(120) + "porta"
-            .Picture         = gc_4c_CaminhoIcones + "geral_excel_26.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "exportar_72.png"
             .PicturePosition = 13
             .Top             = 112
             .Left            = 371
@@ -309,7 +309,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg1.AddObject("cmd_4c_Inventario", "CommandButton")
         WITH loc_oPg1.cmd_4c_Inventario
             .Caption         = "Etiqueta"
-            .Picture         = gc_4c_CaminhoIcones + "operacional_etiqueta_26.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_etiqueta_60.jpg"
             .PicturePosition = 13
             .Top             = 112
             .Left            = 490

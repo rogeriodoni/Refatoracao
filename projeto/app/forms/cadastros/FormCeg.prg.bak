@@ -662,14 +662,14 @@ DEFINE CLASS FormCeg AS FormBase
             .Caption   = "Tipo :"
             .Top       = 338
             .Left      = 148
-            .Width     = 35
+            .Width     = 37    && texto mede 27px
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .Visible   = .T.
         ENDWITH
 

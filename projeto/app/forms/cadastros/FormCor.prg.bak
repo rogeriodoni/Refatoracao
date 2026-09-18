@@ -743,7 +743,7 @@ DEFINE CLASS FormCor AS FormBase
             .Caption   = "Adicionar na Entrega :"
             .Top       = 322
             .Left      = 274
-            .Width     = 113
+            .Width     = 117    && texto mede 107px
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -751,7 +751,7 @@ DEFINE CLASS FormCor AS FormBase
             .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .F.
-            .Alignment = 1
+            .Alignment = 0    && legado: say com AutoSize=.T. e Alignment=0 (esquerda)
             .Visible   = .T.
         ENDWITH
 

@@ -554,7 +554,9 @@ DEFINE CLASS Formcfi AS FormBase
             .Width     = 17
             .Height    = 23
             .MaxLength = 1
-            .Format    = "K!"
+            .Format    = "KM"
+            .InputMask = ",T,S,I,N,F"
+            .ToolTipText = "T - Tribut" + CHR(225) + "vel / S - Servi" + CHR(231) + "os / I - Isento - / N - N" + CHR(227) + "o Tribut" + CHR(225) + "vel / F - Substitui" + CHR(231) + CHR(227) + "o Tribut" + CHR(225) + "ria"
             .FontName  = "Verdana"
             .FontSize  = 8
             .Value     = ""
@@ -576,6 +578,7 @@ DEFINE CLASS Formcfi AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPagina.lbl_4c_Label4
             .Caption   = "(T / S / I / N / F)"
+            .ToolTipText = "T - Tribut" + CHR(225) + "vel / S - Servi" + CHR(231) + "os / I - Isento - / N - N" + CHR(227) + "o Tribut" + CHR(225) + "vel / F - Substitui" + CHR(231) + CHR(227) + "o Tribut" + CHR(225) + "ria"
             .Top       = 248
             .Left      = 333
             .FontName  = "Verdana"

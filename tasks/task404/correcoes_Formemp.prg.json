@@ -1,14 +1,56 @@
 ﻿{
-    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formemp.prg",
-    "timestamp":  "2026-08-01T14:53:30",
+    "arquivo":  "C:\\Users\\roger\\AppData\\Local\\Temp\\claude\\C--4c\\e1da9d21-0caa-4631-b2fa-becc31e17b54\\scratchpad\\t203\\forms\\cadastros\\Formemp.prg",
+    "timestamp":  "2026-09-17T10:24:10",
     "correcoes":  [
                       {
-                          "Tipo":  "ELSEIF",
-                          "Linha":  695,
-                          "Original":  "ELSEIF !THIS.this_oBusinessObject.Buscar(\"\")",
-                          "Corrigido":  "ELSE + IF !THIS.this_oBusinessObject.Buscar(\"\")",
-                          "Descricao":  "VFP9 nao suporta ELSEIF - convertido para ELSE + IF + ENDIF extra"
+                          "Tipo":  "FORMAT_MULTIPLE_CHOICE_PERDIDO",
+                          "Linha":  3695,
+                          "Original":  "txt_4c_Estoque: .Format = (ausente), sem .InputMask",
+                          "Corrigido":  ".Format = \"M\" + .InputMask = \"S,N\"",
+                          "Descricao":  "Pattern #203: Format contendo M eh o modo \u0027multiple choice\u0027 do VFP9 - o InputMask deixa de ser mascara de digitacao e passa a ser a LISTA de valores validos separados por virgula; o controle recusa qualquer outro valor. O migrador trocou o M por \u0027!\u0027 (que so forca maiuscula) ou omitiu o Format, e DESCARTOU o InputMask - o .prg compila limpo e o campo passa a aceitar QUALQUER caractere (no Formcfi o campo \u0027Tipo\u0027, rotulado \u0027(T / S / I / N / F)\u0027, aceitava \u0027A\u0027). O par foi TRANSCRITO do dump do legado, nunca inventado: a lista eh regra de negocio (\u0027A,B\u0027 e \u00270,1\u0027 aparecem tanto quanto \u0027S,N\u0027). Atencao: lista SEM item vazio coage o branco para o 1o item - eh o comportamento do legado. Origem: Erro161 (2026-09-17, Formcfi; o sweep pegou 8 sites em 2 forms)."
+                      },
+                      {
+                          "Tipo":  "FORMAT_MULTIPLE_CHOICE_PERDIDO",
+                          "Linha":  3733,
+                          "Original":  "txt_4c_Difpes: .Format = (ausente), sem .InputMask",
+                          "Corrigido":  ".Format = \"M\" + .InputMask = \"S,N, \"",
+                          "Descricao":  "Pattern #203: Format contendo M eh o modo \u0027multiple choice\u0027 do VFP9 - o InputMask deixa de ser mascara de digitacao e passa a ser a LISTA de valores validos separados por virgula; o controle recusa qualquer outro valor. O migrador trocou o M por \u0027!\u0027 (que so forca maiuscula) ou omitiu o Format, e DESCARTOU o InputMask - o .prg compila limpo e o campo passa a aceitar QUALQUER caractere (no Formcfi o campo \u0027Tipo\u0027, rotulado \u0027(T / S / I / N / F)\u0027, aceitava \u0027A\u0027). O par foi TRANSCRITO do dump do legado, nunca inventado: a lista eh regra de negocio (\u0027A,B\u0027 e \u00270,1\u0027 aparecem tanto quanto \u0027S,N\u0027). Atencao: lista SEM item vazio coage o branco para o 1o item - eh o comportamento do legado. Origem: Erro161 (2026-09-17, Formcfi; o sweep pegou 8 sites em 2 forms)."
+                      },
+                      {
+                          "Tipo":  "FORMAT_MULTIPLE_CHOICE_PERDIDO",
+                          "Linha":  5374,
+                          "Original":  "txt_4c__indicas: .Format = (ausente), sem .InputMask",
+                          "Corrigido":  ".Format = \"M\" + .InputMask = \"0,1\"",
+                          "Descricao":  "Pattern #203: Format contendo M eh o modo \u0027multiple choice\u0027 do VFP9 - o InputMask deixa de ser mascara de digitacao e passa a ser a LISTA de valores validos separados por virgula; o controle recusa qualquer outro valor. O migrador trocou o M por \u0027!\u0027 (que so forca maiuscula) ou omitiu o Format, e DESCARTOU o InputMask - o .prg compila limpo e o campo passa a aceitar QUALQUER caractere (no Formcfi o campo \u0027Tipo\u0027, rotulado \u0027(T / S / I / N / F)\u0027, aceitava \u0027A\u0027). O par foi TRANSCRITO do dump do legado, nunca inventado: a lista eh regra de negocio (\u0027A,B\u0027 e \u00270,1\u0027 aparecem tanto quanto \u0027S,N\u0027). Atencao: lista SEM item vazio coage o branco para o 1o item - eh o comportamento do legado. Origem: Erro161 (2026-09-17, Formcfi; o sweep pegou 8 sites em 2 forms)."
+                      },
+                      {
+                          "Tipo":  "FORMAT_MULTIPLE_CHOICE_PERDIDO",
+                          "Linha":  3544,
+                          "Original":  "txt_4c_Tipoof: .Format = (ausente), sem .InputMask",
+                          "Corrigido":  ".Format = \"M\" + .InputMask = \"A,B\"",
+                          "Descricao":  "Pattern #203: Format contendo M eh o modo \u0027multiple choice\u0027 do VFP9 - o InputMask deixa de ser mascara de digitacao e passa a ser a LISTA de valores validos separados por virgula; o controle recusa qualquer outro valor. O migrador trocou o M por \u0027!\u0027 (que so forca maiuscula) ou omitiu o Format, e DESCARTOU o InputMask - o .prg compila limpo e o campo passa a aceitar QUALQUER caractere (no Formcfi o campo \u0027Tipo\u0027, rotulado \u0027(T / S / I / N / F)\u0027, aceitava \u0027A\u0027). O par foi TRANSCRITO do dump do legado, nunca inventado: a lista eh regra de negocio (\u0027A,B\u0027 e \u00270,1\u0027 aparecem tanto quanto \u0027S,N\u0027). Atencao: lista SEM item vazio coage o branco para o 1o item - eh o comportamento do legado. Origem: Erro161 (2026-09-17, Formcfi; o sweep pegou 8 sites em 2 forms)."
+                      },
+                      {
+                          "Tipo":  "FORMAT_MULTIPLE_CHOICE_PERDIDO",
+                          "Linha":  3428,
+                          "Original":  "txt_4c_Impc: .Format = (ausente), sem .InputMask",
+                          "Corrigido":  ".Format = \"M\" + .InputMask = \"S,N\"",
+                          "Descricao":  "Pattern #203: Format contendo M eh o modo \u0027multiple choice\u0027 do VFP9 - o InputMask deixa de ser mascara de digitacao e passa a ser a LISTA de valores validos separados por virgula; o controle recusa qualquer outro valor. O migrador trocou o M por \u0027!\u0027 (que so forca maiuscula) ou omitiu o Format, e DESCARTOU o InputMask - o .prg compila limpo e o campo passa a aceitar QUALQUER caractere (no Formcfi o campo \u0027Tipo\u0027, rotulado \u0027(T / S / I / N / F)\u0027, aceitava \u0027A\u0027). O par foi TRANSCRITO do dump do legado, nunca inventado: a lista eh regra de negocio (\u0027A,B\u0027 e \u00270,1\u0027 aparecem tanto quanto \u0027S,N\u0027). Atencao: lista SEM item vazio coage o branco para o 1o item - eh o comportamento do legado. Origem: Erro161 (2026-09-17, Formcfi; o sweep pegou 8 sites em 2 forms)."
+                      },
+                      {
+                          "Tipo":  "FORMAT_MULTIPLE_CHOICE_PERDIDO",
+                          "Linha":  3466,
+                          "Original":  "txt_4c_Caraut: .Format = (ausente), sem .InputMask",
+                          "Corrigido":  ".Format = \"M\" + .InputMask = \"S,N\"",
+                          "Descricao":  "Pattern #203: Format contendo M eh o modo \u0027multiple choice\u0027 do VFP9 - o InputMask deixa de ser mascara de digitacao e passa a ser a LISTA de valores validos separados por virgula; o controle recusa qualquer outro valor. O migrador trocou o M por \u0027!\u0027 (que so forca maiuscula) ou omitiu o Format, e DESCARTOU o InputMask - o .prg compila limpo e o campo passa a aceitar QUALQUER caractere (no Formcfi o campo \u0027Tipo\u0027, rotulado \u0027(T / S / I / N / F)\u0027, aceitava \u0027A\u0027). O par foi TRANSCRITO do dump do legado, nunca inventado: a lista eh regra de negocio (\u0027A,B\u0027 e \u00270,1\u0027 aparecem tanto quanto \u0027S,N\u0027). Atencao: lista SEM item vazio coage o branco para o 1o item - eh o comportamento do legado. Origem: Erro161 (2026-09-17, Formcfi; o sweep pegou 8 sites em 2 forms)."
+                      },
+                      {
+                          "Tipo":  "FORMAT_MULTIPLE_CHOICE_PERDIDO",
+                          "Linha":  3505,
+                          "Original":  "txt_4c_Etiqprod: .Format = (ausente), sem .InputMask",
+                          "Corrigido":  ".Format = \"M\" + .InputMask = \"S,N\"",
+                          "Descricao":  "Pattern #203: Format contendo M eh o modo \u0027multiple choice\u0027 do VFP9 - o InputMask deixa de ser mascara de digitacao e passa a ser a LISTA de valores validos separados por virgula; o controle recusa qualquer outro valor. O migrador trocou o M por \u0027!\u0027 (que so forca maiuscula) ou omitiu o Format, e DESCARTOU o InputMask - o .prg compila limpo e o campo passa a aceitar QUALQUER caractere (no Formcfi o campo \u0027Tipo\u0027, rotulado \u0027(T / S / I / N / F)\u0027, aceitava \u0027A\u0027). O par foi TRANSCRITO do dump do legado, nunca inventado: a lista eh regra de negocio (\u0027A,B\u0027 e \u00270,1\u0027 aparecem tanto quanto \u0027S,N\u0027). Atencao: lista SEM item vazio coage o branco para o 1o item - eh o comportamento do legado. Origem: Erro161 (2026-09-17, Formcfi; o sweep pegou 8 sites em 2 forms)."
                       }
                   ],
-    "totalCorrecoes":  1
+    "totalCorrecoes":  7
 }

@@ -3426,6 +3426,8 @@ DEFINE CLASS Formemp AS FormBase
             .Width     = 15
             .Height    = 24
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "S,N"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -3464,6 +3466,8 @@ DEFINE CLASS Formemp AS FormBase
             .Width     = 15
             .Height    = 24
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "S,N"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -3503,6 +3507,8 @@ DEFINE CLASS Formemp AS FormBase
             .Width     = 15
             .Height    = 24
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "S,N"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -3542,6 +3548,8 @@ DEFINE CLASS Formemp AS FormBase
             .Width     = 15
             .Height    = 24
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "A,B"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -3693,6 +3701,8 @@ DEFINE CLASS Formemp AS FormBase
             .Width     = 15
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "S,N"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -3731,6 +3741,8 @@ DEFINE CLASS Formemp AS FormBase
             .Width     = 15
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "S,N, "
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.
@@ -5372,6 +5384,8 @@ DEFINE CLASS Formemp AS FormBase
             .Width     = 15
             .Height    = 23
             .MaxLength = 1
+            .Format    = "M"
+            .InputMask = "0,1"
             .FontName  = "Tahoma"
             .FontSize  = 8
             .Visible   = .T.

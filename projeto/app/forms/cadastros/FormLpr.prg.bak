@@ -447,7 +447,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("cmd_4c_Atualizar", "CommandButton")
             WITH loc_oPagina.cmd_4c_Atualizar
                 .Caption         = "Atualizar"
-                .Picture         = gc_4c_CaminhoIcones + "geral_confirmar_32.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "geral_processar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 119
                 .Left            = 287
@@ -474,7 +474,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("cmd_4c_ImprimirLista", "CommandButton")
             WITH loc_oPagina.cmd_4c_ImprimirLista
                 .Caption         = "Imprimir"
-                .Picture         = gc_4c_CaminhoIcones + "geral_imprimir_32.jpg"
+                .Picture         = gc_4c_CaminhoIcones + "geral_impressora_normal_60.jpg"
                 .PicturePosition = 13
                 .Top             = 119
                 .Left            = 367
@@ -628,7 +628,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .AddObject("cmd_4c_ImpExcel", "CommandButton")
                 WITH .cmd_4c_ImpExcel
                     .Caption         = "\<Excel"
-                    .Picture         = gc_4c_CaminhoIcones + "geral_excel_32.jpg"
+                    .Picture         = gc_4c_CaminhoIcones + "relatorio_excel_26.jpg"
                     .PicturePosition = 13
                     .Top             = 5
                     .Left            = 422
@@ -652,7 +652,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .AddObject("cmd_4c_ImpVideo", "CommandButton")
                 WITH .cmd_4c_ImpVideo
                     .Caption         = "\<V" + CHR(237) + "deo"
-                    .Picture         = gc_4c_CaminhoIcones + "geral_visualizar_32.jpg"
+                    .Picture         = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
                     .PicturePosition = 13
                     .Top             = 5
                     .Left            = 347
@@ -676,7 +676,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .AddObject("cmd_4c_ImpImpressora", "CommandButton")
                 WITH .cmd_4c_ImpImpressora
                     .Caption         = "\<Impressora"
-                    .Picture         = gc_4c_CaminhoIcones + "geral_imprimir_32.jpg"
+                    .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
                     .PicturePosition = 13
                     .Top             = 5
                     .Left            = 272

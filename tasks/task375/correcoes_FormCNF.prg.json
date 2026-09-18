@@ -1,13 +1,13 @@
 ﻿{
-    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCNF.prg",
-    "timestamp":  "2026-07-29T08:19:10",
+    "arquivo":  "C:\\Users\\roger\\AppData\\Local\\Temp\\claude\\C--4c\\e1da9d21-0caa-4631-b2fa-becc31e17b54\\scratchpad\\t204\\forms\\cadastros\\FormCNF.prg",
+    "timestamp":  "2026-09-17T12:19:53",
     "correcoes":  [
                       {
-                          "Tipo":  "NVL_BIT_FIELD_WARN",
-                          "Linha":  998,
-                          "Original":  "IF NVL(cursor_4c_Dados.correcs, 0) = 0",
-                          "Corrigido":  "(revisar manualmente)",
-                          "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                          "Tipo":  "BOM_UTF8",
+                          "Linha":  1,
+                          "Original":  "(BOM UTF-8: EF BB BF)",
+                          "Corrigido":  "(removido)",
+                          "Descricao":  "BOM UTF-8 removido - VFP9 nao suporta"
                       },
                       {
                           "Tipo":  "NVL_BIT_FIELD_WARN",
@@ -18,11 +18,39 @@
                       },
                       {
                           "Tipo":  "NVL_BIT_FIELD_WARN",
-                          "Linha":  2698,
+                          "Linha":  1090,
                           "Original":  "IF NVL(cursor_4c_Dados.correcs, 0) = 0",
                           "Corrigido":  "(revisar manualmente)",
                           "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "NVL_BIT_FIELD_WARN",
+                          "Linha":  2744,
+                          "Original":  "IF NVL(cursor_4c_Dados.correcs, 0) = 0",
+                          "Corrigido":  "(revisar manualmente)",
+                          "Descricao":  "NVL(campo,0)=0 sem assignment detectado. IIF nao eh seguro (avalia ambos ramos). Converter para IF/ELSE/ENDIF manualmente"
+                      },
+                      {
+                          "Tipo":  "WARN-CNT-BOTOES-LEFT-BOTAO-EXTRA",
+                          "Linha":  0,
+                          "Original":  "cnt_4c_Botoes com botao extra: cmd_4c_InserirCarta, cmd_4c_AlteraCarta, cmd_4c_ImpCarta",
+                          "Corrigido":  "(auto-fix Left=542 suprimido — container precisa de mais largura)",
+                          "Descricao":  "cnt_4c_Botoes contem botao(oes) EXTRA (cmd_4c_InserirCarta, cmd_4c_AlteraCarta, cmd_4c_ImpCarta) alem dos CRUD canonicos, entao Left=542 (que assume 5 botoes terminando em 917) NAO se aplica — o container precisa comecar mais a esquerda. Auto-fix suprimido. REVISAR MANUAL junto com Pattern #182 v2. Ref Formacg: Left=390, Width=540, CopiarAcesso=5 e bloco CRUD em 152/227/302/377/452 (abs 542..917). Origem: Erro145-v2 (2026-09-04)."
+                      },
+                      {
+                          "Tipo":  "WARN-182-CONTAINER-COM-BOTAO-EXTRA",
+                          "Linha":  0,
+                          "Original":  "cnt_4c_Botoes com botao extra: cmd_4c_InserirCarta, cmd_4c_AlteraCarta, cmd_4c_ImpCarta",
+                          "Corrigido":  "(auto-fix de Left suprimido — revisar posicoes manualmente)",
+                          "Descricao":  "Pattern #182 v2 (Erro145-v2): cnt_4c_Botoes contem botao(oes) EXTRA (cmd_4c_InserirCarta, cmd_4c_AlteraCarta, cmd_4c_ImpCarta) alem dos CRUD canonicos, entao os offsets 5/80/155/230/305 NAO se aplicam — o bloco CRUD fica legitimamente deslocado para abrir espaco. Auto-mutate SUPRIMIDO para nao empilhar dois botoes no mesmo Left e quebrar o layout. REVISAR MANUAL: manter passo de 75px entre botoes e terminar o ultimo em Left absoluto 917 (onde comeca cnt_4c_Saida). Ref Formacg: CopiarAcesso=5, Incluir=152, Visualizar=227, Alterar=302, Excluir=377, Buscar=452 (container Left=390)."
+                      },
+                      {
+                          "Tipo":  "PICTURE_ARQUIVO_INEXISTENTE",
+                          "Linha":  283,
+                          "Original":  ".Picture = \"relatorio_imprimir_60.jpg\"",
+                          "Corrigido":  ".Picture = \"printer.ico\" (legado/nome)",
+                          "Descricao":  "Pattern #204: \u0027relatorio_imprimir_60.jpg\u0027 nao existe em vbmp\\ e o VFP9 aceita Picture inexistente SEM erro - o controle so nao desenha icone (no FormCliente o botao Visualizar aparecia so com texto no meio de cinco com icone, e nada no log). O migrador inventa o nome a partir da acao em vez de transcrever o do SCX legado, e a grafia real diverge: o inventario tem \u0027cadastro_vizualizar_60.jpg\u0027 (com Z, typo do proprio arquivo) e so nos tamanhos que existem - o sufixo _26/_60 nem corresponde ao tamanho real, todos os icones sao 32x32. Substituto resolvido por: legado/nome. Origem: Erro162 (2026-09-17, FormCliente \u0027Cadastro de Clientes\u0027; o sweep pegou 54 sites em 20 forms)."
                       }
                   ],
-    "totalCorrecoes":  3
+    "totalCorrecoes":  7
 }
