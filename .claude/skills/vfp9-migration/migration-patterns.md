@@ -11587,3 +11587,108 @@ aqui (descartadas medindo): `SET PATH` nao eh escopado por data session (sobrevi
 Auto-fix: CorretorAutomatico **#205** — registrado nas DUAS listas do corretor, inclusive na
 do **modo SEGURO**: o arquivo que originou o bug eh `start\config.prg`, que nao eh form nem
 BO, e registrado so na lista de forms o pattern nunca rodaria nele. Origem: Erro162_Aba1.
+
+---
+
+## 210. Funcao GLOBAL do legado Fortyus chamada pelo p-code do VCX (Erro163_Aba1 2026-09-18)
+
+Os VCX legado (`framework.vcx` / `classobj.vcx` / `classresp.vcx`) sao **p-code compilado**:
+nao da para editar. Eles chamam funcoes GLOBAIS da aplicacao legado (`sig.prg` /
+`SIGFUNCS.PRG`) que **nao vieram no acervo migrado**.
+
+Em VFP9, nome desconhecido seguido de `(` **nao eh erro de compilacao**: o interpretador
+procura `<nome>.prg` no PATH. A ausencia so aparece em **RUNTIME** — e quase sempre dentro de
+um `Init` / `Valid` / `Click`, **fora de qualquer TRY/CATCH**, onde a excecao nao tratada
+**derruba o form**.
+
+**O caso que deu o nome ao erro**: no Cadastro de Cliente, digitar a UF fechava a tela.
+
+```foxpro
+* clsconta.pgframeDados.pgframeDados1.GetEstado.Valid (classresp.vcx)
+loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUfs', ;
+                       'crListaRemota', 'Estados', This.Value, 'Selecao', .T.)
+If Not loLista.plAchouRegistro      && <- SEM guard Type('loLista')=='O'
+```
+
+O `GetCEP` embrulha o `CreateObject` num `If Type(...)=='O'`; o `GetEstado` **nao**. E o erro
+nem chega nessa linha: nasce dentro do `Init` do `fwBuscaExt`, que chama `fSQLExec()`.
+
+### Por que so apareceu agora
+
+Ate o Erro162_Aba1 o `SET PATH` estava quebrado (secao **209**) e `utils\` nunca esteve no
+PATH. Com o PATH consertado os VCX passaram a **alcancar** os `.prg` do projeto — e ai
+apareceu quem nao existia. **Consertar resolucao de nome desenterra ausencias**: rodar a
+auditoria logo depois de mexer em PATH/`SET PROCEDURE`.
+
+### O conserto: wrapper resolvido pelo NOME DO ARQUIVO
+
+`projeto\app\utils\<nome minusculo>.prg`, no padrao de `isempty.prg` / `fconfiggeral.prg` —
+`LPARAMETERS` + `RETURN`, **sem cabecalho `FUNCTION`** (o arquivo eh achado pelo nome):
+
+```foxpro
+* utils\fsqlexec.prg
+LPARAMETERS par_nConexao, par_cComandoSQL, par_cCursor, par_lCancelavel
+...
+RETURN loc_nResultado      && numerico, testado com `> 0` pelo chamador
+```
+
+O cabecalho de comentario **tem de dizer de onde vem a chamada e o que se perde** — eh a unica
+documentacao que sobra de uma funcao cujo fonte nao existe.
+
+### Tres categorias, e a escolha nao eh de gosto
+
+| Categoria | Criterio | Exemplos |
+|---|---|---|
+| **Implementar de verdade** | os call sites fecham o contrato inteiro | `fSQLExec` (eh SQLEXEC), `fValidarCpf`/`fValidarCNPJ` (delegam a validators.prg), `fAbrirTabs`, `fVerificaPasta`, `fMensagemFixa` |
+| **No-op documentado** | retorno descartado, ou tipo do retorno decide um `If` cujo caminho seguro eh obvio | `fChkCpoVlc` (.T.), `fChkCntVlc` (.F. = nenhum campo invalido), `fGravarLog` (.T.), `fInibirBtn` (.T.), `fGerPDFCreator` (.F.) |
+| **DEIXAR AUSENTE** | devolve **valor de calculo** | `fCalcularST`, `fCalcularIPI` |
+
+A terceira linha eh a que se erra. Stub devolvendo `0` para imposto **grava numero errado sem
+erro nenhum na tela** e ninguem reporta (regra #17). Ausente, o erro aparece alto — que eh o
+comportamento seguro. O mesmo raciocinio vale ao contrario em `fGerPDFCreator`: `.F.` puro
+fazia o usuario clicar e **nao acontecer nada**, entao ali o wrapper diverge do legado de
+proposito e exibe `MsgAviso` — tornar a ausencia VISIVEL, nunca silenciosa.
+
+### Objeto global conta igual
+
+Nao eh so funcao. `fSqlConector.Init` (`classes\sigclcnx.PRG`) resolve conexao POR NOME:
+
+```foxpro
+.poDataMgr = CreateObject('fSqlConector', 'cep')        && fwcep/frmceps.Init
+* dentro do Init:
+If (Type([goSistema.ObjectConn]) = [O])
+    This.pnIdConn = goSistema.ObjectConn.Connect(@pNum, pOkc)
+EndIf
+If (This.pnIdConn > 0) ... Else This.pnIdConn = -1
+```
+
+Sem `goSistema.ObjectConn` o `pnIdConn` vira -1 e o proprio VCX exibe **"Impossivel Efetuar
+Conexao Com o Servidor de Banco de Dados..."** (titulo `CreateObject`) — que **mente**: a
+conexao principal esta viva, o que falta eh o gerenciador de nomes. Instanciar no startup com
+a classe legado ORIGINAL (`cOpenConn`, que le `dbo.SigConn`), nunca com um substituto proprio.
+
+### Auditoria
+
+`automation\VerificarFuncoesLegadoVCX.ps1` varre o **texto-fonte dos metodos, que vive no
+`.VCT`** (memo do VCX), e cruza com o que o projeto define. Exit 1 se houver pendencia.
+
+Tres armadilhas que o script ja trata — e que valem para qualquer varredura de VCT:
+
+1. **Chamada COMENTADA nao executa.** O memo guarda o fonte inteiro, comentario incluso: sem
+   filtrar linha `*` / `*!*` / `&&`, o `fGravaLog` do `listener.vcx` entra com "41 chamadas",
+   todas mortas.
+2. **VCX de terceiro nao eh codigo.** O memo do `ReportPreview\listener`, `_frxcursor`,
+   `ClassGdi`/`_gdiplus`, `SFCTRLS`, `ClassScrl` guarda **texto de descricao** de propriedade e
+   ate XSLT, onde `floor(`, `format(`, `files(` casam com o regex. Varrer so os VCX que o
+   projeto realmente carrega (`SET CLASSLIB`) — 18 VCT viram 4.
+3. **`Get-ChildItem -Include` sem `-Recurse` exige wildcard no `-Path`.** `-Path $dir -Include
+   *.prg` devolve **zero em silencio**; `-Path (Join-Path $dir '*') -Include *.prg` devolve os
+   arquivos. Essa linha sozinha fez `sigacess.PRG` sumir do mapa e `fAcessoCampos`,
+   `fAcessoEmpresa` e `fChecaAcessoJOB` aparecerem como ausentes — **tres falsos positivos que
+   teriam virado tres wrappers duplicando funcao existente**.
+
+Estado em 2026-09-18: 25 chamadas distintas, 23 resolvidas, 2 ausentes de proposito, 0 pendentes.
+
+**Sem auto-fix no CorretorAutomatico**: o defeito nao esta no `.prg` gerado — eh a **ausencia
+de um arquivo** em `utils\`. Nao ha texto para o corretor reescrever, e inventar um pattern que
+dispare em cima disso so produziria WARNING em todo form.

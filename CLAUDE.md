@@ -484,6 +484,27 @@ Medido no VFP9: com 3 expressoes o `SET("PATH")` fica so com a 1a; concatenado, 
 
 Auto-fix: CorretorAutomatico **#205**, registrado nas DUAS listas (inclusive modo SEGURO - o arquivo de origem eh `start\config.prg`, que nao eh form nem BO). Origem: Erro162_Aba1.
 
+### 27. Funcao GLOBAL do legado chamada pelo p-code do VCX: wrapper em `utils\`, nunca "deixar pra depois"
+Os VCX (`framework/classobj/classresp.vcx`) sao **p-code compilado** e chamam funcoes globais da aplicacao legado (`sig.prg`/`SIGFUNCS.PRG`) que **nao vieram no acervo**. Nome desconhecido nao eh erro de compilacao (regra #13): o VFP procura `<nome>.prg` no PATH e so estoura em **RUNTIME**, dentro de `Init`/`Valid`/`Click` **fora de TRY/CATCH** -> **o form FECHA**.
+
+No `GetEstado.Valid` (campo UF do Cadastro de Cliente) o `CreateObject('fwBuscaExt',...)` vem **SEM** o guard `Type()=='O'` que o `GetCEP` tem, e o `Init` do fwBuscaExt chama `fSQLExec()`. Digitar a UF fechava a tela.
+
+Wrapper em `projeto\app\utils\<nome minusculo>.prg`, padrao `isempty.prg`: `LPARAMETERS` + `RETURN`, **sem cabecalho `FUNCTION`** (resolve pelo NOME do arquivo). O comentario tem de dizer de onde vem a chamada e **o que se perde**.
+
+| Categoria | Criterio | Exemplos |
+|---|---|---|
+| Implementar | os call sites fecham o contrato | `fSQLExec`, `fValidarCpf/CNPJ`, `fAbrirTabs`, `fVerificaPasta`, `fMensagemFixa` |
+| No-op documentado | retorno descartado / caminho seguro obvio | `fChkCpoVlc`(.T.), `fChkCntVlc`(.F.), `fGravarLog`, `fInibirBtn`, `fGerPDFCreator` |
+| **DEIXAR AUSENTE** | devolve **valor de calculo** | `fCalcularST`, `fCalcularIPI` |
+
+A 3a linha eh a que se erra: stub devolvendo `0` para imposto grava numero errado **em silencio** (regra #17); ausente, o erro aparece alto. Ao contrario, `.F.` puro em `fGerPDFCreator` fazia o usuario clicar e nada acontecer - ali o wrapper **diverge do legado de proposito** e avisa. Ausencia tem de ficar VISIVEL.
+
+**Vale para OBJETO global**: sem `goSistema.ObjectConn` (`cOpenConn` de `classes\sigclcnx.PRG`, que le `dbo.SigConn`), `CreateObject('fSqlConector','cep')` devolve `pnIdConn = -1` e o VCX exibe *"Impossivel Efetuar Conexao Com o Servidor de Banco de Dados..."* - mensagem que **mente**, porque a conexao principal esta viva.
+
+**So apareceu depois do #26**: com o PATH quebrado os VCX nunca alcancavam `utils\`. Consertar resolucao de nome **desenterra ausencias** - rodar a auditoria logo apos mexer em PATH/`SET PROCEDURE`.
+
+Auditoria: `automation\VerificarFuncoesLegadoVCX.ps1` (le o fonte no `.VCT`; ignora linha comentada, varre so os VCX que o projeto carrega). **Sem auto-fix**: o defeito eh a AUSENCIA de um arquivo, nao texto no `.prg` gerado. Skill: secao **210**. Origem: Erro163_Aba1 (2026-09-18).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

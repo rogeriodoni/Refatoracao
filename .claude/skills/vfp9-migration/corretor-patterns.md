@@ -130,6 +130,17 @@ The CorretorAutomatico runs automatically during the migration pipeline (Etapa 5
 
 ---
 
+## Deliberadamente SEM auto-fix
+
+Registrado aqui para nao se gastar esforco tentando de novo.
+
+| Licao | Por que nao vira pattern |
+|---|---|
+| **Funcao GLOBAL do legado Fortyus chamada pelo p-code do VCX** (CLAUDE.md #27, skill secao 210) — `fSQLExec`, `fChkCpoVlc`, `fChkCntVlc`, `fGravarLog`... | O defeito **nao esta no `.prg` gerado**: eh a **AUSENCIA de um arquivo** em `projeto\app\utils\`. O corretor reescreve texto de form/BO — aqui nao ha texto para reescrever, e a chamada que quebra mora em p-code COMPILADO (`framework/classobj/classresp.vcx`), que o corretor nem le. Um pattern que tentasse acusar isso dispararia WARNING em todo arquivo, que eh o modo de falha ja conhecido de [#166 / #183 / #200]. O gate correto eh a auditoria `automation\VerificarFuncoesLegadoVCX.ps1` (exit 1 se houver pendencia), nao o CorretorAutomatico. |
+| **`fCalcularST` / `fCalcularIPI`** | Nem wrapper devem ganhar: devolvem valor de calculo fiscal e um stub com `0` gravaria imposto errado **em silencio** (regra #17). Ficam na lista de "ausentes de proposito" da auditoria. |
+
+---
+
 ## Common Errors Reference (Complete)
 
 | Erro | Causa | Solucao |
