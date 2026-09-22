@@ -11919,3 +11919,167 @@ Tentado, medido e descartado — e o motivo eh estrutural, nao de implementacao:
 
 Ferramenta para um form so, que erra o proprio caso de teste, nao se paga. Fica como
 conhecimento e item de checklist do wrapper, nao como gate.
+
+---
+
+## 214. Metodo do VCX legado refaz o layout a CADA chamada — reaplicar no FUNIL, nao so no Init (Erro165 2026-09-22)
+
+O `clsconta` (`framework\classresp.vcx`) eh **p-code compilado**: o `mLeDados` nao carrega so
+os dados, ele tambem **reposiciona a tela** no final. As duas ultimas coisas que ele faz:
+
+```foxpro
+&& ativa a pagina conforme parametro pcTpCadCli e configuracao crSigCdGcr...
+With This.pgframeDados
+    .Tabs = (This.pcTpCadCli=='0')
+    .Top  = Iif(.Tabs, 0, ThisForm.Height - This.PgframeDados.PageHeight)
+```
+
+```foxpro
+With This.cmdGCarac      && idem CmdgFtec e CmdGPessoal
+    .Top = (This.Height - .Height - 4)
+```
+
+Medido lendo a VCX como DBF e instanciando o clsconta (ver o final desta secao):
+
+| | valor |
+|---|---|
+| `clsconta.pgframeDados.Height` | **802** (PageHeight 798 sem abas) |
+| `FormCliente.Height` | 600 |
+| `pcTpCadCli` que o form passa | `'1'` -> `Tabs = .F.` |
+| `pgframeDados.Top` resultante | **-198** |
+
+A pagina 1 **sobe 198px** e o Container RECORTA o topo dela (irma da **#213**). O `GetCEP.Top`
+eh 200 no SCX, entao a primeira linha visivel vira **CEP / Pais**: o usuario clica Incluir e
+cai direto no bloco de endereco/contato, **sem Codigo / Nome / CPF na tela**. Nao da erro, nao
+entra em log e **nao aparece em screenshot de validacao** — ninguem do pipeline olha o `Top` de
+um PageFrame contra a altura do pai.
+
+**O SCX legado ja resolvia isso, e o migrador jogou o conserto fora.** O `sigcdcli.scx` tem uma
+`PROCEDURE` homonima do metodo do VCX, que existe **so** para desfazer o reposicionamento:
+
+```foxpro
+* SIGCDCLI.cntConta
+PROCEDURE mledados
+Lparameters lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc
+DoDefault(lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc)
+thisform.cntConta.pgframeDados.Top = 0
+ENDPROC
+```
+
+O migrado instancia o VCX por `AddObject("cnt_4c_Conta", "clsconta")` — **nao ha subclasse onde
+por o override**. A migracao entao copiou o `Top = 0` para o `InicializarForm` e deu o assunto
+por encerrado. So que o `mLeDados` roda **de novo em TODO Incluir / Alterar / Visualizar**, e a
+cada vez desfaz tudo.
+
+```foxpro
+* ERRADO - roda uma vez na vida
+PROCEDURE InicializarForm
+    ...
+    THIS.cnt_4c_Conta.pgframeDados.Top = 0
+
+* CERTO - no funil unico de chamadas ao metodo do VCX
+PROTECTED FUNCTION ChamarMLeDadosSeguro(...)
+    loc_lRet = THIS.cnt_4c_Conta.mLeDados(...)
+    THIS.AplicarLayoutPosLeDados()      && equivalente do override do SCX
+    RETURN loc_lRet
+```
+
+Reaplicar tambem nos **CATCH que engolem a excecao** e seguem com o form usavel: o
+reposicionamento fica perto do FIM do `mLeDados`, entao pode ja ter rodado quando o erro
+estourou.
+
+**A regra generica**: ao migrar form wrapper, varrer o dump do SCX atras de `PROCEDURE` com
+**nome de metodo do VCX** (`mledados`, `mgravadados`, `mmontagrade`...). Uma `PROCEDURE` dessas
+que chama `DoDefault()` e acrescenta duas linhas existe **justamente para corrigir o que o
+p-code faz** — e o que vem depois do `DoDefault` tem de rodar depois de **toda** chamada, nao
+uma vez no Init.
+
+### Como ler as propriedades REAIS de uma classe de VCX
+
+O `.VCT` eh p-code: `grep`/`strings` devolvem lixo e as propriedades nao saem legiveis. Abrir a
+`.vcx` como **DBF** no proprio VFP9 e ler a coluna `Properties`:
+
+```foxpro
+USE "C:\4c\Framework\classresp.vcx" ALIAS vcxcls IN 0 SHARED
+SCAN FOR UPPER(ALLTRIM(NVL(vcxcls.ObjName,""))) == "PGFRAMEDADOS"
+    ? ALLTRIM(NVL(vcxcls.Parent,"")) + "." + ALLTRIM(NVL(vcxcls.ObjName,""))
+    ? NVL(vcxcls.Properties,"")
+ENDSCAN
+```
+
+Foi assim que sairam `pgframeDados.Height = 800`, o `PageOrder` de cada Page (**#215**) e o
+`AutoSize`/`Height` dos CommandGroup (**#216**).
+
+---
+
+## 215. `PageFrame.ActivePage` eh o PageOrder, NAO a ordem de declaracao das Pages (Erro165 2026-09-22)
+
+`ActivePage` endereca a pagina pelo **`PageOrder`**. No `clsconta` o `PageOrder` **nao** bate com
+o sufixo do nome:
+
+| Page | Caption | PageOrder |
+|------|---------|-----------|
+| `pgframeDados1` | Cadastro | 1 |
+| `pgframeDados2` | Pessoal | **3** |
+| `pgframeDados7` | Complemento | **2** |
+
+O migrado fazia `loc_oPgf.ActivePage = 2` achando que ia para *Pessoal* e caia em *Complemento*.
+E o estrago nao parava ai: o `cmdPessoal.Click` do VCX eh um **toggle** que so age nos dois
+valores que conhece —
+
+```foxpro
+Case This.Parent.Parent.pgframeDados.ActivePage==1
+    This.Parent.Parent.pgframeDados.ActivePage = 3   && Dados Pessoais/Comerciais
+Case This.Parent.Parent.pgframeDados.ActivePage==3
+    This.Parent.Parent.pgframeDados.ActivePage = 1   && volta p/ Cadastro
+```
+
+— entao, pre-setado para 2, ele caia fora do `Do Case` e virava **no-op**: o F5 do form ficava
+morto. Compila limpo; so aparece na tela.
+
+```foxpro
+* ERRADO - numero inventado a partir do nome da Page, e mata o toggle do VCX
+loc_oPgf.ActivePage = 2
+THIS.cnt_4c_Conta.cmdgPessoal.cmdPessoal.Click()
+
+* CERTO - o legado (SIGCDCLI.KeyPress) chama o Click e MAIS NADA
+THIS.cnt_4c_Conta.cmdgPessoal.cmdPessoal.Click()
+```
+
+**Nunca derivar `ActivePage` do sufixo do nome da Page** — ler o `PageOrder` da classe (**#214**).
+E quando o legado navega chamando o `Click` de um botao, **transcrever isso**: pre-setar
+`ActivePage` antes de delegar tira o toggle do estado que ele sabe tratar.
+
+---
+
+## 216. Membro INTERNO de CommandGroup com NOME PROPRIO: aplicar os overrides do SCX (Erro165 2026-09-22)
+
+A **#213** manda ignorar `Command1`/`Option2`/`Text1` no dump do SCX, por serem membros internos
+posicionados pelo VFP. **A excecao**: quando o membro tem **nome proprio** e o SCX declara
+geometria para ele, esses overrides sao obrigatorios — o CommandGroup eh `AutoSize = .T.`, e eh a
+geometria do botao **interno** que DEFINE a altura do grupo.
+
+```
+cmdGCarac.cmdCarac.Top = 5       cmdGCarac.Left = 633
+cmdGCarac.cmdCarac.Left = 5      cmdGCarac.Top = 397
+cmdGCarac.cmdCarac.Height = 40
+cmdGCarac.cmdCarac.Width = 40
+```
+
+Medido no VFP9 (`AutoSize = .T.`, `ButtonCount = 1`):
+
+| Command1 | grupo resultante |
+|---|---|
+| 32x32 em 5,5 (**classe** do VCX) | 42 x 42 |
+| 40x40 em 5,5 (**SCX**) | **50 x 50** |
+
+E so com **50** o `.Top = (This.Height - .Height - 4)` do `mLeDados` (**#214**) cai em
+`450 - 50 - 4 = 396` — que eh o mesmo **397** que o SCX declara no grupo. Os dois numeros
+concordarem nao eh coincidencia: eh a prova de que os overrides do botao interno fazem parte do
+desenho. O migrador copiou so o `Left`/`Top` do **grupo** e os tres botoes de navegacao ficaram
+menores e fora da linha do legado.
+
+Ao migrar wrapper: para cada `grupo.membro.Prop` do dump cujo **membro tem nome proprio**,
+aplicar TODAS as propriedades declaradas — `Top`/`Left`/`Height`/`Width`, `FontName`/`FontSize`,
+`Picture`, `ForeColor`/`BackColor`/`DisabledBackColor`, `Themes`. E aplicar a geometria do
+interno **antes** de posicionar o grupo, senao o `AutoSize` reposiciona depois.

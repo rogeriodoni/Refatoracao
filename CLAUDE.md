@@ -575,6 +575,37 @@ Em form **WRAPPER de VCX** o migrador copia os overrides do SCX dos controles da
 
 **NAO existe detector automatico** - tentado e medido duas vezes: varrendo todos os forms sao **66 achados em 53 forms, 100% falso positivo**, porque o **PILAR 3 manda RENOMEAR** os objetos no migrado (`btnReport` -> `cmg_4c_Botoes`, `cntSombra` -> `cnt_4c_Cabecalho`, `Pagina` -> `pgf_4c_Paginas`) e comparar pelo nome do legado nunca casa. A tecnica so funciona onde o nome eh **preservado**, que eh o form wrapper - e existe **UM** (`FormCliente`; `FormRPT` e `FormSigPdMp9` usam VCX sem container de layout). Script descartado, nao commitado. Skill: secao **213**. Origem: Erro163_Aba1_3 (2026-09-18).
 
+### 31. Metodo do VCX legado REFAZ o layout a cada chamada - reaplicar no FUNIL, nunca so no Init
+O `mLeDados` do `clsconta` nao carrega so dados: ele **reposiciona a tela** no fim, e faz isso **toda vez que roda**.
+
+```foxpro
+With This.pgframeDados
+    .Tabs = (This.pcTpCadCli=='0')
+    .Top  = Iif(.Tabs, 0, ThisForm.Height - This.PgframeDados.PageHeight)
+```
+
+Medido: `clsconta.pgframeDados.Height` = **802** (PageHeight 798 sem abas) contra `Form.Height` = 600 e `pcTpCadCli = '1'` -> `Top = -198`. A pagina 1 **sobe 198px** e o Container RECORTA o topo (irma da **#30**). Com `GetCEP.Top = 200` no SCX, a primeira linha visivel vira **CEP / Pais**: o usuario clica Incluir e cai no bloco de endereco/contato, **sem Codigo / Nome / CPF**. Sem erro, sem log, **sem aparecer em screenshot**.
+
+**O SCX legado ja consertava - o migrador jogou fora.** O `sigcdcli.scx` tem uma `PROCEDURE` **homonima do metodo do VCX**, que existe so para desfazer o reposicionamento depois do `DoDefault`:
+
+```foxpro
+PROCEDURE mledados
+Lparameters lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc
+DoDefault(lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc)
+thisform.cntConta.pgframeDados.Top = 0
+ENDPROC
+```
+
+O migrado entra por `AddObject("cnt_4c_Conta", "clsconta")` e **nao tem subclasse onde por o override**, entao copiou o `Top = 0` para o `InicializarForm` - e o `mLeDados` roda de novo em **TODO Incluir/Alterar/Visualizar**. O reset tem de ficar no **FUNIL** de chamadas (`ChamarMLeDadosSeguro`) e tambem nos **CATCH que engolem a excecao**: o reposicionamento fica perto do FIM do metodo e pode ja ter rodado quando o erro estourou. Ao migrar wrapper, varrer o dump do SCX atras de `PROCEDURE` com nome de metodo do VCX (`mledados`, `mgravadados`, `mmontagrade`) - o que vem depois do `DoDefault` eh conserto, nao detalhe.
+
+**`ActivePage` eh o `PageOrder`, NAO a ordem de declaracao**: no `clsconta`, `pgframeDados1` (Cadastro) tem `PageOrder=1`, `pgframeDados2` (Pessoal) tem **3** e `pgframeDados7` (Complemento) tem **2**. `ActivePage = 2` caia em Complemento; pior, o `cmdPessoal.Click` do VCX eh um toggle que so age em 1 ou 3, entao virava **no-op** e o F5 ficava morto. Quando o legado navega chamando `Click` de um botao (`KeyPress` do SCX chama `cmdGPessoal.cmdPessoal.Click()` e **mais nada**), TRANSCREVER - nao pre-setar `ActivePage` antes de delegar.
+
+**Membro interno de CommandGroup com NOME PROPRIO eh a excecao da #30**: ignorar `Command1`/`Option2`/`Text1` continua certo, mas `cmdGCarac.cmdCarac.Top/Left/Height/Width/Picture` eh obrigatorio - o grupo eh `AutoSize = .T.` e a geometria do botao INTERNO **define a altura do grupo**. Medido: inner 32x32 (classe) -> grupo 42; inner 40x40 (SCX) -> grupo **50**, e so com 50 o `.Top = (Height - .Height - 4)` do `mLeDados` cai em 396, o mesmo **397** que o SCX declara no grupo. Aplicar o interno **antes** de posicionar o grupo.
+
+**Para ler as propriedades REAIS de uma classe de VCX** (o `.VCT` eh p-code, `grep` devolve lixo): abrir a `.vcx` como **DBF** no VFP9 e ler a coluna `Properties` (`USE Framework\classresp.vcx` + `SCAN` por `ObjName`/`Class`).
+
+**Sem auto-fix** - o defeito mora em p-code que o corretor nao le, e o universo eh UM form wrapper. Skill: secoes **214**, **215**, **216**. Origem: Erro165 (2026-09-22).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)
