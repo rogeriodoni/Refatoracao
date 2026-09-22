@@ -1855,53 +1855,177 @@ ENDFUNC
 
 *==============================================================================
 * FUNCTION fGerUniqueKey
-* Gera numero sequencial unico por prefixo de chave (escopo de sessao)
-* Par: par_cChave - prefixo identificador do contador (ex: "ITAUENV", "BRNOSSONUM")
-* Ret: numero sequencial (numerico)
-* Obs: BRNOSSONUM semente = MAX(nopers) de SigMvCcr para continuidade
+* Gera o proximo numero sequencial de um contador, PERSISTIDO em dbo.SIGSYSEQ.
+*
+* Par: par_cChave - a chave do contador (ex.: "11201001", "HISTBAR")
+* Ret: o numero recem-emitido, ou 0 se nao foi possivel emitir.
+*
+*------------------------------------------------------------------------------
+* O fonte legado desta funcao NAO existe no acervo (so as chamadas, no p-code
+* dos VCX). O contrato, porem, esta determinado pelos dados: a tabela
+*
+*     dbo.SIGSYSEQ ( valor char(25) PK, conteudo numeric(13,0), digchecks numeric(1,0) )
+*
+* eh o contador, e o numero emitido eh o `conteudo` DEPOIS do incremento.
+* Medido no banco (2026-09-22), o que fecha a conta:
+*
+*     SIGSYSEQ.valor = '11201001'  ->  conteudo = 39
+*     SELECT MAX(NClis) FROM SigCdCli WHERE Grupos='11201'  ->  39
+*
+* ou seja, o ultimo numero emitido para a chave eh exatamente o ultimo NClis
+* gravado. O proximo codigo de cliente do grupo tem de ser 40.
+*
+* O call site que motivou a correcao (clsconta.mLeDados, modo INSERIR):
+*
+*     ThisForm.Inicio = fGerUniqueKey(Alltrim(crSigCdGcr.Codigos) + _EMPR)
+*     Replace Iclis With Alltrim(crSigCdGcr.DgCods) + _EMPR + Padl(ThisForm.Inicio,6,'0')
+*     Replace NClis With ThisForm.Inicio In crSigCdCli
+*     ...
+*     If ThisForm.Inicio==0
+*         = MessageBox('Codigo Automatico de Cliente Invalido, ...', 16, ...)
+*
+* Por isso o retorno de falha eh 0: eh o sentinela que o proprio legado testa.
+*
+*------------------------------------------------------------------------------
+* O QUE ESTAVA ERRADO (Erro169): a implementacao anterior mantinha o contador
+* num array PUBLIC, em MEMORIA, semeado em 1 para toda chave nova. Resultado:
+* a cada abertura do sistema o contador recomecava do 1 e o Incluir propunha
+* um codigo JA GRAVADO - C001000001, que era do cliente ROGER TESTE. O defeito
+* nao era so do Cadastro de Cliente: a chave HISTBAR, por exemplo, estava em
+* 377242 no banco e o stub devolvia 1 para o dmoBO.
+*
+*------------------------------------------------------------------------------
+* ATOMICIDADE E COMMIT - os dois pontos que fazem isto funcionar de verdade:
+*
+* 1. `UPDATE ... OUTPUT inserted.conteudo` incrementa e devolve o valor novo
+*    numa UNICA instrucao, entao dois usuarios nunca recebem o mesmo numero.
+*    Ler-depois-gravar em duas instrucoes daria duplicata sob concorrencia.
+*
+* 2. A conexao deste ambiente nasce com Transactions = 2 (MANUAL) - medido.
+*    Sem SQLCOMMIT o incremento sumiria ao encerrar o processo E o lock de
+*    linha ficaria preso, travando todo mundo que pedisse a mesma chave.
 *==============================================================================
 FUNCTION fGerUniqueKey(par_cChave)
-    LOCAL loc_cChave, loc_i, loc_nNovo
-    loc_cChave = UPPER(ALLTRIM(NVL(par_cChave, "")))
+    LOCAL loc_cChave, loc_nNovo, loc_nRet, loc_nSeed, loc_oErro, loc_lManual
 
-    IF TYPE('gnUniqueKeyLen_4c') = 'U'
-        PUBLIC gnUniqueKeyLen_4c
-        gnUniqueKeyLen_4c = 0
-        PUBLIC ga_UniqueKeys_4c[1, 2]
-        ga_UniqueKeys_4c[1, 1] = ""
-        ga_UniqueKeys_4c[1, 2] = 0
+    loc_cChave = ALLTRIM(NVL(par_cChave, ""))
+    loc_nNovo  = 0
+
+    IF EMPTY(loc_cChave)
+        RETURN 0
+    ENDIF
+    IF TYPE("gnConnHandle") <> "N" OR gnConnHandle <= 0
+        *-- Sem conexao nao ha contador. Devolver 0 faz o call site do legado
+        *-- exibir o proprio aviso dele, que eh melhor que inventar um numero
+        *-- e gravar codigo duplicado em silencio.
+        RETURN 0
     ENDIF
 
-    *-- Busca chave existente e incrementa
-    FOR loc_i = 1 TO gnUniqueKeyLen_4c
-        IF UPPER(ALLTRIM(ga_UniqueKeys_4c[loc_i, 1])) = loc_cChave
-            ga_UniqueKeys_4c[loc_i, 2] = ga_UniqueKeys_4c[loc_i, 2] + 1
-            RETURN ga_UniqueKeys_4c[loc_i, 2]
-        ENDIF
-    ENDFOR
+    loc_lManual = (SQLGETPROP(gnConnHandle, "Transactions") = 2)
 
-    *-- Nova chave: define semente inicial
-    loc_nNovo = 1
-    IF loc_cChave = "BRNOSSONUM" AND TYPE('gnConnHandle') = 'N' AND gnConnHandle > 0
-        LOCAL loc_nSeedSQL
-        loc_nSeedSQL = SQLEXEC(gnConnHandle, "SELECT ISNULL(MAX(nopers),0) AS maxval FROM SigMvCcr", "cursor_4c_fGUKSeed")
-        IF loc_nSeedSQL > 0 AND !EOF("cursor_4c_fGUKSeed")
-            loc_nNovo = IIF(cursor_4c_fGUKSeed.maxval > 0, cursor_4c_fGUKSeed.maxval + 1, 1)
+    TRY
+        IF USED("cursor_4c_fGUK")
+            USE IN cursor_4c_fGUK
+        ENDIF
+
+        *-- 1) incrementa e le o valor novo numa instrucao so
+        loc_nRet = SQLEXEC(gnConnHandle, ;
+            "UPDATE SIGSYSEQ SET conteudo = conteudo + 1" + ;
+            " OUTPUT inserted.conteudo AS novo" + ;
+            " WHERE valor = " + EscaparSQL(loc_cChave), ;
+            "cursor_4c_fGUK")
+
+        IF loc_nRet > 0 AND USED("cursor_4c_fGUK") AND RECCOUNT("cursor_4c_fGUK") > 0
+            GO TOP IN cursor_4c_fGUK
+            loc_nNovo = INT(NVL(cursor_4c_fGUK.novo, 0))
+        ENDIF
+
+        IF USED("cursor_4c_fGUK")
+            USE IN cursor_4c_fGUK
+        ENDIF
+
+        *-- 2) chave inexistente: cria com a semente
+        IF loc_nNovo = 0 AND loc_nRet >= 0
+            loc_nSeed = fGerUniqueKeySemente(loc_cChave)
+
+            loc_nRet = SQLEXEC(gnConnHandle, ;
+                "INSERT INTO SIGSYSEQ (valor, conteudo, digchecks) VALUES (" + ;
+                EscaparSQL(loc_cChave) + ", " + FormatarNumeroSQL(loc_nSeed, 0) + ", 0)")
+
+            IF loc_nRet > 0
+                loc_nNovo = loc_nSeed
+            ELSE
+                *-- corrida: outro processo criou a chave entre o UPDATE e o
+                *-- INSERT (a PK recusou). Repetir o UPDATE resolve.
+                IF USED("cursor_4c_fGUK")
+                    USE IN cursor_4c_fGUK
+                ENDIF
+                loc_nRet = SQLEXEC(gnConnHandle, ;
+                    "UPDATE SIGSYSEQ SET conteudo = conteudo + 1" + ;
+                    " OUTPUT inserted.conteudo AS novo" + ;
+                    " WHERE valor = " + EscaparSQL(loc_cChave), ;
+                    "cursor_4c_fGUK")
+                IF loc_nRet > 0 AND USED("cursor_4c_fGUK") AND RECCOUNT("cursor_4c_fGUK") > 0
+                    GO TOP IN cursor_4c_fGUK
+                    loc_nNovo = INT(NVL(cursor_4c_fGUK.novo, 0))
+                ENDIF
+                IF USED("cursor_4c_fGUK")
+                    USE IN cursor_4c_fGUK
+                ENDIF
+            ENDIF
+        ENDIF
+
+        *-- 3) fechar a transacao SEMPRE: commit se emitiu, rollback se nao.
+        *--    Deixar aberto perderia o numero e prenderia o lock da linha.
+        IF loc_lManual
+            IF loc_nNovo > 0
+                = SQLCOMMIT(gnConnHandle)
+            ELSE
+                = SQLROLLBACK(gnConnHandle)
+            ENDIF
+        ENDIF
+    CATCH TO loc_oErro
+        *-- Regra #9: CATCH nunca silencioso.
+        IF loc_lManual
+            = SQLROLLBACK(gnConnHandle)
+        ENDIF
+        MsgErro("Falha ao gerar o numero sequencial da chave [" + loc_cChave + "]." + CHR(13) + ;
+            loc_oErro.Message, "Sequencial")
+        loc_nNovo = 0
+    ENDTRY
+
+    *-- Regra #1: RETURN so FORA do TRY/CATCH
+    RETURN loc_nNovo
+ENDFUNC
+
+*==============================================================================
+* FUNCTION fGerUniqueKeySemente
+* Valor inicial de uma chave que ainda nao existe em SIGSYSEQ.
+*
+* Regra geral: 1. A excecao eh BRNOSSONUM, que nao eh um contador proprio e
+* sim a continuacao da numeracao ja gravada em SigMvCcr.nopers - semear em 1
+* reemitiria nosso-numero ja usado no banco.
+*==============================================================================
+FUNCTION fGerUniqueKeySemente(par_cChave)
+    LOCAL loc_nSeed, loc_nRet
+    loc_nSeed = 1
+
+    IF UPPER(ALLTRIM(NVL(par_cChave, ""))) == "BRNOSSONUM" ;
+       AND TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+        IF USED("cursor_4c_fGUKSeed")
+            USE IN cursor_4c_fGUKSeed
+        ENDIF
+        loc_nRet = SQLEXEC(gnConnHandle, ;
+            "SELECT ISNULL(MAX(nopers),0) AS maxval FROM SigMvCcr", "cursor_4c_fGUKSeed")
+        IF loc_nRet > 0 AND USED("cursor_4c_fGUKSeed") AND !EOF("cursor_4c_fGUKSeed")
+            loc_nSeed = IIF(cursor_4c_fGUKSeed.maxval > 0, cursor_4c_fGUKSeed.maxval + 1, 1)
         ENDIF
         IF USED("cursor_4c_fGUKSeed")
             USE IN cursor_4c_fGUKSeed
         ENDIF
     ENDIF
 
-    *-- Adiciona nova entrada ao array
-    gnUniqueKeyLen_4c = gnUniqueKeyLen_4c + 1
-    IF ALEN(ga_UniqueKeys_4c, 1) < gnUniqueKeyLen_4c
-        DIMENSION ga_UniqueKeys_4c[gnUniqueKeyLen_4c, 2]
-    ENDIF
-    ga_UniqueKeys_4c[gnUniqueKeyLen_4c, 1] = par_cChave
-    ga_UniqueKeys_4c[gnUniqueKeyLen_4c, 2] = loc_nNovo
-
-    RETURN loc_nNovo
+    RETURN loc_nSeed
 ENDFUNC
 
 *==============================================================================
@@ -1924,38 +2048,80 @@ ENDFUNC
 * ATENCAO - O FONTE LEGADO DESTA FUNCAO NAO EXISTE NO ACERVO. Nao esta em
 * Framework\*.PRG, nem nos VCX (so as CHAMADAS aparecem no p-code), nem em
 * dump de task nenhum. Esta implementacao eh a INVERSA EXATA do contador que
-* o proprio fGerUniqueKey mantem (array PUBLIC ga_UniqueKeys_4c) e nada mais.
+* o fGerUniqueKey mantem, agora sobre dbo.SIGSYSEQ (Erro169) - antes era
+* sobre um array em memoria, que reiniciava a cada abertura do sistema.
 *
-* Por isso ela eh CONSERVADORA: so devolve o numero quando ele eh o ULTIMO
-* emitido para aquela chave. Se outro registro ja consumiu um numero depois,
+* Ela eh CONSERVADORA: so devolve o numero quando ele ainda eh o ULTIMO
+* emitido para aquela chave. Se outro usuario ja consumiu um numero depois,
 * decrementar reemitiria um valor em uso - entao nesse caso nao faz nada e
 * devolve .F. (o numero fica "queimado", que eh o comportamento seguro).
+* A condicao `conteudo = <n>` vai DENTRO do UPDATE justamente para que essa
+* checagem seja atomica: testar antes, num SELECT, abriria janela de corrida.
 *
 * Sem esta funcao o VFP procura 'fcanuniquekey.prg' no PATH e estoura
 * "File 'fcanuniquekey.prg' does not exist" em RUNTIME (regra #13) - o
 * FormCliente a chama em 2 sites, no caminho de CPF/CNPJ duplicado.
 *
-* Origem: Erro162_Aba1 (2026-09-17).
+* Origem: Erro162_Aba1 (2026-09-17). Passou a usar SIGSYSEQ no Erro169.
 *==============================================================================
 FUNCTION fCanUniqueKey(par_nCodigo, par_cChave)
-    LOCAL loc_cChave, loc_nCodigo, loc_i, loc_lDevolveu
-    loc_lDevolveu = .F.
-    loc_cChave    = UPPER(ALLTRIM(NVL(par_cChave, "")))
-    loc_nCodigo   = IIF(VARTYPE(par_nCodigo) = "N", par_nCodigo, 0)
+    LOCAL loc_cChave, loc_nCodigo, loc_lDevolveu, loc_nRet, loc_oErro, loc_lManual
 
-    IF !EMPTY(loc_cChave) AND loc_nCodigo > 0 AND TYPE('gnUniqueKeyLen_4c') = 'N'
-        FOR loc_i = 1 TO gnUniqueKeyLen_4c
-            IF UPPER(ALLTRIM(ga_UniqueKeys_4c[loc_i, 1])) = loc_cChave
-                *-- so devolve se for o ultimo emitido; senao o numero ja foi
-                *-- ultrapassado e reemiti-lo geraria duplicata
-                IF ga_UniqueKeys_4c[loc_i, 2] = loc_nCodigo
-                    ga_UniqueKeys_4c[loc_i, 2] = loc_nCodigo - 1
-                    loc_lDevolveu = .T.
-                ENDIF
-                EXIT
-            ENDIF
-        ENDFOR
+    loc_lDevolveu = .F.
+    loc_cChave    = ALLTRIM(NVL(par_cChave, ""))
+    loc_nCodigo   = IIF(VARTYPE(par_nCodigo) = "N", INT(par_nCodigo), 0)
+
+    IF EMPTY(loc_cChave) OR loc_nCodigo <= 0
+        RETURN .F.
     ENDIF
+    IF TYPE("gnConnHandle") <> "N" OR gnConnHandle <= 0
+        RETURN .F.
+    ENDIF
+
+    loc_lManual = (SQLGETPROP(gnConnHandle, "Transactions") = 2)
+
+    TRY
+        IF USED("cursor_4c_fCUK")
+            USE IN cursor_4c_fCUK
+        ENDIF
+
+        *-- O OUTPUT nao eh enfeite: SQLEXEC devolve 1 em UPDATE bem-sucedido
+        *-- INDEPENDENTE de ter afetado linha alguma, entao `loc_nRet > 0` nao
+        *-- distingue "devolvi o numero" de "o numero ja tinha sido
+        *-- ultrapassado e eu nao mexi". Medido: com conteudo=2, pedir a
+        *-- devolucao do 1 deixava o dado certo (o WHERE protege) mas retornava
+        *-- .T. E' a linha devolvida pelo OUTPUT que prova que houve troca.
+        loc_nRet = SQLEXEC(gnConnHandle, ;
+            "UPDATE SIGSYSEQ SET conteudo = conteudo - 1" + ;
+            " OUTPUT inserted.conteudo AS novo" + ;
+            " WHERE valor = " + EscaparSQL(loc_cChave) + ;
+            "   AND conteudo = " + FormatarNumeroSQL(loc_nCodigo, 0), ;
+            "cursor_4c_fCUK")
+
+        loc_lDevolveu = (loc_nRet > 0 AND USED("cursor_4c_fCUK") ;
+                         AND RECCOUNT("cursor_4c_fCUK") > 0)
+
+        IF USED("cursor_4c_fCUK")
+            USE IN cursor_4c_fCUK
+        ENDIF
+
+        IF loc_lManual
+            IF loc_lDevolveu
+                = SQLCOMMIT(gnConnHandle)
+            ELSE
+                = SQLROLLBACK(gnConnHandle)
+            ENDIF
+        ENDIF
+    CATCH TO loc_oErro
+        *-- Regra #9: CATCH nunca silencioso. Nao devolver o numero eh
+        *-- inofensivo (o numero so fica queimado), entao nao trava o usuario.
+        IF loc_lManual
+            = SQLROLLBACK(gnConnHandle)
+        ENDIF
+        MsgAviso("N" + CHR(227) + "o foi poss" + CHR(237) + "vel devolver o sequencial da chave [" + ;
+            loc_cChave + "]: " + loc_oErro.Message, "Sequencial")
+        loc_lDevolveu = .F.
+    ENDTRY
 
     RETURN loc_lDevolveu
 ENDFUNC
