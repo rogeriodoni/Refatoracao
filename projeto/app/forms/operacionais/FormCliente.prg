@@ -2321,10 +2321,40 @@ DEFINE CLASS FormCliente AS FormBase
                 THIS.cmg_4c_Sair.Visible = .F.
             ENDIF
             THIS.this_cModoAtual = "LISTA"
+            THIS.AjustarCaptionConfirmar()
             THIS.RefreshGridClientes()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "IrParaLista")
         ENDTRY
+    ENDPROC
+
+    *============================================================
+    * AjustarCaptionConfirmar - a legenda do botao de confirmar
+    * acompanha a ACAO em curso (Erro168).
+    *
+    * No legado a legenda nao eh fixa: o default da classe Grupo_Salva
+    * do frmcadastro eh "\<Confirmar", e o codigo a troca conforme o
+    * caso - o caminho de Pre-Cadastro, por exemplo, faz
+    *
+    *     With ThisForm.Pagina.Dados.Grupo_Salva
+    *         .Salva.Caption='\<Alterar'
+    *
+    * ao mudar pcEscolha para ALTERAR. Em PROCURAR o botao nao grava
+    * nada (ele dispara o msv_procurar), entao continuar escrito
+    * "Salvar" mente sobre o que o clique faz.
+    *
+    * NOTA: "Procurar" segue o PADRAO atestado (legenda = nome da acao)
+    * usando o termo do proprio legado - a opcao 5 do Grupo_op chama-se
+    * `procurar` e o Wait Window diz "Procurando Contas...". Nao eh
+    * transcricao literal de uma linha do acervo, porque o acervo so
+    * traz o caso de ALTERAR.
+    *============================================================
+    PROCEDURE AjustarCaptionConfirmar
+        IF !PEMSTATUS(THIS, "cmg_4c_Sair", 5)
+            RETURN
+        ENDIF
+        THIS.cmg_4c_Sair.Buttons(1).Caption = ;
+            IIF(THIS.pcEscolha == "PROCURAR", "\<Procurar", "\<Salvar")
     ENDPROC
 
     *============================================================
@@ -2333,6 +2363,7 @@ DEFINE CLASS FormCliente AS FormBase
     PROCEDURE IrParaDados
         LOCAL loc_oErro
         TRY
+            THIS.AjustarCaptionConfirmar()
             IF PEMSTATUS(THIS, "cnt_4c_ViewLista", 5)
                 THIS.cnt_4c_ViewLista.Visible = .F.
             ENDIF
@@ -3786,7 +3817,10 @@ DEFINE CLASS FormCliente AS FormBase
         *-- erro de runtime la dentro derrubar a referencia e fechar o dialogo.
         IF VARTYPE(loc_oDlg) = "O"
             loc_oDlg.Show()
+            *-- LER antes de soltar: o dialogo faz Hide(), nao Release() - o objeto
+            *-- fica vivo justamente para esta leitura (Erro168).
             loc_nRet = loc_oDlg.this_nRetorno
+            loc_oDlg.Release()
             loc_oDlg = .NULL.
         ENDIF
 

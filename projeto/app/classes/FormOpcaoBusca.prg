@@ -29,10 +29,20 @@
 *
 *     loc_oDlg = CREATEOBJECT("FormOpcaoBusca", loc_cMensagem)
 *     IF VARTYPE(loc_oDlg) = "O"
-*         loc_oDlg.Show()
-*         loc_nRetorno = loc_oDlg.this_nRetorno
+*         loc_oDlg.Show()                        && bloqueia ate o Hide()
+*         loc_nRetorno = loc_oDlg.this_nRetorno  && LER antes de soltar
+*         loc_oDlg.Release()
 *         loc_oDlg = .NULL.
 *     ENDIF
+*
+* IMPORTANTE - os botoes chamam Hide(), NAO Release() (Erro168):
+* Release() DESTROI o objeto, e a linha seguinte do caller
+* (loc_oDlg.this_nRetorno) estoura com "LOC_ODLG is not an object". Hide()
+* desbloqueia o Show() e mantem o objeto vivo para a leitura; quem solta eh o
+* caller, depois de ler. Eh a mesma regra que o FormBuscaAuxiliar ja
+* documenta no cabecalho dele:
+*     "Usa Hide() em vez de Release() para permitir leitura de propriedades
+*      Caller deve chamar Release() apos ler valores"
 *==============================================================================
 
 DEFINE CLASS FormOpcaoBusca AS Form
@@ -217,7 +227,8 @@ DEFINE CLASS FormOpcaoBusca AS Form
         *-- OptionGroup.Value eh NUMERICO e ja vale 1..4
         THIS.this_nRetorno = IIF(VARTYPE(THIS.opt_4c_Modo.Value) = "N", ;
                                  THIS.opt_4c_Modo.Value, 1)
-        THIS.Release()
+        *-- Hide, nao Release: o caller ainda vai ler this_nRetorno (Erro168)
+        THIS.Hide()
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -225,7 +236,8 @@ DEFINE CLASS FormOpcaoBusca AS Form
     *--------------------------------------------------------------------------
         *-- 0 = o legado nao executa consulta nenhuma
         THIS.this_nRetorno = 0
-        THIS.Release()
+        *-- Hide, nao Release: o caller ainda vai ler this_nRetorno (Erro168)
+        THIS.Hide()
     ENDPROC
 
     *--------------------------------------------------------------------------

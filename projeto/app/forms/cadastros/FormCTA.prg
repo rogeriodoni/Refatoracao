@@ -4426,12 +4426,39 @@ DEFINE CLASS FormCTA AS FormBase
     *===========================================================================
     * AlternarPagina - Alterna entre Page1 (LISTA) e Page2 (DADOS)
     *===========================================================================
+    *===========================================================================
+    * AjustarCaptionConfirmar - a legenda do botao de confirmar acompanha a
+    * ACAO em curso (Erro168).
+    *
+    * No legado a legenda nao eh fixa: o default da classe Grupo_Salva do
+    * frmcadastro eh "\<Confirmar" e o codigo a troca conforme o caso - o
+    * caminho de Pre-Cadastro faz `.Salva.Caption='\<Alterar'` ao mudar
+    * pcEscolha para ALTERAR. Em PROCURAR o botao nao grava nada (dispara o
+    * msv_procurar), entao continuar escrito "Confirmar" mente sobre o clique.
+    *
+    * NOTA: "Procurar" segue o PADRAO atestado (legenda = nome da acao) com o
+    * termo do proprio legado - a opcao 5 do Grupo_op chama-se `procurar`.
+    * Nao eh transcricao literal: o acervo so traz o caso de ALTERAR.
+    *===========================================================================
+    PROCEDURE AjustarCaptionConfirmar()
+        LOCAL loc_oBt
+        IF !PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "cnt_4c_BotoesAcao", 5)
+            RETURN
+        ENDIF
+        loc_oBt = THIS.pgf_4c_Paginas.Page2.cnt_4c_BotoesAcao
+        IF PEMSTATUS(loc_oBt, "cmd_4c_Confirmar", 5)
+            loc_oBt.cmd_4c_Confirmar.Caption = ;
+                IIF(THIS.pcEscolha == "PROCURAR", "Procurar", "Confirmar")
+        ENDIF
+    ENDPROC
+
     PROCEDURE AlternarPagina(par_cModo)
         *-- Sai do modo PROCURAR em qualquer troca de pagina: Incluir / Alterar
         *-- / Visualizar passam por aqui antes de fazer o que fazem, entao
         *-- nenhum deles herda o estado da procura anterior (Erro167). Quem
         *-- entra em PROCURAR marca DEPOIS de chamar este metodo.
         THIS.pcEscolha = ""
+        THIS.AjustarCaptionConfirmar()
         THIS.this_cModoAtual = par_cModo
 
         IF par_cModo = "DADOS"
@@ -5463,6 +5490,7 @@ DEFINE CLASS FormCTA AS FormBase
         *-- marcar DEPOIS: o AlternarPagina limpa o pcEscolha
         THIS.pcEscolha = "PROCURAR"
         THIS.BuscaPor  = 1
+        THIS.AjustarCaptionConfirmar()
 
         *-- Codigo editavel e com foco, como o mLeDados do legado faz no
         *-- ramo PROCURAR (GetCodigo.ReadOnly = .f. / SetFocus)
@@ -5575,6 +5603,7 @@ DEFINE CLASS FormCTA AS FormBase
         *-- AlternarPagina("LISTA") chamaria CarregarLista e DESFARIA a busca,
         *-- por isso a troca eh feita aqui, na mao.
         THIS.pcEscolha       = ""
+        THIS.AjustarCaptionConfirmar()
         THIS.this_cModoAtual = "LISTA"
         THIS.pgf_4c_Paginas.ActivePage = 1
         THIS.AjustarBotoesPorModo()
@@ -5626,7 +5655,10 @@ DEFINE CLASS FormCTA AS FormBase
         *-- Regra #29: Show() de form MODAL fica FORA do TRY.
         IF VARTYPE(loc_oDlg) = "O"
             loc_oDlg.Show()
+            *-- LER antes de soltar: o dialogo faz Hide(), nao Release() - o objeto
+            *-- fica vivo justamente para esta leitura (Erro168).
             loc_nRet = loc_oDlg.this_nRetorno
+            loc_oDlg.Release()
             loc_oDlg = .NULL.
         ENDIF
 
