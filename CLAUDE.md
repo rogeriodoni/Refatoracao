@@ -499,6 +499,8 @@ Wrapper em `projeto\app\utils\<nome minusculo>.prg`, padrao `isempty.prg`: `LPAR
 
 A 3a linha eh a que se erra: stub devolvendo `0` para imposto grava numero errado **em silencio** (regra #17); ausente, o erro aparece alto. Ao contrario, `.F.` puro em `fGerPDFCreator` fazia o usuario clicar e nada acontecer - ali o wrapper **diverge do legado de proposito** e avisa. Ausencia tem de ficar VISIVEL.
 
+**O wrapper tem de reproduzir o CONTRATO, nao so o nome.** Redirecionar para a primitiva VFP de nome parecido NAO basta: `IsEmpty` do Fortyus **nao eh** `EMPTY` do VFP. Medido: `EMPTY(.NULL.)` devolve `.F.` - para a nativa, NULL "nao esta vazio"; para o legado, esta. O `isempty.prg` fazia so `RETURN EMPTY(par_uValor)` e divergia nesse unico caso, em **142** call sites do p-code. O sintoma sai LONGE da causa e sem erro: o `mRetiraNull` do `clsconta` limpa nulos com `Update crSigCdCli Set Obs = "" Where IsEmpty(Obs)`, o `WHERE` nao casava e o campo Obs. do Cadastro de Cliente exibia **`.NULL.`** na tela. Guarda de NULL **antes** de delegar, com `IF` separado - `ISNULL(x) OR EMPTY(x)` avaliaria `EMPTY(x)` de qualquer jeito, porque VFP9 nao faz short-circuit em OR. Ao escrever ou revisar wrapper, testar NULL, vazio, zero, `.F.` e **argumento ausente**, e provar por tabela que todo valor fora do caso corrigido devolve o MESMO de antes. Delegacao com guarda de tipo eh o padrao certo (`fvalidarcpf.prg`/`fvalidarcnpj.prg` checam `VARTYPE` antes de delegar). Skill: secao **217**. Origem: Erro166 (2026-09-22).
+
 **Vale para OBJETO global**: sem `goSistema.ObjectConn` (`cOpenConn` de `classes\sigclcnx.PRG`, que le `dbo.SigConn`), `CreateObject('fSqlConector','cep')` devolve `pnIdConn = -1` e o VCX exibe *"Impossivel Efetuar Conexao Com o Servidor de Banco de Dados..."* - mensagem que **mente**, porque a conexao principal esta viva.
 
 **So apareceu depois do #26**: com o PATH quebrado os VCX nunca alcancavam `utils\`. Consertar resolucao de nome **desenterra ausencias** - rodar a auditoria logo apos mexer em PATH/`SET PROCEDURE`.
@@ -605,6 +607,28 @@ O migrado entra por `AddObject("cnt_4c_Conta", "clsconta")` e **nao tem subclass
 **Para ler as propriedades REAIS de uma classe de VCX** (o `.VCT` eh p-code, `grep` devolve lixo): abrir a `.vcx` como **DBF** no VFP9 e ler a coluna `Properties` (`USE Framework\classresp.vcx` + `SCAN` por `ObjName`/`Class`).
 
 **Sem auto-fix** - o defeito mora em p-code que o corretor nao le, e o universo eh UM form wrapper. Skill: secoes **214**, **215**, **216**. Origem: Erro165 (2026-09-22).
+
+### 32. Form wrapper de VCX: auditar as `ThisForm.<prop>` do p-code, separando as que o VCX cria sozinho
+Ao ver `Property X is not found`, a tentacao eh declarar aquela property e seguir. A varredura certa eh enumerar TODAS e separar em duas familias.
+
+Para a MAIORIA o VCX se vira sozinho, com o par guarda + `AddProperty`:
+
+```foxpro
+If Type('ThisForm.OldEmpresa') == 'U'
+    ThisForm.AddProperty('OldEmpresa', ...)
+EndIf
+```
+
+Essas **nunca** dao erro e nao precisam ser declaradas. As que aparecem **CRUAS**, sem esse par, sao exatamente as que estouram. No `clsconta` sao **18** properties customizadas: **17 auto-criadas** e **UMA** nao - `AlterouLgpd`, que fazia gravar uma ALTERACAO estourar `Erro 1734: Property ALTEROULGPD is not found` em `FORMCLIENTE.CNT_4C_CONTA.MGRAVADADOS`. A varredura nao so acha a que falta: **prova que nao ha outra na fila**.
+
+**Como varrer**: o `.VCT` eh p-code e grep no arquivo inteiro mistura TODAS as classes dele (140+ nomes, com lixo de bytes printaveis). Abrir a `.vcx` como **DBF** no VFP9 e dumpar a coluna `Methods` SO dos registros cujo `Parent`+`ObjName` contem o nome da classe (tecnica da regra #31); extrair `ThisForm.<x>`, descontar as nativas de Form (`Name`, `LockScreen`, `Height`, `BackColor`, `DataSessionId`, `Refresh`, `AddProperty`) e cruzar com as properties **e metodos** do `.prg` migrado - metodo conta, `ThisForm.checaibge` eh chamada de metodo.
+
+**Tres armadilhas ao redor**:
+1. **Property de OBJETO que o migrado nao tem** (`ThisForm.Pagina`, o PageFrame do `frmcadastro`) so eh segura se TODO uso estiver sob `If Type('...')=='O'` - conferir os sites, nao presumir.
+2. **O bloco recem-habilitado usa cursores.** Declarar faz o `IF` finalmente entrar; o que esta dentro dele precisa existir (`crSigCdLgp` vem do `mIniConta`). Sem conferir, troca-se um erro por outro.
+3. **Declarar NAO basta quando o ciclo de vida difere.** O legado eh modal e vive UM registro; o migrado nao fecha entre um e outro. Sem RESET no funil de chamadas (regra #31), o primeiro cliente em que alguem tocar no consentimento deixa `AlterouLgpd` ligado para sempre e todo ALTERAR seguinte grava **historico de LGPD falso** - exatamente o que a tabela existe para nao ter.
+
+Auditoria: `automation\VerificarPropsThisFormVCX.ps1` (exit 1 se houver pendencia; property so tocada apos `Type(...)` sai como WARNING, nao como falha). **Sem auto-fix**: o defeito eh uma declaracao AUSENTE, e so o p-code do VCX diz qual. Skill: secao **218**. Origem: Erro166 (2026-09-22).
 
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 

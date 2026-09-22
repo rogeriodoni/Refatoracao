@@ -12083,3 +12083,179 @@ Ao migrar wrapper: para cada `grupo.membro.Prop` do dump cujo **membro tem nome 
 aplicar TODAS as propriedades declaradas — `Top`/`Left`/`Height`/`Width`, `FontName`/`FontSize`,
 `Picture`, `ForeColor`/`BackColor`/`DisabledBackColor`, `Themes`. E aplicar a geometria do
 interno **antes** de posicionar o grupo, senao o `AutoSize` reposiciona depois.
+
+---
+
+## 217. Wrapper de funcao global do legado tem de reproduzir o CONTRATO, nao so o nome (Erro166 2026-09-22)
+
+A secao **210** manda criar um wrapper em `projeto\app\utils\<nome>.prg` para cada funcao
+global do legado que o p-code dos VCX chama. O que ela nao diz, e este erro ensinou: o wrapper
+tem de devolver o que a funcao ORIGINAL devolvia. Redirecionar para a primitiva VFP de nome
+parecido **nao basta**.
+
+`IsEmpty` do Fortyus **nao eh** `EMPTY` do VFP. Medido no VFP9:
+
+| chamada | retorno |
+|---|---|
+| `EMPTY(.NULL.)` | **`.F.`** (tipo L, sem erro) |
+
+Ou seja: para a primitiva nativa, NULL **nao esta vazio**. Para o `IsEmpty` do legado esta — eh
+o que o nome diz e o que todos os call sites pressupoem. O wrapper nascera assim:
+
+```foxpro
+* ERRADO - diverge do legado exatamente no caso NULL
+LPARAMETERS par_uValor
+RETURN EMPTY(par_uValor)
+
+* CERTO - guarda de NULL ANTES de delegar
+LPARAMETERS par_uValor
+IF ISNULL(par_uValor)
+    RETURN .T.
+ENDIF
+RETURN EMPTY(par_uValor)
+```
+
+O `IF` eh separado **de proposito**: VFP9 nao faz short-circuit em `OR`, entao
+`ISNULL(x) OR EMPTY(x)` avaliaria `EMPTY(x)` mesmo com `x` nulo. Aqui seria inofensivo
+(`EMPTY(.NULL.)` nao da erro), mas a forma com `IF` nao depende disso.
+
+**O sintoma aparece LONGE da causa, em dado, sem erro nenhum.** O `mRetiraNull` do `clsconta`
+limpa os nulos assim:
+
+```foxpro
+Update crSigCdCli Set Obs = "" Where IsEmpty(Obs)
+```
+
+Com o wrapper devolvendo `.F.` para NULL, o `WHERE` nao casava, a linha nunca era limpa e o
+campo **Obs.** do Cadastro de Cliente exibia **`.NULL.`** na tela. Compila limpo, nao entra em
+log, nao aparece em nenhum gate do pipeline. Medido:
+
+```
+UPDATE ... WHERE EMPTY(nome)                 -> linha NULL NAO eh limpa
+UPDATE ... WHERE ISNULL(nome) OR EMPTY(nome) -> limpa
+```
+
+**Alcance de um wrapper eh sempre grande**: `IsEmpty` tem **142** call sites no p-code dos VCX
+que o projeto carrega (`classresp.vcx` 140, `framework.vcx` 2). Por isso a mudanca tem de ser
+provada por tabela, nao por leitura. Depois da correcao, para TODO valor nao nulo o retorno eh
+**identico** ao de antes — a unica mudanca eh NULL passar a valer `.T.`:
+
+| entrada | antes | depois |
+|---|---|---|
+| `.NULL.` | `.F.` | **`.T.`** |
+| `""` | `.T.` | `.T.` |
+| `"texto"` | `.F.` | `.F.` |
+| `0` / `7` | `.T.` / `.F.` | `.T.` / `.F.` |
+| `.F.` / `.T.` | `.T.` / `.F.` | `.T.` / `.F.` |
+| `{}` (data vazia) | `.T.` | `.T.` |
+| argumento AUSENTE | `.T.` | `.T.` |
+
+Nos dois sentidos a mudanca eh mais segura que o comportamento anterior: `If IsEmpty(x)` passa
+a aplicar o default, e `If Not IsEmpty(x)` deixa de usar um valor nulo como se fosse dado.
+
+**Ao escrever ou revisar um wrapper de `utils\`**: testar explicitamente NULL, vazio, zero,
+`.F.` e **argumento ausente** (`LPARAMETERS` nao recebido vira `.F.`), e conferir contra o que
+os call sites do p-code esperam. Vale para qualquer coluna que venha do SQL Server permitindo
+NULL. Delegacao **com guarda de tipo** eh o padrao certo, e ja existe no projeto:
+
+```foxpro
+* fvalidarcpf.prg
+LPARAMETERS par_cCPF
+IF VARTYPE(par_cCPF) <> "C"
+    RETURN .F.
+ENDIF
+RETURN ValidarCPF(par_cCPF)
+```
+
+Auditoria dos wrappers existentes (2026-09-22): os demais estao corretos — ou sao no-op
+documentado (`fchkcpovlc`, `fchkcntvlc`, `fgravarlog`, `finibirbtn`, `fgerpdfcreator`,
+`fconfiggeral`), ou delegam com guarda de tipo (`fvalidarcpf`, `fvalidarcnpj`). `isempty.prg`
+era o unico a delegar para uma primitiva de nome parecido sem conferir o contrato.
+
+---
+
+## 218. Form wrapper de VCX: auditar as properties de ThisForm que o p-code toca (Erro166 2026-09-22)
+
+O p-code do VCX chama `ThisForm.<x>` em dezenas de pontos. A tentacao, ao ver
+`Property X is not found`, eh declarar aquela property e seguir. Errado: a varredura certa eh
+enumerar TODAS e **separar as que o VCX cria sozinho das que nao**.
+
+Para a maioria delas o VCX se vira, com o par guarda + `AddProperty`:
+
+```foxpro
+If Type('ThisForm.OldEmpresa') == 'U'
+    ThisForm.AddProperty('OldEmpresa', ...)
+EndIf
+```
+
+Essas **nunca** dao erro e nao precisam ser declaradas no form migrado. As que aparecem
+**cruas**, sem esse par, sao exatamente as que estouram em runtime.
+
+No `clsconta` sao **18** properties customizadas. **17 auto-criadas** — AlteraEmpresa, CodClis,
+CriouForm, FigName, Inicio, InsereAuto, MontouCampos, OldCargo, OldEmpresa, pcEscolha,
+pcLstSemChk1, pcLstSemChk2, peInicValue, plAltCpf, plAutoInclusao, pnRetGravacao, poWindowCli,
+PrimeiraEntrada, Ret2Pos, TipoCep, TipoCepTrab, tipopais, ValidaIE. E **uma** fora da lista:
+
+```foxpro
+* mGravaDados, linha 22 - nenhuma guarda, nenhum AddProperty
+If ThisForm.pcEscolha = 'ALTERAR' and ThisForm.AlterouLgpd
+    Zap in CrSigCdLgp          && grava o historico de consentimento LGPD
+```
+
+```foxpro
+* InteractiveChange dos 6 controles de LGPD da pgframeDados1
+* (ckAutEmail / ckAutSms / ckAutWhats / ckAutTeleg / lblAutCtt / cmgimgLgpd)
+If ThisForm.pcEscolha = 'ALTERAR'
+    ThisForm.AlterouLgpd = .T.
+EndIf
+```
+
+Gravar uma ALTERACAO estourava `Erro 1734: Property ALTEROULGPD is not found` em
+`FORMCLIENTE.CNT_4C_CONTA.MGRAVADADOS`. A varredura nao so acha a que falta: ela **prova que
+nao ha outra na fila**.
+
+### Como varrer
+
+O `.VCT` eh p-code — `grep` devolve lixo, e grepar o arquivo inteiro mistura **todas** as
+classes dele (deu 140+ nomes, com falsos positivos vindos de bytes printaveis do p-code).
+Abrir a `.vcx` como **DBF** no VFP9 e dumpar a coluna `Methods` **so** dos registros cujo
+`Parent` + `ObjName` contem o nome da classe (mesma tecnica da secao **214**):
+
+```foxpro
+USE "C:\4c\Framework\classresp.vcx" ALIAS vcxc IN 0 SHARED
+SCAN FOR "clsconta" $ LOWER(ALLTRIM(NVL(vcxc.Parent,"")) + "|" + ALLTRIM(NVL(vcxc.ObjName,"")))
+    lcOut = lcOut + NVL(vcxc.Methods, "") + CHR(13) + CHR(10)
+ENDSCAN
+```
+
+Depois, sobre esse dump: extrair `ThisForm.<x>`, descontar as nativas de Form
+(`Name`, `LockScreen`, `Height`, `BackColor`, `DataSessionId`, `Refresh`, `AddProperty`) e
+cruzar com as properties **e metodos** ja declarados no `.prg` migrado — metodo conta, porque
+`ThisForm.checaibge` eh chamada de metodo, nao leitura de property.
+
+### Tres armadilhas ao redor
+
+**1. Property de OBJETO que o migrado nao tem.** `ThisForm.Pagina` eh o PageFrame do
+`frmcadastro` legado; o form migrado nao tem esse objeto. So eh segura porque **todo** uso esta
+dentro de `If Type('...')=='O'` — conferir os sites um a um, nao presumir:
+
+```foxpro
+If Type('ThisForm.Pagina.Dados.Grupo_Salva.Salva')=='O'
+    ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndIf
+```
+
+**2. O bloco recem-habilitado usa cursores.** Declarar a property faz o `IF` finalmente entrar —
+e ai o que estava dentro dele precisa existir. Aqui `crSigCdLgp` eh criado pelo `mIniConta`
+(`.AddCursor('SigCdLgp', 'cIdChaves', 'crSigCdLgp', '', '', lcQryCdLgp)`), que o form ja chama.
+Sem essa conferencia, troca-se um erro por outro.
+
+**3. Declarar NAO basta quando o ciclo de vida difere.** O `SIGCDCLI` legado eh modal e vive UM
+cliente: o flag nasce `.F.` e morre com o form. O migrado **nao fecha** entre registros
+(Lista -> Dados -> Lista -> Dados). Sem resetar, o primeiro cliente em que alguem tocasse no
+consentimento deixaria `AlterouLgpd` ligado para sempre, e todo ALTERAR seguinte gravaria uma
+linha em `CrSigCdLgp` sem ninguem ter mexido em LGPD — **registro de consentimento falso**, que
+eh justamente o que a tabela existe para nao ter. O reset vai no **funil** de chamadas ao
+metodo do VCX (secao **214**): os 5 caminhos que chamam `mLeDados` sao todos inicio de ciclo.
+
+Auditoria: `automation\VerificarPropsThisFormVCX.ps1`.
