@@ -61,6 +61,44 @@ DEFINE CLASS FormCliente AS FormBase
     CodClis       = ""        && codigo do cliente corrente (usado pelo wrapper)
     tipopais      = .F.       && flag pais estrangeiro
 
+    *-- AlterouLgpd (Erro166): a UNICA property de ThisForm que o clsconta
+    *-- usa e NAO cria sozinho.
+    *--
+    *-- O p-code do clsconta toca 18 properties customizadas em ThisForm, e
+    *-- para 17 delas ele mesmo se vira, com o par guarda + AddProperty:
+    *--
+    *--     If Type('ThisForm.OldEmpresa') == 'U'
+    *--         ThisForm.AddProperty('OldEmpresa', ...)
+    *--     EndIf
+    *--
+    *-- (AlteraEmpresa, CodClis, CriouForm, FigName, Inicio, InsereAuto,
+    *--  MontouCampos, OldCargo, OldEmpresa, pcEscolha, pcLstSemChk1,
+    *--  pcLstSemChk2, peInicValue, plAltCpf, plAutoInclusao, pnRetGravacao,
+    *--  poWindowCli, PrimeiraEntrada, Ret2Pos, TipoCep, TipoCepTrab,
+    *--  tipopais, ValidaIE). Por isso nunca deram erro.
+    *--
+    *-- AlterouLgpd ficou de fora dessa lista: aparece CRU nos dois unicos
+    *-- lugares em que eh citada -
+    *--
+    *--   InteractiveChange dos controles de LGPD da pgframeDados1
+    *--     (ckAutEmail / ckAutSms / ckAutWhats / ckAutTeleg / lblAutCtt /
+    *--      cmgimgLgpd):
+    *--         If ThisForm.pcEscolha = 'ALTERAR'
+    *--             ThisForm.AlterouLgpd = .T.
+    *--         EndIf
+    *--
+    *--   mGravaDados, linha 22:
+    *--         If ThisForm.pcEscolha = 'ALTERAR' and ThisForm.AlterouLgpd
+    *--             Zap in CrSigCdLgp ... (grava o historico de consentimento)
+    *--
+    *-- Sem a property, gravar uma ALTERACAO estourava
+    *-- "Erro 1734: Property ALTEROULGPD is not found" em
+    *-- FORMCLIENTE.CNT_4C_CONTA.MGRAVADADOS.
+    *--
+    *-- O reset por ciclo de edicao fica em ChamarMLeDadosSeguro - ver o
+    *-- comentario la, que explica por que o legado nao precisava dele.
+    AlterouLgpd   = .F.       && LGPD: o usuario mexeu no consentimento?
+
     *-- Parametros recebidos em Init (armazenados para uso em InicializarForm)
     this_cCpf         = ""
     this_cGrupo       = ""
@@ -2397,6 +2435,24 @@ DEFINE CLASS FormCliente AS FormBase
         *-- Funil unico de todas as chamadas a mLeDados (Incluir/Alterar/Visualizar):
         *-- reparar a Gradei ANTES, senao o mmontagrade aborta e leva o mLeDados junto.
         THIS.RepararGradeiColunas()
+
+        *-- LGPD: comeca cada ciclo de edicao com o flag limpo (Erro166).
+        *--
+        *-- O legado nao tem este reset e nao precisa: o SIGCDCLI eh modal e
+        *-- vive UM cliente - abre, edita, grava, fecha. O flag nasce .F. com o
+        *-- form e morre com ele.
+        *--
+        *-- Aqui o form NAO fecha entre um registro e outro (Lista -> Dados ->
+        *-- Lista -> Dados). Sem limpar, o primeiro cliente em que alguem
+        *-- tocasse no consentimento deixaria AlterouLgpd = .T. para sempre, e
+        *-- todo ALTERAR seguinte gravaria uma linha de historico em CrSigCdLgp
+        *-- sem ninguem ter mexido em LGPD nenhuma - registro de consentimento
+        *-- falso, que eh justamente o que a tabela existe para nao ter.
+        *--
+        *-- Este eh o ponto certo: os 5 caminhos que chamam mLeDados
+        *-- (InicializarForm / Incluir / Alterar / Visualizar / CarregarLista)
+        *-- sao todos inicio de ciclo.
+        THIS.AlterouLgpd = .F.
 
         loc_cGrupo = ALLTRIM(IIF(TYPE("par_cGrupo") = "C", par_cGrupo, ""))
         loc_cCli   = ALLTRIM(IIF(TYPE("par_cCli")   = "C", par_cCli,   ""))
