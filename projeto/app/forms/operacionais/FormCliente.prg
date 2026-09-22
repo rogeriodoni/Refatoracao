@@ -14,11 +14,16 @@
 
 DEFINE CLASS FormCliente AS FormBase
 
-    *-- Propriedades visuais (aumentado para 1000x600 p/ acomodar layout
-    *-- Lista+Dados como no legado SIGCDCTA. Wrapper clsconta interno usa
-    *-- 768 de largura fixa; sobra 232 na direita para botoes CRUD topo.)
-    Height       = 600
-    Width        = 1000
+    *-- Propriedades visuais. O form hospeda DUAS vistas: a Lista (grid de
+    *-- clientes) e os Dados (wrapper clsconta). Quem manda no tamanho eh o
+    *-- clsconta, que com as 12 abas visiveis precisa de 1000 x 600 (medido -
+    *-- ver ConfigurarContaCls). Com o container em Left = 12 / Top = 132:
+    *--   Width  >= 12 + 1000 + 12 = 1024
+    *--   Height >= 132 + 600 + 8  = 740
+    *-- A vista Lista acompanha sozinha: cabecalho, botoes e grid sao todos
+    *-- dimensionados por THIS.Width / THIS.Height.
+    Height       = 740
+    Width        = 1024
     AutoCenter   = .T.
     Caption      = "Cadastro de Cliente"
     ShowWindow = 1
@@ -64,6 +69,34 @@ DEFINE CLASS FormCliente AS FormBase
     this_cCli         = ""
     this_cTpBloqCar   = "0"
     this_cMudaCpfCgc  = "0"
+
+    *-- this_cTpCadCli: o 3o parametro do clsconta.mLeDados, e o que decide o
+    *-- FORMATO da tela inteira. Fonte unica: os 5 pontos que chamam mLeDados
+    *-- (InicializarForm / Incluir / Alterar / Visualizar / CarregarLista) leem
+    *-- daqui, entao trocar o modo eh mudar UMA linha.
+    *--
+    *--                      '0' (aqui)                  '1' (o que o SCX passa)
+    *--   Abas               as 12, visiveis             nenhuma
+    *--   pgframeDados.Top   0                           Form.Height - PageHeight
+    *--   Paginas 3..10      conforme crSigCdGcr         desabilitadas
+    *--   Navegacao          pelas abas                  cmdGCarac / cmdgPessoal
+    *--
+    *-- O `sigcdcli.scx` passa '1' - ele eh o cadastro RAPIDO de cliente, so a
+    *-- primeira pagina. Aqui a tela alvo eh a do sistema modular, que mostra as
+    *-- 12 abas (Dados Principais, Pessoais/Comerciais, Dados Bancarios,
+    *-- Follow-up, Conta Corrente, Dados Fiscais, Complemento, Empresa, Dados
+    *-- Contabeis, Informacoes Cadastrais, Caracteristicas, Perfil).
+    *--
+    *-- DIVERGENCIA DELIBERADA do SCX, decidida com o time. Duas consequencias
+    *-- que vem junto e nao sao regressao:
+    *--  1. O `mLeDados` passa a chamar `fAcessoContas(goSistema.Usuario,
+    *--     lcGrupo, 'C', lcIcli)` em ALTERAR - com '1' esse gate nem rodava.
+    *--     Usuario 4CONTROL tem acesso total; os demais passam pela regra real
+    *--     de SigSyAgc/SigSyAcc/SigCdAcG, que eh o comportamento do legado.
+    *--  2. O fallback de grupo que o mLeDados so faz com '1'
+    *--     (`lcGrupo = crSigCdPam.GrPadClis`) deixa de rodar la dentro - mas o
+    *--     `ChamarMLeDadosSeguro` ja resolve o grupo antes de chamar.
+    this_cTpCadCli    = "0"
 
     *============================================================
     PROCEDURE Init
@@ -229,47 +262,14 @@ DEFINE CLASS FormCliente AS FormBase
                     ENDIF
                 ENDTRY
 
-                THIS.cnt_4c_Conta.pgframeDados.Top = 0
+                *-- Geometria dos tres CommandGroup de navegacao entre abas:
+                *-- so precisa correr UMA vez (o mLeDados nao mexe no interno).
+                THIS.ConfigurarBotoesNavegacaoAbas()
+
+                *-- Layout que o mLeDados DESTROI a cada chamada (ver metodo).
+                THIS.AplicarLayoutPosLeDados()
+
                 THIS.cnt_4c_Conta.cmdgPessoal.cmdPessoal.ToolTipText = "F5 - Dados Pessoais/Comerciais"
-
-                *-- BARRA DE NAVEGACAO ENTRE ABAS (Erro163_Aba1_3)
-                *--
-                *-- O pgframeDados do clsconta NAO mostra tabs: quem troca de aba
-                *-- sao estes tres CommandGroup. A migracao aplicou dezenas de
-                *-- overrides do SCX nos controles das PAGINAS e esqueceu os tres
-                *-- filhos DIRETOS do cntConta - entao eles ficaram no Left/Top da
-                *-- CLASSE, que eh fora da area do container:
-                *--
-                *--   botao         classe      SCX legado    cnt_4c_Conta
-                *--   cmdGCarac     891, 540 -> 633, 397      Width  = 768
-                *--   cmdGFtec      924, 540 -> 672, 397      Height = 450
-                *--   cmdgpessoal   957, 539 -> 711, 397
-                *--
-                *-- Container RECORTA filho fora da area, entao os tres sumiam da
-                *-- tela sem erro nenhum: o usuario entrava na aba de endereco e
-                *-- nao tinha como voltar para a aba 1 - so restava Salvar.
-                *-- O Width/Height de 768x450 esta FIEL ao legado; o que faltava
-                *-- eram estes Left/Top, que o SCX declara e o migrador nao copiou.
-                IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdGCarac", 5)
-                    WITH THIS.cnt_4c_Conta.cmdGCarac
-                        .Left = 633
-                        .Top  = 397
-                    ENDWITH
-                ENDIF
-
-                IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdGFtec", 5)
-                    WITH THIS.cnt_4c_Conta.cmdGFtec
-                        .Left = 672
-                        .Top  = 397
-                    ENDWITH
-                ENDIF
-
-                IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdgPessoal", 5)
-                    WITH THIS.cnt_4c_Conta.cmdgPessoal
-                        .Left = 711
-                        .Top  = 397
-                    ENDWITH
-                ENDIF
 
                 *-- Ajustar navegacao inicial do PageFrame interno (pgframeDados)
                 THIS.ConfigurarPaginaLista()
@@ -293,7 +293,7 @@ DEFINE CLASS FormCliente AS FormBase
                 loc_lRetLeDados = .T.  && default sucesso se pulando mLeDados
                 IF loc_lIniciarEmDados
                     TRY
-                        loc_lRetLeDados = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                        loc_lRetLeDados = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, THIS.this_cTpCadCli, ;
                             THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                         IF loc_nHDiag > 0
                             FPUTS(loc_nHDiag, "mLeDados: retornou=" + TRANSFORM(loc_lRetLeDados))
@@ -858,15 +858,195 @@ DEFINE CLASS FormCliente AS FormBase
             MsgErro("Erro ao carregar biblioteca de classes: " + loc_oErro.Message, "Erro")
         ENDTRY
 
+        *-- Dimensoes: as da CLASSE (1000 x 600), nao as do SCX (768 x 450).
+        *--
+        *-- O SCX legado encolhe o container para 768 x 450 porque roda com
+        *-- pcTpCadCli = '1': sem abas e so a pagina de Cadastro. Neste ponto o
+        *-- form passou a rodar com pcTpCadCli = '0' (as 12 abas visiveis, como
+        *-- no sistema modular), e ai 768 x 450 recorta conteudo.
+        *--
+        *-- Medido instanciando o clsconta no VFP9 e percorrendo Pages/Controls
+        *-- (maior Top+Height e Left+Width de cada pagina):
+        *--
+        *--   pgframeDados        802 de altura, 12 paginas
+        *--   Tabs = .T.       -> PageHeight 774 (faixa de abas = 28)
+        *--   pagina mais ALTA -> pgframeDados1  "Cadastro"  bottom = 567
+        *--   pagina mais LARGA-> pgframeDados2  "Pessoal"   right  = 986
+        *--
+        *-- Logo: 28 + 567 = 595 de altura e 986 de largura. A classe declara
+        *-- exatamente 1000 x 600 - ela ja esta dimensionada para o conjunto
+        *-- completo das 12 paginas. Com 768 x 450 ficariam de fora a coluna
+        *-- direita da pagina 1 (LGPD / Conta Inativa, x 768..960) e o rodape
+        *-- (Diretorio/Pasta de Arquivos, y 450..567).
         THIS.AddObject("cnt_4c_Conta", "clsconta")
         WITH THIS.cnt_4c_Conta
             .Top    = 132
             .Left   = 12
-            .Width  = 768
-            .Height = 450
+            .Width  = 1000
+            .Height = 600
             .Visible     = .T.
         ENDWITH
         *-- cnt_4c_Conta permanece oculto ate mLeDados retornar .T. em InicializarForm
+    ENDPROC
+
+    *============================================================
+    * AplicarLayoutPosLeDados - refaz o layout que o mLeDados do
+    * clsconta DESTROI a cada chamada (Erro165).
+    *
+    * O mLeDados (p-code do classresp.vcx) termina com:
+    *
+    *     .Tabs = (This.pcTpCadCli=='0')
+    *     .Top  = Iif(.Tabs, 0, ThisForm.Height - This.PgframeDados.PageHeight)
+    *
+    * Medido na classe: clsconta.pgframeDados.Height = 802 e o form tinha
+    * Height = 600 - com pcTpCadCli='1' o Tabs fica .F. e o Top vira
+    * 600 - 798 = -198. Ou seja: a pagina 1 sobe ~198px e o container
+    * RECORTA o topo dela. O usuario clicava Incluir e caia direto no
+    * bloco de endereco/contato (GetCEP.Top = 200 no SCX), sem
+    * Codigo / Nome / CPF na tela.
+    *
+    * NOTA: com this_cTpCadCli = "0" (o modo atual, ver a property) o
+    * proprio mLeDados ja cai no ramo `Iif(.Tabs, 0, ...)` e deixa o Top
+    * em 0 sozinho - este reset vira rede de seguranca, nao o conserto.
+    * Ele fica porque eh barato e porque volta a ser o conserto no minuto
+    * em que alguem devolver a property para "1". Pelo mesmo motivo os tres
+    * CommandGroup de navegacao continuam sendo reposicionados aqui, mesmo
+    * que com "0" o mLeDados os deixe invisiveis (quem navega sao as abas).
+    *
+    * O SCX legado resolve isso com um override de mledados no PROPRIO
+    * form, que roda DEPOIS do DoDefault (sigcdcli_form_codigo_fonte.txt):
+    *
+    *     PROCEDURE mledados
+    *     Lparameters lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc
+    *     DoDefault(lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc)
+    *     thisform.cntConta.pgframeDados.Top = 0
+    *     ENDPROC
+    *
+    * Aqui o clsconta entra por AddObject (nao ha subclasse onde colocar
+    * o override), entao o reset roda no funil unico de chamadas -
+    * ChamarMLeDadosSeguro. Aplicar so no InicializarForm nao bastava: o
+    * mLeDados roda de novo em TODO Incluir/Alterar/Visualizar.
+    *
+    * O mLeDados tambem re-ancora os tres CommandGroup de navegacao com
+    * .Top = (This.Height - .Height - 4), por isso o Left/Top do SCX eh
+    * reaplicado junto.
+    *============================================================
+    PROCEDURE AplicarLayoutPosLeDados
+        IF !PEMSTATUS(THIS, "cnt_4c_Conta", 5) OR ISNULL(THIS.cnt_4c_Conta)
+            RETURN
+        ENDIF
+
+        IF PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5)
+            THIS.cnt_4c_Conta.pgframeDados.Top = 0
+        ENDIF
+
+        *-- BARRA DE NAVEGACAO ENTRE ABAS (Erro163_Aba1_3 / Erro165)
+        *--
+        *-- O pgframeDados do clsconta NAO mostra tabs: quem troca de aba
+        *-- sao estes tres CommandGroup. A migracao aplicou dezenas de
+        *-- overrides do SCX nos controles das PAGINAS e esqueceu os tres
+        *-- filhos DIRETOS do cntConta - entao eles ficaram no Left/Top da
+        *-- CLASSE, que eh fora da area do container:
+        *--
+        *--   botao         classe      SCX legado    cnt_4c_Conta
+        *--   cmdGCarac     891, 540 -> 633, 397      Width  = 768
+        *--   cmdGFtec      924, 540 -> 672, 397      Height = 450
+        *--   cmdgpessoal   957, 539 -> 711, 397
+        *--
+        *-- Container RECORTA filho fora da area, entao os tres sumiam da
+        *-- tela sem erro nenhum: o usuario entrava na aba de endereco e
+        *-- nao tinha como voltar para a aba 1 - so restava Salvar.
+        IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdGCarac", 5)
+            WITH THIS.cnt_4c_Conta.cmdGCarac
+                .Left = 633
+                .Top  = 397
+            ENDWITH
+        ENDIF
+
+        IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdGFtec", 5)
+            WITH THIS.cnt_4c_Conta.cmdGFtec
+                .Left = 672
+                .Top  = 397
+            ENDWITH
+        ENDIF
+
+        IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdgPessoal", 5)
+            WITH THIS.cnt_4c_Conta.cmdgPessoal
+                .Left = 711
+                .Top  = 397
+            ENDWITH
+        ENDIF
+    ENDPROC
+
+    *============================================================
+    * ConfigurarBotoesNavegacaoAbas - overrides do SCX legado nos
+    * CommandButton INTERNOS dos tres CommandGroup de navegacao.
+    *
+    * O migrador copiou so o Left/Top do GRUPO e deixou o botao interno
+    * com a geometria da CLASSE (32x32 em 5,5 -> grupo AutoSize de 42).
+    * O SCX declara 40x40 em 5,5 (grupo AutoSize de 50), que eh o que faz
+    * o .Top = (Height - 50 - 4) do mLeDados cair em 396 - o mesmo 397 que
+    * o SCX declara no grupo. Sem estes overrides os tres botoes ficam
+    * menores e fora da linha desenhada pelo legado.
+    *
+    * Picture/ForeColor/BackColor transcritos do dump do SCX
+    * (tasks\task372\sigcdcli_form_codigo_fonte.txt, linhas 1873-1926) -
+    * o legado usa o MESMO x_planilha.bmp nos tres; quem distingue eh o
+    * ToolTipText, que o mLeDados preenche.
+    *============================================================
+    PROCEDURE ConfigurarBotoesNavegacaoAbas
+        LOCAL loc_i, loc_cGrupo, loc_cBotao, loc_oBtn
+        LOCAL ARRAY loc_aNav[3, 2]
+
+        IF !PEMSTATUS(THIS, "cnt_4c_Conta", 5) OR ISNULL(THIS.cnt_4c_Conta)
+            RETURN
+        ENDIF
+
+        loc_aNav[1, 1] = "cmdGCarac"
+        loc_aNav[1, 2] = "cmdCarac"
+        loc_aNav[2, 1] = "cmdGFtec"
+        loc_aNav[2, 2] = "cmdFTec"
+        loc_aNav[3, 1] = "cmdgPessoal"
+        loc_aNav[3, 2] = "cmdPessoal"
+
+        FOR loc_i = 1 TO 3
+            loc_cGrupo = loc_aNav[loc_i, 1]
+            loc_cBotao = loc_aNav[loc_i, 2]
+
+            IF !PEMSTATUS(THIS.cnt_4c_Conta, loc_cGrupo, 5)
+                LOOP
+            ENDIF
+
+            *-- Regra #15: EVALUATE so para LEITURA (o "=" fica fora da string).
+            IF EVALUATE("VARTYPE(THIS.cnt_4c_Conta." + loc_cGrupo + ")") <> "O"
+                LOOP
+            ENDIF
+
+            loc_oBtn = .NULL.
+            IF EVALUATE("PEMSTATUS(THIS.cnt_4c_Conta." + loc_cGrupo + ", '" + loc_cBotao + "', 5)")
+                loc_oBtn = EVALUATE("THIS.cnt_4c_Conta." + loc_cGrupo + "." + loc_cBotao)
+            ENDIF
+
+            IF VARTYPE(loc_oBtn) = "O"
+                WITH loc_oBtn
+                    .Top               = 5
+                    .Left              = 5
+                    .Height            = 40
+                    .Width             = 40
+                    .FontName          = "Verdana"
+                    .FontSize          = 8
+                    .WordWrap          = .T.
+                    .Picture           = gc_4c_CaminhoIcones + "x_planilha.bmp"
+                    .ForeColor         = RGB(36, 84, 155)
+                    .BackColor         = RGB(255, 255, 255)
+                    .DisabledBackColor = RGB(255, 255, 255)
+                    .Themes            = .F.
+                ENDWITH
+            ENDIF
+
+            STORE RGB(255, 255, 255) TO ("THIS.cnt_4c_Conta." + loc_cGrupo + ".BackColor")
+            STORE .F.                TO ("THIS.cnt_4c_Conta." + loc_cGrupo + ".Themes")
+        ENDFOR
     ENDPROC
 
     *============================================================
@@ -1005,6 +1185,20 @@ DEFINE CLASS FormCliente AS FormBase
             ENDTRY
         ENDIF
 
+        *-- RollBack do legado (SIGCDCLI.Cancela.Click), que o migrador
+        *-- descartou junto com o .Release. Aqui o form NAO fecha - volta
+        *-- para a Lista - entao sem o RollBack os cursores bufferizados do
+        *-- clsconta (crSigCdCli e companhia) ficam SUJOS com o registro
+        *-- abandonado, e o proximo Incluir/Alterar herda a edicao cancelada.
+        TRY
+            IF VARTYPE(THIS.poDataMgr) = "O" AND !ISNULL(THIS.poDataMgr)
+                THIS.poDataMgr.RollBack()
+            ENDIF
+        CATCH TO loc_oErro
+            *-- Regra #9: CATCH nunca silencioso.
+            THIS.DiagIncluir("RollBack no Cancelar falhou", loc_oErro)
+        ENDTRY
+
         THIS.RetCodCliente = " "
         *-- Voltar para Lista em vez de fechar form
         THIS.IrParaLista()
@@ -1045,16 +1239,33 @@ DEFINE CLASS FormCliente AS FormBase
     ENDPROC
 
     *============================================================
-    * AlternarPagina - alterna entre as paginas do pgframeDados
-    * interno de clsconta (1 = Cadastro, 2 = Dados Pessoais/Comerciais).
+    * AlternarPagina - alterna entre a pagina de Cadastro e a de
+    * Dados Pessoais/Comerciais do pgframeDados interno do clsconta.
     *
-    * Chamada por KeyPress (F5) ou por logica interna do form.
-    * par_nPagina: se informada e valida (1..PageCount), navega
-    * diretamente; caso contrario, alterna entre 1 e 2.
+    * NAO mexer no ActivePage aqui (Erro165). O clsconta numera as
+    * paginas por PageOrder, que NAO bate com a ordem de declaracao:
+    *
+    *     pgframeDados1  (Cadastro)      PageOrder = 1
+    *     pgframeDados2  (Pessoal)       PageOrder = 3
+    *     pgframeDados7  (Complemento)   PageOrder = 2
+    *
+    * ActivePage eh o PageOrder, entao "ActivePage = 2" caia em
+    * Complemento, nao em Pessoal. Pior: depois disso o cmdPessoal.Click
+    * do VCX nao fazia mais nada, porque ele so age com ActivePage 1 ou 3
+    *
+    *     Case ...ActivePage==1 -> ActivePage = 3   && Dados Pessoais
+    *     Case ...ActivePage==3 -> ActivePage = 1   && volta p/ Cadastro
+    *
+    * e o F5 ficava morto na pagina errada. Quem decide o destino eh o
+    * cmdPessoal.Click - igual ao legado, que no KeyPress do SCX chama
+    * exatamente isso e mais nada.
+    *
+    * par_nPagina: 1 = Cadastro, 2 = Dados Pessoais/Comerciais.
+    * Omitido = alterna.
     *============================================================
     PROCEDURE AlternarPagina
         LPARAMETERS par_nPagina
-        LOCAL loc_oPgf, loc_nDestino
+        LOCAL loc_oPgf, loc_nDestino, loc_nAtual
 
         IF !PEMSTATUS(THIS, "cnt_4c_Conta", 5) OR ISNULL(THIS.cnt_4c_Conta)
             RETURN
@@ -1064,26 +1275,24 @@ DEFINE CLASS FormCliente AS FormBase
             RETURN
         ENDIF
 
-        loc_oPgf = THIS.cnt_4c_Conta.pgframeDados
+        loc_oPgf  = THIS.cnt_4c_Conta.pgframeDados
+        loc_nAtual = IIF(loc_oPgf.ActivePage = 3, 2, 1)
 
-        IF TYPE("par_nPagina") = "N" AND par_nPagina >= 1 AND par_nPagina <= loc_oPgf.PageCount
+        IF TYPE("par_nPagina") = "N" AND INLIST(par_nPagina, 1, 2)
             loc_nDestino = par_nPagina
         ELSE
-            loc_nDestino = IIF(loc_oPgf.ActivePage = 1, 2, 1)
+            loc_nDestino = IIF(loc_nAtual = 1, 2, 1)
         ENDIF
 
-        loc_oPgf.ActivePage = loc_nDestino
+        IF loc_nDestino = loc_nAtual
+            RETURN
+        ENDIF
 
-        *-- Delegar ao botao de comando correspondente do clsconta
-        *-- para preservar comportamento original (highlight, refresh, etc.)
-        DO CASE
-        CASE loc_nDestino = 2 AND PEMSTATUS(THIS.cnt_4c_Conta, "cmdgPessoal", 5) ;
-             AND PEMSTATUS(THIS.cnt_4c_Conta.cmdgPessoal, "cmdPessoal", 5)
+        *-- O toggle do VCX cobre os dois sentidos (1 <-> 3).
+        IF PEMSTATUS(THIS.cnt_4c_Conta, "cmdgPessoal", 5) ;
+           AND PEMSTATUS(THIS.cnt_4c_Conta.cmdgPessoal, "cmdPessoal", 5)
             THIS.cnt_4c_Conta.cmdgPessoal.cmdPessoal.Click()
-        CASE loc_nDestino = 1 AND PEMSTATUS(THIS.cnt_4c_Conta, "cmdgCadastro", 5) ;
-             AND PEMSTATUS(THIS.cnt_4c_Conta.cmdgCadastro, "cmdCadastro", 5)
-            THIS.cnt_4c_Conta.cmdgCadastro.cmdCadastro.Click()
-        ENDCASE
+        ENDIF
     ENDPROC
 
     *============================================================
@@ -1091,8 +1300,14 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
         IF par_nKeyCode = -4  && F5 = Aba Dados Pessoais/Comerciais
+            *-- Legado (SIGCDCLI.KeyPress): chama o Click direto, sem
+            *-- tocar no ActivePage. Ver AlternarPagina.
             NODEFAULT
-            THIS.AlternarPagina(2)
+            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta) ;
+               AND PEMSTATUS(THIS.cnt_4c_Conta, "cmdgPessoal", 5) ;
+               AND PEMSTATUS(THIS.cnt_4c_Conta.cmdgPessoal, "cmdPessoal", 5)
+                THIS.cnt_4c_Conta.cmdgPessoal.cmdPessoal.Click()
+            ENDIF
         ENDIF
     ENDPROC
 
@@ -2208,6 +2423,12 @@ DEFINE CLASS FormCliente AS FormBase
             IIF(EMPTY(loc_cGrupo), par_cGrupo, PADR(loc_cGrupo, 10)), ;
             par_cCli, par_cTpCadCli, par_cTpBloqCar, par_cMudaCpfCgc)
 
+        *-- O mLeDados reposiciona o pgframeDados (Top = -195 com este form)
+        *-- e re-ancora os botoes de navegacao. Desfazer AQUI, no funil unico,
+        *-- eh o equivalente do override de mledados do SCX legado - que roda
+        *-- DEPOIS do DoDefault justamente por isso. Ver AplicarLayoutPosLeDados.
+        THIS.AplicarLayoutPosLeDados()
+
         IF loc_lRestaurar
             THIS.pcEscolha = loc_cEscolhaSalva
         ENDIF
@@ -2941,7 +3162,7 @@ DEFINE CLASS FormCliente AS FormBase
             THIS.IrParaDados()
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
                 TRY
-                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, SPACE(10), "1", ;
+                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, SPACE(10), THIS.this_cTpCadCli, ;
                         THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                     THIS.DiagIncluir("mLeDados OK", .NULL.)
                 CATCH TO loc_oErroMLe
@@ -2953,6 +3174,10 @@ DEFINE CLASS FormCliente AS FormBase
                     *-- campos ficam vazios e vao para o banco assim, sem aviso.
                     THIS.DiagIncluir("mLeDados LANCOU EXCECAO", loc_oErroMLe)
                     loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
+                    *-- a excecao pode ter saltado o reset feito no funil (Erro165):
+                    *-- o mLeDados reposiciona o pgframeDados perto do FIM, entao
+                    *-- ele pode ja ter rodado quando o erro estourou.
+                    THIS.AplicarLayoutPosLeDados()
                 ENDTRY
                 IF loc_lRet
                     THIS.cnt_4c_Conta.Refresh()
@@ -2976,7 +3201,7 @@ DEFINE CLASS FormCliente AS FormBase
     * BtnAlterarClick - Recarregar cliente em modo de alteracao
     *============================================================
     PROCEDURE BtnAlterarClick
-        LOCAL loc_cCodigoCli, loc_lRet, loc_oErro, loc_lProsseguir
+        LOCAL loc_cCodigoCli, loc_lRet, loc_oErro, loc_lProsseguir, loc_oErroMLe
         IF !THIS.ValidarPreAcao("ALTERAR")
             RETURN
         ENDIF
@@ -3002,10 +3227,14 @@ DEFINE CLASS FormCliente AS FormBase
 
                 IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
                     TRY
-                        loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                        loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, THIS.this_cTpCadCli, ;
                             THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
-                    CATCH
+                    CATCH TO loc_oErroMLe
+                        *-- Regra #9: CATCH nunca silencioso.
+                        THIS.DiagIncluir("mLeDados (ALTERAR) LANCOU EXCECAO", loc_oErroMLe)
                         loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
+                        *-- ver AplicarLayoutPosLeDados (Erro165)
+                        THIS.AplicarLayoutPosLeDados()
                     ENDTRY
                     IF loc_lRet
                         THIS.cnt_4c_Conta.Refresh()
@@ -3058,7 +3287,7 @@ DEFINE CLASS FormCliente AS FormBase
                 THIS.pcEscolha       = "VISUALIZAR"
 
                 IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, PADR(loc_cCodigoCli, 10), "1", ;
+                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, PADR(loc_cCodigoCli, 10), THIS.this_cTpCadCli, ;
                         THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                     IF loc_lRet
                         THIS.cnt_4c_Conta.Visible = .T.
@@ -3147,7 +3376,7 @@ DEFINE CLASS FormCliente AS FormBase
         LOCAL loc_lRet, loc_oErro
         TRY
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, THIS.this_cTpCadCli, ;
                     THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                 IF loc_lRet
                     THIS.cnt_4c_Conta.Visible = .T.
