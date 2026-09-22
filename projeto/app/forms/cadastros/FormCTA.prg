@@ -24,6 +24,15 @@ DEFINE CLASS FormCTA AS FormBase
     this_nSubPagina      = 1
     this_cMensagemErro   = ""
 
+    *-- pcEscolha: nome do legado para a acao em curso. Aqui so eh usado para
+    *-- marcar o modo PROCURAR (Erro167), em que o Confirmar NAO grava - ele
+    *-- executa a busca por exemplo. Limpo em todo AlternarPagina, entao
+    *-- Incluir / Alterar / Visualizar nunca herdam o estado.
+    pcEscolha            = ""
+    *-- BuscaPor: por qual campo a ultima procura foi feita (1=Codigo,
+    *-- 2=Descricao, 3=CPF/CNPJ), como o legado.
+    BuscaPor             = 1
+
     *===========================================================================
     * Init - APENAS DODEFAULT (FormBase chama InicializarForm)
     *===========================================================================
@@ -4418,6 +4427,11 @@ DEFINE CLASS FormCTA AS FormBase
     * AlternarPagina - Alterna entre Page1 (LISTA) e Page2 (DADOS)
     *===========================================================================
     PROCEDURE AlternarPagina(par_cModo)
+        *-- Sai do modo PROCURAR em qualquer troca de pagina: Incluir / Alterar
+        *-- / Visualizar passam por aqui antes de fazer o que fazem, entao
+        *-- nenhum deles herda o estado da procura anterior (Erro167). Quem
+        *-- entra em PROCURAR marca DEPOIS de chamar este metodo.
+        THIS.pcEscolha = ""
         THIS.this_cModoAtual = par_cModo
 
         IF par_cModo = "DADOS"
@@ -5420,41 +5434,220 @@ DEFINE CLASS FormCTA AS FormBase
         ENDIF
     ENDPROC
 
+    *===========================================================================
+    * BtnBuscarClick - entra em modo PROCURAR (Erro167).
+    *
+    * NAO abre picker. No legado (SIGCDCTA, Pagina.Lista.Grupo_op.Click) esta
+    * eh a opcao 5, que faz busca POR EXEMPLO: abre a ficha em branco, deixa o
+    * Codigo editavel e o usuario preenche UM campo; quem executa a consulta eh
+    * o Confirmar, via msv_procurar.
+    *
+    * O que estava aqui antes era duplamente errado: alem de inventar um
+    * FormBuscaAuxiliar que o legado nao tem, usava o valor do campo GRUPO como
+    * termo de busca sobre IClis, e depois jogava o codigo da conta escolhida de
+    * volta DENTRO do filtro de grupo.
+    *===========================================================================
     PROCEDURE BtnBuscarClick()
-        LOCAL loc_oPg1, loc_cTerm, loc_oBusca
-        loc_oPg1 = THIS.pgf_4c_Paginas.Page1
+        LOCAL loc_oP
 
-        *-- Busca por nome/codigo via lookup
-        loc_cTerm = ""
-        IF PEMSTATUS(loc_oPg1.cnt_4c_Filtros, "txt_4c_Grupo", 5)
-            loc_cTerm = ALLTRIM(NVL(loc_oPg1.cnt_4c_Filtros.txt_4c_Grupo.Value, ""))
+        IF !THIS.ValidarGrupoFiltro()
+            RETURN
         ENDIF
 
-        TRY
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdCli", "cursor_4c_Busca", "IClis", loc_cTerm, ;
-                "Busca de Contas", .T., .T., "")
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("IClis", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Rclis", "", "Nome")
-                loc_oBusca.mAddColuna("Cpfs", "", "CPF/CNPJ")
-                loc_oBusca.Show()
-                IF loc_oBusca.this_lSelecionou
-                    IF USED("cursor_4c_Busca")
-                        SELECT cursor_4c_Busca
-                        LOCAL loc_cSel
-                        loc_cSel = ALLTRIM(NVL(cursor_4c_Busca.IClis, ""))
-                        USE IN cursor_4c_Busca
-                        IF !EMPTY(loc_cSel) AND PEMSTATUS(loc_oPg1.cnt_4c_Filtros, "txt_4c_Grupo", 5)
-                            loc_oPg1.cnt_4c_Filtros.txt_4c_Grupo.Value = loc_cSel
-                            THIS.CarregarLista()
-                        ENDIF
-                    ENDIF
-                ENDIF
+        THIS.this_oBusinessObject.NovoRegistro()
+        THIS.LimparCampos()
+        THIS.HabilitarCampos(.T.)
+        THIS.AlternarPagina("DADOS")
+        THIS.MostrarSubPagina(1)
+
+        *-- marcar DEPOIS: o AlternarPagina limpa o pcEscolha
+        THIS.pcEscolha = "PROCURAR"
+        THIS.BuscaPor  = 1
+
+        *-- Codigo editavel e com foco, como o mLeDados do legado faz no
+        *-- ramo PROCURAR (GetCodigo.ReadOnly = .f. / SetFocus)
+        loc_oP = THIS.pgf_4c_Paginas.Page2.cnt_4c_Pg1
+        IF PEMSTATUS(loc_oP, "txt_4c_IClis", 5)
+            loc_oP.txt_4c_IClis.ReadOnly = .F.
+            loc_oP.txt_4c_IClis.Enabled  = .T.
+            loc_oP.txt_4c_IClis.SetFocus()
+        ENDIF
+    ENDPROC
+
+    *===========================================================================
+    * MsvProcurar - busca por exemplo do modo PROCURAR.
+    *
+    * Transcricao do msv_procurar do SIGCDCTA (ramo crSigCdGcr.TpCads=1).
+    * DO CASE: o PRIMEIRO campo preenchido manda - a ordem eh regra. E TODA
+    * consulta eh escopada pelo Grupo do filtro da lista.
+    *
+    *   1 Codigo   IClis exato                        BuscaPor 1
+    *   2 Nome     Rtrim(RClis)   Like/=  + Grupos    BuscaPor 2
+    *   3 CPF/CNPJ Cpfs = exato            + Grupos    BuscaPor 3
+    *   4 Razao    Rtrim(Razaos)  Like/=  + Grupos    BuscaPor 2
+    *   5 Contato  Rtrim(Contato) Like/=  + Grupos    BuscaPor 1
+    *
+    * O resultado vai para cursor_4c_Dados pelo proprio BO (CTABO.Buscar
+    * monta o SELECT das colunas da grade e so recebe o WHERE, com alias "a").
+    *===========================================================================
+    PROCEDURE MsvProcurar()
+        LOCAL loc_oP, loc_cGru, loc_cVal, loc_cWhere, loc_nModo, loc_cAndGru
+        LOCAL loc_lExecutou
+
+        loc_lExecutou = .F.
+        loc_oP = THIS.pgf_4c_Paginas.Page2.cnt_4c_Pg1
+
+        loc_cGru = ""
+        IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_Filtros", 5) AND ;
+           PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros, "txt_4c_Grupo", 5)
+            loc_cGru = ALLTRIM(NVL(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros.txt_4c_Grupo.Value, ""))
+        ENDIF
+        loc_cAndGru = IIF(EMPTY(loc_cGru), "", ;
+            " AND a.Grupos = " + EscaparSQL(PADR(loc_cGru, 10)))
+
+        DO CASE
+        *-- 1) Codigo: exato, sem dialogo de modo
+        CASE !EMPTY(THIS.ValorControle(loc_oP, "txt_4c_IClis"))
+            loc_cWhere = "a.IClis = " + EscaparSQL(THIS.ValorControle(loc_oP, "txt_4c_IClis"))
+            THIS.BuscaPor = 1
+            loc_lExecutou = .T.
+
+        *-- 2) Nome
+        CASE !EMPTY(THIS.ValorControle(loc_oP, "txt_4c_Rclis"))
+            loc_nModo = THIS.PerguntarModoProcura(loc_cGru)
+            IF loc_nModo > 0
+                loc_cVal = THIS.MontarTermoProcura(THIS.ValorControle(loc_oP, "txt_4c_Rclis"), loc_nModo)
+                loc_cWhere = "Rtrim(a.RClis) " + IIF(loc_nModo = 4, "=", "Like") + ;
+                             " " + EscaparSQL(loc_cVal) + loc_cAndGru
+                THIS.BuscaPor = 2
+                loc_lExecutou = .T.
             ENDIF
-        CATCH TO loException
-            MsgErro("Erro na busca:" + CHR(13) + loException.Message, "Erro")
+
+        *-- 3) CPF/CNPJ: exato, sem dialogo (o legado tambem nao pergunta)
+        CASE !EMPTY(STRTRAN(STRTRAN(STRTRAN( ;
+                THIS.ValorControle(loc_oP, "txt_4c_Cpfs"), ".", ""), "/", ""), "-", ""))
+            loc_cWhere = "a.Cpfs = " + EscaparSQL(THIS.ValorControle(loc_oP, "txt_4c_Cpfs")) + loc_cAndGru
+            THIS.BuscaPor = 3
+            loc_lExecutou = .T.
+
+        *-- 4) Razao Social
+        CASE !EMPTY(THIS.ValorControle(loc_oP, "txt_4c_Razaos"))
+            loc_nModo = THIS.PerguntarModoProcura(loc_cGru)
+            IF loc_nModo > 0
+                loc_cVal = THIS.MontarTermoProcura(THIS.ValorControle(loc_oP, "txt_4c_Razaos"), loc_nModo)
+                loc_cWhere = "Rtrim(a.Razaos) " + IIF(loc_nModo = 4, "=", "Like") + ;
+                             " " + EscaparSQL(loc_cVal) + loc_cAndGru
+                THIS.BuscaPor = 2
+                loc_lExecutou = .T.
+            ENDIF
+
+        *-- 5) Contato
+        CASE !EMPTY(THIS.ValorControle(loc_oP, "txt_4c_Contato"))
+            loc_nModo = THIS.PerguntarModoProcura(loc_cGru)
+            IF loc_nModo > 0
+                loc_cVal = THIS.MontarTermoProcura(THIS.ValorControle(loc_oP, "txt_4c_Contato"), loc_nModo)
+                loc_cWhere = "Rtrim(a.Contato) " + IIF(loc_nModo = 4, "=", "Like") + ;
+                             " " + EscaparSQL(loc_cVal) + loc_cAndGru
+                THIS.BuscaPor = 1
+                loc_lExecutou = .T.
+            ENDIF
+
+        OTHERWISE
+            MsgAviso("Informe ao menos um dado para procurar " + ;
+                "(C" + CHR(243) + "digo, Nome, CPF/CNPJ, Raz" + CHR(227) + "o Social ou Contato).", ;
+                "Procurar")
+        ENDCASE
+
+        IF !loc_lExecutou
+            RETURN .F.
+        ENDIF
+
+        IF !THIS.this_oBusinessObject.Buscar(loc_cWhere)
+            *-- o proprio BO ja exibiu o erro do SQL Server
+            RETURN .F.
+        ENDIF
+
+        IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+            MsgInfo("Nenhuma conta encontrada com os dados informados.", "Procurar")
+        ENDIF
+
+        *-- volta para a Lista com o resultado da procura ja na grade.
+        *-- AlternarPagina("LISTA") chamaria CarregarLista e DESFARIA a busca,
+        *-- por isso a troca eh feita aqui, na mao.
+        THIS.pcEscolha       = ""
+        THIS.this_cModoAtual = "LISTA"
+        THIS.pgf_4c_Paginas.ActivePage = 1
+        THIS.AjustarBotoesPorModo()
+        IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Lista", 5)
+            THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+        ENDIF
+
+        RETURN .T.
+    ENDPROC
+
+    *===========================================================================
+    * ValorControle - le .Value de um controle por NOME, sempre como
+    * CHARACTER com ALLTRIM ("" se nao existir). Regra #15: EVALUATE aqui
+    * eh LEITURA, que eh o uso correto.
+    *===========================================================================
+    PROCEDURE ValorControle(par_oPai, par_cNome)
+        LOCAL loc_uVal
+        IF VARTYPE(par_oPai) <> "O" OR TYPE("par_cNome") <> "C"
+            RETURN ""
+        ENDIF
+        IF !PEMSTATUS(par_oPai, par_cNome, 5)
+            RETURN ""
+        ENDIF
+        loc_uVal = EVALUATE("par_oPai." + par_cNome + ".Value")
+        RETURN IIF(VARTYPE(loc_uVal) = "C", ALLTRIM(loc_uVal), "")
+    ENDPROC
+
+    *===========================================================================
+    * PerguntarModoProcura - dialogo de modo de casamento. Equivale ao
+    * `Do Form SigOpCtd With lcMsg, ThisForm` do legado, que nao veio no
+    * acervo. Devolve 1..4 ou 0 (cancelou).
+    *===========================================================================
+    PROCEDURE PerguntarModoProcura(par_cGrupo)
+        LOCAL loc_oDlg, loc_cMsg, loc_nRet
+        loc_nRet = 0
+
+        *-- texto identico ao do legado
+        loc_cMsg = IIF(EMPTY(ALLTRIM(NVL(par_cGrupo, ""))), ;
+            "Procura Sem Grupo Definido", ;
+            'Procura No Grupo "' + ALLTRIM(par_cGrupo) + '"')
+
+        loc_oDlg = .NULL.
+        TRY
+            loc_oDlg = CREATEOBJECT("FormOpcaoBusca", loc_cMsg)
+        CATCH
+            loc_oDlg = .NULL.
         ENDTRY
+
+        *-- Regra #29: Show() de form MODAL fica FORA do TRY.
+        IF VARTYPE(loc_oDlg) = "O"
+            loc_oDlg.Show()
+            loc_nRet = loc_oDlg.this_nRetorno
+            loc_oDlg = .NULL.
+        ENDIF
+
+        RETURN loc_nRet
+    ENDPROC
+
+    *===========================================================================
+    * MontarTermoProcura - monta o termo com os curingas, EXATAMENTE como o
+    * legado:
+    *   lcTmp = Iif(pnRetorno = 2 or 3, '%', '') + Alltrim(valor) +
+    *           Iif(pnRetorno = 1 or 3, '%', '')
+    * Modo 4 (exato) nao recebe curinga nenhum.
+    *===========================================================================
+    PROCEDURE MontarTermoProcura(par_cValor, par_nModo)
+        LOCAL loc_cVal
+        loc_cVal = ALLTRIM(IIF(TYPE("par_cValor") = "C", par_cValor, ""))
+        IF par_nModo = 4
+            RETURN loc_cVal
+        ENDIF
+        RETURN IIF(INLIST(par_nModo, 2, 3), "%", "") + loc_cVal + ;
+               IIF(INLIST(par_nModo, 1, 3), "%", "")
     ENDPROC
 
     PROCEDURE BtnEncerrarClick()
@@ -5465,6 +5658,15 @@ DEFINE CLASS FormCTA AS FormBase
     * Eventos CRUD - Page 2
     *===========================================================================
     PROCEDURE BtnSalvarClick()
+        *-- Modo PROCURAR: o Confirmar NAO grava, executa a busca (Erro167).
+        *-- No legado quem desvia eh o Salva.Click do frmcadastro, que despacha
+        *-- para msv_<acao>; com pcEscolha='PROCURAR' cai no msv_procurar e o
+        *-- pnRetGravacao vai a 1 sem gravacao nenhuma.
+        IF THIS.pcEscolha == "PROCURAR"
+            = THIS.MsvProcurar()
+            RETURN
+        ENDIF
+
         THIS.FormParaBO()
         IF THIS.this_oBusinessObject.Salvar()
             MsgInfo("Conta salva com sucesso.", "Confirmar")

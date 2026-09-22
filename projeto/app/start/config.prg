@@ -310,6 +310,11 @@ PROCEDURE ConfigurarAmbiente()
     CarregarSeExistir(gcCaminhoClasses + "FormBuscaAuxiliar.prg")
     CarregarSeExistir(gcCaminhoClasses + "FormBuscaSimples.prg")
     CarregarSeExistir(gcCaminhoClasses + "FormErro.prg")
+    *-- FormOpcaoBusca: modo de casamento da busca por texto no PROCURAR
+    *-- (substitui o SigOpCtd do legado, que nao veio no acervo - Erro167).
+    *-- O ADIR abaixo so varre classes\*BO.prg e classes\Relatorio*.prg, entao
+    *-- classe de form que more em classes\ precisa entrar aqui, na mao.
+    CarregarSeExistir(gcCaminhoClasses + "FormOpcaoBusca.prg")
     CarregarSeExistir(gcCaminhoClasses + "TextBoxGridLookup.prg")
     *-- fSqlConector: usar classe legada Fortyus (sigclcnx.PRG) — contem
     *-- cOpenConn + fSqlConector + pClsCursor. Nosso stub (fSqlConector.prg)

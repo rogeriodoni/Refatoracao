@@ -60,6 +60,10 @@ DEFINE CLASS FormCliente AS FormBase
     plAltCpf      = .F.       && permite alterar CPF/CNPJ apos INSERIR
     CodClis       = ""        && codigo do cliente corrente (usado pelo wrapper)
     tipopais      = .F.       && flag pais estrangeiro
+    *-- BuscaPor: por qual campo a ultima procura foi feita. O legado usa para
+    *-- escolher em que coluna da grade o foco cai (1=Codigo, 2=Descricao,
+    *-- 3=CPF/CNPJ, 4=Caracteristica). Erro167.
+    BuscaPor      = 1
 
     *-- AlterouLgpd (Erro166): a UNICA property de ThisForm que o clsconta
     *-- usa e NAO cria sozinho.
@@ -1165,6 +1169,17 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     PROCEDURE BtnOkClick
         LOCAL loc_nRetorno, loc_cCpfCgc
+
+        *-- Modo PROCURAR: o Confirmar NAO grava, executa a busca (Erro167).
+        *-- No legado quem faz o desvio eh o Salva.Click do frmcadastro, que
+        *-- despacha para msv_<acao> - com pcEscolha='PROCURAR' cai no
+        *-- msv_procurar e o pnRetGravacao vai a 1 sem gravacao nenhuma:
+        *--     ThisForm.pnRetGravacao = Iif(InList(Thisform.pcEscolha,
+        *--         'INSERIR', 'ALTERAR', 'EXCLUIR'), 0, 1)
+        IF THIS.pcEscolha == "PROCURAR"
+            = THIS.MsvProcurar()
+            RETURN
+        ENDIF
 
         loc_nRetorno = THIS.cnt_4c_Conta.mValidaObj()
 
@@ -2406,7 +2421,10 @@ DEFINE CLASS FormCliente AS FormBase
             ENDIF
             RETURN .F.
         ENDIF
-        IF loc_cAcao <> "VISUALIZAR"
+        *-- PROCURAR nao exige acesso de alteracao, igual a VISUALIZAR: no
+        *-- Grupo_op do SIGCDCTA so as opcoes 3 (Alterar) e 4 (Excluir) passam
+        *-- pela checagem; a 5 (Procurar) eh leitura. Erro167.
+        IF !INLIST(loc_cAcao, "VISUALIZAR", "PROCURAR")
             IF !fChecaAcesso("SIGCDCTA", "ALTERAR")
                 MsgAviso("Usu" + CHR(225) + "rio N" + CHR(227) + "o Possui Acesso p/ Incluir / Alterar Dados de Clientes.")
                 RETURN .F.
@@ -3524,48 +3542,393 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     * BtnBuscarClick - Abrir busca de cliente para carregar em edicao
     *============================================================
+    *============================================================
+    * BtnBuscarClick - entra em modo PROCURAR (Erro167).
+    *
+    * NAO abre picker. O legado (SIGCDCTA, Pagina.Lista.Grupo_op.Click,
+    * opcao 5) faz busca POR EXEMPLO: abre a ficha em branco, deixa o
+    * Codigo editavel e o usuario preenche UM campo; quem executa a
+    * consulta eh o Confirmar, via MsvProcurar.
+    *
+    *     If This.Value==5
+    *         Select crSigCdCli
+    *         Scatter Memo Memvar Blank
+    *         Insert Into crSigCdCli From Memvar
+    *     EndIf
+    *     ...
+    *     If (This.Value = 5)
+    *         .pgFrameDados1.Enabled = .t.
+    *         .ActivePage = .pgFrameDados1.PageOrder
+    *
+    * e, dentro do mLeDados:
+    *
+    *     Case (Thisform.pcEscolha = 'PROCURAR')
+    *         This.pgframeDados.pgframeDados1.GetCodigo.ReadOnly = .f.
+    *         This.pgFrameDados.pgFrameDados1.GetCodigo.SetFocus
+    *
+    * A migracao tinha inventado um FormBuscaAuxiliar no lugar - e sem
+    * filtro de Grupos, entao listava contas de outros grupos (GAVETA,
+    * COFRE...) com a tela filtrada em 11201/CLIENTES.
+    *============================================================
     PROCEDURE BtnBuscarClick
-        LOCAL loc_oBusca, loc_cCodigoCli, loc_lSelecionou, loc_oErro
+        LOCAL loc_lRet, loc_oErro, loc_oErroMLe
+
+        IF !THIS.ValidarPreAcao("PROCURAR")
+            RETURN
+        ENDIF
+
         TRY
-            loc_cCodigoCli = ""
-            loc_lSelecionou = .F.
+            THIS.pcEscolha       = "PROCURAR"
+            THIS.this_cModoAtual = "PROCURAR"
+            THIS.plaltcd         = .F.
+            THIS.this_cCli       = SPACE(10)
+            THIS.RetCodCliente   = " "
+            THIS.BuscaPor        = 1
 
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdCli", "cursor_4c_BuscaCli", "IClis", "", ;
-                "Sele" + CHR(231) + CHR(227) + "o de Cliente", .T., .T., "")
+            *-- registro em branco, como o legado faz para This.Value==5
+            IF USED("crSigCdCli")
+                SELECT crSigCdCli
+                SCATTER MEMO MEMVAR BLANK
+                INSERT INTO crSigCdCli FROM MEMVAR
+            ENDIF
 
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("IClis", "XXXXXXXXXX", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("RClis", "",           "Nome")
-                loc_oBusca.Show()
+            THIS.IrParaDados()
 
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCli")
-                    SELECT cursor_4c_BuscaCli
-                    GO TOP IN cursor_4c_BuscaCli
-                    IF !EOF("cursor_4c_BuscaCli")
-                        loc_cCodigoCli = ALLTRIM(cursor_4c_BuscaCli.IClis)
+            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
+                TRY
+                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, SPACE(10), ;
+                        THIS.this_cTpCadCli, THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
+                CATCH TO loc_oErroMLe
+                    *-- Regra #9: CATCH nunca silencioso.
+                    THIS.DiagIncluir("mLeDados (PROCURAR) LANCOU EXCECAO", loc_oErroMLe)
+                    loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
+                    THIS.AplicarLayoutPosLeDados()
+                ENDTRY
+
+                IF loc_lRet
+                    THIS.cnt_4c_Conta.Refresh()
+                    IF PEMSTATUS(THIS, "cmg_4c_Sair", 5)
+                        THIS.cmg_4c_Sair.Buttons(1).Enabled = .T.
                     ENDIF
-                    USE IN cursor_4c_BuscaCli
-                    loc_lSelecionou = !EMPTY(loc_cCodigoCli)
+                ELSE
+                    MsgErro("Erro ao inicializar formul" + CHR(225) + "rio para procura.", "Erro")
+                    THIS.IrParaLista()
                 ENDIF
-                loc_oBusca = .NULL.
             ENDIF
-
-            IF loc_lSelecionou
-                THIS.this_cCli       = PADR(loc_cCodigoCli, 10)
-                THIS.pcEscolha       = "ALTERAR"
-                THIS.this_cModoAtual = "ALTERAR"
-                THIS.plaltcd         = .T.
-                THIS.CarregarLista()
-                THIS.AjustarBotoesPorModo()
-            ENDIF
-
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
                 "Procedure: " + loc_oErro.Procedure, ;
                 "Erro em BtnBuscarClick")
         ENDTRY
+    ENDPROC
+
+    *============================================================
+    * MsvProcurar - executa a busca por exemplo do modo PROCURAR.
+    *
+    * Transcricao do msv_procurar do SIGCDCTA (ramo crSigCdGcr.TpCads=1,
+    * que eh o do cadastro / pgframeDados1). O legado chama esse metodo
+    * pela convencao msv_<acao> do frmcadastro, a partir do DoDefault()
+    * do botao Salva; aqui o BtnOkClick chama direto.
+    *
+    * DO CASE: o PRIMEIRO campo preenchido manda - a ordem eh regra, nao
+    * detalhe. E TODA consulta eh escopada pelo Grupo do filtro da lista.
+    *
+    *   1 getCodigo    IClis exato                       BuscaPor 1
+    *   2 getNome      Rtrim(RClis)   Like/=  + Grupos   BuscaPor 2
+    *   3 getCpfCgc    Cpfs = exato            + Grupos   BuscaPor 3
+    *   4 getRazao     Rtrim(Razaos)  Like/=  + Grupos   BuscaPor 2
+    *   5 get_Contato  Rtrim(Contato) Like/=  + Grupos   BuscaPor 1
+    *
+    * Retorna .T. se executou uma consulta (mesmo sem achados) e .F. se
+    * nao havia criterio nenhum ou o usuario cancelou o dialogo de modo.
+    *============================================================
+    PROCEDURE MsvProcurar
+        LOCAL loc_oPg1, loc_cGru, loc_cVal, loc_cQry, loc_nOk, loc_cCol
+        LOCAL loc_cNomeRaz, loc_lExecutou, loc_oErro
+
+        loc_lExecutou = .F.
+
+        IF !PEMSTATUS(THIS, "cnt_4c_Conta", 5) OR ISNULL(THIS.cnt_4c_Conta)
+            RETURN .F.
+        ENDIF
+        IF !PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5) OR ;
+           !PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados, "pgframeDados1", 5)
+            RETURN .F.
+        ENDIF
+        loc_oPg1 = THIS.cnt_4c_Conta.pgframeDados.pgframeDados1
+
+        loc_cGru = ALLTRIM(THIS.this_cGrupo)
+        IF PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) AND ;
+           PEMSTATUS(THIS.cnt_4c_ViewLista, "cnt_4c_ListaFiltros", 5) AND ;
+           PEMSTATUS(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros, "txt_4c_FiltroGrupo", 5)
+            loc_cGru = ALLTRIM(NVL(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value, ""))
+        ENDIF
+
+        *-- O nome do controle da Razao Social tem acento NA CLASSE do VCX
+        *-- (GetRazao com a-til). Regra #4 proibe o literal acentuado no .prg,
+        *-- entao o nome eh montado com CHR() e lido por EVALUATE - que eh o
+        *-- uso CERTO de EVALUATE (leitura; o "=" fica fora da string, #15).
+        loc_cNomeRaz = "GetRaz" + CHR(227) + "o"
+
+        IF USED("crTmpProc")
+            USE IN crTmpProc
+        ENDIF
+
+        TRY
+            DO CASE
+            *-- 1) Codigo: exato, sem dialogo de modo
+            CASE !EMPTY(THIS.ValorControle(loc_oPg1, "GetCodigo"))
+                loc_cVal = THIS.ValorControle(loc_oPg1, "GetCodigo")
+                loc_cQry = "Select * From SigCdCli Where IClis = " + EscaparSQL(loc_cVal)
+                THIS.BuscaPor = 1
+                loc_lExecutou = THIS.ExecutarProcura(loc_cQry)
+
+            *-- 2) Nome
+            CASE !EMPTY(THIS.ValorControle(loc_oPg1, "GetNome"))
+                loc_nOk = THIS.PerguntarModoProcura(loc_cGru)
+                IF loc_nOk > 0
+                    loc_cVal = THIS.MontarTermoProcura(THIS.ValorControle(loc_oPg1, "GetNome"), loc_nOk)
+                    loc_cQry = "Select * From SigCdCli Where Rtrim(RClis) " + ;
+                               IIF(loc_nOk = 4, "=", "Like") + " " + EscaparSQL(loc_cVal) + ;
+                               IIF(EMPTY(loc_cGru), "", " And Grupos = " + EscaparSQL(loc_cGru))
+                    THIS.BuscaPor = 2
+                    loc_lExecutou = THIS.ExecutarProcura(loc_cQry)
+                ENDIF
+
+            *-- 3) CPF/CNPJ: exato, sem dialogo (o legado tambem nao pergunta)
+            CASE !EMPTY(STRTRAN(STRTRAN(STRTRAN( ;
+                    THIS.ValorControle(loc_oPg1, "GetCPFCGC"), ".", ""), "/", ""), "-", ""))
+                loc_cVal = THIS.ValorControle(loc_oPg1, "GetCPFCGC")
+                loc_cQry = "Select * From SigCdCli Where Cpfs = " + EscaparSQL(loc_cVal) + ;
+                           IIF(EMPTY(loc_cGru), "", " And Grupos = " + EscaparSQL(loc_cGru))
+                THIS.BuscaPor = 3
+                loc_lExecutou = THIS.ExecutarProcura(loc_cQry)
+
+            *-- 4) Razao Social
+            CASE !EMPTY(THIS.ValorControle(loc_oPg1, loc_cNomeRaz))
+                loc_nOk = THIS.PerguntarModoProcura(loc_cGru)
+                IF loc_nOk > 0
+                    loc_cVal = THIS.MontarTermoProcura(THIS.ValorControle(loc_oPg1, loc_cNomeRaz), loc_nOk)
+                    loc_cQry = "Select * From SigCdCli Where Rtrim(Razaos) " + ;
+                               IIF(loc_nOk = 4, "=", "Like") + " " + EscaparSQL(loc_cVal) + ;
+                               IIF(EMPTY(loc_cGru), "", " And Grupos = " + EscaparSQL(loc_cGru))
+                    THIS.BuscaPor = 2
+                    loc_lExecutou = THIS.ExecutarProcura(loc_cQry)
+                ENDIF
+
+            *-- 5) Contato
+            CASE !EMPTY(THIS.ValorControle(loc_oPg1, "Get_Contato"))
+                loc_nOk = THIS.PerguntarModoProcura(loc_cGru)
+                IF loc_nOk > 0
+                    loc_cVal = THIS.MontarTermoProcura(THIS.ValorControle(loc_oPg1, "Get_Contato"), loc_nOk)
+                    loc_cQry = "Select * From SigCdCli Where Rtrim(Contato) " + ;
+                               IIF(loc_nOk = 4, "=", "Like") + " " + EscaparSQL(loc_cVal) + ;
+                               IIF(EMPTY(loc_cGru), "", " And Grupos = " + EscaparSQL(loc_cGru))
+                    THIS.BuscaPor = 1
+                    loc_lExecutou = THIS.ExecutarProcura(loc_cQry)
+                ENDIF
+
+            OTHERWISE
+                MsgAviso("Informe ao menos um dado para procurar " + ;
+                    "(C" + CHR(243) + "digo, Nome, CPF/CNPJ, Raz" + CHR(227) + "o Social ou Contato).", ;
+                    "Procurar")
+            ENDCASE
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro em MsvProcurar")
+            loc_lExecutou = .F.
+        ENDTRY
+
+        RETURN loc_lExecutou
+    ENDPROC
+
+    *============================================================
+    * ValorControle - le .Value de um controle da pagina por NOME.
+    * Devolve sempre CHARACTER com ALLTRIM, ou "" se o controle nao
+    * existir. Regra #15: EVALUATE aqui eh LEITURA, uso correto.
+    *============================================================
+    PROCEDURE ValorControle(par_oPai, par_cNome)
+        LOCAL loc_uVal
+        IF VARTYPE(par_oPai) <> "O" OR TYPE("par_cNome") <> "C"
+            RETURN ""
+        ENDIF
+        IF !PEMSTATUS(par_oPai, par_cNome, 5)
+            RETURN ""
+        ENDIF
+        loc_uVal = EVALUATE("par_oPai." + par_cNome + ".Value")
+        RETURN IIF(VARTYPE(loc_uVal) = "C", ALLTRIM(loc_uVal), "")
+    ENDPROC
+
+    *============================================================
+    * PerguntarModoProcura - dialogo de modo de casamento.
+    * Equivale ao `Do Form SigOpCtd With lcMsg, ThisForm` do legado,
+    * que nao veio no acervo. Devolve 1..4 ou 0 (cancelou).
+    *============================================================
+    PROCEDURE PerguntarModoProcura(par_cGrupo)
+        LOCAL loc_oDlg, loc_cMsg, loc_nRet
+        loc_nRet = 0
+
+        *-- texto identico ao do legado
+        loc_cMsg = IIF(EMPTY(ALLTRIM(NVL(par_cGrupo, ""))), ;
+            "Procura Sem Grupo Definido", ;
+            'Procura No Grupo "' + ALLTRIM(par_cGrupo) + '"')
+
+        loc_oDlg = .NULL.
+        TRY
+            loc_oDlg = CREATEOBJECT("FormOpcaoBusca", loc_cMsg)
+        CATCH
+            loc_oDlg = .NULL.
+        ENDTRY
+
+        *-- Regra #29: Show() de form MODAL fica FORA do TRY - toda a vida da
+        *-- tela roda dentro dessa chamada, e um TRY em volta faria qualquer
+        *-- erro de runtime la dentro derrubar a referencia e fechar o dialogo.
+        IF VARTYPE(loc_oDlg) = "O"
+            loc_oDlg.Show()
+            loc_nRet = loc_oDlg.this_nRetorno
+            loc_oDlg = .NULL.
+        ENDIF
+
+        RETURN loc_nRet
+    ENDPROC
+
+    *============================================================
+    * MontarTermoProcura - monta o termo com os curingas, EXATAMENTE
+    * como o legado:
+    *   lcTmp = Iif(pnRetorno = 2 or 3, '%', '') + Alltrim(valor) +
+    *           Iif(pnRetorno = 1 or 3, '%', '')
+    * Modo 4 (exato) nao recebe curinga nenhum.
+    *============================================================
+    PROCEDURE MontarTermoProcura(par_cValor, par_nModo)
+        LOCAL loc_cVal
+        loc_cVal = ALLTRIM(IIF(TYPE("par_cValor") = "C", par_cValor, ""))
+        IF par_nModo = 4
+            RETURN loc_cVal
+        ENDIF
+        RETURN IIF(INLIST(par_nModo, 2, 3), "%", "") + loc_cVal + ;
+               IIF(INLIST(par_nModo, 1, 3), "%", "")
+    ENDPROC
+
+    *============================================================
+    * ExecutarProcura - roda a consulta em crTmpProc e mescla os
+    * achados na lista.
+    *
+    * O legado acumula em crProcurar e depois insere no crSigCdCli
+    * (o cursor da grade), para que os achados aparecam MESMO fora do
+    * filtro de data da lista:
+    *
+    *     If Not Seek(lcChv, 'crSigCdCli', 'IClis')
+    *         ... Select <colunas> From SigCdCli Where Iclis = ...
+    *         Scatter MemVar Memo / Insert Into crSigCdCli From MemVar
+    *
+    * Aqui o merge eh direto de crTmpProc para crSigCdCli, sem o
+    * intermediario - o crProcurar do legado existe para acumular entre
+    * varias procuras seguidas na mesma sessao da tela, que este form
+    * nao tem (cada Procurar recomeca).
+    *============================================================
+    PROCEDURE ExecutarProcura(par_cQuery)
+        LOCAL loc_nRet, loc_nAchados, loc_cCli, loc_oErro, loc_aErr
+
+        IF USED("crTmpProc")
+            USE IN crTmpProc
+        ENDIF
+
+        loc_nRet = -1
+        IF !ISNULL(THIS.poDataMgr) AND VARTYPE(THIS.poDataMgr) = "O"
+            loc_nRet = THIS.poDataMgr.SqlExecute(par_cQuery, "crTmpProc")
+        ELSE
+            IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                loc_nRet = SQLEXEC(gnConnHandle, par_cQuery, "crTmpProc")
+            ENDIF
+        ENDIF
+
+        IF loc_nRet < 1 OR !USED("crTmpProc")
+            *-- Regra #9: nao engolir. O texto do SQL Server ajuda a distinguir
+            *-- "nao achou" de "consulta falhou".
+            DIMENSION loc_aErr[1]
+            AERROR(loc_aErr)
+            MsgErro("Falha ao executar a procura." + CHR(13) + ;
+                IIF(ALEN(loc_aErr, 1) >= 2 AND VARTYPE(loc_aErr[2]) = "C", loc_aErr[2], ""), ;
+                "Procurar")
+            RETURN .F.
+        ENDIF
+
+        SELECT crTmpProc
+        GO TOP IN crTmpProc
+        loc_nAchados = RECCOUNT("crTmpProc")
+
+        IF loc_nAchados = 0
+            MsgInfo("Nenhuma conta encontrada com os dados informados.", "Procurar")
+            USE IN crTmpProc
+            RETURN .T.
+        ENDIF
+
+        loc_cCli = ALLTRIM(NVL(crTmpProc.IClis, ""))
+        THIS.CodClis = loc_cCli
+
+        *-- volta para a Lista e recarrega pelo grupo; em seguida acrescenta
+        *-- os achados que a requery por Grupos/data nao trouxe.
+        THIS.pcEscolha       = "PROCURAR"
+        THIS.this_cModoAtual = "LISTA"
+        THIS.IrParaLista()
+        THIS.MesclarAchadosNaLista()
+
+        *-- posiciona a grade no primeiro achado
+        IF USED("crSigCdCli") AND !EMPTY(loc_cCli)
+            SELECT crSigCdCli
+            LOCATE FOR ALLTRIM(NVL(crSigCdCli.IClis, "")) == loc_cCli
+            IF FOUND("crSigCdCli") AND PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) ;
+               AND PEMSTATUS(THIS.cnt_4c_ViewLista, "grd_4c_Clientes", 5)
+                THIS.cnt_4c_ViewLista.grd_4c_Clientes.Refresh()
+            ENDIF
+        ENDIF
+
+        IF USED("crTmpProc")
+            USE IN crTmpProc
+        ENDIF
+        RETURN .T.
+    ENDPROC
+
+    *============================================================
+    * MesclarAchadosNaLista - insere em crSigCdCli os registros de
+    * crTmpProc que a requery da lista nao trouxe (achado fora do
+    * filtro de data, ou de outro grupo). Espelha o bloco do legado
+    * que percorre crProcurar e completa o crSigCdCli.
+    *============================================================
+    PROCEDURE MesclarAchadosNaLista
+        LOCAL loc_cCli, loc_oErro, loc_nAreaAnt
+
+        IF !USED("crTmpProc") OR !USED("crSigCdCli")
+            RETURN
+        ENDIF
+
+        loc_nAreaAnt = SELECT(0)
+        TRY
+            SELECT crTmpProc
+            GO TOP IN crTmpProc
+            SCAN
+                loc_cCli = ALLTRIM(NVL(crTmpProc.IClis, ""))
+                IF EMPTY(loc_cCli)
+                    LOOP
+                ENDIF
+
+                SELECT crSigCdCli
+                LOCATE FOR ALLTRIM(NVL(crSigCdCli.IClis, "")) == loc_cCli
+                IF !FOUND("crSigCdCli")
+                    SELECT crTmpProc
+                    SCATTER MEMVAR MEMO
+                    INSERT INTO crSigCdCli FROM MEMVAR
+                ENDIF
+                SELECT crTmpProc
+            ENDSCAN
+            GO TOP IN crSigCdCli
+        CATCH TO loc_oErro
+            *-- Regra #9: CATCH nunca silencioso. Merge parcial nao impede o
+            *-- usuario de ver o que a requery normal ja trouxe.
+            THIS.DiagIncluir("MesclarAchadosNaLista falhou", loc_oErro)
+        ENDTRY
+        SELECT (loc_nAreaAnt)
     ENDPROC
 
     *============================================================
