@@ -1,0 +1,266 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 7,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDTPE",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "lcQueryParam = [Select Count(1) As Total From SigCdTpe Where nSituas = 1]\n\nIf (ThisForm.podatamgr.SqlExecute(lcQueryParam, 'csTotal') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdTpe)')\n\tReturn 0\nEndIf\n\nThisForm.pagina.lista.Get_EtqAtivas.Value = csTotal.Total",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_EtqAtivas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE",
+      "evento": "Init",
+      "linhas": 52,
+      "codigoOriginal": "lcQryTPeti = [Select * From SigCdTpe]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdTpe', 'ntipos', 'crSigCdTpe', '', ThisForm.Pagina.Lista.Grade, lcQryTPeti)\n\t\t\t.pfSqlTabela(1).pColuna('ntipos', '', '', 'Tipo', 50, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('cetiquetas', '', '', 'Descrição', 280, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('nsituas', '', '', 'Situação', 50, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('cordems', '', ''... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mContaEtiqs",
+        "controlesReferenciados": "Get_EtqAtivas",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTPE",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf Not DoDefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nIF EMPTY(crSigCdTpe.tpespes)\n\tthisform.pagina.dados.cmbetqesp.ListItemId = 1\nENDIF\n\nthisform.pagina.dados.dobs.Value = ''\nIF !EMPTY(crSigCdTpe.codobs)\n\tthisform.podatamgr.sqlexecute([select descrs from SigCdObs where codigos = ?crSigCdTpe.codobs],[crSigCdObs])\n\tthisform.pagina.dados.dobs.Value = crSigCdObs.descrs\nENDIF\n\nDo Case\n\tCase InList( Thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tThisform.Pagina.Dados.Gru... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "sqlexecute",
+        "controlesReferenciados": "Get_cEtiquetas,Get_nTipos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE",
+      "evento": "Click",
+      "linhas": 40,
+      "codigoOriginal": "Local lnTipos, lcEtiquetas\n\nIf InList( Thisform.pcEscolha, 'INSERIR', 'ALTERAR' )\n\tSelect crSigCdTpe\n\tDo Case\n\t\tCase IsEmpty( Thisform.Pagina.Dados.Get_nTipos.Value )\n\t\t\tDelete\n\t\t\t\n\t\tCase IsEmpty( Thisform.Pagina.Dados.Get_cEtiquetas.Value )\n\t\t\tMessageBox('Descrição da Etiqueta é informação obrigatória.', 48, '')\n\t\t\tThisform.Pagina.Dados.Get_cEtiquetas.SetFocus\n\t\t\tReturn\n\t\t\t\n\t\tOtherWise\t\t\t\n\t\t\tWith Thisform.Pagina.Dados\n\t\t\t\tlnTipos = .Get_nTipos.Value\n\t\t\t\tlcEtiquetas = .Get_cEtiquetas.Value\n\t\t\tEn... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister,mContaEtiqs",
+        "controlesReferenciados": "Get_nTipos,Get_cEtiquetas,ChkRegister('SigCdTpe'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "=DoDefault()\nIf thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE.Pagina.Lista.Get_EtqAtivas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( .F. )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE.Pagina.Lista.Get_MaxEtqs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( .F. )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE.Pagina.Dados.Get_cEtiquetas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( InList( Thisform.pcEscolha, 'INSERIR', 'ALTERAR' ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE.Pagina.Dados.Get_nTipos",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If This.Value < 0\n\tMessageBox('Tipo de Etiqueta Inválido.', 48, '')\n\tThis.Value = 0\n\tThis.Refresh\n\tReturn 0\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE.Pagina.Dados.Get_nTipos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList( Thisform.pcEscolha, 'INSERIR', 'PROCURAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE.Pagina.Dados.Get_cOrdems",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "This.Value = PadL( AllTrim( This.Value ), 3 )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE.Pagina.Dados.cobs",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "IF !EMPTY(this.Value)\n\txBrox = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdObs', ;\n\t\t\t\t\t\t   'crListaRemota', 'codigos', This.Value, 'Observação', .T.)\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('codigos','','Código',.T.)\n\t\txBrox.mAddColuna('descrs','','Descrição',.T.)\n\t\txBrox.Show()\n\tEndIf \n\tIf LastKey()==27\n\t\tThis.Value=''\n\t\tThisForm.pagina.dados.dobs.Value = ''\n\tElse\n\t\tThis.Value = crListaRemota.codigos\n\t\tThisForm.pagina.dados.dobs.Value = crlistaRemota.descrs\n\tEndIf\nE... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPE.Pagina.Dados.dobs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDTPE.Procedure",
+      "queryOriginal": "lcQueryParam = [Select Count(1) As Total From SigCdTpe Where nSituas = 1]",
+      "tabelas": "SigCdTpe",
+      "colunas": "nSituas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDTPE.Init",
+      "queryOriginal": "lcQryTPeti = [Select * From SigCdTpe]",
+      "tabelas": "SigCdTpe",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDTPE.Click",
+      "queryOriginal": "\tthisform.podatamgr.sqlexecute([select descrs from SigCdObs where codigos = ?crSigCdTpe.codobs],[crSigCdObs])",
+      "tabelas": "SigCdObs",
+      "colunas": "descrs,codigos,codobs],[crSigCdObs]",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdTpe", "SigCdObs"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

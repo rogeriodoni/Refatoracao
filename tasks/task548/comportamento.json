@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDTRI",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTRI",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Getcodigo.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdIcm','codigos',ThisForm.Pagina.Dados.Getcodigo.Value)\nElse\n\tIf .Not.IsEmpty(ThisForm.Pagina.Dados.Getdescricao.Value)\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdIcm','descricaos',ThisForm.Pagina.Dados.Getdescricao.Value)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTRI",
+      "evento": "Init",
+      "linhas": 23,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdIcm','codigos','crSigCdIcm','',ThisForm.pagina.lista.grade)\n\t\t\t.pfSqlTabela(1).pColuna('codigos','','','Codigo',80,.t.)\n\t\t\t.pfSqlTabela(1).pColuna('descricaos','','','Descrição',337,.t.)\n\t\t\t.pfSqlTabela(1).pColuna('colunas','','','Coluna',60,.t.)\n\t\t\t.pfSqlTabela(1).pColuna('Tipos','','','Tipo',30,.t.)\n\t\tEndWith\n\n\t\tThisForm.Pagina.Dados.spnColuna.Value = Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Val",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTRI",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "parameters lnOpcao\n\nIf !dodefault( lnOpcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nthisform.Pagina.Dados.spnColuna.value = Val(CrSigCdIcm.colunas)\n\ndo case\n\tcase thisform.pcEscolha$'INSERIR PROCURAR'\n\t\treplace colunas with STR(1)\n\t\tthisform.Pagina.Dados.getcodigo.setfocus\n\tcase thisform.pcEscolha='ALTERAR'\n\t\tthisform.pagina.dados.getdescricao.setfocus\n\tcase thisform.pcEscolha$'CONSULTAR EXCLUIR'\n\t\tthisform.pagina.dados.grupo_salva.salva.setfocus\nendcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "value = Val",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTRI",
+      "evento": "Click",
+      "linhas": 55,
+      "codigoOriginal": "local lnRecno,lcRetorno,Colunas\n\nm.lnRecno = recno('CrSigCdIcm')\n\nif inlist(thisform.pcEscolha,'INSERIR','ALTERAR')\n\n   with thisform.Pagina.Dados\n      if IsEmpty(.getCodigo.value)\n         = messagebox('Código em branco !!!',0+64,goSistema.NomeSistema)\n         .getCodigo.setfocus\n\t\t return\n      else\n\n\t\tIf ThisForm.poDataMgr.ChkRegister('SigCdIcm','codigos',ThisForm.Pagina.Dados.GetCodigo.Value) and inlist(thisform.pcEscolha,'INSERIR')\n\t        messagebox('Código já cadastrado !!!',0+64,goSis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdIcm'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTRI",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTRI.Pagina.Dados.getCodigo",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "local saida\nsaida = .t.\nif inlist(thisform.Pagina.Lista.Grupo_op.value,2,3)\n\tsaida = .f.\nendif\nreturn saida",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTRI.Pagina.Dados.getDescricao",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR').or.;\n       (thisform.pcEscolha=='PROCURAR'.and.IsEmpty(thisform.Pagina.Dados.getCodigo.value)))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "IsEmpty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTRI.Pagina.Dados.spnColuna",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

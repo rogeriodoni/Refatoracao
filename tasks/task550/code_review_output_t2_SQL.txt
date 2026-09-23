@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investigated the flagged `[SQL-FILTRO-INVENTADO]` finding before touching any code, per the project's "verify premise before mass-correcting" rule.
+
+**Finding: false positive, no changes needed.**
+
+`cidchaves` is confirmed as the actual primary key of `SigCdUfd` in `docs/schema.sql`:
+
+```
+CONSTRAINT [sigcdufd_cidchaves] PRIMARY KEY CLUSTERED ([cidchaves] ASC)
+```
+
+The `WHERE cidchaves = ...` clauses in `UfdBO.prg` (`Atualizar`, `CarregarPorCodigo`, `ExecutarExclusao`) are standard `BusinessBase` PK-based record operations ÔÇö required for Alterar/Excluir/Visualizar to identify the correct row (CLAUDE.md rule #22: `cidchaves`/`pkchaves` is the Fortyus PK and belongs in INSERT/WHERE for the master row).
+
+The reference "WHERE original" list (`FKCHAVE, ESTADOS, VALUE, CODCLASFISCAL, CODCFOP`) comes from different legacy queries entirely ÔÇö the detail grids `crSigCdAlo`/`crSigCdAlc` (filtered by `fkchave`) and the UF-descri├º├úo lookup (filtered by `Estados`). None of those snippets cover the legacy master-table save/delete path, because in the legacy form that's done via `ThisForm.poDataMgr.Update('crSigCdUfd')` ÔÇö a buffered CursorAdapter update, not raw SQL text ÔÇö so there's no legacy WHERE-`cidchaves` string to compare against. The absence in the reference list doesn't mean the migrated code invented the filter; it means the legacy mechanism for that specific operation never had literal SQL to begin with.
+
+I also checked `FormUfd.prg` for every `cidchaves` occurrence (lines 1566/1596/1625) ÔÇö those are just reading the field from the already-loaded `cursor_4c_Dados` row (`loc_cChave = ALLTRIM(cidchaves)`), not building a WHERE clause. No invented filter there either.
+
+Removing `WHERE cidchaves = ...` from `UfdBO.prg` would break Alterar/Visualizar/Excluir (no way to target the specific row), so I left the files untouched. No other SQL/tabela/aspas/transa├º├úo issues were found in the reviewed sections.

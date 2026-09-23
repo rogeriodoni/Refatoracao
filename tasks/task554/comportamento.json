@@ -1,0 +1,236 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 10,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDUSA",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.poDataMgr.LocateCursor('crSigSyMov','USUARS',ThisForm.Pagina.Dados.getusuars.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA",
+      "evento": "Init",
+      "linhas": 23,
+      "codigoOriginal": "LParameters lcAcesso\n\nWith ThisForm\n\t.LockScreen = .T.\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tlcQuery = [select a.usuars,a.Dopes,a.Emps,b.ncomps,c.razas,a.cidchaves from SigSyMov a ]+;\n\t\t\t\t  [Left Join SigCdUsu B ON a.usuars = b.usuarios ]+;\n\t\t\t\t  [Left Join SigCdEmp C ON a.emps = c.cemps ]\t\t\t  \n\t\t\t\t  \n\t\tWith .poDatamgr\n\t\t\t.AddCursor('SigSyMov','cidchaves','crSigSyMov','',ThisForm.pagina.lista.grade,lcQuery)\n\t\t\t.pfSqlTabela(1).pColuna('usuars',''... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUSA",
+      "evento": "Click",
+      "linhas": 43,
+      "codigoOriginal": "LParameters lnOpcao\nlnOpcao = Iif(Type(\"lnOpcao\")=='N',lnOpcao,This.Value)\n\nIf !dodefault( lnOpcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\n\nDo Case && Ativa o Foco do mouse, de acordo com o Tipo de Escolha\n\tCase INLIST(ThisForm.pcEscolha,'INSERIR','PROCURAR')\n\t\tThisForm.Pagina.Dados.getUsuars.SetFocus\n\t\tThisForm.pagina.dados.getDopes.Enabled=.f.\n\t\tThisForm.pagina.dados.getDopes.Refresh\n\t\t\n\tCase INLIST(ThisForm.pcEscolha,'CONSULTAR','EXCLUIR')\t\n\t\tThis.Parent.Parent.dados.grupo_salva.salva.SetFoc... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value=Nvl",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA",
+      "evento": "Click",
+      "linhas": 42,
+      "codigoOriginal": "*Verifica se o registro já existe\nIf !Empty(ThisForm.pagina.dados.getUsuars.Value)\n\tIf ThisForm.pcEscolha = 'INSERIR' And ThisForm.poDataMgr.ChkRegister('SigSyMov','usuars',ThisForm.Pagina.Dados.getUsuars.value)\n\t\tMessagebox( 'Usuário já Cadastrado!', 48, 'Atenção' )\n\t\tThisForm.Pagina.Dados.getUsuars.SetFocus\n\t\tReturn\n\tElse\n\t*Faz Validacao dos Campos, nas Seguinte Operacoes\n\t\tIf InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\t\t\tIf Empty(crSigSyMov.Emps)\n\t\t\t\tMessagebox( 'A Empresa precisa ser Inf... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "Sqlexecute,pcEscolha = 'INSERIR' And Reccount",
+        "controlesReferenciados": "ChkRegister('SigSyMov'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "= DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.LockScreen = .t.\n\tThisForm.mAtivapagina1\n\tThisForm.LockScreen = .f.\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA.pagina.dados.getUsuars",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcescolha,'INSERIR','PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA.pagina.dados.getUsuars",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "Local llRetorno,loLista\n\nm.llRetorno = (Empty(This.Value))\nIf Not m.llRetorno\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','USUARIOS',THIS.Value,'SELEÇÃO DE USUÁRIOS',.T.,.f.,[Not cAtivos='N'])\n\tIf .Not.m.loLista.plachouRegistro\n\t\tm.loLista.mAddColuna('USUARIOS',,'Cód.',80,.T.)\n\t\tm.loLista.mAddColuna('NCOMPS',,'Nome',290,.T.)\t\t\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Parent.getUSUARS.Value = Iif(Lastkey()==27,\"\",crSigCdUsu.USUARIOS)\n\tThis.Parent.getUSUARS.R... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA.pagina.dados.getDopes",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Local llRetorno,loLista\n\nm.llRetorno = (Empty(This.Value))\nIf Not m.llRetorno\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDatamgr.pnIdconn,'SigCdOpe','crSigCdOpe','DOPES',THIS.Value,'SELEÇÃO DE OPERAÇÃO',.T.)\n\tIf .Not.m.loLista.plachouRegistro\n\t\tm.loLista.mAddColuna('DOPES',,'Operação.',150,.T.)\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Parent.getDopes.Value = Iif(Lastkey()==27,\"\",crSigCdOpe.DOPES)\n\tThis.Parent.getDopes.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA.pagina.dados.getEmps",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local llRetorno,loLista\n\nm.llRetorno = (Empty(This.Value))\nIf Not m.llRetorno\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','CEMPS',THIS.Value,'SELEÇÃO DE EMPRESAS',.T.)\n\tIf .Not.m.loLista.plachouRegistro\n\t\tm.loLista.mAddColuna('CEMPS'\t,,  'Cód.',31,.T.)\n\t\tm.loLista.mAddColuna('RAZAS'  \t,Replicate('x',40), 'Empresa',290,.T.)\t\t\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Parent.getEmps.Value = Iif(Lastkey()==27,\"\",crSigCdEmp.CEMPS)\n\tThis.Parent.getEmps.Refresh\n\t\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA.pagina.dados.getDEmps",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Empty(THIS.Parent.GETEMPS.VALUE)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA.pagina.dados.getDEmps",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local llRetorno,loLista\n\nm.llRetorno = (Empty(This.Value))\nIf Not m.llRetorno\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','RAZAS',THIS.Value,'SELEÇÃO DE EMPRESAS',.T.)\n\tIf .Not.m.loLista.plachouRegistro\n\t\tm.loLista.mAddColuna('RAZAS'  \t,Replicate('x',40), 'Empresa',290,.T.)\n\t\tm.loLista.mAddColuna('CEMPS'\t,,  'Cód.',31,.T.)\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Parent.getDEmps.Value = Iif(Lastkey()==27,\"\",crSigCdEmp.RAZAS)\n\tThis.Parent.getDEmps.Refresh\n\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA.pagina.dados.getDUsuars",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.getUsuars.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSA.pagina.dados.getDUsuars",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local llRetorno,loLista\n\nm.llRetorno = (Empty(This.Value))\nIf Not m.llRetorno\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDatamgr.pnIdconn,'SigCdUsu','crUsuarios','NCOMPS',THIS.Value,'SELEÇÃO DE USUÁRIOS',.T.,.f.,[Not cAtivos='N'])\n\tIf .Not.m.loLista.plachouRegistro\n\t\tm.loLista.mAddColuna('NCOMPS',, 'Nome',290,.T.)\t\t\n\t\tm.loLista.mAddColuna('USUARIOS'\t,,  'Cód.',80,.T.)\t\t\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Parent.getDUSUARS.Value = Iif(Lastkey()==27,\"\",crUsuarios.NCOMPS)\n\tThis.Parent.getDUSUA... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDUSA.Init",
+      "queryOriginal": "\t\tlcQuery = [select a.usuars,a.Dopes,a.Emps,b.ncomps,c.razas,a.cidchaves from SigSyMov a ]+; \t\t\t\t  [Left Join SigCdUsu B ON a.usuars = b.usuarios ]+; \t\t\t\t  [Left Join SigCdEmp C ON a.emps = c.cemps ]\t\t\t",
+      "tabelas": "SigSyMov,SigCdUsu,SigCdEmp",
+      "colunas": "usuars,Dopes,Emps,ncomps,razas,cidchaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigSyMov", "SigCdUsu", "SigCdEmp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

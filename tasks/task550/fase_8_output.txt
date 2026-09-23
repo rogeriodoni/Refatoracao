@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This all looks correct and consistent with the codebase's established conventions. Phase 8 is complete.
+
+## Summary
+
+Completed Phase 8/8 (Form ÔÇô Eventos Auxiliares e Consolida├º├úo Final) for FormUfd:
+
+**FormUfd.prg** (`projeto\app\forms\cadastros\FormUfd.prg`):
+- Added `FormParaBO()` (Page2 ÔåÆ BO, symmetric to the existing `BOParaForm()`)
+- Added `BtnSalvarClick()` ÔÇö transcreve as valida├º├Áes do legado (`U.F. Origem/Destino Inv├ílido`), fora do TRY; `Salvar()` sem ELSE desnecess├írio (regra #20)
+- Added `BtnCancelarClick()` e `BtnEncerrarClick()`
+- Added `BtnBuscarClick()` ÔÇö filtra a lista via lookup em `SigCdUfs` (o legado n├úo tem `cntFiltros` nesta tela)
+- Extended `CarregarLista()` to accept an optional filter parameter (used by BtnBuscarClick)
+
+**Bug found and fixed while validating the chain**: `UfdBO.prg` had no `ExecutarExclusao()` override ÔÇö it would have silently fallen back to `BusinessBase`'s stub ("m├®todo n├úo implementado"), meaning `BtnExcluirClick` compiled fine but excluir nunca funcionaria em runtime. Added the DELETE implementation.
+
+**Integration** (previously not done in earlier phases): added `AbrirFormUfd()` to `menu.prg` following the canonical pattern (Show() fora do TRY, regra #29) and wired bar 192 in `popCadastros` ("ICMS Interestadual"). `config.prg` needs no changes ÔÇö it loads BOs/Forms dynamically via ADIR().
+
+Deleted stale `.FXP` files for UfdBO/FormUfd/menu so the next compile picks up the changes.
+
+**One caveat**: the legacy form has two child grids (`GradAlo`/`GradAlocfop`, tied to `crAlo`/`crAlocfop`) for per-classification and per-CFOP ICMS rate overrides, with their own Insert/Delete buttons. Earlier phases left placeholder labels ("Say15"/"Say9" ÔÇö grid em fase futura) but never built these sub-grids or their save logic. That's outside what Phase 8's stated scope covers (button/data-binding consolidation) and would need its own follow-up task to implement properly (extra BO methods, transactional save across 3 tables).

@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For Substr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDUNI",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n= DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUNI",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_unid.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdUni','cunis',ThisForm.Pagina.Dados.Get_unid.Value)\nElse\n\tIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_desc.Value)\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdUni','dunis',ThisForm.Pagina.Dados.Get_desc.Value)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_unid,Get_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUNI",
+      "evento": "Init",
+      "linhas": 21,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\n\tIf .poDatamgr.pnIdconn>0\n\t\tWith .poDatamgr\n\t\t\tWith .AddCursor('SigCdUni','cunis','crSigCdUni','',ThisForm.pagina.lista.grade)\n\t\t\t\t.pColuna('cunis','','','Unidade',80,.t.)\n\t\t\t\t.pColuna('dunis','','','Descrição',337,.t.)\n\t\t\tEndWith \n\t\tEndWith\n\t\t= DoDefault()\n\t\t.Refresh\n\tElse \n\t\t= Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\t.LockScreen = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUNI",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUNI",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "LParameters lnOpcao\n\nIf DoDefault( lnOpcao )\n\tDo Case\n\t\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\t\tThisForm.Pagina.Dados.Get_Unid.SetFocus\n\t\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\t\tThisForm.Pagina.Dados.Get_Desc.SetFocus\n\tOther\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\n\tEndCase\n\t\n\tThisForm.Pagina.Dados.chkEtiqDups.Visible = (Upper(Usuar) = [4CONTROL])\nElse\n\tThisForm.mAtivaPagina1()\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Visible =,mAtivaPagina1",
+        "controlesReferenciados": "Get_Unid,Get_Desc,chkEtiqDups",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUNI",
+      "evento": "Click",
+      "linhas": 54,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\tIf IsEmpty( ThisForm.Pagina.Dados.Get_Unid.Value )\n\t\tMessagebox( 'Unidade não pode ficar em branco!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Unid.SetFocus\n\t\tReturn\n\tEndif\n\tIf (ThisForm.pcEscolha = 'INSERIR' And ThisForm.poDataMgr.ChkRegister('SigCdUni','cunis',ThisForm.Pagina.Dados.Get_Unid.Value))\n\t\tMessagebox( 'Unidade já Cadastrada!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Unid.SetFocus\n\t\tReturn\n\tEndif\n\tIf IsEmpty( ThisForm.Pagina.Dados.Get_Desc.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Substr",
+        "metodosFormChamados": "ChkRegister,SqlExecute,mAtivaPagina1",
+        "controlesReferenciados": "Get_Unid,ChkRegister('SigCdUni',Get_Desc,ChkRegister('SigCdPro',ChkRegister('SigCdGrp'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUNI",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "= DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUNI.Pagina.Dados.Get_unid",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return (InList(ThisForm.pcEscolha,'INSERIR','PROCURAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

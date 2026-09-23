@@ -1,0 +1,460 @@
+{
+  "resumo": {
+    "totalMetodos": 27,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 13,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "fUniqueIds", "fDecriptografar"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDTPT",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "llOk = .t.\nIf Not ThisForm.poDataMgr.Update('crSigPrTro')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigPrTro)')\n\tllOk = .f.\nEndIf\n\nIf llOk\n\t=DoDefault()\nElse\n\tThisForm.poDataMgr.RollBack()\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT",
+      "evento": "Init",
+      "linhas": 33,
+      "codigoOriginal": "lcQryTran = [Select * From SigPrTrn]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigPrTrn', 'Codigos', 'crSigPrTrn', '', ThisForm.Pagina.Lista.Grade, lcQryTran)\n\t\t\t.pfSqlTabela(1).pColuna('Codigos',  '', '', 'Códigos',   052, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Descrs',   '', '', 'Descrição', 150, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Extensao', '', '', 'Extensão',  060, .f.)\n\n\t\t\t.AddCursor('SigPrTro', 'cIdChave... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTPT",
+      "evento": "Click",
+      "linhas": 58,
+      "codigoOriginal": "Lparameters Opcao\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nSelect crSigPrTrn\nDo Case\n\tCase Inlist(ThisForm.pcEscolha, 'PROCURAR', 'INSERIR')\n\t\tThisForm.Pagina.Dados.getCodigos.SetFocus\n\n\tCase (ThisForm.pcEscolha = 'ALTERAR')\n\t\tThisForm.Pagina.Dados.getDescrs.SetFocus\t\n\n\tCase Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndCase\n\nIf InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR', 'CONSULTAR')\n\n\tlcValor = 'TRANSPORTE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "Get_Transp,Get_Recebe",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT",
+      "evento": "Click",
+      "linhas": 58,
+      "codigoOriginal": "If (ThisForm.pcEscolha = 'INSERIR')\n\tIf Empty(ThisForm.Pagina.Dados.getCodigos.Value)\n\t\t=MessageBox('Obrigatório Informar o Código!!!', 48, '')\n\t\tThisForm.Pagina.Dados.getCodigos.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf ThisForm.poDataMgr.ChkRegister('SigPrTrn', 'Codigos', crSigPrTrn.Codigos)\n\t\t=MessageBox('Código Já Cadastrado!!!', 0+48, '')\n\t\tThisForm.Pagina.Dados.getCodigos.SetFocus\n\t\tReturn 0 \n\tEndIf\nEndIf\n\n=DoDefault()\n\nIf InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n\n\tIf This.Parent.Parent.Get_... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister,cursorquery,SqlExecute,Commit",
+        "controlesReferenciados": "ChkRegister('SigPrTrn',Get_Transp,Get_Recebe",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Lista.cntCopiar",
+      "evento": "GotFocus",
+      "linhas": 6,
+      "codigoOriginal": "This.getOld.Value  = crSigPrTrn.Codigos\nThis.getOld.Refresh\n\nThis.getNew.SetFocus\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Lista.cntCopiar.getNew",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "NoDefault\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Lista.cntCopiar.CmdOk",
+      "evento": "Click",
+      "linhas": 78,
+      "codigoOriginal": "Local lcNew, lcOld\n\nlcOld = ThisForm.Pagina.Lista.cntCopiar.getOld.Value\nlcNew = ThisForm.Pagina.Lista.cntCopiar.getNew.Value\n\nThisForm.poDataMgr.CursorQuery('SigPrTrn', 'crTmp', 'Codigos', lcNew)\nIf (Reccount('crTmp') > 0)\n\t=MessageBox('O Novo Transporte Informado Já Está Cadastrado!!!', 0+48, '')\n\tThis.Parent.getNew.SetFocus\n\tUse In crTmp\n\tReturn 0\nEndIf\nUse In crTmp\n\nIf MessageBox('Será Gerado Um Novo Transporte Com o Código : [' + lcNew + ']' + Chr(13) + ;\n              'Confirma a Geração ?... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Lista.cntCopiar.CmdCancel",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "lcOld = ThisForm.Pagina.Lista.cntCopiar.getOld.Value\n\nThisForm.Pagina.Dados.Enabled = .t.\n\nWith ThisForm.Pagina.Lista.cntCopiar\n\t.Visible           = .f.\n\t.cmdOk.Enabled     = .f.\n\t.cmdCancel.Enabled = .f.\n\t.getNew.Enabled    = .f.\nEndWith\n\nWith ThisForm.Pagina.Lista\n\t.Grade.Enabled       = .t.\n\t.Grupo_Saida.Enabled = .t.\n\t.Grupo_op.Enabled    = .t.\n\t.btnSubtipos.Enabled = .t.\n\t.btnCopiar.Enabled   = .t.\nEndWith \n\nThisForm.Refresh\n\nThisForm.mAtivaPagina1\n\nThisForm.Pagina.Lista.Grade.SetFocus\n\nSe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Lista.btnSubtipos",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "If Eof('crSigPrTrn')\n\t=MessageBox('Selecione Um Tipo de Transporte Na Grade!!!', 0+48, 'Atenção!!!')\n\tReturn 0\nEndIf\n\nWith ThisForm.Pagina.Lista\n\t.Grade.Enabled       = .f.\n\t.Grupo_Saida.Enabled = .f.\n\t.Grupo_op.Enabled    = .f.\n\t.btnSubtipos.Enabled = .f.\n\t.btnCopiar.Enabled   = .f.\nEndWith \n\t\nThisForm.Pagina.Dados.Enabled = .f.\n\nDo Form SigCdTpr With crSigPrTrn.Codigos\n\nThisForm.Pagina.Dados.Enabled = .t.\n\nWith ThisForm.Pagina.Lista\n\t.Grade.Enabled       = .t.\n\t.Grupo_Saida.Enabled = .t.\n\t.Gru... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Lista.btnCopiar",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "If Eof('crSigPrTrn')\n\t=MessageBox('Selecione Um Tipo de Transporte Na Grade!!!', 0+48, 'Atenção!!!')\n\tReturn 0\nEndIf\n\nWith ThisForm.Pagina.Lista\n\t.Grade.Enabled       = .f.\n\t.Grupo_Saida.Enabled = .f.\n\t.Grupo_op.Enabled    = .f.\n\t.btnSubtipos.Enabled = .f.\n\t.btnCopiar.Enabled   = .f.\nEndWith \n\nThisForm.Pagina.Dados.Enabled = .f.\n\nWith ThisForm.Pagina.Lista.cntCopiar\n\t.Visible           = .t.\n\t.cmdOk.Enabled     = .t.\n\t.cmdCancel.Enabled = .t.\n\t.getNew.Enabled    = .t.\n\t.getNew.Value      = ''\n\t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Lista.Command1",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Do Form SigCdTpt With crSigPrTrn.Codigos\n\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.getCodigos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Not Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.getDescrs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.getExtens",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.Get_Geração",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Directory(This.Value)\n\tThis.Value = GetDir(This.Value, 'Diretório Gravação do Transporte')\n\tIf Not Directory(This.Value)\n\t\t=Messagebox('Diretório Não Localizado!!!', 48)\n\t\tThis.Value = ''\n\tEndIf\nElse\n\tThis.Value = Alltrim(Upper(This.Value)) + Iif(Right(Alltrim(This.Value), 1) <> '\\', '\\', '')\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.Get_Leitura",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Directory(This.Value)\n\tThis.Value = GetDir(This.Value, 'Diretório Leitura do Zip')\n\tIf Not Directory(This.Value)\n\t\t=Messagebox('Diretório Não Localizado!!!', 48)\n\t\tThis.Value = ''\n\tEndIf\nElse\n\tThis.Value = Alltrim(Upper(This.Value)) + Iif(Right(Alltrim(This.Value ), 1) <> '\\', '\\', '')\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.get_Arquivar",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Directory(This.Value)\n\tThis.Value = GetDir(This.Value, 'Diretório Recepção do Transporte')\n\tIf Not Directory(This.Value)\n\t\t=Messagebox('Diretório Não Localizado!!!', 48)\n\t\tThis.Value = ''\n\tEndIf\nElse\n\tThis.Value = Alltrim(Upper(This.Value)) + Iif(Right(Alltrim(This.Value), 1) <> '\\', '\\', '')\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.Get_Recepção",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Not Directory(This.Value)\n\tThis.Value = GetDir(This.Value, 'Diretório Recepção do Transporte')\n\tIf Not Directory(This.Value)\n\t\t=Messagebox('Diretório Não Localizado!!!', 48)\n\t\tThis.Value = ''\n\tEndIf\nElse\n\tThis.Value = Alltrim(Upper(This.Value)) + Iif(Right(Alltrim(This.Value), 1) <> '\\', '\\', '')\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.Get_ftpsenha",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "This.Value = fDecriptografar(This.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDecriptografar",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.Get_senha2",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(This.Parent.Get_ftpsenha.Value)\n\tIf (This.Parent.Get_ftpsenha.Value <> fDecriptografar(This.Value))\n\t\tIf MessageBox('A Senha Não Confere!!! Deseja Continuar Com a Senha em Branco ?', ;\n\t\t\t\t\t  4+32+256, 'Erro na Confirmação da Senha...') = 7\n\t\t\tThis.Value = ''\n\t\t\tReturn .f.\n\t\tElse\n\t\t\tThis.Parent.Get_ftpsenha.Value = ''\n\t\t\tThis.value = ''\n\t\t\tReturn .t.\n\t\tEndIf\n\tEndIf\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ftpsenha",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.Get_ClrArqOks",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "This.peAntvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.Get_ClrArqOks",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If (This.Value < 0)\n\t=MessageBox('Valor Inválido!!!', 0+48, '')\n\tThis.Value = This.peAntvalue\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.Get_Transp",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "This.peAntvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPT.Pagina.Dados.get_Recebe",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "This.peAntvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDTPT.Init",
+      "queryOriginal": "lcQryTran = [Select * From SigPrTrn]",
+      "tabelas": "SigPrTrn",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPrTrn"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

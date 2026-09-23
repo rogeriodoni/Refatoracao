@@ -15279,6 +15279,480 @@ function ConvertTo-ChaveImagem {
     return $t.ToLowerInvariant()
 }
 
+function Corrigir-SelfDentroDeWith {
+    # Pattern #209 (Erro174, 2026-09-23) - AUTO-FIX.
+    #
+    # `.Self` NAO existe em VFP9 - eh de Delphi/Object Pascal. Dentro de um bloco
+    # `WITH <expr>` nao ha como referenciar o proprio objeto com ponto: tem de se
+    # repetir a expressao do WITH (ou usar uma variavel apontando para ela).
+    #
+    # Medido no VFP9 em 2026-09-23:
+    #   WITH obj / PEMSTATUS(.Self, "x", 5)  -> ERRO "Property SELF is not found."
+    #   PEMSTATUS(obj, "Self", 5)            -> .F.  (objeto nao tem Self)
+    #   PEMSTATUS(<expr do WITH>, "x", 5)    -> OK
+    #   PEMSTATUS(<variavel>, "x", 5)        -> OK
+    #
+    # COMPILA LIMPO e so estoura em RUNTIME. Quando o metodo nao tem TRY/CATCH, o
+    # usuario ve o "Program Error" CRU do VFP, nao o MostrarErro do form - foi assim
+    # no Erro174, ao clicar Incluir (BtnIncluirClick -> AjustarBotoesPorModo).
+    #
+    # AUTO-FIX seguro: ao contrario de outros casos deste corretor, aqui nao ha
+    # ambiguidade nenhuma - a expressao correta eh exatamente a do WITH que abre o
+    # bloco, esta na mesma regiao do arquivo e nao depende do dump do legado nem de
+    # julgamento. So NAO muta quando nao da para resolver com certeza:
+    #   - `.Self` fora de qualquer WITH
+    #   - expressao do WITH contendo macro/substituicao (`&`, `$`)
+    param(
+        [string[]]$Linhas,
+        [string]$Arquivo
+    )
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $pilha = New-Object System.Collections.ArrayList
+    $nFix  = 0
+    $nWarn = 0
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $t = $Linhas[$i]
+        $trim = $t.Trim()
+
+        if ($trim -eq '' -or $trim.StartsWith('*') -or $trim.StartsWith('&&')) { continue }
+
+        if ($trim -match '(?i)^WITH\s+(.+?)(\s*&&.*)?$') {
+            [void]$pilha.Add($matches[1].Trim())
+            continue
+        }
+        if ($trim -match '(?i)^ENDWITH\b') {
+            if ($pilha.Count -gt 0) { $pilha.RemoveAt($pilha.Count - 1) }
+            continue
+        }
+
+        if ($t -notmatch '(?i)\.\s*self\b') { continue }
+
+        if ($pilha.Count -eq 0) {
+            $nWarn++
+            Write-Host "[Pattern #209 WARN] linha $($i + 1): .Self FORA de qualquer WITH" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-209-SELF-FORA-DE-WITH" -Linha ($i + 1) -Original $trim -Corrigido "(nao mutado - sem WITH para resolver)" `
+                -Descricao ("Pattern #209 WARNING: `.Self` nao existe em VFP9 (eh de Delphi/Object Pascal) e aqui aparece " +
+                            "FORA de qualquer bloco WITH, entao nao ha expressao de onde tirar o objeto. Trocar a mao pela " +
+                            "referencia correta (THIS, uma variavel local, ou o caminho completo do objeto). " +
+                            "Origem: Erro174 (2026-09-23).")
+            continue
+        }
+
+        $expr = $pilha[$pilha.Count - 1]
+        if ($expr -match '[&$]') {
+            $nWarn++
+            Write-Host "[Pattern #209 WARN] linha $($i + 1): expressao do WITH tem macro - nao mutado" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-209-SELF-WITH-MACRO" -Linha ($i + 1) -Original $trim -Corrigido "(nao mutado - WITH com macro)" `
+                -Descricao ("Pattern #209 WARNING: `.Self` nao existe em VFP9, mas a expressao do WITH que abre este bloco " +
+                            "(``$expr``) contem macro/substituicao - repetir a expressao poderia mudar o significado. " +
+                            "Trocar a mao. Origem: Erro174 (2026-09-23).")
+            continue
+        }
+
+        $novo = [regex]::Replace($t, '(?i)\.\s*self\b', $expr)
+        if ($novo -ne $t) {
+            $Linhas[$i] = $novo
+            $nFix++
+            Add-Correcao -Tipo "SELF_DENTRO_DE_WITH" -Linha ($i + 1) -Original $trim -Corrigido $novo.Trim() `
+                -Descricao ("Pattern #209: `.Self` NAO existe em VFP9 - eh de Delphi/Object Pascal. Dentro de um bloco " +
+                            "``WITH <expr>`` nao ha como referenciar o proprio objeto com ponto: a forma correta eh repetir " +
+                            "a expressao do WITH. Medido no VFP9 em 2026-09-23: ``.Self`` dentro de WITH estoura " +
+                            "**Property SELF is not found** e ``PEMSTATUS(obj, `"Self`", 5)`` devolve .F. - o objeto nao tem " +
+                            "essa propriedade. COMPILA LIMPO e so quebra em RUNTIME; sem TRY/CATCH no metodo, o usuario ve o " +
+                            "``Program Error`` CRU do VFP em vez do MostrarErro do form. Substituido pela expressao do WITH " +
+                            "mais interno (``$expr``), que eh a unica leitura possivel - por isso este pattern eh AUTO-FIX e " +
+                            "nao WARNING. Sweep 2026-09-23: 83 sites em 4 forms (Formgpd 6, FormPAT 24, FormPEN 18, " +
+                            "FormROM 35). Origem: Erro174 (2026-09-23, ao clicar Incluir no Cadastro de Grupo de Produto).")
+        }
+    }
+
+    if ($nFix -gt 0) {
+        Write-Host "[Pattern #209] $nFix ocorrencia(s) de .Self dentro de WITH resolvida(s)" -ForegroundColor Green
+    }
+
+    return $Linhas
+}
+
+function Corrigir-FormBuscaAuxiliarSemHandle {
+    # Pattern #208 (Erro172, 2026-09-23) - WARNING-only.
+    #
+    # `CREATEOBJECT("FormBuscaAuxiliar", ...)` cujo PRIMEIRO argumento nao eh o
+    # handle da conexao. A assinatura real eh:
+    #   Init(par_nConn, par_cTabela, par_cCursor, par_cCampo, par_cValor,
+    #        par_cTitulo, par_lBuscaExata, par_lMostraGrid, par_cFiltro)
+    # e o Init faz `SQLEXEC(par_nConn, loc_cSQL, par_cCursor)` - o 1o argumento vai
+    # DIRETO para o SQLEXEC. Passar a tabela/cursor/SELECT ali desloca TODOS os
+    # argumentos e a consulta nunca acontece: o picker abre VAZIO.
+    #
+    # NAO estoura: o Init tem `IF VARTYPE(par_cTabela) != "C" / RETURN .T.`, e com
+    # string em todos os argumentos ele segue adiante.
+    #
+    # WARNING-only de proposito: o argumento certo (tabela, cursor, campo, valor
+    # inicial) depende do dump do legado de cada tela, e varios sites querem reusar
+    # um cursor JA populado - o conserto muda de caso para caso. Auditoria em lote:
+    # automation\VerificarFormBuscaAuxiliar.ps1.
+    param(
+        [string[]]$Linhas,
+        [string]$Arquivo
+    )
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i].Trim().StartsWith('*')) { continue }
+        if ($Linhas[$i] -notmatch '(?i)CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"') { continue }
+
+        # a forma dominante quebra a chamada com ` ;` - juntar antes de ler o 1o arg,
+        # senao o pattern le argumento vazio e acusa TODO site (medido: 86 falsos
+        # positivos numa 1a versao da auditoria)
+        $junta = $Linhas[$i]
+        $j = $i
+        while ($junta -match ';\s*$' -and $j + 1 -lt $Linhas.Count) {
+            $junta = ($junta -replace ';\s*$', ' ') + $Linhas[$j + 1].Trim()
+            $j++
+        }
+
+        $m = [regex]::Match($junta, '(?i)CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"\s*,\s*(.+)$')
+        if (-not $m.Success) { $i = $j; continue }   # sem argumento: modo manual
+
+        # 1o argumento ate a virgula de TOPO (ignora virgula dentro de parenteses)
+        $prof = 0; $prim = ''
+        foreach ($ch in $m.Groups[1].Value.ToCharArray()) {
+            if ($ch -eq '(') { $prof++ }
+            elseif ($ch -eq ')') { if ($prof -eq 0) { break }; $prof-- }
+            elseif ($ch -eq ',' -and $prof -eq 0) { break }
+            $prim += $ch
+        }
+        $primeiro = $prim.Trim()
+        if ($primeiro -eq '') { $i = $j; continue }
+
+        $ok = ($primeiro -match '(?i)^(m\.)?gnConnHandle$') -or
+              ($primeiro -match '(?i)^(m\.)?(loc_n|par_n|this_n)[A-Za-z0-9_]*$') -or
+              ($primeiro -match '^\d+$')
+
+        if (-not $ok) {
+            Write-Host "[Pattern #208 WARN] linha $($i + 1): FormBuscaAuxiliar sem o handle no 1o argumento" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-208-BUSCAAUX-SEM-HANDLE" -Linha ($i + 1) -Original ($junta.Trim() -replace '\s+', ' ') `
+                -Corrigido "(nao mutado - argumentos corretos dependem do legado)" `
+                -Descricao ("Pattern #208 WARNING: o 1o argumento de CREATEOBJECT(`"FormBuscaAuxiliar`", ...) eh " +
+                            "``par_nConn`` (o handle da conexao, normalmente ``gnConnHandle``), e aqui recebeu ``$primeiro``. " +
+                            "A assinatura eh Init(par_nConn, par_cTabela, par_cCursor, par_cCampo, par_cValor, par_cTitulo, " +
+                            "par_lBuscaExata, par_lMostraGrid, par_cFiltro), e o Init faz ``SQLEXEC(par_nConn, loc_cSQL, " +
+                            "par_cCursor)``: o 1o argumento vai DIRETO para o SQLEXEC. Passar tabela/cursor/SELECT ali desloca " +
+                            "TODOS os argumentos e a consulta nunca acontece - o picker abre VAZIO. NAO estoura, porque o Init " +
+                            "tem ``IF VARTYPE(par_cTabela) != `"C`" / RETURN .T.`` e com string em tudo ele segue adiante. " +
+                            "NAO foi mutado porque tabela/cursor/campo corretos vem do dump do legado da tela, e parte dos " +
+                            "sites quer reusar um cursor JA populado. Auditoria em lote: " +
+                            "automation\\VerificarFormBuscaAuxiliar.ps1. Sweep 2026-09-23: 55 sites em 16 forms. " +
+                            "Origem: Erro172 (2026-09-23, Cadastro de Grupo de Produto).")
+        }
+        $i = $j
+    }
+
+    return $Linhas
+}
+
+function Corrigir-ControlsIndexadoPorNome {
+    # Pattern #207 (Erro171, 2026-09-23, Formgpd linha 7800) - AUTO-FIX.
+    #
+    # `Controls` eh um array indexado por NUMERO. Passar o NOME do controle
+    # COMPILA LIMPO e estoura em RUNTIME, com mensagem diferente conforme o contexto.
+    #
+    # Medido no VFP9 em 2026-09-23:
+    #   Controls(1)                    -> OK, devolve o controle
+    #   Controls("lbl_4c_Teste")       -> ERRO "Invalid subscript reference."
+    #   WITH Controls("lbl_4c_Teste")  -> ERRO "CONTROLS is not an object."
+    #   PEMSTATUS(pg, "lbl_4c_Teste", 5) -> .T.   <<< o guard NAO protege
+    #   EVALUATE("pg.<nome>")                    -> OK
+    #   STORE valor TO ("pg.<nome>.Prop")        -> OK
+    #   WITH EVALUATE("pg.<nome>")               -> OK
+    #
+    # O `PEMSTATUS` que costuma guardar esses blocos devolve .T. (so verifica
+    # existencia pelo nome), entao o IF entra e a linha seguinte quebra - a mesma
+    # armadilha da regra #3 do CLAUDE.md.
+    #
+    # Alcancar membro por NOME eh exatamente o que a regra #15 ja normatiza:
+    # EVALUATE para LEITURA, STORE ... TO (expr) para ATRIBUICAO.
+    #
+    # So muta quando o argumento eh INEQUIVOCAMENTE char (literal string, prefixo
+    # loc_c/par_c/this_c da convencao do projeto, ou elemento de array que recebe
+    # literais string no mesmo arquivo). Indice numerico e qualquer coisa que nao
+    # de para classificar NAO sao tocados - Controls(N) eh o uso correto e
+    # majoritario (402 sites no projeto contra 30 quebrados).
+    param(
+        [string[]]$Linhas,
+        [string]$Arquivo
+    )
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # arrays que recebem literais string neste arquivo => guardam NOMES de controle
+    $arraysChar = New-Object 'System.Collections.Generic.HashSet[string]'
+    foreach ($l in $Linhas) {
+        if ($l -match '(?i)^\s*((?:loc|par|this)_a[A-Za-z0-9_]*)\s*\(\s*\d+\s*\)\s*=\s*"') {
+            [void]$arraysChar.Add($matches[1].ToLower())
+        }
+    }
+
+    # .T. quando o argumento eh seguramente o NOME do controle
+    $ehNome = {
+        param($arg)
+        $a = $arg.Trim()
+        if ($a -match '^"[^"]*"$') { return $true }
+        if ($a -match '(?i)^(m\.)?(loc_c|par_c|this_c)[A-Za-z0-9_]*$') { return $true }
+        if ($a -match '(?i)^((?:loc|par|this)_a[A-Za-z0-9_]*)\s*\(') {
+            return $arraysChar.Contains($matches[1].ToLower())
+        }
+        return $false
+    }
+
+    $saida = New-Object System.Collections.ArrayList
+    $nFix  = 0
+    $nWarn = 0
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        $t     = $linha.Trim()
+
+        if ($t -eq '' -or $t.StartsWith('*') -or $t.StartsWith('&&') -or $linha -notmatch '(?i)\.Controls\s*\(') {
+            [void]$saida.Add($linha); continue
+        }
+
+        $indent = ($linha -replace '^(\s*).*$', '$1')
+        $nova   = $null
+
+        # --- (1) WITH <obj>.Controls(<nome>)  ->  WITH EVALUATE("<obj>." + <nome>)
+        if ($t -match '(?i)^WITH\s+([A-Za-z_][A-Za-z0-9_.]*)\.Controls\s*\(\s*((?:[^()]|\([^()]*\))+?)\s*\)\s*$') {
+            $obj = $matches[1]; $arg = $matches[2]
+            if (& $ehNome $arg) {
+                $nova = "${indent}WITH EVALUATE(`"$obj.`" + $arg)"
+            }
+        }
+        # --- (2) <obj>.Controls(<nome>).<Prop> = <rhs>  ->  STORE <rhs> TO ("<obj>." + <nome> + ".<Prop>")
+        elseif ($t -match '(?i)^([A-Za-z_][A-Za-z0-9_.]*)\.Controls\s*\(\s*((?:[^()]|\([^()]*\))+?)\s*\)\.([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+)$') {
+            $obj = $matches[1]; $arg = $matches[2]; $prop = $matches[3]; $rhs = $matches[4].Trim()
+            # linha com continuacao (`;`) fica de fora: reescrever quebraria a continuacao
+            if ((& $ehNome $arg) -and -not $rhs.EndsWith(';')) {
+                $nova = "${indent}STORE $rhs TO (`"$obj.`" + $arg + `".$prop`")"
+            }
+        }
+
+        if ($nova) {
+            [void]$saida.Add($nova)
+            $nFix++
+            Add-Correcao -Tipo "CONTROLS_INDEXADO_POR_NOME" -Linha ($i + 1) -Original $t -Corrigido $nova.Trim() `
+                -Descricao ("Pattern #207: ``Controls`` eh array indexado por NUMERO, nunca por nome. Medido no VFP9 em " +
+                            "2026-09-23: ``Controls(`"nome`")`` em expressao estoura ``Invalid subscript reference`` e, dentro de " +
+                            "``WITH``, ``CONTROLS is not an object`` - o form nao abre (Erro171: `"Erro ao inicializar FormGpd: " +
+                            "CONTROLS is not an object. Linha 7800`"). COMPILA LIMPO. O ``PEMSTATUS(obj, `"nome`", 5)`` que " +
+                            "costuma guardar esses blocos devolve .T. (so verifica existencia, nao protege), entao o IF entra e a " +
+                            "linha seguinte quebra - mesma armadilha da regra #3. Para alcancar membro por NOME usa-se EVALUATE " +
+                            "(leitura) e STORE ... TO (expr) (atribuicao), exatamente como a regra #15 do CLAUDE.md normatiza; " +
+                            "medido: as duas formas funcionam, e ``WITH EVALUATE(...)`` tambem. Se o que se quer eh mesmo o " +
+                            "INDICE, o padrao certo eh um helper nome->indice varrendo ControlCount (o Formccr tem " +
+                            "``ObterIndiceControle``). Origem: Erro171 (2026-09-23, Cadastro de Grupo de Produto).")
+            continue
+        }
+
+        # --- (3) leitura inline / forma que nao da para mutar com seguranca -> WARNING
+        $mArg = [regex]::Match($t, '(?i)\.Controls\s*\(\s*((?:[^()]|\([^()]*\))+?)\s*\)')
+        if ($mArg.Success -and (& $ehNome $mArg.Groups[1].Value)) {
+            [void]$saida.Add($linha)
+            $nWarn++
+            Write-Host "[Pattern #207 WARN] linha $($i + 1): Controls(<nome>) - indexado por numero, a tela nao abre" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-207-CONTROLS-INDEXADO-POR-NOME" -Linha ($i + 1) -Original $t -Corrigido "(nao mutado - forma composta)" `
+                -Descricao ("Pattern #207 WARNING: ``Controls`` eh array indexado por NUMERO e aqui recebe o NOME do controle. " +
+                            "Compila limpo e estoura em runtime (``Invalid subscript reference`` em expressao, " +
+                            "``CONTROLS is not an object`` dentro de WITH). NAO foi mutado porque a ocorrencia esta embutida numa " +
+                            "expressao maior ou em linha com continuacao - reescrever automaticamente quebraria a linha. Trocar a " +
+                            "mao por ``EVALUATE(`"<obj>.`" + <nome> + `".<Prop>`")`` na LEITURA e por " +
+                            "``STORE <valor> TO (`"<obj>.`" + <nome> + `".<Prop>`")`` na ATRIBUICAO (regra #15 do CLAUDE.md). " +
+                            "Origem: Erro171 (2026-09-23).")
+            continue
+        }
+
+        [void]$saida.Add($linha)
+    }
+
+    if ($nFix -gt 0) {
+        Write-Host "[Pattern #207] $nFix chamada(s) Controls(<nome>) convertida(s) para EVALUATE/STORE" -ForegroundColor Green
+    }
+
+    return $saida.ToArray()
+}
+
+function Corrigir-PropriedadeQueAClasseNaoTem {
+    # Pattern #206 (Erro170, 2026-09-23, Formgpr linha 1066) - AUTO-FIX parcial.
+    #
+    # Atribuir `.Prop` a um controle cuja CLASSE BASE nao tem `Prop` NAO eh erro
+    # de compilacao: estoura no Init, dentro do TRY do form, e o usuario ve
+    #   "Erro ao inicializar Formgpr: Linha 1066 - Property FORECOLOR is not found"
+    # Clicou no menu e a tela nao abriu.
+    #
+    # Medido no VFP9 em 2026-09-23 (PEMSTATUS + atribuicao real):
+    #   OptionGroup  ForeColor NAO   BackColor SIM
+    #   CommandGroup ForeColor NAO   BackColor SIM
+    #   PageFrame    ForeColor NAO   BackColor NAO   BackStyle NAO
+    #   ListBox      ForeColor NAO   BackColor NAO   (sao ItemForeColor/ItemBackColor)
+    #   Shape        ForeColor NAO   ShapeType NAO   (sao BorderColor/FillColor/Curvature)
+    #   ZOrderSet    NAO existe em NENHUMA classe em runtime (so no Form Designer)
+    #   Container/Label/CommandButton/OptionButton/CheckBox/TextBox/Grid/Column/
+    #   Header/Page: tem ForeColor e BackColor.
+    #
+    # A tabela abaixo eh deliberadamente ESTREITA: so combos que foram MEDIDOS.
+    # A varredura completa (todas as classes, via AMEMBERS do proprio VFP) mora em
+    # automation\VerificarPropriedadesInexistentes.ps1 + propriedades_baseclasses.txt,
+    # que nao cabe aqui porque o corretor roda sem VFP disponivel.
+    #
+    # AUTO-FIX so onde a acao eh inequivoca e nada se perde:
+    #   ZOrderSet / ShapeType -> REMOVER (bookkeeping do designer / propriedade do VB)
+    # O resto vira WARNING: mover a cor para o lugar certo exige o dump do legado
+    # (o SCX declara `Option1.ForeColor`, nos BOTOES - ver regra #33 do CLAUDE.md),
+    # e adivinhar o alvo trocaria um crash por cor errada em silencio.
+    param(
+        [string[]]$Linhas,
+        [string]$Arquivo
+    )
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # classe -> propriedades que ela NAO tem (UPPER)
+    $semProp = @{
+        'OPTIONGROUP'   = @('FORECOLOR', 'DISABLEDFORECOLOR')
+        'COMMANDGROUP'  = @('FORECOLOR', 'DISABLEDFORECOLOR')
+        'PAGEFRAME'     = @('FORECOLOR', 'BACKCOLOR', 'BACKSTYLE')
+        'LISTBOX'       = @('FORECOLOR', 'BACKCOLOR')
+        'SHAPE'         = @('FORECOLOR', 'SHAPETYPE')
+    }
+    # propriedades que NENHUMA classe tem em runtime
+    $nuncaExiste = @('ZORDERSET', 'SHAPETYPE')
+    # dessas, as que podem ser removidas sem perder nada
+    $removivel   = @('ZORDERSET', 'SHAPETYPE')
+
+    # sugestao de onde a propriedade realmente mora
+    $ondeMora = @{
+        'OPTIONGROUP.FORECOLOR'  = 'nos membros: WITH .Buttons(1) / .Buttons(2) (o SCX legado declara Option1.ForeColor)'
+        'COMMANDGROUP.FORECOLOR' = 'nos membros: WITH .Buttons(N) (o SCX legado declara Command1.ForeColor)'
+        'PAGEFRAME.FORECOLOR'    = 'na Page (PageFrame.PageN), que tem ForeColor e BackColor'
+        'PAGEFRAME.BACKCOLOR'    = 'na Page (PageFrame.PageN), que tem ForeColor e BackColor'
+        'PAGEFRAME.BACKSTYLE'    = 'na Page (PageFrame.PageN)'
+        'LISTBOX.FORECOLOR'      = 'em ItemForeColor'
+        'LISTBOX.BACKCOLOR'      = 'em ItemBackColor'
+        'SHAPE.FORECOLOR'        = 'em BorderColor / FillColor'
+    }
+
+    # mapa nome do objeto -> classe base. Nome reaproveitado para classes
+    # diferentes vira <<AMBIGUO>> e NAO eh tocado (colisao de nome, regra #11).
+    $map = @{}
+    foreach ($l in $Linhas) {
+        if ($l -match '(?i)AddObject\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"') {
+            $n = $matches[1]; $c = $matches[2].ToUpper()
+            if ($map.ContainsKey($n) -and $map[$n] -ne $c) { $map[$n] = '<<AMBIGUO>>' } else { $map[$n] = $c }
+        }
+    }
+
+    $saida  = New-Object System.Collections.ArrayList
+    $stack  = New-Object System.Collections.ArrayList
+    $nFix   = 0
+    $nWarn  = 0
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        $t     = $linha.Trim()
+
+        if ($t -eq '' -or $t.StartsWith('*') -or $t.StartsWith('&&')) {
+            [void]$saida.Add($linha); continue
+        }
+
+        if ($t -match '(?i)^WITH\s+(.+?)(\s*&&.*)?$') {
+            $expr = $matches[1].Trim()
+            $cls  = $null
+            # membro interno de grupo (.Buttons(N), .Pages(N)...) nao da para resolver
+            if ($expr -notmatch '(?i)\.(Buttons|Pages|Columns|Controls|Objects)\s*\(' -and
+                $expr -match '([A-Za-z0-9_]+)\s*$') {
+                $ultimo = $matches[1]
+                if ($map.ContainsKey($ultimo) -and $map[$ultimo] -ne '<<AMBIGUO>>') { $cls = $map[$ultimo] }
+            }
+            [void]$stack.Add($cls)
+            [void]$saida.Add($linha); continue
+        }
+
+        if ($t -match '(?i)^ENDWITH\b') {
+            if ($stack.Count -gt 0) { $stack.RemoveAt($stack.Count - 1) }
+            [void]$saida.Add($linha); continue
+        }
+
+        # resolve (classe, propriedade) da atribuicao desta linha
+        $clsAlvo  = $null
+        $propAlvo = $null
+
+        $clsWith = if ($stack.Count -gt 0) { $stack[$stack.Count - 1] } else { $null }
+        if ($t -match '^\.([A-Za-z_][A-Za-z0-9_]*)\s*=[^=]') {
+            $propAlvo = $matches[1].ToUpper()
+            $clsAlvo  = $clsWith
+        }
+        elseif ($t -match '^([A-Za-z_][A-Za-z0-9_]*)\.([A-Za-z_][A-Za-z0-9_]*)\s*=[^=]') {
+            $obj = $matches[1]; $propAlvo = $matches[2].ToUpper()
+            if ($map.ContainsKey($obj) -and $map[$obj] -ne '<<AMBIGUO>>') { $clsAlvo = $map[$obj] }
+        }
+
+        if ($null -eq $propAlvo) { [void]$saida.Add($linha); continue }
+
+        # a propriedade nao existe em classe nenhuma?
+        $ehInexistente = $false
+        if ($nuncaExiste -contains $propAlvo) {
+            $ehInexistente = $true
+        } elseif ($clsAlvo -and $semProp.ContainsKey($clsAlvo) -and ($semProp[$clsAlvo] -contains $propAlvo)) {
+            $ehInexistente = $true
+        }
+
+        if (-not $ehInexistente) { [void]$saida.Add($linha); continue }
+
+        if ($removivel -contains $propAlvo) {
+            # AUTO-FIX: some com a linha, deixando o rastro em comentario
+            $indent = ($linha -replace '^(\s*).*$', '$1')
+            [void]$saida.Add("$indent*-- [#206] $($t) REMOVIDO: propriedade nao existe em runtime no VFP9")
+            [void]$saida.Add("$indent*-- (bookkeeping do Form Designer / propriedade do VB). Atribuir estourava")
+            [void]$saida.Add("$indent*-- `"Property $propAlvo is not found`" no Init e a tela nao abria. Erro170.")
+            $nFix++
+            Add-Correcao -Tipo "PROPRIEDADE_INEXISTENTE_REMOVIDA" -Linha ($i + 1) -Original $t -Corrigido "(linha removida)" `
+                -Descricao ("Pattern #206: `.$propAlvo` NAO existe em runtime no VFP9 - eh bookkeeping do Form Designer " +
+                            "(ZOrderSet, gravado no SCX) ou propriedade de outra linguagem (ShapeType eh do VB; no VFP o " +
+                            "equivalente eh Curvature, cujo default ja eh o retangulo pretendido). Atribuir COMPILA LIMPO e " +
+                            "estoura no Init do form, dentro do TRY, com `"Property $propAlvo is not found`" - o usuario " +
+                            "clica no menu e a tela nao abre. Removida porque nada se perde: o equivalente em runtime de " +
+                            "ZOrderSet eh o METODO ZOrder(), que o legado nao chama. Origem: Erro170 (2026-09-23).")
+            continue
+        }
+
+        # WARNING: mover a cor exige o dump do legado
+        [void]$saida.Add($linha)
+        $nWarn++
+        $dica = $ondeMora["$clsAlvo.$propAlvo"]
+        if (-not $dica) { $dica = 'conferir a classe certa no dump do legado' }
+        Write-Host "[Pattern #206 WARN] linha $($i + 1): $clsAlvo NAO tem .$propAlvo - a tela nao abre" -ForegroundColor Yellow
+        Add-Correcao -Tipo "WARN-206-PROPRIEDADE-QUE-A-CLASSE-NAO-TEM" -Linha ($i + 1) -Original $t -Corrigido "(nao mutado - alvo depende do legado)" `
+            -Descricao ("Pattern #206 WARNING: a classe $clsAlvo NAO tem a propriedade $propAlvo (medido no VFP9 em " +
+                        "2026-09-23 com PEMSTATUS e atribuicao real). Isto COMPILA LIMPO e estoura no Init do form, " +
+                        "dentro do TRY, com `"Property $propAlvo is not found`" - o usuario clica no menu e a tela nao " +
+                        "abre. A propriedade mora $dica. NAO foi mutado porque o valor certo tem de vir do dump do " +
+                        "legado (tasks\\<task>\\*_form_codigo_fonte.txt): o SCX declara a cor nos MEMBROS " +
+                        "(`Option1.ForeColor = 255,0,0`), e foi o migrador que a icou para o nivel do grupo. Ao " +
+                        "transcrever, conferir tambem se os OUTROS botoes do form nao perderam o ForeColor que o " +
+                        "legado declara - no Formgpr tres OptionGroups estavam sem o RGB(90,90,90). Ver regra #33 do " +
+                        "CLAUDE.md e automation\\VerificarPropriedadesInexistentes.ps1. Origem: Erro170 (2026-09-23).")
+    }
+
+    if ($nFix -gt 0) {
+        Write-Host "[Pattern #206] $nFix propriedade(s) inexistente(s) removida(s)" -ForegroundColor Green
+    }
+
+    return $saida.ToArray()
+}
+
 function Corrigir-SetPathMultiplasExpressoes {
     # Pattern #205 (Erro162_Aba1, 2026-09-17, config.prg) - AUTO-FIX.
     #
@@ -15524,6 +15998,13 @@ function Invoke-CorrecaoAutomatica {
         # start\config.prg, que cai no modo SEGURO - registrado so na lista de
         # forms/BO o pattern nunca rodaria no arquivo que lhe deu origem.
         $linhas = Corrigir-SetPathMultiplasExpressoes -Linhas $linhas -Arquivo $Arquivo
+        # #206 tambem nas duas listas: classe base que cria controles (GridBase,
+        # FormBuscaAuxiliar, TextBoxGridLookup) faz AddObject igual a form, e uma
+        # propriedade inexistente ali derruba TODA tela que usa a classe.
+        $linhas = Corrigir-PropriedadeQueAClasseNaoTem -Linhas $linhas -Arquivo $Arquivo
+        $linhas = Corrigir-ControlsIndexadoPorNome -Linhas $linhas -Arquivo $Arquivo
+        $linhas = Corrigir-FormBuscaAuxiliarSemHandle -Linhas $linhas -Arquivo $Arquivo
+        $linhas = Corrigir-SelfDentroDeWith -Linhas $linhas -Arquivo $Arquivo
     }
 
     if ($ehFormOuBO) {
@@ -15708,6 +16189,10 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-FormatMultipleChoicePerdido -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
     $linhas = Corrigir-PictureArquivoInexistente -Linhas $linhas -Arquivo $Arquivo -TaskDir $TaskDir
     $linhas = Corrigir-SetPathMultiplasExpressoes -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-PropriedadeQueAClasseNaoTem -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-ControlsIndexadoPorNome -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-FormBuscaAuxiliarSemHandle -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-SelfDentroDeWith -Linhas $linhas -Arquivo $Arquivo
 
     }
 

@@ -1,0 +1,586 @@
+{
+  "resumo": {
+    "totalMetodos": 34,
+    "metodosComSQL": 14,
+    "metodosComValidacao": 15,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Init",
+      "linhas": 49,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdUfd','cidchaves','crSigCdUfd','codigos,destinos,cfos',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('codigos','','','UF Origem',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('destinos','','','UF Destino',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('aliqs','','','Aliq. ICMS',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('AliqSbs','','','Aliq.Sub.Trib',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('AliqPImps','','','Aliq... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "Local laCampos(2,2)\n\nlcUfO = ThisForm.Pagina.Dados.Get_Ocodigo.Value\nlcUfD = ThisForm.Pagina.Dados.Get_Dcodigo.Value\n\nDo case\n\n\tcase IsEmpty( lcUfO )\n\t\t\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdUfd','Destinos',lcUfd)\n\t\t\n\tOtherwise\n\n\t\tm.laCampos(1,1) = 'codigos'\n\t\tm.laCampos(1,2) = lcUfo\n\t\tm.laCampos(2,1) = 'destinos'\n\t\tm.laCampos(2,2) = lcUfd\n\t\t\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdUfd',@m.laCampos)\n\nEndcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_Ocodigo,Get_Dcodigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Click",
+      "linhas": 82,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\n*** Mena - 14/01/2018 - incluido para ter aliquotas local por classificação fiscal ***\nSelect crAlo\nZap\nSelect crAlocfop\nZap\n\n*** pega chave secundária se houver ***\nlcCod = IIF(ThisForm.PcEscolha='INSERIR', '', CrSigcdUfd.cidchaves)\n\nlcSql = [Select * From SigCdAlo Where fkchave = '] + lcCod + [' order by codClasFiscal]\n\n=ThisForm.PodataMgr.SqlExecute(lcSql,'TmpAlo')\nSelect TmpAlo\nScan\n\tSelect crAlo\n\tAppend Blank\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_OCodigo,Get_ONome,Get_DNome",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Click",
+      "linhas": 103,
+      "codigoOriginal": "Local laCampos(3,2)\n\nIf Inlist( Thisform.pcEscolha,'INSERIR','ALTERAR')\n\n\tIf IsEmpty( Thisform.Pagina.Dados.Get_OCodigo.value )\n\t\t=messagebox('U.F. Origem Inválido.',0+64,'Atenção!')\n\t\tThisform.Pagina.Dados.Get_OCodigo.setfocus\n\t\tReturn\n\tEndif\n\tIf IsEmpty( Thisform.Pagina.Dados.Get_DCodigo.value )\n\t\t=messagebox('U.F. Destino Inválido.',0+64,'Atenção!')\n\t\tThisform.Pagina.Dados.Get_DCodigo.setfocus\n\t\tReturn\n\tEndif\n\t\n\tm.laCampos(1,1) = 'codigos'\n\tm.laCampos(1,2) = Thisform.Pagina.Dados.Get_OCodigo.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister,Update",
+        "controlesReferenciados": "Get_OCodigo,Get_DCodigo,ChkRegister('SigCdUfd'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.Get_OCodigo",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdUfs','crSigCdUfs','estados',This.Value,'Estado',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Estados','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('Descrs','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\t*This.Parent.get_ocodigo.Value = Iif(LastKey()==27 or !used('CrSigCdUfs'),'',Evaluate('CrSigCdUfs.Estados'))\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ocodigo,get_onome",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.Get_ONome",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdUfs','crSigCdUfs','descrs',This.Value,'Estado',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Descrs','','Descrição')\n\t\tm.loLista.mAddColuna('Estados','XXXXXX','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Parent.get_ocodigo.Value = Iif(LastKey()==27 or !used('CrSigCdUfs'),'',Evaluate('CrSigCdUfs.Estados'))\n\tT... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ocodigo,get_onome",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.Get_ONome",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And IsEmpty( This.Parent.Get_OCodigo.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_OCodigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.getAliqredb",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.getAliqFcp",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.getAliqFcp",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value < 0 or This.Value > 2 \n\tMessageBox('Valor da Alíquota Inválida.', 48, '' )\n\tReturn 0 \nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.Get_DCodigo",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdUfs','crSigCdUfs','estados',This.Value,'Estado',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Estados','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('Descrs','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Parent.get_dcodigo.Value = Iif(LastKey()==27 or !used('CrSigCdUfs'),'',Evaluate('CrSigCdUfs.Estados'))\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dcodigo,get_dnome",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.Get_DNome",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdUfs','crSigCdUfs','descrs',This.Value,'Estado',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Descrs','','Descrição')\n\t\tm.loLista.mAddColuna('Estados','XXXXXX','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Parent.get_dcodigo.Value = Iif(LastKey()==27 or !used('CrSigCdUfs'),'',Evaluate('CrSigCdUfs.Estados'))\n\tT... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_dcodigo,get_dnome",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.Get_DNome",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And IsEmpty( This.Parent.Get_DCodigo.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DCodigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.getCFO",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,retorno\n\nm.llRetorno = (IsEmpty(StrTran(This.Value, '.', '')))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdCfo','crSigCdCfo','Codigos',This.Value,'CFO',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Codigos','','Código')\n\t\tm.loLista.mAddColuna('Descricaos','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tThis.Value = Iif(LastKey()==27 or !used('CrSigCdCfo'),'',Evaluate('CrSigCdCfo.Codigos'))\n\tThis.R... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.InsAlo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.InsAlo",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nSelect crAlo\nLocate For codClasFiscal=' '\nIf Eof()\n\tAppend Blank\nENDIF\nThisform.Pagina.Dados.gradAlo.Column1.SetFocus\nreplace crAlo.fkchave With crSigCdUfd.cidchaves\nreplace crAlo.codClasFiscal With SPACE(10)\nreplace crAlo.AliqLocal With 0\nreplace crAlo.Aliqfcp With 0\nreplace crAlo.AliqIcms With 0\nreplace crAlo.sitribs With Space(3)\nreplace crAlo.cbenef With Space(10)\n\nThisform.Pagina.Dados.gradAlo.column1.text1.Value= ''\nThisform.Pagina.Dados.gradAlo.Refresh\nThisForm.L... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.ExcRed",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.ExcRed",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Select crAlo\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\n\nSELECT crAlo\nDelete\nThisForm.pagina.Dados.gradAlo.Refresh\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.GradAlo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Eof()\n\tSkip\n\tSkip -1\nENDIF\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.GradAlo.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.GradAlo.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdClf', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tIf (Lastkey() <> 27)\n\t\tThis.value  = CrListaRemota.Codigos\n\tElse\n\t\tThis.Value  = ''\n\tEndIf\n\n\tUse In CrListaRemota\nElse\n\tThis.Value  = ''\nEndIf\nThis.Refre... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.GradAlo.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 9,
+      "codigoOriginal": "Select codclasfiscal from crAlo into cursor Duplica group by codclasfiscal  having count(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('Classificao fiscal  já lançada!!!',0+32,'')\n\tSelect crAlo\nEndIf\nSelect crAlo\nRETURN .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.GradAlo.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.GradAlo.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.OPT_ALTTRANS",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.InsAlc",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nSelect crAlocfop\nLocate For codCfop=' '\nIf Eof()\n\tAppend Blank\nENDIF\nThisform.Pagina.Dados.gradAlocfop.Column1.SetFocus\nreplace crAlocfop.fkchave With crSigCdUfd.cidchaves\nreplace crAlocfop.codCfop With SPACE(10)\nreplace crAlocfop.Aliqfcp With 0\n\nThisform.Pagina.Dados.gradAlocfop.column1.text1.Value= ''\nThisform.Pagina.Dados.gradAlocfop.Refresh\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.InsAlc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.ExcAlc",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Select crAlocfop\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\n\nSELECT crAlocfop\nDelete\nThisForm.pagina.Dados.gradAlocfop.Refresh\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.ExcAlc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.GradAlocfop",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Eof()\n\tSkip\n\tSkip -1\nENDIF\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.GradAlocfop.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 9,
+      "codigoOriginal": "Select codcfop from crAlocfop into cursor Duplica group by codcfop  having count(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('Cfop já lançada!!!',0+32,'')\n\tSelect crAlocfop\nEndIf\nSelect crAlocfop\nRETURN .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.GradAlocfop.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdCfo', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tIf (Lastkey() <> 27)\n\t\tThis.value  = CrListaRemota.Codigos\n\tElse\n\t\tThis.Value  = ''\n\tEndIf\n\n\tUse In CrListaRemota\nElse\n\tThis.Value  = ''\nEndIf\nThis.Refre... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUFD.Pagina.Dados.GradAlocfop.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDUFD.Click",
+      "queryOriginal": "lcSql = [Select * From SigCdAlo Where fkchave = '] + lcCod + [' order by codClasFiscal]",
+      "tabelas": "SigCdAlo",
+      "colunas": "fkchave,lcCod,codClasFiscal]",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDUFD.Pagina.Dados.GradAlo.Column1.Text1.LostFocus",
+      "queryOriginal": "Select codclasfiscal from crAlo into cursor Duplica group by codclasfiscal  having count(1) > 1",
+      "tabelas": "crAlo",
+      "colunas": "codclasfiscal",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDUFD.Pagina.Dados.GradAlocfop.Column1.Text1.LostFocus",
+      "queryOriginal": "Select codcfop from crAlocfop into cursor Duplica group by codcfop  having count(1) > 1",
+      "tabelas": "crAlocfop",
+      "colunas": "codcfop",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdAlo", "crAlo", "crAlocfop"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

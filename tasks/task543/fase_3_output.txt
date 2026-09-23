@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Arquivo `FormTpe.prg` criado com a estrutura base da Fase 3/8:
+
+- `DEFINE CLASS FormTpe AS FormBase` com propriedades visuais (Width=1000, Height=600, Caption="Tipos de Etiquetas de Produto") e propriedades de estado (`this_oBusinessObject`, `this_cModoAtual`)
+- `Init()` apenas com `RETURN DODEFAULT()` (sem duplicar `InicializarForm()`)
+- `InicializarForm()` cria o `TpeBO`, monta o PageFrame e propaga o Caption para os labels do cabe├ºalho nas duas p├íginas
+- `ConfigurarPageFrame()` com `Top=-29`/`Tabs=.F.` e Page1=Lista/Page2=Dados
+- `ConfigurarPaginaLista()` e `ConfigurarPaginaDados()` com o cabe├ºalho cinza completo (`cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo`) em **ambas** as p├íginas (regra #11 do CLAUDE.md), e os containers `cnt_4c_Botoes`/`cnt_4c_BotoesAcao` posicionados mas ainda vazios (grid, bot├Áes CRUD, campos e eventos ficam para as Fases 4-8)
+- `TornarControlesVisiveis()` e `Destroy()` completos
+
+Pr├│ximo passo: Fase 4 deve adicionar o grid e os bot├Áes CRUD via Read+Edit neste mesmo arquivo.

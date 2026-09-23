@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Criado `C:\4c\projeto\app\forms\cadastros\Formuni.prg` (Fase 3/8) seguindo exatamente o padr├úo de `FormCor.prg`:
+
+- `DEFINE CLASS Formuni AS FormBase` com propriedades visuais (Width=1000, Height=600, Caption="Cadastro de Unidades") e demais props can├┤nicas (AutoCenter, WindowType=1, etc.)
+- `Init()` apenas `RETURN DODEFAULT()` (evita duplicar `InicializarForm`)
+- `InicializarForm()` cria `uniBO`, chama `ConfigurarPageFrame()`, propaga o `Caption` para o cabe├ºalho e ativa Page1
+- `ConfigurarPageFrame()` cria `pgf_4c_Paginas` com Top=-29/Tabs=.F. e as duas p├íginas
+- `ConfigurarPaginaLista()` (Page1): cabe├ºalho cinza (primeiro `AddObject`, RGB(100,100,100)+Height=80, labels Sombra/T├¡tulo) + `cnt_4c_Botoes` vazio (Left=542, can├┤nico do framework)
+- `ConfigurarPaginaDados()` (Page2): mesmo cabe├ºalho (regra das duas p├íginas) + `cnt_4c_BotoesAcao` vazio (Left=842)
+- `TornarControlesVisiveis()` recursivo (necess├írio para os containers criados aparecerem)
+- `Destroy()` liberando o BO e cursores
+
+Grid, bot├Áes CRUD, campos de dados e eventos ficam propositalmente de fora, conforme escopo da Fase 3 ÔÇö entram nas Fases 4 a 8.

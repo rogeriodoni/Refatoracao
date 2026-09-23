@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced (25 PROCEDURE/25 ENDPROC, 61 WITH/61 ENDWITH, 1 ENDDEFINE). Phase 8 is complete.
+
+## Summary
+
+FormUfs.prg was already substantially built from prior phases (structure, grid, all data fields, checkboxes, BO binding). Phase 8 added the four remaining event handlers plus one signature fix:
+
+- **`BtnBuscarClick()`** ÔÇö opens `FormBuscaAuxiliar` on `SigCdUfs`, filters the list by selected UF (mirrors `FormUfd.prg`'s established pattern)
+- **`BtnSalvarClick()`** ÔÇö transcribes the legacy `Click` validation ("U.F. Invalido." / "U.F. Ja Cadastrado.") with `SetFocus()`, using `UfsBO.VerificarCodigoExistente()` (already public), then calls `Salvar()` per CLAUDE.md rule #20 (no redundant ELSE ÔÇö BO already reports failures)
+- **`BtnCancelarClick()`** ÔÇö returns to Page1 and reloads the list
+- **`BtnEncerrarClick()`** ÔÇö releases the form
+- **`CarregarLista()`** ÔÇö fixed to accept `par_cFiltro` (was parameterless, but `BtnBuscarClick` needed to pass a filter through to `UfsBO.Buscar(par_cFiltro)`)
+
+Verified: all `BINDEVENT` targets resolve to implemented methods, no duplicate procedure names, and `PROCEDURE`/`ENDPROC`/`WITH`/`ENDWITH` counts balance. FormUfs.prg is now functionally complete per the Phase 8 checklist (BtnBuscar/Encerrar/Salvar/Cancelar, FormParaBO/BOParaForm, HabilitarCampos/LimparCampos, CarregarLista, AjustarBotoesPorModo were all already present).

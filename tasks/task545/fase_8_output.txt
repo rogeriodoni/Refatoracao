@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No TODO/placeholder text, matched TODOS is legitimate Portuguese ("all"), and PROCEDURE/ENDPROC counts balance (23/23). Phase 8 is complete.
+
+## Summary
+
+FormTPR.prg (and TPRBO.prg from earlier phases) were already nearly complete when I picked up Phase 8 ÔÇö everything through `BtnEncerrarClick`/`Destroy` had already landed. What was actually missing for this phase:
+
+1. **`AjustarBotoesPorModo()`** ÔÇö added to `FormTPR.prg`, wired into `BtnIncluirClick`, `BtnAlterarClick`, and `BtnVisualizarClick`. It disables `cmd_4c_Confirmar` in modo VISUALIZAR (keeping `cmd_4c_Cancelar` enabled) per the CRUD button-state convention.
+2. **Menu integration** ÔÇö `FormTPR` had no menu entry. Added `DEFINE BAR 187 OF popCadastros` ("Subtipos de Transportes"), the matching `ON SELECTION`, and `PROCEDURE AbrirFormTPR()` at the end of `menu.prg`, following the exact `VARTYPE`/`Show()`-outside-`TRY`/no-`Release()` pattern used by the other 330 `AbrirForm*` procedures.
+3. **config.prg** ÔÇö confirmed no changes needed; it loads `*BO.prg`/`Form*.prg` dynamically via `ADIR()`, so `TPRBO.prg`/`FormTPR.prg` are picked up automatically.
+4. Updated the file header comment in `FormTPR.prg` to document Fases 7 and 8 instead of leaving it stuck at Fase 6.
+
+Verified: no TODO/stub/placeholder comments, `PROCEDURE`/`ENDPROC` counts balance (23/23), and `TPRBO.prg`'s method names (`Salvar`, `NovoRegistro`, `EditarRegistro`, `CarregarPorCodigo`, `Excluir`, `this_lErroExibido`, `Buscar`) all match what the form calls.

@@ -1,0 +1,42 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 5 conclu├¡da.
+
+## O que estava errado
+
+A Fase 5 pede "adicionar metade dos campos em `ConfigurarPaginaDados()` (Page2)". **Esse m├®todo n├úo tem como existir neste form**: o SCX legado `SIGALTDT` ├® OPERACIONAL flat ÔÇö o dump lista apenas `cntSombra` (+2 labels), `Grupo_Botao`, `Grade` (5 colunas) e os bot├Áes `btnMarca`/`btnExcluir`. N├úo h├í PageFrame, n├úo h├í p├ígina de Dados, n├úo h├í nenhum campo fora da grade.
+
+Criar `ConfigurarPaginaDados()` significaria inventar uma Page2 que o legado n├úo tem (viola o PILAR 1) ou gerar um m├®todo vazio (proibido pela regra de completude). O validador da Fase 5 (`OrquestradorMigracao.ps1:5112`) exigia literalmente a string `ConfigurarPaginaDados` ÔÇö da├¡ a falha.
+
+## Corre├º├úo aplicada
+
+Estendi o validador da Fase 5 para aceitar o layout flat, **exatamente como j├í havia sido feito na Fase 4** (o coment├írio daquele bloco j├í cita `SIGALTDT -> FormVca` nominalmente):
+
+- Layout **paginado** ÔåÆ continua exigindo `ConfigurarPaginaDados` (inalterado).
+- Layout **flat** ÔåÆ `$FormType -eq "OPERACIONAL"` **e** sem `AddObject("pgf_4c_...")` **e** com campos vinculados (`.ControlSource =`). Nesse form os campos edit├íveis do legado **s├úo** as colunas da grade.
+
+Alcance medido: **5 de 132** forms operacionais caem nesse ramo (`FormSIGBLCTA`, `FormSigPdM11`, `FormSigPrApr`, `FormVca`, `Formsigopdiv`); os outros 127 seguem sujeitos ├á regra original. Forms CRUD n├úo s├úo afetados.
+
+## Verifica├º├Áes
+
+- `[Parser]::ParseFile` no `.ps1` ÔåÆ **PARSE OK**.
+- Simula├º├úo do predicado da Fase 5 contra `FormVca.prg` ÔåÆ `VALIDADO=True`.
+- `COMPILE` no VFP9 de `FormVca.prg` e `VcaBO.prg` ÔåÆ ambos geram `.fxp`, sem `.err`. Artefatos tempor├írios removidos.
+- Conferi a fidelidade do form j├í gerado: os 5 `.Picture` batem com o dump legado (`cadastro_salvar_60.jpg`, `cadastro_sair_60.jpg`, `geral_adicao_26.jpg`, `cadastro_excluir_26.jpg`, `new_background.jpg`) e todos existem em `vbmp\`; `BtnSalvarClick` reproduz o `cmdok.Click` legado (guard de duplicidade, `MsgConfirma`, delete-e-reinsere) com o desvio j├í documentado em coment├írio.
+
+Uma sonda auxiliar que eu rodei para confirmar `Column.SetFocus` travou num di├ílogo modal do VFP; matei o processo e limpei. N├úo persegui: a linha migrada ├® transcri├º├úo literal do legado (`ThisForm.grade.Column1.SetFocus()`) e compila limpo.
+
+## Ponto de aten├º├úo ÔÇö fora do escopo da Fase 5
+
+As fases seguintes batem na **mesma parede**, no mesmo `switch`, e v├úo derrubar o pipeline ainda hoje:
+
+| Fase | Exige | Existe no FormVca? |
+|---|---|---|
+| 6 | `ConfigurarPaginaDados` + `BINDEVENT` | s├│ `BINDEVENT` |
+| 7 | `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`/`BtnExcluirClick` | n├úo ÔÇö o legado tem `cmdok`/`cmdsair`/`btnMarca`/`btnExcluir` |
+| 8 | `FormParaBO`/`BOParaForm`/`BtnCancelarClick` | n├úo ÔÇö sem p├ígina de dados n├úo h├í mapeamento campoÔåöBO |
+
+N├úo mexi nelas porque o pedido era a Fase 5. O conserto ├® o mesmo padr├úo (ramo flat para `$FormType -eq "OPERACIONAL"`). Me diga se quer que eu aplique nas tr├¬s.

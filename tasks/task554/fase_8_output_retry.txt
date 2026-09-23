@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. A causa da reprova├º├úo era **uma ├║nica diverg├¬ncia de nome**, n├úo c├│digo faltando.
+
+## O que estava errado
+
+O `FormUSA.prg` j├í continha toda a l├│gica de grava├º├úo, mas o m├®todo estava nomeado `BtnConfirmarClick` (seguindo o nome do controle `cmd_4c_Confirmar`). A valida├º├úo da Fase 8 no `OrquestradorMigracao.ps1:5151` exige a lista `BtnSalvarClick, BtnCancelarClick, FormParaBO, BOParaForm, CarregarLista` ÔÇö e `BtnSalvarClick` era o ├║nico ausente, derrubando a fase inteira.
+
+O nome can├┤nico do projeto ├® **`BtnSalvarClick` ligado a `cmd_4c_Confirmar`** ÔÇö confirmado em `FormCor.prg:460`, `FormUfs.prg:1279` e `FormMoe.prg:1104`. O FormUSA era o desvio.
+
+## Corre├º├úo aplicada
+
+Renomeado `BtnConfirmarClick` ÔåÆ `BtnSalvarClick` nos 3 sites de `FormUSA.prg` (BINDEVENT linha 611, coment├írio 821, `PROCEDURE` 826). O `Caption`/nome do controle `cmd_4c_Confirmar` n├úo mudou ÔÇö PILAR 1 preservado.
+
+## Verifica├º├Áes executadas
+
+- **Compila├º├úo real no VFP9**: apaguei os `.fxp` antes (regra #29 ÔÇö `COMPILE` pode n├úo reescrever um `.fxp` existente) e compilei `USABO.prg` + `FormUSA.prg`. Ambos geraram `.fxp` sem nenhum `.err`. Os `.fxp` foram removidos depois, conforme a conven├º├úo do projeto.
+- **Crit├®rio da Fase 8**: os 5 m├®todos agora presentes.
+- **Completude** (`Test-CompletudeCodigo`): nenhum `TODO`/`FIXME`/`PLACEHOLDER`/stub em nenhum dos dois arquivos.
+- **Regra #1** (`RETURN` dentro de `TRY/CATCH`): varredura nos 6 blocos `TRY` de ambos os arquivos ÔÇö nenhuma ocorr├¬ncia, inclusive `RETURN` bare.
+- **Integra├º├úo**: `menu.prg:421` (`DEFINE BAR 195 OF popCadastros`), `menu.prg:602` (`ON SELECTION`) e `PROCEDURE AbrirFormUSA()` em `menu.prg:11507` j├í estavam presentes das fases anteriores. `config.prg` n├úo precisa de altera├º├úo ÔÇö carrega `*BO.prg`/`Form*.prg` por `ADIR()`.
+
+Os m├®todos de Fase 8 que j├í vinham prontos (`FormParaBO`/`BOParaForm` com os 5 campos, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`, `BtnBuscarClick`, `BtnEncerrarClick`, `CarregarLista` com `par_cFiltro`) foram revisados e mantidos.
+
+N├úo executei o form em runtime ÔÇö a valida├º├úo aqui ├® compila├º├úo e conformidade estrutural. Exercitar Incluir/Alterar/Visualizar/Excluir/Buscar contra o banco continua pendente.

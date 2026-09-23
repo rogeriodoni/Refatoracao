@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No violations. The migration is now complete. Let me summarize what Phase 8 added:
+
+**Phase 8 completed** ÔÇö `FormTpe.prg` now has all remaining auxiliary events:
+- `BtnBuscarClick()` ÔÇö opens `FormBuscaAuxiliar` over `SigCdTpe` itself (key `ntipos`) and locates the chosen row in the grid
+- `BtnEncerrarClick()` ÔÇö `THIS.Release()`
+- `BtnSalvarClick()` ÔÇö `FormParaBO()` + `Salvar()` (no param), relies on `BusinessBase` for error reporting (rule #20)
+- `BtnCancelarClick()` ÔÇö returns to Page1 and reloads the list
+- `AjustarBotoesPorModo()` ÔÇö disables Confirmar outside INCLUIR/ALTERAR
+- Added the missing `BINDEVENT`s for `cmd_4c_Buscar`, `cmd_4c_Encerrar`, `cmd_4c_Confirmar`, `cmd_4c_Cancelar`, plus calls to `AjustarBotoesPorModo()` from `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`
+
+I also handled the integration checklist from the task prompt:
+- Verified `config.prg` auto-loads BOs/Forms via `ADIR()` ÔÇö no manual `SET PROCEDURE` needed (per current CLAUDE.md, which supersedes the older embedded instructions)
+- Added `AbrirFormTpe()` to `menu.prg` following the exact canonical pattern (Show() outside TRY, no Release())
+- Added `DEFINE BAR 186 OF popCadastros` + `ON SELECTION BAR 186 OF popCadastros DO AbrirFormTpe`
+
+The file is structurally balanced (27 PROCEDURE/ENDPROC pairs, 3 TRY/ENDTRY, no RETURN inside TRY blocks) and `TpeBO.prg` (from earlier phases) already provides all the matching methods (`Salvar`, `Excluir`, `NovoRegistro`, `EditarRegistro`, `this_lErroExibido`, etc.) that the form now calls.

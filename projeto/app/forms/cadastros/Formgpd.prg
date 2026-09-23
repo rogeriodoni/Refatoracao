@@ -24,6 +24,10 @@ DEFINE CLASS FormGpd AS FormBase
     this_oBusinessObject = .NULL.
     this_cModoAtual      = "LISTA"
     this_lAtivaPag       = .F.
+    *-- guarda de reentrancia do filtro Grande Grupo da pagina Lista (Erro173):
+    *-- o LostFocus abre um form MODAL, e o vai-e-vem de foco pode redisparar o
+    *-- proprio LostFocus, empilhando um segundo picker.
+    this_lFiltroGdeEmCurso = .F.
 
     *-- Propriedades legado (original SIGCDGPD)
     composoriginal  = .F.
@@ -383,13 +387,18 @@ DEFINE CLASS FormGpd AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
             .MaxLength     = 3
+            .Format        = "!K"
             .BackColor     = RGB(255, 255, 255)
             .ForeColor     = RGB(0, 0, 0)
             .BorderStyle   = 1
             .SpecialEffect = 0
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Filtros.txt_4c_Gde, "KeyPress", THIS, "FiltroGde_KeyPress")
+        *-- LostFocus, nao KeyPress: o legado (Get_gde) recarrega a grade ao SAIR do
+        *-- campo, nao so no Enter, e valida com picker no Valid. BINDEVENT em "Valid"
+        *-- nao dispara de forma confiavel em TextBox, entao as duas coisas moram no
+        *-- handler de LostFocus. Erro172.
+        BINDEVENT(loc_oPagina.cnt_4c_Filtros.txt_4c_Gde, "LostFocus", THIS, "FiltroGde_LostFocus")
 
         *-- Botao Exporta XML (legado: Top=83, Left=759, Height=40, Width=105)
         *-- Compensacao +29: Top=112
@@ -915,9 +924,13 @@ DEFINE CLASS FormGpd AS FormBase
                 ENDIF
             ENDIF
 
-            IF !EMPTY(loc_cGde)
-                loc_cFiltro = "mercs = " + EscaparSQL(loc_cGde)
-            ENDIF
+            *-- O filtro eh SEMPRE aplicado, inclusive vazio. No legado a grade nasce
+            *-- ligada a [Select * From SigCdGrp Where Mercs = ?m.pcMercs] com
+            *-- pcMercs = [] (Init), e o mAtivaPagina1 so preenche pcMercs quando o
+            *-- Get_Gde tem valor: sem Grande Grupo escolhido a consulta nao casa nada
+            *-- e a Lista abre VAZIA. Filtrar so quando preenchido fazia o migrado
+            *-- carregar TODOS os grupos ao abrir (Erro172). Padr(...,3) como o legado.
+            loc_cFiltro = "mercs = " + EscaparSQL(PADR(loc_cGde, 3))
 
             IF !THIS.this_oBusinessObject.Buscar(loc_cFiltro)
                 loc_lResultado = .F.
@@ -928,15 +941,32 @@ DEFINE CLASS FormGpd AS FormBase
                     loc_oGrid          = THIS.pgf_4c_Paginas.Page1.grd_4c_Grade
                     loc_cPrimeiroCgrus = ""
 
-                    loc_oGrid.ColumnCount = 3
+                    *-- 4 colunas, com caption e largura do pColuna do legado (Init):
+                    *--   cgrus 'Codigo' 60 | dgrus 'Descricao' 250 | mercs 'Grande Grupo' 155
+                    *--   Unificas 'Uni' 32
+                    *-- O que vale em runtime eh o pColuna, nao o header desenhado no SCX
+                    *-- (que dizia "Descricao do Grupo" e tinha so 3 colunas). O migrado
+                    *-- seguia o SCX e perdia a coluna Uni (Erro172).
+                    loc_oGrid.ColumnCount = 4
                     loc_oGrid.RecordSource          = "cursor_4c_Dados"
                     loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.cgrus"
                     loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.dgrus"
                     loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.mercs"
+                    loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.unificas"
                     loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
-                    loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o do Grupo"
+                    loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
                     loc_oGrid.Column3.Header1.Caption = "Grande Grupo"
+                    loc_oGrid.Column4.Header1.Caption = "Uni"
                     THIS.FormatarGridLista(loc_oGrid)
+
+                    *-- Larguras por ULTIMO: mexer em RecordSource/ControlSource e na
+                    *-- fonte do Grid faz o VFP recalcular Column.Width para o default
+                    *-- (90). Atribuidas antes, voltavam todas a 90 - medido. Valores
+                    *-- do pColuna do legado.
+                    loc_oGrid.Column1.Width = 60
+                    loc_oGrid.Column2.Width = 250
+                    loc_oGrid.Column3.Width = 155
+                    loc_oGrid.Column4.Width = 32
 
                     *-- Carregar subgrupos do primeiro grupo listado
                     IF USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados")
@@ -1116,9 +1146,12 @@ DEFINE CLASS FormGpd AS FormBase
                 "Buscar Grupo de Produto")
 
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("cgrus", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("dgrus", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("cgrus", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dgrus", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
 
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGpd")
                     SELECT cursor_4c_BuscaGpd
@@ -1210,12 +1243,99 @@ DEFINE CLASS FormGpd AS FormBase
     ENDPROC
 
     *==========================================================================
-    * FiltroGde_KeyPress - Filtra lista ao pressionar Enter no campo Grande Grupo
-    * PUBLIC: BINDEVENT requer metodo publico
+    * FiltroGde_LostFocus - Grande Grupo da pagina Lista (legado: Get_gde)
+    *
+    * Reproduz os DOIS eventos do legado, nesta ordem:
+    *   Valid     -> se o codigo digitado nao existe em SigCdGpr, abre o picker de
+    *                Grande Grupo; ESC/cancelar limpa o campo (o legado faz
+    *                This.Value = '' + Return 0).
+    *   LostFocus -> pcMercs = This.Value, requery do cursor e recarrega a grade.
+    *
+    * PUBLIC: BINDEVENT exige metodo publico (regra #3).
     *==========================================================================
-    PROCEDURE FiltroGde_KeyPress(par_nKeyCode, par_nShiftAltCtrl)
-        IF par_nKeyCode = 13
+    PROCEDURE FiltroGde_LostFocus()
+        LOCAL loc_oTxt, loc_cValor
+
+        *-- Guarda de reentrancia: abrir um form MODAL de dentro do LostFocus faz o
+        *-- foco sair e voltar, e o proprio LostFocus pode disparar de novo - o que
+        *-- empilharia um segundo picker por cima do primeiro (Erro173).
+        IF THIS.this_lFiltroGdeEmCurso
+            RETURN
+        ENDIF
+        THIS.this_lFiltroGdeEmCurso = .T.
+
+        TRY
+            loc_oTxt = THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros.txt_4c_Gde
+            loc_cValor = UPPER(ALLTRIM(loc_oTxt.Value))
+
+            *-- Equivalente ao Valid do legado: so age quando ha algo digitado.
+            *-- NAO ha checagem de existencia aqui: o proprio FormBuscaAuxiliar.Init
+            *-- ja faz o match exato e marca this_lAchouRegistro - duplicar isso com
+            *-- um SQLEXEC a parte era so mais um caminho para divergir.
+            IF !EMPTY(loc_cValor)
+                THIS.AbrirBuscaGdeGrupoFiltro()
+            ENDIF
+
+            *-- equivalente ao LostFocus do legado: recarrega a grade com o filtro atual
             THIS.CarregarLista()
+
+        CATCH TO loc_oErro
+            MostrarErro("Erro no filtro de Grande Grupo:" + CHR(13) + ;
+                loc_oErro.Message, "FormGpd.FiltroGde_LostFocus")
+        ENDTRY
+
+        THIS.this_lFiltroGdeEmCurso = .F.
+    ENDPROC
+
+    *==========================================================================
+    * AbrirBuscaGdeGrupoFiltro - Picker de Grande Grupo do FILTRO da pagina Lista.
+    * Separado do AbrirBuscaGdeGrupo, que devolve para o txt_4c_Mercs da pagina
+    * Dados. Legado: fwbuscasel sobre crSigCdGpr (Codigos/Descs).
+    *==========================================================================
+    PROCEDURE AbrirBuscaGdeGrupoFiltro()
+        LOCAL loc_oBusca, loc_oTxt
+
+        loc_oTxt = THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros.txt_4c_Gde
+
+        TRY
+            *-- 1o parametro do Init eh o HANDLE da conexao (par_nConn), nao a tabela
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdGpr", "cursor_4c_BuscaGdeFiltro", "Codigos", ;
+                ALLTRIM(loc_oTxt.Value), ;
+                "Grande Grupo")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                *-- Padrao canonico do projeto (137 chamadores): o Init ja tenta o
+                *-- match EXATO e, achando 1 registro so, marca this_lAchouRegistro e
+                *-- this_lSelecionou - o valor ja esta resolvido e o picker NAO deve
+                *-- ser mostrado. Chamar Show() aqui sem guarda abria o dialogo por
+                *-- cima da tela ja preenchida (Erro173).
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGdeFiltro")
+                    SELECT cursor_4c_BuscaGdeFiltro
+                    loc_oTxt.Value = ALLTRIM(cursor_4c_BuscaGdeFiltro.Codigos)
+                ELSE
+                    *-- so aqui o legado limpa o campo: o usuario VIU o picker e saiu
+                    *-- sem escolher (ESC/Cancelar). Limpar incondicionalmente no fim
+                    *-- do metodo zerava o filtro mesmo quando o valor ja estava certo,
+                    *-- e a grade vinha vazia em seguida (Erro173).
+                    loc_oTxt.Value = ""
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+        CATCH TO loc_oErro
+            MostrarErro("Erro na busca de Grande Grupo:" + CHR(13) + loc_oErro.Message, ;
+                "FormGpd.AbrirBuscaGdeGrupoFiltro")
+        ENDTRY
+
+        IF USED("cursor_4c_BuscaGdeFiltro")
+            USE IN cursor_4c_BuscaGdeFiltro
         ENDIF
     ENDPROC
 
@@ -1452,24 +1572,30 @@ DEFINE CLASS FormGpd AS FormBase
         IF PEMSTATUS(loc_oPg6, "txt_4c_Cunips", 5)
             THIS.this_oBusinessObject.this_cCunips = ALLTRIM(loc_oPg6.txt_4c_Cunips.Value)
         ENDIF
-        IF PEMSTATUS(loc_oPg6, "obj_4c_Lores", 5)
-            THIS.this_oBusinessObject.this_lCores = (loc_oPg6.obj_4c_Lores.Value = 1)
+        *-- Cores/Tams/Embs/Pesos/Entregas vem da "Grade de Sub-Itens" da aba
+        *-- ESTOQUE/FISCAL (Page4), onde o legado os tem como CheckBox. Antes eram
+        *-- lidos de OptionGroups que o migrador inventara na Page6. CheckBox.Value
+        *-- eh NUMERICO (0/1). Erro175.
+        LOCAL loc_oPg4SubIt
+        loc_oPg4SubIt = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page4
+        IF PEMSTATUS(loc_oPg4SubIt, "chk_4c_Cors", 5)
+            THIS.this_oBusinessObject.this_lCores = (loc_oPg4SubIt.chk_4c_Cors.Value = 1)
         ENDIF
-        IF PEMSTATUS(loc_oPg6, "obj_4c_Ltams", 5)
-            THIS.this_oBusinessObject.this_lTams = (loc_oPg6.obj_4c_Ltams.Value = 1)
+        IF PEMSTATUS(loc_oPg4SubIt, "chk_4c_Tams", 5)
+            THIS.this_oBusinessObject.this_lTams = (loc_oPg4SubIt.chk_4c_Tams.Value = 1)
         ENDIF
-        IF PEMSTATUS(loc_oPg6, "obj_4c_Lembs", 5)
-            THIS.this_oBusinessObject.this_lEmbs = (loc_oPg6.obj_4c_Lembs.Value = 1)
+        IF PEMSTATUS(loc_oPg4SubIt, "chk_4c_Embs", 5)
+            THIS.this_oBusinessObject.this_lEmbs = (loc_oPg4SubIt.chk_4c_Embs.Value = 1)
         ENDIF
-        IF PEMSTATUS(loc_oPg6, "obj_4c_Lpesos", 5)
-            THIS.this_oBusinessObject.this_lPesos = (loc_oPg6.obj_4c_Lpesos.Value = 1)
+        IF PEMSTATUS(loc_oPg4SubIt, "chk_4c_Pesos", 5)
+            THIS.this_oBusinessObject.this_lPesos = (loc_oPg4SubIt.chk_4c_Pesos.Value = 1)
         ENDIF
-        IF PEMSTATUS(loc_oPg6, "obj_4c_Lentregas", 5)
-            THIS.this_oBusinessObject.this_lEntregas = (loc_oPg6.obj_4c_Lentregas.Value = 1)
+        IF PEMSTATUS(loc_oPg4SubIt, "chk_4c_Entregas", 5)
+            THIS.this_oBusinessObject.this_lEntregas = (loc_oPg4SubIt.chk_4c_Entregas.Value = 1)
         ENDIF
-        IF PEMSTATUS(loc_oPg6, "obj_4c_Lfornecs", 5)
-            THIS.this_oBusinessObject.this_lFornecs = (loc_oPg6.obj_4c_Lfornecs.Value = 1)
-        ENDIF
+        *-- fornecs: quem grava eh o cbo_4c_Fornecs da aba PRODUTOS (legado
+        *-- Get_fornobri), mapeado mais abaixo. O obj_4c_Lfornecs da Page6 era
+        *-- duplicata e gravava a MESMA property do BO. Erro175.
 
         *-- Page6: OptionGroups (pgConfig)
         IF PEMSTATUS(loc_oPg6, "obj_4c_GetInfoGru", 5)
@@ -1575,6 +1701,106 @@ DEFINE CLASS FormGpd AS FormBase
         ENDIF
         IF PEMSTATUS(loc_oPg8, "txt_4c_Casas", 5)
             THIS.this_oBusinessObject.this_nCasas = loc_oPg8.txt_4c_Casas.Value
+        ENDIF
+
+        *-- Page2: Produtos (controles criados por ConfigurarPgpgProdutos - Erro171)
+        LOCAL loc_oPgProd
+        loc_oPgProd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page2
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Pcustvens", 5)
+            THIS.this_oBusinessObject.this_nPcustvens = loc_oPgProd.txt_4c_Pcustvens.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Coefs", 5)
+            THIS.this_oBusinessObject.this_nCoefs = loc_oPgProd.txt_4c_Coefs.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Pctdctleis", 5)
+            THIS.this_oBusinessObject.this_nPctdctleis = loc_oPgProd.txt_4c_Pctdctleis.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Markaplics", 5)
+            THIS.this_oBusinessObject.this_nMarkaplics = loc_oPgProd.txt_4c_Markaplics.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Pcuss", 5)
+            THIS.this_oBusinessObject.this_nPcuss = loc_oPgProd.txt_4c_Pcuss.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Fcustos", 5)
+            THIS.this_oBusinessObject.this_nFcustos = loc_oPgProd.txt_4c_Fcustos.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Custofs", 5)
+            THIS.this_oBusinessObject.this_nCustofs = loc_oPgProd.txt_4c_Custofs.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Pmargems", 5)
+            THIS.this_oBusinessObject.this_nPmargens = loc_oPgProd.txt_4c_Pmargems.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Pvideals", 5)
+            THIS.this_oBusinessObject.this_nPvideals = loc_oPgProd.txt_4c_Pvideals.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Pvens", 5)
+            THIS.this_oBusinessObject.this_nPvens = loc_oPgProd.txt_4c_Pvens.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Varcustots", 5)
+            THIS.this_oBusinessObject.this_nVarcustots = loc_oPgProd.txt_4c_Varcustots.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "txt_4c_Varpesoms", 5)
+            THIS.this_oBusinessObject.this_nVarpesoms = loc_oPgProd.txt_4c_Varpesoms.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "cbo_4c_Codprods", 5)
+            THIS.this_oBusinessObject.this_nCodprods = loc_oPgProd.cbo_4c_Codprods.ListIndex
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "cbo_4c_Montagrds", 5)
+            THIS.this_oBusinessObject.this_nMontagrds = loc_oPgProd.cbo_4c_Montagrds.ListIndex
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "cbo_4c_Dsccompras", 5)
+            THIS.this_oBusinessObject.this_nDsccompras = loc_oPgProd.cbo_4c_Dsccompras.ListIndex
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "cbo_4c_Atucomps", 5)
+            THIS.this_oBusinessObject.this_lAtucomps = (loc_oPgProd.cbo_4c_Atucomps.ListIndex = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "cbo_4c_Bpesos", 5)
+            THIS.this_oBusinessObject.this_nBpesos = loc_oPgProd.cbo_4c_Bpesos.ListIndex
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "cbo_4c_Fornecs", 5)
+            THIS.this_oBusinessObject.this_lFornecs = (loc_oPgProd.cbo_4c_Fornecs.ListIndex = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "cbo_4c_Montadescs", 5)
+            THIS.this_oBusinessObject.this_nMontadescs = loc_oPgProd.cbo_4c_Montadescs.ListIndex
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "cbo_4c_Mncompos", 5)
+            THIS.this_oBusinessObject.this_nMncompos = loc_oPgProd.cbo_4c_Mncompos.ListIndex
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "opt_4c_Etidups", 5)
+            THIS.this_oBusinessObject.this_lEtidups = (loc_oPgProd.opt_4c_Etidups.Value = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "opt_4c_Sugestaos", 5)
+            THIS.this_oBusinessObject.this_lSugestoas = (loc_oPgProd.opt_4c_Sugestaos.Value = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "opt_4c_Pvcompos", 5)
+            THIS.this_oBusinessObject.this_lPvcompos = (loc_oPgProd.opt_4c_Pvcompos.Value = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "opt_4c_Mkpobrigs", 5)
+            THIS.this_oBusinessObject.this_lMkpobrigs = (loc_oPgProd.opt_4c_Mkpobrigs.Value = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "opt_4c_Chkforcomp", 5)
+            THIS.this_oBusinessObject.this_lChkforcomp = (loc_oPgProd.opt_4c_Chkforcomp.Value = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "opt_4c_Respcads", 5)
+            THIS.this_oBusinessObject.this_lRespcads = (loc_oPgProd.opt_4c_Respcads.Value = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "opt_4c_Tpcalcps", 5)
+            THIS.this_oBusinessObject.this_nTpcalcps = loc_oPgProd.opt_4c_Tpcalcps.Value
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "chk_4c_Loclivre", 5)
+            THIS.this_oBusinessObject.this_lLoclivre = (loc_oPgProd.chk_4c_Loclivre.Value = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "chk_4c_Omoecs", 5)
+            THIS.this_oBusinessObject.this_lOmoecs = (loc_oPgProd.chk_4c_Omoecs.Value = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "chk_4c_Omoecusfs", 5)
+            THIS.this_oBusinessObject.this_lOmoecusfs = (loc_oPgProd.chk_4c_Omoecusfs.Value = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "chk_4c_Omoedas", 5)
+            THIS.this_oBusinessObject.this_lOmoedas = (loc_oPgProd.chk_4c_Omoedas.Value = 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProd, "chk_4c_Omoevs", 5)
+            THIS.this_oBusinessObject.this_lOmoevs = (loc_oPgProd.chk_4c_Omoevs.Value = 1)
         ENDIF
     ENDPROC
 
@@ -1820,24 +2046,25 @@ DEFINE CLASS FormGpd AS FormBase
         IF PEMSTATUS(loc_oPg6B, "txt_4c_Cunips", 5)
             loc_oPg6B.txt_4c_Cunips.Value = THIS.this_oBusinessObject.this_cCunips
         ENDIF
-        IF PEMSTATUS(loc_oPg6B, "obj_4c_Lores", 5)
-            loc_oPg6B.obj_4c_Lores.Value = IIF(THIS.this_oBusinessObject.this_lCores, 1, 2)
+        *-- Grade de Sub-Itens na aba ESTOQUE/FISCAL (Page4), CheckBox 0/1. Erro175.
+        LOCAL loc_oPg4SubItB
+        loc_oPg4SubItB = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page4
+        IF PEMSTATUS(loc_oPg4SubItB, "chk_4c_Cors", 5)
+            loc_oPg4SubItB.chk_4c_Cors.Value = IIF(THIS.this_oBusinessObject.this_lCores, 1, 0)
         ENDIF
-        IF PEMSTATUS(loc_oPg6B, "obj_4c_Ltams", 5)
-            loc_oPg6B.obj_4c_Ltams.Value = IIF(THIS.this_oBusinessObject.this_lTams, 1, 2)
+        IF PEMSTATUS(loc_oPg4SubItB, "chk_4c_Tams", 5)
+            loc_oPg4SubItB.chk_4c_Tams.Value = IIF(THIS.this_oBusinessObject.this_lTams, 1, 0)
         ENDIF
-        IF PEMSTATUS(loc_oPg6B, "obj_4c_Lembs", 5)
-            loc_oPg6B.obj_4c_Lembs.Value = IIF(THIS.this_oBusinessObject.this_lEmbs, 1, 2)
+        IF PEMSTATUS(loc_oPg4SubItB, "chk_4c_Embs", 5)
+            loc_oPg4SubItB.chk_4c_Embs.Value = IIF(THIS.this_oBusinessObject.this_lEmbs, 1, 0)
         ENDIF
-        IF PEMSTATUS(loc_oPg6B, "obj_4c_Lpesos", 5)
-            loc_oPg6B.obj_4c_Lpesos.Value = IIF(THIS.this_oBusinessObject.this_lPesos, 1, 2)
+        IF PEMSTATUS(loc_oPg4SubItB, "chk_4c_Pesos", 5)
+            loc_oPg4SubItB.chk_4c_Pesos.Value = IIF(THIS.this_oBusinessObject.this_lPesos, 1, 0)
         ENDIF
-        IF PEMSTATUS(loc_oPg6B, "obj_4c_Lentregas", 5)
-            loc_oPg6B.obj_4c_Lentregas.Value = IIF(THIS.this_oBusinessObject.this_lEntregas, 1, 2)
+        IF PEMSTATUS(loc_oPg4SubItB, "chk_4c_Entregas", 5)
+            loc_oPg4SubItB.chk_4c_Entregas.Value = IIF(THIS.this_oBusinessObject.this_lEntregas, 1, 0)
         ENDIF
-        IF PEMSTATUS(loc_oPg6B, "obj_4c_Lfornecs", 5)
-            loc_oPg6B.obj_4c_Lfornecs.Value = IIF(THIS.this_oBusinessObject.this_lFornecs, 1, 2)
-        ENDIF
+        *-- fornecs: exibido pelo cbo_4c_Fornecs da aba PRODUTOS, mais abaixo. Erro175.
         THIS.CarregarDescGrucmvs(THIS.this_oBusinessObject.this_cGrucmvs)
         THIS.CarregarDescPadlinha(THIS.this_oBusinessObject.this_cPadlinha)
         THIS.CarregarDescPadcolec(THIS.this_oBusinessObject.this_cPadcolec)
@@ -1976,6 +2203,113 @@ DEFINE CLASS FormGpd AS FormBase
         *-- Page3: Descricao (pgDescrs) - carregar LocalProD
         THIS.CarregarLocalProD(THIS.this_oBusinessObject.this_cCgrus)
         THIS.AtualizarCmbDescrs()
+
+        *-- Page2: Produtos (controles criados por ConfigurarPgpgProdutos - Erro171)
+        LOCAL loc_oPgProdB
+        loc_oPgProdB = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page2
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Pcustvens", 5)
+            loc_oPgProdB.txt_4c_Pcustvens.Value = THIS.this_oBusinessObject.this_nPcustvens
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Coefs", 5)
+            loc_oPgProdB.txt_4c_Coefs.Value = THIS.this_oBusinessObject.this_nCoefs
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Pctdctleis", 5)
+            loc_oPgProdB.txt_4c_Pctdctleis.Value = THIS.this_oBusinessObject.this_nPctdctleis
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Markaplics", 5)
+            loc_oPgProdB.txt_4c_Markaplics.Value = THIS.this_oBusinessObject.this_nMarkaplics
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Pcuss", 5)
+            loc_oPgProdB.txt_4c_Pcuss.Value = THIS.this_oBusinessObject.this_nPcuss
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Fcustos", 5)
+            loc_oPgProdB.txt_4c_Fcustos.Value = THIS.this_oBusinessObject.this_nFcustos
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Custofs", 5)
+            loc_oPgProdB.txt_4c_Custofs.Value = THIS.this_oBusinessObject.this_nCustofs
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Pmargems", 5)
+            loc_oPgProdB.txt_4c_Pmargems.Value = THIS.this_oBusinessObject.this_nPmargens
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Pvideals", 5)
+            loc_oPgProdB.txt_4c_Pvideals.Value = THIS.this_oBusinessObject.this_nPvideals
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Pvens", 5)
+            loc_oPgProdB.txt_4c_Pvens.Value = THIS.this_oBusinessObject.this_nPvens
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Varcustots", 5)
+            loc_oPgProdB.txt_4c_Varcustots.Value = THIS.this_oBusinessObject.this_nVarcustots
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "txt_4c_Varpesoms", 5)
+            loc_oPgProdB.txt_4c_Varpesoms.Value = THIS.this_oBusinessObject.this_nVarpesoms
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "cbo_4c_Codprods", 5)
+            loc_oPgProdB.cbo_4c_Codprods.ListIndex = ;
+                IIF(THIS.this_oBusinessObject.this_nCodprods >= 1, THIS.this_oBusinessObject.this_nCodprods, 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "cbo_4c_Montagrds", 5)
+            loc_oPgProdB.cbo_4c_Montagrds.ListIndex = ;
+                IIF(THIS.this_oBusinessObject.this_nMontagrds >= 1, THIS.this_oBusinessObject.this_nMontagrds, 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "cbo_4c_Dsccompras", 5)
+            loc_oPgProdB.cbo_4c_Dsccompras.ListIndex = ;
+                IIF(THIS.this_oBusinessObject.this_nDsccompras >= 1, THIS.this_oBusinessObject.this_nDsccompras, 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "cbo_4c_Atucomps", 5)
+            loc_oPgProdB.cbo_4c_Atucomps.ListIndex = IIF(THIS.this_oBusinessObject.this_lAtucomps, 1, 2)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "cbo_4c_Bpesos", 5)
+            loc_oPgProdB.cbo_4c_Bpesos.ListIndex = ;
+                IIF(THIS.this_oBusinessObject.this_nBpesos >= 1, THIS.this_oBusinessObject.this_nBpesos, 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "cbo_4c_Fornecs", 5)
+            loc_oPgProdB.cbo_4c_Fornecs.ListIndex = IIF(THIS.this_oBusinessObject.this_lFornecs, 1, 2)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "cbo_4c_Montadescs", 5)
+            loc_oPgProdB.cbo_4c_Montadescs.ListIndex = ;
+                IIF(THIS.this_oBusinessObject.this_nMontadescs >= 1, THIS.this_oBusinessObject.this_nMontadescs, 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "cbo_4c_Mncompos", 5)
+            loc_oPgProdB.cbo_4c_Mncompos.ListIndex = ;
+                IIF(THIS.this_oBusinessObject.this_nMncompos >= 1, THIS.this_oBusinessObject.this_nMncompos, 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "opt_4c_Etidups", 5)
+            loc_oPgProdB.opt_4c_Etidups.Value = IIF(THIS.this_oBusinessObject.this_lEtidups, 1, 2)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "opt_4c_Sugestaos", 5)
+            loc_oPgProdB.opt_4c_Sugestaos.Value = IIF(THIS.this_oBusinessObject.this_lSugestoas, 1, 2)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "opt_4c_Pvcompos", 5)
+            loc_oPgProdB.opt_4c_Pvcompos.Value = IIF(THIS.this_oBusinessObject.this_lPvcompos, 1, 2)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "opt_4c_Mkpobrigs", 5)
+            loc_oPgProdB.opt_4c_Mkpobrigs.Value = IIF(THIS.this_oBusinessObject.this_lMkpobrigs, 1, 2)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "opt_4c_Chkforcomp", 5)
+            loc_oPgProdB.opt_4c_Chkforcomp.Value = IIF(THIS.this_oBusinessObject.this_lChkforcomp, 1, 2)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "opt_4c_Respcads", 5)
+            loc_oPgProdB.opt_4c_Respcads.Value = IIF(THIS.this_oBusinessObject.this_lRespcads, 1, 2)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "opt_4c_Tpcalcps", 5)
+            loc_oPgProdB.opt_4c_Tpcalcps.Value = ;
+                IIF(THIS.this_oBusinessObject.this_nTpcalcps >= 1, THIS.this_oBusinessObject.this_nTpcalcps, 1)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "chk_4c_Loclivre", 5)
+            loc_oPgProdB.chk_4c_Loclivre.Value = IIF(THIS.this_oBusinessObject.this_lLoclivre, 1, 0)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "chk_4c_Omoecs", 5)
+            loc_oPgProdB.chk_4c_Omoecs.Value = IIF(THIS.this_oBusinessObject.this_lOmoecs, 1, 0)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "chk_4c_Omoecusfs", 5)
+            loc_oPgProdB.chk_4c_Omoecusfs.Value = IIF(THIS.this_oBusinessObject.this_lOmoecusfs, 1, 0)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "chk_4c_Omoedas", 5)
+            loc_oPgProdB.chk_4c_Omoedas.Value = IIF(THIS.this_oBusinessObject.this_lOmoedas, 1, 0)
+        ENDIF
+        IF PEMSTATUS(loc_oPgProdB, "chk_4c_Omoevs", 5)
+            loc_oPgProdB.chk_4c_Omoevs.Value = IIF(THIS.this_oBusinessObject.this_lOmoevs, 1, 0)
+        ENDIF
     ENDPROC
 
     *==========================================================================
@@ -2330,23 +2664,24 @@ DEFINE CLASS FormGpd AS FormBase
         IF PEMSTATUS(loc_oPg6C, "txt_4c_DescCunips", 5)
             loc_oPg6C.txt_4c_DescCunips.Value = ""
         ENDIF
-        IF PEMSTATUS(loc_oPg6C, "obj_4c_Lores", 5)
-            loc_oPg6C.obj_4c_Lores.Value = 2
+        *-- Grade de Sub-Itens: limpa os CheckBox da aba ESTOQUE/FISCAL (Page4).
+        *-- Antes limpava OptionGroups que o migrador inventara na Page6. Erro175.
+        LOCAL loc_oPg4SubItC
+        loc_oPg4SubItC = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page4
+        IF PEMSTATUS(loc_oPg4SubItC, "chk_4c_Cors", 5)
+            loc_oPg4SubItC.chk_4c_Cors.Value = 0
         ENDIF
-        IF PEMSTATUS(loc_oPg6C, "obj_4c_Ltams", 5)
-            loc_oPg6C.obj_4c_Ltams.Value = 2
+        IF PEMSTATUS(loc_oPg4SubItC, "chk_4c_Tams", 5)
+            loc_oPg4SubItC.chk_4c_Tams.Value = 0
         ENDIF
-        IF PEMSTATUS(loc_oPg6C, "obj_4c_Lembs", 5)
-            loc_oPg6C.obj_4c_Lembs.Value = 2
+        IF PEMSTATUS(loc_oPg4SubItC, "chk_4c_Embs", 5)
+            loc_oPg4SubItC.chk_4c_Embs.Value = 0
         ENDIF
-        IF PEMSTATUS(loc_oPg6C, "obj_4c_Lpesos", 5)
-            loc_oPg6C.obj_4c_Lpesos.Value = 2
+        IF PEMSTATUS(loc_oPg4SubItC, "chk_4c_Pesos", 5)
+            loc_oPg4SubItC.chk_4c_Pesos.Value = 0
         ENDIF
-        IF PEMSTATUS(loc_oPg6C, "obj_4c_Lentregas", 5)
-            loc_oPg6C.obj_4c_Lentregas.Value = 2
-        ENDIF
-        IF PEMSTATUS(loc_oPg6C, "obj_4c_Lfornecs", 5)
-            loc_oPg6C.obj_4c_Lfornecs.Value = 2
+        IF PEMSTATUS(loc_oPg4SubItC, "chk_4c_Entregas", 5)
+            loc_oPg4SubItC.chk_4c_Entregas.Value = 0
         ENDIF
 
         *-- Page6: OptionGroups (pgConfig)
@@ -2572,7 +2907,8 @@ DEFINE CLASS FormGpd AS FormBase
         LOCAL loc_nH
         FOR loc_nH = 1 TO ALEN(loc_aCtrls2H)
             IF PEMSTATUS(loc_oPg2H, loc_aCtrls2H(loc_nH), 5)
-                loc_oPg2H.Controls(loc_aCtrls2H(loc_nH)).Enabled = par_lHabilitar
+                *-- Controls() eh indexado por NUMERO: Controls("nome") estoura. STORE ... TO (expr) alcanca por nome (regra #15). Erro171.
+                STORE par_lHabilitar TO ("loc_oPg2H." + loc_aCtrls2H(loc_nH) + ".Enabled")
             ENDIF
         ENDFOR
 
@@ -2592,7 +2928,8 @@ DEFINE CLASS FormGpd AS FormBase
         loc_aCtrls4H(10) = "obj_4c_Obrigfiscs"
         FOR loc_nH = 1 TO ALEN(loc_aCtrls4H)
             IF PEMSTATUS(loc_oPg4H, loc_aCtrls4H(loc_nH), 5)
-                loc_oPg4H.Controls(loc_aCtrls4H(loc_nH)).Enabled = par_lHabilitar
+                *-- Controls() eh indexado por NUMERO: Controls("nome") estoura. STORE ... TO (expr) alcanca por nome (regra #15). Erro171.
+                STORE par_lHabilitar TO ("loc_oPg4H." + loc_aCtrls4H(loc_nH) + ".Enabled")
             ENDIF
         ENDFOR
         IF PEMSTATUS(loc_oPg4H, "obj_4c_Cestoqs", 5)
@@ -2627,7 +2964,8 @@ DEFINE CLASS FormGpd AS FormBase
         loc_aCtrls5H(7) = "txt_4c_Premios"
         FOR loc_nH = 1 TO ALEN(loc_aCtrls5H)
             IF PEMSTATUS(loc_oPg5H, loc_aCtrls5H(loc_nH), 5)
-                loc_oPg5H.Controls(loc_aCtrls5H(loc_nH)).Enabled = par_lHabilitar
+                *-- Controls() eh indexado por NUMERO: Controls("nome") estoura. STORE ... TO (expr) alcanca por nome (regra #15). Erro171.
+                STORE par_lHabilitar TO ("loc_oPg5H." + loc_aCtrls5H(loc_nH) + ".Enabled")
             ENDIF
         ENDFOR
         IF PEMSTATUS(loc_oPg5H, "obj_4c_OptGravPeso", 5)
@@ -2658,7 +2996,10 @@ DEFINE CLASS FormGpd AS FormBase
         *-- Page6: Configuracao
         LOCAL loc_oPg6H
         loc_oPg6H = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page6
-        LOCAL loc_aCtrls6H(14)
+        *-- 12 (era 14): os dois ultimos eram obj_4c_Lores / obj_4c_Ltams, removidos
+        *-- no Erro175 - a Grade de Sub-Itens mora na aba ESTOQUE/FISCAL. Encolher o
+        *-- array em vez de deixar slot vazio: PEMSTATUS com string vazia nao presta.
+        LOCAL loc_aCtrls6H(12)
         loc_aCtrls6H(1)  = "txt_4c_Grucmvs"
         loc_aCtrls6H(2)  = "txt_4c_Concmvs"
         loc_aCtrls6H(3)  = "txt_4c_Gruestps"
@@ -2671,25 +3012,27 @@ DEFINE CLASS FormGpd AS FormBase
         loc_aCtrls6H(10) = "txt_4c_Padfinps"
         loc_aCtrls6H(11) = "txt_4c_Padfase"
         loc_aCtrls6H(12) = "txt_4c_Cunips"
-        loc_aCtrls6H(13) = "obj_4c_Lores"
-        loc_aCtrls6H(14) = "obj_4c_Ltams"
         FOR loc_nH = 1 TO ALEN(loc_aCtrls6H)
             IF PEMSTATUS(loc_oPg6H, loc_aCtrls6H(loc_nH), 5)
-                loc_oPg6H.Controls(loc_aCtrls6H(loc_nH)).Enabled = par_lHabilitar
+                *-- Controls() eh indexado por NUMERO: Controls("nome") estoura. STORE ... TO (expr) alcanca por nome (regra #15). Erro171.
+                STORE par_lHabilitar TO ("loc_oPg6H." + loc_aCtrls6H(loc_nH) + ".Enabled")
             ENDIF
         ENDFOR
-        IF PEMSTATUS(loc_oPg6H, "obj_4c_Lembs", 5)
-            loc_oPg6H.obj_4c_Lembs.Enabled   = par_lHabilitar
-        ENDIF
-        IF PEMSTATUS(loc_oPg6H, "obj_4c_Lpesos", 5)
-            loc_oPg6H.obj_4c_Lpesos.Enabled  = par_lHabilitar
-        ENDIF
-        IF PEMSTATUS(loc_oPg6H, "obj_4c_Lentregas", 5)
-            loc_oPg6H.obj_4c_Lentregas.Enabled = par_lHabilitar
-        ENDIF
-        IF PEMSTATUS(loc_oPg6H, "obj_4c_Lfornecs", 5)
-            loc_oPg6H.obj_4c_Lfornecs.Enabled = par_lHabilitar
-        ENDIF
+        *-- Grade de Sub-Itens: habilita os CheckBox na aba ESTOQUE/FISCAL (Page4).
+        *-- Antes habilitava OptionGroups inventados na Page6. Erro175.
+        LOCAL loc_oPg4SubItH
+        loc_oPg4SubItH = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page4
+        LOCAL ARRAY loc_aSubIt(5)
+        loc_aSubIt(1) = "chk_4c_Cors"
+        loc_aSubIt(2) = "chk_4c_Tams"
+        loc_aSubIt(3) = "chk_4c_Embs"
+        loc_aSubIt(4) = "chk_4c_Pesos"
+        loc_aSubIt(5) = "chk_4c_Entregas"
+        FOR loc_nH = 1 TO ALEN(loc_aSubIt)
+            IF PEMSTATUS(loc_oPg4SubItH, loc_aSubIt(loc_nH), 5)
+                STORE par_lHabilitar TO ("loc_oPg4SubItH." + loc_aSubIt(loc_nH) + ".Enabled")
+            ENDIF
+        ENDFOR
 
         *-- Page8: Codificacao
         LOCAL loc_oPg8H
@@ -2701,7 +3044,8 @@ DEFINE CLASS FormGpd AS FormBase
         loc_aCtrls8H(4) = "txt_4c_Casas"
         FOR loc_nH = 1 TO ALEN(loc_aCtrls8H)
             IF PEMSTATUS(loc_oPg8H, loc_aCtrls8H(loc_nH), 5)
-                loc_oPg8H.Controls(loc_aCtrls8H(loc_nH)).Enabled = par_lHabilitar
+                *-- Controls() eh indexado por NUMERO: Controls("nome") estoura. STORE ... TO (expr) alcanca por nome (regra #15). Erro171.
+                STORE par_lHabilitar TO ("loc_oPg8H." + loc_aCtrls8H(loc_nH) + ".Enabled")
             ENDIF
         ENDFOR
 
@@ -2724,19 +3068,19 @@ DEFINE CLASS FormGpd AS FormBase
 
         IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_Botoes", 5)
             WITH THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes
-                IF PEMSTATUS(.self, "cmd_4c_Incluir", 5)
+                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes, "cmd_4c_Incluir", 5)
                     .cmd_4c_Incluir.Enabled   = loc_lLista
                 ENDIF
-                IF PEMSTATUS(.self, "cmd_4c_Visualizar", 5)
+                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes, "cmd_4c_Visualizar", 5)
                     .cmd_4c_Visualizar.Enabled = loc_lLista
                 ENDIF
-                IF PEMSTATUS(.self, "cmd_4c_Alterar", 5)
+                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes, "cmd_4c_Alterar", 5)
                     .cmd_4c_Alterar.Enabled   = loc_lLista
                 ENDIF
-                IF PEMSTATUS(.self, "cmd_4c_Excluir", 5)
+                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes, "cmd_4c_Excluir", 5)
                     .cmd_4c_Excluir.Enabled   = loc_lLista
                 ENDIF
-                IF PEMSTATUS(.self, "cmd_4c_Buscar", 5)
+                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes, "cmd_4c_Buscar", 5)
                     .cmd_4c_Buscar.Enabled    = loc_lLista
                 ENDIF
                 .Visible     = .T.
@@ -2745,7 +3089,7 @@ DEFINE CLASS FormGpd AS FormBase
 
         IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "cnt_4c_Salva", 5)
             WITH THIS.pgf_4c_Paginas.Page2.cnt_4c_Salva
-                IF PEMSTATUS(.self, "cmd_4c_Confirmar", 5)
+                IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2.cnt_4c_Salva, "cmd_4c_Confirmar", 5)
                     .cmd_4c_Confirmar.Enabled = loc_lEditar OR (THIS.this_cModoAtual = "EXCLUIR")
                 ENDIF
                 .Visible     = .T.
@@ -3285,24 +3629,26 @@ DEFINE CLASS FormGpd AS FormBase
         loc_cDesc   = ""
 
         TRY
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", ;
-                "SigCdGpr", ;
-                "codigos", ;
-                "descs", ;
-                "C" + CHR(243) + "digo", ;
-                "Descri" + CHR(231) + CHR(227) + "o", ;
-                "Grande Grupo", ;
-                "", ;
-                "", ;
-                "")
+            *-- 1o parametro do Init eh o HANDLE da conexao (par_nConn): passar a tabela
+            *-- ali deslocava TODOS os argumentos e o picker consultava a "tabela"
+            *-- codigos. Erro172.
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdGpr", "cursor_4c_BuscaGde", "Codigos", ;
+                IIF(PEMSTATUS(loc_oPg1, "txt_4c_Mercs", 5), ALLTRIM(loc_oPg1.txt_4c_Mercs.Value), ""), ;
+                "Grande Grupo")
 
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
 
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaAuxiliar")
-                    SELECT cursor_4c_BuscaAuxiliar
-                    loc_cCodigo = ALLTRIM(cursor_4c_BuscaAuxiliar.codigos)
-                    loc_cDesc   = ALLTRIM(cursor_4c_BuscaAuxiliar.descs)
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGde")
+                    SELECT cursor_4c_BuscaGde
+                    loc_cCodigo = ALLTRIM(cursor_4c_BuscaGde.Codigos)
+                    loc_cDesc   = ALLTRIM(cursor_4c_BuscaGde.Descs)
                 ENDIF
 
                 loc_oBusca.Release()
@@ -3312,8 +3658,8 @@ DEFINE CLASS FormGpd AS FormBase
                 "FormGpd.AbrirBuscaGdeGrupo")
         ENDTRY
 
-        IF USED("cursor_4c_BuscaAuxiliar")
-            USE IN cursor_4c_BuscaAuxiliar
+        IF USED("cursor_4c_BuscaGde")
+            USE IN cursor_4c_BuscaGde
         ENDIF
 
         IF !EMPTY(loc_cCodigo) AND PEMSTATUS(loc_oPg1, "txt_4c_Mercs", 5)
@@ -4320,13 +4666,16 @@ DEFINE CLASS FormGpd AS FormBase
             .Visible       = .F.
         ENDWITH
 
-        *-- Tipo Tributacao ICMS (tptribs) Top=409+29=438
+        *-- Tipo Tributacao ICMS (tptribs) Top=385+29=414
+        *-- O migrador tinha lido o Top do Get_CodServs (409) em vez do Get_TpTrib
+        *-- (385), e as duas linhas ficavam uma sobre a outra ("SerTipo Paba ICMS").
+        *-- Caption/Left/Width transcritos do Say13 do legado. Erro175.
         loc_oPg.AddObject("lbl_4c_Tptribs", "Label")
         WITH loc_oPg.lbl_4c_Tptribs
-            .Caption   = "Tipo Trib. ICMS :"
-            .Top       = 438
-            .Left      = 545
-            .Width     = 83
+            .Caption   = "Tipo Tributa" + CHR(231) + CHR(227) + "o ICMS :"
+            .Top       = 418
+            .Left      = 517
+            .Width     = 111
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -4339,7 +4688,8 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_Tptribs", "TextBox")
         WITH loc_oPg.txt_4c_Tptribs
             .Value         = ""
-            .Top           = 434
+            *-- legado Get_TpTrib: Top=385 (+29). Erro175.
+            .Top           = 414
             .Left          = 630
             .Width         = 33
             .Height        = 23
@@ -4803,28 +5153,19 @@ DEFINE CLASS FormGpd AS FormBase
             ENDWITH
         ENDWITH
 
-        *-- Obrigatorio Fiscal (obrigfiscs) Top=290+29=319
-        loc_oPg.AddObject("lbl_4c_Obrigfiscs", "Label")
-        WITH loc_oPg.lbl_4c_Obrigfiscs
-            .Caption   = "Obrig. Fiscal :"
-            .Top       = 319
-            .Left      = 338
-            .Width     = 100
-            .Height    = 15
-            .FontName  = "Tahoma"
-            .FontSize  = 8
-            .ForeColor = RGB(90, 90, 90)
-            .BackStyle = 0
-            .AutoSize  = .F.
-            .Visible   = .F.
-        ENDWITH
-
+        *-- Obrigatorio Fiscal (obrigfiscs) = legado Optiongroup2: Top=339+29=368,
+        *-- Left=176, Width=91. Estava em Top=314/Left=440, do outro lado da tela,
+        *-- caindo em cima do bloco "Grade de Sub-Itens". O label desta linha eh o
+        *-- Label2 do legado ("Class. Fiscal Obrigatoria :"), que o
+        *-- ConfigurarPgpgEstoque ja cria como lbl_4c_ClassFiscalOb - o
+        *-- lbl_4c_Obrigfiscs que existia aqui era DUPLICATA, com caption inventado
+        *-- ("Obrig. Fiscal :"), e foi removido. Erro175.
         loc_oPg.AddObject("obj_4c_Obrigfiscs", "OptionGroup")
         WITH loc_oPg.obj_4c_Obrigfiscs
             .Value        = 2
-            .Top          = 314
-            .Left         = 440
-            .Width        = 120
+            .Top          = 368
+            .Left         = 176
+            .Width        = 91
             .Height       = 25
             .ButtonCount  = 2
             .BackStyle    = 0
@@ -5829,7 +6170,10 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_Conestps", "TextBox")
         WITH loc_oPg.txt_4c_Conestps
             .Value         = ""
-            .Top           = 206
+            *-- legado getCtaEsts: Top=161, MESMA linha do getGrpEsts (Grupo Estoque).
+            *-- Estava em 206, 20px abaixo do par, caindo em cima do opt de
+            *-- "Calcula Valor Estimado" da linha seguinte. Erro175.
+            .Top           = 186
             .Left          = 757
             .Width         = 80
             .Height        = 23
@@ -6200,29 +6544,24 @@ DEFINE CLASS FormGpd AS FormBase
             .Visible     = .F.
         ENDWITH
 
-        *-- Cores (cores) OptionGroup Sim/Nao
-        THIS.AdicionarOpcaoSimNao(loc_oPg, "lbl_4c_Lores", "obj_4c_Lores", ;
-            "Cor :", 149, 85, 164)
-
-        *-- Tamanhos (tams)
-        THIS.AdicionarOpcaoSimNao(loc_oPg, "lbl_4c_Ltams", "obj_4c_Ltams", ;
-            "Tam :", 174, 85, 164)
-
-        *-- Embalagens (embs)
-        THIS.AdicionarOpcaoSimNao(loc_oPg, "lbl_4c_Lembs", "obj_4c_Lembs", ;
-            "Emb :", 199, 85, 164)
-
-        *-- Pesos (pesos)
-        THIS.AdicionarOpcaoSimNao(loc_oPg, "lbl_4c_Lpesos", "obj_4c_Lpesos", ;
-            "Peso :", 224, 85, 164)
-
-        *-- Entregas (entregas)
-        THIS.AdicionarOpcaoSimNao(loc_oPg, "lbl_4c_Lentregas", "obj_4c_Lentregas", ;
-            "Entrega :", 249, 85, 164)
-
-        *-- Fornecedores (fornecs)
-        THIS.AdicionarOpcaoSimNao(loc_oPg, "lbl_4c_Lfornecs", "obj_4c_Lfornecs", ;
-            "Fornecedor :", 274, 85, 164)
+        *======================================================================
+        * REMOVIDOS (Erro175): seis pares label+OptionGroup que o migrador criou
+        * AQUI, na pagina Configuracao, em Top 149/174/199/224/249/274 e Left 85 -
+        * exatamente entre as linhas do ConfigurarPgpgConfig, deixando rotulo sobre
+        * rotulo ("Cor :" sobre "Grupo Manual na Copia de Produto :", e por ai).
+        *
+        * Eles nao existem nesta pagina no legado. Medido no dump:
+        *   cores / tams / embs / pesos / entregas -> sao o bloco "Grade de Sub-Itens"
+        *     da aba ESTOQUE/FISCAL (pgEstoque), como CheckBox: ChkCors, ChkTams,
+        *     ChkEmbs, ChkPesos, ChkEntregas. O migrado ja os tem la
+        *     (chk_4c_Cors/Tams/Embs/Pesos/Entregas), so faltava liga-los ao BO.
+        *   fornecs -> eh o Get_fornobri da aba PRODUTOS (pgProdutos), que o migrado
+        *     ja tem como cbo_4c_Fornecs, inclusive mapeado.
+        *
+        * O mapeamento em FormParaBO/BOParaForm/LimparCampos foi re-apontado para os
+        * controles legitimos. O Top vinha como ARGUMENTO da chamada (nao como linha
+        * `.Top =`), e por isso estes seis escaparam da varredura de offset do Erro175.
+        *======================================================================
 
         THIS.TornarControlesVisiveis(loc_oPg)
     ENDPROC
@@ -6241,7 +6580,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbInfoGru", "Label")
         WITH loc_oPg.lbl_4c_LbInfoGru
             .Caption   = "Grupo Manual na C" + CHR(243) + "pia de Produto :"
-            .Top       = 118
+            .Top       = 143
             .Left      = 81
             .Width     = 172
             .Height    = 15
@@ -6256,7 +6595,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_GetInfoGru", "OptionGroup")
         WITH loc_oPg.obj_4c_GetInfoGru
             .Value       = 2
-            .Top         = 109
+            .Top         = 138
             .Left        = 253
             .Width       = 97
             .Height      = 25
@@ -6288,7 +6627,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbFwoption1", "Label")
         WITH loc_oPg.lbl_4c_LbFwoption1
             .Caption   = "Utiliza Subgrupo na Ficha T" + CHR(233) + "cnica :"
-            .Top       = 141
+            .Top       = 166
             .Left      = 89
             .Width     = 164
             .Height    = 15
@@ -6303,7 +6642,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_Fwoption1", "OptionGroup")
         WITH loc_oPg.obj_4c_Fwoption1
             .Value       = 2
-            .Top         = 132
+            .Top         = 161
             .Left        = 253
             .Width       = 97
             .Height      = 25
@@ -6335,7 +6674,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbFwoption8", "Label")
         WITH loc_oPg.lbl_4c_LbFwoption8
             .Caption   = "Alerta Ref. Fornecedor Igual em Produtos :"
-            .Top       = 165
+            .Top       = 190
             .Left      = 47
             .Width     = 206
             .Height    = 15
@@ -6350,7 +6689,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_Fwoption8", "OptionGroup")
         WITH loc_oPg.obj_4c_Fwoption8
             .Value       = 2
-            .Top         = 156
+            .Top         = 185
             .Left        = 253
             .Width       = 97
             .Height      = 25
@@ -6382,7 +6721,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbOptICustos", "Label")
         WITH loc_oPg.lbl_4c_LbOptICustos
             .Caption   = "Inibir Pasta de Custos :"
-            .Top       = 188
+            .Top       = 213
             .Left      = 143
             .Width     = 110
             .Height    = 15
@@ -6397,7 +6736,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_OptICustos", "OptionGroup")
         WITH loc_oPg.obj_4c_OptICustos
             .Value       = 2
-            .Top         = 179
+            .Top         = 208
             .Left        = 253
             .Width       = 97
             .Height      = 25
@@ -6429,7 +6768,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbFwoption2", "Label")
         WITH loc_oPg.lbl_4c_LbFwoption2
             .Caption   = "Utiliza Caracter" + CHR(237) + "sticas :"
-            .Top       = 210
+            .Top       = 235
             .Left      = 146
             .Width     = 107
             .Height    = 15
@@ -6444,7 +6783,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_Fwoption2", "OptionGroup")
         WITH loc_oPg.obj_4c_Fwoption2
             .Value       = 2
-            .Top         = 201
+            .Top         = 230
             .Left        = 253
             .Width       = 97
             .Height      = 25
@@ -6476,7 +6815,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbOptRecPesC", "Label")
         WITH loc_oPg.lbl_4c_LbOptRecPesC
             .Caption   = "Rec" + CHR(225) + "lculo de Pesos de Componentes :"
-            .Top       = 230
+            .Top       = 255
             .Left      = 73
             .Width     = 180
             .Height    = 15
@@ -6491,7 +6830,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_OptRecPesC", "OptionGroup")
         WITH loc_oPg.obj_4c_OptRecPesC
             .Value       = 1
-            .Top         = 221
+            .Top         = 250
             .Left        = 253
             .Width       = 158
             .Height      = 25
@@ -6533,7 +6872,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbOptCompIna", "Label")
         WITH loc_oPg.lbl_4c_LbOptCompIna
             .Caption   = "N" + CHR(227) + "o Mostrar Componentes Inativos :"
-            .Top       = 250
+            .Top       = 275
             .Left      = 78
             .Width     = 175
             .Height    = 15
@@ -6548,7 +6887,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_OptCompIna", "OptionGroup")
         WITH loc_oPg.obj_4c_OptCompIna
             .Value       = 1
-            .Top         = 242
+            .Top         = 271
             .Left        = 253
             .Width       = 97
             .Height      = 25
@@ -6580,7 +6919,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbOptPrdRefCmp", "Label")
         WITH loc_oPg.lbl_4c_LbOptPrdRefCmp
             .Caption   = "Prod. por Refer" + CHR(234) + "ncia na Composi" + CHR(231) + CHR(227) + "o :"
-            .Top       = 269
+            .Top       = 294
             .Left      = 69
             .Width     = 184
             .Height    = 15
@@ -6595,7 +6934,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_OptPrdRefCmp", "OptionGroup")
         WITH loc_oPg.obj_4c_OptPrdRefCmp
             .Value       = 2
-            .Top         = 261
+            .Top         = 290
             .Left        = 253
             .Width       = 99
             .Height      = 25
@@ -6629,7 +6968,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbFwoption3", "Label")
         WITH loc_oPg.lbl_4c_LbFwoption3
             .Caption   = "Calcula Valor Estimado :"
-            .Top       = 191
+            .Top       = 216
             .Left      = 557
             .Width     = 112
             .Height    = 15
@@ -6644,7 +6983,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_Fwoption3", "OptionGroup")
         WITH loc_oPg.obj_4c_Fwoption3
             .Value       = 2
-            .Top         = 182
+            .Top         = 211
             .Left        = 669
             .Width       = 122
             .Height      = 25
@@ -6676,7 +7015,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbFwoption6", "Label")
         WITH loc_oPg.lbl_4c_LbFwoption6
             .Caption   = "C" + CHR(225) + "lculo de Qtde. :"
-            .Top       = 208
+            .Top       = 233
             .Left      = 584
             .Width     = 85
             .Height    = 15
@@ -6691,7 +7030,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_Fwoption6", "OptionGroup")
         WITH loc_oPg.obj_4c_Fwoption6
             .Value       = 1
-            .Top         = 199
+            .Top         = 228
             .Left        = 669
             .Width       = 157
             .Height      = 25
@@ -6723,7 +7062,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbOptInstalas", "Label")
         WITH loc_oPg.lbl_4c_LbOptInstalas
             .Caption   = "Calculo de Valor de Custo :"
-            .Top       = 226
+            .Top       = 251
             .Left      = 542
             .Width     = 127
             .Height    = 15
@@ -6738,7 +7077,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_OptInstalas", "OptionGroup")
         WITH loc_oPg.obj_4c_OptInstalas
             .Value       = 1
-            .Top         = 217
+            .Top         = 246
             .Left        = 669
             .Width       = 126
             .Height      = 25
@@ -6770,7 +7109,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbOptQtdRPP", "Label")
         WITH loc_oPg.lbl_4c_LbOptQtdRPP
             .Caption   = "Qtde. no Doc. Padr" + CHR(227) + "o da Mov. :"
-            .Top       = 244
+            .Top       = 269
             .Left      = 517
             .Width     = 152
             .Height    = 15
@@ -6785,7 +7124,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_OptQtdRPP", "OptionGroup")
         WITH loc_oPg.obj_4c_OptQtdRPP
             .Value       = 1
-            .Top         = 235
+            .Top         = 264
             .Left        = 669
             .Width       = 138
             .Height      = 25
@@ -6817,7 +7156,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbFwoption4", "Label")
         WITH loc_oPg.lbl_4c_LbFwoption4
             .Caption   = "Atualiza o Pre" + CHR(231) + "o do Tamanho quando salvar o Produto :"
-            .Top       = 262
+            .Top       = 287
             .Left      = 404
             .Width     = 265
             .Height    = 15
@@ -6832,7 +7171,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_Fwoption4", "OptionGroup")
         WITH loc_oPg.obj_4c_Fwoption4
             .Value       = 2
-            .Top         = 254
+            .Top         = 283
             .Left        = 669
             .Width       = 122
             .Height      = 25
@@ -6864,7 +7203,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbFwoption5", "Label")
         WITH loc_oPg.lbl_4c_LbFwoption5
             .Caption   = "Atualiza dados do Design pela cole" + CHR(231) + CHR(227) + "o quando salvar o Produto :"
-            .Top       = 282
+            .Top       = 307
             .Left      = 360
             .Width     = 309
             .Height    = 15
@@ -6879,7 +7218,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("obj_4c_Fwoption5", "OptionGroup")
         WITH loc_oPg.obj_4c_Fwoption5
             .Value       = 2
-            .Top         = 274
+            .Top         = 303
             .Left        = 669
             .Width       = 122
             .Height      = 25
@@ -6911,7 +7250,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_ChkOCCuss", "CheckBox")
         WITH loc_oPg.chk_4c_ChkOCCuss
             .Caption       = "C.C. Obrigat" + CHR(243) + "rio"
-            .Top           = 140
+            .Top           = 169
             .Left          = 844
             .Value         = 0
             .Height        = 19
@@ -6927,7 +7266,7 @@ DEFINE CLASS FormGpd AS FormBase
         *-- Finalidades container (Top=193, Left=851)
         loc_oPg.AddObject("cnt_4c_Finalidades", "Container")
         WITH loc_oPg.cnt_4c_Finalidades
-            .Top         = 193
+            .Top         = 222
             .Left        = 851
             .Width       = 66
             .Height      = 64
@@ -6967,7 +7306,7 @@ DEFINE CLASS FormGpd AS FormBase
         *-- Shape2: linha separadora horizontal (Top=309)
         loc_oPg.AddObject("shp_4c_Shape2", "Shape")
         WITH loc_oPg.shp_4c_Shape2
-            .Top           = 309
+            .Top           = 338
             .Left          = 8
             .Width         = 980
             .Height        = 1
@@ -6981,7 +7320,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_TitulosCadProd", "Label")
         WITH loc_oPg.lbl_4c_TitulosCadProd
             .Caption   = "T" + CHR(237) + "tulos do Cadastro de Produtos"
-            .Top       = 314
+            .Top       = 343
             .Left      = 17
             .Width     = 220
             .Height    = 15
@@ -7000,7 +7339,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbDscPcuss", "Label")
         WITH loc_oPg.lbl_4c_LbDscPcuss
             .Caption   = "Pre" + CHR(231) + "o de Custo :"
-            .Top       = 335
+            .Top       = 364
             .Left      = 18
             .Width     = 95
             .Height    = 15
@@ -7014,7 +7353,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_DscPcuss", "TextBox")
         WITH loc_oPg.txt_4c_DscPcuss
             .Value         = ""
-            .Top           = 349
+            .Top           = 378
             .Left          = 18
             .Width         = 115
             .Height        = 23
@@ -7031,7 +7370,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbDscFcustos", "Label")
         WITH loc_oPg.lbl_4c_LbDscFcustos
             .Caption   = "Fator de Custo :"
-            .Top       = 335
+            .Top       = 364
             .Left      = 137
             .Width     = 90
             .Height    = 15
@@ -7045,7 +7384,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_DscFcustos", "TextBox")
         WITH loc_oPg.txt_4c_DscFcustos
             .Value         = ""
-            .Top           = 349
+            .Top           = 378
             .Left          = 137
             .Width         = 115
             .Height        = 23
@@ -7062,7 +7401,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbDscPvideals", "Label")
         WITH loc_oPg.lbl_4c_LbDscPvideals
             .Caption   = "Pre" + CHR(231) + "o Ideal :"
-            .Top       = 335
+            .Top       = 364
             .Left      = 257
             .Width     = 72
             .Height    = 15
@@ -7076,7 +7415,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_DscPvideals", "TextBox")
         WITH loc_oPg.txt_4c_DscPvideals
             .Value         = ""
-            .Top           = 349
+            .Top           = 378
             .Left          = 257
             .Width         = 115
             .Height        = 23
@@ -7093,7 +7432,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbAcabamento", "Label")
         WITH loc_oPg.lbl_4c_LbAcabamento
             .Caption   = "Acabamento :"
-            .Top       = 334
+            .Top       = 363
             .Left      = 377
             .Width     = 80
             .Height    = 15
@@ -7107,7 +7446,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_Acabamento", "TextBox")
         WITH loc_oPg.txt_4c_Acabamento
             .Value         = ""
-            .Top           = 349
+            .Top           = 378
             .Left          = 377
             .Width         = 115
             .Height        = 23
@@ -7124,7 +7463,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbClassificacao", "Label")
         WITH loc_oPg.lbl_4c_LbClassificacao
             .Caption   = "Classifica" + CHR(231) + CHR(227) + "o :"
-            .Top       = 334
+            .Top       = 363
             .Left      = 496
             .Width     = 80
             .Height    = 15
@@ -7138,7 +7477,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_Classificacao", "TextBox")
         WITH loc_oPg.txt_4c_Classificacao
             .Value         = ""
-            .Top           = 349
+            .Top           = 378
             .Left          = 496
             .Width         = 115
             .Height        = 23
@@ -7155,7 +7494,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbModeloR1", "Label")
         WITH loc_oPg.lbl_4c_LbModeloR1
             .Caption   = "Modelo :"
-            .Top       = 334
+            .Top       = 363
             .Left      = 616
             .Width     = 55
             .Height    = 15
@@ -7169,7 +7508,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_Modelo", "TextBox")
         WITH loc_oPg.txt_4c_Modelo
             .Value         = ""
-            .Top           = 349
+            .Top           = 378
             .Left          = 616
             .Width         = 115
             .Height        = 23
@@ -7188,7 +7527,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbDscPvens", "Label")
         WITH loc_oPg.lbl_4c_LbDscPvens
             .Caption   = "Pre" + CHR(231) + "o Atual :"
-            .Top       = 374
+            .Top       = 403
             .Left      = 18
             .Width     = 72
             .Height    = 15
@@ -7202,7 +7541,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_DscPvens", "TextBox")
         WITH loc_oPg.txt_4c_DscPvens
             .Value         = ""
-            .Top           = 389
+            .Top           = 418
             .Left          = 18
             .Width         = 115
             .Height        = 23
@@ -7219,7 +7558,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbDscFideals", "Label")
         WITH loc_oPg.lbl_4c_LbDscFideals
             .Caption   = "Fator Ideal :"
-            .Top       = 374
+            .Top       = 403
             .Left      = 137
             .Width     = 70
             .Height    = 15
@@ -7233,7 +7572,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_DscFideals", "TextBox")
         WITH loc_oPg.txt_4c_DscFideals
             .Value         = ""
-            .Top           = 389
+            .Top           = 418
             .Left          = 137
             .Width         = 115
             .Height        = 23
@@ -7250,7 +7589,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbDscFatuals", "Label")
         WITH loc_oPg.lbl_4c_LbDscFatuals
             .Caption   = "Fator Atual :"
-            .Top       = 374
+            .Top       = 403
             .Left      = 257
             .Width     = 72
             .Height    = 15
@@ -7264,7 +7603,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_DscFatuals", "TextBox")
         WITH loc_oPg.txt_4c_DscFatuals
             .Value         = ""
-            .Top           = 389
+            .Top           = 418
             .Left          = 257
             .Width         = 115
             .Height        = 23
@@ -7281,7 +7620,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbProfundidade", "Label")
         WITH loc_oPg.lbl_4c_LbProfundidade
             .Caption   = "Profundidade :"
-            .Top       = 376
+            .Top       = 405
             .Left      = 377
             .Width     = 80
             .Height    = 15
@@ -7295,7 +7634,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_Profundidade", "TextBox")
         WITH loc_oPg.txt_4c_Profundidade
             .Value         = ""
-            .Top           = 391
+            .Top           = 420
             .Left          = 377
             .Width         = 115
             .Height        = 23
@@ -7312,7 +7651,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbAltura", "Label")
         WITH loc_oPg.lbl_4c_LbAltura
             .Caption   = "Altura :"
-            .Top       = 376
+            .Top       = 405
             .Left      = 496
             .Width     = 48
             .Height    = 15
@@ -7326,7 +7665,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_Altura", "TextBox")
         WITH loc_oPg.txt_4c_Altura
             .Value         = ""
-            .Top           = 391
+            .Top           = 420
             .Left          = 496
             .Width         = 115
             .Height        = 23
@@ -7343,7 +7682,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_LbComprimento", "Label")
         WITH loc_oPg.lbl_4c_LbComprimento
             .Caption   = "Comprimento :"
-            .Top       = 376
+            .Top       = 405
             .Left      = 616
             .Width     = 80
             .Height    = 15
@@ -7357,7 +7696,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_Comprimento", "TextBox")
         WITH loc_oPg.txt_4c_Comprimento
             .Value         = ""
-            .Top           = 391
+            .Top           = 420
             .Left          = 616
             .Width         = 115
             .Height        = 23
@@ -7373,7 +7712,7 @@ DEFINE CLASS FormGpd AS FormBase
         *-- Shape1: linha separadora horizontal (Top=420)
         loc_oPg.AddObject("shp_4c_Shape1", "Shape")
         WITH loc_oPg.shp_4c_Shape1
-            .Top           = 420
+            .Top           = 449
             .Left          = 8
             .Width         = 980
             .Height        = 1
@@ -7387,7 +7726,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_SecPreenchimento", "Label")
         WITH loc_oPg.lbl_4c_SecPreenchimento
             .Caption   = "Preenchimento Padr" + CHR(227) + "o"
-            .Top       = 427
+            .Top       = 456
             .Left      = 19
             .Width     = 140
             .Height    = 15
@@ -7406,7 +7745,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Ajpvens", "CheckBox")
         WITH loc_oPg.chk_4c_Ajpvens
             .Caption       = "Cor Obrigat" + CHR(243) + "ria"
-            .Top           = 448
+            .Top           = 477
             .Left          = 809
             .Value         = 0
             .Height        = 19
@@ -7423,7 +7762,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Obrlinha", "CheckBox")
         WITH loc_oPg.chk_4c_Obrlinha
             .Caption       = "Obrigat" + CHR(243) + "rio"
-            .Top           = 448
+            .Top           = 477
             .Left          = 510
             .Value         = 0
             .Height        = 19
@@ -7440,7 +7779,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Obridecs", "CheckBox")
         WITH loc_oPg.chk_4c_Obridecs
             .Caption       = "Identificador Obrigat" + CHR(243) + "rio"
-            .Top           = 448
+            .Top           = 477
             .Left          = 617
             .Value         = 0
             .Height        = 19
@@ -7457,7 +7796,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Obrcclas", "CheckBox")
         WITH loc_oPg.chk_4c_Obrcclas
             .Caption       = "Obrigat" + CHR(243) + "rio"
-            .Top           = 449
+            .Top           = 478
             .Left          = 201
             .Value         = 0
             .Height        = 19
@@ -7474,7 +7813,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Obrsgrus", "CheckBox")
         WITH loc_oPg.chk_4c_Obrsgrus
             .Caption       = "Subgrupo Obrigat" + CHR(243) + "rio"
-            .Top           = 466
+            .Top           = 495
             .Left          = 617
             .Value         = 0
             .Height        = 19
@@ -7491,7 +7830,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_EqvObrigs", "CheckBox")
         WITH loc_oPg.chk_4c_EqvObrigs
             .Caption       = "Equivalente Obrigat" + CHR(243) + "rio"
-            .Top           = 466
+            .Top           = 495
             .Left          = 809
             .Value         = 0
             .Height        = 19
@@ -7508,7 +7847,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Obrfinps", "CheckBox")
         WITH loc_oPg.chk_4c_Obrfinps
             .Caption       = "Obrigat" + CHR(243) + "rio"
-            .Top           = 475
+            .Top           = 504
             .Left          = 201
             .Value         = 0
             .Height        = 19
@@ -7525,7 +7864,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Obrcolec", "CheckBox")
         WITH loc_oPg.chk_4c_Obrcolec
             .Caption       = "Obrigat" + CHR(243) + "rio"
-            .Top           = 475
+            .Top           = 504
             .Left          = 510
             .Value         = 0
             .Height        = 19
@@ -7542,7 +7881,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_AltSubgs", "CheckBox")
         WITH loc_oPg.chk_4c_AltSubgs
             .Caption       = "Permite Alterar Subgrupo"
-            .Top           = 484
+            .Top           = 513
             .Left          = 617
             .Value         = 0
             .Height        = 19
@@ -7559,7 +7898,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Chkmedida", "CheckBox")
         WITH loc_oPg.chk_4c_Chkmedida
             .Caption       = "Dimens" + CHR(245) + "es (P, A, L)"
-            .Top           = 484
+            .Top           = 513
             .Left          = 809
             .Value         = 0
             .Height        = 19
@@ -7576,7 +7915,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_ObrigCompos", "CheckBox")
         WITH loc_oPg.chk_4c_ObrigCompos
             .Caption       = CHR(34) + "Compos" + CHR(34) + " Obrigat" + CHR(243) + "rio"
-            .Top           = 503
+            .Top           = 532
             .Left          = 617
             .Value         = 0
             .Height        = 19
@@ -7593,7 +7932,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_MpObriga", "CheckBox")
         WITH loc_oPg.chk_4c_MpObriga
             .Caption       = "Material principal Obrigat" + CHR(243) + "rio"
-            .Top           = 503
+            .Top           = 532
             .Left          = 809
             .Value         = 0
             .Height        = 19
@@ -7610,7 +7949,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_Unidade2", "Label")
         WITH loc_oPg.lbl_4c_Unidade2
             .Caption   = "Unidade 2 :"
-            .Top       = 524
+            .Top       = 553
             .Left      = 105
             .Width     = 57
             .Height    = 15
@@ -7624,7 +7963,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_Unidade2", "TextBox")
         WITH loc_oPg.txt_4c_Unidade2
             .Value         = ""
-            .Top           = 521
+            .Top           = 550
             .Left          = 164
             .Width         = 31
             .Height        = 23
@@ -7644,7 +7983,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Chkunidade2", "CheckBox")
         WITH loc_oPg.chk_4c_Chkunidade2
             .Caption       = "Obrigat" + CHR(243) + "rio"
-            .Top           = 526
+            .Top           = 555
             .Left          = 201
             .Value         = 0
             .Height        = 19
@@ -7661,7 +8000,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Obrpesoms", "CheckBox")
         WITH loc_oPg.chk_4c_Obrpesoms
             .Caption       = "Peso M" + CHR(233) + "dio Obrigat" + CHR(243) + "rio"
-            .Top           = 522
+            .Top           = 551
             .Left          = 617
             .Value         = 0
             .Height        = 19
@@ -7678,7 +8017,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Obrservico", "CheckBox")
         WITH loc_oPg.chk_4c_Obrservico
             .Caption       = "Servi" + CHR(231) + "os Obrigat" + CHR(243) + "rio"
-            .Top           = 522
+            .Top           = 551
             .Left          = 809
             .Value         = 0
             .Height        = 19
@@ -7695,7 +8034,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Obrconjuts", "CheckBox")
         WITH loc_oPg.chk_4c_Obrconjuts
             .Caption       = "Conjunto/Cod. Pai Obrigat" + CHR(243) + "rio"
-            .Top           = 544
+            .Top           = 573
             .Left          = 617
             .Value         = 0
             .Height        = 19
@@ -7712,7 +8051,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("chk_4c_Vldconjuts", "CheckBox")
         WITH loc_oPg.chk_4c_Vldconjuts
             .Caption       = "Valida Inf. Conjunto/Cod. Pai"
-            .Top           = 565
+            .Top           = 594
             .Left          = 617
             .Value         = 0
             .Height        = 19
@@ -7729,7 +8068,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_MinRefFors", "Label")
         WITH loc_oPg.lbl_4c_MinRefFors
             .Caption   = "Minimo Ref. Fornec.:"
-            .Top       = 551
+            .Top       = 580
             .Left      = 60
             .Width     = 102
             .Height    = 15
@@ -7743,7 +8082,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_MinRefFors", "TextBox")
         WITH loc_oPg.txt_4c_MinRefFors
             .Value         = 0
-            .Top           = 547
+            .Top           = 576
             .Left          = 164
             .Width         = 31
             .Height        = 23
@@ -7760,7 +8099,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("lbl_4c_MinObsComs", "Label")
         WITH loc_oPg.lbl_4c_MinObsComs
             .Caption   = "Minimo Obs. Componente :"
-            .Top       = 577
+            .Top       = 606
             .Left      = 31
             .Width     = 131
             .Height    = 15
@@ -7774,7 +8113,7 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPg.AddObject("txt_4c_MinObsComs", "TextBox")
         WITH loc_oPg.txt_4c_MinObsComs
             .Value         = 0
-            .Top           = 573
+            .Top           = 602
             .Left          = 164
             .Width         = 31
             .Height        = 23
@@ -7796,8 +8135,14 @@ DEFINE CLASS FormGpd AS FormBase
     PROTECTED PROCEDURE AdicionarOpcaoSimNao(par_oPage, par_cNomeLbl, par_cNomeOpt, ;
         par_cCaption, par_nTop, par_nLeftLbl, par_nLeftOpt)
 
+        *-- Controls() eh array indexado por NUMERO, nunca por nome (medido no VFP9):
+        *-- em WITH, Controls("nome") estoura "CONTROLS is not an object" e a tela nao
+        *-- abre; em expressao, "Invalid subscript reference". Para alcancar membro por
+        *-- NOME usa-se EVALUATE (leitura) / STORE ... TO (...) (atribuicao) - regra #15
+        *-- do CLAUDE.md. O PEMSTATUS que guarda esses blocos devolve .T. e nao protege.
+        *-- Erro171.
         par_oPage.AddObject(par_cNomeLbl, "Label")
-        WITH par_oPage.Controls(par_cNomeLbl)
+        WITH EVALUATE("par_oPage." + par_cNomeLbl)
             .Caption   = par_cCaption
             .Top       = par_nTop
             .Left      = par_nLeftLbl
@@ -7812,7 +8157,7 @@ DEFINE CLASS FormGpd AS FormBase
         ENDWITH
 
         par_oPage.AddObject(par_cNomeOpt, "OptionGroup")
-        WITH par_oPage.Controls(par_cNomeOpt)
+        WITH EVALUATE("par_oPage." + par_cNomeOpt)
             .Value        = 2
             .Top          = par_nTop - 4
             .Left         = par_nLeftOpt
@@ -8370,9 +8715,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg2.txt_4c_Idecpros.Value), ;
                 "Identificador C" + CHR(243) + "digo Produto")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaIdecpros")
                     SELECT cursor_4c_BuscaIdecpros
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaIdecpros.Codigos)
@@ -8456,9 +8804,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg2.txt_4c_Cgrus2.Value), ;
                 "Grande Grupo 2")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCgrus2")
                     SELECT cursor_4c_BuscaCgrus2
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaCgrus2.Codigos)
@@ -8712,9 +9063,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg4.txt_4c_Clfiscals.Value), ;
                 "Classifica" + CHR(231) + CHR(227) + "o Fiscal")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaClfiscal")
                     SELECT cursor_4c_BuscaClfiscal
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaClfiscal.Codigos)
@@ -8833,9 +9187,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg4.txt_4c_Origmercs.Value), ;
                 "Origem da Mercadoria")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaOrigmerc")
                     SELECT cursor_4c_BuscaOrigmerc
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaOrigmerc.Codigos)
@@ -8954,9 +9311,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg4.txt_4c_Sittricms.Value), ;
                 "Situa" + CHR(231) + CHR(227) + "o Tribut" + CHR(225) + "ria ICMS")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaSittricm")
                     SELECT cursor_4c_BuscaSittricm
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaSittricm.Codigos)
@@ -9104,9 +9464,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg4.txt_4c_Tptribs.Value), ;
                 "Tipo Tributa" + CHR(231) + CHR(227) + "o ICMS")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Tipos", "", "Tipo")
-                loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Tipos", "", "Tipo")
+                    loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaTptrib")
                     SELECT cursor_4c_BuscaTptrib
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaTptrib.Tipos)
@@ -9423,9 +9786,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg6.txt_4c_Padlinha.Value), ;
                 "Linha Padr" + CHR(227) + "o")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Linhas", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Linhas", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaLinha")
                     SELECT cursor_4c_BuscaLinha
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaLinha.Linhas)
@@ -9544,9 +9910,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg6.txt_4c_Padcolec.Value), ;
                 "Cole" + CHR(231) + CHR(227) + "o Padr" + CHR(227) + "o")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Colecoes", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Colecoes", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaColec")
                     SELECT cursor_4c_BuscaColec
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaColec.Colecoes)
@@ -9655,9 +10024,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg6.txt_4c_Padcclas.Value), ;
                 "Classifica" + CHR(231) + CHR(227) + "o Padr" + CHR(227) + "o")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Cods", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Cods", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaPadcclas")
                     SELECT cursor_4c_BuscaPadcclas
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaPadcclas.Cods)
@@ -9743,9 +10115,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg6.txt_4c_Padfinps.Value), ;
                 "Finalidade Padr" + CHR(227) + "o")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Cods", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Cods", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaFinp")
                     SELECT cursor_4c_BuscaFinp
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaFinp.Cods)
@@ -9864,9 +10239,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg6.txt_4c_Padfase.Value), ;
                 "Fase Padr" + CHR(227) + "o")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("grupos", "", "Fase")
-                loc_oBusca.mAddColuna("Ordems", "", "Ordem")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("grupos", "", "Fase")
+                    loc_oBusca.mAddColuna("Ordems", "", "Ordem")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaFase")
                     SELECT cursor_4c_BuscaFase
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaFase.grupos)
@@ -9985,9 +10363,12 @@ DEFINE CLASS FormGpd AS FormBase
                 ALLTRIM(loc_oPg6.txt_4c_Cunips.Value), ;
                 "Unidade 1")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("CUnis", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("DUnis", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("CUnis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("DUnis", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUnidade")
                     SELECT cursor_4c_BuscaUnidade
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaUnidade.CUnis)
@@ -10088,18 +10469,20 @@ DEFINE CLASS FormGpd AS FormBase
             RETURN
         ENDIF
         TRY
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", ;
-                "SigCdUni", ;
-                "CUnis", ;
-                "DUnis", ;
-                "Unidade 2", ;
-                loc_oPg6.txt_4c_Unidade2.Value, ;
-                "", ;
-                "", ;
-                "", ;
-                "")
+            *-- 1o parametro eh o HANDLE (par_nConn), que vai direto ao SQLEXEC. Erro172.
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdUni", "cursor_4c_BuscaUni2", "CUnis", ;
+                ALLTRIM(loc_oPg6.txt_4c_Unidade2.Value), ;
+                "Unidade 2")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.Show()
+                loc_oBusca.mAddColuna("CUnis", "", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("DUnis", "", "Descri" + CHR(231) + CHR(227) + "o")
+            ENDIF
+            IF VARTYPE(loc_oBusca) = "O"
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.Show()
+                ENDIF
                 loc_cCodSel = loc_oBusca.this_cCodigoSelecionado
                 IF !EMPTY(ALLTRIM(loc_cCodSel))
                     loc_oPg6.txt_4c_Unidade2.Value = ALLTRIM(loc_cCodSel)
@@ -10132,10 +10515,10 @@ DEFINE CLASS FormGpd AS FormBase
             IF loc_nResult > 0 AND !EOF(par_cCursorNome)
                 loc_cDesc = ALLTRIM(dmoes)
                 IF PEMSTATUS(par_oPagina, par_cTxtCod, 5)
-                    par_oPagina.Controls(par_cTxtCod).Value = ALLTRIM(cmoes)
+                    STORE ALLTRIM(cmoes) TO ("par_oPagina." + par_cTxtCod + ".Value")
                 ENDIF
                 IF !EMPTY(par_cTxtDesc) AND PEMSTATUS(par_oPagina, par_cTxtDesc, 5)
-                    par_oPagina.Controls(par_cTxtDesc).Value = loc_cDesc
+                    STORE loc_cDesc TO ("par_oPagina." + par_cTxtDesc + ".Value")
                 ENDIF
             ELSE
                 THIS.AbrirLookupMoeda(par_cTxtCod, par_cTxtDesc, 0)
@@ -10174,12 +10557,15 @@ DEFINE CLASS FormGpd AS FormBase
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdMoe", "cursor_4c_BuscaMoeda", "cmoes", ;
                 IIF(PEMSTATUS(loc_oPg, par_cTxtCod, 5), ;
-                    ALLTRIM(loc_oPg.Controls(par_cTxtCod).Value), ""), ;
+                    ALLTRIM(EVALUATE("loc_oPg." + par_cTxtCod + ".Value")), ""), ;
                 "Moeda")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("cmoes", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("dmoes", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("cmoes", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("dmoes", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaMoeda")
                     SELECT cursor_4c_BuscaMoeda
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaMoeda.cmoes)
@@ -10197,10 +10583,10 @@ DEFINE CLASS FormGpd AS FormBase
         ENDIF
         IF !EMPTY(loc_cCodigo)
             IF !EMPTY(par_cTxtCod) AND PEMSTATUS(loc_oPg, par_cTxtCod, 5)
-                loc_oPg.Controls(par_cTxtCod).Value = loc_cCodigo
+                STORE loc_cCodigo TO ("loc_oPg." + par_cTxtCod + ".Value")
             ENDIF
             IF !EMPTY(par_cTxtDesc) AND PEMSTATUS(loc_oPg, par_cTxtDesc, 5)
-                loc_oPg.Controls(par_cTxtDesc).Value = loc_cDesc
+                STORE loc_cDesc TO ("loc_oPg." + par_cTxtDesc + ".Value")
             ENDIF
         ENDIF
     ENDPROC
@@ -10212,7 +10598,7 @@ DEFINE CLASS FormGpd AS FormBase
             RETURN
         ENDIF
         IF EMPTY(ALLTRIM(par_cCodigo))
-            par_oPagina.Controls(par_cTxtDesc).Value = ""
+            STORE "" TO ("par_oPagina." + par_cTxtDesc + ".Value")
             RETURN
         ENDIF
         TRY
@@ -10220,12 +10606,12 @@ DEFINE CLASS FormGpd AS FormBase
                 "SELECT dmoes FROM SigCdMoe WHERE cmoes = " + EscaparSQL(ALLTRIM(par_cCodigo)), ;
                 "cursor_4c_TmpMoeda")
             IF loc_nResult > 0 AND !EOF("cursor_4c_TmpMoeda")
-                par_oPagina.Controls(par_cTxtDesc).Value = ALLTRIM(cursor_4c_TmpMoeda.dmoes)
+                STORE ALLTRIM(cursor_4c_TmpMoeda.dmoes) TO ("par_oPagina." + par_cTxtDesc + ".Value")
             ELSE
-                par_oPagina.Controls(par_cTxtDesc).Value = ""
+                STORE "" TO ("par_oPagina." + par_cTxtDesc + ".Value")
             ENDIF
         CATCH TO loc_oErro
-            par_oPagina.Controls(par_cTxtDesc).Value = ""
+            STORE "" TO ("par_oPagina." + par_cTxtDesc + ".Value")
         ENDTRY
         IF USED("cursor_4c_TmpMoeda")
             USE IN cursor_4c_TmpMoeda
@@ -10246,10 +10632,10 @@ DEFINE CLASS FormGpd AS FormBase
             IF loc_nResult > 0 AND !EOF(par_cCursorNome)
                 loc_cDesc = ALLTRIM(Descrs)
                 IF PEMSTATUS(par_oPagina, par_cTxtCod, 5)
-                    par_oPagina.Controls(par_cTxtCod).Value = ALLTRIM(Codigos)
+                    STORE ALLTRIM(Codigos) TO ("par_oPagina." + par_cTxtCod + ".Value")
                 ENDIF
                 IF !EMPTY(par_cTxtDesc) AND PEMSTATUS(par_oPagina, par_cTxtDesc, 5)
-                    par_oPagina.Controls(par_cTxtDesc).Value = loc_cDesc
+                    STORE loc_cDesc TO ("par_oPagina." + par_cTxtDesc + ".Value")
                 ENDIF
             ELSE
                 IF USED(par_cCursorNome)
@@ -10287,12 +10673,15 @@ DEFINE CLASS FormGpd AS FormBase
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdGcr", "cursor_4c_BuscaGruContab", "Codigos", ;
                 IIF(PEMSTATUS(loc_oPg, par_cTxtCod, 5), ;
-                    ALLTRIM(loc_oPg.Controls(par_cTxtCod).Value), ""), ;
+                    ALLTRIM(EVALUATE("loc_oPg." + par_cTxtCod + ".Value")), ""), ;
                 "Grupo Cont" + CHR(225) + "bil")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGruContab")
                     SELECT cursor_4c_BuscaGruContab
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaGruContab.Codigos)
@@ -10310,10 +10699,10 @@ DEFINE CLASS FormGpd AS FormBase
         ENDIF
         IF !EMPTY(loc_cCodigo)
             IF !EMPTY(par_cTxtCod) AND PEMSTATUS(loc_oPg, par_cTxtCod, 5)
-                loc_oPg.Controls(par_cTxtCod).Value = loc_cCodigo
+                STORE loc_cCodigo TO ("loc_oPg." + par_cTxtCod + ".Value")
             ENDIF
             IF !EMPTY(par_cTxtDesc) AND PEMSTATUS(loc_oPg, par_cTxtDesc, 5)
-                loc_oPg.Controls(par_cTxtDesc).Value = loc_cDesc
+                STORE loc_cDesc TO ("loc_oPg." + par_cTxtDesc + ".Value")
             ENDIF
         ENDIF
     ENDPROC
@@ -10325,7 +10714,7 @@ DEFINE CLASS FormGpd AS FormBase
             RETURN
         ENDIF
         IF EMPTY(ALLTRIM(par_cCodigo))
-            par_oPagina.Controls(par_cTxtDesc).Value = ""
+            STORE "" TO ("par_oPagina." + par_cTxtDesc + ".Value")
             RETURN
         ENDIF
         TRY
@@ -10333,12 +10722,12 @@ DEFINE CLASS FormGpd AS FormBase
                 "SELECT Descrs FROM SigCdGcr WHERE Codigos = " + EscaparSQL(ALLTRIM(par_cCodigo)), ;
                 "cursor_4c_TmpGruContab")
             IF loc_nResult > 0 AND !EOF("cursor_4c_TmpGruContab")
-                par_oPagina.Controls(par_cTxtDesc).Value = ALLTRIM(cursor_4c_TmpGruContab.Descrs)
+                STORE ALLTRIM(cursor_4c_TmpGruContab.Descrs) TO ("par_oPagina." + par_cTxtDesc + ".Value")
             ELSE
-                par_oPagina.Controls(par_cTxtDesc).Value = ""
+                STORE "" TO ("par_oPagina." + par_cTxtDesc + ".Value")
             ENDIF
         CATCH TO loc_oErro
-            par_oPagina.Controls(par_cTxtDesc).Value = ""
+            STORE "" TO ("par_oPagina." + par_cTxtDesc + ".Value")
         ENDTRY
         IF USED("cursor_4c_TmpGruContab")
             USE IN cursor_4c_TmpGruContab
@@ -10359,10 +10748,10 @@ DEFINE CLASS FormGpd AS FormBase
             IF loc_nResult > 0 AND !EOF(par_cCursorNome)
                 loc_cDesc = ALLTRIM(Rclis)
                 IF PEMSTATUS(par_oPagina, par_cTxtCod, 5)
-                    par_oPagina.Controls(par_cTxtCod).Value = ALLTRIM(Iclis)
+                    STORE ALLTRIM(Iclis) TO ("par_oPagina." + par_cTxtCod + ".Value")
                 ENDIF
                 IF !EMPTY(par_cTxtDesc) AND PEMSTATUS(par_oPagina, par_cTxtDesc, 5)
-                    par_oPagina.Controls(par_cTxtDesc).Value = loc_cDesc
+                    STORE loc_cDesc TO ("par_oPagina." + par_cTxtDesc + ".Value")
                 ENDIF
             ELSE
                 IF USED(par_cCursorNome)
@@ -10400,12 +10789,15 @@ DEFINE CLASS FormGpd AS FormBase
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdCli", "cursor_4c_BuscaCtaContab", "Iclis", ;
                 IIF(PEMSTATUS(loc_oPg, par_cTxtCod, 5), ;
-                    ALLTRIM(loc_oPg.Controls(par_cTxtCod).Value), ""), ;
+                    ALLTRIM(EVALUATE("loc_oPg." + par_cTxtCod + ".Value")), ""), ;
                 "Conta")
             IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("Iclis", "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("Rclis", "", "Raz" + CHR(227) + "o Social")
-                loc_oBusca.Show()
+                *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                IF !loc_oBusca.this_lAchouRegistro
+                    loc_oBusca.mAddColuna("Iclis", "", "C" + CHR(243) + "digo")
+                    loc_oBusca.mAddColuna("Rclis", "", "Raz" + CHR(227) + "o Social")
+                    loc_oBusca.Show()
+                ENDIF
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCtaContab")
                     SELECT cursor_4c_BuscaCtaContab
                     loc_cCodigo = ALLTRIM(cursor_4c_BuscaCtaContab.Iclis)
@@ -10423,10 +10815,10 @@ DEFINE CLASS FormGpd AS FormBase
         ENDIF
         IF !EMPTY(loc_cCodigo)
             IF !EMPTY(par_cTxtCod) AND PEMSTATUS(loc_oPg, par_cTxtCod, 5)
-                loc_oPg.Controls(par_cTxtCod).Value = loc_cCodigo
+                STORE loc_cCodigo TO ("loc_oPg." + par_cTxtCod + ".Value")
             ENDIF
             IF !EMPTY(par_cTxtDesc) AND PEMSTATUS(loc_oPg, par_cTxtDesc, 5)
-                loc_oPg.Controls(par_cTxtDesc).Value = loc_cDesc
+                STORE loc_cDesc TO ("loc_oPg." + par_cTxtDesc + ".Value")
             ENDIF
         ENDIF
     ENDPROC
@@ -10718,14 +11110,6 @@ DEFINE CLASS FormGpd AS FormBase
             .Column3.ColumnOrder      = 4
             .Column3.Sparse           = .F.
             .Column3.Header1.Caption  = ""
-            .Column3.Check1.Alignment = 0
-            .Column3.Check1.Caption   = ""
-            .Column3.Check1.ReadOnly  = .F.
-            .Column3.Check1.Visible   = .T.
-            .Column3.Check1.Top       = 9
-            .Column3.Check1.Left      = 2
-            .Column3.Check1.Height    = 17
-            .Column3.Check1.Width     = 22
             .Column4.ControlSource    = "cursor_4c_SigCdPsg.marckupa"
             .Column4.Width            = 70
             .Column4.ColumnOrder      = 3
@@ -10738,6 +11122,28 @@ DEFINE CLASS FormGpd AS FormBase
             .Column4.Text1.InputMask   = "999,999.99"
             .Column4.Text1.Margin      = 0
         ENDWITH
+
+        *-- CheckBox da Column3 (pesoprods). A Column nasce so com Header1 e Text1:
+        *-- o CheckBox tem de ser CRIADO com AddObject e eleito CurrentControl, senao
+        *-- a coluna segue desenhando o Text1 (regra #18). Antes daqui o form apenas
+        *-- atribuia .Column3.Check1.<prop>, o que estourava "Unknown member CHECK1."
+        *-- no Init e a tela nao abria. Geometria transcrita do SCX legado
+        *-- (SIGCDGPD...grdSigCdPsg.Column3.Check1: Top 27, Left 11, 60x17, Alignment 0,
+        *-- Caption ""). Erro171.
+        loc_oPg1.grd_4c_PsgCad.Column3.AddObject("Check1", "CheckBox")
+        WITH loc_oPg1.grd_4c_PsgCad.Column3.Check1
+            .Caption   = ""
+            .Alignment = 0
+            .Top       = 27
+            .Left      = 11
+            .Width     = 60
+            .Height    = 17
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+        loc_oPg1.grd_4c_PsgCad.Column3.CurrentControl = "Check1"
+        loc_oPg1.grd_4c_PsgCad.Column3.Sparse         = .F.
+
         BINDEVENT(loc_oPg1.grd_4c_PsgCad.Column1.Text1, "Valid", THIS, "PsgCadCodigoValid")
 
         *-- CommandGroup inserir/excluir sub-grupos (cmdgCompo: Top=284+29=313, Left=903)
@@ -11070,7 +11476,10 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oForm = FormBuscaAuxiliar.Init("SigCdEmp", "cemps", "razas", ;
             "", "", "", "", "", "")
         IF VARTYPE(loc_oForm) = "O"
-            loc_oForm.Show()
+            *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+            IF !loc_oForm.this_lAchouRegistro
+                loc_oForm.Show()
+            ENDIF
             IF USED("cursor_4c_BuscaAuxiliar") AND RECCOUNT("cursor_4c_BuscaAuxiliar") > 0
                 IF USED("cursor_4c_Prazos") AND !EOF("cursor_4c_Prazos")
                     SELECT cursor_4c_Prazos
@@ -11312,6 +11721,1440 @@ DEFINE CLASS FormGpd AS FormBase
         RETURN loc_lResultado
     ENDPROC
 
+
+    *==========================================================================
+    * ConfigurarPgpgProdutos - Segunda passada sobre a Page2 (aba Produtos) do
+    * pgf_4c_Divisoes, que o ConfigurarAbaProdutos() nao cobria.
+    *
+    * O metodo era CHAMADO em ConfigurarPaginaDados mas nunca foi gerado: o Init
+    * estourava "Property CONFIGURARPGPGPRODUTOS is not found" e a tela do Cadastro
+    * de Grupo de Produto nao abria (Erro171).
+    *
+    * Transcrito de tasks\task438\sigcdgpd_form_codigo_fonte.txt
+    * (SIGCDGPD.Pagina.Dados.pgDivisoes.pgProdutos): 115 controles no legado, 30 ja
+    * criados pelo ConfigurarAbaProdutos e 71 criados aqui. Os 14 restantes sao os 6
+    * campos que o migrador colocou em OUTRAS abas (Compos/Casas/DigiMaxs/OrdCompos
+    * em Page8, Montagens em Page4, PesMts em Page5) mais os labels e botoes que os
+    * acompanham - duplica-los aqui criaria dois controles gravando a MESMA property
+    * do BO. Ficam registrados como pendencia de re-layout, nao omitidos em silencio.
+    *
+    * Top = Top do legado + 29 (compensacao do pgf_4c_Paginas.Top = -29), igual ao
+    * resto do form. Acentos por CHR() (regra #4). OptionGroup NAO tem ForeColor:
+    * a cor vai nos Buttons (regra #33).
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPgpgProdutos()
+        LOCAL loc_oPg
+        loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page2
+
+        *-- lbl_etiqueta () Top=112+29=141
+        loc_oPg.AddObject("lbl_4c_Etidups", "Label")
+        WITH loc_oPg.lbl_4c_Etidups
+            .Caption   = "Etiqueta Dupla :"
+            .Top       = 141
+            .Left      = 618
+            .Width     = 79
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- opt_descricao_produto (etidups) Top=112+29=141
+        loc_oPg.AddObject("opt_4c_Etidups", "OptionGroup")
+        WITH loc_oPg.opt_4c_Etidups
+            .ButtonCount = 2
+            .Top         = 141
+            .Left        = 695
+            .Width       = 116
+            .Height      = 15
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Visible     = .F.
+            WITH .Buttons(1)
+                .Caption   = "Sim"
+                .Left      = 5
+                .Top       = 0
+                .Width     = 34
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "N" + CHR(227) + "o"
+                .Left      = 70
+                .Top       = 0
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Get_CodProd (codprods) Top=125+29=154
+        loc_oPg.AddObject("cbo_4c_Codprods", "ComboBox")
+        WITH loc_oPg.cbo_4c_Codprods
+            .Top           = 154
+            .Left          = 199
+            .Width         = 303
+            .Height        = 23
+            .RowSourceType = 1
+            .RowSource     = "Manual,Grupo,Fornecedor,Identificador 8 D" + CHR(237) + "gitos,Identificador 5 D" + CHR(237) + "gitos,Codifica" + CHR(231) + CHR(227) + "o,Identificador + Fornecedor,Fornecedor + Identificador,Grupo + SubGrupo + Ident. + Classif.,Grupo + SubGrupo + 5 D" + CHR(237) + "gitos"
+            .Style         = 2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Label9 () Top=129+29=158
+        loc_oPg.AddObject("lbl_4c_Codprods", "Label")
+        WITH loc_oPg.lbl_4c_Codprods
+            .Caption   = "C" + CHR(243) + "digo Autom" + CHR(225) + "tico :"
+            .Top       = 158
+            .Left      = 98
+            .Width     = 99
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- getMontaDescs (MontaGrDs) Top=150+29=179
+        loc_oPg.AddObject("cbo_4c_Montagrds", "ComboBox")
+        WITH loc_oPg.cbo_4c_Montagrds
+            .Top           = 179
+            .Left          = 199
+            .Width         = 303
+            .Height        = 23
+            .RowSourceType = 1
+            .RowSource     = "Composi" + CHR(231) + CHR(227) + "o,Grupo + Composi" + CHR(231) + CHR(227) + "o,SubGrupo + Composi" + CHR(231) + CHR(227) + "o,Grupo + SubGrupo + Composi" + CHR(231) + CHR(227) + "o,Manual,Grupo + Fornecedor (4 Dig.) + Ref.Forneedor,Grupo + Cor + Composi" + CHR(231) + CHR(227) + "o,Grupo + Pedras + Ouro,Grupo + Pedras,Configura" + CHR(231) + CHR(227) + "o,Grupo + SubGrupo + Ident. + Classif."
+            .Style         = 2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say2 () Top=152+29=181
+        loc_oPg.AddObject("lbl_4c_Sugestaos", "Label")
+        WITH loc_oPg.lbl_4c_Sugestaos
+            .Caption   = "Sugest" + CHR(227) + "o de Pre" + CHR(231) + "os :"
+            .Top       = 181
+            .Left      = 593
+            .Width     = 104
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- optSugestaos (Sugestaos) Top=152+29=181
+        loc_oPg.AddObject("opt_4c_Sugestaos", "OptionGroup")
+        WITH loc_oPg.opt_4c_Sugestaos
+            .ButtonCount = 2
+            .Value       = 2
+            .Top         = 181
+            .Left        = 695
+            .Width       = 116
+            .Height      = 15
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Visible     = .F.
+            WITH .Buttons(1)
+                .Caption   = "Sim"
+                .Left      = 5
+                .Top       = 0
+                .Width     = 34
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "N" + CHR(227) + "o"
+                .Left      = 70
+                .Top       = 0
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Label7 () Top=154+29=183
+        loc_oPg.AddObject("lbl_4c_Montagrds", "Label")
+        WITH loc_oPg.lbl_4c_Montagrds
+            .Caption   = "Montar Descri" + CHR(231) + CHR(227) + "o com :"
+            .Top       = 183
+            .Left      = 83
+            .Width     = 114
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Say17 () Top=172+29=201
+        loc_oPg.AddObject("lbl_4c_Pvcompos", "Label")
+        WITH loc_oPg.lbl_4c_Pvcompos
+            .Caption   = "Preco Composicao :"
+            .Top       = 201
+            .Left      = 601
+            .Width     = 96
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- fwoption1 (PvCompos) Top=172+29=201
+        loc_oPg.AddObject("opt_4c_Pvcompos", "OptionGroup")
+        WITH loc_oPg.opt_4c_Pvcompos
+            .ButtonCount = 2
+            .Value       = 1
+            .Top         = 201
+            .Left        = 695
+            .Width       = 130
+            .Height      = 15
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Visible     = .F.
+            WITH .Buttons(1)
+                .Caption   = "Custo"
+                .Left      = 5
+                .Top       = 0
+                .Width     = 46
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "Venda"
+                .Left      = 70
+                .Top       = 0
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- cmbDscCompras (DscCompras) Top=175+29=204
+        loc_oPg.AddObject("cbo_4c_Dsccompras", "ComboBox")
+        WITH loc_oPg.cbo_4c_Dsccompras
+            .Top           = 204
+            .Left          = 199
+            .Width         = 303
+            .Height        = 23
+            .RowSourceType = 1
+            .RowSource     = "Nenhuma,Portugu" + CHR(234) + "s,Ingl" + CHR(234) + "s"
+            .Style         = 2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Label1 () Top=179+29=208
+        loc_oPg.AddObject("lbl_4c_Dsccompras", "Label")
+        WITH loc_oPg.lbl_4c_Dsccompras
+            .Caption   = "Montar Descri" + CHR(231) + CHR(227) + "o de Compra :"
+            .Top       = 208
+            .Left      = 50
+            .Width     = 147
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Say13 () Top=193+29=222
+        loc_oPg.AddObject("lbl_4c_Mkpobrigs", "Label")
+        WITH loc_oPg.lbl_4c_Mkpobrigs
+            .Caption   = "Markup Obrigat" + CHR(243) + "rio :"
+            .Top       = 222
+            .Left      = 596
+            .Width     = 101
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Get_Mkp (MkpObrigs) Top=193+29=222
+        loc_oPg.AddObject("opt_4c_Mkpobrigs", "OptionGroup")
+        WITH loc_oPg.opt_4c_Mkpobrigs
+            .ButtonCount = 2
+            .Value       = 2
+            .Top         = 222
+            .Left        = 695
+            .Width       = 116
+            .Height      = 15
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Visible     = .F.
+            WITH .Buttons(1)
+                .Caption   = "Sim"
+                .Left      = 5
+                .Top       = 0
+                .Width     = 34
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "N" + CHR(227) + "o"
+                .Left      = 70
+                .Top       = 0
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- get_atupreco (atucomps) Top=200+29=229
+        loc_oPg.AddObject("cbo_4c_Atucomps", "ComboBox")
+        WITH loc_oPg.cbo_4c_Atucomps
+            .Top           = 229
+            .Left          = 199
+            .Width         = 72
+            .Height        = 23
+            .RowSourceType = 1
+            .RowSource     = "Sim,N" + CHR(227) + "o"
+            .Style         = 2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- get_bpeso (bpesos) Top=200+29=229
+        loc_oPg.AddObject("cbo_4c_Bpesos", "ComboBox")
+        WITH loc_oPg.cbo_4c_Bpesos
+            .Top           = 229
+            .Left          = 422
+            .Width         = 80
+            .Height        = 23
+            .RowSourceType = 1
+            .RowSource     = "Sim,N" + CHR(227) + "o,Peso"
+            .Style         = 2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Label3 () Top=204+29=233
+        loc_oPg.AddObject("lbl_4c_Atucomps", "Label")
+        WITH loc_oPg.lbl_4c_Atucomps
+            .Caption   = "Atualiza Pre" + CHR(231) + "o Composi" + CHR(231) + CHR(227) + "o :"
+            .Top       = 233
+            .Left      = 60
+            .Width     = 137
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Label6 () Top=204+29=233
+        loc_oPg.AddObject("lbl_4c_Bpesos", "Label")
+        WITH loc_oPg.lbl_4c_Bpesos
+            .Caption   = "Base de Peso :"
+            .Top       = 233
+            .Left      = 347
+            .Width     = 73
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Get_fornobri (fornecs) Top=225+29=254
+        loc_oPg.AddObject("cbo_4c_Fornecs", "ComboBox")
+        WITH loc_oPg.cbo_4c_Fornecs
+            .Top           = 254
+            .Left          = 422
+            .Width         = 80
+            .Height        = 23
+            .RowSourceType = 1
+            .RowSource     = "Sim,N" + CHR(227) + "o"
+            .Style         = 2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Label4 () Top=229+29=258
+        loc_oPg.AddObject("lbl_4c_Fornecs", "Label")
+        WITH loc_oPg.lbl_4c_Fornecs
+            .Caption   = "Fornecedor Obrigat" + CHR(243) + "rio :"
+            .Top       = 258
+            .Left      = 299
+            .Width     = 121
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Say19 () Top=255+29=284
+        loc_oPg.AddObject("lbl_4c_Chkforcomp", "Label")
+        WITH loc_oPg.lbl_4c_Chkforcomp
+            .Caption   = "Fornec. X Compos. :"
+            .Top       = 284
+            .Left      = 597
+            .Width     = 100
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- fwoption2 (chkforcomp) Top=255+29=284
+        loc_oPg.AddObject("opt_4c_Chkforcomp", "OptionGroup")
+        WITH loc_oPg.opt_4c_Chkforcomp
+            .ButtonCount = 2
+            .Value       = 2
+            .Top         = 284
+            .Left        = 695
+            .Width       = 116
+            .Height      = 15
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Visible     = .F.
+            WITH .Buttons(1)
+                .Caption   = "Sim"
+                .Left      = 5
+                .Top       = 0
+                .Width     = 34
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "N" + CHR(227) + "o"
+                .Left      = 70
+                .Top       = 0
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Say31 () Top=274+29=303
+        loc_oPg.AddObject("lbl_4c_Respcads", "Label")
+        WITH loc_oPg.lbl_4c_Respcads
+            .Caption   = "Calcula Peso Compos. :"
+            .Top       = 303
+            .Left      = 583
+            .Width     = 114
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Get_RespCad (respcads) Top=274+29=303
+        loc_oPg.AddObject("opt_4c_Respcads", "OptionGroup")
+        WITH loc_oPg.opt_4c_Respcads
+            .ButtonCount = 2
+            .Value       = 2
+            .Top         = 303
+            .Left        = 695
+            .Width       = 116
+            .Height      = 15
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Visible     = .F.
+            WITH .Buttons(1)
+                .Caption   = "Sim"
+                .Left      = 5
+                .Top       = 0
+                .Width     = 34
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "N" + CHR(227) + "o"
+                .Left      = 70
+                .Top       = 0
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Get_PCV (pcustvens) Top=275+29=304
+        loc_oPg.AddObject("txt_4c_Pcustvens", "TextBox")
+        WITH loc_oPg.txt_4c_Pcustvens
+            .Value         = 0
+            .Top           = 304
+            .Left          = 199
+            .Width         = 72
+            .Height        = 23
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Get_cusFeitio (Coefs) Top=275+29=304
+        loc_oPg.AddObject("txt_4c_Coefs", "TextBox")
+        WITH loc_oPg.txt_4c_Coefs
+            .Value         = 0
+            .Top           = 304
+            .Left          = 422
+            .Width         = 80
+            .Height        = 23
+            .Format        = "K"
+            .InputMask     = "999.9999"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say15 () Top=279+29=308
+        loc_oPg.AddObject("lbl_4c_Pcustvens", "Label")
+        WITH loc_oPg.lbl_4c_Pcustvens
+            .Caption   = "% Custo/Venda Valor :"
+            .Top       = 308
+            .Left      = 85
+            .Width     = 112
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Say8 () Top=279+29=308
+        loc_oPg.AddObject("lbl_4c_Coefs", "Label")
+        WITH loc_oPg.lbl_4c_Coefs
+            .Caption   = "Coef. Custo Feitio :"
+            .Top       = 308
+            .Left      = 324
+            .Width     = 96
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- get_TipoPreco (TpCalcPs) Top=289+29=318
+        loc_oPg.AddObject("opt_4c_Tpcalcps", "OptionGroup")
+        WITH loc_oPg.opt_4c_Tpcalcps
+            .ButtonCount = 6
+            .Top         = 318
+            .Left        = 695
+            .Width       = 253
+            .Height      = 65
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Visible     = .F.
+            WITH .Buttons(1)
+                .Caption   = "\<Composi" + CHR(231) + CHR(227) + "o"
+                .Left      = 5
+                .Top       = 5
+                .Width     = 75
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "Custo / \<Venda"
+                .Left      = 114
+                .Top       = 5
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(3)
+                .Caption   = "Por Moedas"
+                .Left      = 5
+                .Top       = 25
+                .Width     = 74
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(4)
+                .Caption   = "Custo x Feitio"
+                .Left      = 114
+                .Top       = 25
+                .Width     = 84
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(5)
+                .Caption   = "Custo + Feitio"
+                .Left      = 5
+                .Top       = 45
+                .Width     = 86
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(6)
+                .Caption   = "Custo x Peso x MKP Vda"
+                .Left      = 114
+                .Top       = 45
+                .Width     = 134
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Say12 () Top=295+29=324
+        loc_oPg.AddObject("lbl_4c_Tpcalcps", "Label")
+        WITH loc_oPg.lbl_4c_Tpcalcps
+            .Caption   = "C" + CHR(225) + "lculo de Pre" + CHR(231) + "o :"
+            .Top       = 324
+            .Left      = 609
+            .Width     = 88
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- getPctDctLeis (pctdctleis) Top=300+29=329
+        loc_oPg.AddObject("txt_4c_Pctdctleis", "TextBox")
+        WITH loc_oPg.txt_4c_Pctdctleis
+            .Value         = 0
+            .Top           = 329
+            .Left          = 199
+            .Width         = 72
+            .Height        = 23
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .ToolTipText   = "Usado na Venda Leil" + CHR(227) + "o Para Pedir Senha de Libera" + CHR(231) + CHR(227) + "o"
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Get_MarkAp (MarkAplics) Top=300+29=329
+        loc_oPg.AddObject("txt_4c_Markaplics", "TextBox")
+        WITH loc_oPg.txt_4c_Markaplics
+            .Value         = 0
+            .Top           = 329
+            .Left          = 422
+            .Width         = 80
+            .Height        = 23
+            .Format        = "K"
+            .InputMask     = "999.999999"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say30 () Top=304+29=333
+        loc_oPg.AddObject("lbl_4c_Pctdctleis", "Label")
+        WITH loc_oPg.lbl_4c_Pctdctleis
+            .Caption   = "% Desconto Permitido :"
+            .Top       = 333
+            .Left      = 82
+            .Width     = 115
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- fwDescGrades () Top=322+29=351
+        loc_oPg.AddObject("opt_4c_DescGrades", "OptionGroup")
+        WITH loc_oPg.opt_4c_DescGrades
+            .ButtonCount = 2
+            .Value       = 2
+            .Top         = 351
+            .Left        = 193
+            .Width       = 154
+            .Height      = 25
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Visible     = .F.
+            WITH .Buttons(1)
+                .Caption   = "Descri" + CHR(231) + CHR(227) + "o"
+                .Left      = 5
+                .Top       = 5
+                .Width     = 64
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "Descritivo"
+                .Left      = 84
+                .Top       = 5
+                .Height    = 15
+                .AutoSize  = .T.
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Say32 () Top=326+29=355
+        loc_oPg.AddObject("lbl_4c_DescGrades", "Label")
+        WITH loc_oPg.lbl_4c_DescGrades
+            .Caption   = "Grade Cadastro Produtos :"
+            .Top       = 355
+            .Left      = 66
+            .Width     = 131
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- chkLocLivre (LocLivre) Top=349+29=378
+        loc_oPg.AddObject("chk_4c_Loclivre", "CheckBox")
+        WITH loc_oPg.chk_4c_Loclivre
+            .Caption       = "Localiza" + CHR(231) + CHR(227) + "o Livre "
+            .Value         = 0
+            .Top           = 378
+            .Left          = 307
+            .Width         = 101
+            .Height        = 15
+            .Alignment     = 0
+            .AutoSize      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BackStyle     = 0
+            .ForeColor     = RGB(90, 90, 90)
+            .SpecialEffect = 1
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Shape6 () Top=356+29=385
+        loc_oPg.AddObject("shp_4c_LinLocLivre", "Shape")
+        WITH loc_oPg.shp_4c_LinLocLivre
+            .Top           = 385
+            .Left          = 295
+            .Width         = 13
+            .Height        = 1
+            .BackStyle     = 0
+            .Curvature     = 0
+            .SpecialEffect = 0
+            .Visible       = .F.
+        ENDWITH
+
+        *-- chkCalProCs () Top=357+29=386
+        loc_oPg.AddObject("chk_4c_CalProCs", "CheckBox")
+        WITH loc_oPg.chk_4c_CalProCs
+            .Caption       = "N" + CHR(227) + "o Aplica Fator no C" + CHR(225) + "lculo de Custo de Produto"
+            .Value         = 0
+            .Top           = 386
+            .Left          = 698
+            .Width         = 251
+            .Height        = 15
+            .Alignment     = 0
+            .AutoSize      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BackStyle     = 0
+            .ForeColor     = RGB(90, 90, 90)
+            .SpecialEffect = 1
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say1 () Top=371+29=400
+        loc_oPg.AddObject("lbl_4c_TitValMin", "Label")
+        WITH loc_oPg.lbl_4c_TitValMin
+            .Caption   = "Valores M" + CHR(237) + "nimos Para Cadastro"
+            .Top       = 400
+            .Left      = 24
+            .Width     = 177
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Say6 () Top=371+29=400
+        loc_oPg.AddObject("lbl_4c_TitObrigMoedas", "Label")
+        WITH loc_oPg.lbl_4c_TitObrigMoedas
+            .Caption   = "Obrigatoriedade de Moedas Cadastro"
+            .Top       = 400
+            .Left      = 314
+            .Width     = 212
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Say22 () Top=378+29=407
+        loc_oPg.AddObject("lbl_4c_TitPadraoCad", "Label")
+        WITH loc_oPg.lbl_4c_TitPadraoCad
+            .Caption   = "Padr" + CHR(227) + "o do Cadastro"
+            .Top       = 407
+            .Left      = 679
+            .Width     = 113
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Shape3 () Top=386+29=415
+        loc_oPg.AddObject("shp_4c_LinValMin", "Shape")
+        WITH loc_oPg.shp_4c_LinValMin
+            .Top           = 415
+            .Left          = 24
+            .Width         = 236
+            .Height        = 2
+            .BackStyle     = 0
+            .BorderWidth   = 2
+            .BorderColor   = RGB(90,90,90)
+            .SpecialEffect = 0
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Shape1 () Top=386+29=415
+        loc_oPg.AddObject("shp_4c_LinObrigMoedas", "Shape")
+        WITH loc_oPg.shp_4c_LinObrigMoedas
+            .Top           = 415
+            .Left          = 314
+            .Width         = 305
+            .Height        = 2
+            .BackStyle     = 0
+            .BorderWidth   = 2
+            .BorderColor   = RGB(90,90,90)
+            .SpecialEffect = 0
+            .Visible       = .F.
+        ENDWITH
+
+        *-- getPcus (pcuss) Top=392+29=421
+        loc_oPg.AddObject("txt_4c_Pcuss", "TextBox")
+        WITH loc_oPg.txt_4c_Pcuss
+            .Value         = 0
+            .Top           = 421
+            .Left          = 143
+            .Width         = 115
+            .Height        = 23
+            .Alignment     = 3
+            .Format        = "K"
+            .InputMask     = "99,999,999.999"
+            .MaxLength     = 14
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- fwcheckbox1 (omoecs) Top=392+29=421
+        loc_oPg.AddObject("chk_4c_Omoecs", "CheckBox")
+        WITH loc_oPg.chk_4c_Omoecs
+            .Caption       = "Pre" + CHR(231) + "o de Custo da Composi" + CHR(231) + CHR(227) + "o"
+            .Value         = 0
+            .Top           = 421
+            .Left          = 314
+            .Width         = 166
+            .Height        = 15
+            .Alignment     = 0
+            .AutoSize      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BackStyle     = 0
+            .ForeColor     = RGB(90, 90, 90)
+            .SpecialEffect = 1
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Shape4 () Top=393+29=422
+        loc_oPg.AddObject("shp_4c_LinPadraoCad", "Shape")
+        WITH loc_oPg.shp_4c_LinPadraoCad
+            .Top           = 422
+            .Left          = 679
+            .Width         = 304
+            .Height        = 2
+            .BackStyle     = 0
+            .BorderWidth   = 2
+            .BorderColor   = RGB(90,90,90)
+            .SpecialEffect = 0
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say5 () Top=395+29=424
+        loc_oPg.AddObject("lbl_4c_Pcuss", "Label")
+        WITH loc_oPg.lbl_4c_Pcuss
+            .Caption   = "Pre" + CHR(231) + "o Composi" + CHR(231) + CHR(227) + "o :"
+            .Top       = 424
+            .Left      = 45
+            .Width     = 96
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- fwcheckbox2 (omoecusfs) Top=409+29=438
+        loc_oPg.AddObject("chk_4c_Omoecusfs", "CheckBox")
+        WITH loc_oPg.chk_4c_Omoecusfs
+            .Caption       = "Total de Custo da Composi" + CHR(231) + CHR(227) + "o"
+            .Value         = 0
+            .Top           = 438
+            .Left          = 314
+            .Width         = 163
+            .Height        = 15
+            .Alignment     = 0
+            .AutoSize      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BackStyle     = 0
+            .ForeColor     = RGB(90, 90, 90)
+            .SpecialEffect = 1
+            .Visible       = .F.
+        ENDWITH
+
+        *-- getFcusto (fcustos) Top=417+29=446
+        loc_oPg.AddObject("txt_4c_Fcustos", "TextBox")
+        WITH loc_oPg.txt_4c_Fcustos
+            .Value         = 0
+            .Top           = 446
+            .Left          = 143
+            .Width         = 115
+            .Height        = 23
+            .Alignment     = 3
+            .Format        = "K"
+            .InputMask     = "9,999.999"
+            .MaxLength     = 9
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say7 () Top=420+29=449
+        loc_oPg.AddObject("lbl_4c_Fcustos", "Label")
+        WITH loc_oPg.lbl_4c_Fcustos
+            .Caption   = "Fator de Custo :"
+            .Top       = 449
+            .Left      = 60
+            .Width     = 81
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- fwcheckbox3 (omoedas) Top=426+29=455
+        loc_oPg.AddObject("chk_4c_Omoedas", "CheckBox")
+        WITH loc_oPg.chk_4c_Omoedas
+            .Caption       = "Pre" + CHR(231) + "o Ideal de Venda"
+            .Value         = 0
+            .Top           = 455
+            .Left          = 314
+            .Width         = 120
+            .Height        = 15
+            .Alignment     = 0
+            .AutoSize      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BackStyle     = 0
+            .ForeColor     = RGB(90, 90, 90)
+            .SpecialEffect = 1
+            .Visible       = .F.
+        ENDWITH
+
+        *-- getCustof (custofs) Top=442+29=471
+        loc_oPg.AddObject("txt_4c_Custofs", "TextBox")
+        WITH loc_oPg.txt_4c_Custofs
+            .Value         = 0
+            .Top           = 471
+            .Left          = 143
+            .Width         = 115
+            .Height        = 23
+            .Alignment     = 3
+            .InputMask     = "99,999,999.999"
+            .MaxLength     = 14
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- fwcheckbox4 (omoevs) Top=443+29=472
+        loc_oPg.AddObject("chk_4c_Omoevs", "CheckBox")
+        WITH loc_oPg.chk_4c_Omoevs
+            .Caption       = "Pre" + CHR(231) + "o Atual de Venda"
+            .Value         = 0
+            .Top           = 472
+            .Left          = 314
+            .Width         = 121
+            .Height        = 15
+            .Alignment     = 0
+            .AutoSize      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .BackStyle     = 0
+            .ForeColor     = RGB(90, 90, 90)
+            .SpecialEffect = 1
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say3 () Top=445+29=474
+        loc_oPg.AddObject("lbl_4c_Custofs", "Label")
+        WITH loc_oPg.lbl_4c_Custofs
+            .Caption   = "Total de Custo:"
+            .Top       = 474
+            .Left      = 65
+            .Width     = 76
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- getMargem (pmargems) Top=467+29=496
+        loc_oPg.AddObject("txt_4c_Pmargems", "TextBox")
+        WITH loc_oPg.txt_4c_Pmargems
+            .Value         = 0
+            .Top           = 496
+            .Left          = 143
+            .Width         = 115
+            .Height        = 23
+            .Alignment     = 3
+            .InputMask     = "999.999999"
+            .MaxLength     = 6
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say4 () Top=468+29=497
+        loc_oPg.AddObject("lbl_4c_TitMateriaPrima", "Label")
+        WITH loc_oPg.lbl_4c_TitMateriaPrima
+            .Caption   = "Mat" + CHR(233) + "ria Prima"
+            .Top       = 497
+            .Left      = 314
+            .Width     = 82
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .T.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Say9 () Top=470+29=499
+        loc_oPg.AddObject("lbl_4c_Pmargems", "Label")
+        WITH loc_oPg.lbl_4c_Pmargems
+            .Caption   = "MarkUp Ideal :"
+            .Top       = 499
+            .Left      = 69
+            .Width     = 72
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Shape2 () Top=485+29=514
+        loc_oPg.AddObject("shp_4c_LinMateriaPrima", "Shape")
+        WITH loc_oPg.shp_4c_LinMateriaPrima
+            .Top           = 514
+            .Left          = 314
+            .Width         = 305
+            .Height        = 2
+            .BackStyle     = 0
+            .BorderWidth   = 2
+            .BorderColor   = RGB(90,90,90)
+            .SpecialEffect = 0
+            .Visible       = .F.
+        ENDWITH
+
+        *-- getPvideal (pvideals) Top=492+29=521
+        loc_oPg.AddObject("txt_4c_Pvideals", "TextBox")
+        WITH loc_oPg.txt_4c_Pvideals
+            .Value         = 0
+            .Top           = 521
+            .Left          = 143
+            .Width         = 115
+            .Height        = 23
+            .Alignment     = 3
+            .InputMask     = "9,999,999.99"
+            .MaxLength     = 12
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say10 () Top=495+29=524
+        loc_oPg.AddObject("lbl_4c_Pvideals", "Label")
+        WITH loc_oPg.lbl_4c_Pvideals
+            .Caption   = "Pre" + CHR(231) + "o Ideal :"
+            .Top       = 524
+            .Left      = 78
+            .Width     = 63
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- cmbMontaDescs (MontaDescs) Top=518+29=547
+        loc_oPg.AddObject("cbo_4c_Montadescs", "ComboBox")
+        WITH loc_oPg.cbo_4c_Montadescs
+            .Top           = 547
+            .Left          = 397
+            .Width         = 221
+            .Height        = 23
+            .RowSourceType = 1
+            .RowSource     = "Qtde + Uni + Codigo, Qtde + Codigo, Uni + Codigo, Codigo, Qtde + Codigo (s/ CT),Qtde+Codigo+Peso+Unidade,Qtde + Unidade"
+            .Style         = 2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .ToolTipText   = "Forma de Montagem da Mat" + CHR(233) + "ria Prima na Descri" + CHR(231) + CHR(227) + "o Autom" + CHR(225) + "tica do Produto"
+            .Visible       = .F.
+        ENDWITH
+
+        *-- btnAtuMontas () Top=518+29=547
+        loc_oPg.AddObject("cmd_4c_AtuMontas", "CommandButton")
+        WITH loc_oPg.cmd_4c_AtuMontas
+            .Caption       = ""
+            .Top           = 547
+            .Left          = 622
+            .Width         = 40
+            .Height        = 23
+            .Picture       = gc_4c_CaminhoIcones + "geral_circulo_16.jpg"
+            .Themes        = .T.
+            .Visible       = .F.
+        ENDWITH
+
+        *-- lblMontaDescs () Top=522+29=551
+        loc_oPg.AddObject("lbl_4c_Montadescs", "Label")
+        WITH loc_oPg.lbl_4c_Montadescs
+            .Caption   = "Montagem :"
+            .Top       = 551
+            .Left      = 336
+            .Width     = 59
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- getPven (pvens) Top=542+29=571
+        loc_oPg.AddObject("txt_4c_Pvens", "TextBox")
+        WITH loc_oPg.txt_4c_Pvens
+            .Value         = 0
+            .Top           = 571
+            .Left          = 143
+            .Width         = 115
+            .Height        = 23
+            .Alignment     = 3
+            .InputMask     = "9,999,999.99"
+            .MaxLength     = 14
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- getvarcustots (varcustots) Top=543+29=572
+        loc_oPg.AddObject("txt_4c_Varcustots", "TextBox")
+        WITH loc_oPg.txt_4c_Varcustots
+            .Value         = 0
+            .Top           = 572
+            .Left          = 819
+            .Width         = 52
+            .Height        = 23
+            .InputMask     = "999.99"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- cmbMnCompos (MnCompos) Top=544+29=573
+        loc_oPg.AddObject("cbo_4c_Mncompos", "ComboBox")
+        WITH loc_oPg.cbo_4c_Mncompos
+            .Top           = 573
+            .Left          = 397
+            .Width         = 221
+            .Height        = 23
+            .RowSourceType = 1
+            .RowSource     = "Autom" + CHR(225) + "tica,Grupo + Classifica" + CHR(231) + CHR(227) + "o,Classifica" + CHR(231) + CHR(227) + "o Componentes,Identificado + C" + CHR(243) + "digo,Manual"
+            .Style         = 2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .ToolTipText   = "Forma de Montagem do Campo Compos"
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say11 () Top=545+29=574
+        loc_oPg.AddObject("lbl_4c_Pvens", "Label")
+        WITH loc_oPg.lbl_4c_Pvens
+            .Caption   = "Pre" + CHR(231) + "o Atual :"
+            .Top       = 574
+            .Left      = 77
+            .Width     = 64
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Say35 () Top=547+29=576
+        loc_oPg.AddObject("lbl_4c_Varcustots", "Label")
+        WITH loc_oPg.lbl_4c_Varcustots
+            .Caption   = "Varia" + CHR(231) + CHR(227) + "o Custo  :                    %"
+            .Top       = 576
+            .Left      = 733
+            .Width     = 155
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- Say18 () Top=548+29=577
+        loc_oPg.AddObject("lbl_4c_Mncompos", "Label")
+        WITH loc_oPg.lbl_4c_Mncompos
+            .Caption   = "Compos :"
+            .Top       = 577
+            .Left      = 348
+            .Width     = 47
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        *-- getVarPesoMs (varPesoMs) Top=568+29=597
+        loc_oPg.AddObject("txt_4c_Varpesoms", "TextBox")
+        WITH loc_oPg.txt_4c_Varpesoms
+            .Value         = 0
+            .Top           = 597
+            .Left          = 819
+            .Width         = 52
+            .Height        = 23
+            .InputMask     = "999.99"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderColor   = RGB(100, 100, 100)
+            .Visible       = .F.
+        ENDWITH
+
+        *-- Say34 () Top=572+29=601
+        loc_oPg.AddObject("lbl_4c_Varpesoms", "Label")
+        WITH loc_oPg.lbl_4c_Varpesoms
+            .Caption   = "Varia" + CHR(231) + CHR(227) + "o Peso  :                    %"
+            .Top       = 601
+            .Left      = 738
+            .Width     = 150
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .F.
+        ENDWITH
+
+        THIS.TornarControlesVisiveis(loc_oPg)
+    ENDPROC
     *==========================================================================
     * ConfigurarPgpgCodificacao - Adiciona controles restantes da aba Codificacao
     * Page8 de pgf_4c_Divisoes: Shape, labels, CommandGroup, getMontagem,
@@ -14790,21 +16633,27 @@ DEFINE CLASS FormGpd AS FormBase
                 IF loc_nRet > 0 AND USED("cursor_4c_BuscaGpr")
                     IF RECCOUNT("cursor_4c_BuscaGpr") = 0
                         USE IN cursor_4c_BuscaGpr
-                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", ;
-                            "SigCdGpr", "codigos", "descs", ;
-                            "C" + CHR(243) + "digo", ;
-                            "Descri" + CHR(231) + CHR(227) + "o", ;
-                            "Grande Grupo", "", "", "")
+                        *-- 1o parametro eh o HANDLE (par_nConn). Erro172.
+                        loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                            "SigCdGpr", "cursor_4c_BuscaGprCol", "codigos", ;
+                            ALLTRIM(loc_cMercs), ;
+                            "Grande Grupo")
                         IF VARTYPE(loc_oBusca) = "O"
-                            loc_oBusca.Show()
-                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaAuxiliar")
+                            *-- Show() so quando o Init NAO resolveu pelo match exato (Erro173)
+                            IF !loc_oBusca.this_lAchouRegistro
+                                loc_oBusca.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
+                                loc_oBusca.mAddColuna("descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                                loc_oBusca.Show()
+                            ENDIF
+                            IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGprCol")
+                                SELECT cursor_4c_BuscaGprCol
                                 loc_oPg3.grd_4c_Dados.Column8.Text1.Value = ;
-                                    ALLTRIM(cursor_4c_BuscaAuxiliar.codigos)
+                                    ALLTRIM(cursor_4c_BuscaGprCol.codigos)
                             ENDIF
                             loc_oBusca.Release()
                         ENDIF
-                        IF USED("cursor_4c_BuscaAuxiliar")
-                            USE IN cursor_4c_BuscaAuxiliar
+                        IF USED("cursor_4c_BuscaGprCol")
+                            USE IN cursor_4c_BuscaGprCol
                         ENDIF
                     ELSE
                         USE IN cursor_4c_BuscaGpr

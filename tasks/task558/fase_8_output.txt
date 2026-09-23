@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No TODOs/stubs found, and procedure/ENDPROC counts match (37/37) ÔÇö the file is structurally balanced.
+
+## Resumo
+
+O `FormVis.prg` (Fase 8) j├í estava completo de fases anteriores: `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`/`BOParaForm` (cobrindo todas as 7 propriedades do `VisBO`: Data, Grupo, Representante c├│digo/descri├º├úo, Conta c├│digo/descri├º├úo, Vendas, Pedidos, Observa├º├úo), `HabilitarCampos`, `LimparCampos`, `CarregarLista` e `AjustarBotoesPorModo` ÔÇö todos com l├│gica real, sem stubs.
+
+O que faltava e eu corrigi: **integra├º├úo com o menu** (`config.prg` n├úo precisa de edi├º├úo ÔÇö usa `ADIR()` din├ómico conforme CLAUDE.md ÔÇö mas `menu.prg` n├úo tinha nenhuma refer├¬ncia a `FormVis`). Adicionei:
+- `DEFINE BAR 197 OF popCadastros` ("Visitas de Representantes")
+- `ON SELECTION BAR 197 OF popCadastros DO AbrirFormVis`
+- `PROCEDURE AbrirFormVis()` no padr├úo can├┤nico (VARTYPE, Show() fora do TRY, sem Release())
+
+Formul├írio agora acess├¡vel via menu Cadastros. N├úo fiz altera├º├Áes no BO nem no Form al├®m da verifica├º├úo, pois ambos j├í atendiam ao checklist da Fase 8.

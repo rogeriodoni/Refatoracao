@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced: 16 PROCEDURE/ENDPROC, 19 WITH/ENDWITH, 4 TRY/ENDTRY. The file is structurally sound.
+
+## Summary
+
+Phase 4/8 complete for `FormTPR.prg`. Added to `ConfigurarPaginaLista()`:
+- `cnt_4c_Botoes` with 5 CRUD buttons (Incluir/Visualizar/Alterar/Excluir/Buscar) using canonical positions/icons from `framework_frmcadastro_layout.md`
+- `cnt_4c_Saida`/`cmd_4c_Encerrar` per the canonical rule (CLAUDE.md #10)
+- `grd_4c_Lista` (Top=117/Left=26/Width=890/Height=498, Verdana 8, canonical colors)
+
+Added new methods (matching the established pattern from `FormACJ.prg`):
+- `CarregarLista()` ÔÇö populates the grid from `TPRBO.Buscar()`, redefining `ControlSource`/`Header1.Caption` for all 7 columns (tptrans, tps, obs, rectrans, dbf, cprocs, ordems) after `RecordSource`, with a `gb_4c_ValidandoUI` guard
+- `FormatarGridLista()`, `AlternarPagina()`
+- `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick` (all PUBLIC for BINDEVENT)
+
+Also wired `CarregarLista()` into `InicializarForm()` (guarded by `gb_4c_ValidandoUI`) so the grid populates on open. Page2 fields, `FormParaBO`/`BOParaForm`, and `HabilitarCampos` are left for later phases ÔÇö the CRUD handlers navigate to Page2 and prep the BO state but don't yet touch Page2 controls, which don't exist yet.

@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+19 `PROCEDURE`/`FUNCTION` declarations match 19 `ENDPROC`, and the file closes cleanly with a single `ENDDEFINE`.
+
+## Resumo da Fase 6
+
+O `SIGCDTPG` n├úo tem uma segunda p├ígina de dados (├® um form flat, com os 3 campos direto nas colunas do `Grid1`), ent├úo a Fase 6 se concentrou nos lookups que ainda faltavam nessas colunas, extra├¡dos do c├│digo-fonte legado completo (n├úo truncado):
+
+- **Column1 (Emps)**: substitui `fAcessoEmpresa` (fun├º├úo legada n├úo portada) por valida├º├úo contra `SigCdEmp` + `AbrirLookupCanonico` (F4 sempre abre; Enter/Tab valida e abre se n├úo achar).
+- **Column2 (TpTrans)**: o legado chamava `fwBuscaSel('crSigPrTrn','Codigos',...)`, mas esse cursor (carregado de `SigPrTra`) n├úo tem colunas `Codigos`/`Descrs` ÔÇö conferi no `schema.sql` que a tabela mestre `SigPrTrn` (codigos char(6), descrs char(20)) ├® quem bate exatamente com esses nomes e com o tamanho do campo. Implementado com o mesmo padr├úo de valida├º├úo+lookup.
+- **Column3 (Tps)**: s├│ valida├º├úo `INLIST('T','R')`, sem lookup (fiel ao legado).
+- **ValidarDuplicidadeLinha()**: replica a checagem de duplicidade (Emps+TpTrans+Tps) que os tr├¬s `Valid` do legado repetiam ao final, incluindo o aviso e a limpeza do campo quando encontra outra linha com a mesma combina├º├úo.
+
+Todos os handlers de `KeyPress` s├úo `PUBLIC` (exigido pelo `BINDEVENT`), sem `RETURN` dentro de `TRY/CATCH`, e os `CATCH` sempre reportam erro via `MsgErro`.

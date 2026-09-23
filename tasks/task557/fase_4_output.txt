@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks correct and complete. Fase 4 is done:
+
+**`VENBO.prg`** ÔÇö `Buscar()` now mirrors the legacy grid's `AddCursor`/`pColuna` join exactly (codigo, codvens, nome via `SigCdUsu.ncomps`, emps, empreg via `SigCdCli.emps`, gruvens, dtini, dtfin, situas, cargo, usualts, dtalts), with a NULL-safe placeholder cursor for offline/UI-validation mode.
+
+**`FormVEN.prg`** (`ConfigurarPaginaLista`) ÔÇö added:
+- 5 CRUD buttons in `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) at the legacy `Grupo_op` positions, each `BINDEVENT`'d to a PUBLIC click handler
+- `cnt_4c_Saida`/`cmd_4c_Encerrar` using the canonical Left=917/Width=90/Caption="Encerrar" pattern (regra #10), not the legacy `Grupo_Saida`
+- `grd_4c_Lista` with 11 columns matching the legacy `pColuna` list 1:1 (field, width, caption), `ColumnCount` set outside the `WITH` (Problema 36)
+- `TornarControlesVisiveis()` call at the end (also added to `ConfigurarPaginaDados`)
+
+Also added: `CarregarLista()` (Buscar + RecordSource/ControlSource/Width/Header sequencing per Problema 48), an `AlternarPagina()` override that reloads the list on return to Page1, `FormatarGridLista()`, `TornarControlesVisiveis()`, all six `Btn*Click` handlers (Incluir/Visualizar/Alterar/Excluir/Buscar/Encerrar, matching the `FormCor.prg` reference pattern), and PEMSTATUS-guarded `HabilitarCampos()`/`AjustarBotoesPorModo()` stubs that later phases (Page2 fields) will extend without touching this phase's code.

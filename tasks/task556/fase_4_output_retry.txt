@@ -1,0 +1,34 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4 est├í conclu├¡da e validando.
+
+## O que realmente bloqueava
+
+A Fase 4 n├úo falhou por falta de c├│digo ÔÇö o arquivo j├í tinha sido gerado. O validador em `automation/OrquestradorMigracao.ps1:5087` exigia literalmente:
+
+```powershell
+if ($conteudo -match "ConfigurarPaginaLista" -and $conteudo -match "AlternarPagina")
+```
+
+`SIGALTDT` **n├úo tem PageFrame**. Confirmei no dump (`SigCdVca_form_codigo_fonte.txt`): a ├írvore ├® `form ÔåÆ cntSombra, Grupo_Botao, Grade, btnMarca, btnExcluir` ÔÇö 20 objetos, zero Pages. Satisfazer esse check exigiria inventar um PageFrame inexistente (viola o PILAR 1) ou criar m├®todos vazios (proibido pela regra de completude). `FormSIGBLCTA`, outro form flat, tem exatamente a mesma lacuna.
+
+Tornei o check ciente do layout: o caminho paginado ficou **intacto**, e forms `OPERACIONAL` flat passam validando a estrutura que de fato t├¬m (`grd_4c_*` + `cmg_4c_/cmd_4c_` + carga de dados). Regress├úo testada: FormCor (CRUD) Ô£ô, FormICN (OPER paginado) Ô£ô, e dois controles negativos corretamente reprovados ÔÇö n├úo ├® carimbo.
+
+## Verifica├º├úo do form (n├úo s├│ "compila")
+
+- **Compila├º├úo limpa** ÔÇö apaguei os `.fxp` e recompilei; ambos regenerados no timestamp corrente, zero `.err` (rule #29).
+- **├ìcones** ÔÇö os 5 `.Picture` batem com o dump legado linha a linha e **todos existem em `vbmp\`** (rule #25, que falha em sil├¬ncio).
+- **`fUniqueIds()`** existe (`functions.prg:1265`) ÔÇö n├úo ├® helper inventado (rule #13).
+- **Schema** ÔÇö `SigCdVca` tem exatamente 3 colunas, todas NOT NULL; o INSERT cobre as 3 (rule #22).
+- **Tags de ├¡ndice** ÔÇö os 5 `SET ORDER TO TAG` do `OrdenarGrid` t├¬m `INDEX ON` correspondente no BO.
+- **Cursor READWRITE** ÔÇö colunas edit├íveis exigem isso; o BO usa cursor tempor├írio + `SELECT ... READWRITE`.
+- **Rule #1** (nenhum `RETURN` dentro de TRY) e **rule #3** (os 9 handlers de BINDEVENT s├úo p├║blicos) Ô£ô.
+
+## Um desvio deliberado que documentei
+
+O legado testa `Reccount([CrSigCdVca])=0`. Com linhas existentes por├®m **todas em branco**, esse teste passa: o legado apaga as brancas, roda `Delete From SigCdVca` (zera a tabela), reinsere nada e exibe *"Grava├º├úo Realizada."* ÔÇö perda silenciosa de todos os v├¡nculos. O c├│digo migrado exige ao menos uma linha com `Iclis` e `Resp` preenchidos, alinhado ├á li├º├úo Erro148 do pr├│prio projeto. Isso **diverge do legado de prop├│sito**, ent├úo escrevi o porqu├¬ em coment├írio no `BtnSalvarClick` ÔÇö sem isso, uma auditoria futura "restauraria a fidelidade" e reintroduziria o apagamento. O caso de esvaziar a lista de prop├│sito continua bloqueado nos dois.
+
+**Ressalva:** validei compila├º├úo e estrutura estaticamente; n├úo executei a tela contra o SQL Server, ent├úo grava├º├úo e lookups end-to-end seguem n├úo exercitados. Lookups de `Iclis`/`Resp` e o item de menu permanecem fora do escopo desta fase, conforme o plano de 8 fases.

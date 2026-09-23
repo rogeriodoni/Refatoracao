@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FormUfs.prg (Fase 3/8) criado em `C:\4c\projeto\app\forms\cadastros\FormUfs.prg` com a estrutura base:
+
+- `DEFINE CLASS FormUfs AS FormBase` com propriedades visuais (Width=1000, Height=600, Caption="Cadastro de Estados") e de estado (`this_oBusinessObject`, `this_cModoAtual`)
+- `Init()` apenas com `RETURN DODEFAULT()`
+- `InicializarForm()` criando `UfsBO`, configurando o PageFrame e propagando o Caption para os labels do cabe├ºalho nas duas p├íginas
+- `ConfigurarPageFrame()` com `pgf_4c_Paginas` (Top=-29, Tabs=.F., Page1=Lista, Page2=Dados)
+- `ConfigurarPaginaLista()` e `ConfigurarPaginaDados()`, cada uma com o container `cnt_4c_Cabecalho` completo (faixa cinza + labels Sombra/Titulo, seguindo a regra #11 do CLAUDE.md ÔÇö faixa nas DUAS p├íginas, primeiro AddObject) e o respectivo container de bot├Áes (`cnt_4c_Botoes` na Lista, `cnt_4c_BotoesAcao` nos Dados) criado vazio, sem os bot├Áes internos ÔÇö isso fica para a Fase 4
+- `TornarControlesVisiveis()` recursivo (Controls + Pages de PageFrame aninhado)
+- `Destroy()` liberando o BO e fechando `cursor_4c_Dados` se aberto
+
+N├úo inclu├¡ grid, bot├Áes CRUD, TextBoxes ou eventos, conforme o escopo da Fase 3. A chamada a `THIS.CarregarLista()` em `InicializarForm()` est├í protegida por `PEMSTATUS` para n├úo quebrar antes da Fase 4 introduzir esse m├®todo.

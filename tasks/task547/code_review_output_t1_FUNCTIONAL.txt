@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This is clean and consistent.
+
+## Summary
+
+Investigated all 7 findings against the actual legacy dump (`tasks/task547/sigcdtra_form_codigo_fonte.txt`) before touching anything, per the project's rule to verify audit premises before mass-correcting:
+
+**Fixed (real defect, 2 files):**
+- **GRID-HEADER (4 findings)** ÔÇö The audit's comparison set was pulled from the wrong grid (`GradEstado`, the fretes-by-state sub-grid), but the real Lista grid *was* wrong: the legacy `Init` wires `Pagina.Lista.Grade` via `AddCursor`+`pColuna` to exactly 3 columns ÔÇö **C├│digo, Raz├úo Social, Telefone** ÔÇö while the migrated grid invented Cidade/UF/CGC columns and dropped Telefone entirely. Fixed `traBO.Buscar()` (SQL + fallback cursor: `itras, razaos, tel1s`) and `Formtra.prg`'s list grid (`ColumnCount=3`, correct `ControlSource`/widths/headers) to mirror the legacy exactly.
+
+**Confirmed false positives (no change made):**
+- **BINDEVENT-PARAMS (2 findings)** ÔÇö `ValidarUfEstado`/`ValidarMunicipioEstado` already declare `(par_nKeyCode, par_nShiftAltCtrl)` inline and are PUBLIC; functionally identical to `LPARAMETERS`.
+- **LAYOUT-POSITION (1 finding)** ÔÇö legacy `GradEstado` (Top 123, Height 419) ends at 542 with buttons at Top 545 (3px gap); migrated grid (Top 211, Height 419) ends at 630 with buttons at Top 633 ÔÇö the same 3px gap, shifted by the same +88px header-band offset applied to the grid itself. "Fixing" the Top to 545 would place the buttons on top of the grid.

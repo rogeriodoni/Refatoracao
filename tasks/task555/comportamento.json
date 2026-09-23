@@ -1,0 +1,406 @@
+{
+  "resumo": {
+    "totalMetodos": 24,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 12,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "fGravarLog", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDUSU",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Local lcUsu\n\nlcUsu = Alltrim(ThisForm.Pagina.Dados.getUsuarios.Value)\n\nSelect crSigCdUsu\nSet Near On\nLocate For Usuarios = lcUsu\nSet Near Off\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU",
+      "evento": "Init",
+      "linhas": 34,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdUsu', 'Usuarios', 'crSigCdUsu', '', ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna('Usuarios', '', '', 'Usuário', 080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('NComps',   '', '', 'Nome',    310, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('CCargs',   '', '', 'Cargo',   080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Deptos',   '', '', 'Depto.',  080, .t.)\n\t\t\t.pfSqlTabela(1).pCo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUSU",
+      "evento": "Click",
+      "linhas": 49,
+      "codigoOriginal": "Parameters Opcao\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndIf\n\nSelect crSigCdUsu\n\nIf Not DoDefault(Opcao)\n\tThisForm.LockScreen = .f.\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf\n\nDo Case\n\tCase InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')\n\t\tReplace cAtivos With 'S' In crSigCdUsu\n\t\tThisForm.Pagina.Dados.getUsuarios.SetFocus\n\n\tCase Inlist(ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR')\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\n\n\tCase Inlist(ThisForm.pcEscolha, 'ALTERAR')\n\t\t ThisForm.Pag... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Value = Iif",
+        "controlesReferenciados": "optAtivo",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUSU",
+      "evento": "Click",
+      "linhas": 40,
+      "codigoOriginal": "If InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf (Thisform.pcEscolha = 'INSERIR')\n\t\tIf Empty(crSigCdUsu.Usuarios)\n\t\t\t=MessageBox('Usuário Inválido!!!', 0+48, '')\n\t\t\tThisForm.Pagina.Dados.getUsuarios.SetFocus\t\n\t\t\tReturn 0\n\t\tEndIf\n\t\t\n\t\tIf ThisForm.poDataMgr.CursorQuery('SigCdUsu', 'crTmp', 'Usuarios', crSigCdUsu.Usuarios)\n\t\t\t=MessageBox('Usuário Já Cadastrado!!!', 0+48, '')\n\t\t\tThisForm.Pagina.Dados.getUsuarios.SetFocus\t\n\t\t\tReturn 0\n\t\tEndIf\n\tEndIf\nEndIf\n\nIf (Thisform.pcEscolha = 'EXCLUIR')\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Select crSigCdUsu\n\n=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Lista.cmdGLimSenha",
+      "evento": "Click",
+      "linhas": 41,
+      "codigoOriginal": "Local loDataMgr1,lnErro1,lcMcrSql1\n\nIf Not Eof('crSigCdUsu')\n\n\t* Richard em 29/11/2016 - Eliminando SUPERVIS\n\tIf (Upper(crSigCdUsu.Usuarios) = [4CONTROL])\n*!*\t\tIf InList(Upper(crSigCdUsu.Supervis), [I], [S])\n\t\tMessageBox([Senha do Usuario não pode ser Limpa !!!], 16, [])\n\t\tReturn\n\tEndIf \n\n\tIf Messagebox('Deseja Limpar a Senha do Usuario ' + Alltrim(crSigCdUsu.Usuarios) +;\n\t\t Iif(Not Empty(crSigCdUsu.Ncomps), ' - ' + Proper(Alltrim(crSigCdUsu.Ncomps)), '') + '?',4+32+256,'')==6\n\n\t\tm.loDataMgr1 = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getUsuarios",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getNComps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getCCargs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getCCargs",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCrg', ;\n\t\t\t\t\t\t   'crListaRemota', 'CCargs', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CCargs', '', 'Código')\n\t\tloLista.mAddColuna('DCargs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CCargs\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\n* Fim ************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getSetores",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getSetores",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdSet', ;\n\t\t\t\t\t\t   'crListaRemota', 'Setores', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Setores', '', 'Setor')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Setores\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ********************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getDeptos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getDeptos",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdDpt','crSigCdDpt','codigos',This.Value,'Seleção',.T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('codigos','xxxxxxxxxx','Código',.T.)\n\t\tloLista.mAddColuna('Descricaos','xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx','Descrição',.T.)\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisform.Pagina.Dados.getDeptos.value = Iif(LastKey()==27,'',crSigCdDpt.codigos)\n\tThisform.Pagina.Dados.getNDeptos.value = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getNDeptos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.pagina.dados.getDeptos.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getNDeptos",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdDpt','crSigCdDpt','Descricaos',This.Value,'Seleção',.T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descricaos','xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx','Descrição',.T.)\n\t\tloLista.mAddColuna('codigos','xxxxxxxxxx','Código',.T.)\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisform.Pagina.Dados.getDeptos.value = Iif(LastKey()==27,'',crSigCdDpt.codigos)\n\tThisform.Pagina.Dados.getNDeptos.value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getIClis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getIClis",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [IClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([IClis], [], [Código])\n\t\tloLista.mAddColuna([RClis], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\tIf (Lastkey()<>27)\n\t\tThis.Parent.getIClis.Value = crListaRemota.IClis\n\t\tThis.Parent.getRClis.Value = crListaRemota.RClis\n\tElse\n\t\tThis.Parent.getIClis.Value = []\n\t\tThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getRClis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]) And Empty(ThisForm.pagina.dados.getIClis.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.getRClis",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCli], ;\n\t\t\t\t\t\t   [crListaRemota], [RClis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([RClis], [], [Descrição])\n\t\tloLista.mAddColuna([IClis], [], [Código])\n\t\tloLista.Show()\n\tEndIf\n\tIf (Lastkey()<>27)\n\t\tThis.Parent.getIClis.Value = crListaRemota.IClis\n\t\tThis.Parent.getRClis.Value = crListaRemota.RClis\n\tElse\n\t\tThis.Parent.getIClis.Value = []\n\t\tThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.optativo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'ALTERAR', 'INSERIR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.optativo",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "replace cativos with IIF(this.Value = 1,'S','N') in crsigcdusu\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUSU.Pagina.Dados.Optiongroup1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'ALTERAR', 'INSERIR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

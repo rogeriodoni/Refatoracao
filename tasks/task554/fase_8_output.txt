@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything checks out. Phase 8/8 is complete:
+
+**FormUSA.prg** ÔÇö added the missing auxiliary methods that Phase 8 required and that the earlier-phase `BINDEVENT` calls were already referencing (but which didn't exist yet, which would have thrown "Property BTNBUSCARCLICK/BTNENCERRARCLICK is not found" at runtime):
+- `HabilitarCampos(par_lHabilitar)`, `LimparCampos()`, `AjustarBotoesPorModo()` ÔÇö extracted as dedicated methods (following the `FormUfs.prg` canonical pattern) and wired into `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`
+- `BtnBuscarClick()` ÔÇö opens `FormBuscaAuxiliar` on `SigSyMov` by `usuars` and filters the list
+- `BtnEncerrarClick()` ÔÇö closes the form
+- `CarregarLista()` now accepts an optional `par_cFiltro`, passed through to `USABO.Buscar()`, needed by the search button
+
+**menu.prg** ÔÇö added `DEFINE BAR 195 OF popCadastros`, `ON SELECTION BAR 195`, and the `AbrirFormUSA()` procedure (canonical pattern: `VARTYPE` check, `Show()` outside `TRY` per rule #29, no `Release()`).
+
+**config.prg** ÔÇö no change needed; it auto-loads `*BO.prg`/`Form*.prg` via `ADIR()`.
+
+`FormParaBO`/`BOParaForm`/`CarregarLista`/`AlternarPagina` from earlier phases were already complete and functional; I left them as-is. Note: I couldn't compile/run VFP9 in this environment to verify at runtime ÔÇö recommend running the app and exercising Incluir/Alterar/Visualizar/Excluir/Buscar/Encerrar on FormUSA to confirm.

@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All methods properly paired with ENDPROC, and the class closes correctly. The Phase 4 implementation is complete.
+
+## Summary
+
+Completed Phase 4/8 for `FormUpd.prg`:
+
+- **`ConfigurarPaginaLista()`**: now builds the full Grid (`grd_4c_Lista`) with 4 columns transcribed from the legacy `SIGCDUPD.Init()` AddCursor/pColuna calls (Fase/Codigos, Unid. Produtiva/UniPrdts, Descri├º├úo/Descrs, Ordem/Ordems), plus 6 CRUD buttons (Incluir, Visualizar, Alterar, Excluir, Buscar in `cnt_4c_Botoes`, and Encerrar in the canonical `cnt_4c_Saida` per CLAUDE.md rule #10).
+- **`CarregarLista()`**: binds the grid to `cursor_4c_Dados` from `UpdBO.Buscar()`, redefining `ControlSource`/`Header1.Caption` after `RecordSource` (rules #2/#48).
+- **`AlternarPagina()`**: switches pages and reloads the list when returning to Page1.
+- Added the supporting methods the buttons/grid require to exist for `BINDEVENT`: `FormatarGridLista`, `TornarControlesVisiveis`, and the six `Btn*Click` handlers (all PUBLIC per rule #17), plus a buscar picker against `SigCdGcr` (the Fase lookup table).
+- Wired `InicializarForm()` to call `CarregarLista()` guarded by `gb_4c_ValidandoUI`, and `Destroy()` to close `cursor_4c_Dados`/`cursor_4c_BuscaUpd`.
+
+Page2 field population and BO data-binding (`FormParaBO`/`BOParaForm`/`HabilitarCampos`) remain for later phases, as scoped.

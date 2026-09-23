@@ -1,0 +1,584 @@
+{
+  "resumo": {
+    "totalMetodos": 33,
+    "metodosComSQL": 10,
+    "metodosComValidacao": 17,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fAcessoEmpresa", "fAcessoContas", "fChecaAcesso"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDVEN",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "llDatai = ThisForm.Pagina.Lista.CntPeriodo.Dt_inicial.Value\nllDataf = ThisForm.Pagina.Lista.CntPeriodo.Dt_Final.Value\nllDatai = fDtoSQL(llDatai)\nllDataf = fDtoSQL(llDataf,'23:59:59')\npcEmps = ALLTRIM(ThisForm.Pagina.Lista.cntEmps.getEmps.Value)\npcVens = ALLTRIM(ThisForm.Pagina.Lista.CntVens.getVens.Value)\n\nIF EMPTY(pcVens)\n\tpcVensF = 'zzzzzzzzzz'\nELSE\n\tpcVensF=pcVens\nENDIF\n\nIF EMPTY(pcEmps)\n\tpcEmpsF = 'zzz'\nELSE\n\tpcEmpsF = pcEmps\nENDIF\n\nThisForm.podatamgr.Requery('crSigcdVen')\n\nSelect crSigCdVen... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "*** Mena - 02/04/2018 - pega empresa de registro do vendedor ***\nlcSql = [Select emps From SigCdCli where grupos=']+ALLTRIM(thisform.pagina.dados.getGrupo.Value)+[' and iclis =']+ALLTRIM(thisform.pagina.dados.getvens.Value)+['] \nThisForm.poDataMgr.Sqlexecute(lcsql,'crAuxCli')\nthisform.pagina.dados.GetempReg.Value = crAuxCli.emps\nthisform.pagina.dados.GetempReg.Refresh ",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN",
+      "evento": "Init",
+      "linhas": 47,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nPublic llDatai,llDataf,pcEmps, pcEmpsF, pcVens, pcVensF\n\nThisForm.Pagina.Lista.CntPeriodo.Dt_inicial.Value = DATE()\nThisForm.Pagina.Lista.CntPeriodo.Dt_Final.Value = DATE()\nThisForm.Pagina.Lista.cntEmps.getEmps.Value = _empr\nThisForm.Pagina.Lista.CntVens.getVens.Value = usuar\n\nllDatai = ThisForm.Pagina.Lista.CntPeriodo.Dt_inicial.Value\nllDataf = ThisForm.Pagina.Lista.CntPeriodo.Dt_Final.Value\nllDatai = fDtoSQL(llDatai)\nllDataf = fDtoSQL(llDataf,'23:59:59')\npcEmps  = ALLTRIM... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "sqldados,Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.Empty(ThisForm.Pagina.Dados.GetVens.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdVen','codvens',ThisForm.Pagina.Dados.GetVens.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tthisform.pagina.dados.getGrupo.value = crSigCdPam.GrPadVens  \n\t\tThisForm.Pagina.Dados.Getemps.SetFocus\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.Getemps.SetFocus\n\tCase Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndcase\n\nlcQuery = [Select Iclis, Rclis From SigCdCli Where ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,pegaempreg",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN",
+      "evento": "Click",
+      "linhas": 88,
+      "codigoOriginal": "LOCAL lcQuery, lcCheCod\n\nlcCheCod = []\nIf INLIST(ThisForm.pcEscolha,'ALTERAR')\n\tlcChecod = [ and codigo <> ']+CrSigCdVen.codigo+[' ]\nENDIF\n\nIf INLIST(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\tIf Empty( CrSigCdVen.emps )\n\t\tMessagebox( 'Empresa não pode ficar em branco!', 48, '' ) \n\t\tThisForm.Pagina.Dados.Getemps.SetFocus\n\t\tReturn\n\tEndif\n\tIf Empty( CrSigCdVen.Codvens )\n\t\tMessagebox( 'Vendedor não pode ficar em branco!', 48, '' ) \n\t\tThisForm.Pagina.Dados.Getemps.SetFocus\n\t\tReturn\n\tEndif\n\tIf Empty( C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.CntPeriodo.Dt_inicial",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If This.Value > This.Parent.Dt_final.Value\n\tThis.Parent.Dt_Final.Value = This.Value\nEndif\n\nThisForm.SqlDados\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.CntPeriodo.Dt_final",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.Pagina.Lista.Grade.Column1.SetFocus\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.CntPeriodo.Dt_final",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If This.Value < This.Parent.Dt_Inicial.Value\n\tThis.Parent.Dt_Inicial.Value = This.Value\nEndIf\nThisForm.SqlDados\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.cntEmps.getEmps",
+      "evento": "LostFocus",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL lcEmp\nlcEmp = this.value\nIF !EMPTY(lcEmp)\n\tlcQuery = \t[Select * From SigcdEmp where cemps = ']+lcEmp+[' ]\n\tIf ThisForm.Podatamgr.Sqlexecute(lcQuery,'localEmp') < 1\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn\n\tENDIF\nENDIF\nthis.Parent.Refresh \nThisForm.SqlDados\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.cntEmps.getEmps",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.pagina.lista.cntEmps.getEmps)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.cntEmps.getEmps",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.cntVens.GetVens",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "lcGrupo = This.Parent.getGrupo.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,lcGrupo,'C',This.value,This,This.parent.getDVENS)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.getDVens.Value = ''\n\t\tThis.parent.getDVens.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThis.parent.getDVens.Value = ''\n\tThis.parent.getDVens.Refresh\n\tThisForm.SqlDados\n\treturn(.t.)\nENDIF\n\nThisForm.SqlDados\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.cntVens.GetVens",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.cntVens.GetdVens",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "grupo = This.Parent.getGrupo.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.value,This.parent.getVens,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.getVens.Value = ''\n\t\tThis.parent.getVens.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\tThis.parent.getVens.Value = ''\n\tThis.parent.getVens.Refresh\n\treturn(.t.)\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.cntVens.GetdVens",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Empty(This.Parent.GetVens.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Lista.cntVens.getGrupo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.getEmps",
+      "evento": "LostFocus",
+      "linhas": 16,
+      "codigoOriginal": "LOCAL lcEmp\nlcEmp = this.value\nIF !EMPTY(lcEmp)\n\tlcQuery = \t[Select * From SigcdEmp where cemps = ']+lcEmp+[' ]\n\tIf ThisForm.Podatamgr.Sqlexecute(lcQuery,'localEmp') < 1\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn\n\tENDIF\n\tthis.Parent.getUfs.value = localEmp.estas\nELSE\n\tthis.Parent.getUfs.Value = ''\nENDIF\nthis.Parent.Refresh \n\nSELECT crSigCdVen\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.getEmps",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.pagina.dados.getEmps)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.getEmps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN INLIST(ThisForm.pcEscolha, 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.getDtini",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN INLIST(ThisForm.pcEscolha, 'INSERIR','ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.GetDtfin",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN INLIST(ThisForm.pcEscolha, 'INSERIR','ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.getcodigo",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.getcodigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.GetUfs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.getGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.GetVens",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "lcGrupo = This.Parent.getGrupo.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,lcGrupo,'C',This.value,This,This.parent.getDVENS)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.getDVens.Value = ''\n\t\tThis.parent.getDVens.Refresh\n\t\tSelect crSigCdVen\n\t\treturn 0 \n\tEndif\nElse\n\tThis.parent.getDVens.Value = ''\n\tThis.parent.getDVens.Refresh\n\tSelect crSigCdVen\n\treturn(.t.)\nENDIF\n\nthisform.pegaempreg()\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "pegaempreg",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.GetVens",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN INLIST(ThisForm.pcEscolha, 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.GetdVens",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "grupo = This.Parent.getGrupo.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.value,This.parent.getVens,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.getVens.Value = ''\n\t\tThis.parent.getVens.Refresh\n\t\tSelect crSigCdVen\n\t\treturn 0 \n\tEndif\nElse\n\tThis.parent.getVens.Value = ''\n\tThis.parent.getVens.Refresh\n\tSelect crSigCdVen\n\treturn(.t.)\nendif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.GetdVens",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Empty(This.Parent.GetVens.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.CmbSituas",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "*** Mena - 01/04/2017 \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ***\n*** só permite dar folga quem tem acesso ou se usuário logado é da mesma empresa do vendedor ***\n\nIF THIS.Value <> 'FOLGA'\n\tRETURN .T.\nENDIF\n\t\nIF fChecaAcesso('SIGCDVEN', 'FOLGA' )\n\tRETURN .T.\nENDIF\n\nlcSql = [select emps from sigcdcli where iclis = '] +usuar+[' and emps in ( select emps from sigcdcli where iclis = ']+crSigCdVen.codvens+[')]\nThisForm.poDataMgr.Sqlexecute(lcsql,'crCliAux')\n\nIF RECCOUNT('crCliAux') > 0\n\tRETURN .t.\nENDIF\n\nRETURN .f.\n\t\n\n\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDVEN.Pagina.Dados.GetEmpReg",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDVEN.Procedure",
+      "queryOriginal": "lcSql = [Select emps From SigCdCli where grupos=']+ALLTRIM(thisform.pagina.dados.getGrupo.Value)+[' and iclis =']+ALLTRIM(thisform.pagina.dados.getvens.Value)+['] ThisForm.poDataMgr.Sqlexecute(lcsql,'crAuxCli')",
+      "tabelas": "SigCdCli",
+      "colunas": "emps,grupos,Value+[,iclis,Value+[],Sqlexecutelcsql,crAuxCli",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDVEN.Click",
+      "queryOriginal": "lcQuery = [Select Iclis, Rclis From SigCdCli Where ... [TRUNCADO]",
+      "tabelas": "SigCdCli",
+      "colunas": "Iclis,Rclis",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDVEN.Pagina.Lista.cntEmps.getEmps.LostFocus",
+      "queryOriginal": "\tlcQuery = \t[Select * From SigcdEmp where cemps = ']+lcEmp+[' ] \tIf ThisForm.Podatamgr.Sqlexecute(lcQuery,'localEmp') < 1",
+      "tabelas": "SigcdEmp",
+      "colunas": "cemps,SqlexecutelcQuery,localEmp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDVEN.Pagina.Dados.getEmps.LostFocus",
+      "queryOriginal": "\tlcQuery = \t[Select * From SigcdEmp where cemps = ']+lcEmp+[' ] \tIf ThisForm.Podatamgr.Sqlexecute(lcQuery,'localEmp') < 1",
+      "tabelas": "SigcdEmp",
+      "colunas": "cemps,SqlexecutelcQuery,localEmp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDVEN.Pagina.Dados.CmbSituas.Valid",
+      "queryOriginal": "lcSql = [select emps from sigcdcli where iclis = '] +usuar+[' and emps in ( select emps from sigcdcli where iclis = ']+crSigCdVen.codvens+[')] ThisForm.poDataMgr.Sqlexecute(lcsql,'crCliAux')",
+      "tabelas": "sigcdcli",
+      "colunas": "emps,iclis,select,from,sigcdcli,where,codvens+[],Sqlexecutelcsql,crCliAux",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCli", "SigcdEmp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

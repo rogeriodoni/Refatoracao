@@ -1,0 +1,944 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdVca.SCX
+* Data/Hora: 19/09/2026 02:22:23
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGALTDT
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGALTDT
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGALTDT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGALTDT.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grupo_Botao
+  Parent: SIGALTDT
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Grade
+  Parent: SIGALTDT
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGALTDT.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGALTDT.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGALTDT.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGALTDT.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGALTDT.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGALTDT.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGALTDT.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGALTDT.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGALTDT.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGALTDT.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: btnMarca
+  Parent: SIGALTDT
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: btnExcluir
+  Parent: SIGALTDT
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = (Prompt())
+  ControlBox = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  TitleBar = 0
+  podatamgr = .F.
+  sigkey = .F.
+  Name = "SIGALTDT"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grupo_Botao
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = ""
+  Height = 85
+  Left = 645
+  SpecialEffect = 1
+  Top = -2
+  Width = 160
+  TabIndex = 7
+  BorderColor = 136,189,188
+  Name = "Grupo_Botao"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Salvar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmdok"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Caption = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmdsair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Arial"
+  FontSize = 8
+  DeleteMark = .F.
+  HeaderHeight = 17
+  Height = 290
+  Left = 86
+  ReadOnly = .T.
+  RecordMark = .T.
+  RowHeight = 17
+  ScrollBars = 2
+  Top = 95
+  Width = 585
+  GridLineColor = 238,238,238
+  Name = "Grade"
+  Column1.FontName = "Arial"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 1
+  Column1.Width = 70
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Arial"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 2
+  Column2.Width = 170
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Arial"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 3
+  Column3.Width = 70
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Arial"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 4
+  Column4.Width = 170
+  Column4.Movable = .T.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Arial"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 5
+  Column5.Width = 70
+  Column5.Movable = .T.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usuário"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Nome"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Departamento"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.btnMarca
+------------------------------------------------------------
+  Top = 211
+  Left = 674
+  Height = 40
+  Width = 40
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\framework\imagens\geral_adicao_26.jpg
+  Caption = ""
+  TabIndex = 13
+  TabStop = .F.
+  ToolTipText = "Selecionar Tudo"
+  ForeColor = 255,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 7
+  Themes = .F.
+  Name = "btnMarca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGALTDT.btnExcluir
+------------------------------------------------------------
+  Top = 252
+  Left = 674
+  Height = 40
+  Width = 40
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 13
+  TabStop = .F.
+  ToolTipText = "Selecionar Tudo"
+  ForeColor = 255,0,0
+  BackColor = 255,255,255
+  ZOrderSet = 7
+  Themes = .F.
+  Name = "btnExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Arial, 0, 8, 5, 14, 11, 29, 3, 0
+  Arial, 0, 7, 4, 12, 9, 24, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGALTDT
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE montagrade
+------------------------------------------------------------
+PROCEDURE montagrade
+lnOldSele = Select()
+
+Select CrSigCdVca
+Go top
+
+With ThisForm.Grade
+	.RecordSource = [CrSigCdVca]	
+	.Column1.ControlSource   = [CrSigCdVca.Iclis]
+	.Column2.ControlSource   = [CrSigCdVca.rclis]
+	.Column3.ControlSource   = [CrSigCdVca.Resp]
+	.Column4.ControlSource   = [CrSigCdVca.Usuario]
+	.Column5.ControlSource   = [CrSigCdVca.Deptos]
+	.Refresh
+EndWith 	
+
+Select(lnOldSele)
+Return .T.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+Thisform.podatamgr.Release
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+lcQryVca = [select a.*, c.rclis, b.deptos, b.ncomps as usuario ] + ;
+	[from sigcdvca a ] + ;
+	[inner join sigcdusu b on a.resp = b.usuarios ] + ; 
+	[inner join sigcdcli c on a.iclis = c.iclis  ]   
+
+ThisForm.Grade.RecordSource = []
+
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+	If (.poDataMgr.pnIdconn > 0)
+		.poDataMgr.AddCursor('SigCdVca', 'pkChaves', 'CrSigCdVca','','', lcQryVca)
+		.poDataMgr.AddCursor('SigCdGcr', 'Codigos',	 'CrSigCdGcr','','')
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf	
+EndWith 
+
+ThisForm.poDataMgr.SqlExecute([Select * From SigCdPac],[crSigCdPac])
+ThisForm.SigKey = CrSigCdPac.SigKeys
+
+ThisForm.poDataMgr.SqlExecute([Select * From SigCdPaM],[crSigCdPaM])
+
+ThisForm.poDataMgr.Requery([CrSigCdVca])
+ThisForm.poDataMgr.Requery([CrSigCdGcr])
+
+Select CrSigCdVca
+Index on iclis Tag iclis additive 
+Index on resp Tag resp additive
+Index on rclis Tag rclis additive
+Index on deptos Tag deptos additive
+Index on usuario Tag usuario additive
+Go Top
+
+ThisForm.MontaGrade()
+
+
+
+
+
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+If nKeyCode = 27
+	thisform.grupo_Botao.cmdsair.Click
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.Grupo_Botao
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdok.Click
+------------------------------------------------------------
+PROCEDURE cmdok.Click
+Local lnOldSel
+lnOldSel = Select()
+
+Select CrSigCdVca
+Go Top
+
+If Reccount([CrSigCdVca])=0
+	Messagebox([Nenhum Registro para Atualização.],0+64,[Atenção])
+	Return .F.
+Endif
+
+Select CrSigCdVca
+Select Iclis, rClis, Count(*) as TT From CrSigCdVca Where Not Empty(Iclis) group by iclis, rClis having Count(*) > 1 Into Cursor cdCtaDup ReadWrite
+
+Select cdCtaDup
+Go Top
+If Reccount([cdCtaDup]) > 0
+	lcCta = [] 
+	Scan 
+		lcCta = lcCta + Iif(Empty(lcCta),[],[,])+ Alltrim(Iclis) + [ - ] + Alltrim(rClis)+Chr(13)
+	EndScan 
+	
+	MessageBox([Existem Contas Duplicadas, Favor Verificar.] + Chr(13) + [Contas : ] + Chr(13) + lcCta ,0+64,[Atenção])
+	Return .F.
+EndIf 
+
+lnResp=Messagebox([Deseja Gravar as Informações?.],4+32,[Atenção])
+If lnResp<>6
+	Return .F.
+Endif
+
+Select CrSigCdVca
+Delete From CrSigCdVca Where Empty(IClis) or Empty(Resp)
+Go Top
+
+Select CrSigCdVca
+Scan 
+	Replace pkChaves With Sys(2015)+Sys(2015) in CrSigCdVca
+EndScan 
+
+lcDelete = [Delete From SigCdVca]
+If Thisform.PodataMgr.SqlExecute(lcDelete) < 1
+	MessageBox([Favor reiniciar o Processo.],0+16,[Falha de Conexão])
+	Return .F.
+EndIf 
+
+Select CrSigCdVca
+Locate for .F.
+Go Top
+
+llErro1 = Thisform.PodataMgr.Update('CrSigCdVca')
+
+If !llErro1
+	Messagebox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	ThisForm.poDataMgr.RollBack()
+Else
+	ThisForm.poDataMgr.Commit()
+	Messagebox('Gravação Realizada.',64,'Atenção')
+Endif
+
+Select(lnOldSel)
+
+thisform.Release
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdsair.Click
+------------------------------------------------------------
+PROCEDURE cmdsair.Click
+thisform.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.Grade.Column1.Header1
+* Classe: header (Base: header)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Upper(Order('crSigCdVca')) # 'ICLIS'
+	Select crSigCdVca
+	Set Order to ICLIS
+	With ThisForm.Grade
+		.Column1.Header1.BackColor 		= RGB(251,253,176)
+		.Column2.Header1.BackColor 		= RGB(192,192,192)
+		.Column3.Header1.BackColor 		= RGB(192,192,192)
+		.Column4.Header1.BackColor 		= RGB(192,192,192)
+		.Column5.Header1.BackColor 		= RGB(192,192,192)
+		.Refresh
+	EndWith
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcGrupo, lordem
+
+lcGrupo = []
+lordem  = .F.
+lcDigClass = '3'
+
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar,lcGrupo,'C',This.Value,This,ThisForm.Grade.Column2.Text1,lordem,,,.T.)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		ThisForm.Grade.Column2.Text1.Value = ''
+		llRet = .f.
+	EndIf
+Else
+	This.Value = ''
+	ThisForm.Grade.Column2.Text1.Value = ''
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.Grade.Column2.Header1
+* Classe: header (Base: header)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Upper(Order('crSigCdVca')) # 'RCLIS'
+	Select crSigCdVca
+	Set Order to RCLIS
+	With ThisForm.Grade
+		.Column1.Header1.BackColor 		= RGB(192,192,192)
+		.Column2.Header1.BackColor 		= RGB(251,253,176)
+		.Column3.Header1.BackColor 		= RGB(192,192,192)
+		.Column4.Header1.BackColor 		= RGB(192,192,192)
+		.Column5.Header1.BackColor 		= RGB(192,192,192)
+		.Refresh
+	EndWith
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .F.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.Grade.Column3.Header1
+* Classe: header (Base: header)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Upper(Order('crSigCdVca')) # 'RESP'
+	Select crSigCdVca
+	Set Order to RESP
+	With ThisForm.Grade
+		.Column1.Header1.BackColor 		= RGB(192,192,192)
+		.Column2.Header1.BackColor 		= RGB(192,192,192)
+		.Column3.Header1.BackColor 		= RGB(251,253,176)
+		.Column4.Header1.BackColor 		= RGB(192,192,192)
+		.Column5.Header1.BackColor 		= RGB(192,192,192)
+		.Refresh
+	EndWith
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If !IsEmpty( This.Value )
+	loLista = Createobject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','Usuarios',This.Value,'Seleção',.T.,'Usuarios',[Not cAtivos='N'])
+
+	If  Not loLista.plAchouRegistro
+		loLista.mAddColuna('Usuarios', '', 'Código', .T.)
+		loLista.mAddColuna('nComps', '', 'Nome', .T.)
+		loLista.mAddColuna('deptos', '', 'Departamento', .T.)
+		loLista.Show()
+	Endif
+
+	This.Value = Iif( Lastkey() # 27, Evaluate('crSigCdUsu.Usuarios'), '' )
+	Thisform.grade.column4.Text1.Value = Iif( Lastkey() # 27, Evaluate('crSigCdUsu.nComps'), '' )
+	Thisform.grade.column5.Text1.Value = Iif( Lastkey() # 27, Evaluate('crSigCdUsu.deptos'), '' )
+Else
+	This.Value = []
+	Thisform.grade.column4.Text1.Value = []
+	Thisform.grade.column5.Text1.Value = []
+Endif
+
+Return(.T.)
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.Grade.Column4.Header1
+* Classe: header (Base: header)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Upper(Order('crSigCdVca')) # 'USUARIO'
+	Select crSigCdVca
+	Set Order to USUARIO
+	With ThisForm.Grade
+		.Column1.Header1.BackColor 		= RGB(192,192,192)
+		.Column2.Header1.BackColor 		= RGB(192,192,192)
+		.Column3.Header1.BackColor 		= RGB(192,192,192)
+		.Column4.Header1.BackColor 		= RGB(251,253,176)
+		.Column5.Header1.BackColor 		= RGB(192,192,192)
+		.Refresh
+	EndWith
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.Grade.Column5.Header1
+* Classe: header (Base: header)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Upper(Order('crSigCdVca')) # 'DEPTOS'
+	Select crSigCdVca
+	Set Order to DEPTOS
+	With ThisForm.Grade
+		.Column1.Header1.BackColor 		= RGB(192,192,192)
+		.Column2.Header1.BackColor 		= RGB(192,192,192)
+		.Column3.Header1.BackColor 		= RGB(192,192,192)
+		.Column4.Header1.BackColor 		= RGB(192,192,192)
+		.Column5.Header1.BackColor 		= RGB(251,253,176)
+		.Refresh
+	EndWith
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.btnMarca
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select CrSigCdVca
+Go Top In CrSigCdVca
+Locate For (Empty(IClis) And Empty(Resp))
+If Eof([CrSigCdVca])
+	Select CrSigCdVca
+	Append Blank 
+Endif
+Keyboard '{Dnarrow}'
+
+ThisForm.grade.Column1.SetFocus()
+
+		
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGALTDT.btnExcluir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select CrSigCdVca
+If Not Eof()
+	Delete
+EndIf
+
+If Not Eof()
+	Skip 
+	Skip - 1
+EndIf 
+Go Bottom
+ThisForm.Grade.SetFocus
+ThisForm.Grade.Refresh
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGALTDT
+RESERVED3 (ClassInfo): podatamgr
+sigkey
+*montagrade 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

@@ -1,0 +1,14 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Phase 1/8 complete. Created `C:\4c\projeto\app\classes\TPRBO.prg` with:
+
+- All 12 properties mapped 1:1 to `SigPrTro` schema columns (verified against `docs/schema.sql`, read via `Get-Content -Raw` per the UTF-16 rule) ÔÇö `cidchaves` (PK), `tptrans`, `tps`, `rectrans`, `dbf`, `obs`, `cprocs`, `ordems`, `indice`, `chave`, `comparacao`, `fotos`. All fields on the form map cleanly to schema columns; no hidden NOT NULL columns are missing.
+- DB-style naming (`this_cTpTrans`, `this_nOrdems`, etc.) per the earlier lesson on avoiding FormÔåöBO property mismatches.
+- `Init()` following the canonical `CorBO.prg` pattern: `DODEFAULT()` inside TRY, flag variable, `RETURN` outside TRY/CATCH, setting `this_cTabela = "SigPrTro"` and `this_cCampoChave = "cidchaves"`.
+
+Also confirmed the task545 SCX (3867 bytes) matches the size of all `4install/*` copies, so it's not stale ÔÇö no need to re-extract before continuing.
+
+Next phase (2/8) will add `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`, `Buscar()`, `CarregarPorCodigo()`, and `ObterChavePrimaria()`.

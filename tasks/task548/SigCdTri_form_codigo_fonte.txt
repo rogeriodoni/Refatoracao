@@ -1,0 +1,591 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdTri.SCX
+* Data/Hora: 18/09/2026 21:48:20
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDTRI
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDTRI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodigo
+  Parent: SIGCDTRI.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDTRI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDTRI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDTRI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescricao
+  Parent: SIGCDTRI.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDTRI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDTRI.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_tipo
+  Parent: SIGCDTRI.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: spnColuna
+  Parent: SIGCDTRI.Pagina.Dados
+  Class: spinner
+  BaseClass: spinner
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 224
+  Left = -6
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Tributação de Icms"
+  Name = "SIGCDTRI"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 971
+  Pagina.Lista.Grade.ForeColor = 0,0,0
+  Pagina.Lista.Grade.GridLineColor = 238,238,238
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 543
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 96
+  Pagina.Lista.cntFiltros.Left = 815
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Height = 85
+  Pagina.Dados.Grupo_Salva.Left = 837
+  Pagina.Dados.Grupo_Salva.Top = -4
+  Pagina.Dados.Grupo_Salva.Width = 161
+  Pagina.Dados.Grupo_Salva.TabIndex = 11
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Código :"
+  Height = 15
+  Left = 278
+  Top = 138
+  Width = 42
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI.Pagina.Dados.getCodigo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdIcm.codigos"
+  Height = 25
+  Left = 323
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 133
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  Name = "getCodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo :"
+  Left = 291
+  Top = 221
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Coluna Livros:"
+  Height = 15
+  Left = 250
+  Top = 193
+  Width = 70
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição :"
+  Height = 15
+  Left = 265
+  Top = 166
+  Width = 55
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI.Pagina.Dados.getDescricao
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdIcm.descricaos"
+  Format = "!"
+  Height = 25
+  InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  Left = 323
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 161
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "getDescricao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "1-Tributado  2-Isentas  3-Outras"
+  Height = 15
+  Left = 364
+  Top = 195
+  Width = 159
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  WordWrap = .T.
+  BackStyle = 0
+  Caption = "[T]ributável  /  [S]erviços  /  [ I ]sento [N]ão Tributável  /  [F]Subst. Tributária"
+  Height = 28
+  Left = 347
+  Top = 217
+  Width = 213
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI.Pagina.Dados.Get_tipo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Value = 
+  ControlSource = "crSigCdIcm.tipos"
+  Format = "M"
+  InputMask = ",T,S,I,F,N"
+  Left = 323
+  SpecialEffect = 1
+  TabIndex = 9
+  ToolTipText = "T - Tributável / S - Serviços / I - Isento - / N - Não Tributável / F - Substituição Tributária"
+  Top = 218
+  Width = 17
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "Get_tipo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTRI.Pagina.Dados.spnColuna
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 25
+  KeyboardHighValue = 3
+  KeyboardLowValue = 1
+  Left = 323
+  SpecialEffect = 1
+  SpinnerHighValue =   3.00
+  SpinnerLowValue =   1.00
+  TabIndex = 6
+  Top = 189
+  Width = 34
+  ForeColor = 0,0,0
+  Value = 1
+  ControlSource = ""
+  Name = "spnColuna"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDTRI
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.poDataMgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.Getcodigo.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdIcm','codigos',ThisForm.Pagina.Dados.Getcodigo.Value)
+Else
+	If .Not.IsEmpty(ThisForm.Pagina.Dados.Getdescricao.Value)
+		ThisForm.poDataMgr.LocateCursor('crSigCdIcm','descricaos',ThisForm.Pagina.Dados.Getdescricao.Value)
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdIcm','codigos','crSigCdIcm','',ThisForm.pagina.lista.grade)
+			.pfSqlTabela(1).pColuna('codigos','','','Codigo',80,.t.)
+			.pfSqlTabela(1).pColuna('descricaos','','','Descrição',337,.t.)
+			.pfSqlTabela(1).pColuna('colunas','','','Coluna',60,.t.)
+			.pfSqlTabela(1).pColuna('Tipos','','','Tipo',30,.t.)
+		EndWith
+
+		ThisForm.Pagina.Dados.spnColuna.Value = Val(CrSigCdIcm.Colunas)
+		
+		=DoDefault()
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+parameters lnOpcao
+
+If !dodefault( lnOpcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+thisform.Pagina.Dados.spnColuna.value = Val(CrSigCdIcm.colunas)
+
+do case
+	case thisform.pcEscolha$'INSERIR PROCURAR'
+		replace colunas with STR(1)
+		thisform.Pagina.Dados.getcodigo.setfocus
+	case thisform.pcEscolha='ALTERAR'
+		thisform.pagina.dados.getdescricao.setfocus
+	case thisform.pcEscolha$'CONSULTAR EXCLUIR'
+		thisform.pagina.dados.grupo_salva.salva.setfocus
+endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+local lnRecno,lcRetorno,Colunas
+
+m.lnRecno = recno('CrSigCdIcm')
+
+if inlist(thisform.pcEscolha,'INSERIR','ALTERAR')
+
+   with thisform.Pagina.Dados
+      if IsEmpty(.getCodigo.value)
+         = messagebox('Código em branco !!!',0+64,goSistema.NomeSistema)
+         .getCodigo.setfocus
+		 return
+      else
+
+		If ThisForm.poDataMgr.ChkRegister('SigCdIcm','codigos',ThisForm.Pagina.Dados.GetCodigo.Value) and inlist(thisform.pcEscolha,'INSERIR')
+	        messagebox('Código já cadastrado !!!',0+64,goSistema.NomeSistema)
+			ThisForm.Pagina.Dados.GetCodigo.SetFocus
+			Return
+			
+		Endif	
+
+        if IsEmpty(.getDescricao.value)
+
+	         = messagebox('Descrição em branco !!!',0+64,goSistema.NomeSistema)
+	         .getDescricao.setfocus
+			 return
+		
+		 else
+
+		      if !between(.spnColuna.value,1,3)
+		         = messagebox('Coluna Inválida, Permitido Apenas Valores 1,2 ou 3.',0+64,goSistema.NomeSistema)
+		         .spnColuna.setfocus
+				 return
+		      endif
+			
+		 endif
+						
+		endif
+		
+	endwith
+
+endif
+
+if thisform.pcEscolha $ 'INSERIR ALTERAR'
+
+   Select CrSigCdIcm
+   Replace Colunas With Str(thisform.Pagina.Dados.spnColuna.value,1)
+   
+endif
+
+=DoDefault()
+
+select CrSigCdIcm
+
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTRI.Pagina.Dados.getCodigo
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+local saida
+saida = .t.
+if inlist(thisform.Pagina.Lista.Grupo_op.value,2,3)
+	saida = .f.
+endif
+return saida
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTRI.Pagina.Dados.getDescricao
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR').or.;
+       (thisform.pcEscolha=='PROCURAR'.and.IsEmpty(thisform.Pagina.Dados.getCodigo.value)))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTRI.Pagina.Dados.spnColuna
+* Classe: spinner (Base: spinner)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDTRI
+RESERVED3 (ClassInfo): nrecno
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

@@ -920,7 +920,10 @@ DEFINE CLASS Formsigprenv AS FormBase
 
             IF THIS.obj_4c_Opt_Tipo.ButtonCount >= THIS.obj_4c_Opt_Tipo.Value AND ;
                THIS.obj_4c_Opt_Tipo.Value > 0
-                .this_nTipoEtq = ALLTRIM(THIS.obj_4c_Opt_Tipo.Buttons(THIS.obj_4c_Opt_Tipo.Value.Tag))
+                *-- parenteses no lugar errado: o `)` fechava depois de .Tag, entao
+                *-- lia .Tag de um NUMERICO (.Value). Mesmo formato do bloco de
+                *-- Impressora logo abaixo, que ja estava certo. Erro170.
+                .this_nTipoEtq = ALLTRIM(THIS.obj_4c_Opt_Tipo.Buttons(THIS.obj_4c_Opt_Tipo.Value).Tag)
             ENDIF
 
             IF THIS.obj_4c_Opt_Impressora.ButtonCount >= THIS.obj_4c_Opt_Impressora.Value AND ;
@@ -928,16 +931,21 @@ DEFINE CLASS Formsigprenv AS FormBase
                 .this_cNomeImpressora = ALLTRIM(THIS.obj_4c_Opt_Impressora.Buttons(THIS.obj_4c_Opt_Impressora.Value).Tag)
             ENDIF
 
-            WITH THIS.cnt_4c__Impressora
-                .this_nOpcaoImp = .obj_4c_Opcao_imp.Value
-                .this_nAjVerts  = .obj_4c_Spn_AjVerts.Value
-                .this_nAjHorzs  = .obj_4c_Spn_AjHorzs.Value
-                .this_nAjDenss  = .obj_4c_Spn_AjDenss.Value
-                .this_nAjVelos  = .obj_4c_Spn_AjVelos.Value
-                .Visible     = .T.
-            ENDWITH
-            .Visible     = .T.
+            *-- ATENCAO: aqui havia um WITH aninhado em cnt_4c__Impressora que
+            *-- SEQUESTRAVA o escopo - this_nOpcaoImp e irmas sao properties do BO,
+            *-- nao do Container, e estouravam "Property THIS_NOPCAOIMP is not found"
+            *-- (Container puro, sem AddProperty). Qualificar explicitamente, como o
+            *-- bloco de CarregarParametros ja fazia. Erro170.
+            .this_nOpcaoImp = THIS.cnt_4c__Impressora.obj_4c_Opcao_imp.Value
+            .this_nAjVerts  = THIS.cnt_4c__Impressora.obj_4c_Spn_AjVerts.Value
+            .this_nAjHorzs  = THIS.cnt_4c__Impressora.obj_4c_Spn_AjHorzs.Value
+            .this_nAjDenss  = THIS.cnt_4c__Impressora.obj_4c_Spn_AjDenss.Value
+            .this_nAjVelos  = THIS.cnt_4c__Impressora.obj_4c_Spn_AjVelos.Value
         ENDWITH
+
+        *-- o `.Visible = .T.` que ficava aqui dentro do WITH do BO tambem estourava:
+        *-- nem BusinessBase nem sigprenvBO tem Visible. Quem fica visivel eh o Container.
+        THIS.cnt_4c__Impressora.Visible = .T.
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -948,18 +956,18 @@ DEFINE CLASS Formsigprenv AS FormBase
             THIS.txt_4c_Etq_Ini.Value = .this_nEtqIni
             THIS.txt_4c_Etq_Qtd.Value = .this_nEtqQtd
 
-            WITH THIS.cnt_4c__Impressora
-                IF .this_nOpcaoImp >= 1 AND .this_nOpcaoImp <= 3
-                    .obj_4c_Opcao_imp.Value = .this_nOpcaoImp
-                ENDIF
-                .obj_4c_Spn_AjVerts.Value = .this_nAjVerts
-                .obj_4c_Spn_AjHorzs.Value = .this_nAjHorzs
-                .obj_4c_Spn_AjDenss.Value = .this_nAjDenss
-                .obj_4c_Spn_AjVelos.Value = .this_nAjVelos
-                .Visible     = .T.
-            ENDWITH
-            .Visible     = .T.
+            *-- mesmo sequestro de escopo do FormParaBO: this_nOpcaoImp e irmas sao
+            *-- properties do BO (o WITH de fora), nao do Container. Erro170.
+            IF .this_nOpcaoImp >= 1 AND .this_nOpcaoImp <= 3
+                THIS.cnt_4c__Impressora.obj_4c_Opcao_imp.Value = .this_nOpcaoImp
+            ENDIF
+            THIS.cnt_4c__Impressora.obj_4c_Spn_AjVerts.Value = .this_nAjVerts
+            THIS.cnt_4c__Impressora.obj_4c_Spn_AjHorzs.Value = .this_nAjHorzs
+            THIS.cnt_4c__Impressora.obj_4c_Spn_AjDenss.Value = .this_nAjDenss
+            THIS.cnt_4c__Impressora.obj_4c_Spn_AjVelos.Value = .this_nAjVelos
         ENDWITH
+
+        THIS.cnt_4c__Impressora.Visible = .T.
     ENDPROC
 
     *--------------------------------------------------------------------------

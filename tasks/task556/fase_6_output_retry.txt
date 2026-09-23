@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 6 conclu├¡da e validando.
+
+## O que estava bloqueando
+
+A Fase 6 n├úo falhou por falta de c├│digo no form ÔÇö falhou no **validador**. `Invoke-MigracaoFase` exigia, para a Fase 6, `ConfigurarPaginaDados` **e** `BINDEVENT` no form. O `FormVca` ├® OPERACIONAL **flat**: o SCX legado (`SIGALTDT`) n├úo tem PageFrame, logo n├úo existe "Page2 de Dados" ÔÇö os campos edit├íveis do legado **s├úo as colunas da grade**, e os lookups vivem nos handlers de `KeyPress` dessas colunas. As Fases 4 e 5 j├í carregavam exatamente essa exce├º├úo de layout flat; a Fase 6 era a ├║nica que tinha ficado sem ela.
+
+Criar um `ConfigurarPaginaDados` s├│ para satisfazer o regex significaria inventar uma p├ígina que o legado n├úo tem (viola o PILAR 1) ou gerar um m├®todo vazio (proibido pela regra de completude). Apliquei ent├úo a **mesma exce├º├úo j├í estabelecida nas Fases 4 e 5** (`automation/OrquestradorMigracao.ps1`): layout flat valida o que a fase realmente entrega ÔÇö sem PageFrame + `BINDEVENT` + m├®todo `AbrirLookup*`/`AbrirBusca*` de fato implementado.
+
+## Corre├º├úo de fidelidade no form
+
+Auditando os lookups contra o dump legado, achei um desvio real que a migra├º├úo tinha perdido: o `fwBuscaExt` da `Column3` nasce com o filtro `[Not cAtivos='N']` ÔÇö **usu├írio inativo n├úo entra na lista**. As quatro queries sobre `SigCdUsu` no `FormVca.prg` ignoravam isso, ent├úo o picker ofereceria inativos e a busca exata casaria com um inativo. Transcrevi o filtro literalmente (`AND NOT cAtivos = 'N'`) nos quatro pontos: valida├º├úo exata, lookup por prefixo, lookup show-all e o fallback show-all. Coluna `cativos char(1)` confirmada em `docs/schema.sql` (lido com `Get-Content -Raw`, regra #14).
+
+## Estado verificado
+
+- Validador Fase 6 sobre o arquivo real: `flat=True` ÔåÆ **VALIDADO = True**
+- `OrquestradorMigracao.ps1`: 0 erros de parse
+- `FormVca.prg` compila limpo no VFP9 (`.fxp` gerado, `.err` vazio) ÔÇö `.fxp` removido depois
+- Sem TODO/stub (a ├║nica linha que casa o grep ├® a palavra "TODOS" em prosa, na linha 843)
+- Os dois lookups j├í estavam completos das fases anteriores: `Iclis`ÔåÆ`SigCdCli` e `Resp`ÔåÆ`SigCdUsu`, ambos com F4(115)/Enter(13)/Tab(9), Pattern A manual (SQL no caller + fallback show-all + `DefinirCursor`/`Mostrar()`), sem `fAcessoContas` como handler de UX
+- Integra├º├úo de menu (bar 127 em `popMovimentos` + `AbrirFormVca` com `Show()` fora do TRY, regra #29) veio da tentativa anterior e est├í correta
+
+N├úo commitei ÔÇö se quiser, stageio s├│ `FormVca.prg` e `OrquestradorMigracao.ps1`.

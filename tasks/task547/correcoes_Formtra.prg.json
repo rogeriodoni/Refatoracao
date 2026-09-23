@@ -1,0 +1,28 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formtra.prg",
+    "timestamp":  "2026-09-18T21:38:14",
+    "correcoes":  [
+                      {
+                          "Tipo":  "CONTAINER_BOTOES_TRANSPARENTE",
+                          "Linha":  516,
+                          "Original":  ".BackStyle = 1",
+                          "Corrigido":  ".BackStyle = 0",
+                          "Descricao":  "Container cnt_4c_BotoesAcao (hospeda botoes CRUD) deve ser transparente - NAO criar caixa cinza ao redor dos botoes"
+                      },
+                      {
+                          "Tipo":  "CNT-OVERLAY-GRID-BACKSTYLE",
+                          "Linha":  516,
+                          "Original":  ".BackStyle = 0",
+                          "Corrigido":  ".BackStyle = 1",
+                          "Descricao":  "Container cnt_4c_botoesacao sobrepoe Grid com BackStyle=0 (ghost trails) - Pattern #107 forcou BackStyle=1"
+                      },
+                      {
+                          "Tipo":  "WARN-184-REBIND-SEM-CURRENTCONTROL",
+                          "Linha":  1700,
+                          "Original":  "loc_oGrid.RecordSource = \"cursor_4c_Estados\"",
+                          "Corrigido":  "(adicionar .Sparse = .F. + .CurrentControl = \u0027txt_4c_ColMunicipio\u0027 apos o rebind)",
+                          "Descricao":  "Pattern #184 (Erro145-v2): CarregarGradeEstados reatribui RecordSource do grid \u0027grd_4c_estados\u0027 (coluna editavel, CurrentControl = \u0027txt_4c_ColMunicipio\u0027) sem restaurar .Sparse/.CurrentControl depois. Reatribuir RecordSource reseta Column.Sparse/.CurrentControl/.ReadOnly alem de Width/Header1.Caption (Problema 48 / Pattern #180) — o CheckBox/ComboBox some ou para de aceitar clique. REVISAR MANUAL: apos o bloco de ControlSource/Width adicionar .Sparse = .F. e .CurrentControl = \u0027txt_4c_ColMunicipio\u0027, e reaplicar Habilitar*Grid(\u003cmodo editavel\u003e) DEPOIS de todas as cargas (nunca antes do rebind — seria descartado)."
+                      }
+                  ],
+    "totalCorrecoes":  3
+}

@@ -1134,7 +1134,10 @@ DEFINE CLASS FormSigPrGlx AS FormBase
                 .BackColor     = RGB(255, 255, 255)
                 .BackStyle     = 1
                 .Visible       = .F.
-                .ZOrderSet     = 1
+                *-- ZOrderSet NAO existe em runtime (medido no VFP9): eh bookkeeping
+                *-- do Form Designer, gravado no SCX. Atribuir estourava "Property
+                *-- ZORDERSET is not found" no Init e a tela nao abria. O equivalente
+                *-- em runtime seria o METODO ZOrder(), que o legado nao chama. Erro170.
 
                 .AddObject("lbl_4c_AguardeMsg", "Label")
                 WITH .lbl_4c_AguardeMsg

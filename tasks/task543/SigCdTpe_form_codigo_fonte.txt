@@ -1,0 +1,820 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdTpe.SCX
+* Data/Hora: 18/09/2026 18:07:08
+* Total de registros: 21
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDTPE
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDTPE.Pagina.Lista
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDTPE.Pagina.Lista
+  Class: label
+  BaseClass: label
+
+Objeto: Get_EtqAtivas
+  Parent: SIGCDTPE.Pagina.Lista
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_MaxEtqs
+  Parent: SIGCDTPE.Pagina.Lista
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_nSituas
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say22
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cEtiquetas
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_nTipos
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cOrdems
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cobs
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: dobs
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmbetqesp
+  Parent: SIGCDTPE.Pagina.Dados
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 73
+  Left = 26
+  Width = 540
+  Height = 317
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Tipos de Etiquetas de Produto"
+  placalterar = .T.
+  placexcluir = .T.
+  placinserir = .T.
+  Name = "SIGCDTPE"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.ZOrderSet = 1
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 434
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 132
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.ZOrderSet = 2
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.ZOrderSet = 3
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.ZOrderSet = 4
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.ZOrderSet = 0
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 5
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Lista.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Quantidade de Etiquetas Ativas : "
+  Height = 15
+  Left = 42
+  Top = 104
+  Width = 188
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Lista.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Máximo de Tipos de Etiquetas : "
+  Height = 15
+  Left = 369
+  Top = 104
+  Width = 179
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Lista.Get_EtqAtivas
+------------------------------------------------------------
+  Enabled = .F.
+  Height = 23
+  Left = 233
+  Top = 100
+  Width = 77
+  BackColor = 162,214,242
+  DisabledBackColor = 162,214,242
+  ZOrderSet = 7
+  Name = "Get_EtqAtivas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Lista.Get_MaxEtqs
+------------------------------------------------------------
+  ControlSource = "csSigCdPam.nMaxTpEtis"
+  Enabled = .F.
+  Height = 23
+  Left = 551
+  Top = 100
+  Width = 77
+  BackColor = 162,214,242
+  DisabledBackColor = 162,214,242
+  ZOrderSet = 8
+  Name = "Get_MaxEtqs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.Opt_nSituas
+------------------------------------------------------------
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdTpe.nSituas"
+  Height = 20
+  Left = 220
+  SpecialEffect = 0
+  Top = 156
+  Width = 140
+  TabIndex = 3
+  ZOrderSet = 4
+  Name = "Opt_nSituas"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Ativa"
+  Option1.Value = 0
+  Option1.Left = 5
+  Option1.Top = 2
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 0,0,0
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "I\<nativa"
+  Option2.Value = 1
+  Option2.Left = 75
+  Option2.Top = 2
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 0,0,0
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.Say22
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Situação :"
+  Height = 15
+  Left = 163
+  Top = 158
+  Width = 50
+  TabIndex = 9
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "Say22"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ordem :"
+  Height = 15
+  Left = 172
+  Top = 182
+  Width = 41
+  TabIndex = 8
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Observação :"
+  Height = 15
+  Left = 146
+  Top = 239
+  Width = 67
+  TabIndex = 8
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Etiquetas Especiais :"
+  Height = 15
+  Left = 113
+  Top = 210
+  Width = 100
+  TabIndex = 8
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.Get_cEtiquetas
+------------------------------------------------------------
+  ControlSource = "crSigCdTpe.cEtiquetas"
+  InputMask = ""
+  Left = 220
+  TabIndex = 2
+  Top = 131
+  Width = 220
+  ZOrderSet = 6
+  Name = "Get_cEtiquetas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.Get_nTipos
+------------------------------------------------------------
+  ControlSource = "crSigCdTpe.nTipos"
+  InputMask = "999"
+  Left = 220
+  MaxLength = 3
+  TabIndex = 1
+  Top = 106
+  Width = 31
+  ZOrderSet = 7
+  Name = "Get_nTipos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 158
+  Top = 133
+  TabIndex = 7
+  ForeColor = 0,0,0
+  ZOrderSet = 8
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo :"
+  Left = 184
+  Top = 109
+  TabIndex = 6
+  ForeColor = 0,0,0
+  ZOrderSet = 9
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.Get_cOrdems
+------------------------------------------------------------
+  ControlSource = "crSigCdTpe.cOrdems"
+  InputMask = "999"
+  Left = 220
+  MaxLength = 3
+  TabIndex = 4
+  Top = 179
+  Width = 31
+  ZOrderSet = 7
+  Name = "Get_cOrdems"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.cobs
+------------------------------------------------------------
+  ControlSource = "crSigCdTpe.codobs"
+  InputMask = "999"
+  Left = 220
+  MaxLength = 3
+  TabIndex = 4
+  Top = 236
+  Width = 31
+  ZOrderSet = 7
+  Name = "cobs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.dobs
+------------------------------------------------------------
+  InputMask = ""
+  Left = 252
+  TabIndex = 2
+  Top = 236
+  Width = 220
+  ZOrderSet = 6
+  Name = "dobs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPE.Pagina.Dados.cmbetqesp
+------------------------------------------------------------
+  ColumnCount = 0
+  ColumnWidths = ""
+  RowSourceType = 1
+  RowSource = "NENHUMA,TAG MODELO 1"
+  ControlSource = "crSigCdTpe.tpespes"
+  FirstElement = 1
+  Height = 24
+  Left = 220
+  NumberOfElements = 0
+  Top = 207
+  Width = 151
+  Name = "cmbetqesp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDTPE
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mcontaetiqs
+------------------------------------------------------------
+PROCEDURE mcontaetiqs
+lcQueryParam = [Select Count(1) As Total From SigCdTpe Where nSituas = 1]
+
+If (ThisForm.podatamgr.SqlExecute(lcQueryParam, 'csTotal') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdTpe)')
+	Return 0
+EndIf
+
+ThisForm.pagina.lista.Get_EtqAtivas.Value = csTotal.Total
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQryTPeti = [Select * From SigCdTpe]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdTpe', 'ntipos', 'crSigCdTpe', '', ThisForm.Pagina.Lista.Grade, lcQryTPeti)
+			.pfSqlTabela(1).pColuna('ntipos', '', '', 'Tipo', 50, .t.)
+			.pfSqlTabela(1).pColuna('cetiquetas', '', '', 'Descrição', 280, .t.)
+			.pfSqlTabela(1).pColuna('nsituas', '', '', 'Situação', 50, .t.)
+			.pfSqlTabela(1).pColuna('cordems', '', '', 'Ordem', 50, .t.)
+
+			lcQueryParam = [Select nMaxTpEtis From SigCdPam]
+
+			If (.SqlExecute(lcQueryParam, 'csSigCdPam') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdPam)')
+				Return 0
+			EndIf
+			
+		EndWith
+
+		If IsEmpty( csSigCdPam.nMaxTpEtis )
+			lcQueryParam = [Update SigCdPam Set nMaxTpEtis = 1]
+			If (.SqlExecute(lcQueryParam, 'csSigCdPam') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdPam)')
+				Return 0
+			EndIf		
+            ThisForm.pagina.lista.Get_EtqAtivas.Value = 1
+		Else
+          ThisForm.pagina.lista.Get_EtqAtivas.Value = csSigCdPam.nMaxTpEtis
+        EndIf
+
+		Thisform.mContaEtiqs()
+
+		With Thisform.Pagina.Lista.Grade
+			.SetAll('DynamicForeColor','RGB(Iif(crSigCdTpe.nSituas # 1, 255, 0),0,0)','Column')
+		EndWith
+
+		Select crSigCdTpe
+		Goto Top
+
+		=DoDefault()
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If Not DoDefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+IF EMPTY(crSigCdTpe.tpespes)
+	thisform.pagina.dados.cmbetqesp.ListItemId = 1
+ENDIF
+
+thisform.pagina.dados.dobs.Value = ''
+IF !EMPTY(crSigCdTpe.codobs)
+	thisform.podatamgr.sqlexecute([select descrs from SigCdObs where codigos = ?crSigCdTpe.codobs],[crSigCdObs])
+	thisform.pagina.dados.dobs.Value = crSigCdObs.descrs
+ENDIF
+
+Do Case
+	Case InList( Thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		Thisform.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+		
+	Case Thisform.pcEscolha = 'ALTERAR'
+		Thisform.Pagina.Dados.Get_cEtiquetas.SetFocus
+		
+	Case InList( Thisform.pcEscolha, 'INSERIR', 'PROCURAR' )
+		Thisform.Pagina.Dados.Get_nTipos.SetFocus
+		
+EndCase
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Local lnTipos, lcEtiquetas
+
+If InList( Thisform.pcEscolha, 'INSERIR', 'ALTERAR' )
+	Select crSigCdTpe
+	Do Case
+		Case IsEmpty( Thisform.Pagina.Dados.Get_nTipos.Value )
+			Delete
+			
+		Case IsEmpty( Thisform.Pagina.Dados.Get_cEtiquetas.Value )
+			MessageBox('Descrição da Etiqueta é informação obrigatória.', 48, '')
+			Thisform.Pagina.Dados.Get_cEtiquetas.SetFocus
+			Return
+			
+		OtherWise			
+			With Thisform.Pagina.Dados
+				lnTipos = .Get_nTipos.Value
+				lcEtiquetas = .Get_cEtiquetas.Value
+			EndWith
+            If InList( Thisform.pcEscolha, 'INSERIR')
+				If ThisForm.poDataMgr.ChkRegister('SigCdTpe','ntipos',lnTipos)
+					MessageBox('Tipo de Etiqueta já cadastrado.', 48, '')
+	 				Thisform.Pagina.Dados.Get_nTipos.SetFocus
+	                Return
+				EndIf
+				If ThisForm.poDataMgr.ChkRegister('SigCdTpe','cetiquetas',lcEtiquetas)
+					MessageBox('Não é Permitido Etiquetas com a mesma descrição.', 48, '' )
+					Thisform.Pagina.Dados.Get_cEtiquetas.SetFocus
+	                Return
+				Endif
+			EndIF
+	EndCase
+	
+	If Not IsEmpty( crSigCdTpe.cOrdems )
+		Replace crSigCdTpe.cOrdems With PadL(AllTrim(Str(Val(crSigCdTpe.cOrdems))),3)
+	EndIf
+EndIf
+
+=DoDefault()
+Thisform.mContaEtiqs()
+Thisform.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If thisform.plCancelar
+	thisform.mAtivapagina1
+endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPE.Pagina.Lista.Get_EtqAtivas
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( .F. )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPE.Pagina.Lista.Get_MaxEtqs
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( .F. )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPE.Pagina.Dados.Get_cEtiquetas
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( InList( Thisform.pcEscolha, 'INSERIR', 'ALTERAR' ) )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPE.Pagina.Dados.Get_nTipos
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < 0
+	MessageBox('Tipo de Etiqueta Inválido.', 48, '')
+	This.Value = 0
+	This.Refresh
+	Return 0
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList( Thisform.pcEscolha, 'INSERIR', 'PROCURAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPE.Pagina.Dados.Get_cOrdems
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+This.Value = PadL( AllTrim( This.Value ), 3 )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPE.Pagina.Dados.cobs
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+IF !EMPTY(this.Value)
+	xBrox = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdObs', ;
+						   'crListaRemota', 'codigos', This.Value, 'Observação', .T.)
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('codigos','','Código',.T.)
+		xBrox.mAddColuna('descrs','','Descrição',.T.)
+		xBrox.Show()
+	EndIf 
+	If LastKey()==27
+		This.Value=''
+		ThisForm.pagina.dados.dobs.Value = ''
+	Else
+		This.Value = crListaRemota.codigos
+		ThisForm.pagina.dados.dobs.Value = crlistaRemota.descrs
+	EndIf
+ENDIF
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPE.Pagina.Dados.dobs
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDTPE
+RESERVED3 (ClassInfo): netqativas
+*mcontaetiqs 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

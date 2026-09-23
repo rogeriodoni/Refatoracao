@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything balances cleanly: TRY/ENDTRY (5/5), PROCEDURE+FUNCTION/ENDPROC (13/13), IF/ENDIF depth 0, no RETURN inside TRY, no non-ASCII characters.
+
+## Summary
+
+**Phase 4/8 complete.** Updated two files:
+
+**`FormTPG.prg`** ÔÇö added the grid + CRUD buttons for this flat/single-page OPERACIONAL form (no PageFrame, per Phase 3's established deviation):
+- `ConfigurarGrid()` / `ConfigurarGridDados()` ÔÇö `grd_4c_Dados`, 3 editable columns (Empresa/Tipo de Transp./Tipo T-R) bound to a **READWRITE** `cursor_4c_Dados`, exact legacy positions/colors
+- `ConfigurarBotoesCrud()` ÔÇö `cnt_4c_Botoes` with `cmd_4c_Incluir`/`cmd_4c_Excluir` at legacy pixel positions
+- `ConfigurarBotaoEncerrar()` ÔÇö `cnt_4c_Saida`/`cmd_4c_Encerrar` (legacy's own Left=511 layout, not the CRUD-canonical Left=917, since this isn't a frmcadastro-origin form)
+- `BindEventos()` + real, non-stub `BtnIncluirClick`/`BtnExcluirClick`/`BtnEncerrarClick` handlers, adapting the legacy's buffered multi-row commit (`poDataMgr.Update+Commit`) to this architecture's per-row `Salvar()`/`ExcluirPorChave()`, while preserving the legacy validation order and messages
+- Deliberately **no `AlternarPagina()`** ÔÇö there's no second page in this flat form; a no-op stub would violate the "never fake-stub" rule. Confirmed this matches `TesteAutomatico.prg`'s own OPERACIONAL-detection heuristic (`!CarregarLista` on the form `AND` `!AlternarPagina`)
+
+**`TPGBO.prg`** ÔÇö added `CarregarLista()` (SQLEXEC ÔåÆ temp cursor ÔåÆ READWRITE `cursor_4c_Dados`, indexed like the legacy `EmpTp` tag) and `ExcluirPorChave()` (direct per-row delete, since grid-row deletion doesn't fit `BusinessBase`'s single-record `Excluir()` flow).
+
+Caught and fixed two correctness bugs along the way: bare `RETURN` inside `TRY` blocks (forbidden per CLAUDE.md #1) in the Incluir/Excluir handlers, and reliance on VFP's **non-short-circuiting** `AND` which would have shown a spurious delete-confirmation dialog and issued a bogus DELETE for never-persisted rows.

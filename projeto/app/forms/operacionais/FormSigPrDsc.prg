@@ -209,7 +209,10 @@ DEFINE CLASS FormSigPrDsc AS FormBase
             .WordWrap        = .T.
             .AutoSize        = .F.
             .Cancel          = .T.
-            .ZOrderSet       = 1
+            *-- ZOrderSet NAO existe em runtime (medido no VFP9): eh bookkeeping do
+            *-- Form Designer, gravado no SCX. Atribuir estourava "Property
+            *-- ZORDERSET is not found" no Init e a tela nao abria. O equivalente
+            *-- em runtime seria o METODO ZOrder(), que o legado nao chama. Erro170.
         ENDWITH
         BINDEVENT(THIS.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
 

@@ -777,10 +777,10 @@ DEFINE CLASS FormPEN AS FormBase
 
             IF PEMSTATUS(loc_oPg1, "cnt_4c_Filtros", 5)
                 WITH loc_oPg1.cnt_4c_Filtros
-                    IF PEMSTATUS(.Self, "txt_4c_FGrupo", 5)
+                    IF PEMSTATUS(loc_oPg1.cnt_4c_Filtros, "txt_4c_FGrupo", 5)
                         loc_cGrupo = ALLTRIM(.txt_4c_FGrupo.Value)
                     ENDIF
-                    IF PEMSTATUS(.Self, "txt_4c_FConta", 5)
+                    IF PEMSTATUS(loc_oPg1.cnt_4c_Filtros, "txt_4c_FConta", 5)
                         loc_cConta = ALLTRIM(.txt_4c_FConta.Value)
                     ENDIF
                     .Visible     = .T.
@@ -845,24 +845,24 @@ DEFINE CLASS FormPEN AS FormBase
                 THIS.BOParaForm()
 
                 WITH loc_oPg2
-                    IF PEMSTATUS(.Self, "txt_4c_Grupos", 5)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_Grupos", 5)
                         .txt_4c_Grupos.ReadOnly  = loc_lReadOnly
                         .txt_4c_DGrupos.ReadOnly = .T.
                     ENDIF
-                    IF PEMSTATUS(.Self, "txt_4c_Contas", 5)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_Contas", 5)
                         .txt_4c_Contas.ReadOnly  = loc_lReadOnly
                         .txt_4c_DContas.ReadOnly = .T.
                     ENDIF
-                    IF PEMSTATUS(.Self, "txt_4c_Ddis", 5)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_Ddis", 5)
                         .txt_4c_Ddis.ReadOnly = loc_lReadOnly
                     ENDIF
-                    IF PEMSTATUS(.Self, "txt_4c_Ddfs", 5)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_Ddfs", 5)
                         .txt_4c_Ddfs.ReadOnly = loc_lReadOnly
                     ENDIF
-                    IF PEMSTATUS(.Self, "txt_4c_Penas", 5)
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_Penas", 5)
                         .txt_4c_Penas.ReadOnly = loc_lReadOnly
                     ENDIF
-                    IF PEMSTATUS(.Self, "cmd_4c_Confirmar", 5)
+                    IF PEMSTATUS(loc_oPg2, "cmd_4c_Confirmar", 5)
                         .cmd_4c_Confirmar.Enabled = !loc_lReadOnly
                     ENDIF
                 ENDWITH
@@ -916,23 +916,23 @@ DEFINE CLASS FormPEN AS FormBase
 
         TRY
             WITH loc_oPg2
-                IF PEMSTATUS(.Self, "txt_4c_Grupos", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Grupos", 5)
                     .txt_4c_Grupos.Value  = loc_oBO.this_cGrupos
                     .txt_4c_DGrupos.Value = IIF(!EMPTY(loc_oBO.this_cGrupos), ;
                         loc_oBO.BuscarDescGrupo(loc_oBO.this_cGrupos), "")
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Contas", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Contas", 5)
                     .txt_4c_Contas.Value  = loc_oBO.this_cContas
                     .txt_4c_DContas.Value = IIF(!EMPTY(loc_oBO.this_cContas), ;
                         loc_oBO.BuscarDescConta(loc_oBO.this_cContas), "")
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Ddis", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Ddis", 5)
                     .txt_4c_Ddis.Value = loc_oBO.this_nDdis
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Ddfs", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Ddfs", 5)
                     .txt_4c_Ddfs.Value = loc_oBO.this_nDdfs
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Penas", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Penas", 5)
                     .txt_4c_Penas.Value = loc_oBO.this_nPenas
                 ENDIF
             ENDWITH
@@ -952,19 +952,19 @@ DEFINE CLASS FormPEN AS FormBase
 
         TRY
             WITH loc_oPg2
-                IF PEMSTATUS(.Self, "txt_4c_Grupos", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Grupos", 5)
                     loc_oBO.this_cGrupos = ALLTRIM(.txt_4c_Grupos.Value)
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Contas", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Contas", 5)
                     loc_oBO.this_cContas = ALLTRIM(.txt_4c_Contas.Value)
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Ddis", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Ddis", 5)
                     loc_oBO.this_nDdis = .txt_4c_Ddis.Value
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Ddfs", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Ddfs", 5)
                     loc_oBO.this_nDdfs = .txt_4c_Ddfs.Value
                 ENDIF
-                IF PEMSTATUS(.Self, "txt_4c_Penas", 5)
+                IF PEMSTATUS(loc_oPg2, "txt_4c_Penas", 5)
                     loc_oBO.this_nPenas = .txt_4c_Penas.Value
                 ENDIF
             ENDWITH

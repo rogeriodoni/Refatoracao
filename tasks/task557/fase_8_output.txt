@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FormVEN is fully wired into the menu now.
+
+## Summary
+
+Phase 8/8 for FormVEN was already substantially complete from prior phases ÔÇö I verified `FormVEN.prg` (1799 lines) and `VENBO.prg` (297 lines) both already contain full, non-stub implementations of every required method:
+
+- **BtnBuscarClick / BtnEncerrarClick / BtnSalvarClick / BtnCancelarClick** ÔÇö all present, PUBLIC (BINDEVENT-safe), with real logic (period-overlap validation transcribed from the legacy Click handler, FormBuscaAuxiliar lookup, etc.)
+- **FormParaBO / BOParaForm** ÔÇö cover every `this_*` property that has a corresponding form field (only audit/system fields like `this_cFolga`, `this_dDtAlts` are correctly excluded since they're not on the form)
+- **HabilitarCampos / LimparCampos / CarregarLista / AjustarBotoesPorModo** ÔÇö all implemented with real logic, no `RETURN .T.` stubs
+
+I verified:
+- No `RETURN` inside any `TRY/CATCH` block (checked programmatically)
+- PROCEDURE/ENDPROC counts balance (28/28)
+- All helper functions referenced (`fAcessoContas`, `fChecaAcesso`, `fGerUniqueKey`, `VerificarAcessoEmpresa`) exist in `utils\functions.prg`
+- All BusinessBase-inherited methods used (`NovoRegistro`, `EditarRegistro`, `Salvar`, `Excluir`, `this_lNovoRegistro`, `this_lErroExibido`) exist and match the expected API
+
+The one gap was **menu integration**, which this task explicitly requires ÔÇö `config.prg` didn't need changes (it uses `ADIR()` dynamic loading for both BOs and Forms), but `menu.prg` had no entry for FormVEN. I added:
+- `DEFINE BAR 196 OF popCadastros` ÔÇö "Presen├ºa de Vendedores"
+- `ON SELECTION BAR 196 OF popCadastros DO AbrirFormVEN`
+- `PROCEDURE AbrirFormVEN()` at the end of the file, following the canonical pattern (VARTYPE check, TRY covering only CREATEOBJECT, `Show()` outside the TRY per rule #29, no `Release()` after Show).
+
+FormVEN is now fully migrated and accessible via the Cadastros menu.

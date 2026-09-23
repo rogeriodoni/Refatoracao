@@ -1,0 +1,21 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormTPG.prg",
+    "timestamp":  "2026-09-18T19:32:51",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "WARN-179-FORM-WIDTH-MENOR-SAIDA",
+                          "Linha":  100,
+                          "Original":  "Width = 592 (\u003c 1000, cnt_4c_Saida.Left=917 transborda)",
+                          "Corrigido":  "(REVISAR MANUAL - preferir Width=1000 padrao CRUD)",
+                          "Descricao":  "Pattern #179: Form CRUD com Width=592 \u003c 1000 E cnt_4c_Saida.Left=917 -\u003e cnt_4c_Saida termina em 917+90=1007 (fora do form). Container Encerrar e ultimos botoes do cnt_4c_Botoes ficam INVISIVEIS/CORTADOS. Fixes possiveis (decisao manual): (a) Ampliar Width para 1000 (padrao CRUD canonico) -- pode deixar espaco vazio a direita se form original pequeno; (b) Ajustar cnt_4c_Saida.Left para (Width-90) mantendo form pequeno -- viola CLAUDE.md #10 \u0027Padrao Canonico Saida/Encerrar\u0027 que fixa Left=917. Preferir (a) — canonico universal. Origem: Erro141 (2026-09-01 FormSrv Width=812 truncando Excluir+Encerrar)."
+                      }
+                  ],
+    "totalCorrecoes":  2
+}

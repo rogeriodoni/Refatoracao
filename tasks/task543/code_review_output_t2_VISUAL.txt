@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All 4 reported issues are the same false positive already documented in memory for this exact form (`feedback_layout_position_colisao_nome_generico.md`), and I've now re-verified it against the legacy dump.
+
+**Root cause of the false positive:** the review compared migrated `lbl_4c_Label1`/`lbl_4c_Label2` against `SIGCDTPE.Pagina.Lista.Label1`/`Label2` from the legacy dump ÔÇö but those are different controls, on the **Lista** page (unrelated "Quantidade de Etiquetas Ativas"/"M├íximo de Tipos de Etiquetas" counters, not migrated). The name `Label1`/`Label2` collided by coincidence with the migrated tool's sequential naming scheme.
+
+The migrated labels actually transcribe `SIGCDTPE.Pagina.**Dados**.Say1`/`Say2`, and I confirmed the dump values match the current code exactly (with the documented +29 PageFrame.Top compensation):
+
+| Legacy (Pagina.Dados) | Left/Top | Migrado | Left/Top |
+|---|---|---|---|
+| `Say1` "Tipo :" | 184 / 109 | `lbl_4c_Label1` | 184 / **138** (109+29 Ô£ô) |
+| `Say2` "Descri├º├úo :" | 158 / 133 | `lbl_4c_Label2` | 158 / **162** (133+29 Ô£ô) |
+
+Applying the suggested Top/Left from `Pagina.Lista.Label1`/`Label2` would corrupt an already-correct transcription. I made no changes to `FormTpe.prg`.

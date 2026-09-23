@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2/8 completa: `TPRBO.prg` agora tem todos os m├®todos CRUD implementados com l├│gica completa.
+
+Resumo do que foi adicionado:
+- **ObterChavePrimaria()** ÔÇö retorna `cidchaves` para auditoria
+- **InicializarValoresPadrao()** ÔÇö reseta campos para novo registro (Fotos default = 1, igual ao legado)
+- **CarregarDoCursor()** ÔÇö mapeia as 12 colunas com `SELECT (alias)` + `TratarNulo`
+- **ValidarDados()** ÔÇö transcri├º├úo literal das valida├º├Áes do `Salva.Click` + `getRecTrans.Valid` + `getCProcs.Valid` + `getTps.Valid`: campos obrigat├│rios (Obs/Tps/RecTrans/Dbf), RecTrans deve ser T/R, lista de processos v├ílidos condicionada ao tipo T/R, regra COMPLEMENTO/COMPLECLI exige c├│digo letra A-Z, ATUACPF s├│ para SigCdCli
+- **VerificarDuplicidade()** ÔÇö replica a query `LocalTron` do legado (TpTrans+Tps+RecTrans+CProcs, excluindo o pr├│prio `cidchaves`)
+- **Inserir()** ÔÇö gera `cidchaves` via `fUniqueIds()` (padr├úo CecBO), INSERT com as 12 colunas
+- **Atualizar()** ÔÇö UPDATE de todos os campos edit├íveis por `cidchaves` (tptrans/cidchaves n├úo mudam)
+- **ExecutarExclusao()** ÔÇö DELETE por `cidchaves`
+- **Buscar()** ÔÇö SELECT com filtro opcional, `ORDER BY rectrans, tps, ordems` (igual ao legado)
+- **CarregarPorCodigo()** ÔÇö SELECT por `cidchaves`
+
+Todas as colunas conferidas contra `docs/schema.sql` (via `Get-Content -Raw`, regra #14) ÔÇö os 12 campos batem exatamente com as propriedades j├í declaradas na Fase 1, sem colunas NOT NULL faltando.

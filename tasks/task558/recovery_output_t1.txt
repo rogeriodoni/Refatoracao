@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Diagn├│stico
+
+Rastreei os 16 "diferen├ºas visuais" at├® o relat├│rio real gerado pelo `07_validarUI` (`UIFidelity_FormVis_20260919044251.html`, referenciado em `tasks\task558\task_state.json`). Os 16 itens `DIFERENCA` s├úo:
+
+- **15 deltas de `Top` = 29px** em todos os campos de `Pagina.Dados` (Label1/2/3/4/5/6/7, optVenda, optPedido, getCodCli, getGrupo, getCodCta, getDesCli, getDesCta, getData)
+- **1 mismatch real**: `getGrupo.DisabledBackColor` ÔÇö esperado `RGB(255,255,255)`, migrado devolvia `RGB(240,240,240)`
+
+Investiguei os 15 deltas de `Top` a fundo (via `ComparadorUI.prg`, `docs/FORMCOR_LICOES_APRENDIDAS.md` e o form de refer├¬ncia `FormCor.prg`) e confirmei que **n├úo s├úo bugs**: s├úo o padr├úo can├┤nico documentado ÔÇö "TODOS os controles dentro das Pages devem ter `Top = Top_Original + 29`" (compensa├º├úo do `PageFrame.Top = -29` usado para esconder as abas). O `FormCor` usa exatamente o mesmo padr├úo; ele s├│ "passa" no validador porque seu `mapeamento.json` est├í desatualizado e faz o comparador reportar "objeto n├úo encontrado" (AVISO) em vez de comparar o `Top`. No `FormVis`, o mapeamento resolve corretamente os objetos (`lbl_4c_Label1` etc. existem de fato), ent├úo o comparador consegue comparar `Top` bruto contra o valor cru do legado e acusa a compensa├º├úo como "diferen├ºa" ÔÇö um falso positivo conhecido da ferramenta, n├úo um defeito no c├│digo. Alterar esses `Top` quebraria o alinhamento visual real (violaria o PILAR 1).
+
+## Corre├º├úo aplicada
+
+O ├║nico item genu├¡no era a aus├¬ncia de `.DisabledBackColor` no `txt_4c_Grupo` (campo somente-leitura) ÔÇö os irm├úos `txt_4c_CodCli`/`txt_4c_DesCli` j├í tinham essa propriedade, mas `txt_4c_Grupo` ficava com o cinza padr├úo do VFP9 em vez do branco do legado.
+
+```foxpro
+.SpecialEffect     = 1
+.Value             = ""
+.Enabled           = .F.
+.DisabledBackColor = RGB(255, 255, 255)   ' <- adicionado
+.Visible           = .T.
+```
+
+Arquivo alterado: `C:\4c\projeto\app\forms\cadastros\FormVis.prg` (linha ~484). `VisBO.prg` n├úo precisou de mudan├ºa ÔÇö a causa era 100% de layout no form.
+
+Os 15 deltas de `Top` remanescentes devem continuar aparecendo em uma nova rodada de `07_validarUI` (s├úo esperados/corretos); se o pipeline exigir 0 diferen├ºas estritas, o ajuste correto seria no validador (`ComparadorUI.prg`), n├úo no form ÔÇö sinalizo isso caso queira que eu trate essa parte tamb├®m.

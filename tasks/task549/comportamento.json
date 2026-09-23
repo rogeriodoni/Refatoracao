@@ -1,0 +1,172 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 6,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fAcessoEmpresa", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDUEP",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigCdUep], [cIdChaves], [crSigCdUep], [], ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna([Usuarios],  [], [], [Usuario],    080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([Emps], [], [], [Empresa], 80, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\t.Pagina.Lista.Grade.Column1.SetFocus\n\tElse\n\t\t=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateO... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUEP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf Not Empty(ThisForm.Pagina.Dados.getUsuarios.Value)\n\tThisForm.poDataMgr.LocateCursor([crSigCdUep], [Usuarios], ThisForm.Pagina.Dados.getUsuarios.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUEP",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "Parameters lnOpcao\n\nIf Not DoDefault(lnOpcao)\n\tThisForm.mAtivaPagina1\n\tReturn .f.\nEndIf\n\nDo Case\n\tCase InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])\n\t\t ThisForm.Pagina.Dados.getUsuarios.SetFocus\n\t\t \n\tCase InList(ThisForm.pcEscolha, [ALTERAR])\n\t\t ThisForm.Pagina.Dados.getEmpresa.SetFocus\n\n\tOtherwise\n\t\t ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUEP",
+      "evento": "Click",
+      "linhas": 39,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\tIf Empty(ThisForm.Pagina.Dados.getUsuarios.Value)\n\t\t=Messagebox([Usuario Inválido!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.getUsuarios.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\n\tIf Empty(ThisForm.Pagina.Dados.GetEmpresa.Value)\n\t\t=Messagebox([Empresa Inválida!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.GetEmpresa.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\t\n\tIf (ThisForm.pcEscolha = [INSERIR])\n\t\tlcQuery = [Select Usuarios From SigCdUep ] + ;\n\t\t\t\t   [Where U... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SetFocus,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDUEP",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUEP.Pagina.Dados.GetEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUEP.Pagina.Dados.GetEmpresa",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !Empty(This.Value)\n\t= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.Pagina.Dados.getEmpresa,'',ThisForm.poDataMgr,.t.)\nElse\n\tMessageBox('Preenchimento Obrigatorio!!!',0+48,'Empresa')\n\tReturn 0\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUEP.Pagina.Dados.getUsuarios",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUsu', ;\n\t\t\t\t\t\t   'crListaRemota', 'Usuarios', This.Value, 'Seleção', 500,.f.,[Not cAtivos='N'])\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Usuarios', '', 'Código')\n\t\tloLista.mAddColuna('NComps',   '', 'Nome')\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = Iif(Lastkey()=27, '', crListaRemota.Usuarios)\n\tUse In crListaRemota\nEndIf\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDUEP.Pagina.Dados.getUsuarios",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDUEP.Click",
+      "queryOriginal": "\t\tlcQuery = [Select Usuarios From SigCdUep ] + ; \t\t\t\t   [Where U... [TRUNCADO]",
+      "tabelas": "SigCdUep",
+      "colunas": "Usuarios",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdUep"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

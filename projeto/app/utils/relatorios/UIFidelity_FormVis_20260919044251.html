@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Fidelity Report - FormVis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 30px; background: #fafafa; }
+        .card { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }
+        .card h3 { font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
+        .card .numero { font-size: 36px; font-weight: bold; color: #333; }
+        .card.erro { border-left-color: #e74c3c; }
+        .card.erro .numero { color: #e74c3c; }
+        .card.aviso { border-left-color: #f39c12; }
+        .card.aviso .numero { color: #f39c12; }
+        .card.diferenca { border-left-color: #e67e22; }
+        .card.diferenca .numero { color: #e67e22; }
+        .card.total { border-left-color: #3498db; }
+        .card.total .numero { color: #3498db; }
+        .conteudo { padding: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #667eea; color: white; padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f8f9fa; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .badge.erro { background: #ffe6e6; color: #e74c3c; }
+        .badge.aviso { background: #fff4e6; color: #f39c12; }
+        .badge.diferenca { background: #ffe8dc; color: #e67e22; }
+        .sucesso { padding: 30px; text-align: center; color: #27ae60; }
+        .sucesso h2 { font-size: 32px; margin-bottom: 10px; }
+        .rodape { padding: 20px 30px; background: #fafafa; color: #666; font-size: 12px; text-align: center; border-top: 1px solid #eee; }
+        code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>&#128269; UI Fidelity Report</h1>
+            <p>Formulario: FormVis | Data: 19/09/2026 04:42:51</p>
+        </div>        <div class="resumo">
+            <div class="card total">
+                <h3>Total de Problemas</h3>
+                <div class="numero">149</div>
+            </div>
+            <div class="card erro">
+                <h3>Erros Criticos</h3>
+                <div class="numero">0</div>
+            </div>
+            <div class="card aviso">
+                <h3>Avisos</h3>
+                <div class="numero">133</div>
+            </div>
+            <div class="card diferenca">
+                <h3>Diferencas Visuais</h3>
+                <div class="numero">16</div>
+            </div>
+        </div><div class="conteudo">
+  <h2>Detalhes das Diferencas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tipo</th>
+        <th>Objeto</th>
+        <th>Propriedade</th>
+        <th>Valor Original</th>
+        <th>Valor Migrado</th>
+        <th>Linha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.cntSombra.Width</strong></td>
+        <td><code>1100</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>184</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grade.Height</strong></td>
+        <td><code>447</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>187</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grade.Left</strong></td>
+        <td><code>28</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>188</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grade.Top</strong></td>
+        <td><code>145</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>190</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grade.Width</strong></td>
+        <td><code>940</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>191</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Inserir.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>195</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Inserir.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>196</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Consultar.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>198</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Consultar.Left</strong></td>
+        <td><code>80</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>199</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Alterar.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>201</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Alterar.Left</strong></td>
+        <td><code>155</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>202</td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Excluir.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>204</td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Excluir.Left</strong></td>
+        <td><code>230</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>205</td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Procurar.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>207</td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Procurar.Left</strong></td>
+        <td><code>305</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>208</td>
+      </tr>
+      <tr>
+        <td>16</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Height</strong></td>
+        <td><code>85</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>210</td>
+      </tr>
+      <tr>
+        <td>17</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Left</strong></td>
+        <td><code>544</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>211</td>
+      </tr>
+      <tr>
+        <td>18</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Top</strong></td>
+        <td><code>-1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>212</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Op.Width</strong></td>
+        <td><code>385</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>213</td>
+      </tr>
+      <tr>
+        <td>20</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Saida.Sair.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>217</td>
+      </tr>
+      <tr>
+        <td>21</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Saida.Sair.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>218</td>
+      </tr>
+      <tr>
+        <td>22</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Saida.Left</strong></td>
+        <td><code>919</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>220</td>
+      </tr>
+      <tr>
+        <td>23</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Grupo_Saida.Top</strong></td>
+        <td><code>-1</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>221</td>
+      </tr>
+      <tr>
+        <td>24</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.cntFiltros.Top</strong></td>
+        <td><code>84</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>225</td>
+      </tr>
+      <tr>
+        <td>25</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.cntFiltros.Left</strong></td>
+        <td><code>27</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>226</td>
+      </tr>
+      <tr>
+        <td>26</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.cntFiltros.Width</strong></td>
+        <td><code>645</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>227</td>
+      </tr>
+      <tr>
+        <td>27</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.cntFiltros.Height</strong></td>
+        <td><code>58</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>228</td>
+      </tr>
+      <tr>
+        <td>28</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Lista.Picture</strong></td>
+        <td><code>..\framework\imagens\new_background.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>234</td>
+      </tr>
+      <tr>
+        <td>29</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Salva.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>237</td>
+      </tr>
+      <tr>
+        <td>30</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Salva.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>238</td>
+      </tr>
+      <tr>
+        <td>31</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Cancelar.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>240</td>
+      </tr>
+      <tr>
+        <td>32</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Cancelar.Left</strong></td>
+        <td><code>80</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>241</td>
+      </tr>
+      <tr>
+        <td>33</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Left</strong></td>
+        <td><code>843</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>243</td>
+      </tr>
+      <tr>
+        <td>34</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Dados.Grupo_Salva.Top</strong></td>
+        <td><code>-2</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>244</td>
+      </tr>
+      <tr>
+        <td>35</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Dados.Picture</strong></td>
+        <td><code>..\framework\imagens\new_background.jpg</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>247</td>
+      </tr>
+      <tr>
+        <td>36</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS</code></td>
+        <td><strong>Pagina.Width</strong></td>
+        <td><code>1003</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>249</td>
+      </tr>
+      <tr>
+        <td>37</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label1</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>258</td>
+      </tr>
+      <tr>
+        <td>38</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label1</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>259</td>
+      </tr>
+      <tr>
+        <td>39</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label1</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>260</td>
+      </tr>
+      <tr>
+        <td>40</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label1</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Representante</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>262</td>
+      </tr>
+      <tr>
+        <td>41</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label1</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>15</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>263</td>
+      </tr>
+      <tr>
+        <td>42</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label1</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>39</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>264</td>
+      </tr>
+      <tr>
+        <td>43</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label1</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>96</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>265</td>
+      </tr>
+      <tr>
+        <td>44</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label1</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>87</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>266</td>
+      </tr>
+      <tr>
+        <td>45</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label1</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>268</td>
+      </tr>
+      <tr>
+        <td>46</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getConta</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>39</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>278</td>
+      </tr>
+      <tr>
+        <td>47</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getConta</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>279</td>
+      </tr>
+      <tr>
+        <td>48</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getConta</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>111</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>281</td>
+      </tr>
+      <tr>
+        <td>49</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getConta</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>80</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>282</td>
+      </tr>
+      <tr>
+        <td>50</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getConta</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>283</td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getConta</code></td>
+        <td><strong>DisabledBackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>284</td>
+      </tr>
+      <tr>
+        <td>52</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getConta</code></td>
+        <td><strong>DisabledForeColor</strong></td>
+        <td><code>128,128,128</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>285</td>
+      </tr>
+      <tr>
+        <td>53</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtFinal</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>295</td>
+      </tr>
+      <tr>
+        <td>54</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtFinal</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>296</td>
+      </tr>
+      <tr>
+        <td>55</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtFinal</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>557</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>297</td>
+      </tr>
+      <tr>
+        <td>56</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtFinal</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>298</td>
+      </tr>
+      <tr>
+        <td>57</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtFinal</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>111</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>300</td>
+      </tr>
+      <tr>
+        <td>58</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtFinal</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>80</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>301</td>
+      </tr>
+      <tr>
+        <td>59</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtFinal</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>302</td>
+      </tr>
+      <tr>
+        <td>60</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label2</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>312</td>
+      </tr>
+      <tr>
+        <td>61</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label2</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>313</td>
+      </tr>
+      <tr>
+        <td>62</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label2</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>314</td>
+      </tr>
+      <tr>
+        <td>63</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label2</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>Período</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>316</td>
+      </tr>
+      <tr>
+        <td>64</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label2</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>15</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>317</td>
+      </tr>
+      <tr>
+        <td>65</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label2</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>446</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>318</td>
+      </tr>
+      <tr>
+        <td>66</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label2</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>95</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>319</td>
+      </tr>
+      <tr>
+        <td>67</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label2</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>45</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>320</td>
+      </tr>
+      <tr>
+        <td>68</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label2</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>322</td>
+      </tr>
+      <tr>
+        <td>69</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label3</code></td>
+        <td><strong>FontBold</strong></td>
+        <td><code>.T.</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>331</td>
+      </tr>
+      <tr>
+        <td>70</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label3</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>332</td>
+      </tr>
+      <tr>
+        <td>71</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label3</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>333</td>
+      </tr>
+      <tr>
+        <td>72</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label3</code></td>
+        <td><strong>Caption</strong></td>
+        <td><code>até</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>335</td>
+      </tr>
+      <tr>
+        <td>73</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label3</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>15</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>336</td>
+      </tr>
+      <tr>
+        <td>74</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label3</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>530</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>337</td>
+      </tr>
+      <tr>
+        <td>75</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label3</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>114</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>338</td>
+      </tr>
+      <tr>
+        <td>76</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label3</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>21</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>339</td>
+      </tr>
+      <tr>
+        <td>77</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.Label3</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>341</td>
+      </tr>
+      <tr>
+        <td>78</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDesCta</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>350</td>
+      </tr>
+      <tr>
+        <td>79</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDesCta</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>122</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>351</td>
+      </tr>
+      <tr>
+        <td>80</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDesCta</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>352</td>
+      </tr>
+      <tr>
+        <td>81</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDesCta</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>111</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>354</td>
+      </tr>
+      <tr>
+        <td>82</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDesCta</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>312</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>355</td>
+      </tr>
+      <tr>
+        <td>83</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDesCta</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>356</td>
+      </tr>
+      <tr>
+        <td>84</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDesCta</code></td>
+        <td><strong>DisabledBackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>357</td>
+      </tr>
+      <tr>
+        <td>85</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDesCta</code></td>
+        <td><strong>DisabledForeColor</strong></td>
+        <td><code>128,128,128</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>358</td>
+      </tr>
+      <tr>
+        <td>86</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtInicial</code></td>
+        <td><strong>Alignment</strong></td>
+        <td><code>3</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>367</td>
+      </tr>
+      <tr>
+        <td>87</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtInicial</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>23</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>369</td>
+      </tr>
+      <tr>
+        <td>88</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtInicial</code></td>
+        <td><strong>InputMask</strong></td>
+        <td><code></code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>370</td>
+      </tr>
+      <tr>
+        <td>89</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtInicial</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>446</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>371</td>
+      </tr>
+      <tr>
+        <td>90</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtInicial</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>372</td>
+      </tr>
+      <tr>
+        <td>91</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtInicial</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>111</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>374</td>
+      </tr>
+      <tr>
+        <td>92</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtInicial</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>80</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>375</td>
+      </tr>
+      <tr>
+        <td>93</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Lista.getDtInicial</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>376</td>
+      </tr>
+      <tr>
+        <td>94</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.Label1</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>165</code></td>
+        <td><code>194</code></td>
+        <td>392</td>
+      </tr>
+      <tr>
+        <td>95</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.Label2</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>221</code></td>
+        <td><code>250</code></td>
+        <td>409</td>
+      </tr>
+      <tr>
+        <td>96</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.Label3</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>193</code></td>
+        <td><code>222</code></td>
+        <td>426</td>
+      </tr>
+      <tr>
+        <td>97</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>243</code></td>
+        <td><code>272</code></td>
+        <td>444</td>
+      </tr>
+      <tr>
+        <td>98</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option1.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>448</td>
+      </tr>
+      <tr>
+        <td>99</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option1.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>449</td>
+      </tr>
+      <tr>
+        <td>100</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option1.Caption</strong></td>
+        <td><code>Sim</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>451</td>
+      </tr>
+      <tr>
+        <td>101</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option1.Height</strong></td>
+        <td><code>17</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>453</td>
+      </tr>
+      <tr>
+        <td>102</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option1.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>454</td>
+      </tr>
+      <tr>
+        <td>103</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option1.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>456</td>
+      </tr>
+      <tr>
+        <td>104</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option1.Width</strong></td>
+        <td><code>40</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>457</td>
+      </tr>
+      <tr>
+        <td>105</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option1.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>459</td>
+      </tr>
+      <tr>
+        <td>106</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option2.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>461</td>
+      </tr>
+      <tr>
+        <td>107</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option2.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>462</td>
+      </tr>
+      <tr>
+        <td>108</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option2.Caption</strong></td>
+        <td><code>Não</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>464</td>
+      </tr>
+      <tr>
+        <td>109</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option2.Height</strong></td>
+        <td><code>17</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>466</td>
+      </tr>
+      <tr>
+        <td>110</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option2.Left</strong></td>
+        <td><code>47</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>467</td>
+      </tr>
+      <tr>
+        <td>111</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option2.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>469</td>
+      </tr>
+      <tr>
+        <td>112</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option2.Width</strong></td>
+        <td><code>40</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>470</td>
+      </tr>
+      <tr>
+        <td>113</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optVenda</code></td>
+        <td><strong>Option2.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>472</td>
+      </tr>
+      <tr>
+        <td>114</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.Label4</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>249</code></td>
+        <td><code>278</code></td>
+        <td>486</td>
+      </tr>
+      <tr>
+        <td>115</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>269</code></td>
+        <td><code>298</code></td>
+        <td>504</td>
+      </tr>
+      <tr>
+        <td>116</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option1.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>508</td>
+      </tr>
+      <tr>
+        <td>117</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option1.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>509</td>
+      </tr>
+      <tr>
+        <td>118</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option1.Caption</strong></td>
+        <td><code>Sim</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>511</td>
+      </tr>
+      <tr>
+        <td>119</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option1.Height</strong></td>
+        <td><code>17</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>513</td>
+      </tr>
+      <tr>
+        <td>120</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option1.Left</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>514</td>
+      </tr>
+      <tr>
+        <td>121</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option1.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>516</td>
+      </tr>
+      <tr>
+        <td>122</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option1.Width</strong></td>
+        <td><code>40</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>517</td>
+      </tr>
+      <tr>
+        <td>123</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option1.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>519</td>
+      </tr>
+      <tr>
+        <td>124</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option2.FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>521</td>
+      </tr>
+      <tr>
+        <td>125</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option2.FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>522</td>
+      </tr>
+      <tr>
+        <td>126</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option2.Caption</strong></td>
+        <td><code>Não</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>524</td>
+      </tr>
+      <tr>
+        <td>127</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option2.Height</strong></td>
+        <td><code>17</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>526</td>
+      </tr>
+      <tr>
+        <td>128</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option2.Left</strong></td>
+        <td><code>47</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>527</td>
+      </tr>
+      <tr>
+        <td>129</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option2.Top</strong></td>
+        <td><code>5</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>529</td>
+      </tr>
+      <tr>
+        <td>130</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option2.Width</strong></td>
+        <td><code>40</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>530</td>
+      </tr>
+      <tr>
+        <td>131</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.optPedido</code></td>
+        <td><strong>Option2.ForeColor</strong></td>
+        <td><code>90,90,90</code></td>
+        <td><code>(propriedade não existe)</code></td>
+        <td>532</td>
+      </tr>
+      <tr>
+        <td>132</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.Label5</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>275</code></td>
+        <td><code>304</code></td>
+        <td>546</td>
+      </tr>
+      <tr>
+        <td>133</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.edtObs</code></td>
+        <td><strong>FontName</strong></td>
+        <td><code>Tahoma</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>556</td>
+      </tr>
+      <tr>
+        <td>134</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.edtObs</code></td>
+        <td><strong>FontSize</strong></td>
+        <td><code>8</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>557</td>
+      </tr>
+      <tr>
+        <td>135</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.edtObs</code></td>
+        <td><strong>Height</strong></td>
+        <td><code>109</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>558</td>
+      </tr>
+      <tr>
+        <td>136</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.edtObs</code></td>
+        <td><strong>Left</strong></td>
+        <td><code>317</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>559</td>
+      </tr>
+      <tr>
+        <td>137</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.edtObs</code></td>
+        <td><strong>SpecialEffect</strong></td>
+        <td><code>1</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>560</td>
+      </tr>
+      <tr>
+        <td>138</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.edtObs</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>302</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>562</td>
+      </tr>
+      <tr>
+        <td>139</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.edtObs</code></td>
+        <td><strong>Width</strong></td>
+        <td><code>446</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>563</td>
+      </tr>
+      <tr>
+        <td>140</td>
+        <td><span class="badge aviso">AVISO</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.edtObs</code></td>
+        <td><strong>ForeColor</strong></td>
+        <td><code>0,0,0</code></td>
+        <td><code>(objeto não encontrado)</code></td>
+        <td>564</td>
+      </tr>
+      <tr>
+        <td>141</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.Label6</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>302</code></td>
+        <td><code>331</code></td>
+        <td>580</td>
+      </tr>
+      <tr>
+        <td>142</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.getCodCli</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>189</code></td>
+        <td><code>218</code></td>
+        <td>597</td>
+      </tr>
+      <tr>
+        <td>143</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.getGrupo</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>161</code></td>
+        <td><code>190</code></td>
+        <td>615</td>
+      </tr>
+      <tr>
+        <td>144</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.getGrupo</code></td>
+        <td><strong>DisabledBackColor</strong></td>
+        <td><code>255,255,255</code></td>
+        <td><code>RGB(240,240,240)</code></td>
+        <td>618</td>
+      </tr>
+      <tr>
+        <td>145</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.getCodCta</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>217</code></td>
+        <td><code>246</code></td>
+        <td>632</td>
+      </tr>
+      <tr>
+        <td>146</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.getDesCli</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>189</code></td>
+        <td><code>218</code></td>
+        <td>650</td>
+      </tr>
+      <tr>
+        <td>147</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.getDesCta</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>217</code></td>
+        <td><code>246</code></td>
+        <td>666</td>
+      </tr>
+      <tr>
+        <td>148</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.Label7</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>137</code></td>
+        <td><code>166</code></td>
+        <td>684</td>
+      </tr>
+      <tr>
+        <td>149</td>
+        <td><span class="badge diferenca">DIFERENCA</span></td>
+        <td><code>SIGCDVIS.Pagina.Dados.getData</code></td>
+        <td><strong>Top</strong></td>
+        <td><code>133</code></td>
+        <td><code>162</code></td>
+        <td>700</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+        <div class="rodape">
+            <p>Gerado automaticamente por ValidarUIFidelity.prg | Sistema de Refatoracao VFP9</p>
+        </div>
+    </div>
+</body>
+</html>

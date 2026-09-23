@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All consistent ÔÇö every field referenced in lookups/BINDEVENTs was actually created via `AddObject`. Fase 6 is complete.
+
+## Summary
+
+Completed **FormUsu.prg** (`C:\4c\projeto\app\forms\cadastros\FormUsu.prg`) with the remaining 50% of Page2 fields and all 6 lookups:
+
+- **New fields added**: Setor, Departamento (c├│digo + nome), Cadastro de Contas (c├│digo + raz├úo social), Obriga Cadastrar Senha (OptionGroup) ÔÇö all with `Top` compensated +29 for `PageFrame.Top=-29`, and label widths sized to end just before their field (regra #23, classe `say`/AutoSize).
+- **All 6 lookups fully implemented** (no stubs) via `FormBuscaAuxiliar`, following `docs/lookup_implementation.md`'s canonical pattern (`this_lSelecionou`/`this_lAchouRegistro` checks, F4=115 KeyPress + DblClick):
+  - Cargo (`SigCdCrg`), Setor (`SigCdSet`), Departamento bidirecional (`SigCdDpt`, c├│digoÔåödescri├º├úo), Cliente/Fornecedor bidirecional (`SigCdCli`, c├│digoÔåöraz├úo social) ÔÇö matching the legado's dual-search behavior exactly.
+- **Salvar/Cancelar buttons** added to `cnt_4c_BotoesAcao` (reusing `CriarBotaoCrud`), wired to fully-implemented `BtnSalvarClick`/`BtnCancelarClick` (guarding not-yet-defined `FormParaBO` via `PEMSTATUS`, consistent with the existing `BtnIncluirClick`/`BtnAlterarClick` pattern from Fase 4).
+- Verified `PROCEDURE`/`ENDPROC` and `WITH`/`ENDWITH` balance (35/35, 37/37) and no duplicate method names or dangling object references.
+
+Next phase would wire `FormParaBO`/`BOParaForm`/`HabilitarCampos`/`AjustarBotoesPorModo`, which the guarded calls already anticipate.

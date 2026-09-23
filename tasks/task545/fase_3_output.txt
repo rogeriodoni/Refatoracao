@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything balances: 7 PROCEDURE/ENDPROC pairs, 9 WITH/ENDWITH, 1 TRY/ENDTRY, 2 FOR/ENDFOR, pure ASCII, and DEFINE CLASS/ENDDEFINE match.
+
+**Phase 3/8 complete.** Created `C:\4c\projeto\app\forms\cadastros\FormTPR.prg` with:
+- `DEFINE CLASS FormTPR AS FormBase` ÔÇö visual properties copied exactly from legacy SIGCDTPR.SCX (1000x600, Caption "Subtipos de Transportes", modal, no title bar)
+- `Init()` ÔÇö delegates to `DODEFAULT()` only (no duplicate `InicializarForm()` call)
+- `InicializarForm()` ÔÇö instantiates `TPRBO`, builds the PageFrame, propagates the Caption to header labels on both pages
+- `ConfigurarPageFrame()` ÔÇö `Top=-29`/`Tabs=.F.`, Page1=Lista/Page2=Dados
+- `ConfigurarPaginaLista()` / `ConfigurarPaginaDados()` ÔÇö full gray header (`cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo`) on **both** pages per CLAUDE.md rule #11, plus `cnt_4c_Botoes` and `cnt_4c_BotoesAcao` positioned but still empty shells (canonical Left=542/390 and Left=842/160)
+- `TornarControlesVisiveis()` and `Destroy()` fully implemented
+
+Followed the same-day sibling forms `FormTpe.prg`/`FormACE.prg` (same pipeline) for exact positioning conventions. Deliberately deferred to Phase 4: the grid, the 5 CRUD buttons, and `cnt_4c_Saida`/`cmd_4c_Encerrar` ÔÇö none of those are referenced yet, so there are no dangling calls to undefined methods (e.g. `CarregarLista()` is not called yet, since it won't exist until Phase 4 adds the grid).

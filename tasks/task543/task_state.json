@@ -1,0 +1,263 @@
+﻿{
+    "taskId":  "task543",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "RECOVERED pela Retrospectiva Fase 3 (tentativa 1)",
+    "criadoEm":  "2026-09-18T18:07:08",
+    "atualizadoEm":  "2026-09-19T05:40:35",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-09-18T18:07:08",
+                                            "fim":  "2026-09-18T18:07:08",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task543\\SigCdTpe.sct",
+                                            "baseName":  "SigCdTpe",
+                                            "scxFile":  "C:\\4c\\tasks\\task543\\SigCdTpe.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-09-18T18:07:08",
+                                          "fim":  "2026-09-18T18:07:09",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigCdTpe",
+                                          "txtFile":  "C:\\4c\\tasks\\task543\\SigCdTpe_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-18T18:07:09",
+                                              "fim":  "2026-09-18T18:07:09",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task543\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-18T18:07:10",
+                                              "fim":  "2026-09-18T18:07:19",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task543\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task543\\meta_prompt.md",
+                                              "boClass":  "TpeBO",
+                                              "formClass":  "FormTpe",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task543\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-18T18:07:19",
+                                              "fim":  "2026-09-18T18:07:19",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task543\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-18T18:07:19",
+                                               "fim":  "2026-09-18T18:07:20",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task543\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormTpe_esqueleto.prg",
+                                                                "TpeBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-18T18:07:20",
+                                       "fim":  "2026-09-18T18:35:07",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\TpeBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  23.06,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTpe.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  820
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-09-18T18:35:07",
+                                                  "fim":  "2026-09-18T18:35:25",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTpe.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\TpeBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-09-18T18:35:25",
+                                                 "fim":  "2026-09-18T18:35:26",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-18T18:38:55",
+                                       "fim":  "2026-09-18T18:40:59",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "inicio":  "2026-09-18T18:40:59",
+                                               "fim":  "2026-09-18T18:42:58",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "tentativasUsadas":  1,
+                                               "resultFile":  "C:\\4c\\tasks\\task543\\teste_resultado.json",
+                                               "status":  "RECOVERED",
+                                               "percentual":  100,
+                                               "total":  9,
+                                               "passou":  9
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "RECOVERED",
+                                        "inicio":  "2026-09-18T18:42:59",
+                                        "fim":  "2026-09-18T18:43:00",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  "UI Fidelity: 0 erros (limite 4), 13 diferencas visuais (limite 0), 72 avisos (nao-bloqueantes)",
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormTpe_20260918184300.html",
+                                        "diferencas":  13,
+                                        "erros":  0,
+                                        "totalProblemas":  85,
+                                        "avisos":  72,
+                                        "recoveredAt":  "2026-09-19T05:40:35",
+                                        "recoveredBy":  "Retrospectiva_Fase3"
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-09-18T18:07:09",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-09-18T18:07:10",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task543\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-09-18T18:07:10",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-18T18:07:10"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-09-18T18:35:25",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-09-18T18:35:25",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormTpe_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTpe.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task543\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-09-18T18:35:26",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-09-18T18:35:26",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-09-18T18:35:26",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-09-18T18:38:38",
+                                          "passes":  2,
+                                          "problemas":  "[LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTPE.Pagina.Lista): Top original=104 vs migrado \u0027lbl_4c_Label1\u0027 Top=138 (diff=34px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTPE.Pagina.Lista): Left original=42 vs migrado \u0027lbl_4c_Label1\u0027 Left=184 (diff=142px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTPE.Pagina.Lista): Top original=104 vs migrado \u0027lbl_4c_Label2\u0027 Top=162 (diff=58px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTPE.Pagina.Lista): Left original=369 vs migrado \u0027lbl_4c_Label2\u0027 Left=158 (diff=211px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  4
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-09-18T18:38:38",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-09-18T18:38:55",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\TpeBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTpe.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-09-18T18:42:58",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-18T18:42:59",
+                                             "thresholdPx":  5,
+                                             "unmatched":  4,
+                                             "errors":  4,
+                                             "matched":  13,
+                                             "warnings":  15,
+                                             "reportFile":  "C:\\4c\\tasks\\task543\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

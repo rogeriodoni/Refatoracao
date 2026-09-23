@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All structural counts balance correctly. Phase 6 is complete.
+
+## Summary
+
+Completed FormUep.prg Phase 6/8: added the last fields' interactions and lookups (the form only has 2 data fields, `txt_4c_Usuarios` and `txt_4c_Empresa`, so this phase focused on making them fully functional):
+
+- **cnt_4c_BotoesAcao**: added `cmd_4c_Confirmar`/`cmd_4c_Cancelar` buttons with icons, bound to `BtnSalvarClick`/`BtnCancelarClick`
+- **Lookup Usuarios**: `AbrirLookupUsuario()` replicates the legacy `fwBuscaExt` against `SigCdUsu` (filter `NOT cAtivos='N'`), wired via KeyPress(F4)/DblClick/LostFocus
+- **Lookup Empresa**: `AbrirLookupEmpresa()` replaces `fAcessoEmpresa()` (confirmed via memory `feedback_facessoempresa_nao_portada` that this legacy function was never ported) with a `FormBuscaAuxiliar` against `SigCdEmp` (key `Cemps`)
+- **FormParaBO/BOParaForm/LimparCampos**: complete field transfers
+- **HabilitarCampos**: transcribes the legacy `When` rules literally ÔÇö `Usuarios` is only editable in INCLUIR (it's the business key, locked once created), `Empresa` editable in INCLUIR/ALTERAR
+- **AjustarBotoesPorModo**: disables Confirmar in VISUALIZAR mode
+- **BtnSalvarClick**: transcribes the legacy validation + INCLUIR-only duplicate check exactly, including the literal `PADR(valor,3)` from the source
+- All TRY/CATCH blocks avoid `RETURN` inside them (used flag variables instead); PROCEDURE/ENDPROC, IF/ENDIF, WITH/ENDWITH, TRY/ENDTRY all balance.
+
+**One important flag for you**: while cross-checking columns, I confirmed the table `SigCdUep` (used by `UepBO.prg` from earlier phases for all CRUD SQL) **does not exist anywhere in `docs/schema.sql`** (682 tables, none named SigCdUep, checked case-insensitively). A structurally similar table `sigcdace` exists (columns `usuarios` char(10), `emps` char(3), PK `pkchaves`) which fits the "Cadastro de Usuarios Fixos Por Empresa" concept, but its PK column name differs from the `cIdChaves` the legacy code expects. Since the legacy SCX source itself literally says `SigCdUep`, and this predates my phase, I didn't rename anything (would violate PILAR 2 without confirmation) ÔÇö but Salvar/Excluir will fail with "Invalid object name" if this table truly doesn't exist in the live database. Worth verifying against the actual SQL Server before this form goes live.

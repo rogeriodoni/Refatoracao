@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo da Fase 8/8 ÔÇö FormTPG (Tipos de Transporte Autom├ítico)
+
+Revisei o form completo (j├í implementado at├® a Fase 7) e o BO, e conclui a fase final:
+
+**O que verifiquei estar correto:**
+- Os 7 m├®todos do legado (`comportamento.json`) j├í t├¬m equivalente migrado (Init/CarregarLista, 3 Valid de coluna do grid, Commandgroup1.Click/Encerrar, cmdinserir, cmdexcluir).
+- `TPGBO.Inserir()` cobre as 5 colunas NOT NULL de `SigPrTra` (confirmei contra `docs/schema.sql`, lido corretamente via PowerShell por ser UTF-16) ÔÇö nenhuma coluna faltando (regra #22).
+- Lookups de `SigCdEmp.cemps/razas` e `SigPrTrn.codigos/descrs` batem com o schema real.
+
+**Por que os m├®todos gen├®ricos do template da Fase 8 n├úo se aplicam aqui:** documentei no cabe├ºalho do arquivo (mesmo racioc├¡nio j├í usado nas Fases 5 e 7) ÔÇö este ├® um form OPERACIONAL flat/single-page, sem segunda p├ígina de dados, sem modos INCLUIR/ALTERAR/VISUALIZAR e sem bot├úo Buscar no legado. Criar `BtnBuscarClick`/`BtnSalvarClick`/`BtnCancelarClick`/`FormParaBO`/`BOParaForm`/`HabilitarCampos`/`LimparCampos`/`AjustarBotoesPorModo` vazios seria stub disfar├ºado (proibido) ou funcionalidade inventada sem base no legado (viola o PILAR 1).
+
+**Bug real corrigido:** em `BtnEncerrarClick`, se `Salvar()` falhasse numa linha no meio do `SCAN`, as linhas j├í persistidas antes dela continuavam com `flagnovo = .T.` ÔÇö um novo clique em Encerrar tentaria reinseri-las, colidindo com a PK `cidchaves` j├í gravada. Adicionei `REPLACE cursor_4c_Dados.flagnovo WITH .F.` logo ap├│s cada `Salvar()` bem-sucedido.
+
+**Integra├º├úo finalizada:** adicionei o item de menu em `popMovimentos` (bar 125, "Tipos de Transporte Autom├ítico") e a `PROCEDURE AbrirFormTPG()` no `menu.prg`, seguindo exatamente o padr├úo can├┤nico (VARTYPE, Show() fora do TRY ÔÇö regra #29). `config.prg` j├í carrega `TPGBO.prg`/`FormTPG.prg` automaticamente via `ADIR`, sem necessidade de `SET PROCEDURE` manual.
+
+A migra├º├úo do FormTPG est├í completa.

@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investigado o achado antes de aplicar qualquer corre├º├úo ÔÇö e conclu├¡ que ├® **falso positivo**, n├úo vou alterar os arquivos.
+
+**Evid├¬ncia:**
+
+1. Conferi o dump do legado (`tasks/task553/SigCdUpd_form_codigo_fonte.txt:541-542`): o WHERE de localiza├º├úo de registro ├® `Codigos = 'x' AND UniPrdts = 'y'` (chave natural composta). O legado nunca referencia `cidchaves` em SQL nenhum ÔÇö o Fortyus (`AddCursor`/`TableUpdate`) gerencia a PK internamente, sem expor no c├│digo do form.
+
+2. O `UpdBO.prg` usa `cidchaves` no WHERE em tr├¬s lugares: `CarregarPorCodigo`, `Atualizar` e `ExecutarExclusao`. Isso ├® exatamente o padr├úo arquitetural do PILAR 3 (`this_cCampoChave = "cidchaves"`, PK Fortyus usada como identificador de linha) ÔÇö **id├¬ntico** ao usado em outros **163 BOs** do projeto (`grep` confirmou 493 ocorr├¬ncias de `WHERE cidchaves =` em `projeto/app/classes/`).
+
+3. `cursor_4c_Dados` (grid da Lista) traz `cidchaves` como coluna oculta justamente para permitir esse fluxo ÔÇö a mesma t├®cnica usada em todo o sistema novo.
+
+**Conclus├úo:** a auditoria comparou o WHERE migrado contra o WHERE literal do legado e viu `cidchaves` como "inventado" porque o legado nunca precisa cit├í-lo (o Fortyus faz isso por baixo dos panos). Mas remover essas condi├º├Áes quebraria `CarregarPorCodigo`/`Atualizar`/`Excluir` do form inteiro e divergiria do padr├úo usado em todo o resto do projeto ÔÇö seria regress├úo, n├úo corre├º├úo. Este ├® exatamente o tipo de falso positivo j├í registrado na minha mem├│ria (`feedback_harness_de_auditoria_mede_errado.md` ÔÇö a pr├│pria auditoria "inventando" defeito ao comparar contra o WHERE errado de refer├¬ncia).
+
+Nenhuma linha de `FormUpd.prg` ou `UpdBO.prg` foi alterada.

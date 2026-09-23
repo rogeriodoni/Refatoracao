@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything is structurally sound and complete. Phase 6 is done.
+
+**Summary of changes to `C:\4c\projeto\app\forms\cadastros\Formtra.prg`:**
+
+1. **Height bumped 600ÔåÆ700** ÔÇö the header band added to Page2 (rule #11) plus ~40 controls needed more vertical room than the legacy form (documented, sanctioned by CLAUDE.md rule #11's "grow Form.Height" allowance).
+2. **Remaining ~50% of Page2 fields** added (all shifted +88 from legacy Top, matching Phase 5's established offset): Fax, FTP section (t├¡tulo, Gera├º├úo/Leitura drives, Tipo de Conex├úo, Endere├ºo FTP, pastas envio/recep├º├úo, usu├írio/senha/redigita), tipo de transporte OptionGroup, checkboxes (limpa diret├│rio FTP/local), URL Tracking editbox.
+3. **Grade de fretes por estado** (`grd_4c_Estados`) ÔÇö full 5-column grid mirroring legacy `GradEstado`, with:
+   - Custom `txt_4c_ColUf` / `txt_4c_ColMunicipio` controls on Column1/Column5 (rule #18: CurrentControl + Sparse=.F. + ReadOnly ordering).
+   - **Both lookups fully implemented**: `ValidarUfEstado()` (FormBuscaAuxiliar Mode 1 against `SigCdUfs`) and `ValidarMunicipioEstado()` (join `SigCdMun`+`SigCdUfs` filtered by UF, exact-match or FormBuscaAuxiliar Mode 2 picker) ÔÇö transcribed from the legacy `Column1.Text1.Valid`/`Column5.Text1.Valid`.
+   - Row insert/delete buttons (`BtnIncluirEstadoClick`/`BtnExcluirEstadoClick`).
+   - `CarregarGradeEstados()`/`SalvarGradeEstados()` ÔÇö discovered via schema check that `SigPrTrv` has no `uf`/`munici` columns (they're JOIN aliases), so loading uses the same join as the legacy `Init()`, and saving uses delete-all+reinsert.
+4. **`cnt_4c_BotoesAcao`** populated with Confirmar/Cancelar buttons (canonical framework positions).
+5. **`FormParaBO()`/`BOParaForm()`** added covering every field from Phases 5+6, plus **`BtnConfirmarClick()`** (transcribes the legacy "frete/peso can't be zeroed" validation, then saves header + grid) and **`BtnCancelarClick()`**.
+6. `Destroy()` updated to release the new cursors.
+
+Verified balanced `WITH/ENDWITH`, `TRY/ENDTRY`, `IF/ENDIF`, `TEXT/ENDTEXT`, `SCAN/ENDSCAN`, `PROCEDURE/ENDPROC` counts, and confirmed no `RETURN` sits inside any `TRY` block.

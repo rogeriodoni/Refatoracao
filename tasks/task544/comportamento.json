@@ -1,0 +1,140 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 5,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoEmpresa", "fwBuscaSel", "fGravarLog", "For Empty", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDTPG",
+      "evento": "Init",
+      "linhas": 29,
+      "codigoOriginal": "Parameters pcCodigos\n\nlcQuery = [Select * From SigPrTra Where TPTrans = ']+pcCodigos+[']\n\nThisForm.Grid1.RecordSource = ''\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\t\n\tWith .poDataMgr\n\t\t* Cursor Principal Para Montagem da Lista (Tabela Grande)\n\t\t.AddCursor('SigPrTrn', 'cIdChaves', 'crSigPrTrn', '', .f.,lcQuery)\n\tEndWith\n\t\n\t.poDataMgr.Requery('crSigPrTrn')\n\t\nEndWith\n\nSelect crSigPrTrn\nIndex On Emps+TpTrans+Tps Tag EmpTp\nSet Order To EmpTp\nGo Top\n\nThisForm.Grid1.Reco... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPG.Grid1.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.Grid1.Column1.Text1, '', ThisForm.poDataMgr)\n\nIf ! Empty(This.Value)\n\tlnReg = Recno()\n\n\tSelect crSigPrTrn\n\tlcEmp   = Emps\n\tlcTra   = TpTrans\n\tlcTps   = Tps\n\tlcChave = cIdChaves\n\tLocate for Emps = lcEmp And TpTrans = lcTra And Tps = lcTps And cIdChaves <> lcChave\n\tIf ! Eof()\n\t\tMessageBox('Tipo de Transferencia Cadastrada',16,'')\n\t\tGo lnReg\n\t\tThis.Value = ''\n\t\tReturn .f.\n\tEndif\n\n\tGo lnReg\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTPG.Grid1.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 37,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tSet Near On\n\tIf Not Seek(This.Value, 'crSigPrTrn', 'Codigos')\n\t\tm.loBrowse = CreateObject('fwBuscaSel', 'crSigPrTrn', 'Codigos', This.Value, 'Tipo Transporte')\n\t\tm.loBrowse.AddColuna('Codigos', '', 'Código',    .t., 'Codigos')\n\t\tm.loBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'Descrs')\n\t\tm.loBrowse.Show\n\tEndIf\n\tSet Near Off\n\tThis.Value = Evaluate('crSigPrTrn.Codigos')\n\tThis.Refresh\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n\nIf ! Empty(This.Value)\n\tln... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTPG.Grid1.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 28,
+      "codigoOriginal": "If !Empty(This.Value) And Not InList(This.Value,'T','R')\n\t=MessageBox('Opcao Inválida. Informe <T>ransporte <R>ecepcao ', 0+48, '')\n\tThis.Value = ''\n\tReturn 0\nEndIf\nThis.Refresh\n\n\nIf ! Empty(This.Value)\n\tlnReg = Recno()\n\n\tSelect crSigPrTrn\n\tlcEmp   = Emps\n\tlcTra   = TpTrans\n\tlcTps   = Tps\n\tlcChave = cIdChaves\n\tLocate for Emps = lcEmp And TpTrans = lcTra And Tps = lcTps And cIdChaves <> lcChave\n\tIf ! Eof()\n\t\tMessageBox('Tipo de Transferencia Cadastrada',16,'')\n\t\tGo lnReg\n\t\tThis.Value = ''\n\t\tRetur... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTPG.Commandgroup1",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "Select crSigPrTrn\nGo Top\nScan\n\tIf Empty(Emps) \n\t\tMessageBox('Empresa Invalida !!',16,'')\n\t\tThisform.Grid1.Column1.Text1.SetFocus\n\t\tReturn\n\tEndif\n*\tIf Empty(TpTrans) \n*\t\tMessageBox('Tipo de Transporte Invalido !!',16,'')\n*\t\tThisform.Grid1.Column2.Text1.SetFocus\n*\t\tReturn\n*\tEndif\n\tIf Empty(Tps) \n\t\tMessageBox('Tipo Invalido !!',16,'')\n\t\tThisform.Grid1.Column3.Text1.SetFocus\n\t\tReturn\n\tEndif\nEndScan\n\nThisForm.poDatamgr.Update('crSigPrTrn')\nThisForm.poDatamgr.Commit()\n\n=fGravarLog('G', 'SigPrTrnG', 'G... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "Update,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPG.cmdinserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Select crSigPrTrn\nLocate For Empty(Emps) And Empty(TpTrans) And Empty(Tps)\nIf Eof()\n\tAppend Blank\n\tReplace cIdChaves With fUniqueIds()\n\tGo Top\nEndIf\nThisForm.Refresh\n=fGravarLog('I', 'SigPrTrnG', 'INSERIR', '')\nThisForm.Grid1.Column1.Text1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty,fUniqueIds,fGravarLog",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPG.cmdexcluir",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "Select crSigPrTrn\nlcChave = Emps+' - '+TpTrans+' - '+Tps\n=fGravarLog('E', 'SigPrTrnG', 'EXCLUSAO', lcChave)\nSelect crSigPrTrn\nlnReg = Recno()\nDelete\nGo Top\nIf Reccount() < lnReg \n\tGo Bott\nElse\n\tGo lnReg\nEndif\nThisForm.Grid1.SetFocus\nThisForm.Grid1.Column1.Text1.SetFocus\nThisForm.Grid1.Refresh\nThisForm.Refresh\nThis.SetFocus",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDTPG.Init",
+      "queryOriginal": "lcQuery = [Select * From SigPrTra Where TPTrans = ']+pcCodigos+['] ",
+      "tabelas": "SigPrTra",
+      "colunas": "TPTrans",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPrTra"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

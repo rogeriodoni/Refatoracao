@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verified against the legacy source (`tasks\task550\SigCdUfd_form_codigo_fonte.txt`) before touching anything ÔÇö both categories of findings in this pass are false positives from the audit tool, not real bugs:
+
+**[METODO-INEXISTENTE] `THIS.ExecutarBuscaUf()`** ÔÇö it *is* defined, at line 1108 of `FormUfd.prg`:
+```
+PROTECTED FUNCTION ExecutarBuscaUf(par_cCampoBusca, par_cValor)
+    ...
+ENDFUNC
+```
+The audit tool likely only scans for `PROCEDURE` declarations and missed this one because it's declared as `FUNCTION`. `THIS.ExecutarBuscaUf(...)` is called correctly from 6 sites in the file (OCodigoLookup, DCodigoLookup, ONomeLookup, DNomeLookup, BOParaForm ├ù2), all of them working as intended.
+
+**[GRID-HEADER] all 8 caption mismatches** ÔÇö the legacy source, lines 1219-1226, has the exact `pColuna` definitions for the list grid (`pfSqlTabela(1)`):
+```
+pColuna('codigos','','','UF Origem',80,.t.)
+pColuna('destinos','','','UF Destino',80,.t.)
+pColuna('aliqs','','','Aliq. ICMS',80,.t.)
+pColuna('AliqSbs','','','Aliq.Sub.Trib',80,.t.)
+pColuna('AliqPImps','','','Aliq.Prod.Importado',80,.t.)
+pColuna('Aliqfcp','','','Aliq.FECP',80,.t.)
+pColuna('Aliqredb','','','Aliq.Reducao Base',80,.t.)
+pColuna('iest','','','IE Subst.Trib.Dest.',100,.t.)
+```
+These match the migrated headers in `CarregarLista` (lines 417-424) **character-for-character**. The "legado headers encontrados" the audit cited (Classifica├º├úo, Aliq Local, Aliq FCP, Aliq Icms, CST, C Benef, CFOP) belong to a *different* grid in the same form ÔÇö the per-classification rate grids (`GradAlo`/`GradFcp`, referenced around line 995-1172), which are a separate UI element (planned for a future phase per the code comment at line 997), not the main list grid. The audit tool scraped headers from the wrong grid in the legacy dump.
+
+No changes were made to `FormUfd.prg` or `UfdBO.prg` ÔÇö all 9 reported problems are audit false positives, confirmed against the authoritative legacy source. This matches the pattern in memory `feedback_harness_de_auditoria_mede_errado.md` (audit tools inventing defects); I'd suggest that memory also note the two new failure modes here (missing `FUNCTION`-declared methods, and grid-header comparison picking the wrong grid section) if you want this propagated via the `propagate-lesson` skill.

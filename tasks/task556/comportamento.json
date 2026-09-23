@@ -1,0 +1,307 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 10,
+    "metodosComValidacao": 6,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["MontaGrade", "fConfigGeral", "From CrSigCdVca Where Empty", "fAcessoContas", "fwBuscaExt", "For"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGALTDT",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "lnOldSele = Select()\n\nSelect CrSigCdVca\nGo top\n\nWith ThisForm.Grade\n\t.RecordSource = [CrSigCdVca]\t\n\t.Column1.ControlSource   = [CrSigCdVca.Iclis]\n\t.Column2.ControlSource   = [CrSigCdVca.rclis]\n\t.Column3.ControlSource   = [CrSigCdVca.Resp]\n\t.Column4.ControlSource   = [CrSigCdVca.Usuario]\n\t.Column5.ControlSource   = [CrSigCdVca.Deptos]\n\t.Refresh\nEndWith \t\n\nSelect(lnOldSele)\nReturn .T.",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.podatamgr.Release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT",
+      "evento": "Init",
+      "linhas": 46,
+      "codigoOriginal": "ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nlcQryVca = [select a.*, c.rclis, b.deptos, b.ncomps as usuario ] + ;\n\t[from sigcdvca a ] + ;\n\t[inner join sigcdusu b on a.resp = b.usuarios ] + ; \n\t[inner join sigcdcli c on a.iclis = c.iclis  ]   \n\nThisForm.Grade.RecordSource = []\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.poDataMgr.AddCursor('SigCdVca', 'pkChaves', 'CrSigCdVca',... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "SqlExecute,Requery,MontaGrade",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGALTDT",
+      "evento": "KeyPress",
+      "linhas": 4,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\nIf nKeyCode = 27\n\tthisform.grupo_Botao.cmdsair.Click\nEndIf ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT.Grupo_Botao",
+      "evento": "Click",
+      "linhas": 63,
+      "codigoOriginal": "Local lnOldSel\nlnOldSel = Select()\n\nSelect CrSigCdVca\nGo Top\n\nIf Reccount([CrSigCdVca])=0\n\tMessagebox([Nenhum Registro para Atualização.],0+64,[Atenção])\n\tReturn .F.\nEndif\n\nSelect CrSigCdVca\nSelect Iclis, rClis, Count(*) as TT From CrSigCdVca Where Not Empty(Iclis) group by iclis, rClis having Count(*) > 1 Into Cursor cdCtaDup ReadWrite\n\nSelect cdCtaDup\nGo Top\nIf Reccount([cdCtaDup]) > 0\n\tlcCta = [] \n\tScan \n\t\tlcCta = lcCta + Iif(Empty(lcCta),[],[,])+ Alltrim(Iclis) + [ - ] + Alltrim(rClis)+Chr(1... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From CrSigCdVca Where Empty",
+        "metodosFormChamados": "SqlExecute,Update,RollBack,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGALTDT.Grupo_Botao",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "thisform.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT.Grade.Column1.Header1",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If Upper(Order('crSigCdVca')) # 'ICLIS'\n\tSelect crSigCdVca\n\tSet Order to ICLIS\n\tWith ThisForm.Grade\n\t\t.Column1.Header1.BackColor \t\t= RGB(251,253,176)\n\t\t.Column2.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column3.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column4.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column5.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Refresh\n\tEndWith\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lcGrupo, lordem\n\nlcGrupo = []\nlordem  = .F.\nlcDigClass = '3'\n\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar,lcGrupo,'C',This.Value,This,ThisForm.Grade.Column2.Text1,lordem,,,.T.)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Grade.Column2.Text1.Value = ''\n\t\tllRet = .f.\n\tEndIf\nElse\n\tThis.Value = ''\n\tThisForm.Grade.Column2.Text1.Value = ''\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT.Grade.Column2.Header1",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If Upper(Order('crSigCdVca')) # 'RCLIS'\n\tSelect crSigCdVca\n\tSet Order to RCLIS\n\tWith ThisForm.Grade\n\t\t.Column1.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column2.Header1.BackColor \t\t= RGB(251,253,176)\n\t\t.Column3.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column4.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column5.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Refresh\n\tEndWith\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGALTDT.Grade.Column3.Header1",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If Upper(Order('crSigCdVca')) # 'RESP'\n\tSelect crSigCdVca\n\tSet Order to RESP\n\tWith ThisForm.Grade\n\t\t.Column1.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column2.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column3.Header1.BackColor \t\t= RGB(251,253,176)\n\t\t.Column4.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column5.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Refresh\n\tEndWith\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT.Grade.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local loLista\n\nIf !IsEmpty( This.Value )\n\tloLista = Createobject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','Usuarios',This.Value,'Seleção',.T.,'Usuarios',[Not cAtivos='N'])\n\n\tIf  Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Usuarios', '', 'Código', .T.)\n\t\tloLista.mAddColuna('nComps', '', 'Nome', .T.)\n\t\tloLista.mAddColuna('deptos', '', 'Departamento', .T.)\n\t\tloLista.Show()\n\tEndif\n\n\tThis.Value = Iif( Lastkey() # 27, Evaluate('crSigCdUsu.Usuarios'), '' )\n\tThisform.grade.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Value = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT.Grade.Column4.Header1",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If Upper(Order('crSigCdVca')) # 'USUARIO'\n\tSelect crSigCdVca\n\tSet Order to USUARIO\n\tWith ThisForm.Grade\n\t\t.Column1.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column2.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column3.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column4.Header1.BackColor \t\t= RGB(251,253,176)\n\t\t.Column5.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Refresh\n\tEndWith\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT.Grade.Column5.Header1",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "If Upper(Order('crSigCdVca')) # 'DEPTOS'\n\tSelect crSigCdVca\n\tSet Order to DEPTOS\n\tWith ThisForm.Grade\n\t\t.Column1.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column2.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column3.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column4.Header1.BackColor \t\t= RGB(192,192,192)\n\t\t.Column5.Header1.BackColor \t\t= RGB(251,253,176)\n\t\t.Refresh\n\tEndWith\nEndIf",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT.btnMarca",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Select CrSigCdVca\nGo Top In CrSigCdVca\nLocate For (Empty(IClis) And Empty(Resp))\nIf Eof([CrSigCdVca])\n\tSelect CrSigCdVca\n\tAppend Blank \nEndif\nKeyboard '{Dnarrow}'\n\nThisForm.grade.Column1.SetFocus()\n\n\t\t\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGALTDT.btnExcluir",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "Select CrSigCdVca\nIf Not Eof()\n\tDelete\nEndIf\n\nIf Not Eof()\n\tSkip \n\tSkip - 1\nEndIf \nGo Bottom\nThisForm.Grade.SetFocus\nThisForm.Grade.Refresh\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGALTDT.Init",
+      "queryOriginal": "lcQryVca = [select a.*, c.rclis, b.deptos, b.ncomps as usuario ] + ; \t[from sigcdvca a ] + ; \t[inner join sigcdusu b on a.resp = b.usuarios ] + ; \t[inner join sigcdcli c on a.iclis = c.iclis  ]",
+      "tabelas": "sigcdusu,sigcdcli",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGALTDT.Grupo_Botao.Click",
+      "queryOriginal": "Select Iclis, rClis, Count(*) as TT From CrSigCdVca Where Not Empty(Iclis) group by iclis, rClis having Count(*) > 1 Into Cursor cdCtaDup ReadWrite",
+      "tabelas": "CrSigCdVca",
+      "colunas": "Iclis,rClis,having,Count*,cdCtaDup,ReadWrite",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["sigcdusu", "sigcdcli", "CrSigCdVca"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

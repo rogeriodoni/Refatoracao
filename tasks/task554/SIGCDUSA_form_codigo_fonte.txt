@@ -1,0 +1,633 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDUSA.SCX
+* Data/Hora: 19/09/2026 01:14:30
+* Total de registros: 12
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDUSA
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDUSA.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDUSA.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGCDUSA.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: getUsuars
+  Parent: SIGCDUSA.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDopes
+  Parent: SIGCDUSA.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmps
+  Parent: SIGCDUSA.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDEmps
+  Parent: SIGCDUSA.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDUsuars
+  Parent: SIGCDUSA.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUSA
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Usuários Automáticos"
+  Name = "SIGCDUSA"
+  pagina.ErasePage = .T.
+  pagina.lista.cntSombra.lblSombra.Name = "lblSombra"
+  pagina.lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  pagina.lista.cntSombra.Name = "cntSombra"
+  pagina.lista.grade.Name = "grade"
+  pagina.lista.grupo_op.AutoSize = .F.
+  pagina.lista.grupo_op.inserir.Top = 5
+  pagina.lista.grupo_op.inserir.Left = 5
+  pagina.lista.grupo_op.inserir.Name = "inserir"
+  pagina.lista.grupo_op.consultar.Top = 5
+  pagina.lista.grupo_op.consultar.Left = 80
+  pagina.lista.grupo_op.consultar.Name = "consultar"
+  pagina.lista.grupo_op.alterar.Top = 5
+  pagina.lista.grupo_op.alterar.Left = 155
+  pagina.lista.grupo_op.alterar.Name = "alterar"
+  pagina.lista.grupo_op.excluir.Top = 5
+  pagina.lista.grupo_op.excluir.Left = 230
+  pagina.lista.grupo_op.excluir.Name = "excluir"
+  pagina.lista.grupo_op.procurar.Top = 5
+  pagina.lista.grupo_op.procurar.Left = 305
+  pagina.lista.grupo_op.procurar.Name = "procurar"
+  pagina.lista.grupo_op.Name = "grupo_op"
+  pagina.lista.grupo_saida.sair.Top = 5
+  pagina.lista.grupo_saida.sair.Left = 5
+  pagina.lista.grupo_saida.sair.Name = "sair"
+  pagina.lista.grupo_saida.Name = "grupo_saida"
+  pagina.lista.cntFiltros.Name = "cntFiltros"
+  pagina.lista.Name = "lista"
+  pagina.dados.grupo_salva.salva.Top = 5
+  pagina.dados.grupo_salva.salva.Left = 5
+  pagina.dados.grupo_salva.salva.Name = "salva"
+  pagina.dados.grupo_salva.cancelar.Top = 5
+  pagina.dados.grupo_salva.cancelar.Left = 80
+  pagina.dados.grupo_salva.cancelar.Name = "cancelar"
+  pagina.dados.grupo_salva.TabIndex = 9
+  pagina.dados.grupo_salva.Name = "grupo_salva"
+  pagina.dados.Name = "dados"
+  pagina.TabIndex = 1
+  pagina.Name = "pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUSA.pagina.dados.Label1
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Usuário : "
+  Height = 17
+  Left = 197
+  Top = 269
+  Width = 55
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUSA.pagina.dados.Label2
+------------------------------------------------------------
+  AutoSize = .F.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Operação : "
+  Height = 17
+  Left = 185
+  Top = 319
+  Width = 67
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUSA.pagina.dados.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Height = 15
+  Left = 202
+  Top = 295
+  Width = 50
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUSA.pagina.dados.getUsuars
+------------------------------------------------------------
+  ControlSource = "crSigSyMov.USUARS"
+  Enabled = .T.
+  Left = 251
+  MaxLength = 10
+  TabIndex = 4
+  Top = 266
+  Width = 80
+  DisabledBackColor = 192,192,192
+  Name = "getUsuars"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUSA.pagina.dados.getDopes
+------------------------------------------------------------
+  ControlSource = "crSigSyMov.DOPES"
+  Enabled = .F.
+  Left = 251
+  MaxLength = 20
+  TabIndex = 8
+  Top = 316
+  Width = 150
+  DisabledBackColor = 192,192,192
+  Name = "getDopes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUSA.pagina.dados.getEmps
+------------------------------------------------------------
+  ControlSource = "crSigSyMov.EMPS"
+  Format = "K"
+  Height = 23
+  Left = 251
+  MaxLength = 3
+  TabIndex = 6
+  Top = 291
+  Width = 31
+  Name = "getEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUSA.pagina.dados.getDEmps
+------------------------------------------------------------
+  ControlSource = "crSigSyMov.razas"
+  Format = "K!"
+  Height = 23
+  Left = 284
+  MaxLength = 40
+  TabIndex = 7
+  Top = 291
+  Width = 290
+  Name = "getDEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUSA.pagina.dados.getDUsuars
+------------------------------------------------------------
+  ControlSource = "crSigSyMov.ncomps"
+  Format = "K!"
+  Height = 23
+  Left = 333
+  MaxLength = 30
+  TabIndex = 5
+  Top = 266
+  Width = 290
+  DisabledBackColor = 255,255,255
+  Name = "getDUsuars"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDUSA
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+ThisForm.poDataMgr.LocateCursor('crSigSyMov','USUARS',ThisForm.Pagina.Dados.getusuars.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lcAcesso
+
+With ThisForm
+	.LockScreen = .T.
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+	If (.poDataMgr.pnIdconn > 0)
+		lcQuery = [select a.usuars,a.Dopes,a.Emps,b.ncomps,c.razas,a.cidchaves from SigSyMov a ]+;
+				  [Left Join SigCdUsu B ON a.usuars = b.usuarios ]+;
+				  [Left Join SigCdEmp C ON a.emps = c.cemps ]			  
+				  
+		With .poDatamgr
+			.AddCursor('SigSyMov','cidchaves','crSigSyMov','',ThisForm.pagina.lista.grade,lcQuery)
+			.pfSqlTabela(1).pColuna('usuars','','','Usuário'           ,080,.T.)
+			.pfSqlTabela(1).pColuna('Dopes'  ,'','','Operação'			,150,.T.)
+			.pfSqlTabela(1).pColuna('Emps'  ,'','','Emp'				,31,.T.)			
+		EndWith
+		= DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+	.LockScreen = .F.	
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.lista.grupo_op.Click
+------------------------------------------------------------
+PROCEDURE pagina.lista.grupo_op.Click
+LParameters lnOpcao
+lnOpcao = Iif(Type("lnOpcao")=='N',lnOpcao,This.Value)
+
+If !dodefault( lnOpcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+
+Do Case && Ativa o Foco do mouse, de acordo com o Tipo de Escolha
+	Case INLIST(ThisForm.pcEscolha,'INSERIR','PROCURAR')
+		ThisForm.Pagina.Dados.getUsuars.SetFocus
+		ThisForm.pagina.dados.getDopes.Enabled=.f.
+		ThisForm.pagina.dados.getDopes.Refresh
+		
+	Case INLIST(ThisForm.pcEscolha,'CONSULTAR','EXCLUIR')	
+		This.Parent.Parent.dados.grupo_salva.salva.SetFocus 			
+EndCase
+
+
+If ThisForm.pcescolha='PROCURAR'
+	ThisForm.pagina.dados.getDEmps.Enabled=.f.
+	ThisForm.pagina.dados.getDUsuars.Enabled=.f.
+	
+	ThisForm.pagina.dados.getDEmps.Refresh
+	ThisForm.pagina.dados.getDUsuars.Refresh
+EndIf
+
+
+If INLIST(ThisForm.pcEscolha,'ALTERAR','CONSULTAR','EXCLUIR') 
+	ThisForm.pagina.dados.getEmps.SetFocus
+	ThisForm.pagina.dados.getDUsuars.Enabled=.f.
+
+	If Empty(ThisForm.pagina.dados.getUsuars.Value)
+		ThisForm.pagina.dados.getDopes.Enabled=.f.
+	EndIf
+
+	If IsNull(ThisForm.pagina.dados.getDUsuars.Value)
+		ThisForm.pagina.dados.getDUsuars.Value=Nvl(ThisForm.pagina.dados.getDUsuars.Value,Space(40))
+	EndIf
+	
+	ThisForm.pagina.dados.getDUsuars.Refresh
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.grupo_salva.salva.Click
+------------------------------------------------------------
+PROCEDURE pagina.dados.grupo_salva.salva.Click
+*Verifica se o registro já existe
+If !Empty(ThisForm.pagina.dados.getUsuars.Value)
+	If ThisForm.pcEscolha = 'INSERIR' And ThisForm.poDataMgr.ChkRegister('SigSyMov','usuars',ThisForm.Pagina.Dados.getUsuars.value)
+		Messagebox( 'Usuário já Cadastrado!', 48, 'Atenção' )
+		ThisForm.Pagina.Dados.getUsuars.SetFocus
+		Return
+	Else
+	*Faz Validacao dos Campos, nas Seguinte Operacoes
+		If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+			If Empty(crSigSyMov.Emps)
+				Messagebox( 'A Empresa precisa ser Informada...', 48, 'Atenção' )
+				ThisForm.Pagina.Dados.getemps.SetFocus	
+				Return
+			Else
+				If Empty(crSigSyMov.Dopes)
+					Messagebox( 'A Operação precisar ser Informado...', 48, 'Atenção' )
+					ThisForm.Pagina.Dados.getDopes.SetFocus				
+					Return
+				EndIf
+			EndIf
+		EndIf
+	EndIf
+Else
+	If Empty(ThisForm.pagina.dados.getEmps.Value)
+		Messagebox( 'A Empresa precisa ser Informada...', 48, 'Atenção' )
+		ThisForm.Pagina.Dados.getemps.SetFocus
+		Return
+	EndIf
+	lcSql = [Select * From SigSyMov Where Emps=']+ThisForm.Pagina.Dados.getEmps.Value+[' And Dopes = '  ' ]
+	=ThisForm.Podatamgr.Sqlexecute(lcSql,'LocMOV')
+	If ThisForm.pcEscolha = 'INSERIR' And Reccount('LocMov') > 0
+		Messagebox( 'Empresa já Cadastrada com esse Usuário/Operação!', 48, 'Atenção' )
+		ThisForm.Pagina.Dados.getEmps.SetFocus
+		Return
+	EndIf
+EndIf
+
+If ThisForm.pcEscolha = 'INSERIR'
+	Replace cidChaves with fUniqueIds() IN crSigSyMov
+EndIf		
+= DoDefault()
+ThisForm.mAtivaPagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.grupo_salva.cancelar.Click
+------------------------------------------------------------
+PROCEDURE pagina.dados.grupo_salva.cancelar.Click
+= DoDefault()
+If ThisForm.plCancelar
+	ThisForm.LockScreen = .t.
+	ThisForm.mAtivapagina1
+	ThisForm.LockScreen = .f.
+EndIf 
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUSA.pagina.dados.getUsuars
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcescolha,'INSERIR','PROCURAR')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,loLista
+
+m.llRetorno = (Empty(This.Value))
+If Not m.llRetorno
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDatamgr.pnIdconn,'SigCdUsu','crSigCdUsu','USUARIOS',THIS.Value,'SELEÇÃO DE USUÁRIOS',.T.,.f.,[Not cAtivos='N'])
+	If .Not.m.loLista.plachouRegistro
+		m.loLista.mAddColuna('USUARIOS',,'Cód.',80,.T.)
+		m.loLista.mAddColuna('NCOMPS',,'Nome',290,.T.)		
+		m.loLista.Show()
+	EndIf
+
+	This.Parent.getUSUARS.Value = Iif(Lastkey()==27,"",crSigCdUsu.USUARIOS)
+	This.Parent.getUSUARS.Refresh
+	
+	This.Parent.getDUSUARS.Value = Iif(Lastkey()==27,"",crSigCdUsu.NCOMPS)
+	This.Parent.getDUSUARS.Refresh
+		
+EndIf
+If Empty(This.Value)
+	This.Parent.getDUSUARS.Value = ""
+	This.Parent.getDUSUARS.Refresh
+	This.Parent.getDOPES.Enabled = .f.	
+	This.Parent.getDOPES.Refresh
+Else
+	This.Parent.getDOPES.Enabled = .t.
+	This.Parent.getDOPES.Refresh
+EndIf
+Return(.T.)
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUSA.pagina.dados.getDopes
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,loLista
+
+m.llRetorno = (Empty(This.Value))
+If Not m.llRetorno
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDatamgr.pnIdconn,'SigCdOpe','crSigCdOpe','DOPES',THIS.Value,'SELEÇÃO DE OPERAÇÃO',.T.)
+	If .Not.m.loLista.plachouRegistro
+		m.loLista.mAddColuna('DOPES',,'Operação.',150,.T.)
+		m.loLista.Show()
+	EndIf
+
+	This.Parent.getDopes.Value = Iif(Lastkey()==27,"",crSigCdOpe.DOPES)
+	This.Parent.getDopes.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUSA.pagina.dados.getEmps
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,loLista
+
+m.llRetorno = (Empty(This.Value))
+If Not m.llRetorno
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','CEMPS',THIS.Value,'SELEÇÃO DE EMPRESAS',.T.)
+	If .Not.m.loLista.plachouRegistro
+		m.loLista.mAddColuna('CEMPS'	,,  'Cód.',31,.T.)
+		m.loLista.mAddColuna('RAZAS'  	,Replicate('x',40), 'Empresa',290,.T.)		
+		m.loLista.Show()
+	EndIf
+
+	This.Parent.getEmps.Value = Iif(Lastkey()==27,"",crSigCdEmp.CEMPS)
+	This.Parent.getEmps.Refresh
+	
+	This.Parent.getDEmps.Value = Iif(Lastkey()==27,"",crSigCdEmp.RAZAS)
+	This.Parent.getDEmps.Refresh
+		
+EndIf
+If Empty(This.Value)
+	This.Parent.getDEmps.Value = ""
+	This.Parent.getDEmps.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUSA.pagina.dados.getDEmps
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(THIS.Parent.GETEMPS.VALUE)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,loLista
+
+m.llRetorno = (Empty(This.Value))
+If Not m.llRetorno
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','RAZAS',THIS.Value,'SELEÇÃO DE EMPRESAS',.T.)
+	If .Not.m.loLista.plachouRegistro
+		m.loLista.mAddColuna('RAZAS'  	,Replicate('x',40), 'Empresa',290,.T.)
+		m.loLista.mAddColuna('CEMPS'	,,  'Cód.',31,.T.)
+		m.loLista.Show()
+	EndIf
+
+	This.Parent.getDEmps.Value = Iif(Lastkey()==27,"",crSigCdEmp.RAZAS)
+	This.Parent.getDEmps.Refresh
+
+	This.Parent.getEmps.Value = Iif(Lastkey()==27,"",crSigCdEmp.CEMPS)
+	This.Parent.getEmps.Refresh
+EndIf
+If Empty(This.Value)
+	This.Parent.getEmps.Value = ""
+	This.Parent.getEmps.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUSA.pagina.dados.getDUsuars
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(This.Parent.getUsuars.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local llRetorno,loLista
+
+m.llRetorno = (Empty(This.Value))
+If Not m.llRetorno
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDatamgr.pnIdconn,'SigCdUsu','crUsuarios','NCOMPS',THIS.Value,'SELEÇÃO DE USUÁRIOS',.T.,.f.,[Not cAtivos='N'])
+	If .Not.m.loLista.plachouRegistro
+		m.loLista.mAddColuna('NCOMPS',, 'Nome',290,.T.)		
+		m.loLista.mAddColuna('USUARIOS'	,,  'Cód.',80,.T.)		
+		m.loLista.Show()
+	EndIf
+
+	This.Parent.getDUSUARS.Value = Iif(Lastkey()==27,"",crUsuarios.NCOMPS)
+	This.Parent.getDUSUARS.Refresh
+	
+	This.Parent.getUSUARS.Value = Iif(Lastkey()==27,"",crUsuarios.USUARIOS)
+	This.Parent.getUSUARS.Refresh			
+EndIf
+If Empty(This.Value)
+	This.Parent.getUSUARS.Value = ""
+	This.Parent.getUSUARS.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

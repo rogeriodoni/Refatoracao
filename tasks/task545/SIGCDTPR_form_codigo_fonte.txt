@@ -1,0 +1,866 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDTPR.SCX
+* Data/Hora: 18/09/2026 19:34:59
+* Total de registros: 26
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDTPR
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getTpTrans
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Ordem
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDbf
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getRecTrans
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getIndice
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getChave
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCProcs
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getTps
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getObs
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getComparacao
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Say21
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: op_fotos
+  Parent: SIGCDTPR.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 129
+  Left = 71
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  DoCreate = .T.
+  Caption = "Subtipos de Transportes"
+  KeyPreview = .T.
+  WindowType = 1
+  Name = "SIGCDTPR"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.TabIndex = 1
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 37
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 112
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 187
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 262
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 337
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 312
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 421
+  Pagina.Lista.Grupo_op.TabIndex = 2
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.TabIndex = 3
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 88
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 22
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 2
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.TabIndex = 1
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.getTpTrans
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigPrTro.TpTrans"
+  Enabled = .F.
+  Height = 25
+  Left = 212
+  TabIndex = 1
+  Top = 141
+  Width = 52
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  ZOrderSet = 1
+  Name = "getTpTrans"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Tipo Transporte:"
+  Left = 108
+  Top = 145
+  Width = 97
+  TabIndex = 12
+  ZOrderSet = 3
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Tipo (T/R) :"
+  Left = 136
+  Top = 224
+  Width = 69
+  TabIndex = 15
+  ZOrderSet = 5
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.Say8
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Comando :"
+  Left = 139
+  Top = 399
+  Width = 66
+  TabIndex = 21
+  ZOrderSet = 5
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.Say9
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Ordem :"
+  Left = 155
+  Top = 249
+  Width = 50
+  TabIndex = 16
+  ZOrderSet = 5
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Tabela :"
+  Left = 156
+  Top = 276
+  Width = 49
+  TabIndex = 17
+  ZOrderSet = 5
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.get_Ordem
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "crSigPrTro.Ordems"
+  Height = 25
+  Left = 212
+  TabIndex = 5
+  Top = 244
+  Width = 17
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 7
+  Name = "get_Ordem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Índice :"
+  Left = 159
+  Top = 302
+  Width = 46
+  TabIndex = 18
+  ZOrderSet = 5
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.getDbf
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigPrTro.Dbf"
+  Format = "K!"
+  Height = 25
+  Left = 212
+  TabIndex = 6
+  Top = 271
+  Width = 66
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 7
+  Name = "getDbf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.getRecTrans
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigPrTro.RecTrans"
+  Format = "K!"
+  Height = 25
+  Left = 212
+  TabIndex = 4
+  Top = 219
+  Width = 17
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 7
+  Name = "getRecTrans"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.getIndice
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigPrTro.Indice"
+  Format = "K!"
+  Height = 25
+  Left = 212
+  TabIndex = 7
+  Top = 297
+  Width = 115
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 7
+  Name = "getIndice"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Chave :"
+  Left = 157
+  Top = 328
+  Width = 48
+  TabIndex = 19
+  ZOrderSet = 5
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.getChave
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigPrTro.Chave"
+  Format = "K!"
+  Height = 25
+  Left = 212
+  TabIndex = 8
+  Top = 323
+  Width = 290
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 7
+  Name = "getChave"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Processo :"
+  Left = 143
+  Top = 354
+  Width = 62
+  TabIndex = 20
+  ZOrderSet = 5
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.getCProcs
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigPrTro.CProcs"
+  Format = "K!"
+  Height = 25
+  Left = 212
+  TabIndex = 9
+  Top = 349
+  Width = 115
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 7
+  Name = "getCProcs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Código do Transporte :"
+  Left = 70
+  Top = 198
+  Width = 135
+  TabIndex = 14
+  ZOrderSet = 5
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.getTps
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigPrTro.Tps"
+  Format = "K!"
+  Height = 25
+  Left = 212
+  TabIndex = 3
+  Top = 193
+  Width = 17
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 7
+  Name = "getTps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Descrição :"
+  Left = 138
+  Top = 172
+  Width = 67
+  TabIndex = 13
+  ZOrderSet = 5
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.getObs
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigPrTro.Obs"
+  Format = "K!"
+  Height = 25
+  Left = 212
+  TabIndex = 2
+  Top = 167
+  Width = 290
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 7
+  Name = "getObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.getComparacao
+------------------------------------------------------------
+  FontName = "Courier New"
+  Height = 76
+  Left = 212
+  TabIndex = 11
+  Top = 396
+  Width = 516
+  ControlSource = "crSigPrTro.Comparacao"
+  NullDisplay = "  "
+  Name = "getComparacao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.Say21
+------------------------------------------------------------
+  Caption = "Foto :"
+  Height = 15
+  Left = 170
+  Top = 377
+  Width = 35
+  TabIndex = 23
+  ZOrderSet = 35
+  Name = "Say21"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPR.Pagina.Dados.op_fotos
+------------------------------------------------------------
+  AutoSize = .F.
+  Value = 1
+  ControlSource = "crSigPrTro.Fotos"
+  Height = 20
+  Left = 212
+  SpecialEffect = 0
+  Top = 375
+  Width = 88
+  TabIndex = 10
+  ZOrderSet = 49
+  Name = "op_fotos"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Left = 5
+  Option1.Top = 2
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.FontSize = 8
+  Option2.Caption = "Não"
+  Option2.Left = 49
+  Option2.Top = 2
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDTPR
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pTip
+
+Local lcQryTron
+
+If (Type('pTip')<>'C')
+	=Messagebox('O Parâmetro Passado Não é Válido!!!', 0+48, 'Init - SigPrTro')
+	Return .f.
+EndIf
+
+ThisForm.TpTrans = Padr(pTip, 6)
+
+lcQryTron = [Select * From SigPrTro Where TpTrans = '] + ThisForm.TpTrans + [' Order BY RecTrans,Tps,ordems]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigPrTro', 'cIdChaves', 'crSigPrTro', '', ThisForm.Pagina.Lista.Grade, lcQryTron)
+			.pfSqlTabela(1).pColuna('Tps',     '', '', 'Cod', 	     031, .f.)
+			.pfSqlTabela(1).pColuna('RecTrans','', '', 'T/R', 	     031, .f.)
+			.pfSqlTabela(1).pColuna('Dbf',     '', '', 'Tabela',    066, .f.)
+			.pfSqlTabela(1).pColuna('Obs',     '', '', 'Descrição', 275, .f.)
+			.pfSqlTabela(1).pColuna('CProcs',  '', '', 'Processo',  105, .f.)
+			.pfSqlTabela(1).pColuna('Indice',  '', '', 'Índice',    115, .f.)
+		EndWith
+
+		=DoDefault()
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Lparameters Opcao
+
+If (Type('Opcao') = 'N')
+	This.Value = Opcao
+EndIf
+
+Select crSigPrTro
+
+If Not DoDefault(Opcao)
+	ThisForm.mAtivapagina1
+	Return 0
+EndIf
+
+If (ThisForm.pcEscolha = 'INSERIR')
+	Replace TpTrans With ThisForm.Tptrans In crSigPrTro
+	ThisForm.Pagina.Dados.getTpTrans.Refresh 
+EndIf
+
+If Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')
+	ThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus
+Else
+	ThisForm.Pagina.Dados.getObs.Setfocus
+EndIf
+
+Select crSigPrTro
+
+ThisForm.Pagina.Dados.getTpTrans.Enabled = .f.
+
+ThisForm.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	If Empty(ThisForm.Pagina.Dados.getObs.Value)
+		=MessageBox('Obrigatório Informar a Descrição do Transporte!!!', 48, '')
+		ThisForm.Pagina.Dados.getObs.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(ThisForm.Pagina.Dados.getTps.Value)
+		=MessageBox('Obrigatório Informar o Código do Transporte!!!', 48, '')
+		ThisForm.Pagina.Dados.getTps.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(ThisForm.Pagina.Dados.getRecTrans.Value)
+		=MessageBox('Obrigatório Informar o Tipo do Transporte!!!', 48, '')
+		ThisForm.Pagina.Dados.getRecTrans.SetFocus
+		Return 0
+	EndIf
+
+	If Not InList(ThisForm.Pagina.Dados.getRecTrans.Value, 'T', 'R')
+		=MessageBox('O Tipo do Transporte Tem Que Ser T ou R!!!', 48, '')
+		ThisForm.Pagina.Dados.getRecTrans.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(ThisForm.Pagina.Dados.getDbf.Value)
+		=MessageBox('Obrigatório Informar a Tabela do Transporte!!!', 48, '')
+		ThisForm.Pagina.Dados.getDbf.SetFocus
+		Return 0
+	EndIf
+
+	If (ThisForm.pcEscolha = 'INSERIR')
+		Replace cIdChaves With fUniqueIds(), ;
+				TpTrans   With ThisForm.TpTrans In crSigPrTro
+	EndIf
+
+	lcQuery = [Select * ] + ;
+				[From SigPrTro ] + ;
+			   [Where TpTrans = '] + ThisForm.TpTrans + [' And ] + ;
+			   		 [Tps = '] + crSigPrTro.Tps + [' And ] + ;
+			   		 [RecTrans = '] + crSigPrTro.RecTrans + [' And ] + ;
+			   		 [Cprocs = '] + CrSigPrTro.cprocs + [' And ] +;
+			   		 [Not cIdChaves = '] + crSigPrTro.cIdChaves + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalTron') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalTron)')
+		Return 0
+	EndIf
+
+	If (Reccount('LocalTron') > 0)
+		=MessageBox('Código do Transporte Já Cadastrado!!!', 48, '')
+		ThisForm.Pagina.Dados.getTps.SetFocus
+		Return 0
+	EndIf
+EndIf
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPR.Pagina.Dados.getRecTrans
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return(InList(This.Value,'R','T'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPR.Pagina.Dados.getCProcs
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+IF Thisform.Pagina.Dados.GetRecTrans.Value = [T]
+	If Not Empty(This.Value) And Not InList(This.Value, 'COPIA', 'PRODUTO', 'CLIENTE', 'PROETI', ;
+			'TRANSFERE', 'SITUACAO', 'CHDEVOL', 'BALANCO', 'CPF', 'ETIQUETA','COMPLEMENTO',;
+			'COMPLECLI','EMPCLIENTE','DATATRANS','APAGA','SIGMVHST','SIGMVCCR','SALDO','TRANSFEREC','CADCLIENTES')
+		=MessageBox('Os Processos Válidos são: COPIA, PRODUTO, CLIENTE, PROETI, TRANSFERE, ' + Chr(13) + ;
+					'SITUACAO, CHDEVOL, BALANCO, CPF, ETIQUETA, COMPLEMENTO, COMPLECLI, ' + ;
+					'EMPCLIENTE,DATATRANS,APAGA,SIGMVHST,SIGMVCCR,SALDO,TRANSFEREC,CADCLIENTES', 0+16, 'Atenção!!!')
+		Return 0
+	EndIf
+ELSE
+	If Not Empty(This.Value) And Not InList(This.Value, 'INSERIR', 'COPIA', 'APAGA', 'ATUALIZA', 'TRANSFERE',;
+		 'BAIXA VALPAGS', 'SITUCHDEV', 'INTERATIVO', 'CURSOR', 'COMANDO','ETIQUETA','EXCLUSIVO','TRANSF ETQ','ATUACPF')
+		=MessageBox('Os Processos Válidos são: INSERIR,COPIA,APAGA,ATUALIZA,TRANSFERE,TRANSF ETQ, ' + Chr(13) + ;
+					'BAIXA VALPAGS,SITUCHDEV,ETIQUETA,INTERATIVO,EXCLUSIVO,CURSOR,COMANDO ', 0+16, 'Atenção!!!')
+		Return 0
+	EndIf
+EndIf
+
+If InList(This.Value,'COMPLEMENTO','COMPLECLI') 
+	If  Asc(This.Parent.GetTps.Value) < 65 Or Asc(This.Value) > 90
+		MessageBox('Código do Transporte deve ser Letra',16,'')
+		Return .f.
+	Endif
+EndIf
+
+If This.Value = 'ATUACPF' And This.Parent.GetDbf.Value <> 'SigCdCli'
+	MessageBox('Tipo AtuaCpf é utilizado somente para o Arquivo SigCdCli !!!',16,'')
+	Return .f.
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPR.Pagina.Dados.getTps
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If InList(This.Parent.GetCProcs.Value,'COMPLEMENTO','COMPLECLI') 
+	If  Asc(This.Value) < 65 or Asc(This.Value) > 90
+		MessageBox('Código do Transporte deve ser Letra',16,'')
+		Return .f.
+	Endif
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPR.Pagina.Dados.getComparacao
+* Classe: editbox (Base: editbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDTPR
+RESERVED3 (ClassInfo): tptrans
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

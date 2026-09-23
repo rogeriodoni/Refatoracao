@@ -630,6 +630,208 @@ Essas **nunca** dao erro e nao precisam ser declaradas. As que aparecem **CRUAS*
 
 Auditoria: `automation\VerificarPropsThisFormVCX.ps1` (exit 1 se houver pendencia; property so tocada apos `Type(...)` sai como WARNING, nao como falha). **Sem auto-fix**: o defeito eh uma declaracao AUSENTE, e so o p-code do VCX diz qual. Skill: secao **218**. Origem: Erro166 (2026-09-22).
 
+### 33. Propriedade que a CLASSE nao tem: compila limpo e a TELA NAO ABRE
+Atribuir `.Prop` a um controle cuja classe base nao tem `Prop` **nao eh erro de compilacao**. Estoura no `Init`, dentro do TRY do form, e o usuario ve *"Erro ao inicializar FormX: Linha N - Property FORECOLOR is not found"* — clicou no menu e nada abriu.
+
+O erro mais frequente eh **cor em CONTAINER DE GRUPO**. Medido no VFP9 (2026-09-23):
+
+| classe | ForeColor | BackColor | onde a cor mora de verdade |
+|---|---|---|---|
+| **OptionGroup** / **CommandGroup** | **NAO** | SIM | nos MEMBROS: `Buttons(N).ForeColor` |
+| **PageFrame** | **NAO** | **NAO** (nem `BackStyle`) | na `Page`, que tem as duas |
+| **ListBox** | **NAO** | **NAO** | `ItemForeColor` / `ItemBackColor` |
+| **Shape** | **NAO** | SIM | `BorderColor` / `FillColor` |
+| Container, Label, CommandButton, OptionButton, CheckBox, TextBox, Grid, Column, Header, Page | SIM | SIM | |
+
+E **o legado ja faz certo**: o SCX declara `Option1.ForeColor = 255,0,0` / `Option2.ForeColor = ...`, nos botoes. O migrador eh que iça a propriedade para o nivel do grupo. Transcrever o dump resolve — e a mesma varredura costuma revelar que o migrado **perdeu** o `ForeColor = 90,90,90` dos OUTROS botoes, que saem pretos.
+
+Duas familias vizinhas, mesmo sintoma:
+
+| familia | exemplo | conserto |
+|---|---|---|
+| **propriedade so do Form Designer** | `ZOrderSet` (o SCX grava o indice de z-order) | REMOVER — o equivalente em runtime eh o METODO `ZOrder()`, que o legado nao chama |
+| **propriedade de outra linguagem** | `ShapeType` (eh do VB; no VFP eh `Curvature`) | REMOVER — o default ja eh o retangulo pretendido |
+
+**`WITH` aninhado sequestra o escopo e produz o MESMO erro.** No `Formsigprenv`, `WITH THIS.this_oBusinessObject` + `WITH THIS.cnt_4c__Impressora` dentro fez `.this_nOpcaoImp` (property do BO) resolver contra um `Container` puro. Qualificar explicitamente (`THIS.cnt_4c__Impressora.obj_X.Value`) em vez de aninhar. No mesmo bloco, `.Visible = .T.` sobrando dentro do `WITH` do BO tambem estourava — BO nao tem `Visible`.
+
+**NUNCA chutar a lista de propriedades** — perguntar ao VFP. `automation\DumpPropriedadesBaseClasses.prg` dumpa via `AMEMBERS()` a lista REAL de cada classe base para `automation\propriedades_baseclasses.txt`; `automation\VerificarPropriedadesInexistentes.ps1` audita o projeto contra ela (sem a tabela ele AVISA e sai com 0, nao inventa defeito). Nome de objeto reaproveitado para classes diferentes vira `<<AMBIGUO>>` e nao eh checado (mesmo risco de colisao da regra #11).
+
+WARNING: CorretorAutomatico **#206**. Origem: Erro170 (2026-09-23, `Formgpr` linha 1066; a auditoria achou mais **20 sites em 6 outros forms** — FormDup, FormPzo, FormSigPdAco, FormSIGPRIMP, FormSigPrDsc, FormSigPrGlx, Formsigprenv — todos confirmados medindo no VFP9).
+
+### 34. `Controls` eh indexado por NUMERO - com o NOME a tela nao abre
+`Controls` eh **array**, nao colecao por chave. Passar o nome do controle **compila limpo** e estoura em RUNTIME com mensagem diferente conforme o contexto. Medido no VFP9 (2026-09-23):
+
+```
+Controls(1)                        -> OK
+Controls("lbl_4c_Teste")           -> Invalid subscript reference.
+WITH Controls("lbl_4c_Teste")      -> CONTROLS is not an object.     <- Erro171
+PEMSTATUS(pg, "lbl_4c_Teste", 5)   -> .T.     <<< o guard NAO protege
+EVALUATE("pg." + nome)             -> OK
+STORE valor TO ("pg." + nome + ".Prop") -> OK
+WITH EVALUATE("pg." + nome)        -> OK
+```
+
+O `PEMSTATUS` que costuma cercar esses blocos so verifica existencia pelo nome: devolve `.T.`, o `IF` entra e a linha seguinte quebra — mesma armadilha da regra **#3**.
+
+Alcancar membro por NOME eh o que a regra **#15** ja normatiza: `EVALUATE` para LEITURA, `STORE ... TO (expr)` para ATRIBUICAO.
+
+```foxpro
+* ERRADO                                   * CERTO
+WITH par_oPage.Controls(par_cNome)         WITH EVALUATE("par_oPage." + par_cNome)
+obj.Controls(par_cNome).Value = x          STORE x TO ("obj." + par_cNome + ".Value")
+y = obj.Controls(par_cNome).Value          y = EVALUATE("obj." + par_cNome + ".Value")
+```
+
+**Se o que se quer eh mesmo o INDICE**, o padrao certo eh um helper nome->indice varrendo `ControlCount` (o `Formccr` tem `ObterIndiceControle`, que devolve `loc_nI`). `Controls(N)` numerico eh o uso correto e majoritario: 402 sites no projeto contra 30 quebrados, todos num form so.
+
+Auto-fix: CorretorAutomatico **#207** (muta `WITH` e atribuicao de linha inteira; leitura embutida em expressao vira WARNING). Origem: Erro171 (2026-09-23, `Formgpd`).
+
+**Dois defeitos vizinhos apareceram na MESMA tela, cada um so visivel depois de consertar o anterior** — `Init` de form grande falha em cadeia, e "a tela abriu" so se prova instanciando:
+1. `.Column3.Check1.<prop>` sem `AddObject` -> *Unknown member CHECK1* (regra **#18**: a Column nasce so com `Header1`/`Text1`).
+2. `ConfigurarPgpgProdutos()` chamado e **nunca gerado** -> *Property CONFIGURARPGPGPRODUTOS is not found*; eram **71 controles** de uma aba inteira que a migracao perdeu. Auditar `THIS.<membro>` contra o proprio form **e a heranca de FormBase/BusinessBase/GridBase** antes de concluir.
+
+**Ao reconectar uma aba perdida, conferir o TIPO da property no BO**: no `gpdBO`, 5 colunas `numeric(1,0)` MULTI-VALOR (`bpesos` 3 opcoes, `dsccompras` 3, `mncompos` 5, `tpcalcps` 6, `montadescs` 7) tinham virado LOGICO com `(col = 1)` — valores 2..7 liam `.F.` e regravavam 0. Ligar o controle novo a isso institucionaliza perda silenciosa: converter para numerico ANTES de mapear.
+
+### 35. A pagina LISTA tem regra propria - e ela mora no `AddCursor`/`pColuna` do `Init` legado
+Tres defeitos da mesma origem: o migrador olha o SCX desenhado e ignora o `Init`, que eh onde o legado define o que a Lista consulta e como a grade fica.
+
+**(a) O filtro eh aplicado SEMPRE, inclusive VAZIO.** O legado liga a grade a uma query ja filtrada:
+
+```foxpro
+pcMercs  = []                                       && Init: vazio
+lcQryGru = [Select * From SigCdGrp Where Mercs = ?m.pcMercs ]
+.AddCursor('SigCdGrp','cgrus','CrSigCdGrp','', ThisForm.Pagina.Lista.Grade, lcQryGru)
+```
+
+Com `pcMercs` vazio a consulta **nao casa nada** e a Lista abre VAZIA — de proposito, esperando o usuario escolher. O migrado fazia `IF !EMPTY(filtro)` e caia em `Buscar("")`, que traz a TABELA INTEIRA. Transcrever o `Where` do `AddCursor`, com o mesmo `PADR(...,3)`.
+
+**(b) A grade espelha o `pColuna`, nao o header do SCX.** Os headers desenhados no SCX sao sobrescritos em runtime:
+
+```foxpro
+.pfSqlTabela(1).pColuna('cgrus','','','Codigo',60,.T.)
+.pfSqlTabela(1).pColuna('dgrus','','','Descricao',250,.T.)
+.pfSqlTabela(1).pColuna('mercs','','','Grande Grupo',155,.T.)
+.pfSqlTabela(1).pColuna('Unificas','','','Uni',32,.T.)
+```
+
+No `Formgpd` o SCX tinha 3 colunas com "Descricao do Grupo"; o `pColuna` tem **4**, com "Descricao" e a coluna `Unificas`/"Uni" — que o migrado perdeu, junto com a coluna no SELECT do BO.
+
+**(c) `Column.Width` vai por ULTIMO.** Mexer em `RecordSource`/`ControlSource` **e na fonte do Grid** faz o VFP recalcular as larguras para o default 90. Medido: atribuidas antes do `FormatarGridLista`, todas voltavam a 90; depois dele, ficam. Irma da regra ja conhecida sobre `RecordSource` resetar `Column.Width`.
+
+**Campo de filtro tem os DOIS eventos do legado.** O `Get_gde` do `Formgpd` tem `Valid` (se o codigo nao existe, abre o picker; ESC limpa) **e** `LostFocus` (recarrega a grade ao SAIR do campo, nao so no Enter). O migrado tinha so `KeyPress` com Enter — digitar e sair nao fazia nada. Como `BINDEVENT` em `"Valid"` nao dispara de forma confiavel em TextBox, as duas coisas moram no handler de `LostFocus`.
+
+### 36. `FormBuscaAuxiliar`: o 1o argumento eh o HANDLE, e errar isso abre picker VAZIO
+```foxpro
+Init(par_nConn, par_cTabela, par_cCursor, par_cCampo, par_cValor,
+     par_cTitulo, par_lBuscaExata, par_lMostraGrid, par_cFiltro)
+```
+
+O `Init` faz `SQLEXEC(par_nConn, loc_cSQL, par_cCursor)`: o 1o argumento vai **direto** para o `SQLEXEC`. Passar a tabela (ou um cursor, ou um `SELECT` inteiro) ali desloca TODOS os argumentos — `par_cTabela` recebe o nome da COLUNA, `par_cCursor` recebe o titulo — e a consulta nunca acontece.
+
+**Nao estoura**: o `Init` tem `IF VARTYPE(par_cTabela) != "C" / RETURN .T.`, e com string em tudo ele segue adiante. O usuario clica no lookup e ve um picker **vazio**.
+
+```foxpro
+* ERRADO                                     * CERTO
+CREATEOBJECT("FormBuscaAuxiliar", ;          CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+    "SigCdGpr", "codigos", "descs", ...)         "SigCdGpr", "cursor_4c_BuscaGde", "Codigos", ;
+                                                 ALLTRIM(<valor atual>), "Grande Grupo")
+```
+
+Auditoria: `automation\VerificarFormBuscaAuxiliar.ps1`. WARNING: CorretorAutomatico **#208** (sem auto-fix — tabela/cursor/campo corretos vem do dump do legado, e parte dos sites quer reusar um cursor JA populado). Sweep 2026-09-23: **55 sites em 16 forms**.
+
+**Ao escrever a auditoria, tratar CONTINUACAO DE LINHA**: a forma dominante eh `CREATEOBJECT("FormBuscaAuxiliar", ;` com o 1o argumento na linha SEGUINTE. Sem juntar as continuacoes, o script le argumento vazio e acusa TUDO — a 1a versao desta auditoria deu **95 achados, ~86 falsos positivos**. E tirar o `)` final, senao `gnConnHandle)` nao casa com `^gnConnHandle$`.
+
+### 37. `FormBuscaAuxiliar` tem CONTRATO: `this_lAchouRegistro` antes do `Show()`
+O `Init` ja tenta o **match exato** e, achando **1** registro, resolve o valor sozinho:
+
+```foxpro
+IF loc_nResultado > 0 AND RECCOUNT(par_cCursor) = 1
+    THIS.this_lAchouRegistro = .T.
+    THIS.this_lSelecionou    = .T.
+    RETURN .T.
+```
+
+Dai o padrao canonico do projeto (137 arquivos), que tem de ser seguido inteiro:
+
+```foxpro
+IF VARTYPE(loc_oBusca) = "O"
+    IF !loc_oBusca.this_lAchouRegistro          && 1) Show SO se nao resolveu
+        loc_oBusca.mAddColuna(...)
+        loc_oBusca.Show()
+    ENDIF
+    IF loc_oBusca.this_lSelecionou AND USED("<cursor>")   && 2) atribui SO sob guarda
+        SELECT <cursor>
+        <controle>.Value = ALLTRIM(<cursor>.<col>)
+    ENDIF
+    loc_oBusca.Release()
+ENDIF
+```
+
+**Os dois erros andam juntos e sao invisiveis no codigo:**
+
+| erro | sintoma |
+|---|---|
+| `Show()` sem a guarda | com valor JA valido, o dialogo abre por cima da tela preenchida e o usuario precisa dispensar |
+| atribuir o valor FORA da guarda `this_lSelecionou` (tipico: `<controle>.Value = loc_cCodigo` no FIM do metodo) | nada escolhido -> `loc_cCodigo` vazio -> **o campo eh ZERADO** e o que dependia dele (filtro/grade) esvazia |
+
+**Nao duplicar a checagem de existencia** com um `SQLEXEC` proprio antes de chamar o picker: o `Init` ja faz o match exato, e a segunda consulta so cria um caminho para divergir.
+
+**Abrir form MODAL de dentro de `LostFocus` pede guarda de reentrancia.** O `Show()` bloqueia, o foco sai e volta, e o proprio `LostFocus` pode disparar de novo — empilhando um segundo picker. Property booleana no form, setada na entrada e limpa DEPOIS do `ENDTRY` (para valer tambem quando o CATCH dispara).
+
+**Diagnostico barato**: num teste headless, `Show()` de form modal **trava** a execucao. Se o script termina dentro do timeout, o picker nao abriu — eh prova de que a guarda pegou.
+
+**Sem auto-fix e sem auditoria** — medido e descartado: `Show()` sem guarda aparece em **530 sites de 176 arquivos** (o padrao MAJORITARIO), e com match exato ele abre com 1 linha, o que eh incomodo e nao quebrado; um detector disso seria WARNING massivo. A atribuicao fora da guarda da 334 contra 2407 dentro, com heuristica grosseira demais para separar falso positivo. O que torna o caso um defeito de verdade eh o **legado**: o `Valid` do `Get_gde` so abre o picker `If Not Seek(This.Value, 'crSigCdGpr', 'Codigos')`. Conferir contra o dump, nao contra a contagem.
+
+Origem: Erro173 (2026-09-23, `Formgpd`) — regressao introduzida ao consertar o Erro172.
+
+### 38. `.Self` NAO existe em VFP9 - dentro de `WITH`, repetir a expressao
+`Self` eh de Delphi/Object Pascal. Em VFP9 o objeto **nao tem** essa propriedade, e dentro de um bloco `WITH` nao ha como referenciar o proprio objeto com ponto. Medido no VFP9 (2026-09-23):
+
+```
+WITH obj / PEMSTATUS(.Self, "x", 5)   -> ERRO "Property SELF is not found."
+PEMSTATUS(obj, "Self", 5)             -> .F.   (objeto nao tem Self)
+PEMSTATUS(<expr do WITH>, "x", 5)     -> OK
+PEMSTATUS(<variavel>, "x", 5)         -> OK
+```
+
+```foxpro
+* ERRADO                                     * CERTO
+WITH THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes   WITH THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes
+    IF PEMSTATUS(.Self, "cmd_4c_Incluir", 5)       IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes, "cmd_4c_Incluir", 5)
+```
+
+**COMPILA LIMPO e so estoura em RUNTIME.** E quando o metodo nao tem TRY/CATCH, o usuario ve o **`Program Error` CRU do VFP**, nao o `MostrarErro` do form — foi assim no Erro174, ao clicar Incluir (`BtnIncluirClick` -> `AjustarBotoesPorModo`). Diante de um Program Error cru em vez do dialogo do projeto, procurar o metodo SEM TRY/CATCH no caminho daquele botao.
+
+Auto-fix: CorretorAutomatico **#209**. Este eh AUTO-FIX de verdade, nao WARNING: a expressao certa eh exatamente a do `WITH` que abre o bloco, esta na mesma regiao do arquivo e nao depende do dump do legado nem de julgamento. Nao muta so quando nao da para resolver com certeza — `.Self` fora de qualquer `WITH`, ou expressao de `WITH` com macro (`&`/`$`). Com `WITH` aninhado vale o **mais interno**.
+
+Sweep 2026-09-23: **83 sites em 4 forms** (`Formgpd` 6, `FormPAT` 24, `FormPEN` 18, `FormROM` 35). Origem: Erro174.
+
+### 39. Pagina preenchida por DOIS metodos: se um esquecer o +29, a aba fica com texto sobre texto
+Quando `ConfigurarAba<X>` e `ConfigurarPgpg<X>` preenchem a MESMA `pgf_4c_Divisoes.PageN`, basta um deles transcrever o `Top` CRU do SCX — sem a compensacao do `pgf_4c_Paginas.Top = -29` — para os controles dele caírem ~29px acima e pousarem em cima do que o outro ja desenhou. **Nao ha erro, nao ha log**: so a aba desformatada.
+
+Medido no `Formgpd` (Erro175), controle a controle contra o `layout.json`:
+
+| metodo | controles | com +29 | **sem +29** |
+|---|---|---|---|
+| `ConfigurarAbaConfiguracao` | 32 | 14 | 1 |
+| **`ConfigurarPgpgConfig`** | 83 | 14 | **67** |
+| `ConfigurarPgpgEstoque` | 46 | 46 | 0 |
+
+**Como diagnosticar** (o que funcionou): escopar a UM metodo do `.prg` e UMA pagina do SCX — a correspondencia se descobre LENDO o codigo, na primeira linha do metodo (`loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Divisoes.PageN`). Com esse escopo, parear por `Left` (±3) e comparar o `Top` com `legado.top` contra `legado.top + 29`. **Conferir que o pareamento saiu 1-para-1**: legado casado com dois migrados eh sinal de ruido, nao de defeito.
+
+**NAO existe ferramenta para isso — tentado DUAS vezes e descartado**:
+1. Auditoria varrendo o projeto contra o `layout.json` inteiro: **4220 achados em ~230 forms**, quase tudo falso positivo, inclusive 11 no proprio `Formgpd` JA CORRIGIDO (pareou o `lbl_4c_Titulo` da faixa do cabecalho com um `fwcombo1`).
+2. Versao dirigida, exigindo metodo + pagina: acusou **49** no metodo recem-corrigido e **18** num que estava certo. O pareamento "legado mais proximo pelo Top cru" so vale enquanto os controles estao UNIFORMEMENTE deslocados; depois de corrigidos, o vizinho mais proximo passa a ser outro controle e o verificador se perde.
+
+A raiz eh a mesma da regra **#30**: o PILAR 3 manda RENOMEAR os objetos, entao nao ha como casar migrado com legado por nome, e casar por geometria sempre encontra um sosia. Serve para diagnosticar um caso conhecido, **nao** para validar em massa nem para confirmar o conserto — o conserto se confere instanciando e olhando a tela.
+
+**Defeitos vizinhos, da mesma origem** (migrador lendo o controle errado no dump):
+- `Tptribs` com o `Top` do `Get_CodServs` (409) em vez do `Get_TpTrib` (385): as duas linhas viraram uma so ("SerTipo Paba ICMS").
+- `Obrigfiscs` em `Left=440` quando o legado tem `Left=176` — foi parar do outro lado da tela, sobre outro bloco.
+- **Label DUPLICADO**: o `ConfigurarAba*` inventou `lbl_4c_Obrigfiscs` ("Obrig. Fiscal :") para uma linha cujo label o `ConfigurarPgpg*` ja criava a partir do `Label2` do legado ("Class. Fiscal Obrigatoria :"). Ao achar dois labels na mesma linha, conferir qual existe no SCX — o legado tem UM.
+
+Origem: Erro175 (2026-09-23, abas Estoque/Fiscal e Configuracao do `Formgpd`).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

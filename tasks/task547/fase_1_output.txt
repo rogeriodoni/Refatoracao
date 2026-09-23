@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da: criei `C:\4c\projeto\app\classes\traBO.prg` com todas as propriedades mapeadas ├ás colunas de `SigPrTrp` (validadas contra `docs/schema.sql` via `Get-Content -Raw`, respeitando a regra do UTF-16) e o `Init()` configurando `this_cTabela = "SigPrTrp"` / `this_cCampoChave = "itras"`.
+
+Pontos que ficaram documentados nos coment├írios para as pr├│ximas fases:
+- `this_nCodigoSequencial` (`codigos`) ├® gerado internamente (equivalente ao `fGerUniqueKey` do legado) para compor o `itras` ÔÇö n├úo ├® um campo digit├ível.
+- `dirftpts`/`dirftpls` e `drivets`/`drivels` foram mapeados pela posi├º├úo real dos labels (`Say18`/`Say20` e `Say17`/`Say21`), n├úo pela ordem alfab├®tica dos nomes ÔÇö evita a armadilha de colunas g├¬meas.
+- `apelidos` (NULL) foi declarado mesmo sem controle vis├¡vel no form mapeado, por ser coluna real da tabela.
+- O campo `Get_senha2` (confirma├º├úo de senha) n├úo virou propriedade do BO ÔÇö no legado ├® apenas compara├º├úo em tela (c├│digo comentado), n├úo ├® persistido.
+- A tabela de detalhe `SigPrTrv` (fretes por estado, grid `GradEstado`) ainda n├úo foi tratada ÔÇö fica para a fase do grid/cursor de detalhe.
+
+Pronto para a Fase 2 (CarregarDoCursor/Inserir/Atualizar) quando voc├¬ quiser prosseguir.

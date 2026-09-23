@@ -1,0 +1,172 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 4,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDTPR",
+      "evento": "Init",
+      "linhas": 36,
+      "codigoOriginal": "Lparameters pTip\n\nLocal lcQryTron\n\nIf (Type('pTip')<>'C')\n\t=Messagebox('O Parâmetro Passado Não é Válido!!!', 0+48, 'Init - SigPrTro')\n\tReturn .f.\nEndIf\n\nThisForm.TpTrans = Padr(pTip, 6)\n\nlcQryTron = [Select * From SigPrTro Where TpTrans = '] + ThisForm.TpTrans + [' Order BY RecTrans,Tps,ordems]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigPrTro', 'cIdChaves', 'crSigPrTro', '', ThisForm.Pagina.Lista.Gr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "TpTrans = Padr",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTPR",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPR",
+      "evento": "Click",
+      "linhas": 30,
+      "codigoOriginal": "Lparameters Opcao\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndIf\n\nSelect crSigPrTro\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf\n\nIf (ThisForm.pcEscolha = 'INSERIR')\n\tReplace TpTrans With ThisForm.Tptrans In crSigPrTro\n\tThisForm.Pagina.Dados.getTpTrans.Refresh \nEndIf\n\nIf Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\tThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus\nElse\n\tThisForm.Pagina.Dados.getObs.Setfocus\nEndIf\n\nSelect crSigPrTro\n\nThisForm.Pagina.Dados.getTpTrans... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPR",
+      "evento": "Click",
+      "linhas": 60,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Empty(ThisForm.Pagina.Dados.getObs.Value)\n\t\t=MessageBox('Obrigatório Informar a Descrição do Transporte!!!', 48, '')\n\t\tThisForm.Pagina.Dados.getObs.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(ThisForm.Pagina.Dados.getTps.Value)\n\t\t=MessageBox('Obrigatório Informar o Código do Transporte!!!', 48, '')\n\t\tThisForm.Pagina.Dados.getTps.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(ThisForm.Pagina.Dados.getRecTrans.Value)\n\t\t=MessageBox('Obrigatório Informar o Ti... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPR",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPR.Pagina.Dados.getRecTrans",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(This.Value,'R','T'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTPR.Pagina.Dados.getCProcs",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "IF Thisform.Pagina.Dados.GetRecTrans.Value = [T]\n\tIf Not Empty(This.Value) And Not InList(This.Value, 'COPIA', 'PRODUTO', 'CLIENTE', 'PROETI', ;\n\t\t\t'TRANSFERE', 'SITUACAO', 'CHDEVOL', 'BALANCO', 'CPF', 'ETIQUETA','COMPLEMENTO',;\n\t\t\t'COMPLECLI','EMPCLIENTE','DATATRANS','APAGA','SIGMVHST','SIGMVCCR','SALDO','TRANSFEREC','CADCLIENTES')\n\t\t=MessageBox('Os Processos Válidos são: COPIA, PRODUTO, CLIENTE, PROETI, TRANSFERE, ' + Chr(13) + ;\n\t\t\t\t\t'SITUACAO, CHDEVOL, BALANCO, CPF, ETIQUETA, COMPLEMENTO, CO... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTPR.Pagina.Dados.getTps",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If InList(This.Parent.GetCProcs.Value,'COMPLEMENTO','COMPLECLI') \n\tIf  Asc(This.Value) < 65 or Asc(This.Value) > 90\n\t\tMessageBox('Código do Transporte deve ser Letra',16,'')\n\t\tReturn .f.\n\tEndif\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTPR.Pagina.Dados.getComparacao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDTPR.Init",
+      "queryOriginal": "lcQryTron = [Select * From SigPrTro Where TpTrans = '] + ThisForm.TpTrans + [' Order BY RecTrans,Tps,ordems]",
+      "tabelas": "SigPrTro",
+      "colunas": "TpTrans,RecTrans,Tps,ordems]",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPrTro"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

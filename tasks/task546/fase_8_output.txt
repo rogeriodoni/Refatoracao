@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stubs or TODOs ÔÇö those are just false-positive matches on "todos" (Portuguese for "all"). Phase 8 is complete.
+
+## Summary
+
+Completed **FASE 8/8** for `FormTpt.prg` (Cadastro de Tipos de Transporte):
+
+**Added to `FormTpt.prg`:**
+- `BtnBuscarClick()` ÔÇö opens `FormBuscaAuxiliar` on `SigPrTrn`/`codigos`, locates the record in `cursor_4c_Dados` and refreshes the grid
+- `BtnEncerrarClick()` ÔÇö closes the form
+- `FormParaBO()` ÔÇö transfers all Page2 fields to the BO (codigo, descricao, extensao, transporte-ok, pr├│x. transporte/recebe, checkboxes, gera├º├úo/leitura/recep├º├úo/arquivar, config. FTP, dirs FTP); `txt_4c_Senha2` (redigita) is deliberately excluded, matching the legacy behavior already documented for `BOParaForm()`
+- `BtnSalvarClick()` ÔÇö calls `FormParaBO()` + `Salvar()`, relies on `BusinessBase` for error reporting (no `ELSE` needed per CLAUDE.md rule #20, but guarded via `this_lErroExibido`)
+- `BtnCancelarClick()` ÔÇö returns to the list and reloads it
+
+**Integration:**
+- `config.prg` needs no changes ÔÇö this project uses `ADIR()` dynamic loading (confirmed in the file), not manual `SET PROCEDURE`
+- `menu.prg` ÔÇö added `DEFINE BAR 188 OF popCadastros "Tipos de Transporte"`, its `ON SELECTION`, and the `AbrirFormTpt()` procedure (following the exact `VARTYPE`/`Show()` outside `TRY`/no `Release()` pattern used by all other CRUD forms)
+
+**Verified:** every method bound via `BINDEVENT` (`BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, plus the pre-existing ones) is declared `PUBLIC` (no `PROTECTED`), and the file's `PROCEDURE`/`ENDPROC` (25/25) and `WITH`/`ENDWITH` (64/64) counts balance. No stubs, TODOs, or placeholder logic were introduced.

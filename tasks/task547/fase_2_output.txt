@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file structure is complete and correct ÔÇö every `PROCEDURE`/`FUNCTION` closes properly, every `RETURN` sits outside its `TRY/CATCH`, and `ENDDEFINE` terminates the class.
+
+**Phase 2 complete.** `traBO.prg` now has full CRUD support for the `SigPrTrp` (transportadoras) table:
+
+- **ObterChavePrimaria()** / **CarregarDoCursor()** ÔÇö mapping all 27 columns from the schema
+- **InicializarValoresPadrao()** ÔÇö reproduces the legacy `itras` auto-generation (`'T' + empresa + seq(6,'0')`), sourced from `MAX(codigos)` in the DB rather than the legacy's session-only counter, so it's safe across sessions
+- **ValidarDados()** / **VerificarCodigoExistente()** ÔÇö c├│digo and raz├úo social required, duplicate check on insert (setting `this_cMensagemErro` so `BusinessBase.ExibirFalha` reports it, per the project's "falha nunca ├® muda" rule)
+- **Inserir()** / **Atualizar()** ÔÇö cover every NOT NULL column, with `RegistrarAuditoria()` on both
+- **ExecutarExclusao()** ÔÇö cascades delete into `SigPrTrv` (freight-by-state detail rows) before removing the header, matching the legacy delete behavior
+- **Buscar()** / **CarregarPorCodigo()** ÔÇö list and detail queries against exact schema column names (verified against `docs/schema.sql`, read via `-Raw` since it's UTF-16)
+
+Next up per the pipeline would be Phase 3 (creating `Formtra.prg`).

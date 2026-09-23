@@ -1,0 +1,1555 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdVis.SCX
+* Data/Hora: 19/09/2026 04:08:43
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDVIS
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDVIS.Pagina.Lista
+  Class: label
+  BaseClass: label
+
+Objeto: getConta
+  Parent: SIGCDVIS.Pagina.Lista
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtFinal
+  Parent: SIGCDVIS.Pagina.Lista
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGCDVIS.Pagina.Lista
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGCDVIS.Pagina.Lista
+  Class: label
+  BaseClass: label
+
+Objeto: getDesCta
+  Parent: SIGCDVIS.Pagina.Lista
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtInicial
+  Parent: SIGCDVIS.Pagina.Lista
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: optVenda
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label4
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: optPedido
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Label5
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: edtObs
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: editbox
+  BaseClass: editbox
+
+Objeto: Label6
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: getCodCli
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getGrupo
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodCta
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesCli
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesCta
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label7
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: getData
+  Parent: SIGCDVIS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS
+------------------------------------------------------------
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = (prompt())
+  antcta = .F.
+  antdtf = .F.
+  antdti = .F.
+  antgru = .F.
+  ativaprocura = .F.
+  pcta = .F.
+  pdtf = .F.
+  pdti = .F.
+  pgru = .F.
+  usuvendedor = .F.
+  Name = "SIGCDVIS"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Width = 1100
+  Pagina.Lista.cntSombra.ZOrderSet = 0
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.Height = 447
+  Pagina.Lista.Grade.Left = 28
+  Pagina.Lista.Grade.TabIndex = 10
+  Pagina.Lista.Grade.Top = 145
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ZOrderSet = 3
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_Op.AutoSize = .T.
+  Pagina.Lista.Grupo_Op.Inserir.Top = 5
+  Pagina.Lista.Grupo_Op.Inserir.Left = 5
+  Pagina.Lista.Grupo_Op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_Op.Consultar.Top = 5
+  Pagina.Lista.Grupo_Op.Consultar.Left = 80
+  Pagina.Lista.Grupo_Op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_Op.Alterar.Top = 5
+  Pagina.Lista.Grupo_Op.Alterar.Left = 155
+  Pagina.Lista.Grupo_Op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_Op.Excluir.Top = 5
+  Pagina.Lista.Grupo_Op.Excluir.Left = 230
+  Pagina.Lista.Grupo_Op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_Op.Procurar.Top = 5
+  Pagina.Lista.Grupo_Op.Procurar.Left = 305
+  Pagina.Lista.Grupo_Op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_Op.Height = 85
+  Pagina.Lista.Grupo_Op.Left = 544
+  Pagina.Lista.Grupo_Op.Top = -1
+  Pagina.Lista.Grupo_Op.Width = 385
+  Pagina.Lista.Grupo_Op.TabIndex = 9
+  Pagina.Lista.Grupo_Op.ZOrderSet = 1
+  Pagina.Lista.Grupo_Op.Name = "Grupo_Op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.TabIndex = 11
+  Pagina.Lista.Grupo_Saida.ZOrderSet = 6
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 84
+  Pagina.Lista.cntFiltros.Left = 27
+  Pagina.Lista.cntFiltros.Width = 645
+  Pagina.Lista.cntFiltros.Height = 58
+  Pagina.Lista.cntFiltros.BackStyle = 0
+  Pagina.Lista.cntFiltros.TabIndex = 1
+  Pagina.Lista.cntFiltros.BorderColor = 90,90,90
+  Pagina.Lista.cntFiltros.ZOrderSet = 2
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 843
+  Pagina.Dados.Grupo_Salva.Top = -2
+  Pagina.Dados.Grupo_Salva.TabIndex = 17
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.ZOrderSet = 0
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Lista.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Representante"
+  Height = 15
+  Left = 39
+  Top = 96
+  Width = 87
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Lista.getConta
+------------------------------------------------------------
+  Enabled = .F.
+  Format = "K"
+  Left = 39
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 111
+  Width = 80
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 128,128,128
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Lista.getDtFinal
+------------------------------------------------------------
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 557
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 111
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 7
+  Name = "getDtFinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Lista.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Período"
+  Height = 15
+  Left = 446
+  Top = 95
+  Width = 45
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Lista.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "até"
+  Height = 15
+  Left = 530
+  Top = 114
+  Width = 21
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Lista.getDesCta
+------------------------------------------------------------
+  Enabled = .F.
+  Height = 23
+  Left = 122
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 111
+  Width = 312
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 128,128,128
+  BorderColor = 100,100,100
+  ZOrderSet = 10
+  Name = "getDesCta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Lista.getDtInicial
+------------------------------------------------------------
+  Alignment = 3
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 446
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 111
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 11
+  Name = "getDtInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 278
+  Top = 165
+  Width = 38
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta :"
+  Height = 15
+  Left = 278
+  Top = 221
+  Width = 38
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Representante :"
+  Height = 15
+  Left = 235
+  Top = 193
+  Width = 81
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.optVenda
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdVis.vendas"
+  Height = 27
+  Left = 314
+  Top = 243
+  Width = 92
+  TabIndex = 12
+  Name = "optVenda"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 47
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 40
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Vendas :"
+  Height = 15
+  Left = 272
+  Top = 249
+  Width = 44
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.optPedido
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdVis.pedidos"
+  Height = 27
+  Left = 314
+  Top = 269
+  Width = 92
+  TabIndex = 14
+  Name = "optPedido"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 17
+  Option1.Left = 5
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 40
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 17
+  Option2.Left = 47
+  Option2.Style = 0
+  Option2.Top = 5
+  Option2.Width = 40
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.Label5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Pedidos :"
+  Height = 15
+  Left = 270
+  Top = 275
+  Width = 46
+  TabIndex = 13
+  ForeColor = 90,90,90
+  Name = "Label5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.edtObs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 109
+  Left = 317
+  SpecialEffect = 1
+  TabIndex = 16
+  Top = 302
+  Width = 446
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ControlSource = "crSigCdVis.obss"
+  Name = "edtObs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Observação :"
+  Height = 15
+  Left = 249
+  Top = 302
+  Width = 67
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.getCodCli
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdVis.contas"
+  Enabled = .F.
+  Left = 318
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 189
+  Width = 80
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "getCodCli"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.getGrupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdVis.grupos"
+  Enabled = .F.
+  Left = 318
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 161
+  Width = 80
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "getGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.getCodCta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdVis.iclis"
+  Left = 318
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 217
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  plprocurar = .T.
+  Name = "getCodCta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.getDesCli
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Enabled = .F.
+  Left = 402
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 189
+  Width = 360
+  ForeColor = 0,0,0
+  DisabledBackColor = 255,255,255
+  BorderColor = 100,100,100
+  Name = "getDesCli"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.getDesCta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Left = 402
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 217
+  Width = 360
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  plprocurar = .T.
+  Name = "getDesCta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.Label7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Data :"
+  Height = 15
+  Left = 284
+  Top = 137
+  Width = 32
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Label7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDVIS.Pagina.Dados.getData
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdVis.datas"
+  Left = 318
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 133
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  plprocurar = .T.
+  Name = "getData"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDVIS
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE sqldados
+------------------------------------------------------------
+PROCEDURE sqldados
+Private pDtI, pDtF, pGru, pCta
+
+With this.pagina.lista
+	pGru = thisform.antgru
+	pCta = Alltrim(.getConta.Value)
+	pDtI = fDtoSQL(.getDtInicial.Value)
+	pDtF = fDtoSQL(.getDtFinal.Value, '23:59:59')
+
+	ThisForm.poDataMgr.Requery('crSigCdVis')
+	
+	Select crSigCdVis
+	index on pkidchave tag pkidchave
+*!*		Go Top
+EndWith
+
+ThisForm.LockScreen = .t.
+=fCarregaGrade(ThisForm.Pagina.Lista.Grade)
+ThisForm.LockScreen = .f.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Private pGru, pCta, pDtI, pDtF
+
+pDtI = Date()
+pDtF = Date()
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	** Selecionando Grupo Padrao de Representantes **********************************************
+	lcQryPar = [Select GrPadVens From SigCdPam]	
+
+	If (.poDataMgr.SqlExecute(lcQryPar, 'crSigCdPam') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMccr)')
+		Return 0
+	EndIf
+	
+	pGru = Alltrim(crSigCdPam.GrPadVens)
+	thisform.antgru = pGru
+	** Fim ***************************************************************************************
+	
+	** Verifica liberação de senha ***************************************************************
+	libConta = fChecaAcesso('SIGCDVIS','ALTCONTA') 
+	If not libConta
+	
+		Do Form SigOpCks With 'VALIDACESSO','Validação de Acesso' To _Retorno
+		llOk = ( Left( _Retorno, 1 ) = "*" )
+		If !llOk
+			MessageBox('Autorização não Confirmada!!!',0+48,'')
+			pCta = []
+			Return .f.
+		Else 	
+			ThisForm.UsuVendedor = Substr( _Retorno, 2 )
+		
+			lcQryCta = [Select iclis,rclis From SigCdCli ] + ;
+					[Where rclis = '] + thisform.Usuvendedor + [' AND Grupos = '] + pGru + [']
+					
+			If (.poDataMgr.SqlExecute(lcQryCta, 'crSigCdCli') < 1)
+				=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMccr)')
+				Return 0
+			EndIf 
+			*** Verifica se existe conta cadastrada para esse usuario **************************
+			If Empty(crSigCdCli.rclis)&& = []
+				=MessageBox('Conta não cadastrada no Cadastro de Contas de Representantes', 0+256, 'Cadastro de Visitas')
+				Return .f.				
+			EndIf 
+			** Fim *****************************************************************************
+			
+			pCta = Alltrim(crSigCdCli.iclis)
+			pDCta = Alltrim(crSigCdCli.rclis)
+		EndIf 
+	Else
+		ThisForm.UsuVendedor = usuar
+		pCta = []
+		pDCta = []
+	EndIf 
+	** Fim ******************************************************************************************
+	
+	** Query Principal da Grid ********************************************************************************
+	lcQryVis = [Select a.*, b.rclis as descri, c.rclis as repr, ] + ;
+		[case when a.vendas=1 then 'Sim' else 'Não' end as descvendas, ] + ;
+		[case when a.pedidos=1 then 'Sim' else 'Não' end as descpedidos ] + ;
+	      [From SigCdVis a ] + ;
+	      [Inner Join SigCdCli b on a.iclis=b.iclis ] + ;
+	      [Inner Join SigCdCli c on a.Contas=c.iclis ] + ;	      
+		 [Where a.Grupos = ?pGru And ] + ;
+		 	[(a.Contas = ?pCta Or ?pCta='') And ] +;
+		 	   [a.Datas Between ?pDtI And ?pDtF ] + ;
+		 [Order By a.pkidchave]			 
+	** Fim ***************************************************************************************************
+				 
+	If (.poDataMgr.pnIdconn > 0)
+		.Pagina.Lista.getConta.Value = pCta
+		.Pagina.Lista.getdtinicial.Value = pDtI
+		.Pagina.Lista.getDtFinal.Value   = pDtF
+		.Pagina.Lista.getDesCta.Value = pDCta
+
+		.Pagina.Lista.getConta.enabled = libConta
+		.Pagina.Lista.getDesCta.enabled = libConta
+		
+		
+		With .poDataMgr
+			.AddCursor('SigCdVis', 'pkIdChave', 'crSigCdVis', '', ThisForm.Pagina.Lista.Grade, lcQryVis)
+			.pfSqlTabela(1).pColuna('Datas',   '', '', 'Data',    080, .t.)
+			.pfSqlTabela(1).pColuna('Repr',   '', '', 'Representante',    150, .t.)
+			.pfSqlTabela(1).pColuna('Iclis',   '', '', 'Conta',    080, .t.)
+			.pfSqlTabela(1).pColuna('Descri', '', '', 'Descrição',  150, .t.)
+			.pfSqlTabela(1).pColuna('DescVendas',  '', '', 'Venda',   031, .t.)
+			.pfSqlTabela(1).pColuna('DescPedidos',  '', '', 'Pedido',   031, .t.)
+		EndWith
+	
+		Select crSigCdVis
+		index on pkidchave tag pkidchave
+		
+*!*			=DoDefault()
+		
+		If (.Pagina.Lista.getConta.Enabled)
+			.Pagina.Lista.getConta.SetFocus
+		Else
+			.Pagina.Lista.getDtInicial.SetFocus
+		EndIf 
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+With this.pagina.lista
+	pGru = thisform.antgru
+	pCta = Alltrim(.getConta.Value)
+	pDtI = fDtoSQL(.getDtInicial.Value)
+	pDtF = fDtoSQL(.getDtFinal.Value, '23:59:59')
+EndWith 
+
+DoDefault()
+
+** Atualizando Cursor da Grid ********************************
+If thisform.ativaprocura 
+	Select crSigCdVis
+	index on pkidchave tag pkidchave
+
+	If Used([crTmp]) And (Reccount([crTmp]) > 0)
+		Select crTmp	
+			Scan
+				lcChv = crTmp.pkIdChave
+				If not Seek(lcChv, [crSigCdVis], [pkIdChave])
+					Scatter MemVar Memo
+				 	Insert Into crSigCdVis From MemVar
+				EndIf 
+			EndScan
+		Go Top In crTmp	
+		use in crTmp
+	EndIf 	
+EndIf 
+** Fim *******************************************************
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Private pGru, pRep, pCta, pDta
+
+pGru = thisform.antgru 
+pRep = thisform.pagina.dados.getCodCli.Value 
+pCta = thisform.pagina.dados.getCodCta.Value
+pDtI = fDtoSQL(thisform.pagina.dados.getData.Value)
+pDtf = Iif(Empty(thisform.pagina.dados.getData.Value),Datetime(),fDtoSQL(thisform.pagina.dados.getData.Value, '23:59:59'))
+
+If Used([crTmp])
+	Use In CrTmp
+EndIf
+
+** Cursor para Procurar ****************************************************
+lcQuery = [Select a.*, b.rclis as descri, c.rclis as repr, ] + ;
+		[case when a.vendas=1 then 'Sim' else 'Não' end as descvendas, ] + ;
+		[case when a.pedidos=1 then 'Sim' else 'Não' end as descpedidos ] + ;
+	      [From SigCdVis a ] + ;
+	      [Inner Join SigCdCli b on a.iclis=b.iclis ] + ;
+	      [Inner Join SigCdCli c on a.Contas=c.iclis ] + ;	      
+		 [Where a.Grupos = ?pGru And ] + ;
+		 	[(a.contas = ?pRep Or ?pRep='') And ] +;
+		 	[(a.iclis = ?pCta Or ?pCta='') And ] +;
+		 	   [a.Datas Between ?pDtI And ?pDtF ] + ;
+		 [Order By a.pkidchave]	
+
+ThisForm.poDataMgr.SqlExecute(lcQuery, [crTmp])
+
+Select crtmp
+thisform.ativaprocura = .T.
+* Fim ***********************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_Op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_Op.Click
+Lparameters Opcao
+
+If (Type('Opcao') = 'N')
+	This.Value = Opcao
+EndIf
+
+** Verifica se existe a conta digitada no form de senha **************
+If This.Value = 1 &&(INSERIR)
+	If Empty(thisform.pagina.lista.getConta.value)
+		MessageBox('Conta Inválida!',0+256,'Cadastro de Visitas')
+		Return .f.
+	EndIf 
+EndIf 
+** Fim ***************************************************************
+
+If Not DoDefault(This.Value)
+	ThisForm.mAtivaPagina1
+	ThisForm.LockScreen = .f.
+	Return 0
+EndIf
+
+thisform.pagina.dados.getGrupo.Value = ThisForm.antGru
+
+If (ThisForm.pcEscolha = 'INSERIR')
+	thisform.pagina.dados.getCodCli.Value = thisform.pagina.lista.getConta.Value
+	thisform.pagina.dados.getdesCli.Value = thisform.pagina.lista.getdesCta.Value	
+	thisform.pagina.dados.getdesCta.Value = []
+	thisform.pagina.dados.optPedido.Value = 2
+	thisform.pagina.dados.optVenda.Value = 2
+EndIf
+
+If InList(ThisForm.pcEscolha,'EXCLUIR','CONSULTAR','ALTERAR')
+	lcQuery = [Select rclis From SigCdCli ] + ;
+		[Where iclis = '] + crSigCdVis.contas + [']
+		
+	If (thisform.poDataMgr.SqlExecute(lcQuery, 'crSigCdCli') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMccr)')
+		Return 0
+	EndIf		
+	thisform.pagina.dados.getdesCli.Value = crSigCdCli.rclis
+	
+	lcQuery = [Select rclis From SigCdCli ] + ;
+		[Where iclis = '] + crSigCdVis.iclis + [']
+		
+	If (thisform.poDataMgr.SqlExecute(lcQuery, 'crSigCdCll') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalMccr)')
+		Return 0
+	EndIf		
+	thisform.pagina.dados.getdesCta.Value = crSigCdCll.rclis	
+	
+	lcObs = Iif(IsNull(crSigCdVis.obss),[],crSigCdVis.obss)	
+	replace obss with lcObs in crSigCdVis
+	
+	thisform.Refresh 	
+EndIf 
+
+If (ThisForm.pcEscolha = 'PROCURAR')
+	thisform.pagina.dados.getdesCta.Value = []
+	thisform.pagina.dados.getCodCli.Value = thisform.pagina.lista.getConta.Value
+	thisform.pagina.dados.getdesCli.Value = thisform.pagina.lista.getdesCta.Value	
+EndIf 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+
+ldDt = Datetime()
+
+If (ThisForm.pcEscolha = 'INSERIR')
+	replace pkidchave with fUniqueIds(), ;
+		dtalts with ldDt in crSigCdVis
+EndIf
+
+If (ThisForm.pcEscolha = 'ALTERAR')
+	replace dtalts with ldDt in crSigCdvis
+EndIf
+
+=DoDefault()
+Thisform.mativapagina1()
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+= DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1()
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Activate
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Activate
+If !Empty(thisform.pagina.dados.getCodCli.value)
+	thisform.pagina.dados.getCodCta.SetFocus
+EndIf
+
+=DoDefault()
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Lista.getConta
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+
+If (Lastkey() <> 27)
+	Keyboard Chr(32) Plain
+	= Inkey(0)
+
+	ThisForm.Pagina.Lista.getdtinicial.SetFocus
+EndIf
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+lcGru = thisform.antgru
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'iclis', This.Value, 'Seleção de Conta', .T.,'','Grupos = ?lcGru')
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('iclis', '', 'Código')
+		loLista.mAddColuna('rclis', '', 'Nome')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Iclis
+	ThisForm.pagina.lista.getDesCta.Value = crListaRemota.rclis
+
+	Use In crListaRemota
+Else
+	This.Value = []
+	ThisForm.pagina.lista.getDesCta.Value = []
+EndIf
+
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .t.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Lista.getDtFinal
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+*!*	With ThisForm.Pagina.Lista
+*!*		ldDtI = .getDtInicial.Value
+*!*		ldDtF = .getDtFinal.Value	
+*!*		ldCta = .getConta.value
+*!*	EndWith
+
+*!*	If (ThisForm.AntDtI <> ldDtI) Or (ThisForm.AntDtF <> ldDtF) Or (ThisForm.AntCta <> ldCta)
+	ThisForm.SqlDados
+*!*	EndIf
+
+ThisForm.Pagina.Lista.Grade.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.Value)
+	=MessageBox('Preenchimento Obrigatorio!!!', 0+48)
+	Return .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Lista.getDesCta
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+lcGru = thisform.antgru
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'rclis', This.Value, 'Seleção de Conta', .T.,'','Grupos = ?lcGru')
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('rclis', '', 'Nome')
+		loLista.mAddColuna('iclis', '', 'Código')		
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.rclis
+	ThisForm.pagina.lista.getConta.Value = crListaRemota.iclis
+
+	Use In crListaRemota
+Else
+	This.Value = []
+	ThisForm.pagina.lista.getConta.Value = []
+EndIf
+
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Empty(thisform.pagina.lista.getConta.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Lista.getDtInicial
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.Pagina.Lista.getDtFinal.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (This.Value > This.Parent.getDtFinal.Value)
+	ThisForm.pagina.lista.getDtFinal.Value = This.Value
+	ThisForm.pDtF = This.Value
+EndIf
+
+ThisForm.pDtI = This.Value
+
+If Empty(This.Value)
+	=MessageBox('Preenchimento Obrigatorio!!!', 0+48)
+	Return .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Dados.optVenda
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+Local llRetorno
+
+m.llRetorno = .t.
+
+If Type('ThisForm.pcEscolha')='C'
+	If (.Not.(ThisForm.pcEscolha== 'INSERIR'.Or.ThisForm.pcEscolha=='ALTERAR'))
+		m.llRetorno = .f.
+	EndIf
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Dados.optPedido
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+Local llRetorno
+
+m.llRetorno = .t.
+
+If Type('ThisForm.pcEscolha')='C'
+	If (.Not.(ThisForm.pcEscolha== 'INSERIR'.Or.ThisForm.pcEscolha=='ALTERAR'))
+		m.llRetorno = .f.
+	EndIf
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Dados.edtObs
+* Classe: editbox (Base: editbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+Local llRetorno
+
+m.llRetorno = .t.
+
+If Type('ThisForm.pcEscolha')='C'
+	If (.Not.(ThisForm.pcEscolha== 'INSERIR'.Or.ThisForm.pcEscolha=='ALTERAR'))
+		m.llRetorno = .f.
+	EndIf
+EndIf
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Dados.getCodCli
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If fChecaAcesso('SIGCDVIS','ALTCONTA') 
+	Local loLista
+	lcGru = thisform.antgru
+	If Not IsEmpty(This.Value)
+		loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+							   'crListaRemota', 'iclis', This.Value, 'Seleção de Representante', .T.,'','Grupos = ?lcGru')
+
+		If Not loLista.plAchouRegistro
+			loLista.mAddColuna('iclis', '', 'Código')
+			loLista.mAddColuna('rclis', '', 'Nome')
+			loLista.Show()
+		EndIf
+		
+		This.Value = crListaRemota.Iclis
+		This.Parent.getDesCli.Value = crListaRemota.rclis
+
+		Use In crListaRemota
+	Else
+		This.Value = []
+		This.Parent.getDesCli.Value = []
+	EndIf
+	This.Refresh
+EndIf 
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If fChecaAcesso('SIGCDVIS','ALTCONTA') 
+	Return Inlist( Thisform.pcEscolha, "INSERIR","PROCURAR")
+EndIf 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Dados.getGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Dados.getCodCta
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Local loLista
+
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'iclis', This.Value, 'Seleção de Contas', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('iclis', '', 'Código')
+		loLista.mAddColuna('rclis', '', 'Nome')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Iclis
+	ThisForm.pagina.dados.getDesCta.Value = crListaRemota.rclis
+
+	Use In crListaRemota
+Else
+	This.Value = []
+	ThisForm.pagina.dados.getDesCta.Value = []
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( Thisform.pcEscolha, "INSERIR", "ALTERAR", "PROCURAR" )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Dados.getDesCli
+* Classe: fwget (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Local loLista
+
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'rclis', This.Value, 'Seleção de Representantes', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('rclis', '', 'Nome')
+		loLista.mAddColuna('iclis', '', 'Código')		
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.rclis
+	this.Parent.getCodCli.Value = crListaRemota.iclis
+
+	Use In crListaRemota
+Else
+	This.Value = []
+	this.Parent.getCodCli.Value = []
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Empty(thisform.pagina.dados.getCodCli.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Dados.getDesCta
+* Classe: fwget (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not IsEmpty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;
+						   'crListaRemota', 'rclis', This.Value, 'Seleção de Contas', .T.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('rclis', '', 'Nome')
+		loLista.mAddColuna('iclis', '', 'Código')		
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.rclis
+	ThisForm.pagina.dados.getCodCta.Value = crListaRemota.iclis
+
+	Use In crListaRemota
+Else
+	This.Value = []
+	ThisForm.pagina.dados.getCodCta.Value = []
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Empty(thisform.pagina.dados.getCodCta.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDVIS.Pagina.Dados.getData
+* Classe: fwget (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( Thisform.pcEscolha, "INSERIR", "ALTERAR", "PROCURAR" )
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDVIS
+RESERVED3 (ClassInfo): antcta
+antdtf
+antdti
+antgru
+ativaprocura
+pcta
+pdtf
+pdti
+pgru
+usuvendedor
+*sqldados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 33
+================================================================================

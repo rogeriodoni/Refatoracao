@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+TriBO.prg is now complete for the FASE 2 scope. Summary of what was added to the BO created in Fase 1:
+
+- **ObterChavePrimaria()** ÔÇö returns `codigos` for the audit trail.
+- **CarregarDoCursor()** ÔÇö `SELECT (alias)` then maps all 4 columns (`codigos`, `colunas`, `descricaos`, `tipos`) without prefixes.
+- **ValidarDados()** + **VerificarCodigoExistente()** ÔÇö transcribed from the legacy `Salva.Click` (c├│digo/descri├º├úo obrigat├│rios, c├│digo duplicado s├│ no INSERIR, coluna entre 1 e 3 via `BETWEEN(VAL(...))`).
+- **Inserir()** / **Atualizar()** ÔÇö full SQL with `EscaparSQL()` on all 4 char columns (schema confirmed via `Get-Content -Raw` on `schema.sql`: `codigos char(3)` PK, `colunas char(1)`, `descricaos char(40)`, `tipos char(1)`, all `NOT NULL` ÔÇö no hidden columns missing), calling `RegistrarAuditoria()`.
+- **ExecutarExclusao()** ÔÇö plain DELETE (legacy has no dependency check for this table).
+- **Buscar()** ÔÇö `cursor_4c_Dados` with `codigos, descricaos, colunas, tipos`, matching the legacy grid column order (`pColuna` calls in `Init`).
+- **CarregarPorCodigo()** ÔÇö loads by PK, resets `this_lNovoRegistro = .F.`.
+
+No `RETURN` inside any `TRY/CATCH`, every `CATCH` calls `MostrarErro`/`MsgErro`, all SQL uses `EscaparSQL()`. Next phase (3/8) will build `FormTri.prg`.

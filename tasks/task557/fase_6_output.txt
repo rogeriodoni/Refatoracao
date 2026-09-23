@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Signature confirmed: `MsgErro(mensagem, titulo)` ÔÇö matches all my usages. The implementation is complete and structurally sound.
+
+## Summary
+
+Phase 6 is complete. I finished `C:\4c\projeto\app\forms\cadastros\FormVEN.prg`:
+
+**Remaining Page2 fields added** (Data Final, Situa├º├úo/combobox, Cargo/combobox, Comiss├úo %, Subs├¡dio %, Meta %), all with Top compensated +29 for the PageFrame offset, captions/RowSource/InputMask transcribed literally from the legacy dump, and Save/Cancel buttons (`cmd_4c_Confirmar`/`cmd_4c_Cancelar`) added to `cnt_4c_BotoesAcao`.
+
+**Lookups/validations implemented** ÔÇö this form has no F4 picker lookups (no `fwbuscaext`/`sigacess` in the source); its real "lookups" are access-check validations, which I transcribed using the already-ported global helpers (`fAcessoContas`, `VerificarAcessoEmpresa`, `fChecaAcesso` in `utils\functions.prg`):
+- `ValidarEmpsDados` ÔÇö fills UF from `SigcdEmp` and checks company access
+- `ValidarVensDados` / `ValidarDVensDados` ÔÇö codeÔåödescription two-way lookup via `fAcessoContas`, then `PegaEmpReg()`
+- `ValidarSituacao` ÔÇö the FOLGA access-restriction rule
+- All guarded against re-triggering on unchanged values (Problema 45)
+
+**Also added**, since they were already referenced but undefined (would have crashed at runtime): `FormParaBO`, `BOParaForm`, `LimparCampos`, `PegaEmpReg`, `BtnSalvarClick` (full save validation incl. the date-overlap check and `codigo` generation, transcribed literally from `Grupo_Salva.Salva.Click`), and `BtnCancelarClick`.
+
+Verified: PROCEDURE/ENDPROC (28/28), WITH/ENDWITH (47/47), IF/ENDIF (93/93) all balanced, single `ENDDEFINE`, no RETURN inside TRY/CATCH, no stubs/TODOs.
+
+Note: the Page1 list filters (`CntPeriodo`, `cntEmps`, `cntVens`) from the legacy source were never added in an earlier phase ÔÇö out of scope for this Page2-focused phase, but worth flagging for a later pass.

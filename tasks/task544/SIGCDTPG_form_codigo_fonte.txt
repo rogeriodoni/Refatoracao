@@ -1,0 +1,618 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDTPG.SCX
+* Data/Hora: 18/09/2026 18:43:01
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDTPG
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDTPG
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDTPG.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDTPG.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Grid1
+  Parent: SIGCDTPG
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDTPG.Grid1.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDTPG.Grid1.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDTPG.Grid1.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDTPG.Grid1.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDTPG.Grid1.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDTPG.Grid1.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Commandgroup1
+  Parent: SIGCDTPG
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cmdinserir
+  Parent: SIGCDTPG
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdexcluir
+  Parent: SIGCDTPG
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG
+------------------------------------------------------------
+  BorderStyle = 2
+  Height = 408
+  Width = 592
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Tipos de Transporte Automático"
+  ControlBox = .F.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGCDTPG"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.cntSombra
+------------------------------------------------------------
+  Top = -2
+  Left = -2
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.Grid1
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 308
+  Left = 201
+  Panel = 1
+  RowHeight = 16
+  ScrollBars = 2
+  Top = 96
+  Width = 233
+  ForeColor = 90,90,90
+  GridLineColor = 238,238,238
+  Name = "Grid1"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Alignment = 3
+  Column1.Width = 56
+  Column1.ForeColor = 90,90,90
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 89
+  Column2.ForeColor = 90,90,90
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Alignment = 2
+  Column3.Width = 56
+  Column3.ForeColor = 90,90,90
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.Grid1.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.Grid1.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.Grid1.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo de Transp."
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.Grid1.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.Grid1.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo (T/R)"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.Grid1.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.Commandgroup1
+------------------------------------------------------------
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 110
+  Left = 511
+  SpecialEffect = 1
+  Top = 1
+  Width = 90
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Commandgroup1"
+  Command1.Top = 1
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Command3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.cmdinserir
+------------------------------------------------------------
+  Top = 2
+  Left = 366
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "\<Incluir"
+  Name = "cmdinserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPG.cmdexcluir
+------------------------------------------------------------
+  Top = 2
+  Left = 441
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "\<Excluir"
+  Name = "cmdexcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDTPG
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters pcCodigos
+
+lcQuery = [Select * From SigPrTra Where TPTrans = ']+pcCodigos+[']
+
+ThisForm.Grid1.RecordSource = ''
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	
+	With .poDataMgr
+		* Cursor Principal Para Montagem da Lista (Tabela Grande)
+		.AddCursor('SigPrTrn', 'cIdChaves', 'crSigPrTrn', '', .f.,lcQuery)
+	EndWith
+	
+	.poDataMgr.Requery('crSigPrTrn')
+	
+EndWith
+
+Select crSigPrTrn
+Index On Emps+TpTrans+Tps Tag EmpTp
+Set Order To EmpTp
+Go Top
+
+ThisForm.Grid1.RecordSource = 'crSigPrTrn'
+ThisForm.Grid1.Column1.ControlSource = 'crSigPrTrn.Emps'
+ThisForm.Grid1.Column2.ControlSource = 'crSigPrTrn.TpTrans'
+ThisForm.Grid1.Column3.ControlSource = 'crSigPrTrn.Tps'
+
+ThisForm.cmdinserir.SetFocus()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPG.Grid1.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.Grid1.Column1.Text1, '', ThisForm.poDataMgr)
+
+If ! Empty(This.Value)
+	lnReg = Recno()
+
+	Select crSigPrTrn
+	lcEmp   = Emps
+	lcTra   = TpTrans
+	lcTps   = Tps
+	lcChave = cIdChaves
+	Locate for Emps = lcEmp And TpTrans = lcTra And Tps = lcTps And cIdChaves <> lcChave
+	If ! Eof()
+		MessageBox('Tipo de Transferencia Cadastrada',16,'')
+		Go lnReg
+		This.Value = ''
+		Return .f.
+	Endif
+
+	Go lnReg
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPG.Grid1.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	Set Near On
+	If Not Seek(This.Value, 'crSigPrTrn', 'Codigos')
+		m.loBrowse = CreateObject('fwBuscaSel', 'crSigPrTrn', 'Codigos', This.Value, 'Tipo Transporte')
+		m.loBrowse.AddColuna('Codigos', '', 'Código',    .t., 'Codigos')
+		m.loBrowse.AddColuna('Descrs',  '', 'Descrição', .t., 'Descrs')
+		m.loBrowse.Show
+	EndIf
+	Set Near Off
+	This.Value = Evaluate('crSigPrTrn.Codigos')
+	This.Refresh
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+
+If ! Empty(This.Value)
+	lnReg = Recno()
+
+	Select crSigPrTrn
+	lcEmp   = Emps
+	lcTra   = TpTrans
+	lcTps   = Tps
+	lcChave = cIdChaves
+	Locate for Emps = lcEmp And TpTrans = lcTra And Tps = lcTps And cIdChaves <> lcChave
+	If ! Eof()
+		MessageBox('Tipo de Transferencia Cadastrada',16,'')
+		Go lnReg
+		This.Value = ''
+		Return .f.
+	Endif
+
+	Go lnReg
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPG.Grid1.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value) And Not InList(This.Value,'T','R')
+	=MessageBox('Opcao Inválida. Informe <T>ransporte <R>ecepcao ', 0+48, '')
+	This.Value = ''
+	Return 0
+EndIf
+This.Refresh
+
+
+If ! Empty(This.Value)
+	lnReg = Recno()
+
+	Select crSigPrTrn
+	lcEmp   = Emps
+	lcTra   = TpTrans
+	lcTps   = Tps
+	lcChave = cIdChaves
+	Locate for Emps = lcEmp And TpTrans = lcTra And Tps = lcTps And cIdChaves <> lcChave
+	If ! Eof()
+		MessageBox('Tipo de Transferencia Cadastrada',16,'')
+		Go lnReg
+		This.Value = ''
+		Return .f.
+	Endif
+
+	Go lnReg
+EndIf
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPG.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command3.Click
+------------------------------------------------------------
+PROCEDURE Command3.Click
+Select crSigPrTrn
+Go Top
+Scan
+	If Empty(Emps) 
+		MessageBox('Empresa Invalida !!',16,'')
+		Thisform.Grid1.Column1.Text1.SetFocus
+		Return
+	Endif
+*	If Empty(TpTrans) 
+*		MessageBox('Tipo de Transporte Invalido !!',16,'')
+*		Thisform.Grid1.Column2.Text1.SetFocus
+*		Return
+*	Endif
+	If Empty(Tps) 
+		MessageBox('Tipo Invalido !!',16,'')
+		Thisform.Grid1.Column3.Text1.SetFocus
+		Return
+	Endif
+EndScan
+
+ThisForm.poDatamgr.Update('crSigPrTrn')
+ThisForm.poDatamgr.Commit()
+
+=fGravarLog('G', 'SigPrTrnG', 'GRAVACAO', '')
+
+Release Windows
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPG.cmdinserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigPrTrn
+Locate For Empty(Emps) And Empty(TpTrans) And Empty(Tps)
+If Eof()
+	Append Blank
+	Replace cIdChaves With fUniqueIds()
+	Go Top
+EndIf
+ThisForm.Refresh
+=fGravarLog('I', 'SigPrTrnG', 'INSERIR', '')
+ThisForm.Grid1.Column1.Text1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPG.cmdexcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigPrTrn
+lcChave = Emps+' - '+TpTrans+' - '+Tps
+=fGravarLog('E', 'SigPrTrnG', 'EXCLUSAO', lcChave)
+Select crSigPrTrn
+lnReg = Recno()
+Delete
+Go Top
+If Reccount() < lnReg 
+	Go Bott
+Else
+	Go lnReg
+Endif
+ThisForm.Grid1.SetFocus
+ThisForm.Grid1.Column1.Text1.SetFocus
+ThisForm.Grid1.Refresh
+ThisForm.Refresh
+This.SetFocus
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDTPG
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

@@ -1,0 +1,783 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdUpd.SCX
+* Data/Hora: 19/09/2026 00:40:23
+* Total de registros: 20
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDUPD
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdCargas
+  Parent: SIGCDUPD.Pagina.Lista
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Say1
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodigos
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GET_ORDEM
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDescrs
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getUnidade
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetQtdes
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ddr
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ddf
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say34
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Say35
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label2
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Say3
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDUPD.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 601
+  Width = 807
+  DoCreate = .T.
+  Caption = "Unidade Produtiva"
+  Name = "SIGCDUPD"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 865
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Left = 351
+  Pagina.Lista.Grupo_op.Top = 0
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 726
+  Pagina.Lista.Grupo_Saida.Top = 0
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 49
+  Pagina.Lista.cntFiltros.Left = 72
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 619
+  Pagina.Dados.Grupo_Salva.Top = 15
+  Pagina.Dados.Grupo_Salva.TabIndex = 8
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 2
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -29
+  Pagina.Left = -1
+  Pagina.Width = 817
+  Pagina.Height = 635
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Lista.cmdCargas
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 276
+  MousePointer = 15
+  Top = 0
+  Width = 85
+  TabIndex = 59
+  Themes = .F.
+  Name = "cmdCargas"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 7
+  Command1.Picture = ..\framework\imagens\geral_datas_60.jpg
+  Command1.Caption = "\<Carga Horária"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnCargas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.Say1
+------------------------------------------------------------
+  Caption = "Fase :"
+  Left = 258
+  Top = 208
+  TabIndex = 9
+  ZOrderSet = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.Say2
+------------------------------------------------------------
+  Caption = "Unidade Produtiva :"
+  Left = 193
+  Top = 233
+  TabIndex = 10
+  ZOrderSet = 4
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.getCodigos
+------------------------------------------------------------
+  ControlSource = "crSigCdUpd.Codigos"
+  Height = 23
+  Left = 297
+  MaxLength = 10
+  TabIndex = 1
+  Top = 205
+  Width = 84
+  ZOrderSet = 5
+  Name = "getCodigos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.GET_ORDEM
+------------------------------------------------------------
+  ControlSource = "crSigCdUpd.ordems"
+  Height = 23
+  InputMask = "99"
+  Left = 297
+  TabIndex = 7
+  Top = 331
+  Width = 24
+  ZOrderSet = 5
+  Name = "GET_ORDEM"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.GetDescrs
+------------------------------------------------------------
+  ControlSource = "crSigCdUpd.Descrs"
+  Height = 23
+  Left = 383
+  MaxLength = 20
+  TabIndex = 2
+  Top = 205
+  Width = 194
+  ZOrderSet = 5
+  Name = "GetDescrs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.getUnidade
+------------------------------------------------------------
+  ControlSource = "crSigCdUpd.UniPrdts"
+  Height = 23
+  Left = 297
+  MaxLength = 10
+  TabIndex = 3
+  Top = 230
+  Width = 84
+  ZOrderSet = 5
+  Name = "getUnidade"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.GetQtdes
+------------------------------------------------------------
+  ControlSource = "crSigCdUpd.Qtdes"
+  Height = 23
+  InputMask = "99"
+  Left = 297
+  MaxLength = 0
+  TabIndex = 4
+  Top = 255
+  Width = 28
+  ZOrderSet = 5
+  Name = "GetQtdes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.get_ddr
+------------------------------------------------------------
+  ControlSource = "crSigCdUpd.hordds"
+  Height = 23
+  InputMask = "99.99"
+  Left = 297
+  MaxLength = 5
+  TabIndex = 5
+  Top = 280
+  Width = 45
+  ZOrderSet = 5
+  Name = "get_ddr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.get_ddf
+------------------------------------------------------------
+  ControlSource = "crSigCdUpd.ddsems"
+  Height = 23
+  InputMask = ""
+  Left = 297
+  MaxLength = 1
+  TabIndex = 6
+  Top = 305
+  Width = 18
+  ZOrderSet = 5
+  Name = "get_ddf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.Say34
+------------------------------------------------------------
+  Caption = "Horas Por Dia :"
+  Left = 216
+  Top = 283
+  TabIndex = 12
+  ZOrderSet = 77
+  Name = "Say34"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Hs."
+  Height = 15
+  Left = 349
+  Top = 284
+  Width = 18
+  TabIndex = 15
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.Say35
+------------------------------------------------------------
+  Caption = "Dias por Semana :"
+  Left = 201
+  Top = 308
+  TabIndex = 13
+  ZOrderSet = 78
+  Name = "Say35"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "(1-7)"
+  Height = 15
+  Left = 318
+  Top = 310
+  Width = 26
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.Say3
+------------------------------------------------------------
+  Caption = "Quantidade :"
+  Left = 225
+  Top = 258
+  TabIndex = 11
+  ZOrderSet = 77
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDUPD.Pagina.Dados.Say4
+------------------------------------------------------------
+  Caption = "Ordem no Mapa :"
+  Left = 205
+  Top = 334
+  TabIndex = 14
+  ZOrderSet = 78
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDUPD
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Select crSigCdUpd
+If ! Empty(ThisForm.Pagina.Dados.GetCodigos.Value)
+	If Empty(ThisForm.Pagina.Dados.GetUnidade.Value)
+		Locate for Codigos >= ThisForm.Pagina.Dados.GetCodigos.Value
+	Else
+		Locate for Codigos >= ThisForm.Pagina.Dados.GetCodigos.Value And UniPrdts >= ThisForm.Pagina.Dados.GetUnidade.Value
+	Endif
+EndIf
+If ! Empty(ThisForm.Pagina.Dados.GetUnidade.Value)
+	Locate for UniPrdts >= ThisForm.Pagina.Dados.GetUnidade.Value
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQryUprdt = [Select a.*, b.Descrs From SigCdUpd a Inner Join SigCdGcr b on a.Codigos = b.Codigos]
+
+With ThisForm
+
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdUpd', 'cIdChaves', 'crSigCdUpd', '', ThisForm.Pagina.Lista.Grade, lcQryUprdt)
+			.pfSqlTabela(1).pColuna('Codigos',  '', '', 'Fase', 	 080, .t.)
+			.pfSqlTabela(1).pColuna('UniPrdts', '', '', 'Unid. Produtiva',    150, .t.)
+			.pfSqlTabela(1).pColuna('Descrs', '', '', 'Descrição',    150, .t.)
+			.pfSqlTabela(1).pColuna('Ordems', '', '', 'Ordem',    60, .t.)
+		EndWith
+
+		=DoDefault()
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Lparameters Opcao
+
+If Not DoDefault(Opcao)
+	ThisForm.mAtivaPagina1
+	Return 0
+EndIf
+
+Do Case
+	Case InList(Thisform.pcEscolha, 'INSERIR', 'PROCURAR')
+		If InList(Thisform.pcEscolha, 'INSERIR')
+			Replace cIdChaves With fUniqueIds()
+		Endif
+		Thisform.Pagina.Dados.getCodigos.Setfocus
+
+	Case (Thisform.pcEscolha = 'ALTERAR')
+		Thisform.Pagina.Dados.getCodigos.Setfocus
+
+	Case InList(Thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR')
+		Thisform.Pagina.Dados.Grupo_Salva.Salva.Setfocus
+EndCase
+
+Select crSigCdUpd
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If Inlist(ThisForm.Pagina.Lista.Grupo_op.Value, 1, 3)
+
+	If Empty(Thisform.Pagina.Dados.getCodigos.Value)
+		=Messagebox('Código Inválido!!!', 0+64, '')
+		Thisform.Pagina.Dados.getCodigos.Setfocus
+		Return 0
+	EndIf
+
+	If Inlist(ThisForm.Pagina.Lista.Grupo_op.Value, 1)
+		lcQryUprdt = [Select * From SigCdUpd Where Codigos = ']+Thisform.Pagina.Dados.getCodigos.Value+[' And ]+;
+												  [UniPrdts = ']+Thisform.Pagina.Dados.GetUnidade.Value+[']
+		ThisForm.poDatamgr.SqlExecute(lcQryUprdt,'csSigCdUpd')
+		Select csSigCdUpd
+		Go Top
+		If ! Eof()
+			=Messagebox('Unidade Ja Cadastrada!!!', 0+64, '')
+			Thisform.Pagina.Dados.getUnidade.Setfocus
+			Return 0
+		EndIf
+	Endif
+
+EndIf
+
+Select crSigCdUpd
+
+=DoDefault()
+
+If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+	lnOrdem  = ThisForm.Pagina.Dados.GET_ORDEM.Value
+	lcfase   = ThisForm.Pagina.Dados.GetCodigos.Value
+	lcUpdate = [Update SigCdUpd Set Ordems = ]+Str(lnOrdem,2)+[ Where Codigos = ']+lcFase+[']
+	Thisform.Podatamgr.Sqlexecute(lcUpdate,'')
+	ThisForm.Podatamgr.Commit()
+EndIf
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUPD.Pagina.Lista.cmdCargas
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnCargas.Valid
+------------------------------------------------------------
+PROCEDURE btnCargas.Valid
+If Not Used('crSigCdUpd') Or Eof('crSigCdUpd') Or Empty(crSigCdUpd.Codigos) Or Empty(crSigCdUpd.UniPrdts)
+	=MessageBox([Impossível Acessar o Cadastro de Carga Horária!!!] + Chr(13) + ;
+				[Posicione Um Registro da Grade e Tente Novamente!!!], 0+48, [Atenção!!!])
+	Return 0
+Else
+	Do Form SigCdHor With crSigCdUpd.Codigos, crSigCdUpd.UniPrdts
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUPD.Pagina.Dados.getCodigos
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR','PROCURAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local xBrow, lCod, lFan, xObj
+Private lcDopes, lcDopeSTrfs
+
+If Not IsEmpty(This.Value) And Lastkey() <> 27
+	
+	ThisForm.poDatamgr.SqlExecute([Select Codigos, Descrs From SigCdGcr Where GerBals = 1],'crSigCdGcr')
+
+	Locate For Codigos = This.Value
+
+	If EOF()
+		xBrow = CreateObject('fwBuscaInt','crSigCdGcr','Codigos',This.Value,'Fases',.t.)
+		xBrow.mAddColuna('Codigos','','Fase',.t.)
+		xBrow.mAddColuna('Descrs','','Descrição',.t.)
+		xBrow.Show		
+	EndIf
+
+	This.Value                  = Iif( LastKey() # 27, Evaluate('crSigCdGcr.Codigos'), '')
+	This.Parent.GetDescrs.Value = Iif( LastKey() # 27, Evaluate('crSigCdGcr.Descrs'), '')
+
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUPD.Pagina.Dados.GET_ORDEM
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUPD.Pagina.Dados.GetDescrs
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR','PROCURAR') And Empty(This.Parent.getCodigos.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local xBrow, lCod, lFan, xObj
+Private lcDopes, lcDopeSTrfs
+
+If Not IsEmpty(This.Value)
+	
+	ThisForm.poDatamgr.SqlExecute([Select Codigos, Descrs From SigCdGcr Where GerBals = 1],'crSigCdGcr')
+
+	Locate For Codigos = This.Value
+
+	If EOF()
+		xBrow = CreateObject('fwBuscaInt','crSigCdGcr','Descrs',This.Value,'Fases',.t.)
+		xBrow.mAddColuna('Descrs','','Descrição',.t.)
+		xBrow.mAddColuna('Codigos','','Fase',.t.)
+		xBrow.Show		
+	EndIf
+
+	This.Value                   = Iif( LastKey() # 27, Evaluate('crSigCdGcr.Descrs'), '')
+	This.Parent.GetCodigos.Value = Iif( LastKey() # 27, Evaluate('crSigCdGcr.Codigos'), '')
+
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUPD.Pagina.Dados.getUnidade
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR','PROCURAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUPD.Pagina.Dados.GetQtdes
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUPD.Pagina.Dados.get_ddr
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDUPD.Pagina.Dados.get_ddf
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < 0 Or This.Value > 7
+	MessageBox('a Semana só pode ter no máximo 7 dias...',0+16,'')
+	This.Value = 0
+	Return .f.
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 16
+================================================================================

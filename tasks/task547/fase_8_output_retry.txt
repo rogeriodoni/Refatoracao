@@ -1,0 +1,46 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da e validada.
+
+## Causa da falha anterior
+
+O validador da Fase 8 (`OrquestradorMigracao.ps1:5148`) exige a string literal `BtnSalvarClick`. O `Formtra.prg` nomeava o handler de grava├º├úo como **`BtnConfirmarClick`** ÔÇö todos os outros 4 m├®todos exigidos existiam. Era o ├║nico item faltante:
+
+```
+BtnSalvarClick    0   <- ausente
+BtnCancelarClick  3
+FormParaBO        4
+BOParaForm        5
+CarregarLista     6
+```
+
+## Corre├º├úo
+
+Renomeei `BtnConfirmarClick` ÔåÆ `BtnSalvarClick` nos 3 sites (BINDEVENT `cmd_4c_Confirmar`, coment├írio de cabe├ºalho, `PROCEDURE`). Esse ├® o nome can├┤nico do sistema: **841 forms** usam `BtnSalvarClick` (incluindo a refer├¬ncia `FormCor`, que tamb├®m faz `BINDEVENT(cmd_4c_Confirmar, "Click", THIS, "BtnSalvarClick")`); s├│ 73 usavam a variante. O bot├úo continua com `Caption = "Confirmar"` ÔÇö muda o handler, n├úo a UX (PILAR 1 preservado).
+
+## Auditoria do restante da fase (nada mais precisou mudar)
+
+Os demais entreg├íveis da Fase 8 j├í estavam completos e funcionais ÔÇö verifiquei em vez de assumir:
+
+- **`FormParaBO`/`BOParaForm`**: 26 campos cada, sim├®tricos; `CheckBox.Value` comparado com `.T.` (l├│gico, sem type mismatch); `OptionGroup.Value` num├®rico com clamp 1..4.
+- **`CarregarLista`**: `RecordSource` ÔåÆ `ControlSource` ÔåÆ `Width` ÔåÆ `Header1.Caption`, nessa ordem (regra do auto-bind); colunas `itras/razaos/cidas/estas/cgcs` conferem com `SigPrTrp` no schema.
+- **`HabilitarCampos`**: cobre os 26 controles; `Grid.ReadOnly` antes de `Column.ReadOnly` (regra #18).
+- **`BtnSalvarClick`**: transcreve o guard do legado (frete/peso zerado) e usa o padr├úo `IF Salvar() ... IF !this_lErroExibido` da regra #20.
+- **`INSERT` do `traBO`**: cobre as **27 colunas** de `SigPrTrp`, incluindo todas as 24 `NOT NULL` (regra #22).
+
+## Verifica├º├Áes executadas
+
+| Checagem | Resultado |
+|---|---|
+| `COMPILE` no VFP9 real (`.fxp` apagado antes) | `Formtra.fxp` OK, `traBO.fxp` OK, nenhum `.err` |
+| `RETURN` dentro de TRY/CATCH | 0 ocorr├¬ncias |
+| `ISEMPTY()` / `MostrarAviso()` | 0 ocorr├¬ncias |
+| TODO/stub/placeholder | 0 (os matches do grep eram "**todo**s os controles") |
+| Validador oficial da Fase 8 | **OK ÔÇö 91,9 KB** |
+| Integra├º├úo `menu.prg` | BAR 189 + `ON SELECTION` + `AbrirFormtra` com `Show()` **fora** do TRY (regra #29) |
+| `config.prg` | Sem altera├º├úo necess├íria ÔÇö carrega via `ADIR()` |
+
+Arquivos: `Formtra.prg` e `traBO.prg` novos (untracked); `menu.prg` modificado. N├úo commitei ÔÇö a pol├¡tica do repo ├® commit direto na `main` apenas quando solicitado.

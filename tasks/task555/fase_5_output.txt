@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks structurally sound. The FASE 5/8 update to `FormUsu.prg` is complete:
+
+- Added `cnt_4c_Cabecalho` (faixa cinza) to Page2 ÔÇö as the **first** `AddObject`, mirroring Page1 exactly, satisfying CLAUDE.md regra #11 (faixa nas duas p├íginas, criada antes dos containers de bot├úo).
+- Reordered so `cnt_4c_BotoesAcao` is created *after* the header band (draws on top, per the same rule).
+- Added the first 50% of Page2 data fields, transcribed exactly from `SigCdUsu_form_codigo_fonte.txt` (not invented), with the standard +29px PageFrame compensation:
+  - **Usu├írio** (`lbl_4c_Usuario` + `txt_4c_Usuarios`, MaxLength=10 per schema)
+  - **Ativo** (`lbl_4c_Ativo` + `obj_4c_Ativo` OptionGroup, Sim/N├úo, Value=1 numeric per rule #32)
+  - **Nome** (`lbl_4c_Nome` + `txt_4c_NComps`, MaxLength=30)
+  - **Cargo** (`lbl_4c_Cargo` + `txt_4c_CCargs`, MaxLength=10)
+
+For the `say`-class labels (Say5, Say6) that declared no `Width`/`Alignment` in the legado dump, I followed rule #23 and used `Alignment=0` with a width sized just to the neighboring control's `Left` ÔÇö avoiding the "text eaten by right-alignment" bug that rule documents. Remaining fields (Departamento, Setor, Cadastro de Contas, Obriga Cadastrar Senha) and their lookups are left for Fase 6, as scoped.

@@ -1,0 +1,1057 @@
+*==============================================================================
+* FormTri.prg - Formulario de Cadastro de Tributacao de Icms
+* Legado: SIGCDTRI.SCX (frmcadastro)
+* Tabela: SigCdIcm (codigos PK)
+*==============================================================================
+
+DEFINE CLASS FormTri AS FormBase
+
+    *-- Propriedades visuais (PILAR 1 - UX Fidelity: Height/Width/Caption EXATOS do original)
+    Height      = 600
+    Width       = 1000
+    Caption     = "Tributa" + CHR(231) + CHR(227) + "o de Icms"
+    AutoCenter  = .T.
+    ShowWindow  = 1
+    WindowType  = 1
+    ControlBox  = .F.
+    TitleBar    = 0
+    Themes      = .F.
+    BorderStyle = 2
+
+    *-- Propriedades de estado
+    this_oBusinessObject = .NULL.
+    this_cModoAtual      = "LISTA"
+
+    *--------------------------------------------------------------------------
+    * Init - Inicializa o formulario
+    * REGRA CRITICA: Apenas RETURN DODEFAULT()
+    * FormBase.Init() ja chama InicializarForm() - NAO duplicar a chamada!
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarForm - Configura estrutura completa
+    * Chamado automaticamente pelo FormBase.Init() via DODEFAULT()
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.this_oBusinessObject = CREATEOBJECT("TriBO")
+
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MsgErro("Erro ao criar objeto de neg" + CHR(243) + "cio TriBO", "Erro")
+            ELSE
+                THIS.ConfigurarPageFrame()
+
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+                THIS.pgf_4c_Paginas.Page2.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.pgf_4c_Paginas.Page2.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+
+                IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+                    THIS.CarregarLista()
+                ENDIF
+
+                THIS.pgf_4c_Paginas.Visible = .T.
+                THIS.pgf_4c_Paginas.ActivePage = 1
+                THIS.this_cModoAtual = "LISTA"
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ao inicializar FormTri:" + CHR(13) + loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPageFrame - Cria PageFrame com Page1 (Lista) e Page2 (Dados)
+    * Top=-29 para esconder abas; controles das Pages compensam +29 no Top
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+
+        WITH THIS.pgf_4c_Paginas
+            .PageCount = 2
+            .Top       = -29
+            .Left      = 0
+            .Width     = THIS.Width
+            .Height    = THIS.Height + 29
+            .Tabs      = .F.
+            .Visible   = .T.
+
+            .Page1.Caption   = "Lista"
+            .Page1.BackColor = RGB(255, 255, 255)
+            .Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+            .Page2.Caption   = "Dados"
+            .Page2.BackColor = RGB(255, 255, 255)
+            .Page2.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        ENDWITH
+
+        THIS.ConfigurarPaginaLista()
+        THIS.ConfigurarPaginaDados()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaLista - Configura Page1 (Lista) com Grid e botoes CRUD
+    * Colunas do grid: codigos, descricaos, colunas, tipos (cursor_4c_Dados do TriBO.Buscar)
+    * Larguras copiadas do Init() legado: pColuna(codigos,80) / (descricaos,337) / (colunas,60) / (Tipos,30)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+        *-- Cabecalho (PRIMEIRO AddObject da pagina - CLAUDE.md regra #11)
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top         = 31
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BackColor   = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+
+        loc_oPagina.cnt_4c_Cabecalho.AddObject("lbl_4c_Sombra", "Label")
+        WITH loc_oPagina.cnt_4c_Cabecalho.lbl_4c_Sombra
+            .Top       = 15
+            .Left      = 10
+            .Width     = THIS.Width
+            .Height    = 40
+            .Caption   = THIS.Caption
+            .FontName  = "Tahoma"
+            .FontSize  = 16
+            .FontBold  = .T.
+            .ForeColor = RGB(0, 0, 0)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPagina.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
+        WITH loc_oPagina.cnt_4c_Cabecalho.lbl_4c_Titulo
+            .Top       = 18
+            .Left      = 10
+            .Width     = THIS.Width
+            .Height    = 46
+            .Caption   = THIS.Caption
+            .FontName  = "Tahoma"
+            .FontSize  = 16
+            .FontBold  = .T.
+            .ForeColor = RGB(255, 255, 255)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Container de botoes CRUD (lado direito - canonico Grupo_op)
+        loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
+        WITH loc_oPagina.cnt_4c_Botoes
+            .Top         = 29
+            .Left        = 542
+            .Width       = 390
+            .Height      = 85
+            .BackStyle   = 0
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Botao Incluir (Left=5)
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir
+            .Caption         = "Incluir"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 5
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
+
+        *-- Botao Visualizar (Left=80)
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Visualizar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar
+            .Caption         = "Visualizar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 80
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
+
+        *-- Botao Alterar (Left=155)
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar
+            .Caption         = "Alterar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 155
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar, "Click", THIS, "BtnAlterarClick")
+
+        *-- Botao Excluir (Left=230)
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir
+            .Caption         = "Excluir"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 230
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir, "Click", THIS, "BtnExcluirClick")
+
+        *-- Botao Buscar (Left=305)
+        loc_oPagina.cnt_4c_Botoes.AddObject("cmd_4c_Buscar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar
+            .Caption         = "Buscar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 305
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar, "Click", THIS, "BtnBuscarClick")
+
+        *-- Container Saida - PADRAO CANONICO (prevalece sobre legado - CLAUDE.md regra #10)
+        loc_oPagina.AddObject("cnt_4c_Saida", "Container")
+        WITH loc_oPagina.cnt_4c_Saida
+            .Top         = 29
+            .Left        = 917
+            .Width       = 90
+            .Height      = 85
+            .BackStyle   = 0
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Botao Encerrar - PADRAO CANONICO: Caption="Encerrar", Width=75, Height=75
+        loc_oPagina.cnt_4c_Saida.AddObject("cmd_4c_Encerrar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar
+            .Caption         = "Encerrar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 5
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
+
+        *-- Grid de listagem (canonico framework: Top=117, Left=26, Width=880, Height=498)
+        loc_oPagina.AddObject("grd_4c_Lista", "Grid")
+        *-- ColumnCount FORA do WITH (Problema 36: dentro do WITH nao cria colunas imediatamente)
+        loc_oPagina.grd_4c_Lista.ColumnCount = 4
+        WITH loc_oPagina.grd_4c_Lista
+            .Top                = 117
+            .Left               = 26
+            .Width              = 880
+            .Height             = 498
+            .FontName           = "Verdana"
+            .FontSize           = 8
+            .ForeColor          = RGB(90, 90, 90)
+            .BackColor          = RGB(255, 255, 255)
+            .GridLineColor      = RGB(238, 238, 238)
+            .HighlightBackColor = RGB(255, 255, 255)
+            .HighlightForeColor = RGB(15, 41, 104)
+            .HighlightStyle     = 2
+            .DeleteMark         = .F.
+            .RecordMark         = .F.
+            .RowHeight          = 16
+            .ScrollBars         = 2
+            .GridLines          = 3
+            .Visible            = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.grd_4c_Lista, "DblClick", THIS, "BtnVisualizarClick")
+
+        THIS.TornarControlesVisiveis(loc_oPagina)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarLista - Carrega dados no grid da Page1
+    * OBRIGATORIO: ControlSource e Headers APOS RecordSource (Problema 2/48)
+    * OBRIGATORIO: RecordSource/ColumnCount FORA do WITH (Problema 36)
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarLista()
+        LOCAL loc_lResultado, loc_oGrid
+
+        loc_lResultado = .F.
+
+        TRY
+            IF !THIS.this_oBusinessObject.Buscar("")
+                loc_lResultado = .F.
+            ELSE
+                loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
+
+                loc_oGrid.ColumnCount  = 4
+                loc_oGrid.RecordSource = "cursor_4c_Dados"
+
+                loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.codigos"
+                loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.descricaos"
+                loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.colunas"
+                loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.tipos"
+
+                loc_oGrid.Column1.Width = 80
+                loc_oGrid.Column2.Width = 337
+                loc_oGrid.Column3.Width = 60
+                loc_oGrid.Column4.Width = 30
+
+                loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
+                loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                loc_oGrid.Column3.Header1.Caption = "Coluna"
+                loc_oGrid.Column4.Header1.Caption = "Tipo"
+
+                THIS.FormatarGridLista(loc_oGrid)
+
+                GO TOP IN cursor_4c_Dados
+                loc_oGrid.Refresh()
+
+                loc_lResultado = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro ao carregar lista:" + CHR(13) + loc_oErro.Message, "FormTri.CarregarLista")
+            loc_lResultado = .F.
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AlternarPagina - Alterna entre Page1 (Lista=1) e Page2 (Dados=2)
+    * Ao voltar para Page1, recarrega a lista (Problema 2 - grade nao repinta sozinha)
+    *--------------------------------------------------------------------------
+    PROCEDURE AlternarPagina(par_nPagina)
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+
+        TRY
+            IF VARTYPE(par_nPagina) != "N" OR par_nPagina < 1 OR par_nPagina > 2
+                MsgAviso("P" + CHR(225) + "gina inv" + CHR(225) + "lida: " + TRANSFORM(par_nPagina))
+            ELSE
+                THIS.pgf_4c_Paginas.ActivePage = par_nPagina
+
+                IF par_nPagina = 1
+                    THIS.this_cModoAtual = "LISTA"
+                    THIS.CarregarLista()
+                ENDIF
+
+                loc_lResultado = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro ao alternar p" + CHR(225) + "gina:" + CHR(13) + loc_oErro.Message, "FormTri.AlternarPagina")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormatarGridLista - Formata visual do grid de lista (FontName/FontSize)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormatarGridLista(par_oGrid)
+        TRY
+            WITH par_oGrid
+                .FontName = "Tahoma"
+                .FontSize = 8
+            ENDWITH
+        CATCH TO loc_oErro
+            MsgErro("Erro ao formatar grid:" + CHR(13) + loc_oErro.Message, "FormTri.FormatarGridLista")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TornarControlesVisiveis - Torna todos os controles visiveis recursivamente
+    * REGRA: Chamar SEMPRE com parametro: THIS.TornarControlesVisiveis(loc_oPagina)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_oObjeto, loc_nP
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oObjeto = par_oContainer.Controls(loc_nI)
+
+            IF VARTYPE(loc_oObjeto) = "O"
+                IF PEMSTATUS(loc_oObjeto, "Visible", 5)
+                    loc_oObjeto.Visible = .T.
+                ENDIF
+
+                IF UPPER(loc_oObjeto.BaseClass) = "PAGEFRAME"
+                    FOR loc_nP = 1 TO loc_oObjeto.PageCount
+                        THIS.TornarControlesVisiveis(loc_oObjeto.Pages(loc_nP))
+                    ENDFOR
+                ENDIF
+
+                IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+                    THIS.TornarControlesVisiveis(loc_oObjeto)
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaDados - Configura Page2 (Dados)
+    * Nesta fase: apenas cabecalho + container de botoes de acao VAZIO.
+    * Campos (TextBoxes/Spinner) sao adicionados nas Fases 5-6.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Paginas.Page2
+
+        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+        *-- Cabecalho identico ao da pagina Lista (faixa nas DUAS paginas - CLAUDE.md regra #11)
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top         = 29
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BackColor   = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+
+        loc_oPagina.cnt_4c_Cabecalho.AddObject("lbl_4c_Sombra", "Label")
+        WITH loc_oPagina.cnt_4c_Cabecalho.lbl_4c_Sombra
+            .Top       = 15
+            .Left      = 10
+            .Width     = THIS.Width
+            .Height    = 40
+            .Caption   = THIS.Caption
+            .FontName  = "Tahoma"
+            .FontSize  = 16
+            .FontBold  = .T.
+            .ForeColor = RGB(0, 0, 0)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oPagina.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
+        WITH loc_oPagina.cnt_4c_Cabecalho.lbl_4c_Titulo
+            .Top       = 18
+            .Left      = 10
+            .Width     = THIS.Width
+            .Height    = 46
+            .Caption   = THIS.Caption
+            .FontName  = "Tahoma"
+            .FontSize  = 16
+            .FontBold  = .T.
+            .ForeColor = RGB(255, 255, 255)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Container de botoes de acao (canonico Grupo_Salva)
+        *-- VAZIO nesta fase: botoes Confirmar/Cancelar sao adicionados junto com os campos (Fases 5-6)
+        loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
+        WITH loc_oPagina.cnt_4c_BotoesAcao
+            .Top         = 33
+            .Left        = 842
+            .Width       = 160
+            .Height      = 85
+            .BackStyle = 1
+            .BackColor = RGB(255, 255, 255)
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Botao Confirmar (Salva) - Left=5
+        loc_oPagina.cnt_4c_BotoesAcao.AddObject("cmd_4c_Confirmar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar
+            .Caption         = "Confirmar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 5
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar, "Click", THIS, "BtnSalvarClick")
+
+        *-- Botao Cancelar - Left=80
+        loc_oPagina.cnt_4c_BotoesAcao.AddObject("cmd_4c_Cancelar", "CommandButton")
+        WITH loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar
+            .Caption         = "Encerrar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
+            .PicturePosition = 13
+            .Top             = 5
+            .Left            = 80
+            .Width           = 75
+            .Height          = 75
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90, 90, 90)
+            .BackColor       = RGB(255, 255, 255)
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
+
+        *-- ===================================================================
+        *-- CAMPOS PRINCIPAIS - PARTE 1 (Fase 5/8): Codigo e Descricao
+        *-- Posicoes copiadas de layout.json (SIGCDTRI.Pagina.Dados) + 29 de
+        *-- compensacao do PageFrame.Top=-29. Labels com Width declarado no
+        *-- dump original terminam 3px antes do campo -> Alignment=1 (direita),
+        *-- conforme CLAUDE.md regra #23 (right-align legitimo quando o Say
+        *-- declara Width).
+        *-- ===================================================================
+
+        *-- Say1 "Codigo :" -> lbl_4c_Label1 (original Top=138,Left=278,W=42,H=15)
+        loc_oPagina.AddObject("lbl_4c_Label1", "Label")
+        WITH loc_oPagina.lbl_4c_Label1
+            .Top       = 167
+            .Left      = 278
+            .Width     = 42
+            .Height    = 15
+            .Caption   = "C" + CHR(243) + "digo :"
+            .Alignment = 1
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- getCodigo -> txt_4c_Codigo (original Top=133,Left=323,W=31,H=25)
+        loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
+        WITH loc_oPagina.txt_4c_Codigo
+            .Top          = 162
+            .Left         = 323
+            .Width        = 31
+            .Height       = 25
+            .Value        = ""
+            .MaxLength    = 3
+            .FontName     = "Tahoma"
+            .FontSize     = 8
+            .ForeColor    = RGB(0, 0, 0)
+            .BackColor    = RGB(255, 255, 255)
+            .Themes       = .F.
+            .SpecialEffect = 1
+            .Visible      = .T.
+        ENDWITH
+
+        *-- Say2 "Descricao :" -> lbl_4c_Label2 (original Top=166,Left=265,W=55,H=15)
+        loc_oPagina.AddObject("lbl_4c_Label2", "Label")
+        WITH loc_oPagina.lbl_4c_Label2
+            .Top       = 195
+            .Left      = 265
+            .Width     = 55
+            .Height    = 15
+            .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
+            .Alignment = 1
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- getDescricao -> txt_4c_Descricao (original Top=161,Left=323,W=290,H=25)
+        loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
+        WITH loc_oPagina.txt_4c_Descricao
+            .Top          = 190
+            .Left         = 323
+            .Width        = 290
+            .Height       = 25
+            .Value        = ""
+            .MaxLength    = 40
+            .FontName     = "Tahoma"
+            .FontSize     = 8
+            .ForeColor    = RGB(0, 0, 0)
+            .BackColor    = RGB(255, 255, 255)
+            .Themes       = .F.
+            .SpecialEffect = 1
+            .Visible      = .T.
+        ENDWITH
+
+        *-- ===================================================================
+        *-- CAMPOS RESTANTES (Fase 6/8): Coluna Livros (spinner) e Tipo
+        *-- Posicoes copiadas de layout.json (SIGCDTRI.Pagina.Dados) + 29 de
+        *-- compensacao do PageFrame.Top=-29. Sem lookups neste form
+        *-- (comportamento.json: temLookup=false em todos os metodos).
+        *-- ===================================================================
+
+        *-- Say3 "Coluna Livros:" -> lbl_4c_Label3 (original Top=193,Left=250,W=70,H=15)
+        loc_oPagina.AddObject("lbl_4c_Label3", "Label")
+        WITH loc_oPagina.lbl_4c_Label3
+            .Top       = 222
+            .Left      = 250
+            .Width     = 70
+            .Height    = 15
+            .Caption   = "Coluna Livros:"
+            .Alignment = 1
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- spnColuna -> obj_4c_SpnColuna (original Top=189,Left=323,W=34,H=25)
+        *-- Sem ControlSource no legado (valor transferido via codigo: Init faz
+        *-- Value=Val(Colunas), Salva faz Replace Colunas With Str(Value,1))
+        loc_oPagina.AddObject("obj_4c_SpnColuna", "Spinner")
+        WITH loc_oPagina.obj_4c_SpnColuna
+            .Top               = 218
+            .Left              = 323
+            .Width             = 34
+            .Height            = 25
+            .SpinnerHighValue  = 3
+            .SpinnerLowValue   = 1
+            .KeyboardHighValue = 3
+            .KeyboardLowValue  = 1
+            .Value             = 1
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .ForeColor         = RGB(0, 0, 0)
+            .BackColor         = RGB(255, 255, 255)
+            .SpecialEffect     = 1
+            .Visible           = .T.
+        ENDWITH
+
+        *-- Say4 "1-Tributado  2-Isentas  3-Outras" -> lbl_4c_Label4 (original Top=195,Left=364,W=159,H=15)
+        loc_oPagina.AddObject("lbl_4c_Label4", "Label")
+        WITH loc_oPagina.lbl_4c_Label4
+            .Top       = 224
+            .Left      = 364
+            .Width     = 159
+            .Height    = 15
+            .Caption   = "1-Tributado  2-Isentas  3-Outras"
+            .Alignment = 1
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Say5 "Tipo :" -> lbl_4c_Label5 (original Top=221,Left=291, sem Width/Alignment
+        *-- declarados -> classe say pura, CLAUDE.md regra #23 -> Alignment=0)
+        loc_oPagina.AddObject("lbl_4c_Label5", "Label")
+        WITH loc_oPagina.lbl_4c_Label5
+            .Top       = 250
+            .Left      = 291
+            .Width     = 30
+            .Height    = 15
+            .Caption   = "Tipo :"
+            .Alignment = 0
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Get_tipo -> txt_4c_Tipo (original Top=218,Left=323,W=17)
+        *-- Format="M" = multiple choice; InputMask eh a LISTA de valores validos
+        *-- (CLAUDE.md regra #24) - transcrito literal do legado, NAO trocar por "!"
+        loc_oPagina.AddObject("txt_4c_Tipo", "TextBox")
+        WITH loc_oPagina.txt_4c_Tipo
+            .Top           = 247
+            .Left          = 323
+            .Width         = 17
+            .Height        = 25
+            .Value         = ""
+            .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = ",T,S,I,F,N"
+            .ToolTipText   = "T - Tribut" + CHR(225) + "vel / S - Servi" + CHR(231) + "os / I - Isento - / N - N" + CHR(227) + "o Tribut" + CHR(225) + "vel / F - Substitui" + CHR(231) + CHR(227) + "o Tribut" + CHR(225) + "ria"
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(0, 0, 0)
+            .BackColor     = RGB(255, 255, 255)
+            .Themes        = .F.
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Say6 (nota explicativa) -> lbl_4c_Label6 (original Top=217,Left=347,W=213,H=28, WordWrap)
+        loc_oPagina.AddObject("lbl_4c_Label6", "Label")
+        WITH loc_oPagina.lbl_4c_Label6
+            .Top       = 246
+            .Left      = 347
+            .Width     = 213
+            .Height    = 28
+            .Caption   = "[T]ribut" + CHR(225) + "vel  /  [S]ervi" + CHR(231) + "os  /  [ I ]sento [N]" + CHR(227) + "o Tribut" + CHR(225) + "vel  /  [F]Subst. Tribut" + CHR(225) + "ria"
+            .Alignment = 1
+            .WordWrap  = .T.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .FontBold  = .F.
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        THIS.TornarControlesVisiveis(loc_oPagina)
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnIncluirClick - Prepara BO e form para inclusao de novo registro
+    * Legado: Grupo_op.Click caso INSERIR -> Colunas With Str(1), foco em getCodigo
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnIncluirClick()
+        THIS.this_oBusinessObject.NovoRegistro()
+        THIS.this_cModoAtual = "INCLUIR"
+        THIS.LimparCampos()
+        THIS.HabilitarCampos(.T.)
+        THIS.AjustarBotoesPorModo()
+        THIS.pgf_4c_Paginas.ActivePage = 2
+        THIS.pgf_4c_Paginas.Page2.txt_4c_Codigo.SetFocus
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnVisualizarClick - Carrega registro selecionado e navega para Page2 leitura
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_cCodigo
+        IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados") OR BOF("cursor_4c_Dados")
+            MsgAviso("Selecione uma tributa" + CHR(231) + CHR(227) + "o para visualizar!", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+        loc_cCodigo = ALLTRIM(cursor_4c_Dados.codigos)
+        IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCodigo)
+            THIS.this_cModoAtual = "VISUALIZAR"
+            THIS.BOParaForm()
+            THIS.HabilitarCampos(.F.)
+            THIS.AjustarBotoesPorModo()
+            THIS.pgf_4c_Paginas.ActivePage = 2
+            THIS.pgf_4c_Paginas.Page2.txt_4c_Descricao.SetFocus
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnAlterarClick - Carrega registro selecionado e navega para Page2 edicao
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnAlterarClick()
+        LOCAL loc_cCodigo
+        IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados") OR BOF("cursor_4c_Dados")
+            MsgAviso("Selecione uma tributa" + CHR(231) + CHR(227) + "o para alterar!", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+        loc_cCodigo = ALLTRIM(cursor_4c_Dados.codigos)
+        IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCodigo)
+            THIS.this_oBusinessObject.EditarRegistro()
+            THIS.this_cModoAtual = "ALTERAR"
+            THIS.BOParaForm()
+            THIS.HabilitarCampos(.T.)
+            THIS.AjustarBotoesPorModo()
+            THIS.pgf_4c_Paginas.ActivePage = 2
+            THIS.pgf_4c_Paginas.Page2.txt_4c_Descricao.SetFocus
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnExcluirClick - Confirma e exclui o registro selecionado na lista
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnExcluirClick()
+        LOCAL loc_cCodigo, loc_cDesc
+        IF !USED("cursor_4c_Dados") OR EOF("cursor_4c_Dados") OR BOF("cursor_4c_Dados")
+            MsgAviso("Selecione uma tributa" + CHR(231) + CHR(227) + "o para excluir!", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            RETURN
+        ENDIF
+        loc_cCodigo = ALLTRIM(cursor_4c_Dados.codigos)
+        loc_cDesc   = ALLTRIM(cursor_4c_Dados.descricaos)
+        IF MsgConfirma("Confirma exclus" + CHR(227) + "o da tributa" + CHR(231) + CHR(227) + "o:" + CHR(13) + ;
+                loc_cCodigo + " - " + loc_cDesc, "Excluir Tributa" + CHR(231) + CHR(227) + "o")
+            IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCodigo)
+                IF THIS.this_oBusinessObject.Excluir()
+                    MsgInfo("Tributa" + CHR(231) + CHR(227) + "o exclu" + CHR(237) + "da com sucesso!", "Sucesso")
+                    THIS.CarregarLista()
+                ENDIF
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnBuscarClick - Busca uma tributacao pelo codigo/descricao (FormBuscaAuxiliar
+    * na propria tabela SigCdIcm) e posiciona o cursor da lista no registro achado
+    * PUBLIC: BINDEVENT requer metodo publico (CLAUDE.md regra #3)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnBuscarClick()
+        LOCAL loc_oBusca, loc_cCodigo
+        loc_cCodigo = ""
+
+        TRY
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdIcm", "cursor_4c_BuscaTri", "codigos", "", ;
+                "Buscar Tributa" + CHR(231) + CHR(227) + "o de Icms")
+
+            IF VARTYPE(loc_oBusca) = "O"
+                loc_oBusca.mAddColuna("codigos",    "", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oBusca.Show()
+
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaTri")
+                    SELECT cursor_4c_BuscaTri
+                    loc_cCodigo = ALLTRIM(cursor_4c_BuscaTri.codigos)
+                ENDIF
+
+                loc_oBusca.Release()
+            ENDIF
+
+            IF USED("cursor_4c_BuscaTri")
+                USE IN cursor_4c_BuscaTri
+            ENDIF
+
+            IF !EMPTY(loc_cCodigo) AND USED("cursor_4c_Dados")
+                SELECT cursor_4c_Dados
+                LOCATE FOR ALLTRIM(codigos) == loc_cCodigo
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Refresh()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro("Erro na busca:" + CHR(13) + loc_oErro.Message, "FormTri.BtnBuscarClick")
+            IF USED("cursor_4c_BuscaTri")
+                USE IN cursor_4c_BuscaTri
+            ENDIF
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnEncerrarClick - Fecha o formulario
+    * PUBLIC: BINDEVENT requer metodo publico (CLAUDE.md regra #3)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BOParaForm - Transfere valores do BO para o Form apos CarregarPorCodigo
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_oPg2
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        WITH THIS.this_oBusinessObject
+            loc_oPg2.txt_4c_Codigo.Value    = ALLTRIM(.this_cCodigos)
+            loc_oPg2.txt_4c_Descricao.Value = ALLTRIM(.this_cDescricaos)
+            loc_oPg2.obj_4c_SpnColuna.Value = IIF(BETWEEN(VAL(.this_cColunas), 1, 3), VAL(.this_cColunas), 1)
+            loc_oPg2.txt_4c_Tipo.Value      = ALLTRIM(.this_cTipos)
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparCampos - Limpa valores de todos os campos da Page2
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE LimparCampos()
+        LOCAL loc_oPg2
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        loc_oPg2.txt_4c_Codigo.Value    = ""
+        loc_oPg2.txt_4c_Descricao.Value = ""
+        loc_oPg2.obj_4c_SpnColuna.Value = 1
+        loc_oPg2.txt_4c_Tipo.Value      = ""
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * HabilitarCampos - Habilita/desabilita campos conforme o modo atual
+    * par_lHabilitar: .T. = edicao (INCLUIR/ALTERAR), .F. = leitura (VISUALIZAR)
+    * Regra: txt_4c_Codigo (PK) so habilitado no modo INCLUIR (legado: getCodigo.When
+    * retorna .F. quando Grupo_op.value esta em Consultar/Alterar)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_oPg2, loc_lCodigo
+        loc_oPg2    = THIS.pgf_4c_Paginas.Page2
+        loc_lCodigo = (THIS.this_cModoAtual = "INCLUIR")
+
+        loc_oPg2.txt_4c_Codigo.Enabled    = loc_lCodigo
+        loc_oPg2.txt_4c_Descricao.Enabled = par_lHabilitar
+        loc_oPg2.obj_4c_SpnColuna.Enabled = par_lHabilitar
+        loc_oPg2.txt_4c_Tipo.Enabled      = par_lHabilitar
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarBotoesPorModo - Ajusta estado dos botoes da Page2 pelo modo atual
+    * INCLUIR/ALTERAR: Confirmar habilitado, Cancelar habilitado
+    * VISUALIZAR: Confirmar desabilitado, Cancelar habilitado (padrao canonico)
+    *--------------------------------------------------------------------------
+    PROCEDURE AjustarBotoesPorModo()
+        LOCAL loc_oPg2, loc_lPodeConfirmar
+        loc_oPg2           = THIS.pgf_4c_Paginas.Page2
+        loc_lPodeConfirmar = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+
+        loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lPodeConfirmar
+        loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Enabled  = .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaBO - Transfere valores do Form para o BO antes de Salvar()
+    * this_cColunas eh char(1) mas editado via Spinner numerico -> STR(valor,1)
+    * (legado: Grupo_op.Click "replace colunas with STR(1)" no modo INSERIR)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaBO()
+        LOCAL loc_oPg2
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        THIS.this_oBusinessObject.this_cCodigos    = ALLTRIM(loc_oPg2.txt_4c_Codigo.Value)
+        THIS.this_oBusinessObject.this_cDescricaos = ALLTRIM(loc_oPg2.txt_4c_Descricao.Value)
+        THIS.this_oBusinessObject.this_cColunas    = STR(loc_oPg2.obj_4c_SpnColuna.Value, 1)
+        THIS.this_oBusinessObject.this_cTipos      = UPPER(ALLTRIM(loc_oPg2.txt_4c_Tipo.Value))
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnSalvarClick - Salva o registro (Inserir/Atualizar conforme o modo)
+    * Sem ELSE: BusinessBase.Salvar() ja exibe a falha (CLAUDE.md regra #20)
+    * PUBLIC: BINDEVENT requer metodo publico (CLAUDE.md regra #3)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnSalvarClick()
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+
+        THIS.FormParaBO()
+
+        IF THIS.this_oBusinessObject.Salvar()
+            MsgInfo("Tributa" + CHR(231) + CHR(227) + "o de Icms salva com sucesso!")
+            THIS.AlternarPagina(1)
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnCancelarClick - Cancela edicao/visualizacao e volta para a lista
+    * Legado: Grupo_Salva.Cancelar.Click -> DoDefault() + mAtivaPagina1
+    * PUBLIC: BINDEVENT requer metodo publico (CLAUDE.md regra #3)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnCancelarClick()
+        THIS.AlternarPagina(1)
+        THIS.this_cModoAtual = "LISTA"
+        THIS.CarregarLista()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera cursores e objeto de negocio
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF USED("cursor_4c_Dados")
+            USE IN cursor_4c_Dados
+        ENDIF
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_oBusinessObject = .NULL.
+        ENDIF
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE
